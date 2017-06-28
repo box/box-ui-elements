@@ -3,6 +3,7 @@
  * @file Upload state component
  */
 
+import classNames from 'classnames';
 import React from 'react';
 import IconErrorEmptyState from '../icons/states/IconErrorEmptyState';
 import IconUploadStartState from '../icons/states/IconUploadStartState';
@@ -69,14 +70,11 @@ const UploadState = ({ canDrop, getLocalizedMessage, hasItems, isOver, isTouch, 
         /* eslint-enable jsx-a11y/label-has-for */
     }
 
-    let className = 'bcu-upload-state';
-    if (isOver) {
-        className = `${className} ${canDrop ? 'bcu-is-droppable' : 'bcu-is-not-droppable'}`;
-    }
-
-    if (hasItems) {
-        className = `${className} bcu-has-items`;
-    }
+    const className = classNames('bcu-upload-state', {
+        'bcu-is-droppable': isOver && canDrop,
+        'bcu-is-not-droppable': isOver && !canDrop,
+        'bcu-has-items': hasItems
+    });
 
     return (
         <div className={className}>
