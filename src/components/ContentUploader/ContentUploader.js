@@ -39,7 +39,7 @@ type Props = {
     uploadHost: string,
     clientName: string,
     className: string,
-    onClose?: Function,
+    onClose: Function,
     onComplete: Function,
     getLocalizedMessage: Function,
     isSmall: boolean,
@@ -73,6 +73,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         clientName: CLIENT_NAME_CONTENT_UPLOADER,
         className: '',
+        onClose: noop,
         onComplete: noop
     };
 

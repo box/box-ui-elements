@@ -13,6 +13,15 @@ import type { BoxItem, ModalOptions } from '../flowTypes';
 
 class ContentUploader extends ES6Wrapper {
     /**
+     * Callback on closing uploader. Emits 'close' event.
+     *
+     * @return {void}
+     */
+    onClose = (): void => {
+        this.emit('close');
+    };
+
+    /**
      * Callback on completed upload. Emits 'complete' event with Box File objects of uploaded items as data.
      *
      * @param {Array} data - Completed upload items
@@ -32,6 +41,7 @@ class ContentUploader extends ES6Wrapper {
                 componentRef={this.setComponent}
                 rootFolderId={this.root}
                 token={this.token}
+                onClose={this.onClose}
                 onComplete={this.onComplete}
                 modal={modal}
                 {...rest}
