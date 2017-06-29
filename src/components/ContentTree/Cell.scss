@@ -1,0 +1,24 @@
+@import '../variables';
+
+.bft-cell-node {
+    align-items: center;
+    display: flex;
+}
+
+.bft-cell-node-btn {
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 13px;
+    padding: 0;
+    width: 15px;
+
+    .buik-is-small & {
+        font-size: 10px;
+        line-height: 9px;
+        width: 11px;
+    }
+
+    &:focus {
+        border-color: $blue;
+    }
+}

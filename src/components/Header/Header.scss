@@ -1,0 +1,45 @@
+@import '../variables';
+
+.buik-header {
+    align-items: center;
+    background: $almost-white;
+    border-bottom: 1px solid $off-white;
+    display: flex;
+    height: 70px;
+    justify-content: space-between;
+    padding: 0 25px 0 0;
+
+    .buik-is-small & {
+        padding-right: 20px;
+    }
+
+    .buik-logo {
+        padding-left: 20px;
+
+        .buik-logo-custom {
+            max-height: 32px;
+            max-width: 80px;
+        }
+
+        .buik-is-small & {
+            display: none;
+        }
+    }
+
+    .buik-header-left {
+        align-items: center;
+        display: flex;
+    }
+
+    .buik-search {
+        padding-left: 20px;
+
+        input[type="search"] {
+            width: 300px;
+
+            .buik-is-small & {
+                width: 205px;
+            }
+        }
+    }
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Box Content Picker Test Page</title>
+        <style>
+            body,
+            html {
+                background: #ccc;
+                border: 0 none;
+                box-sizing: border-box !important;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+
+            .explorer1 {
+                width: 100%;
+                height: 600px;
+                overflow: auto;
+            }
+
+            .container {
+                margin: 50px 0;
+            }
+
+            .inputs {
+                margin: 50px;
+            }
+
+            .inputs div {
+                display: flex;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/explorer.css" />
+    </head>
+    <body>
+        <div class="inputs">
+            <div>
+                <label>
+                    <div>Folder Id</div>
+                    <input class="folder" type="text" placeholder="Enter root folder id" value="0" />
+                </label>
+                <label>
+                    <div>Auth Token</div>
+                    <input class="token" type="text" placeholder="Enter auth token" />
+                </label>
+            </div>
+            <button type="button" onclick="load()">Submit</button>
+        </div>
+        <div class="container">
+            <h1>Content Explorer</h1>
+            <div class="explorer1"></div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js"></script>
+        <script src="../dev/en-US/explorer.no.react.js"></script>
+        <script>
+            function load() {
+                const { ContentExplorer } = Box;
+                const token = document.querySelector('.token').value || localStorage.getItem('token');
+                const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
+
+                localStorage.setItem('token', token);
+                localStorage.setItem('folder', folderId);
+
+                const tokenGenerator1 = (id) => {
+                    if (id === `folder_${folderId}`) {
+                        return Promise.resolve(token);
+                    } else {
+                        return Promise.reject()
+                    }
+                };
+                const tokenGenerator2 = (id) => {
+                    if (id === `folder_${folderId}`) {
+                        return Promise.resolve({ [`folder_${folderId}`]: token });
+                    } else {
+                        return Promise.reject()
+                    }
+                };
+
+                const explorer1 = new ContentExplorer();
+                document.querySelector('.explorer1').innerHTML = '';
+                explorer1.show(folderId, token, {
+                    container: '.explorer1',
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                });
+            }
+            load();
+        </script>
+    </body>
+</html>

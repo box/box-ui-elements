@@ -1,0 +1,55 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+        "airbnb",
+        "plugin:flowtype/recommended",
+        "plugin:react/recommended",
+        "prettier",
+        "prettier/flowtype",
+        "prettier/react"
+    ],
+    "env": {
+        "es6": true,
+        "browser": true,
+        "mocha": true,
+        "commonjs": true
+    },
+    "globals": {
+        "after": false,
+        "afterEach": false,
+        "before": false,
+        "beforeEach": false,
+        "describe": false,
+        "expect": false,
+        "it": false,
+        "sinon": false,
+        "assert": false,
+        "fixture": false,
+        "__I18N__": false,
+        "Box": false
+    },
+    "rules": {
+        "camelcase": [0],
+        "comma-dangle": [2, "never"],
+        "indent": [2, 4, { "SwitchCase": 1 }],
+        "react/jsx-indent": [2, 4],
+        "react/jsx-indent-props": [2, 4],
+        "react/jsx-filename-extension": [0],
+        "react/no-unused-prop-types": [0],
+        "react/sort-comp": [0],
+        "jsx-quotes": [2, "prefer-single"],
+        "max-len": ["error", 120],
+        "arrow-parens": [2, "always"],
+        "react/forbid-prop-types": [0],
+        "class-methods-use-this": [0],
+        "no-param-reassign": [2, { "props": false }],
+        "import/no-extraneous-dependencies": [0],
+        "react/require-default-props": [0],
+        "react/display-name": [0],
+        "quotes": [2, "single"]
+    },
+    "plugins": [
+        "flowtype",
+        "react"
+    ]
+}

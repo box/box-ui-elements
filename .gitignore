@@ -1,0 +1,13 @@
+_site
+node_modules
+*.swp
+*.iml
+.idea
+.DS_Store
+npm-debug.log
+yarn-debug.log
+reports
+dist
+src/i18n/json
+lib
+*~~bak

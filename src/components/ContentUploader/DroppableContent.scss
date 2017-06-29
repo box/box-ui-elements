@@ -1,0 +1,16 @@
+.bcu-droppable-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    position: relative;
+
+    .bcu-item-list {
+        flex: 1;
+        position: relative;
+
+        // sass-lint:disable class-name-format
+        .ReactVirtualized__Table__Grid {
+            outline: none;
+        }
+    }
+}

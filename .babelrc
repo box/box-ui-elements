@@ -1,0 +1,50 @@
+{
+    "presets": [
+        [
+            "es2015", { "modules": false }
+        ],
+        "es2016",
+        "react",
+        "flow"
+    ],
+    "plugins": [
+        "transform-class-properties",
+        "transform-export-extensions",
+        "transform-object-rest-spread",
+        [
+            "react-intl",
+            {
+                "messagesDir": "./src/i18n/json"
+            }
+        ]
+    ],
+    "env": {
+        "npm": {
+            "plugins": [
+                [
+                    "babel-plugin-transform-require-ignore", {
+                        "extensions": [".scss", ".css"]
+                    }
+                ]
+            ]
+        },
+        "test": {
+            "plugins": [
+                [
+                    "istanbul", {
+                        "exclude": [
+                            "build/**",
+                            "**/*-test.js"
+                        ]
+                    }
+                ],
+                "rewire",
+                [
+                    "babel-plugin-transform-require-ignore", {
+                        "extensions": [".scss", ".css"]
+                    }
+                ]
+            ]
+        }
+    }
+}

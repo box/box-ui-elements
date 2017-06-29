@@ -1,0 +1,23 @@
+@import '../variables';
+
+.buik-sub-header {
+    align-items: center;
+    border-bottom: 1px solid $off-white;
+    box-shadow: 0 4px 6px -2px $transparent-black;
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+    padding: 0 25px;
+
+    .bce:not(.buik-is-small) & {
+        box-shadow: none;
+    }
+
+    .bce.buik-is-small & {
+        border-bottom: 0 none;
+    }
+
+    .buik-is-small & {
+        padding: 0 18px;
+    }
+}

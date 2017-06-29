@@ -1,0 +1,309 @@
+/**
+ * @flow
+ * @file Content Tree Component
+ * @author Box
+ */
+
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import classNames from 'classnames';
+import uniqueid from 'lodash.uniqueid';
+import noop from 'lodash.noop';
+import Content from './Content';
+import API from '../../api';
+import makeResponsive from '../makeResponsive';
+import {
+    DEFAULT_HOSTNAME_UPLOAD,
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_ROOT,
+    VIEW_FOLDER,
+    VIEW_ERROR,
+    TYPE_FOLDER,
+    TYPE_FILE,
+    TYPE_WEBLINK,
+    CLIENT_NAME_CONTENT_TREE,
+    SORT_NAME,
+    SORT_ASC
+} from '../../constants';
+import type { BoxItem, Collection, View } from '../../flowTypes';
+import '../fonts.scss';
+import '../base.scss';
+
+type Props = {
+    type: string,
+    rootFolderId: string,
+    onClick: Function,
+    apiHost: string,
+    getLocalizedMessage: Function,
+    clientName: string,
+    token: string | Function,
+    isSmall: boolean,
+    isLarge: boolean,
+    isTouch: boolean,
+    className: string,
+    measureRef: Function,
+    sharedLink?: string,
+    sharedLinkPassword?: string
+};
+
+type State = {
+    currentCollection: Collection,
+    view: View
+};
+
+type DefaultProps = {
+    type: string,
+    rootFolderId: string,
+    onClick: Function,
+    apiHost: string,
+    clientName: string,
+    className: string
+};
+
+class ContentTree extends Component<DefaultProps, Props, State> {
+    id: string;
+    api: API;
+    state: State;
+    props: Props;
+    table: any;
+
+    static defaultProps: DefaultProps = {
+        type: `${TYPE_FILE},${TYPE_WEBLINK},${TYPE_FOLDER}`,
+        rootFolderId: DEFAULT_ROOT,
+        onClick: noop,
+        className: '',
+        apiHost: DEFAULT_HOSTNAME_API,
+        uploadHost: DEFAULT_HOSTNAME_UPLOAD,
+        clientName: CLIENT_NAME_CONTENT_TREE
+    };
+
+    /**
+     * [constructor]
+     *
+     * @private
+     * @return {ContentPicker}
+     */
+    constructor(props: Props) {
+        super(props);
+
+        const { rootFolderId, token, sharedLink, sharedLinkPassword, apiHost, clientName } = props;
+
+        this.api = new API({
+            token,
+            sharedLink,
+            sharedLinkPassword,
+            apiHost,
+            clientName,
+            id: `folder_${rootFolderId}`
+        });
+
+        this.id = uniqueid('bct_');
+
+        this.state = {
+            currentCollection: {},
+            view: VIEW_FOLDER
+        };
+    }
+
+    /**
+     * Destroys api instances
+     *
+     * @private
+     * @return {void}
+     */
+    clearCache(): void {
+        this.api.destroy(true);
+    }
+
+    /**
+     * Calls the passed on onClick funcsion
+     *
+     * @private
+     * @param {Object} item - clicked item
+     * @return {void}
+     */
+    onItemClick = (item: BoxItem): void => {
+        const { onClick }: Props = this.props;
+        delete item.selected;
+        onClick(item);
+    };
+
+    /**
+     * Fetches the root folder on load
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    componentDidMount() {
+        this.fetchFolder();
+    }
+
+    /**
+     * Resets the percentLoaded in the collection
+     * so that the loading bar starts showing
+     *
+     * @private
+     * @fires cancel
+     * @return {void}
+     */
+    currentUnloadedCollection(): Collection {
+        const { currentCollection }: State = this.state;
+        return Object.assign(currentCollection, {
+            percentLoaded: 0
+        });
+    }
+
+    /**
+     * Network error callback
+     *
+     * @private
+     * @param {Error} error error object
+     * @return {void}
+     */
+    errorCallback = (error: Error): void => {
+        this.setState({
+            view: VIEW_ERROR
+        });
+        /* eslint-disable no-console */
+        console.error(error);
+        /* eslint-enable no-console */
+    };
+
+    /**
+     * Action performed when clicking on an item expand button
+     *
+     * @private
+     * @param {Object} item - the clicked box item
+     * @return {void}
+     */
+    onExpanderClick = (folder: BoxItem) => {
+        const { currentCollection }: State = this.state;
+        const { id, path_collection, selected = false }: BoxItem = folder;
+
+        if (!path_collection || !currentCollection.items) {
+            throw new Error('Bad state!');
+        }
+
+        if (selected) {
+            folder.selected = false;
+            const length = path_collection.total_count;
+            const newItems = currentCollection.items.filter((item) => {
+                if (item.path_collection && item.path_collection.total_count > length) {
+                    return item.path_collection.entries[length].id !== id;
+                }
+                return true;
+            });
+            currentCollection.items = newItems;
+            this.setState({ currentCollection });
+        } else {
+            this.fetchFolder(id);
+        }
+    };
+
+    /**
+     * Folder fetch success callback
+     *
+     * @private
+     * @param {Object} collection item collection object
+     * @return {void}
+     */
+    fetchFolderSuccessCallback = (collection: Collection): void => {
+        const { items: newItems = [], percentLoaded }: Collection = collection;
+        const { type }: Props = this.props;
+
+        const filteredItems = newItems.filter((item: BoxItem) => {
+            if (item.type) {
+                return type.indexOf(item.type) > -1;
+            }
+            return false;
+        });
+        let { currentCollection }: State = this.state;
+        const { items }: Collection = currentCollection;
+
+        if (items) {
+            const parentIndex = items.findIndex((item) => item.type === TYPE_FOLDER && item.id === collection.id);
+            items[parentIndex].selected = true;
+            items.splice(parentIndex + 1, 0, ...filteredItems);
+            currentCollection.percentLoaded = percentLoaded;
+        } else {
+            currentCollection = collection;
+            currentCollection.items = filteredItems;
+        }
+
+        // Set the new state and focus the grid for tabbing
+        this.setState({ currentCollection }, () => {
+            if (!this.table || !this.table.Grid) {
+                return;
+            }
+            const grid: any = findDOMNode(this.table.Grid);
+            grid.focus();
+        });
+    };
+
+    /**
+     * Fetches a folder, defaults to fetching root folder
+     *
+     * @private
+     * @param {string|void} [id] folder id
+     * @param {Boolean|void} [forceFetch] To void cache
+     * @return {void}
+     */
+    fetchFolder = (id?: string, forceFetch: boolean = false): void => {
+        const { rootFolderId }: Props = this.props;
+        const folderId: string = typeof id === 'string' ? id : rootFolderId;
+
+        // Reset the view and show busy indicator
+        this.setState({
+            view: VIEW_FOLDER,
+            currentCollection: this.currentUnloadedCollection()
+        });
+
+        // Fetch the folder using folder API
+        this.api
+            .getFolderAPI()
+            .folder(folderId, SORT_NAME, SORT_ASC, this.fetchFolderSuccessCallback, this.errorCallback, forceFetch);
+    };
+
+    /**
+     * Saves reference to table component
+     *
+     * @private
+     * @param {Component} react component
+     * @return {void}
+     */
+    tableRef = (table: React$Component<*, *, *>) => {
+        this.table = table;
+    };
+
+    /**
+     * Renders the file picker
+     *
+     * @private
+     * @inheritdoc
+     * @return {Element}
+     */
+    render() {
+        const { rootFolderId, type, getLocalizedMessage, isSmall, className, measureRef }: Props = this.props;
+        const { view, currentCollection }: State = this.state;
+        const styleClassName = classNames('buik bct buik-app-element', className);
+
+        return (
+            <div id={this.id} className={styleClassName} ref={measureRef}>
+                <Content
+                    view={view}
+                    isSmall={isSmall}
+                    rootId={rootFolderId}
+                    selectableType={type}
+                    currentCollection={currentCollection}
+                    tableRef={this.tableRef}
+                    onItemClick={this.onItemClick}
+                    onExpanderClick={this.onExpanderClick}
+                    getLocalizedMessage={getLocalizedMessage}
+                />
+            </div>
+        );
+    }
+}
+
+export default makeResponsive(ContentTree);

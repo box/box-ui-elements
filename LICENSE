@@ -1,0 +1,397 @@
+                                    BOX
+                          SOFTWARE LICENSE AGREEMENT
+                                (v.20170516)
+
+                                BOX UI ELEMENTS
+
+This "Agreement" forms a legally binding agreement between Box (as defined in
+Section 14) and you ("Developer") that governs Developer's right to access and
+use this SDK (as defined below).
+
+DEVELOPER'S RIGHT TO USE THE SDK IS SUBJECT TO DEVELOPER'S ACCEPTANCE OF AND
+CONTINUING COMPLIANCE WITH THIS AGREEMENT. Developer accepts this Agreement by
+either: (a) clicking an option to "accept" or "agree" to this Agreement, where
+such option is made available by Box; or (b) by actually using the SDK, in
+which event Developer hereby agrees that such use constitutes acceptance of
+this Agreement from that time onwards. Developer will not use the SDK and will
+not accept this Agreement if Developer is barred from using the SDK under the
+laws of the United States or other countries including the country in which
+Developer is a resident or in which Developer access or uses the SDK. If the
+individual accepting this Agreement is doing so on behalf of an employer or
+other entity, such individual represents and warrants that such individual has
+full legal authority to bind such employer or other entity to this Agreement;
+and, if the individual does not have the requisite authority, the individual
+may not accept the Agreement or use the SDK on behalf of such employer or
+other entity. IF DEVELOPER DOES NOT AGREE TO BE BOUND BY THIS AGREEMENT,
+DEVELOPER MUST NOT USE THE SDK AND MAY NOT OFFER OR CREATE APPLICATIONS OR
+SERVICES THAT INTERACT WITH THE SDK.
+
+This Agreement does not govern use of any Box software or services other than
+the SDK. See the relevant agreements accompanying the other Box software or
+services for their respective governing terms.
+
+1. General. The "SDK" means the Box software development kit, including any
+   subsequent updates or upgrade made available to Developer, and any
+   associated documentation, software code, or other materials made
+   available by Box to assist Developer in developing solution(s) (each a
+   "Developer Application") that are customizable and responsive web based
+   UI components, optimized for web and mobile that enable certain features
+   and functionality with respect to Box's cloud-based content collaboration
+   service ("Box Service"). This Agreement applies to any SDK provided by
+   Box or that includes, displays, or links to this Agreement, and to any
+   updates, supplements or support services for this SDK. Developer may only
+   use this SDK to develop a Developer Application that interoperates with
+   the Box Service and to certify compatibility of Developer's Product(s)
+   with the Box Service.
+
+   Box reserves the right to discontinue offering the SDK (or any updates
+   thereto) or to modify the SDK at any time in its sole discretion.
+   Free/open source software components distributed in this SDK are licensed
+   to Developer under the terms of the applicable free/open source license
+   agreements and such free/open source software licenses can be found at
+   https://cloud.box.com/v/preview-licenses-v1.
+
+2. Use Rights & Requirements.
+    a. Subject to Developer's compliance with the terms of this Agreement,
+       Developer may:
+        i. download, install, and use the SDK on its devices solely to design,
+           develop, and test Developer Application(s);
+       ii. make a reasonable number of copies of the SDK as necessary to
+           develop Developer Application(s), provided that Developer
+           reproduces complete copies of the SDK, including without
+           limitation all "read me" files, copyright notices, and other legal
+           notices and terms; and
+      iii. use, reproduce, modify, and distribute the sample code included in
+           the SDK only as embedded in a Developer Application that complies
+           with the technical limitations and the Acceptable Use Policy (set
+           forth in Exhibit A hereto) ("AUP").
+    b. Developer shall ensure the Developer Application displays prominently,
+       and made apparent to each end-user of the Developer Application, the
+       following notice and disclaimer in full:
+
+        "Copyright 2017 Box, Inc. All rights reserved.
+
+        This product includes software developed by Box, Inc. ("Box")
+        (http://www.box.com)
+
+        ALL BOX SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+        WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+        MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+        IN NO EVENT SHALL BOX BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+        SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+        LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+        DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+        THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+        (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+        See the Box license for the specific language governing permissions
+        and limitations under the license."
+
+3. Restrictions. Except as set forth above, Developer may not:
+    a. distribute, sell, lease, rent, lend, or sublicense the SDK (or any copy
+       or portion thereof);
+    b. use the SDK to create, design, or develop anything other than Developer
+       Application(s);
+    c. modify or distribute any portion of the SDK, or distribute any
+       Developer Application, in any way that would subject any portion of the
+       SDK to an Excluded License. An "Excluded License" is a license that
+       requires, as a condition of use, modification, or distribution of code
+       subject to that license, that the code be disclosed or distributed in
+       source code form or that others have the right to modify the code;
+    d. create or attempt to create a product that mimics or interferes with
+       the communications and commands between Box's API services; or
+    e. use the SDK: (i) to violate the AUP; (ii) to circumvent any technical
+       or licensing restrictions of the Box Service; or (iii) in violation of
+       any U.S. denied party-list, embargoed country restriction, export law
+       or regulation.
+
+4. Contributions. Developer Contributions (as defined in the "Contributor
+   License Agreement" (CLA)), made by the Developer pursuant to the rights
+   granted or permitted under this Agreement, are subject to the following:
+    a. Developer shall comply with the Contribution policy set forth here:
+       https://github.com/box/box-content-preview/blob/master/CONTRIBUTING.md;
+       and
+    b. For each Contribution, Developer shall agree to the Box "Contributor
+       License Agreement" (or "CLA") located here:
+       https://developer.box.com/docs/ui-kits-contribution-license.
+
+5. Feedback. Developer may, from time to time, provide feedback to Box
+   concerning the functionality and performance of the SDK or Box Service
+   including, without limitation, identifying potential errors and
+   improvements ("Feedback"). In such event, Box may freely use and exploit
+   any such Feedback without any obligation to Developer, unless otherwise
+   agreed upon in writing.  Developer hereby assigns to Box any proprietary
+   right that Developer may have in or to any modification, enhancement,
+   improvement or change in or to the Box Service based upon any Feedback from
+   Developer.
+
+6. Box Independent Development. Nothing in this Agreement will impair Box's
+   right to develop, acquire, license, market, promote or distribute products,
+   software or technologies that perform the same or similar functions as, or
+   otherwise compete with, any Developer Application or other products,
+   software or technologies that Developer may develop, produce, market, or
+   distribute.
+
+7. Support. Box does not provide technical or other support for the SDK under
+   this Agreement.
+
+8. Termination. This Agreement becomes effective on the date Developer first
+   uses the SDK and will continue as long as Developer is in compliance with
+   the terms specified herein or until otherwise terminated. Either party may
+   terminate this Agreement upon thirty days written notice if the other party
+   is in material breach of any term of this Agreement. Developer agrees, upon
+   termination, to immediately destroy all copies of the SDK within the
+   Developer's possession or control. The following Sections survive any
+   termination of this Agreement: Sections 4, 5, 9, 11, 12, 13, 15, 16 and 17.
+
+9. Ownership. The SDK is licensed, not sold. Box reserves all other rights not
+   granted herein. The parties acknowledge that, as between the parties:
+    a. Box or its licensors retain complete ownership of all Intellectual
+       Property Rights in and to the SDK; and
+    b. Developer or its licensors retain complete ownership of all
+       Intellectual Property Rights in the Developer Application(s) (subject
+       to Box's underlying ownership of the Intellectual Property Rights in
+       and to the SDK).
+   Nothing in this Agreement will be construed to transfer or assign any
+   Intellectual Property Rights of either party to the other. "Intellectual
+   Property Rights" means any and all rights under patent law, copyright law,
+   trade secret law, trademark law, and any and all other proprietary rights.
+
+10.	Data Privacy. Developer agrees that Box may periodically collect, process
+    and store Technical Data. "Technical Data" means technical data and
+    related information about the Developer Application and Developer's
+    device, system, peripherals, account and Developer's use of the SDK,
+    including without limitation:
+    a. internet protocol address;
+    b. hardware identification;
+    c. operating system;
+    d. application software;
+    e. peripheral hardware;
+    f. number of active plugins and software development kits;
+    g. the successful installation and launch of SDK;
+    h. number and type of API calls; and
+    i. SDK usage statistics (e.g., as implemented by analytics calls in the
+       SDK).
+
+    Box will use Technical Data for internal statistical and analytical
+    purposes to facilitate support, invoicing or online services, the
+    provisioning of updates, to study usage patterns to improve the SDKs, and
+    the development of the Box Service. Box may transfer Technical Data to
+    other companies in the Box group from time to time. Developer acknowledges
+    that correspondence and log files generated in conjunction with a request
+    for support services may contain sensitive, confidential or personal
+    information. Developer is solely responsible for taking the steps
+    necessary to protect such data, including obfuscating the logs or
+    otherwise guarding such information prior to sending it to Box.  For each
+    Developer Application, Developer will provide a privacy policy describing
+    information collected by such Developer Application and Developer's
+    privacy practices. Any privacy policy created by Developer for any
+    Developer Application will be at least as restrictive as Box's
+    then-current privacy policy ("Box Privacy Policy") found at
+    https://www.box.com/static/html/privacy.html. Developer will comply and
+    ensure that the Developer Application complies with the Box Privacy Policy
+    and any privacy policy it creates for a Developer Application.
+
+11.	DISCLAIMER OF WARRANTIES. THE SDK IS PROVIDED "AS IS" WITHOUT ANY
+    WARRANTIES OF ANY KIND. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW,
+    BOX MAKES NO REPRESENTATIONS OR WARRANTIES OF ANY KIND, WHETHER EXPRESS,
+    IMPLIED, STATUTORY OR OTHERWISE, INCLUDING, WITHOUT LIMITATION, ANY
+    WARRANTY THAT THE SERVICES WILL BE UNINTERRUPTED, ERROR-FREE OR FREE OF
+    HARMFUL COMPONENTS, AND ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+    SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE, OR
+    NON-INFRINGEMENT, AND ANY WARRANTY ARISING OUT OF ANY COURSE OF
+    PERFORMANCE, COURSE OF DEALING OR USAGE OF TRADE. SOME JURISDICTIONS
+    DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES. IN SUCH AN EVENT THE
+    ABOVE EXCLUSION WILL NOT APPLY SOLELY TO THE EXTENT PROHIBITED BY LAW.
+
+12.	LIMITATION OF LIABILITY. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE
+    LAW, IN NO EVENT WILL BOX BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL,
+    PUNITIVE, COVER OR CONSEQUENTIAL DAMAGES (INCLUDING, WITHOUT LIMITATION,
+    DAMAGES FOR LOST PROFITS, GOODWILL, USE OR DATA) HOWEVER CAUSED, UNDER ANY
+    THEORY OF LIABILITY, INCLUDING, WITHOUT LIMITATION, CONTRACT, TORT,
+    WARRANTY, NEGLIGENCE OR OTHERWISE, EVEN IF BOX HAS BEEN ADVISED AS TO THE
+    POSSIBILITY OF SUCH DAMAGES.  IN NO EVENT WILL BOX'S TOTAL AND CUMULATIVE
+    LIABILITY FOR ALL CLAIMS OF ANY NATURE ARISING OUT OF THIS AGREEMENT
+    EXCEED $50.00. SOME JURISDICTIONS DO NOT ALLOW THE LIMITATION OF
+    INCIDENTAL, CONSEQUENTIAL OR OTHER DAMAGES. IN SUCH AN EVENT THIS
+    LIMITATION WILL NOT APPLY TO THE EXTENT PROHIBITED BY LAW.
+
+13.	INDEMNIFICATION. DEVELOPER WILL DEFEND, INDEMNIFY AND HOLD BOX, ITS
+    AFFILIATES, OFFICERS, DIRECTORS, EMPLOYEES AND AGENTS HARMLESS, FROM AND
+    AGAINST ANY AND ALL THIRD PARTY CLAIMS AND ALL LIABILITIES, ASSESSMENTS,
+    LOSSES, COSTS OR DAMAGES RESULTING FROM OR ARISING OUT OF:
+    a. DEVELOPER'S BREACH OF THIS AGREEMENT;
+    b. DEVELOPER APPLICATIONS;
+    c. DEVELOPER'S INFRINGEMENT OR VIOLATION OF ANY INTELLECTUAL PROPERTY,
+       OTHER RIGHTS OR PRIVACY OF A THIRD PARTY; AND/OR
+    d. MISUSE OF ANY OF THE SERVICES BY A THIRD PARTY WHERE SUCH MISUSE WAS
+       MADE AVAILABLE BY DEVELOPER'S FAILURE TO TAKE REASONABLE MEASURES TO
+       PROTECT DEVELOPER'S USERNAME AND PASSWORD AGAINST MISUSE.
+    Developer will not settle any claim, and no settlement of a claim will be
+    binding on Box, without Box's prior written consent, which will not be
+    unreasonably withheld or delayed.
+
+14.	Box Entity. The location of Developer will determine the Box entity with
+    which Developer is contracting under this Agreement and to which Developer
+    should direct notices under this Agreement, as follows:
+
+    +---------------+-------------------+----------------------------------+
+    |   Developer   |  Box Contracting  |        Box Notices Sent to       |
+    |    Location   |       Entity      |                                  |
+    +---------------+-------------------+----------------------------------+
+    | Within        | Box, Inc.         | LegalOps, Box, Inc.              |
+    | United States |                   | 900 Jefferson Avenue             |
+    |               |                   | Redwood City, California, 94063  |
+    |               |                   | United States of America         |
+    +---------------+-------------------+----------------------------------+
+    | Rest of World | Box.com (UK) Ltd. | LegalOps, Box.com (UK) Ltd       |
+    |               |                   | 64 North Row, 2nd Floor          |
+    |               |                   | London W1K 7LL                   |
+    |               |                   | United Kingdom                   |
+    +---------------+-------------------+----------------------------------+
+
+15.	Confidentiality. "Confidential Information" means all information
+    disclosed by one Party ("Disclosing Party") to the other Party ("Receiving
+    Party") that is in tangible form and labeled "confidential" or the like,
+    or that reasonably should be understood to be confidential given the
+    nature of the information and the circumstances of the disclosure.   The
+    following information will be considered Confidential Information whether
+    or not marked or identified as such:
+    a. non-public materials regarding the SDK or the Box Service;
+    b. license keys;
+    c. the terms of this Agreement including all orders and pricing thereto;
+       and
+    d. Box's strategic roadmaps, product plans, product designs and
+       architecture, technology and technical information, security audit
+       reviews, business and marketing plans, and business processes.
+    Confidential Information will not include information that as shown by the
+    Receiving Party's records was:
+        i. already known to Receiving Party at the time of disclosure by the
+           Disclosing Party;
+       ii. was disclosed to the Receiving Party by a third party who had the
+           right to make such disclosure without any confidentiality
+           restrictions;
+      iii. is, or through no fault of the Receiving Party has become,
+           generally available to the public; or
+       iv. was independently developed by Receiving Party without use of the
+           Disclosing Party's Confidential Information.
+    The Receiving Party will use no less than a reasonable standard of care to
+    safeguard the Confidential Information received from the Disclosing Party
+    and will only use the Confidential Information of the Disclosing Party to
+    exercise its rights and perform its obligations under this Agreement.
+    Neither party will disclose Confidential Information in violation of the
+    terms and conditions of this Agreement, to any third party, without the
+    prior written consent of the other party. Notwithstanding the foregoing
+    each party may disclose Confidential Information, including the terms and
+    conditions of this Agreement, without the prior written consent of the
+    other party:
+        A. as compelled by law provided that to the extent legally permissible
+           the Receiving Party gives the Disclosing Party prior notice of such
+           compelled disclosure and reasonable assistance, at the Disclosing
+           Party's expense, if the Disclosing Party seeks to contest such
+           disclosure;
+        B. in confidence, to legal counsel, accountants, banks, and financing
+           sources and their advisors;
+        C. in connection with the enforcement of this Agreement or rights
+           under this Agreement;
+        D. the terms and conditions of this Agreement in confidence, in
+           connection with an actual or proposed merger, acquisition, or
+           similar transaction; or
+        E. to respond to an emergency which Box believes in the good faith
+           requires Box to disclose information to assist in preventing the
+           death or serious bodily injury of any person.
+
+16.	Governing Law/Venue. This Agreement will be construed and enforced in all
+    respects in accordance with the laws of the State of California, U.S.A.,
+    without reference to its choice of law rules. The parties specifically
+    exclude from application to the Agreement the United Nations Convention on
+    Contracts for the International Sale of Goods and the Uniform Computer
+    Information Transactions Act.  Developer hereby irrevocably and
+    unconditionally consents to the exclusive jurisdiction and venue in the
+    state and federal courts sitting in Santa Clara County, California.  In
+    any such dispute, the prevailing party will be entitled to recover its
+    reasonable attorneys' fees and expenses from the other party.
+
+17.	General. Developer will not, directly, indirectly, by operation of law or
+    otherwise, assign all or any part of this Agreement or its rights
+    hereunder or delegate performance of any of its duties hereunder without
+    the prior written consent of Box. This Agreement sets forth the entire
+    understanding of the parties and supersedes any and all prior oral and
+    written agreements or understandings between the parties regarding the
+    subject matter of this Agreement. Any modifications of this Agreement must
+    be in writing and signed by both parties hereto. The failure of either
+    party to insist upon or enforce strict performance of any of the
+    provisions of this Agreement or to exercise any rights or remedies under
+    this Agreement will not be construed as a waiver or relinquishment to any
+    extent of such party's right to assert or rely upon any such provision,
+    right or remedy in that or any other instance; rather, the same will
+    remain in full force and effect. In the event that any provision of this
+    Agreement or the application thereof, becomes or is declared by a court of
+    competent jurisdiction to be illegal, void or unenforceable, the remainder
+    of this Agreement will continue in full force and effect. The parties will
+    promptly replace such void or unenforceable provision with a valid and
+    enforceable provision that will achieve, to the extent possible, the
+    economic, business and other purposes of such void or unenforceable
+    provision. The parties are entering into this Agreement as independent
+    contracting parties. Neither party will have, or hold itself out as
+    having, any right or authority to incur any obligation on behalf of the
+    other party. This Agreement will not be construed to create an
+    association, joint venture or partnership between the parties or to impose
+    any partnership liability upon any party. If at any time Developer has any
+    questions about this Agreement, the Developer Web Site or the Developer
+    Services, Developer should contact Box at
+    https://developer.box.com/docs#section-developer-support.
+
+
+                                   Exhibit A
+                       BOX UI ELEMENTS ACCEPTABLE USE POLICY
+
+Acceptable Use Policy.  Developer shall not, and shall not use the SDKs to:
+    a) Do anything illegal, or facilitate, promote or encourage any illegal
+       activities (gambling, etc.), or otherwise violate applicable law;
+    b) Invade the privacy of any person;
+    c) Engage in any activity that interferes with, plagiarizes, copies, or
+       disrupts the Box Service or any Box API;
+    d) Remove or modify any copyright, trademark or other proprietary rights
+       notice, or any specific element or phrase attributing part of the
+       technology to Box, on or in the SDKs or on any materials printed or
+       copied off of the SDKs;
+    e) Interfere with the servers or networks connected to the Box Service or
+       violate any of the procedures, policies or regulations of networks
+       connected to the Box Service including attempting to gain unauthorized
+       access to the Box Service, user accounts, computer systems or networks
+       connected to the Box Service through hacking, password mining or any
+       other means;
+    f) Use any robot, spider, service search/retrieval application, or other
+       automated device, process or means to maliciously access, retrieve,
+       scrape, or index the Box Service;
+    g) Upload or otherwise transmit any material containing software viruses
+       or other computer code, files or programs designed to interrupt,
+       destroy, or limit the functionality of any software or hardware;
+    h) Facilitate the transmission or storage of any material depicting or
+       promoting sexually explicit or pornographic material, violence, or
+       discrimination based on race, sex, religion, nationality, disability,
+       sexual orientation or age or that could otherwise give rise to any
+       civil or criminal liability under applicable laws or regulations;
+    i) Harass, threaten, incite, degrade, intimidate, deceive or mislead
+       anyone;
+    j) Infringe or violate any rights of Box, or any third party, including
+       any intellectual property rights (e.g., patents, copyrights,
+       trademarks, trade secrets or other personal or proprietary right),
+       rights of privacy or publicity which includes not facilitating or
+       engaging in the unauthorized use, distribution, or exploitation of
+       copyrighted materials or content;
+    k) Collect, or facilitate the collection of, any information or data of
+       any kind for any unlawful purpose;
+    l) Intercept, monitor, or modify the communications of others;
+    m) Disseminate "spam," "junk mail," "phishing," "chain letters," "pyramid
+       schemes," illegal contests or sweepstakes, spyware, adware, viruses,
+       worms, Trojan horses, time bombs, or any other type of malware or
+       malicious code;
+    n) Install software: (i) to perform hidden activities without the
+       end-user's consent; (ii) that may harm or alter an end-user's system;
+       (iii) that is downloaded as a hidden component of other software; or
+       (iv) that is automatically downloaded in whole or in part without
+       express end-user consent; and
+    o) Promote or encourage illegal or controlled products or services.

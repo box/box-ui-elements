@@ -1,0 +1,11 @@
+@import '../variables';
+
+.buik-inline-breadcrumbs {
+    color: $sevens;
+    font-size: 11px;
+
+    .buik-breadcrumb .buik-btn.buik-btn-plain {
+        color: inherit;
+        font-size: 11px;
+    }
+}

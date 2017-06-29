@@ -1,0 +1,10 @@
+.buik-item-icon {
+    align-items: center;
+    display: flex;
+    flex: 0 0 50px;
+    justify-content: center;
+
+    .buik-is-small & {
+        flex: 0 0 30px;
+    }
+}

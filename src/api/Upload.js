@@ -1,0 +1,216 @@
+/**
+ * @flow
+ * @file Helper for the Box Upload API
+ * @author Box
+ */
+
+import noop from 'lodash.noop';
+import Base from './Base';
+import type { BoxItem } from '../flowTypes';
+
+class Upload extends Base {
+    file: File;
+    id: string;
+    overwrite: boolean;
+    successCallback: Function;
+    errorCallback: Function;
+    progressCallback: Function;
+
+    /**
+     * Handles an upload success response
+     *
+     * @return {void}
+     */
+    uploadSuccessHandler = ({ entries }: { entries: BoxItem[] }): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        if (typeof this.successCallback === 'function') {
+            // Response entries are the successfully created Box File objects
+            this.successCallback(entries);
+        }
+    };
+
+    /**
+     * Handles an upload error
+     *
+     * @param {Object} error - Upload error
+     * @return {void}
+     */
+    uploadErrorHandler = (error: any): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        // Automatically handle name conflict errors
+        if (error.status === 409) {
+            if (this.overwrite) {
+                // Error response contains file ID to upload a new file version for
+                this.makePreflightRequest({
+                    fileId: error.context_info.conflicts.id
+                });
+            } else {
+                // Otherwise, reupload and append timestamp
+                // 'test.jpg' becomes 'test-TIMESTAMP.jpg'
+                const { name } = this.file;
+                const extension = name.substr(name.lastIndexOf('.')) || '';
+                this.makePreflightRequest({
+                    fileName: `${name.substr(0, name.lastIndexOf('.'))}-${Date.now()}${extension}`
+                });
+            }
+        } else if (typeof this.errorCallback === 'function') {
+            this.errorCallback(error);
+        }
+    };
+
+    /**
+     * Handles an upload progress event
+     *
+     * @param {Object} event - Progress event
+     * @return {void}
+     */
+    uploadProgressHandler = (event: ProgressEvent): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        if (typeof this.progressCallback === 'function') {
+            this.progressCallback(event);
+        }
+    };
+
+    /**
+     * Sends an upload pre-flight request. If a file ID is supplied,
+     * send a pre-flight request to that file version.
+     *
+     * @param {fileId} fileId - ID of file to replace
+     * @param {fileName} fileName - New name for file
+     * @return {void}
+     */
+    makePreflightRequest({ fileId, fileName }: { fileId?: string, fileName?: string }) {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        let url = `${this.getBaseUrl()}/files/content`;
+        if (fileId) {
+            url = url.replace('content', `${fileId}/content`);
+        }
+
+        const attributes = {
+            name: fileName || this.file.name,
+            parent: { id: this.id },
+            size: this.file.size
+        };
+
+        this.xhr.options({
+            url,
+            data: attributes,
+            successHandler: (data) => {
+                // Make an actual POST request to the fast upload URL returned by pre-flight
+                this.makeRequest({
+                    url: data.upload_url
+                });
+            },
+            errorHandler: this.uploadErrorHandler
+        });
+    }
+
+    /**
+     * Uploads a file. If a file ID is supplied, use the Upload File
+     * Version API to replace the file.
+     *
+     * @param {Object} - Request options
+     * @param {boolean} [options.preflight] - Whether or not this is a preflight options request
+     * @param {string} [options.fileId] - ID of file to replace
+     * @param {string} [options.fileName] - New name for file
+     * @return {void}
+     */
+    makeRequest({ url, fileId, fileName }: { url?: string, fileId?: string, fileName?: string }): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        // Use provided upload URL if passed in, otherwise construct
+        let uploadUrl = url;
+        if (!uploadUrl) {
+            uploadUrl = `${this.uploadHost}/api/2.0/files/content`;
+
+            if (fileId) {
+                uploadUrl = uploadUrl.replace('content', `${fileId}/content`);
+            }
+        }
+
+        const attributes = JSON.stringify({
+            name: fileName || this.file.name,
+            parent: { id: this.id }
+        });
+
+        this.xhr.postFile({
+            url: uploadUrl,
+            data: {
+                attributes,
+                file: this.file
+            },
+            successHandler: this.uploadSuccessHandler,
+            errorHandler: this.uploadErrorHandler,
+            progressHandler: this.uploadProgressHandler
+        });
+    }
+
+    /**
+     * Cancels upload of a file.
+     *
+     * @return {void}
+     */
+    cancel() {
+        if (this.xhr && typeof this.xhr.abort === 'function') {
+            this.xhr.abort();
+        }
+    }
+
+    /**
+     * Uploads a file. If there is a conflict, replaces the file.
+     *
+     * @param {Object} options - Upload options
+     * @param {string} options.id - Folder id
+     * @param {File} options.file - File blob object
+     * @param {Function} [options.successCallback] - Function to call with response
+     * @param {Function} [options.errorCallback] - Function to call with errors
+     * @param {Function} [options.progressCallback] - Function to call with progress
+     * @param {boolean} [overwrite] - To overwrite or not
+     * @return {void}
+     */
+    upload({
+        id,
+        file,
+        successCallback = noop,
+        errorCallback = noop,
+        progressCallback = noop,
+        overwrite = true
+    }: {
+        id: string,
+        file: File,
+        successCallback?: Function,
+        errorCallback?: Function,
+        progressCallback?: Function,
+        overwrite?: boolean
+    }): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        // Save references
+        this.id = id;
+        this.file = file;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+        this.progressCallback = progressCallback;
+        this.overwrite = overwrite;
+
+        this.makePreflightRequest({});
+    }
+}
+
+export default Upload;

@@ -1,0 +1,19 @@
+@import '../variables';
+
+.buik-breadcrumb {
+    .buik-btn.buik-btn-plain {
+        color: $sevens;
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:last-child {
+            color: $twos;
+        }
+    }
+}
+
+.buik-breadcrumb-seperator {
+    padding: 0 6px;
+}

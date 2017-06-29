@@ -1,0 +1,8 @@
+@import '../variables';
+
+.bcu-item-label {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

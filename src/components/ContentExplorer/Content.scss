@@ -1,0 +1,25 @@
+@import '../variables';
+
+.bce-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
+    .bce-item-list,
+    .bce-empty-state {
+        flex: 1;
+        position: relative;
+
+        // sass-lint:disable class-name-format
+        .ReactVirtualized__Table__Grid {
+            outline: none;
+        }
+    }
+
+    .bce-empty-state {
+        align-items: center;
+        display: flex;
+        flex: 1;
+        justify-content: center;
+    }
+}

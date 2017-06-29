@@ -1,0 +1,4 @@
+The Box UI Elements use third-party libraries which may be distributed
+under licenses different than the Box UI Elements themseleves. For the
+libraries bundled at build-time, please look at package.json and
+https://cloud.box.com/v/preview-licenses-v1.

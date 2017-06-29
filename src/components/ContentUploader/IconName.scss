@@ -1,0 +1,26 @@
+@import '../variables';
+
+.bcu-item-icon-name {
+    cursor: default;
+    display: flex;
+    height: 50px;
+    width: 100%;
+}
+
+.bcu-item-icon {
+    align-items: center;
+    display: flex;
+    flex: 0 0 50px;
+    justify-content: center;
+}
+
+.bcu-item-name {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 15px;
+    overflow: hidden;
+    text-align: left;
+}

@@ -1,0 +1,359 @@
+@import './variables';
+
+.buik {
+    background: $white;
+    border: 0 none;
+    /* stylelint-disable declaration-no-important */
+    box-sizing: border-box !important;
+    /* stylelint-enable declaration-no-important */
+    color: $twos;
+    font-family: $font;
+    font-size: 13px;
+    height: 100%;
+    letter-spacing: .13px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    text-rendering: optimizeLegibility;
+    width: 100%;
+
+    @mixin placeholder {
+        font-family: $font;
+        font-weight: 200;
+        opacity: .6;
+    }
+
+    /* stylelint-disable selector-no-vendor-prefix */
+    ::-webkit-input-placeholder {
+        @include placeholder;
+    }
+
+    ::-moz-placeholder {
+        @include placeholder;
+    }
+
+    :-ms-input-placeholder {
+        @include placeholder;
+    }
+
+    ::-webkit-scrollbar {
+        height: 5px;
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: $off-white;
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        /* stylelint-disable selector-pseudo-class-no-unknown */
+        &:vertical {
+            background-color: $lighter-black;
+            border-radius: 6px;
+
+            &:hover {
+                background: $darker-black;
+            }
+        }
+
+        &:horizontal {
+            background-color: $lighter-black;
+            border-radius: 6px;
+
+            &:hover {
+                background: $darker-black;
+            }
+        }
+        /* stylelint-enable selector-pseudo-class-no-unknown */
+    }
+
+    ::-webkit-file-upload-button {
+        cursor: pointer;
+    }
+    /* stylelint-enable selector-no-vendor-prefix */
+
+    * {
+        /* stylelint-disable declaration-no-important */
+        box-sizing: border-box !important;
+        /* stylelint-enable declaration-no-important */
+        font-family: $font;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+
+        &::after,
+        &::before {
+            box-sizing: inherit;
+            color: inherit;
+            font-family: inherit;
+            text-rendering: inherit;
+        }
+    }
+
+    select {
+        appearance: none;
+        background: none;
+        background-image: linear-gradient(45deg, transparent 50%, $sevens 50%), linear-gradient(135deg, $sevens 50%, transparent 50%);
+        background-position: calc(100% - 14px) 10px, calc(100% - 10px) 10px;
+        background-repeat: no-repeat;
+        background-size: 4px 4px, 4px 4px;
+        border: 1px solid $grey;
+        border-radius: 2px;
+        color: inherit;
+        cursor: pointer;
+        padding: 5px 25px 5px 10px;
+
+        &:hover {
+            border-color: $blue;
+        }
+
+        &:focus,
+        &:active {
+            background-image: linear-gradient(45deg, transparent 50%, $blue 50%), linear-gradient(135deg, $blue 50%, transparent 50%);
+            border-color: $blue;
+            color: $blue;
+            outline: none;
+        }
+
+        &:disabled {
+            background-image: linear-gradient(45deg, transparent 50%, $off-white 50%), linear-gradient(135deg, $off-white 50%, transparent 50%);
+            border-color: $off-white;
+            color: $off-white;
+        }
+
+        /* stylelint-disable declaration-no-important */
+        &:-moz-focusring,
+        &::-moz-focus-inner {
+            color: transparent !important;
+            text-shadow: 0 0 0 $twos !important;
+        }
+
+        &::-ms-expand {
+            display: none !important;
+        }
+        /* stylelint-enable declaration-no-important */
+    }
+
+    input[type="text"],
+    input[type="search"] {
+        appearance: textfield;
+        border: 1px solid $grey;
+        border-radius: 3px;
+        box-shadow: inset 0 1px 1px $lightest-black;
+        color: $twos;
+        font-size: 13px;
+        height: 34px;
+        line-height: 15px;
+        padding: 7px;
+        transition: border-color linear .15s, box-shadow linear .1s;
+        width: 100%;
+
+        &:hover {
+            border-color: $blue;
+            box-shadow: inset 0 1px 1px $lighter-black;
+        }
+
+        &:focus {
+            border-color: $blue;
+            box-shadow: none;
+            outline: 0;
+        }
+
+        /* stylelint-disable selector-no-vendor-prefix */
+        &::-webkit-input-placeholder,
+        &::-moz-placeholder,
+        &::-ms-input-placeholder {
+            color: $see-see;
+        }
+        /* stylelint-enable selector-no-vendor-prefix */
+
+        &:invalid {
+            border: 1px solid $red;
+        }
+
+        &:invalid:focus {
+            border: 1px solid $see-see;
+        }
+
+        &:disabled {
+            background-color: $haze;
+            border-color: $efive;
+            box-shadow: none;
+            color: $bfive;
+
+            &:hover {
+                border-color: $efive;
+            }
+        }
+    }
+
+    label {
+        div {
+            padding: 10px 0;
+        }
+    }
+}
+
+.buik-app-element {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+// Input element styled like a link
+.buik-input-link {
+    color: $blue;
+    cursor: pointer;
+    display: block;
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+
+    input {
+        display: none;
+    }
+}
+
+// Input styled like a button
+.buik-input-btn {
+    cursor: pointer;
+    display: block;
+
+    input {
+        display: none;
+    }
+}
+
+.buik-checkbox {
+    cursor: pointer;
+    display: block;
+    position: relative;
+    user-select: none;
+
+    > input {
+        &[type='checkbox'] {
+            flex: none;
+            height: 14px;
+            margin: 3px 0 0;
+            opacity: 0;
+            width: 14px;
+
+            + span {
+                &::before {
+                    background: $white;
+                    border: 1px solid $see-see;
+                    border-radius: 2px;
+                    content: '';
+                    height: 14px;
+                    left: 0;
+                    position: absolute;
+                    top: 3px;
+                    width: 14px;
+                }
+
+                &::after {
+                    backface-visibility: hidden;
+                    border-bottom: 2px solid $blue;
+                    border-right: 2px solid $blue;
+                    content: '';
+                    height: 7px;
+                    left: 5px;
+                    position: absolute;
+                    top: 6px;
+                    transform: rotate(45deg) scale(0);
+                    width: 4px;
+                }
+            }
+
+            &:checked {
+                + span {
+                    &::after {
+                        transform: rotate(45deg) scale(1);
+                    }
+                }
+            }
+
+            &:focus {
+                + span {
+                    &::before {
+                        border-color: $blue;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.buik-hidden {
+    display: none;
+}
+
+.buik-modal {
+    .buik-modal-btns {
+        display: flex;
+        justify-content: center;
+        padding: 15px 0 0;
+
+        .buik-btn {
+            margin-left: 8px;
+        }
+    }
+
+    .buik-modal-error {
+        color: $red;
+    }
+}
+
+.buik-modal-wrapper-content,
+.buik-modal-dialog-content-full-bleed {
+    background-color: $white;
+    border: 0 none;
+    border-radius: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    outline: none;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.buik-modal-wrapper-overlay {
+    background-color: $darker-black;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+.buik-modal-dialog-content {
+    @extend .buik-modal-wrapper-content;
+
+    border-radius: 4px;
+    bottom: auto;
+    left: 50%;
+    margin-right: -50%;
+    padding: 25px;
+    position: absolute;
+    right: auto;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+
+    .buik-is-small & {
+        width: 340px;
+    }
+}
+
+.buik-modal-dialog-overlay {
+    @extend .buik-modal-wrapper-overlay;
+
+    position: absolute;
+}

@@ -1,0 +1,12 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "typescript.validate.enable": false,
+    "typescript.format.enable": false,
+    "flow.useNPMPackagedFlow": true,
+    "flow.enabled": true,
+    "javascript.validate.enable": false,
+    "prettier.eslintIntegration": true,
+    "prettier.printWidth": 120,
+    "prettier.tabWidth": 4,
+    "prettier.singleQuote": true
+}

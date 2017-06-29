@@ -1,0 +1,20 @@
+@import '../variables';
+
+.bcu-progress-container {
+    background: $off-white;
+    height: 2px;
+    margin-right: 40px;
+    transition: .4s opacity;
+    width: 100%;
+    z-index: 201;
+
+    .bcu-progress {
+        background: $blue;
+        box-shadow: 0 1px 5px 0 $light-blue;
+        height: 2px;
+        left: 0;
+        max-width: 100%;
+        top: 0;
+        transition: .4s width;
+    }
+}

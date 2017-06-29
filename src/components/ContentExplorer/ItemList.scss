@@ -1,0 +1,95 @@
+@import '../variables';
+
+.bce-item-row {
+    border-left: 2px solid transparent;
+    border-top: 1px solid $off-white;
+    outline: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: $lighter-light-blue;
+        border-left-color: $dark-cerulean;
+
+        .bce-more-options {
+            opacity: 1;
+        }
+
+        .bce-item-coloumn,
+        .buik-btn-plain {
+            color: $dark-cerulean;
+        }
+    }
+
+    .bce-item-coloumn {
+        color: $sevens;
+    }
+
+    &:first-child {
+        /* stylelint-disable declaration-no-important */
+        border-top-color: transparent !important;
+        /* stylelint-enable declaration-no-important */
+    }
+
+    &:last-child {
+        border-bottom: 1px solid $off-white;
+
+        &.bce-item-row-selected {
+            border-bottom-color: $grey-blue;
+        }
+    }
+
+    &.bce-item-row-selected {
+        background-color: $light-blue;
+        border-top-color: $grey-blue;
+
+        .bce-more-options {
+            opacity: 1;
+        }
+
+        .bce-item-coloumn,
+        .buik-btn-plain {
+            color: $dark-cerulean;
+        }
+    }
+
+    &.bce-item-row-selected + & {
+        border-top-color: $grey-blue;
+    }
+
+    .bce-more-options {
+        opacity: 0;
+
+        .buik-btn {
+            background-color: transparent;
+            margin-left: 8px;
+        }
+
+        .buik-is-touch & {
+            opacity: 1;
+        }
+    }
+}
+
+.bce-item-header-row {
+    border-bottom: 1px solid $off-white;
+    box-shadow: 0 4px 6px -2px $transparent-black;
+    color: $sevens;
+    font-weight: 400;
+    text-transform: none;
+}
+
+.ReactVirtualized__Table__headerTruncatedText {
+    vertical-align: middle;
+}
+
+.ReactVirtualized__Table__sortableHeaderColumn {
+    cursor: pointer;
+
+    &:active,
+    &:hover,
+    &:focus {
+        color: $blue;
+        outline: none;
+    }
+}
