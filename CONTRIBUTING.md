@@ -16,6 +16,7 @@ This project adheres to the [Box Open Code of Conduct](http://opensource.box.com
 
 ## How to contribute
 
+* See [Developing Guide](Developing.md).
 * **File an issue** - if you found a bug, want to request an enhancement, or want to implement something (bug fix or feature).
 * **Send a pull request** - if you want to contribute code. Please be sure to file an issue first.
 
