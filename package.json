@@ -35,6 +35,36 @@
   "bugs": {
     "url": "https://github.com/box/box-ui-elements/issues"
   },
+  "scripts": {
+    "dev": "BABEL_ENV=dev NODE_ENV=dev ./node_modules/.bin/webpack --progress --colors --config build/webpack.web.config.js",
+    "deploy": "BABEL_ENV=dev NODE_ENV=dev ./node_modules/.bin/webpack-dev-server --config build/webpack.web.config.js",
+    "ci": "BABEL_ENV=production NODE_ENV=production CI=1 node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js -p --progress --colors --config build/webpack.web.config.js",
+    "prod": "BABEL_ENV=production NODE_ENV=production node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js -p --progress --colors --config build/webpack.web.config.js",
+    "npm": "webpack -p --progress --colors --config build/webpack.npm.config.js",
+    "clean": "rm -rf dist && rm -rf lib && rm -rf reports/coverage && rm -rf src/i18n/json",
+    "changelog": "./node_modules/.bin/conventional-changelog -i CHANGELOG.md -s -r 0",
+    "prettier": "prettier-eslint --print-width 120 --tab-width 4 --single-quote --semi --write --bracket-spacing true \"src/**/*.js\"",
+    "commitmsg": "conventional-changelog-lint -e",
+    "prepush": "yarn run lint && yarn run flow && yarn run test",
+    "precommit": "lint-staged",
+    "lint": "NODE_ENV=dev ./node_modules/.bin/eslint src && ./node_modules/.bin/stylelint 'src/**/*.scss'",
+    "test": "NODE_ENV=test ./node_modules/.bin/karma start build/karma.conf.js",
+    "debug": "NODE_ENV=test ./node_modules/.bin/karma start build/karma.conf.js --no-single-run --auto-watch",
+    "build": "yarn run lint && yarn run clean && yarn run dev",
+    "build-lib": "yarn run npm && ./node_modules/.bin/cpx './src/{**/!(__tests__)/*,*}' lib && node ./build/props-to-es2015.js && BABEL_ENV=npm NODE_ENV=production ./node_modules/.bin/babel lib -d lib",
+    "minor": "./build/release.sh -n && ./build/publish.sh"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "prettier-eslint --print-width 120 --tab-width 4 --single-quote --semi --write --bracket-spacing true",
+      "git add"
+    ]
+  },
+  "devEngines": {
+    "node": ">=6.x",
+    "npm": ">=3.x",
+    "yarn": ">=0.21.3"
+  },
   "dependencies": {
     "classnames": "^2.2.5",
     "lodash.clonedeep": "^4.5.0",
@@ -139,35 +169,5 @@
   "peerDependencies": {
     "react": "^15.6.0 || ^16.0.0-alpha",
     "react-dom": "^15.6.0 || ^16.0.0-alpha"
-  },
-  "scripts": {
-    "dev": "BABEL_ENV=dev NODE_ENV=dev ./node_modules/.bin/webpack --progress --colors --config build/webpack.web.config.js",
-    "deploy": "BABEL_ENV=dev NODE_ENV=dev ./node_modules/.bin/webpack-dev-server --config build/webpack.web.config.js",
-    "ci": "BABEL_ENV=production NODE_ENV=production JENKINS=1 node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js -p --progress --colors --config build/webpack.web.config.js",
-    "prod": "BABEL_ENV=production NODE_ENV=production node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js -p --progress --colors --config build/webpack.web.config.js",
-    "npm": "webpack -p --progress --colors --config build/webpack.npm.config.js",
-    "clean": "rm -rf dist && rm -rf lib && rm -rf reports/coverage && rm -rf src/i18n/json",
-    "changelog": "./node_modules/.bin/conventional-changelog -i CHANGELOG.md -s -r 0",
-    "prettier": "prettier-eslint --print-width 120 --tab-width 4 --single-quote --semi --write --bracket-spacing true \"src/**/*.js\"",
-    "commitmsg": "conventional-changelog-lint -e",
-    "prepush": "yarn run lint && yarn run flow && yarn run test",
-    "precommit": "lint-staged",
-    "lint": "NODE_ENV=dev ./node_modules/.bin/eslint src && ./node_modules/.bin/stylelint 'src/**/*.scss'",
-    "test": "NODE_ENV=test ./node_modules/.bin/karma start build/karma.conf.js",
-    "debug": "NODE_ENV=test ./node_modules/.bin/karma start build/karma.conf.js --no-single-run --auto-watch",
-    "build": "yarn run lint && yarn run clean && yarn run dev",
-    "build-lib": "yarn run npm && ./node_modules/.bin/cpx './src/{**/!(__tests__)/*,*}' lib && node ./build/props-to-es2015.js && BABEL_ENV=npm NODE_ENV=production ./node_modules/.bin/babel lib -d lib",
-    "minor": "./build/release.sh -n && ./build/publish.sh"
-  },
-  "lint-staged": {
-    "src/**/*.js": [
-      "prettier-eslint --print-width 120 --tab-width 4 --single-quote --semi --write --bracket-spacing true",
-      "git add"
-    ]
-  },
-  "devEngines": {
-    "node": ">=6.x",
-    "npm": ">=3.x",
-    "yarn": ">=0.21.3"
   }
 }

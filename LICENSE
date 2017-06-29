@@ -2,7 +2,7 @@
                           SOFTWARE LICENSE AGREEMENT
                                 (v.20170516)
 
-                                BOX UI ELEMENTS
+                              BOX UI ELEMENTS
 
 This "Agreement" forms a legally binding agreement between Box (as defined in
 Section 14) and you ("Developer") that governs Developer's right to access and
@@ -48,8 +48,8 @@ services for their respective governing terms.
    thereto) or to modify the SDK at any time in its sole discretion.
    Free/open source software components distributed in this SDK are licensed
    to Developer under the terms of the applicable free/open source license
-   agreements and such free/open source software licenses can be found at
-   https://cloud.box.com/v/preview-licenses-v1.
+   agreements and such free/open source software licenses can be found in
+   the THIRD_PARTY_LICENSES file in the same source directory as this file.
 
 2. Use Rights & Requirements.
     a. Subject to Developer's compliance with the terms of this Agreement,
@@ -109,12 +109,12 @@ services for their respective governing terms.
 4. Contributions. Developer Contributions (as defined in the "Contributor
    License Agreement" (CLA)), made by the Developer pursuant to the rights
    granted or permitted under this Agreement, are subject to the following:
-    a. Developer shall comply with the Contribution policy set forth here:
-       https://github.com/box/box-content-preview/blob/master/CONTRIBUTING.md;
+    a. Developer shall comply with the Contribution policy set forth in the
+       CONTRIBUTING.md file in the same source directory as this file;
        and
     b. For each Contribution, Developer shall agree to the Box "Contributor
        License Agreement" (or "CLA") located here:
-       https://developer.box.com/docs/ui-kits-contribution-license.
+       https://developer.box.com/docs/box-ui-elements-cla.
 
 5. Feedback. Developer may, from time to time, provide feedback to Box
    concerning the functionality and performance of the SDK or Box Service
@@ -345,7 +345,7 @@ services for their respective governing terms.
 
 
                                    Exhibit A
-                       BOX UI ELEMENTS ACCEPTABLE USE POLICY
+                       BOX UI ELEMENT ACCEPTABLE USE POLICY
 
 Acceptable Use Policy.  Developer shall not, and shall not use the SDKs to:
     a) Do anything illegal, or facilitate, promote or encourage any illegal

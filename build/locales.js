@@ -1,7 +1,7 @@
 const isRelease = process.env.NODE_ENV === 'production';
-const isJenkins = process.env.JENKINS === '1';
+const isCI = process.env.CI === '1';
 
-module.exports = isRelease && !isJenkins ? [
+module.exports = isRelease && !isCI ? [
     'en-AU',
     'en-CA',
     'en-GB',

@@ -1,9 +1,9 @@
-The Box UI Elements use third-party libraries which may be distributed
-under licenses different than the Box UI Element itself. For the
+The Box UI Elements use third-party libraries which may be
+distributed under licenses different than the Box UI Element itself. For the
 libraries bundled at build-time, please look at package.json. The other
 libraries are:
 
-1) pdf.js
+1. pdf.js
 ---------
 Source code: https://github.com/mozilla/pdf.js
 License: Apache License, Version 2.0

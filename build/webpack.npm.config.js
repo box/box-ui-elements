@@ -2,6 +2,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const license = require('./license');
 
 const BannerPlugin = webpack.BannerPlugin;
 
@@ -51,7 +52,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new BannerPlugin('Box UI Elements | Copyright 2016-2017 Box | License: https://developer.box.com/docs/box-ui-kit-software-license-agreement'),
+        new BannerPlugin(license),
         new OptimizeCssAssetsPlugin({
             cssProcessorOptions: {
                 safe: true
