@@ -66,7 +66,7 @@
             <div class="filePicker2"></div>
         </div>
         <div class="container">
-            <h1>Folder Picker (max 3 items / token generator)</h1>
+            <h1>Folder Picker (max 3 items / token generator / cannot upload)</h1>
             <div class="folderPicker2"></div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
@@ -166,7 +166,8 @@
                 folderPicker2.show(folderId, tokenGenerator2, {
                     container: '.folderPicker2',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
-                    maxSelectable: 3
+                    maxSelectable: 3,
+                    canUpload: false
                 });
             }
             load();

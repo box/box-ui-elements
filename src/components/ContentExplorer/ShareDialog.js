@@ -7,7 +7,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import ShareAccessSelect from '../ShareAccessSelect';
-import { Button } from '../Button';
+import { Button, PrimaryButton } from '../Button';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './ShareDialog.scss';
@@ -71,9 +71,9 @@ const ShareDialog = ({
                             }}
                             value={url}
                         />
-                        <Button className='buik-modal-button-copy' onClick={copy}>
+                        <PrimaryButton className='buik-modal-button-copy' onClick={copy}>
                             {getLocalizedMessage('buik.modal.dialog.share.button.copy')}
-                        </Button>
+                        </PrimaryButton>
                     </span>
                 </label>
             </div>

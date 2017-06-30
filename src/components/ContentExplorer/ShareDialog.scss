@@ -21,24 +21,14 @@
     }
 
     .buik-modal-button-copy {
-        appearance: none;
-        background-color: $blue;
-        border: 1px solid $blue;
-        border-left: 0 none;
         border-radius: 0 3px 3px 0;
-        box-shadow: inset 0 1px 1px $lightest-black;
-        color: $white;
         font-size: 10px;
         font-weight: bold;
         height: 34px;
         letter-spacing: 1px;
         line-height: 34px;
-        margin: 0;
-        outline: none;
         padding: 0 10px;
-        text-shadow: none;
         text-transform: uppercase;
-        transition: background-color .05s ease-in-out, border-color .05s ease-in-out;
     }
 
     .buik-modal-btns {

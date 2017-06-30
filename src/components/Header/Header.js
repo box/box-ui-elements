@@ -41,9 +41,10 @@ const Header = ({ view, searchQuery, canUpload, onSearch, onUpload, logoUrl, get
                     />
                 </div>
             </div>
-            <Button onClick={onUpload} isDisabled={!canUpload || !isFolder}>
-                {getLocalizedMessage('buik.header.button.upload')}
-            </Button>
+            {canUpload &&
+                <Button onClick={onUpload} isDisabled={!isFolder}>
+                    {getLocalizedMessage('buik.header.button.upload')}
+                </Button>}
         </div>
     );
 };

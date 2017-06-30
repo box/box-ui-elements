@@ -5,21 +5,14 @@
     flex: 1;
     flex-direction: column;
 
-    .bct-item-list,
-    .bct-empty-state {
+    .bct-item-list {
         flex: 1;
+        min-height: 300px;
         position: relative;
 
         // sass-lint:disable class-name-format
         .ReactVirtualized__Table__Grid {
             outline: none;
         }
-    }
-
-    .bct-empty-state {
-        align-items: center;
-        display: flex;
-        flex: 1;
-        justify-content: center;
     }
 }

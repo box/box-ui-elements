@@ -74,22 +74,19 @@
 .bce-item-header-row {
     border-bottom: 1px solid $off-white;
     box-shadow: 0 4px 6px -2px $transparent-black;
-    color: $sevens;
-    font-weight: 400;
-    text-transform: none;
-}
 
-.ReactVirtualized__Table__headerTruncatedText {
-    vertical-align: middle;
-}
+    .ReactVirtualized__Table__sortableHeaderColumn {
+        color: $sevens;
+        cursor: pointer;
+        font-weight: 400;
+        text-transform: none;
+        user-select: none;
 
-.ReactVirtualized__Table__sortableHeaderColumn {
-    cursor: pointer;
-
-    &:active,
-    &:hover,
-    &:focus {
-        color: $blue;
-        outline: none;
+        &:active,
+        &:hover,
+        &:focus {
+            color: $dark-cerulean;
+            outline: none;
+        }
     }
 }
