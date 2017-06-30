@@ -16,6 +16,7 @@
     padding: 0;
     position: relative;
     text-rendering: optimizeLegibility;
+    user-select: none;
     width: 100%;
 
     @mixin placeholder {
@@ -233,7 +234,6 @@
     cursor: pointer;
     display: block;
     position: relative;
-    user-select: none;
 
     > input {
         &[type='checkbox'] {
