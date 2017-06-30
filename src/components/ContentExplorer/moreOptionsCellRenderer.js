@@ -8,7 +8,7 @@ import React from 'react';
 import DropdownMenu from '../DropdownMenu';
 import { Menu, MenuItem } from '../Menu';
 import { Button } from '../Button';
-import type { BoxItem } from '../../flowTypes';
+import isMobile from '../../util/mobile';
 import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_RENAME,
@@ -18,6 +18,7 @@ import {
     TYPE_FILE,
     TYPE_WEBLINK
 } from '../../constants';
+import type { BoxItem } from '../../flowTypes';
 import './MoreOptionsCell.scss';
 
 export default (
@@ -53,7 +54,7 @@ export default (
     const allowDelete = canDelete && permissions[PERMISSION_CAN_DELETE];
     const allowShare = canShare && permissions[PERMISSION_CAN_SHARE];
     const allowRename = canRename && permissions[PERMISSION_CAN_RENAME];
-    const allowDownload = canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE;
+    const allowDownload = canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE && !isMobile();
     const allowed = allowDelete || allowRename || allowDownload || allowPreview || allowShare || allowOpen;
 
     if (!allowed) {
