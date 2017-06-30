@@ -16,15 +16,6 @@
                 width: 100%;
             }
 
-            .explorer1,
-            .filePicker1,
-            .folderPicker1,
-            .uploader1 {
-                width: 100%;
-                height: 600px;
-                overflow: auto;
-            }
-
             .container {
                 margin: 50px 0;
             }
@@ -40,6 +31,7 @@
         <link rel="stylesheet" type="text/css" href="../dev/en-US/explorer.css" />
         <link rel="stylesheet" type="text/css" href="../dev/en-US/picker.css" />
         <link rel="stylesheet" type="text/css" href="../dev/en-US/uploader.css" />
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/tree.css" />
     </head>
     <body>
         <div class="inputs">
@@ -71,27 +63,17 @@
             <h1>Content Uploader</h1>
             <div class="uploader1"></div>
         </div>
+        <div class="container">
+            <h1>Content Tree</h1>
+            <div class="tree1"></div>
+        </div>
         <script src="../dev/en-US/explorer.js"></script>
         <script src="../dev/en-US/picker.js"></script>
         <script src="../dev/en-US/uploader.js"></script>
+        <script src="../dev/en-US/tree.js"></script>
         <script>
             function load() {
-                const { ContentExplorer, FolderPicker, FilePicker, ContentUploader } = Box;
-                const tokenGenerator1 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve(token);
-                    } else {
-                        return Promise.reject()
-                    }
-                };
-                const tokenGenerator2 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve({ [`folder_${folderId}`]: token });
-                    } else {
-                        return Promise.reject()
-                    }
-                };
-
+                const { ContentTree, ContentExplorer, FolderPicker, FilePicker, ContentUploader } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
 
@@ -104,7 +86,14 @@
                 document.querySelector('.explorer1').innerHTML = '';
                 explorer1.show(folderId, token, {
                     container: '.explorer1',
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
+                    canUpload: false,
+                    canSetShareAccess: false,
+                    canPreview: false,
+                    canDownload: false,
+                    canRename: false,
+                    canDelete: false,
+                    canShare: false
                 });
 
 
@@ -121,7 +110,8 @@
                 });
                 filePicker1.show(folderId, token, {
                     container: '.filePicker1',
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
+                    canSetShareAccess: false
                 });
 
 
@@ -145,8 +135,23 @@
                     document.querySelector('.folderPicker1').innerHTML = '';
                 });
                 folderPicker1.show(folderId, token, {
-                    container: '.folderPicker1'
+                    container: '.folderPicker1',
+                    canUpload: false,
+                    canSetShareAccess: false
                 });
+
+
+
+                const tree1 = new ContentTree();
+                tree1.addListener('click', function(data) {
+                    console.log('%c' + JSON.stringify(data, null, 2), 'background: orange; color: #fff');
+                })
+                document.querySelector('.tree1').innerHTML = '';
+                tree1.show(folderId, token, {
+                    container: '.tree1'
+                });
+
+
             }
             load();
         </script>
