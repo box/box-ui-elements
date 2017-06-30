@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Helper for the Box Upload API
+ * @file Helper for the plain Box Upload API
  * @author Box
  */
 
@@ -8,7 +8,7 @@ import noop from 'lodash.noop';
 import Base from './Base';
 import type { BoxItem } from '../flowTypes';
 
-class Upload extends Base {
+class PlainUpload extends Base {
     file: File;
     id: string;
     overwrite: boolean;
@@ -17,8 +17,26 @@ class Upload extends Base {
     progressCallback: Function;
 
     /**
+     * Handles a upload preflight success response
+     *
+     * @param {Object} data - Preflight success data
+     * @return {void}
+     */
+    uploadPreflightSuccessHandler = ({ upload_url }: { upload_url: string }) => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        // Make an actual POST request to the fast upload URL returned by pre-flight
+        this.makeRequest({
+            url: upload_url
+        });
+    };
+
+    /**
      * Handles an upload success response
      *
+     * @param {Object} data - Upload success data
      * @return {void}
      */
     uploadSuccessHandler = ({ entries }: { entries: BoxItem[] }): void => {
@@ -29,6 +47,22 @@ class Upload extends Base {
         if (typeof this.successCallback === 'function') {
             // Response entries are the successfully created Box File objects
             this.successCallback(entries);
+        }
+    };
+
+    /**
+     * Handles an upload progress event
+     *
+     * @param {Object} event - Progress event
+     * @return {void}
+     */
+    uploadProgressHandler = (event: ProgressEvent): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        if (typeof this.progressCallback === 'function') {
+            this.progressCallback(event);
         }
     };
 
@@ -65,22 +99,6 @@ class Upload extends Base {
     };
 
     /**
-     * Handles an upload progress event
-     *
-     * @param {Object} event - Progress event
-     * @return {void}
-     */
-    uploadProgressHandler = (event: ProgressEvent): void => {
-        if (this.isDestroyed()) {
-            return;
-        }
-
-        if (typeof this.progressCallback === 'function') {
-            this.progressCallback(event);
-        }
-    };
-
-    /**
      * Sends an upload pre-flight request. If a file ID is supplied,
      * send a pre-flight request to that file version.
      *
@@ -98,21 +116,17 @@ class Upload extends Base {
             url = url.replace('content', `${fileId}/content`);
         }
 
+        const { size, name } = this.file;
         const attributes = {
-            name: fileName || this.file.name,
+            name: fileName || name,
             parent: { id: this.id },
-            size: this.file.size
+            size
         };
 
         this.xhr.options({
             url,
             data: attributes,
-            successHandler: (data) => {
-                // Make an actual POST request to the fast upload URL returned by pre-flight
-                this.makeRequest({
-                    url: data.upload_url
-                });
-            },
+            successHandler: this.uploadPreflightSuccessHandler,
             errorHandler: this.uploadErrorHandler
         });
     }
@@ -122,7 +136,7 @@ class Upload extends Base {
      * Version API to replace the file.
      *
      * @param {Object} - Request options
-     * @param {boolean} [options.preflight] - Whether or not this is a preflight options request
+     * @param {boolean} [options.url] - Upload URL to use
      * @param {string} [options.fileId] - ID of file to replace
      * @param {string} [options.fileName] - New name for file
      * @return {void}
@@ -147,7 +161,7 @@ class Upload extends Base {
             parent: { id: this.id }
         });
 
-        this.xhr.postFile({
+        this.xhr.uploadFile({
             url: uploadUrl,
             data: {
                 attributes,
@@ -160,18 +174,8 @@ class Upload extends Base {
     }
 
     /**
-     * Cancels upload of a file.
-     *
-     * @return {void}
-     */
-    cancel() {
-        if (this.xhr && typeof this.xhr.abort === 'function') {
-            this.xhr.abort();
-        }
-    }
-
-    /**
-     * Uploads a file. If there is a conflict, replaces the file.
+     * Uploads a file. If there is a conflict and overwrite is true, replace the file.
+     * Otherwise, re-upload with a different name.
      *
      * @param {Object} options - Upload options
      * @param {string} options.id - Folder id
@@ -179,7 +183,7 @@ class Upload extends Base {
      * @param {Function} [options.successCallback] - Function to call with response
      * @param {Function} [options.errorCallback] - Function to call with errors
      * @param {Function} [options.progressCallback] - Function to call with progress
-     * @param {boolean} [overwrite] - To overwrite or not
+     * @param {boolean} [overwrite] - Should upload overwrite file with same name
      * @return {void}
      */
     upload({
@@ -192,10 +196,10 @@ class Upload extends Base {
     }: {
         id: string,
         file: File,
-        successCallback?: Function,
-        errorCallback?: Function,
-        progressCallback?: Function,
-        overwrite?: boolean
+        successCallback: Function,
+        errorCallback: Function,
+        progressCallback: Function,
+        overwrite: boolean
     }): void {
         if (this.isDestroyed()) {
             return;
@@ -211,6 +215,17 @@ class Upload extends Base {
 
         this.makePreflightRequest({});
     }
+
+    /**
+     * Cancels upload of a file.
+     *
+     * @return {void}
+     */
+    cancel() {
+        if (this.xhr && typeof this.xhr.abort === 'function') {
+            this.xhr.abort();
+        }
+    }
 }
 
-export default Upload;
+export default PlainUpload;

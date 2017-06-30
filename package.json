@@ -79,6 +79,7 @@
     "react-modal": "^2.0.2",
     "react-tether": "^0.5.7",
     "react-virtualized": "^9.8.0",
+    "rusha": "^0.8.6",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {

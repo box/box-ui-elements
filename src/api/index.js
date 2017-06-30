@@ -5,12 +5,15 @@
  */
 
 import Cache from '../util/Cache';
-import UploadAPI from './Upload';
+import ChunkedUploadAPI from './ChunkedUpload';
+import PlainUploadAPI from './PlainUpload';
 import FolderAPI from './Folder';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
+
+const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
 
 class API {
     /**
@@ -64,9 +67,9 @@ class API {
     folderAPI: FolderAPI;
 
     /**
-     * @property {UploadAPI}
+     * @property {UploadAPI|ChunkedUploadAPI}
      */
-    uploadAPI: UploadAPI;
+    uploadAPI: PlainUploadAPI | ChunkedUploadAPI;
 
     /**
      * @property {SearchAPI}
@@ -156,11 +159,21 @@ class API {
     /**
      * API for uploads
      *
+     * @param {boolean} chunked - Should chunked upload be used
+     * @param {number} fileSize - File size
      * @return {UploadAPI} UploadAPI instance
      */
-    getUploadAPI(): UploadAPI {
-        this.destroy();
-        this.uploadAPI = new UploadAPI(this.options);
+    getUploadAPI(chunked?: boolean, fileSize?: number): ChunkedUploadAPI | PlainUploadAPI {
+        if (this.uploadAPI) {
+            return this.uploadAPI;
+        }
+
+        if (chunked && fileSize && fileSize > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
+            this.uploadAPI = new ChunkedUploadAPI(this.options);
+        } else {
+            this.uploadAPI = new PlainUploadAPI(this.options);
+        }
+
         return this.uploadAPI;
     }
 

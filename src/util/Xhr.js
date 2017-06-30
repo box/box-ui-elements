@@ -10,6 +10,7 @@ import type { StringMap, StringAnyMap } from '../flowTypes';
 
 const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
+const CONTENT_TYPE_HEADER = 'Content-Type';
 
 type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
 
@@ -84,8 +85,8 @@ class Xhr {
      * @return {Object} JS Object representation of the JSON response or the response
      */
     static parseJSON(response: Response): Response | Promise<any> {
-        // if is 204 just return response
-        if (response.status === 204) {
+        // Return plain response if it is 202 or 204 since they don't have a body
+        if (response.status === 202 || response.status === 204) {
             return response;
         }
         return response.json();
@@ -141,14 +142,14 @@ class Xhr {
     /**
      * Builds a list of required XHR headers.
      *
-     * @param {Object} [args] optional existing headers
+     * @param {Object} [args] - Optional existing headers
      * @return {Object} Headers
      */
     getHeaders(args: StringMap = {}) {
         const headers: StringMap = Object.assign(
             {
                 Accept: 'application/json',
-                'Content-Type': 'application/json'
+                [CONTENT_TYPE_HEADER]: 'application/json'
             },
             args
         );
@@ -265,29 +266,56 @@ class Xhr {
     }
 
     /**
-     * HTTP POSTs a URL with File data. Uses native XHR for progress event.
+     * HTTP POST or PUT a URL with File data. Uses native XHR for progress event.
      *
      * @param {string} url - The URL to post to
-     * @param {Object} data - The non-file post data that should accompany the post
+     * @param {Object} [data] - File data and attributes
      * @param {Object} [headers] - Key-value map of headers
+     * @param {string} [method] - XHR method, supports 'POST' and 'PUT'
      * @param {Function} successHandler - Load success handler
      * @param {Function} errorHandler - Error handler
-     * @param {Function} [progressHandler] - Progress handler
+     * @param {Function} progressHandler - Progress handler
      * @return {void}
      */
-    postFile({ url, data, headers = {}, successHandler, errorHandler, progressHandler }: XHROptions): Promise<any> {
-        const formData = new FormData();
-        Object.keys(data).forEach((key) => {
-            formData.append(key, data[key]);
-        });
+    uploadFile({
+        url,
+        data,
+        headers = {},
+        method = 'POST',
+        successHandler,
+        errorHandler,
+        progressHandler
+    }: {
+        url: string,
+        data: ?Object,
+        headers?: StringMap,
+        method?: Method,
+        successHandler: Function,
+        errorHandler: Function,
+        progressHandler: Function
+    }): Promise<any> {
+        let formData;
+        if (data && data.attributes) {
+            formData = new FormData();
+            Object.keys(data).forEach((key) => {
+                if (data) {
+                    formData.append(key, data[key]);
+                }
+            });
+        }
 
         return this.getHeaders(headers)
             .then((hdrs) => {
+                // Remove Accept/Content-Type added by getHeaders()
                 delete hdrs.Accept;
-                delete hdrs['Content-Type'];
+                delete hdrs[CONTENT_TYPE_HEADER];
+
+                if (headers[CONTENT_TYPE_HEADER]) {
+                    hdrs[CONTENT_TYPE_HEADER] = headers[CONTENT_TYPE_HEADER];
+                }
 
                 this.xhr = new XMLHttpRequest();
-                this.xhr.open('POST', url, true);
+                this.xhr.open(method, url, true);
 
                 Object.keys(hdrs).forEach((header) => {
                     this.xhr.setRequestHeader(header, hdrs[header]);
@@ -311,7 +339,11 @@ class Xhr {
                     this.xhr.upload.addEventListener('progress', progressHandler);
                 }
 
-                this.xhr.send(formData);
+                if (formData) {
+                    this.xhr.send(formData);
+                } else {
+                    this.xhr.send(data);
+                }
             })
             .catch(errorHandler);
     }
