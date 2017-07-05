@@ -70,7 +70,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '0.129.2';
+export const DEFAULT_PREVIEW_VERSION = '0.130.0';
 export const DEFAULT_PREVIEW_LOCALE = 'en-US';
 export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
 export const DEFAULT_HOSTNAME_STATIC = 'https://cdn01.boxcdn.net';
