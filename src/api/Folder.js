@@ -18,7 +18,8 @@ import type {
     FlattenedBoxItem,
     FlattenedBoxItemCollection,
     SortBy,
-    SortDirection
+    SortDirection,
+    Collection
 } from '../flowTypes';
 
 const LIMIT_ITEM_FETCH = 1000;
@@ -122,16 +123,18 @@ class Folder extends Item {
         }
 
         const percentLoaded: number = total_count === 0 ? 100 : entries.length * 100 / total_count;
-        this.successCallback({
+        const collection: Collection = {
             id,
             name,
             percentLoaded,
             permissions,
+            boxItem: sortedFolder,
             breadcrumbs: path_collection.entries,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
             items: entries.map((key: string) => this.getCache().get(key))
-        });
+        };
+        this.successCallback(collection);
     }
 
     /**

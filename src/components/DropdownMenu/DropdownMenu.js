@@ -17,11 +17,11 @@ type Props = {
     renderElementTo: string
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     constrainToScrollParent: boolean,
     constrainToWindow: boolean,
     isRightAligned: boolean
-};
+|};
 
 type State = {
     initialFocusIndex: number,

@@ -87,7 +87,7 @@ type State = {
     isUploadModalOpen: boolean
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     type: string,
     rootFolderId: string,
     onChoose: Function,
@@ -102,7 +102,7 @@ type DefaultProps = {
     uploadHost: string,
     clientName: string,
     className: string
-};
+|};
 
 class ContentPicker extends Component<DefaultProps, Props, State> {
     id: string;
@@ -717,7 +717,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                 {canUpload && !!this.appElement
                     ? <UploadDialog
                         isOpen={isUploadModalOpen}
-                        root={id}
+                        rootFolderId={id}
                         token={token}
                         sharedLink={sharedLink}
                         sharedLinkPassword={sharedLinkPassword}

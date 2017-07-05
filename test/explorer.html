@@ -113,6 +113,11 @@
                     console.log('%c' + JSON.stringify(data, null, 2), 'background: orange; color: #fff');
                     console.log('%c==========Upload===========', 'background: orange; color: #fff');
                 });
+                explorer1.addListener('navigate', function(data) {
+                    console.log('%c==========Navigate===========', 'background: pink; color: #fff');
+                    console.log('%c' + JSON.stringify(data, null, 2), 'background: pink; color: #fff');
+                    console.log('%c==========Navigate===========', 'background: pink; color: #fff');
+                });
                 document.querySelector('.explorer1').innerHTML = '';
                 explorer1.show(folderId, token, {
                     container: '.explorer1',

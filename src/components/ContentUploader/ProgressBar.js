@@ -14,15 +14,15 @@ type State = {
     percent: number
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     percent: number
-};
+|};
 
 class ProgressBar extends PureComponent<DefaultProps, Props, State> {
     props: Props;
     state: State;
 
-    static defaultProps = {
+    static defaultProps: DefaultProps = {
         percent: 0
     };
 

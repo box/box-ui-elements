@@ -9,23 +9,23 @@
 The Box UI Elements are currently in beta and may contain bugs. Their interfaces may also update as needed. Please email [box-ui-kit-feedback@box.com](mailto:box-ui-kit-feedback@box.com) to report issues or provide feedback.
 
 ## Usage
-If you are not building a React based app, please follow the [documentation link](https://developer.box.com/docs/box-ui-elements) to use the Box UI Elements as simple library includes. Continue reading below to import the components into your React based app.
+If you are not building a [React](https://facebook.github.io/react) based app, please follow the [documentation on our developer docs](https://developer.box.com/docs/box-ui-elements), which shows how to use the Box UI Elements via script includes. Continue reading below to import the components into your React based app.
 
 ## Installation
 `yarn add box-ui-elements`
 
 ## Authentication
-We have designed the Box UI Elements in an authentication-type agnostic way so whether you are using them for users who have Box accounts (Managed Users) or non-Box accounts (App Users), they should just work out of the box. They only expect a **token** to be passed in for authentication. Please refer to the documentation links to learn more about authentication and generating access tokens.
+We have designed the Box UI Elements in an authentication-type agnostic way. Whether you are using them for users who have Box accounts (Managed Users) or non-Box accounts (App Users), they should just work out of the box. They only expect an **access token** to be passed in for authentication. Please refer to the documentation links to learn more about authentication and generating access tokens.
 
 ## CSS
-The Box UI Elements require their corresponding CSS stylesheet to render properly. If you import the CSS as shown in the examples below, you will require setting up webpack's style-loader / css-loader plugins to properly process the CSS. Alternatively, you can just include the CSS file in your apps's HTML without importing it into javascript.
+The Box UI Elements require their corresponding CSS stylesheet to render properly. If you import the CSS as shown in the examples below, you will require setting up webpack's style-loader / css-loader plugins to properly process the CSS. Alternatively, you can just include the CSS file (hosted versions can be found in the documentation links) in your apps's HTML without importing it into javascript.
 
 ## Components
-You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview` or `ContentTree`. Likewise, you can also import the `ContentPickerPopup`, `ContentUploaderPopup` or `ContentTreePopup` which are popup versions for the picker, uploader and content tree respectively.
+You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview` or `ContentTree`. Likewise, you can also import the `ContentPickerPopup`, `ContentUploaderPopup` or `ContentTreePopup` which are popup versions for the content picker, content uploader and content tree respectively.
 
 ## Content Explorer ([Documentation](https://developer.box.com/docs/box-content-explorer))
 
-<img src="https://user-images.githubusercontent.com/1075325/27419186-596c98ba-56d4-11e7-818e-f5050d5a29fd.png" width="75%"/>
+<img src="https://user-images.githubusercontent.com/1075325/27887154-092a232a-6194-11e7-82f4-697331ac5cbe.png" width="75%"/>
 
 ```js
 import React from 'react';
@@ -51,11 +51,11 @@ render(
 | Attribute | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
-| getLocalizedMessage* | function |  | Function to get localized strings. |
+| getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
 | rootFolderId | string | `0` | The root folder for the content explorer. |
 | currentFolderId | string | | The current folder shown for the content explorer. This should be a sub folder to the root folder. |
 | sortBy | string | `name` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
-| sortDirection | SortDirection | `asc` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| sortDirection | string | `asc` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | canPreview | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | canDownload | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | canDelete | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
@@ -63,12 +63,13 @@ render(
 | canRename | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | canShare | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | canSetShareAccess | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
-| onDelete | function |  | Callback function for when item(s) are deleted. |
-| onDownload | function |  | Callback function for when item(s) are downloaded. |
-| onPreview | function |  | Callback function for when an item is previewed. |
-| onRename | function |  | Callback function for when an item is renamed. |
-| onSelect | function |  | Callback function for when item(s) are selected. |
-| onUpload | function |  | Callback function for when item(s) are uploaded. |
+| onDelete | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when item(s) are deleted. |
+| onDownload | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when item(s) are downloaded. |
+| onPreview | function([File](https://developer.box.com/reference#file-object)) |  | Callback function for when an item is previewed. |
+| onRename | function([File](https://developer.box.com/reference#file-object)) |  | Callback function for when an item is renamed. |
+| onSelect | function(Array&lt;[Folder](https://developer.box.com/reference#folder-object)&#124;[File](https://developer.box.com/reference#file-object)&#124;[Web Link](https://developer.box.com/reference#web-link-object)&gt;) |  | Callback function for when item(s) are selected. |
+| onUpload | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when item(s) are uploaded. |
+| onNavigate | function([File](https://developer.box.com/reference#file-object)) |  | Callback function for when navigating into a folder. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
@@ -77,7 +78,7 @@ render(
 
 ## Content Picker ([Documentation](https://developer.box.com/docs/box-content-picker))
 
-<img src="https://user-images.githubusercontent.com/1075325/27419182-59696758-56d4-11e7-89d5-a462d0ea742c.png" width="75%"/>
+<img src="https://user-images.githubusercontent.com/1075325/27887156-0940ee3e-6194-11e7-8e22-961139e82dfe.png" width="75%"/>
 
 ```js
 import React from 'react';
@@ -103,12 +104,12 @@ render(
 | Attribute | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
-| getLocalizedMessage* | function |  | Function to get localized strings. |
+| getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
 | rootFolderId | string | `0` | The root folder for the content picker. |
 | type | string | `file, web_link` | Indicates which type of items can be picked. Should be a comma seperated combination of `file`, `folder` or `web_link`. |
 | sortBy | string | `name` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
-| sortDirection | SortDirection | `asc` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
-| extensions | string[] | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| sortDirection | string | `asc` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| extensions | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | maxSelectable | number | `Infinity` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | canUpload | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | canSetShareAccess | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
@@ -120,7 +121,7 @@ render(
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 
 ## Content Uploader ([Documentation](https://developer.box.com/docs/box-content-uploader))
-<img src="https://user-images.githubusercontent.com/1075325/27419181-596712b4-56d4-11e7-911e-d230a02efd5e.png" width="75%"/>
+<img src="https://user-images.githubusercontent.com/1075325/27887153-09243762-6194-11e7-8d2d-cf654d9364bc.png" width="75%"/>
 
 ```js
 import React from 'react';
@@ -146,10 +147,10 @@ render(
 | Attribute | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
-| getLocalizedMessage* | function |  | Function to get localized strings. |
+| getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
 | rootFolderId | string | `0` | The root folder for the content uploader. |
 | onClose | function |  | Callback function for when the close button is pressed. |
-| onComplete | function |  | Callback function for when uploads are complete. |
+| onComplete | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when uploads are complete. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
@@ -158,7 +159,7 @@ render(
 
 ## Content Tree ([Documentation](https://developer.box.com/docs/box-content-tree))
 
-<img src="https://user-images.githubusercontent.com/1075325/27419183-5969c446-56d4-11e7-8dd1-432cd63aa40b.png" width="75%"/>
+<img src="https://user-images.githubusercontent.com/1075325/27887155-092e7362-6194-11e7-877d-157726789bef.png" width="75%"/>
 
 ```js
 import React from 'react';
@@ -184,10 +185,10 @@ render(
 | Attribute | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| getLocalizedMessage* | function |  | Function to get localized strings. |
+| getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
 | rootFolderId | string | `0` | The root folder for the content tree. |
 | type | string | `file, web_link, folder` | Indicates which type of items show up in the tree. Should be a comma seperated combination of `file`, `folder` or `web_link`. |
-| onClick | function |  | Callback function for when an item is clicked. |
+| onClick | function([Folder](https://developer.box.com/reference#folder-object)&#124;[File](https://developer.box.com/reference#file-object)&#124;[Web Link](https://developer.box.com/reference#web-link-object)) |  | Callback function for when an item is clicked. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
@@ -224,7 +225,7 @@ render(
 | fileId* | string | | The id of the file to preview. |
 | locale | string | `en-US` | Locale for this component. |
 | onLoad | function |  | Callback function for when a file preview loads. |
-| collection | string[] | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
+| collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
 | header | string | `light` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |

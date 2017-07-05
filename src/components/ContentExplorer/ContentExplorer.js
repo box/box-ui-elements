@@ -79,6 +79,7 @@ type Props = {
     onRename: Function,
     onSelect: Function,
     onUpload: Function,
+    onNavigate: Function,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string
@@ -101,7 +102,7 @@ type State = {
     errorCode: string
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     rootFolderId: string,
     sortBy: SortBy,
     sortDirection: SortDirection,
@@ -120,8 +121,9 @@ type DefaultProps = {
     onPreview: Function,
     onRename: Function,
     onSelect: Function,
-    onUpload: Function
-};
+    onUpload: Function,
+    onNavigate: Function
+|};
 
 class ContentExplorer extends Component<DefaultProps, Props, State> {
     id: string;
@@ -151,7 +153,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         onPreview: noop,
         onRename: noop,
         onSelect: noop,
-        onUpload: noop
+        onUpload: noop,
+        onNavigate: noop
     };
 
     /**
@@ -301,6 +304,25 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
     };
 
     /**
+     * Focuses the grid and fires navigate event
+     *
+     * @private
+     * @return {void}
+     */
+    finishNavigation() {
+        const { onNavigate }: Props = this.props;
+        const { currentCollection: { percentLoaded, boxItem } }: State = this.state;
+        onNavigate(cloneDeep(boxItem));
+
+        // Don't focus the grid until its loaded and user is not already on an interactable element
+        if (percentLoaded !== 100 || !this.table || !this.table.Grid || isActionableElement(document.activeElement)) {
+            return;
+        }
+        const grid: any = findDOMNode(this.table.Grid);
+        grid.focus();
+    }
+
+    /**
      * Folder fetch success callback
      *
      * @private
@@ -325,13 +347,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         this.closeModals();
 
         // Set the new state and focus the grid for tabbing
-        this.setState(newState, () => {
-            if (!this.table || !this.table.Grid || isActionableElement(document.activeElement)) {
-                return;
-            }
-            const grid: any = findDOMNode(this.table.Grid);
-            grid.focus();
-        });
+        this.setState(newState, this.finishNavigation);
     };
 
     /**
@@ -993,7 +1009,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                 {canUpload && !!this.appElement
                     ? <UploadDialog
                         isOpen={isUploadModalOpen}
-                        root={id}
+                        rootFolderId={id}
                         token={token}
                         sharedLink={sharedLink}
                         sharedLinkPassword={sharedLinkPassword}

@@ -9,10 +9,13 @@
     font-size: 13px;
     line-height: 16px;
     margin: 0;
+    max-width: 100%;
+    overflow: hidden;
     padding: 8px 16px;
     position: relative;
     text-align: center;
     text-decoration: none;
+    text-overflow: ellipsis;
     text-shadow: none;
     transition: background-color .05s ease-in-out, border-color .05s ease-in-out;
     white-space: nowrap;
