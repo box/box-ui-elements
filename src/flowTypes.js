@@ -153,7 +153,8 @@ export type Collection = {
     percentLoaded?: number,
     sortBy?: SortBy,
     sortDirection?: SortDirection,
-    items?: BoxItem[]
+    items?: BoxItem[],
+    boxItem?: FlattenedBoxItem
 };
 
 export type UploadItem = {

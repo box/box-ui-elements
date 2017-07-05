@@ -14,13 +14,13 @@ import {
     DEFAULT_PREVIEW_LOCALE
 } from '../../constants';
 
-type DefaultProps = {
+type DefaultProps = {|
     apiHost: string,
     staticHost: string,
     locale: string,
     version: string,
     className: string
-};
+|};
 
 type Props = {
     fileId: string,

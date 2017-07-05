@@ -15,9 +15,9 @@ type Props = {
     children: any
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     className: string
-};
+|};
 
 function stopPropagationAndPreventDefault(event: Event) {
     event.stopPropagation();

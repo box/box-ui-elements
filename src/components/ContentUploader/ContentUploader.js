@@ -48,12 +48,14 @@ type Props = {
     measureRef: Function
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     apiHost: string,
     className: string,
     clientName: string,
-    uploadHost: string
-};
+    uploadHost: string,
+    onClose: Function,
+    onComplete: Function
+|};
 
 type State = {
     view: View,
@@ -68,7 +70,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     rootElement: HTMLElement;
     appElement: HTMLElement;
 
-    static defaultProps = {
+    static defaultProps: DefaultProps = {
         apiHost: DEFAULT_HOSTNAME_API,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         clientName: CLIENT_NAME_CONTENT_UPLOADER,

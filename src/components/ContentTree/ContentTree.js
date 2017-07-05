@@ -13,7 +13,6 @@ import Content from './Content';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import {
-    DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
     DEFAULT_ROOT,
     VIEW_FOLDER,
@@ -51,14 +50,14 @@ type State = {
     view: View
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     type: string,
     rootFolderId: string,
     onClick: Function,
     apiHost: string,
     clientName: string,
     className: string
-};
+|};
 
 class ContentTree extends Component<DefaultProps, Props, State> {
     id: string;
@@ -73,7 +72,6 @@ class ContentTree extends Component<DefaultProps, Props, State> {
         onClick: noop,
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
-        uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         clientName: CLIENT_NAME_CONTENT_TREE
     };
 

@@ -11,7 +11,7 @@ import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from
 
 type Props = {
     isOpen: boolean,
-    root: string,
+    rootFolderId: string,
     token: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
@@ -26,7 +26,7 @@ type Props = {
 /* eslint-disable jsx-a11y/label-has-for */
 const UploadDialog = ({
     isOpen,
-    root,
+    rootFolderId,
     token,
     sharedLink,
     sharedLinkPassword,
@@ -46,7 +46,7 @@ const UploadDialog = ({
         contentLabel={getLocalizedMessage('buik.modal.upload.dialog.label')}
     >
         <ContentUploader
-            root={root}
+            rootFolderId={rootFolderId}
             token={token}
             sharedLink={sharedLink}
             sharedLinkPassword={sharedLinkPassword}

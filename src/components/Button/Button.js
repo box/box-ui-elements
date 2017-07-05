@@ -23,9 +23,9 @@ type Props = {
     type: ButtonType
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     type: ButtonType
-};
+|};
 
 class Button extends PureComponent<DefaultProps, Props, void> {
     props: Props;

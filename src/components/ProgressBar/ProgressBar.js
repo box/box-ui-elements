@@ -11,9 +11,9 @@ type Props = {
     percent: number
 };
 
-type DefaultProps = {
+type DefaultProps = {|
     percent: number
-};
+|};
 
 type State = {
     percent: number

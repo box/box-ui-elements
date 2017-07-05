@@ -84,7 +84,7 @@ class ES6Wrapper extends EventEmitter {
      * @param {Object|undefined} [replacements] - Optional replacements.
      * @return {string}
      */
-    getLocalizedMessage = (id: string, replacements: ?any = {}): string => {
+    getLocalizedMessage = (id: string, replacements: ?StringMap = {}): string => {
         if (!messages[id]) {
             unmountComponentAtNode(this.container);
             throw new Error(`Cannot get localized message for ${id}`);

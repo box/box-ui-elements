@@ -22,6 +22,16 @@ class ContentExplorer extends ES6Wrapper {
     };
 
     /**
+     * Callback for navigating into a folder
+     *
+     * @param {Object} data - chosen box items
+     * @return {void}
+     */
+    onNavigate = (data: BoxItem): void => {
+        this.emit('navigate', data);
+    };
+
+    /**
      * Callback for renaming file
      *
      * @return {void}
@@ -93,6 +103,7 @@ class ContentExplorer extends ES6Wrapper {
                 onRename={this.onRename}
                 onSelect={this.onSelect}
                 onUpload={this.onUpload}
+                onNavigate={this.onNavigate}
                 {...this.options}
             />,
             this.container

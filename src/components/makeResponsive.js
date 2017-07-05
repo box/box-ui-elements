@@ -10,9 +10,9 @@ import classNames from 'classnames';
 import { SIZE_LARGE, SIZE_SMALL, CLASS_IS_COMPACT, CLASS_IS_TOUCH } from '../constants';
 import type { Size, ClassComponent } from '../flowTypes';
 
-type DefaultProps = {
+type DefaultProps = {|
     isTouch: boolean
-};
+|};
 
 type Props = {
     isTouch: boolean,
