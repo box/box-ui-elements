@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export NODE_PATH=$NODE_PATH:./node_modules
-export PATH=/box/www/devtools/bin:$PATH
-
 # Temp version
 VERSION="XXX"
 
@@ -194,7 +191,6 @@ publish_to_npm() {
     fi
 }
 
-
 # Execute this entire script
 if ! publish_to_npm; then
     echo "----------------------------------------------------"
@@ -202,7 +198,6 @@ if ! publish_to_npm; then
     echo "----------------------------------------------------"
     exit 1
 fi
-
 
 echo "----------------------------------------------------"
 echo "Checking out back to master"
