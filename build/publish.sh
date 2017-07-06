@@ -3,7 +3,8 @@
 export NODE_PATH=$NODE_PATH:./node_modules
 export PATH=/box/www/devtools/bin:$PATH
 
-VERSION=$(./build/current_version.sh)
+# Temp version
+VERSION="XXX"
 
 install_dependencies() {
     echo "--------------------------------------------------------"
@@ -129,6 +130,8 @@ publish_to_npm() {
     # Remove old local tags in case a build failed
     git fetch --prune origin '+refs/tags/*:refs/tags/*' || exit 1
     git clean -fdX || exit 1
+
+    VERSION=$(./build/current_version.sh)
 
     if [[ $(git status --porcelain 2>/dev/null| grep "^??") != "" ]] ; then
         echo "----------------------------------------------------"
