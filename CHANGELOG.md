@@ -1,6 +1,14 @@
+<a name="0.41.0"></a>
+# 0.41.0 (2017-07-06)
+
+* Update: Make focusing the grid optional via autoFocus prop (#12) ([430fea6](https://github.com/box/box-ui-elements/commit/430fea6))
+
+
+
 <a name="0.40.0"></a>
 # 0.40.0 (2017-07-06)
 
+* Release: 0.40.0 ([1cc8dd2](https://github.com/box/box-ui-elements/commit/1cc8dd2))
 * Chore: Remove unnecessary code in release scripts (#11) ([42cfabd](https://github.com/box/box-ui-elements/commit/42cfabd))
 * Fix: Release script issue using stale version (#10) ([ce227eb](https://github.com/box/box-ui-elements/commit/ce227eb))
 
