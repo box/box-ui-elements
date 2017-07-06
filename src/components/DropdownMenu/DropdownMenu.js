@@ -14,7 +14,7 @@ type Props = {
     constrainToScrollParent: boolean,
     constrainToWindow: boolean,
     isRightAligned: boolean,
-    renderElementTo: string
+    bodyElement: string | HTMLElement
 };
 
 type DefaultProps = {|
@@ -217,13 +217,7 @@ class DropdownMenu extends PureComponent<DefaultProps, Props, State> {
      * @return {Element}
      */
     render() {
-        const {
-            children,
-            isRightAligned,
-            constrainToScrollParent,
-            constrainToWindow,
-            renderElementTo
-        }: Props = this.props;
+        const { children, isRightAligned, constrainToScrollParent, constrainToWindow, bodyElement }: Props = this.props;
         const { isOpen, initialFocusIndex }: State = this.state;
         const elements = Children.toArray(children);
 
@@ -287,7 +281,7 @@ class DropdownMenu extends PureComponent<DefaultProps, Props, State> {
                 targetAttachment={targetAttachment}
                 constraints={constraints}
                 enabled={isOpen}
-                renderElementTo={renderElementTo}
+                bodyElement={bodyElement}
             >
                 {cloneElement(menuButton, menuButtonProps)}
                 {isOpen ? cloneElement(menu, menuProps) : null}
