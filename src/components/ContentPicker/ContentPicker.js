@@ -61,6 +61,7 @@ type Props = {
     maxSelectable: number,
     canUpload: boolean,
     canSetShareAccess: boolean,
+    autoFocus: boolean,
     apiHost: string,
     uploadHost: string,
     getLocalizedMessage: Function,
@@ -98,6 +99,7 @@ type DefaultProps = {|
     maxSelectable: number,
     canUpload: boolean,
     canSetShareAccess: boolean,
+    autoFocus: boolean,
     apiHost: string,
     uploadHost: string,
     clientName: string,
@@ -124,6 +126,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         maxSelectable: Infinity,
         canUpload: true,
         canSetShareAccess: true,
+        autoFocus: false,
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
@@ -317,6 +320,30 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     };
 
     /**
+     * Focuses the grid
+     *
+     * @private
+     * @return {void}
+     */
+    finishNavigation() {
+        const { autoFocus }: Props = this.props;
+        const { currentCollection: { percentLoaded } }: State = this.state;
+
+        // Don't focus the grid until its loaded and user is not already on an interactable element
+        if (
+            !autoFocus ||
+            percentLoaded !== 100 ||
+            !this.table ||
+            !this.table.Grid ||
+            isActionableElement(document.activeElement)
+        ) {
+            return;
+        }
+        const grid: any = findDOMNode(this.table.Grid);
+        grid.focus();
+    }
+
+    /**
      * Folder fetch success callback
      *
      * @private
@@ -335,13 +362,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         };
 
         // Set the new state and focus the grid for tabbing
-        this.setState(newState, () => {
-            if (!this.table || !this.table.Grid || isActionableElement(document.activeElement)) {
-                return;
-            }
-            const grid: any = findDOMNode(this.table.Grid);
-            grid.focus();
-        });
+        this.setState(newState, this.finishNavigation);
     };
 
     /**

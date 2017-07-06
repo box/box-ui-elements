@@ -12,6 +12,7 @@ import noop from 'lodash.noop';
 import Content from './Content';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
+import isActionableElement from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_ROOT,
@@ -39,6 +40,7 @@ type Props = {
     isSmall: boolean,
     isLarge: boolean,
     isTouch: boolean,
+    autoFocus: boolean,
     className: string,
     measureRef: Function,
     sharedLink?: string,
@@ -56,6 +58,7 @@ type DefaultProps = {|
     onClick: Function,
     apiHost: string,
     clientName: string,
+    autoFocus: boolean,
     className: string
 |};
 
@@ -71,6 +74,7 @@ class ContentTree extends Component<DefaultProps, Props, State> {
         rootFolderId: DEFAULT_ROOT,
         onClick: noop,
         className: '',
+        autoFocus: false,
         apiHost: DEFAULT_HOSTNAME_API,
         clientName: CLIENT_NAME_CONTENT_TREE
     };
@@ -200,6 +204,30 @@ class ContentTree extends Component<DefaultProps, Props, State> {
     };
 
     /**
+     * Focuses the grid
+     *
+     * @private
+     * @return {void}
+     */
+    finishNavigation() {
+        const { autoFocus }: Props = this.props;
+        const { currentCollection: { percentLoaded } }: State = this.state;
+
+        // Don't focus the grid until its loaded and user is not already on an interactable element
+        if (
+            !autoFocus ||
+            percentLoaded !== 100 ||
+            !this.table ||
+            !this.table.Grid ||
+            isActionableElement(document.activeElement)
+        ) {
+            return;
+        }
+        const grid: any = findDOMNode(this.table.Grid);
+        grid.focus();
+    }
+
+    /**
      * Folder fetch success callback
      *
      * @private
@@ -230,13 +258,7 @@ class ContentTree extends Component<DefaultProps, Props, State> {
         }
 
         // Set the new state and focus the grid for tabbing
-        this.setState({ currentCollection }, () => {
-            if (!this.table || !this.table.Grid) {
-                return;
-            }
-            const grid: any = findDOMNode(this.table.Grid);
-            grid.focus();
-        });
+        this.setState({ currentCollection }, this.finishNavigation);
     };
 
     /**
