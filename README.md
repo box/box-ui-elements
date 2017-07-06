@@ -6,7 +6,7 @@
 
 [Box UI Elements](https://developer.box.com/docs/box-ui-elements)
 ==========================================================================
-The Box UI Elements are currently in beta and may contain bugs. Their interfaces may also update as needed. Please email [box-ui-kit-feedback@box.com](mailto:box-ui-kit-feedback@box.com) to report issues or provide feedback.
+The Box UI Elements are currently in beta and may contain bugs. Their interfaces may also update as needed. Please email [box-ui-elements@box.com](mailto:box-ui-elements@box.com) to report issues or provide feedback.
 
 ## Usage
 If you are not building a [React](https://facebook.github.io/react) based app, please follow the [documentation on our developer docs](https://developer.box.com/docs/box-ui-elements), which shows how to use the Box UI Elements via script includes. Continue reading below to import the components into your React based app.
@@ -47,8 +47,8 @@ render(
 );
 ```
 
-### Attributes
-| Attribute | Type | Default | Description |
+### Props
+| Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
@@ -100,8 +100,8 @@ render(
 );
 ```
 
-### Attributes
-| Attribute | Type | Default | Description |
+### Props
+| Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
@@ -143,8 +143,8 @@ render(
 );
 ```
 
-### Attributes
-| Attribute | Type | Default | Description |
+### Props
+| Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
@@ -181,8 +181,8 @@ render(
 );
 ```
 
-### Attributes
-| Attribute | Type | Default | Description |
+### Props
+| Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
@@ -218,8 +218,8 @@ render(
 );
 ```
 
-### Attributes
-| Attribute | Type | Default | Description |
+### Props
+| Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
 | fileId* | string | | The id of the file to preview. |
