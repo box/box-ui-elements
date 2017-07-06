@@ -71,6 +71,7 @@ type Props = {
     isSmall: boolean,
     isLarge: boolean,
     isTouch: boolean,
+    autoFocus: boolean,
     className: string,
     measureRef: Function,
     onDelete: Function,
@@ -113,6 +114,7 @@ type DefaultProps = {|
     canPreview: boolean,
     canShare: boolean,
     canSetShareAccess: boolean,
+    autoFocus: boolean,
     apiHost: string,
     uploadHost: string,
     className: string,
@@ -145,6 +147,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         canShare: true,
         canPreview: true,
         canSetShareAccess: true,
+        autoFocus: false,
         apiHost: DEFAULT_HOSTNAME_API,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         className: '',
@@ -310,12 +313,18 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     finishNavigation() {
-        const { onNavigate }: Props = this.props;
+        const { onNavigate, autoFocus }: Props = this.props;
         const { currentCollection: { percentLoaded, boxItem } }: State = this.state;
         onNavigate(cloneDeep(boxItem));
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
-        if (percentLoaded !== 100 || !this.table || !this.table.Grid || isActionableElement(document.activeElement)) {
+        if (
+            !autoFocus ||
+            percentLoaded !== 100 ||
+            !this.table ||
+            !this.table.Grid ||
+            isActionableElement(document.activeElement)
+        ) {
             return;
         }
         const grid: any = findDOMNode(this.table.Grid);

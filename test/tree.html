@@ -85,7 +85,8 @@
                 document.querySelector('.tree2').innerHTML = '';
                 tree2.show(folderId, token, {
                     container: '.tree2',
-                    type: 'folder,file,web_link'
+                    type: 'folder,file,web_link',
+                    autoFocus: true
                 });
             }
             load();

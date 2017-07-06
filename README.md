@@ -71,6 +71,7 @@ render(
 | onUpload | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when item(s) are uploaded. |
 | onNavigate | function([File](https://developer.box.com/reference#file-object)) |  | Callback function for when navigating into a folder. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| autoFocus | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
@@ -116,6 +117,7 @@ render(
 | onCancel | function |  | Callback function for when the cancel button is pressed. |
 | onChoose | function |  | Callback function for when the choose button is pressed. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| autoFocus | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
@@ -190,6 +192,7 @@ render(
 | type | string | `file, web_link, folder` | Indicates which type of items show up in the tree. Should be a comma seperated combination of `file`, `folder` or `web_link`. |
 | onClick | function([Folder](https://developer.box.com/reference#folder-object)&#124;[File](https://developer.box.com/reference#file-object)&#124;[Web Link](https://developer.box.com/reference#web-link-object)) |  | Callback function for when an item is clicked. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
+| autoFocus | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
