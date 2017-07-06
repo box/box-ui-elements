@@ -1,9 +1,5 @@
 #!/bin/bash
 
-export NODE_PATH=$NODE_PATH:./node_modules
-export PATH=/box/www/devtools/bin:$PATH
-
-
 # Temp version
 VERSION="XXX"
 
@@ -200,7 +196,6 @@ push_new_release() {
     fi
 }
 
-
 # Check if we are doing major, minor, or patch release
 while getopts "mnp" opt; do
     case "$opt" in
@@ -212,7 +207,6 @@ while getopts "mnp" opt; do
             patch_release=true ;;
     esac
 done
-
 
 # Execute this entire script
 if ! push_new_release; then
