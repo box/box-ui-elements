@@ -1,6 +1,15 @@
+<a name="0.40.0"></a>
+# 0.40.0 (2017-07-06)
+
+* Chore: Remove unnecessary code in release scripts (#11) ([42cfabd](https://github.com/box/box-ui-elements/commit/42cfabd))
+* Fix: Release script issue using stale version (#10) ([ce227eb](https://github.com/box/box-ui-elements/commit/ce227eb))
+
+
+
 <a name="0.39.0"></a>
 # 0.39.0 (2017-07-06)
 
+* Release: 0.39.0 ([70acc5e](https://github.com/box/box-ui-elements/commit/70acc5e))
 * Update: Add onNavigate to explorer (#7) ([ee57ad9](https://github.com/box/box-ui-elements/commit/ee57ad9))
 * Update: License ([a8e8053](https://github.com/box/box-ui-elements/commit/a8e8053))
 * Update: Licenses and package files (#1) ([6dc2d38](https://github.com/box/box-ui-elements/commit/6dc2d38))
