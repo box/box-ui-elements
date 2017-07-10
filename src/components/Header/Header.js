@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import IconLogo from '../icons/IconLogo';
+import IconDefaultLogo from '../icons/IconDefaultLogo';
 import { Button } from '../Button';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../constants';
 import type { View } from '../../flowTypes';
@@ -29,7 +29,7 @@ const Header = ({ view, searchQuery, canUpload, onSearch, onUpload, logoUrl, get
         <div className='buik-header'>
             <div className='buik-header-left'>
                 <div className='buik-logo'>
-                    {logoUrl ? <img alt='' src={logoUrl} className='buik-logo-custom' /> : <IconLogo />}
+                    {logoUrl ? <img alt='' src={logoUrl} className='buik-logo-custom' /> : <IconDefaultLogo />}
                 </div>
                 <div className='buik-search'>
                     <input

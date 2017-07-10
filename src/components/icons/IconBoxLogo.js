@@ -8,8 +8,8 @@ import React from 'react';
 import { BOX_BLUE } from '../../constants';
 import type { IconType } from '../../flowTypes';
 
-const IconLogo = ({ color = BOX_BLUE, height = 25, width = 45 }: IconType) =>
-    <div className='logo'>
+const IconBoxLogo = ({ color = BOX_BLUE, height = 25, width = 45 }: IconType) =>
+    <div>
         <svg height={height} width={width} viewBox='0 0 98 52' aria-labelledby='title desc' role='img'>
             <path
                 fill={color}
@@ -32,4 +32,4 @@ const IconLogo = ({ color = BOX_BLUE, height = 25, width = 45 }: IconType) =>
         </svg>
     </div>;
 
-export default IconLogo;
+export default IconBoxLogo;
