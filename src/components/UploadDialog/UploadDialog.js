@@ -43,6 +43,7 @@ const UploadDialog = ({
         portalClassName={`${CLASS_MODAL} buik-modal-upload`}
         className={CLASS_MODAL_CONTENT_FULL_BLEED}
         overlayClassName={CLASS_MODAL_OVERLAY}
+        onRequestClose={onClose}
         contentLabel={getLocalizedMessage('buik.modal.upload.dialog.label')}
     >
         <ContentUploader

@@ -95,6 +95,7 @@ const RenameDialog = ({
             portalClassName={`${CLASS_MODAL} buik-modal-rename`}
             className={CLASS_MODAL_CONTENT}
             overlayClassName={CLASS_MODAL_OVERLAY}
+            onRequestClose={onCancel}
             contentLabel={getLocalizedMessage('buik.modal.rename.dialog.label')}
         >
             <label>

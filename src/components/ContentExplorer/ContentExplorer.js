@@ -5,7 +5,6 @@
  */
 
 import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 import debounce from 'lodash.debounce';
@@ -23,7 +22,7 @@ import SubHeader from '../SubHeader/SubHeader';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import openUrlInsideIframe from '../../util/iframe';
-import isActionableElement from '../../util/dom';
+import { isFocusableElement, isInputElement, focus } from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -100,7 +99,8 @@ type State = {
     isUploadModalOpen: boolean,
     isPreviewModalOpen: boolean,
     isLoading: boolean,
-    errorCode: string
+    errorCode: string,
+    focusedRow: number
 };
 
 type DefaultProps = {|
@@ -135,6 +135,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
     table: any;
     rootElement: HTMLElement;
     appElement: HTMLElement;
+    globalModifier: boolean;
 
     static defaultProps: DefaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -203,7 +204,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             isUploadModalOpen: false,
             isPreviewModalOpen: false,
             isLoading: false,
-            errorCode: ''
+            errorCode: '',
+            focusedRow: 0
         };
     }
 
@@ -318,17 +320,9 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         onNavigate(cloneDeep(boxItem));
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
-        if (
-            !autoFocus ||
-            percentLoaded !== 100 ||
-            !this.table ||
-            !this.table.Grid ||
-            isActionableElement(document.activeElement)
-        ) {
-            return;
+        if (autoFocus && percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
+            focus(this.rootElement, '.bce-item-row');
         }
-        const grid: any = findDOMNode(this.table.Grid);
-        grid.focus();
     }
 
     /**
@@ -529,8 +523,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
 
         this.setModalAppElement();
         this.setState({
-            isUploadModalOpen: true,
-            currentCollection: this.currentUnloadedCollection()
+            isUploadModalOpen: true
         });
     };
 
@@ -627,7 +620,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
-        const { selected }: State = this.state;
+        const { selected, currentCollection: { items = [] } }: State = this.state;
         const { onSelect }: Props = this.props;
 
         if (item === selected) {
@@ -637,7 +630,9 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
 
         this.unselect();
         item.selected = true;
-        this.setState({ selected: item }, () => {
+
+        const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
+        this.setState({ focusedRow, selected: item }, () => {
             onSelect(cloneDeep([item]));
             callback(item);
         });
@@ -909,6 +904,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     closeModals = (): void => {
+        const { focusedRow }: State = this.state;
+
         this.setState({
             isLoading: false,
             isDeleteModalOpen: false,
@@ -917,6 +914,51 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             isUploadModalOpen: false,
             isPreviewModalOpen: false
         });
+
+        const { selected, currentCollection: { items = [] } }: State = this.state;
+        if (selected && items.length > 0) {
+            focus(this.rootElement, `.bce-item-row-${focusedRow}`);
+        }
+    };
+
+    /**
+     * Keyboard events
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    onKeyDown = (event: SyntheticKeyboardEvent & { target: HTMLElement }) => {
+        if (isInputElement(event.target)) {
+            return;
+        }
+
+        const { rootFolderId }: Props = this.props;
+        const key = event.key.toLowerCase();
+
+        switch (key) {
+            case '/':
+                focus(this.rootElement, '.buik-search input[type="search"]', false);
+                break;
+            case 'g':
+                break;
+            case 'f':
+                if (this.globalModifier) {
+                    this.fetchFolder(rootFolderId);
+                }
+                break;
+            case 'u':
+                if (this.globalModifier) {
+                    this.upload();
+                }
+                break;
+            default:
+                this.globalModifier = false;
+                return;
+        }
+
+        this.globalModifier = key === 'g';
+        event.preventDefault();
     };
 
     /**
@@ -962,15 +1004,18 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             isPreviewModalOpen,
             selected,
             isLoading,
-            errorCode
+            errorCode,
+            focusedRow
         }: State = this.state;
         const { id, permissions }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const styleClassName = classNames('buik bce', className);
         const allowUpload = canUpload && can_upload;
 
+        /* eslint-disable jsx-a11y/no-static-element-interactions */
+        /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <div id={this.id} className={styleClassName} ref={measureRef}>
+            <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
                 <div className='buik-app-element'>
                     <Header
                         view={view}
@@ -996,6 +1041,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                         rootId={rootFolderId}
                         isSmall={isSmall}
                         isTouch={isTouch}
+                        rootElement={this.rootElement}
+                        focusedRow={focusedRow}
                         canSetShareAccess={canSetShareAccess}
                         canShare={canShare}
                         canPreview={canPreview}
@@ -1080,6 +1127,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                     : null}
             </div>
         );
+        /* eslint-enable jsx-a11y/no-static-element-interactions */
+        /* eslint-enable jsx-a11y/no-noninteractive-tabindex */
     }
 }
 

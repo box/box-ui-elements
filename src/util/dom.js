@@ -7,25 +7,58 @@
 import { CLASS_CHECKBOX_SPAN, CLASS_BUTTON_CONTENT_SPAN } from '../constants';
 
 /**
- * Gets if an html element is button or input
- * or text area or select etc. Something the user
- * can focus or type into.
+ * Checks if an html element is some type of input-able
+ * element or text area type where characters can be typed.
  *
  * @param {HTMLElement|null} element - the dom element to check
  * @return {boolean} true if its one of the above elements
  */
-export default function isActionableElement(element: HTMLElement | null): boolean {
+export function isInputElement(element: HTMLElement | null): boolean {
+    if (!element) {
+        return false;
+    }
+    const tag = element.tagName.toLowerCase();
+    return tag === 'input' || tag === 'select' || tag === 'textarea';
+}
+
+/**
+ * Checks if an html element is some kind of element
+ * that the user would want to keep their focus on.
+ *
+ * @param {HTMLElement|null} element - the dom element to check
+ * @return {boolean} true if its one of the above elements
+ */
+export function isFocusableElement(element: HTMLElement | null): boolean {
     if (!element) {
         return false;
     }
     const tag = element.tagName.toLowerCase();
     return (
+        isInputElement(element) ||
         tag === 'button' ||
-        tag === 'select' ||
-        tag === 'input' ||
-        tag === 'textarea' ||
+        tag === 'a' ||
         tag === 'option' ||
         element.classList.contains(CLASS_CHECKBOX_SPAN) ||
         element.classList.contains(CLASS_BUTTON_CONTENT_SPAN)
     );
+}
+
+/**
+ * Focuses a DOM element if it exists.
+ *
+ * @param {HTMLElement} root - the root dom element to search
+ * @param {string} selector - the query selector
+ * @param {boolean|void} [focusRoot] - if root should be focused
+ * @return {void}
+ */
+export function focus(root: HTMLElement, selector: string, focusRoot: boolean = true): void {
+    if (!root || !selector) {
+        return;
+    }
+    const element = root.querySelector(selector);
+    if (element && typeof element.focus === 'function') {
+        element.focus();
+    } else if (focusRoot) {
+        root.focus();
+    }
 }

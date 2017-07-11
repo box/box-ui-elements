@@ -41,7 +41,7 @@ const EmptyState = ({ view, isLoading, getLocalizedMessage }: Props) => {
             break;
     }
     return (
-        <div>
+        <div className='buik-empty'>
             {type}
             <div>{message}</div>
         </div>

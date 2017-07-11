@@ -1,16 +1,17 @@
 @import '../variables';
 
-.bcp-progress-container {
+.buik-progress-container {
+    left: 0;
+    position: absolute;
+    top: 0;
     transition: .4s opacity;
-    z-index: 201;
+    width: 100%;
 
-    .bcp-progress {
+    .buik-progress {
         background: $blue;
         box-shadow: 0 1px 5px 0 $light-blue;
         height: 2px;
-        left: 0;
         max-width: 100%;
-        top: 0;
         transition: .4s width;
     }
 }
