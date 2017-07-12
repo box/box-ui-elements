@@ -1,6 +1,13 @@
+<a name="0.43.0"></a>
+# 0.43.0 (2017-07-12)
+
+
+
+
 <a name="0.42.0"></a>
 # 0.42.0 (2017-07-12)
 
+* Release: 0.42.0 ([84ed7b4](https://github.com/box/box-ui-elements/commit/84ed7b4))
 * Fix: Adjust icon button CSS (#16) ([427810c](https://github.com/box/box-ui-elements/commit/427810c))
 * New: Chunked uploads (#15) ([59feabc](https://github.com/box/box-ui-elements/commit/59feabc))
 * Update: New default header logo (#13) ([482287e](https://github.com/box/box-ui-elements/commit/482287e))
