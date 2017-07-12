@@ -113,6 +113,14 @@ push_to_npm() {
     fi
 }
 
+add_remote() {
+    # Add the release remote if it is not present
+    if git remote get-url release; then
+        git remote remove release || return 1
+    fi
+    git remote add release git@github.com:box/box-ui-elements.git || return 1
+}
+
 publish_to_npm() {
     if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]] ; then
         echo "----------------------------------------------------"
@@ -121,11 +129,18 @@ publish_to_npm() {
         exit 1
     fi
 
+    if ! add_remote; then
+        echo "----------------------------------------------------"
+        echo "Error in add_remote!"
+        echo "----------------------------------------------------"
+        exit 1
+    fi
+
     git checkout master || exit 1
-    git fetch origin || exit 1
-    git reset --hard origin/master || exit 1
+    git fetch release || exit 1
+    git reset --hard release/master || exit 1
     # Remove old local tags in case a build failed
-    git fetch --prune origin '+refs/tags/*:refs/tags/*' || exit 1
+    git fetch --prune release '+refs/tags/*:refs/tags/*' || exit 1
     git clean -fdX || exit 1
 
     VERSION=$(./build/current_version.sh)
