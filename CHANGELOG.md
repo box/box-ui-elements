@@ -1,6 +1,16 @@
+<a name="0.42.0"></a>
+# 0.42.0 (2017-07-12)
+
+* Fix: Adjust icon button CSS (#16) ([427810c](https://github.com/box/box-ui-elements/commit/427810c))
+* New: Chunked uploads (#15) ([59feabc](https://github.com/box/box-ui-elements/commit/59feabc))
+* Update: New default header logo (#13) ([482287e](https://github.com/box/box-ui-elements/commit/482287e))
+
+
+
 <a name="0.41.0"></a>
 # 0.41.0 (2017-07-06)
 
+* Release: 0.41.0 ([17e88b5](https://github.com/box/box-ui-elements/commit/17e88b5))
 * Update: Make focusing the grid optional via autoFocus prop (#12) ([430fea6](https://github.com/box/box-ui-elements/commit/430fea6))
 
 
