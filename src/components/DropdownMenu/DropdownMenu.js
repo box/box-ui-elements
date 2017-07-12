@@ -160,7 +160,7 @@ class DropdownMenu extends PureComponent<DefaultProps, Props, State> {
      * @private
      * @return {void}
      */
-    handleButtonKeyDown = (event: Event & { key: string }) => {
+    handleButtonKeyDown = (event: SyntheticKeyboardEvent) => {
         switch (event.key) {
             case ' ': // Spacebar
             case 'Enter':

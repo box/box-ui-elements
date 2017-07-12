@@ -4,15 +4,5 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-
-    .bce-item-list {
-        flex: 1;
-        min-height: 300px;
-        position: relative;
-
-        // sass-lint:disable class-name-format
-        .ReactVirtualized__Table__Grid {
-            outline: none;
-        }
-    }
+    position: relative;
 }

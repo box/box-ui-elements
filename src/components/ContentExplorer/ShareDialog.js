@@ -55,6 +55,7 @@ const ShareDialog = ({
             portalClassName={`${CLASS_MODAL} buik-modal-share`}
             className={CLASS_MODAL_CONTENT}
             overlayClassName={CLASS_MODAL_OVERLAY}
+            onRequestClose={onCancel}
             contentLabel={getLocalizedMessage('buik.modal.share.dialog.label')}
         >
             <div className='buik-modal-content'>
@@ -71,7 +72,7 @@ const ShareDialog = ({
                             }}
                             value={url}
                         />
-                        <PrimaryButton className='buik-modal-button-copy' onClick={copy}>
+                        <PrimaryButton className='buik-modal-button-copy' onClick={copy} autoFocus>
                             {getLocalizedMessage('buik.modal.dialog.share.button.copy')}
                         </PrimaryButton>
                     </span>

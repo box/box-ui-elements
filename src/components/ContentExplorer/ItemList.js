@@ -5,24 +5,29 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import 'react-virtualized/styles.css';
+import KeyBinder from '../KeyBinder';
 import headerCellRenderer from './headerCellRenderer';
 import sizeCellRenderer from './sizeCellRenderer';
 import dateCellRenderer from './dateCellRenderer';
 import nameCellRenderer from '../Item/nameCellRenderer';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
+import { focus } from '../../util/dom';
 import { FIELD_NAME, FIELD_ID, FIELD_MODIFIED_AT, FIELD_SIZE } from '../../constants';
 import type { View, Collection } from '../../flowTypes';
 import './ItemList.scss';
 
 type Props = {
     view: View,
+    rootElement: HTMLElement,
     isSmall: boolean,
     isTouch: boolean,
     rootId: string,
+    focusedRow: number,
     canShare: boolean,
     canDownload: boolean,
     canDelete: boolean,
@@ -46,6 +51,7 @@ const ItemList = ({
     isSmall,
     isTouch,
     rootId,
+    rootElement,
     canShare,
     canDownload,
     canDelete,
@@ -61,6 +67,7 @@ const ItemList = ({
     onSortChange,
     currentCollection,
     tableRef,
+    focusedRow,
     getLocalizedMessage
 }: Props) => {
     const nameCell = nameCellRenderer(
@@ -92,81 +99,104 @@ const ItemList = ({
         isSmall
     );
     const { items = [], sortBy, sortDirection }: Collection = currentCollection;
-    const rowCount = items.length;
+    const rowCount: number = items.length;
     const rowClassName = ({ index }) => {
         if (index === -1) {
             return 'bce-item-header-row';
         }
         const { selected } = items[index];
-        return `bce-item-row ${selected ? 'bce-item-row-selected' : ''}`;
+        return classNames(`bce-item-row bce-item-row-${index}`, {
+            'bce-item-row-selected': selected
+        });
     };
     const sort = ({ sortBy: by, sortDirection: direction }) => {
         onSortChange(by, direction);
     };
 
     return (
-        <AutoSizer>
-            {({ width, height }) =>
-                <Table
-                    width={width}
-                    height={height}
-                    headerHeight={isSmall ? 0 : 40}
-                    rowHeight={50}
-                    rowCount={rowCount}
-                    rowGetter={({ index }) => items[index]}
-                    ref={tableRef}
-                    sort={sort}
-                    sortBy={sortBy}
-                    sortDirection={sortDirection}
-                    rowClassName={rowClassName}
-                    onRowClick={({ rowData }) => onItemSelect(rowData)}
-                >
-                    <Column
-                        disableSort
-                        dataKey={FIELD_ID}
-                        cellRenderer={iconCell}
-                        width={isSmall ? 30 : 50}
-                        flexShrink={0}
-                    />
-                    <Column
-                        label={getLocalizedMessage('buik.item.name')}
-                        dataKey={FIELD_NAME}
-                        cellRenderer={nameCell}
-                        headerRenderer={headerCellRenderer}
-                        width={300}
-                        flexGrow={1}
-                    />
-                    {isSmall
-                        ? null
-                        : <Column
-                            className='bce-item-coloumn'
-                            label={getLocalizedMessage('buik.item.modified')}
-                            dataKey={FIELD_MODIFIED_AT}
-                            cellRenderer={dateCell}
-                            headerRenderer={headerCellRenderer}
-                            width={120}
-                            flexShrink={0}
-                          />}
-                    {isSmall
-                        ? null
-                        : <Column
-                            className='bce-item-coloumn'
-                            label={getLocalizedMessage('buik.item.size')}
-                            dataKey={FIELD_SIZE}
-                            cellRenderer={sizeAccessCell}
-                            headerRenderer={headerCellRenderer}
-                            width={80}
-                            flexShrink={0}
-                          />}
-                    <Column
-                        disableSort
-                        dataKey={FIELD_ID}
-                        cellRenderer={moreOptionsCell}
-                        width={isSmall || !canShare ? 58 : 140}
-                        flexShrink={0}
-                    />
-                </Table>}
-        </AutoSizer>
+        <KeyBinder
+            columnCount={1}
+            rowCount={rowCount}
+            className='bce-item-grid'
+            currentCollection={currentCollection}
+            onRename={onItemRename}
+            onShare={onItemShare}
+            onDownload={onItemDownload}
+            onOpen={onItemClick}
+            onSelect={onItemSelect}
+            onDelete={onItemDelete}
+            scrollToRow={focusedRow}
+            onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bce-item-row-${scrollToRow}`)}
+        >
+            {({ onSectionRendered, scrollToRow }) =>
+                <AutoSizer>
+                    {({ width, height }) =>
+                        <Table
+                            width={width}
+                            height={height}
+                            headerHeight={isSmall ? 0 : 40}
+                            rowHeight={50}
+                            rowCount={rowCount}
+                            rowGetter={({ index }) => items[index]}
+                            ref={tableRef}
+                            sort={sort}
+                            sortBy={sortBy}
+                            sortDirection={sortDirection}
+                            rowClassName={rowClassName}
+                            onRowClick={({ rowData }) => onItemSelect(rowData)}
+                            scrollToIndex={scrollToRow}
+                            onRowsRendered={({ startIndex, stopIndex }) => {
+                                onSectionRendered({ rowStartIndex: startIndex, rowStopIndex: stopIndex });
+                                focus(rootElement, `.bce-item-row-${scrollToRow}`);
+                            }}
+                        >
+                            <Column
+                                disableSort
+                                dataKey={FIELD_ID}
+                                cellRenderer={iconCell}
+                                width={isSmall ? 30 : 50}
+                                flexShrink={0}
+                            />
+                            <Column
+                                label={getLocalizedMessage('buik.item.name')}
+                                dataKey={FIELD_NAME}
+                                cellRenderer={nameCell}
+                                headerRenderer={headerCellRenderer}
+                                width={300}
+                                flexGrow={1}
+                            />
+                            {isSmall
+                                ? null
+                                : <Column
+                                    className='bce-item-coloumn'
+                                    label={getLocalizedMessage('buik.item.modified')}
+                                    dataKey={FIELD_MODIFIED_AT}
+                                    cellRenderer={dateCell}
+                                    headerRenderer={headerCellRenderer}
+                                    width={120}
+                                    flexShrink={0}
+                                  />}
+                            {isSmall
+                                ? null
+                                : <Column
+                                    className='bce-item-coloumn'
+                                    label={getLocalizedMessage('buik.item.size')}
+                                    dataKey={FIELD_SIZE}
+                                    cellRenderer={sizeAccessCell}
+                                    headerRenderer={headerCellRenderer}
+                                    width={80}
+                                    flexShrink={0}
+                                  />}
+                            <Column
+                                disableSort
+                                dataKey={FIELD_ID}
+                                cellRenderer={moreOptionsCell}
+                                width={isSmall || !canShare ? 58 : 140}
+                                flexShrink={0}
+                            />
+                        </Table>}
+                </AutoSizer>}
+        </KeyBinder>
     );
 };
 
