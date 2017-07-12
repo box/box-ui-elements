@@ -1,5 +1,10 @@
 .bcu-item-action {
     button {
         display: flex;
+
+        // Vertically center icon
+        svg {
+            display: block;
+        }
     }
 }
