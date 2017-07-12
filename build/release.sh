@@ -113,7 +113,7 @@ commit_and_tag() {
 
 push_to_github() {
     # Push to Github including tags
-    if git push origin master --tags --no-verify; then
+    if git push release master --tags --no-verify; then
         echo "----------------------------------------------------"
         echo "Pushed version" $VERSION "to git successfully"
         echo "----------------------------------------------------"
@@ -133,13 +133,28 @@ move_reports() {
     mv ./reports/coverage/junit/*/junit.xml ./reports/junit.xml;
 }
 
+add_remote() {
+    # Add the release remote if it is not present
+    if git remote get-url release; then
+        git remote remove release || return 1
+    fi
+    git remote add release git@github.com:box/box-ui-elements.git || return 1
+}
+
 # Check out latest code from git, build assets, increment version, and push t
 push_new_release() {
+    if ! add_remote; then
+        echo "----------------------------------------------------"
+        echo "Error in add_remote!"
+        echo "----------------------------------------------------"
+        exit 1
+    fi
+
     git checkout master || exit 1
-    git fetch origin || exit 1
-    git reset --hard origin/master || exit 1
+    git fetch release || exit 1
+    git reset --hard release/master || exit 1
     # Remove old local tags in case a build failed
-    git fetch --prune origin '+refs/tags/*:refs/tags/*' || exit 1
+    git fetch --prune release '+refs/tags/*:refs/tags/*' || exit 1
     git clean -fdX || exit 1
 
     # Install node modules
@@ -152,8 +167,8 @@ push_new_release() {
 
     # Double check that we have the latest code... just in case yarn install took forever.
     # i.e. Translation commits have been known to sneak in.
-    git fetch origin || exit 1
-    git diff --quiet origin/master || git reset --hard origin/master || exit 1
+    git fetch release || exit 1
+    git diff --quiet release/master || git reset --hard release/master || exit 1
 
 
     # Do testing and linting
