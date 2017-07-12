@@ -1,5 +1,15 @@
 @import '../variables';
 
+.bce-item-grid {
+    flex: 1;
+    min-height: 300px;
+
+    // sass-lint:disable class-name-format
+    .ReactVirtualized__Table__Grid {
+        outline: none;
+    }
+}
+
 .bce-item-row {
     border-left: 2px solid transparent;
     border-top: 1px solid $off-white;

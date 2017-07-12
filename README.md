@@ -76,6 +76,26 @@ render(
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 
+### Keyboard Shortcuts
+When the item list is focused, either manually by clicking on it or programatically via javascript or via the above mentioned `autoFocus` prop, the following keyboard shorcuts will work if their corresponding operations are applicable and allowed.
+
+| Key | Description |
+| --- | --- |
+| Arrow Up | Previous item row |
+| Arrow Down | Next item row |
+| Ctrl/Cmd + Arrow Up | First item row |
+| Ctrl/Cmd + Arrow Down | Last item row |
+| / | Search |
+| Enter | Open an item |
+| Delete | Delete an item |
+| Shift + X | Select an item row |
+| Shift + R | Rename an item |
+| Shift + S | Share an item |
+| Shift + D | Download an item |
+| g then f | Navigates to the root folder |
+| g then u | Upload to the current folder |
+
+
 
 ## Content Picker ([Documentation](https://developer.box.com/docs/box-content-picker))
 
@@ -121,6 +141,24 @@ render(
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+
+### Keyboard Shortcuts
+When the item list is focused, either manually by clicking on it or programatically via javascript or via the above mentioned `autoFocus` prop, the following keyboard shorcuts will work if their corresponding operations are applicable and allowed.
+
+| Key | Description |
+| --- | --- |
+| Arrow Up | Previous item row |
+| Arrow Down | Next item row |
+| Ctrl/Cmd + Arrow Up | First item row |
+| Ctrl/Cmd + Arrow Down | Last item row |
+| / | Search |
+| Enter | Open an item |
+| Shift + X | Select an item row |
+| g then f | Navigates to the root folder |
+| g then u | Upload to the current folder |
+| g then s | Show selected items |
+| g then c | Choose |
+| g then x | Cancel |
 
 ## Content Uploader ([Documentation](https://developer.box.com/docs/box-content-uploader))
 <img src="https://user-images.githubusercontent.com/1075325/27887153-09243762-6194-11e7-8d2d-cf654d9364bc.png" width="75%"/>

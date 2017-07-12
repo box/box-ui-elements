@@ -108,8 +108,8 @@ class ProgressBar extends PureComponent<DefaultProps, Props, State> {
             transitionDelay: percent > 0 && percent < 100 ? '0' : '0.4s'
         };
         return (
-            <div className='bcp-progress-container' style={containerStyle}>
-                <div className='bcp-progress' style={{ width: `${percent}%` }} />
+            <div className='buik-progress-container' style={containerStyle}>
+                <div className='buik-progress' style={{ width: `${percent}%` }} />
             </div>
         );
     }

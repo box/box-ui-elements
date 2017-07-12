@@ -1,5 +1,15 @@
 @import '../variables';
 
+.bcp-item-grid {
+    flex: 1;
+    min-height: 300px;
+
+    // sass-lint:disable class-name-format
+    .ReactVirtualized__Table__Grid {
+        outline: none;
+    }
+}
+
 .bcp-item-row {
     border-bottom: 1px solid transparent;
     border-left: 2px solid transparent;

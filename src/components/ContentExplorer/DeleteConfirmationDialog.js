@@ -35,6 +35,7 @@ const DeleteConfirmationDialog = ({
         portalClassName={CLASS_MODAL}
         className={CLASS_MODAL_CONTENT}
         overlayClassName={CLASS_MODAL_OVERLAY}
+        onRequestClose={onCancel}
         contentLabel={getLocalizedMessage('buik.modal.delete.confirmation.label')}
     >
         <div>
@@ -46,7 +47,7 @@ const DeleteConfirmationDialog = ({
             <PrimaryButton onClick={onDelete} isLoading={isLoading}>
                 {getLocalizedMessage('buik.more.options.delete')}
             </PrimaryButton>
-            <Button onClick={onCancel} isDisabled={isLoading}>
+            <Button onClick={onCancel} isDisabled={isLoading} autoFocus>
                 {getLocalizedMessage('buik.footer.button.cancel')}
             </Button>
         </div>

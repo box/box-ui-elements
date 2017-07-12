@@ -5,7 +5,6 @@
  */
 
 import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import Modal from 'react-modal';
 import debounce from 'lodash.debounce';
@@ -18,7 +17,7 @@ import SubHeader from '../SubHeader/SubHeader';
 import UploadDialog from '../UploadDialog';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
-import isActionableElement from '../../util/dom';
+import { isFocusableElement, isInputElement, focus } from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -85,7 +84,8 @@ type State = {
     selected: BoxItemMap,
     searchQuery: string,
     view: View,
-    isUploadModalOpen: boolean
+    isUploadModalOpen: boolean,
+    focusedRow: number
 };
 
 type DefaultProps = {|
@@ -114,6 +114,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     table: any;
     rootElement: HTMLElement;
     appElement: HTMLElement;
+    globalModifier: boolean;
 
     static defaultProps: DefaultProps = {
         type: `${TYPE_FILE},${TYPE_WEBLINK}`,
@@ -172,7 +173,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             selected: {},
             searchQuery: '',
             view: VIEW_FOLDER,
-            isUploadModalOpen: false
+            isUploadModalOpen: false,
+            focusedRow: 0
         };
     }
 
@@ -330,17 +332,9 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         const { currentCollection: { percentLoaded } }: State = this.state;
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
-        if (
-            !autoFocus ||
-            percentLoaded !== 100 ||
-            !this.table ||
-            !this.table.Grid ||
-            isActionableElement(document.activeElement)
-        ) {
-            return;
+        if (autoFocus && percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
+            focus(this.rootElement, '.bcp-item-row');
         }
-        const grid: any = findDOMNode(this.table.Grid);
-        grid.focus();
     }
 
     /**
@@ -399,16 +393,19 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     showSelected = (): void => {
         const { selected, sortBy, sortDirection }: State = this.state;
-        this.setState({
-            searchQuery: '',
-            view: VIEW_SELECTED,
-            currentCollection: {
-                sortBy,
-                sortDirection,
-                percentLoaded: 100,
-                items: Object.keys(selected).map((key) => selected[key])
-            }
-        });
+        this.setState(
+            {
+                searchQuery: '',
+                view: VIEW_SELECTED,
+                currentCollection: {
+                    sortBy,
+                    sortDirection,
+                    percentLoaded: 100,
+                    items: Object.keys(selected).map((key) => selected[key])
+                }
+            },
+            this.finishNavigation
+        );
     };
 
     /**
@@ -501,8 +498,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
 
         Modal.setAppElement(this.appElement);
         this.setState({
-            isUploadModalOpen: true,
-            currentCollection: this.currentUnloadedCollection()
+            isUploadModalOpen: true
         });
     };
 
@@ -527,7 +523,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     select = (item: BoxItem): void => {
         const { type: selectableType, maxSelectable }: Props = this.props;
-        const { view, selected }: State = this.state;
+        const { view, selected, currentCollection: { items = [] } }: State = this.state;
         const { id, type }: BoxItem = item;
 
         if (!id || !type || selectableType.indexOf(type) === -1) {
@@ -570,7 +566,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             selected[typedId] = item;
         }
 
-        this.setState({ selected }, () => {
+        const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
+        this.setState({ selected, focusedRow }, () => {
             if (view === VIEW_SELECTED) {
                 // Need to refresh the selected view
                 this.showSelected();
@@ -656,6 +653,61 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     };
 
     /**
+     * Keyboard events
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    onKeyDown = (event: SyntheticKeyboardEvent & { target: HTMLElement }) => {
+        if (isInputElement(event.target)) {
+            return;
+        }
+
+        const { rootFolderId }: Props = this.props;
+        const key = event.key.toLowerCase();
+
+        switch (key) {
+            case '/':
+                focus(this.rootElement, '.buik-search input[type="search"]', false);
+                break;
+            case 'g':
+                break;
+            case 'f':
+                if (this.globalModifier) {
+                    this.fetchFolder(rootFolderId);
+                }
+                break;
+            case 'c':
+                if (this.globalModifier) {
+                    this.choose();
+                }
+                break;
+            case 'x':
+                if (this.globalModifier) {
+                    this.cancel();
+                }
+                break;
+            case 's':
+                if (this.globalModifier) {
+                    this.showSelected();
+                }
+                break;
+            case 'u':
+                if (this.globalModifier) {
+                    this.upload();
+                }
+                break;
+            default:
+                this.globalModifier = false;
+                return;
+        }
+
+        this.globalModifier = key === 'g';
+        event.preventDefault();
+    };
+
+    /**
      * Renders the file picker
      *
      * @private
@@ -681,7 +733,15 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             className,
             measureRef
         }: Props = this.props;
-        const { view, rootName, selected, currentCollection, searchQuery, isUploadModalOpen }: State = this.state;
+        const {
+            view,
+            rootName,
+            selected,
+            currentCollection,
+            searchQuery,
+            isUploadModalOpen,
+            focusedRow
+        }: State = this.state;
         const { id, permissions }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const selectedCount: number = Object.keys(selected).length;
@@ -689,8 +749,10 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         const allowUpload = canUpload && can_upload;
         const styleClassName = classNames('buik bcp', className);
 
+        /* eslint-disable jsx-a11y/no-static-element-interactions */
+        /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <div id={this.id} className={styleClassName} ref={measureRef}>
+            <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
                 <div className='buik-app-element'>
                     <Header
                         view={view}
@@ -715,6 +777,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                         view={view}
                         isSmall={isSmall}
                         rootId={rootFolderId}
+                        rootElement={this.rootElement}
+                        focusedRow={focusedRow}
                         selectableType={type}
                         canSetShareAccess={canSetShareAccess}
                         extensionsWhitelist={extensions}
@@ -751,6 +815,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                     : null}
             </div>
         );
+        /* eslint-enable jsx-a11y/no-static-element-interactions */
+        /* eslint-enable jsx-a11y/no-noninteractive-tabindex */
     }
 }
 

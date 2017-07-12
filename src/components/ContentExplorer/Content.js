@@ -8,7 +8,7 @@ import React from 'react';
 import ItemList from './ItemList';
 import EmptyState from '../EmptyState';
 import ProgressBar from '../ProgressBar';
-import { VIEW_ERROR } from '../../constants';
+import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
 import type { Collection, View } from '../../flowTypes';
 import './Content.scss';
 
@@ -28,6 +28,7 @@ type Props = {
     view: View,
     rootId: string,
     tableRef: Function,
+    rootElement: HTMLElement,
     canShare: boolean,
     canDownload: boolean,
     canDelete: boolean,
@@ -44,6 +45,7 @@ type Props = {
     getLocalizedMessage: Function,
     isSmall: boolean,
     isTouch: boolean,
+    focusedRow: number,
     currentCollection: Collection
 };
 
@@ -52,8 +54,10 @@ const Content = ({
     isSmall,
     isTouch,
     rootId,
+    rootElement,
     currentCollection,
     tableRef,
+    focusedRow,
     canDownload,
     canDelete,
     canRename,
@@ -70,40 +74,39 @@ const Content = ({
     getLocalizedMessage
 }: Props) =>
     <div className='bce-content'>
+        {view === VIEW_ERROR || view === VIEW_SELECTED
+            ? null
+            : <ProgressBar percent={currentCollection.percentLoaded} />}
         {isEmpty(view, currentCollection)
-            ? <div className='buik-empty'>
-                <EmptyState
-                    view={view}
-                    getLocalizedMessage={getLocalizedMessage}
-                    isLoading={currentCollection.percentLoaded !== 100}
-                  />
-                <ProgressBar percent={currentCollection.percentLoaded} />
-            </div>
-            : <div className='bce-item-list'>
-                <ItemList
-                    view={view}
-                    isSmall={isSmall}
-                    isTouch={isTouch}
-                    rootId={rootId}
-                    currentCollection={currentCollection}
-                    tableRef={tableRef}
-                    canShare={canShare}
-                    canPreview={canPreview}
-                    canDelete={canDelete}
-                    canRename={canRename}
-                    canDownload={canDownload}
-                    onItemClick={onItemClick}
-                    onItemSelect={onItemSelect}
-                    onItemDelete={onItemDelete}
-                    onItemDownload={onItemDownload}
-                    onItemRename={onItemRename}
-                    onItemShare={onItemShare}
-                    onItemPreview={onItemPreview}
-                    onSortChange={onSortChange}
-                    getLocalizedMessage={getLocalizedMessage}
-                  />
-                <ProgressBar percent={currentCollection.percentLoaded} />
-            </div>}
+            ? <EmptyState
+                view={view}
+                getLocalizedMessage={getLocalizedMessage}
+                isLoading={currentCollection.percentLoaded !== 100}
+              />
+            : <ItemList
+                view={view}
+                isSmall={isSmall}
+                isTouch={isTouch}
+                rootId={rootId}
+                rootElement={rootElement}
+                focusedRow={focusedRow}
+                currentCollection={currentCollection}
+                tableRef={tableRef}
+                canShare={canShare}
+                canPreview={canPreview}
+                canDelete={canDelete}
+                canRename={canRename}
+                canDownload={canDownload}
+                onItemClick={onItemClick}
+                onItemSelect={onItemSelect}
+                onItemDelete={onItemDelete}
+                onItemDownload={onItemDownload}
+                onItemRename={onItemRename}
+                onItemShare={onItemShare}
+                onItemPreview={onItemPreview}
+                onSortChange={onSortChange}
+                getLocalizedMessage={getLocalizedMessage}
+              />}
     </div>;
 
 export default Content;

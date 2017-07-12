@@ -12,7 +12,7 @@ import noop from 'lodash.noop';
 import Content from './Content';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
-import isActionableElement from '../../util/dom';
+import { isFocusableElement } from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_ROOT,
@@ -219,7 +219,7 @@ class ContentTree extends Component<DefaultProps, Props, State> {
             percentLoaded !== 100 ||
             !this.table ||
             !this.table.Grid ||
-            isActionableElement(document.activeElement)
+            isFocusableElement(document.activeElement)
         ) {
             return;
         }

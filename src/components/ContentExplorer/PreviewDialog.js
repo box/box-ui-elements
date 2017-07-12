@@ -106,6 +106,7 @@ class PreviewDialog extends PureComponent<void, Props, State> {
                 className={CLASS_MODAL_CONTENT_FULL_BLEED}
                 overlayClassName={CLASS_MODAL_OVERLAY}
                 contentLabel={label}
+                onRequestClose={this.onClose}
             >
                 <div className='buik-modal-content'>
                     <div className='buik-preview-header'>
