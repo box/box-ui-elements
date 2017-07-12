@@ -1,6 +1,17 @@
+<a name="0.45.0"></a>
+# 0.45.0 (2017-07-12)
+
+* Chore: Update release scripts to add remote before syncing (#19) ([aa34c58](https://github.com/box/box-ui-elements/commit/aa34c58))
+* Update: Keyboard shortcuts for Explorer and Picker (#14) ([245369d](https://github.com/box/box-ui-elements/commit/245369d))
+* Update: Preview 1.0.0 (#18) ([2523c7b](https://github.com/box/box-ui-elements/commit/2523c7b))
+* Fix: Disable chunked upload in IE11 (#17) ([1f668d2](https://github.com/box/box-ui-elements/commit/1f668d2))
+
+
+
 <a name="0.44.0"></a>
 # 0.44.0 (2017-07-12)
 
+* Release: 0.44.0 ([fc933b4](https://github.com/box/box-ui-elements/commit/fc933b4))
 
 
 
