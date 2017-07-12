@@ -39,6 +39,7 @@ type Props = {
     uploadHost: string,
     clientName: string,
     className: string,
+    chunked: boolean,
     onClose: Function,
     onComplete: Function,
     getLocalizedMessage: Function,
@@ -50,6 +51,7 @@ type Props = {
 
 type DefaultProps = {|
     apiHost: string,
+    chunked: boolean,
     className: string,
     clientName: string,
     uploadHost: string,
@@ -72,9 +74,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     static defaultProps: DefaultProps = {
         apiHost: DEFAULT_HOSTNAME_API,
-        uploadHost: DEFAULT_HOSTNAME_UPLOAD,
-        clientName: CLIENT_NAME_CONTENT_UPLOADER,
+        chunked: true,
         className: '',
+        clientName: CLIENT_NAME_CONTENT_UPLOADER,
+        uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         onClose: noop,
         onComplete: noop
     };
@@ -228,8 +231,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     upload = () => {
         const { items } = this.state;
         items.forEach((uploadItem) => {
-            const { status } = uploadItem;
-            if (status !== STATUS_IN_PROGRESS) {
+            if (uploadItem.status !== STATUS_IN_PROGRESS) {
                 this.uploadFile(uploadItem);
             }
         });
@@ -242,9 +244,9 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     uploadFile(item: UploadItem) {
-        const { rootFolderId } = this.props;
+        const { rootFolderId, chunked } = this.props;
         const { api, file } = item;
-        api.getUploadAPI().upload({
+        api.getUploadAPI(chunked, file.size).upload({
             id: rootFolderId,
             file,
             successCallback: (entries) => this.handleUploadSuccess(item, entries),

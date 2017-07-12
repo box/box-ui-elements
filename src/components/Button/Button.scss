@@ -123,4 +123,9 @@
             text-decoration: underline;
         }
     }
+
+    // Vertically center icon
+    svg {
+        display: block;
+    }
 }
