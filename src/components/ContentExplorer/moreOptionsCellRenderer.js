@@ -8,7 +8,7 @@ import React from 'react';
 import DropdownMenu from '../DropdownMenu';
 import { Menu, MenuItem } from '../Menu';
 import { Button } from '../Button';
-import isMobile from '../../util/mobile';
+import { isMobile } from '../../util/browser';
 import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_RENAME,

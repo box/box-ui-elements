@@ -13,6 +13,7 @@ import API from '../../api';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
+import { isIE } from '../../util/browser';
 import {
     CLIENT_NAME_CONTENT_UPLOADER,
     DEFAULT_HOSTNAME_UPLOAD,
@@ -246,7 +247,11 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     uploadFile(item: UploadItem) {
         const { rootFolderId, chunked } = this.props;
         const { api, file } = item;
-        api.getUploadAPI(chunked, file.size).upload({
+
+        // Disable chunked upload in IE11 for now until hashing is done in a worker
+        const useChunked = chunked && !isIE();
+
+        api.getUploadAPI(useChunked, file.size).upload({
             id: rootFolderId,
             file,
             successCallback: (entries) => this.handleUploadSuccess(item, entries),
