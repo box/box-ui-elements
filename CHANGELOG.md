@@ -1,6 +1,13 @@
+<a name="0.44.0"></a>
+# 0.44.0 (2017-07-12)
+
+
+
+
 <a name="0.43.0"></a>
 # 0.43.0 (2017-07-12)
 
+* Release: 0.43.0 ([77a7676](https://github.com/box/box-ui-elements/commit/77a7676))
 
 
 
