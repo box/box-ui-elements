@@ -1,6 +1,17 @@
+<a name="1.0.0"></a>
+# 1.0.0 (2017-07-13)
+
+* Docs: Update badge URL ([e4c6908](https://github.com/box/box-ui-elements/commit/e4c6908))
+* Docs: Update support section ([690129b](https://github.com/box/box-ui-elements/commit/690129b))
+* Fix: Remove parent null check when renaming files (#21) ([8362cc1](https://github.com/box/box-ui-elements/commit/8362cc1))
+* Chore: Update release scripts to add remote before syncing (#20) ([9e0058b](https://github.com/box/box-ui-elements/commit/9e0058b))
+
+
+
 <a name="0.45.0"></a>
 # 0.45.0 (2017-07-12)
 
+* Release: 0.45.0 ([a679f52](https://github.com/box/box-ui-elements/commit/a679f52))
 * Chore: Update release scripts to add remote before syncing (#19) ([aa34c58](https://github.com/box/box-ui-elements/commit/aa34c58))
 * Update: Keyboard shortcuts for Explorer and Picker (#14) ([245369d](https://github.com/box/box-ui-elements/commit/245369d))
 * Update: Preview 1.0.0 (#18) ([2523c7b](https://github.com/box/box-ui-elements/commit/2523c7b))
