@@ -52,7 +52,9 @@
     "debug": "NODE_ENV=test ./node_modules/.bin/karma start build/karma.conf.js --no-single-run --auto-watch",
     "build": "yarn run lint && yarn run clean && yarn run dev",
     "build-lib": "yarn run npm && ./node_modules/.bin/cpx './src/{**/!(__tests__)/*,*}' lib && node ./build/props-to-es2015.js && BABEL_ENV=npm NODE_ENV=production ./node_modules/.bin/babel lib -d lib",
-    "minor": "./build/release.sh -n && ./build/publish.sh"
+    "minor": "./build/release.sh -n && ./build/publish.sh",
+    "major": "./build/release.sh -m && ./build/publish.sh",
+    "patch": "./build/release.sh -p && ./build/publish.sh"
   },
   "lint-staged": {
     "src/**/*.js": [
