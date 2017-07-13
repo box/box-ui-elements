@@ -22,6 +22,7 @@ type Props = {
     canSetShareAccess: boolean,
     onItemClick: Function,
     onItemSelect: Function,
+    onFocusChange: Function,
     onShareAccessChange: Function,
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
@@ -56,6 +57,7 @@ const Content = ({
     onItemClick,
     onItemSelect,
     onShareAccessChange,
+    onFocusChange,
     extensionsWhitelist,
     getLocalizedMessage
 }: Props) =>
@@ -82,6 +84,7 @@ const Content = ({
                 selectableType={selectableType}
                 onItemSelect={onItemSelect}
                 onItemClick={onItemClick}
+                onFocusChange={onFocusChange}
                 onShareAccessChange={onShareAccessChange}
                 extensionsWhitelist={extensionsWhitelist}
                 getLocalizedMessage={getLocalizedMessage}

@@ -67,21 +67,6 @@
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
 
-                const tokenGenerator1 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve(token);
-                    } else {
-                        return Promise.reject()
-                    }
-                };
-                const tokenGenerator2 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve({ [`folder_${folderId}`]: token });
-                    } else {
-                        return Promise.reject()
-                    }
-                };
-
                 const explorer1 = new ContentExplorer();
                 explorer1.addListener('download', function(data) {
                     console.log('%c==========Download===========', 'background: #222; color: #bada55');
@@ -121,15 +106,14 @@
                 document.querySelector('.explorer1').innerHTML = '';
                 explorer1.show(folderId, token, {
                     container: '.explorer1',
-                    // logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    autoFocus: true
                 });
 
                 const explorer2 = new ContentExplorer();
                 document.querySelector('.explorer2').innerHTML = '';
                 explorer2.show(folderId, token, {
                     container: '.explorer2',
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
-                    autoFocus: true
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
                 });
             }
             load();

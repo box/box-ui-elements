@@ -31,6 +31,7 @@ type Props = {
     selectableType: string,
     hasHitSelectionLimit: boolean,
     onShareAccessChange: Function,
+    onFocusChange: Function,
     extensionsWhitelist: string[],
     getLocalizedMessage: Function,
     currentCollection: Collection,
@@ -51,6 +52,7 @@ const ItemList = ({
     onItemSelect,
     onItemClick,
     onShareAccessChange,
+    onFocusChange,
     currentCollection,
     tableRef,
     getLocalizedMessage
@@ -81,13 +83,23 @@ const ItemList = ({
         });
     };
 
-    const onRowClick = ({ event, rowData }: { event: Event & { target: HTMLElement }, rowData: BoxItem }) => {
+    const onRowClick = ({
+        event,
+        rowData,
+        index
+    }: {
+        event: Event & { target: HTMLElement },
+        rowData: BoxItem,
+        index: number
+    }) => {
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (
             isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) &&
             !isFocusableElement(event.target)
         ) {
             onItemSelect(rowData);
+        } else {
+            onFocusChange(index);
         }
     };
 
@@ -102,7 +114,7 @@ const ItemList = ({
             scrollToRow={focusedRow}
             onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bcp-item-row-${scrollToRow}`)}
         >
-            {({ onSectionRendered, scrollToRow }) =>
+            {({ onSectionRendered, scrollToRow, focusOnRender }) =>
                 <AutoSizer>
                     {({ width, height }) =>
                         <Table
@@ -119,7 +131,9 @@ const ItemList = ({
                             scrollToIndex={scrollToRow}
                             onRowsRendered={({ startIndex, stopIndex }) => {
                                 onSectionRendered({ rowStartIndex: startIndex, rowStopIndex: stopIndex });
-                                focus(rootElement, `.bcp-item-row-${scrollToRow}`);
+                                if (focusOnRender) {
+                                    focus(rootElement, `.bcp-item-row-${scrollToRow}`);
+                                }
                             }}
                         >
                             <Column

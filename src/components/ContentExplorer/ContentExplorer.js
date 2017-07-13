@@ -100,7 +100,8 @@ type State = {
     isPreviewModalOpen: boolean,
     isLoading: boolean,
     errorCode: string,
-    focusedRow: number
+    focusedRow: number,
+    firstLoad: boolean
 };
 
 type DefaultProps = {|
@@ -205,7 +206,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             isPreviewModalOpen: false,
             isLoading: false,
             errorCode: '',
-            focusedRow: 0
+            focusedRow: 0,
+            firstLoad: true
         };
     }
 
@@ -316,12 +318,18 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      */
     finishNavigation() {
         const { onNavigate, autoFocus }: Props = this.props;
-        const { currentCollection: { percentLoaded, boxItem } }: State = this.state;
+        const { firstLoad, currentCollection: { percentLoaded, boxItem } }: State = this.state;
         onNavigate(cloneDeep(boxItem));
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
-        if (autoFocus && percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
+        if (percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
+            // If loading for the very first time, only focus if autoFocus is true
+            if (firstLoad && !autoFocus) {
+                this.setState({ firstLoad: false });
+                return;
+            }
             focus(this.rootElement, '.bce-item-row');
+            this.setState({ focusedRow: 0 });
         }
     }
 
@@ -940,7 +948,16 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             case '/':
                 focus(this.rootElement, '.buik-search input[type="search"]', false);
                 break;
+            case 'arrowdown':
+                focus(this.rootElement, '.bce-item-row', false);
+                this.setState({ focusedRow: 0 });
+                break;
             case 'g':
+                break;
+            case 'b':
+                if (this.globalModifier) {
+                    focus(this.rootElement, '.buik-breadcrumb button', false);
+                }
                 break;
             case 'f':
                 if (this.globalModifier) {
