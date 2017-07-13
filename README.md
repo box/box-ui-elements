@@ -9,7 +9,7 @@
 Box UI Elements are pre-built UI components that allow developers to add features of the main Box web application into their own applications. They can be used to navigate through, upload, preview, and select content stored on Box and are available both as React components and framework-agnostic JavaScript libraries.
 
 ## Usage
-If you are not building a [React](https://facebook.github.io/react) based app, please follow the [documentation on our developer docs](https://developer.box.com/docs/box-ui-elements), which shows how to use the Box UI Elements as libraries via script includes. Continue reading below to import the components into your React based app.
+If you are not building a [React](https://facebook.github.io/react) based app, please follow the [documentation on our developer docs](https://developer.box.com/docs/box-ui-elements), which shows how to use the Box UI Elements as libraries via script includes. Continue reading below to import the components into your React based app. You can also refer to https://github.com/box/box-ui-elements-demo, which a very minimalistic React based app using the Explorer UI Element.
 
 ## Installation
 `yarn add box-ui-elements` or `npm install box-ui-elements`
@@ -253,7 +253,7 @@ Copyright 2016-2017 Box, Inc. All Rights Reserved.
 
 Licensed under the Box Software License Agreement v.20170516.
 You may not use this file except in compliance with the License.
-You may obtain a copy of the License at [Box UI Elements Software License Agreement](https://developer.box.com/docs/box-ui-kit-software-license-agreement)
+You may obtain a copy of the License at [Box UI Elements Software License Agreement](https://developer.box.com/docs/box-ui-elements-license)
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
