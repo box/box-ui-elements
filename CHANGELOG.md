@@ -1,6 +1,14 @@
+<a name="1.0.1"></a>
+## 1.0.1 (2017-07-13)
+
+* Fix: Fix autoFocus issue and add shortcut for breadcrumbs (#22) ([1b18f55](https://github.com/box/box-ui-elements/commit/1b18f55)), closes [#22](https://github.com/box/box-ui-elements/issues/22)
+
+
+
 <a name="1.0.0"></a>
 # 1.0.0 (2017-07-13)
 
+* Release: 1.0.0 ([2c2f7ed](https://github.com/box/box-ui-elements/commit/2c2f7ed))
 * Docs: Update badge URL ([e4c6908](https://github.com/box/box-ui-elements/commit/e4c6908))
 * Docs: Update support section ([690129b](https://github.com/box/box-ui-elements/commit/690129b))
 * Fix: Remove parent null check when renaming files (#21) ([8362cc1](https://github.com/box/box-ui-elements/commit/8362cc1))
