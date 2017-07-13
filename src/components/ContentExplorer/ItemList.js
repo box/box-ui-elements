@@ -126,9 +126,7 @@ const ItemList = ({
             onSelect={onItemSelect}
             onDelete={onItemDelete}
             scrollToRow={focusedRow}
-            onScrollToChange={({ scrollToRow }) => {
-                focus(rootElement, `.bce-item-row-${scrollToRow}`);
-            }}
+            onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bce-item-row-${scrollToRow}`)}
         >
             {({ onSectionRendered, scrollToRow, focusOnRender }) =>
                 <AutoSizer>
