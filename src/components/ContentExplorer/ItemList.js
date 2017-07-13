@@ -128,7 +128,7 @@ const ItemList = ({
             scrollToRow={focusedRow}
             onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bce-item-row-${scrollToRow}`)}
         >
-            {({ onSectionRendered, scrollToRow }) =>
+            {({ onSectionRendered, scrollToRow, focusOnRender }) =>
                 <AutoSizer>
                     {({ width, height }) =>
                         <Table
@@ -147,7 +147,9 @@ const ItemList = ({
                             scrollToIndex={scrollToRow}
                             onRowsRendered={({ startIndex, stopIndex }) => {
                                 onSectionRendered({ rowStartIndex: startIndex, rowStopIndex: stopIndex });
-                                focus(rootElement, `.bce-item-row-${scrollToRow}`);
+                                if (focusOnRender) {
+                                    focus(rootElement, `.bce-item-row-${scrollToRow}`);
+                                }
                             }}
                         >
                             <Column

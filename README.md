@@ -94,6 +94,7 @@ When the item list is focused, either manually by clicking on it or programatica
 | Shift + D | Download an item |
 | g then f | Navigates to the root folder |
 | g then u | Upload to the current folder |
+| g then b | Focuses the root breadcrumb |
 
 
 
@@ -159,6 +160,9 @@ When the item list is focused, either manually by clicking on it or programatica
 | g then s | Show selected items |
 | g then c | Choose |
 | g then x | Cancel |
+| g then b | Focuses the root breadcrumb |
+
+
 
 ## Content Uploader ([Documentation](https://developer.box.com/docs/box-content-uploader))
 <img src="https://user-images.githubusercontent.com/1075325/27887153-09243762-6194-11e7-8d2d-cf654d9364bc.png" width="75%"/>
@@ -195,6 +199,7 @@ render(
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
+
 
 
 ## Content Tree ([Documentation](https://developer.box.com/docs/box-content-tree))
@@ -234,6 +239,7 @@ render(
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
+
 
 
 ## Content Preview ([Documentation](https://developer.box.com/docs/box-content-preview))

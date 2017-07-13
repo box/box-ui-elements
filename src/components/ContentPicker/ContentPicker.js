@@ -85,7 +85,8 @@ type State = {
     searchQuery: string,
     view: View,
     isUploadModalOpen: boolean,
-    focusedRow: number
+    focusedRow: number,
+    firstLoad: boolean
 };
 
 type DefaultProps = {|
@@ -174,7 +175,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             searchQuery: '',
             view: VIEW_FOLDER,
             isUploadModalOpen: false,
-            focusedRow: 0
+            focusedRow: 0,
+            firstLoad: true
         };
     }
 
@@ -329,11 +331,17 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     finishNavigation() {
         const { autoFocus }: Props = this.props;
-        const { currentCollection: { percentLoaded } }: State = this.state;
+        const { firstLoad, currentCollection: { percentLoaded } }: State = this.state;
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
-        if (autoFocus && percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
+        if (percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
+            // If loading for the very first time, only focus if autoFocus is true
+            if (firstLoad && !autoFocus) {
+                this.setState({ firstLoad: false });
+                return;
+            }
             focus(this.rootElement, '.bcp-item-row');
+            this.setState({ focusedRow: 0 });
         }
     }
 
@@ -671,7 +679,16 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             case '/':
                 focus(this.rootElement, '.buik-search input[type="search"]', false);
                 break;
+            case 'arrowdown':
+                focus(this.rootElement, '.bcp-item-row', false);
+                this.setState({ focusedRow: 0 });
+                break;
             case 'g':
+                break;
+            case 'b':
+                if (this.globalModifier) {
+                    focus(this.rootElement, '.buik-breadcrumb button', false);
+                }
                 break;
             case 'f':
                 if (this.globalModifier) {
@@ -705,6 +722,17 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
 
         this.globalModifier = key === 'g';
         event.preventDefault();
+    };
+
+    /**
+     * Updates the focused row based on key binder
+     *
+     * @private
+     * @param {number} focusedRow - the row index thats focused
+     * @return {void}
+     */
+    onFocusChange = (focusedRow: number) => {
+        this.setState({ focusedRow });
     };
 
     /**
@@ -787,6 +815,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                         tableRef={this.tableRef}
                         onItemSelect={this.select}
                         onItemClick={this.onItemClick}
+                        onFocusChange={this.onFocusChange}
                         onShareAccessChange={this.changeShareAccess}
                         getLocalizedMessage={getLocalizedMessage}
                     />

@@ -38,7 +38,8 @@ type Props = {
 
 type State = {
     scrollToColumn: number,
-    scrollToRow: number
+    scrollToRow: number,
+    focusOnRender: boolean
 };
 
 class KeyBinder extends PureComponent<DefaultProps, Props, State> {
@@ -71,7 +72,8 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
 
         this.state = {
             scrollToColumn: props.scrollToColumn,
-            scrollToRow: props.scrollToRow
+            scrollToRow: props.scrollToRow,
+            focusOnRender: false
         };
 
         this.columnStartIndex = 0;
@@ -87,18 +89,16 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps(nextProps: Props): void {
         const { scrollToColumn, scrollToRow, currentCollection: { id } }: Props = nextProps;
-        const {
-            scrollToColumn: prevScrollToColumn,
-            scrollToRow: prevScrollToRow,
-            currentCollection: { id: prevId }
-        }: Props = this.props;
+        const { currentCollection: { id: prevId } }: Props = this.props;
+        const { scrollToColumn: prevScrollToColumn, scrollToRow: prevScrollToRow }: State = this.state;
 
         if (id !== prevId) {
             this.setState({
                 scrollToColumn: 0,
-                scrollToRow: 0
+                scrollToRow: 0,
+                focusOnRender: false
             });
         } else if (prevScrollToColumn !== scrollToColumn && prevScrollToRow !== scrollToRow) {
             this.setState({
@@ -119,7 +119,7 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent) => {
+    onKeyDown = (event: SyntheticKeyboardEvent): void => {
         const {
             columnCount,
             rowCount,
@@ -141,6 +141,7 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
         switch (event.key) {
             case 'ArrowDown':
                 scrollToRow = ctrlMeta ? rowCount - 1 : Math.min(scrollToRow + 1, rowCount - 1);
+                event.stopPropagation(); // To prevent the arrow down capture of parent
                 break;
             case 'ArrowLeft':
                 scrollToColumn = ctrlMeta ? 0 : Math.max(scrollToColumn - 1, 0);
@@ -202,7 +203,7 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
         columnStopIndex: number,
         rowStartIndex: number,
         rowStopIndex: number
-    }) => {
+    }): void => {
         this.columnStartIndex = columnStartIndex;
         this.columnStopIndex = columnStopIndex;
         this.rowStartIndex = rowStartIndex;
@@ -216,10 +217,10 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    updateScrollState({ scrollToColumn, scrollToRow }: State) {
+    updateScrollState({ scrollToColumn, scrollToRow }: { scrollToColumn: number, scrollToRow: number }): void {
         const { onScrollToChange } = this.props;
         onScrollToChange({ scrollToColumn, scrollToRow });
-        this.setState({ scrollToColumn, scrollToRow });
+        this.setState({ scrollToColumn, scrollToRow, focusOnRender: true });
     }
 
     /**
@@ -231,7 +232,7 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
      */
     render() {
         const { className, children } = this.props;
-        const { scrollToColumn, scrollToRow }: State = this.state;
+        const { scrollToColumn, scrollToRow, focusOnRender }: State = this.state;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         return (
@@ -239,7 +240,8 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
                 {children({
                     onSectionRendered: this.onSectionRendered,
                     scrollToColumn,
-                    scrollToRow
+                    scrollToRow,
+                    focusOnRender
                 })}
             </div>
         );
