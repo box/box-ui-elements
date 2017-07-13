@@ -77,25 +77,7 @@ render(
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 
 ### Keyboard Shortcuts
-When the item list is focused, either manually by clicking on it or programatically via javascript or via the above mentioned `autoFocus` prop, the following keyboard shorcuts will work if their corresponding operations are applicable and allowed.
-
-| Key | Description |
-| --- | --- |
-| Arrow Up | Previous item row |
-| Arrow Down | Next item row |
-| Ctrl/Cmd + Arrow Up | First item row |
-| Ctrl/Cmd + Arrow Down | Last item row |
-| / | Search |
-| Enter | Open an item |
-| Delete | Delete an item |
-| Shift + X | Select an item row |
-| Shift + R | Rename an item |
-| Shift + S | Share an item |
-| Shift + D | Download an item |
-| g then f | Navigates to the root folder |
-| g then u | Upload to the current folder |
-| g then b | Focuses the root breadcrumb |
-
+*See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-keyboard-shortcuts).*
 
 
 ## Content Picker ([Documentation](https://developer.box.com/docs/box-content-picker))
@@ -144,23 +126,7 @@ render(
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 
 ### Keyboard Shortcuts
-When the item list is focused, either manually by clicking on it or programatically via javascript or via the above mentioned `autoFocus` prop, the following keyboard shorcuts will work if their corresponding operations are applicable and allowed.
-
-| Key | Description |
-| --- | --- |
-| Arrow Up | Previous item row |
-| Arrow Down | Next item row |
-| Ctrl/Cmd + Arrow Up | First item row |
-| Ctrl/Cmd + Arrow Down | Last item row |
-| / | Search |
-| Enter | Open an item |
-| Shift + X | Select an item row |
-| g then f | Navigates to the root folder |
-| g then u | Upload to the current folder |
-| g then s | Show selected items |
-| g then c | Choose |
-| g then x | Cancel |
-| g then b | Focuses the root breadcrumb |
+*See the [developer docs](https://developer.box.com/docs/box-content-picker#section-keyboard-shortcuts).*
 
 
 
