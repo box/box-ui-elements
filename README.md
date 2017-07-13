@@ -6,13 +6,13 @@
 
 [Box UI Elements](https://developer.box.com/docs/box-ui-elements)
 ==========================================================================
-The Box UI Elements are currently in beta and may contain bugs. Their interfaces may also update as needed. Please email [box-ui-elements@box.com](mailto:box-ui-elements@box.com) to report issues or provide feedback.
+Box UI Elements are pre-built UI components that allow developers to add features of the main Box web application into their own applications. They can be used to navigate through, upload, preview, and select content stored on Box and are available both as React components and framework-agnostic JavaScript libraries.
 
 ## Usage
-If you are not building a [React](https://facebook.github.io/react) based app, please follow the [documentation on our developer docs](https://developer.box.com/docs/box-ui-elements), which shows how to use the Box UI Elements via script includes. Continue reading below to import the components into your React based app.
+If you are not building a [React](https://facebook.github.io/react) based app, please follow the [documentation on our developer docs](https://developer.box.com/docs/box-ui-elements), which shows how to use the Box UI Elements as libraries via script includes. Continue reading below to import the components into your React based app.
 
 ## Installation
-`yarn add box-ui-elements`
+`yarn add box-ui-elements` or `npm install box-ui-elements`
 
 ## Authentication
 We have designed the Box UI Elements in an authentication-type agnostic way. Whether you are using them for users who have Box accounts (Managed Users) or non-Box accounts (App Users), they should just work out of the box. They only expect an **access token** to be passed in for authentication. Please refer to the documentation links to learn more about authentication and generating access tokens.
@@ -274,7 +274,7 @@ render(
 
 
 ## Support
-Need to contact us directly? Email oss@box.com and be sure to include the name of this project in the subject.
+The Box UI Elements are currently in active development. Their interfaces may update over time. Please email [box-ui-elements@box.com](mailto:box-ui-elements@box.com) to report issues or provide feedback.
 
 ## Copyright and License
 Copyright 2016-2017 Box, Inc. All Rights Reserved.
