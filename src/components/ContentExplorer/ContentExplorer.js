@@ -759,8 +759,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        const { id, permissions, type }: BoxItem = selected;
-        if (!id || !permissions || !type) {
+        const { id, permissions, parent, type }: BoxItem = selected;
+        if (!id || !permissions || !parent || !type) {
             return;
         }
 
