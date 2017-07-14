@@ -8,29 +8,21 @@
 ==========================================================================
 Box UI Elements are pre-built UI components that allow developers to add features of the main Box web application into their own applications. They can be used to navigate through, upload, preview, and select content stored on Box and are available both as React components and framework-agnostic JavaScript libraries.
 
-## Documentation
-Visit our [developer documentation](https://developer.box.com/docs/box-ui-elements) for detailed information on how to use and configure each UI Element.
-
-## Browser Support
-* Desktop Chrome, Firefox, Safari, Edge (latest 2 versions)
-* Limited support for Internet Explorer 11 (requires ES2015/Intl polyfill)
-* Mobile Chrome and Safari
-
-Box UI Elements require an ES2015-capable browser supporting Intl (ECMAScript Internationalization API). If your application supports Internet Explorer 11 or Safari 9, please include your favorite polyfill library or a service like polyfill.io to smartly load only the polyfills your users need.
-
-## Current Version
-* 1.0.1
-
-## Supported Locales
-`en-AU`, `en-CA`, `en-GB`, `en-US`, `da-DK`, `de-DE`, `es-ES`, `fi-FI`, `fr-CA`, `fr-FR`, `it-IT`, `ja-JP`, `ko-KR`, `nb-NO`, `nl-NL`, `pl-PL`, `pt-BR`, `ru-RU`, `sv-SE`, `tr-TR`, `zh-CN`, `zh-TW`
-
-Read the [developer documentation](https://developer.box.com/docs/box-ui-elements) for how to use different locales.
-
-## Usage
+# Usage
 The instructions below describe how to use the UI Elements in a [React](https://facebook.github.io/react) application. If you would like to include the language-agnostic libraries as scripts, refer to our [developer documentation](https://developer.box.com/docs/box-ui-elements). Continue reading below for how to import the UI Elements as components into your React application. You can also reference https://github.com/box/box-ui-elements-demo for a minimal React application using the Explorer UI Element.
 
 ## Installation
 `yarn add box-ui-elements` or `npm install box-ui-elements`
+
+## Browser Support
+* Desktop Chrome, Firefox, Safari, Edge (latest 2 versions)
+* Limited support for Internet Explorer 11 (requires ES2015 polyfill)
+* Mobile Chrome and Safari
+
+## Available Locales
+`en-AU`, `en-CA`, `en-GB`, `en-US`, `da-DK`, `de-DE`, `es-ES`, `fi-FI`, `fr-CA`, `fr-FR`, `it-IT`, `ja-JP`, `ko-KR`, `nb-NO`, `nl-NL`, `pl-PL`, `pt-BR`, `ru-RU`, `sv-SE`, `tr-TR`, `zh-CN`, `zh-TW`
+
+The NPM package includes translated messages for the above locales. See the examples below on how to reference them. You can also use your own translated messages since the components are essentially locale free and only require a `getLocalizedMessage` function to be passed in. The `getLocalizedMessage` function in the examples below accepts a string message id and returns a formatted string after some optional string replacements. Alternatively, if your React app is using the popular [react-intl](https://github.com/yahoo/react-intl) library, you can instead use [formatmessage](https://github.com/yahoo/react-intl/wiki/API#formatmessage) to do the replacements.
 
 ## Authentication
 We have designed the Box UI Elements in an authentication-type agnostic way. Whether you are using them for users who have Box accounts (Managed Users) or non-Box accounts (App Users), they should just work out of the box. They only expect an **access token** to be passed in for authentication. The [developer documentation](https://developer.box.com/docs/box-ui-elements) contains more information on how to generate and use these access tokens.
@@ -38,7 +30,7 @@ We have designed the Box UI Elements in an authentication-type agnostic way. Whe
 ## CSS
 The Box UI Elements require their corresponding CSS stylesheets to render properly. You will need to set up Webpack's style-loader and css-loader in order to properly include the CSS like in the examples below. Alternatively, you can include the appropriate CSS files in your application's HTML without importing it in React. Links to hosted versions of these CSS files on the Box CDN can be found in the documentation links below.
 
-## Components
+# Components
 You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview` or `ContentTree`. Similarly, you can also import the `ContentPickerPopup`, `ContentUploaderPopup` or `ContentTreePopup` which are popup versions for the Content Picker, Content Uploader and Content Tree, respectively.
 
 ## Content Explorer ([Documentation](https://developer.box.com/docs/box-content-explorer))
@@ -260,10 +252,10 @@ render(
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
 
 
-## Questions
+# Questions
 If you have any questions, please visit our [developer forum](https://community.box.com/t5/Box-Developer-Forum/bd-p/DeveloperForum) or contact us via one of our [available support channels](https://community.box.com/t5/Community/ct-p/English).
 
-## Copyright and License
+# Copyright and License
 Copyright 2016-2017 Box, Inc. All Rights Reserved.
 
 Licensed under the Box Software License Agreement v.20170516.
