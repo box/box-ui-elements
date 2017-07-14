@@ -13,23 +13,6 @@
         padding-right: 20px;
     }
 
-    .buik-logo {
-        padding-left: 20px;
-
-        .buik-logo-custom {
-            max-height: 32px;
-            max-width: 80px;
-        }
-
-        .buik-is-small & {
-            display: none;
-        }
-
-        svg {
-            display: block;
-        }
-    }
-
     .buik-header-left {
         align-items: center;
         display: flex;

@@ -1,11 +1,11 @@
 /**
  * @flow
- * @file File picker content header
+ * @file Header bar
  * @author Box
  */
 
 import React from 'react';
-import IconDefaultLogo from '../icons/IconDefaultLogo';
+import Logo from './Logo';
 import { Button } from '../Button';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../constants';
 import type { View } from '../../flowTypes';
@@ -28,9 +28,7 @@ const Header = ({ view, searchQuery, canUpload, onSearch, onUpload, logoUrl, get
     return (
         <div className='buik-header'>
             <div className='buik-header-left'>
-                <div className='buik-logo'>
-                    {logoUrl ? <img alt='' src={logoUrl} className='buik-logo-custom' /> : <IconDefaultLogo />}
-                </div>
+                <Logo url={logoUrl} />
                 <div className='buik-search'>
                     <input
                         type='search'
