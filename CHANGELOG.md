@@ -1,6 +1,18 @@
+<a name="1.0.2"></a>
+## 1.0.2 (2017-07-14)
+
+* Docs: Changes applicable to react ([99ca6c0](https://github.com/box/box-ui-elements/commit/99ca6c0))
+* Docs: Links to key shortcuts ([f53ba57](https://github.com/box/box-ui-elements/commit/f53ba57))
+* Docs: Update README ([1e4c6a7](https://github.com/box/box-ui-elements/commit/1e4c6a7))
+* Docs: Update with example app (#23) ([bcbbb25](https://github.com/box/box-ui-elements/commit/bcbbb25))
+* Update: Adding option to show the box logo (#24) ([4824a67](https://github.com/box/box-ui-elements/commit/4824a67))
+
+
+
 <a name="1.0.1"></a>
 ## 1.0.1 (2017-07-13)
 
+* Release: 1.0.1 ([a43b101](https://github.com/box/box-ui-elements/commit/a43b101))
 * Fix: Fix autoFocus issue and add shortcut for breadcrumbs (#22) ([1b18f55](https://github.com/box/box-ui-elements/commit/1b18f55)), closes [#22](https://github.com/box/box-ui-elements/issues/22)
 
 
