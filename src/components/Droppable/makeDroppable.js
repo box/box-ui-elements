@@ -1,233 +1,223 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file HOC for drag drop
+ * @author Box
+ */
+
+import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
+import type { ClassComponent } from '../../flowTypes';
+
+type Props = {
+    className: string
+};
+
+type DefaultProps = {
+    className: string
+};
+
+type State = {
+    canDrop: boolean,
+    isDragging: boolean,
+    isOver: boolean
+};
 
 /* eslint-disable no-plusplus */
-function makeDroppable(definition = {}) {
-    const { dropValidator, onDragEnter, onDragLeave, onDragOver, onDrop } = definition;
+const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, onDrop?: Function }) => (
+    Wrapped: ClassComponent<any, any, any>
+): ClassComponent<any, any, any> =>
+    class DroppableComponent extends PureComponent<DefaultProps, Props, State> {
+        props: Props;
+        state: State;
+        enterLeaveCounter: number;
+        droppableEl: Element;
+        wrappedRef: Element;
 
-    return function WrappedComponent(BaseComponent) {
-        const displayName = BaseComponent.displayName || BaseComponent.name || 'DroppableComponent';
+        static defaultProps: DefaultProps = {
+            className: ''
+        };
 
-        class DroppableComponent extends Component {
-            static propTypes = {
-                className: PropTypes.string
+        /**
+         * [constructor]
+         *
+         * @param {*} props
+         * @return {DroppableComponent}
+         */
+        constructor(props: Props) {
+            super(props);
+            this.enterLeaveCounter = 0;
+            this.state = {
+                canDrop: false,
+                isDragging: false,
+                isOver: false
             };
-
-            static contextTypes = {
-                dragDrop: PropTypes.shape({
-                    getDragItem: PropTypes.func
-                })
-            };
-
-            static defaultProps = {
-                className: ''
-            };
-
-            constructor(props) {
-                super(props);
-                this.enterLeaveCounter = 0;
-                this.state = {
-                    canDrop: false,
-                    isDragging: false,
-                    isOver: false
-                };
-            }
-
-            /**
-             * Adds event listeners once the component mounts
-             */
-            componentDidMount() {
-                const droppableEl = findDOMNode(this);
-                const { handleDragEnter, handleDragOver, handleDragLeave, handleDrop } = this;
-
-                // add event listeners directly on the element
-                droppableEl.addEventListener('dragenter', handleDragEnter);
-                droppableEl.addEventListener('dragover', handleDragOver);
-                droppableEl.addEventListener('dragleave', handleDragLeave);
-                droppableEl.addEventListener('drop', handleDrop);
-
-                this.droppableEl = droppableEl;
-            }
-
-            /**
-             * Removes event listeners when the component is going to unmount
-             */
-            componentWillUnmount() {
-                const { droppableEl } = this;
-                const { handleDragEnter, handleDragOver, handleDragLeave, handleDrop } = this;
-
-                // remove event listeners
-                droppableEl.removeEventListener('dragenter', handleDragEnter);
-                droppableEl.removeEventListener('dragover', handleDragOver);
-                droppableEl.removeEventListener('dragleave', handleDragLeave);
-                droppableEl.removeEventListener('drop', handleDrop);
-            }
-
-            /**
-             * If currently inside a DragDrop context, returns the current drag item.
-             * Otherwise, return null
-             * @returns {object}
-             */
-            getDragItem() {
-                const { dragDrop } = this.context;
-                if (!dragDrop) {
-                    return null;
-                }
-
-                return dragDrop.getDragItem();
-            }
-
-            /**
-             * Sets a ref to the instance of BaseComponent
-             * Note: This will return null if BaseComponent is a stateless, functional component
-             * because stateless, functional components have no instances
-             * @param {Component} ref - Ref to the component instance of BaseComponent
-             */
-            setWrappedRef = (ref) => {
-                this.wrappedRef = ref;
-            };
-
-            /**
-             * Function that gets called when an item is dragged into the drop zone
-             * @param {SyntheticEvent} event - The dragenter event
-             * @returns {void}
-             */
-            handleDragEnter = (event) => {
-                // This allows onDrop to be fired
-                event.preventDefault();
-
-                // Use this to track the number of drag enters and leaves.
-                // This is used to normalize enters/leaves between parent/child elements
-
-                // we only want to do things in dragenter when the counter === 1
-                if (++this.enterLeaveCounter === 1) {
-                    const { props, wrappedRef } = this;
-                    const { dataTransfer } = event;
-
-                    const dragItem = this.getDragItem();
-                    // if we don't have a dropValidator, we just default canDrop to true
-                    const canDrop = dropValidator ? dropValidator(props, dataTransfer, dragItem) : true;
-
-                    this.setState({
-                        isOver: true,
-                        canDrop
-                    });
-
-                    if (onDragEnter) {
-                        // if onDragEnter was passed in, call it
-                        onDragEnter(event, props, dragItem, wrappedRef);
-                    }
-                }
-            };
-
-            /**
-             * Function that gets called when an item is dragged over the drop zone
-             * @param {SyntheticEvent} event - The dragover event
-             * @returns {void}
-             */
-            handleDragOver = (event) => {
-                // This allows onDrop to be fired
-                event.preventDefault();
-
-                const { props, state, wrappedRef } = this;
-                const { canDrop } = state;
-                const { dataTransfer } = event;
-
-                if (!canDrop) {
-                    dataTransfer.dropEffect = 'none';
-                } else if (dataTransfer.effectAllowed) {
-                    // Set the drop effect if it was defined
-                    dataTransfer.dropEffect = dataTransfer.effectAllowed;
-                }
-
-                if (onDragOver) {
-                    const dragItem = this.getDragItem();
-                    // if onDragOver was passed in, call it
-                    onDragOver(event, props, dragItem, wrappedRef);
-                }
-            };
-
-            /**
-             * Function that gets called when an item is drop onto the drop zone
-             * @param {SyntheticEvent} event - The drop event
-             * @returns {void}
-             */
-            handleDrop = (event) => {
-                event.preventDefault();
-
-                // reset enterLeaveCounter
-                this.enterLeaveCounter = 0;
-
-                const { canDrop } = this.state;
-                const { props, wrappedRef } = this;
-
-                this.setState({
-                    canDrop: false,
-                    isDragging: false,
-                    isOver: false
-                });
-
-                if (canDrop && onDrop) {
-                    const dragItem = this.getDragItem();
-                    // if onDrop was passed in, call it
-                    onDrop(event, props, dragItem, wrappedRef);
-                }
-            };
-
-            /**
-             * Function that gets called when an item is dragged out of the drop zone
-             * @param {SyntheticEvent} event - The dragleave event
-             * @returns {void}
-             */
-            handleDragLeave = (event) => {
-                event.preventDefault();
-
-                // if enterLeaveCounter is zero, it means that we're actually leaving the item
-                if (--this.enterLeaveCounter > 0) {
-                    return;
-                }
-
-                const { props, wrappedRef } = this;
-
-                this.setState({
-                    canDrop: false,
-                    isDragging: false,
-                    isOver: false
-                });
-
-                if (onDragLeave) {
-                    const dragItem = this.getDragItem();
-                    // if onDragLeave was passed in, call it
-                    onDragLeave(event, props, dragItem, wrappedRef);
-                }
-            };
-
-            render() {
-                const { props, state, setWrappedRef } = this;
-                const { className, ...rest } = props;
-                const { canDrop, isOver } = state;
-
-                const classes = classNames(className, {
-                    'is-droppable': canDrop,
-                    'is-over': isOver
-                });
-
-                const mergedProps = {
-                    ...rest,
-                    ...state,
-                    className: classes
-                };
-
-                return <BaseComponent {...mergedProps} ref={setWrappedRef} />;
-            }
         }
 
-        DroppableComponent.displayName = displayName;
+        /**
+         * Adds event listeners once the component mounts@inheritdoc
+         * @inheritdoc
+         */
+        componentDidMount() {
+            const droppableEl = findDOMNode(this);
+            if (!droppableEl || !(droppableEl instanceof Element)) {
+                throw new Error('Bad mount in makeDroppable');
+            }
 
-        return DroppableComponent;
+            // add event listeners directly on the element
+            droppableEl.addEventListener('dragenter', this.handleDragEnter);
+            droppableEl.addEventListener('dragover', this.handleDragOver);
+            droppableEl.addEventListener('dragleave', this.handleDragLeave);
+            droppableEl.addEventListener('drop', this.handleDrop);
+
+            this.droppableEl = droppableEl;
+        }
+
+        /**
+         * Removes event listeners when the component is going to unmount
+         * @inheritdoc
+         */
+        componentWillUnmount() {
+            this.droppableEl.removeEventListener('dragenter', this.handleDragEnter);
+            this.droppableEl.removeEventListener('dragover', this.handleDragOver);
+            this.droppableEl.removeEventListener('dragleave', this.handleDragLeave);
+            this.droppableEl.removeEventListener('drop', this.handleDrop);
+        }
+
+        /**
+         * Sets a ref to the instance of BaseComponent
+         * Note: This will return null if BaseComponent is a stateless, functional component
+         * because stateless, functional components have no instances
+         *
+         * @param {Component} ref - Ref to the component instance of BaseComponent
+         * @return {void}
+         */
+        setWrappedRef = (ref: Element) => {
+            this.wrappedRef = ref;
+        };
+
+        /**
+         * Function that gets called when an item is dragged into the drop zone
+         *
+         * @param {SyntheticEvent} event - The dragenter event
+         * @return {void}
+         */
+        handleDragEnter = (event: DragEvent) => {
+            // This allows onDrop to be fired
+            event.preventDefault();
+
+            // Use this to track the number of drag enters and leaves.
+            // This is used to normalize enters/leaves between parent/child elements
+
+            // we only want to do things in dragenter when the counter === 1
+            if (++this.enterLeaveCounter === 1) {
+                const { dataTransfer } = event;
+
+                // if we don't have a dropValidator, we just default canDrop to true
+                const canDrop = dropValidator ? dropValidator(this.props, dataTransfer) : true;
+
+                this.setState({
+                    isOver: true,
+                    canDrop
+                });
+            }
+        };
+
+        /**
+         * Function that gets called when an item is dragged over the drop zone
+         *
+         * @param {DragEvent} event - The dragover event
+         * @return {void}
+         */
+        handleDragOver = (event: DragEvent) => {
+            // This allows onDrop to be fired
+            event.preventDefault();
+
+            const { canDrop } = this.state;
+            const { dataTransfer } = event;
+
+            if (!dataTransfer) {
+                return;
+            }
+
+            if (!canDrop) {
+                dataTransfer.dropEffect = 'none';
+            } else if (dataTransfer.effectAllowed) {
+                // Set the drop effect if it was defined
+                dataTransfer.dropEffect = dataTransfer.effectAllowed;
+            }
+        };
+
+        /**
+         * Function that gets called when an item is drop onto the drop zone
+         *
+         * @param {DragEvent} event - The drop event
+         * @return {void}
+         */
+        handleDrop = (event: DragEvent) => {
+            event.preventDefault();
+
+            // reset enterLeaveCounter
+            this.enterLeaveCounter = 0;
+
+            const { canDrop } = this.state;
+
+            this.setState({
+                canDrop: false,
+                isDragging: false,
+                isOver: false
+            });
+
+            if (canDrop && onDrop) {
+                onDrop(event, this.props);
+            }
+        };
+
+        /**
+         * Function that gets called when an item is dragged out of the drop zone
+         *
+         * @param {DragEvent} event - The dragleave event
+         * @return {void}
+         */
+        handleDragLeave = (event: DragEvent) => {
+            event.preventDefault();
+
+            // if enterLeaveCounter is zero, it means that we're actually leaving the item
+            if (--this.enterLeaveCounter > 0) {
+                return;
+            }
+
+            this.setState({
+                canDrop: false,
+                isDragging: false,
+                isOver: false
+            });
+        };
+
+        /**
+         * Renders the HOC
+         *
+         * @private
+         * @inheritdoc
+         * @return {Element}
+         */
+        render() {
+            const { className, ...rest } = this.props;
+            const { canDrop, isOver } = this.state;
+
+            const classes = classNames(className, {
+                'is-droppable': canDrop,
+                'is-over': isOver
+            });
+
+            const mergedProps = {
+                ...rest,
+                ...this.state,
+                className: classes
+            };
+
+            return <Wrapped {...mergedProps} ref={this.setWrappedRef} />;
+        }
     };
-}
 
 export default makeDroppable;

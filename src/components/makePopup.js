@@ -31,8 +31,8 @@ const makePopup = (kit: string) => (Wrapped: any) =>
         /**
          * [constructor]
          *
-         * @param {*} data
-         * @return {void}
+         * @param {*} props
+         * @return {Wrapper}
          */
         constructor(props: Props) {
             super(props);

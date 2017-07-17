@@ -24,7 +24,7 @@ describe('Droppable/makeDroppable', () => {
     });
 
     it('should correctly wrap the base component and set props', () => {
-        const DroppableComponent = makeDroppable()(TestComponent);
+        const DroppableComponent = makeDroppable({})(TestComponent);
         const component = shallow(<DroppableComponent />);
 
         assert.equal(component.find('TestComponent').length, 1);
@@ -34,7 +34,7 @@ describe('Droppable/makeDroppable', () => {
     });
 
     it('should correctly set the initial state', () => {
-        const DroppableComponent = makeDroppable()(TestComponent);
+        const DroppableComponent = makeDroppable({})(TestComponent);
         const component = shallow(<DroppableComponent />);
 
         assert.equal(component.state('canDrop'), false);
@@ -42,7 +42,7 @@ describe('Droppable/makeDroppable', () => {
     });
 
     it('should set isOver to true and default canDrop to true on handleDragEnter', () => {
-        const DroppableComponent = makeDroppable()(TestComponent);
+        const DroppableComponent = makeDroppable({})(TestComponent);
         const component = shallow(<DroppableComponent />);
         const instance = component.instance();
 
@@ -72,21 +72,18 @@ describe('Droppable/makeDroppable', () => {
         assert.equal(component.state('canDrop'), false);
     });
 
-    it('should pass props, dataTransfer, and dragItem into dropValidator', () => {
-        const dragData = { hello: 'wasdfas' };
+    it('should pass props, dataTransfer into dropValidator', () => {
         const props = {
             className: 'abc'
         };
         const dataTransfer = {};
 
         const dropDefinition = {
-            dropValidator: sandbox.mock().withArgs(props, dataTransfer, dragData).once().returns(true)
+            dropValidator: sandbox.mock().withArgs(props, dataTransfer).once().returns(true)
         };
         const DroppableComponent = makeDroppable(dropDefinition)(TestComponent);
         const component = shallow(<DroppableComponent {...props} />);
         const instance = component.instance();
-
-        sandbox.mock(instance).expects('getDragItem').returns(dragData).once();
 
         assert.equal(component.state('isOver'), false);
         instance.handleDragEnter({
@@ -97,22 +94,8 @@ describe('Droppable/makeDroppable', () => {
         assert.equal(component.state('canDrop'), true);
     });
 
-    it('should call onDragEnter during handleDragEnter if passed in through props', () => {
-        const dropDefinition = {
-            onDragEnter: sandbox.mock().once()
-        };
-        const DroppableComponent = makeDroppable(dropDefinition)(TestComponent);
-        const component = shallow(<DroppableComponent />);
-        const instance = component.instance();
-
-        instance.handleDragEnter({
-            dataTransfer: {},
-            preventDefault: sandbox.mock().once()
-        });
-    });
-
     it('should set dropEffect to none on handleDragOver if canDrop is false', () => {
-        const DroppableComponent = makeDroppable()(TestComponent);
+        const DroppableComponent = makeDroppable({})(TestComponent);
         const component = shallow(<DroppableComponent />);
         const instance = component.instance();
         const event = {
@@ -129,7 +112,7 @@ describe('Droppable/makeDroppable', () => {
     });
 
     it('should set dropEffect on handleDragOver if canDrop is true and dropEffect was defined', () => {
-        const DroppableComponent = makeDroppable()(TestComponent);
+        const DroppableComponent = makeDroppable({})(TestComponent);
         const component = shallow(<DroppableComponent />);
         const instance = component.instance();
         const event = {
@@ -148,7 +131,7 @@ describe('Droppable/makeDroppable', () => {
     });
 
     it('should prevent default event on handleDragOver', () => {
-        const DroppableComponent = makeDroppable()(TestComponent);
+        const DroppableComponent = makeDroppable({})(TestComponent);
         const component = shallow(<DroppableComponent />);
         const instance = component.instance();
 
@@ -162,22 +145,8 @@ describe('Droppable/makeDroppable', () => {
         });
     });
 
-    it('should call onDragOver during handleDragOver if passed in through props', () => {
-        const dropDefinition = {
-            onDragOver: sandbox.mock().once()
-        };
-        const DroppableComponent = makeDroppable(dropDefinition)(TestComponent);
-        const component = shallow(<DroppableComponent />);
-        const instance = component.instance();
-
-        instance.handleDragOver({
-            dataTransfer: {},
-            preventDefault: sandbox.mock().once()
-        });
-    });
-
     it('should prevent default event and reset state on handleDrop', () => {
-        const DroppableComponent = makeDroppable()(TestComponent);
+        const DroppableComponent = makeDroppable({})(TestComponent);
         const component = shallow(<DroppableComponent />);
         const instance = component.instance();
 
@@ -191,7 +160,6 @@ describe('Droppable/makeDroppable', () => {
     });
 
     it('should call onDrop if canDrop is true and onDrop is passed in through props', () => {
-        const data = { hello: 'wasdfas' };
         const event = {
             preventDefault: sandbox.mock().once()
         };
@@ -205,8 +173,6 @@ describe('Droppable/makeDroppable', () => {
         instance.setState({
             canDrop: true
         });
-
-        sandbox.mock(context.dragDrop).expects('getDragItem').returns(data).once();
 
         instance.handleDrop(event);
         clock.tick(10);
