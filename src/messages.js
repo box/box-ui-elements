@@ -236,7 +236,7 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
     'buik.modal.delete.confirmation.text.folder': {
         id: 'buik.modal.delete.confirmation.text.folder',
         description: 'Text for delete confirmation dialog for folders',
-        defaultMessage: 'Are you sure you want to delete {name} and all it’s contents?'
+        defaultMessage: 'Are you sure you want to delete {name} and all its contents?'
     },
     'buik.modal.rename.dialog.label': {
         id: 'buik.modal.rename.dialog.label',
