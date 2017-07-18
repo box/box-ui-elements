@@ -14,7 +14,7 @@ import { CLASS_CHECKBOX_SPAN, CLASS_BUTTON_CONTENT_SPAN } from '../constants';
  * @return {boolean} true if its one of the above elements
  */
 export function isInputElement(element: HTMLElement | null): boolean {
-    if (!element) {
+    if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
     const tag = element.tagName.toLowerCase();
@@ -29,7 +29,7 @@ export function isInputElement(element: HTMLElement | null): boolean {
  * @return {boolean} true if its one of the above elements
  */
 export function isFocusableElement(element: HTMLElement | null): boolean {
-    if (!element) {
+    if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
     const tag = element.tagName.toLowerCase();
