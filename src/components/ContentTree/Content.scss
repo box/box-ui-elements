@@ -2,12 +2,11 @@
 
 .bct-content {
     display: flex;
-    flex: 1;
+    flex: 1 0 350px;
     flex-direction: column;
 
     .bct-item-list {
         flex: 1;
-        min-height: 300px;
         position: relative;
 
         // sass-lint:disable class-name-format
