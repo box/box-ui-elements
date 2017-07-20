@@ -4,13 +4,12 @@
  * @author Box
  */
 
-import noop from 'lodash.noop';
 import Item from './Item';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
-import { FIELDS_TO_FETCH } from '../constants';
+import { FIELDS_TO_FETCH, CACHE_PREFIX_FOLDER } from '../constants';
 import getBadItemError from '../util/error';
 import type {
     BoxItem,
@@ -72,7 +71,7 @@ class Folder extends Item {
      * @return {string} key
      */
     getCacheKey(id: string): string {
-        return `folder_${id}`;
+        return `${CACHE_PREFIX_FOLDER}${id}`;
     }
 
     /**
@@ -263,19 +262,6 @@ class Folder extends Item {
 
         // Make the XHR request
         this.folderRequest();
-    }
-
-    /**
-     * API to delete a folder
-     *
-     * @param {String} id - item id
-     * @param {String} parentId - item parent id
-     * @param {Function} successCallback - success callback
-     * @param {Function} errorCallback - error callback
-     * @return {void}
-     */
-    delete(id: string, parentId: string, successCallback: Function, errorCallback: Function = noop): void {
-        super.delete(id, parentId, successCallback, errorCallback, true);
     }
 }
 

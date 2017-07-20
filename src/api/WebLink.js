@@ -5,6 +5,7 @@
  */
 
 import Item from './Item';
+import { CACHE_PREFIX_WEBLINK } from '../constants';
 
 class WebLink extends Item {
     /**
@@ -14,7 +15,7 @@ class WebLink extends Item {
      * @return {string} key
      */
     getCacheKey(id: string): string {
-        return `web_link_${id}`;
+        return `${CACHE_PREFIX_WEBLINK}${id}`;
     }
 
     /**

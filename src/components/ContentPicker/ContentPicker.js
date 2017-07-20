@@ -42,7 +42,8 @@ import type {
     SortBy,
     Access,
     BoxItemPermission,
-    ItemAPI
+    ItemAPI,
+    ItemType
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -187,7 +188,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @param {String} type - item type
      * @return {ItemAPI} api
      */
-    getAPI(type: string): ItemAPI {
+    getAPI(type: ItemType): ItemAPI {
         let api: ItemAPI;
 
         switch (type) {

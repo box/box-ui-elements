@@ -6,10 +6,9 @@
 
 import noop from 'lodash.noop';
 import Base from './Base';
-import FolderAPI from './Folder';
-import { ACCESS_NONE, CACHE_PREFIX_SEARCH } from '../constants';
 import getBadItemError from '../util/error';
-import type { BoxItem, FlattenedBoxItem, FlattenedBoxItemCollection } from '../flowTypes';
+import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
+import type { BoxItem, FlattenedBoxItem, FlattenedBoxItemCollection, BoxItemPermission } from '../flowTypes';
 
 class Item extends Base {
     /**
@@ -31,6 +30,17 @@ class Item extends Base {
      * @property {Function}
      */
     errorCallback: Function;
+
+    /**
+     * Creates a key for the item's parent
+     * This is always a folder
+     *
+     * @param {string} id folder id
+     * @return {string} key
+     */
+    getParentCacheKey(id: string): string {
+        return `${CACHE_PREFIX_FOLDER}${id}`;
+    }
 
     /**
      * Handles error responses
@@ -111,13 +121,11 @@ class Item extends Base {
             return;
         }
 
-        const parentAPI = new FolderAPI(this.options);
-        const parentKey: string = parentAPI.getCacheKey(this.parentId);
-
         // When fetching the parent folder from the cache
         // we have no guarantees that it will be there since
         // search results happen across folders and we only
         // add those folders to cache that have been navigated to.
+        const parentKey: string = this.getParentCacheKey(this.parentId);
         const folder: ?FlattenedBoxItem = this.getCache().get(parentKey);
         if (!folder) {
             this.postDeleteCleanup();
@@ -152,25 +160,32 @@ class Item extends Base {
     /**
      * API to delete an Item
      *
-     * @param {String} id - item id
+     * @param {Object} item - item to delete
      * @param {Function} successCallback - success callback
      * @param {Function} errorCallback - error callback
      * @param {Boolean} recursive - true for folders
      * @return {void}
      */
-    delete(
-        id: string,
-        parentId: string,
-        successCallback: Function,
-        errorCallback: Function = noop,
-        recursive: boolean = false
-    ): void {
+    delete(item: BoxItem, successCallback: Function, errorCallback: Function = noop): void {
+        const { id, permissions, parent, type }: BoxItem = item;
+        if (!id || !permissions || !parent || !type) {
+            errorCallback();
+            return;
+        }
+
+        const { id: parentId } = parent;
+        const { can_delete }: BoxItemPermission = permissions;
+        if (!can_delete || !parentId) {
+            errorCallback();
+            return;
+        }
+
         this.id = id;
         this.parentId = parentId;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        const url = `${this.getUrl(id)}${recursive ? '?recursive=true' : ''}`;
+        const url = `${this.getUrl(id)}${type === TYPE_FOLDER ? '?recursive=true' : ''}`;
         this.xhr.delete(url).then(this.deleteSuccessHandler).catch(this.errorHandler);
     }
 

@@ -46,7 +46,8 @@ import type {
     SortBy,
     Access,
     BoxItemPermission,
-    ItemAPI
+    ItemAPI,
+    ItemType
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -218,7 +219,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @param {String} type - item type
      * @return {ItemAPI} api
      */
-    getAPI(type: string): ItemAPI {
+    getAPI(type: ItemType): ItemAPI {
         let api: ItemAPI;
 
         switch (type) {
@@ -777,7 +778,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         }
 
         this.setState({ isLoading: true });
-        this.getAPI(type).delete(id, parentId, () => {
+        this.getAPI(type).delete(selected, () => {
             onDelete(cloneDeep([selected]));
             if (view === VIEW_FOLDER) {
                 this.fetchFolder(parentId);

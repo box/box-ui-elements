@@ -88,7 +88,7 @@ class Search extends Base {
      * @return {string} key
      */
     getCacheKey(id: string, query: string): string {
-        return `${CACHE_PREFIX_SEARCH}folder_${id}|${query}`;
+        return `${CACHE_PREFIX_SEARCH}${id}|${query}`;
     }
 
     /**

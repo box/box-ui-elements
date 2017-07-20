@@ -5,7 +5,7 @@
  */
 
 import Item from './Item';
-import { FIELD_DOWNLOAD_URL } from '../constants';
+import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
 class File extends Item {
@@ -16,7 +16,7 @@ class File extends Item {
      * @return {string} key
      */
     getCacheKey(id: string): string {
-        return `file_${id}`;
+        return `${CACHE_PREFIX_FILE}${id}`;
     }
 
     /**
@@ -37,7 +37,7 @@ class File extends Item {
      * @return {void}
      */
     getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): void {
-        this.xhr
+        return this.xhr
             .get(this.getUrl(id), {
                 fields: FIELD_DOWNLOAD_URL
             })

@@ -22,6 +22,12 @@ export const TYPE_FOLDER: 'folder' = 'folder';
 export const TYPE_FILE: 'file' = 'file';
 export const TYPE_WEBLINK: 'web_link' = 'web_link';
 
+/* ----------------- Cache Key Prefix ----------------------- */
+export const CACHE_PREFIX_FOLDER = 'folder_';
+export const CACHE_PREFIX_FILE = 'file_';
+export const CACHE_PREFIX_WEBLINK = 'web_link_';
+export const CACHE_PREFIX_SEARCH = 'search_';
+
 /* ----------------------- Sorts ---------------------------- */
 export const SORT_ASC: 'ASC' = 'ASC';
 export const SORT_DESC: 'DESC' = 'DESC';
@@ -87,7 +93,6 @@ export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
 export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
 export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
 export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
-export const CACHE_PREFIX_SEARCH = 'search_';
 
 /* ---------------------- Statuses  -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';

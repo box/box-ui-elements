@@ -6,6 +6,7 @@
 
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
+import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
 
 class Base {
     /**
@@ -52,8 +53,8 @@ class Base {
     constructor(options: any = {}) {
         this.options = options;
         this.cache = options.cache;
-        this.apiHost = options.apiHost;
-        this.uploadHost = options.uploadHost;
+        this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
+        this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
         this.xhr = new Xhr(options);
         this.destroyed = false;
     }
