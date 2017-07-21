@@ -9,7 +9,7 @@
 Box UI Elements are pre-built UI components that allow developers to add features of the main Box web application into their own applications. They can be used to navigate through, upload, preview, and select content stored on Box and are available both as React components and framework-agnostic JavaScript libraries.
 
 # Usage
-The instructions below describe how to use the UI Elements in a [React](https://facebook.github.io/react) application. If instead you would like to include the framework-agnostic libraries as scripts, refer to our [developer documentation](https://developer.box.com/docs/box-ui-elements). Continue reading below for how to import the UI Elements as React components. You can also reference https://github.com/box/box-ui-elements-demo for a minimal React application using the Explorer UI Element.
+The instructions below describe how to use the UI Elements in a [React](https://facebook.github.io/react) application. If instead you would like to include the framework-agnostic libraries as scripts, refer to our [developer documentation](https://developer.box.com/docs/box-ui-elements). Continue reading below for how to import the UI Elements as React components. You can also reference https://github.com/box/box-ui-elements-demo or https://github.com/box/box-content-preview-demo for minimal React applications using the Explorer UI Element and Preview UI Element respectively.
 
 ## Installation
 `yarn add box-ui-elements` or `npm install box-ui-elements`
@@ -219,12 +219,13 @@ render(
 
 <img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" width="75%"/>
 
-***The Box Content Preview has a slightly different interface than the other components. Instead of importing localizations like the examples above, it requires a locale (defaults to en-US) to be passed in. This will automatically pull in the corresponding preview bundle and dynamically load it. It will also dynamically load the required CSS file.***
+***The Box Content Preview has a slightly different interface than the other components. Instead of importing localizations like in the examples above, it requires a locale (defaults to en-US) to be passed in. This will automatically pull in the corresponding preview bundle and dynamically load it. It will also dynamically load the additional required CSS file needed for preview.***
 
 ```js
 import React from 'react';
 import { render } from 'react-dom';
 import { ContentPreview } from 'box-ui-elements';
+import 'box-ui-elements/dist/preview.css';
 
 const token = 'ACCESS_TOKEN';
 const fileId = 'FILE_ID';
@@ -241,15 +242,17 @@ render(
 ### Props
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
+| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | fileId* | string | | The id of the file to preview. |
 | locale | string | `en-US` | Locale for this component. |
 | onLoad | function |  | Callback function for when a file preview loads. |
-| collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
-| header | string | `light` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
-| logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
-| sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
-| sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-initialization-and-options).* |
+| collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| showAnnotations | boolean | false | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| showDownload | boolean | false | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| header | string | `light` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 
 
 # Questions

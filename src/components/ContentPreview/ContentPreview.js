@@ -13,6 +13,8 @@ import {
     DEFAULT_PREVIEW_VERSION,
     DEFAULT_PREVIEW_LOCALE
 } from '../../constants';
+import '../fonts.scss';
+import '../base.scss';
 
 type DefaultProps = {|
     apiHost: string,
