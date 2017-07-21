@@ -12,7 +12,8 @@ module.exports = {
         picker: path.resolve('src/components/ContentPicker/index.js'),
         explorer: path.resolve('src/components/ContentExplorer/index.js'),
         uploader: path.resolve('src/components/ContentUploader/index.js'),
-        tree: path.resolve('src/components/ContentTree/index.js')
+        tree: path.resolve('src/components/ContentTree/index.js'),
+        preview: path.resolve('src/components/ContentPreview/index.js')
     },
     output: {
         path: path.resolve('dist'),
