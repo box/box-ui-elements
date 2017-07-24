@@ -12,7 +12,7 @@ describe('Cache', () => {
         sandbox.verifyAndRestore();
     });
 
-    it('should set and get correctly', () => {
+    it('should set, get and unset correctly', () => {
         cache.set('foo', 'bar');
         assert.ok(cache.has('foo'));
         assert.equal(cache.get('foo'), 'bar');
@@ -29,6 +29,19 @@ describe('Cache', () => {
     });
 
     it('should return undefined when not set', () => {
+        cache.set('foo1', 'bar1');
+        cache.set('foo2', 'bar2');
+        cache.set('foo3', 'bar3');
+        assert.equal(cache.get('foo1'), 'bar1');
+        assert.equal(cache.get('foo2'), 'bar2');
+        assert.equal(cache.get('foo3'), 'bar3');
+        cache.unsetAll('foo');
+        assert.equal(cache.get('foo1'), undefined);
+        assert.equal(cache.get('foo2'), undefined);
+        assert.equal(cache.get('foo3'), undefined);
+    });
+
+    it('should properly unset all', () => {
         assert.equal(cache.get('foobar'), undefined);
     });
 
