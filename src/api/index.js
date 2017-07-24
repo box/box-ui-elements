@@ -12,44 +12,15 @@ import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
+import type { Options } from '../flowTypes';
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
 
 class API {
     /**
-     * @property {string}
-     */
-    id: string;
-
-    /**
-     * @property {string|function}
-     */
-    token: string | Function;
-
-    /**
-     * @property {string}
-     */
-    sharedLink: string;
-
-    /**
-     * @property {string}
-     */
-    sharedLinkPassword: string;
-
-    /**
-     * @property {string}
-     */
-    apiHost: string;
-
-    /**
-     * @property {string}
-     */
-    uploadHost: string;
-
-    /**
      * @property {*}
      */
-    options: any;
+    options: Options;
 
     /**
      * @property {FileAPI}
@@ -88,16 +59,10 @@ class API {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {API} Api instance
      */
-    constructor(options: any) {
-        this.id = options.id;
-        this.token = options.token;
-        this.sharedLink = options.sharedLink;
-        this.sharedLinkPassword = options.sharedLinkPassword;
-        this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
-        this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
+    constructor(options: Options = {}) {
         this.options = Object.assign({}, options, {
-            apiHost: this.apiHost,
-            uploadHost: this.uploadHost,
+            apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
+            uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
             cache: new Cache()
         });
     }

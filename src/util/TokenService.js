@@ -3,18 +3,23 @@
  * @file An example of a token managing service
  * @author Box
  */
+import type { Token } from '../flowTypes';
 
 const TOO_MANY_REQUESTS = 'Too many tokens requested at a single time!';
 const REQUEST_LIMIT_HARD = 200;
 const REQUEST_LIMIT = 100;
 
-type Token = {
-    token: string,
+type TokenWrapper = {
+    token: Token,
     promise: Promise<any>,
     expiration: number
 };
 
 type Tokens = {
+    [id: string]: TokenWrapper
+};
+
+type TokenMap = {
     [id: string]: Token
 };
 
@@ -164,8 +169,8 @@ class TokenService {
      * @param {string[]} ids - List of IDs to check
      * @return {string[]}
      */
-    getIdTokenMap(ids: string[]): { [id: string]: string } {
-        const map: { [id: string]: string } = {};
+    getIdTokenMap(ids: string[]): TokenMap {
+        const map: TokenMap = {};
         ids.forEach((id: string) => {
             map[id] = this.tokens[id].token;
         });
@@ -229,7 +234,7 @@ class TokenService {
      * @param {string[]} ids List of IDs to check
      * @return {string[]}
      */
-    getTokens(ids: string[]): { [id: string]: string } {
+    getTokens(ids: string[]): Promise<TokenMap> {
         this.cleanUpExpiredTokens(ids);
 
         const previouslyRequestedids = this.getPreviouslyRequestedIds(ids);
@@ -259,10 +264,9 @@ class TokenService {
      * @param {string|string[]} id id to check
      * @return {string|Object}
      */
-    getToken(id: string | string[]): string | { [id: string]: string } {
+    getToken(id: string | string[]): Promise<Token | TokenMap> {
         const ids: string[] = Array.isArray(id) ? id : [id];
-        const tokens: { [id: string]: string } = this.getTokens(ids);
-        return Array.isArray(id) ? tokens : tokens[id];
+        return this.getTokens(ids).then((tokens: TokenMap) => (Array.isArray(id) ? tokens : tokens[id]));
     }
 }
 

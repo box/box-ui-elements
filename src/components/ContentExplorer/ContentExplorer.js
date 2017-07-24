@@ -47,7 +47,8 @@ import type {
     Access,
     BoxItemPermission,
     ItemAPI,
-    ItemType
+    ItemType,
+    Token
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -67,7 +68,7 @@ type Props = {
     apiHost: string,
     uploadHost: string,
     getLocalizedMessage: Function,
-    token: string,
+    token: Token,
     isSmall: boolean,
     isLarge: boolean,
     isTouch: boolean,

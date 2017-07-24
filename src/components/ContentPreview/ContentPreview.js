@@ -13,6 +13,7 @@ import {
     DEFAULT_PREVIEW_VERSION,
     DEFAULT_PREVIEW_LOCALE
 } from '../../constants';
+import type { Token } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 
@@ -30,7 +31,7 @@ type Props = {
     version: string,
     apiHost: string,
     staticHost: string,
-    token: string | Function,
+    token: Token,
     className: string,
     onLoad?: Function,
     collection?: string[],

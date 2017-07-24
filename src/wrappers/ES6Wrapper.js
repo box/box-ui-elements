@@ -12,7 +12,7 @@ import { unmountComponentAtNode } from 'react-dom';
 /* eslint-enable */
 import { DEFAULT_CONTAINER } from '../constants';
 import messages from '../messages';
-import type { StringMap } from '../flowTypes';
+import type { StringMap, Token } from '../flowTypes';
 
 declare var __LOCALE__: string;
 declare var __VERSION__: string;
@@ -37,7 +37,7 @@ class ES6Wrapper extends EventEmitter {
     /**
      * @property {string}
      */
-    token: string;
+    token: Token;
 
     /**
      * @property {string}
@@ -106,7 +106,7 @@ class ES6Wrapper extends EventEmitter {
      * @param {Object|void} [options] Optional options.
      * @return {void}
      */
-    show(root: string, token: string, options: { [key: string]: any } = {}): void {
+    show(root: string, token: Token, options: { [key: string]: any } = {}): void {
         this.root = root;
         this.token = token;
         this.options = options;
