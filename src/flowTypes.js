@@ -9,6 +9,7 @@ import API from './api';
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
+import Cache from './util/Cache';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -41,6 +42,7 @@ import {
     FIELD_SIZE
 } from './constants';
 
+export type Token = string | Function;
 export type ClassComponent<D, P, S> = Class<React$Component<D, P, S>>;
 export type StringMap = { [string]: string };
 export type StringAnyMap = { [string]: any };
@@ -186,4 +188,16 @@ export type IconType = {
 export type Crumb = {
     id?: string,
     name: string
+};
+
+export type Options = {
+    id?: string,
+    token?: Token,
+    clientName?: string,
+    version?: string,
+    sharedLink?: string,
+    sharedLinkPassword?: string,
+    cache?: Cache,
+    apiHost?: string,
+    uploadHost?: string
 };

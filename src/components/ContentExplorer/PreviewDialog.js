@@ -11,7 +11,7 @@ import ContentPreview from '../ContentPreview';
 import { Button } from '../Button';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import IconCross from '../icons/IconCross';
-import type { BoxItem, Collection } from '../../flowTypes';
+import type { BoxItem, Collection, Token } from '../../flowTypes';
 import './PreviewDialog.scss';
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
     currentCollection: Collection,
     onCancel: Function,
     item: BoxItem,
-    token: string,
+    token: Token,
     getLocalizedMessage: Function,
     parentElement: HTMLElement,
     isTouch: boolean,

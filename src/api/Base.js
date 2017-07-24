@@ -7,6 +7,7 @@
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
+import type { Options } from '../flowTypes';
 
 class Base {
     /**
@@ -37,7 +38,7 @@ class Base {
     /**
      * @property {*}
      */
-    options: any;
+    options: Options;
 
     /**
      * [constructor]
@@ -50,9 +51,9 @@ class Base {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {Base} Base instance
      */
-    constructor(options: any = {}) {
+    constructor(options: Options = {}) {
         this.options = options;
-        this.cache = options.cache;
+        this.cache = options.cache || new Cache();
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
         this.xhr = new Xhr(options);

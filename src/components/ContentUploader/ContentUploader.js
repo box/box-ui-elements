@@ -27,13 +27,13 @@ import {
     STATUS_COMPLETE,
     STATUS_ERROR
 } from '../../constants';
-import type { BoxItem, UploadItem, View } from '../../flowTypes';
+import type { BoxItem, UploadItem, View, Token } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 
 type Props = {
     rootFolderId: string,
-    token: string,
+    token: Token,
     sharedLink?: string,
     sharedLinkPassword?: string,
     apiHost: string,

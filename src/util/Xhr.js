@@ -6,22 +6,13 @@
 
 import 'whatwg-fetch';
 import { stringify } from 'querystring';
-import type { StringMap, StringAnyMap } from '../flowTypes';
+import type { StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
 const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 const CONTENT_TYPE_HEADER = 'Content-Type';
 
 type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
-
-type Options = {
-    id?: string,
-    clientName?: string,
-    token?: string,
-    version?: string,
-    sharedLink?: string,
-    sharedLinkPassword?: string
-};
 
 type XHROptions = {
     url: string,
@@ -35,7 +26,7 @@ type XHROptions = {
 class Xhr {
     id: string;
     clientName: ?string;
-    token: string;
+    token: Token;
     version: ?string;
     sharedLink: ?string;
     sharedLinkPassword: ?string;

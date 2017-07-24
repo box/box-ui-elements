@@ -8,11 +8,12 @@ import React from 'react';
 import Modal from 'react-modal';
 import ContentUploader from '../ContentUploader';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
+import type { Token } from '../../flowTypes';
 
 type Props = {
     isOpen: boolean,
     rootFolderId: string,
-    token: string,
+    token: Token,
     sharedLink?: string,
     sharedLinkPassword?: string,
     apiHost: string,

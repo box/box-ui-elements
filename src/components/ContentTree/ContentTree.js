@@ -25,7 +25,7 @@ import {
     SORT_NAME,
     SORT_ASC
 } from '../../constants';
-import type { BoxItem, Collection, View } from '../../flowTypes';
+import type { BoxItem, Collection, View, Token } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 
@@ -36,7 +36,7 @@ type Props = {
     apiHost: string,
     getLocalizedMessage: Function,
     clientName: string,
-    token: string | Function,
+    token: Token,
     isSmall: boolean,
     isLarge: boolean,
     isTouch: boolean,
