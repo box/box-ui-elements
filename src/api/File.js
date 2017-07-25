@@ -36,7 +36,7 @@ class File extends Item {
      * @param {string} [id] optional file id
      * @return {void}
      */
-    getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): void {
+    getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
         return this.xhr
             .get(this.getUrl(id), {
                 fields: FIELD_DOWNLOAD_URL

@@ -1,6 +1,7 @@
 /**
  * @flow
  * @file Content Uploader component
+ * @author Box
  */
 
 /* eslint-disable no-param-reassign */
@@ -65,6 +66,8 @@ type State = {
     items: UploadItem[]
 };
 
+const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
+
 class ContentUploader extends Component<DefaultProps, Props, State> {
     id: string;
     state: State;
@@ -112,11 +115,11 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     }
 
     /**
-     * Create and return new instance of Upload API
+     * Create and return new instance of API creator
      *
      * @return {API}
      */
-    createAPI(): API {
+    createAPIFactory(): API {
         const { rootFolderId, token, sharedLink, sharedLinkPassword, apiHost, uploadHost, clientName } = this.props;
         return new API({
             token,
@@ -148,7 +151,11 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     addFilesToUploadQueue = (files: File[]) => {
+        const { chunked } = this.props;
         const { view, items } = this.state;
+
+        // Disable chunked upload in IE11 for now until hashing is done in a worker
+        const useChunked = chunked && !isIE();
 
         // Filter out files that are already in the upload queue
         const newItems = [].filter
@@ -167,8 +174,17 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                     extension = '';
                 }
 
+                const factory = this.createAPIFactory();
+                let api;
+
+                if (useChunked && size && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
+                    api = factory.getChunkedUploadAPI();
+                } else {
+                    api = factory.getPlainUploadAPI();
+                }
+
                 const uploadItem = {
-                    api: this.createAPI(),
+                    api,
                     extension,
                     file,
                     name,
@@ -196,7 +212,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      */
     removeFileFromUploadQueue(item: UploadItem) {
         const { api } = item;
-        api.getUploadAPI().cancel();
+        api.cancel();
 
         const { items } = this.state;
         items.splice(items.indexOf(item), 1);
@@ -215,7 +231,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         items.forEach((uploadItem) => {
             const { api, status } = uploadItem;
             if (status === STATUS_IN_PROGRESS) {
-                api.getUploadAPI().cancel();
+                api.cancel();
             }
         });
 
@@ -245,13 +261,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     uploadFile(item: UploadItem) {
-        const { rootFolderId, chunked } = this.props;
+        const { rootFolderId } = this.props;
         const { api, file } = item;
 
-        // Disable chunked upload in IE11 for now until hashing is done in a worker
-        const useChunked = chunked && !isIE();
-
-        api.getUploadAPI(useChunked, file.size).upload({
+        api.upload({
             id: rootFolderId,
             file,
             successCallback: (entries) => this.handleUploadSuccess(item, entries),

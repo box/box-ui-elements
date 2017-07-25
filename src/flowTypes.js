@@ -5,10 +5,11 @@
  */
 /* eslint-disable no-use-before-define */
 
-import API from './api';
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
+import ChunkedUploadAPI from './api/ChunkedUpload';
+import PlainUploadAPI from './api/PlainUpload';
 import Cache from './util/Cache';
 import {
     ACCESS_OPEN,
@@ -160,7 +161,7 @@ export type Collection = {
 };
 
 export type UploadItem = {
-    api: API,
+    api: PlainUploadAPI | ChunkedUploadAPI,
     boxFile?: BoxItem,
     extension: string,
     file: File,
