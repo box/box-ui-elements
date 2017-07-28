@@ -209,6 +209,12 @@ push_new_release() {
         echo "----------------------------------------------------"
         exit 1
     fi
+
+    # Push GitHub release
+    echo "----------------------------------------------------------------------"
+    echo "Pushing new GitHub release"
+    echo "----------------------------------------------------------------------"
+    ./node_modules/.bin/conventional-github-releaser
 }
 
 # Check if we are doing major, minor, or patch release
