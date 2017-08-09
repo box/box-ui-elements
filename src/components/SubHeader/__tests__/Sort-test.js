@@ -106,6 +106,27 @@ describe('picker/components/Sort', () => {
         expect(sort.withArgs('size', SORT_DESC)).to.be.called;
     });
 
+    it('should pass correct parameters when clicked when view is recents', () => {
+        const sort = sandbox.stub();
+        const wrapper = shallow(
+            <Sort
+                isRecents
+                isLoaded={false}
+                sortBy='name'
+                sortDirection={SORT_ASC}
+                getLocalizedMessage={getLocalizedMessage}
+                onSortChange={sort}
+            />
+        );
+        const options = wrapper.find(MenuItem);
+
+        options.at(2).simulate('click');
+        expect(sort.withArgs('interacted_at', SORT_ASC)).to.be.called;
+
+        options.at(3).simulate('click');
+        expect(sort.withArgs('interacted_at', SORT_DESC)).to.be.called;
+    });
+
     it('should render a select with correct option selected', () => {
         const wrapper = shallow(
             <Sort

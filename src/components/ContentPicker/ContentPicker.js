@@ -15,6 +15,7 @@ import Content from './Content';
 import Header from '../Header';
 import SubHeader from '../SubHeader/SubHeader';
 import UploadDialog from '../UploadDialog';
+import CreateFolderDialog from '../CreateFolderDialog';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import { isFocusableElement, isInputElement, focus } from '../../util/dom';
@@ -23,12 +24,15 @@ import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
-    SORT_NAME,
+    FIELD_NAME,
+    FIELD_MODIFIED_AT,
+    FIELD_INTERACTED_AT,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
     VIEW_SELECTED,
     VIEW_ERROR,
+    VIEW_RECENTS,
     TYPE_FILE,
     TYPE_FOLDER,
     TYPE_WEBLINK,
@@ -42,8 +46,6 @@ import type {
     SortBy,
     Access,
     BoxItemPermission,
-    ItemAPI,
-    ItemType,
     Token
 } from '../../flowTypes';
 import '../fonts.scss';
@@ -82,13 +84,15 @@ type State = {
     sortBy: SortBy,
     sortDirection: SortDirection,
     rootName: string,
+    errorCode: string,
     currentCollection: Collection,
     selected: BoxItemMap,
     searchQuery: string,
+    isLoading: boolean,
     view: View,
     isUploadModalOpen: boolean,
-    focusedRow: number,
-    firstLoad: boolean
+    isCreateFolderModalOpen: boolean,
+    focusedRow: number
 };
 
 type DefaultProps = {|
@@ -109,6 +113,8 @@ type DefaultProps = {|
     className: string
 |};
 
+const defaultType = `${TYPE_FILE},${TYPE_WEBLINK}`;
+
 class ContentPicker extends Component<DefaultProps, Props, State> {
     id: string;
     api: API;
@@ -118,13 +124,14 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     rootElement: HTMLElement;
     appElement: HTMLElement;
     globalModifier: boolean;
+    firstLoad: boolean = true; // Keeps track of very 1st load
 
     static defaultProps: DefaultProps = {
-        type: `${TYPE_FILE},${TYPE_WEBLINK}`,
+        type: defaultType,
         rootFolderId: DEFAULT_ROOT,
         onChoose: noop,
         onCancel: noop,
-        sortBy: SORT_NAME,
+        sortBy: FIELD_NAME,
         sortDirection: SORT_ASC,
         extensions: [],
         maxSelectable: Infinity,
@@ -176,37 +183,12 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             selected: {},
             searchQuery: '',
             view: VIEW_FOLDER,
+            isCreateFolderModalOpen: false,
             isUploadModalOpen: false,
             focusedRow: 0,
-            firstLoad: true
+            isLoading: false,
+            errorCode: ''
         };
-    }
-
-    /**
-     * Returns the API based on type of item
-     *
-     * @private
-     * @param {String} type - item type
-     * @return {ItemAPI} api
-     */
-    getAPI(type: ItemType): ItemAPI {
-        let api: ItemAPI;
-
-        switch (type) {
-            case TYPE_FOLDER:
-                api = this.api.getFolderAPI();
-                break;
-            case TYPE_FILE:
-                api = this.api.getFileAPI();
-                break;
-            case TYPE_WEBLINK:
-                api = this.api.getWebLinkAPI();
-                break;
-            default:
-                throw new Error('Unknown Type!');
-        }
-
-        return api;
     }
 
     /**
@@ -217,6 +199,21 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     clearCache(): void {
         this.api.destroy(true);
+    }
+
+    /**
+     * react-modal expects the Modals app element
+     * to be set so that it can add proper aria tags.
+     * We need to keep setting it, since there might be
+     * multiple widgets on the same page with their own
+     * app elements.
+     *
+     * @private
+     * @param {Object} collection item collection object
+     * @return {void}
+     */
+    setModalAppElement() {
+        Modal.setAppElement(this.appElement);
     }
 
     /**
@@ -289,6 +286,21 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     }
 
     /**
+     * Helper function to refresh the grid.
+     * This is useful when mutating the underlying data
+     * structure and hence the state.
+     *
+     * @private
+     * @fires cancel
+     * @return {void}
+     */
+    refreshGrid = () => {
+        if (this.table) {
+            this.table.forceUpdateGrid();
+        }
+    };
+
+    /**
      * Network error callback
      *
      * @private
@@ -333,18 +345,21 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     finishNavigation() {
         const { autoFocus }: Props = this.props;
-        const { firstLoad, currentCollection: { percentLoaded } }: State = this.state;
+        const { currentCollection: { percentLoaded } }: State = this.state;
+
+        // If loading for the very first time, only allow focus if autoFocus is true
+        if (this.firstLoad && !autoFocus) {
+            this.firstLoad = false;
+            return;
+        }
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
         if (percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
-            // If loading for the very first time, only focus if autoFocus is true
-            if (firstLoad && !autoFocus) {
-                this.setState({ firstLoad: false });
-                return;
-            }
             focus(this.rootElement, '.bcp-item-row');
             this.setState({ focusedRow: 0 });
         }
+
+        this.firstLoad = false;
     }
 
     /**
@@ -361,9 +376,11 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         // New folder state
         const newState = {
             currentCollection: collection,
-            rootName: id === rootFolderId ? name : '',
-            isUploadModalOpen: false
+            rootName: id === rootFolderId ? name : ''
         };
+
+        // Close any open modals
+        this.closeModals();
 
         // Set the new state and focus the grid for tabbing
         this.setState(newState, this.finishNavigation);
@@ -382,6 +399,14 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
 
+        // If we are navigating around, aka not first load
+        // then reset the focus to the root so that after
+        // the collection loads the activeElement is not the
+        // button that was clicked to fetch the folder
+        if (!this.firstLoad) {
+            this.rootElement.focus();
+        }
+
         // Reset search state, the view and show busy indicator
         this.setState({
             searchQuery: '',
@@ -393,6 +418,50 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         this.api
             .getFolderAPI()
             .folder(folderId, sortBy, sortDirection, this.fetchFolderSuccessCallback, this.errorCallback, forceFetch);
+    };
+
+    /**
+     * Recents fetch success callback
+     *
+     * @private
+     * @param {Object} collection item collection object
+     * @return {void}
+     */
+    recentsSuccessCallback = (collection: Collection) => {
+        // Set the new state and focus the grid for tabbing
+        this.setState(
+            {
+                currentCollection: collection
+            },
+            this.finishNavigation
+        );
+    };
+
+    /**
+     * Shows recents
+     *
+     * @private
+     * @param {Boolean|void} [forceFetch] To void cache
+     * @return {void}
+     */
+    showRecents = (forceFetch: boolean = false) => {
+        const { rootFolderId }: Props = this.props;
+        const { sortBy, sortDirection }: State = this.state;
+
+        // Recents are sorted by a different date field than the rest
+        const by = sortBy === FIELD_MODIFIED_AT ? FIELD_INTERACTED_AT : sortBy;
+
+        // Reset search state, the view and show busy indicator
+        this.setState({
+            searchQuery: '',
+            view: VIEW_RECENTS,
+            currentCollection: this.currentUnloadedCollection()
+        });
+
+        // Fetch the folder using folder API
+        this.api
+            .getRecentsAPI()
+            .recents(rootFolderId, by, sortDirection, this.recentsSuccessCallback, this.errorCallback, forceFetch);
     };
 
     /**
@@ -506,7 +575,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        Modal.setAppElement(this.appElement);
+        this.setModalAppElement();
         this.setState({
             isUploadModalOpen: true
         });
@@ -522,6 +591,72 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     uploadSuccessHandler = (): void => {
         const { currentCollection: { id } }: State = this.state;
         this.fetchFolder(id, true);
+    };
+
+    /**
+     * Creates a new folder
+     *
+     * @private
+     * @return {void}
+     */
+    createFolder = (): void => {
+        this.createFolderCallback();
+    };
+
+    /**
+     * New folder callback
+     *
+     * @private
+     * @param {string} name - folder name
+     * @return {void}
+     */
+    createFolderCallback = (name?: string): void => {
+        const { isCreateFolderModalOpen, currentCollection }: State = this.state;
+        const { canUpload }: Props = this.props;
+        if (!canUpload) {
+            return;
+        }
+
+        const { id, permissions }: Collection = currentCollection;
+        if (!id || !permissions) {
+            return;
+        }
+
+        const { can_upload }: BoxItemPermission = permissions;
+        if (!can_upload) {
+            return;
+        }
+
+        if (!isCreateFolderModalOpen || !name) {
+            this.setModalAppElement();
+            this.setState({ isCreateFolderModalOpen: true, errorCode: '' });
+            return;
+        }
+
+        if (!name) {
+            this.setState({ errorCode: 'item_name_invalid', isLoading: false });
+            return;
+        }
+
+        if (name.length > 255) {
+            this.setState({ errorCode: 'item_name_too_long', isLoading: false });
+            return;
+        }
+
+        this.setState({ isLoading: true });
+        this.api.getFolderAPI().create(
+            id,
+            name,
+            () => {
+                this.fetchFolder(id);
+            },
+            ({ response: status }) => {
+                this.setState({
+                    errorCode: status === 409 ? 'item_name_in_use' : 'item_name_invalid',
+                    isLoading: false
+                });
+            }
+        );
     };
 
     /**
@@ -594,7 +729,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     changeShareAccess = (access: Access, item: BoxItem): void => {
-        const { view, searchQuery }: State = this.state;
         const { canSetShareAccess }: Props = this.props;
         if (!item || !canSetShareAccess) {
             return;
@@ -610,20 +744,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        this.getAPI(type).share(id, access, () => {
-            if (view === VIEW_FOLDER) {
-                const { parent }: BoxItem = item;
-                if (parent) {
-                    this.fetchFolder(parent.id);
-                }
-            } else if (view === VIEW_SEARCH) {
-                this.search(searchQuery);
-            } else if (view === VIEW_SELECTED) {
-                this.showSelected();
-            } else {
-                throw new Error('Cannot sort incompatible view!');
-            }
-        });
+        this.api.getAPI(type).share(id, access, this.refreshGrid);
     };
 
     /**
@@ -645,6 +766,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                 this.fetchFolder(id);
             } else if (view === VIEW_SEARCH) {
                 this.search(searchQuery);
+            } else if (view === VIEW_RECENTS) {
+                this.showRecents();
             } else {
                 throw new Error('Cannot sort incompatible view!');
             }
@@ -660,6 +783,27 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     tableRef = (table: React$Component<*, *, *>) => {
         this.table = table;
+    };
+
+    /**
+     * Closes the modal dialogs that may be open
+     *
+     * @private
+     * @return {void}
+     */
+    closeModals = (): void => {
+        const { focusedRow }: State = this.state;
+
+        this.setState({
+            isLoading: false,
+            isCreateFolderModalOpen: false,
+            isUploadModalOpen: false
+        });
+
+        const { selected, currentCollection: { items = [] } }: State = this.state;
+        if (selected && items.length > 0) {
+            focus(this.rootElement, `.bcp-item-row-${focusedRow}`);
+        }
     };
 
     /**
@@ -680,41 +824,61 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         switch (key) {
             case '/':
                 focus(this.rootElement, '.buik-search input[type="search"]', false);
+                event.preventDefault();
                 break;
             case 'arrowdown':
                 focus(this.rootElement, '.bcp-item-row', false);
                 this.setState({ focusedRow: 0 });
+                event.preventDefault();
                 break;
             case 'g':
                 break;
             case 'b':
                 if (this.globalModifier) {
                     focus(this.rootElement, '.buik-breadcrumb button', false);
+                    event.preventDefault();
                 }
                 break;
             case 'f':
                 if (this.globalModifier) {
                     this.fetchFolder(rootFolderId);
+                    event.preventDefault();
                 }
                 break;
             case 'c':
                 if (this.globalModifier) {
                     this.choose();
+                    event.preventDefault();
                 }
                 break;
             case 'x':
                 if (this.globalModifier) {
                     this.cancel();
+                    event.preventDefault();
                 }
                 break;
             case 's':
                 if (this.globalModifier) {
                     this.showSelected();
+                    event.preventDefault();
                 }
                 break;
             case 'u':
                 if (this.globalModifier) {
                     this.upload();
+                    event.preventDefault();
+                }
+                break;
+            case 'r':
+                if (this.globalModifier) {
+                    this.showRecents(true);
+                    event.preventDefault();
+                }
+                break;
+            case 'n':
+                if (this.globalModifier) {
+                    this.createFolder();
+                    event.preventDefault();
                 }
                 break;
             default:
@@ -723,7 +887,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         }
 
         this.globalModifier = key === 'g';
-        event.preventDefault();
     };
 
     /**
@@ -769,7 +932,10 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             selected,
             currentCollection,
             searchQuery,
+            isCreateFolderModalOpen,
             isUploadModalOpen,
+            isLoading,
+            errorCode,
             focusedRow
         }: State = this.state;
         const { id, permissions }: Collection = currentCollection;
@@ -786,11 +952,10 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                 <div className='buik-app-element'>
                     <Header
                         view={view}
+                        isSmall={isSmall}
                         searchQuery={searchQuery}
                         logoUrl={logoUrl}
-                        canUpload={allowUpload}
                         onSearch={this.search}
-                        onUpload={this.upload}
                         getLocalizedMessage={getLocalizedMessage}
                     />
                     <SubHeader
@@ -799,6 +964,9 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                         isSmall={isSmall}
                         rootName={rootName}
                         currentCollection={currentCollection}
+                        canUpload={allowUpload}
+                        onUpload={this.upload}
+                        onCreate={this.createFolder}
                         onItemClick={this.fetchFolder}
                         onSortChange={this.sort}
                         getLocalizedMessage={getLocalizedMessage}
@@ -841,6 +1009,17 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                         uploadHost={uploadHost}
                         onClose={this.uploadSuccessHandler}
                         getLocalizedMessage={getLocalizedMessage}
+                        parentElement={this.rootElement}
+                      />
+                    : null}
+                {canUpload && !!this.appElement
+                    ? <CreateFolderDialog
+                        isOpen={isCreateFolderModalOpen}
+                        onCreate={this.createFolderCallback}
+                        onCancel={this.closeModals}
+                        getLocalizedMessage={getLocalizedMessage}
+                        isLoading={isLoading}
+                        errorCode={errorCode}
                         parentElement={this.rootElement}
                       />
                     : null}

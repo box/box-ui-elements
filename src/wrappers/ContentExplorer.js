@@ -77,6 +77,15 @@ class ContentExplorer extends ES6Wrapper {
     };
 
     /**
+     * Callback for creating a folder
+     *
+     * @return {void}
+     */
+    onCreate = (data: BoxItem): void => {
+        this.emit('create', data);
+    };
+
+    /**
      * Helper to programatically navigate
      *
      * @param {string} id - string folder id
@@ -103,6 +112,7 @@ class ContentExplorer extends ES6Wrapper {
                 onRename={this.onRename}
                 onSelect={this.onSelect}
                 onUpload={this.onUpload}
+                onCreate={this.onCreate}
                 onNavigate={this.onNavigate}
                 {...this.options}
             />,

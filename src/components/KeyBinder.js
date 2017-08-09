@@ -6,7 +6,8 @@
 
 import React, { PureComponent } from 'react';
 import noop from 'lodash.noop';
-import type { BoxItem, Collection } from '../flowTypes';
+import { isInputElement } from '../util/dom';
+import type { BoxItem } from '../flowTypes';
 
 type DefaultProps = {
     scrollToColumn: number,
@@ -33,7 +34,8 @@ type Props = {
     onOpen: Function,
     onSelect: Function,
     onDelete: Function,
-    currentCollection: Collection
+    items: BoxItem[],
+    id: string
 };
 
 type State = {
@@ -83,32 +85,37 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
     }
 
     /**
-     * Resets scroll states
+     * Resets scroll states and sets new states if
+     * needed specially when collection changes
      *
      * @private
      * @inheritdoc
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { scrollToColumn, scrollToRow, currentCollection: { id } }: Props = nextProps;
-        const { currentCollection: { id: prevId } }: Props = this.props;
+        const { id, scrollToColumn, scrollToRow }: Props = nextProps;
+        const { id: prevId }: Props = this.props;
         const { scrollToColumn: prevScrollToColumn, scrollToRow: prevScrollToRow }: State = this.state;
+        const newState = {};
 
         if (id !== prevId) {
-            this.setState({
-                scrollToColumn: 0,
-                scrollToRow: 0,
-                focusOnRender: false
-            });
+            // Only when the entire collection changes
+            // like folder navigate, reset the scroll states
+            newState.scrollToColumn = 0;
+            newState.scrollToRow = 0;
+            newState.focusOnRender = false;
         } else if (prevScrollToColumn !== scrollToColumn && prevScrollToRow !== scrollToRow) {
-            this.setState({
-                scrollToColumn,
-                scrollToRow
-            });
+            newState.scrollToColumn = scrollToColumn;
+            newState.scrollToRow = scrollToRow;
         } else if (prevScrollToColumn !== scrollToColumn) {
-            this.setState({ scrollToColumn });
+            newState.scrollToColumn = scrollToColumn;
         } else if (prevScrollToRow !== scrollToRow) {
-            this.setState({ scrollToRow });
+            newState.scrollToRow = scrollToRow;
+        }
+
+        // Only update the state if there is something to set
+        if (Object.keys(newState).length) {
+            this.setState(newState);
         }
     }
 
@@ -119,7 +126,10 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent): void => {
+    onKeyDown = (event: SyntheticKeyboardEvent & { target: HTMLElement }): void => {
+        if (isInputElement(event.target)) {
+            return;
+        }
         const {
             columnCount,
             rowCount,
@@ -129,7 +139,7 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
             onShare,
             onDelete,
             onOpen,
-            currentCollection: { items = [] }
+            items
         }: Props = this.props;
         const { scrollToColumn: scrollToColumnPrevious, scrollToRow: scrollToRowPrevious }: State = this.state;
         let { scrollToColumn, scrollToRow }: State = this.state;

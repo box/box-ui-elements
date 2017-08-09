@@ -20,6 +20,7 @@ import '../base.scss';
 type DefaultProps = {|
     apiHost: string,
     staticHost: string,
+    staticPath: string,
     locale: string,
     version: string,
     className: string
@@ -31,6 +32,7 @@ type Props = {
     version: string,
     apiHost: string,
     staticHost: string,
+    staticPath: string,
     token: Token,
     className: string,
     onLoad?: Function,
@@ -50,6 +52,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
         staticHost: DEFAULT_HOSTNAME_STATIC,
+        staticPath: 'platform/preview',
         locale: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION
     };
@@ -130,8 +133,8 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
      * @return {string} base url
      */
     getBasePath(asset: string): string {
-        const { staticHost, locale, version }: Props = this.props;
-        const path: string = `platform/preview/${version}/${locale}/${asset}`;
+        const { staticHost, staticPath, locale, version }: Props = this.props;
+        const path: string = `${staticPath}/${version}/${locale}/${asset}`;
         const suffix: string = staticHost.endsWith('/') ? path : `/${path}`;
         return `${staticHost}${suffix}`;
     }

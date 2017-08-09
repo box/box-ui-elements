@@ -17,7 +17,14 @@ import nameCellRenderer from '../Item/nameCellRenderer';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { focus } from '../../util/dom';
-import { FIELD_NAME, FIELD_ID, FIELD_MODIFIED_AT, FIELD_SIZE } from '../../constants';
+import {
+    FIELD_NAME,
+    FIELD_ID,
+    FIELD_MODIFIED_AT,
+    FIELD_INTERACTED_AT,
+    FIELD_SIZE,
+    VIEW_RECENTS
+} from '../../constants';
 import type { View, Collection } from '../../flowTypes';
 import './ItemList.scss';
 
@@ -98,7 +105,8 @@ const ItemList = ({
         onItemPreview,
         isSmall
     );
-    const { items = [], sortBy, sortDirection }: Collection = currentCollection;
+    const isRecents: boolean = view === VIEW_RECENTS;
+    const { id, items = [], sortBy, sortDirection }: Collection = currentCollection;
     const rowCount: number = items.length;
     const rowClassName = ({ index }) => {
         if (index === -1) {
@@ -115,10 +123,11 @@ const ItemList = ({
 
     return (
         <KeyBinder
+            id={id}
+            items={items}
             columnCount={1}
             rowCount={rowCount}
             className='bce-item-grid'
-            currentCollection={currentCollection}
             onRename={onItemRename}
             onShare={onItemShare}
             onDownload={onItemDownload}
@@ -171,8 +180,12 @@ const ItemList = ({
                                 ? null
                                 : <Column
                                     className='bce-item-coloumn'
-                                    label={getLocalizedMessage('buik.item.modified')}
-                                    dataKey={FIELD_MODIFIED_AT}
+                                    label={
+                                          isRecents
+                                              ? getLocalizedMessage('buik.item.interacted')
+                                              : getLocalizedMessage('buik.item.modified')
+                                      }
+                                    dataKey={isRecents ? FIELD_INTERACTED_AT : FIELD_MODIFIED_AT}
                                     cellRenderer={dateCell}
                                     headerRenderer={headerCellRenderer}
                                     width={120}

@@ -10,6 +10,7 @@ import FolderAPI from './Folder';
 import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
+import Cache from '../util/Cache';
 import { FIELDS_TO_FETCH, CACHE_PREFIX_SEARCH } from '../constants';
 import getBadItemError from '../util/error';
 import type {
@@ -102,15 +103,16 @@ class Search extends Base {
     }
 
     /**
-     * Tells if a folder has its items all loaded
+     * Tells if a search results has its items all loaded
      *
      * @return {boolean} if items are loaded
      */
     isLoaded(): boolean {
-        if (!this.getCache().has(this.key)) {
+        const cache: Cache = this.getCache();
+        if (!cache.has(this.key)) {
             return false;
         }
-        const { item_collection = {} }: FlattenedBoxItem = this.getCache().get(this.key);
+        const { item_collection = {} }: FlattenedBoxItem = cache.get(this.key);
         return !!item_collection.isLoaded;
     }
 
@@ -124,8 +126,9 @@ class Search extends Base {
             return;
         }
 
-        const search: FlattenedBoxItem = this.getCache().get(this.key);
-        const sortedSearch: FlattenedBoxItem = sort(search, this.sortBy, this.sortDirection, this.cache);
+        const cache: Cache = this.getCache();
+        const search: FlattenedBoxItem = cache.get(this.key);
+        const sortedSearch: FlattenedBoxItem = sort(search, this.sortBy, this.sortDirection, cache);
         const { item_collection }: FlattenedBoxItem = sortedSearch;
         if (!item_collection) {
             throw getBadItemError();
@@ -142,7 +145,7 @@ class Search extends Base {
             id: this.id,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => this.getCache().get(key))
+            items: entries.map((key: string) => cache.get(key))
         };
         this.successCallback(collection);
     }
@@ -205,12 +208,12 @@ class Search extends Base {
      *
      * @return {void}
      */
-    searchRequest(): void {
+    searchRequest(): Promise<void> {
         if (this.isDestroyed()) {
-            return;
+            return Promise.reject();
         }
 
-        this.xhr
+        return this.xhr
             .get(this.getUrl(), {
                 offset: this.offset,
                 query: this.query,
@@ -223,7 +226,7 @@ class Search extends Base {
     }
 
     /**
-     * Gets a box folder and its items
+     * Gets search results
      *
      * @param {string} id folder id
      * @param {string} query search string

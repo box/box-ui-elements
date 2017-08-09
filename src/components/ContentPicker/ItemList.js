@@ -68,7 +68,7 @@ const ItemList = ({
         hasHitSelectionLimit,
         getLocalizedMessage
     );
-    const { items = [] }: Collection = currentCollection;
+    const { id, items = [] }: Collection = currentCollection;
     const rowCount: number = items.length;
 
     const rowClassName = ({ index }) => {
@@ -108,7 +108,8 @@ const ItemList = ({
             columnCount={1}
             rowCount={rowCount}
             className='bcp-item-grid'
-            currentCollection={currentCollection}
+            id={id}
+            items={items}
             onSelect={onItemSelect}
             onOpen={onItemClick}
             scrollToRow={focusedRow}

@@ -33,6 +33,9 @@ const SubHeaderLeft = ({
     if (view === VIEW_FOLDER || view === VIEW_SEARCH) {
         const { id, name = '', breadcrumbs = [] } = currentCollection;
         crumbs = breadcrumbs.concat({ id, name });
+
+        // Search results are specific to the current folder
+        // hence the breadcrumb is added to the end of the list
         if (view === VIEW_SEARCH) {
             crumbs = crumbs.concat({
                 id: undefined,

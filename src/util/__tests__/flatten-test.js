@@ -47,4 +47,14 @@ describe('flatten', () => {
         const badList = [{ id: '1', type: 'foo' }];
         expect(flatten.bind(flatten, badList, folder, file, weblink)).to.throw(Error, /Unknown Type/);
     });
+
+    it('should throw with a bad item when no id', () => {
+        const badList = [{ type: 'foo' }];
+        expect(flatten.bind(flatten, badList, folder, file, weblink)).to.throw(Error, /Bad box item/);
+    });
+
+    it('should throw with a bad item when no type', () => {
+        const badList = [{ id: 'foo' }];
+        expect(flatten.bind(flatten, badList, folder, file, weblink)).to.throw(Error, /Bad box item/);
+    });
 });

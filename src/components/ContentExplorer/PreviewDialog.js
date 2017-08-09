@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Content Explorer Delete Confirmation Dialog
+ * @file Content Explorer Preview dialog
  * @author Box
  */
 

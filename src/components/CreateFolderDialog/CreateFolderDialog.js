@@ -1,20 +1,18 @@
 /**
  * @flow
- * @file Content Explorer Rename Dialog
+ * @file Content Explorer Create Folder Dialog
  * @author Box
  */
 
 import React from 'react';
 import Modal from 'react-modal';
-import type { BoxItem } from '../../flowTypes';
 import { Button, PrimaryButton } from '../Button';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 
 type Props = {
     isOpen: boolean,
-    onRename: Function,
+    onCreate: Function,
     onCancel: Function,
-    item: BoxItem,
     getLocalizedMessage: Function,
     isLoading: boolean,
     errorCode: string,
@@ -22,11 +20,10 @@ type Props = {
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
-const RenameDialog = ({
+const CreateFolderDialog = ({
     isOpen,
-    onRename,
+    onCreate,
     onCancel,
-    item,
     getLocalizedMessage,
     isLoading,
     errorCode,
@@ -35,20 +32,12 @@ const RenameDialog = ({
     let textInput = null;
     let error = '';
 
-    const { name = '', extension } = item;
-    const ext = extension ? `.${extension}` : '';
-    const nameWithoutExt = extension ? name.replace(ext, '') : name;
-
     /**
      * Appends the extension and calls rename function
      */
-    const rename = () => {
+    const create = () => {
         if (textInput && textInput.value) {
-            if (textInput.value === nameWithoutExt) {
-                onCancel();
-            } else {
-                onRename(textInput.value, ext);
-            }
+            onCreate(textInput.value);
         }
     };
 
@@ -69,7 +58,7 @@ const RenameDialog = ({
     const onKeyDown = ({ key }) => {
         switch (key) {
             case 'Enter':
-                rename();
+                create();
                 break;
             default:
                 break;
@@ -78,13 +67,13 @@ const RenameDialog = ({
 
     switch (errorCode) {
         case 'item_name_in_use':
-            error = getLocalizedMessage('buik.modal.rename.dialog.error.inuse');
+            error = getLocalizedMessage('buik.modal.create.dialog.error.inuse');
             break;
         case 'item_name_too_long':
-            error = getLocalizedMessage('buik.modal.rename.dialog.error.toolong');
+            error = getLocalizedMessage('buik.modal.create.dialog.error.toolong');
             break;
         default:
-            error = errorCode ? getLocalizedMessage('buik.modal.rename.dialog.error.invalid') : '';
+            error = errorCode ? getLocalizedMessage('buik.modal.create.dialog.error.invalid') : '';
             break;
     }
 
@@ -92,11 +81,11 @@ const RenameDialog = ({
         <Modal
             isOpen={isOpen}
             parentSelector={() => parentElement}
-            portalClassName={`${CLASS_MODAL} buik-modal-rename`}
+            portalClassName={CLASS_MODAL}
             className={CLASS_MODAL_CONTENT}
             overlayClassName={CLASS_MODAL_OVERLAY}
             onRequestClose={onCancel}
-            contentLabel={getLocalizedMessage('buik.modal.rename.dialog.label')}
+            contentLabel={getLocalizedMessage('buik.modal.create.dialog.label')}
         >
             <label>
                 {error
@@ -105,15 +94,13 @@ const RenameDialog = ({
                     </div>
                     : null}
                 <div>
-                    {getLocalizedMessage('buik.modal.rename.dialog.text', {
-                        name: nameWithoutExt
-                    })}
+                    {getLocalizedMessage('buik.modal.create.dialog.text')}
                 </div>
-                <input type='text' required ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} />
+                <input type='text' required ref={ref} onKeyDown={onKeyDown} />
             </label>
             <div className='buik-modal-btns'>
-                <PrimaryButton onClick={rename} isLoading={isLoading}>
-                    {getLocalizedMessage('buik.more.options.rename')}
+                <PrimaryButton onClick={create} isLoading={isLoading}>
+                    {getLocalizedMessage('buik.modal.create.dialog.button')}
                 </PrimaryButton>
                 <Button onClick={onCancel} isDisabled={isLoading}>
                     {getLocalizedMessage('buik.footer.button.cancel')}
@@ -123,4 +110,4 @@ const RenameDialog = ({
     );
 };
 
-export default RenameDialog;
+export default CreateFolderDialog;

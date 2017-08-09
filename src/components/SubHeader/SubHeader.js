@@ -17,6 +17,9 @@ type Props = {
     onSortChange: Function,
     getLocalizedMessage: Function,
     currentCollection: Collection,
+    onUpload: Function,
+    onCreate: Function,
+    canUpload?: boolean,
     view: View,
     isSmall: boolean
 };

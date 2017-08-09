@@ -8,6 +8,7 @@ import File from '../api/File';
 import Folder from '../api/Folder';
 import WebLink from '../api/WebLink';
 import Cache from './Cache';
+import getBadItemError from './error';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
@@ -28,7 +29,7 @@ export default function(list: BoxItem[], folderAPI: Folder, fileAPI: File, webli
     list.forEach((item: BoxItem) => {
         const { id, type }: BoxItem = item;
         if (!id || !type) {
-            throw new Error('Invalid box item!');
+            throw getBadItemError();
         }
 
         let api;
@@ -54,7 +55,7 @@ export default function(list: BoxItem[], folderAPI: Folder, fileAPI: File, webli
         } else {
             cache.set(key, item);
         }
-        items.push(api.getCacheKey(id));
+        items.push(key);
     });
     return items;
 }

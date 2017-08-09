@@ -7,9 +7,13 @@
 }
 
 .buik-btn.buik-sort-btn {
-    padding: 5px 16px;
+    padding: 7px 6px;
 
     .bce:not(.buik-is-small) & {
         display: none;
+    }
+
+    svg {
+        display: block;
     }
 }

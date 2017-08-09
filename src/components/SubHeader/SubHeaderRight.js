@@ -6,28 +6,61 @@
 
 import React from 'react';
 import Sort from './Sort';
-import { VIEW_SELECTED, VIEW_ERROR } from '../../constants';
+import Add from './Add';
+import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS } from '../../constants';
 import type { View, Collection } from '../../flowTypes';
+import './SubHeaderRight.scss';
 
 type Props = {
     onSortChange: Function,
     getLocalizedMessage: Function,
     currentCollection: Collection,
+    onUpload: Function,
+    onCreate: Function,
+    canUpload?: boolean,
     view: View
 };
 
-const SubHeaderRight = ({ view, currentCollection, onSortChange, getLocalizedMessage }: Props) => {
+const SubHeaderRight = ({
+    view,
+    onUpload,
+    onCreate,
+    canUpload,
+    currentCollection,
+    onSortChange,
+    getLocalizedMessage
+}: Props) => {
     const { sortBy, sortDirection, percentLoaded, items = [] }: Collection = currentCollection;
+    const isRecents: boolean = view === VIEW_RECENTS;
+    const isFolder: boolean = view === VIEW_FOLDER;
+    const isSearch: boolean = view === VIEW_SEARCH;
+    const showSort: boolean = (isRecents || isFolder || isSearch) && items.length > 0;
+    const showAdd: boolean = !!canUpload && isFolder;
+    const isLoaded: boolean = percentLoaded === 100;
 
-    return view === VIEW_ERROR || view === VIEW_SELECTED || items.length === 0 || !sortBy || !sortDirection
-        ? null
-        : <Sort
-            isLoaded={percentLoaded === 100}
-            sortBy={sortBy}
-            sortDirection={sortDirection}
-            onSortChange={onSortChange}
-            getLocalizedMessage={getLocalizedMessage}
-          />;
+    return (
+        <div className='buik-sub-header-right'>
+            {showSort &&
+                !!sortBy &&
+                !!sortDirection &&
+                <Sort
+                    isRecents={isRecents}
+                    isLoaded={isLoaded}
+                    sortBy={sortBy}
+                    sortDirection={sortDirection}
+                    onSortChange={onSortChange}
+                    getLocalizedMessage={getLocalizedMessage}
+                />}
+            {showAdd &&
+                <Add
+                    onUpload={onUpload}
+                    onCreate={onCreate}
+                    isDisabled={!isFolder}
+                    isLoaded={isLoaded}
+                    getLocalizedMessage={getLocalizedMessage}
+                />}
+        </div>
+    );
 };
 
 export default SubHeaderRight;
