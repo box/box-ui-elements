@@ -11,8 +11,9 @@ import FolderAPI from './Folder';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
-import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
-import type { Options } from '../flowTypes';
+import RecentsAPI from './Recents';
+import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
+import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
 class APIFactory {
     /**
@@ -49,6 +50,11 @@ class APIFactory {
      * @property {SearchAPI}
      */
     searchAPI: SearchAPI;
+
+    /**
+     * @property {RecentsAPI}
+     */
+    recentsAPI: RecentsAPI;
 
     /**
      * [constructor]
@@ -101,9 +107,40 @@ class APIFactory {
             this.searchAPI.destroy();
             delete this.searchAPI;
         }
+        if (this.recentsAPI) {
+            this.recentsAPI.destroy();
+            delete this.recentsAPI;
+        }
         if (destroyCache) {
             this.options.cache = new Cache();
         }
+    }
+
+    /**
+     * Returns the API based on type of item
+     *
+     * @private
+     * @param {String} type - item type
+     * @return {ItemAPI} api
+     */
+    getAPI(type: ItemType): ItemAPI {
+        let api: ItemAPI;
+
+        switch (type) {
+            case TYPE_FOLDER:
+                api = this.getFolderAPI();
+                break;
+            case TYPE_FILE:
+                api = this.getFileAPI();
+                break;
+            case TYPE_WEBLINK:
+                api = this.getWebLinkAPI();
+                break;
+            default:
+                throw new Error('Unknown Type!');
+        }
+
+        return api;
     }
 
     /**
@@ -170,6 +207,17 @@ class APIFactory {
         this.destroy();
         this.searchAPI = new SearchAPI(this.options);
         return this.searchAPI;
+    }
+
+    /**
+     * API for recents
+     *
+     * @return {RecentsAPI} RecentsAPI instance
+     */
+    getRecentsAPI(): RecentsAPI {
+        this.destroy();
+        this.recentsAPI = new RecentsAPI(this.options);
+        return this.recentsAPI;
     }
 }
 

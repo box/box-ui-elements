@@ -21,9 +21,10 @@ type Props = {
 
 const EmptyState = ({ view, isLoading, getLocalizedMessage }: Props) => {
     let type;
-    const message = isLoading && view === VIEW_FOLDER
-        ? getLocalizedMessage('buik.empty.state.folder.loading')
-        : getLocalizedMessage(`buik.empty.state.${view}`);
+    const message =
+        isLoading && view === VIEW_FOLDER
+            ? getLocalizedMessage('buik.empty.state.folder.loading')
+            : getLocalizedMessage(`buik.empty.state.${view}`);
 
     switch (view) {
         case VIEW_ERROR:
@@ -35,7 +36,6 @@ const EmptyState = ({ view, isLoading, getLocalizedMessage }: Props) => {
         case VIEW_SEARCH:
             type = <IconSearchEmptyState />;
             break;
-        case VIEW_FOLDER:
         default:
             type = <IconFolderEmptyState />;
             break;
@@ -43,7 +43,9 @@ const EmptyState = ({ view, isLoading, getLocalizedMessage }: Props) => {
     return (
         <div className='buik-empty'>
             {type}
-            <div>{message}</div>
+            <div>
+                {message}
+            </div>
         </div>
     );
 };

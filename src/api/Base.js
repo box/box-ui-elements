@@ -52,11 +52,15 @@ class Base {
      * @return {Base} Base instance
      */
     constructor(options: Options = {}) {
-        this.options = options;
         this.cache = options.cache || new Cache();
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
-        this.xhr = new Xhr(options);
+        this.options = Object.assign({}, options, {
+            apiHost: this.apiHost,
+            uploadHost: this.uploadHost,
+            cache: this.cache
+        });
+        this.xhr = new Xhr(this.options);
         this.destroyed = false;
     }
 

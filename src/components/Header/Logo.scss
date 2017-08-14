@@ -6,10 +6,10 @@
     .buik-logo-custom {
         max-height: 32px;
         max-width: 80px;
-    }
 
-    .buik-is-small & {
-        display: none;
+        .buik-is-small & {
+            max-width: 75px;
+        }
     }
 
     svg {

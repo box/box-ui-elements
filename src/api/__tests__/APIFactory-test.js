@@ -8,6 +8,7 @@ import FolderAPI from '../Folder';
 import FileAPI from '../File';
 import WebLinkAPI from '../WebLink';
 import SearchAPI from '../Search';
+import RecentsAPI from '../Recents';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -30,6 +31,7 @@ describe('api/APIFactory', () => {
             factory.searchAPI = { destroy: sandbox.mock() };
             factory.plainUploadAPI = { destroy: sandbox.mock() };
             factory.chunkedUploadAPI = { destroy: sandbox.mock() };
+            factory.recentsAPI = { destroy: sandbox.mock() };
             factory.destroy();
             expect(factory.fileAPI).to.equal(undefined);
             expect(factory.folderAPI).to.equal(undefined);
@@ -37,6 +39,7 @@ describe('api/APIFactory', () => {
             expect(factory.searchAPI).to.equal(undefined);
             expect(factory.plainUploadAPI).to.equal(undefined);
             expect(factory.chunkedUploadAPI).to.equal(undefined);
+            expect(factory.recentsAPI).to.equal(undefined);
         });
         it('should not destroy cache by default', () => {
             const cache = factory.options.cache;
@@ -51,6 +54,21 @@ describe('api/APIFactory', () => {
             factory.destroy(true);
             expect(factory.options.cache).to.not.equal(cache);
             expect(factory.options.cache.get('foo')).to.equal(undefined);
+        });
+    });
+
+    describe('getAPI()', () => {
+        it('should return file api when type is file', () => {
+            expect(factory.getAPI('file') instanceof FileAPI).to.be.true;
+        });
+        it('should return folder api when type is folder', () => {
+            expect(factory.getAPI('folder') instanceof FolderAPI).to.be.true;
+        });
+        it('should return web link api when type is web_link', () => {
+            expect(factory.getAPI('web_link') instanceof WebLinkAPI).to.be.true;
+        });
+        it('should throw error when type is incorrect', () => {
+            expect(factory.getAPI.bind(factory, 'foo')).to.throw(Error, /Unknown Type/);
         });
     });
 
@@ -123,6 +141,18 @@ describe('api/APIFactory', () => {
             expect(searchAPI.options.cache instanceof Cache).to.be.true;
             expect(searchAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
             expect(searchAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getRecentsAPI()', () => {
+        it('should call destroy and return recents API', () => {
+            const spy = sandbox.spy(factory, 'destroy');
+            const recentsAPI = factory.getRecentsAPI();
+            expect(spy).to.be.called;
+            expect(recentsAPI instanceof RecentsAPI).to.be.true;
+            expect(recentsAPI.options.cache instanceof Cache).to.be.true;
+            expect(recentsAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
+            expect(recentsAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

@@ -7,10 +7,10 @@
 import React from 'react';
 import IconChevron from '../icons/IconChevron';
 import { SORT_ASC } from '../../constants';
-import type { SortableFields, SortBy, SortDirection } from '../../flowTypes';
+import type { SortBy, SortDirection } from '../../flowTypes';
 
 type Props = {
-    dataKey: SortableFields,
+    dataKey: SortBy,
     label: string,
     sortBy: SortBy,
     sortDirection: SortDirection

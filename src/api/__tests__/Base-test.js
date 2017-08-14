@@ -17,7 +17,8 @@ describe('api/Base', () => {
     });
 
     it('should should have correct defaults on construct', () => {
-        expect(base.options).to.deep.equal({});
+        expect(base.options.apiHost).to.equal('https://api.box.com');
+        expect(base.options.uploadHost).to.equal('https://upload.box.com');
         expect(base.cache instanceof Cache).to.be.true;
         expect(base.apiHost).to.equal('https://api.box.com');
         expect(base.uploadHost).to.equal('https://upload.box.com');
