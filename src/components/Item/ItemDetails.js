@@ -28,7 +28,7 @@ const ItemDetails = ({ view, rootId, item, onItemClick, getLocalizedMessage }: P
                 onItemClick={onItemClick}
                 getLocalizedMessage={getLocalizedMessage}
               />
-            : <ItemSubDetails item={item} getLocalizedMessage={getLocalizedMessage} />}
+            : <ItemSubDetails view={view} item={item} getLocalizedMessage={getLocalizedMessage} />}
     </div>;
 
 export default ItemDetails;

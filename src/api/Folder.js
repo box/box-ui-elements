@@ -4,11 +4,13 @@
  * @author Box
  */
 
+import noop from 'lodash.noop';
 import Item from './Item';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
+import Cache from '../util/Cache';
 import { FIELDS_TO_FETCH, CACHE_PREFIX_FOLDER } from '../constants';
 import getBadItemError from '../util/error';
 import type {
@@ -80,7 +82,7 @@ class Folder extends Item {
      * @param {string} [id] optional file id
      * @return {string} base url for files
      */
-    getUrl(id: string): string {
+    getUrl(id?: string): string {
         const suffix: string = id ? `/${id}` : '';
         return `${this.getBaseUrl()}/folders${suffix}`;
     }
@@ -91,10 +93,11 @@ class Folder extends Item {
      * @return {boolean} if items are loaded
      */
     isLoaded(): boolean {
-        if (!this.getCache().has(this.key)) {
+        const cache: Cache = this.getCache();
+        if (!cache.has(this.key)) {
             return false;
         }
-        const { item_collection = {} }: FlattenedBoxItem = this.getCache().get(this.key);
+        const { item_collection = {} }: FlattenedBoxItem = cache.get(this.key);
         return !!item_collection.isLoaded;
     }
 
@@ -108,8 +111,9 @@ class Folder extends Item {
             return;
         }
 
-        const folder: FlattenedBoxItem = this.getCache().get(this.key);
-        const sortedFolder: FlattenedBoxItem = sort(folder, this.sortBy, this.sortDirection, this.cache);
+        const cache: Cache = this.getCache();
+        const folder: FlattenedBoxItem = cache.get(this.key);
+        const sortedFolder: FlattenedBoxItem = sort(folder, this.sortBy, this.sortDirection, cache);
 
         const { id, name, permissions, path_collection, item_collection }: FlattenedBoxItem = sortedFolder;
         if (!item_collection || !path_collection) {
@@ -131,7 +135,7 @@ class Folder extends Item {
             breadcrumbs: path_collection.entries,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => this.getCache().get(key))
+            items: entries.map((key: string) => cache.get(key))
         };
         this.successCallback(collection);
     }
@@ -198,16 +202,16 @@ class Folder extends Item {
     };
 
     /**
-     * Does the network request
+     * Does the network request for fetching a folder
      *
      * @return {void}
      */
-    folderRequest(): void {
+    folderRequest(): Promise<void> {
         if (this.isDestroyed()) {
-            return;
+            return Promise.reject();
         }
 
-        this.xhr
+        return this.xhr
             .get(this.getUrl(this.id), {
                 offset: this.offset,
                 limit: LIMIT_ITEM_FETCH,
@@ -262,6 +266,83 @@ class Folder extends Item {
 
         // Make the XHR request
         this.folderRequest();
+    }
+
+    /**
+     * API to rename an Item
+     *
+     * @param {string} id - parent folder id
+     * @param {string} name - new folder name
+     * @param {Function} successCallback - success callback
+     * @param {Function} errorCallback - error callback
+     * @return {void}
+     */
+    createSuccessHandler = (item: BoxItem): void => {
+        const { id: childId } = item;
+        if (this.isDestroyed() || !childId) {
+            return;
+        }
+        const childKey: string = this.getCacheKey(childId);
+        const cache: Cache = this.getCache();
+        const parent: FlattenedBoxItem = cache.get(this.key);
+
+        const { item_collection }: FlattenedBoxItem = parent;
+        if (!item_collection) {
+            throw getBadItemError();
+        }
+
+        const { total_count, entries }: FlattenedBoxItemCollection = item_collection;
+        if (!Array.isArray(entries) || typeof total_count !== 'number') {
+            throw getBadItemError();
+        }
+
+        cache.set(childKey, item);
+        item_collection.entries = [childKey].concat(entries);
+        item_collection.total_count = total_count + 1;
+        this.successCallback(item);
+    };
+
+    /**
+     * Does the network request for fetching a folder
+     *
+     * @return {void}
+     */
+    folderCreateRequest(name: string): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        const url = `${this.getUrl()}?fields=${FIELDS_TO_FETCH}`;
+        return this.xhr
+            .post(url, {
+                name,
+                parent: {
+                    id: this.id
+                }
+            })
+            .then(this.createSuccessHandler)
+            .catch(this.folderErrorHandler);
+    }
+
+    /**
+     * API to rename an Item
+     *
+     * @param {string} id - parent folder id
+     * @param {string} name - new folder name
+     * @param {Function} successCallback - success callback
+     * @param {Function} errorCallback - error callback
+     * @return {void}
+     */
+    create(id: string, name: string, successCallback: Function, errorCallback: Function = noop): void {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        this.id = id;
+        this.key = this.getCacheKey(id);
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+        this.folderCreateRequest(name);
     }
 }
 

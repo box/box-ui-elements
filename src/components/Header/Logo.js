@@ -10,21 +10,22 @@ import IconBoxLogo from '../icons/IconBoxLogo';
 import './Logo.scss';
 
 type Props = {
-    url?: string
+    url?: string,
+    isSmall: boolean
 };
 
-function getLogo(url?: string) {
+function getLogo(isSmall: boolean, url?: string) {
     if (url === 'box') {
         return <IconBoxLogo />;
     } else if (typeof url === 'string') {
         return <img alt='' src={url} className='buik-logo-custom' />;
     }
-    return <IconDefaultLogo />;
+    return <IconDefaultLogo width={isSmall ? 75 : 100} />;
 }
 
-const Logo = ({ url }: Props) =>
+const Logo = ({ url, isSmall }: Props) =>
     <div className='buik-logo'>
-        {getLogo(url)}
+        {getLogo(isSmall, url)}
     </div>;
 
 export default Logo;

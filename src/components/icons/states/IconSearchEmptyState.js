@@ -8,7 +8,7 @@ import React from 'react';
 import { BOX_BLUE } from '../../../constants';
 import type { IconType } from '../../../flowTypes';
 
-const IconSearchEmptyState = ({ className = '', color = BOX_BLUE, height = 180, width = 180 }: IconType) =>
+const IconSearchEmptyState = ({ className = '', color = BOX_BLUE, height = 126, width = 130 }: IconType) =>
     <svg className={className} height={height} role='img' viewBox='0 0 150 150' width={width}>
         <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
             <path

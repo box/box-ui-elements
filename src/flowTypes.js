@@ -19,6 +19,7 @@ import {
     VIEW_FOLDER,
     VIEW_ERROR,
     VIEW_SELECTED,
+    VIEW_RECENTS,
     VIEW_UPLOAD_EMPTY,
     VIEW_UPLOAD_IN_PROGRESS,
     VIEW_UPLOAD_SUCCESS,
@@ -40,6 +41,7 @@ import {
     SIZE_LARGE,
     FIELD_NAME,
     FIELD_MODIFIED_AT,
+    FIELD_INTERACTED_AT,
     FIELD_SIZE
 } from './constants';
 
@@ -52,14 +54,15 @@ export type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCES
 export type View =
     | typeof VIEW_ERROR
     | typeof VIEW_SELECTED
+    | typeof VIEW_RECENTS
     | typeof VIEW_FOLDER
     | typeof VIEW_SEARCH
     | typeof VIEW_UPLOAD_EMPTY
     | typeof VIEW_UPLOAD_IN_PROGRESS
     | typeof VIEW_UPLOAD_SUCCESS;
 export type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
-export type SortBy = typeof SORT_NAME | typeof SORT_DATE | typeof SORT_SIZE;
-export type SortableFields = typeof FIELD_NAME | typeof FIELD_MODIFIED_AT | typeof FIELD_SIZE;
+export type SortableOptions = typeof SORT_NAME | typeof SORT_DATE | typeof SORT_SIZE;
+export type SortBy = typeof FIELD_NAME | typeof FIELD_MODIFIED_AT | typeof FIELD_INTERACTED_AT | typeof FIELD_SIZE;
 export type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
 export type UploadStatus =
     | typeof STATUS_PENDING
@@ -99,6 +102,7 @@ export type BoxItem = {
     permissions?: BoxItemPermission,
     item_collection?: BoxItemCollection,
     path_collection?: BoxPathCollection,
+    interacted_at?: string,
     modified_at?: string,
     shared_link?: SharedLink,
     allowed_shared_link_access_levels?: Access[],
@@ -126,6 +130,7 @@ export type FlattenedBoxItem = {
     permissions?: BoxItemPermission,
     item_collection?: FlattenedBoxItemCollection,
     path_collection?: BoxPathCollection,
+    interacted_at?: string,
     modified_at?: string,
     shared_link?: SharedLink,
     allowed_shared_link_access_levels?: Access[],
@@ -201,4 +206,14 @@ export type Options = {
     cache?: Cache,
     apiHost?: string,
     uploadHost?: string
+};
+
+export type Recent = {
+    interacted_at: string,
+    item: BoxItem
+};
+
+export type RecentCollection = {
+    order: Order,
+    entries: Recent[]
 };

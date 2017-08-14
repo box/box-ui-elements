@@ -43,6 +43,11 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         description: 'Message shown when there are no folder items.',
         defaultMessage: 'There are no items in this folder.'
     },
+    'buik.empty.state.recents': {
+        id: 'buik.empty.state.recents',
+        description: 'Message shown when there are no recent items.',
+        defaultMessage: 'There are no recent items yet.'
+    },
     'buik.empty.state.folder.loading': {
         id: 'buik.empty.state.folder.loading',
         description: 'Message shown when folder items are still fetching.',
@@ -90,8 +95,13 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
     },
     'buik.header.button.upload': {
         id: 'buik.header.button.upload',
-        description: 'Label for the upload button.',
+        description: 'Label for the upload menu item.',
         defaultMessage: 'Upload'
+    },
+    'buik.header.button.create': {
+        id: 'buik.header.button.create',
+        description: 'Label for the new folder menu item.',
+        defaultMessage: 'New Folder'
     },
     'buik.folder.path.prefix': {
         id: 'buik.folder.path.prefix',
@@ -102,6 +112,11 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         id: 'buik.item.modified',
         description: 'Shown before folder modification date and label for modified column.',
         defaultMessage: 'Modified'
+    },
+    'buik.item.interacted': {
+        id: 'buik.item.interacted',
+        description: 'Shown before folder modification date and label for interacted column.',
+        defaultMessage: 'Last Accessed'
     },
     'buik.item.name': {
         id: 'buik.item.name',
@@ -183,6 +198,11 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         description: 'Shown as the title in the sub header while searching.',
         defaultMessage: 'Search Results'
     },
+    'buik.folder.name.recents': {
+        id: 'buik.folder.name.recents',
+        description: 'Shown as the title in the sub header when showing recents.',
+        defaultMessage: 'Recents'
+    },
     'buik.folder.name.selected': {
         id: 'buik.folder.name.selected',
         description: 'Shown as the title in the sub header while showing selected items.',
@@ -247,6 +267,21 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         id: 'buik.modal.rename.dialog.text',
         description: 'Text for rename dialog',
         defaultMessage: 'Please enter a new name for {name}:'
+    },
+    'buik.modal.create.dialog.label': {
+        id: 'buik.modal.create.dialog.label',
+        description: 'Label for create folder dialog',
+        defaultMessage: 'New Folder'
+    },
+    'buik.modal.create.dialog.text': {
+        id: 'buik.modal.create.dialog.text',
+        description: 'Text for create folder dialog',
+        defaultMessage: 'Please enter a name.'
+    },
+    'buik.modal.create.dialog.button': {
+        id: 'buik.modal.create.dialog.button',
+        description: 'Text for create folder dialog button',
+        defaultMessage: 'Create'
     },
     'buik.upload.state.error': {
         id: 'buik.upload.state.error',
@@ -315,8 +350,23 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
     },
     'buik.modal.rename.dialog.error.toolong': {
         id: 'buik.modal.rename.dialog.error.toolong',
-        description: 'Error text for rename dialog when name too long',
+        description: 'Error text for rename dialog when name is too long',
         defaultMessage: 'This name is too long.'
+    },
+    'buik.modal.create.dialog.error.invalid': {
+        id: 'buik.modal.create.dialog.error.invalid',
+        description: 'Error text for create folder dialog when name is invalid',
+        defaultMessage: 'This is an invalid folder name.'
+    },
+    'buik.modal.create.dialog.error.toolong': {
+        id: 'buik.modal.create.dialog.error.toolong',
+        description: 'Error text for create folder dialog when name is too long',
+        defaultMessage: 'This folder name is too long.'
+    },
+    'buik.modal.create.dialog.error.inuse': {
+        id: 'buik.modal.create.dialog.error.inuse',
+        description: 'Error text for create folder dialog when name is already in use',
+        defaultMessage: 'An folder with the same name already exists.'
     },
     'buik.modal.preview.dialog.label': {
         id: 'buik.modal.preview.dialog.label',

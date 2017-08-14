@@ -12,6 +12,7 @@ export const SIZE_LARGE: 'large' = 'large';
 export const VIEW_FOLDER: 'folder' = 'folder';
 export const VIEW_SEARCH: 'search' = 'search';
 export const VIEW_SELECTED: 'selected' = 'selected';
+export const VIEW_RECENTS: 'recents' = 'recents';
 export const VIEW_ERROR: 'error' = 'error';
 export const VIEW_UPLOAD_EMPTY: 'upload-empty' = 'upload-empty';
 export const VIEW_UPLOAD_IN_PROGRESS: 'upload-inprogress' = 'upload-inprogress';
@@ -27,6 +28,7 @@ export const CACHE_PREFIX_FOLDER = 'folder_';
 export const CACHE_PREFIX_FILE = 'file_';
 export const CACHE_PREFIX_WEBLINK = 'web_link_';
 export const CACHE_PREFIX_SEARCH = 'search_';
+export const CACHE_PREFIX_RECENTS = 'recents_';
 
 /* ----------------------- Sorts ---------------------------- */
 export const SORT_ASC: 'ASC' = 'ASC';
@@ -52,6 +54,7 @@ export const FIELD_PERMISSIONS = 'permissions';
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_MODIFIED_AT: 'modified_at' = 'modified_at';
+export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
 export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
 export const FIELD_HAS_COLLABORATIONS = 'has_collaborations';

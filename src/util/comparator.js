@@ -5,7 +5,15 @@
  */
 
 import Cache from './Cache';
-import { TYPE_FILE, TYPE_FOLDER, SORT_DESC, FIELD_MODIFIED_AT, FIELD_NAME, FIELD_SIZE } from '../constants';
+import {
+    TYPE_FILE,
+    TYPE_FOLDER,
+    SORT_DESC,
+    FIELD_MODIFIED_AT,
+    FIELD_INTERACTED_AT,
+    FIELD_NAME,
+    FIELD_SIZE
+} from '../constants';
 import type { SortBy, SortDirection, BoxItem, ItemType } from '../flowTypes';
 
 /**
@@ -27,6 +35,8 @@ export default function(sortBy: SortBy, sortDirection: SortDirection, cache: Cac
         const itemBName: string = itemB.name || '';
         const itemADate: number = Date.parse(itemA.modified_at || '0');
         const itemBDate: number = Date.parse(itemB.modified_at || '0');
+        const itemAInteractedDate: number = Date.parse(itemA.interacted_at || itemA.modified_at || '0');
+        const itemBInteractedDate: number = Date.parse(itemB.interacted_at || itemB.modified_at || '0');
         const itemASize: number = itemA.size || 0;
         const itemBSize: number = itemB.size || 0;
 
@@ -38,6 +48,9 @@ export default function(sortBy: SortBy, sortDirection: SortDirection, cache: Cac
             } else if (sortBy === FIELD_MODIFIED_AT) {
                 if (itemADate > itemBDate) return -1 * invert;
                 if (itemADate < itemBDate) return 1 * invert;
+            } else if (sortBy === FIELD_INTERACTED_AT) {
+                if (itemAInteractedDate > itemBInteractedDate) return -1 * invert;
+                if (itemAInteractedDate < itemBInteractedDate) return 1 * invert;
             } else if (sortBy === FIELD_SIZE) {
                 if (itemASize > itemBSize) return -1 * invert;
                 if (itemASize < itemBSize) return 1 * invert;
