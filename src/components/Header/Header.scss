@@ -13,14 +13,7 @@
     }
 
     .buik-search {
+        flex: 1;
         padding-left: 20px;
-
-        input[type="search"] {
-            width: 300px;
-
-            .buik-is-small & {
-                width: 205px;
-            }
-        }
     }
 }

@@ -36,7 +36,9 @@ import {
     TYPE_FILE,
     TYPE_FOLDER,
     TYPE_WEBLINK,
-    CLIENT_NAME_CONTENT_PICKER
+    CLIENT_NAME_CONTENT_PICKER,
+    DEFAULT_VIEW_FILES,
+    DEFAULT_VIEW_RECENTS
 } from '../../constants';
 import type {
     BoxItem,
@@ -46,7 +48,8 @@ import type {
     SortBy,
     Access,
     BoxItemPermission,
-    Token
+    Token,
+    DefaultView
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -75,6 +78,9 @@ type Props = {
     isTouch: boolean,
     className: string,
     measureRef: Function,
+    defaultView: DefaultView,
+    chooseButtonLabel?: string,
+    cancelButtonLabel?: string,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string
@@ -110,7 +116,8 @@ type DefaultProps = {|
     apiHost: string,
     uploadHost: string,
     clientName: string,
-    className: string
+    className: string,
+    defaultView: DefaultView
 |};
 
 const defaultType = `${TYPE_FILE},${TYPE_WEBLINK}`;
@@ -141,7 +148,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
-        clientName: CLIENT_NAME_CONTENT_PICKER
+        clientName: CLIENT_NAME_CONTENT_PICKER,
+        defaultView: DEFAULT_VIEW_FILES
     };
 
     /**
@@ -227,7 +235,13 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         // $FlowFixMe: child will exist
         this.appElement = this.rootElement.firstElementChild;
-        this.fetchFolder();
+
+        const { defaultView }: Props = this.props;
+        if (defaultView === DEFAULT_VIEW_RECENTS) {
+            this.showRecents(true);
+        } else {
+            this.fetchFolder();
+        }
     }
 
     /**
@@ -924,7 +938,9 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             uploadHost,
             isSmall,
             className,
-            measureRef
+            measureRef,
+            chooseButtonLabel,
+            cancelButtonLabel
         }: Props = this.props;
         const {
             view,
@@ -996,6 +1012,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                         onChoose={this.choose}
                         onCancel={this.cancel}
                         getLocalizedMessage={getLocalizedMessage}
+                        chooseButtonLabel={chooseButtonLabel}
+                        cancelButtonLabel={cancelButtonLabel}
                     />
                 </div>
                 {canUpload && !!this.appElement

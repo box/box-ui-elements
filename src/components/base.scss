@@ -162,14 +162,6 @@
             outline: 0;
         }
 
-        /* stylelint-disable selector-no-vendor-prefix */
-        &::-webkit-input-placeholder,
-        &::-moz-placeholder,
-        &::-ms-input-placeholder {
-            color: $see-see;
-        }
-        /* stylelint-enable selector-no-vendor-prefix */
-
         &:invalid {
             border: 1px solid $red;
         }
@@ -186,6 +178,10 @@
 
             &:hover {
                 border-color: $efive;
+            }
+
+            &::placeholder {
+                color: $see-see;
             }
         }
     }

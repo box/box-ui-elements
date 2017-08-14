@@ -42,7 +42,9 @@ import {
     FIELD_NAME,
     FIELD_MODIFIED_AT,
     FIELD_INTERACTED_AT,
-    FIELD_SIZE
+    FIELD_SIZE,
+    DEFAULT_VIEW_RECENTS,
+    DEFAULT_VIEW_FILES
 } from './constants';
 
 export type Token = string | Function;
@@ -51,6 +53,7 @@ export type StringMap = { [string]: string };
 export type StringAnyMap = { [string]: any };
 export type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 export type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
+export type DefaultView = typeof DEFAULT_VIEW_RECENTS | typeof DEFAULT_VIEW_FILES;
 export type View =
     | typeof VIEW_ERROR
     | typeof VIEW_SELECTED
