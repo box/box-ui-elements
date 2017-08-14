@@ -86,6 +86,7 @@ render(
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| defaultView | string | `files` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 
 ### Keyboard Shortcuts
 *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-keyboard-shortcuts).*
@@ -135,6 +136,9 @@ render(
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| chooseButtonLabel | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| cancelButtonLabel | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| defaultView | string | `files` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 
 ### Keyboard Shortcuts
 *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-keyboard-shortcuts).*

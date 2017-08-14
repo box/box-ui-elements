@@ -40,7 +40,9 @@ import {
     TYPE_FILE,
     TYPE_WEBLINK,
     TYPE_FOLDER,
-    CLIENT_NAME_CONTENT_EXPLORER
+    CLIENT_NAME_CONTENT_EXPLORER,
+    DEFAULT_VIEW_FILES,
+    DEFAULT_VIEW_RECENTS
 } from '../../constants';
 import type {
     BoxItem,
@@ -50,7 +52,8 @@ import type {
     SortBy,
     Access,
     BoxItemPermission,
-    Token
+    Token,
+    DefaultView
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -85,6 +88,7 @@ type Props = {
     onSelect: Function,
     onUpload: Function,
     onNavigate: Function,
+    defaultView: DefaultView,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string
@@ -131,7 +135,8 @@ type DefaultProps = {|
     onCreate: Function,
     onSelect: Function,
     onUpload: Function,
-    onNavigate: Function
+    onNavigate: Function,
+    defaultView: DefaultView
 |};
 
 class ContentExplorer extends Component<DefaultProps, Props, State> {
@@ -167,7 +172,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         onCreate: noop,
         onSelect: noop,
         onUpload: noop,
-        onNavigate: noop
+        onNavigate: noop,
+        defaultView: DEFAULT_VIEW_FILES
     };
 
     /**
@@ -237,11 +243,16 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { currentFolderId }: Props = this.props;
+        const { defaultView, currentFolderId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         // $FlowFixMe: child will exist
         this.appElement = this.rootElement.firstElementChild;
-        this.fetchFolder(currentFolderId);
+
+        if (defaultView === DEFAULT_VIEW_RECENTS) {
+            this.showRecents(true);
+        } else {
+            this.fetchFolder(currentFolderId);
+        }
     }
 
     /**
@@ -541,7 +552,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    recents = (forceFetch: boolean = false) => {
+    showRecents = (forceFetch: boolean = false) => {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
@@ -648,7 +659,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             if (view === VIEW_FOLDER) {
                 this.fetchFolder(id, false);
             } else if (view === VIEW_RECENTS) {
-                this.recents();
+                this.showRecents();
             } else if (view === VIEW_SEARCH) {
                 this.search(searchQuery);
             } else {
@@ -835,7 +846,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             if (view === VIEW_FOLDER) {
                 this.fetchFolder(parentId, false);
             } else if (view === VIEW_RECENTS) {
-                this.recents();
+                this.showRecents();
             } else if (view === VIEW_SEARCH) {
                 this.search(searchQuery);
             } else {
@@ -1100,7 +1111,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                 break;
             case 'r':
                 if (this.globalModifier) {
-                    this.recents();
+                    this.showRecents(true);
                     event.preventDefault();
                 }
                 break;

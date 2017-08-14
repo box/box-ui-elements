@@ -112,6 +112,8 @@
                     autoFocus: true,
                     sortBy: 'modified_at',
                     sortDirection: 'DESC',
+                    chooseButtonLabel: 'add',
+                    cancelButtonLabel: 'X',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
                 });
                 window.fp = filePicker1;
@@ -133,7 +135,8 @@
                     container: '.filePicker2',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     extensions: ['pdf', 'doc', 'docx', 'ppt', 'pptx'],
-                    maxSelectable: 3
+                    maxSelectable: 3,
+                    defaultView: 'recents'
                 });
 
 

@@ -14,7 +14,9 @@ type Props = {
     hasHitSelectionLimit: boolean,
     getLocalizedMessage: Function,
     onChoose: Function,
-    onCancel: Function
+    onCancel: Function,
+    chooseButtonLabel?: string,
+    cancelButtonLabel?: string
 };
 
 const Footer = ({
@@ -23,7 +25,9 @@ const Footer = ({
     hasHitSelectionLimit,
     onCancel,
     onChoose,
-    getLocalizedMessage
+    getLocalizedMessage,
+    chooseButtonLabel,
+    cancelButtonLabel
 }: Props) =>
     <div className='bcp-footer'>
         <div className='bcp-footer-left'>
@@ -41,10 +45,10 @@ const Footer = ({
         </div>
         <div className='bcp-footer-right'>
             <Button onClick={onCancel}>
-                {getLocalizedMessage('buik.footer.button.cancel')}
+                {cancelButtonLabel || getLocalizedMessage('buik.footer.button.cancel')}
             </Button>
             <PrimaryButton onClick={onChoose}>
-                {getLocalizedMessage('buik.footer.button.choose')}
+                {chooseButtonLabel || getLocalizedMessage('buik.footer.button.choose')}
             </PrimaryButton>
         </div>
     </div>;
