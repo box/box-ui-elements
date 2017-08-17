@@ -11,7 +11,9 @@ describe('DropdownMenu/DropdownMenu', () => {
 
     // eslint-disable-next-line
     const FakeMenu = ({ initialFocusIndex = 0, onClose = () => {}, ...rest }) =>
-        <ul {...rest} role='menu'>Some Menu</ul>;
+        <ul {...rest} role='menu'>
+            Some Menu
+        </ul>;
     FakeMenu.displayName = 'FakeMenu';
 
     afterEach(() => {

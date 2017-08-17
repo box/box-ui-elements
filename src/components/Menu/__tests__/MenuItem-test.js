@@ -12,11 +12,7 @@ describe('box-react-ui-overlays/Menu/MenuItem', () => {
 
     describe('render()', () => {
         it('should correctly render a list element with correct props', () => {
-            const wrapper = shallow(
-                <MenuItem>
-                    Test
-                </MenuItem>
-            );
+            const wrapper = shallow(<MenuItem>Test</MenuItem>);
 
             assert.isTrue(wrapper.is('li'), 'list element rendered');
             assert.equal(wrapper.prop('role'), 'menuitem');
@@ -39,11 +35,7 @@ describe('box-react-ui-overlays/Menu/MenuItem', () => {
         });
 
         it('should fire onClick when it exists', () => {
-            const wrapper = shallow(
-                <MenuItem onClick={sandbox.mock()}>
-                    Test
-                </MenuItem>
-            );
+            const wrapper = shallow(<MenuItem onClick={sandbox.mock()}>Test</MenuItem>);
 
             wrapper.simulate('click', {
                 preventDefault: sandbox.mock().never(),

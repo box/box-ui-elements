@@ -19,9 +19,7 @@ type Props = {
 
 const BreadcrumbDropdown = ({ crumbs, onCrumbClick, className = '' }: Props) =>
     <DropdownMenu constrainToScrollParent>
-        <PlainButton className={`buik-breadcrumbs-drop-down ${className}`}>
-            ···
-        </PlainButton>
+        <PlainButton className={`buik-breadcrumbs-drop-down ${className}`}>···</PlainButton>
         <Menu>
             {crumbs.map(({ id, name }: Crumb) =>
                 <MenuItem key={id} onClick={() => onCrumbClick(id)}>

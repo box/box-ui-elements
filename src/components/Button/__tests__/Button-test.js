@@ -12,7 +12,11 @@ describe('Button/Button', () => {
     it('should correctly render children in button', () => {
         const children = 'yooo';
 
-        const wrapper = shallow(<Button>{children}</Button>);
+        const wrapper = shallow(
+            <Button>
+                {children}
+            </Button>
+        );
 
         assert.isTrue(wrapper.hasClass('buik-btn'));
         assert.equal(wrapper.find('.buik-btn-content').length, 1);
