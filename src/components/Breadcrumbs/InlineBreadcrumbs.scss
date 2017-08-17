@@ -2,10 +2,26 @@
 
 .buik-inline-breadcrumbs {
     color: $sevens;
+    display: flex;
     font-size: 11px;
+    min-width: 0;
 
-    .buik-breadcrumb .buik-btn.buik-btn-plain {
-        color: inherit;
-        font-size: 11px;
+    .buik-breadcrumbs {
+        padding-right: 0;
+    }
+
+    .buik-breadcrumb {
+        &:first-child {
+            min-width: 43px;
+        }
+
+        .buik-btn.buik-btn-plain {
+            color: inherit;
+            font-size: 11px;
+        }
+    }
+
+    .buik-breadcrumb-more {
+        min-width: 16px;
     }
 }

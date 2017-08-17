@@ -46,7 +46,7 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (
-            <span>
+            <span className='buik-breadcrumb-more'>
                 <BreadcrumbDropdown
                     onCrumbClick={onCrumbClick}
                     crumbs={crumbs}
@@ -76,14 +76,12 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
     const lastBreadcrumb = <Breadcrumb name={crumb.name} onClick={onClick} isLast />;
 
     // Always show the second last/parent breadcrumb when there are at least 2 crumbs.
-    const secondLastBreadcrumb = length > 1
-        ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter)
-        : null;
+    const secondLastBreadcrumb =
+        length > 1 ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter) : null;
 
     // Only show the more dropdown when there were at least 4 crumbs.
-    const moreBreadcrumbs = length > 3
-        ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter)
-        : null;
+    const moreBreadcrumbs =
+        length > 3 ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter) : null;
 
     // Only show the root breadcrumb when there are at least 3 crumbs.
     const firstBreadcrumb = length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter) : null;

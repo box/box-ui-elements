@@ -48,7 +48,8 @@ type Props = {
     isSmall: boolean,
     isLarge: boolean,
     isTouch: boolean,
-    measureRef: Function
+    measureRef: Function,
+    responseFilter?: Function
 };
 
 type DefaultProps = {|
@@ -120,7 +121,16 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {API}
      */
     createAPIFactory(): API {
-        const { rootFolderId, token, sharedLink, sharedLinkPassword, apiHost, uploadHost, clientName } = this.props;
+        const {
+            rootFolderId,
+            token,
+            sharedLink,
+            sharedLinkPassword,
+            apiHost,
+            uploadHost,
+            clientName,
+            responseFilter
+        } = this.props;
         return new API({
             token,
             sharedLink,
@@ -128,6 +138,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             apiHost,
             uploadHost,
             clientName,
+            responseFilter,
             id: `folder_${rootFolderId}`
         });
     }

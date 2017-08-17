@@ -44,7 +44,8 @@ type Props = {
     className: string,
     measureRef: Function,
     sharedLink?: string,
-    sharedLinkPassword?: string
+    sharedLinkPassword?: string,
+    responseFilter?: Function
 };
 
 type State = {
@@ -88,7 +89,7 @@ class ContentTree extends Component<DefaultProps, Props, State> {
     constructor(props: Props) {
         super(props);
 
-        const { rootFolderId, token, sharedLink, sharedLinkPassword, apiHost, clientName } = props;
+        const { rootFolderId, token, sharedLink, sharedLinkPassword, apiHost, clientName, responseFilter } = props;
 
         this.api = new API({
             token,
@@ -96,6 +97,7 @@ class ContentTree extends Component<DefaultProps, Props, State> {
             sharedLinkPassword,
             apiHost,
             clientName,
+            responseFilter,
             id: `folder_${rootFolderId}`
         });
 

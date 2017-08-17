@@ -91,7 +91,8 @@ type Props = {
     defaultView: DefaultView,
     logoUrl?: string,
     sharedLink?: string,
-    sharedLinkPassword?: string
+    sharedLinkPassword?: string,
+    responseFilter?: Function
 };
 
 type State = {
@@ -193,7 +194,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             apiHost,
             uploadHost,
             sortBy,
-            sortDirection
+            sortDirection,
+            responseFilter
         }: Props = props;
         this.api = new API({
             token,
@@ -201,6 +203,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             sharedLinkPassword,
             apiHost,
             uploadHost,
+            responseFilter,
             clientName: CLIENT_NAME_CONTENT_EXPLORER,
             id: `folder_${rootFolderId}`
         });

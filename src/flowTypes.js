@@ -47,6 +47,7 @@ import {
     DEFAULT_VIEW_FILES
 } from './constants';
 
+export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
 export type Token = string | Function;
 export type ClassComponent<D, P, S> = Class<React$Component<D, P, S>>;
 export type StringMap = { [string]: string };
@@ -208,7 +209,8 @@ export type Options = {
     sharedLinkPassword?: string,
     cache?: Cache,
     apiHost?: string,
-    uploadHost?: string
+    uploadHost?: string,
+    responseFilter?: Function
 };
 
 export type Recent = {

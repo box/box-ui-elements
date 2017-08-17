@@ -6,13 +6,12 @@
 
 import 'whatwg-fetch';
 import { stringify } from 'querystring';
-import type { StringMap, StringAnyMap, Options, Token } from '../flowTypes';
+import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
 const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 const CONTENT_TYPE_HEADER = 'Content-Type';
-
-type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
+const SUCCESS_RESPONSE_FILTER = ({ response }) => response;
 
 type XHROptions = {
     url: string,
@@ -31,6 +30,7 @@ class Xhr {
     sharedLink: ?string;
     sharedLinkPassword: ?string;
     xhr: XMLHttpRequest;
+    responseFilter: Function;
 
     /**
      * [constructor]
@@ -43,13 +43,14 @@ class Xhr {
      * @param {string} [options.sharedLinkPassword] - Shared link password
      * @return {Xhr} Cache instance
      */
-    constructor({ id, clientName, token, version, sharedLink, sharedLinkPassword }: Options = {}) {
+    constructor({ id, clientName, token, version, sharedLink, sharedLinkPassword, responseFilter }: Options = {}) {
         this.id = id || '';
         this.token = token || '';
         this.clientName = clientName;
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
+        this.responseFilter = typeof responseFilter === 'function' ? responseFilter : SUCCESS_RESPONSE_FILTER;
     }
 
     /**
@@ -91,6 +92,38 @@ class Xhr {
      */
     static stringifyData(data: StringAnyMap): string {
         return JSON.stringify(data).replace(/"\s+|\s+"/g, '"');
+    }
+
+    /**
+     * Function that applies filtering
+     *
+     * @param {Object} data - JS Object representation of JSON data to send
+     * @return {string} - Stringifyed data
+     */
+    applyResponseFiltering(url: string, method: Method, body?: StringAnyMap): Function {
+        const a = document.createElement('a');
+        a.href = url;
+
+        return (response: StringAnyMap): Promise<StringAnyMap> => {
+            const filteredResponse = this.responseFilter({
+                request: {
+                    method,
+                    url,
+                    body,
+                    api: url.replace(`${a.origin}/2.0`, ''),
+                    host: a.host,
+                    hostname: a.hostname,
+                    pathname: a.pathname,
+                    origin: a.origin,
+                    protocol: a.protocol,
+                    search: a.search,
+                    hash: a.hash,
+                    port: a.port
+                },
+                response
+            });
+            return filteredResponse instanceof Promise ? filteredResponse : Promise.resolve(filteredResponse);
+        };
     }
 
     /**
@@ -173,12 +206,15 @@ class Xhr {
      * @param {Object} [params] - Key-value map of querystring params
      * @return {Promise} - HTTP response
      */
-    get(url: string, params: any = {}, headers: any = {}) {
+    get(url: string, params: StringAnyMap = {}, headers: StringMap = {}): Promise<StringAnyMap> {
         const querystring = stringify(params);
         const fullUrl = querystring.length > 0 ? `${url}?${querystring}` : url;
 
         return this.getHeaders(headers).then((hdrs) =>
-            fetch(fullUrl, { headers: hdrs, mode: 'cors' }).then(Xhr.checkStatus).then(Xhr.parseJSON)
+            fetch(fullUrl, { headers: hdrs, mode: 'cors' })
+                .then(Xhr.checkStatus)
+                .then(Xhr.parseJSON)
+                .then(this.applyResponseFiltering(fullUrl, 'GET'))
         );
     }
 
@@ -191,7 +227,12 @@ class Xhr {
      * @param {string} [method] - xhr type
      * @return {Promise} - HTTP response
      */
-    post(url: string, data: StringAnyMap = {}, headers: StringMap = {}, method: Method = 'POST'): Promise<any> {
+    post(
+        url: string,
+        data: StringAnyMap = {},
+        headers: StringMap = {},
+        method: Method = 'POST'
+    ): Promise<StringAnyMap> {
         return this.getHeaders(headers).then((hdrs) =>
             fetch(url, {
                 method,
@@ -200,6 +241,7 @@ class Xhr {
             })
                 .then(Xhr.checkStatus)
                 .then(Xhr.parseJSON)
+                .then(this.applyResponseFiltering(url, method, data))
         );
     }
 
@@ -211,7 +253,7 @@ class Xhr {
      * @param {Object} [headers] - Key-value map of headers
      * @return {Promise} - HTTP response
      */
-    put(url: string, data: StringAnyMap = {}, headers: StringMap = {}): Promise<any> {
+    put(url: string, data: StringAnyMap = {}, headers: StringMap = {}): Promise<StringAnyMap> {
         return this.post(url, data, headers, 'PUT');
     }
 
@@ -223,7 +265,7 @@ class Xhr {
      * @param {Object} [headers] - Key-value map of headers
      * @return {Promise} - HTTP response
      */
-    delete(url: string, data: StringAnyMap = {}, headers: StringMap = {}): Promise<any> {
+    delete(url: string, data: StringAnyMap = {}, headers: StringMap = {}): Promise<StringAnyMap> {
         return this.post(url, data, headers, 'DELETE');
     }
 
@@ -237,7 +279,7 @@ class Xhr {
      * @param {Function} errorHandler - Error handler
      * @returns {void}
      */
-    options({ url, data, headers = {}, successHandler, errorHandler }: XHROptions): Promise<any> {
+    options({ url, data, headers = {}, successHandler, errorHandler }: XHROptions): Promise<StringAnyMap> {
         return this.getHeaders(headers).then((hdrs) =>
             fetch(url, {
                 method: 'OPTIONS',
