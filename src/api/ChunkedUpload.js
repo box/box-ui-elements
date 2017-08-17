@@ -8,7 +8,7 @@ import noop from 'lodash.noop';
 import Rusha from 'rusha';
 import Chunk from './Chunk';
 import Base from './Base';
-import type { StringAnyMap } from '../flowTypes';
+import type { BoxItem, StringAnyMap } from '../flowTypes';
 import int32ArrayToBase64 from '../util/base64';
 
 const DEFAULT_RETRY_COMMIT_DELAY_MS = 3000; // Wait 3s before retrying a chunk
@@ -201,7 +201,7 @@ class ChunkedUpload extends Base {
                     sha1: int32ArrayToBase64(new Rusha().rawDigest(buffer)),
                     totalSize: this.file.size,
                     successCallback: this.handleChunkSuccess,
-                    errorCallback: this.handleChunkError,
+                    errorCallback: this.handleUploadError,
                     progressCallback: (progressEvent) => this.handleChunkProgress(chunk, progressEvent)
                 });
 
@@ -232,18 +232,6 @@ class ChunkedUpload extends Base {
     };
 
     /**
-     * Handles upload error for a chunk.
-     *
-     * @private
-     * @param {Error} error - Progress error
-     * @return {void}
-     */
-    handleChunkError = (error: Error) => {
-        this.cancel();
-        this.errorCallback(error);
-    };
-
-    /**
      * Handles upload progress event for a chunk.
      *
      * @private
@@ -251,7 +239,7 @@ class ChunkedUpload extends Base {
      * @param {ProgressEvent} event - Progress event
      * @return {void}
      */
-    handleChunkProgress = (chunk: Chunk, event: ProgressEvent) => {
+    handleChunkProgress = (chunk: Chunk, event: ProgressEvent): void => {
         if (!event.lengthComputable) {
             return;
         }
@@ -306,23 +294,53 @@ class ChunkedUpload extends Base {
                 Digest: `SHA=${digest}`
             };
 
-            this.xhr.post(this.getUploadSessionUrl(this.sessionId, 'commit'), postData, headers).then((response) => {
-                // Retry after a delay since server is still processing chunks
-                if (response.status === 202) {
-                    this.finished = false;
-                    const retryAfterSec = parseInt(response.headers.get('Retry-After'), 10);
-
-                    if (isNaN(retryAfterSec)) {
-                        setTimeout(() => this.commitFile(), DEFAULT_RETRY_COMMIT_DELAY_MS);
-                    } else {
-                        setTimeout(() => this.commitFile(), retryAfterSec * 1000);
-                    }
-                } else {
-                    this.successCallback(response);
-                }
-            });
+            this.xhr
+                .post(this.getUploadSessionUrl(this.sessionId, 'commit'), postData, headers)
+                .then(this.handleCommitSuccess)
+                .catch(this.handleUploadError);
         });
     }
+
+    /**
+     * Handles a successful commit file response.
+     *
+     * @param {Response} response - Fetch response object
+     * @return {void}
+     */
+    handleCommitSuccess = ({
+        entries,
+        headers,
+        status
+    }: {
+        entries: BoxItem[],
+        headers: Headers,
+        status: number
+    }): void => {
+        // Retry after a delay since server is still processing chunks
+        if (status === 202) {
+            this.finished = false;
+            const retryAfterSec = parseInt(headers.get('Retry-After'), 10);
+
+            if (isNaN(retryAfterSec)) {
+                setTimeout(() => this.commitFile(), DEFAULT_RETRY_COMMIT_DELAY_MS);
+            } else {
+                setTimeout(() => this.commitFile(), retryAfterSec * 1000);
+            }
+        } else if (entries) {
+            this.successCallback(entries);
+        }
+    };
+
+    /**
+     * Handles an upload error. Cancels the pending upload and executes error callback.
+     *
+     * @param {Error} error - Error
+     * @return {void}
+     */
+    handleUploadError = (error: Error): void => {
+        this.cancel();
+        this.errorCallback(error);
+    };
 
     /**
      * Updates SHA1 digest, ensuring that parts are added in the right order.

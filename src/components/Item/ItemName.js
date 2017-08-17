@@ -28,7 +28,9 @@ const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
         ? <PlainButton className='buik-item-label' onFocus={onItemFocus} onClick={onItemClick}>
             {name}
         </PlainButton>
-        : <span className='buik-item-label'>{name}</span>;
+        : <span className='buik-item-label'>
+            {name}
+        </span>;
 };
 
 export default ItemName;

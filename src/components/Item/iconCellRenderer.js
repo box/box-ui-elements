@@ -27,4 +27,6 @@ function getIcon(dimension: number, rowData: BoxItem) {
 }
 
 export default (dimension: number = 32): Function => ({ rowData }: { rowData: BoxItem }) =>
-    <div className='buik-item-icon'>{getIcon(dimension, rowData)}</div>;
+    <div className='buik-item-icon'>
+        {getIcon(dimension, rowData)}
+    </div>;

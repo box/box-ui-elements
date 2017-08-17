@@ -35,19 +35,20 @@ const UploadState = ({ canDrop, getLocalizedMessage, hasItems, isOver, isTouch, 
         case VIEW_UPLOAD_EMPTY:
             icon = <IconUploadStartState />;
             /* eslint-disable no-nested-ternary */
-            content = canDrop && hasItems
-                ? <UploadStateContent message={getLocalizedMessage('buik.upload.state.inprogress')} />
-                : isTouch
-                  ? <UploadStateContent
-                      inputLabel={getLocalizedMessage('buik.upload.state.empty.input.nodragdrop')}
-                      useButton
-                      onChange={onSelect}
-                    />
-                  : <UploadStateContent
-                      inputLabel={getLocalizedMessage('buik.upload.state.empty.input')}
-                      message={getLocalizedMessage('buik.upload.state.empty')}
-                      onChange={onSelect}
-                    />;
+            content =
+                canDrop && hasItems
+                    ? <UploadStateContent message={getLocalizedMessage('buik.upload.state.inprogress')} />
+                    : isTouch
+                      ? <UploadStateContent
+                          inputLabel={getLocalizedMessage('buik.upload.state.empty.input.nodragdrop')}
+                          useButton
+                          onChange={onSelect}
+                        />
+                      : <UploadStateContent
+                          inputLabel={getLocalizedMessage('buik.upload.state.empty.input')}
+                          message={getLocalizedMessage('buik.upload.state.empty')}
+                          onChange={onSelect}
+                        />;
             /* eslint-enable no-nested-ternary */
             break;
         case VIEW_UPLOAD_IN_PROGRESS:

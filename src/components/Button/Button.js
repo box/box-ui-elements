@@ -88,7 +88,9 @@ class Button extends PureComponent<DefaultProps, Props, void> {
 
         return (
             <button className={styleClassName} type={type} onClick={this.handleClick} {...buttonProps}>
-                <span className={CLASS_BUTTON_CONTENT_SPAN}>{children}</span>
+                <span className={CLASS_BUTTON_CONTENT_SPAN}>
+                    {children}
+                </span>
                 {isLoading && <LoadingIndicator className='buik-btn-loading-indicator' />}
             </button>
         );

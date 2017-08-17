@@ -15,7 +15,9 @@ type Props = {
 
 const BreadcrumbDelimiter = ({ delimiter }: Props) =>
     delimiter === DELIMITER_CARET
-        ? <span className='buik-breadcrumb-seperator'><IconRightArrow /></span>
+        ? <span className='buik-breadcrumb-seperator'>
+            <IconRightArrow />
+        </span>
         : <span>/</span>;
 
 export default BreadcrumbDelimiter;

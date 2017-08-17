@@ -10,6 +10,9 @@ type Props = {
     name: string
 };
 
-const ItemName = ({ name }: Props) => <span className='bcu-item-label'>{name}</span>;
+const ItemName = ({ name }: Props) =>
+    <span className='bcu-item-label'>
+        {name}
+    </span>;
 
 export default ItemName;
