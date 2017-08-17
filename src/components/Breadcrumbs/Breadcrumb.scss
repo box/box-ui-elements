@@ -1,12 +1,15 @@
 @import '../variables';
 
 .buik-breadcrumb {
+    display: flex;
+    min-width: 20px;
+
+    &:first-child {
+        min-width: 64px;
+    }
+
     .buik-btn.buik-btn-plain {
         color: $sevens;
-        max-width: 100px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
 
         &:last-child {
             color: $twos;

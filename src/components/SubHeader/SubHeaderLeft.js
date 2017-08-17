@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Breadcrumbs } from '../Breadcrumbs';
-import { VIEW_SEARCH, VIEW_FOLDER, DELIMITER_CARET } from '../../constants';
+import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../constants';
 import type { View, Collection } from '../../flowTypes';
 
 type Props = {
@@ -45,14 +45,17 @@ const SubHeaderLeft = ({
     } else {
         crumbs = [
             {
-                id: rootId,
-                name: rootName || getLocalizedMessage('buik.folder.name.root')
-            },
-            {
                 id: undefined,
                 name: getLocalizedMessage(`buik.folder.name.${view}`)
             }
         ];
+
+        if (view !== VIEW_RECENTS) {
+            crumbs.unshift({
+                id: rootId,
+                name: rootName || getLocalizedMessage('buik.folder.name.root')
+            });
+        }
     }
 
     return (

@@ -252,9 +252,9 @@ class Search extends Base {
 
         // Save references
         this.offset = 0;
-        this.query = this.getEncodedQuery(query);
+        this.query = query;
         this.id = id;
-        this.key = this.getCacheKey(id, this.query);
+        this.key = this.getCacheKey(id, this.getEncodedQuery(this.query));
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         this.sortBy = sortBy;

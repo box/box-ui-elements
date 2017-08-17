@@ -86,7 +86,7 @@ describe('api/Search', () => {
             expect(search.sortDirection).to.equal('direction');
             expect(search.key).to.equal('key');
             expect(search.offset).to.equal(0);
-            expect(search.query).to.equal('foo%20query');
+            expect(search.query).to.equal('foo query');
         });
         it('should save args and not make search request when cached', () => {
             search.searchRequest = sandbox.mock().never();
@@ -101,7 +101,7 @@ describe('api/Search', () => {
             expect(search.sortDirection).to.equal('direction');
             expect(search.key).to.equal('key');
             expect(search.offset).to.equal(0);
-            expect(search.query).to.equal('foo%20query');
+            expect(search.query).to.equal('foo query');
         });
         it('should save args and make search request when cached but forced to fetch', () => {
             search.searchRequest = sandbox.mock();
@@ -116,7 +116,7 @@ describe('api/Search', () => {
             expect(search.sortDirection).to.equal('direction');
             expect(search.key).to.equal('key');
             expect(search.offset).to.equal(0);
-            expect(search.query).to.equal('foo%20query');
+            expect(search.query).to.equal('foo query');
         });
     });
 

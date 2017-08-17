@@ -87,7 +87,22 @@
                     currentFolderId: '4579229774',
                     canShare: false,
                     autoFocus: true,
-                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                    logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
+                    responseFilter: ({ request, response }) => {
+                        const { method, api } = request;
+                        const { item_collection } = response;
+
+                        // Only apply filtering if it was a certain API request
+                        if (method === 'GET' && /^\/folders/.test(api) && !!item_collection) {
+                            const originalLength = item_collection.entries.length; // Keep track of items originally sent
+                            item_collection.entries = item_collection.entries.filter((item) => item.type === 'folder'); // Filter out unwanted items
+                            const newLength = item_collection.entries.length; // Calculate the new item list length
+                            item_collection.total_count -= (originalLength - newLength); // Update the total_count value based on the difference
+                        }
+
+                        console.log(response);
+                        return Promise.resolve(response);
+                    }
                 });
             }
             load();

@@ -83,7 +83,8 @@ type Props = {
     cancelButtonLabel?: string,
     logoUrl?: string,
     sharedLink?: string,
-    sharedLinkPassword?: string
+    sharedLinkPassword?: string,
+    responseFilter?: Function
 };
 
 type State = {
@@ -170,7 +171,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             uploadHost,
             sortBy,
             sortDirection,
-            clientName
+            clientName,
+            responseFilter
         } = props;
         this.api = new API({
             token,
@@ -179,6 +181,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             apiHost,
             uploadHost,
             clientName,
+            responseFilter,
             id: `folder_${rootFolderId}`
         });
         this.id = uniqueid('bcp_');
