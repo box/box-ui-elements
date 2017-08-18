@@ -42,7 +42,10 @@ import {
     TYPE_FOLDER,
     CLIENT_NAME_CONTENT_EXPLORER,
     DEFAULT_VIEW_FILES,
-    DEFAULT_VIEW_RECENTS
+    DEFAULT_VIEW_RECENTS,
+    ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_ITEM_NAME_TOO_LONG,
+    ERROR_CODE_ITEM_NAME_IN_USE
 } from '../../constants';
 import type {
     BoxItem,
@@ -239,6 +242,17 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
     }
 
     /**
+     * Cleanup
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    componentWillUnmount() {
+        this.clearCache();
+    }
+
+    /**
      * Fetches the root folder on load
      *
      * @private
@@ -256,6 +270,21 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         } else {
             this.fetchFolder(currentFolderId);
         }
+    }
+
+    /**
+     * react-modal expects the Modals app element
+     * to be set so that it can add proper aria tags.
+     * We need to keep setting it, since there might be
+     * multiple widgets on the same page with their own
+     * app elements.
+     *
+     * @private
+     * @param {Object} collection item collection object
+     * @return {void}
+     */
+    setModalAppElement() {
+        Modal.setAppElement(this.appElement);
     }
 
     /**
@@ -405,21 +434,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             forceFetch
         );
     };
-
-    /**
-     * react-modal expects the Modals app element
-     * to be set so that it can add proper aria tags.
-     * We need to keep setting it, since there might be
-     * multiple widgets on the same page with their own
-     * app elements.
-     *
-     * @private
-     * @param {Object} collection item collection object
-     * @return {void}
-     */
-    setModalAppElement() {
-        Modal.setAppElement(this.appElement);
-    }
 
     /**
      * Action performed when clicking on an item
@@ -901,7 +915,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
 
         const name = `${nameWithoutExt}${extension}`;
         if (!nameWithoutExt.trim()) {
-            this.setState({ errorCode: 'item_name_invalid', isLoading: false });
+            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_INVALID, isLoading: false });
             return;
         }
 
@@ -965,12 +979,12 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         }
 
         if (!name) {
-            this.setState({ errorCode: 'item_name_invalid', isLoading: false });
+            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_INVALID, isLoading: false });
             return;
         }
 
         if (name.length > 255) {
-            this.setState({ errorCode: 'item_name_too_long', isLoading: false });
+            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_TOO_LONG, isLoading: false });
             return;
         }
 
@@ -985,7 +999,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             },
             ({ response: { status } }) => {
                 this.setState({
-                    errorCode: status === 409 ? 'item_name_in_use' : 'item_name_invalid',
+                    errorCode: status === 409 ? ERROR_CODE_ITEM_NAME_IN_USE : ERROR_CODE_ITEM_NAME_INVALID,
                     isLoading: false
                 });
             }

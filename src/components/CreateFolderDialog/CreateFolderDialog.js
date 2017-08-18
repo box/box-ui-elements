@@ -7,7 +7,13 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { Button, PrimaryButton } from '../Button';
-import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
+import {
+    CLASS_MODAL_CONTENT,
+    CLASS_MODAL_OVERLAY,
+    CLASS_MODAL,
+    ERROR_CODE_ITEM_NAME_TOO_LONG,
+    ERROR_CODE_ITEM_NAME_IN_USE
+} from '../../constants';
 
 type Props = {
     isOpen: boolean,
@@ -66,10 +72,10 @@ const CreateFolderDialog = ({
     };
 
     switch (errorCode) {
-        case 'item_name_in_use':
+        case ERROR_CODE_ITEM_NAME_IN_USE:
             error = getLocalizedMessage('buik.modal.create.dialog.error.inuse');
             break;
-        case 'item_name_too_long':
+        case ERROR_CODE_ITEM_NAME_TOO_LONG:
             error = getLocalizedMessage('buik.modal.create.dialog.error.toolong');
             break;
         default:
