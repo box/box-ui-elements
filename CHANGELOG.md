@@ -1,6 +1,36 @@
+<a name="1.1.0"></a>
+# 1.1.0 (2017-08-19)
+
+* Update: Bump Preview version and add GitHub releases (#38) ([edac306](https://github.com/box/box-ui-elements/commit/edac306))
+* Update: Minor css fixes and code cleanup (#49) ([2cf139c](https://github.com/box/box-ui-elements/commit/2cf139c)), closes [#49](https://github.com/box/box-ui-elements/issues/49)
+* Update: Preview v1.1.1 (#31) ([c5fbd0c](https://github.com/box/box-ui-elements/commit/c5fbd0c))
+* Mojito: Update translations (#27) ([494b7d9](https://github.com/box/box-ui-elements/commit/494b7d9))
+* Mojito: Update translations (#40) ([55d6943](https://github.com/box/box-ui-elements/commit/55d6943))
+* Mojito: Update translations (#41) ([07a8944](https://github.com/box/box-ui-elements/commit/07a8944))
+* Mojito: Update translations (#43) ([5c4cd3a](https://github.com/box/box-ui-elements/commit/5c4cd3a))
+* Mojito: Update translations (#48) ([7f53796](https://github.com/box/box-ui-elements/commit/7f53796))
+* Fix: Add missing base css entries needed for preview ui element (#33) ([1b76928](https://github.com/box/box-ui-elements/commit/1b76928))
+* Fix: Grammar (#30) ([a74bf27](https://github.com/box/box-ui-elements/commit/a74bf27))
+* Fix: min height button overlapping issue with the elements (#28) ([0d4759c](https://github.com/box/box-ui-elements/commit/0d4759c))
+* Fix: Random errors in IE11 due to document.activeElement being an object (#29) ([7ba3df8](https://github.com/box/box-ui-elements/commit/7ba3df8))
+* Fix: Upload complete event for large files (#47) ([ad01823](https://github.com/box/box-ui-elements/commit/ad01823))
+* New: Add option to re-label choose/cancel button and show recents (#44) ([ba339eb](https://github.com/box/box-ui-elements/commit/ba339eb))
+* New: Adding option to filter out response (#46) ([3b5ff58](https://github.com/box/box-ui-elements/commit/3b5ff58))
+* New: Recents and Create Folder feature (#42) ([5c74304](https://github.com/box/box-ui-elements/commit/5c74304))
+* Chore: Cache test (#36) ([59ae93a](https://github.com/box/box-ui-elements/commit/59ae93a))
+* Chore: Cleanup circular dependency in delete api (#32) ([8971f17](https://github.com/box/box-ui-elements/commit/8971f17))
+* Chore: error.js test (#35) ([8d6a867](https://github.com/box/box-ui-elements/commit/8d6a867))
+* Chore: Refactor and tests for API factory (#37) ([c722028](https://github.com/box/box-ui-elements/commit/c722028))
+* Chore: Test for api Base.js and code / flow cleanup (#34) ([36f523e](https://github.com/box/box-ui-elements/commit/36f523e))
+* Chore: Upgrade versions in package.json (#26) ([01e8189](https://github.com/box/box-ui-elements/commit/01e8189))
+* Docs: Minor wording ([c873b51](https://github.com/box/box-ui-elements/commit/c873b51))
+
+
+
 <a name="1.0.2"></a>
 ## 1.0.2 (2017-07-14)
 
+* Release: 1.0.2 ([e0eb813](https://github.com/box/box-ui-elements/commit/e0eb813))
 * Docs: Changes applicable to react ([99ca6c0](https://github.com/box/box-ui-elements/commit/99ca6c0))
 * Docs: Links to key shortcuts ([f53ba57](https://github.com/box/box-ui-elements/commit/f53ba57))
 * Docs: Update README ([1e4c6a7](https://github.com/box/box-ui-elements/commit/1e4c6a7))
