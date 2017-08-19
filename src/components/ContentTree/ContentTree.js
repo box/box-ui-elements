@@ -120,17 +120,15 @@ class ContentTree extends Component<DefaultProps, Props, State> {
     }
 
     /**
-     * Calls the passed on onClick funcsion
+     * Cleanup
      *
      * @private
-     * @param {Object} item - clicked item
+     * @inheritdoc
      * @return {void}
      */
-    onItemClick = (item: BoxItem): void => {
-        const { onClick }: Props = this.props;
-        delete item.selected;
-        onClick(item);
-    };
+    componentWillUnmount() {
+        this.clearCache();
+    }
 
     /**
      * Fetches the root folder on load
@@ -142,6 +140,19 @@ class ContentTree extends Component<DefaultProps, Props, State> {
     componentDidMount() {
         this.fetchFolder();
     }
+
+    /**
+     * Calls the passed on onClick funcsion
+     *
+     * @private
+     * @param {Object} item - clicked item
+     * @return {void}
+     */
+    onItemClick = (item: BoxItem): void => {
+        const { onClick }: Props = this.props;
+        delete item.selected;
+        onClick(item);
+    };
 
     /**
      * Resets the percentLoaded in the collection

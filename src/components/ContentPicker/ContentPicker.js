@@ -38,7 +38,10 @@ import {
     TYPE_WEBLINK,
     CLIENT_NAME_CONTENT_PICKER,
     DEFAULT_VIEW_FILES,
-    DEFAULT_VIEW_RECENTS
+    DEFAULT_VIEW_RECENTS,
+    ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_ITEM_NAME_TOO_LONG,
+    ERROR_CODE_ITEM_NAME_IN_USE
 } from '../../constants';
 import type {
     BoxItem,
@@ -225,6 +228,17 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     setModalAppElement() {
         Modal.setAppElement(this.appElement);
+    }
+
+    /**
+     * Cleanup
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    componentWillUnmount() {
+        this.clearCache();
     }
 
     /**
@@ -651,12 +665,12 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         }
 
         if (!name) {
-            this.setState({ errorCode: 'item_name_invalid', isLoading: false });
+            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_INVALID, isLoading: false });
             return;
         }
 
         if (name.length > 255) {
-            this.setState({ errorCode: 'item_name_too_long', isLoading: false });
+            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_TOO_LONG, isLoading: false });
             return;
         }
 
@@ -667,9 +681,9 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             () => {
                 this.fetchFolder(id);
             },
-            ({ response: status }) => {
+            ({ response: { status } }) => {
                 this.setState({
-                    errorCode: status === 409 ? 'item_name_in_use' : 'item_name_invalid',
+                    errorCode: status === 409 ? ERROR_CODE_ITEM_NAME_IN_USE : ERROR_CODE_ITEM_NAME_INVALID,
                     isLoading: false
                 });
             }

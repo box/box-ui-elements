@@ -132,3 +132,8 @@ export const FIELDS_TO_FETCH = [
     FIELD_HAS_COLLABORATIONS,
     FIELD_IS_EXTERNALLY_OWNED
 ].join(',');
+
+/* ------------------ Error Codes  ---------------------- */
+export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
+export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
+export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
