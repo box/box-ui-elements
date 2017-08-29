@@ -3,7 +3,7 @@ import Cache from '../Cache';
 let cache;
 const sandbox = sinon.sandbox.create();
 
-describe('Cache', () => {
+describe('util/Cache', () => {
     beforeEach(() => {
         cache = new Cache();
     });

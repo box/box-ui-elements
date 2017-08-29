@@ -45,7 +45,8 @@ import {
     DEFAULT_VIEW_RECENTS,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
-    ERROR_CODE_ITEM_NAME_IN_USE
+    ERROR_CODE_ITEM_NAME_IN_USE,
+    TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
 import type {
     BoxItem,
@@ -92,6 +93,7 @@ type Props = {
     onUpload: Function,
     onNavigate: Function,
     defaultView: DefaultView,
+    hasPreviewSidebar: boolean,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
@@ -140,7 +142,8 @@ type DefaultProps = {|
     onSelect: Function,
     onUpload: Function,
     onNavigate: Function,
-    defaultView: DefaultView
+    defaultView: DefaultView,
+    hasPreviewSidebar: boolean
 |};
 
 class ContentExplorer extends Component<DefaultProps, Props, State> {
@@ -177,7 +180,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         onSelect: noop,
         onUpload: noop,
         onNavigate: noop,
-        defaultView: DEFAULT_VIEW_FILES
+        defaultView: DEFAULT_VIEW_FILES,
+        hasPreviewSidebar: false
     };
 
     /**
@@ -190,7 +194,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         super(props);
 
         const {
-            rootFolderId,
             token,
             sharedLink,
             sharedLinkPassword,
@@ -198,8 +201,10 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             uploadHost,
             sortBy,
             sortDirection,
-            responseFilter
+            responseFilter,
+            rootFolderId
         }: Props = props;
+
         this.api = new API({
             token,
             sharedLink,
@@ -208,8 +213,9 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             uploadHost,
             responseFilter,
             clientName: CLIENT_NAME_CONTENT_EXPLORER,
-            id: `folder_${rootFolderId}`
+            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
+
         this.id = uniqueid('bce_');
 
         this.state = {
@@ -641,18 +647,18 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        const { permissions, type, id }: BoxItem = selected;
-        if (!permissions || !type || !id) {
+        const { permissions, type }: BoxItem = selected;
+        if (!permissions || !type) {
             return;
         }
 
-        const { can_set_share_access: canSetShareAccessPermission }: BoxItemPermission = permissions;
-        if (!canSetShareAccessPermission) {
+        const { can_set_share_access }: BoxItemPermission = permissions;
+        if (!can_set_share_access) {
             return;
         }
 
         this.setState({ isLoading: true });
-        this.api.getAPI(type).share(id, access, (updatedItem: BoxItem) => {
+        this.api.getAPI(type).share(selected, access, (updatedItem: BoxItem) => {
             updatedItem.selected = true;
             this.setState({ selected: updatedItem, isLoading: false });
         });
@@ -921,7 +927,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
 
         this.setState({ isLoading: true });
         this.api.getAPI(type).rename(
-            id,
+            selected,
             name,
             (updatedItem: BoxItem) => {
                 onRename(cloneDeep(selected));
@@ -1175,7 +1181,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             className,
             measureRef,
             onPreview,
-            onUpload
+            onUpload,
+            hasPreviewSidebar
         }: Props = this.props;
         const {
             view,
@@ -1322,6 +1329,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                         getLocalizedMessage={getLocalizedMessage}
                         parentElement={this.rootElement}
                         onPreview={onPreview}
+                        hasPreviewSidebar={hasPreviewSidebar}
+                        cache={this.api.getCache()}
                       />
                     : null}
             </div>

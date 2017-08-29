@@ -12,20 +12,12 @@ const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 const CONTENT_TYPE_HEADER = 'Content-Type';
 const SUCCESS_RESPONSE_FILTER = ({ response }) => response;
-
-type XHROptions = {
-    url: string,
-    data: StringAnyMap,
-    headers?: StringMap,
-    successHandler: Function,
-    errorHandler: Function,
-    progressHandler?: Function
-};
+const error = new Error('Bad id or auth token!');
 
 class Xhr {
-    id: string;
+    id: ?string;
     clientName: ?string;
-    token: Token;
+    token: ?Token;
     version: ?string;
     sharedLink: ?string;
     sharedLinkPassword: ?string;
@@ -44,13 +36,19 @@ class Xhr {
      * @return {Xhr} Cache instance
      */
     constructor({ id, clientName, token, version, sharedLink, sharedLinkPassword, responseFilter }: Options = {}) {
-        this.id = id || '';
-        this.token = token || '';
+        this.id = id;
+        this.token = token;
         this.clientName = clientName;
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
         this.responseFilter = typeof responseFilter === 'function' ? responseFilter : SUCCESS_RESPONSE_FILTER;
+
+        // Tokens should either be null or undefuned or string or functions
+        // Anything else is not supported and throw error
+        if (token !== null && token !== undefined && typeof token !== 'string' && typeof token !== 'function') {
+            throw error;
+        }
     }
 
     /**
@@ -65,9 +63,9 @@ class Xhr {
             return response;
         }
 
-        const error: any = new Error(response.statusText);
-        error.response = response;
-        throw error;
+        const err: any = new Error(response.statusText);
+        err.response = response;
+        throw err;
     }
 
     /**
@@ -132,44 +130,49 @@ class Xhr {
      * id and value is the token. The function accepts either a simple id
      * or an array of file ids
      *
-     * @param
-     * @param {string|Array} id - box file id(s)
-     * @param {string|Function} token
+     * @private
+     * @param {string} [id] - Optional box item id
      * @return {Promise} that resolves to a token
      */
-    getToken(): Promise<string> {
-        const error = new Error('Bad auth token!');
+    getToken(id?: string): Promise<?string> {
+        const itemId = id || this.id || '';
+
+        // Make sure we are getting typed ids
+        if (!itemId.includes('_')) {
+            return Promise.reject(error);
+        }
+
+        if (!this.token || typeof this.token === 'string') {
+            // Token is a simple string or null or undefined
+            return Promise.resolve(this.token);
+        }
+
+        // Token is a function which returns a promise
+        // that on resolution returns an id to token map.
         return new Promise((resolve: Function, reject: Function) => {
-            if (typeof this.token === 'string') {
-                // Token is a simple string
-                resolve(this.token);
-            } else if (typeof this.token === 'function') {
-                // Token is a function which returns a promise
-                // that on resolution returns an id to token map.
-                this.token(this.id)
-                    .then((token) => {
-                        if (typeof token === 'string') {
-                            resolve(token);
-                        } else if (typeof token === 'object') {
-                            resolve(token[this.id]);
-                        } else {
-                            reject(error);
-                        }
-                    })
-                    .catch(reject);
-            } else {
-                reject(error);
-            }
+            // $FlowFixMe Nulls and strings already checked above
+            this.token(itemId)
+                .then((token) => {
+                    if (typeof token === 'string') {
+                        resolve(token);
+                    } else if (typeof token === 'object' && !!token[itemId]) {
+                        resolve(token[itemId]);
+                    } else {
+                        reject(error);
+                    }
+                })
+                .catch(reject);
         });
     }
 
     /**
      * Builds a list of required XHR headers.
      *
+     * @param {string} [id] - Optional box item id
      * @param {Object} [args] - Optional existing headers
      * @return {Object} Headers
      */
-    getHeaders(args: StringMap = {}) {
+    getHeaders(id?: string, args: StringMap = {}) {
         const headers: StringMap = Object.assign(
             {
                 Accept: 'application/json',
@@ -192,8 +195,11 @@ class Xhr {
             headers[HEADER_CLIENT_VERSION] = this.version;
         }
 
-        return this.getToken().then((token) => {
-            headers.Authorization = `Bearer ${token}`;
+        return this.getToken(id).then((token) => {
+            if (token) {
+                // Only add a token when there was one found
+                headers.Authorization = `Bearer ${token}`;
+            }
             return headers;
         });
     }
@@ -201,16 +207,27 @@ class Xhr {
     /**
      * HTTP GETs a URL
      *
+     * @param {string} id - Box item id
      * @param {string} url - The URL to fetch
      * @param {Object} [headers] - Key-value map of headers
      * @param {Object} [params] - Key-value map of querystring params
      * @return {Promise} - HTTP response
      */
-    get(url: string, params: StringAnyMap = {}, headers: StringMap = {}): Promise<StringAnyMap> {
+    get({
+        url,
+        id,
+        params = {},
+        headers = {}
+    }: {
+        url: string,
+        id?: string,
+        params?: StringAnyMap,
+        headers?: StringMap
+    }): Promise<StringAnyMap> {
         const querystring = stringify(params);
         const fullUrl = querystring.length > 0 ? `${url}?${querystring}` : url;
 
-        return this.getHeaders(headers).then((hdrs) =>
+        return this.getHeaders(id, headers).then((hdrs) =>
             fetch(fullUrl, { headers: hdrs, mode: 'cors' })
                 .then(Xhr.checkStatus)
                 .then(Xhr.parseJSON)
@@ -221,19 +238,27 @@ class Xhr {
     /**
      * HTTP POSTs a URL with JSON data
      *
+     * @param {string} id - Box item id
      * @param {string} url - The URL to fetch
      * @param {Object} data - JS Object representation of JSON data to send
      * @param {Object} [headers] - Key-value map of headers
      * @param {string} [method] - xhr type
      * @return {Promise} - HTTP response
      */
-    post(
+    post({
+        url,
+        id,
+        data = {},
+        headers = {},
+        method = 'POST'
+    }: {
         url: string,
-        data: StringAnyMap = {},
-        headers: StringMap = {},
-        method: Method = 'POST'
-    ): Promise<StringAnyMap> {
-        return this.getHeaders(headers).then((hdrs) =>
+        id?: string,
+        data?: StringAnyMap,
+        headers?: StringMap,
+        method?: Method
+    }): Promise<StringAnyMap> {
+        return this.getHeaders(id, headers).then((hdrs) =>
             fetch(url, {
                 method,
                 headers: hdrs,
@@ -248,30 +273,53 @@ class Xhr {
     /**
      * HTTP PUTs a URL with JSON data
      *
+     * @param {string} id - Box item id
      * @param {string} url - The URL to fetch
      * @param {Object} data - JS Object representation of JSON data to send
      * @param {Object} [headers] - Key-value map of headers
      * @return {Promise} - HTTP response
      */
-    put(url: string, data: StringAnyMap = {}, headers: StringMap = {}): Promise<StringAnyMap> {
-        return this.post(url, data, headers, 'PUT');
+    put({
+        url,
+        id,
+        data = {},
+        headers = {}
+    }: {
+        url: string,
+        id?: string,
+        data?: StringAnyMap,
+        headers?: StringMap
+    }): Promise<StringAnyMap> {
+        return this.post({ id, url, data, headers, method: 'PUT' });
     }
 
     /**
      * HTTP DELETEs a URL with JSON data
      *
+     * @param {string} id - Box item id
      * @param {string} url - The URL to fetch
      * @param {Object} data - JS Object representation of JSON data to send
      * @param {Object} [headers] - Key-value map of headers
      * @return {Promise} - HTTP response
      */
-    delete(url: string, data: StringAnyMap = {}, headers: StringMap = {}): Promise<StringAnyMap> {
-        return this.post(url, data, headers, 'DELETE');
+    delete({
+        url,
+        id,
+        data = {},
+        headers = {}
+    }: {
+        url: string,
+        id?: string,
+        data?: StringAnyMap,
+        headers?: StringMap
+    }): Promise<StringAnyMap> {
+        return this.post({ id, url, data, headers, method: 'DELETE' });
     }
 
     /**
      * HTTP OPTIONs a URL with JSON data.
      *
+     * @param {string} id - Box item id
      * @param {string} url - The URL to post to
      * @param {Object} data - The non-file post data that should accompany the post
      * @param {Object} [headers] - Key-value map of headers
@@ -279,8 +327,23 @@ class Xhr {
      * @param {Function} errorHandler - Error handler
      * @returns {void}
      */
-    options({ url, data, headers = {}, successHandler, errorHandler }: XHROptions): Promise<StringAnyMap> {
-        return this.getHeaders(headers).then((hdrs) =>
+    options({
+        id,
+        url,
+        data,
+        headers = {},
+        successHandler,
+        errorHandler
+    }: {
+        url: string,
+        data: StringAnyMap,
+        id?: string,
+        headers?: StringMap,
+        successHandler: Function,
+        errorHandler: Function,
+        progressHandler?: Function
+    }): Promise<StringAnyMap> {
+        return this.getHeaders(id, headers).then((hdrs) =>
             fetch(url, {
                 method: 'OPTIONS',
                 headers: hdrs,
@@ -301,6 +364,7 @@ class Xhr {
     /**
      * HTTP POST or PUT a URL with File data. Uses native XHR for progress event.
      *
+     * @param {string} id - Box item id
      * @param {string} url - The URL to post to
      * @param {Object} [data] - File data and attributes
      * @param {Object} [headers] - Key-value map of headers
@@ -311,6 +375,7 @@ class Xhr {
      * @return {void}
      */
     uploadFile({
+        id,
         url,
         data,
         headers = {},
@@ -320,7 +385,8 @@ class Xhr {
         progressHandler
     }: {
         url: string,
-        data: ?Object,
+        id?: string,
+        data?: ?Blob | ?StringAnyMap,
         headers?: StringMap,
         method?: Method,
         successHandler: Function,
@@ -328,16 +394,15 @@ class Xhr {
         progressHandler: Function
     }): Promise<any> {
         let formData;
-        if (data && data.attributes) {
+        if (data && !(data instanceof Blob) && data.attributes) {
             formData = new FormData();
             Object.keys(data).forEach((key) => {
-                if (data) {
-                    formData.append(key, data[key]);
-                }
+                // $FlowFixMe Already checked above
+                formData.append(key, data[key]);
             });
         }
 
-        return this.getHeaders(headers)
+        return this.getHeaders(id, headers)
             .then((hdrs) => {
                 // Remove Accept/Content-Type added by getHeaders()
                 delete hdrs.Accept;

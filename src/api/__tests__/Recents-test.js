@@ -2,7 +2,7 @@
 
 import Recents from '../Recents';
 import Cache from '../../util/Cache';
-import { FIELDS_TO_FETCH } from '../../constants';
+import { FIELDS_TO_FETCH, X_REP_HINTS } from '../../constants';
 
 let recents;
 let cache;
@@ -79,6 +79,10 @@ describe('api/Recents', () => {
     });
 
     describe('recentsRequest()', () => {
+        beforeEach(() => {
+            recents.id = 'id';
+        });
+
         it('should not do anything if destroyed', () => {
             recents.isDestroyed = sandbox.mock().returns(true);
             recents.xhr = null;
@@ -90,7 +94,11 @@ describe('api/Recents', () => {
             recents.xhr = {
                 get: sandbox
                     .mock()
-                    .withArgs('https://api.box.com/2.0/recent_items', { fields: FIELDS_TO_FETCH })
+                    .withArgs({
+                        url: 'https://api.box.com/2.0/recent_items',
+                        params: { fields: FIELDS_TO_FETCH },
+                        headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    })
                     .returns(Promise.resolve('success'))
             };
             return recents.recentsRequest();
@@ -101,7 +109,11 @@ describe('api/Recents', () => {
             recents.xhr = {
                 get: sandbox
                     .mock()
-                    .withArgs('https://api.box.com/2.0/recent_items', { fields: FIELDS_TO_FETCH })
+                    .withArgs({
+                        url: 'https://api.box.com/2.0/recent_items',
+                        params: { fields: FIELDS_TO_FETCH },
+                        headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    })
                     .returns(Promise.reject('error'))
             };
             return recents.recentsRequest();

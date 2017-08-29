@@ -96,6 +96,13 @@ export type BoxItemPermission = {
     can_set_share_access?: boolean
 };
 
+export type User = {
+    id: string,
+    login: string,
+    name: string,
+    type: 'user'
+};
+
 export type BoxItem = {
     id?: string,
     name?: string,
@@ -103,17 +110,22 @@ export type BoxItem = {
     type?: ItemType,
     parent?: BoxItem,
     extension?: string,
+    description?: string,
     permissions?: BoxItemPermission,
     item_collection?: BoxItemCollection,
     path_collection?: BoxPathCollection,
     interacted_at?: string,
     modified_at?: string,
+    created_at?: string,
     shared_link?: SharedLink,
     allowed_shared_link_access_levels?: Access[],
     has_collaborations?: boolean,
     is_externally_owned?: boolean,
     download_url?: string,
     url?: string,
+    owned_by?: User,
+    modified_by?: User,
+    created_by?: User,
     selected?: boolean
 };
 
@@ -131,17 +143,22 @@ export type FlattenedBoxItem = {
     type?: ItemType,
     parent?: BoxItem,
     extension?: string,
+    description?: string,
     permissions?: BoxItemPermission,
     item_collection?: FlattenedBoxItemCollection,
     path_collection?: BoxPathCollection,
     interacted_at?: string,
     modified_at?: string,
+    created_at?: string,
     shared_link?: SharedLink,
     allowed_shared_link_access_levels?: Access[],
     has_collaborations?: boolean,
     is_externally_owned?: boolean,
     download_url?: string,
     url?: string,
+    owned_by?: User,
+    modified_by?: User,
+    created_by?: User,
     selected?: boolean
 };
 
@@ -222,3 +239,32 @@ export type RecentCollection = {
     order: Order,
     entries: Recent[]
 };
+
+export type CardType = 'keyword' | 'transcript' | 'timeline';
+export type CardEntryType = 'text' | 'image';
+
+export type TimeSlice = {
+    id: string,
+    start: number,
+    end?: number
+};
+
+export type CardEntry = {
+    id: string,
+    type: CardEntryType,
+    text?: string,
+    url?: string,
+    appears: TimeSlice[]
+};
+
+export type Card = {
+    id: string,
+    type: 'card',
+    card_type: CardType,
+    item: BoxItem,
+    title: string,
+    duration?: number,
+    entries: CardEntry[]
+};
+
+export type Cards = Card[];

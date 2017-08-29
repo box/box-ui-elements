@@ -12,7 +12,7 @@ import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './IconCell.scss';
 
-function getIcon(dimension: number, rowData: BoxItem) {
+export function getIcon(dimension: number, rowData: BoxItem) {
     const { type, extension, has_collaborations, is_externally_owned }: BoxItem = rowData;
     switch (type) {
         case TYPE_FOLDER:

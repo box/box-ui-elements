@@ -1,0 +1,14 @@
+@import '../variables';
+
+.buik-transcript {
+    color: $sevens;
+
+    // sass-lint:disable class-name-format
+    .ReactVirtualized__Table__Grid {
+        outline: none;
+    }
+}
+
+.buik-transcript-column {
+    padding: 0 10px 15px 0;
+}

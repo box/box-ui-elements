@@ -1,0 +1,35 @@
+@import '../variables';
+
+.bcpr-btns {
+    display: flex;
+
+    .buik-btn.buik-btn-plain.bcpr-btn {
+        padding: 0 15px 0 5px;
+
+        &:hover,
+        &:active {
+            background: none;
+        }
+    }
+}
+
+.bcpr-header {
+    align-items: center;
+    background-color: $haze;
+    border-bottom: 1px solid $see-see;
+    display: flex;
+    flex: 0 0 45px;
+    font-size: 13px;
+    justify-content: space-between;
+    padding: 0 0 0 15px;
+}
+
+.bcpr-name {
+    align-items: center;
+    display: flex;
+
+    span {
+        font-weight: 600;
+        padding-left: 5px;
+    }
+}

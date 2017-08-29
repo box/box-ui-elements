@@ -11,8 +11,15 @@ import WebLinkAPI from '../api/WebLink';
 import Cache from '../util/Cache';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
-import { FIELDS_TO_FETCH, DEFAULT_ROOT, CACHE_PREFIX_RECENTS, SORT_DESC, FIELD_INTERACTED_AT } from '../constants';
 import getBadItemError from '../util/error';
+import {
+    FIELDS_TO_FETCH,
+    DEFAULT_ROOT,
+    CACHE_PREFIX_RECENTS,
+    SORT_DESC,
+    FIELD_INTERACTED_AT,
+    X_REP_HINTS
+} from '../constants';
 import type {
     Crumb,
     BoxItem,
@@ -176,10 +183,13 @@ class Recents extends Base {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
-
         return this.xhr
-            .get(this.getUrl(), {
-                fields: FIELDS_TO_FETCH
+            .get({
+                url: this.getUrl(),
+                params: {
+                    fields: FIELDS_TO_FETCH
+                },
+                headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
             .then(this.recentsSuccessHandler)
             .catch(this.recentsErrorHandler);

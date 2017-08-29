@@ -11,7 +11,7 @@ import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import Cache from '../util/Cache';
-import { FIELDS_TO_FETCH, CACHE_PREFIX_SEARCH } from '../constants';
+import { FIELDS_TO_FETCH, CACHE_PREFIX_SEARCH, X_REP_HINTS } from '../constants';
 import getBadItemError from '../util/error';
 import type {
     BoxItemCollection,
@@ -214,12 +214,16 @@ class Search extends Base {
         }
 
         return this.xhr
-            .get(this.getUrl(), {
-                offset: this.offset,
-                query: this.query,
-                ancestor_folder_ids: this.id,
-                limit: LIMIT_ITEM_FETCH,
-                fields: FIELDS_TO_FETCH
+            .get({
+                url: this.getUrl(),
+                params: {
+                    offset: this.offset,
+                    query: this.query,
+                    ancestor_folder_ids: this.id,
+                    limit: LIMIT_ITEM_FETCH,
+                    fields: FIELDS_TO_FETCH
+                },
+                headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
             .then(this.searchSuccessHandler)
             .catch(this.searchErrorHandler);

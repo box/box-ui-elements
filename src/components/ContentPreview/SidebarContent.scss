@@ -1,0 +1,25 @@
+@import '../variables';
+
+.bcpr-sidebar-content {
+    flex: 1;
+    position: relative; // So that the scroll wrapper is absolute
+
+    .bcpr-sidebar-title {
+        border-bottom: 1px solid $off-white;
+        line-height: 30px;
+        margin: 16px;
+    }
+
+    .bcpr-sidebar-scroll-content-wrapper {
+        bottom: 0;
+        left: 0;
+        overflow: auto;
+        position: absolute; // Prevents non-sidebar parts from re-painting
+        right: 0;
+        top: 61px;
+
+        .bcpr-sidebar-scroll-content {
+            width: 330px;
+        }
+    }
+}

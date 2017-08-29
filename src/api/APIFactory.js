@@ -12,6 +12,7 @@ import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import RecentsAPI from './Recents';
+import MetadataAPI from './Metadata';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
@@ -57,6 +58,11 @@ class APIFactory {
     recentsAPI: RecentsAPI;
 
     /**
+     * @property {MetadataAPI}
+     */
+    metadataAPI: MetadataAPI;
+
+    /**
      * [constructor]
      *
      * @param {Object} options
@@ -72,7 +78,7 @@ class APIFactory {
         this.options = Object.assign({}, options, {
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
-            cache: new Cache()
+            cache: options.cache || new Cache()
         });
     }
 
@@ -111,9 +117,22 @@ class APIFactory {
             this.recentsAPI.destroy();
             delete this.recentsAPI;
         }
+        if (this.metadataAPI) {
+            this.metadataAPI.destroy();
+            delete this.metadataAPI;
+        }
         if (destroyCache) {
             this.options.cache = new Cache();
         }
+    }
+
+    /**
+     * Gets the cache instance
+     *
+     * @return {Cache} cache instance
+     */
+    getCache(): ?Cache {
+        return this.options.cache;
     }
 
     /**
@@ -218,6 +237,17 @@ class APIFactory {
         this.destroy();
         this.recentsAPI = new RecentsAPI(this.options);
         return this.recentsAPI;
+    }
+
+    /**
+     * API for file meta data
+     *
+     * @return {MetadataAPI} MetadataAPI instance
+     */
+    getMetadataAPI(): MetadataAPI {
+        this.destroy();
+        this.metadataAPI = new MetadataAPI(this.options);
+        return this.metadataAPI;
     }
 }
 

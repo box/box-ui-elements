@@ -2,7 +2,7 @@
 
 import Folder from '../Folder';
 import Cache from '../../util/Cache';
-import { FIELDS_TO_FETCH } from '../../constants';
+import { FIELDS_TO_FETCH, X_REP_HINTS } from '../../constants';
 
 let folder;
 let cache;
@@ -137,10 +137,16 @@ describe('api/Folder', () => {
             folder.xhr = {
                 get: sandbox
                     .mock()
-                    .withArgs('https://api.box.com/2.0/folders/id', {
-                        offset: 0,
-                        limit: 1000,
-                        fields: FIELDS_TO_FETCH
+                    .withArgs({
+                        url: 'https://api.box.com/2.0/folders/id',
+                        params: {
+                            offset: 0,
+                            limit: 1000,
+                            fields: FIELDS_TO_FETCH
+                        },
+                        headers: {
+                            'X-Rep-Hints': X_REP_HINTS
+                        }
                     })
                     .returns(Promise.resolve('success'))
             };
@@ -152,10 +158,16 @@ describe('api/Folder', () => {
             folder.xhr = {
                 get: sandbox
                     .mock()
-                    .withArgs('https://api.box.com/2.0/folders/id', {
-                        offset: 0,
-                        limit: 1000,
-                        fields: FIELDS_TO_FETCH
+                    .withArgs({
+                        url: 'https://api.box.com/2.0/folders/id',
+                        params: {
+                            offset: 0,
+                            limit: 1000,
+                            fields: FIELDS_TO_FETCH
+                        },
+                        headers: {
+                            'X-Rep-Hints': X_REP_HINTS
+                        }
                     })
                     .returns(Promise.reject('error'))
             };
@@ -317,7 +329,7 @@ describe('api/Folder', () => {
             expect(folder.folderSuccessHandler.bind(folder, {})).to.throw(Error, /Bad box item/);
         });
 
-        it('should throw bad item error when item collection total count is missing', () => {
+        it('should throw bad item error when item collection entries is missing', () => {
             folder.finish = sandbox.mock().never();
             expect(folder.folderSuccessHandler.bind(folder, { item_collection: { total_count: 1 } })).to.throw(
                 Error,
@@ -325,7 +337,7 @@ describe('api/Folder', () => {
             );
         });
 
-        it('should throw bad item error when entries is missing', () => {
+        it('should throw bad item error when item collection total count is missing', () => {
             folder.finish = sandbox.mock().never();
             expect(folder.folderSuccessHandler.bind(folder, { item_collection: { entries: [] } })).to.throw(
                 Error,
@@ -534,10 +546,13 @@ describe('api/Folder', () => {
             folder.xhr = {
                 post: sandbox
                     .mock()
-                    .withArgs(`https://api.box.com/2.0/folders?fields=${FIELDS_TO_FETCH}`, {
-                        name: 'foo',
-                        parent: {
-                            id: 'id'
+                    .withArgs({
+                        url: `https://api.box.com/2.0/folders?fields=${FIELDS_TO_FETCH}`,
+                        data: {
+                            name: 'foo',
+                            parent: {
+                                id: 'id'
+                            }
                         }
                     })
                     .returns(Promise.resolve('success'))
@@ -550,10 +565,13 @@ describe('api/Folder', () => {
             folder.xhr = {
                 post: sandbox
                     .mock()
-                    .withArgs(`https://api.box.com/2.0/folders?fields=${FIELDS_TO_FETCH}`, {
-                        name: 'foo',
-                        parent: {
-                            id: 'id'
+                    .withArgs({
+                        url: `https://api.box.com/2.0/folders?fields=${FIELDS_TO_FETCH}`,
+                        data: {
+                            name: 'foo',
+                            parent: {
+                                id: 'id'
+                            }
                         }
                     })
                     .returns(Promise.reject('error'))
@@ -630,7 +648,7 @@ describe('api/Folder', () => {
             cache.set('key', {
                 id: 'id',
                 item_collection: {
-                    entries: []
+                    total_count: 2
                 }
             });
             expect(folder.createSuccessHandler.bind(folder, { id: 'foo' })).to.throw(Error, /Bad box item/);
@@ -644,7 +662,7 @@ describe('api/Folder', () => {
             cache.set('key', {
                 id: 'id',
                 item_collection: {
-                    total_count: 2
+                    entries: []
                 }
             });
             expect(folder.createSuccessHandler.bind(folder, { id: 'foo', item_collection: { entries: [] } })).to.throw(

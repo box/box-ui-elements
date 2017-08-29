@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import getDate from '../../util/date';
+import { getDate } from '../../util/date';
 
 export default (getLocalizedMessage: Function) => ({ cellData }: { cellData: string }) =>
     <span>

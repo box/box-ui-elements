@@ -1,0 +1,15 @@
+@import '../variables';
+
+.bcpr {
+    display: flex;
+    flex-direction: column;
+}
+
+.bcpr-body {
+    display: flex;
+    flex: 1;
+}
+
+.bcpr-content {
+    flex: 1;
+}

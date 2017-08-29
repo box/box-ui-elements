@@ -6,6 +6,7 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import noop from 'lodash.noop';
 import ShareAccessSelect from '../ShareAccessSelect';
 import { Button, PrimaryButton } from '../Button';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
@@ -66,7 +67,7 @@ const ShareDialog = ({
                     <span>
                         <input
                             type='text'
-                            readOnly
+                            onChange={noop}
                             ref={(input) => {
                                 textInput = input;
                             }}

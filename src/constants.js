@@ -4,6 +4,8 @@
  * @author Box
  */
 
+import { canPlayDash } from './util/browser';
+
 /* ----------------------- Size ---------------------------- */
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_LARGE: 'large' = 'large';
@@ -23,12 +25,18 @@ export const TYPE_FOLDER: 'folder' = 'folder';
 export const TYPE_FILE: 'file' = 'file';
 export const TYPE_WEBLINK: 'web_link' = 'web_link';
 
+/* -------------------- Typed Prefix-------------------------- */
+export const TYPED_ID_FOLDER_PREFIX = 'folder_';
+export const TYPED_ID_FILE_PREFIX = 'file_';
+export const TYPED_ID_WEBLINK_PREFIX = 'web_link_';
+
 /* ----------------- Cache Key Prefix ----------------------- */
-export const CACHE_PREFIX_FOLDER = 'folder_';
-export const CACHE_PREFIX_FILE = 'file_';
-export const CACHE_PREFIX_WEBLINK = 'web_link_';
+export const CACHE_PREFIX_FOLDER = TYPED_ID_FOLDER_PREFIX;
+export const CACHE_PREFIX_FILE = TYPED_ID_FILE_PREFIX;
+export const CACHE_PREFIX_WEBLINK = TYPED_ID_WEBLINK_PREFIX;
 export const CACHE_PREFIX_SEARCH = 'search_';
 export const CACHE_PREFIX_RECENTS = 'recents_';
+export const CACHE_PREFIX_METADATA = 'metadata_';
 
 /* ----------------------- Sorts ---------------------------- */
 export const SORT_ASC: 'ASC' = 'ASC';
@@ -54,6 +62,7 @@ export const FIELD_PERMISSIONS = 'permissions';
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_MODIFIED_AT: 'modified_at' = 'modified_at';
+export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
 export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
@@ -64,6 +73,15 @@ export const FIELD_ENTRIES = 'entries';
 export const FIELD_DOWNLOAD_URL = 'download_url';
 export const FIELD_ACCESS = 'access';
 export const FIELD_URL = 'url';
+export const FIELD_CREATED_BY = 'created_by';
+export const FIELD_MODIFIED_BY = 'modified_by';
+export const FIELD_OWNED_BY = 'owned_by';
+export const FIELD_DESCRIPTION = 'description';
+export const FIELD_REPRESENTATIONS = 'representations';
+export const FIELD_SHA1 = 'sha1';
+export const FIELD_WATERMARK_INFO = 'watermark_info';
+export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
+export const FIELD_FILE_VERSION = 'file_version';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -79,8 +97,9 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.2.1';
+export const DEFAULT_PREVIEW_VERSION = '1.9.1';
 export const DEFAULT_PREVIEW_LOCALE = 'en-US';
+export const DEFAULT_PREVIEW_STATIC_PATH = 'platform/preview';
 export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
 export const DEFAULT_HOSTNAME_STATIC = 'https://cdn01.boxcdn.net';
 export const DEFAULT_HOSTNAME_UPLOAD = 'https://upload.box.com';
@@ -98,6 +117,7 @@ export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
 export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
 export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
 export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
+export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
 
 /* ---------------------- Statuses  -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
@@ -127,13 +147,32 @@ export const FIELDS_TO_FETCH = [
     FIELD_ITEM_COLLECTION,
     FIELD_PATH_COLLECTION,
     FIELD_MODIFIED_AT,
+    FIELD_CREATED_AT,
     FIELD_SHARED_LINK,
     FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
     FIELD_HAS_COLLABORATIONS,
-    FIELD_IS_EXTERNALLY_OWNED
+    FIELD_IS_EXTERNALLY_OWNED,
+    FIELD_CREATED_BY,
+    FIELD_MODIFIED_BY,
+    FIELD_OWNED_BY,
+    FIELD_DESCRIPTION,
+    FIELD_REPRESENTATIONS,
+    FIELD_SHA1,
+    FIELD_WATERMARK_INFO,
+    FIELD_AUTHENTICATED_DOWNLOAD_URL,
+    FIELD_FILE_VERSION
 ].join(',');
 
 /* ------------------ Error Codes  ---------------------- */
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
+
+/* ------------- Representation Hints  ------------------- */
+const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';
+const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';
+const X_REP_HINT_IMAGE = '[jpg?dimensions=2048x2048,png?dimensions=2048x2048]';
+const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
+const X_REP_HINT_VIDEO_MP4 = '[mp4]';
+const videoHint = canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
+export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;

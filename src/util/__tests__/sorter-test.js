@@ -6,7 +6,7 @@ let cache;
 let item;
 const sandbox = sinon.sandbox.create();
 
-describe('Sorter', () => {
+describe('util/sorter', () => {
     beforeEach(() => {
         item = {
             item_collection: {}

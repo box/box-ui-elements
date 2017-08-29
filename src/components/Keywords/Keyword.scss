@@ -1,0 +1,42 @@
+@import '../variables';
+
+.buik-file-keywords .buik-timelines {
+    margin: 20px 0 0;
+}
+
+.buik-file-keyword {
+    display: inline-block;
+    margin: 0 3px 8px;
+
+    .buik-btn.buik-btn-plain {
+        border: 1px solid $see-see;
+        color: $sevens;
+        font-size: 11px;
+        padding: 2px 6px;
+
+        &.buik-file-keyword-word {
+            border-radius: 8px;
+            // border-radius: 8px 0 0 8px;
+            // border-right: 0 none;
+        }
+
+        &.buik-file-keyword-delete {
+            border-left: 0 none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        &:focus,
+        &:active,
+        &:hover {
+            background-color: $blue;
+            border-color: $blue;
+            color: $white;
+            text-decoration: none;
+
+            svg path {
+                fill: $white;
+                stroke: $white;
+            }
+        }
+    }
+}

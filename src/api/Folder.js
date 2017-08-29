@@ -11,7 +11,7 @@ import sort from '../util/sorter';
 import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
 import Cache from '../util/Cache';
-import { FIELDS_TO_FETCH, CACHE_PREFIX_FOLDER } from '../constants';
+import { FIELDS_TO_FETCH, CACHE_PREFIX_FOLDER, X_REP_HINTS } from '../constants';
 import getBadItemError from '../util/error';
 import type {
     BoxItem,
@@ -212,10 +212,14 @@ class Folder extends Item {
         }
 
         return this.xhr
-            .get(this.getUrl(this.id), {
-                offset: this.offset,
-                limit: LIMIT_ITEM_FETCH,
-                fields: FIELDS_TO_FETCH
+            .get({
+                url: this.getUrl(this.id),
+                params: {
+                    offset: this.offset,
+                    limit: LIMIT_ITEM_FETCH,
+                    fields: FIELDS_TO_FETCH
+                },
+                headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
             .then(this.folderSuccessHandler)
             .catch(this.folderErrorHandler);
@@ -314,10 +318,13 @@ class Folder extends Item {
 
         const url = `${this.getUrl()}?fields=${FIELDS_TO_FETCH}`;
         return this.xhr
-            .post(url, {
-                name,
-                parent: {
-                    id: this.id
+            .post({
+                url,
+                data: {
+                    name,
+                    parent: {
+                        id: this.id
+                    }
                 }
             })
             .then(this.createSuccessHandler)
