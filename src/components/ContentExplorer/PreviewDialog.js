@@ -59,6 +59,7 @@ const PreviewDialog = ({
             onRequestClose={onCancel}
         >
             <ContentPreview
+                skipServerUpdate
                 cache={cache}
                 file={item}
                 token={token}
