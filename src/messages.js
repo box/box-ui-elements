@@ -110,8 +110,23 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
     },
     'buik.item.modified': {
         id: 'buik.item.modified',
-        description: 'Shown before folder modification date and label for modified column.',
+        description: 'Shown before folder modification date and label for modified column and preview sidebar.',
         defaultMessage: 'Modified'
+    },
+    'buik.item.created': {
+        id: 'buik.item.created',
+        description: 'Shown in the preview sidebar.',
+        defaultMessage: 'Created'
+    },
+    'buik.item.owner': {
+        id: 'buik.item.owner',
+        description: 'Shown in the preview sidebar.',
+        defaultMessage: 'Owner'
+    },
+    'buik.item.uploader': {
+        id: 'buik.item.uploader',
+        description: 'Shown in the preview sidebar.',
+        defaultMessage: 'Uploader'
     },
     'buik.item.interacted': {
         id: 'buik.item.interacted',
@@ -373,6 +388,16 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         description: 'Label for preview dialog',
         defaultMessage: 'Preview'
     },
+    'buik.modal.preview.dialog.button.sidebar.show.title': {
+        id: 'buik.modal.preview.dialog.button.sidebar.show.title',
+        description: 'Aria title for preview dialog button to show sidebar',
+        defaultMessage: 'Show sidebar'
+    },
+    'buik.modal.preview.dialog.button.sidebar.hide.title': {
+        id: 'buik.modal.preview.dialog.button.sidebar.hide.title',
+        description: 'Aria title for preview dialog button to hide sidebar',
+        defaultMessage: 'Hide sidebar'
+    },
     'buik.modal.upload.dialog.label': {
         id: 'buik.modal.upload.dialog.label',
         description: 'Label for upload dialog',
@@ -402,6 +427,26 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         id: 'buik.modal.dialog.share.button.close',
         description: 'Close button label',
         defaultMessage: 'Close'
+    },
+    'buik.preview.sidebar.details.description': {
+        id: 'buik.preview.sidebar.details.description',
+        description: 'Label for the description field in the preview sidebar',
+        defaultMessage: 'Description'
+    },
+    'buik.preview.sidebar.details.description.placeholder': {
+        id: 'buik.preview.sidebar.details.description.placeholder',
+        description: 'Placeholder for file description in preview sidebar',
+        defaultMessage: 'Enter a description'
+    },
+    'buik.preview.sidebar.details.title': {
+        id: 'buik.preview.sidebar.details.title',
+        description: 'Title for the details sidebar',
+        defaultMessage: 'Details'
+    },
+    'buik.preview.sidebar.details.properties': {
+        id: 'buik.preview.sidebar.details.properties',
+        description: 'Label for file properties section in the preview sidebar',
+        defaultMessage: 'File Properties'
     }
 });
 

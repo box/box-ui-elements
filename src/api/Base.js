@@ -94,7 +94,6 @@ class Base {
     /**
      * Gets the cache instance
      *
-     * @param {string} key map key
      * @return {Cache} cache instance
      */
     getCache(): Cache {

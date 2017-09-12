@@ -12,7 +12,7 @@ const UPLOAD_RETRY_INTERVAL_MS = 1000;
 
 class Chunk extends Base {
     cancelled: boolean;
-    chunk: ?Object;
+    chunk: ?Blob;
     data: Object = {};
     progress: number = 0;
     retry: number;

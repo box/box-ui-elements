@@ -6,16 +6,24 @@
 
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash.uniqueid';
+import noop from 'lodash.noop';
 import Measure from 'react-measure';
+import Sidebar from './Sidebar';
+import Header from './Header';
+import API from '../../api';
+import Cache from '../../util/Cache';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_STATIC,
     DEFAULT_PREVIEW_VERSION,
-    DEFAULT_PREVIEW_LOCALE
+    DEFAULT_PREVIEW_LOCALE,
+    DEFAULT_PREVIEW_STATIC_PATH,
+    CLIENT_NAME_CONTENT_PREVIEW
 } from '../../constants';
-import type { Token } from '../../flowTypes';
+import type { Token, BoxItem, Cards } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
+import './ContentPreview.scss';
 
 type DefaultProps = {|
     apiHost: string,
@@ -23,38 +31,61 @@ type DefaultProps = {|
     staticPath: string,
     locale: string,
     version: string,
-    className: string
+    hasSidebar: boolean,
+    hasHeader: boolean,
+    className: string,
+    onLoad: Function,
+    onNavigate: Function
 |};
 
 type Props = {
-    fileId: string,
+    file?: BoxItem,
+    fileId?: string,
     locale: string,
     version: string,
+    hasSidebar: boolean,
+    hasHeader: boolean,
     apiHost: string,
     staticHost: string,
     staticPath: string,
     token: Token,
     className: string,
-    onLoad?: Function,
+    getLocalizedMessage: Function,
+    onLoad: Function,
+    onNavigate: Function,
+    onClose?: Function,
+    skipServerUpdate?: boolean,
+    cache?: Cache,
     collection?: string[],
-    header?: 'none' | 'light' | 'dark',
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string
 };
 
-class ContentPreview extends PureComponent<DefaultProps, Props, void> {
+type State = {
+    file?: BoxItem,
+    metadata?: Cards,
+    isSidebarVisible: boolean
+};
+
+class ContentPreview extends PureComponent<DefaultProps, Props, State> {
     id: string;
     props: Props;
+    state: State;
     preview: any;
+    api: API;
 
     static defaultProps: DefaultProps = {
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
         staticHost: DEFAULT_HOSTNAME_STATIC,
-        staticPath: 'platform/preview',
+        staticPath: DEFAULT_PREVIEW_STATIC_PATH,
         locale: DEFAULT_PREVIEW_LOCALE,
-        version: DEFAULT_PREVIEW_VERSION
+        version: DEFAULT_PREVIEW_VERSION,
+        hasSidebar: false,
+        hasHeader: false,
+        onLoad: noop,
+        onNavigate: noop
     };
 
     /**
@@ -65,7 +96,18 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
      */
     constructor(props: Props) {
         super(props);
+        const { file, cache, token, hasSidebar, sharedLink, sharedLinkPassword, apiHost } = props;
+
+        this.state = { file, isSidebarVisible: hasSidebar };
         this.id = uniqueid('bcpr_');
+        this.api = new API({
+            cache,
+            token,
+            sharedLink,
+            sharedLinkPassword,
+            apiHost,
+            clientName: CLIENT_NAME_CONTENT_PREVIEW
+        });
     }
 
     /**
@@ -83,13 +125,30 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
     }
 
     /**
-     * Returns true if component should update
+     * Called after shell mounts
      *
      * @private
      * @return {void}
      */
-    shouldComponentUpdate(nextProps: Props): boolean {
-        return !this.preview || nextProps.fileId !== this.props.fileId || nextProps.token !== this.props.token;
+    componentWillReceiveProps(nextProps: Props): void {
+        const { fileId, token }: Props = this.props;
+        const { file }: State = this.state;
+
+        const hasTokenChanged = nextProps.token !== token;
+        const hasFileIdChanged = nextProps.fileId !== fileId;
+        const hasFileChanged = nextProps.file !== file;
+
+        if (hasTokenChanged || hasFileChanged || hasFileIdChanged) {
+            if (hasFileChanged) {
+                this.setState({ file: nextProps.file });
+            } else {
+                this.setState({ file: undefined });
+            }
+            if (this.preview) {
+                this.preview.destroy();
+                this.preview = undefined;
+            }
+        }
     }
 
     /**
@@ -119,7 +178,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
      * @return {void}
      */
     loadAssetsAndPreview(): void {
-        if (!this.isPreviewLoaded()) {
+        if (!this.isPreviewLibraryLoaded()) {
             this.loadStylesheet();
             this.loadScript();
         }
@@ -140,12 +199,12 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
     }
 
     /**
-     * Determines if preview is loaded
+     * Determines if preview assets are loaded
      *
      * @private
      * @return {boolean} true if preview is loaded
      */
-    isPreviewLoaded(): boolean {
+    isPreviewLibraryLoaded(): boolean {
         return !!global.Box && !!global.Box.Preview;
     }
 
@@ -194,31 +253,58 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
      * @return {void}
      */
     loadPreview = (): void => {
-        if (!this.isPreviewLoaded()) {
+        if (!this.isPreviewLibraryLoaded() || this.preview) {
             return;
-        }
-
-        if (this.preview) {
-            this.preview.destroy();
         }
 
         const { Preview } = global.Box;
-        const { fileId, token, onLoad, ...rest }: Props = this.props;
+        const { fileId, token, onLoad, onNavigate, ...rest }: Props = this.props;
+        const { file }: State = this.state;
+        const fileOrFileId = file ? Object.assign({}, file) : fileId;
 
-        if (!fileId || !token) {
-            return;
+        if ((!file && !fileId) || !token) {
+            throw new Error('Missing file or fileId and/or token for Preview!');
         }
 
         this.preview = new Preview();
-
-        if (onLoad) {
-            this.preview.addListener('load', onLoad);
-        }
-
-        this.preview.show(fileId, token, {
-            container: `#${this.id}`,
+        this.preview.addListener('navigate', (id: string) => {
+            this.updateHeaderAndSidebar(id);
+            onNavigate(id);
+        });
+        this.preview.addListener('load', onLoad);
+        this.preview.show(fileOrFileId, token, {
+            container: `#${this.id} .bcpr-content`,
+            header: 'none',
             ...rest
         });
+        this.updateHeaderAndSidebar(file ? file.id : fileId);
+    };
+
+    /**
+     * Updates header and sidebar
+     *
+     * @private
+     * @param {String} id - file id
+     * @return {void}
+     */
+    updateHeaderAndSidebar(id?: string): void {
+        if (!id) {
+            throw new Error('Invalid id for Preview!');
+        }
+        this.fetchFile(id);
+        this.fetchMetadata(id);
+    }
+
+    /**
+     * Handles showing or hiding of hasSidebar
+     *
+     * @private
+     * @return {void}
+     */
+    toggleSidebar = (): void => {
+        this.setState((prevState) => ({
+            isSidebarVisible: !prevState.isSidebarVisible
+        }));
     };
 
     /**
@@ -233,6 +319,65 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
     };
 
     /**
+     * Network error callback
+     *
+     * @private
+     * @param {Error} error error object
+     * @return {void}
+     */
+    errorCallback = (error: Error): void => {
+        /* eslint-disable no-console */
+        console.error(error);
+        /* eslint-enable no-console */
+    };
+
+    /**
+     * File fetch success callback
+     *
+     * @private
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchFileSuccessCallback = (file: BoxItem): void => {
+        this.setState({ file });
+    };
+
+    /**
+     * Metadata fetch success callback
+     *
+     * @private
+     * @param {Object} metadata - file metadata
+     * @return {void}
+     */
+    fetchMetadataSuccessCallback = (metadata: Cards): void => {
+        this.setState({ metadata });
+    };
+
+    /**
+     * Fetches a file
+     *
+     * @private
+     * @param {string} id file id
+     * @param {Boolean|void} [forceFetch] To void cache
+     * @return {void}
+     */
+    fetchFile(id: string, forceFetch: boolean = false): void {
+        this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch);
+    }
+
+    /**
+     * Fetches file metadata
+     *
+     * @private
+     * @param {string} id file id
+     * @param {Boolean|void} [forceFetch] To void cache
+     * @return {void}
+     */
+    fetchMetadata(id: string, forceFetch: boolean = false): void {
+        this.api.getMetadataAPI().metadata(id, this.fetchMetadataSuccessCallback, this.errorCallback, forceFetch);
+    }
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -240,12 +385,27 @@ class ContentPreview extends PureComponent<DefaultProps, Props, void> {
      * @return {Element}
      */
     render() {
-        const { className } = this.props;
+        const { className, hasSidebar, hasHeader, onClose, getLocalizedMessage }: Props = this.props;
+        const { file, metadata, isSidebarVisible }: State = this.state;
         return (
-            <Measure bounds onResize={this.onResize}>
-                {({ measureRef }) =>
-                    <div id={this.id} ref={measureRef} className={`buik buik-app-element ${className}`} />}
-            </Measure>
+            <div id={this.id} className={`buik bcpr ${className}`}>
+                {hasHeader &&
+                    <Header
+                        file={file}
+                        isSidebarVisible={isSidebarVisible}
+                        hasSidebar={hasSidebar}
+                        toggleSidebar={this.toggleSidebar}
+                        onClose={onClose}
+                        getLocalizedMessage={getLocalizedMessage}
+                    />}
+                <div className='bcpr-body'>
+                    <Measure bounds onResize={this.onResize}>
+                        {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
+                    </Measure>
+                    {isSidebarVisible &&
+                        <Sidebar file={file} metadata={metadata} getLocalizedMessage={getLocalizedMessage} />}
+                </div>
+            </div>
         );
     }
 }

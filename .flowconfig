@@ -21,4 +21,5 @@ module.name_mapper.extension='css' -> '<PROJECT_ROOT>/flow/SCSSFlowStub.js.flow'
 module.name_mapper='i18n-locale-data' -> '<PROJECT_ROOT>/flow/WebpackI18N.js.flow'
 module.name_mapper='react-virtualized/dist/es/Table' -> '<PROJECT_ROOT>/flow/ReactVirtualizedStub.js.flow'
 module.name_mapper='react-virtualized/dist/es/AutoSizer' -> '<PROJECT_ROOT>/flow/ReactVirtualizedStub.js.flow'
+module.name_mapper='react-virtualized/dist/es/CellMeasurer' -> '<PROJECT_ROOT>/flow/ReactVirtualizedStub.js.flow'
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe

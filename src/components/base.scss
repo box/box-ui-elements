@@ -138,7 +138,8 @@
     }
 
     input[type="text"],
-    input[type="search"] {
+    input[type="search"],
+    textarea {
         appearance: textfield;
         border: 1px solid $grey;
         border-radius: 3px;
@@ -189,6 +190,27 @@
     label {
         div {
             padding: 10px 0;
+        }
+    }
+
+    dl {
+        margin: 0;
+        padding: 0;
+
+        dt {
+            color: $sevens;
+            font-size: 13px;
+            line-height: 16px;
+            padding-bottom: 3px;
+        }
+
+        dd {
+            line-height: 16px;
+            margin: 0;
+
+            &:not(:last-child) {
+                margin: 0 0 20px;
+            }
         }
     }
 }

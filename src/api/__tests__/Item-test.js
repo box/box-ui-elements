@@ -45,10 +45,12 @@ describe('api/Item', () => {
             item.errorCallback = sandbox.mock().never();
             item.errorHandler('foo');
         });
+
         it('should not do anything if no response', () => {
             item.errorCallback = sandbox.mock().never();
             item.errorHandler('foo');
         });
+
         it('should call error callback', () => {
             const json = () => {
                 return {
@@ -56,6 +58,11 @@ describe('api/Item', () => {
                 };
             };
             item.errorHandler({ response: { json } });
+        });
+
+        it('should throw error when getting error event', () => {
+            item.errorCallback = sandbox.mock();
+            expect(item.errorHandler.bind(item, new Error())).to.throw(Error);
         });
     });
 
@@ -125,52 +132,117 @@ describe('api/Item', () => {
     });
 
     describe('rename()', () => {
+        beforeEach(() => {
+            file = {
+                id: 'id',
+                permissions: {
+                    can_rename: true
+                }
+            };
+        });
+
         it('should not do anything if destroyed', () => {
             item.isDestroyed = sandbox.mock().returns(true);
             item.xhr = null;
             return item.rename().should.be.rejected;
         });
+
+        it('should not do anything if id is missing', () => {
+            delete file.id;
+            item.xhr = null;
+            return item.rename(file, 'name', 'success', sandbox.mock()).should.be.rejected;
+        });
+
+        it('should not do anything if permissions is missing', () => {
+            delete file.permissions;
+            item.xhr = null;
+            return item.rename(file, 'name', 'success', sandbox.mock()).should.be.rejected;
+        });
+
+        it('should not do anything if can rename is false', () => {
+            delete file.permissions.can_rename;
+            item.xhr = null;
+            return item.rename(file, 'name', 'success', sandbox.mock()).should.be.rejected;
+        });
+
         it('should make xhr to rename item and call success callback', () => {
             item.renameSuccessHandler = sandbox.mock().withArgs('success');
             item.errorHandler = sandbox.mock().never();
             item.getUrl = sandbox.mock().withArgs('id').returns('url');
             item.xhr = {
-                put: sandbox.mock().withArgs('url', { name: 'name' }).returns(Promise.resolve('success'))
+                put: sandbox.mock().withArgs({ url: 'url', data: { name: 'name' } }).returns(Promise.resolve('success'))
             };
-            return item.rename('id', 'name', 'success', 'error').then(() => {
+            return item.rename(file, 'name', 'success', 'error').then(() => {
                 expect(item.successCallback).to.equal('success');
                 expect(item.errorCallback).to.equal('error');
                 expect(item.id).to.equal('id');
             });
         });
+
         it('should make xhr to rename item and call error callback', () => {
             item.renameSuccessHandler = sandbox.mock().never();
             item.errorHandler = sandbox.mock().withArgs('error');
             item.getUrl = sandbox.mock().withArgs('id').returns('url');
             item.xhr = {
-                put: sandbox.mock().withArgs('url', { name: 'name' }).returns(Promise.reject('error'))
+                put: sandbox.mock().withArgs({ url: 'url', data: { name: 'name' } }).returns(Promise.reject('error'))
             };
-            return item.rename('id', 'name', 'success', 'error').then(() => {
+            return item.rename(file, 'name', 'success', 'error').then(() => {
                 expect(item.successCallback).to.equal('success');
                 expect(item.errorCallback).to.equal('error');
                 expect(item.id).to.equal('id');
             });
         });
+
         it('should default to noop error callback', () => {
             item.xhr = {
                 put: sandbox.mock().returns(Promise.resolve('success'))
             };
-            item.rename('id', 'name', 'success');
+            item.rename(file, 'name', 'success');
             expect(item.errorCallback).to.equal(noop);
         });
     });
 
     describe('share()', () => {
+        beforeEach(() => {
+            file = {
+                id: 'id',
+                permissions: {
+                    can_share: true,
+                    can_set_share_access: true
+                }
+            };
+        });
+
         it('should not do anything if destroyed', () => {
             item.isDestroyed = sandbox.mock().returns(true);
             item.xhr = null;
             return item.share().should.be.rejected;
         });
+
+        it('should not do anything if id is missing', () => {
+            delete file.id;
+            item.xhr = null;
+            return item.share(file, 'access', 'success', sandbox.mock()).should.be.rejected;
+        });
+
+        it('should not do anything if permissions is missing', () => {
+            delete file.permissions;
+            item.xhr = null;
+            return item.share(file, 'access', 'success', sandbox.mock()).should.be.rejected;
+        });
+
+        it('should not do anything if can share is false', () => {
+            delete file.permissions.can_share;
+            item.xhr = null;
+            return item.share(file, 'access', 'success', sandbox.mock()).should.be.rejected;
+        });
+
+        it('should not do anything if can set share access is false', () => {
+            delete file.permissions.can_set_share_access;
+            item.xhr = null;
+            return item.share(file, 'access', 'success', sandbox.mock()).should.be.rejected;
+        });
+
         it('should make xhr to share item and call success callback with access', () => {
             item.shareSuccessHandler = sandbox.mock().withArgs('success');
             item.errorHandler = sandbox.mock().never();
@@ -178,28 +250,33 @@ describe('api/Item', () => {
             item.xhr = {
                 put: sandbox
                     .mock()
-                    .withArgs('url', { shared_link: { access: 'access' } })
+                    .withArgs({ url: 'url', data: { shared_link: { access: 'access' } } })
                     .returns(Promise.resolve('success'))
             };
-            return item.share('id', 'access', 'success', 'error').then(() => {
+            return item.share(file, 'access', 'success', 'error').then(() => {
                 expect(item.successCallback).to.equal('success');
                 expect(item.errorCallback).to.equal('error');
                 expect(item.id).to.equal('id');
             });
         });
+
         it('should make xhr to share item and call success callback with access null', () => {
             item.shareSuccessHandler = sandbox.mock().withArgs('success');
             item.errorHandler = sandbox.mock().never();
             item.getUrl = sandbox.mock().withArgs('id').returns('url');
             item.xhr = {
-                put: sandbox.mock().withArgs('url', { shared_link: null }).returns(Promise.resolve('success'))
+                put: sandbox
+                    .mock()
+                    .withArgs({ url: 'url', data: { shared_link: null } })
+                    .returns(Promise.resolve('success'))
             };
-            return item.share('id', 'none', 'success', 'error').then(() => {
+            return item.share(file, 'none', 'success', 'error').then(() => {
                 expect(item.successCallback).to.equal('success');
                 expect(item.errorCallback).to.equal('error');
                 expect(item.id).to.equal('id');
             });
         });
+
         it('should make xhr to share item and call error callback', () => {
             item.shareSuccessHandler = sandbox.mock().never();
             item.errorHandler = sandbox.mock().withArgs('error');
@@ -207,20 +284,21 @@ describe('api/Item', () => {
             item.xhr = {
                 put: sandbox
                     .mock()
-                    .withArgs('url', { shared_link: { access: 'access' } })
+                    .withArgs({ url: 'url', data: { shared_link: { access: 'access' } } })
                     .returns(Promise.reject('error'))
             };
-            return item.share('id', 'access', 'success', 'error').then(() => {
+            return item.share(file, 'access', 'success', 'error').then(() => {
                 expect(item.successCallback).to.equal('success');
                 expect(item.errorCallback).to.equal('error');
                 expect(item.id).to.equal('id');
             });
         });
+
         it('should default to noop error callback', () => {
             item.xhr = {
                 put: sandbox.mock().returns(Promise.resolve('success'))
             };
-            item.share('id', 'name', 'success');
+            item.share(file, 'access', 'success');
             expect(item.errorCallback).to.equal(noop);
         });
     });
@@ -286,7 +364,7 @@ describe('api/Item', () => {
             item.errorHandler = sandbox.mock().never();
             item.getUrl = sandbox.mock().withArgs('id').returns('url');
             item.xhr = {
-                delete: sandbox.mock().withArgs('url').returns(Promise.resolve('success'))
+                delete: sandbox.mock().withArgs({ url: 'url' }).returns(Promise.resolve('success'))
             };
             return item.delete(file, 'success', 'error').then(() => {
                 expect(item.successCallback).to.equal('success');
@@ -302,7 +380,7 @@ describe('api/Item', () => {
             item.errorHandler = sandbox.mock().never();
             item.getUrl = sandbox.mock().withArgs('id').returns('url');
             item.xhr = {
-                delete: sandbox.mock().withArgs('url?recursive=true').returns(Promise.resolve('success'))
+                delete: sandbox.mock().withArgs({ url: 'url?recursive=true' }).returns(Promise.resolve('success'))
             };
             return item.delete(file, 'success', 'error').then(() => {
                 expect(item.successCallback).to.equal('success');
@@ -317,7 +395,7 @@ describe('api/Item', () => {
             item.errorHandler = sandbox.mock().withArgs('error');
             item.getUrl = sandbox.mock().withArgs('id').returns('url');
             item.xhr = {
-                delete: sandbox.mock().withArgs('url').returns(Promise.reject('error'))
+                delete: sandbox.mock().withArgs({ url: 'url' }).returns(Promise.reject('error'))
             };
             return item.delete(file, 'success', 'error').then(() => {
                 expect(item.successCallback).to.equal('success');

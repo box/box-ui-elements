@@ -23,7 +23,8 @@ import {
     TYPE_WEBLINK,
     CLIENT_NAME_CONTENT_TREE,
     SORT_NAME,
-    SORT_ASC
+    SORT_ASC,
+    TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
 import type { BoxItem, Collection, View, Token } from '../../flowTypes';
 import '../fonts.scss';
@@ -98,7 +99,7 @@ class ContentTree extends Component<DefaultProps, Props, State> {
             apiHost,
             clientName,
             responseFilter,
-            id: `folder_${rootFolderId}`
+            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
 
         this.id = uniqueid('bct_');

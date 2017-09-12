@@ -2,7 +2,7 @@
 
 import Search from '../Search';
 import Cache from '../../util/Cache';
-import { FIELDS_TO_FETCH } from '../../constants';
+import { FIELDS_TO_FETCH, X_REP_HINTS } from '../../constants';
 
 let search;
 let cache;
@@ -143,12 +143,16 @@ describe('api/Search', () => {
             search.xhr = {
                 get: sandbox
                     .mock()
-                    .withArgs('https://api.box.com/2.0/search', {
-                        offset: 0,
-                        query: 'query',
-                        ancestor_folder_ids: 'id',
-                        limit: 200,
-                        fields: FIELDS_TO_FETCH
+                    .withArgs({
+                        url: 'https://api.box.com/2.0/search',
+                        params: {
+                            offset: 0,
+                            query: 'query',
+                            ancestor_folder_ids: 'id',
+                            limit: 200,
+                            fields: FIELDS_TO_FETCH
+                        },
+                        headers: { 'X-Rep-Hints': X_REP_HINTS }
                     })
                     .returns(Promise.resolve('success'))
             };
@@ -160,12 +164,16 @@ describe('api/Search', () => {
             search.xhr = {
                 get: sandbox
                     .mock()
-                    .withArgs('https://api.box.com/2.0/search', {
-                        offset: 0,
-                        query: 'query',
-                        ancestor_folder_ids: 'id',
-                        limit: 200,
-                        fields: FIELDS_TO_FETCH
+                    .withArgs({
+                        url: 'https://api.box.com/2.0/search',
+                        params: {
+                            offset: 0,
+                            query: 'query',
+                            ancestor_folder_ids: 'id',
+                            limit: 200,
+                            fields: FIELDS_TO_FETCH
+                        },
+                        headers: { 'X-Rep-Hints': X_REP_HINTS }
                     })
                     .returns(Promise.reject('error'))
             };

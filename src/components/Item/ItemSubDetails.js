@@ -6,7 +6,7 @@
 
 import React from 'react';
 import getSize from '../../util/size';
-import getDate from '../../util/date';
+import { getDate } from '../../util/date';
 import { VIEW_RECENTS } from '../../constants';
 import type { BoxItem, View } from '../../flowTypes';
 

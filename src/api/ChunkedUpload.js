@@ -130,7 +130,7 @@ class ChunkedUpload extends Base {
         }
 
         this.xhr
-            .post(uploadSessionUrl, postData)
+            .post({ url: uploadSessionUrl, data: postData })
             .then(this.uploadSessionSuccessHandler)
             .catch(this.uploadSessionErrorHandler);
     }
@@ -295,7 +295,7 @@ class ChunkedUpload extends Base {
             };
 
             this.xhr
-                .post(this.getUploadSessionUrl(this.sessionId, 'commit'), postData, headers)
+                .post({ url: this.getUploadSessionUrl(this.sessionId, 'commit'), data: postData, headers })
                 .then(this.handleCommitSuccess)
                 .catch(this.handleUploadError);
         });
@@ -467,7 +467,7 @@ class ChunkedUpload extends Base {
         this.chunks = [];
 
         // Abort upload session
-        this.xhr.delete(this.getUploadSessionUrl(this.sessionId));
+        this.xhr.delete({ url: this.getUploadSessionUrl(this.sessionId) });
         this.destroy();
     }
 }

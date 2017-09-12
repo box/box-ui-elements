@@ -49,12 +49,16 @@ class Item extends Base {
      * @param {Response} error.response - error response
      * @return {Function} Function that handles response
      */
-    errorHandler = ({ response }: { response: Response }): void => {
+    errorHandler = (error: any): void => {
         if (this.isDestroyed()) {
             return;
         }
+        const { response } = error;
         if (response) {
             response.json().then(this.errorCallback);
+        } else if (error instanceof Error) {
+            this.errorCallback();
+            throw error;
         }
     };
 
@@ -193,7 +197,7 @@ class Item extends Base {
         this.errorCallback = errorCallback;
 
         const url = `${this.getUrl(id)}${type === TYPE_FOLDER ? '?recursive=true' : ''}`;
-        return this.xhr.delete(url).then(this.deleteSuccessHandler).catch(this.errorHandler);
+        return this.xhr.delete({ url }).then(this.deleteSuccessHandler).catch(this.errorHandler);
     }
 
     /**
@@ -211,14 +215,26 @@ class Item extends Base {
     /**
      * API to rename an Item
      *
-     * @param {string} id - item id
+     * @param {Object} item - item to rename
      * @param {string} name - item new name
      * @param {Function} successCallback - success callback
      * @param {Function} errorCallback - error callback
      * @return {void}
      */
-    rename(id: string, name: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    rename(item: BoxItem, name: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
         if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        const { id, permissions }: BoxItem = item;
+        if (!id || !permissions) {
+            errorCallback();
+            return Promise.reject();
+        }
+
+        const { can_rename }: BoxItemPermission = permissions;
+        if (!can_rename) {
+            errorCallback();
             return Promise.reject();
         }
 
@@ -226,7 +242,10 @@ class Item extends Base {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        return this.xhr.put(`${this.getUrl(id)}`, { name }).then(this.renameSuccessHandler).catch(this.errorHandler);
+        return this.xhr
+            .put({ url: `${this.getUrl(id)}`, data: { name } })
+            .then(this.renameSuccessHandler)
+            .catch(this.errorHandler);
     }
 
     /**
@@ -242,14 +261,26 @@ class Item extends Base {
     /**
      * Api to create or remove a shared link
      *
-     * @param {string} id - item id
+     * @param {Object} item - item to share
      * @param {string} access - shared access level
      * @param {Function} successCallback - success callback
      * @param {Function|void} errorCallback - error callback
      * @return {void}
      */
-    share(id: string, access: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    share(item: BoxItem, access: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
         if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        const { id, permissions }: BoxItem = item;
+        if (!id || !permissions) {
+            errorCallback();
+            return Promise.reject();
+        }
+
+        const { can_share, can_set_share_access }: BoxItemPermission = permissions;
+        if (!can_share || !can_set_share_access) {
+            errorCallback();
             return Promise.reject();
         }
 
@@ -257,9 +288,14 @@ class Item extends Base {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
+        // We use the parent folder's auth token since use case involves
+        // only content explorer or picker which works onf folder tokens
         return this.xhr
-            .put(this.getUrl(this.id), {
-                shared_link: access === ACCESS_NONE ? null : { access }
+            .put({
+                url: this.getUrl(this.id),
+                data: {
+                    shared_link: access === ACCESS_NONE ? null : { access }
+                }
             })
             .then(this.shareSuccessHandler)
             .catch(this.errorHandler);

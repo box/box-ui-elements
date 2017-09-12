@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Box Content Explorer/Preview Test Page</title>
+        <style>
+            body,
+            html {
+                background: #ccc;
+                border: 0 none;
+                box-sizing: border-box !important;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/explorer.css" />
+        <script src="../dev/en-US/explorer.js"></script>
+        <script>
+            window.onload = function() {
+                const { ContentExplorer } = Box;
+                const explorer = new ContentExplorer();
+                explorer.show('0', 'DcMR7enbzWtX1nZ6UVFniBlDhxyhPFk3', {
+                    hasPreviewSidebar: true
+                });
+            }
+        </script>
+    </head>
+    <body></body>
+</html>

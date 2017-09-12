@@ -1,6 +1,6 @@
 import size from '../size';
 
-describe('size', () => {
+describe('util/size', () => {
     it('should return 0 bytes when undefined', () => {
         expect(size()).to.equal('0 Byte');
     });

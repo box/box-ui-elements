@@ -8,11 +8,11 @@
  * Gets the date in simple format
  *
  * @param {Object} date object
- * @param {string} todayString today
- * @param {string} yesterdayString yesterday
+ * @param {string|void} [todayString] today
+ * @param {string|void} [yesterdayString] yesterday
  * @return {string} date in words
  */
-export default function(date: string, todayString: string, yesterdayString: string): string {
+export function getDate(date: string, todayString?: string, yesterdayString?: string): string {
     const today: Date = new Date();
     const yesterday: Date = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -21,10 +21,24 @@ export default function(date: string, todayString: string, yesterdayString: stri
     const isToday: boolean = today.toDateString() === then.toDateString();
     const isYesterday: boolean = yesterday.toDateString() === then.toDateString();
 
-    if (isToday) {
+    if (isToday && !!todayString) {
         return todayString;
-    } else if (isYesterday) {
+    } else if (isYesterday && !!yesterdayString) {
         return yesterdayString;
     }
     return then.toDateString();
+}
+
+/**
+ * Gets the date time in simple format
+ *
+ * @param {Object} date object
+ * @param {string|void} [todayString] today
+ * @param {string|void} [yesterdayString] yesterday
+ * @return {string} date in words
+ */
+export function getDateTime(date: string, todayString?: string, yesterdayString?: string): string {
+    const dateString: string = getDate(date, todayString, yesterdayString);
+    const d: Date = new Date(date);
+    return `${dateString}, ${d.toLocaleTimeString()}`;
 }

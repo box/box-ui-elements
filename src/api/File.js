@@ -5,7 +5,14 @@
  */
 
 import Item from './Item';
-import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE } from '../constants';
+import {
+    FIELD_DOWNLOAD_URL,
+    CACHE_PREFIX_FILE,
+    FIELDS_TO_FETCH,
+    X_REP_HINTS,
+    TYPED_ID_FILE_PREFIX
+} from '../constants';
+import Cache from '../util/Cache';
 import type { BoxItem } from '../flowTypes';
 
 class File extends Item {
@@ -17,6 +24,17 @@ class File extends Item {
      */
     getCacheKey(id: string): string {
         return `${CACHE_PREFIX_FILE}${id}`;
+    }
+
+    /**
+     * Returns typed id for file. Useful for when
+     * making file based XHRs where auth token
+     * can be per file as used by Preview.
+     *
+     * @return {string} typed id for file
+     */
+    getTypedFileId(id: string): string {
+        return `${TYPED_ID_FILE_PREFIX}${id}`;
     }
 
     /**
@@ -33,16 +51,66 @@ class File extends Item {
     /**
      * API for getting download URL for files
      *
-     * @param {string} [id] optional file id
+     * @param {string} id - file id
      * @return {void}
      */
     getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
         return this.xhr
-            .get(this.getUrl(id), {
-                fields: FIELD_DOWNLOAD_URL
+            .get({
+                url: this.getUrl(id),
+                params: {
+                    fields: FIELD_DOWNLOAD_URL
+                }
             })
             .then((data: BoxItem) => {
                 successCallback(data[FIELD_DOWNLOAD_URL]);
+            })
+            .catch(errorCallback);
+    }
+
+    /**
+     * Gets a box file
+     *
+     * @param {string} id File id
+     * @param {Function} successCallback Function to call with results
+     * @param {Function} errorCallback Function to call with errors
+     * @param {boolean} forceFetch Bypasses the cache
+     * @return {Promise}
+     */
+    file(id: string, successCallback: Function, errorCallback: Function, forceFetch: boolean = false): Promise<void> {
+        if (this.isDestroyed()) {
+            return Promise.reject();
+        }
+
+        const cache: Cache = this.getCache();
+        const key = this.getCacheKey(id);
+
+        // Clear the cache if needed
+        if (forceFetch) {
+            cache.unset(key);
+        }
+
+        // Return the Cache value if it exists
+        if (cache.has(key)) {
+            successCallback(cache.get(key));
+            return Promise.resolve();
+        }
+
+        // Make the XHR request
+        // We use per file auth tokens for file
+        // as thats what needed by preview.
+        return this.xhr
+            .get({
+                id: this.getTypedFileId(id),
+                url: this.getUrl(id),
+                params: {
+                    fields: FIELDS_TO_FETCH
+                },
+                headers: { 'X-Rep-Hints': X_REP_HINTS }
+            })
+            .then((file: BoxItem) => {
+                cache.set(key, file);
+                successCallback(file);
             })
             .catch(errorCallback);
     }

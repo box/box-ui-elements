@@ -41,7 +41,8 @@ import {
     DEFAULT_VIEW_RECENTS,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
-    ERROR_CODE_ITEM_NAME_IN_USE
+    ERROR_CODE_ITEM_NAME_IN_USE,
+    TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
 import type {
     BoxItem,
@@ -166,7 +167,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         super(props);
 
         const {
-            rootFolderId,
             token,
             sharedLink,
             sharedLinkPassword,
@@ -175,8 +175,10 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             sortBy,
             sortDirection,
             clientName,
-            responseFilter
+            responseFilter,
+            rootFolderId
         } = props;
+
         this.api = new API({
             token,
             sharedLink,
@@ -185,8 +187,9 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             uploadHost,
             clientName,
             responseFilter,
-            id: `folder_${rootFolderId}`
+            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
+
         this.id = uniqueid('bcp_');
 
         this.state = {
@@ -765,17 +768,17 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        const { permissions, type, id }: BoxItem = item;
-        if (!permissions || !type || !id) {
+        const { permissions, type }: BoxItem = item;
+        if (!permissions || !type) {
             return;
         }
 
-        const { can_set_share_access: canSetShareAccessPermission }: BoxItemPermission = permissions;
-        if (!canSetShareAccessPermission) {
+        const { can_set_share_access }: BoxItemPermission = permissions;
+        if (!can_set_share_access) {
             return;
         }
 
-        this.api.getAPI(type).share(id, access, this.refreshGrid);
+        this.api.getAPI(type).share(item, access, this.refreshGrid);
     };
 
     /**

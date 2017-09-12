@@ -21,7 +21,7 @@ const file = new FileAPI({ cache });
 const folder = new FolderAPI({ cache });
 const weblink = new WebLinkAPI({ cache });
 
-describe('flatten', () => {
+describe('util/flatten', () => {
     it('should flatten the list and create new cache entries', () => {
         const items = flatten(list, folder, file, weblink);
         expect(items).to.deep.equal(['folder_1', 'file_2', 'web_link_3']);
