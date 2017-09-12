@@ -59,6 +59,7 @@ const PreviewDialog = ({
             onRequestClose={onCancel}
         >
             <ContentPreview
+                skipServerUpdate
                 cache={cache}
                 file={item}
                 token={token}
@@ -68,10 +69,6 @@ const PreviewDialog = ({
                 onClose={onCancel}
                 hasSidebar={hasPreviewSidebar}
                 getLocalizedMessage={getLocalizedMessage}
-                skipServerUpdate
-                staticHost='https://phora.dev.box.net'
-                staticPath='content-experience'
-                version='dev'
             />
         </Modal>
     );
