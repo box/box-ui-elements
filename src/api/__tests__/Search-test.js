@@ -2,7 +2,8 @@
 
 import Search from '../Search';
 import Cache from '../../util/Cache';
-import { FIELDS_TO_FETCH, X_REP_HINTS } from '../../constants';
+import getFields from '../../util/fields';
+import { X_REP_HINTS } from '../../constants';
 
 let search;
 let cache;
@@ -46,18 +47,21 @@ describe('api/Search', () => {
             search.key = 'key';
             expect(search.isLoaded()).to.equal(false);
         });
+
         it('should return false when no item collection', () => {
             search.key = 'key';
             cache.set('key', {});
             search.getCache = sandbox.mock().returns(cache);
             expect(search.isLoaded()).to.equal(false);
         });
+
         it('should return false when not loaded', () => {
             search.key = 'key';
             cache.set('key', { item_collection: { isLoaded: false } });
             search.getCache = sandbox.mock().returns(cache);
             expect(search.isLoaded()).to.equal(false);
         });
+
         it('should return true when loaded', () => {
             search.key = 'key';
             cache.set('key', { item_collection: { isLoaded: true } });
@@ -78,7 +82,7 @@ describe('api/Search', () => {
             search.searchRequest = sandbox.mock();
             search.getCacheKey = sandbox.mock().withArgs('id', 'foo%20query').returns('key');
             search.isLoaded = sandbox.mock().returns(false);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail');
+            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
             expect(search.id).to.equal('id');
             expect(search.successCallback).to.equal('success');
             expect(search.errorCallback).to.equal('fail');
@@ -87,13 +91,15 @@ describe('api/Search', () => {
             expect(search.key).to.equal('key');
             expect(search.offset).to.equal(0);
             expect(search.query).to.equal('foo query');
+            expect(search.includePreviewFields).to.equal('preview');
+            expect(search.includePreviewSidebarFields).to.equal('sidebar');
         });
         it('should save args and not make search request when cached', () => {
             search.searchRequest = sandbox.mock().never();
             search.finish = sandbox.mock();
             search.getCacheKey = sandbox.mock().withArgs('id', 'foo%20query').returns('key');
             search.isLoaded = sandbox.mock().returns(true);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail');
+            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
             expect(search.id).to.equal('id');
             expect(search.successCallback).to.equal('success');
             expect(search.errorCallback).to.equal('fail');
@@ -102,13 +108,15 @@ describe('api/Search', () => {
             expect(search.key).to.equal('key');
             expect(search.offset).to.equal(0);
             expect(search.query).to.equal('foo query');
+            expect(search.includePreviewFields).to.equal('preview');
+            expect(search.includePreviewSidebarFields).to.equal('sidebar');
         });
         it('should save args and make search request when cached but forced to fetch', () => {
             search.searchRequest = sandbox.mock();
             search.getCache = sandbox.mock().returns({ unset: sandbox.mock().withArgs('key') });
             search.getCacheKey = sandbox.mock().withArgs('id', 'foo%20query').returns('key');
             search.isLoaded = sandbox.mock().returns(false);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', true);
+            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', true, 'preview', 'sidebar');
             expect(search.id).to.equal('id');
             expect(search.successCallback).to.equal('success');
             expect(search.errorCallback).to.equal('fail');
@@ -117,6 +125,8 @@ describe('api/Search', () => {
             expect(search.key).to.equal('key');
             expect(search.offset).to.equal(0);
             expect(search.query).to.equal('foo query');
+            expect(search.includePreviewFields).to.equal('preview');
+            expect(search.includePreviewSidebarFields).to.equal('sidebar');
         });
     });
 
@@ -137,9 +147,11 @@ describe('api/Search', () => {
             search.xhr = null;
             return search.searchRequest().should.be.rejected;
         });
+
         it('should make xhr to search and call success callback', () => {
             search.searchSuccessHandler = sandbox.mock().withArgs('success');
             search.searchErrorHandler = sandbox.mock().never();
+            search.includePreviewFields = true;
             search.xhr = {
                 get: sandbox
                     .mock()
@@ -150,7 +162,7 @@ describe('api/Search', () => {
                             query: 'query',
                             ancestor_folder_ids: 'id',
                             limit: 200,
-                            fields: FIELDS_TO_FETCH
+                            fields: getFields(true)
                         },
                         headers: { 'X-Rep-Hints': X_REP_HINTS }
                     })
@@ -158,9 +170,12 @@ describe('api/Search', () => {
             };
             return search.searchRequest();
         });
+
         it('should make xhr to search and call error callback', () => {
             search.searchSuccessHandler = sandbox.mock().never();
             search.searchErrorHandler = sandbox.mock().withArgs('error');
+            search.includePreviewFields = true;
+            search.includePreviewSidebarFields = true;
             search.xhr = {
                 get: sandbox
                     .mock()
@@ -171,7 +186,7 @@ describe('api/Search', () => {
                             query: 'query',
                             ancestor_folder_ids: 'id',
                             limit: 200,
-                            fields: FIELDS_TO_FETCH
+                            fields: getFields(true, true)
                         },
                         headers: { 'X-Rep-Hints': X_REP_HINTS }
                     })

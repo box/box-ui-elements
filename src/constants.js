@@ -97,7 +97,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.9.1';
+export const DEFAULT_PREVIEW_VERSION = '1.10.0';
 export const DEFAULT_PREVIEW_LOCALE = 'en-US';
 export const DEFAULT_PREVIEW_STATIC_PATH = 'platform/preview';
 export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
@@ -134,34 +134,6 @@ export const CLASS_IS_TOUCH = 'buik-is-touch';
 export const CLASS_MODAL = 'buik-modal';
 export const CLASS_BUTTON_CONTENT_SPAN = 'buik-btn-content';
 export const CLASS_CHECKBOX_SPAN = 'buik-checkbox-span';
-
-/* --------------- Feilds to fetch via API ----------------- */
-export const FIELDS_TO_FETCH = [
-    FIELD_NAME,
-    FIELD_URL,
-    FIELD_TYPE,
-    FIELD_SIZE,
-    FIELD_PARENT,
-    FIELD_EXTENSION,
-    FIELD_PERMISSIONS,
-    FIELD_ITEM_COLLECTION,
-    FIELD_PATH_COLLECTION,
-    FIELD_MODIFIED_AT,
-    FIELD_CREATED_AT,
-    FIELD_SHARED_LINK,
-    FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
-    FIELD_HAS_COLLABORATIONS,
-    FIELD_IS_EXTERNALLY_OWNED,
-    FIELD_CREATED_BY,
-    FIELD_MODIFIED_BY,
-    FIELD_OWNED_BY,
-    FIELD_DESCRIPTION,
-    FIELD_REPRESENTATIONS,
-    FIELD_SHA1,
-    FIELD_WATERMARK_INFO,
-    FIELD_AUTHENTICATED_DOWNLOAD_URL,
-    FIELD_FILE_VERSION
-].join(',');
 
 /* ------------------ Error Codes  ---------------------- */
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';

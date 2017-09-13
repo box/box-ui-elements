@@ -13,23 +13,24 @@ type Props = {
     type: CardEntryType,
     start: number,
     duration: number,
+    color?: string,
     end?: number
 };
 
-const LENGTH_IMAGE_ITEMLINE = 220;
-const LENGTH_TEXT_ITEMLINE = 260;
+const LENGTH_IMAGE_ITEMLINE = 250;
+const LENGTH_TEXT_ITEMLINE = 290;
 
-const Line = ({ type, start, end, duration }: Props) => {
+const Line = ({ type, start, end, duration, color = '#777' }: Props) => {
     if (typeof start !== 'number' || !end || !duration) {
         return null;
     }
-    const startPercent = start * 100 / duration;
-    const endPercent = end * 100 / duration;
+    const barLength = type === 'image' ? LENGTH_IMAGE_ITEMLINE : LENGTH_TEXT_ITEMLINE;
+    const startPercent = start * barLength / duration;
+    const endPercent = end * barLength / duration;
     const styles = {
-        left: `${startPercent}%`,
-        width: `${(endPercent - startPercent) *
-            (type === 'image' ? LENGTH_IMAGE_ITEMLINE : LENGTH_TEXT_ITEMLINE) /
-            100}px`
+        backgroundColor: color,
+        left: `${startPercent}px`,
+        width: `${endPercent - startPercent}px`
     };
     return <PlainButton className='buik-timeline-time' style={styles} />;
 };

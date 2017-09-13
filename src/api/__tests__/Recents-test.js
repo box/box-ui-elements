@@ -2,7 +2,8 @@
 
 import Recents from '../Recents';
 import Cache from '../../util/Cache';
-import { FIELDS_TO_FETCH, X_REP_HINTS } from '../../constants';
+import getFields from '../../util/fields';
+import { X_REP_HINTS } from '../../constants';
 
 let recents;
 let cache;
@@ -42,39 +43,45 @@ describe('api/Recents', () => {
             recents.recentsRequest = sandbox.mock();
             recents.getCache = sandbox.mock().returns(cache);
             recents.getCacheKey = sandbox.mock().withArgs('id').returns('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail');
+            recents.recents('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
             expect(recents.id).to.equal('id');
             expect(recents.successCallback).to.equal('success');
             expect(recents.errorCallback).to.equal('fail');
             expect(recents.sortBy).to.equal('interacted_at');
             expect(recents.sortDirection).to.equal('DESC');
             expect(recents.key).to.equal('key');
+            expect(recents.includePreviewFields).to.equal('preview');
+            expect(recents.includePreviewSidebarFields).to.equal('sidebar');
         });
         it('should save args and not make recents request when cached', () => {
             cache.set('key', 'value');
             recents.finish = sandbox.mock();
             recents.getCache = sandbox.mock().returns(cache);
             recents.getCacheKey = sandbox.mock().withArgs('id').returns('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail');
+            recents.recents('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
             expect(recents.id).to.equal('id');
             expect(recents.successCallback).to.equal('success');
             expect(recents.errorCallback).to.equal('fail');
             expect(recents.sortBy).to.equal('by');
             expect(recents.sortDirection).to.equal('direction');
             expect(recents.key).to.equal('key');
+            expect(recents.includePreviewFields).to.equal('preview');
+            expect(recents.includePreviewSidebarFields).to.equal('sidebar');
         });
         it('should save args and make recents request when cached but forced to fetch', () => {
             cache.set('key', 'value');
             recents.recentsRequest = sandbox.mock();
             recents.getCache = sandbox.mock().returns(cache);
             recents.getCacheKey = sandbox.mock().withArgs('id').returns('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail', true);
+            recents.recents('id', 'by', 'direction', 'success', 'fail', true, 'preview', 'sidebar');
             expect(recents.id).to.equal('id');
             expect(recents.successCallback).to.equal('success');
             expect(recents.errorCallback).to.equal('fail');
             expect(recents.sortBy).to.equal('interacted_at');
             expect(recents.sortDirection).to.equal('DESC');
             expect(recents.key).to.equal('key');
+            expect(recents.includePreviewFields).to.equal('preview');
+            expect(recents.includePreviewSidebarFields).to.equal('sidebar');
         });
     });
 
@@ -91,12 +98,13 @@ describe('api/Recents', () => {
         it('should make xhr get recents and call success callback', () => {
             recents.recentsSuccessHandler = sandbox.mock().withArgs('success');
             recents.recentsErrorHandler = sandbox.mock().never();
+            recents.includePreviewFields = true;
             recents.xhr = {
                 get: sandbox
                     .mock()
                     .withArgs({
                         url: 'https://api.box.com/2.0/recent_items',
-                        params: { fields: FIELDS_TO_FETCH },
+                        params: { fields: getFields(true) },
                         headers: { 'X-Rep-Hints': X_REP_HINTS }
                     })
                     .returns(Promise.resolve('success'))
@@ -106,12 +114,14 @@ describe('api/Recents', () => {
         it('should make xhr to get recents and call error callback', () => {
             recents.recentsSuccessHandler = sandbox.mock().never();
             recents.recentsErrorHandler = sandbox.mock().withArgs('error');
+            recents.includePreviewFields = true;
+            recents.includePreviewSidebarFields = true;
             recents.xhr = {
                 get: sandbox
                     .mock()
                     .withArgs({
                         url: 'https://api.box.com/2.0/recent_items',
-                        params: { fields: FIELDS_TO_FETCH },
+                        params: { fields: getFields(true, true) },
                         headers: { 'X-Rep-Hints': X_REP_HINTS }
                     })
                     .returns(Promise.reject('error'))

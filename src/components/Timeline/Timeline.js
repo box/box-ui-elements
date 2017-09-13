@@ -11,13 +11,14 @@ import './Timeline.scss';
 
 type Props = {
     type: CardEntryType,
+    color?: string,
     text?: string,
     url?: string,
     timeslices?: TimeSlice[],
     duration?: number
 };
 
-const Timeline = ({ type, text = '', url = '', duration = 0, timeslices = [] }: Props) =>
+const Timeline = ({ type, color, text = '', url = '', duration = 0, timeslices = [] }: Props) =>
     <div className={`buik-timeline buik-timeline-${type}`}>
         {(text || url) &&
             <div className='buik-timeline-label'>
@@ -30,7 +31,7 @@ const Timeline = ({ type, text = '', url = '', duration = 0, timeslices = [] }: 
         <div className='buik-timeline-wrapper'>
             <div className='buik-timeline-line' />
             {timeslices.map(({ id: timeId, start, end }: TimeSlice) =>
-                <Line key={timeId} type={type} start={start} end={end} duration={duration} />
+                <Line key={timeId} color={color} type={type} start={start} end={end} duration={duration} />
             )}
         </div>
     </div>;

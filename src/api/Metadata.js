@@ -163,7 +163,7 @@ class Metadata extends Item {
                             {
                                 id: uniqueid('time_'),
                                 start: 20,
-                                end: 30
+                                end: 80
                             },
                             {
                                 id: uniqueid('time_'),
@@ -184,12 +184,125 @@ class Metadata extends Item {
                     },
                     {
                         id: uniqueid('cardentry_'),
+                        type: 'text',
+                        text: 'Games',
+                        appears: [
+                            {
+                                id: uniqueid('time_'),
+                                start: 100,
+                                end: 810
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 1500,
+                                end: 1800
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 1950,
+                                end: 2310
+                            }
+                        ]
+                    },
+                    {
+                        id: uniqueid('cardentry_'),
                         type: 'image',
                         url: 'http://www.globalo.com/content/uploads/2015/12/darth-vader.jpg',
                         appears: [
                             {
                                 id: uniqueid('time_'),
-                                start: 2530,
+                                start: 0,
+                                end: 150
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 200,
+                                end: 400
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 800,
+                                end: 1200
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 2000,
+                                end: 2560
+                            }
+                        ]
+                    },
+                    {
+                        id: uniqueid('cardentry_'),
+                        type: 'image',
+                        url: 'http://www.globalo.com/content/uploads/2015/12/darth-vader.jpg',
+                        appears: [
+                            {
+                                id: uniqueid('time_'),
+                                start: 300,
+                                end: 600
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 1000,
+                                end: 1400
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 1500,
+                                end: 1800
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 2200,
+                                end: 2560
+                            }
+                        ]
+                    },
+                    {
+                        id: uniqueid('cardentry_'),
+                        type: 'text',
+                        text: 'Books',
+                        appears: [
+                            {
+                                id: uniqueid('time_'),
+                                start: 20,
+                                end: 300
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 1000,
+                                end: 2100
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 2500,
+                                end: 3300
+                            }
+                        ]
+                    },
+                    {
+                        id: uniqueid('cardentry_'),
+                        type: 'image',
+                        url: 'http://www.globalo.com/content/uploads/2015/12/darth-vader.jpg',
+                        appears: [
+                            {
+                                id: uniqueid('time_'),
+                                start: 100,
+                                end: 200
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 300,
+                                end: 800
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 1000,
+                                end: 1200
+                            },
+                            {
+                                id: uniqueid('time_'),
+                                start: 2200,
                                 end: 2560
                             }
                         ]

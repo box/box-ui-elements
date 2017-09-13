@@ -2,7 +2,8 @@
 
 import Folder from '../Folder';
 import Cache from '../../util/Cache';
-import { FIELDS_TO_FETCH, X_REP_HINTS } from '../../constants';
+import getFields from '../../util/fields';
+import { X_REP_HINTS } from '../../constants';
 
 let folder;
 let cache;
@@ -75,7 +76,7 @@ describe('api/Folder', () => {
             folder.folderRequest = sandbox.mock();
             folder.getCacheKey = sandbox.mock().withArgs('id').returns('key');
             folder.isLoaded = sandbox.mock().returns(false);
-            folder.folder('id', 'by', 'direction', 'success', 'fail');
+            folder.folder('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
             expect(folder.id).to.equal('id');
             expect(folder.successCallback).to.equal('success');
             expect(folder.errorCallback).to.equal('fail');
@@ -83,13 +84,15 @@ describe('api/Folder', () => {
             expect(folder.sortDirection).to.equal('direction');
             expect(folder.key).to.equal('key');
             expect(folder.offset).to.equal(0);
+            expect(folder.includePreviewFields).to.equal('preview');
+            expect(folder.includePreviewSidebarFields).to.equal('sidebar');
         });
         it('should save args and not make folder request when cached', () => {
             folder.folderRequest = sandbox.mock().never();
             folder.finish = sandbox.mock();
             folder.getCacheKey = sandbox.mock().withArgs('id').returns('key');
             folder.isLoaded = sandbox.mock().returns(true);
-            folder.folder('id', 'by', 'direction', 'success', 'fail');
+            folder.folder('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
             expect(folder.id).to.equal('id');
             expect(folder.successCallback).to.equal('success');
             expect(folder.errorCallback).to.equal('fail');
@@ -97,13 +100,15 @@ describe('api/Folder', () => {
             expect(folder.sortDirection).to.equal('direction');
             expect(folder.key).to.equal('key');
             expect(folder.offset).to.equal(0);
+            expect(folder.includePreviewFields).to.equal('preview');
+            expect(folder.includePreviewSidebarFields).to.equal('sidebar');
         });
         it('should save args and make folder request when cached but forced to fetch', () => {
             folder.folderRequest = sandbox.mock();
             folder.getCache = sandbox.mock().returns({ unset: sandbox.mock().withArgs('key') });
             folder.getCacheKey = sandbox.mock().withArgs('id').returns('key');
             folder.isLoaded = sandbox.mock().returns(false);
-            folder.folder('id', 'by', 'direction', 'success', 'fail', true);
+            folder.folder('id', 'by', 'direction', 'success', 'fail', true, 'preview', 'sidebar');
             expect(folder.id).to.equal('id');
             expect(folder.successCallback).to.equal('success');
             expect(folder.errorCallback).to.equal('fail');
@@ -111,6 +116,8 @@ describe('api/Folder', () => {
             expect(folder.sortDirection).to.equal('direction');
             expect(folder.key).to.equal('key');
             expect(folder.offset).to.equal(0);
+            expect(folder.includePreviewFields).to.equal('preview');
+            expect(folder.includePreviewSidebarFields).to.equal('sidebar');
         });
     });
 
@@ -134,6 +141,7 @@ describe('api/Folder', () => {
         it('should make xhr to folder and call success callback', () => {
             folder.folderSuccessHandler = sandbox.mock().withArgs('success');
             folder.folderErrorHandler = sandbox.mock().never();
+            folder.includePreviewFields = true;
             folder.xhr = {
                 get: sandbox
                     .mock()
@@ -142,7 +150,7 @@ describe('api/Folder', () => {
                         params: {
                             offset: 0,
                             limit: 1000,
-                            fields: FIELDS_TO_FETCH
+                            fields: getFields(true)
                         },
                         headers: {
                             'X-Rep-Hints': X_REP_HINTS
@@ -155,6 +163,8 @@ describe('api/Folder', () => {
         it('should make xhr to folder and call error callback', () => {
             folder.folderSuccessHandler = sandbox.mock().never();
             folder.folderErrorHandler = sandbox.mock().withArgs('error');
+            folder.includePreviewFields = true;
+            folder.includePreviewSidebarFields = true;
             folder.xhr = {
                 get: sandbox
                     .mock()
@@ -163,7 +173,7 @@ describe('api/Folder', () => {
                         params: {
                             offset: 0,
                             limit: 1000,
-                            fields: FIELDS_TO_FETCH
+                            fields: getFields(true, true)
                         },
                         headers: {
                             'X-Rep-Hints': X_REP_HINTS
@@ -547,7 +557,7 @@ describe('api/Folder', () => {
                 post: sandbox
                     .mock()
                     .withArgs({
-                        url: `https://api.box.com/2.0/folders?fields=${FIELDS_TO_FETCH}`,
+                        url: `https://api.box.com/2.0/folders?fields=${getFields()}`,
                         data: {
                             name: 'foo',
                             parent: {
@@ -566,7 +576,7 @@ describe('api/Folder', () => {
                 post: sandbox
                     .mock()
                     .withArgs({
-                        url: `https://api.box.com/2.0/folders?fields=${FIELDS_TO_FETCH}`,
+                        url: `https://api.box.com/2.0/folders?fields=${getFields()}`,
                         data: {
                             name: 'foo',
                             parent: {

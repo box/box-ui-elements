@@ -1,6 +1,7 @@
 import File from '../File';
 import Cache from '../../util/Cache';
-import { FIELDS_TO_FETCH, X_REP_HINTS } from '../../constants';
+import getFields from '../../util/fields';
+import { X_REP_HINTS } from '../../constants';
 
 let file;
 let cache;
@@ -86,7 +87,7 @@ describe('api/File', () => {
                         id: 'file_id',
                         url: 'https://api.box.com/2.0/files/id',
                         params: {
-                            fields: FIELDS_TO_FETCH
+                            fields: getFields(true)
                         },
                         headers: {
                             'X-Rep-Hints': X_REP_HINTS
@@ -105,7 +106,7 @@ describe('api/File', () => {
                         id: 'file_id',
                         url: 'https://api.box.com/2.0/files/id',
                         params: {
-                            fields: FIELDS_TO_FETCH
+                            fields: getFields(true, true)
                         },
                         headers: {
                             'X-Rep-Hints': X_REP_HINTS
@@ -113,7 +114,7 @@ describe('api/File', () => {
                     })
                     .returns(Promise.reject('error'))
             };
-            return file.file('id', sandbox.mock().never(), sandbox.mock().withArgs('error'));
+            return file.file('id', sandbox.mock().never(), sandbox.mock().withArgs('error'), false, true);
         });
 
         it('should make xhr to get file when forced to clear cache', () => {
@@ -129,7 +130,7 @@ describe('api/File', () => {
                         id: 'file_id',
                         url: 'https://api.box.com/2.0/files/id',
                         params: {
-                            fields: FIELDS_TO_FETCH
+                            fields: getFields(true)
                         },
                         headers: {
                             'X-Rep-Hints': X_REP_HINTS
