@@ -1,15 +1,15 @@
 @import '../variables';
 
 .buik-btn.buik-btn-plain.buik-timeline-time {
-    background-color: $bfive;
     cursor: pointer;
     height: 6px;
     position: absolute;
-    top: -2px;
 
     &:focus,
     &:active,
     &:hover {
-        background-color: $blue;
+        /* stylelint-disable declaration-no-important */
+        background-color: $blue !important;
+        /* stylelint-enable declaration-no-important */
     }
 }

@@ -2,6 +2,7 @@
 
 .buik-timeline {
     display: flex;
+    height: 60px;
     padding: 0 0 20px;
 }
 
@@ -11,8 +12,8 @@
 }
 
 .buik-timeline-line {
-    background-color: $see-see;
-    height: 2px;
+    background-color: $ffive;
+    height: 6px;
     position: absolute;
 }
 
@@ -30,12 +31,8 @@
         margin-left: 10px;
     }
 
-    & + .buik-timeline-text {
-        margin: 10px 0;
-    }
-
     .buik-timeline-line {
-        width: 220px;
+        width: 250px;
     }
 }
 
@@ -48,11 +45,7 @@
         padding-bottom: 10px;
     }
 
-    & + .buik-timeline-image {
-        margin: 10px 0;
-    }
-
     .buik-timeline-line {
-        width: 260px;
+        width: 290px;
     }
 }

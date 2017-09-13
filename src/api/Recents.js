@@ -12,14 +12,8 @@ import Cache from '../util/Cache';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import getBadItemError from '../util/error';
-import {
-    FIELDS_TO_FETCH,
-    DEFAULT_ROOT,
-    CACHE_PREFIX_RECENTS,
-    SORT_DESC,
-    FIELD_INTERACTED_AT,
-    X_REP_HINTS
-} from '../constants';
+import getFields from '../util/fields';
+import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, SORT_DESC, FIELD_INTERACTED_AT, X_REP_HINTS } from '../constants';
 import type {
     Crumb,
     BoxItem,
@@ -62,6 +56,16 @@ class Recents extends Base {
      * @property {string}
      */
     sortDirection: SortDirection;
+
+    /**
+     * @property {boolean}
+     */
+    includePreviewFields: boolean;
+
+    /**
+     * @property {boolean}
+     */
+    includePreviewSidebarFields: boolean;
 
     /**
      * Creates a key for the cache
@@ -187,7 +191,7 @@ class Recents extends Base {
             .get({
                 url: this.getUrl(),
                 params: {
-                    fields: FIELDS_TO_FETCH
+                    fields: getFields(this.includePreviewFields, this.includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
@@ -199,11 +203,13 @@ class Recents extends Base {
      * Gets recent files
      *
      * @param {string} id - parent folder id
-     * @param {string} sortBy sort by field
-     * @param {string} sortDirection sort direction
+     * @param {string} sortBy - sort by field
+     * @param {string} sortDirection - sort direction
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
-     * @param {boolean} forceUpdate Bypasses the cache
+     * @param {boolean|void} [forceFetch] - Bypasses the cache
+     * @param {boolean|void} [includePreview] - Optionally include preview fields
+     * @param {boolean|void} [includePreviewSidebar] - Optionally include preview sidebar fields
      * @return {void}
      */
     recents(
@@ -212,7 +218,9 @@ class Recents extends Base {
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        forceFetch: boolean = false
+        forceFetch: boolean = false,
+        includePreviewFields: boolean = false,
+        includePreviewSidebarFields: boolean = false
     ): void {
         if (this.isDestroyed()) {
             return;
@@ -224,6 +232,8 @@ class Recents extends Base {
         this.errorCallback = errorCallback;
         this.sortBy = sortBy;
         this.sortDirection = sortDirection;
+        this.includePreviewFields = includePreviewFields;
+        this.includePreviewSidebarFields = includePreviewSidebarFields;
 
         const cache: Cache = this.getCache();
         this.key = this.getCacheKey(this.id);
