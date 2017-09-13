@@ -409,7 +409,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     fetchFolder = (id?: string, triggerEvent: boolean = true, forceFetch: boolean = false) => {
-        const { rootFolderId }: Props = this.props;
+        const { rootFolderId, canPreview, hasPreviewSidebar }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
 
@@ -437,7 +437,9 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerEvent);
             },
             this.errorCallback,
-            forceFetch
+            forceFetch,
+            canPreview,
+            hasPreviewSidebar
         );
     };
 
@@ -502,10 +504,21 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     debouncedSearch = debounce((id: string, query: string, forceFetch?: boolean) => {
+        const { canPreview, hasPreviewSidebar }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         this.api
             .getSearchAPI()
-            .search(id, query, sortBy, sortDirection, this.searchSuccessCallback, this.errorCallback, forceFetch);
+            .search(
+                id,
+                query,
+                sortBy,
+                sortDirection,
+                this.searchSuccessCallback,
+                this.errorCallback,
+                forceFetch,
+                canPreview,
+                hasPreviewSidebar
+            );
     }, DEFAULT_SEARCH_DEBOUNCE);
 
     /**
@@ -576,7 +589,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     showRecents = (forceFetch: boolean = false) => {
-        const { rootFolderId }: Props = this.props;
+        const { rootFolderId, canPreview, hasPreviewSidebar }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
         // Recents are sorted by a different date field than the rest
@@ -592,7 +605,16 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         // Fetch the folder using folder API
         this.api
             .getRecentsAPI()
-            .recents(rootFolderId, by, sortDirection, this.recentsSuccessCallback, this.errorCallback, forceFetch);
+            .recents(
+                rootFolderId,
+                by,
+                sortDirection,
+                this.recentsSuccessCallback,
+                this.errorCallback,
+                forceFetch,
+                canPreview,
+                hasPreviewSidebar
+            );
     };
 
     /**

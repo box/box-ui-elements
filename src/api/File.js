@@ -5,14 +5,9 @@
  */
 
 import Item from './Item';
-import {
-    FIELD_DOWNLOAD_URL,
-    CACHE_PREFIX_FILE,
-    FIELDS_TO_FETCH,
-    X_REP_HINTS,
-    TYPED_ID_FILE_PREFIX
-} from '../constants';
 import Cache from '../util/Cache';
+import getFields from '../util/fields';
+import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS, TYPED_ID_FILE_PREFIX } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
 class File extends Item {
@@ -71,13 +66,20 @@ class File extends Item {
     /**
      * Gets a box file
      *
-     * @param {string} id File id
-     * @param {Function} successCallback Function to call with results
-     * @param {Function} errorCallback Function to call with errors
-     * @param {boolean} forceFetch Bypasses the cache
+     * @param {string} id - File id
+     * @param {Function} successCallback - Function to call with results
+     * @param {Function} errorCallback - Function to call with errors
+     * @param {boolean|void} [forceFetch] - Bypasses the cache
+     * @param {boolean|void} [includePreviewSidebar] - Optionally include preview sidebar fields
      * @return {Promise}
      */
-    file(id: string, successCallback: Function, errorCallback: Function, forceFetch: boolean = false): Promise<void> {
+    file(
+        id: string,
+        successCallback: Function,
+        errorCallback: Function,
+        forceFetch: boolean = false,
+        includePreviewSidebarFields: boolean = false
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
@@ -104,7 +106,7 @@ class File extends Item {
                 id: this.getTypedFileId(id),
                 url: this.getUrl(id),
                 params: {
-                    fields: FIELDS_TO_FETCH
+                    fields: getFields(true, includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })

@@ -362,7 +362,8 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {void}
      */
     fetchFile(id: string, forceFetch: boolean = false): void {
-        this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch);
+        const { hasSidebar }: Props = this.props;
+        this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch, hasSidebar);
     }
 
     /**

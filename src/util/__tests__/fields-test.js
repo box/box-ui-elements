@@ -1,0 +1,113 @@
+import getFields from '../fields';
+import {
+    FIELD_ID,
+    FIELD_NAME,
+    FIELD_URL,
+    FIELD_TYPE,
+    FIELD_SIZE,
+    FIELD_PARENT,
+    FIELD_EXTENSION,
+    FIELD_PERMISSIONS,
+    FIELD_ITEM_COLLECTION,
+    FIELD_PATH_COLLECTION,
+    FIELD_MODIFIED_AT,
+    FIELD_CREATED_AT,
+    FIELD_SHARED_LINK,
+    FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
+    FIELD_HAS_COLLABORATIONS,
+    FIELD_IS_EXTERNALLY_OWNED,
+    FIELD_CREATED_BY,
+    FIELD_MODIFIED_BY,
+    FIELD_OWNED_BY,
+    FIELD_DESCRIPTION,
+    FIELD_REPRESENTATIONS,
+    FIELD_SHA1,
+    FIELD_WATERMARK_INFO,
+    FIELD_AUTHENTICATED_DOWNLOAD_URL,
+    FIELD_FILE_VERSION
+} from '../../constants';
+
+describe('util/fields', () => {
+    describe('getDate()', () => {
+        it('should return default set of fields', () => {
+            expect(getFields()).to.deep.equal(
+                [
+                    FIELD_ID,
+                    FIELD_NAME,
+                    FIELD_URL,
+                    FIELD_TYPE,
+                    FIELD_SIZE,
+                    FIELD_PARENT,
+                    FIELD_EXTENSION,
+                    FIELD_PERMISSIONS,
+                    FIELD_ITEM_COLLECTION,
+                    FIELD_PATH_COLLECTION,
+                    FIELD_MODIFIED_AT,
+                    FIELD_CREATED_AT,
+                    FIELD_SHARED_LINK,
+                    FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
+                    FIELD_HAS_COLLABORATIONS,
+                    FIELD_IS_EXTERNALLY_OWNED
+                ].join(',')
+            );
+        });
+        it('should return default set + preview fields', () => {
+            expect(getFields(true)).to.deep.equal(
+                [
+                    FIELD_ID,
+                    FIELD_NAME,
+                    FIELD_URL,
+                    FIELD_TYPE,
+                    FIELD_SIZE,
+                    FIELD_PARENT,
+                    FIELD_EXTENSION,
+                    FIELD_PERMISSIONS,
+                    FIELD_ITEM_COLLECTION,
+                    FIELD_PATH_COLLECTION,
+                    FIELD_MODIFIED_AT,
+                    FIELD_CREATED_AT,
+                    FIELD_SHARED_LINK,
+                    FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
+                    FIELD_HAS_COLLABORATIONS,
+                    FIELD_IS_EXTERNALLY_OWNED,
+                    FIELD_REPRESENTATIONS,
+                    FIELD_SHA1,
+                    FIELD_WATERMARK_INFO,
+                    FIELD_AUTHENTICATED_DOWNLOAD_URL,
+                    FIELD_FILE_VERSION
+                ].join(',')
+            );
+        });
+        it('should return default set + preview + sidebar fields', () => {
+            expect(getFields(true, true)).to.deep.equal(
+                [
+                    FIELD_ID,
+                    FIELD_NAME,
+                    FIELD_URL,
+                    FIELD_TYPE,
+                    FIELD_SIZE,
+                    FIELD_PARENT,
+                    FIELD_EXTENSION,
+                    FIELD_PERMISSIONS,
+                    FIELD_ITEM_COLLECTION,
+                    FIELD_PATH_COLLECTION,
+                    FIELD_MODIFIED_AT,
+                    FIELD_CREATED_AT,
+                    FIELD_SHARED_LINK,
+                    FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
+                    FIELD_HAS_COLLABORATIONS,
+                    FIELD_IS_EXTERNALLY_OWNED,
+                    FIELD_CREATED_BY,
+                    FIELD_MODIFIED_BY,
+                    FIELD_OWNED_BY,
+                    FIELD_DESCRIPTION,
+                    FIELD_REPRESENTATIONS,
+                    FIELD_SHA1,
+                    FIELD_WATERMARK_INFO,
+                    FIELD_AUTHENTICATED_DOWNLOAD_URL,
+                    FIELD_FILE_VERSION
+                ].join(',')
+            );
+        });
+    });
+});

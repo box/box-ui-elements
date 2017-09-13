@@ -11,7 +11,8 @@ import sort from '../util/sorter';
 import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
 import Cache from '../util/Cache';
-import { FIELDS_TO_FETCH, CACHE_PREFIX_FOLDER, X_REP_HINTS } from '../constants';
+import getFields from '../util/fields';
+import { CACHE_PREFIX_FOLDER, X_REP_HINTS } from '../constants';
 import getBadItemError from '../util/error';
 import type {
     BoxItem,
@@ -65,6 +66,16 @@ class Folder extends Item {
      * @property {Function}
      */
     errorCallback: Function;
+
+    /**
+     * @property {boolean}
+     */
+    includePreviewFields: boolean;
+
+    /**
+     * @property {boolean}
+     */
+    includePreviewSidebarFields: boolean;
 
     /**
      * Creates a key for the cache
@@ -217,7 +228,7 @@ class Folder extends Item {
                 params: {
                     offset: this.offset,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: FIELDS_TO_FETCH
+                    fields: getFields(this.includePreviewFields, this.includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
@@ -228,12 +239,14 @@ class Folder extends Item {
     /**
      * Gets a box folder and its items
      *
-     * @param {string} id Folder id
-     * @param {string} sortBy sort by field
-     * @param {string} sortDirection sort direction
-     * @param {Function} successCallback Function to call with results
-     * @param {Function} errorCallback Function to call with errors
-     * @param {boolean} forceFetch Bypasses the cache
+     * @param {string} id - Folder id
+     * @param {string} sortBy - sort by field
+     * @param {string} sortDirection - sort direction
+     * @param {Function} successCallback - Function to call with results
+     * @param {Function} errorCallback - Function to call with errors
+     * @param {boolean|void} [forceFetch] - Bypasses the cache
+     * @param {boolean|void} [includePreview] - Optionally include preview fields
+     * @param {boolean|void} [includePreviewSidebar] - Optionally include preview sidebar fields
      * @return {void}
      */
     folder(
@@ -242,7 +255,9 @@ class Folder extends Item {
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        forceFetch: boolean = false
+        forceFetch: boolean = false,
+        includePreviewFields: boolean = false,
+        includePreviewSidebarFields: boolean = false
     ): void {
         if (this.isDestroyed()) {
             return;
@@ -256,6 +271,8 @@ class Folder extends Item {
         this.errorCallback = errorCallback;
         this.sortBy = sortBy;
         this.sortDirection = sortDirection;
+        this.includePreviewFields = includePreviewFields;
+        this.includePreviewSidebarFields = includePreviewSidebarFields; // implies preview
 
         // Clear the cache if needed
         if (forceFetch) {
@@ -316,7 +333,7 @@ class Folder extends Item {
             return Promise.reject();
         }
 
-        const url = `${this.getUrl()}?fields=${FIELDS_TO_FETCH}`;
+        const url = `${this.getUrl()}?fields=${getFields()}`;
         return this.xhr
             .post({
                 url,
