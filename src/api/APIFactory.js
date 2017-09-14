@@ -12,7 +12,6 @@ import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import RecentsAPI from './Recents';
-import MetadataAPI from './Metadata';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
@@ -56,11 +55,6 @@ class APIFactory {
      * @property {RecentsAPI}
      */
     recentsAPI: RecentsAPI;
-
-    /**
-     * @property {MetadataAPI}
-     */
-    metadataAPI: MetadataAPI;
 
     /**
      * [constructor]
@@ -116,10 +110,6 @@ class APIFactory {
         if (this.recentsAPI) {
             this.recentsAPI.destroy();
             delete this.recentsAPI;
-        }
-        if (this.metadataAPI) {
-            this.metadataAPI.destroy();
-            delete this.metadataAPI;
         }
         if (destroyCache) {
             this.options.cache = new Cache();
@@ -237,17 +227,6 @@ class APIFactory {
         this.destroy();
         this.recentsAPI = new RecentsAPI(this.options);
         return this.recentsAPI;
-    }
-
-    /**
-     * API for file meta data
-     *
-     * @return {MetadataAPI} MetadataAPI instance
-     */
-    getMetadataAPI(): MetadataAPI {
-        this.destroy();
-        this.metadataAPI = new MetadataAPI(this.options);
-        return this.metadataAPI;
     }
 }
 

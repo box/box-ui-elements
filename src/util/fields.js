@@ -29,7 +29,10 @@ import {
     FIELD_SHA1,
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
-    FIELD_FILE_VERSION
+    FIELD_FILE_VERSION,
+    METADATA_KEYWORDS,
+    METADATA_TIMELINES,
+    METADATA_TRANSCRIPTS
 } from '../constants';
 
 // Minimum set of fields needed for Content Explorer / Picker
@@ -53,7 +56,15 @@ const BASE_FIELDS_TO_FETCH = [
 ];
 
 // Additional fields needed for the sidebar
-const SIDEBAR_FIELDS_TO_FETCH = [FIELD_CREATED_BY, FIELD_MODIFIED_BY, FIELD_OWNED_BY, FIELD_DESCRIPTION];
+const SIDEBAR_FIELDS_TO_FETCH = [
+    FIELD_CREATED_BY,
+    FIELD_MODIFIED_BY,
+    FIELD_OWNED_BY,
+    FIELD_DESCRIPTION,
+    METADATA_KEYWORDS,
+    METADATA_TIMELINES,
+    METADATA_TRANSCRIPTS
+];
 
 // Additional fields needed for preview
 const PREVIEW_FIELDS_TO_FETCH = [

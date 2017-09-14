@@ -27,6 +27,8 @@ import { isFocusableElement, isInputElement, focus } from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_APP,
+    DEFAULT_HOSTNAME_STATIC,
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
@@ -75,6 +77,8 @@ type Props = {
     canShare: boolean,
     canSetShareAccess: boolean,
     apiHost: string,
+    appHost: string,
+    staticHost: string,
     uploadHost: string,
     getLocalizedMessage: Function,
     token: Token,
@@ -132,6 +136,8 @@ type DefaultProps = {|
     canSetShareAccess: boolean,
     autoFocus: boolean,
     apiHost: string,
+    appHost: string,
+    staticHost: string,
     uploadHost: string,
     className: string,
     onDelete: Function,
@@ -170,6 +176,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         canSetShareAccess: true,
         autoFocus: false,
         apiHost: DEFAULT_HOSTNAME_API,
+        appHost: DEFAULT_HOSTNAME_APP,
+        staticHost: DEFAULT_HOSTNAME_STATIC,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         className: '',
         onDelete: noop,
@@ -1197,6 +1205,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             sharedLink,
             sharedLinkPassword,
             apiHost,
+            appHost,
+            staticHost,
             uploadHost,
             isSmall,
             isTouch,
@@ -1353,6 +1363,9 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                         onPreview={onPreview}
                         hasPreviewSidebar={hasPreviewSidebar}
                         cache={this.api.getCache()}
+                        apiHost={apiHost}
+                        appHost={appHost}
+                        staticHost={staticHost}
                       />
                     : null}
             </div>

@@ -2,6 +2,7 @@
 
 .buik-transcript {
     color: $sevens;
+    font-size: 11px;
 
     // sass-lint:disable class-name-format
     .ReactVirtualized__Table__Grid {
@@ -10,5 +11,5 @@
 }
 
 .buik-transcript-column {
-    padding: 0 10px 15px 0;
+    padding: 8px 15px 8px 0;
 }

@@ -23,7 +23,10 @@ type Props = {
     isTouch: boolean,
     onPreview: Function,
     hasPreviewSidebar: boolean,
-    cache: Cache
+    cache: Cache,
+    apiHost: string,
+    appHost: string,
+    staticHost: string
 };
 
 const PreviewDialog = ({
@@ -36,7 +39,10 @@ const PreviewDialog = ({
     currentCollection,
     hasPreviewSidebar,
     onCancel,
-    onPreview
+    onPreview,
+    apiHost,
+    appHost,
+    staticHost
 }: Props) => {
     const { items }: Collection = currentCollection;
     const onLoad = (data: any): void => {
@@ -60,6 +66,9 @@ const PreviewDialog = ({
         >
             <ContentPreview
                 skipServerUpdate
+                apiHost={apiHost}
+                appHost={appHost}
+                staticHost={staticHost}
                 cache={cache}
                 file={item}
                 token={token}

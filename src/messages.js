@@ -447,6 +447,21 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         id: 'buik.preview.sidebar.details.properties',
         description: 'Label for file properties section in the preview sidebar',
         defaultMessage: 'File Properties'
+    },
+    'buik.preview.sidebar.details.keyword': {
+        id: 'buik.preview.sidebar.details.keywords',
+        description: 'Label for keywords section in the preview sidebar',
+        defaultMessage: 'Keywords'
+    },
+    'buik.preview.sidebar.details.timeline': {
+        id: 'buik.preview.sidebar.details.timeline',
+        description: 'Label for timelines section in the preview sidebar',
+        defaultMessage: 'Timelines'
+    },
+    'buik.preview.sidebar.details.transcript': {
+        id: 'buik.preview.sidebar.details.transcript',
+        description: 'Label for transcripts section in the preview sidebar',
+        defaultMessage: 'Transcripts'
     }
 });
 

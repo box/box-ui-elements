@@ -24,7 +24,10 @@ import {
     FIELD_SHA1,
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
-    FIELD_FILE_VERSION
+    FIELD_FILE_VERSION,
+    METADATA_KEYWORDS,
+    METADATA_TIMELINES,
+    METADATA_TRANSCRIPTS
 } from '../../constants';
 
 describe('util/fields', () => {
@@ -101,6 +104,9 @@ describe('util/fields', () => {
                     FIELD_MODIFIED_BY,
                     FIELD_OWNED_BY,
                     FIELD_DESCRIPTION,
+                    METADATA_KEYWORDS,
+                    METADATA_TIMELINES,
+                    METADATA_TRANSCRIPTS,
                     FIELD_REPRESENTATIONS,
                     FIELD_SHA1,
                     FIELD_WATERMARK_INFO,

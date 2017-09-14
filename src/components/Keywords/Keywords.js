@@ -1,44 +1,47 @@
 /**
  * @flow
- * @file File Keywords Card component
+ * @file File Keywords SkillData component
  * @author Box
  */
 
 import React, { PureComponent } from 'react';
 import FileKeyword from './Keyword';
 import { Timeline } from '../Timeline';
-import type { Card, CardEntry } from '../../flowTypes';
+import type { SkillData, SkillDataEntry } from '../../flowTypes';
 
 type Props = {
-    card: Card
+    skill: SkillData
 };
 
 type State = {
-    keyword?: CardEntry
+    keyword?: SkillDataEntry
 };
 
 class FileKeywords extends PureComponent<void, Props, State> {
     props: Props;
     state: State = {};
 
-    onClick = (keyword: CardEntry) => {
+    onClick = (keyword: SkillDataEntry) => {
         this.setState({ keyword });
     };
 
     render() {
-        const { card }: Props = this.props;
-        const { entries, duration }: Card = card;
+        const { skill }: Props = this.props;
+        const { entries, duration }: SkillData = skill;
         const { keyword }: State = this.state;
         return (
             <div className='buik-file-keywords'>
-                {entries.map((entry: CardEntry) =>
-                    <FileKeyword key={entry.id} keyword={entry} onClick={this.onClick} />
+                {entries.map(
+                    (entry: SkillDataEntry, index) =>
+                        /* eslint-disable react/no-array-index-key */
+                        <FileKeyword key={index} keyword={entry} onClick={this.onClick} />
+                    /* eslint-enable react/no-array-index-key */
                 )}
                 {!!keyword &&
                     Array.isArray(keyword.appears) &&
-                    keyword.appears.length &&
+                    keyword.appears.length > 0 &&
                     <div className='buik-timelines'>
-                        <Timeline type={keyword.type} timeslices={keyword.appears} duration={duration} />
+                        <Timeline type={keyword.entry_type} timeslices={keyword.appears} duration={duration} />
                     </div>}
             </div>
         );

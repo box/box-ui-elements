@@ -9,7 +9,6 @@ import FileAPI from '../File';
 import WebLinkAPI from '../WebLink';
 import SearchAPI from '../Search';
 import RecentsAPI from '../Recents';
-import MetadataAPI from '../Metadata';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -39,7 +38,6 @@ describe('api/APIFactory', () => {
             factory.plainUploadAPI = { destroy: sandbox.mock() };
             factory.chunkedUploadAPI = { destroy: sandbox.mock() };
             factory.recentsAPI = { destroy: sandbox.mock() };
-            factory.metadataAPI = { destroy: sandbox.mock() };
             factory.destroy();
             expect(factory.fileAPI).to.equal(undefined);
             expect(factory.folderAPI).to.equal(undefined);
@@ -48,7 +46,6 @@ describe('api/APIFactory', () => {
             expect(factory.plainUploadAPI).to.equal(undefined);
             expect(factory.chunkedUploadAPI).to.equal(undefined);
             expect(factory.recentsAPI).to.equal(undefined);
-            expect(factory.metadataAPI).to.equal(undefined);
         });
         it('should not destroy cache by default', () => {
             const cache = factory.options.cache;
@@ -162,18 +159,6 @@ describe('api/APIFactory', () => {
             expect(recentsAPI.options.cache instanceof Cache).to.be.true;
             expect(recentsAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
             expect(recentsAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
-        });
-    });
-
-    describe('getMetadataAPI()', () => {
-        it('should call destroy and return metadata API', () => {
-            const spy = sandbox.spy(factory, 'destroy');
-            const metadataAPI = factory.getMetadataAPI();
-            expect(spy).to.be.called;
-            expect(metadataAPI instanceof MetadataAPI).to.be.true;
-            expect(metadataAPI.options.cache instanceof Cache).to.be.true;
-            expect(metadataAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
-            expect(metadataAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

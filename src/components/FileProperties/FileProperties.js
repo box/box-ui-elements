@@ -1,12 +1,12 @@
 /**
  * @flow
- * @file File Properties Card component
+ * @file File Properties SkillData component
  * @author Box
  */
 
 import React from 'react';
 import getSize from '../../util/size';
-import { getDateTime } from '../../util/date';
+import { getDateTime } from '../../util/datetime';
 import type { BoxItem } from '../../flowTypes';
 
 type Props = {

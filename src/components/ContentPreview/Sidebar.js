@@ -6,18 +6,17 @@
 
 import React from 'react';
 import DetailsSidebar from './DetailsSidebar';
-import type { BoxItem, Cards } from '../../flowTypes';
+import type { BoxItem } from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
     file?: BoxItem,
-    metadata?: Cards,
     getLocalizedMessage: Function
 };
 
-const Sidebar = ({ file, metadata, getLocalizedMessage }: Props) =>
+const Sidebar = ({ file, getLocalizedMessage }: Props) =>
     <div className='bcpr-sidebar'>
-        {!!file && <DetailsSidebar file={file} metadata={metadata} getLocalizedMessage={getLocalizedMessage} />}
+        {!!file && <DetailsSidebar file={file} getLocalizedMessage={getLocalizedMessage} />}
     </div>;
 
 export default Sidebar;

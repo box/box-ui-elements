@@ -1,8 +1,8 @@
-import date, { getDate, getDateTime } from '../date';
+import date, { getDate, getDateTime, formatTime } from '../datetime';
 
 const sandbox = sinon.sandbox.create();
 
-describe('util/date', () => {
+describe('util/datetime', () => {
     describe('getDate()', () => {
         it('should return today for today', () => {
             expect(getDate(new Date(), 'foo', 'bar')).to.equal('foo');
@@ -18,6 +18,7 @@ describe('util/date', () => {
             expect(getDate(new Date('2000-03-31T16:20:30-08:00'))).to.equal('Fri Mar 31 2000');
         });
     });
+
     describe('getDateTime()', () => {
         /* eslint-disable no-underscore-dangle */
         it('should return today with time for today', () => {
@@ -36,6 +37,38 @@ describe('util/date', () => {
         it('should return proper date time', () => {
             const d = new Date('2000-03-31T16:20:30-08:00');
             expect(getDateTime(d)).to.equal('Fri Mar 31 2000, 4:20:30 PM PST');
+        });
+    });
+
+    describe('formatTime()', () => {
+        it('should correctly format 3 hours', () => {
+            const result = formatTime(10800);
+            expect(result).to.equal('3:00:00');
+        });
+
+        it('should correctly format the time', () => {
+            const result = formatTime(11211);
+            expect(result).to.equal('3:06:51');
+        });
+
+        it('should correctly format when double-digit minutes', () => {
+            const result = formatTime(705);
+            expect(result).to.equal('11:45');
+        });
+
+        it('should correctly format when single-digit minutes', () => {
+            const result = formatTime(105);
+            expect(result).to.equal('1:45');
+        });
+
+        it('should correctly format when 0 minutes', () => {
+            const result = formatTime(9);
+            expect(result).to.equal('0:09');
+        });
+
+        it('should correctly format 0 seconds', () => {
+            const result = formatTime(0);
+            expect(result).to.equal('0:00');
         });
     });
 });

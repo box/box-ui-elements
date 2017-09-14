@@ -3,13 +3,12 @@
 .buik-btn.buik-btn-plain.buik-timeline-time {
     cursor: pointer;
     height: 6px;
+    opacity: .5;
     position: absolute;
 
     &:focus,
     &:active,
     &:hover {
-        /* stylelint-disable declaration-no-important */
-        background-color: $blue !important;
-        /* stylelint-enable declaration-no-important */
+        opacity: 1;
     }
 }
