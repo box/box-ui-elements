@@ -14,19 +14,21 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import {
     DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_APP,
     DEFAULT_HOSTNAME_STATIC,
     DEFAULT_PREVIEW_VERSION,
     DEFAULT_PREVIEW_LOCALE,
-    DEFAULT_PREVIEW_STATIC_PATH,
+    DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW
 } from '../../constants';
-import type { Token, BoxItem, Cards } from '../../flowTypes';
+import type { Token, BoxItem } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
 
 type DefaultProps = {|
     apiHost: string,
+    appHost: string,
     staticHost: string,
     staticPath: string,
     locale: string,
@@ -46,6 +48,7 @@ type Props = {
     hasSidebar: boolean,
     hasHeader: boolean,
     apiHost: string,
+    appHost: string,
     staticHost: string,
     staticPath: string,
     token: Token,
@@ -64,7 +67,6 @@ type Props = {
 
 type State = {
     file?: BoxItem,
-    metadata?: Cards,
     isSidebarVisible: boolean
 };
 
@@ -78,8 +80,9 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
     static defaultProps: DefaultProps = {
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
+        appHost: DEFAULT_HOSTNAME_APP,
         staticHost: DEFAULT_HOSTNAME_STATIC,
-        staticPath: DEFAULT_PREVIEW_STATIC_PATH,
+        staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         locale: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
@@ -292,7 +295,6 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
             throw new Error('Invalid id for Preview!');
         }
         this.fetchFile(id);
-        this.fetchMetadata(id);
     }
 
     /**
@@ -343,17 +345,6 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
     };
 
     /**
-     * Metadata fetch success callback
-     *
-     * @private
-     * @param {Object} metadata - file metadata
-     * @return {void}
-     */
-    fetchMetadataSuccessCallback = (metadata: Cards): void => {
-        this.setState({ metadata });
-    };
-
-    /**
      * Fetches a file
      *
      * @private
@@ -367,18 +358,6 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
     }
 
     /**
-     * Fetches file metadata
-     *
-     * @private
-     * @param {string} id file id
-     * @param {Boolean|void} [forceFetch] To void cache
-     * @return {void}
-     */
-    fetchMetadata(id: string, forceFetch: boolean = false): void {
-        this.api.getMetadataAPI().metadata(id, this.fetchMetadataSuccessCallback, this.errorCallback, forceFetch);
-    }
-
-    /**
      * Renders the file preview
      *
      * @private
@@ -387,7 +366,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      */
     render() {
         const { className, hasSidebar, hasHeader, onClose, getLocalizedMessage }: Props = this.props;
-        const { file, metadata, isSidebarVisible }: State = this.state;
+        const { file, isSidebarVisible }: State = this.state;
         return (
             <div id={this.id} className={`buik bcpr ${className}`}>
                 {hasHeader &&
@@ -403,8 +382,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
                     <Measure bounds onResize={this.onResize}>
                         {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
                     </Measure>
-                    {isSidebarVisible &&
-                        <Sidebar file={file} metadata={metadata} getLocalizedMessage={getLocalizedMessage} />}
+                    {isSidebarVisible && <Sidebar file={file} getLocalizedMessage={getLocalizedMessage} />}
                 </div>
             </div>
         );

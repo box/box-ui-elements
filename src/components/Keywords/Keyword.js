@@ -7,11 +7,11 @@
 import React from 'react';
 import { PlainButton } from '../Button';
 // import IconCross from '../icons/IconCross';
-import type { CardEntry } from '../../flowTypes';
+import type { SkillDataEntry } from '../../flowTypes';
 import './Keyword.scss';
 
 type Props = {
-    keyword: CardEntry,
+    keyword: SkillDataEntry,
     onClick: Function
 };
 

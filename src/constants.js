@@ -36,7 +36,6 @@ export const CACHE_PREFIX_FILE = TYPED_ID_FILE_PREFIX;
 export const CACHE_PREFIX_WEBLINK = TYPED_ID_WEBLINK_PREFIX;
 export const CACHE_PREFIX_SEARCH = 'search_';
 export const CACHE_PREFIX_RECENTS = 'recents_';
-export const CACHE_PREFIX_METADATA = 'metadata_';
 
 /* ----------------------- Sorts ---------------------------- */
 export const SORT_ASC: 'ASC' = 'ASC';
@@ -82,6 +81,9 @@ export const FIELD_SHA1 = 'sha1';
 export const FIELD_WATERMARK_INFO = 'watermark_info';
 export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
 export const FIELD_FILE_VERSION = 'file_version';
+export const METADATA_KEYWORDS = 'metadata.global.box-skills-keywords-demo';
+export const METADATA_TIMELINES = 'metadata.global.box-skills-timelines-demo';
+export const METADATA_TRANSCRIPTS = 'metadata.global.box-skills-transcripts-demo';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -99,10 +101,12 @@ export const DELIMITER_CARET: 'caret' = 'caret';
 /* ---------------------- Defaults -------------------------- */
 export const DEFAULT_PREVIEW_VERSION = '1.10.0';
 export const DEFAULT_PREVIEW_LOCALE = 'en-US';
-export const DEFAULT_PREVIEW_STATIC_PATH = 'platform/preview';
+export const DEFAULT_PATH_STATIC = 'platform/elements';
+export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
 export const DEFAULT_HOSTNAME_API = 'https://api.box.com';
 export const DEFAULT_HOSTNAME_STATIC = 'https://cdn01.boxcdn.net';
 export const DEFAULT_HOSTNAME_UPLOAD = 'https://upload.box.com';
+export const DEFAULT_HOSTNAME_APP = 'https://app.box.com';
 export const DEFAULT_CONTAINER = 'body';
 export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;

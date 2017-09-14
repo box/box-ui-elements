@@ -103,6 +103,16 @@ export type User = {
     type: 'user'
 };
 
+export type MetadataTemplate = {
+    'box-skills-keywords-demo'?: { keywords: string },
+    'box-skills-timelines-demo'?: { timelines: string },
+    'box-skills-transcripts-demo'?: { transcripts: string }
+};
+
+export type MetadataType = {
+    global?: MetadataTemplate
+};
+
 export type BoxItem = {
     id?: string,
     name?: string,
@@ -126,7 +136,8 @@ export type BoxItem = {
     owned_by?: User,
     modified_by?: User,
     created_by?: User,
-    selected?: boolean
+    selected?: boolean,
+    metadata?: MetadataType
 };
 
 export type BoxItemCollection = {
@@ -159,7 +170,8 @@ export type FlattenedBoxItem = {
     owned_by?: User,
     modified_by?: User,
     created_by?: User,
-    selected?: boolean
+    selected?: boolean,
+    metadata?: MetadataType
 };
 
 export type FlattenedBoxItemCollection = {
@@ -240,31 +252,25 @@ export type RecentCollection = {
     entries: Recent[]
 };
 
-export type CardType = 'keyword' | 'transcript' | 'timeline';
-export type CardEntryType = 'text' | 'image';
+export type SkillDataType = 'keyword' | 'transcript' | 'timeline';
+export type SkillDataEntryType = 'text' | 'image';
 
 export type TimeSlice = {
-    id: string,
     start: number,
     end?: number
 };
 
-export type CardEntry = {
-    id: string,
-    type: CardEntryType,
+export type SkillDataEntry = {
+    entry_type?: SkillDataEntryType,
     text?: string,
     url?: string,
-    appears: TimeSlice[]
+    appears?: TimeSlice[]
 };
 
-export type Card = {
-    id: string,
-    type: 'card',
-    card_type: CardType,
-    item: BoxItem,
-    title: string,
+export type SkillData = {
+    type: 'skills_data',
+    skills_data_type: SkillDataType,
+    title?: string,
     duration?: number,
-    entries: CardEntry[]
+    entries: SkillDataEntry[]
 };
-
-export type Cards = Card[];

@@ -1,7 +1,13 @@
 @import '../variables';
 
-.buik-file-keywords .buik-timelines {
-    margin: 20px 0 0;
+.buik-file-keywords {
+    .buik-timelines {
+        margin: 20px 0 0;
+    }
+
+    .buik-timeline {
+        height: auto;
+    }
 }
 
 .buik-file-keyword {

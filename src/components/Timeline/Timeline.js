@@ -6,11 +6,11 @@
 
 import React from 'react';
 import Line from './Line';
-import type { TimeSlice, CardEntryType } from '../../flowTypes';
+import type { TimeSlice, SkillDataEntryType } from '../../flowTypes';
 import './Timeline.scss';
 
 type Props = {
-    type: CardEntryType,
+    type?: SkillDataEntryType,
     color?: string,
     text?: string,
     url?: string,
@@ -18,7 +18,7 @@ type Props = {
     duration?: number
 };
 
-const Timeline = ({ type, color, text = '', url = '', duration = 0, timeslices = [] }: Props) =>
+const Timeline = ({ type = 'text', color, text = '', url = '', duration = 0, timeslices = [] }: Props) =>
     <div className={`buik-timeline buik-timeline-${type}`}>
         {(text || url) &&
             <div className='buik-timeline-label'>
@@ -30,8 +30,11 @@ const Timeline = ({ type, color, text = '', url = '', duration = 0, timeslices =
             </div>}
         <div className='buik-timeline-wrapper'>
             <div className='buik-timeline-line' />
-            {timeslices.map(({ id: timeId, start, end }: TimeSlice) =>
-                <Line key={timeId} color={color} type={type} start={start} end={end} duration={duration} />
+            {timeslices.map(
+                ({ start, end }: TimeSlice, index) =>
+                    /* eslint-disable react/no-array-index-key */
+                    <Line key={index} color={color} type={type} start={start} end={end} duration={duration} />
+                /* eslint-enable react/no-array-index-key */
             )}
         </div>
     </div>;
