@@ -358,6 +358,26 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
     }
 
     /**
+     * Returns the viewer instance being used by preview.
+     * This will let child components access the viewers.
+     *
+     * @private
+     * @return {Preview} current instance of preview
+     */
+    getPreviewer = (): any => {
+        const { file }: State = this.state;
+        if (!this.preview || !file) {
+            return null;
+        }
+        const viewer = this.preview.getCurrentViewer();
+        const previewingFile = this.preview.getCurrentFile();
+        if (!previewingFile || !viewer || previewingFile.id !== file.id) {
+            return null;
+        }
+        return viewer;
+    };
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -382,7 +402,12 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
                     <Measure bounds onResize={this.onResize}>
                         {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
                     </Measure>
-                    {isSidebarVisible && <Sidebar file={file} getLocalizedMessage={getLocalizedMessage} />}
+                    {isSidebarVisible &&
+                        <Sidebar
+                            file={file}
+                            getPreviewer={this.getPreviewer}
+                            getLocalizedMessage={getLocalizedMessage}
+                        />}
                 </div>
             </div>
         );

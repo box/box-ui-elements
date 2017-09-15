@@ -15,10 +15,11 @@ type Props = {
     text?: string,
     url?: string,
     timeslices?: TimeSlice[],
-    duration?: number
+    duration?: number,
+    getPreviewer?: Function
 };
 
-const Timeline = ({ type = 'text', color, text = '', url = '', duration = 0, timeslices = [] }: Props) =>
+const Timeline = ({ type = 'text', color, text = '', url = '', duration = 0, timeslices = [], getPreviewer }: Props) =>
     <div className={`buik-timeline buik-timeline-${type}`}>
         {(text || url) &&
             <div className='buik-timeline-label'>
@@ -33,7 +34,15 @@ const Timeline = ({ type = 'text', color, text = '', url = '', duration = 0, tim
             {timeslices.map(
                 ({ start, end }: TimeSlice, index) =>
                     /* eslint-disable react/no-array-index-key */
-                    <Line key={index} color={color} type={type} start={start} end={end} duration={duration} />
+                    <Line
+                        key={index}
+                        color={color}
+                        type={type}
+                        start={start}
+                        end={end}
+                        duration={duration}
+                        getPreviewer={getPreviewer}
+                    />
                 /* eslint-enable react/no-array-index-key */
             )}
         </div>
