@@ -41,7 +41,7 @@ class FileKeywords extends PureComponent<void, Props, State> {
                     Array.isArray(keyword.appears) &&
                     keyword.appears.length > 0 &&
                     <div className='buik-timelines'>
-                        <Timeline type={keyword.entry_type} timeslices={keyword.appears} duration={duration} />
+                        <Timeline type={keyword.type} timeslices={keyword.appears} duration={duration} />
                     </div>}
             </div>
         );

@@ -13,16 +13,17 @@ import type { SkillData, MetadataType } from '../../flowTypes';
 
 type Props = {
     metadata?: MetadataType,
+    getPreviewer: Function,
     getLocalizedMessage: Function
 };
 
-function getCard(skill: SkillData) {
+function getCard(skill: SkillData, getPreviewer: Function) {
     const { skills_data_type } = skill;
     switch (skills_data_type) {
         case 'keyword':
             return <Keywords skill={skill} />;
         case 'timeline':
-            return <Timelines skill={skill} />;
+            return <Timelines skill={skill} getPreviewer={getPreviewer} />;
         case 'transcript':
             return <Transcript skill={skill} />;
         default:
@@ -30,7 +31,7 @@ function getCard(skill: SkillData) {
     }
 }
 
-const SidebarSkills = ({ metadata, getLocalizedMessage }: Props) => {
+const SidebarSkills = ({ metadata, getPreviewer, getLocalizedMessage }: Props) => {
     if (!metadata || !metadata.global) {
         return null;
     }
@@ -79,7 +80,7 @@ const SidebarSkills = ({ metadata, getLocalizedMessage }: Props) => {
                             skill.title || getLocalizedMessage(`buik.preview.sidebar.details.${skill.skills_data_type}`)
                         }
                     >
-                        {getCard(skill)}
+                        {getCard(skill, getPreviewer)}
                     </SidebarSection>
                 /* eslint-enable react/no-array-index-key */
             )}

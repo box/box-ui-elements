@@ -261,7 +261,7 @@ export type TimeSlice = {
 };
 
 export type SkillDataEntry = {
-    entry_type?: SkillDataEntryType,
+    type?: SkillDataEntryType,
     text?: string,
     url?: string,
     appears?: TimeSlice[]
