@@ -14,11 +14,12 @@ import './DetailsSidebar.scss';
 
 type Props = {
     file: BoxItem,
+    getPreviewer: Function,
     getLocalizedMessage: Function
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
-const DetailsSidebar = ({ file, getLocalizedMessage }: Props) =>
+const DetailsSidebar = ({ file, getPreviewer, getLocalizedMessage }: Props) =>
     <SidebarContent title={getLocalizedMessage('buik.preview.sidebar.details.title')}>
         <div className='bcpr-sidebar-details-description'>
             <label>
@@ -35,7 +36,7 @@ const DetailsSidebar = ({ file, getLocalizedMessage }: Props) =>
         <SidebarSection title={getLocalizedMessage('buik.preview.sidebar.details.properties')}>
             <FileProperties file={file} getLocalizedMessage={getLocalizedMessage} />
         </SidebarSection>
-        <SidebarSkills metadata={file.metadata} getLocalizedMessage={getLocalizedMessage} />
+        <SidebarSkills metadata={file.metadata} getPreviewer={getPreviewer} getLocalizedMessage={getLocalizedMessage} />
     </SidebarContent>;
 
 export default DetailsSidebar;
