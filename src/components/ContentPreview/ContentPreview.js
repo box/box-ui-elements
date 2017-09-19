@@ -135,11 +135,17 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      */
     componentWillReceiveProps(nextProps: Props): void {
         const { fileId, token }: Props = this.props;
-        const { file }: State = this.state;
+        const { file, isSidebarVisible }: State = this.state;
 
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
         const hasFileChanged = nextProps.file !== file;
+        const shouldToggleSidebar = nextProps.hasSidebar !== isSidebarVisible;
+
+        if (shouldToggleSidebar) {
+            this.state = { file, isSidebarVisible: nextProps.hasSidebar };
+            return;
+        }
 
         if (hasTokenChanged || hasFileChanged || hasFileIdChanged) {
             if (hasFileChanged) {
