@@ -16,16 +16,16 @@ import './Header.scss';
 type Props = {
     file?: BoxItem,
     getLocalizedMessage: Function,
-    isSidebarVisible: boolean,
-    hasSidebar: boolean,
+    showSidebarButton: boolean,
+    showSidebar: boolean,
     toggleSidebar: Function,
     onClose?: Function
 };
 
-const Header = ({ file, hasSidebar, onClose, getLocalizedMessage, isSidebarVisible, toggleSidebar }: Props) => {
+const Header = ({ file, showSidebar, onClose, getLocalizedMessage, showSidebarButton, toggleSidebar }: Props) => {
     const name = file ? file.name : '';
     const close = getLocalizedMessage('buik.modal.dialog.share.button.close');
-    const sidebar = isSidebarVisible
+    const sidebar = showSidebar
         ? getLocalizedMessage('buik.modal.preview.dialog.button.sidebar.show.title')
         : getLocalizedMessage('buik.modal.preview.dialog.button.sidebar.hide.title');
 
@@ -38,9 +38,9 @@ const Header = ({ file, hasSidebar, onClose, getLocalizedMessage, isSidebarVisib
                 </span>
             </div>
             <div className='bcpr-btns'>
-                {hasSidebar &&
+                {showSidebarButton &&
                     <PlainButton className='bcpr-btn' onClick={toggleSidebar} title={sidebar} aria-label={sidebar}>
-                        <IconSidebar color={isSidebarVisible ? BOX_BLUE : '#777'} width={16} height={16} />
+                        <IconSidebar color={showSidebar ? BOX_BLUE : '#777'} width={16} height={16} />
                     </PlainButton>}
                 {onClose &&
                     <PlainButton className='bcpr-btn' onClick={onClose} title={close} aria-label={close}>

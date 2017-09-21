@@ -289,14 +289,14 @@ describe('api/Folder', () => {
             expect(cache.get('file_item3')).to.deep.equal(item3);
         });
 
-        it('should call folder request again if returned items are less than total', () => {
+        it('should call folder request again if limit + offset is less than total', () => {
             folder.options = { cache };
             folder.offset = 0;
             folder.key = 'key';
             folder.finish = sandbox.mock();
             folder.folderRequest = sandbox.mock();
             folder.getCache = sandbox.mock().returns(cache);
-            response.item_collection.total_count = 10;
+            response.item_collection.total_count = 2000;
             folder.folderSuccessHandler(response);
             expect(cache.get('key')).to.deep.equal({
                 id: 'id',
@@ -304,14 +304,14 @@ describe('api/Folder', () => {
                     isLoaded: false,
                     limit: 1000,
                     offset: 0,
-                    total_count: 10,
+                    total_count: 2000,
                     entries: ['file_item1', 'file_item2', 'file_item3']
                 }
             });
             expect(folder.offset).to.equal(1000);
         });
 
-        it('should append the collection and call folder request again if returned items are less than total', () => {
+        it('should append the collection and call folder request again if limit + offset is less than total', () => {
             folder.options = { cache };
             folder.offset = 0;
             folder.key = 'key';
@@ -319,7 +319,7 @@ describe('api/Folder', () => {
             folder.folderRequest = sandbox.mock();
             folder.getCache = sandbox.mock().returns(cache);
             folder.itemCache = ['foo', 'bar'];
-            response.item_collection.total_count = 10;
+            response.item_collection.total_count = 2000;
             folder.folderSuccessHandler(response);
             expect(cache.get('key')).to.deep.equal({
                 id: 'id',
@@ -327,7 +327,7 @@ describe('api/Folder', () => {
                     isLoaded: false,
                     limit: 1000,
                     offset: 0,
-                    total_count: 10,
+                    total_count: 2000,
                     entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3']
                 }
             });
@@ -341,18 +341,34 @@ describe('api/Folder', () => {
 
         it('should throw bad item error when item collection entries is missing', () => {
             folder.finish = sandbox.mock().never();
-            expect(folder.folderSuccessHandler.bind(folder, { item_collection: { total_count: 1 } })).to.throw(
-                Error,
-                /Bad box item/
-            );
+            expect(
+                folder.folderSuccessHandler.bind(folder, { item_collection: { total_count: 1, offset: 0, limit: 100 } })
+            ).to.throw(Error, /Bad box item/);
         });
 
         it('should throw bad item error when item collection total count is missing', () => {
             folder.finish = sandbox.mock().never();
-            expect(folder.folderSuccessHandler.bind(folder, { item_collection: { entries: [] } })).to.throw(
-                Error,
-                /Bad box item/
-            );
+            expect(
+                folder.folderSuccessHandler.bind(folder, { item_collection: { entries: [], offset: 0, limit: 100 } })
+            ).to.throw(Error, /Bad box item/);
+        });
+
+        it('should throw bad item error when item collection offset is missing', () => {
+            folder.finish = sandbox.mock().never();
+            expect(
+                folder.folderSuccessHandler.bind(folder, {
+                    item_collection: { entries: [], total_count: 0, limit: 100 }
+                })
+            ).to.throw(Error, /Bad box item/);
+        });
+
+        it('should throw bad item error when item collection limit is missing', () => {
+            folder.finish = sandbox.mock().never();
+            expect(
+                folder.folderSuccessHandler.bind(folder, {
+                    item_collection: { entries: [], total_count: 0, offset: 100 }
+                })
+            ).to.throw(Error, /Bad box item/);
         });
     });
 
@@ -390,7 +406,7 @@ describe('api/Folder', () => {
                     entries: 'breadcrumbs'
                 },
                 item_collection: {
-                    isLoaded: true,
+                    isLoaded: false,
                     limit: 1000,
                     offset: 0,
                     total_count: 3,
@@ -447,6 +463,54 @@ describe('api/Folder', () => {
             });
 
             folderResults.item_collection.entries = ['file_item1', 'file_item2'];
+            cache.set('key', folderResults);
+            folder.finish();
+        });
+
+        it('should call success callback with 100% percent loaded when item collection isLoaded', () => {
+            folder.id = 'id';
+            folder.key = 'key';
+            folder.sortBy = 'name';
+            folder.sortDirection = 'DESC';
+            folder.getCache = sandbox.mock().returns(cache);
+            folder.successCallback = sandbox.mock().withArgs({
+                id: 'id',
+                name: 'name',
+                percentLoaded: 100,
+                permissions: 'permissions',
+                sortBy: 'name',
+                sortDirection: 'DESC',
+                boxItem: folderResults,
+                breadcrumbs: 'breadcrumbs',
+                items: [item2, item1]
+            });
+
+            folderResults.item_collection.entries = ['file_item1', 'file_item2'];
+            folderResults.item_collection.isLoaded = true;
+            cache.set('key', folderResults);
+            folder.finish();
+        });
+
+        it('should call success callback with 100% percent loaded when item collection total count is 0', () => {
+            folder.id = 'id';
+            folder.key = 'key';
+            folder.sortBy = 'name';
+            folder.sortDirection = 'DESC';
+            folder.getCache = sandbox.mock().returns(cache);
+            folder.successCallback = sandbox.mock().withArgs({
+                id: 'id',
+                name: 'name',
+                percentLoaded: 100,
+                permissions: 'permissions',
+                sortBy: 'name',
+                sortDirection: 'DESC',
+                boxItem: folderResults,
+                breadcrumbs: 'breadcrumbs',
+                items: [item2, item1]
+            });
+
+            folderResults.item_collection.entries = ['file_item1', 'file_item2'];
+            folderResults.item_collection.total_count = 0;
             cache.set('key', folderResults);
             folder.finish();
         });

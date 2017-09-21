@@ -146,19 +146,22 @@ class Item extends Base {
             return;
         }
 
-        const { entries }: FlattenedBoxItemCollection = item_collection;
-        if (!Array.isArray(entries)) {
+        const { entries, total_count }: FlattenedBoxItemCollection = item_collection;
+        if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
 
         const childKey: string = this.getCacheKey(this.id);
+        const oldCount: number = entries.length;
         const newEntries: string[] = entries.filter((entry: string) => entry !== childKey);
+        const newCount: number = newEntries.length;
+
         this.merge(
             parentKey,
             'item_collection',
             Object.assign(item_collection, {
                 entries: newEntries,
-                total_count: newEntries.length
+                total_count: total_count - (oldCount - newCount)
             })
         );
         this.postDeleteCleanup();

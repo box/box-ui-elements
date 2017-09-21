@@ -24,7 +24,7 @@ const Timeline = ({ type = 'text', color, text = '', url = '', duration = 0, tim
         {(text || url) &&
             <div className='buik-timeline-label'>
                 {type === 'image'
-                    ? <img alt={text} src={url} />
+                    ? <img alt={text} title={text} src={url} />
                     : <span>
                         {text}
                     </span>}

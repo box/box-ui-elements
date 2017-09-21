@@ -144,7 +144,9 @@ export type BoxItemCollection = {
     total_count?: number,
     entries?: BoxItem[],
     order?: Order[],
-    isLoaded?: boolean
+    isLoaded?: boolean,
+    limit?: number,
+    offset?: number
 };
 
 export type FlattenedBoxItem = {
@@ -178,7 +180,9 @@ export type FlattenedBoxItemCollection = {
     total_count?: number,
     entries?: string[],
     order?: Order[],
-    isLoaded?: boolean
+    isLoaded?: boolean,
+    limit?: number,
+    offset?: number
 };
 
 export type BoxPathCollection = {

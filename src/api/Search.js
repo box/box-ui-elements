@@ -150,7 +150,12 @@ class Search extends Base {
             throw getBadItemError();
         }
 
-        const percentLoaded: number = total_count === 0 ? 100 : entries.length * 100 / total_count;
+        // Total count may be more than the actual number of entries, so don't rely
+        // on it on its own. Good for calculating percentatge, but not good for
+        // figuring our when the collection is done loading.
+        const percentLoaded: number =
+            !!item_collection.isLoaded || total_count === 0 ? 100 : entries.length * 100 / total_count;
+
         const collection: Collection = {
             percentLoaded,
             id: this.id,
@@ -172,8 +177,13 @@ class Search extends Base {
             return;
         }
 
-        const { entries, total_count }: BoxItemCollection = response;
-        if (!Array.isArray(entries) || typeof total_count !== 'number') {
+        const { entries, total_count, limit, offset }: BoxItemCollection = response;
+        if (
+            !Array.isArray(entries) ||
+            typeof total_count !== 'number' ||
+            typeof limit !== 'number' ||
+            typeof offset !== 'number'
+        ) {
             throw getBadItemError();
         }
 
@@ -184,7 +194,11 @@ class Search extends Base {
             new WebLinkAPI(this.options)
         );
         this.itemCache = (this.itemCache || []).concat(flattened);
-        const isLoaded: boolean = this.itemCache.length === total_count;
+
+        // Total count may be more than the actual number of entries, so don't rely
+        // on it on its own. Good for calculating percentatge, but not good for
+        // figuring our when the collection is done loading.
+        const isLoaded: boolean = offset + limit >= total_count;
 
         this.getCache().set(this.key, {
             item_collection: Object.assign({}, response, {
@@ -194,7 +208,7 @@ class Search extends Base {
         });
 
         if (!isLoaded) {
-            this.offset += LIMIT_ITEM_FETCH;
+            this.offset += limit;
             this.searchRequest();
         }
 
