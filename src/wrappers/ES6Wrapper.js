@@ -175,6 +175,24 @@ class ES6Wrapper extends EventEmitter {
             component.clearCache();
         }
     }
+
+    /**
+     * Wrapper for emit to prevent JS exceptions
+     * in the listeners own code.
+     *
+     * @public
+     * @param {string} eventName - name of the event
+     * @param {Object} data - event data
+     * @return {boolean} true if the event had listeners, false otherwise.
+     */
+    emit(eventName: string, data: any): boolean {
+        try {
+            return super.emit(eventName, data);
+        } catch (e) {
+            // do nothing
+        }
+        return false;
+    }
 }
 
 export default ES6Wrapper;

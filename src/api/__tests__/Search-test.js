@@ -295,21 +295,21 @@ describe('api/Search', () => {
             expect(cache.get('file_item3')).to.deep.equal(item3);
         });
 
-        it('should call search request again if returned items are less than total', () => {
+        it('should call search request again if offset + limit less than total', () => {
             search.options = { cache };
             search.offset = 0;
             search.key = 'key';
             search.finish = sandbox.mock();
             search.searchRequest = sandbox.mock();
             search.getCache = sandbox.mock().returns(cache);
-            response.total_count = 10;
+            response.total_count = 2000;
             search.searchSuccessHandler(response);
             expect(cache.get('key')).to.deep.equal({
                 item_collection: {
                     isLoaded: false,
                     limit: 200,
                     offset: 0,
-                    total_count: 10,
+                    total_count: 2000,
                     entries: ['file_item1', 'file_item2', 'file_item3']
                 }
             });
@@ -324,28 +324,56 @@ describe('api/Search', () => {
             search.searchRequest = sandbox.mock();
             search.getCache = sandbox.mock().returns(cache);
             search.itemCache = ['foo', 'bar'];
-            response.total_count = 10;
+            response.total_count = 2000;
             search.searchSuccessHandler(response);
             expect(cache.get('key')).to.deep.equal({
                 item_collection: {
                     isLoaded: false,
                     limit: 200,
                     offset: 0,
-                    total_count: 10,
+                    total_count: 2000,
                     entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3']
                 }
             });
             expect(search.offset).to.equal(200);
         });
 
-        it('should throw bad item error when item collection total count is missing', () => {
-            search.finish = sandbox.mock().never();
-            expect(search.searchSuccessHandler.bind(search, { total_count: 1 })).to.throw(Error, /Bad box item/);
-        });
-
         it('should throw bad item error when entries is missing', () => {
             search.finish = sandbox.mock().never();
-            expect(search.searchSuccessHandler.bind(search, { entries: [] })).to.throw(Error, /Bad box item/);
+            expect(search.searchSuccessHandler.bind(search, { total_count: 1, offset: 0, limit: 100 })).to.throw(
+                Error,
+                /Bad box item/
+            );
+        });
+
+        it('should throw bad item error when total count is missing', () => {
+            search.finish = sandbox.mock().never();
+            expect(search.searchSuccessHandler.bind(search, { entries: [], offset: 0, limit: 100 })).to.throw(
+                Error,
+                /Bad box item/
+            );
+        });
+
+        it('should throw bad item error when offset is missing', () => {
+            search.finish = sandbox.mock().never();
+            expect(
+                search.searchSuccessHandler.bind(search, {
+                    entries: [],
+                    total_count: 0,
+                    limit: 100
+                })
+            ).to.throw(Error, /Bad box item/);
+        });
+
+        it('should throw bad item error when limit is missing', () => {
+            search.finish = sandbox.mock().never();
+            expect(
+                search.searchSuccessHandler.bind(search, {
+                    entries: [],
+                    total_count: 0,
+                    offset: 100
+                })
+            ).to.throw(Error, /Bad box item/);
         });
     });
 
@@ -377,7 +405,7 @@ describe('api/Search', () => {
             };
             searchResults = {
                 item_collection: {
-                    isLoaded: true,
+                    isLoaded: false,
                     limit: 200,
                     offset: 0,
                     total_count: 3,
@@ -427,6 +455,46 @@ describe('api/Search', () => {
             });
 
             searchResults.item_collection.entries = ['file_item1', 'file_item2'];
+            cache.set('key', searchResults);
+            search.finish();
+        });
+
+        it('should call success callback with 100% percent loaded when item collection isLoaded is true', () => {
+            search.id = 'id';
+            search.key = 'key';
+            search.sortBy = 'name';
+            search.sortDirection = 'DESC';
+            search.getCache = sandbox.mock().returns(cache);
+            search.successCallback = sandbox.mock().withArgs({
+                percentLoaded: 100,
+                id: 'id',
+                sortBy: 'name',
+                sortDirection: 'DESC',
+                items: [item2, item1]
+            });
+
+            searchResults.item_collection.entries = ['file_item1', 'file_item2'];
+            searchResults.item_collection.isLoaded = true;
+            cache.set('key', searchResults);
+            search.finish();
+        });
+
+        it('should call success callback with 100% loaded when item collection total count is 0', () => {
+            search.id = 'id';
+            search.key = 'key';
+            search.sortBy = 'name';
+            search.sortDirection = 'DESC';
+            search.getCache = sandbox.mock().returns(cache);
+            search.successCallback = sandbox.mock().withArgs({
+                percentLoaded: 100,
+                id: 'id',
+                sortBy: 'name',
+                sortDirection: 'DESC',
+                items: [item2, item1]
+            });
+
+            searchResults.item_collection.entries = ['file_item1', 'file_item2'];
+            searchResults.item_collection.total_count = 0;
             cache.set('key', searchResults);
             search.finish();
         });

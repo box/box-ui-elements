@@ -34,6 +34,7 @@ type DefaultProps = {|
     locale: string,
     version: string,
     hasSidebar: boolean,
+    showSidebar: boolean,
     hasHeader: boolean,
     className: string,
     onLoad: Function,
@@ -46,6 +47,7 @@ type Props = {
     locale: string,
     version: string,
     hasSidebar: boolean,
+    showSidebar: boolean,
     hasHeader: boolean,
     apiHost: string,
     appHost: string,
@@ -67,7 +69,7 @@ type Props = {
 
 type State = {
     file?: BoxItem,
-    isSidebarVisible: boolean
+    showSidebar: boolean
 };
 
 class ContentPreview extends PureComponent<DefaultProps, Props, State> {
@@ -86,6 +88,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
         locale: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
+        showSidebar: false,
         hasHeader: false,
         onLoad: noop,
         onNavigate: noop
@@ -101,7 +104,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
         super(props);
         const { file, cache, token, hasSidebar, sharedLink, sharedLinkPassword, apiHost } = props;
 
-        this.state = { file, isSidebarVisible: hasSidebar };
+        this.state = { file, showSidebar: hasSidebar };
         this.id = uniqueid('bcpr_');
         this.api = new API({
             cache,
@@ -135,22 +138,34 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      */
     componentWillReceiveProps(nextProps: Props): void {
         const { fileId, token }: Props = this.props;
-        const { file }: State = this.state;
+        const { file, showSidebar }: State = this.state;
 
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
         const hasFileChanged = nextProps.file !== file;
+        const hasSidebarVisibilityChanged = nextProps.showSidebar !== showSidebar;
+
+        const newState = {};
+
+        if (hasSidebarVisibilityChanged) {
+            newState.showSidebar = nextProps.showSidebar;
+        }
 
         if (hasTokenChanged || hasFileChanged || hasFileIdChanged) {
             if (hasFileChanged) {
-                this.setState({ file: nextProps.file });
+                newState.file = nextProps.file;
             } else {
-                this.setState({ file: undefined });
+                newState.file = undefined;
             }
             if (this.preview) {
                 this.preview.destroy();
                 this.preview = undefined;
             }
+        }
+
+        // Only update the state if there is something to update
+        if (Object.keys(newState).length) {
+            this.setState(newState);
         }
     }
 
@@ -305,7 +320,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      */
     toggleSidebar = (): void => {
         this.setState((prevState) => ({
-            isSidebarVisible: !prevState.isSidebarVisible
+            showSidebar: !prevState.showSidebar
         }));
     };
 
@@ -386,14 +401,14 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      */
     render() {
         const { className, hasSidebar, hasHeader, onClose, getLocalizedMessage }: Props = this.props;
-        const { file, isSidebarVisible }: State = this.state;
+        const { file, showSidebar }: State = this.state;
         return (
             <div id={this.id} className={`buik bcpr ${className}`}>
                 {hasHeader &&
                     <Header
                         file={file}
-                        isSidebarVisible={isSidebarVisible}
-                        hasSidebar={hasSidebar}
+                        showSidebar={showSidebar}
+                        showSidebarButton={hasSidebar}
                         toggleSidebar={this.toggleSidebar}
                         onClose={onClose}
                         getLocalizedMessage={getLocalizedMessage}
@@ -402,7 +417,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
                     <Measure bounds onResize={this.onResize}>
                         {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
                     </Measure>
-                    {isSidebarVisible &&
+                    {showSidebar &&
                         <Sidebar
                             file={file}
                             getPreviewer={this.getPreviewer}
