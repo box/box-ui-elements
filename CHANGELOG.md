@@ -1,6 +1,25 @@
+<a name="1.2.0"></a>
+# 1.2.0 (2017-09-22)
+
+* Fix: Allow transcripts to work without timestamp (#63) ([002b885](https://github.com/box/box-ui-elements/commit/002b885))
+* Fix: Calculate collection loaded correctly via total_count (#61) ([2980e0c](https://github.com/box/box-ui-elements/commit/2980e0c))
+* Fix: Issue with preview reloading on sidebar toggle. (#62) ([7080dbe](https://github.com/box/box-ui-elements/commit/7080dbe))
+* Fix: Remove localhost configuration for preview (#53) ([8b19970](https://github.com/box/box-ui-elements/commit/8b19970))
+* Mojito: Update translations (#52) ([375accf](https://github.com/box/box-ui-elements/commit/375accf))
+* Mojito: Update translations (#55) ([04c8301](https://github.com/box/box-ui-elements/commit/04c8301))
+* Mojito: Update translations (#57) ([4573871](https://github.com/box/box-ui-elements/commit/4573871))
+* Mojito: Update translations (#59) ([65cfb48](https://github.com/box/box-ui-elements/commit/65cfb48))
+* Update: Hook up metadata from the api call (#56) ([6294f58](https://github.com/box/box-ui-elements/commit/6294f58))
+* Update: Let the timeline component get acces to preview's viewer (#58) ([84d12f6](https://github.com/box/box-ui-elements/commit/84d12f6))
+* Update: Only request applicable API fields (#54) ([94c5d08](https://github.com/box/box-ui-elements/commit/94c5d08))
+* New: Preview Sidebar and Box Skills (#51) ([dfdf503](https://github.com/box/box-ui-elements/commit/dfdf503))
+
+
+
 <a name="1.1.0"></a>
 # 1.1.0 (2017-08-19)
 
+* Release: 1.1.0 ([4fefce1](https://github.com/box/box-ui-elements/commit/4fefce1))
 * Update: Bump Preview version and add GitHub releases (#38) ([edac306](https://github.com/box/box-ui-elements/commit/edac306))
 * Update: Minor css fixes and code cleanup (#49) ([2cf139c](https://github.com/box/box-ui-elements/commit/2cf139c)), closes [#49](https://github.com/box/box-ui-elements/issues/49)
 * Update: Preview v1.1.1 (#31) ([c5fbd0c](https://github.com/box/box-ui-elements/commit/c5fbd0c))
