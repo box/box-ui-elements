@@ -1,6 +1,13 @@
+<a name="1.2.1"></a>
+## 1.2.1 (2017-09-22)
+
+
+
+
 <a name="1.2.0"></a>
 # 1.2.0 (2017-09-22)
 
+* Release: 1.2.0 ([92c75cd](https://github.com/box/box-ui-elements/commit/92c75cd))
 * Fix: Allow transcripts to work without timestamp (#63) ([002b885](https://github.com/box/box-ui-elements/commit/002b885))
 * Fix: Calculate collection loaded correctly via total_count (#61) ([2980e0c](https://github.com/box/box-ui-elements/commit/2980e0c))
 * Fix: Issue with preview reloading on sidebar toggle. (#62) ([7080dbe](https://github.com/box/box-ui-elements/commit/7080dbe))
