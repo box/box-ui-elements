@@ -5,9 +5,9 @@
  */
 
 import Item from './Item';
-import Cache from '../util/Cache';
 import getFields from '../util/fields';
 import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS, TYPED_ID_FILE_PREFIX } from '../constants';
+import type Cache from '../util/Cache';
 import type { BoxItem } from '../flowTypes';
 
 class File extends Item {

@@ -5,26 +5,24 @@
  */
 
 import React from 'react';
-import {
-    IconFileAudio,
-    IconFileBookmark,
-    IconFileBoxNote,
-    IconFileCode,
-    IconFileDefault,
-    IconFileDocument,
-    IconFileIllustrator,
-    IconFileImage,
-    IconFileIndesign,
-    IconFilePDF,
-    IconFilePhotoshop,
-    IconFilePresentation,
-    IconFileSpreadsheet,
-    IconFileText,
-    IconFileThreeD,
-    IconFileVector,
-    IconFileVideo,
-    IconFileZip
-} from './';
+import IconFileAudio from './IconFileAudio';
+import IconFileBookmark from './IconFileBookmark';
+import IconFileBoxNote from './IconFileBoxNote';
+import IconFileCode from './IconFileCode';
+import IconFileDefault from './IconFileDefault';
+import IconFileDocument from './IconFileDocument';
+import IconFileIllustrator from './IconFileIllustrator';
+import IconFileImage from './IconFileImage';
+import IconFileIndesign from './IconFileIndesign';
+import IconFilePDF from './IconFilePDF';
+import IconFilePhotoshop from './IconFilePhotoshop';
+import IconFilePresentation from './IconFilePresentation';
+import IconFileSpreadsheet from './IconFileSpreadsheet';
+import IconFileText from './IconFileText';
+import IconFileThreeD from './IconFileThreeD';
+import IconFileVector from './IconFileVector';
+import IconFileVideo from './IconFileVideo';
+import IconFileZip from './IconFileZip';
 
 const Components = {
     IconFileAudio,

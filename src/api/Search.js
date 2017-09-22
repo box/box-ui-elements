@@ -10,10 +10,10 @@ import FolderAPI from './Folder';
 import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
-import Cache from '../util/Cache';
 import getFields from '../util/fields';
 import { CACHE_PREFIX_SEARCH, X_REP_HINTS } from '../constants';
 import getBadItemError from '../util/error';
+import type Cache from '../util/Cache';
 import type {
     BoxItemCollection,
     FlattenedBoxItem,
