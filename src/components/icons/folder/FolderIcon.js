@@ -5,7 +5,9 @@
  */
 
 import React from 'react';
-import { IconFolderCollab, IconFolderExternal, IconFolderPersonal } from './';
+import IconFolderCollab from './IconFolderCollab';
+import IconFolderExternal from './IconFolderExternal';
+import IconFolderPersonal from './IconFolderPersonal';
 
 type Props = {
     isExternal: boolean,

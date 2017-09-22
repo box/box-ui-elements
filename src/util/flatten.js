@@ -4,13 +4,13 @@
  * @author Box
  */
 
-import File from '../api/File';
-import Folder from '../api/Folder';
-import WebLink from '../api/WebLink';
-import Cache from './Cache';
 import getBadItemError from './error';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { BoxItem } from '../flowTypes';
+import type File from '../api/File';
+import type Folder from '../api/Folder';
+import type WebLink from '../api/WebLink';
+import type Cache from './Cache';
 
 /**
  * Takes an item list and flattens it by moving

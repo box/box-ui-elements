@@ -4,7 +4,6 @@
  * @author Box
  */
 
-import Cache from './Cache';
 import {
     TYPE_FILE,
     TYPE_FOLDER,
@@ -15,6 +14,7 @@ import {
     FIELD_SIZE
 } from '../constants';
 import type { SortBy, SortDirection, BoxItem, ItemType } from '../flowTypes';
+import type Cache from './Cache';
 
 /**
  * Comparator function for sorting files and folders

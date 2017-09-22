@@ -102,9 +102,9 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        const { file, cache, token, hasSidebar, sharedLink, sharedLinkPassword, apiHost } = props;
+        const { file, cache, token, showSidebar, sharedLink, sharedLinkPassword, apiHost } = props;
 
-        this.state = { file, showSidebar: hasSidebar };
+        this.state = { file, showSidebar };
         this.id = uniqueid('bcpr_');
         this.api = new API({
             cache,
@@ -137,8 +137,8 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { fileId, token }: Props = this.props;
-        const { file, showSidebar }: State = this.state;
+        const { file, fileId, token }: Props = this.props;
+        const { showSidebar }: State = this.state;
 
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;

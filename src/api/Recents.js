@@ -8,12 +8,12 @@ import Base from './Base';
 import FileAPI from './File';
 import FolderAPI from './Folder';
 import WebLinkAPI from '../api/WebLink';
-import Cache from '../util/Cache';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import getBadItemError from '../util/error';
 import getFields from '../util/fields';
 import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, SORT_DESC, FIELD_INTERACTED_AT, X_REP_HINTS } from '../constants';
+import type Cache from '../util/Cache';
 import type {
     Crumb,
     BoxItem,

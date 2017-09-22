@@ -7,8 +7,8 @@
 import noop from 'lodash.noop';
 import Base from './Base';
 import getBadItemError from '../util/error';
-import Cache from '../util/Cache';
 import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
+import type Cache from '../util/Cache';
 import type { BoxItem, FlattenedBoxItem, FlattenedBoxItemCollection, BoxItemPermission } from '../flowTypes';
 
 class Item extends Base {
