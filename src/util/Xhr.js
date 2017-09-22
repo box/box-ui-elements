@@ -195,13 +195,17 @@ class Xhr {
             headers[HEADER_CLIENT_VERSION] = this.version;
         }
 
-        return this.getToken(id).then((token) => {
-            if (token) {
-                // Only add a token when there was one found
-                headers.Authorization = `Bearer ${token}`;
-            }
-            return headers;
-        });
+        return this.getToken(id)
+            .then((token) => {
+                if (token) {
+                    // Only add a token when there was one found
+                    headers.Authorization = `Bearer ${token}`;
+                }
+                return headers;
+            })
+            .catch(() => {
+                throw error;
+            });
     }
 
     /**

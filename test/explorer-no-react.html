@@ -39,8 +39,12 @@
         <div class="inputs">
             <div>
                 <label>
-                    <div>Folder Id</div>
+                    <div>Root Folder Id</div>
                     <input class="folder" type="text" placeholder="Enter root folder id" value="0" />
+                </label>
+                <label>
+                    <div>Current Folder Id</div>
+                    <input class="currentFolder" type="text" placeholder="Enter root folder id" value="38437418331" />
                 </label>
                 <label>
                     <div>Auth Token</div>
@@ -50,7 +54,7 @@
             <button type="button" onclick="load()">Submit</button>
         </div>
         <div class="container">
-            <h1>Content Explorer</h1>
+            <h1>Content Explorer With Filtering to folders and navigating to another folder on load and token generator</h1>
             <div class="explorer1"></div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
@@ -61,30 +65,20 @@
                 const { ContentExplorer } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
+                const currentFolderId = document.querySelector('.currentFolder').value || localStorage.getItem('currentFolder');
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
 
-                const tokenGenerator1 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve(token);
-                    } else {
-                        return Promise.reject()
-                    }
-                };
-                const tokenGenerator2 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve({ [`folder_${folderId}`]: token });
-                    } else {
-                        return Promise.reject()
-                    }
+                const tokenGenerator = (id) => {
+                    return Promise.resolve({ [id]: token });
                 };
 
                 const explorer1 = new ContentExplorer();
                 document.querySelector('.explorer1').innerHTML = '';
-                explorer1.show(folderId, token, {
+                explorer1.show(folderId, tokenGenerator, {
                     container: '.explorer1',
-                    currentFolderId: '4579229774',
+                    currentFolderId: currentFolderId,
                     canShare: false,
                     autoFocus: true,
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',

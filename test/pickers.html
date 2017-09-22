@@ -90,18 +90,10 @@
                 localStorage.setItem('folder', folderId);
 
                 const tokenGenerator1 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve(token);
-                    } else {
-                        return Promise.reject()
-                    }
+                    return Promise.resolve(token);
                 };
                 const tokenGenerator2 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve({ [`folder_${folderId}`]: token });
-                    } else {
-                        return Promise.reject()
-                    }
+                    return Promise.resolve({ [id]: token });
                 };
 
                 const filePicker1 = new FilePicker();

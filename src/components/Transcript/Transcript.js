@@ -38,9 +38,15 @@ const Transcript = ({ skill: { entries } }: Props) =>
             >
                 <Column
                     dataKey='appears'
-                    width={35}
+                    className='buik-transcript-time-column'
+                    width={45}
                     flexShrink={0}
-                    cellRenderer={({ cellData }) => formatTime(cellData[0].start)}
+                    cellRenderer={({ cellData }): string => {
+                        if (Array.isArray(cellData) && !!cellData[0] && typeof cellData[0].start === 'number') {
+                            return formatTime(cellData[0].start);
+                        }
+                        return '--';
+                    }}
                 />
                 <Column
                     dataKey='text'
