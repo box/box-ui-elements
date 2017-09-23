@@ -1,6 +1,14 @@
+<a name="1.2.2"></a>
+## 1.2.2 (2017-09-23)
+
+* Fix: Moving randomcolor to deps (#64) ([cdea012](https://github.com/box/box-ui-elements/commit/cdea012))
+
+
+
 <a name="1.2.1"></a>
 ## 1.2.1 (2017-09-22)
 
+* Release: 1.2.1 ([42ba915](https://github.com/box/box-ui-elements/commit/42ba915))
 
 
 
