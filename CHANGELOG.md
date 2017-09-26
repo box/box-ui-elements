@@ -1,6 +1,14 @@
+<a name="1.3.0"></a>
+# 1.3.0 (2017-09-26)
+
+* Update: Hook up preview to transcript and keyword cards (#65) ([c7a9dd2](https://github.com/box/box-ui-elements/commit/c7a9dd2))
+
+
+
 <a name="1.2.2"></a>
 ## 1.2.2 (2017-09-23)
 
+* Release: 1.2.2 ([3040cc6](https://github.com/box/box-ui-elements/commit/3040cc6))
 * Fix: Moving randomcolor to deps (#64) ([cdea012](https://github.com/box/box-ui-elements/commit/cdea012))
 
 
