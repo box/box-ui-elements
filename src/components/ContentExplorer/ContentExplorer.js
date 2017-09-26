@@ -1240,8 +1240,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
-                <div className='buik-app-element'>
+            <div id={this.id} className={styleClassName} ref={measureRef}>
+                <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
                     <Header
                         view={view}
                         isSmall={isSmall}
