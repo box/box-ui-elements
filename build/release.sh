@@ -125,6 +125,19 @@ push_to_github() {
     fi
 }
 
+tag_release_on_github() {
+    if yarn run github-release; then
+        echo "----------------------------------------------------------------------"
+        echo "Pushing new GitHub release succuessfully"
+        echo "----------------------------------------------------------------------"
+    else
+        echo "----------------------------------------------------------------------"
+        echo "Error pushing new GitHub release"
+        echo "----------------------------------------------------------------------"
+        exit 1
+    fi
+}
+
 move_reports() {
     echo "--------------------------------------------------------------------------"
     echo "Moving test reports to ./reports/cobertura.xml and ./reports/junit.xml"
@@ -211,10 +224,12 @@ push_new_release() {
     fi
 
     # Push GitHub release
-    echo "----------------------------------------------------------------------"
-    echo "Pushing new GitHub release"
-    echo "----------------------------------------------------------------------"
-    ./node_modules/.bin/conventional-github-releaser
+    if ! tag_release_on_github; then
+        echo "----------------------------------------------------"
+        echo "Error in tag_release_on_github!"
+        echo "----------------------------------------------------"
+        exit 1
+    fi
 }
 
 # Check if we are doing major, minor, or patch release
