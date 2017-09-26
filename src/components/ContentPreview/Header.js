@@ -26,8 +26,8 @@ const Header = ({ file, showSidebar, onClose, getLocalizedMessage, showSidebarBu
     const name = file ? file.name : '';
     const close = getLocalizedMessage('buik.modal.dialog.share.button.close');
     const sidebar = showSidebar
-        ? getLocalizedMessage('buik.modal.preview.dialog.button.sidebar.show.title')
-        : getLocalizedMessage('buik.modal.preview.dialog.button.sidebar.hide.title');
+        ? getLocalizedMessage('buik.modal.preview.dialog.button.sidebar.hide.title')
+        : getLocalizedMessage('buik.modal.preview.dialog.button.sidebar.show.title');
 
     return (
         <div className='bcpr-header'>

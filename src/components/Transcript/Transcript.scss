@@ -6,7 +6,14 @@
 
     // sass-lint:disable class-name-format
     .ReactVirtualized__Table__Grid {
+        cursor: pointer;
         outline: none;
+
+        .ReactVirtualized__Table__row:focus,
+        .ReactVirtualized__Table__row:active {
+            background-color: $lighter-light-blue;
+            outline: none;
+        }
     }
 }
 

@@ -21,11 +21,11 @@ function getCard(skill: SkillData, getPreviewer: Function) {
     const { skills_data_type } = skill;
     switch (skills_data_type) {
         case 'keyword':
-            return <Keywords skill={skill} />;
+            return <Keywords skill={skill} getPreviewer={getPreviewer} />;
         case 'timeline':
             return <Timelines skill={skill} getPreviewer={getPreviewer} />;
         case 'transcript':
-            return <Transcript skill={skill} />;
+            return <Transcript skill={skill} getPreviewer={getPreviewer} />;
         default:
             return null;
     }

@@ -10,11 +10,12 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
 import 'react-virtualized/styles.css';
 import { formatTime } from '../../util/datetime';
-import type { SkillData } from '../../flowTypes';
+import type { SkillData, TimeSlice, SkillDataEntry } from '../../flowTypes';
 import './Transcript.scss';
 
 type Props = {
-    skill: SkillData
+    skill: SkillData,
+    getPreviewer?: Function
 };
 
 const cache = new CellMeasurerCache({
@@ -22,7 +23,10 @@ const cache = new CellMeasurerCache({
     fixedWidth: true
 });
 
-const Transcript = ({ skill: { entries } }: Props) =>
+const isValidStartTime = (cellData?: TimeSlice[]): boolean =>
+    Array.isArray(cellData) && !!cellData[0] && typeof cellData[0].start === 'number';
+
+const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
     <AutoSizer disableHeight>
         {({ width }) =>
             <Table
@@ -35,18 +39,29 @@ const Transcript = ({ skill: { entries } }: Props) =>
                 rowGetter={({ index }) => entries[index]}
                 className='buik-transcript'
                 deferredMeasurementCache={cache}
+                onRowClick={({ rowData }: { rowData: SkillDataEntry }): void => {
+                    const viewer = getPreviewer ? getPreviewer() : null;
+                    const cellData = rowData.appears;
+                    if (
+                        isValidStartTime(cellData) &&
+                        viewer &&
+                        viewer.isLoaded() &&
+                        !viewer.isDestroyed() &&
+                        typeof viewer.play === 'function'
+                    ) {
+                        // $FlowFixMe Already checked above
+                        const { start, end } = cellData[0];
+                        viewer.play(start, end);
+                    }
+                }}
             >
                 <Column
                     dataKey='appears'
                     className='buik-transcript-time-column'
                     width={45}
                     flexShrink={0}
-                    cellRenderer={({ cellData }): string => {
-                        if (Array.isArray(cellData) && !!cellData[0] && typeof cellData[0].start === 'number') {
-                            return formatTime(cellData[0].start);
-                        }
-                        return '--';
-                    }}
+                    cellRenderer={({ cellData }): string =>
+                        isValidStartTime(cellData) ? formatTime(cellData[0].start) : '--'}
                 />
                 <Column
                     dataKey='text'

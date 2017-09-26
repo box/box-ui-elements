@@ -10,7 +10,8 @@ import { Timeline } from '../Timeline';
 import type { SkillData, SkillDataEntry } from '../../flowTypes';
 
 type Props = {
-    skill: SkillData
+    skill: SkillData,
+    getPreviewer?: Function
 };
 
 type State = {
@@ -26,7 +27,7 @@ class FileKeywords extends PureComponent<void, Props, State> {
     };
 
     render() {
-        const { skill }: Props = this.props;
+        const { skill, getPreviewer }: Props = this.props;
         const { entries, duration }: SkillData = skill;
         const { keyword }: State = this.state;
         return (
@@ -41,7 +42,12 @@ class FileKeywords extends PureComponent<void, Props, State> {
                     Array.isArray(keyword.appears) &&
                     keyword.appears.length > 0 &&
                     <div className='buik-timelines'>
-                        <Timeline type={keyword.type} timeslices={keyword.appears} duration={duration} />
+                        <Timeline
+                            type={keyword.type}
+                            timeslices={keyword.appears}
+                            duration={duration}
+                            getPreviewer={getPreviewer}
+                        />
                     </div>}
             </div>
         );
