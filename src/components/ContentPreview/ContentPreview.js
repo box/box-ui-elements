@@ -88,7 +88,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
         locale: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
-        showSidebar: false,
+        showSidebar: true,
         hasHeader: false,
         onLoad: noop,
         onNavigate: noop
@@ -417,7 +417,8 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
                     <Measure bounds onResize={this.onResize}>
                         {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
                     </Measure>
-                    {showSidebar &&
+                    {hasSidebar &&
+                        showSidebar &&
                         <Sidebar
                             file={file}
                             getPreviewer={this.getPreviewer}

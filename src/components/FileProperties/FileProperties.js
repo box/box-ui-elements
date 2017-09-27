@@ -20,18 +20,22 @@ const FileProperties = ({ file, getLocalizedMessage }: Props) => {
     const { name: uploader = '' } = created_by || {};
     return (
         <dl>
-            <dt>
-                {getLocalizedMessage('buik.item.owner')}
-            </dt>
-            <dd>
-                {owner}
-            </dd>
-            <dt>
-                {getLocalizedMessage('buik.item.uploader')}
-            </dt>
-            <dd>
-                {uploader}
-            </dd>
+            {!!owner &&
+                <dt>
+                    {getLocalizedMessage('buik.item.owner')}
+                </dt>}
+            {!!owner &&
+                <dd>
+                    {owner}
+                </dd>}
+            {!!uploader &&
+                <dt>
+                    {getLocalizedMessage('buik.item.uploader')}
+                </dt>}
+            {!!uploader &&
+                <dd>
+                    {uploader}
+                </dd>}
             <dt>
                 {getLocalizedMessage('buik.item.created')}
             </dt>
