@@ -1,6 +1,15 @@
+<a name="1.3.1"></a>
+## 1.3.1 (2017-09-27)
+
+* Fix: Do not show preview sidebar if hasSidebar is false (#67) ([7654311](https://github.com/box/box-ui-elements/commit/7654311))
+* Fix: Release scripts and updating preview version (#66) ([2fe09b9](https://github.com/box/box-ui-elements/commit/2fe09b9))
+
+
+
 <a name="1.3.0"></a>
 # 1.3.0 (2017-09-26)
 
+* Release: 1.3.0 ([751339a](https://github.com/box/box-ui-elements/commit/751339a))
 * Update: Hook up preview to transcript and keyword cards (#65) ([c7a9dd2](https://github.com/box/box-ui-elements/commit/c7a9dd2))
 
 
