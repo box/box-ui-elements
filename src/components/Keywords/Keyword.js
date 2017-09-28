@@ -12,12 +12,16 @@ import './Keyword.scss';
 
 type Props = {
     keyword: SkillDataEntry,
+    isSelected: boolean,
     onClick: Function
 };
 
-const Keyword = ({ keyword, onClick }: Props) =>
+const Keyword = ({ keyword, onClick, isSelected }: Props) =>
     <span className='buik-file-keyword'>
-        <PlainButton className='buik-file-keyword-word' onClick={() => onClick(keyword)}>
+        <PlainButton
+            className={`buik-file-keyword-word ${isSelected ? 'buik-file-keyword-selected' : ''}`}
+            onClick={() => onClick(keyword)}
+        >
             {keyword.text}
         </PlainButton>
     </span>;

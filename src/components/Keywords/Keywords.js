@@ -35,7 +35,12 @@ class FileKeywords extends PureComponent<void, Props, State> {
                 {entries.map(
                     (entry: SkillDataEntry, index) =>
                         /* eslint-disable react/no-array-index-key */
-                        <FileKeyword key={index} keyword={entry} onClick={this.onClick} />
+                        <FileKeyword
+                            key={index}
+                            keyword={entry}
+                            isSelected={keyword === entry}
+                            onClick={this.onClick}
+                        />
                     /* eslint-enable react/no-array-index-key */
                 )}
                 {!!keyword &&

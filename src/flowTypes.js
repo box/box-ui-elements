@@ -267,6 +267,7 @@ export type TimeSlice = {
 export type SkillDataEntry = {
     type?: SkillDataEntryType,
     text?: string,
+    label?: string,
     url?: string,
     appears?: TimeSlice[]
 };

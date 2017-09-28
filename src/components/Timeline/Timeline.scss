@@ -7,13 +7,14 @@
 
 .buik-timeline-wrapper {
     flex: 1;
+    height: 9px;
     position: relative;
 }
 
 .buik-timeline-line {
     background-color: $off-white;
     border-radius: 2px;
-    height: 6px;
+    height: 9px;
     position: absolute;
 }
 

@@ -33,7 +33,8 @@
 
         &:focus,
         &:active,
-        &:hover {
+        &:hover,
+        &.buik-file-keyword-selected {
             background-color: $blue;
             border-color: $blue;
             color: $white;
