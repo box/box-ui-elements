@@ -42,6 +42,7 @@ type Props = {
     clientName: string,
     className: string,
     chunked: boolean,
+    fileLimit: number,
     onClose: Function,
     onComplete: Function,
     getLocalizedMessage: Function,
@@ -57,6 +58,7 @@ type DefaultProps = {|
     chunked: boolean,
     className: string,
     clientName: string,
+    fileLimit: number,
     uploadHost: string,
     onClose: Function,
     onComplete: Function
@@ -64,10 +66,12 @@ type DefaultProps = {|
 
 type State = {
     view: View,
-    items: UploadItem[]
+    items: UploadItem[],
+    message: string
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
+const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 
 class ContentUploader extends Component<DefaultProps, Props, State> {
     id: string;
@@ -82,6 +86,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         chunked: true,
         className: '',
         clientName: CLIENT_NAME_CONTENT_UPLOADER,
+        fileLimit: FILE_LIMIT_DEFAULT,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         onClose: noop,
         onComplete: noop
@@ -98,7 +103,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         const { rootFolderId, token } = props;
         this.state = {
             view: rootFolderId && token ? VIEW_UPLOAD_EMPTY : VIEW_ERROR,
-            items: []
+            items: [],
+            message: ''
         };
         this.id = uniqueid('bcu_');
     }
@@ -162,7 +168,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     addFilesToUploadQueue = (files: File[]) => {
-        const { chunked } = this.props;
+        const { chunked, fileLimit, getLocalizedMessage } = this.props;
         const { view, items } = this.state;
 
         // Disable chunked upload in IE11 for now until hashing is done in a worker
@@ -207,7 +213,20 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                 return uploadItem;
             });
 
-        this.updateViewAndCollection(items.concat(newItems));
+        let updatedItems = [];
+        const totalNumOfItems = items.length + newItems.length;
+
+        // Don't add more than fileLimit # of items
+        if (totalNumOfItems > fileLimit) {
+            updatedItems = items.concat(newItems.slice(0, fileLimit - items.length));
+            this.setState({
+                message: getLocalizedMessage('buik.upload.message.toomanyfiles', { fileLimit })
+            });
+        } else {
+            updatedItems = items.concat(newItems);
+        }
+
+        this.updateViewAndCollection(updatedItems);
 
         // Automatically start upload if other files are being uploaded
         if (view === VIEW_UPLOAD_IN_PROGRESS) {
@@ -357,7 +376,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     };
 
     /**
-     * Handles an upload error.
+     * Handles an upload progress event.
      *
      * @private
      * @param {UploadItem} item - Upload item corresponding to progress event
@@ -409,7 +428,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      */
     render() {
         const { onClose, getLocalizedMessage, className, measureRef, isTouch }: Props = this.props;
-        const { view, items }: State = this.state;
+        const { view, items, message }: State = this.state;
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);
@@ -431,6 +450,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                     getLocalizedMessage={getLocalizedMessage}
                     hasFiles={hasFiles}
                     isLoading={isLoading}
+                    message={message}
                     onCancel={this.cancel}
                     onClose={onClose}
                     onUpload={this.upload}
