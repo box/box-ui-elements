@@ -10,13 +10,14 @@ import './Footer.scss';
 type Props = {
     isLoading: boolean,
     hasFiles: boolean,
+    message: string,
     onCancel: Function,
     onClose?: Function,
     onUpload: Function,
     getLocalizedMessage: Function
 };
 
-const Footer = ({ isLoading, hasFiles, onCancel, onClose, onUpload, getLocalizedMessage }: Props) =>
+const Footer = ({ isLoading, hasFiles, message, onCancel, onClose, onUpload, getLocalizedMessage }: Props) =>
     <div className='bcu-footer'>
         <div className='bcu-footer-left'>
             {onClose
@@ -24,6 +25,9 @@ const Footer = ({ isLoading, hasFiles, onCancel, onClose, onUpload, getLocalized
                     {getLocalizedMessage('buik.footer.button.close')}
                 </Button>
                 : null}
+        </div>
+        <div className='bcu-footer-message'>
+            {message}
         </div>
         <div className='bcu-footer-right'>
             <Button isDisabled={!hasFiles} onClick={onCancel}>

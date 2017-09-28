@@ -298,6 +298,11 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         description: 'Text for create folder dialog button',
         defaultMessage: 'Create'
     },
+    'buik.upload.message.toomanyfiles': {
+        id: 'buik.upload.message.toomanyfiles',
+        description: 'Message shown when too many files are uploaded at once',
+        defaultMessage: 'You can only upload up to {fileLimit} files at a time.'
+    },
     'buik.upload.state.error': {
         id: 'buik.upload.state.error',
         description: 'Message shown when there is a network error when uploading',
