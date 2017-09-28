@@ -2,7 +2,6 @@
 
 .buik-timeline {
     display: flex;
-    height: 60px;
     padding: 0 0 20px;
 }
 
@@ -24,9 +23,9 @@
     .buik-timeline-label img {
         border-radius: 100%;
         filter: brightness(1.5);
-        height: 30px;
+        height: 45px;
         vertical-align: middle;
-        width: 30px;
+        width: 45px;
     }
 
     .buik-timeline-wrapper {
@@ -34,7 +33,7 @@
     }
 
     .buik-timeline-line {
-        width: 250px;
+        width: 235px;
     }
 }
 
@@ -42,9 +41,10 @@
     color: $sevens;
     flex-direction: column;
     font-size: 12px;
+    height: 50px;
 
     .buik-timeline-label {
-        padding-bottom: 10px;
+        padding-bottom: 6px;
     }
 
     .buik-timeline-line {

@@ -19,7 +19,7 @@ type Props = {
 };
 
 const cache = new CellMeasurerCache({
-    minHeight: 20,
+    minHeight: 10,
     fixedWidth: true
 });
 
@@ -75,7 +75,7 @@ const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
                                     whiteSpace: 'normal'
                                 }}
                             >
-                                {cellData}
+                                {(cellData || '').replace(/\r?\n|\r/g, '')}
                             </div>
                         </CellMeasurer>}
                 />
