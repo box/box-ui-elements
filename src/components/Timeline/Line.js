@@ -18,7 +18,7 @@ type Props = {
     getPreviewer?: Function
 };
 
-const LENGTH_IMAGE_ITEMLINE = 250;
+const LENGTH_IMAGE_ITEMLINE = 235;
 const LENGTH_TEXT_ITEMLINE = 290;
 
 const Line = ({ type, start, end = 0, duration, color = '#777', getPreviewer }: Props) => {
