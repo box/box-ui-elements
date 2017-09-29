@@ -67,7 +67,7 @@ class ChunkedUpload extends Base {
 
         // Automatically handle name conflict errors
         const { response } = error;
-        if (response.status === 409) {
+        if (response && response.status === 409) {
             const { name } = this.file;
 
             if (this.overwrite) {
