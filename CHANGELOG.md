@@ -1,6 +1,15 @@
+<a name="1.4.0"></a>
+# 1.4.0 (2017-09-29)
+
+* New: Key Value card and UI tweaks (#69) ([00f3083](https://github.com/box/box-ui-elements/commit/00f3083))
+* Fix: Transcript and timelines minor UI issues (#68) ([f735d8c](https://github.com/box/box-ui-elements/commit/f735d8c))
+
+
+
 <a name="1.3.1"></a>
 ## 1.3.1 (2017-09-27)
 
+* Release: 1.3.1 ([fd10b4a](https://github.com/box/box-ui-elements/commit/fd10b4a))
 * Fix: Do not show preview sidebar if hasSidebar is false (#67) ([7654311](https://github.com/box/box-ui-elements/commit/7654311))
 * Fix: Release scripts and updating preview version (#66) ([2fe09b9](https://github.com/box/box-ui-elements/commit/2fe09b9))
 
