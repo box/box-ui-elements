@@ -57,15 +57,14 @@ const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
             >
                 <Column
                     dataKey='appears'
-                    className='buik-transcript-time-column'
-                    width={45}
+                    width={50}
                     flexShrink={0}
                     cellRenderer={({ cellData }): string =>
                         isValidStartTime(cellData) ? formatTime(cellData[0].start) : '--'}
                 />
                 <Column
                     dataKey='text'
-                    width={245}
+                    width={240}
                     flexGrow={1}
                     cellRenderer={({ dataKey, parent, rowIndex, cellData }) =>
                         <CellMeasurer cache={cache} columnIndex={0} key={dataKey} parent={parent} rowIndex={rowIndex}>

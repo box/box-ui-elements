@@ -26,8 +26,8 @@ const Line = ({ type, start, end = 0, duration, color = '#777', getPreviewer }: 
         return null;
     }
     const barLength = type === 'image' ? LENGTH_IMAGE_ITEMLINE : LENGTH_TEXT_ITEMLINE;
-    const startPercent = start * barLength / duration;
-    const endPercent = Math.max(startPercent + 5, end * barLength / duration);
+    const startPercent = Math.round(start * barLength / duration);
+    const endPercent = Math.round(Math.max(startPercent + 9, end * barLength / duration));
     const styles = {
         backgroundColor: color,
         left: `${startPercent}px`,
@@ -36,7 +36,7 @@ const Line = ({ type, start, end = 0, duration, color = '#777', getPreviewer }: 
     const onClick = () => {
         const viewer = getPreviewer ? getPreviewer() : null;
         if (viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
-            viewer.play(start, end);
+            viewer.play(start);
         }
     };
     return <PlainButton className='buik-timeline-time' style={styles} onClick={onClick} />;

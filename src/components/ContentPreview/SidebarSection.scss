@@ -35,12 +35,3 @@
         }
     }
 }
-
-.bcpr-sidebar-toggle {
-    transform: rotateZ(-45deg);
-    transition: transform .3s;
-
-    .bcpr-sidebar-section-open & {
-        transform: rotateZ(0deg);
-    }
-}

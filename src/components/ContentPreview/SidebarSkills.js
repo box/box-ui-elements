@@ -9,6 +9,7 @@ import SidebarSection from './SidebarSection';
 import Keywords from '../Keywords';
 import Transcript from '../Transcript';
 import Timelines from '../Timeline';
+import Keyvalues from '../Keyvalues';
 import type { SkillData, MetadataType } from '../../flowTypes';
 
 type Props = {
@@ -22,6 +23,8 @@ function getCard(skill: SkillData, getPreviewer: Function) {
     switch (skills_data_type) {
         case 'keyword':
             return <Keywords skill={skill} getPreviewer={getPreviewer} />;
+        case 'keyvalue':
+            return <Keyvalues skill={skill} />;
         case 'timeline':
             return <Timelines skill={skill} getPreviewer={getPreviewer} />;
         case 'transcript':
@@ -74,6 +77,8 @@ const SidebarSkills = ({ metadata, getPreviewer, getLocalizedMessage }: Props) =
             {skills.map(
                 (skill: SkillData, index) =>
                     /* eslint-disable react/no-array-index-key */
+                    Array.isArray(skill.entries) &&
+                    skill.entries.length > 0 &&
                     <SidebarSection
                         key={index}
                         title={

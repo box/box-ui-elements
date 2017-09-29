@@ -7,7 +7,8 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { PlainButton } from '../Button';
-import IconCross from '../icons/IconCross';
+import IconAddCircle from '../icons/IconAddCircle';
+import IconSubtractCircle from '../icons/IconSubtractCircle';
 import './SidebarSection.scss';
 
 type Props = {
@@ -32,7 +33,7 @@ class SidebarSection extends PureComponent<DefaultProps, Props, State> {
 
     static defaultProps = {
         className: '',
-        isOpen: false
+        isOpen: true
     };
 
     /**
@@ -72,14 +73,6 @@ class SidebarSection extends PureComponent<DefaultProps, Props, State> {
         const { isOpen }: State = this.state;
         const { children, className, title }: Props = this.props;
 
-        const titleClassName = classNames(
-            'bcpr-sidebar-toggle',
-            {
-                'bcpr-sidebar-toggle-cross': isOpen
-            },
-            className
-        );
-
         const sectionClassName = classNames(
             'bcpr-sidebar-section',
             {
@@ -94,7 +87,7 @@ class SidebarSection extends PureComponent<DefaultProps, Props, State> {
                     <span className='bcpr-sidebar-section-title-text'>
                         {title}
                     </span>
-                    <IconCross color='#b5b5b5' width={11} height={11} className={titleClassName} />
+                    {isOpen ? <IconSubtractCircle width={14} height={14} /> : <IconAddCircle width={14} height={14} />}
                 </PlainButton>
                 {isOpen &&
                     <div className='bcpr-sidebar-section-content'>

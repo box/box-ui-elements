@@ -21,22 +21,23 @@ type Props = {
 /* eslint-disable jsx-a11y/label-has-for */
 const DetailsSidebar = ({ file, getPreviewer, getLocalizedMessage }: Props) =>
     <SidebarContent title={getLocalizedMessage('buik.preview.sidebar.details.title')}>
-        <div className='bcpr-sidebar-details-description'>
-            <label>
-                <span>
-                    {getLocalizedMessage('buik.preview.sidebar.details.description')}
-                </span>
-                <textarea
-                    readOnly
-                    placeholder={getLocalizedMessage('buik.preview.sidebar.details.description.placeholder')}
-                    defaultValue={file.description}
-                />
-            </label>
-        </div>
-        <SidebarSection title={getLocalizedMessage('buik.preview.sidebar.details.properties')}>
+        <SidebarSkills metadata={file.metadata} getPreviewer={getPreviewer} getLocalizedMessage={getLocalizedMessage} />
+        <SidebarSection isOpen={false} title={getLocalizedMessage('buik.preview.sidebar.details.properties')}>
             <FileProperties file={file} getLocalizedMessage={getLocalizedMessage} />
         </SidebarSection>
-        <SidebarSkills metadata={file.metadata} getPreviewer={getPreviewer} getLocalizedMessage={getLocalizedMessage} />
     </SidebarContent>;
 
 export default DetailsSidebar;
+
+// <div className='bcpr-sidebar-details-description'>
+// <label>
+//     <span>
+//         {getLocalizedMessage('buik.preview.sidebar.details.description')}
+//     </span>
+//     <textarea
+//         readOnly
+//         placeholder={getLocalizedMessage('buik.preview.sidebar.details.description.placeholder')}
+//         defaultValue={file.description}
+//     />
+// </label>
+// </div>

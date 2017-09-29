@@ -9,6 +9,14 @@
         cursor: pointer;
         outline: none;
 
+        .ReactVirtualized__Table__row {
+            align-items: flex-start;
+
+            .ReactVirtualized__Table__rowColumn:first-of-type {
+                margin: 0;
+            }
+        }
+
         .ReactVirtualized__Table__row:focus,
         .ReactVirtualized__Table__row:active {
             background-color: $lighter-light-blue;
@@ -18,11 +26,6 @@
 }
 
 .buik-transcript-column {
-    padding: 5px 15px 5px 0;
-    white-space: normal;
-    width: 210px;
-}
-
-.buik-transcript-time-column {
-    text-align: center;
+    padding: 0 0 20px;
+    width: 220px;
 }
