@@ -78,7 +78,7 @@ class PlainUpload extends Base {
         }
 
         // Automatically handle name conflict errors
-        if (error.status === 409) {
+        if (error && error.status === 409) {
             if (this.overwrite) {
                 // Error response contains file ID to upload a new file version for
                 this.makePreflightRequest({
