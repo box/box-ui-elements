@@ -1,6 +1,15 @@
+<a name="1.4.1"></a>
+## 1.4.1 (2017-10-02)
+
+* Fix: OCR Text (#73) ([8fdb6c8](https://github.com/box/box-ui-elements/commit/8fdb6c8))
+* New: ContentUploader fileLimit option (#71) ([73e5d5f](https://github.com/box/box-ui-elements/commit/73e5d5f))
+
+
+
 <a name="1.4.0"></a>
 # 1.4.0 (2017-09-29)
 
+* Release: 1.4.0 ([87e87d4](https://github.com/box/box-ui-elements/commit/87e87d4))
 * New: Key Value card and UI tweaks (#69) ([00f3083](https://github.com/box/box-ui-elements/commit/00f3083))
 * Fix: Transcript and timelines minor UI issues (#68) ([f735d8c](https://github.com/box/box-ui-elements/commit/f735d8c))
 
