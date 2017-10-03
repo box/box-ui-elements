@@ -1,6 +1,6 @@
 [![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg?style=flat-square)](http://opensource.box.com/badges)
 [![Styled With Prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![build status](https://img.shields.io/travis/box/box-ui-elements/master.svg?style=flat-square)](https://travis-ci.com/box/box-ui-elements)
+[![build status](https://img.shields.io/travis/box/box-ui-elements/master.svg?style=flat-square)](https://travis-ci.org/box/box-ui-elements)
 [![npm version](https://img.shields.io/npm/v/box-ui-elements.svg?style=flat-square)](https://www.npmjs.com/package/box-ui-elements)
 
 
