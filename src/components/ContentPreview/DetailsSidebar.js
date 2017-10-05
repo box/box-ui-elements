@@ -22,7 +22,7 @@ type Props = {
 const DetailsSidebar = ({ file, getPreviewer, getLocalizedMessage }: Props) =>
     <SidebarContent title={getLocalizedMessage('buik.preview.sidebar.details.title')}>
         <SidebarSkills metadata={file.metadata} getPreviewer={getPreviewer} getLocalizedMessage={getLocalizedMessage} />
-        <SidebarSection isOpen={false} title={getLocalizedMessage('buik.preview.sidebar.details.properties')}>
+        <SidebarSection title={getLocalizedMessage('buik.preview.sidebar.details.properties')}>
             <FileProperties file={file} getLocalizedMessage={getLocalizedMessage} />
         </SidebarSection>
     </SidebarContent>;

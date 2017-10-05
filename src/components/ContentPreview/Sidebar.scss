@@ -3,7 +3,7 @@
 .bcpr-sidebar {
     background-color: $almost-white;
     display: flex;
-    flex: 0 0 60px;
+    flex: 0 0 61px;
 
     &.bcpr-sidebar-visible {
         border-right: 1px solid $off-white;
@@ -15,14 +15,14 @@
         border-right: 1px solid $off-white;
         display: flex;
         flex-direction: column;
-        padding-top: 3px;
 
         .buik-btn.buik-btn-plain {
             border-left: 2px solid transparent;
             border-radius: 0;
             height: 60px;
-            width: 57px;
+            width: 60px;
 
+            &:hover,
             &.bcpr-sidebar-btn-selected {
                 border-left-color: $blue;
             }
