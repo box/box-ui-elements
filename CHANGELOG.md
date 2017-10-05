@@ -1,6 +1,14 @@
+<a name="1.5.1"></a>
+## 1.5.1 (2017-10-05)
+
+* Update: Style tweaks (#78) ([5ef01b2](https://github.com/box/box-ui-elements/commit/5ef01b2))
+
+
+
 <a name="1.5.0"></a>
 # 1.5.0 (2017-10-05)
 
+* Release: 1.5.0 ([a3648ab](https://github.com/box/box-ui-elements/commit/a3648ab))
 * Mojito: Update translations (#72) ([e9b6e34](https://github.com/box/box-ui-elements/commit/e9b6e34))
 * Mojito: Update translations (#77) ([aa12686](https://github.com/box/box-ui-elements/commit/aa12686))
 * Update: Travis URL (#74) ([c922850](https://github.com/box/box-ui-elements/commit/c922850))
