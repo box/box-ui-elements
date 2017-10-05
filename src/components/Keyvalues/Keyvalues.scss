@@ -2,4 +2,8 @@
 
 .buik .buik-keyvalue {
     margin: 0 0 20px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
 }

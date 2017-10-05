@@ -57,7 +57,7 @@ const Timeline = ({
                         </span>}
                 </div>}
             <div className='buik-timeline-wrapper'>
-                <div className='buik-timeline-line' />
+                <div className='buik-timeline-line' style={{ backgroundColor: color }} />
                 {timeslices.map(
                     ({ start, end }: TimeSlice, index) =>
                         /* eslint-disable react/no-array-index-key */

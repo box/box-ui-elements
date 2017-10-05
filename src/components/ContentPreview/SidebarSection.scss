@@ -1,7 +1,12 @@
 @import '../variables';
 
 .bcpr-sidebar-section {
+    background-color: $white;
+    border: 1px solid $efive;
+    border-radius: 5px;
+    box-shadow: 0 0 20px 0 $lightest-black;
     margin: 0 20px 20px;
+    padding: 15px 20px;
 }
 
 .buik-btn.buik-btn-plain.bcpr-sidebar-section-title {
@@ -10,14 +15,16 @@
 
     .buik-btn-content {
         align-items: center;
-        border-bottom: 1px solid $off-white;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
-        line-height: 30px;
-        margin: 0 0 15px;
+
+        .bcpr-sidebar-section-open & {
+            margin: 0 0 15px;
+        }
 
         .bcpr-sidebar-section-title-text {
+            margin: 0;
             max-width: 250px;
             overflow: hidden;
             text-overflow: ellipsis;

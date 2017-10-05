@@ -4,6 +4,10 @@
     color: $sevens;
     font-size: 11px;
 
+    * {
+        font-family: monospace;
+    }
+
     // sass-lint:disable class-name-format
     .ReactVirtualized__Table__Grid {
         cursor: pointer;
@@ -15,6 +19,15 @@
             .ReactVirtualized__Table__rowColumn:first-of-type {
                 margin: 0;
             }
+
+            .buik-transcript-column {
+                padding: 10px 0;
+                width: 200px;
+            }
+
+            .buik-transcript-time-column {
+                padding: 10px 0 0 5px;
+            }
         }
 
         .ReactVirtualized__Table__row:focus,
@@ -23,9 +36,4 @@
             outline: none;
         }
     }
-}
-
-.buik-transcript-column {
-    padding: 0 0 20px;
-    width: 220px;
 }

@@ -6,6 +6,8 @@
 
     .bcpr-sidebar-title {
         // border-bottom: 1px solid $off-white;
+        font-size: 16px;
+        font-weight: 200;
         line-height: 30px;
         margin: 15px 20px;
     }
@@ -16,10 +18,11 @@
         overflow: auto;
         position: absolute; // Prevents non-sidebar parts from re-painting
         right: 0;
-        top: 61px;
+        top: 50px;
 
         .bcpr-sidebar-scroll-content {
-            width: 330px;
+            padding: 15px 0 0;
+            width: 354px;
         }
     }
 }
