@@ -54,21 +54,22 @@ const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
                               typeof viewer.play === 'function'
                           ) {
                               // $FlowFixMe Already checked above
-                            const { start, end } = cellData[0];
-                            viewer.play(start, end);
+                            const { start } = cellData[0];
+                            viewer.play(start);
                         }
                     }}
                   >
                     <Column
                         dataKey='appears'
-                        width={50}
+                        width={60}
                         flexShrink={0}
+                        className='buik-transcript-time-column'
                         cellRenderer={({ cellData }): string =>
                               isValidStartTime(cellData) ? formatTime(cellData[0].start) : '--'}
                       />
                     <Column
                         dataKey='text'
-                        width={240}
+                        width={230}
                         flexGrow={1}
                         cellRenderer={({ dataKey, parent, rowIndex, cellData }) =>
                             <CellMeasurer

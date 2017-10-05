@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { PlainButton } from '../Button';
+import { BOX_BLUE } from '../../constants';
 import type { SkillDataEntryType } from '../../flowTypes';
 import './Line.scss';
 
@@ -18,20 +19,20 @@ type Props = {
     getPreviewer?: Function
 };
 
-const LENGTH_IMAGE_ITEMLINE = 235;
-const LENGTH_TEXT_ITEMLINE = 290;
+const LENGTH_IMAGE_ITEMLINE = 215;
+const LENGTH_TEXT_ITEMLINE = 270;
 
-const Line = ({ type, start, end = 0, duration, color = '#777', getPreviewer }: Props) => {
+const Line = ({ type, start, end = 0, duration, color = BOX_BLUE, getPreviewer }: Props) => {
     if (typeof start !== 'number' || !duration) {
         return null;
     }
     const barLength = type === 'image' ? LENGTH_IMAGE_ITEMLINE : LENGTH_TEXT_ITEMLINE;
-    const startPercent = Math.round(start * barLength / duration);
-    const endPercent = Math.round(Math.max(startPercent + 9, end * barLength / duration));
+    const startLeft = Math.round(start * barLength / duration);
+    const endLeft = Math.round(Math.min(barLength, Math.max(startLeft + 6, end * barLength / duration)));
     const styles = {
         backgroundColor: color,
-        left: `${startPercent}px`,
-        width: `${endPercent - startPercent}px`
+        left: `${startLeft}px`,
+        width: `${endLeft - startLeft}px`
     };
     const onClick = () => {
         const viewer = getPreviewer ? getPreviewer() : null;

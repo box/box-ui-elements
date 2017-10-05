@@ -6,7 +6,7 @@
     }
 
     .buik-timeline {
-        height: auto;
+        height: 20px;
     }
 }
 
@@ -17,14 +17,13 @@
     .buik-btn.buik-btn-plain {
         border: 1px solid $see-see;
         color: $sevens;
-        font-size: 11px;
-        padding: 2px 6px;
+        padding: 5px 10px;
 
         &.buik-file-keyword-word {
-            border-radius: 8px;
+            border-radius: 13px;
             // border-radius: 8px 0 0 8px;
             // border-right: 0 none;
-            max-width: 285px;
+            max-width: 265px;
             white-space: normal;
         }
 

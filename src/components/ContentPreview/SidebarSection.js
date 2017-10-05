@@ -7,8 +7,6 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { PlainButton } from '../Button';
-import IconAddCircle from '../icons/IconAddCircle';
-import IconSubtractCircle from '../icons/IconSubtractCircle';
 import './SidebarSection.scss';
 
 type Props = {
@@ -84,10 +82,9 @@ class SidebarSection extends PureComponent<DefaultProps, Props, State> {
         return (
             <div className={sectionClassName}>
                 <PlainButton onClick={this.toggleVisibility} className='bcpr-sidebar-section-title'>
-                    <span className='bcpr-sidebar-section-title-text'>
+                    <h4 className='bcpr-sidebar-section-title-text'>
                         {title}
-                    </span>
-                    {isOpen ? <IconSubtractCircle width={14} height={14} /> : <IconAddCircle width={14} height={14} />}
+                    </h4>
                 </PlainButton>
                 {isOpen &&
                     <div className='bcpr-sidebar-section-content'>

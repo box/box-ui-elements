@@ -393,16 +393,6 @@ const messages: { [string]: IntlDescriptor } = defineMessages({
         description: 'Label for preview dialog',
         defaultMessage: 'Preview'
     },
-    'buik.modal.preview.dialog.button.sidebar.show.title': {
-        id: 'buik.modal.preview.dialog.button.sidebar.show.title',
-        description: 'Aria title for preview dialog button to show sidebar',
-        defaultMessage: 'Show sidebar'
-    },
-    'buik.modal.preview.dialog.button.sidebar.hide.title': {
-        id: 'buik.modal.preview.dialog.button.sidebar.hide.title',
-        description: 'Aria title for preview dialog button to hide sidebar',
-        defaultMessage: 'Hide sidebar'
-    },
     'buik.modal.upload.dialog.label': {
         id: 'buik.modal.upload.dialog.label',
         description: 'Label for upload dialog',
