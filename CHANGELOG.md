@@ -1,6 +1,18 @@
+<a name="1.5.0"></a>
+# 1.5.0 (2017-10-05)
+
+* Mojito: Update translations (#72) ([e9b6e34](https://github.com/box/box-ui-elements/commit/e9b6e34))
+* Mojito: Update translations (#77) ([aa12686](https://github.com/box/box-ui-elements/commit/aa12686))
+* Update: Travis URL (#74) ([c922850](https://github.com/box/box-ui-elements/commit/c922850))
+* Update: UI changes for preview sidebar (#76) ([0bcfc56](https://github.com/box/box-ui-elements/commit/0bcfc56))
+* New: Add functionality to navigate timeline on image click (#75) ([41692ca](https://github.com/box/box-ui-elements/commit/41692ca))
+
+
+
 <a name="1.4.1"></a>
 ## 1.4.1 (2017-10-02)
 
+* Release: 1.4.1 ([14cd9d6](https://github.com/box/box-ui-elements/commit/14cd9d6))
 * Fix: OCR Text (#73) ([8fdb6c8](https://github.com/box/box-ui-elements/commit/8fdb6c8))
 * New: ContentUploader fileLimit option (#71) ([73e5d5f](https://github.com/box/box-ui-elements/commit/73e5d5f))
 
