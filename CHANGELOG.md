@@ -1,6 +1,14 @@
+<a name="1.5.2"></a>
+## 1.5.2 (2017-10-06)
+
+* Update: UI Tweaks for Preview (#79) ([9d2b0a2](https://github.com/box/box-ui-elements/commit/9d2b0a2))
+
+
+
 <a name="1.5.1"></a>
 ## 1.5.1 (2017-10-05)
 
+* Release: 1.5.1 ([145bf6f](https://github.com/box/box-ui-elements/commit/145bf6f))
 * Update: Style tweaks (#78) ([5ef01b2](https://github.com/box/box-ui-elements/commit/5ef01b2))
 
 
