@@ -50,7 +50,9 @@ const Timeline = ({
                 <div className='buik-timeline-label'>
                     {type === 'image'
                         ? <PlainButton onClick={startNextSegment}>
-                            <img alt={text} title={text} src={url} />
+                            <div className='buik-timeline-image-container'>
+                                <img alt={text} title={text} src={url} />
+                            </div>
                         </PlainButton>
                         : <span>
                             {text}

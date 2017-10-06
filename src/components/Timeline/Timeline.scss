@@ -5,7 +5,7 @@
     padding: 0 0 20px;
 
     &:last-child {
-        padding-bottom: 0;
+        padding-bottom: 5px;
     }
 }
 
@@ -19,19 +19,28 @@
     background-color: $blue;
     border-radius: 6px;
     height: 6px;
-    opacity: .1;
+    opacity: .25;
     position: absolute;
 }
 
 .buik-timeline-image {
     align-items: center;
 
-    .buik-timeline-label img {
+    .buik-timeline-image-container {
         border-radius: 100%;
+        overflow: hidden;
+    }
+
+    .buik-timeline-label img {
         filter: brightness(1.5);
         height: 45px;
+        transition: transform .3s;
         vertical-align: middle;
         width: 45px;
+
+        &:hover {
+            transform: scale(1.3);
+        }
     }
 
     .buik-timeline-wrapper {
