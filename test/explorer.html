@@ -55,7 +55,10 @@
         <div class="container">
             <h1>Content Explorer</h1>
             <div class="explorer1"></div>
+            <h1>Content Explorer (no folder create)</h1>
             <div class="explorer2"></div>
+            <h1>Content Explorer (no folder upload)</h1>
+            <div class="explorer3"></div>
         </div>
         <script src="../dev/en-US/explorer.js"></script>
         <script>
@@ -114,11 +117,22 @@
                     autoFocus: true
                 });
 
+
                 const explorer2 = new ContentExplorer();
                 document.querySelector('.explorer2').innerHTML = '';
                 explorer2.show(folderId, token, {
                     container: '.explorer2',
+                    canCreateNewFolder: false,
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
+                });
+
+
+                const explorer3 = new ContentExplorer();
+                document.querySelector('.explorer3').innerHTML = '';
+                explorer2.show(folderId, token, {
+                    container: '.explorer3',
+                    canUpload: false,
+                    logoUrl: 'box'
                 });
             }
             load();

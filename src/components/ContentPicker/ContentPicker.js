@@ -71,6 +71,7 @@ type Props = {
     maxSelectable: number,
     canUpload: boolean,
     canSetShareAccess: boolean,
+    canCreateNewFolder: boolean,
     autoFocus: boolean,
     apiHost: string,
     uploadHost: string,
@@ -117,6 +118,7 @@ type DefaultProps = {|
     maxSelectable: number,
     canUpload: boolean,
     canSetShareAccess: boolean,
+    canCreateNewFolder: boolean,
     autoFocus: boolean,
     apiHost: string,
     uploadHost: string,
@@ -149,6 +151,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         maxSelectable: Infinity,
         canUpload: true,
         canSetShareAccess: true,
+        canCreateNewFolder: true,
         autoFocus: false,
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
@@ -646,8 +649,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     createFolderCallback = (name?: string): void => {
         const { isCreateFolderModalOpen, currentCollection }: State = this.state;
-        const { canUpload }: Props = this.props;
-        if (!canUpload) {
+        const { canCreateNewFolder }: Props = this.props;
+        if (!canCreateNewFolder) {
             return;
         }
 
@@ -947,6 +950,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             logoUrl,
             canUpload,
             canSetShareAccess,
+            canCreateNewFolder,
             extensions,
             maxSelectable,
             type,
@@ -978,7 +982,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         const { can_upload }: BoxItemPermission = permissions || {};
         const selectedCount: number = Object.keys(selected).length;
         const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && maxSelectable !== 1;
-        const allowUpload = canUpload && can_upload;
+        const allowUpload: boolean = canUpload && !!can_upload;
+        const allowCreate: boolean = canCreateNewFolder && !!can_upload;
         const styleClassName = classNames('buik bcp', className);
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -1001,6 +1006,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                         rootName={rootName}
                         currentCollection={currentCollection}
                         canUpload={allowUpload}
+                        canCreateNewFolder={allowCreate}
                         onUpload={this.upload}
                         onCreate={this.createFolder}
                         onItemClick={this.fetchFolder}
@@ -1036,7 +1042,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                         cancelButtonLabel={cancelButtonLabel}
                     />
                 </div>
-                {canUpload && !!this.appElement
+                {allowUpload && !!this.appElement
                     ? <UploadDialog
                         isOpen={isUploadModalOpen}
                         rootFolderId={id}
@@ -1050,7 +1056,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                         parentElement={this.rootElement}
                       />
                     : null}
-                {canUpload && !!this.appElement
+                {allowCreate && !!this.appElement
                     ? <CreateFolderDialog
                         isOpen={isCreateFolderModalOpen}
                         onCreate={this.createFolderCallback}
