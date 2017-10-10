@@ -54,11 +54,11 @@ function getMenuItem(
 }
 
 const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange, getLocalizedMessage }: Props) =>
-    <DropdownMenu isRightAligned constrainToScrollParent>
+    <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-sort'>
         <Button isDisabled={!isLoaded} className='buik-sort-btn'>
             <IconSort />
         </Button>
-        <Menu className='buik-sort'>
+        <Menu className='buik-menu-sort'>
             {getMenuItem(SORT_NAME, FIELD_NAME, SORT_ASC, sortBy, sortDirection, onSortChange, getLocalizedMessage)}
             {getMenuItem(SORT_NAME, FIELD_NAME, SORT_DESC, sortBy, sortDirection, onSortChange, getLocalizedMessage)}
             {getMenuItem(

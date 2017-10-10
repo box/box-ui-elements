@@ -73,6 +73,7 @@ render(
 | canRename | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | canShare | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | canSetShareAccess | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| canCreateNewFolder | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | onDelete | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when item(s) are deleted. |
 | onDownload | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when item(s) are downloaded. |
 | onPreview | function([File](https://developer.box.com/reference#file-object)) |  | Callback function for when an item is previewed. |
@@ -130,6 +131,7 @@ render(
 | maxSelectable | number | `Infinity` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | canUpload | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | canSetShareAccess | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| canCreateNewFolder | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | onCancel | function |  | Callback function for when the cancel button is pressed. |
 | onChoose | function |  | Callback function for when the choose button is pressed. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |

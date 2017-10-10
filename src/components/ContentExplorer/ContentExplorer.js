@@ -76,6 +76,7 @@ type Props = {
     canRename: boolean,
     canShare: boolean,
     canSetShareAccess: boolean,
+    canCreateNewFolder: boolean,
     apiHost: string,
     appHost: string,
     staticHost: string,
@@ -134,6 +135,7 @@ type DefaultProps = {|
     canPreview: boolean,
     canShare: boolean,
     canSetShareAccess: boolean,
+    canCreateNewFolder: boolean,
     autoFocus: boolean,
     apiHost: string,
     appHost: string,
@@ -174,6 +176,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         canShare: true,
         canPreview: true,
         canSetShareAccess: true,
+        canCreateNewFolder: true,
         autoFocus: false,
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
@@ -993,8 +996,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      */
     createFolderCallback = (name?: string): void => {
         const { isCreateFolderModalOpen, currentCollection }: State = this.state;
-        const { canUpload, onCreate }: Props = this.props;
-        if (!canUpload) {
+        const { canCreateNewFolder, onCreate }: Props = this.props;
+        if (!canCreateNewFolder) {
             return;
         }
 
@@ -1194,6 +1197,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             rootFolderId,
             logoUrl,
             canUpload,
+            canCreateNewFolder,
             canSetShareAccess,
             canDelete,
             canRename,
@@ -1235,7 +1239,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         const { id, permissions }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const styleClassName = classNames('buik bce', className);
-        const allowUpload = canUpload && can_upload;
+        const allowUpload: boolean = canUpload && !!can_upload;
+        const allowCreate: boolean = canCreateNewFolder && !!can_upload;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1257,6 +1262,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                         rootName={rootName}
                         currentCollection={currentCollection}
                         canUpload={allowUpload}
+                        canCreateNewFolder={allowCreate}
                         onUpload={this.upload}
                         onCreate={this.createFolder}
                         onItemClick={this.fetchFolder}
@@ -1289,7 +1295,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                         getLocalizedMessage={getLocalizedMessage}
                     />
                 </div>
-                {canUpload && !!this.appElement
+                {allowUpload && !!this.appElement
                     ? <UploadDialog
                         isOpen={isUploadModalOpen}
                         rootFolderId={id}
@@ -1304,7 +1310,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                         onUpload={onUpload}
                       />
                     : null}
-                {canUpload && !!this.appElement
+                {allowCreate && !!this.appElement
                     ? <CreateFolderDialog
                         isOpen={isCreateFolderModalOpen}
                         onCreate={this.createFolderCallback}

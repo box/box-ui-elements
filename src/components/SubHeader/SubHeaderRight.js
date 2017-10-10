@@ -17,7 +17,8 @@ type Props = {
     currentCollection: Collection,
     onUpload: Function,
     onCreate: Function,
-    canUpload?: boolean,
+    canUpload: boolean,
+    canCreateNewFolder: boolean,
     view: View
 };
 
@@ -26,6 +27,7 @@ const SubHeaderRight = ({
     onUpload,
     onCreate,
     canUpload,
+    canCreateNewFolder,
     currentCollection,
     onSortChange,
     getLocalizedMessage
@@ -35,7 +37,7 @@ const SubHeaderRight = ({
     const isFolder: boolean = view === VIEW_FOLDER;
     const isSearch: boolean = view === VIEW_SEARCH;
     const showSort: boolean = (isRecents || isFolder || isSearch) && items.length > 0;
-    const showAdd: boolean = !!canUpload && isFolder;
+    const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
     const isLoaded: boolean = percentLoaded === 100;
 
     return (
@@ -53,6 +55,8 @@ const SubHeaderRight = ({
                 />}
             {showAdd &&
                 <Add
+                    showUpload={canUpload}
+                    showCreate={canCreateNewFolder}
                     onUpload={onUpload}
                     onCreate={onCreate}
                     isDisabled={!isFolder}

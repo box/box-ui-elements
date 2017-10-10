@@ -58,11 +58,11 @@
             <div class="filePicker1"></div>
         </div>
         <div class="container">
-            <h1>Folder Picker</h1>
+            <h1>Folder Picker (Cannot create)</h1>
             <div class="folderPicker1"></div>
         </div>
         <div class="container">
-            <h1>File Picker (max 3 items / token generator / only 'pdf', 'doc', 'docx', 'ppt', 'pptx')</h1>
+            <h1>File Picker (max 3 items / token generator / only 'pdf', 'doc', 'docx', 'ppt', 'pptx') Cannot upload or create</h1>
             <div class="filePicker2"></div>
         </div>
         <div class="container">
@@ -136,7 +136,9 @@
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     extensions: ['pdf', 'doc', 'docx', 'ppt', 'pptx'],
                     maxSelectable: 3,
-                    defaultView: 'recents'
+                    defaultView: 'recents',
+                    canUpload: false,
+                    canCreateNewFolder: false
                 });
 
 
@@ -153,7 +155,8 @@
                     document.querySelector('.folderPicker1').innerHTML = '';
                 });
                 folderPicker1.show(folderId, token, {
-                    container: '.folderPicker1'
+                    container: '.folderPicker1',
+                    canCreateNewFolder: false
                 });
 
 
