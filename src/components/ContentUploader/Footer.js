@@ -10,7 +10,7 @@ import './Footer.scss';
 type Props = {
     isLoading: boolean,
     hasFiles: boolean,
-    message: string,
+    message?: string,
     onCancel: Function,
     onClose?: Function,
     onUpload: Function,

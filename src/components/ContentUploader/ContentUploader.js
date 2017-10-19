@@ -67,7 +67,7 @@ type DefaultProps = {|
 type State = {
     view: View,
     items: UploadItem[],
-    message: string
+    message?: string
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
@@ -360,10 +360,16 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             items = []; // Reset item collection after successful upload
         }
 
-        this.setState({
-            view,
-            items
-        });
+        const state: State = {
+            items,
+            view
+        };
+
+        if (items.length === 0) {
+            state.message = '';
+        }
+
+        this.setState(state);
     }
 
     /**

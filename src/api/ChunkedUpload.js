@@ -7,7 +7,7 @@
 import noop from 'lodash.noop';
 import Rusha from 'rusha';
 import Chunk from './Chunk';
-import Base from './Base';
+import BaseUpload from './BaseUpload';
 import { DEFAULT_RETRY_DELAY_MS } from '../constants';
 import type { BoxItem, StringAnyMap } from '../flowTypes';
 import int32ArrayToBase64 from '../util/base64';
@@ -15,7 +15,7 @@ import int32ArrayToBase64 from '../util/base64';
 const DIGEST_DELAY_MS = 1000; // Delay 1s before retry-ing digest update or fetch
 const UPLOAD_PARALLELISM = 5; // Maximum concurrent chunks to upload per file
 
-class ChunkedUpload extends Base {
+class ChunkedUpload extends BaseUpload {
     digest: string;
     file: File;
     finished: boolean = false;
@@ -65,28 +65,11 @@ class ChunkedUpload extends Base {
             return;
         }
 
-        // Automatically handle name conflict errors
         const { response } = error;
-        if (response && response.status === 409) {
-            const { name } = this.file;
-
-            if (this.overwrite) {
-                response.json().then((body) => {
-                    // Error response contains file ID to upload a new file version for
-                    this.createUploadSession({
-                        fileId: body.context_info.conflicts.id,
-                        fileName: name
-                    });
-                });
-            } else {
-                // Otherwise, reupload and append timestamp - 'test.jpg' becomes 'test-TIMESTAMP.jpg'
-                const extension = name.substr(name.lastIndexOf('.')) || '';
-                this.createUploadSession({
-                    fileName: `${name.substr(0, name.lastIndexOf('.'))}-${Date.now()}${extension}`
-                });
-            }
-        } else if (typeof this.errorCallback === 'function') {
-            this.errorCallback(response);
+        if (response) {
+            response.json().then((body) => {
+                this.baseUploadErrorHandler(body, this.createUploadSession.bind(this));
+            });
         }
     };
 

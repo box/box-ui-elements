@@ -5,16 +5,14 @@
  */
 
 import noop from 'lodash.noop';
-import Base from './Base';
-import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../constants';
+import BaseUpload from './BaseUpload';
 import type { StringMap } from '../flowTypes';
 
-class Chunk extends Base {
+class Chunk extends BaseUpload {
     cancelled: boolean;
     chunk: ?Blob;
     data: Object = {};
     progress: number = 0;
-    retryCount: number = 0;
     retryTimeout: number;
     uploadHeaders: StringMap;
     uploadUrl: string;
@@ -107,32 +105,8 @@ class Chunk extends Base {
                 this.chunk = null;
                 this.successCallback(data);
             },
-            errorHandler: (err) => {
-                // Retry after interval defined in header
-                if (err.code && err.code === 'too_many_requests') {
-                    let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
-
-                    if (err.headers) {
-                        const retryAfterSec = parseInt(err.headers.get('Retry-After'), 10);
-
-                        if (!isNaN(retryAfterSec)) {
-                            retryAfterMs = retryAfterSec * MS_IN_S;
-                        }
-                    }
-
-                    this.retryTimeout = setTimeout(() => this.upload(), retryAfterMs);
-                }
-
-                // If there's an error code and it's not from rate limiting, fail the upload
-                if (err.code && err.code !== 'too_many_requests') {
-                    this.cancel();
-                    this.errorCallback(err);
-
-                    // Retry with exponential backoff for other failures since these are likely to be network errors
-                } else {
-                    this.retryTimeout = setTimeout(() => this.upload(), 2 ** this.retryCount * MS_IN_S);
-                    this.retryCount += 1;
-                }
+            errorHandler: (error) => {
+                this.baseUploadErrorHandler(error, this.upload.bind(this));
             },
             progressHandler: this.progressCallback
         });
