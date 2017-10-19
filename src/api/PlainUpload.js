@@ -6,12 +6,15 @@
 
 import noop from 'lodash.noop';
 import Base from './Base';
+import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
 class PlainUpload extends Base {
     file: File;
     id: string;
     overwrite: boolean;
+    retryCount: number = 0;
+    retryTimeout: number;
     successCallback: Function;
     errorCallback: Function;
     progressCallback: Function;
@@ -93,8 +96,27 @@ class PlainUpload extends Base {
                     fileName: `${name.substr(0, name.lastIndexOf('.'))}-${Date.now()}${extension}`
                 });
             }
-        } else if (typeof this.errorCallback === 'function') {
+            // Retry after interval defined in header
+        } else if (error && error.status === 429) {
+            let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
+
+            if (error.headers) {
+                const retryAfterSec = parseInt(error.headers.get('Retry-After'), 10);
+
+                if (!isNaN(retryAfterSec)) {
+                    retryAfterMs = retryAfterSec * MS_IN_S;
+                }
+            }
+
+            this.retryTimeout = setTimeout(() => this.makePreflightRequest({}), retryAfterMs);
+
+            // If another error status that isn't name conflict or rate limiting, fail upload
+        } else if (error && error.status && typeof this.errorCallback === 'function') {
             this.errorCallback(error);
+            // Retry with exponential backoff for other failures since these are likely to be network errors
+        } else {
+            this.retryTimeout = setTimeout(() => this.makePreflightRequest({}), 2 ** this.retryCount * MS_IN_S);
+            this.retryCount += 1;
         }
     };
 
@@ -225,6 +247,8 @@ class PlainUpload extends Base {
         if (this.xhr && typeof this.xhr.abort === 'function') {
             this.xhr.abort();
         }
+
+        clearTimeout(this.retryTimeout);
     }
 }
 

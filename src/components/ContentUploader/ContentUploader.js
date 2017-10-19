@@ -224,6 +224,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             });
         } else {
             updatedItems = items.concat(newItems);
+            this.setState({ message: '' });
         }
 
         this.updateViewAndCollection(updatedItems);
@@ -241,6 +242,9 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     removeFileFromUploadQueue(item: UploadItem) {
+        // Clear any error message in footer
+        this.setState({ message: '' });
+
         const { api } = item;
         api.cancel();
 
@@ -369,10 +373,16 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     handleUploadError = () => {
-        this.setState({
-            view: VIEW_ERROR,
-            items: []
-        });
+        const { items } = this.state;
+
+        // Show error state if there are items being uploaded - this check prevents the error state from flashing in
+        // from an asynchronous failure after there are no more items being uploaded
+        if (items.length !== 0) {
+            this.setState({
+                view: VIEW_ERROR,
+                items: []
+            });
+        }
     };
 
     /**

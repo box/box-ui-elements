@@ -152,3 +152,7 @@ const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
 const X_REP_HINT_VIDEO_MP4 = '[mp4]';
 const videoHint = canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
 export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;
+
+/* ------------------ Uploader  ---------------------- */
+export const DEFAULT_RETRY_DELAY_MS = 3000;
+export const MS_IN_S = 1000;

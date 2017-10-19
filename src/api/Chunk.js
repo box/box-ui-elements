@@ -6,16 +6,16 @@
 
 import noop from 'lodash.noop';
 import Base from './Base';
+import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../constants';
 import type { StringMap } from '../flowTypes';
-
-const UPLOAD_RETRY_INTERVAL_MS = 1000;
 
 class Chunk extends Base {
     cancelled: boolean;
     chunk: ?Blob;
     data: Object = {};
     progress: number = 0;
-    retry: number;
+    retryCount: number = 0;
+    retryTimeout: number;
     uploadHeaders: StringMap;
     uploadUrl: string;
     successCallback: Function;
@@ -108,14 +108,30 @@ class Chunk extends Base {
                 this.successCallback(data);
             },
             errorHandler: (err) => {
-                // If there's an error code and it's not 429 from rate limiting, fail the upload
-                if (err.code && err.code !== 429) {
+                // Retry after interval defined in header
+                if (err.code && err.code === 'too_many_requests') {
+                    let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
+
+                    if (err.headers) {
+                        const retryAfterSec = parseInt(err.headers.get('Retry-After'), 10);
+
+                        if (!isNaN(retryAfterSec)) {
+                            retryAfterMs = retryAfterSec * MS_IN_S;
+                        }
+                    }
+
+                    this.retryTimeout = setTimeout(() => this.upload(), retryAfterMs);
+                }
+
+                // If there's an error code and it's not from rate limiting, fail the upload
+                if (err.code && err.code !== 'too_many_requests') {
                     this.cancel();
                     this.errorCallback(err);
 
-                    // Retry on other failures since these are likely to be network errors
+                    // Retry with exponential backoff for other failures since these are likely to be network errors
                 } else {
-                    this.retry = setTimeout(() => this.upload(), UPLOAD_RETRY_INTERVAL_MS);
+                    this.retryTimeout = setTimeout(() => this.upload(), 2 ** this.retryCount * MS_IN_S);
+                    this.retryCount += 1;
                 }
             },
             progressHandler: this.progressCallback
@@ -132,7 +148,7 @@ class Chunk extends Base {
             this.xhr.abort();
         }
 
-        clearTimeout(this.retry);
+        clearTimeout(this.retryTimeout);
         this.chunk = null;
         this.data = {};
         this.destroy();

@@ -8,12 +8,12 @@ import noop from 'lodash.noop';
 import Rusha from 'rusha';
 import Chunk from './Chunk';
 import Base from './Base';
+import { DEFAULT_RETRY_DELAY_MS } from '../constants';
 import type { BoxItem, StringAnyMap } from '../flowTypes';
 import int32ArrayToBase64 from '../util/base64';
 
-const DEFAULT_RETRY_COMMIT_DELAY_MS = 3000; // Wait 3s before retrying a chunk
 const DIGEST_DELAY_MS = 1000; // Delay 1s before retry-ing digest update or fetch
-const UPLOAD_PARALLELISM = 3; // Maximum concurrent chunks to upload per file
+const UPLOAD_PARALLELISM = 5; // Maximum concurrent chunks to upload per file
 
 class ChunkedUpload extends Base {
     digest: string;
@@ -319,13 +319,17 @@ class ChunkedUpload extends Base {
         // Retry after a delay since server is still processing chunks
         if (status === 202) {
             this.finished = false;
-            const retryAfterSec = parseInt(headers.get('Retry-After'), 10);
+            let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
 
-            if (isNaN(retryAfterSec)) {
-                setTimeout(() => this.commitFile(), DEFAULT_RETRY_COMMIT_DELAY_MS);
-            } else {
-                setTimeout(() => this.commitFile(), retryAfterSec * 1000);
+            if (headers) {
+                const retryAfterSec = parseInt(headers.get('Retry-After'), 10);
+
+                if (!isNaN(retryAfterSec)) {
+                    retryAfterMs = retryAfterSec * 1000;
+                }
             }
+
+            setTimeout(() => this.commitFile(), retryAfterMs);
         } else if (entries) {
             this.successCallback(entries);
         }
