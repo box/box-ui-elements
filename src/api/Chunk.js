@@ -5,17 +5,15 @@
  */
 
 import noop from 'lodash.noop';
-import Base from './Base';
+import BaseUpload from './BaseUpload';
 import type { StringMap } from '../flowTypes';
 
-const UPLOAD_RETRY_INTERVAL_MS = 1000;
-
-class Chunk extends Base {
+class Chunk extends BaseUpload {
     cancelled: boolean;
     chunk: ?Blob;
     data: Object = {};
     progress: number = 0;
-    retry: number;
+    retryTimeout: number;
     uploadHeaders: StringMap;
     uploadUrl: string;
     successCallback: Function;
@@ -107,16 +105,8 @@ class Chunk extends Base {
                 this.chunk = null;
                 this.successCallback(data);
             },
-            errorHandler: (err) => {
-                // If there's an error code and it's not 429 from rate limiting, fail the upload
-                if (err.code && err.code !== 429) {
-                    this.cancel();
-                    this.errorCallback(err);
-
-                    // Retry on other failures since these are likely to be network errors
-                } else {
-                    this.retry = setTimeout(() => this.upload(), UPLOAD_RETRY_INTERVAL_MS);
-                }
+            errorHandler: (error) => {
+                this.baseUploadErrorHandler(error, this.upload.bind(this));
             },
             progressHandler: this.progressCallback
         });
@@ -132,7 +122,7 @@ class Chunk extends Base {
             this.xhr.abort();
         }
 
-        clearTimeout(this.retry);
+        clearTimeout(this.retryTimeout);
         this.chunk = null;
         this.data = {};
         this.destroy();

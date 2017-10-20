@@ -5,13 +5,14 @@
  */
 
 import noop from 'lodash.noop';
-import Base from './Base';
+import BaseUpload from './BaseUpload';
 import type { BoxItem } from '../flowTypes';
 
-class PlainUpload extends Base {
+class PlainUpload extends BaseUpload {
     file: File;
     id: string;
     overwrite: boolean;
+    retryTimeout: number;
     successCallback: Function;
     errorCallback: Function;
     progressCallback: Function;
@@ -77,25 +78,7 @@ class PlainUpload extends Base {
             return;
         }
 
-        // Automatically handle name conflict errors
-        if (error && error.status === 409) {
-            if (this.overwrite) {
-                // Error response contains file ID to upload a new file version for
-                this.makePreflightRequest({
-                    fileId: error.context_info.conflicts.id
-                });
-            } else {
-                // Otherwise, reupload and append timestamp
-                // 'test.jpg' becomes 'test-TIMESTAMP.jpg'
-                const { name } = this.file;
-                const extension = name.substr(name.lastIndexOf('.')) || '';
-                this.makePreflightRequest({
-                    fileName: `${name.substr(0, name.lastIndexOf('.'))}-${Date.now()}${extension}`
-                });
-            }
-        } else if (typeof this.errorCallback === 'function') {
-            this.errorCallback(error);
-        }
+        this.baseUploadErrorHandler(error, this.makePreflightRequest.bind(this));
     };
 
     /**
@@ -222,9 +205,15 @@ class PlainUpload extends Base {
      * @return {void}
      */
     cancel() {
+        if (this.isDestroyed()) {
+            return;
+        }
+
         if (this.xhr && typeof this.xhr.abort === 'function') {
             this.xhr.abort();
         }
+
+        clearTimeout(this.retryTimeout);
     }
 }
 
