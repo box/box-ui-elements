@@ -73,7 +73,7 @@ class Chunk extends BaseUpload {
 
         this.uploadHeaders = {
             'Content-Type': 'application/octet-stream',
-            Digest: `SHA=${sha1}}`,
+            Digest: `sha=${sha1}`,
             'Content-Range': `bytes ${rangeStart}-${rangeEnd}/${totalSize}`
         };
 

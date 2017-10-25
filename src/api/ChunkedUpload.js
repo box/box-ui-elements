@@ -13,7 +13,7 @@ import type { BoxItem, StringAnyMap } from '../flowTypes';
 import int32ArrayToBase64 from '../util/base64';
 
 const DIGEST_DELAY_MS = 1000; // Delay 1s before retry-ing digest update or fetch
-const UPLOAD_PARALLELISM = 5; // Maximum concurrent chunks to upload per file
+const UPLOAD_PARALLELISM = 4; // Maximum concurrent chunks to upload per file
 
 class ChunkedUpload extends BaseUpload {
     digest: string;
@@ -131,10 +131,7 @@ class ChunkedUpload extends BaseUpload {
 
         for (let i = 0; i < UPLOAD_PARALLELISM; i += 1) {
             this.getNextChunk().then((chunk) => (chunk ? this.uploadChunk(chunk) : this.commitFile())).catch(() => {
-                /* eslint-disable no-console */
-                console.log('Error fetching next chunk');
-                /* eslint-enable no-console */
-                this.errorCallback();
+                this.errorCallback(new Error('Error fetching next chunk'));
             });
         }
     }

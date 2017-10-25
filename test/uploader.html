@@ -88,6 +88,17 @@
 
                 const uploader1 = new ContentUploader();
                 document.querySelector('.uploader1').innerHTML = '';
+
+                uploader1.on('upload', (data) => {
+                    console.log(`Successfully uploaded a file: ${data ? data.id : 'No File ID'}`);
+                });
+                uploader1.on('error', (data) => {
+                    console.log(`Failed to upload: ${JSON.stringify(data)}`);
+                });
+                uploader1.on('complete', (data) => {
+                    console.log(`All files successfully uploaded: ${JSON.stringify(data)}`);
+                });
+
                 uploader1.show(folderId, tokenGenerator, {
                     container: '.uploader1'
                 });

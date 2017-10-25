@@ -45,6 +45,8 @@ type Props = {
     fileLimit: number,
     onClose: Function,
     onComplete: Function,
+    onError: Function,
+    onUpload: Function,
     getLocalizedMessage: Function,
     isSmall: boolean,
     isLarge: boolean,
@@ -61,7 +63,9 @@ type DefaultProps = {|
     fileLimit: number,
     uploadHost: string,
     onClose: Function,
-    onComplete: Function
+    onComplete: Function,
+    onError: Function,
+    onUpload: Function
 |};
 
 type State = {
@@ -89,7 +93,9 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         fileLimit: FILE_LIMIT_DEFAULT,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         onClose: noop,
-        onComplete: noop
+        onComplete: noop,
+        onError: noop,
+        onUpload: noop
     };
 
     /**
@@ -302,12 +308,33 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             id: rootFolderId,
             file,
             successCallback: (entries) => this.handleUploadSuccess(item, entries),
-            errorCallback: this.handleUploadError,
+            errorCallback: (error) => this.handleUploadError(item, error),
             progressCallback: (event) => this.handleUploadProgress(item, event),
             overwrite: true
         });
 
         item.status = STATUS_IN_PROGRESS;
+        const { items } = this.state;
+        items[items.indexOf(item)] = item;
+
+        this.updateViewAndCollection(items);
+    }
+
+    /**
+     * Helper to reset a file. Cancels any current upload and resets progress.
+     *
+     * @param {UploadItem} item - Upload item to reset
+     * @return {void}
+     */
+    resetFile(item: UploadItem) {
+        const { api } = item;
+        if (api && typeof api.cancel === 'function') {
+            api.cancel();
+        }
+
+        item.progress = 0;
+        item.status = STATUS_PENDING;
+
         const { items } = this.state;
         items[items.indexOf(item)] = item;
 
@@ -323,6 +350,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     handleUploadSuccess = (item: UploadItem, entries?: BoxItem[]) => {
+        const { onUpload } = this.props;
+
         item.progress = 100;
         item.status = STATUS_COMPLETE;
 
@@ -333,6 +362,9 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
         const { items } = this.state;
         items[items.indexOf(item)] = item;
+
+        // Broadcast that a file has been uploaded
+        onUpload(item.boxFile);
 
         this.updateViewAndCollection(items);
     };
@@ -376,19 +408,26 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * Handles an upload error.
      *
      * @private
+     * @param {UploadItem} item - Upload item corresponding to error
+     * @param {Error} error - Upload error
      * @return {void}
      */
-    handleUploadError = () => {
-        const { items } = this.state;
+    handleUploadError = (item: UploadItem, error: Error) => {
+        const { onError } = this.props;
+        const { file } = item;
 
-        // Show error state if there are items being uploaded - this check prevents the error state from flashing in
-        // from an asynchronous failure after there are no more items being uploaded
-        if (items.length !== 0) {
-            this.setState({
-                view: VIEW_ERROR,
-                items: []
-            });
-        }
+        item.status = STATUS_ERROR;
+
+        const { items } = this.state;
+        items[items.indexOf(item)] = item;
+
+        // Broadcast that there was an error uploading a file
+        onError({
+            file,
+            error
+        });
+
+        this.updateViewAndCollection(items);
     };
 
     /**
@@ -429,6 +468,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                 this.removeFileFromUploadQueue(item);
                 break;
             case STATUS_ERROR:
+                this.resetFile(item);
                 this.uploadFile(item);
                 break;
             default:

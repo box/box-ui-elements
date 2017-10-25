@@ -22,13 +22,33 @@ class ContentUploader extends ES6Wrapper {
     };
 
     /**
-     * Callback on completed upload. Emits 'complete' event with Box File objects of uploaded items as data.
+     * Callback when all files finish uploading. Emits 'complete' event with Box File objects of uploaded items as data.
      *
      * @param {Array} data - Completed upload items
      * @return {void}
      */
     onComplete = (data: BoxItem[]): void => {
         this.emit('complete', data);
+    };
+
+    /**
+     * Callback on a single upload error. Emits 'uploaderror' event with information about the failed upload.
+     *
+     * @param {Object} data - File and error info about failed upload
+     * @return {void}
+     */
+    onError = (data: any): void => {
+        this.emit('error', data);
+    };
+
+    /**
+     * Callback on a single successful upload. Emits 'uploadsuccess' event with Box File object of uploaded item.
+     *
+     * @param {BoxItem} data - Successfully uploaded item
+     * @return {void}
+     */
+    onUpload = (data: BoxItem): void => {
+        this.emit('upload', data);
     };
 
     /** @inheritdoc */
@@ -43,6 +63,8 @@ class ContentUploader extends ES6Wrapper {
                 token={this.token}
                 onClose={this.onClose}
                 onComplete={this.onComplete}
+                onError={this.onError}
+                onUpload={this.onUpload}
                 modal={modal}
                 {...rest}
             />,
