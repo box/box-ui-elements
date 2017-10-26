@@ -1,6 +1,16 @@
+<a name="1.6.0"></a>
+# 1.6.0 (2017-10-26)
+
+* New: Upload & error events per file and manual retries (#84) ([dd26b48](https://github.com/box/box-ui-elements/commit/dd26b48))
+* Fix: Better error and retry handling for Uploader (#82) ([3a4641d](https://github.com/box/box-ui-elements/commit/3a4641d))
+* Update: Adding new property to allow creating a new folder in the UI (#80) ([e4ddba6](https://github.com/box/box-ui-elements/commit/e4ddba6))
+
+
+
 <a name="1.5.2"></a>
 ## 1.5.2 (2017-10-06)
 
+* Release: 1.5.2 ([ac48c8a](https://github.com/box/box-ui-elements/commit/ac48c8a))
 * Update: UI Tweaks for Preview (#79) ([9d2b0a2](https://github.com/box/box-ui-elements/commit/9d2b0a2))
 
 
