@@ -9,6 +9,23 @@ major_release=false
 minor_release=false
 patch_release=false
 
+
+install_dependencies() {
+    echo "--------------------------------------------------------"
+    echo "Installing all package dependencies"
+    echo "--------------------------------------------------------"
+    if yarn install; then
+        echo "----------------------------------------------------"
+        echo "Installed dependencies successfully."
+        echo "----------------------------------------------------"
+    else
+        echo "----------------------------------------------------"
+        echo "Error: Failed to run 'yarn install'!"
+        echo "----------------------------------------------------"
+        exit 1;
+    fi
+}
+
 lint_and_test() {
     echo "----------------------------------------------------"
     echo "Running linter for version" $VERSION
@@ -151,9 +168,17 @@ push_new_release() {
     git reset --hard release/master || exit 1
     # Remove old local tags in case a build failed
     git fetch --prune release '+refs/tags/*:refs/tags/*' || exit 1
-    git clean -f || exit 1
+    git clean -fd || exit 1
 
-    # Double check that we have the latest code...
+    # Install node modules
+    if ! install_dependencies; then
+        echo "----------------------------------------------------"
+        echo "Error in install_dependencies!"
+        echo "----------------------------------------------------"
+        exit 1
+    fi
+
+    # Double check that we have the latest code... just in case yarn install took forever.
     # i.e. Translation commits have been known to sneak in.
     git fetch release || exit 1
     git diff --quiet release/master || git reset --hard release/master || exit 1

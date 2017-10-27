@@ -14,8 +14,7 @@ export default (
     canSetShareAccess: boolean,
     selectableType: string,
     extensionsWhitelist: string[],
-    hasHitSelectionLimit: boolean,
-    getLocalizedMessage: Function
+    hasHitSelectionLimit: boolean
 ) => ({ rowData }: { rowData: BoxItem }) => {
     if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData)) {
         return <span />;
@@ -27,7 +26,6 @@ export default (
             canSetShareAccess={canSetShareAccess}
             onChange={onChange}
             item={rowData}
-            getLocalizedMessage={getLocalizedMessage}
         />
     );
 };

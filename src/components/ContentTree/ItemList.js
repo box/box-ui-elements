@@ -16,21 +16,12 @@ type Props = {
     onItemClick: Function,
     onExpanderClick: Function,
     tableRef: Function,
-    getLocalizedMessage: Function,
     items?: BoxItem[],
     isSmall: boolean,
     isLoading: boolean
 };
 
-const ItemList = ({
-    isSmall,
-    isLoading,
-    onItemClick,
-    onExpanderClick,
-    items = [],
-    tableRef,
-    getLocalizedMessage
-}: Props) =>
+const ItemList = ({ isSmall, isLoading, onItemClick, onExpanderClick, items = [], tableRef }: Props) =>
     <AutoSizer>
         {({ width, height }) =>
             <Table
@@ -45,7 +36,7 @@ const ItemList = ({
             >
                 <Column
                     dataKey={FIELD_NAME}
-                    cellRenderer={cellRenderer(getLocalizedMessage, onExpanderClick, onItemClick, isSmall, isLoading)}
+                    cellRenderer={cellRenderer(onExpanderClick, onItemClick, isSmall, isLoading)}
                     width={300}
                     flexGrow={1}
                 />

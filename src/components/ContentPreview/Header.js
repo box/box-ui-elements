@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import messages from '../messages';
 import { PlainButton } from '../Button';
 import IconCross from '../icons/IconCross';
 import { getIcon } from '../Item/iconCellRenderer';
@@ -13,13 +15,13 @@ import './Header.scss';
 
 type Props = {
     file?: BoxItem,
-    getLocalizedMessage: Function,
-    onClose?: Function
+    onClose?: Function,
+    intl: any
 };
 
-const Header = ({ file, onClose, getLocalizedMessage }: Props) => {
+const Header = ({ file, onClose, intl }: Props) => {
     const name = file ? file.name : '';
-    const close = getLocalizedMessage('buik.modal.dialog.share.button.close');
+    const close = intl.formatMessage(messages.close);
     return (
         <div className='bcpr-header'>
             <div className='bcpr-name'>
@@ -38,4 +40,4 @@ const Header = ({ file, onClose, getLocalizedMessage }: Props) => {
     );
 };
 
-export default Header;
+export default injectIntl(Header);

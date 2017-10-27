@@ -12,7 +12,8 @@ const config = merge(baseConfig, {
             sinon: 'sinon/pkg/sinon',
             'react-intl': path.resolve('build/react-intl-mocks.js'),
             intl: path.resolve('build/lib-intl-mock.js'),
-            'i18n-locale-data': path.resolve('node_modules/react-intl/locale-data/en.js')
+            'react-intl-locale-data': path.resolve('node_modules/react-intl/locale-data/en.js'),
+            'box-ui-elements-locale-data': path.resolve('i18n/en-US.js')
         }
     },
     externals: {

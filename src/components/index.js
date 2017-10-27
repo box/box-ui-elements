@@ -1,5 +1,7 @@
-export ContentExplorer from './ContentExplorer';
-export ContentPreview from './ContentPreview';
-export ContentPicker, { ContentPickerPopup } from './ContentPicker';
-export ContentUploader, { ContentUploaderPopup } from './ContentUploader';
-export ContentTree, { ContentTreePopup } from './ContentTree';
+// @flow
+
+export { default as ContentExplorer } from './ContentExplorer';
+export { default as ContentPreview } from './ContentPreview';
+export { default as ContentPicker, ContentPickerPopup } from './ContentPicker';
+export { default as ContentUploader, ContentUploaderPopup } from './ContentUploader';
+export { default as ContentTree, ContentTreePopup } from './ContentTree';

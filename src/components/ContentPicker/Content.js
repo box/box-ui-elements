@@ -26,7 +26,6 @@ type Props = {
     onShareAccessChange: Function,
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
-    getLocalizedMessage: Function,
     view: View,
     currentCollection: Collection
 };
@@ -58,19 +57,14 @@ const Content = ({
     onItemSelect,
     onShareAccessChange,
     onFocusChange,
-    extensionsWhitelist,
-    getLocalizedMessage
+    extensionsWhitelist
 }: Props) =>
     <div className='bcp-content'>
         {view === VIEW_ERROR || view === VIEW_SELECTED
             ? null
             : <ProgressBar percent={currentCollection.percentLoaded} />}
         {isEmpty(view, currentCollection)
-            ? <EmptyState
-                view={view}
-                getLocalizedMessage={getLocalizedMessage}
-                isLoading={currentCollection.percentLoaded !== 100}
-              />
+            ? <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
             : <ItemList
                 view={view}
                 rootId={rootId}
@@ -87,7 +81,6 @@ const Content = ({
                 onFocusChange={onFocusChange}
                 onShareAccessChange={onShareAccessChange}
                 extensionsWhitelist={extensionsWhitelist}
-                getLocalizedMessage={getLocalizedMessage}
               />}
     </div>;
 

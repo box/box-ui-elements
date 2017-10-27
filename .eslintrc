@@ -25,7 +25,6 @@
         "sinon": false,
         "assert": false,
         "fixture": false,
-        "__I18N__": false,
         "Box": false
     },
     "rules": {

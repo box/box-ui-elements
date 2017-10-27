@@ -4,19 +4,13 @@
  * @author Box
  */
 
-/* eslint-disable */
-import localeData from 'i18n-locale-data'; // this is a webpack alias
 import EventEmitter from 'events';
-import { IntlProvider, addLocaleData } from 'react-intl';
-import { unmountComponentAtNode } from 'react-dom';
-/* eslint-enable */
+import { addLocaleData } from 'react-intl';
 import { DEFAULT_CONTAINER } from '../constants';
-import messages from '../messages';
+import i18n from '../i18n';
 import type { StringMap, Token } from '../flowTypes';
 
-declare var __LOCALE__: string;
 declare var __VERSION__: string;
-declare var __TRANSLATIONS__: StringMap;
 
 class ES6Wrapper extends EventEmitter {
     /**
@@ -47,17 +41,17 @@ class ES6Wrapper extends EventEmitter {
     /**
      * @property {string}
      */
-    locale: string = __LOCALE__;
-
-    /**
-     * @property {string}
-     */
-    translations: StringMap = __TRANSLATIONS__;
+    language: string = i18n.language;
 
     /**
      * @property {Object}
      */
-    intl: any;
+    localeData: any = i18n.localeData;
+
+    /**
+     * @property {Object}
+     */
+    messages: StringMap = i18n.messages;
 
     /**
      * @property {Element}
@@ -72,30 +66,8 @@ class ES6Wrapper extends EventEmitter {
      */
     constructor() {
         super();
-        addLocaleData(localeData);
-        this.intl = new IntlProvider({ locale: this.locale, messages: this.translations }, {}).getChildContext().intl;
+        addLocaleData(this.localeData);
     }
-
-    /**
-     * Uses react intl to format messages
-     *
-     * @public
-     * @param {string} id - The message id.
-     * @param {Object|undefined} [replacements] - Optional replacements.
-     * @return {string}
-     */
-    getLocalizedMessage = (id: string, replacements: ?StringMap = {}): string => {
-        if (!messages[id]) {
-            unmountComponentAtNode(this.container);
-            throw new Error(`Cannot get localized message for ${id}`);
-        }
-        const message: string = this.intl.formatMessage(messages[id], replacements);
-        if (!message) {
-            unmountComponentAtNode(this.container);
-            throw new Error(`Cannot get localized message for ${id}`);
-        }
-        return message;
-    };
 
     /**
      * Shows the content picker.

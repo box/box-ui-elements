@@ -13,7 +13,6 @@ import './NameCell.scss';
 
 export default (
     rootId: string,
-    getLocalizedMessage: Function,
     view: View,
     onItemClick: Function,
     onItemSelect?: Function,
@@ -30,12 +29,6 @@ export default (
             onFocus={onItemSelect}
         />
         {view === VIEW_SEARCH || showDetails
-            ? <ItemDetails
-                item={rowData}
-                view={view}
-                rootId={rootId}
-                onItemClick={onItemClick}
-                getLocalizedMessage={getLocalizedMessage}
-              />
+            ? <ItemDetails item={rowData} view={view} rootId={rootId} onItemClick={onItemClick} />
             : null}
     </div>;

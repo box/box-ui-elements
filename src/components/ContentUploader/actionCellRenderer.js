@@ -11,5 +11,5 @@ type Props = {
     rowData: UploadItem
 };
 
-export default (onClick: Function, getLocalizedMessage: Function) => ({ rowData }: Props) =>
-    <ItemAction {...rowData} onClick={() => onClick(rowData)} getLocalizedMessage={getLocalizedMessage} />;
+export default (onClick: Function) => ({ rowData }: Props) =>
+    <ItemAction {...rowData} onClick={() => onClick(rowData)} />;

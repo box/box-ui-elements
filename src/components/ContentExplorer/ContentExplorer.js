@@ -24,6 +24,7 @@ import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import openUrlInsideIframe from '../../util/iframe';
 import { isFocusableElement, isInputElement, focus } from '../../util/dom';
+import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -59,7 +60,8 @@ import type {
     Access,
     BoxItemPermission,
     Token,
-    DefaultView
+    DefaultView,
+    StringMap
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -81,7 +83,6 @@ type Props = {
     appHost: string,
     staticHost: string,
     uploadHost: string,
-    getLocalizedMessage: Function,
     token: Token,
     isSmall: boolean,
     isLarge: boolean,
@@ -99,6 +100,8 @@ type Props = {
     onNavigate: Function,
     defaultView: DefaultView,
     hasPreviewSidebar: boolean,
+    language?: string,
+    messages?: StringMap,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
@@ -1194,6 +1197,9 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      */
     render() {
         const {
+            language,
+            messages,
+
             rootFolderId,
             logoUrl,
             canUpload,
@@ -1204,7 +1210,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             canDownload,
             canPreview,
             canShare,
-            getLocalizedMessage,
             token,
             sharedLink,
             sharedLinkPassword,
@@ -1245,136 +1250,129 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <div id={this.id} className={styleClassName} ref={measureRef}>
-                <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
-                    <Header
-                        view={view}
-                        isSmall={isSmall}
-                        searchQuery={searchQuery}
-                        logoUrl={logoUrl}
-                        onSearch={this.search}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <SubHeader
-                        view={view}
-                        rootId={rootFolderId}
-                        isSmall={isSmall}
-                        rootName={rootName}
-                        currentCollection={currentCollection}
-                        canUpload={allowUpload}
-                        canCreateNewFolder={allowCreate}
-                        onUpload={this.upload}
-                        onCreate={this.createFolder}
-                        onItemClick={this.fetchFolder}
-                        onSortChange={this.sort}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <Content
-                        view={view}
-                        rootId={rootFolderId}
-                        isSmall={isSmall}
-                        isTouch={isTouch}
-                        rootElement={this.rootElement}
-                        focusedRow={focusedRow}
-                        canSetShareAccess={canSetShareAccess}
-                        canShare={canShare}
-                        canPreview={canPreview}
-                        canDelete={canDelete}
-                        canRename={canRename}
-                        canDownload={canDownload}
-                        currentCollection={currentCollection}
-                        tableRef={this.tableRef}
-                        onItemSelect={this.select}
-                        onItemClick={this.onItemClick}
-                        onItemDelete={this.delete}
-                        onItemDownload={this.download}
-                        onItemRename={this.rename}
-                        onItemShare={this.share}
-                        onItemPreview={this.preview}
-                        onSortChange={this.sort}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
+            <Internationalize language={language} messages={messages}>
+                <div id={this.id} className={styleClassName} ref={measureRef}>
+                    <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                        <Header
+                            view={view}
+                            isSmall={isSmall}
+                            searchQuery={searchQuery}
+                            logoUrl={logoUrl}
+                            onSearch={this.search}
+                        />
+                        <SubHeader
+                            view={view}
+                            rootId={rootFolderId}
+                            isSmall={isSmall}
+                            rootName={rootName}
+                            currentCollection={currentCollection}
+                            canUpload={allowUpload}
+                            canCreateNewFolder={allowCreate}
+                            onUpload={this.upload}
+                            onCreate={this.createFolder}
+                            onItemClick={this.fetchFolder}
+                            onSortChange={this.sort}
+                        />
+                        <Content
+                            view={view}
+                            rootId={rootFolderId}
+                            isSmall={isSmall}
+                            isTouch={isTouch}
+                            rootElement={this.rootElement}
+                            focusedRow={focusedRow}
+                            canSetShareAccess={canSetShareAccess}
+                            canShare={canShare}
+                            canPreview={canPreview}
+                            canDelete={canDelete}
+                            canRename={canRename}
+                            canDownload={canDownload}
+                            currentCollection={currentCollection}
+                            tableRef={this.tableRef}
+                            onItemSelect={this.select}
+                            onItemClick={this.onItemClick}
+                            onItemDelete={this.delete}
+                            onItemDownload={this.download}
+                            onItemRename={this.rename}
+                            onItemShare={this.share}
+                            onItemPreview={this.preview}
+                            onSortChange={this.sort}
+                        />
+                    </div>
+                    {allowUpload && !!this.appElement
+                        ? <UploadDialog
+                            isOpen={isUploadModalOpen}
+                            rootFolderId={id}
+                            token={token}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
+                            apiHost={apiHost}
+                            uploadHost={uploadHost}
+                            onClose={this.uploadSuccessHandler}
+                            parentElement={this.rootElement}
+                            onUpload={onUpload}
+                          />
+                        : null}
+                    {allowCreate && !!this.appElement
+                        ? <CreateFolderDialog
+                            isOpen={isCreateFolderModalOpen}
+                            onCreate={this.createFolderCallback}
+                            onCancel={this.closeModals}
+                            isLoading={isLoading}
+                            errorCode={errorCode}
+                            parentElement={this.rootElement}
+                          />
+                        : null}
+                    {canDelete && selected && !!this.appElement
+                        ? <DeleteConfirmationDialog
+                            isOpen={isDeleteModalOpen}
+                            onDelete={this.deleteCallback}
+                            onCancel={this.closeModals}
+                            item={selected}
+                            isLoading={isLoading}
+                            parentElement={this.rootElement}
+                          />
+                        : null}
+                    {canRename && selected && !!this.appElement
+                        ? <RenameDialog
+                            isOpen={isRenameModalOpen}
+                            onRename={this.renameCallback}
+                            onCancel={this.closeModals}
+                            item={selected}
+                            isLoading={isLoading}
+                            errorCode={errorCode}
+                            parentElement={this.rootElement}
+                          />
+                        : null}
+                    {canShare && selected && !!this.appElement
+                        ? <ShareDialog
+                            isOpen={isShareModalOpen}
+                            canSetShareAccess={canSetShareAccess}
+                            onShareAccessChange={this.changeShareAccess}
+                            onCancel={this.closeModals}
+                            item={selected}
+                            isLoading={isLoading}
+                            parentElement={this.rootElement}
+                          />
+                        : null}
+                    {canPreview && selected && !!this.appElement
+                        ? <PreviewDialog
+                            isOpen={isPreviewModalOpen}
+                            isTouch={isTouch}
+                            onCancel={this.closeModals}
+                            item={selected}
+                            currentCollection={currentCollection}
+                            token={token}
+                            parentElement={this.rootElement}
+                            onPreview={onPreview}
+                            hasPreviewSidebar={hasPreviewSidebar}
+                            cache={this.api.getCache()}
+                            apiHost={apiHost}
+                            appHost={appHost}
+                            staticHost={staticHost}
+                          />
+                        : null}
                 </div>
-                {allowUpload && !!this.appElement
-                    ? <UploadDialog
-                        isOpen={isUploadModalOpen}
-                        rootFolderId={id}
-                        token={token}
-                        sharedLink={sharedLink}
-                        sharedLinkPassword={sharedLinkPassword}
-                        apiHost={apiHost}
-                        uploadHost={uploadHost}
-                        onClose={this.uploadSuccessHandler}
-                        getLocalizedMessage={getLocalizedMessage}
-                        parentElement={this.rootElement}
-                        onUpload={onUpload}
-                      />
-                    : null}
-                {allowCreate && !!this.appElement
-                    ? <CreateFolderDialog
-                        isOpen={isCreateFolderModalOpen}
-                        onCreate={this.createFolderCallback}
-                        onCancel={this.closeModals}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        errorCode={errorCode}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {canDelete && selected && !!this.appElement
-                    ? <DeleteConfirmationDialog
-                        isOpen={isDeleteModalOpen}
-                        onDelete={this.deleteCallback}
-                        onCancel={this.closeModals}
-                        item={selected}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {canRename && selected && !!this.appElement
-                    ? <RenameDialog
-                        isOpen={isRenameModalOpen}
-                        onRename={this.renameCallback}
-                        onCancel={this.closeModals}
-                        item={selected}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        errorCode={errorCode}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {canShare && selected && !!this.appElement
-                    ? <ShareDialog
-                        isOpen={isShareModalOpen}
-                        canSetShareAccess={canSetShareAccess}
-                        onShareAccessChange={this.changeShareAccess}
-                        onCancel={this.closeModals}
-                        item={selected}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {canPreview && selected && !!this.appElement
-                    ? <PreviewDialog
-                        isOpen={isPreviewModalOpen}
-                        isTouch={isTouch}
-                        onCancel={this.closeModals}
-                        item={selected}
-                        currentCollection={currentCollection}
-                        token={token}
-                        getLocalizedMessage={getLocalizedMessage}
-                        parentElement={this.rootElement}
-                        onPreview={onPreview}
-                        hasPreviewSidebar={hasPreviewSidebar}
-                        cache={this.api.getCache()}
-                        apiHost={apiHost}
-                        appHost={appHost}
-                        staticHost={staticHost}
-                      />
-                    : null}
-            </div>
+            </Internationalize>
         );
         /* eslint-enable jsx-a11y/no-static-element-interactions */
         /* eslint-enable jsx-a11y/no-noninteractive-tabindex */

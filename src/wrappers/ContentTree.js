@@ -38,8 +38,9 @@ class ContentTree extends ES6Wrapper {
         const TreeComponent = modal ? ContentTreePopup : ContentTreeComponent;
         render(
             <TreeComponent
+                language={this.language}
+                messages={this.messages}
                 clientName={this.getClientName()}
-                getLocalizedMessage={this.getLocalizedMessage}
                 componentRef={this.setComponent}
                 rootFolderId={this.root}
                 token={this.token}

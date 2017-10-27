@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import FileProperties from '../FileProperties';
 import SidebarContent from './SidebarContent';
@@ -14,16 +16,15 @@ import './DetailsSidebar.scss';
 
 type Props = {
     file: BoxItem,
-    getPreviewer: Function,
-    getLocalizedMessage: Function
+    getPreviewer: Function
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
-const DetailsSidebar = ({ file, getPreviewer, getLocalizedMessage }: Props) =>
-    <SidebarContent title={getLocalizedMessage('buik.preview.sidebar.details.title')}>
-        <SidebarSkills metadata={file.metadata} getPreviewer={getPreviewer} getLocalizedMessage={getLocalizedMessage} />
-        <SidebarSection title={getLocalizedMessage('buik.preview.sidebar.details.properties')}>
-            <FileProperties file={file} getLocalizedMessage={getLocalizedMessage} />
+const DetailsSidebar = ({ file, getPreviewer }: Props) =>
+    <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
+        <SidebarSkills metadata={file.metadata} getPreviewer={getPreviewer} />
+        <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
+            <FileProperties file={file} />
         </SidebarSection>
     </SidebarContent>;
 
@@ -31,12 +32,10 @@ export default DetailsSidebar;
 
 // <div className='bcpr-sidebar-details-description'>
 // <label>
-//     <span>
-//         {getLocalizedMessage('buik.preview.sidebar.details.description')}
-//     </span>
+//     <FormattedMessage {...messages.sidebarDescription} />
 //     <textarea
 //         readOnly
-//         placeholder={getLocalizedMessage('buik.preview.sidebar.details.description.placeholder')}
+//         placeholder={intl.formatMessage(messages.sidebarDescriptionPlaceholder)}
 //         defaultValue={file.description}
 //     />
 // </label>

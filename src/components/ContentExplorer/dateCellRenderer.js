@@ -5,9 +5,6 @@
  */
 
 import React from 'react';
-import { getDate } from '../../util/datetime';
+import DateField from '../Date';
 
-export default (getLocalizedMessage: Function) => ({ cellData }: { cellData: string }) =>
-    <span>
-        {getDate(cellData, getLocalizedMessage('buik.date.today'), getLocalizedMessage('buik.date.yesterday'))}
-    </span>;
+export default () => ({ cellData }: { cellData: string }) => <DateField date={cellData} />;
