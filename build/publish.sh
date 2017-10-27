@@ -3,22 +3,6 @@
 # Temp version
 VERSION="XXX"
 
-install_dependencies() {
-    echo "--------------------------------------------------------"
-    echo "Installing all package dependencies"
-    echo "--------------------------------------------------------"
-    if yarn install; then
-        echo "----------------------------------------------------"
-        echo "Installed dependencies successfully."
-        echo "----------------------------------------------------"
-    else
-        echo "----------------------------------------------------"
-        echo "Error: Failed to run 'yarn install'!"
-        echo "----------------------------------------------------"
-        exit 1;
-    fi
-}
-
 lint_and_test() {
     echo "----------------------------------------------------"
     echo "Running linter for version" $VERSION
@@ -141,7 +125,7 @@ publish_to_npm() {
     git reset --hard release/master || exit 1
     # Remove old local tags in case a build failed
     git fetch --prune release '+refs/tags/*:refs/tags/*' || exit 1
-    git clean -fdX || exit 1
+    git clean -f || exit 1
 
     VERSION=$(./build/current_version.sh)
 
@@ -164,14 +148,6 @@ publish_to_npm() {
     echo "----------------------------------------------------"
     # Check out the version we want to build (version tags are prefixed with a v)
     git checkout v$VERSION || exit 1
-
-    # Install node modules
-    if ! install_dependencies; then
-        echo "----------------------------------------------------"
-        echo "Error in install_dependencies!"
-        echo "----------------------------------------------------"
-        exit 1
-    fi
 
     # Do testing and linting
     if ! clean_assets; then
