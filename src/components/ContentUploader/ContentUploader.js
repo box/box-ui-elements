@@ -174,11 +174,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     addFilesToUploadQueue = (files: File[]) => {
-        const { chunked, fileLimit, getLocalizedMessage } = this.props;
+        const { fileLimit, getLocalizedMessage } = this.props;
         const { view, items } = this.state;
-
-        // Disable chunked upload in IE11 for now until hashing is done in a worker
-        const useChunked = chunked && !isIE();
 
         // Filter out files that are already in the upload queue
         const newItems = [].filter
@@ -197,15 +194,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                     extension = '';
                 }
 
-                const factory = this.createAPIFactory();
-                let api;
-
-                if (useChunked && size && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
-                    api = factory.getChunkedUploadAPI();
-                } else {
-                    api = factory.getPlainUploadAPI();
-                }
-
+                const api = this.getUploadAPI(file);
                 const uploadItem = {
                     api,
                     extension,
@@ -240,6 +229,28 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             this.upload();
         }
     };
+
+    /**
+     * Returns a new API instance for the given file.
+     *
+     * @private
+     * @param {File} file - File to get a new API instance for
+     * @return {UploadAPI} - Instance of Upload API
+     */
+    getUploadAPI(file) {
+        // Disable chunked upload in IE11 for now until hashing is done in a worker
+        const { chunked } = this.props;
+        const useChunked = chunked && !isIE();
+
+        const { size } = file;
+        const factory = this.createAPIFactory();
+
+        if (useChunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
+            return factory.getChunkedUploadAPI();
+        }
+
+        return factory.getPlainUploadAPI();
+    }
 
     /**
      * Removes an item from the upload queue. Cancels upload if in progress.
@@ -327,11 +338,13 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     resetFile(item: UploadItem) {
-        const { api } = item;
+        const { api, file } = item;
         if (api && typeof api.cancel === 'function') {
             api.cancel();
         }
 
+        // Reset API, progress & status
+        item.api = this.getUploadAPI(file);
         item.progress = 0;
         item.status = STATUS_PENDING;
 
