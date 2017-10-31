@@ -5,14 +5,12 @@
  */
 
 import noop from 'lodash.noop';
-import Rusha from 'rusha';
 import Chunk from './Chunk';
 import BaseUpload from './BaseUpload';
+import hexToBase64 from '../util/base64';
 import { DEFAULT_RETRY_DELAY_MS } from '../constants';
 import type { BoxItem, StringAnyMap } from '../flowTypes';
-import int32ArrayToBase64 from '../util/base64';
 
-const DIGEST_DELAY_MS = 1000; // Delay 1s before retry-ing digest update or fetch
 const UPLOAD_PARALLELISM = 4; // Maximum concurrent chunks to upload per file
 
 class ChunkedUpload extends BaseUpload {
@@ -27,7 +25,7 @@ class ChunkedUpload extends BaseUpload {
     overwrite: boolean;
     position: number = 0;
     sessionId: string;
-    sha1: any;
+    sha1Worker: any;
     totalNumChunks: number;
     successCallback: Function;
     errorCallback: Function;
@@ -67,9 +65,14 @@ class ChunkedUpload extends BaseUpload {
 
         const { response } = error;
         if (response) {
-            response.json().then((body) => {
-                this.baseUploadErrorHandler(body, this.createUploadSession.bind(this));
-            });
+            // When blocked by CORS due to authentication errors, response.json() fails
+            if (response.status === 401 || response.status === 403) {
+                this.baseUploadErrorHandler(response, this.createUploadSession.bind(this));
+            } else {
+                response.json().then((body) => {
+                    this.baseUploadErrorHandler(body, this.createUploadSession.bind(this));
+                });
+            }
         }
     };
 
@@ -150,7 +153,7 @@ class ChunkedUpload extends BaseUpload {
                 return;
             }
 
-            if (!this.file || this.position >= this.file.size) {
+            if (!this.file || this.position >= this.file.size || !this.sha1Worker) {
                 resolve(null);
                 return;
             }
@@ -159,37 +162,33 @@ class ChunkedUpload extends BaseUpload {
             const bytePosition = this.position;
             this.position += this.chunkSize;
 
-            // Slice the file as a blob for upload - XHR seems to work much better with a blob than with an ArrayBuffer
+            // Generate unique part ID based on session ID & byte position
+            const partId = `${this.sessionId}${bytePosition}`;
+
+            // Slice the file as a blob for upload and hashing
             const blobPart: Blob = this.file.slice(bytePosition, bytePosition + this.chunkSize);
 
-            // Read the blob as an ArrayBuffer so SHA1 can be calculated with Rusha
-            const fileReader = new FileReader();
-            fileReader.addEventListener('load', (event: Event & { target: EventTarget }) => {
-                if (!event || !event.target || !event.target.result) {
-                    reject();
-                    return;
+            // Send blob to Rusha worker for hashing
+            this.sha1Worker.postMessage({ id: partId, data: blobPart });
+
+            // When hashing is complete, generate a chunk for upload
+            this.sha1Worker.addEventListener('message', ({ data }) => {
+                if (data && data.id === partId) {
+                    const chunk = new Chunk(this.options);
+                    chunk.setup({
+                        sessionId: this.sessionId,
+                        part: blobPart,
+                        offset: bytePosition,
+                        sha1: hexToBase64(data.hash),
+                        totalSize: this.file.size,
+                        successCallback: this.handleChunkSuccess,
+                        errorCallback: this.handleUploadError,
+                        progressCallback: (progressEvent) => this.handleChunkProgress(chunk, progressEvent)
+                    });
+
+                    resolve(chunk);
                 }
-
-                const buffer = event.target.result;
-                this.updateDigest(buffer, bytePosition);
-
-                const chunk = new Chunk(this.options);
-                chunk.setup({
-                    sessionId: this.sessionId,
-                    part: blobPart,
-                    offset: bytePosition,
-                    sha1: int32ArrayToBase64(new Rusha().rawDigest(buffer)),
-                    totalSize: this.file.size,
-                    successCallback: this.handleChunkSuccess,
-                    errorCallback: this.handleUploadError,
-                    progressCallback: (progressEvent) => this.handleChunkProgress(chunk, progressEvent)
-                });
-
-                resolve(chunk);
             });
-
-            fileReader.addEventListener('error', reject);
-            fileReader.readAsArrayBuffer(blobPart);
         });
     }
 
@@ -220,7 +219,7 @@ class ChunkedUpload extends BaseUpload {
      * @return {void}
      */
     handleChunkProgress = (chunk: Chunk, event: ProgressEvent): void => {
-        if (!event.lengthComputable) {
+        if (!event.total) {
             return;
         }
 
@@ -230,14 +229,12 @@ class ChunkedUpload extends BaseUpload {
         // Calculate progress across all chunks
         const loaded = this.chunks.reduce((progress, chk) => progress + chk.getProgress(), 0) * 100;
 
-        // Generate an overall progress event
-        this.progressCallback(
-            new ProgressEvent('progress', {
-                lengthComputable: true,
-                loaded,
-                total: this.totalNumChunks * 100
-            })
-        );
+        // Generate an overall progress event and bubble progress up. We don't use ProgressEvent because it is not
+        // supported in IE11
+        this.progressCallback({
+            loaded,
+            total: this.totalNumChunks * 100
+        });
     };
 
     /**
@@ -271,7 +268,7 @@ class ChunkedUpload extends BaseUpload {
 
         this.getDigest().then((digest) => {
             const headers = {
-                Digest: `SHA=${digest}`
+                Digest: `sha=${digest}`
             };
 
             this.xhr
@@ -327,44 +324,24 @@ class ChunkedUpload extends BaseUpload {
     };
 
     /**
-     * Updates SHA1 digest, ensuring that parts are added in the right order.
-     *
-     * @param {ArrayBuffer} buffer - ArrayBuffer of part data
-     * @param {number} bytePosition - Byte offset of this part
-     * @return {void}
-     */
-    updateDigest(buffer: ArrayBuffer, bytePosition: number) {
-        // If we are at the correct byte offset, use Rusha to update the digest with this part
-        if (bytePosition === this.hashPosition) {
-            this.sha1.append(buffer);
-            this.hashPosition += this.chunkSize;
-
-            // If not, retry updating after a short delay
-        } else {
-            setTimeout(() => this.updateDigest(buffer, bytePosition), DIGEST_DELAY_MS);
-        }
-    }
-
-    /**
      * Get SHA1 digest of file. This happens asynchronously since it's possible that the digest hasn't been updated
      * with all of the parts yet.
      *
      * @return {Promise<string>} Promise that resolves with digest
      */
-    getDigest() {
+    getDigest(): Promise<string> {
         return new Promise((resolve) => {
             if (this.digest) {
                 resolve(this.digest);
                 return;
             }
 
-            // Hash position will be at or beyond file size when complete
-            if (this.hashPosition >= this.file.size) {
-                this.digest = int32ArrayToBase64(this.sha1.rawEnd());
-                resolve(this.digest);
-            } else {
-                setTimeout(this.getDigest().then((digest) => resolve(digest)), DIGEST_DELAY_MS);
-            }
+            this.sha1Worker.postMessage({ id: this.sessionId, file: this.file });
+            this.sha1Worker.addEventListener('message', ({ data }) => {
+                if (data && data.id === this.sessionId) {
+                    resolve(hexToBase64(data.hash));
+                }
+            });
         });
     }
 
@@ -374,7 +351,7 @@ class ChunkedUpload extends BaseUpload {
      * @private
      * @param {string[]} [parts] - String parts to add to the upload URL
      */
-    getUploadSessionUrl(...parts: string[]) {
+    getUploadSessionUrl(...parts: string[]): string {
         let sessionUrl = `${this.uploadHost}/api/2.0/files/upload_sessions`;
 
         parts.forEach((part) => {
@@ -400,6 +377,7 @@ class ChunkedUpload extends BaseUpload {
     upload({
         id,
         file,
+        sha1Worker,
         successCallback = noop,
         errorCallback = noop,
         progressCallback = noop,
@@ -407,6 +385,7 @@ class ChunkedUpload extends BaseUpload {
     }: {
         id: string,
         file: File,
+        sha1Worker: any,
         successCallback: Function,
         errorCallback: Function,
         progressCallback: Function,
@@ -419,13 +398,11 @@ class ChunkedUpload extends BaseUpload {
         // Save references
         this.id = id;
         this.file = file;
+        this.sha1Worker = sha1Worker;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         this.progressCallback = progressCallback;
         this.overwrite = overwrite;
-
-        this.sha1 = new Rusha();
-        this.sha1.resetState();
 
         this.createUploadSession({
             fileName: this.file.name

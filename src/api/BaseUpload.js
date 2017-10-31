@@ -25,6 +25,8 @@ class BaseUpload extends Base {
     baseUploadErrorHandler = (error: any, retryUploadFunc: Function): void => {
         const fileName = this.file ? this.file.name : '';
 
+        // TODO(tonyjin): Normalize error object and clean up error handling
+
         // Automatically handle name conflict errors
         if (error && error.status === 409) {
             if (this.overwrite) {
@@ -41,7 +43,7 @@ class BaseUpload extends Base {
                     fileName: `${fileName.substr(0, fileName.lastIndexOf('.'))}-${Date.now()}${extension}`
                 });
             }
-            // Retry after interval defined in header
+            // When rate limited, retry after interval defined in header
         } else if (error && (error.status === 429 || error.code === 'too_many_requests')) {
             let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
 
@@ -62,7 +64,11 @@ class BaseUpload extends Base {
             );
 
             // If another error status that isn't name conflict or rate limiting, fail upload
-        } else if (error && error.status && typeof this.errorCallback === 'function') {
+        } else if (
+            error &&
+            (error.status || error.message === 'Failed to fetch') &&
+            typeof this.errorCallback === 'function'
+        ) {
             this.errorCallback(error);
             // Retry with exponential backoff for other failures since these are likely to be network errors
         } else {

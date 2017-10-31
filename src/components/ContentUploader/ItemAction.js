@@ -8,6 +8,7 @@ import { injectIntl } from 'react-intl';
 import IconCross from '../icons/IconCross';
 import IconCheck from '../icons/IconCheck';
 import IconRetry from '../icons/IconRetry';
+import IconInProgress from './IconInProgress';
 import { PlainButton } from '../Button';
 import messages from '../messages';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
@@ -33,10 +34,11 @@ const ItemAction = ({ status, onClick, intl }: Props) => {
             icon = <IconRetry />;
             title = intl.formatMessage(messages.retry);
             break;
-        case STATUS_PENDING:
+        case STATUS_IN_PROGRESS:
+            icon = <IconInProgress />;
             title = intl.formatMessage(messages.remove);
             break;
-        case STATUS_IN_PROGRESS:
+        case STATUS_PENDING:
         default:
         // empty
     }

@@ -134,7 +134,7 @@ class Chunk extends BaseUpload {
      * @return {number} Progress from 0-1
      */
     getProgress(): number {
-        return this.progress;
+        return this.progress || 0;
     }
 
     /**

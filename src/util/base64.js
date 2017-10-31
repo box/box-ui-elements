@@ -5,19 +5,18 @@
  */
 
 /**
- * Converts Int32Array to Base64. Adapted from https://jsperf.com/int32array-to-base64.
+ * Converts hex to Base 64. Adapted from
+ * https://stackoverflow.com/questions/23190056/hex-to-base64-converter-for-javascript.
  *
- * @param {Int32Array} numArray - Int32Array to convert
+ * @param {string} str - Hex string to convert
  * @return {string}
  */
-/* eslint-disable no-bitwise */
-export default function(numArray: Int32Array): string {
-    let bytes = '';
-
-    for (let i = 0; i < numArray.length; i += 1) {
-        const v = numArray[i];
-        bytes += String.fromCharCode(v & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >> 24) & 0xff);
-    }
-
-    return btoa(bytes);
+export default function hexToBase64(str: string): string {
+    return btoa(
+        // $FlowFixMe - ignore flow errors from next line
+        String.fromCharCode.apply(
+            null,
+            str.replace(/\r|\n/g, '').replace(/([\da-fA-F]{2}) ?/g, '0x$1 ').replace(/ +$/, '').split(' ')
+        )
+    );
 }

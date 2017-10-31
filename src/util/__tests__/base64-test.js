@@ -1,9 +1,9 @@
-import int32ArrayToBase64 from '../base64';
+import hexToBase64 from '../base64';
 
 describe('util/base64', () => {
-    it('should convert a Int32Array to Base64 correctly', () => {
-        const arr = new Int32Array([13, 37]);
-        const expectedB64 = 'DQAAACUAAAA=';
-        expect(int32ArrayToBase64(arr)).to.equal(expectedB64);
+    it('should convert hex to Base64 correctly', () => {
+        const str = '12AB34';
+        const expectedB64 = 'Eqs0';
+        expect(hexToBase64(str)).to.equal(expectedB64);
     });
 });

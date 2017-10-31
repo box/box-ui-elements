@@ -6,5 +6,37 @@
         svg {
             display: block;
         }
+
+        .buik-icon-in-progress {
+            height: 14px;
+            width: 14px;
+
+            // Hide cross icon without hover
+            svg {
+                display: none;
+            }
+        }
+
+        // Display cross icon on hover and hide loading indicator
+        &:hover .buik-icon-in-progress {
+            svg {
+                display: block;
+            }
+
+            .buik-btn-loading-indicator {
+                display: none;
+            }
+        }
+    }
+
+    .buik-btn-loading-indicator {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
     }
 }
