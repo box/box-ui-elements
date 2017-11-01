@@ -1,6 +1,15 @@
+<a name="1.6.1"></a>
+## 1.6.1 (2017-10-27)
+
+* Chore: Remove NPM install from release/publish scripts (#88) ([db2ba82](https://github.com/box/box-ui-elements/commit/db2ba82))
+* Fix: Restart manual retries properly (#87) ([66b4fd6](https://github.com/box/box-ui-elements/commit/66b4fd6))
+
+
+
 <a name="1.6.0"></a>
 # 1.6.0 (2017-10-26)
 
+* Release: 1.6.0 ([ed7f158](https://github.com/box/box-ui-elements/commit/ed7f158))
 * New: Upload & error events per file and manual retries (#84) ([dd26b48](https://github.com/box/box-ui-elements/commit/dd26b48))
 * Fix: Better error and retry handling for Uploader (#82) ([3a4641d](https://github.com/box/box-ui-elements/commit/3a4641d))
 * Update: Adding new property to allow creating a new folder in the UI (#80) ([e4ddba6](https://github.com/box/box-ui-elements/commit/e4ddba6))

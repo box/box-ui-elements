@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import messages from '../messages';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../constants';
 import type { View, Collection } from '../../flowTypes';
@@ -13,21 +15,13 @@ type Props = {
     rootId: string,
     rootName?: string,
     onItemClick: Function,
-    getLocalizedMessage: Function,
     currentCollection: Collection,
     view: View,
-    isSmall: boolean
+    isSmall: boolean,
+    intl: any
 };
 
-const SubHeaderLeft = ({
-    view,
-    isSmall,
-    rootId,
-    rootName,
-    currentCollection,
-    onItemClick,
-    getLocalizedMessage
-}: Props) => {
+const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick, intl }: Props) => {
     let crumbs;
 
     if (view === VIEW_FOLDER || view === VIEW_SEARCH) {
@@ -39,21 +33,21 @@ const SubHeaderLeft = ({
         if (view === VIEW_SEARCH) {
             crumbs = crumbs.concat({
                 id: undefined,
-                name: getLocalizedMessage('buik.folder.name.search')
+                name: intl.formatMessage(messages.searchBreadcrumb)
             });
         }
     } else {
         crumbs = [
             {
                 id: undefined,
-                name: getLocalizedMessage(`buik.folder.name.${view}`)
+                name: intl.formatMessage(messages[`${view}Breadcrumb`])
             }
         ];
 
         if (view !== VIEW_RECENTS) {
             crumbs.unshift({
                 id: rootId,
-                name: rootName || getLocalizedMessage('buik.folder.name.root')
+                name: rootName || intl.formatMessage(messages.rootBreadcrumb)
             });
         }
     }
@@ -69,4 +63,4 @@ const SubHeaderLeft = ({
     );
 };
 
-export default SubHeaderLeft;
+export default injectIntl(SubHeaderLeft);

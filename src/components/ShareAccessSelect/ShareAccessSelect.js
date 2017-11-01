@@ -5,19 +5,21 @@
  */
 
 import React from 'react';
-import type { BoxItem } from '../../flowTypes';
+import { injectIntl } from 'react-intl';
+import messages from '../messages';
 import { ACCESS_NONE, ACCESS_OPEN, ACCESS_COLLAB, ACCESS_COMPANY } from '../../constants';
+import type { BoxItem } from '../../flowTypes';
 
 type Props = {
     canSetShareAccess: boolean,
     onChange: Function,
     item: BoxItem,
-    getLocalizedMessage: Function,
-    className: string
+    className: string,
+    intl: any
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
-const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, getLocalizedMessage }: Props) => {
+const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl }: Props) => {
     const { allowed_shared_link_access_levels: allowedSharedAccessLevels, permissions, shared_link: sharedLink } = item;
 
     if (!allowedSharedAccessLevels) {
@@ -41,26 +43,26 @@ const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, getLo
         <select className={className} value={access} onChange={changeHandler}>
             {allowOpen
                 ? <option value={ACCESS_OPEN}>
-                    {getLocalizedMessage('buik.item.share.access.open')}
+                    {intl.formatMessage(messages.shareAccessOpen)}
                 </option>
                 : null}
             {allowCollab
                 ? <option value={ACCESS_COLLAB}>
-                    {getLocalizedMessage('buik.item.share.access.collaborators')}
+                    {intl.formatMessage(messages.shareAccessCollab)}
                 </option>
                 : null}
             {allowCompany
                 ? <option value={ACCESS_COMPANY}>
-                    {getLocalizedMessage('buik.item.share.access.company')}
+                    {intl.formatMessage(messages.shareAccessCompany)}
                 </option>
                 : null}
             <option value={ACCESS_NONE}>
                 {access === ACCESS_NONE
-                    ? getLocalizedMessage('buik.item.share.access.none')
-                    : getLocalizedMessage('buik.item.share.access.remove')}
+                    ? intl.formatMessage(messages.shareAccessNone)
+                    : intl.formatMessage(messages.shareAccessRemove)}
             </option>
         </select>
     );
 };
 
-export default ShareAccessSelect;
+export default injectIntl(ShareAccessSelect);

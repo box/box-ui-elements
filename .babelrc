@@ -14,7 +14,8 @@
         [
             "react-intl",
             {
-                "messagesDir": "./src/i18n/json"
+                "enforceDescriptions": true,
+                "messagesDir": "./i18n/json"
             }
         ]
     ],

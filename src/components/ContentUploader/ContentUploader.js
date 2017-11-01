@@ -6,6 +6,7 @@
 
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import noop from 'lodash.noop';
 import uniqueid from 'lodash.uniqueid';
@@ -15,6 +16,8 @@ import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import { isIE } from '../../util/browser';
+import Internationalize from '../Internationalize';
+import messageDescriptors from '../messages';
 import {
     CLIENT_NAME_CONTENT_UPLOADER,
     DEFAULT_HOSTNAME_UPLOAD,
@@ -28,7 +31,7 @@ import {
     STATUS_COMPLETE,
     STATUS_ERROR
 } from '../../constants';
-import type { BoxItem, UploadItem, View, Token } from '../../flowTypes';
+import type { BoxItem, UploadItem, View, Token, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 
@@ -47,12 +50,14 @@ type Props = {
     onComplete: Function,
     onError: Function,
     onUpload: Function,
-    getLocalizedMessage: Function,
     isSmall: boolean,
     isLarge: boolean,
     isTouch: boolean,
     measureRef: Function,
-    responseFilter?: Function
+    language?: string,
+    messages?: StringMap,
+    responseFilter?: Function,
+    intl: any
 };
 
 type DefaultProps = {|
@@ -174,11 +179,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     addFilesToUploadQueue = (files: File[]) => {
-        const { chunked, fileLimit, getLocalizedMessage } = this.props;
+        const { fileLimit, intl } = this.props;
         const { view, items } = this.state;
-
-        // Disable chunked upload in IE11 for now until hashing is done in a worker
-        const useChunked = chunked && !isIE();
 
         // Filter out files that are already in the upload queue
         const newItems = [].filter
@@ -197,15 +199,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                     extension = '';
                 }
 
-                const factory = this.createAPIFactory();
-                let api;
-
-                if (useChunked && size && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
-                    api = factory.getChunkedUploadAPI();
-                } else {
-                    api = factory.getPlainUploadAPI();
-                }
-
+                const api = this.getUploadAPI(file);
                 const uploadItem = {
                     api,
                     extension,
@@ -226,7 +220,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         if (totalNumOfItems > fileLimit) {
             updatedItems = items.concat(newItems.slice(0, fileLimit - items.length));
             this.setState({
-                message: getLocalizedMessage('buik.upload.message.toomanyfiles', { fileLimit })
+                message: intl.formatMessage(messageDescriptors.uploadErrorTooManyFiles, { fileLimit })
             });
         } else {
             updatedItems = items.concat(newItems);
@@ -240,6 +234,28 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             this.upload();
         }
     };
+
+    /**
+     * Returns a new API instance for the given file.
+     *
+     * @private
+     * @param {File} file - File to get a new API instance for
+     * @return {UploadAPI} - Instance of Upload API
+     */
+    getUploadAPI(file) {
+        // Disable chunked upload in IE11 for now until hashing is done in a worker
+        const { chunked } = this.props;
+        const useChunked = chunked && !isIE();
+
+        const { size } = file;
+        const factory = this.createAPIFactory();
+
+        if (useChunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
+            return factory.getChunkedUploadAPI();
+        }
+
+        return factory.getPlainUploadAPI();
+    }
 
     /**
      * Removes an item from the upload queue. Cancels upload if in progress.
@@ -327,11 +343,13 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     resetFile(item: UploadItem) {
-        const { api } = item;
+        const { api, file } = item;
         if (api && typeof api.cancel === 'function') {
             api.cancel();
         }
 
+        // Reset API, progress & status
+        item.api = this.getUploadAPI(file);
         item.progress = 0;
         item.status = STATUS_PENDING;
 
@@ -483,7 +501,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {Component}
      */
     render() {
-        const { onClose, getLocalizedMessage, className, measureRef, isTouch }: Props = this.props;
+        const { language, messages, onClose, className, measureRef, isTouch }: Props = this.props;
         const { view, items, message }: State = this.state;
 
         const hasFiles = items.length !== 0;
@@ -491,29 +509,29 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         const styleClassName = classNames('buik buik-app-element bcu', className);
 
         return (
-            <div className={styleClassName} id={this.id} ref={measureRef}>
-                <DroppableContent
-                    addFiles={this.addFilesToUploadQueue}
-                    allowedTypes={['Files']}
-                    getLocalizedMessage={getLocalizedMessage}
-                    items={items}
-                    isTouch={isTouch}
-                    tableRef={this.tableRef}
-                    view={view}
-                    onClick={this.onClick}
-                />
-                <Footer
-                    getLocalizedMessage={getLocalizedMessage}
-                    hasFiles={hasFiles}
-                    isLoading={isLoading}
-                    message={message}
-                    onCancel={this.cancel}
-                    onClose={onClose}
-                    onUpload={this.upload}
-                />
-            </div>
+            <Internationalize language={language} messages={messages}>
+                <div className={styleClassName} id={this.id} ref={measureRef}>
+                    <DroppableContent
+                        addFiles={this.addFilesToUploadQueue}
+                        allowedTypes={['Files']}
+                        items={items}
+                        isTouch={isTouch}
+                        tableRef={this.tableRef}
+                        view={view}
+                        onClick={this.onClick}
+                    />
+                    <Footer
+                        hasFiles={hasFiles}
+                        isLoading={isLoading}
+                        message={message}
+                        onCancel={this.cancel}
+                        onClose={onClose}
+                        onUpload={this.upload}
+                    />
+                </div>
+            </Internationalize>
         );
     }
 }
 
-export default makeResponsive(ContentUploader);
+export default makeResponsive(injectIntl(ContentUploader));

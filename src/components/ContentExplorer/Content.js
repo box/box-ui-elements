@@ -42,7 +42,6 @@ type Props = {
     onItemShare: Function,
     onItemPreview: Function,
     onSortChange: Function,
-    getLocalizedMessage: Function,
     isSmall: boolean,
     isTouch: boolean,
     focusedRow: number,
@@ -70,19 +69,14 @@ const Content = ({
     onItemRename,
     onItemShare,
     onItemPreview,
-    onSortChange,
-    getLocalizedMessage
+    onSortChange
 }: Props) =>
     <div className='bce-content'>
         {view === VIEW_ERROR || view === VIEW_SELECTED
             ? null
             : <ProgressBar percent={currentCollection.percentLoaded} />}
         {isEmpty(view, currentCollection)
-            ? <EmptyState
-                view={view}
-                getLocalizedMessage={getLocalizedMessage}
-                isLoading={currentCollection.percentLoaded !== 100}
-              />
+            ? <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
             : <ItemList
                 view={view}
                 isSmall={isSmall}
@@ -105,7 +99,6 @@ const Content = ({
                 onItemShare={onItemShare}
                 onItemPreview={onItemPreview}
                 onSortChange={onSortChange}
-                getLocalizedMessage={getLocalizedMessage}
               />}
     </div>;
 

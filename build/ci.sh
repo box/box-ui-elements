@@ -65,7 +65,7 @@ build_assets() {
     echo "-----------------------------------------"
     echo "Starting build for version" $VERSION
     echo "-----------------------------------------"
-    if yarn run ci; then
+    if yarn run build-ci; then
         echo "----------------------------------------------------"
         echo "Built assets for version" $VERSION
         echo "----------------------------------------------------"

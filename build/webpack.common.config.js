@@ -1,7 +1,6 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
-const getMessages = require('./extractTranslations');
 const version = require('../package.json').version;
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const license = require('./license');
@@ -10,14 +9,14 @@ const DefinePlugin = webpack.DefinePlugin;
 const BannerPlugin = webpack.BannerPlugin;
 
 module.exports = (language) => {
-    const translations = getMessages(language);
     const locale = language.substr(0, language.indexOf('-'));
     return {
         bail: true,
         resolve: {
             modules: ['src', 'node_modules'],
             alias: {
-                'i18n-locale-data': `react-intl/locale-data/${locale}`
+                'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
+                'box-ui-elements-locale-data': path.resolve(`i18n/${language}`)
             }
         },
         resolveLoader: {
@@ -62,8 +61,7 @@ module.exports = (language) => {
                 allChunks: true
             }),
             new DefinePlugin({
-                __LOCALE__: JSON.stringify(locale),
-                __TRANSLATIONS__: JSON.stringify(translations),
+                __LANGUAGE__: JSON.stringify(language),
                 __VERSION__: JSON.stringify(version),
                 'process.env': {
                     NODE_ENV: JSON.stringify(process.env.NODE_ENV),

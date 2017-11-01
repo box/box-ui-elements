@@ -141,7 +141,7 @@ publish_to_npm() {
     git reset --hard release/master || exit 1
     # Remove old local tags in case a build failed
     git fetch --prune release '+refs/tags/*:refs/tags/*' || exit 1
-    git clean -fdX || exit 1
+    git clean -fd || exit 1
 
     VERSION=$(./build/current_version.sh)
 

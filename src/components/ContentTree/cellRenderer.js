@@ -13,13 +13,11 @@ import { TYPE_FOLDER, VIEW_FOLDER } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './Cell.scss';
 
-export default (
-    getLocalizedMessage: Function,
-    onExpanderClick: Function,
-    onItemClick: Function,
-    isSmall: boolean = false,
-    isLoading: boolean
-) => ({ rowData }: { rowData: BoxItem }) => {
+export default (onExpanderClick: Function, onItemClick: Function, isSmall: boolean = false, isLoading: boolean) => ({
+    rowData
+}: {
+    rowData: BoxItem
+}) => {
     const { path_collection, selected }: BoxItem = rowData;
     if (!path_collection) {
         throw new Error('Bad Item!');
@@ -41,7 +39,7 @@ export default (
                 {isSmall
                     ? null
                     : <div className='buik-item-details'>
-                        <ItemSubDetails view={VIEW_FOLDER} item={rowData} getLocalizedMessage={getLocalizedMessage} />
+                        <ItemSubDetails view={VIEW_FOLDER} item={rowData} />
                     </div>}
             </div>
         </div>

@@ -4,6 +4,8 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import { Button, PrimaryButton } from '../Button';
 import './Footer.scss';
 
@@ -13,16 +15,15 @@ type Props = {
     message?: string,
     onCancel: Function,
     onClose?: Function,
-    onUpload: Function,
-    getLocalizedMessage: Function
+    onUpload: Function
 };
 
-const Footer = ({ isLoading, hasFiles, message, onCancel, onClose, onUpload, getLocalizedMessage }: Props) =>
+const Footer = ({ isLoading, hasFiles, message, onCancel, onClose, onUpload }: Props) =>
     <div className='bcu-footer'>
         <div className='bcu-footer-left'>
             {onClose
                 ? <Button isDisabled={hasFiles} onClick={onClose}>
-                    {getLocalizedMessage('buik.footer.button.close')}
+                    <FormattedMessage {...messages.close} />
                 </Button>
                 : null}
         </div>
@@ -31,10 +32,10 @@ const Footer = ({ isLoading, hasFiles, message, onCancel, onClose, onUpload, get
         </div>
         <div className='bcu-footer-right'>
             <Button isDisabled={!hasFiles} onClick={onCancel}>
-                {getLocalizedMessage('buik.footer.button.cancel.uploads')}
+                <FormattedMessage {...messages.cancelUploads} />
             </Button>
             <PrimaryButton isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload}>
-                {getLocalizedMessage('buik.footer.button.upload')}
+                <FormattedMessage {...messages.upload} />
             </PrimaryButton>
         </div>
     </div>;

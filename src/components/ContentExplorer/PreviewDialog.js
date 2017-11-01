@@ -6,8 +6,10 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import { injectIntl } from 'react-intl';
 import cloneDeep from 'lodash.clonedeep';
 import ContentPreview from '../ContentPreview';
+import messages from '../messages';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import Cache from '../../util/Cache';
 import type { BoxItem, Collection, Token } from '../../flowTypes';
@@ -18,7 +20,6 @@ type Props = {
     onCancel: Function,
     item: BoxItem,
     token: Token,
-    getLocalizedMessage: Function,
     parentElement: HTMLElement,
     isTouch: boolean,
     onPreview: Function,
@@ -26,13 +27,13 @@ type Props = {
     cache: Cache,
     apiHost: string,
     appHost: string,
-    staticHost: string
+    staticHost: string,
+    intl: any
 };
 
 const PreviewDialog = ({
     item,
     isOpen,
-    getLocalizedMessage,
     parentElement,
     token,
     cache,
@@ -42,7 +43,8 @@ const PreviewDialog = ({
     onPreview,
     apiHost,
     appHost,
-    staticHost
+    staticHost,
+    intl
 }: Props) => {
     const { items }: Collection = currentCollection;
     const onLoad = (data: any): void => {
@@ -61,7 +63,7 @@ const PreviewDialog = ({
             portalClassName={`${CLASS_MODAL} buik-modal-preview`}
             className={CLASS_MODAL_CONTENT_FULL_BLEED}
             overlayClassName={CLASS_MODAL_OVERLAY}
-            contentLabel={getLocalizedMessage('buik.modal.preview.dialog.label')}
+            contentLabel={intl.formatMessage(messages.preview)}
             onRequestClose={onCancel}
         >
             <ContentPreview
@@ -77,10 +79,9 @@ const PreviewDialog = ({
                 onLoad={onLoad}
                 onClose={onCancel}
                 hasSidebar={hasPreviewSidebar}
-                getLocalizedMessage={getLocalizedMessage}
             />
         </Modal>
     );
 };
 
-export default PreviewDialog;
+export default injectIntl(PreviewDialog);

@@ -5,6 +5,7 @@
  */
 
 import React, { PureComponent } from 'react';
+import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import DetailsSidebar from './DetailsSidebar';
 import IconComments from '../icons/IconComments';
@@ -14,13 +15,14 @@ import IconApps from '../icons/IconApps';
 import IconDetails from '../icons/IconDetails';
 import { PlainButton } from '../Button';
 import { BOX_BLUE } from '../../constants';
+import messages from '../messages';
 import type { BoxItem } from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
     file?: BoxItem,
     getPreviewer: Function,
-    getLocalizedMessage: Function
+    intl: any
 };
 
 type State = {
@@ -62,9 +64,9 @@ class Sidebar extends PureComponent<void, Props, State> {
      * @inheritdoc
      */
     render() {
-        const { file, getPreviewer, getLocalizedMessage }: Props = this.props;
+        const { file, getPreviewer, intl }: Props = this.props;
         const { showSidebar }: State = this.state;
-        const sidebarTitle = getLocalizedMessage('buik.preview.sidebar.details.title');
+        const sidebarTitle = intl.formatMessage(messages.sidebarDetailsTitle);
 
         const sidebarClassName = classNames('bcpr-sidebar', {
             'bcpr-sidebar-visible': showSidebar
@@ -98,16 +100,10 @@ class Sidebar extends PureComponent<void, Props, State> {
                         <IconDetails color={showSidebar ? BOX_BLUE : '#aaa'} />
                     </PlainButton>
                 </div>
-                {!!file &&
-                    showSidebar &&
-                    <DetailsSidebar
-                        file={file}
-                        getPreviewer={getPreviewer}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />}
+                {!!file && showSidebar && <DetailsSidebar file={file} getPreviewer={getPreviewer} />}
             </div>
         );
     }
 }
 
-export default Sidebar;
+export default injectIntl(Sidebar);

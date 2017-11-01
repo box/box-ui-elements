@@ -18,7 +18,6 @@ type Props = {
     tableRef: Function,
     onItemClick: Function,
     onExpanderClick: Function,
-    getLocalizedMessage: Function,
     currentCollection: Collection
 };
 
@@ -34,23 +33,11 @@ function isEmpty(view: View, currentCollection: Collection): boolean {
     return view === VIEW_ERROR || items.length === 0;
 }
 
-const Content = ({
-    view,
-    isSmall,
-    currentCollection,
-    tableRef,
-    onItemClick,
-    onExpanderClick,
-    getLocalizedMessage
-}: Props) =>
+const Content = ({ view, isSmall, currentCollection, tableRef, onItemClick, onExpanderClick }: Props) =>
     <div className='bct-content'>
         {isEmpty(view, currentCollection)
             ? <div className='buik-empty'>
-                <EmptyState
-                    view={view}
-                    getLocalizedMessage={getLocalizedMessage}
-                    isLoading={currentCollection.percentLoaded !== 100}
-                  />
+                <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
                 <ProgressBar percent={currentCollection.percentLoaded} />
             </div>
             : <div className='bct-item-list'>
@@ -60,7 +47,6 @@ const Content = ({
                     tableRef={tableRef}
                     onItemClick={onItemClick}
                     onExpanderClick={onExpanderClick}
-                    getLocalizedMessage={getLocalizedMessage}
                     isLoading={currentCollection.percentLoaded !== 100}
                   />
                 <ProgressBar percent={currentCollection.percentLoaded} />

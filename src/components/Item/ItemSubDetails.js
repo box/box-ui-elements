@@ -5,30 +5,36 @@
  */
 
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import messages from '../messages';
 import getSize from '../../util/size';
-import { getDate } from '../../util/datetime';
+import Datefield from '../Date';
 import { VIEW_RECENTS } from '../../constants';
 import type { BoxItem, View } from '../../flowTypes';
 
 type Props = {
     item: BoxItem,
-    getLocalizedMessage: Function,
-    view: View
+    view: View,
+    intl: any
 };
 
-const ItemSubDetails = ({ view, item, getLocalizedMessage }: Props) => {
+const ItemSubDetails = ({ view, item, intl }: Props) => {
     const { size, modified_at = '', interacted_at = '' }: BoxItem = item;
-    const today: string = getLocalizedMessage('buik.date.today');
-    const yesterday: string = getLocalizedMessage('buik.date.yesterday');
     const isRecents: boolean = view === VIEW_RECENTS;
-    const date: string = getDate(isRecents ? interacted_at || modified_at : modified_at, today, yesterday);
-    const message = isRecents ? getLocalizedMessage('buik.item.interacted') : getLocalizedMessage('buik.item.modified');
+    const date: string = isRecents ? interacted_at || modified_at : modified_at;
+    const message = isRecents ? intl.formatMessage(messages.interacted) : intl.formatMessage(messages.modified);
 
     return (
         <span>
-            {`${message} ${date} - ${getSize(size)}`}
+            <span>
+                {message}&nbsp;
+            </span>
+            <Datefield date={date} />
+            <span>
+                &nbsp;-&nbsp;{getSize(size)}
+            </span>
         </span>
     );
 };
 
-export default ItemSubDetails;
+export default injectIntl(ItemSubDetails);

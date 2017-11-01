@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import Keywords from '../Keywords';
 import Transcript from '../Transcript';
@@ -14,8 +16,7 @@ import type { SkillData, MetadataType } from '../../flowTypes';
 
 type Props = {
     metadata?: MetadataType,
-    getPreviewer: Function,
-    getLocalizedMessage: Function
+    getPreviewer: Function
 };
 
 function getCard(skill: SkillData, getPreviewer: Function) {
@@ -34,7 +35,7 @@ function getCard(skill: SkillData, getPreviewer: Function) {
     }
 }
 
-const SidebarSkills = ({ metadata, getPreviewer, getLocalizedMessage }: Props) => {
+const SidebarSkills = ({ metadata, getPreviewer }: Props) => {
     if (!metadata || !metadata.global) {
         return null;
     }
@@ -81,9 +82,7 @@ const SidebarSkills = ({ metadata, getPreviewer, getLocalizedMessage }: Props) =
                     skill.entries.length > 0 &&
                     <SidebarSection
                         key={index}
-                        title={
-                            skill.title || getLocalizedMessage(`buik.preview.sidebar.details.${skill.skills_data_type}`)
-                        }
+                        title={skill.title || <FormattedMessage {...messages[`${skill.skills_data_type}Skill`]} />}
                     >
                         {getCard(skill, getPreviewer)}
                     </SidebarSection>

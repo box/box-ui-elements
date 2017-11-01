@@ -8,7 +8,7 @@ import React from 'react';
 import './SidebarContent.scss';
 
 type Props = {
-    title: string,
+    title: React$Element<any>,
     children: any
 };
 

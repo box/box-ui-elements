@@ -12,6 +12,7 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import API from '../../api';
 import Cache from '../../util/Cache';
+import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -21,7 +22,7 @@ import {
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW
 } from '../../constants';
-import type { Token, BoxItem } from '../../flowTypes';
+import type { Token, BoxItem, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
@@ -31,7 +32,7 @@ type DefaultProps = {|
     appHost: string,
     staticHost: string,
     staticPath: string,
-    locale: string,
+    language: string,
     version: string,
     hasSidebar: boolean,
     hasHeader: boolean,
@@ -43,7 +44,6 @@ type DefaultProps = {|
 type Props = {
     file?: BoxItem,
     fileId?: string,
-    locale: string,
     version: string,
     hasSidebar: boolean,
     hasHeader: boolean,
@@ -53,11 +53,12 @@ type Props = {
     staticPath: string,
     token: Token,
     className: string,
-    getLocalizedMessage: Function,
     onLoad: Function,
     onNavigate: Function,
     onClose?: Function,
     skipServerUpdate?: boolean,
+    language: string,
+    messages?: StringMap,
     cache?: Cache,
     collection?: string[],
     logoUrl?: string,
@@ -82,7 +83,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
         appHost: DEFAULT_HOSTNAME_APP,
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
-        locale: DEFAULT_PREVIEW_LOCALE,
+        language: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
         hasHeader: false,
@@ -200,8 +201,8 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {string} base url
      */
     getBasePath(asset: string): string {
-        const { staticHost, staticPath, locale, version }: Props = this.props;
-        const path: string = `${staticPath}/${version}/${locale}/${asset}`;
+        const { staticHost, staticPath, language, version }: Props = this.props;
+        const path: string = `${staticPath}/${version}/${language}/${asset}`;
         const suffix: string = staticHost.endsWith('/') ? path : `/${path}`;
         return `${staticHost}${suffix}`;
     }
@@ -378,29 +379,20 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {Element}
      */
     render() {
-        const { className, hasSidebar, hasHeader, onClose, getLocalizedMessage }: Props = this.props;
+        const { language, messages, className, hasSidebar, hasHeader, onClose }: Props = this.props;
         const { file }: State = this.state;
         return (
-            <div id={this.id} className={`buik bcpr ${className}`}>
-                {hasHeader &&
-                    <Header
-                        file={file}
-                        showSidebarButton={hasSidebar}
-                        onClose={onClose}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />}
-                <div className='bcpr-body'>
-                    {hasSidebar &&
-                        <Sidebar
-                            file={file}
-                            getPreviewer={this.getPreviewer}
-                            getLocalizedMessage={getLocalizedMessage}
-                        />}
-                    <Measure bounds onResize={this.onResize}>
-                        {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
-                    </Measure>
+            <Internationalize language={language} messages={messages}>
+                <div id={this.id} className={`buik bcpr ${className}`}>
+                    {hasHeader && <Header file={file} showSidebarButton={hasSidebar} onClose={onClose} />}
+                    <div className='bcpr-body'>
+                        {hasSidebar && <Sidebar file={file} getPreviewer={this.getPreviewer} />}
+                        <Measure bounds onResize={this.onResize}>
+                            {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
+                        </Measure>
+                    </div>
                 </div>
-            </div>
+            </Internationalize>
         );
     }
 }

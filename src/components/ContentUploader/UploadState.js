@@ -3,8 +3,10 @@
  * @file Upload state component
  */
 
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
+import { FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import IconErrorEmptyState from '../icons/states/IconErrorEmptyState';
 import IconUploadStartState from '../icons/states/IconUploadStartState';
 import IconUploadSuccessState from '../icons/states/IconUploadSuccessState';
@@ -15,7 +17,6 @@ import './UploadState.scss';
 
 type Props = {
     canDrop: boolean,
-    getLocalizedMessage: Function,
     hasItems: boolean,
     isOver: boolean,
     isTouch: boolean,
@@ -23,44 +24,44 @@ type Props = {
     onSelect: Function
 };
 
-const UploadState = ({ canDrop, getLocalizedMessage, hasItems, isOver, isTouch, view, onSelect }: Props) => {
+const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect }: Props) => {
     let icon;
     let content;
     /* eslint-disable jsx-a11y/label-has-for */
     switch (view) {
         case VIEW_ERROR:
             icon = <IconErrorEmptyState />;
-            content = <UploadStateContent message={getLocalizedMessage('buik.upload.state.error')} />;
+            content = <UploadStateContent message={<FormattedMessage {...messages.uploadError} />} />;
             break;
         case VIEW_UPLOAD_EMPTY:
             icon = <IconUploadStartState />;
             /* eslint-disable no-nested-ternary */
             content =
                 canDrop && hasItems
-                    ? <UploadStateContent message={getLocalizedMessage('buik.upload.state.inprogress')} />
+                    ? <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />
                     : isTouch
                       ? <UploadStateContent
-                          inputLabel={getLocalizedMessage('buik.upload.state.empty.input.nodragdrop')}
+                          inputLabel={<FormattedMessage {...messages.uploadNoDragDrop} />}
                           useButton
                           onChange={onSelect}
                         />
                       : <UploadStateContent
-                          inputLabel={getLocalizedMessage('buik.upload.state.empty.input')}
-                          message={getLocalizedMessage('buik.upload.state.empty')}
+                          inputLabel={<FormattedMessage {...messages.uploadEmptyInput} />}
+                          message={<FormattedMessage {...messages.uploadEmpty} />}
                           onChange={onSelect}
                         />;
             /* eslint-enable no-nested-ternary */
             break;
         case VIEW_UPLOAD_IN_PROGRESS:
             icon = <IconUploadStartState />;
-            content = <UploadStateContent message={getLocalizedMessage('buik.upload.state.inprogress')} />;
+            content = <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />;
             break;
         case VIEW_UPLOAD_SUCCESS:
             icon = <IconUploadSuccessState />;
             content = (
                 <UploadStateContent
-                    inputLabel={getLocalizedMessage('buik.upload.state.success.input')}
-                    message={getLocalizedMessage('buik.upload.state.success')}
+                    inputLabel={<FormattedMessage {...messages.uploadSuccessInput} />}
+                    message={<FormattedMessage {...messages.uploadSuccess} />}
                     useButton={isTouch}
                     onChange={onSelect}
                 />

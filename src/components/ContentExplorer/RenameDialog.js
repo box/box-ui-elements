@@ -6,7 +6,8 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import type { BoxItem } from '../../flowTypes';
+import { injectIntl, FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import { Button, PrimaryButton } from '../Button';
 import {
     CLASS_MODAL_CONTENT,
@@ -15,31 +16,23 @@ import {
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     ERROR_CODE_ITEM_NAME_IN_USE
 } from '../../constants';
+import type { BoxItem } from '../../flowTypes';
 
 type Props = {
     isOpen: boolean,
     onRename: Function,
     onCancel: Function,
     item: BoxItem,
-    getLocalizedMessage: Function,
     isLoading: boolean,
     errorCode: string,
-    parentElement: HTMLElement
+    parentElement: HTMLElement,
+    intl: any
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
-const RenameDialog = ({
-    isOpen,
-    onRename,
-    onCancel,
-    item,
-    getLocalizedMessage,
-    isLoading,
-    errorCode,
-    parentElement
-}: Props) => {
+const RenameDialog = ({ isOpen, onRename, onCancel, item, isLoading, errorCode, parentElement, intl }: Props) => {
     let textInput = null;
-    let error = '';
+    let error;
 
     const { name = '', extension } = item;
     const ext = extension ? `.${extension}` : '';
@@ -84,13 +77,13 @@ const RenameDialog = ({
 
     switch (errorCode) {
         case ERROR_CODE_ITEM_NAME_IN_USE:
-            error = getLocalizedMessage('buik.modal.rename.dialog.error.inuse');
+            error = messages.renameDialogErrorInUse;
             break;
         case ERROR_CODE_ITEM_NAME_TOO_LONG:
-            error = getLocalizedMessage('buik.modal.rename.dialog.error.toolong');
+            error = messages.renameDialogErrorTooLong;
             break;
         default:
-            error = errorCode ? getLocalizedMessage('buik.modal.rename.dialog.error.invalid') : '';
+            error = errorCode ? messages.renameDialogErrorInvalid : null;
             break;
     }
 
@@ -102,31 +95,27 @@ const RenameDialog = ({
             className={CLASS_MODAL_CONTENT}
             overlayClassName={CLASS_MODAL_OVERLAY}
             onRequestClose={onCancel}
-            contentLabel={getLocalizedMessage('buik.modal.rename.dialog.label')}
+            contentLabel={intl.formatMessage(messages.renameDialogLabel)}
         >
             <label>
                 {error
                     ? <div className='buik-modal-error'>
-                        {error}
+                        <FormattedMessage {...error} values={{ name: nameWithoutExt }} />
                     </div>
                     : null}
-                <div>
-                    {getLocalizedMessage('buik.modal.rename.dialog.text', {
-                        name: nameWithoutExt
-                    })}
-                </div>
+                <FormattedMessage tagName='div' {...messages.renameDialogText} values={{ name: nameWithoutExt }} />
                 <input type='text' required ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} />
             </label>
             <div className='buik-modal-btns'>
                 <PrimaryButton onClick={rename} isLoading={isLoading}>
-                    {getLocalizedMessage('buik.more.options.rename')}
+                    <FormattedMessage {...messages.rename} />
                 </PrimaryButton>
                 <Button onClick={onCancel} isDisabled={isLoading}>
-                    {getLocalizedMessage('buik.footer.button.cancel')}
+                    <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>
         </Modal>
     );
 };
 
-export default RenameDialog;
+export default injectIntl(RenameDialog);

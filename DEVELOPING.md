@@ -24,8 +24,8 @@ Install the following plugins in your preferred editor
 
 ### Yarn commands
 
-* `yarn run build` to generate resource bundles and JS webpack bundles.
-* `yarn run watch` to only generate JS webpack bundles on file changes.
+* `yarn run build` to run webpack and generate JS/CSS.
+* `yarn run watch` to run webpack and generate JS/CSS on file changes.
 * `yarn run deploy` launches a local webpack dev server for testing. Also watches file changes.
 * `yarn run prettier` to format JS code with prettier.
 * `yarn run test` launches karma tests with PhantomJS.
