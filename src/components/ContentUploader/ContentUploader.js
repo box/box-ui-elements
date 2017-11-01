@@ -6,6 +6,7 @@
 
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import noop from 'lodash.noop';
 import uniqueid from 'lodash.uniqueid';
@@ -15,6 +16,8 @@ import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import { isIE } from '../../util/browser';
+import Internationalize from '../Internationalize';
+import messageDescriptors from '../messages';
 import {
     CLIENT_NAME_CONTENT_UPLOADER,
     DEFAULT_HOSTNAME_UPLOAD,
@@ -28,7 +31,7 @@ import {
     STATUS_COMPLETE,
     STATUS_ERROR
 } from '../../constants';
-import type { BoxItem, UploadItem, View, Token } from '../../flowTypes';
+import type { BoxItem, UploadItem, View, Token, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 
@@ -47,12 +50,14 @@ type Props = {
     onComplete: Function,
     onError: Function,
     onUpload: Function,
-    getLocalizedMessage: Function,
     isSmall: boolean,
     isLarge: boolean,
     isTouch: boolean,
     measureRef: Function,
-    responseFilter?: Function
+    language?: string,
+    messages?: StringMap,
+    responseFilter?: Function,
+    intl: any
 };
 
 type DefaultProps = {|
@@ -174,7 +179,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     addFilesToUploadQueue = (files: File[]) => {
-        const { fileLimit, getLocalizedMessage } = this.props;
+        const { fileLimit, intl } = this.props;
         const { view, items } = this.state;
 
         // Filter out files that are already in the upload queue
@@ -215,7 +220,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         if (totalNumOfItems > fileLimit) {
             updatedItems = items.concat(newItems.slice(0, fileLimit - items.length));
             this.setState({
-                message: getLocalizedMessage('buik.upload.message.toomanyfiles', { fileLimit })
+                message: intl.formatMessage(messageDescriptors.uploadErrorTooManyFiles, { fileLimit })
             });
         } else {
             updatedItems = items.concat(newItems);
@@ -496,7 +501,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {Component}
      */
     render() {
-        const { onClose, getLocalizedMessage, className, measureRef, isTouch }: Props = this.props;
+        const { language, messages, onClose, className, measureRef, isTouch }: Props = this.props;
         const { view, items, message }: State = this.state;
 
         const hasFiles = items.length !== 0;
@@ -504,29 +509,29 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         const styleClassName = classNames('buik buik-app-element bcu', className);
 
         return (
-            <div className={styleClassName} id={this.id} ref={measureRef}>
-                <DroppableContent
-                    addFiles={this.addFilesToUploadQueue}
-                    allowedTypes={['Files']}
-                    getLocalizedMessage={getLocalizedMessage}
-                    items={items}
-                    isTouch={isTouch}
-                    tableRef={this.tableRef}
-                    view={view}
-                    onClick={this.onClick}
-                />
-                <Footer
-                    getLocalizedMessage={getLocalizedMessage}
-                    hasFiles={hasFiles}
-                    isLoading={isLoading}
-                    message={message}
-                    onCancel={this.cancel}
-                    onClose={onClose}
-                    onUpload={this.upload}
-                />
-            </div>
+            <Internationalize language={language} messages={messages}>
+                <div className={styleClassName} id={this.id} ref={measureRef}>
+                    <DroppableContent
+                        addFiles={this.addFilesToUploadQueue}
+                        allowedTypes={['Files']}
+                        items={items}
+                        isTouch={isTouch}
+                        tableRef={this.tableRef}
+                        view={view}
+                        onClick={this.onClick}
+                    />
+                    <Footer
+                        hasFiles={hasFiles}
+                        isLoading={isLoading}
+                        message={message}
+                        onCancel={this.cancel}
+                        onClose={onClose}
+                        onUpload={this.upload}
+                    />
+                </div>
+            </Internationalize>
         );
     }
 }
 
-export default makeResponsive(ContentUploader);
+export default makeResponsive(injectIntl(ContentUploader));

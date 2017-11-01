@@ -6,7 +6,9 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import { injectIntl } from 'react-intl';
 import ContentUploader from '../ContentUploader';
+import messages from '../messages';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import type { Token } from '../../flowTypes';
 
@@ -19,9 +21,9 @@ type Props = {
     apiHost: string,
     uploadHost: string,
     onClose: Function,
-    getLocalizedMessage: Function,
     parentElement: HTMLElement,
-    onUpload: Function
+    onUpload: Function,
+    intl: any
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -34,9 +36,9 @@ const UploadDialog = ({
     apiHost,
     uploadHost,
     onClose,
-    getLocalizedMessage,
     parentElement,
-    onUpload
+    onUpload,
+    intl
 }: Props) =>
     <Modal
         isOpen={isOpen}
@@ -45,7 +47,7 @@ const UploadDialog = ({
         className={CLASS_MODAL_CONTENT_FULL_BLEED}
         overlayClassName={CLASS_MODAL_OVERLAY}
         onRequestClose={onClose}
-        contentLabel={getLocalizedMessage('buik.modal.upload.dialog.label')}
+        contentLabel={intl.formatMessage(messages.upload)}
     >
         <ContentUploader
             rootFolderId={rootFolderId}
@@ -55,9 +57,8 @@ const UploadDialog = ({
             apiHost={apiHost}
             uploadHost={uploadHost}
             onClose={onClose}
-            getLocalizedMessage={getLocalizedMessage}
             onComplete={onUpload}
         />
     </Modal>;
 
-export default UploadDialog;
+export default injectIntl(UploadDialog);

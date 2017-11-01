@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import IconErrorEmptyState from '../icons/states/IconErrorEmptyState';
 import IconFolderEmptyState from '../icons/states/IconFolderEmptyState';
 import IconSelectedItemsEmptyState from '../icons/states/IconSelectedItemsEmptyState';
@@ -15,16 +17,15 @@ import './EmptyState.scss';
 
 type Props = {
     view: View,
-    isLoading: boolean,
-    getLocalizedMessage: Function
+    isLoading: boolean
 };
 
-const EmptyState = ({ view, isLoading, getLocalizedMessage }: Props) => {
+const EmptyState = ({ view, isLoading }: Props) => {
     let type;
     const message =
         isLoading && view === VIEW_FOLDER
-            ? getLocalizedMessage('buik.empty.state.folder.loading')
-            : getLocalizedMessage(`buik.empty.state.${view}`);
+            ? <FormattedMessage {...messages.loadingState} />
+            : <FormattedMessage {...messages[`${view}State`]} />;
 
     switch (view) {
         case VIEW_ERROR:

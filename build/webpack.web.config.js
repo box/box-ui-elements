@@ -1,11 +1,10 @@
 const path = require('path');
 const commonConfig = require('./webpack.common.config');
-const Json2PropsPlugin = require('./json-to-props-webpack-plugin');
+const TranslationsPlugin = require('./TranslationsPlugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const locales = require('./locales');
 
 const noReactSuffix = '.no.react';
-const i18n = path.resolve('src/i18n');
 const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'dev';
 const version = isRelease ? require('../package.json').version : 'dev';
@@ -27,7 +26,7 @@ function updateConfig(conf, locale, noReact, index) {
     });
 
     if (isDev) {
-        config.plugins.push(new Json2PropsPlugin(i18n));
+        config.plugins.push(new TranslationsPlugin());
         config.devtool = 'inline-source-map';
     }
 

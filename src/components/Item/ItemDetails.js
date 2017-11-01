@@ -14,21 +14,15 @@ import './ItemDetails.scss';
 type Props = {
     rootId: string,
     item: BoxItem,
-    getLocalizedMessage: Function,
     onItemClick: Function,
     view: View
 };
 
-const ItemDetails = ({ view, rootId, item, onItemClick, getLocalizedMessage }: Props) =>
+const ItemDetails = ({ view, rootId, item, onItemClick }: Props) =>
     <div className='buik-item-details'>
         {view === VIEW_SELECTED || view === VIEW_SEARCH
-            ? <InlineBreadcrumbs
-                rootId={rootId}
-                item={item}
-                onItemClick={onItemClick}
-                getLocalizedMessage={getLocalizedMessage}
-              />
-            : <ItemSubDetails view={view} item={item} getLocalizedMessage={getLocalizedMessage} />}
+            ? <InlineBreadcrumbs rootId={rootId} item={item} onItemClick={onItemClick} />
+            : <ItemSubDetails view={view} item={item} />}
     </div>;
 
 export default ItemDetails;

@@ -6,6 +6,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import { injectIntl } from 'react-intl';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import 'react-virtualized/styles.css';
@@ -17,6 +18,7 @@ import nameCellRenderer from '../Item/nameCellRenderer';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { focus } from '../../util/dom';
+import messages from '../messages';
 import {
     FIELD_NAME,
     FIELD_ID,
@@ -49,8 +51,8 @@ type Props = {
     onItemPreview: Function,
     onSortChange: Function,
     tableRef: Function,
-    getLocalizedMessage: Function,
-    currentCollection: Collection
+    currentCollection: Collection,
+    intl: any
 };
 
 const ItemList = ({
@@ -75,11 +77,10 @@ const ItemList = ({
     currentCollection,
     tableRef,
     focusedRow,
-    getLocalizedMessage
+    intl
 }: Props) => {
     const nameCell = nameCellRenderer(
         rootId,
-        getLocalizedMessage,
         view,
         onItemClick,
         onItemSelect,
@@ -88,10 +89,9 @@ const ItemList = ({
         isTouch
     );
     const iconCell = iconCellRenderer();
-    const dateCell = dateCellRenderer(getLocalizedMessage);
+    const dateCell = dateCellRenderer();
     const sizeAccessCell = sizeCellRenderer();
     const moreOptionsCell = moreOptionsCellRenderer(
-        getLocalizedMessage,
         canPreview,
         canShare,
         canDownload,
@@ -169,7 +169,7 @@ const ItemList = ({
                                 flexShrink={0}
                             />
                             <Column
-                                label={getLocalizedMessage('buik.item.name')}
+                                label={intl.formatMessage(messages.name)}
                                 dataKey={FIELD_NAME}
                                 cellRenderer={nameCell}
                                 headerRenderer={headerCellRenderer}
@@ -182,8 +182,8 @@ const ItemList = ({
                                     className='bce-item-coloumn'
                                     label={
                                           isRecents
-                                              ? getLocalizedMessage('buik.item.interacted')
-                                              : getLocalizedMessage('buik.item.modified')
+                                              ? intl.formatMessage(messages.interacted)
+                                              : intl.formatMessage(messages.modified)
                                       }
                                     dataKey={isRecents ? FIELD_INTERACTED_AT : FIELD_MODIFIED_AT}
                                     cellRenderer={dateCell}
@@ -195,7 +195,7 @@ const ItemList = ({
                                 ? null
                                 : <Column
                                     className='bce-item-coloumn'
-                                    label={getLocalizedMessage('buik.item.size')}
+                                    label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}
                                     headerRenderer={headerCellRenderer}
@@ -215,4 +215,4 @@ const ItemList = ({
     );
 };
 
-export default ItemList;
+export default injectIntl(ItemList);

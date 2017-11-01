@@ -5,10 +5,12 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import DropdownMenu from '../DropdownMenu';
 import { Menu, MenuItem } from '../Menu';
 import { Button } from '../Button';
 import { isMobile } from '../../util/browser';
+import messages from '../messages';
 import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_RENAME,
@@ -22,7 +24,6 @@ import type { BoxItem } from '../../flowTypes';
 import './MoreOptionsCell.scss';
 
 export default (
-    getLocalizedMessage: Function,
     canPreview: boolean,
     canShare: boolean,
     canDownload: boolean,
@@ -70,39 +71,39 @@ export default (
                 <Menu>
                     {allowPreview
                         ? <MenuItem onClick={onPreview}>
-                            {getLocalizedMessage('buik.more.options.preview')}
+                            <FormattedMessage {...messages.preview} />
                         </MenuItem>
                         : null}
                     {allowOpen
                         ? <MenuItem onClick={onPreview}>
-                            {getLocalizedMessage('buik.more.options.open')}
+                            <FormattedMessage {...messages.open} />
                         </MenuItem>
                         : null}
                     {allowDelete
                         ? <MenuItem onClick={onDelete}>
-                            {getLocalizedMessage('buik.more.options.delete')}
+                            <FormattedMessage {...messages.delete} />
                         </MenuItem>
                         : null}
                     {allowDownload
                         ? <MenuItem onClick={onDownload}>
-                            {getLocalizedMessage('buik.more.options.download')}
+                            <FormattedMessage {...messages.download} />
                         </MenuItem>
                         : null}
                     {allowRename
                         ? <MenuItem onClick={onRename}>
-                            {getLocalizedMessage('buik.more.options.rename')}
+                            <FormattedMessage {...messages.rename} />
                         </MenuItem>
                         : null}
                     {allowShare
                         ? <MenuItem onClick={onShare}>
-                            {getLocalizedMessage('buik.item.button.share')}
+                            <FormattedMessage {...messages.share} />
                         </MenuItem>
                         : null}
                 </Menu>
             </DropdownMenu>
             {allowShare && !isSmall
                 ? <Button onFocus={onFocus} onClick={onShare}>
-                    {getLocalizedMessage('buik.item.button.share')}
+                    <FormattedMessage {...messages.share} />
                 </Button>
                 : null}
         </div>

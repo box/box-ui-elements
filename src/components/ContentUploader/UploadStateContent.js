@@ -6,8 +6,8 @@
 import React from 'react';
 
 type Props = {
-    message?: string,
-    inputLabel?: string,
+    message?: React$Element<any>,
+    inputLabel?: React$Element<any>,
     useButton?: boolean,
     onChange?: Function
 };

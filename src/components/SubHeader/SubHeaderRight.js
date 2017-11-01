@@ -13,7 +13,6 @@ import './SubHeaderRight.scss';
 
 type Props = {
     onSortChange: Function,
-    getLocalizedMessage: Function,
     currentCollection: Collection,
     onUpload: Function,
     onCreate: Function,
@@ -29,8 +28,7 @@ const SubHeaderRight = ({
     canUpload,
     canCreateNewFolder,
     currentCollection,
-    onSortChange,
-    getLocalizedMessage
+    onSortChange
 }: Props) => {
     const { sortBy, sortDirection, percentLoaded, items = [] }: Collection = currentCollection;
     const isRecents: boolean = view === VIEW_RECENTS;
@@ -51,7 +49,6 @@ const SubHeaderRight = ({
                     sortBy={sortBy}
                     sortDirection={sortDirection}
                     onSortChange={onSortChange}
-                    getLocalizedMessage={getLocalizedMessage}
                 />}
             {showAdd &&
                 <Add
@@ -61,7 +58,6 @@ const SubHeaderRight = ({
                     onCreate={onCreate}
                     isDisabled={!isFolder}
                     isLoaded={isLoaded}
-                    getLocalizedMessage={getLocalizedMessage}
                 />}
         </div>
     );

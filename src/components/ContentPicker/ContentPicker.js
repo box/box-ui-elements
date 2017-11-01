@@ -19,6 +19,7 @@ import CreateFolderDialog from '../CreateFolderDialog';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import { isFocusableElement, isInputElement, focus } from '../../util/dom';
+import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -53,7 +54,8 @@ import type {
     Access,
     BoxItemPermission,
     Token,
-    DefaultView
+    DefaultView,
+    StringMap
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -75,7 +77,6 @@ type Props = {
     autoFocus: boolean,
     apiHost: string,
     uploadHost: string,
-    getLocalizedMessage: Function,
     clientName: string,
     token: Token,
     isSmall: boolean,
@@ -86,6 +87,8 @@ type Props = {
     defaultView: DefaultView,
     chooseButtonLabel?: string,
     cancelButtonLabel?: string,
+    language?: string,
+    messages?: StringMap,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
@@ -946,6 +949,9 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     render() {
         const {
+            language,
+            messages,
+
             rootFolderId,
             logoUrl,
             canUpload,
@@ -954,7 +960,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             extensions,
             maxSelectable,
             type,
-            getLocalizedMessage,
             token,
             sharedLink,
             sharedLinkPassword,
@@ -989,85 +994,81 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <div id={this.id} className={styleClassName} ref={measureRef}>
-                <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
-                    <Header
-                        view={view}
-                        isSmall={isSmall}
-                        searchQuery={searchQuery}
-                        logoUrl={logoUrl}
-                        onSearch={this.search}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <SubHeader
-                        view={view}
-                        rootId={rootFolderId}
-                        isSmall={isSmall}
-                        rootName={rootName}
-                        currentCollection={currentCollection}
-                        canUpload={allowUpload}
-                        canCreateNewFolder={allowCreate}
-                        onUpload={this.upload}
-                        onCreate={this.createFolder}
-                        onItemClick={this.fetchFolder}
-                        onSortChange={this.sort}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <Content
-                        view={view}
-                        isSmall={isSmall}
-                        rootId={rootFolderId}
-                        rootElement={this.rootElement}
-                        focusedRow={focusedRow}
-                        selectableType={type}
-                        canSetShareAccess={canSetShareAccess}
-                        extensionsWhitelist={extensions}
-                        hasHitSelectionLimit={hasHitSelectionLimit}
-                        currentCollection={currentCollection}
-                        tableRef={this.tableRef}
-                        onItemSelect={this.select}
-                        onItemClick={this.onItemClick}
-                        onFocusChange={this.onFocusChange}
-                        onShareAccessChange={this.changeShareAccess}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <Footer
-                        selectedCount={selectedCount}
-                        hasHitSelectionLimit={hasHitSelectionLimit}
-                        onSelectedClick={this.showSelected}
-                        onChoose={this.choose}
-                        onCancel={this.cancel}
-                        getLocalizedMessage={getLocalizedMessage}
-                        chooseButtonLabel={chooseButtonLabel}
-                        cancelButtonLabel={cancelButtonLabel}
-                    />
+            <Internationalize language={language} messages={messages}>
+                <div id={this.id} className={styleClassName} ref={measureRef}>
+                    <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                        <Header
+                            view={view}
+                            isSmall={isSmall}
+                            searchQuery={searchQuery}
+                            logoUrl={logoUrl}
+                            onSearch={this.search}
+                        />
+                        <SubHeader
+                            view={view}
+                            rootId={rootFolderId}
+                            isSmall={isSmall}
+                            rootName={rootName}
+                            currentCollection={currentCollection}
+                            canUpload={allowUpload}
+                            canCreateNewFolder={allowCreate}
+                            onUpload={this.upload}
+                            onCreate={this.createFolder}
+                            onItemClick={this.fetchFolder}
+                            onSortChange={this.sort}
+                        />
+                        <Content
+                            view={view}
+                            isSmall={isSmall}
+                            rootId={rootFolderId}
+                            rootElement={this.rootElement}
+                            focusedRow={focusedRow}
+                            selectableType={type}
+                            canSetShareAccess={canSetShareAccess}
+                            extensionsWhitelist={extensions}
+                            hasHitSelectionLimit={hasHitSelectionLimit}
+                            currentCollection={currentCollection}
+                            tableRef={this.tableRef}
+                            onItemSelect={this.select}
+                            onItemClick={this.onItemClick}
+                            onFocusChange={this.onFocusChange}
+                            onShareAccessChange={this.changeShareAccess}
+                        />
+                        <Footer
+                            selectedCount={selectedCount}
+                            hasHitSelectionLimit={hasHitSelectionLimit}
+                            onSelectedClick={this.showSelected}
+                            onChoose={this.choose}
+                            onCancel={this.cancel}
+                            chooseButtonLabel={chooseButtonLabel}
+                            cancelButtonLabel={cancelButtonLabel}
+                        />
+                    </div>
+                    {allowUpload && !!this.appElement
+                        ? <UploadDialog
+                            isOpen={isUploadModalOpen}
+                            rootFolderId={id}
+                            token={token}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
+                            apiHost={apiHost}
+                            uploadHost={uploadHost}
+                            onClose={this.uploadSuccessHandler}
+                            parentElement={this.rootElement}
+                          />
+                        : null}
+                    {allowCreate && !!this.appElement
+                        ? <CreateFolderDialog
+                            isOpen={isCreateFolderModalOpen}
+                            onCreate={this.createFolderCallback}
+                            onCancel={this.closeModals}
+                            isLoading={isLoading}
+                            errorCode={errorCode}
+                            parentElement={this.rootElement}
+                          />
+                        : null}
                 </div>
-                {allowUpload && !!this.appElement
-                    ? <UploadDialog
-                        isOpen={isUploadModalOpen}
-                        rootFolderId={id}
-                        token={token}
-                        sharedLink={sharedLink}
-                        sharedLinkPassword={sharedLinkPassword}
-                        apiHost={apiHost}
-                        uploadHost={uploadHost}
-                        onClose={this.uploadSuccessHandler}
-                        getLocalizedMessage={getLocalizedMessage}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {allowCreate && !!this.appElement
-                    ? <CreateFolderDialog
-                        isOpen={isCreateFolderModalOpen}
-                        onCreate={this.createFolderCallback}
-                        onCancel={this.closeModals}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        errorCode={errorCode}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-            </div>
+            </Internationalize>
         );
         /* eslint-enable jsx-a11y/no-static-element-interactions */
         /* eslint-enable jsx-a11y/no-noninteractive-tabindex */

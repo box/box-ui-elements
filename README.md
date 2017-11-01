@@ -14,15 +14,28 @@ The instructions below describe how to use the UI Elements in a [React](https://
 ## Installation
 `yarn add box-ui-elements` or `npm install box-ui-elements`
 
+To prevent duplication, the UI Elements require certain peer dependencies to be installed manually. For a list of required peer dependencies, see [package.json](package.json).
+
 ## Browser Support
 * Desktop Chrome, Firefox, Safari, Edge (latest 2 versions)
 * Limited support for Internet Explorer 11 (requires ES2015 polyfill)
 * Mobile Chrome and Safari
 
-## Available Locales
-`en-AU`, `en-CA`, `en-GB`, `en-US`, `da-DK`, `de-DE`, `es-ES`, `fi-FI`, `fr-CA`, `fr-FR`, `it-IT`, `ja-JP`, `ko-KR`, `nb-NO`, `nl-NL`, `pl-PL`, `pt-BR`, `ru-RU`, `sv-SE`, `tr-TR`, `zh-CN`, `zh-TW`
+## Internationalization
+The UI Elements use [react-intl](https://github.com/yahoo/react-intl) to do internationalization. In order for the UI Elements to render properly, they need to be wrapped in an [IntlProvider](https://github.com/yahoo/react-intl/wiki/Components#intlprovider) context and given a locale and translated messages to use. Each of the UI Element components below optionally take in a `language` property and a `messages` property which is then delegated to our internal [IntlProvider](src/components/Internationalize.js). If either of these properties are not passed in, we do not use our internal `IntlProvider` and it is assumed that the parent react app (the react app that is importing in the UI Elements) has its own `IntlProvider`.
 
-The NPM package includes translated messages for the above locales. See the examples below on how to reference them. You can also use your own translated messages since the components are essentially locale free and only require a `getLocalizedMessage` function to be passed in. The `getLocalizedMessage` function in the examples below accepts a string message id and returns a formatted string after some optional string replacements. Alternatively, if your React app is using the popular [react-intl](https://github.com/yahoo/react-intl) library, you can instead use [formatmessage](https://github.com/yahoo/react-intl/wiki/API#formatmessage) to do the replacements.
+The `language` property is a string that can be one of `en-AU`, `en-CA`, `en-GB`, `en-US`, `da-DK`, `de-DE`, `es-ES`, `fi-FI`, `fr-CA`, `fr-FR`, `it-IT`, `ja-JP`, `ko-KR`, `nb-NO`, `nl-NL`, `pl-PL`, `pt-BR`, `ru-RU`, `sv-SE`, `tr-TR`, `zh-CN`, `zh-TW`.
+
+The `messages` property is a map of message keys and translated strings. All the messages that the UI elements use can be found under the [i18n](i18n) folder. We distribute them as JS modules within the `box-ui-elements` npm package and they can be imported like any other module. We provide translated strings for all the langauges listed above.
+
+For `react-intl` to work properly, locale data needs to be added via [addlocaledata](https://github.com/yahoo/react-intl/wiki/API#addlocaledata). They are all bundled inside the `react-intl` package inside `node_modules`. By default it uses the `en` locale but for any other locale you have to do similar to the following before rendering the component:
+```
+import { addLocaleData } from 'react-intl';
+import frLocaleData from 'react-intl/locale-data/fr';
+addLocaleData(frLocaleData);
+```
+
+The messages that are needed for the components can be imported from `box-ui-elements/i18n/[LANGUAGE]` package under `node_modules`. The code examples for each of the UI Elements below assume `en-US` and show how the US english messages are imported in.
 
 ## Authentication
 We have designed the Box UI Elements in an authentication-type agnostic way. Whether you are using them for users who have Box accounts (Managed Users) or non-Box accounts (App Users), they should just work out of the box. They only expect an **access token** to be passed in for authentication. The [developer documentation](https://developer.box.com/docs/box-ui-elements) contains more information on how to generate and use these access tokens.
@@ -40,18 +53,19 @@ You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `Conte
 ```js
 import React from 'react';
 import { render } from 'react-dom';
+import { addLocaleData } from 'react-intl';
+import enLocaleData from 'react-intl/locale-data/en';
 import { ContentExplorer } from 'box-ui-elements';
-import messages from 'box-ui-elements/lib/i18n/en-US';
+import messages from 'box-ui-elements/i18n/en-US';
 import 'box-ui-elements/dist/explorer.css';
 
-const token = 'ACCESS_TOKEN';
-const getLocalizedMessage = (id, replacements) =>
-    messages[id].replace(/{\s*(\w+)\s*}/g, (match, key) => replacements[key]);
+addLocaleData(enLocaleData);
 
 render(
     <ContentExplorer
-        token={token}
-        getLocalizedMessage={getLocalizedMessage}
+        token='ACCESS_TOKEN'
+        language='en-US'
+        messages={messages}
     />,
     document.querySelector('.container')
 );
@@ -61,7 +75,8 @@ render(
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
-| getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
+| language | string |  | *See the [Internationalization](#internationalization) section* |
+| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | rootFolderId | string | `0` | The root folder for the content explorer. |
 | currentFolderId | string | | The current folder shown for the content explorer. This should be a sub folder to the root folder. |
 | sortBy | string | `name` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
@@ -101,18 +116,19 @@ render(
 ```js
 import React from 'react';
 import { render } from 'react-dom';
+import { addLocaleData } from 'react-intl';
+import enLocaleData from 'react-intl/locale-data/en';
 import { ContentPicker } from 'box-ui-elements';
-import messages from 'box-ui-elements/lib/i18n/en-US';
+import messages from 'box-ui-elements/i18n/en-US';
 import 'box-ui-elements/dist/picker.css';
 
-const token = 'ACCESS_TOKEN';
-const getLocalizedMessage = (id, replacements) =>
-    messages[id].replace(/{\s*(\w+)\s*}/g, (match, key) => replacements[key]);
+addLocaleData(enLocaleData);
 
 render(
     <ContentPicker
-        token={token}
-        getLocalizedMessage={getLocalizedMessage}
+        token='ACCESS_TOKEN'
+        language='en-US'
+        messages={messages}
     />,
     document.querySelector('.container')
 );
@@ -122,7 +138,8 @@ render(
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
-| getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
+| language | string |  | *See the [Internationalization](#internationalization) section* |
+| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | rootFolderId | string | `0` | The root folder for the content picker. |
 | type | string | `file, web_link` | Indicates which type of items can be picked. Should be a comma seperated combination of `file`, `folder` or `web_link`. |
 | sortBy | string | `name` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
@@ -154,18 +171,19 @@ render(
 ```js
 import React from 'react';
 import { render } from 'react-dom';
+import { addLocaleData } from 'react-intl';
+import enLocaleData from 'react-intl/locale-data/en';
 import { ContentUploader } from 'box-ui-elements';
-import messages from 'box-ui-elements/lib/i18n/en-US';
+import messages from 'box-ui-elements/i18n/en-US';
 import 'box-ui-elements/dist/uploader.css';
 
-const token = 'ACCESS_TOKEN';
-const getLocalizedMessage = (id, replacements) =>
-    messages[id].replace(/{\s*(\w+)\s*}/g, (match, key) => replacements[key]);
+addLocaleData(enLocaleData);
 
 render(
     <ContentUploader
-        token={token}
-        getLocalizedMessage={getLocalizedMessage}
+        token='ACCESS_TOKEN'
+        language='en-US'
+        messages={messages}
     />,
     document.querySelector('.container')
 );
@@ -175,7 +193,8 @@ render(
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
-| getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
+| language | string |  | *See the [Internationalization](#internationalization) section* |
+| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | rootFolderId | string | `0` | The root folder for the content uploader. |
 | onClose | function |  | Callback function for when the close button is pressed. |
 | onComplete | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when uploads are complete. |
@@ -193,18 +212,19 @@ render(
 ```js
 import React from 'react';
 import { render } from 'react-dom';
+import { addLocaleData } from 'react-intl';
+import enLocaleData from 'react-intl/locale-data/en';
 import { ContentTree } from 'box-ui-elements';
-import messages from 'box-ui-elements/lib/i18n/en-US';
+import messages from 'box-ui-elements/i18n/en-US';
 import 'box-ui-elements/dist/tree.css';
 
-const token = 'ACCESS_TOKEN';
-const getLocalizedMessage = (id, replacements) =>
-    messages[id].replace(/{\s*(\w+)\s*}/g, (match, key) => replacements[key]);
+addLocaleData(enLocaleData);
 
 render(
     <ContentTree
-        token={token}
-        getLocalizedMessage={getLocalizedMessage}
+        token='ACCESS_TOKEN'
+        language='en-US'
+        messages={messages}
     />,
     document.querySelector('.container')
 );
@@ -214,7 +234,8 @@ render(
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| getLocalizedMessage* | function(string, { [string]: string }) |  | Function to get localized strings. |
+| language | string |  | *See the [Internationalization](#internationalization) section* |
+| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | rootFolderId | string | `0` | The root folder for the content tree. |
 | type | string | `file, web_link, folder` | Indicates which type of items show up in the tree. Should be a comma seperated combination of `file`, `folder` or `web_link`. |
 | onClick | function([Folder](https://developer.box.com/reference#folder-object)&#124;[File](https://developer.box.com/reference#file-object)&#124;[Web Link](https://developer.box.com/reference#web-link-object)) |  | Callback function for when an item is clicked. |
@@ -230,21 +251,25 @@ render(
 
 <img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" width="75%"/>
 
-***The Box Content Preview has a slightly different interface than the other components. Instead of importing localizations like in the examples above, it requires a locale (defaults to en-US) to be passed in. This will automatically pull in the corresponding preview bundle and dynamically load it. It will also dynamically load the additional required CSS file needed for preview.***
+***The Box Content Preview requires a langauge (defaults to en-US) to be passed in. This will automatically pull in the corresponding preview bundle and dynamically load it. It will also dynamically load the additional required CSS file needed for preview.***
 
 ```js
 import React from 'react';
 import { render } from 'react-dom';
+import { addLocaleData } from 'react-intl';
+import enLocaleData from 'react-intl/locale-data/en';
 import { ContentPreview } from 'box-ui-elements';
+import messages from 'box-ui-elements/i18n/en-US';
 import 'box-ui-elements/dist/preview.css';
 
-const token = 'ACCESS_TOKEN';
-const fileId = 'FILE_ID';
+addLocaleData(enLocaleData);
 
 render(
     <ContentPreview
-        fileId={fileId}
-        token={token}
+        fileId='FILE_ID'
+        token='ACCESS_TOKEN'
+        language='en-US'
+        messages={messages}
     />,
     document.querySelector('.container')
 );
@@ -255,7 +280,8 @@ render(
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | fileId* | string | | The id of the file to preview. |
-| locale | string | `en-US` | Locale for this component. |
+| language | string | `en-US` | *See the [Internationalization](#internationalization) section* |
+| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | onLoad | function |  | Callback function for when a file preview loads. |
 | collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | showAnnotations | boolean | false | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |

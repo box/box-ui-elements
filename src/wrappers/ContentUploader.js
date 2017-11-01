@@ -57,7 +57,8 @@ class ContentUploader extends ES6Wrapper {
         const UploaderComponent = modal ? ContentUploaderPopup : ContentUploaderComponent;
         render(
             <UploaderComponent
-                getLocalizedMessage={this.getLocalizedMessage}
+                language={this.language}
+                messages={this.messages}
                 componentRef={this.setComponent}
                 rootFolderId={this.root}
                 token={this.token}

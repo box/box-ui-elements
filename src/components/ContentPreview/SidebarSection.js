@@ -12,7 +12,7 @@ import './SidebarSection.scss';
 type Props = {
     children?: any,
     className: string,
-    title: string,
+    title: string | React$Element<any>,
     isOpen: boolean
 };
 

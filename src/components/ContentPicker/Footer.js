@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import { Button, PrimaryButton, PlainButton } from '../Button';
 import './Footer.scss';
 
@@ -12,7 +14,6 @@ type Props = {
     selectedCount: number,
     onSelectedClick: Function,
     hasHitSelectionLimit: boolean,
-    getLocalizedMessage: Function,
     onChoose: Function,
     onCancel: Function,
     chooseButtonLabel?: string,
@@ -25,7 +26,6 @@ const Footer = ({
     hasHitSelectionLimit,
     onCancel,
     onChoose,
-    getLocalizedMessage,
     chooseButtonLabel,
     cancelButtonLabel
 }: Props) =>
@@ -34,21 +34,21 @@ const Footer = ({
             <PlainButton onClick={onSelectedClick}>
                 <span className='bcp-selected-count'>{selectedCount}</span>
                 &nbsp;
-                <span>{getLocalizedMessage('buik.footer.selected')}</span>
+                <FormattedMessage {...messages.selected} />
             </PlainButton>
             &nbsp;
             {hasHitSelectionLimit
                 ? <span className='bcp-selected-max'>
-                    {getLocalizedMessage('buik.footer.selected.max')}
+                    <FormattedMessage {...messages.max} />
                 </span>
                 : null}
         </div>
         <div className='bcp-footer-right'>
             <Button onClick={onCancel}>
-                {cancelButtonLabel || getLocalizedMessage('buik.footer.button.cancel')}
+                {cancelButtonLabel || <FormattedMessage {...messages.cancel} />}
             </Button>
             <PrimaryButton onClick={onChoose}>
-                {chooseButtonLabel || getLocalizedMessage('buik.footer.button.choose')}
+                {chooseButtonLabel || <FormattedMessage {...messages.choose} />}
             </PrimaryButton>
         </div>
     </div>;

@@ -33,7 +33,6 @@ type Props = {
     onShareAccessChange: Function,
     onFocusChange: Function,
     extensionsWhitelist: string[],
-    getLocalizedMessage: Function,
     currentCollection: Collection,
     isSmall: boolean,
     view: View
@@ -54,19 +53,17 @@ const ItemList = ({
     onShareAccessChange,
     onFocusChange,
     currentCollection,
-    tableRef,
-    getLocalizedMessage
+    tableRef
 }: Props) => {
     const iconCell = iconCellRenderer();
-    const nameCell = nameCellRenderer(rootId, getLocalizedMessage, view, onItemClick);
+    const nameCell = nameCellRenderer(rootId, view, onItemClick);
     const checkboxCell = checkboxCellRenderer(onItemSelect, selectableType, extensionsWhitelist, hasHitSelectionLimit);
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
         canSetShareAccess,
         selectableType,
         extensionsWhitelist,
-        hasHitSelectionLimit,
-        getLocalizedMessage
+        hasHitSelectionLimit
     );
     const { id, items = [] }: Collection = currentCollection;
     const rowCount: number = items.length;

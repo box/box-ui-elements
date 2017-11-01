@@ -5,6 +5,8 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import DropdownMenu from '../DropdownMenu';
 import { Menu, MenuItem } from '../Menu';
 import { Button } from '../Button';
@@ -16,11 +18,10 @@ type Props = {
     showCreate: boolean,
     onUpload: Function,
     onCreate: Function,
-    isLoaded: boolean,
-    getLocalizedMessage: Function
+    isLoaded: boolean
 };
 
-const Add = ({ onUpload, onCreate, isLoaded, getLocalizedMessage, showUpload = true, showCreate = true }: Props) =>
+const Add = ({ onUpload, onCreate, isLoaded, showUpload = true, showCreate = true }: Props) =>
     <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-add'>
         <Button className='buik-btn-add' isDisabled={!isLoaded}>
             <IconPlus />
@@ -28,11 +29,11 @@ const Add = ({ onUpload, onCreate, isLoaded, getLocalizedMessage, showUpload = t
         <Menu className='buik-menu-add'>
             {showUpload &&
                 <MenuItem onClick={onUpload}>
-                    {getLocalizedMessage('buik.header.button.upload')}
+                    <FormattedMessage {...messages.upload} />
                 </MenuItem>}
             {showCreate &&
                 <MenuItem onClick={onCreate}>
-                    {getLocalizedMessage('buik.header.button.create')}
+                    <FormattedMessage {...messages.newFolder} />
                 </MenuItem>}
         </Menu>
     </DropdownMenu>;

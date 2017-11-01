@@ -6,6 +6,8 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import { injectIntl, FormattedMessage } from 'react-intl';
+import messages from '../messages';
 import { Button, PrimaryButton } from '../Button';
 import {
     CLASS_MODAL_CONTENT,
@@ -19,24 +21,16 @@ type Props = {
     isOpen: boolean,
     onCreate: Function,
     onCancel: Function,
-    getLocalizedMessage: Function,
     isLoading: boolean,
     errorCode: string,
-    parentElement: HTMLElement
+    parentElement: HTMLElement,
+    intl: any
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
-const CreateFolderDialog = ({
-    isOpen,
-    onCreate,
-    onCancel,
-    getLocalizedMessage,
-    isLoading,
-    errorCode,
-    parentElement
-}: Props) => {
+const CreateFolderDialog = ({ isOpen, onCreate, onCancel, isLoading, errorCode, parentElement, intl }: Props) => {
     let textInput = null;
-    let error = '';
+    let error;
 
     /**
      * Appends the extension and calls rename function
@@ -73,13 +67,13 @@ const CreateFolderDialog = ({
 
     switch (errorCode) {
         case ERROR_CODE_ITEM_NAME_IN_USE:
-            error = getLocalizedMessage('buik.modal.create.dialog.error.inuse');
+            error = messages.createDialogErrorInUse;
             break;
         case ERROR_CODE_ITEM_NAME_TOO_LONG:
-            error = getLocalizedMessage('buik.modal.create.dialog.error.toolong');
+            error = messages.createDialogErrorTooLong;
             break;
         default:
-            error = errorCode ? getLocalizedMessage('buik.modal.create.dialog.error.invalid') : '';
+            error = errorCode ? messages.createDialogErrorInvalid : null;
             break;
     }
 
@@ -91,29 +85,27 @@ const CreateFolderDialog = ({
             className={CLASS_MODAL_CONTENT}
             overlayClassName={CLASS_MODAL_OVERLAY}
             onRequestClose={onCancel}
-            contentLabel={getLocalizedMessage('buik.modal.create.dialog.label')}
+            contentLabel={intl.formatMessage(messages.createDialogLabel)}
         >
             <label>
                 {error
                     ? <div className='buik-modal-error'>
-                        {error}
+                        <FormattedMessage {...error} />
                     </div>
                     : null}
-                <div>
-                    {getLocalizedMessage('buik.modal.create.dialog.text')}
-                </div>
+                <FormattedMessage tagName='div' {...messages.createDialogText} />
                 <input type='text' required ref={ref} onKeyDown={onKeyDown} />
             </label>
             <div className='buik-modal-btns'>
                 <PrimaryButton onClick={create} isLoading={isLoading}>
-                    {getLocalizedMessage('buik.modal.create.dialog.button')}
+                    <FormattedMessage {...messages.create} />
                 </PrimaryButton>
                 <Button onClick={onCancel} isDisabled={isLoading}>
-                    {getLocalizedMessage('buik.footer.button.cancel')}
+                    <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>
         </Modal>
     );
 };
 
-export default CreateFolderDialog;
+export default injectIntl(CreateFolderDialog);

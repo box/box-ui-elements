@@ -5,7 +5,9 @@
  */
 
 import React from 'react';
+import { injectIntl } from 'react-intl';
 import Logo from './Logo';
+import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../constants';
 import type { View } from '../../flowTypes';
 import './Header.scss';
@@ -15,11 +17,11 @@ type Props = {
     onSearch: Function,
     logoUrl?: string,
     isSmall: boolean,
-    getLocalizedMessage: Function,
-    view: View
+    view: View,
+    intl: any
 };
 
-const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, getLocalizedMessage }: Props) => {
+const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
     const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
     const isFolder = view === VIEW_FOLDER;
     const isSearch = view === VIEW_SEARCH;
@@ -30,7 +32,7 @@ const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, getLocalizedMes
                 <input
                     type='search'
                     disabled={!isFolder && !isSearch}
-                    placeholder={getLocalizedMessage('buik.header.search.placeholder')}
+                    placeholder={intl.formatMessage(messages.searchPlaceholder)}
                     value={searchQuery}
                     onChange={search}
                 />
@@ -39,4 +41,4 @@ const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, getLocalizedMes
     );
 };
 
-export default Header;
+export default injectIntl(Header);
