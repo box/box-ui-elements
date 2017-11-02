@@ -5,8 +5,9 @@
  */
 
 import React from 'react';
-import IconDefaultLogo from '../icons/IconDefaultLogo';
+import { FormattedMessage } from 'react-intl';
 import IconBoxLogo from '../icons/IconBoxLogo';
+import messages from '../messages';
 import './Logo.scss';
 
 type Props = {
@@ -20,7 +21,11 @@ function getLogo(isSmall: boolean, url?: string) {
     } else if (typeof url === 'string') {
         return <img alt='' src={url} className='buik-logo-custom' />;
     }
-    return <IconDefaultLogo width={isSmall ? 75 : 100} />;
+    return (
+        <div className='buik-logo-placeholder'>
+            <FormattedMessage {...messages.logo} />
+        </div>
+    );
 }
 
 const Logo = ({ url, isSmall }: Props) =>

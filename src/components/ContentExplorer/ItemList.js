@@ -188,7 +188,7 @@ const ItemList = ({
                                     dataKey={isRecents ? FIELD_INTERACTED_AT : FIELD_MODIFIED_AT}
                                     cellRenderer={dateCell}
                                     headerRenderer={headerCellRenderer}
-                                    width={120}
+                                    width={135}
                                     flexShrink={0}
                                   />}
                             {isSmall

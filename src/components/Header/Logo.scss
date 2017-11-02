@@ -12,6 +12,25 @@
         }
     }
 
+    .buik-logo-placeholder {
+        align-items: center;
+        background-color: $off-white;
+        border: 1px dashed;
+        display: flex;
+        height: 32px;
+        justify-content: center;
+        width: 75px;
+
+        .buik-is-small & {
+            width: 60px;
+        }
+
+        span {
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+    }
+
     svg {
         display: block;
     }
