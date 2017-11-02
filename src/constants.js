@@ -143,6 +143,7 @@ export const CLASS_CHECKBOX_SPAN = 'buik-checkbox-span';
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
+export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
 
 /* ------------- Representation Hints  ------------------- */
 const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';

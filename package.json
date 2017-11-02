@@ -46,7 +46,7 @@
     "copy-lib": "./node_modules/.bin/cpx './src/{**/!(__tests__)/*,*}' lib",
     "commitmsg": "conventional-changelog-lint -e",
     "debug": "NODE_ENV=test ./node_modules/.bin/karma start build/karma.conf.js --no-single-run --auto-watch",
-    "deploy": "yarn run pre-build && BABEL_ENV=dev NODE_ENV=dev ./node_modules/.bin/webpack-dev-server --config build/webpack.web.config.js",
+    "deploy": "yarn run pre-build && BUILD_PSEUDO_LOCALE=1 BABEL_ENV=dev NODE_ENV=dev ./node_modules/.bin/webpack-dev-server --config build/webpack.web.config.js",
     "github-release": "./node_modules/.bin/conventional-github-releaser",
     "lint": "NODE_ENV=dev ./node_modules/.bin/eslint src && ./node_modules/.bin/stylelint 'src/**/*.scss'",
     "major": "./build/release.sh -m && ./build/publish.sh",

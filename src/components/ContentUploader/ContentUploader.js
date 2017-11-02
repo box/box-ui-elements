@@ -6,7 +6,6 @@
 
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
-import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import noop from 'lodash.noop';
 import uniqueid from 'lodash.uniqueid';
@@ -17,7 +16,6 @@ import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import { isIE } from '../../util/browser';
 import Internationalize from '../Internationalize';
-import messageDescriptors from '../messages';
 import {
     CLIENT_NAME_CONTENT_UPLOADER,
     DEFAULT_HOSTNAME_UPLOAD,
@@ -29,7 +27,8 @@ import {
     STATUS_PENDING,
     STATUS_IN_PROGRESS,
     STATUS_COMPLETE,
-    STATUS_ERROR
+    STATUS_ERROR,
+    ERROR_CODE_UPLOAD_FILE_LIMIT
 } from '../../constants';
 import type { BoxItem, UploadItem, View, Token, StringMap } from '../../flowTypes';
 import '../fonts.scss';
@@ -76,7 +75,7 @@ type DefaultProps = {|
 type State = {
     view: View,
     items: UploadItem[],
-    message?: string
+    errorCode?: string
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
@@ -115,7 +114,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         this.state = {
             view: rootFolderId && token ? VIEW_UPLOAD_EMPTY : VIEW_ERROR,
             items: [],
-            message: ''
+            errorCode: ''
         };
         this.id = uniqueid('bcu_');
     }
@@ -179,7 +178,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     addFilesToUploadQueue = (files: File[]) => {
-        const { fileLimit, intl } = this.props;
+        const { fileLimit } = this.props;
         const { view, items } = this.state;
 
         // Filter out files that are already in the upload queue
@@ -220,11 +219,11 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         if (totalNumOfItems > fileLimit) {
             updatedItems = items.concat(newItems.slice(0, fileLimit - items.length));
             this.setState({
-                message: intl.formatMessage(messageDescriptors.uploadErrorTooManyFiles, { fileLimit })
+                errorCode: ERROR_CODE_UPLOAD_FILE_LIMIT
             });
         } else {
             updatedItems = items.concat(newItems);
-            this.setState({ message: '' });
+            this.setState({ errorCode: '' });
         }
 
         this.updateViewAndCollection(updatedItems);
@@ -264,8 +263,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     removeFileFromUploadQueue(item: UploadItem) {
-        // Clear any error message in footer
-        this.setState({ message: '' });
+        // Clear any error errorCode in footer
+        this.setState({ errorCode: '' });
 
         const { api } = item;
         api.cancel();
@@ -416,7 +415,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         };
 
         if (items.length === 0) {
-            state.message = '';
+            state.errorCode = '';
         }
 
         this.setState(state);
@@ -501,8 +500,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {Component}
      */
     render() {
-        const { language, messages, onClose, className, measureRef, isTouch }: Props = this.props;
-        const { view, items, message }: State = this.state;
+        const { language, messages, onClose, className, measureRef, isTouch, fileLimit }: Props = this.props;
+        const { view, items, errorCode }: State = this.state;
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);
@@ -523,7 +522,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                     <Footer
                         hasFiles={hasFiles}
                         isLoading={isLoading}
-                        message={message}
+                        errorCode={errorCode}
+                        fileLimit={fileLimit}
                         onCancel={this.cancel}
                         onClose={onClose}
                         onUpload={this.upload}
@@ -534,4 +534,4 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     }
 }
 
-export default makeResponsive(injectIntl(ContentUploader));
+export default makeResponsive(ContentUploader);
