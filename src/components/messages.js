@@ -310,7 +310,7 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
     uploadErrorTooManyFiles: {
         id: 'be.uploadErrorTooManyFiles',
         description: 'Message shown when too many files are uploaded at once',
-        defaultMessage: 'You can only upload up to {fileLimit} files at a time.'
+        defaultMessage: 'You can only upload up to {fileLimit} file(s) at a time.'
     },
     uploadError: {
         id: 'be.uploadError',
