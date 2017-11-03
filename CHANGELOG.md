@@ -1,6 +1,21 @@
+<a name="2.0.0"></a>
+# 2.0.0 (2017-11-03)
+
+* Fix: Localization issue in ContentUploader (#92) ([7bcc1c1](https://github.com/box/box-ui-elements/commit/7bcc1c1))
+* Fix: Multiple previews on the same page (#95) ([2bad12a](https://github.com/box/box-ui-elements/commit/2bad12a)), closes [#89](https://github.com/box/box-ui-elements/issues/89)
+* Update: Move default logo svg to be CSS based (#94) ([d6d6bb9](https://github.com/box/box-ui-elements/commit/d6d6bb9))
+* Mojito: Update translations (#83) ([8423885](https://github.com/box/box-ui-elements/commit/8423885))
+* Mojito: Update translations (#93) ([595d317](https://github.com/box/box-ui-elements/commit/595d317))
+* Chore: es-MX clean-up ([31124b5](https://github.com/box/box-ui-elements/commit/31124b5))
+* Chore: Update LICENSE to generic Box SDK license (#81) ([cea69be](https://github.com/box/box-ui-elements/commit/cea69be))
+* Breaking: Migrating to the react-intl for internationalization (#91) ([df4262c](https://github.com/box/box-ui-elements/commit/df4262c))
+
+
+
 <a name="1.6.1"></a>
 ## 1.6.1 (2017-10-27)
 
+* Release: 1.6.1 ([492c95a](https://github.com/box/box-ui-elements/commit/492c95a))
 * Chore: Remove NPM install from release/publish scripts (#88) ([db2ba82](https://github.com/box/box-ui-elements/commit/db2ba82))
 * Fix: Restart manual retries properly (#87) ([66b4fd6](https://github.com/box/box-ui-elements/commit/66b4fd6))
 
