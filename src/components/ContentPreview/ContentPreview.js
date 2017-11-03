@@ -187,10 +187,8 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {void}
      */
     loadAssetsAndPreview(): void {
-        if (!this.isPreviewLibraryLoaded()) {
-            this.loadStylesheet();
-            this.loadScript();
-        }
+        this.loadStylesheet();
+        this.loadScript();
         this.loadPreview();
     }
 
@@ -246,7 +244,13 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
         const { head } = document;
         const url: string = this.getBasePath('preview.js');
 
-        if (!head || head.querySelector(`script[src="${url}"]`)) {
+        if (!head || this.isPreviewLibraryLoaded()) {
+            return;
+        }
+
+        const previewScript = head.querySelector(`script[src="${url}"]`);
+        if (previewScript) {
+            previewScript.addEventListener('load', this.loadPreview);
             return;
         }
 

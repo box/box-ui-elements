@@ -26,7 +26,7 @@ class ES6Wrapper extends EventEmitter {
     /**
      * @property {string}
      */
-    root: string;
+    id: string;
 
     /**
      * @property {string}
@@ -73,13 +73,13 @@ class ES6Wrapper extends EventEmitter {
      * Shows the content picker.
      *
      * @public
-     * @param {string} root The root folder id.
-     * @param {string} token The API access token.
+     * @param {string} id - The folder or file id.
+     * @param {string} token - The API access token.
      * @param {Object|void} [options] Optional options.
      * @return {void}
      */
-    show(root: string, token: Token, options: { [key: string]: any } = {}): void {
-        this.root = root;
+    show(id: string, token: Token, options: { [key: string]: any } = {}): void {
+        this.id = id;
         this.token = token;
         this.options = options;
         this.options.version = __VERSION__;

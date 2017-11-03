@@ -61,7 +61,7 @@ class ContentPicker extends ES6Wrapper {
                 messages={this.messages}
                 clientName={this.getClientName()}
                 componentRef={this.setComponent}
-                rootFolderId={this.root}
+                rootFolderId={this.id}
                 token={this.token}
                 type={this.getType()}
                 onCancel={this.onCancel}
