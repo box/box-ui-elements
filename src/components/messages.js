@@ -23,7 +23,11 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Shown instead of yesterdays date.',
         defaultMessage: 'yesterday'
     },
-
+    logo: {
+        id: 'be.logo',
+        description: 'Placeholder for a logo.',
+        defaultMessage: 'Logo'
+    },
     preview: {
         id: 'be.preview',
         description: 'Label for preview action.',
@@ -119,7 +123,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Indicator on the footer that max items have been selected.',
         defaultMessage: 'max'
     },
-
     modified: {
         id: 'be.itemModified',
         description: 'Label for item modified date.',
@@ -155,7 +158,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Label for item size attribute.',
         defaultMessage: 'Size'
     },
-
     deleteDialogLabel: {
         id: 'be.deleteDialogLabel',
         description: 'Label for delete confirmation dialog',
@@ -171,7 +173,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Text for delete confirmation dialog for folders',
         defaultMessage: 'Are you sure you want to delete {name} and all its contents?'
     },
-
     renameDialogLabel: {
         id: 'be.renameDialogLabel',
         description: 'Label for rename dialog',
@@ -197,7 +198,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Error text for rename dialog when name is too long',
         defaultMessage: 'This name is too long.'
     },
-
     createDialogLabel: {
         id: 'be.createDialogLabel',
         description: 'Label for create folder dialog',
@@ -223,7 +223,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Error text for create folder dialog when name is already in use',
         defaultMessage: 'An folder with the same name already exists.'
     },
-
     shareDialogLabel: {
         id: 'be.shareDialogLabel',
         description: 'Label for shared link dialog',
@@ -239,7 +238,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Text for no shared link',
         defaultMessage: 'None'
     },
-
     shareAccessOpen: {
         id: 'be.shareAccessOpen',
         description: 'Dropdown select option for open share access.',
@@ -265,7 +263,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Dropdown select option to remove access.',
         defaultMessage: 'Remove shared link'
     },
-
     searchPlaceholder: {
         id: 'be.searchPlaceholder',
         description: 'Shown as a placeholder in the search box.',
@@ -306,7 +303,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Label for transcripts skill section in the preview sidebar',
         defaultMessage: 'Transcripts'
     },
-
     uploadErrorTooManyFiles: {
         id: 'be.uploadErrorTooManyFiles',
         description: 'Message shown when too many files are uploaded at once',
@@ -347,7 +343,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Message shown for upload link after a successful upload',
         defaultMessage: 'Upload additional files'
     },
-
     nameASC: {
         id: 'be.nameASC',
         description: 'Name ascending option shown in the share access drop down select.',
@@ -378,7 +373,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Size descending option shown in the share access drop down select.',
         defaultMessage: 'Size: Largest → Smallest'
     },
-
     searchState: {
         id: 'be.searchState',
         description: 'Message shown when there are no search results.',
@@ -409,7 +403,6 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Message shown when folder items are still fetching.',
         defaultMessage: 'Please wait while the items load...'
     },
-
     rootBreadcrumb: {
         id: 'be.rootBreadcrumb',
         description: 'Default label for root folder.',

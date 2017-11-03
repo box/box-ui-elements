@@ -1,5 +1,8 @@
 Development Setup
 -----------------
+
+Our development setup assumes a LINUX/BSD environemnt. Windows users may have to use cygwin.
+
 1. Install Node v6.10.0 or higher.
 2. Install yarn package manager `https://yarnpkg.com/en/docs/install` v1.0.1 or higher. Alternatively, you can replace most `yarn` commands with `npm` commands.
 2. Fork the upstream repo `https://github.com/box/box-ui-elements`.
