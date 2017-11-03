@@ -42,7 +42,7 @@ class ContentTree extends ES6Wrapper {
                 messages={this.messages}
                 clientName={this.getClientName()}
                 componentRef={this.setComponent}
-                rootFolderId={this.root}
+                rootFolderId={this.id}
                 token={this.token}
                 onClick={this.onClick}
                 modal={modal}

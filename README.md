@@ -251,7 +251,7 @@ render(
 
 <img src="https://user-images.githubusercontent.com/1075325/27419184-596b485c-56d4-11e7-8d42-c65328089c95.png" width="75%"/>
 
-***The Box Content Preview requires a langauge (defaults to en-US) to be passed in. This will automatically pull in the corresponding preview bundle and dynamically load it. It will also dynamically load the additional required CSS file needed for preview.***
+***IMPORTANT: The Content Preview UI Element (React component) works slightly different from the other UI Elements above. The React component is a wrapper for the [Preview library](https://developer.box.com/docs/box-content-preview). It also requires a langauge (defaults to en-US) to be passed in since the preview library bundles are localized. Providing a language will automatically pull in the corresponding preview.js bundle and dynamically load it by adding a script tag. It will also dynamically load the additional required preview.css file by adding a link tag.***
 
 ```js
 import React from 'react';

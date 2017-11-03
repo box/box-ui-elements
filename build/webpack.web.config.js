@@ -16,7 +16,8 @@ function updateConfig(conf, locale, noReact, index) {
             picker: path.resolve('src/wrappers/ContentPickers.js'),
             uploader: path.resolve('src/wrappers/ContentUploader.js'),
             explorer: path.resolve('src/wrappers/ContentExplorer.js'),
-            tree: path.resolve('src/wrappers/ContentTree.js')
+            tree: path.resolve('src/wrappers/ContentTree.js'),
+            preview: path.resolve('src/wrappers/ContentPreview.js')
         },
         output: {
             path: output,

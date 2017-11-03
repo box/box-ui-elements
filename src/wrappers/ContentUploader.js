@@ -60,7 +60,7 @@ class ContentUploader extends ES6Wrapper {
                 language={this.language}
                 messages={this.messages}
                 componentRef={this.setComponent}
-                rootFolderId={this.root}
+                rootFolderId={this.id}
                 token={this.token}
                 onClose={this.onClose}
                 onComplete={this.onComplete}

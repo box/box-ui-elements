@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Preview Test Page</title>
+        <style>
+            body,
+            html {
+                background: #ccc;
+                border: 0 none;
+                box-sizing: border-box !important;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+            .preview {
+                height: 600px;
+                width: 100%;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/preview.css" />
+        <script src="../dev/en-US/preview.js"></script>
+    </head>
+    <body>
+        <div class="preivew preview1"></div>
+        <div class="preivew preview2"></div>
+        <div class="preivew preview3"></div>
+        <script>
+            window.onload = function() {
+                const { ContentPreview } = Box;
+
+                const preview1 = new ContentPreview();
+                preview1.show('41362267026', 'fStdsjuZbiyDBz4TY7XpnRAJSWOyKICE', {
+                    container: '.preview1',
+                    collection: ['41362267026', '44702126425', '34159725861']
+                });
+
+                const preview2 = new ContentPreview();
+                preview2.show('44702126425', 'fStdsjuZbiyDBz4TY7XpnRAJSWOyKICE', {
+                    container: '.preview2',
+                    collection: ['41362267026', '44702126425', '34159725861']
+                });
+
+                const preview3 = new ContentPreview();
+                preview3.show('34159725861', 'fStdsjuZbiyDBz4TY7XpnRAJSWOyKICE', {
+                    container: '.preview3',
+                    collection: ['41362267026', '44702126425', '34159725861']
+                });
+            }
+        </script>
+    </body>
+</html>

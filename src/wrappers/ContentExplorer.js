@@ -104,7 +104,7 @@ class ContentExplorer extends ES6Wrapper {
             <ContentExplorerComponent
                 language={this.language}
                 messages={this.messages}
-                rootFolderId={this.root}
+                rootFolderId={this.id}
                 token={this.token}
                 componentRef={this.setComponent}
                 onDelete={this.onDelete}
