@@ -14,8 +14,8 @@ import API from '../../api';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
-import { isIE } from '../../util/browser';
 import Internationalize from '../Internationalize';
+import createWorker from '../../util/uploads-sha1-worker';
 import {
     CLIENT_NAME_CONTENT_UPLOADER,
     DEFAULT_HOSTNAME_UPLOAD,
@@ -88,6 +88,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     table: any;
     rootElement: HTMLElement;
     appElement: HTMLElement;
+    sha1Worker: any;
 
     static defaultProps: DefaultProps = {
         apiHost: DEFAULT_HOSTNAME_API,
@@ -117,6 +118,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             errorCode: ''
         };
         this.id = uniqueid('bcu_');
+        this.sha1Worker = createWorker();
     }
 
     /**
@@ -242,14 +244,11 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {UploadAPI} - Instance of Upload API
      */
     getUploadAPI(file) {
-        // Disable chunked upload in IE11 for now until hashing is done in a worker
         const { chunked } = this.props;
-        const useChunked = chunked && !isIE();
-
         const { size } = file;
         const factory = this.createAPIFactory();
 
-        if (useChunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
+        if (chunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
             return factory.getChunkedUploadAPI();
         }
 
@@ -322,6 +321,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         api.upload({
             id: rootFolderId,
             file,
+            sha1Worker: this.sha1Worker,
             successCallback: (entries) => this.handleUploadSuccess(item, entries),
             errorCallback: (error) => this.handleUploadError(item, error),
             progressCallback: (event) => this.handleUploadProgress(item, event),
@@ -455,12 +455,12 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @param {ProgressEvent} event - Progress event
      * @return {void}
      */
-    handleUploadProgress = (item: UploadItem, event: ProgressEvent) => {
-        if (!event.lengthComputable || item.status === STATUS_COMPLETE) {
+    handleUploadProgress = (item: UploadItem, event: any) => {
+        if (!event.total || item.status === STATUS_COMPLETE) {
             return;
         }
 
-        item.progress = Math.round(event.loaded / event.total * 100);
+        item.progress = Math.min(Math.round(event.loaded / event.total * 100), 100);
         item.status = STATUS_IN_PROGRESS;
 
         const { items } = this.state;
