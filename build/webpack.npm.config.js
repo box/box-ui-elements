@@ -49,6 +49,13 @@ module.exports = {
                         }
                     ]
                 })
+            },
+            {
+                test: /\.js$/,
+                loader: 'raw-loader',
+                include: [
+                    path.resolve('src/third-party/uploader/rusha.min.js')
+                ]
             }
         ]
     },
