@@ -15,7 +15,7 @@ import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
-import createWorker from '../../util/uploads-sha1-worker';
+import createWorker from '../../util/uploadsSHA1Worker';
 import {
     CLIENT_NAME_CONTENT_UPLOADER,
     DEFAULT_HOSTNAME_UPLOAD,
