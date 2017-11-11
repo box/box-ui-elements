@@ -27,10 +27,7 @@ module.exports = (language) => {
                 {
                     test: /\.js$/,
                     loader: 'babel-loader',
-                    exclude: [
-                        path.resolve('node_modules'),
-                        path.resolve('src/third-party')
-                    ]
+                    exclude: /(node_modules)/
                 },
                 {
                     test: /\.s?css$/,
@@ -49,13 +46,6 @@ module.exports = (language) => {
                             }
                         ]
                     })
-                },
-                {
-                    test: /\.js$/,
-                    loader: 'raw-loader',
-                    include: [
-                        path.resolve('src/third-party/uploader/rusha.min.js')
-                    ]
                 }
             ]
         },
