@@ -1199,7 +1199,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         const {
             language,
             messages,
-
             rootFolderId,
             logoUrl,
             canUpload,
@@ -1225,6 +1224,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             onUpload,
             hasPreviewSidebar
         }: Props = this.props;
+
         const {
             view,
             rootName,
@@ -1241,6 +1241,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             errorCode,
             focusedRow
         }: State = this.state;
+
         const { id, permissions }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const styleClassName = classNames('buik bce', className);
@@ -1369,6 +1370,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             apiHost={apiHost}
                             appHost={appHost}
                             staticHost={staticHost}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
                           />
                         : null}
                 </div>

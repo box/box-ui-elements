@@ -1,16 +1,16 @@
 @import '../variables';
 
-.bcpr-sidebar {
+.bcs {
     background-color: $almost-white;
     display: flex;
     flex: 0 0 61px;
 
-    &.bcpr-sidebar-visible {
+    &.bcs-visible {
         border-right: 1px solid $off-white;
         flex: 0 0 420px;
     }
 
-    .bcpr-sidebar-btns {
+    .bcs-btns {
         background-color: $white;
         border-right: 1px solid $off-white;
         display: flex;
@@ -23,7 +23,7 @@
             width: 60px;
 
             &:hover,
-            &.bcpr-sidebar-btn-selected {
+            &.bcs-btn-selected {
                 border-left-color: $blue;
             }
         }

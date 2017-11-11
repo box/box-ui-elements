@@ -28,6 +28,8 @@ type Props = {
     apiHost: string,
     appHost: string,
     staticHost: string,
+    sharedLink?: string,
+    sharedLinkPassword?: string,
     intl: any
 };
 
@@ -44,6 +46,8 @@ const PreviewDialog = ({
     apiHost,
     appHost,
     staticHost,
+    sharedLink,
+    sharedLinkPassword,
     intl
 }: Props) => {
     const { items }: Collection = currentCollection;
@@ -79,6 +83,8 @@ const PreviewDialog = ({
                 onLoad={onLoad}
                 onClose={onCancel}
                 hasSidebar={hasPreviewSidebar}
+                sharedLink={sharedLink}
+                sharedLinkPassword={sharedLinkPassword}
             />
         </Modal>
     );

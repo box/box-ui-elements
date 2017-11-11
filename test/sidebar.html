@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sidebar Test Page</title>
+        <style>
+            body,
+            html,
+            .sidebar {
+                background: #ccc;
+                border: 0 none;
+                box-sizing: border-box !important;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+
+            .sidebar {
+                display: flex;
+            }
+        </style>
+        <div class="sidebar">
+            <div class="sidebar1"></div>
+            <div class="gap">&nbsp;&nbsp;</div>
+            <div class="sidebar2"></div>
+        </div>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
+        <script src="../dev/en-US/sidebar.js"></script>
+    </head>
+    <body>
+        <div class="preivew sidebar1"></div>
+        <script>
+            window.onload = function() {
+                const { ContentSidebar } = Box;
+                const token = 'W1uPV0nM1ggDpoAjc7fzRIF9cFvEkKjc';
+
+                const sidebar1 = new ContentSidebar();
+                sidebar1.show('233852272782', token, {
+                    container: '.sidebar1',
+                    hasProperties: true
+                });
+
+                const sidebar2 = new ContentSidebar();
+                sidebar2.show('233852272782', token, {
+                    container: '.sidebar2',
+                    hasProperties: true,
+                    hasTitle: true,
+                    hasSkills: true
+                });
+            }
+        </script>
+    </body>
+</html>

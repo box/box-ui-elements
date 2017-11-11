@@ -122,6 +122,7 @@ export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
 export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
 export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
 export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
+export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
 
 /* ---------------------- Statuses  -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';

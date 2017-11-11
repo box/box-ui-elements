@@ -8,7 +8,7 @@ import React, { PureComponent } from 'react';
 import uniqueid from 'lodash.uniqueid';
 import noop from 'lodash.noop';
 import Measure from 'react-measure';
-import Sidebar from './Sidebar';
+import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
 import Cache from '../../util/Cache';
@@ -45,6 +45,7 @@ type Props = {
     file?: BoxItem,
     fileId?: string,
     version: string,
+    showSidebar?: boolean,
     hasSidebar: boolean,
     hasHeader: boolean,
     apiHost: string,
@@ -67,7 +68,8 @@ type Props = {
 };
 
 type State = {
-    file?: BoxItem
+    file?: BoxItem,
+    showSidebar: boolean
 };
 
 class ContentPreview extends PureComponent<DefaultProps, Props, State> {
@@ -99,9 +101,9 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        const { file, cache, token, sharedLink, sharedLinkPassword, apiHost } = props;
+        const { file, hasSidebar, cache, token, sharedLink, sharedLinkPassword, apiHost } = props;
 
-        this.state = { file };
+        this.state = { file, showSidebar: hasSidebar };
         this.id = uniqueid('bcpr_');
         this.api = new API({
             cache,
@@ -376,6 +378,19 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
     };
 
     /**
+     * Handles showing or hiding of the sidebar.
+     * Only used when showSidebar isnt passed in as prop.
+     *
+     * @private
+     * @return {void}
+     */
+    toggleSidebar = (): void => {
+        this.setState((prevState) => ({
+            showSidebar: !prevState.showSidebar
+        }));
+    };
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -383,17 +398,59 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {Element}
      */
     render() {
-        const { language, messages, className, hasSidebar, hasHeader, onClose }: Props = this.props;
-        const { file }: State = this.state;
+        const {
+            token,
+            language,
+            messages,
+            className,
+            showSidebar,
+            hasSidebar,
+            hasHeader,
+            onClose,
+            sharedLink,
+            sharedLinkPassword
+        }: Props = this.props;
+
+        const { file, showSidebar: showSidebarState }: State = this.state;
+
+        let isSidebarVisible = hasSidebar && showSidebarState;
+        let hasSidebarButton = hasSidebar;
+        let onSidebarToggle = this.toggleSidebar;
+
+        if (typeof showSidebar === 'boolean') {
+            // The parent component passed in the showSidebar property.
+            // Sidebar should be controlled by the parent and not by local state.
+            isSidebarVisible = hasSidebar && showSidebar;
+            hasSidebarButton = false;
+            onSidebarToggle = null;
+        }
+
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={`buik bcpr ${className}`}>
-                    {hasHeader && <Header file={file} showSidebarButton={hasSidebar} onClose={onClose} />}
+                    {hasHeader &&
+                        <Header
+                            file={file}
+                            hasSidebarButton={hasSidebarButton}
+                            isSidebarVisible={isSidebarVisible}
+                            onClose={onClose}
+                            onSidebarToggle={onSidebarToggle}
+                        />}
                     <div className='bcpr-body'>
-                        {hasSidebar && <Sidebar file={file} getPreviewer={this.getPreviewer} />}
                         <Measure bounds onResize={this.onResize}>
                             {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
                         </Measure>
+                        {isSidebarVisible &&
+                            <ContentSidebar
+                                hasProperties
+                                hasSkills
+                                cache={this.api.getCache()}
+                                token={token}
+                                fileId={file ? file.id : null}
+                                getPreviewer={this.getPreviewer}
+                                sharedLink={sharedLink}
+                                sharedLinkPassword={sharedLinkPassword}
+                            />}
                     </div>
                 </div>
             </Internationalize>
