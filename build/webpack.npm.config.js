@@ -14,7 +14,7 @@ module.exports = {
         uploader: path.resolve('src/components/ContentUploader/index.js'),
         tree: path.resolve('src/components/ContentTree/index.js'),
         preview: path.resolve('src/components/ContentPreview/index.js'),
-        sidebar: path.resolve('src/wrappers/ContentSidebar/index.js')
+        sidebar: path.resolve('src/components/ContentSidebar/index.js')
     },
     output: {
         path: path.resolve('dist'),
