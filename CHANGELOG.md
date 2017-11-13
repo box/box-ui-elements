@@ -1,6 +1,14 @@
+<a name="2.1.2"></a>
+## 2.1.2 (2017-11-13)
+
+* Fix: Incorrect path (#112) ([3cf1fc8](https://github.com/box/box-ui-elements/commit/3cf1fc8))
+
+
+
 <a name="2.1.1"></a>
 ## 2.1.1 (2017-11-13)
 
+* Release: 2.1.1 ([36b7734](https://github.com/box/box-ui-elements/commit/36b7734))
 * Fix: Build script missing locale data aliasing (#111) ([3f56c53](https://github.com/box/box-ui-elements/commit/3f56c53))
 
 
