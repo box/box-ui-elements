@@ -14,14 +14,18 @@ module.exports = {
         uploader: path.resolve('src/components/ContentUploader/index.js'),
         tree: path.resolve('src/components/ContentTree/index.js'),
         preview: path.resolve('src/components/ContentPreview/index.js'),
-        sidebar: path.resolve('src/wrappers/ContentSidebar.js')
+        sidebar: path.resolve('src/wrappers/ContentSidebar/index.js')
     },
     output: {
         path: path.resolve('dist'),
         filename: '[name].js'
     },
     resolve: {
-        modules: ['src', 'node_modules']
+        modules: ['src', 'node_modules'],
+        alias: {
+            'react-intl-locale-data': path.resolve('node_modules/react-intl/locale-data/en.js'),
+            'box-ui-elements-locale-data': path.resolve('i18n/en-US.js')
+        }
     },
     resolveLoader: {
         modules: [path.resolve('src'), path.resolve('node_modules')]
