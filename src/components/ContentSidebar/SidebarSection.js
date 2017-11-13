@@ -72,22 +72,20 @@ class SidebarSection extends PureComponent<DefaultProps, Props, State> {
         const { children, className, title }: Props = this.props;
 
         const sectionClassName = classNames(
-            'bcpr-sidebar-section',
+            'bcs-section',
             {
-                'bcpr-sidebar-section-open': isOpen
+                'bcs-section-open': isOpen
             },
             className
         );
 
         return (
             <div className={sectionClassName}>
-                <PlainButton onClick={this.toggleVisibility} className='bcpr-sidebar-section-title'>
-                    <h4 className='bcpr-sidebar-section-title-text'>
-                        {title}
-                    </h4>
+                <PlainButton onClick={this.toggleVisibility} className='bcs-section-title'>
+                    {title}
                 </PlainButton>
                 {isOpen &&
-                    <div className='bcpr-sidebar-section-content'>
+                    <div className='bcs-section-content'>
                         {children}
                     </div>}
             </div>

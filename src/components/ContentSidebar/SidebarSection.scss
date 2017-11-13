@@ -1,0 +1,24 @@
+@import '../variables';
+
+.bcs-section {
+    margin: 0 20px 20px 30px; // Right margin less as parent width leaves some gap for scrollbar
+}
+
+.bcs-section-content {
+    padding: 15px 0 5px;
+}
+
+.buik-btn.buik-btn-plain.bcs-section-title {
+    border-bottom: 1px solid $off-white;
+    padding: 5px 0 10px;
+    text-align: left;
+    text-decoration: none;
+    width: 100%;
+
+    .buik-btn-content {
+        cursor: pointer;
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

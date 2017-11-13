@@ -12,22 +12,26 @@ import DateField from '../Date';
 import type { BoxItem } from '../../flowTypes';
 
 type Props = {
-    file: BoxItem
+    file: BoxItem,
+    ensurePrivacy: boolean
 };
 
-const FileProperties = ({ file }: Props) => {
+const FileProperties = ({ file, ensurePrivacy }: Props) => {
     const { owned_by, created_by, created_at = '', modified_at = '', size = 0 }: BoxItem = file;
     const { name: owner = '' } = owned_by || {};
     const { name: uploader = '' } = created_by || {};
+    const showOwner = !!owner && !ensurePrivacy;
+    const showUploader = !!uploader && !ensurePrivacy;
+
     return (
         <dl>
-            {!!owner && <FormattedMessage tagName='dt' {...messages.owner} />}
-            {!!owner &&
+            {showOwner && <FormattedMessage tagName='dt' {...messages.owner} />}
+            {showOwner &&
                 <dd>
                     {owner}
                 </dd>}
-            {!!uploader && <FormattedMessage tagName='dt' {...messages.uploader} />}
-            {!!uploader &&
+            {showUploader && <FormattedMessage tagName='dt' {...messages.uploader} />}
+            {showUploader &&
                 <dd>
                     {uploader}
                 </dd>}

@@ -268,19 +268,29 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Shown as a placeholder in the search box.',
         defaultMessage: 'Search files and folders'
     },
-    sidebarDESCription: {
-        id: 'be.sidebarDESCription',
-        description: 'Label for the description field in the preview sidebar',
-        defaultMessage: 'DESCription'
+    sidebarShow: {
+        id: 'be.sidebarShow',
+        description: 'Label for the show sidebar button.',
+        defaultMessage: 'Show Sidebar'
     },
-    sidebarDESCriptionPlaceholder: {
-        id: 'be.sidebarDESCriptionPlaceholder',
-        description: 'Placeholder for file description in preview sidebar',
+    sidebarHide: {
+        id: 'be.sidebarHide',
+        description: 'Label for the hide sidebar button.',
+        defaultMessage: 'Hide Sidebar'
+    },
+    sidebarDescription: {
+        id: 'be.sidebarDescription',
+        description: 'Label for the description field in the preview sidebar.',
+        defaultMessage: 'Description'
+    },
+    sidebarDescriptionPlaceholder: {
+        id: 'be.sidebarDescriptionPlaceholder',
+        description: 'Placeholder for file description in preview sidebar.',
         defaultMessage: 'Enter a description'
     },
     sidebarDetailsTitle: {
         id: 'be.sidebarDetailsTitle',
-        description: 'Title for the preview details sidebar',
+        description: 'Title for the preview details sidebar.',
         defaultMessage: 'Details'
     },
     sidebarProperties: {

@@ -1,0 +1,31 @@
+@import '../variables';
+
+.bcs-content {
+    flex: 1;
+
+    .bcs-title {
+        font-size: 16px;
+        font-weight: 200;
+        height: 50px; // Same as section top below
+        line-height: 50px;
+        margin: 0;
+        padding: 0 30px;
+    }
+
+    .bcs-scroll-content-wrapper {
+        bottom: 0;
+        left: 0;
+        overflow: auto;
+        position: absolute; // Prevents non-sidebar parts from re-painting
+        right: 0;
+        top: 20px;
+
+        &.bcs-section-has-title {
+            top: 50px; // Same as title above
+        }
+
+        .bcs-scroll-content {
+            width: 325px; // 15px less than the total width for scroll bar
+        }
+    }
+}

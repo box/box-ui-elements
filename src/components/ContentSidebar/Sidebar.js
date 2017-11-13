@@ -68,17 +68,17 @@ class Sidebar extends PureComponent<void, Props, State> {
         const { showSidebar }: State = this.state;
         const sidebarTitle = intl.formatMessage(messages.sidebarDetailsTitle);
 
-        const sidebarClassName = classNames('bcpr-sidebar', {
-            'bcpr-sidebar-visible': showSidebar
+        const sidebarClassName = classNames('bcs', {
+            'bcs-visible': showSidebar
         });
 
         const sidebarBtnClassName = classNames({
-            'bcpr-sidebar-btn-selected': showSidebar
+            'bcs-btn-selected': showSidebar
         });
 
         return (
             <div className={sidebarClassName}>
-                <div className='bcpr-sidebar-btns'>
+                <div className='bcs-btns'>
                     <PlainButton>
                         <IconComments />
                     </PlainButton>
