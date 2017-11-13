@@ -1,6 +1,14 @@
+<a name="2.1.1"></a>
+## 2.1.1 (2017-11-13)
+
+* Fix: Build script missing locale data aliasing (#111) ([3f56c53](https://github.com/box/box-ui-elements/commit/3f56c53))
+
+
+
 <a name="2.1.0"></a>
 # 2.1.0 (2017-11-13)
 
+* Release: 2.1.0 ([10394fb](https://github.com/box/box-ui-elements/commit/10394fb))
 * Mojito: Update translations (#104) ([2605978](https://github.com/box/box-ui-elements/commit/2605978))
 * Mojito: Update translations (#110) ([98160a0](https://github.com/box/box-ui-elements/commit/98160a0))
 * Mojito: Update translations (#96) ([50cc504](https://github.com/box/box-ui-elements/commit/50cc504))
