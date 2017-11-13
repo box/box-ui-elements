@@ -1,6 +1,23 @@
+<a name="2.1.0"></a>
+# 2.1.0 (2017-11-13)
+
+* Mojito: Update translations (#104) ([2605978](https://github.com/box/box-ui-elements/commit/2605978))
+* Mojito: Update translations (#110) ([98160a0](https://github.com/box/box-ui-elements/commit/98160a0))
+* Mojito: Update translations (#96) ([50cc504](https://github.com/box/box-ui-elements/commit/50cc504))
+* New: ContentSidebar UI Element (#107) ([d22fec1](https://github.com/box/box-ui-elements/commit/d22fec1))
+* Chore: Tests for Chunk (#100) ([38c37db](https://github.com/box/box-ui-elements/commit/38c37db))
+* Chore: Tests for PlainUpload (#99) ([15c49b4](https://github.com/box/box-ui-elements/commit/15c49b4))
+* Chore: Unit tests for BaseUpload (#108) ([595f860](https://github.com/box/box-ui-elements/commit/595f860))
+* Chore: Unit tests for uploadsSHA1Worker (#109) ([6fd4bb0](https://github.com/box/box-ui-elements/commit/6fd4bb0))
+* Fix: Remove usage of webpack raw loader for Rusha hashing (#106) ([eac5cc4](https://github.com/box/box-ui-elements/commit/eac5cc4))
+* Update: Move uploader SHA1 hashing to a worker (#97) ([51eb4b4](https://github.com/box/box-ui-elements/commit/51eb4b4))
+
+
+
 <a name="2.0.0"></a>
 # 2.0.0 (2017-11-03)
 
+* Release: 2.0.0 ([e841db8](https://github.com/box/box-ui-elements/commit/e841db8))
 * Fix: Localization issue in ContentUploader (#92) ([7bcc1c1](https://github.com/box/box-ui-elements/commit/7bcc1c1))
 * Fix: Multiple previews on the same page (#95) ([2bad12a](https://github.com/box/box-ui-elements/commit/2bad12a)), closes [#89](https://github.com/box/box-ui-elements/issues/89)
 * Update: Move default logo svg to be CSS based (#94) ([d6d6bb9](https://github.com/box/box-ui-elements/commit/d6d6bb9))
