@@ -32,7 +32,6 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
         state: State;
         enterLeaveCounter: number;
         droppableEl: Element;
-        wrappedRef: Element;
 
         static defaultProps: DefaultProps = {
             className: ''
@@ -83,18 +82,6 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             this.droppableEl.removeEventListener('dragleave', this.handleDragLeave);
             this.droppableEl.removeEventListener('drop', this.handleDrop);
         }
-
-        /**
-         * Sets a ref to the instance of BaseComponent
-         * Note: This will return null if BaseComponent is a stateless, functional component
-         * because stateless, functional components have no instances
-         *
-         * @param {Component} ref - Ref to the component instance of BaseComponent
-         * @return {void}
-         */
-        setWrappedRef = (ref: Element) => {
-            this.wrappedRef = ref;
-        };
 
         /**
          * Function that gets called when an item is dragged into the drop zone
@@ -216,7 +203,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
                 className: classes
             };
 
-            return <Wrapped {...mergedProps} ref={this.setWrappedRef} />;
+            return <Wrapped {...mergedProps} />;
         }
     };
 

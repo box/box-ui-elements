@@ -85,7 +85,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     id: string;
     state: State;
     props: Props;
-    table: any;
     rootElement: HTMLElement;
     appElement: HTMLElement;
     sha1Worker: any;
@@ -160,17 +159,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             id: `folder_${rootFolderId}`
         });
     }
-
-    /**
-     * Saves reference to table component
-     *
-     * @private
-     * @param {Component} table - React virtualized Table component
-     * @return {void}
-     */
-    tableRef = (table: any) => {
-        this.table = table;
-    };
 
     /**
      * Converts File API to upload items and adds to upload queue.
@@ -515,7 +503,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                         allowedTypes={['Files']}
                         items={items}
                         isTouch={isTouch}
-                        tableRef={this.tableRef}
                         view={view}
                         onClick={this.onClick}
                     />
