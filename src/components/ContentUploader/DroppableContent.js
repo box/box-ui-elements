@@ -48,20 +48,19 @@ type Props = {
     isTouch: boolean,
     view: View,
     items: UploadItem[],
-    tableRef: Function,
     addFiles: Function,
     onClick: Function
 };
 
 const DroppableContent = makeDroppable(
     dropDefinition
-)(({ canDrop, isOver, isTouch, view, items, tableRef, addFiles, onClick }: Props) => {
+)(({ canDrop, isOver, isTouch, view, items, addFiles, onClick }: Props) => {
     const handleSelectFiles = ({ target: { files } }: any) => addFiles(files);
     const hasItems = items.length > 0;
 
     return (
         <div className='bcu-droppable-content'>
-            <ItemList items={items} tableRef={tableRef} view={view} onClick={onClick} />
+            <ItemList items={items} view={view} onClick={onClick} />
             <UploadState
                 canDrop={canDrop}
                 hasItems={hasItems}

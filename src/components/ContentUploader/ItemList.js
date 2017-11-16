@@ -15,11 +15,10 @@ import './ItemList.scss';
 
 type Props = {
     items: UploadItem[],
-    tableRef: Function,
     onClick: Function
 };
 
-const ItemList = ({ items, tableRef, onClick }: Props) =>
+const ItemList = ({ items, onClick }: Props) =>
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer();
@@ -32,7 +31,6 @@ const ItemList = ({ items, tableRef, onClick }: Props) =>
                     disableHeader
                     headerHeight={0}
                     height={height}
-                    ref={tableRef}
                     rowClassName='bcu-item-row'
                     rowCount={items.length}
                     rowGetter={({ index }) => items[index]}
