@@ -17,6 +17,7 @@ import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
 import createWorker from '../../util/uploadsSHA1Worker';
 import {
+    DEFAULT_ROOT,
     CLIENT_NAME_CONTENT_UPLOADER,
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -60,6 +61,7 @@ type Props = {
 };
 
 type DefaultProps = {|
+    rootFolderId: string,
     apiHost: string,
     chunked: boolean,
     className: string,
@@ -90,6 +92,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     sha1Worker: any;
 
     static defaultProps: DefaultProps = {
+        rootFolderId: DEFAULT_ROOT,
         apiHost: DEFAULT_HOSTNAME_API,
         chunked: true,
         className: '',

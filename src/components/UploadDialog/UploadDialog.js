@@ -14,7 +14,7 @@ import type { Token } from '../../flowTypes';
 
 type Props = {
     isOpen: boolean,
-    rootFolderId: string,
+    currentFolderId: string,
     token: Token,
     sharedLink?: string,
     sharedLinkPassword?: string,
@@ -29,7 +29,7 @@ type Props = {
 /* eslint-disable jsx-a11y/label-has-for */
 const UploadDialog = ({
     isOpen,
-    rootFolderId,
+    currentFolderId,
     token,
     sharedLink,
     sharedLinkPassword,
@@ -50,7 +50,7 @@ const UploadDialog = ({
         contentLabel={intl.formatMessage(messages.upload)}
     >
         <ContentUploader
-            rootFolderId={rootFolderId}
+            rootFolderId={currentFolderId}
             token={token}
             sharedLink={sharedLink}
             sharedLinkPassword={sharedLinkPassword}
