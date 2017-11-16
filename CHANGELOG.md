@@ -1,6 +1,17 @@
+<a name="2.1.3"></a>
+## 2.1.3 (2017-11-16)
+
+* Fix: Remove refs from functional components (#118) ([64a18b1](https://github.com/box/box-ui-elements/commit/64a18b1))
+* New: LocalStore (#114) ([6f91570](https://github.com/box/box-ui-elements/commit/6f91570))
+* Mojito: Update translations (#115) ([f0ce7c8](https://github.com/box/box-ui-elements/commit/f0ce7c8))
+* Mojito: Update translations (#116) ([ac0d59a](https://github.com/box/box-ui-elements/commit/ac0d59a))
+
+
+
 <a name="2.1.2"></a>
 ## 2.1.2 (2017-11-13)
 
+* Release: 2.1.2 ([8080751](https://github.com/box/box-ui-elements/commit/8080751))
 * Fix: Incorrect path (#112) ([3cf1fc8](https://github.com/box/box-ui-elements/commit/3cf1fc8))
 
 
