@@ -49,12 +49,10 @@ lint_and_test() {
         echo "----------------------------------------------------"
         echo "Done testing for version" $VERSION
         echo "----------------------------------------------------"
-        move_reports
     else
         echo "----------------------------------------------------"
         echo "Failed testing!"
         echo "----------------------------------------------------"
-        move_reports
         exit 1;
     fi
 }
@@ -136,14 +134,6 @@ tag_release_on_github() {
         echo "----------------------------------------------------------------------"
         exit 1
     fi
-}
-
-move_reports() {
-    echo "--------------------------------------------------------------------------"
-    echo "Moving test reports to ./reports/cobertura.xml and ./reports/junit.xml"
-    echo "--------------------------------------------------------------------------"
-    mv ./reports/coverage/cobertura/*/cobertura-coverage.xml ./reports/cobertura.xml;
-    mv ./reports/coverage/junit/*/junit.xml ./reports/junit.xml;
 }
 
 add_remote() {

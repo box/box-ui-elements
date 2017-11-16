@@ -3,21 +3,6 @@
 # Temp version
 VERSION="XXX"
 
-install_dependencies() {
-    echo "--------------------------------------------------------"
-    echo "Installing all package dependencies"
-    echo "--------------------------------------------------------"
-    if yarn install; then
-        echo "----------------------------------------------------"
-        echo "Installed dependencies successfully."
-        echo "----------------------------------------------------"
-    else
-        echo "----------------------------------------------------"
-        echo "Error: Failed to run 'yarn install'!"
-        echo "----------------------------------------------------"
-        exit 1;
-    fi
-}
 
 lint_and_test() {
     echo "----------------------------------------------------"
@@ -65,17 +50,17 @@ lint_and_test() {
     fi
 }
 
-clean_assets() {
+pre_build() {
+    echo "-------------------------------------------------------------"
+    echo "Starting install, clean and pre build for version" $VERSION
     echo "----------------------------------------------------"
-    echo "Running clean for version" $VERSION
-    echo "----------------------------------------------------"
-    if yarn run clean; then
+    if yarn run pre-buid; then
         echo "----------------------------------------------------"
-        echo "Done cleaning for version" $VERSION
+        echo "Pre build complete for version" $VERSION
         echo "----------------------------------------------------"
     else
         echo "----------------------------------------------------"
-        echo "Failed cleaning!"
+        echo "Failed to pre build!"
         echo "----------------------------------------------------"
         exit 1;
     fi
@@ -83,15 +68,15 @@ clean_assets() {
 
 build_assets() {
     echo "----------------------------------------------------"
-    echo "Starting babel build for version" $VERSION
+    echo "Starting npm build for version" $VERSION
     echo "----------------------------------------------------"
-    if yarn run build-lib; then
+    if yarn run build-npm; then
         echo "----------------------------------------------------"
-        echo "Built babel assets for version" $VERSION
+        echo "Built npm assets for version" $VERSION
         echo "----------------------------------------------------"
     else
         echo "----------------------------------------------------"
-        echo "Failed to build production assets!"
+        echo "Failed to npm production assets!"
         echo "----------------------------------------------------"
         exit 1;
     fi
@@ -165,18 +150,10 @@ publish_to_npm() {
     # Check out the version we want to build (version tags are prefixed with a v)
     git checkout v$VERSION || exit 1
 
-    # Install node modules
-    if ! install_dependencies; then
+    # Do pre build
+    if ! pre_build; then
         echo "----------------------------------------------------"
-        echo "Error in install_dependencies!"
-        echo "----------------------------------------------------"
-        exit 1
-    fi
-
-    # Do testing and linting
-    if ! clean_assets; then
-        echo "----------------------------------------------------"
-        echo "Error in clean_assets!"
+        echo "Error in pre_build!"
         echo "----------------------------------------------------"
         exit 1
     fi
