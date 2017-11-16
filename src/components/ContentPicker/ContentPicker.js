@@ -1047,7 +1047,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                     {allowUpload && !!this.appElement
                         ? <UploadDialog
                             isOpen={isUploadModalOpen}
-                            rootFolderId={id}
+                            currentFolderId={id}
                             token={token}
                             sharedLink={sharedLink}
                             sharedLinkPassword={sharedLinkPassword}
