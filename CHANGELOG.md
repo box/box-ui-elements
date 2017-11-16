@@ -1,6 +1,14 @@
+<a name="2.1.4"></a>
+## 2.1.4 (2017-11-16)
+
+* Fix: Default to 0 as the root folder for content uploader (#119) ([db292e9](https://github.com/box/box-ui-elements/commit/db292e9))
+
+
+
 <a name="2.1.3"></a>
 ## 2.1.3 (2017-11-16)
 
+* Release: 2.1.3 ([eca19e3](https://github.com/box/box-ui-elements/commit/eca19e3))
 * Fix: Remove refs from functional components (#118) ([64a18b1](https://github.com/box/box-ui-elements/commit/64a18b1))
 * New: LocalStore (#114) ([6f91570](https://github.com/box/box-ui-elements/commit/6f91570))
 * Mojito: Update translations (#115) ([f0ce7c8](https://github.com/box/box-ui-elements/commit/f0ce7c8))
