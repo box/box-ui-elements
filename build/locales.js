@@ -1,13 +1,8 @@
-const isProd = process.env.NODE_ENV === 'production';
-const isDev = process.env.NODE_ENV === 'dev';
-const isCI = process.env.CI === '1';
-const buildPseudo = process.env.BUILD_PSEUDO_LOCALE === '1';
-
-const locales = isProd && !isCI ? [
+module.exports = [
+    'en-US',
     'en-AU',
     'en-CA',
     'en-GB',
-    'en-US',
     'en-x-pseudo',
     'bn-IN',
     'da-DK',
@@ -30,10 +25,4 @@ const locales = isProd && !isCI ? [
     'tr-TR',
     'zh-CN',
     'zh-TW'
-] : ['en-US']; // Only 1 locale needed for dev
-
-if (isDev && buildPseudo) {
-    locales.push('en-x-pseudo');
-}
-
-module.exports = locales;
+];
