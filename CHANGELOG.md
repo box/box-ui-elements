@@ -1,6 +1,14 @@
+<a name="2.2.0"></a>
+# 2.2.0 (2017-11-17)
+
+* Chore: Speed up release build (#121) ([634e7a3](https://github.com/box/box-ui-elements/commit/634e7a3))
+
+
+
 <a name="2.1.4"></a>
 ## 2.1.4 (2017-11-16)
 
+* Release: 2.1.4 ([6580802](https://github.com/box/box-ui-elements/commit/6580802))
 * Fix: Default to 0 as the root folder for content uploader (#119) ([db292e9](https://github.com/box/box-ui-elements/commit/db292e9))
 
 
