@@ -55,7 +55,7 @@ const PreviewDialog = ({
         onPreview(cloneDeep(data));
     };
 
-    if (!item || !items || !isOpen) {
+    if (!item || !items) {
         return null;
     }
 
