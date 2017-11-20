@@ -6,7 +6,7 @@ All contributions are welcome to this project.
 
 Before a contribution can be merged into this project, please fill out the Contributor License Agreement (CLA) located at:
 
-https://developer.box.com/v2.0/docs/box-ui-elements-cla
+https://developer.box.com/docs/box-sdk-cla
 
 To learn more about CLAs and why they are important to the UI Element projects, please see the [Wikipedia entry](http://en.wikipedia.org/wiki/Contributor_License_Agreement).
 
