@@ -1,112 +1,114 @@
-/* eslint-disable no-unused-expressions */
 import PlainUpload from '../PlainUpload';
 
 let upload;
-const sandbox = sinon.sandbox.create();
 
 describe('api/PlainUpload', () => {
     beforeEach(() => {
         upload = new PlainUpload();
     });
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('uploadPreflightSuccessHandler()', () => {
-        it('should not do anything if API is destroyed', () => {
-            upload.isDestroyed = sandbox.mock().returns(true);
-            upload.makeRequest = sandbox.mock().never();
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            upload.makeRequest = jest.fn();
             upload.uploadPreflightSuccessHandler({
                 upload_url: 'test'
             });
+            expect(upload.makeRequest).not.toHaveBeenCalled();
         });
 
-        it('should make an upload request with the returned url', () => {
+        test('should make an upload request with the returned url', () => {
             const uploadUrl = 'someUrl';
 
-            upload.isDestroyed = sandbox.mock().returns(false);
-            upload.makeRequest = sandbox.mock().withArgs({
-                url: uploadUrl
-            });
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.makeRequest = jest.fn();
 
             upload.uploadPreflightSuccessHandler({
                 upload_url: uploadUrl
             });
+            expect(upload.makeRequest).toHaveBeenCalledWith({ url: uploadUrl });
         });
     });
 
     describe('uploadSuccessHandler()', () => {
-        it('should not do anything if API is destroyed', () => {
-            upload.isDestroyed = sandbox.mock().returns(true);
-            upload.successCallback = sandbox.mock().never();
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            upload.successCallback = jest.fn();
             upload.uploadSuccessHandler({
                 entries: {}
             });
+            expect(upload.successCallback).not.toHaveBeenCalled();
         });
 
-        it('should call success callback with returned entries', () => {
+        test('should call success callback with returned entries', () => {
             const entries = [{}, {}];
 
-            upload.isDestroyed = sandbox.mock().returns(false);
-            upload.successCallback = sandbox.mock().withArgs(entries);
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.successCallback = jest.fn();
 
             upload.uploadSuccessHandler({ entries });
+            expect(upload.successCallback).toHaveBeenCalledWith(entries);
         });
     });
 
     describe('uploadProgressHandler', () => {
-        it('should not do anything if API is destroyed', () => {
-            upload.isDestroyed = sandbox.mock().returns(true);
-            upload.progressCallback = sandbox.mock().never();
-            upload.uploadProgressHandler(new ProgressEvent());
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            upload.progressCallback = jest.fn();
+            upload.uploadProgressHandler(new ProgressEvent('null'));
+            expect(upload.progressCallback).not.toHaveBeenCalled();
         });
 
-        it('should call progress callback with progress event', () => {
-            const event = new ProgressEvent();
+        test('should call progress callback with progress event', () => {
+            const event = new ProgressEvent('null');
 
-            upload.isDestroyed = sandbox.mock().returns(false);
-            upload.progressCallback = sandbox.mock().withArgs(event);
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.progressCallback = jest.fn();
 
             upload.uploadProgressHandler(event);
+            expect(upload.progressCallback).toHaveBeenCalledWith(event);
         });
     });
 
     describe('uploadErrorHandler', () => {
-        it('should not do anything if API is destroyed', () => {
-            upload.isDestroyed = sandbox.mock().returns(true);
-            upload.baseUploadErrorHandler = sandbox.mock().never();
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            upload.baseUploadErrorHandler = jest.fn();
             upload.uploadErrorHandler(new Error());
+            expect(upload.baseUploadErrorHandler).not.toHaveBeenCalled();
         });
 
-        it('should call base upload error handler with error', () => {
+        test('should call base upload error handler with error', () => {
             const error = new Error();
 
-            upload.isDestroyed = sandbox.mock().returns(false);
-            upload.baseUploadErrorHandler = sandbox.mock().withArgs(error);
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.baseUploadErrorHandler = jest.fn();
 
             upload.uploadErrorHandler(error);
+            expect(upload.baseUploadErrorHandler).toHaveBeenCalledWith(error, expect.any(Function));
         });
     });
 
     describe('makePreflightRequest()', () => {
-        it('should not do anything if API is destroyed', () => {
-            upload.isDestroyed = sandbox.mock().returns(true);
-            upload.getBaseUrl = sandbox.mock().never();
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            upload.getBaseUrl = jest.fn();
             upload.xhr = {
-                options: sandbox.mock().never()
+                options: jest.fn()
             };
             upload.makePreflightRequest({
                 fileId: '123',
                 fileName: 'cayde'
             });
+            expect(upload.getBaseUrl).not.toHaveBeenCalled();
+            expect(upload.xhr.options).not.toHaveBeenCalled();
         });
 
-        it('should make preflight request with current file attributes', () => {
+        test('should make preflight request with current file attributes', () => {
             const baseUrl = 'base';
 
-            upload.isDestroyed = sandbox.mock().returns(false);
-            upload.getBaseUrl = sandbox.mock().returns(baseUrl);
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.getBaseUrl = jest.fn().mockReturnValueOnce(baseUrl);
             upload.file = {
                 size: 1,
                 name: 'zavala'
@@ -114,29 +116,30 @@ describe('api/PlainUpload', () => {
             upload.id = '123';
 
             upload.xhr = {
-                options: sandbox.mock().withArgs({
-                    url: `${baseUrl}/files/content`,
-                    data: {
-                        name: upload.file.name,
-                        parent: {
-                            id: upload.id
-                        },
-                        size: upload.file.size
-                    },
-                    successHandler: sinon.match.func,
-                    errorHandler: sinon.match.func
-                })
+                options: jest.fn()
             };
 
             upload.makePreflightRequest({});
+            expect(upload.xhr.options).toHaveBeenCalledWith({
+                url: `${baseUrl}/files/content`,
+                data: {
+                    name: upload.file.name,
+                    parent: {
+                        id: upload.id
+                    },
+                    size: upload.file.size
+                },
+                successHandler: expect.any(Function),
+                errorHandler: expect.any(Function)
+            });
         });
 
-        it('should make preflight request to upload file version url if fileId is given', () => {
+        test('should make preflight request to upload file version url if fileId is given', () => {
             const baseUrl = 'base';
             const fileId = '234';
 
-            upload.isDestroyed = sandbox.mock().returns(false);
-            upload.getBaseUrl = sandbox.mock().returns(baseUrl);
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.getBaseUrl = jest.fn().mockReturnValueOnce(baseUrl);
             upload.file = {
                 size: 1,
                 name: 'zavala'
@@ -144,109 +147,114 @@ describe('api/PlainUpload', () => {
             upload.id = '123';
 
             upload.xhr = {
-                options: sandbox.mock().withArgs({
-                    url: `${baseUrl}/files/${fileId}/content`,
-                    data: sinon.match.object,
-                    successHandler: sinon.match.func,
-                    errorHandler: sinon.match.func
-                })
+                options: jest.fn()
             };
 
             upload.makePreflightRequest({
                 fileId
             });
+            expect(upload.xhr.options).toHaveBeenCalledWith({
+                url: `${baseUrl}/files/${fileId}/content`,
+                data: expect.any(Object),
+                successHandler: expect.any(Function),
+                errorHandler: expect.any(Function)
+            });
         });
     });
 
     describe('makeRequest', () => {
-        it('should not do anything if API is destroyed', () => {
-            upload.isDestroyed = sandbox.mock().returns(true);
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.xhr = {
-                uploadFile: sandbox.mock().never()
+                uploadFile: jest.fn()
             };
             upload.makeRequest({
                 fileId: '123',
                 fileName: 'hunter'
             });
+            expect(upload.xhr.uploadFile).not.toHaveBeenCalled();
         });
 
-        it('should generate upload URL and make request if no URL is provided', () => {
-            upload.isDestroyed = sandbox.mock().returns(false);
+        test('should generate upload URL and make request if no URL is provided', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
 
             upload.file = {
                 name: 'warlock'
             };
             upload.id = '123';
             upload.xhr = {
-                uploadFile: sinon.mock().withArgs({
-                    url: `${upload.uploadHost}/api/2.0/files/content`,
-                    data: {
-                        attributes: sinon.match.string,
-                        file: upload.file
-                    },
-                    successHandler: sinon.match.func,
-                    errorHandler: sinon.match.func,
-                    progressHandler: sinon.match.func
-                })
+                uploadFile: jest.fn()
             };
 
             upload.makeRequest({});
+            expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
+                url: `${upload.uploadHost}/api/2.0/files/content`,
+                data: {
+                    attributes: expect.any(String),
+                    file: upload.file
+                },
+                successHandler: expect.any(Function),
+                errorHandler: expect.any(Function),
+                progressHandler: expect.any(Function)
+            });
         });
 
-        it('should upload to new file version if file ID is provided', () => {
+        test('should upload to new file version if file ID is provided', () => {
             const fileId = '123';
 
-            upload.isDestroyed = sandbox.mock().returns(false);
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
             upload.file = {
                 name: 'warlock'
             };
             upload.id = '123';
             upload.xhr = {
-                uploadFile: sinon.mock().withArgs({
-                    url: `${upload.uploadHost}/api/2.0/files/${fileId}/content`,
-                    data: sinon.match.any,
-                    successHandler: sinon.match.func,
-                    errorHandler: sinon.match.func,
-                    progressHandler: sinon.match.func
-                })
+                uploadFile: jest.fn()
             };
 
             upload.makeRequest({
                 fileId
             });
+            expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
+                url: `${upload.uploadHost}/api/2.0/files/${fileId}/content`,
+                data: expect.any(Object),
+                successHandler: expect.any(Function),
+                errorHandler: expect.any(Function),
+                progressHandler: expect.any(Function)
+            });
         });
 
-        it('should stringify name and parent for upload data', () => {
+        test('should stringify name and parent for upload data', () => {
             const name = 'titan';
             const parentId = '123';
+            JSON.stringify = jest.fn();
 
-            upload.isDestroyed = sandbox.mock().returns(false);
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
             upload.id = parentId;
             upload.xhr = {
-                uploadFile: sandbox.stub()
+                uploadFile: jest.fn()
             };
 
-            sandbox.mock(JSON).expects('stringify').withArgs({
+            upload.makeRequest({
+                fileName: name
+            });
+            expect(JSON.stringify).toHaveBeenCalledWith({
                 name,
                 parent: {
                     id: parentId
                 }
             });
-
-            upload.makeRequest({
-                fileName: name
-            });
         });
     });
 
     describe('upload()', () => {
-        it('should not do anything if API is destroyed', () => {
-            upload.isDestroyed = sandbox.mock().returns(true);
-            upload.makePreflightRequest = sandbox.mock().never();
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            upload.makePreflightRequest = jest.fn();
             upload.upload({});
+            expect(upload.makePreflightRequest).not.toHaveBeenCalled();
         });
 
-        it('should set properties and make preflight request', () => {
+        test('should set properties and make preflight request', () => {
             const id = '123';
             const file = {};
             const successCallback = () => {};
@@ -254,8 +262,8 @@ describe('api/PlainUpload', () => {
             const progressCallback = () => {};
             const overwrite = true;
 
-            upload.isDestroyed = sandbox.mock().returns(false);
-            upload.makePreflightRequest = sandbox.mock();
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.makePreflightRequest = jest.fn();
             upload.upload({
                 id,
                 file,
@@ -265,30 +273,32 @@ describe('api/PlainUpload', () => {
                 overwrite
             });
 
-            expect(upload.id).to.equal(id);
-            expect(upload.file).to.equal(file);
-            expect(upload.successCallback).to.equal(successCallback);
-            expect(upload.errorCallback).to.equal(errorCallback);
-            expect(upload.progressCallback).to.equal(progressCallback);
-            expect(upload.overwrite).to.equal(overwrite);
+            expect(upload.id).toBe(id);
+            expect(upload.file).toBe(file);
+            expect(upload.successCallback).toBe(successCallback);
+            expect(upload.errorCallback).toBe(errorCallback);
+            expect(upload.progressCallback).toBe(progressCallback);
+            expect(upload.overwrite).toBe(overwrite);
         });
     });
 
     describe('cancel()', () => {
-        it('should not do anything if API is destroyed', () => {
-            upload.isDestroyed = sandbox.mock().returns(true);
+        test('should not do anything if API is destroyed', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.xhr = {
-                abort: sandbox.mock().never()
+                abort: jest.fn()
             };
             upload.cancel();
+            expect(upload.xhr.abort).not.toHaveBeenCalled();
         });
 
-        it('should abort xhr', () => {
-            upload.isDestroyed = sandbox.mock().returns(false);
+        test('should abort xhr', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
             upload.xhr = {
-                abort: sandbox.mock()
+                abort: jest.fn()
             };
             upload.cancel();
+            expect(upload.xhr.abort).toHaveBeenCalled();
         });
     });
 });

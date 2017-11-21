@@ -1,5 +1,15 @@
 @import '../variables';
 
+.bcu-drag-drop-overlay {
+    bottom: 0;
+    display: none;
+    left: 0;
+    opacity: .2;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 .bcu-upload-state {
     align-items: center;
     display: flex;
@@ -10,6 +20,18 @@
 
     svg {
         margin-bottom: 10px;
+    }
+
+    // Show blue indicator when item can be dropped
+    &.bcu-is-droppable .bcu-drag-drop-overlay {
+        background: $blue;
+        display: block;
+    }
+
+    // Show red indicator when item cannot be dropped
+    &.bcu-is-not-droppable .bcu-drag-drop-overlay {
+        background: $red;
+        display: block;
     }
 
     // Hide upload prompt if there are items queued
@@ -32,28 +54,6 @@
             }
         }
     }
-
-    // Show blue indicator when item can be dropped
-    &.bcu-is-droppable .bcu-drag-drop-overlay {
-        background: $blue;
-        display: block;
-    }
-
-    // Show red indicator when item cannot be dropped
-    &.bcu-is-not-droppable .bcu-drag-drop-overlay {
-        background: $red;
-        display: block;
-    }
-}
-
-.bcu-drag-drop-overlay {
-    bottom: 0;
-    display: none;
-    left: 0;
-    opacity: .2;
-    position: absolute;
-    right: 0;
-    top: 0;
 }
 
 .bcu-upload-state-message + .buik-input-btn {

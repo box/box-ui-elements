@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-expressions, no-underscore-dangle */
 import { withData } from 'leche';
 import MultiputPart, { PART_STATE_UPLOADED } from '../MultiputPart';
 
-const sandbox = sinon.sandbox.create();
-
-describe('api/MultiputPart', () => {
+describe('api/uploads/MultiputPart', () => {
     const options = {};
     const index = 0;
     const offset = 0;
@@ -12,8 +9,9 @@ describe('api/MultiputPart', () => {
     const sessionId = 1;
     const sessionEndpoints = {};
     const config = {};
-    const getNumPartsUploading = sandbox.stub();
+    const getNumPartsUploading = jest.fn();
     let MultiputPartTest;
+
     beforeEach(() => {
         MultiputPartTest = new MultiputPart(
             options,
@@ -27,82 +25,72 @@ describe('api/MultiputPart', () => {
         );
     });
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('upload()', () => {
-        it('should throw error if sha256 is not available', () => {
+        test('should throw error if sha256 is not available', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.blob = {};
 
-            MultiputPartTest.xhr.uploadFile = sandbox.mock().never();
+            MultiputPartTest.xhr.uploadFile = jest.fn();
 
-            assert.throws(() => {
-                MultiputPartTest.upload();
-            });
+            expect(MultiputPartTest.upload.bind(MultiputPartTest)).toThrowError(/Part SHA-256 unavailable/);
+            expect(MultiputPartTest.xhr.uploadFile).not.toHaveBeenCalled();
         });
 
-        it('should throw error if blob is not available', () => {
+        test('should throw error if blob is not available', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.sha256 = '123';
 
-            MultiputPartTest.xhr.uploadFile = sandbox.mock().never();
+            MultiputPartTest.xhr.uploadFile = jest.fn();
 
-            assert.throws(() => {
-                MultiputPartTest.upload();
-            });
+            expect(MultiputPartTest.upload.bind(MultiputPartTest)).toThrowError(/Part blob unavailable/);
+            expect(MultiputPartTest.xhr.uploadFile).not.toHaveBeenCalled();
         });
 
-        it('should upload file properly', () => {
+        test('should upload file properly', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.sha256 = '123';
             MultiputPartTest.blob = {};
-            MultiputPartTest.xhr.uploadFile = sandbox.mock();
+            MultiputPartTest.xhr.uploadFile = jest.fn();
 
             MultiputPartTest.upload();
         });
     });
 
     describe('uploadSuccessHandler()', () => {
-        it('should noop if destroyed', () => {
+        test('should noop if destroyed', () => {
             MultiputPartTest.destroyed = true;
-
-            MultiputPartTest.onSuccess = sandbox.mock().never();
-
+            MultiputPartTest.onSuccess = jest.fn();
             MultiputPartTest.uploadSuccessHandler();
+            expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
         });
 
-        it('should call onSuccess and update attributes properly', () => {
+        test('should call onSuccess and update attributes properly', () => {
             const data = { hi: 1 };
             MultiputPartTest.destroyed = false;
-            MultiputPartTest.onSuccess = sandbox.mock();
-
+            MultiputPartTest.onSuccess = jest.fn();
             MultiputPartTest.uploadSuccessHandler(data);
-
-            assert.equal(MultiputPartTest.data, data);
-            assert.isNull(MultiputPartTest.blob);
-            assert.equal(MultiputPartTest.state, PART_STATE_UPLOADED);
+            expect(MultiputPartTest.data).toBe(data);
+            expect(MultiputPartTest.blob).toBeNull();
+            expect(MultiputPartTest.onSuccess).toHaveBeenCalledWith(MultiputPartTest);
+            expect(MultiputPartTest.state).toBe(PART_STATE_UPLOADED);
         });
     });
 
     describe('uploadProgressHandler()', () => {
-        it('should noop if destroyed', () => {
+        test('should noop if destroyed', () => {
             MultiputPartTest.destroyed = true;
-
-            MultiputPartTest.onSuccess = sandbox.mock().never();
-
+            MultiputPartTest.onSuccess = jest.fn();
             MultiputPartTest.uploadProgressHandler();
+            expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
         });
 
-        it('should call onProgress and update attributes properly', () => {
+        test('should call onProgress and update attributes properly', () => {
             const event = { loaded: 1 };
             MultiputPartTest.destroyed = false;
-            MultiputPartTest.onProgress = sandbox.mock();
-
+            MultiputPartTest.onProgress = jest.fn();
             MultiputPartTest.uploadProgressHandler(event);
-
-            assert.equal(MultiputPartTest.uploadedBytes, 1);
+            expect(MultiputPartTest.uploadedBytes).toBe(1);
+            expect(MultiputPartTest.onProgress).toHaveBeenCalled();
         });
     });
 
@@ -115,65 +103,63 @@ describe('api/MultiputPart', () => {
                 }
             };
         });
-        it('should noop if destroyed', () => {
+        test('should noop if destroyed', () => {
             MultiputPartTest.destroyed = true;
-
-            MultiputPartTest.onSuccess = sandbox.mock().never();
-
+            MultiputPartTest.onSuccess = jest.fn();
             MultiputPartTest.uploadErrorHandler();
+            expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
         });
 
-        it('should log error, and call onError when retry is exhausted', () => {
+        test('should log error, and call onError when retry is exhausted', () => {
             const error = { message: 'no' };
             MultiputPartTest.destroyed = false;
             MultiputPartTest.numUploadRetriesPerformed = 100;
             MultiputPartTest.config.retries = 1;
-            MultiputPartTest.logEvent = sandbox.mock();
-            MultiputPartTest.onError = sandbox.mock();
-
+            MultiputPartTest.logEvent = jest.fn();
+            MultiputPartTest.onError = jest.fn();
             MultiputPartTest.uploadErrorHandler(error);
+            expect(MultiputPartTest.logEvent).toHaveBeenCalled();
+            expect(MultiputPartTest.onError).toHaveBeenCalled();
         });
 
-        it('should retry upload after delay when retry is not exhausted', () => {
-            MultiputPart.__Rewire__('getBoundedExpBackoffRetryDelay', sandbox.mock().returns(10));
+        test('should retry upload after delay when retry is not exhausted', () => {
             const error = { message: 'no' };
+            jest.useFakeTimers();
+            MultiputPart.getBoundedExpBackoffRetryDelay = jest.fn().mockReturnValueOnce(10);
             MultiputPartTest.destroyed = false;
             MultiputPartTest.numUploadRetriesPerformed = 100;
             MultiputPartTest.config.retries = 1000;
-            MultiputPartTest.logEvent = sandbox.mock();
-            MultiputPartTest.onError = sandbox.mock().never();
-
+            MultiputPartTest.logEvent = jest.fn();
+            MultiputPartTest.onError = jest.fn();
+            MultiputPartTest.retryUpload = jest.fn();
             MultiputPartTest.uploadErrorHandler(error);
-            setTimeout(() => {
-                sandbox.mock(MultiputPartTest).expect('retryUpload');
-                assert.equal(MultiputPartTest.numUploadRetriesPerformed, 101);
-            }, 100);
-            MultiputPart.__ResetDependency__('getBoundedExpBackoffRetryDelay');
+            jest.runOnlyPendingTimers();
+            expect(MultiputPartTest.numUploadRetriesPerformed).toBe(101);
+            expect(MultiputPartTest.logEvent).toHaveBeenCalled();
+            expect(MultiputPartTest.onError).not.toHaveBeenCalled();
+            jest.clearAllTimers();
         });
     });
 
     describe('retryUpload()', () => {
-        it('should noop if destroyed', () => {
+        test('should noop if destroyed', () => {
             MultiputPartTest.destroyed = true;
-
-            MultiputPartTest.onSuccess = sandbox.mock().never();
-
+            MultiputPartTest.onSuccess = jest.fn();
             MultiputPartTest.retryUpload();
+            expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
         });
 
-        it('should call upload when upload is incomplete', async () => {
+        test('should call upload when upload is incomplete', async () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.uploadedBytes = 1;
             MultiputPartTest.size = 100;
             MultiputPartTest.numUploadRetriesPerformed = 0;
-            MultiputPartTest.upload = sandbox.mock();
-
+            MultiputPartTest.upload = jest.fn();
             await MultiputPartTest.retryUpload();
-
-            assert.equal(MultiputPartTest.numUploadRetriesPerformed, 1);
+            expect(MultiputPartTest.numUploadRetriesPerformed).toBe(1);
         });
 
-        it('should call uploadSuccessHandler when upload is already available on the server', async () => {
+        test('should call uploadSuccessHandler when upload is already available on the server', async () => {
             const part = {
                 offset: 1,
                 part_id: 1
@@ -185,13 +171,13 @@ describe('api/MultiputPart', () => {
             MultiputPartTest.size = 100;
             MultiputPartTest.offset = 1;
             MultiputPartTest.numUploadRetriesPerformed = 0;
-            MultiputPartTest.upload = sandbox.mock().never();
-            MultiputPartTest.uploadSuccessHandler = sandbox.mock().withArgs({
-                part
-            });
-            MultiputPartTest.listParts = sandbox.mock().resolves(parts);
+            MultiputPartTest.upload = jest.fn();
+            MultiputPartTest.uploadSuccessHandler = jest.fn();
+            MultiputPartTest.listParts = jest.fn().mockReturnValueOnce(Promise.resolve(parts));
 
             await MultiputPartTest.retryUpload();
+            expect(MultiputPartTest.upload).not.toHaveBeenCalled();
+            expect(MultiputPartTest.uploadSuccessHandler).toHaveBeenCalledWith({ part });
         });
 
         withData(
@@ -219,55 +205,52 @@ describe('api/MultiputPart', () => {
                 ]
             ],
             (parts) => {
-                it('should call upload when upload is not available on the server', async () => {
+                test('should call upload when upload is not available on the server', async () => {
                     MultiputPartTest.destroyed = false;
                     MultiputPartTest.uploadedBytes = 100;
                     MultiputPartTest.size = 100;
                     MultiputPartTest.numUploadRetriesPerformed = 0;
-                    MultiputPartTest.upload = sandbox.mock();
-                    MultiputPartTest.uploadSuccessHandler = sandbox.mock().never();
-                    MultiputPartTest.listParts = sandbox.mock().resolves(parts);
+                    MultiputPartTest.upload = jest.fn();
+                    MultiputPartTest.uploadSuccessHandler = jest.fn();
+                    MultiputPartTest.listParts = jest.fn().mockReturnValueOnce(Promise.resolve(parts));
 
                     await MultiputPartTest.retryUpload();
-
-                    assert.equal(MultiputPartTest.numUploadRetriesPerformed, 1);
+                    expect(MultiputPartTest.numUploadRetriesPerformed).toBe(1);
+                    expect(MultiputPartTest.uploadSuccessHandler).not.toHaveBeenCalled();
                 });
             }
         );
     });
 
     describe('cancel()', () => {
-        it('should tear down properly', () => {
+        test('should tear down properly', () => {
             MultiputPartTest.xhr = {
-                abort: sandbox.mock()
+                abort: jest.fn()
             };
             MultiputPartTest.blob = new Blob();
             MultiputPartTest.data = { hi: 1 };
-            MultiputPartTest.destroy = sandbox.mock();
+            MultiputPartTest.destroy = jest.fn();
 
             MultiputPartTest.cancel();
 
-            assert.isNull(MultiputPartTest.blob);
-            assert.deepEqual(MultiputPartTest.data, {});
+            expect(MultiputPartTest.blob).toBeNull();
+            expect(MultiputPartTest.data).toEqual({});
+            expect(MultiputPartTest.xhr.abort).toHaveBeenCalled();
         });
     });
 
     describe('listParts()', () => {
-        it('should GET from correct endpoint and return entries', async () => {
+        test('should GET from correct endpoint and return entries', async () => {
             const endpoint = 'www.box.com';
             const entries = [1];
-            MultiputPart.__Rewire__('updateQueryParameters', sandbox.mock().returns(endpoint));
+            MultiputPart.updateQueryParameters = jest.fn().mockReturnValueOnce(endpoint);
             MultiputPartTest.xhr = {
-                get: sandbox.mock().resolves({
-                    entries
-                })
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ entries }))
             };
 
             const res = await MultiputPartTest.listParts(1, 1);
 
-            assert.equal(res, entries);
-
-            MultiputPart.__ResetDependency__('updateQueryParameters');
+            expect(res).toBe(entries);
         });
     });
 });

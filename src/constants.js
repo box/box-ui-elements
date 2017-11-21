@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import { canPlayDash } from './util/browser';
+import Browser from './util/Browser';
 
 /* ----------------------- Size ---------------------------- */
 export const SIZE_SMALL: 'small' = 'small';
@@ -152,7 +152,7 @@ const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';
 const X_REP_HINT_IMAGE = '[jpg?dimensions=2048x2048,png?dimensions=2048x2048]';
 const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
 const X_REP_HINT_VIDEO_MP4 = '[mp4]';
-const videoHint = canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
+const videoHint = Browser.canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
 export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;
 
 /* ------------------ Uploader  ---------------------- */

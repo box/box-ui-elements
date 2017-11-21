@@ -4,7 +4,6 @@ import { SORT_ASC, SORT_DESC } from '../../constants';
 
 let cache;
 let item;
-const sandbox = sinon.sandbox.create();
 
 describe('util/sorter', () => {
     beforeEach(() => {
@@ -33,36 +32,32 @@ describe('util/sorter', () => {
         cache.set('foo', { name: 'a', modified_at: '1', interacted_at: '1', size: 10, type: 'bar' });
     });
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
-    it('should not sort when already sorted', () => {
+    test('should not sort when already sorted', () => {
         item.item_collection.entries = ['fo1', 'fo2', 'fo3', 'f1', 'f2', 'f3', 'w1', 'w2', 'w3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'name', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['fo1', 'fo2', 'fo3', 'f1', 'f2', 'f3', 'w1', 'w2', 'w3']);
+        expect(sorted.item_collection.entries).toEqual(['fo1', 'fo2', 'fo3', 'f1', 'f2', 'f3', 'w1', 'w2', 'w3']);
     });
 
-    it('should sort with name desc', () => {
+    test('should sort with name desc', () => {
         item.item_collection.entries = ['fo1', 'fo2', 'fo3', 'f1', 'f2', 'f3', 'w1', 'w2', 'w3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'name', SORT_DESC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['fo3', 'fo2', 'fo1', 'f3', 'f2', 'f1', 'w3', 'w2', 'w1']);
+        expect(sorted.item_collection.entries).toEqual(['fo3', 'fo2', 'fo1', 'f3', 'f2', 'f1', 'w3', 'w2', 'w1']);
     });
 
-    it('should sort with date desc', () => {
+    test('should sort with date desc', () => {
         item.item_collection.entries = ['fo3', 'f1', 'f2', 'w1', 'w2', 'fo1', 'fo2', 'f3', 'w3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'modified_at', SORT_DESC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['fo3', 'fo2', 'fo1', 'f3', 'f2', 'f1', 'w3', 'w2', 'w1']);
+        expect(sorted.item_collection.entries).toEqual(['fo3', 'fo2', 'fo1', 'f3', 'f2', 'f1', 'w3', 'w2', 'w1']);
     });
 
-    it('should sort with date asc', () => {
+    test('should sort with date asc', () => {
         item.item_collection.entries = ['fo1', 'fo4', 'f1', 'f3', 'w2', 'w1', 'fo2', 'fo3', 'f2', 'w3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'modified_at', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal([
+        expect(sorted.item_collection.entries).toEqual([
             'fo1',
             'fo4',
             'fo2',
@@ -76,18 +71,18 @@ describe('util/sorter', () => {
         ]);
     });
 
-    it('should sort with interacted date desc', () => {
+    test('should sort with interacted date desc', () => {
         item.item_collection.entries = ['fo3', 'f1', 'f2', 'w1', 'w2', 'fo1', 'fo2', 'f3', 'w3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'interacted_at', SORT_DESC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['fo2', 'fo3', 'fo1', 'f2', 'f3', 'f1', 'w1', 'w2', 'w3']);
+        expect(sorted.item_collection.entries).toEqual(['fo2', 'fo3', 'fo1', 'f2', 'f3', 'f1', 'w1', 'w2', 'w3']);
     });
 
-    it('should sort with interacted date asc', () => {
+    test('should sort with interacted date asc', () => {
         item.item_collection.entries = ['fo1', 'fo4', 'f1', 'f3', 'w2', 'w1', 'fo2', 'fo3', 'f2', 'w3', 'w4'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'interacted_at', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal([
+        expect(sorted.item_collection.entries).toEqual([
             'fo1',
             'fo4',
             'fo3',
@@ -102,18 +97,18 @@ describe('util/sorter', () => {
         ]);
     });
 
-    it('should sort with interacted date desc', () => {
+    test('should sort with interacted date desc', () => {
         item.item_collection.entries = ['fo3', 'f1', 'f2', 'w1', 'w2', 'fo1', 'fo2', 'f3', 'w3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'size', SORT_DESC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['fo2', 'fo1', 'fo3', 'f1', 'f3', 'f2', 'w3', 'w1', 'w2']);
+        expect(sorted.item_collection.entries).toEqual(['fo2', 'fo1', 'fo3', 'f1', 'f3', 'f2', 'w3', 'w1', 'w2']);
     });
 
-    it('should sort with size asc', () => {
+    test('should sort with size asc', () => {
         item.item_collection.entries = ['fo1', 'fo4', 'f1', 'f3', 'w2', 'w1', 'fo2', 'fo3', 'f2', 'w3', 'w4'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'size', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal([
+        expect(sorted.item_collection.entries).toEqual([
             'fo3',
             'fo1',
             'fo2',
@@ -128,39 +123,39 @@ describe('util/sorter', () => {
         ]);
     });
 
-    it('should sort with default type file and modified date when interacted date and type is missing', () => {
+    test('should sort with default type file and modified date when interacted date and type is missing', () => {
         item.item_collection.entries = ['fo5', 'fo6', 'f4', 'f5'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'interacted_at', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['fo6', 'fo5', 'f5', 'f4']);
+        expect(sorted.item_collection.entries).toEqual(['fo6', 'fo5', 'f5', 'f4']);
     });
 
-    it('should sort with default size 0 when size is missing', () => {
+    test('should sort with default size 0 when size is missing', () => {
         item.item_collection.entries = ['fo5', 'fo6', 'f4', 'f5'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'size', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['fo5', 'fo6', 'f4', 'f5']);
+        expect(sorted.item_collection.entries).toEqual(['fo5', 'fo6', 'f4', 'f5']);
     });
 
-    it('should sort with default name when name is missing', () => {
+    test('should sort with default name when name is missing', () => {
         item.item_collection.entries = ['f7', 'f6'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'name', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['f7', 'f6']);
+        expect(sorted.item_collection.entries).toEqual(['f7', 'f6']);
     });
 
-    it('should sort with default name when name is missing', () => {
+    test('should sort with default name when name is missing', () => {
         item.item_collection.entries = ['f7', 'f6'];
         item.item_collection.order = [{ by: 'name', direction: SORT_ASC }];
         const sorted = sort(item, 'interacted_at', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal(['f7', 'f6']);
+        expect(sorted.item_collection.entries).toEqual(['f7', 'f6']);
     });
 
-    it('should sort with name asc', () => {
+    test('should sort with name asc', () => {
         item.item_collection.entries = ['w1', 'w3', 'fo1', 'fo4', 'f1', 'w2', 'w4', 'f3', 'f2', 'fo2', 'fo3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_DESC }];
         const sorted = sort(item, 'name', SORT_ASC, cache);
-        expect(sorted.item_collection.entries).to.deep.equal([
+        expect(sorted.item_collection.entries).toEqual([
             'fo1',
             'fo4',
             'fo2',
@@ -175,25 +170,25 @@ describe('util/sorter', () => {
         ]);
     });
 
-    it('should throw with a bad sortBy', () => {
+    test('should throw with a bad sortBy', () => {
         item.item_collection.entries = ['w1', 'w3', 'fo1', 'fo4', 'f1', 'w2', 'w4', 'f3', 'f2', 'fo2', 'fo3'];
         item.item_collection.order = [{ by: 'name', direction: SORT_DESC }];
-        expect(sort.bind(sort, item, 'foobar', SORT_ASC, cache)).to.throw(Error, /sort field/);
+        expect(sort.bind(sort, item, 'foobar', SORT_ASC, cache)).toThrow(Error, /sort field/);
     });
 
-    it('should throw with a bad type', () => {
+    test('should throw with a bad type', () => {
         item.item_collection.entries = ['w1', 'w3', 'fo1', 'foo'];
         item.item_collection.order = [{ by: 'name', direction: SORT_DESC }];
-        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).to.throw(Error, /sort comparator/);
+        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).toThrow(Error, /sort comparator/);
     });
 
-    it('should throw with a bad item when no item_collection', () => {
+    test('should throw with a bad item when no item_collection', () => {
         item.item_collection = null;
-        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).to.throw(Error, /Bad box item/);
+        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).toThrow(Error, /Bad box item/);
     });
 
-    it('should throw with a bad item when no entries', () => {
+    test('should throw with a bad item when no entries', () => {
         item.item_collection.entries = null;
-        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).to.throw(Error, /Bad box item/);
+        expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).toThrow(Error, /Bad box item/);
     });
 });

@@ -811,6 +811,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             return;
         }
 
+        this.setModalAppElement();
         this.setState({ isPreviewModalOpen: true });
     };
 

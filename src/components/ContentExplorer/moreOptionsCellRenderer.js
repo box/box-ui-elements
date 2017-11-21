@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import DropdownMenu from '../DropdownMenu';
 import { Menu, MenuItem } from '../Menu';
 import { Button } from '../Button';
-import { isMobile } from '../../util/browser';
+import Browser from '../../util/Browser';
 import messages from '../messages';
 import {
     PERMISSION_CAN_DOWNLOAD,
@@ -55,7 +55,8 @@ export default (
     const allowDelete = canDelete && permissions[PERMISSION_CAN_DELETE];
     const allowShare = canShare && permissions[PERMISSION_CAN_SHARE];
     const allowRename = canRename && permissions[PERMISSION_CAN_RENAME];
-    const allowDownload = canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE && !isMobile();
+    const allowDownload =
+        canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE && !Browser.isMobile();
     const allowed = allowDelete || allowRename || allowDownload || allowPreview || allowShare || allowOpen;
 
     if (!allowed) {

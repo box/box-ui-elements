@@ -14,6 +14,23 @@
     border-top: 1px solid $off-white;
     outline: none;
 
+    .bce-item-coloumn {
+        color: $sevens;
+    }
+
+    .bce-more-options {
+        opacity: 0;
+
+        .buik-btn {
+            background-color: transparent;
+            margin-left: 8px;
+        }
+
+        .buik-is-touch & {
+            opacity: 1;
+        }
+    }
+
     &:hover,
     &:active,
     &:focus {
@@ -27,24 +44,6 @@
         .bce-item-coloumn,
         .buik-btn-plain {
             color: $dark-cerulean;
-        }
-    }
-
-    .bce-item-coloumn {
-        color: $sevens;
-    }
-
-    &:first-child {
-        /* stylelint-disable declaration-no-important */
-        border-top-color: transparent !important;
-        /* stylelint-enable declaration-no-important */
-    }
-
-    &:last-child {
-        border-bottom: 1px solid $off-white;
-
-        &.bce-item-row-selected {
-            border-bottom-color: $grey-blue;
         }
     }
 
@@ -62,21 +61,22 @@
         }
     }
 
-    &.bce-item-row-selected + & {
-        border-top-color: $grey-blue;
+    &:first-child {
+        /* stylelint-disable declaration-no-important */
+        border-top-color: transparent !important;
+        /* stylelint-enable declaration-no-important */
     }
 
-    .bce-more-options {
-        opacity: 0;
+    &:last-child {
+        border-bottom: 1px solid $off-white;
 
-        .buik-btn {
-            background-color: transparent;
-            margin-left: 8px;
+        &.bce-item-row-selected {
+            border-bottom-color: $grey-blue;
         }
+    }
 
-        .buik-is-touch & {
-            opacity: 1;
-        }
+    &.bce-item-row-selected + & {
+        border-top-color: $grey-blue;
     }
 }
 

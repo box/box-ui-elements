@@ -1,30 +1,24 @@
-/* eslint-disable no-unused-expressions */
 import Chunk from '../Chunk';
 
 let chunk;
-const sandbox = sinon.sandbox.create();
 
 describe('api/Chunk', () => {
     beforeEach(() => {
         chunk = new Chunk();
     });
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('getPart()', () => {
-        it('should return the part associated with this chunk', () => {
+        test('should return the part associated with this chunk', () => {
             chunk.data = {
                 part: new ArrayBuffer()
             };
 
-            expect(chunk.getPart()).to.equal(chunk.data.part);
+            expect(chunk.getPart()).toBe(chunk.data.part);
         });
     });
 
     describe('setup()', () => {
-        it('should set chunk properties', () => {
+        test('should set chunk properties', () => {
             const uploadHost = 'someHost';
             const sessionId = 'session';
             const sha1 = 'someSha1';
@@ -53,27 +47,28 @@ describe('api/Chunk', () => {
                 progressCallback
             });
 
-            expect(chunk.uploadUrl).to.equal(`${uploadHost}/api/2.0/files/upload_sessions/${sessionId}`);
-            expect(chunk.uploadHeaders).to.deep.equal(uploadHeaders);
-            expect(chunk.chunk).to.equal(part);
-            expect(chunk.successCallback).to.equal(successCallback);
-            expect(chunk.errorCallback).to.equal(errorCallback);
-            expect(chunk.progressCallback).to.equal(progressCallback);
+            expect(chunk.uploadUrl).toBe(`${uploadHost}/api/2.0/files/upload_sessions/${sessionId}`);
+            expect(chunk.uploadHeaders).toEqual(uploadHeaders);
+            expect(chunk.chunk).toBe(part);
+            expect(chunk.successCallback).toBe(successCallback);
+            expect(chunk.errorCallback).toBe(errorCallback);
+            expect(chunk.progressCallback).toBe(progressCallback);
         });
     });
 
     describe('upload()', () => {
-        it('should not do anything if API is destroyed', () => {
-            chunk.isDestroyed = sandbox.mock().returns(true);
+        test('should not do anything if API is destroyed', () => {
+            chunk.isDestroyed = jest.fn().mockReturnValueOnce(true);
             chunk.xhr = {
-                uploadFile: sandbox.mock().never()
+                uploadFile: jest.fn()
             };
             chunk.upload();
 
-            expect(chunk.chunk).to.equal(null);
+            expect(chunk.chunk).toBe(null);
+            expect(chunk.xhr.uploadFile).not.toHaveBeenCalled();
         });
 
-        it('should upload chunk', () => {
+        test('should upload chunk', () => {
             const uploadUrl = 'someUrl';
             const chunkData = new Blob();
             const uploadHeaders = {
@@ -86,59 +81,60 @@ describe('api/Chunk', () => {
             chunk.progressCallback = () => {};
 
             chunk.xhr = {
-                uploadFile: sandbox.mock().withArgs({
-                    url: uploadUrl,
-                    data: chunkData,
-                    headers: uploadHeaders,
-                    method: 'PUT',
-                    successHandler: sinon.match.func,
-                    errorHandler: sinon.match.func,
-                    progressHandler: sinon.match.func
-                })
+                uploadFile: jest.fn()
             };
 
             chunk.upload();
+            expect(chunk.xhr.uploadFile).toHaveBeenCalledWith({
+                url: uploadUrl,
+                data: chunkData,
+                headers: uploadHeaders,
+                method: 'PUT',
+                successHandler: expect.any(Function),
+                errorHandler: expect.any(Function),
+                progressHandler: expect.any(Function)
+            });
         });
     });
 
     describe('cancel()', () => {
-        it('should abort xhr, clear data, and destroy API', () => {
+        test('should abort xhr, clear data, and destroy API', () => {
             chunk.chunk = new Blob();
             chunk.data = {
                 someStuff: {}
             };
             chunk.xhr = {
-                abort: sandbox.mock()
+                abort: jest.fn()
             };
-            chunk.destroy = sandbox.mock();
+            chunk.destroy = jest.fn();
 
             chunk.cancel();
 
-            expect(chunk.chunk).to.equal(null);
-            expect(chunk.data).to.not.have.property('someStuff');
+            expect(chunk.chunk).toBe(null);
+            expect(chunk.data).not.toHaveProperty('someStuff');
         });
     });
 
     describe('getProgress()', () => {
-        it('should return internal progress and default to 0', () => {
+        test('should return internal progress and default to 0', () => {
             chunk.progress = 10;
-            expect(chunk.getProgress()).to.equal(10);
+            expect(chunk.getProgress()).toBe(10);
 
             chunk.progress = 45;
-            expect(chunk.getProgress()).to.equal(45);
+            expect(chunk.getProgress()).toBe(45);
 
             chunk.progress = null;
-            expect(chunk.getProgress()).to.equal(0);
+            expect(chunk.getProgress()).toBe(0);
         });
     });
 
     describe('setProgress()', () => {
-        it('should set internal progress', () => {
+        test('should set internal progress', () => {
             chunk.setProgress(10);
-            expect(chunk.progress).to.equal(10);
+            expect(chunk.progress).toBe(10);
 
             chunk.setProgress(67);
-            expect(chunk.progress).to.equal(67);
+            expect(chunk.progress).toBe(67);
         });
     });
 });
