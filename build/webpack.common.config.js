@@ -8,8 +8,6 @@ const license = require('./license');
 const DefinePlugin = webpack.DefinePlugin;
 const BannerPlugin = webpack.BannerPlugin;
 
-const isDev = process.env.NODE_ENV === 'dev';
-
 module.exports = (language) => {
     const locale = language.substr(0, language.indexOf('-'));
     return {
@@ -53,6 +51,11 @@ module.exports = (language) => {
         },
         plugins: [
             new BannerPlugin(license),
+            new OptimizeCssAssetsPlugin({
+                cssProcessorOptions: {
+                    safe: true
+                }
+            }),
             new ExtractTextPlugin({
                 filename: '[name].css',
                 allChunks: true
@@ -64,15 +67,7 @@ module.exports = (language) => {
                     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                     BABEL_ENV: JSON.stringify(process.env.BABEL_ENV)
                 }
-            }),
-            // include plugins when not in dev
-            ...(!isDev ? [
-                new OptimizeCssAssetsPlugin({
-                    cssProcessorOptions: {
-                        safe: true
-                    }
-                })
-            ] : [])
+            })
         ],
         stats: {
             assets: true,
