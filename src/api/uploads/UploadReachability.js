@@ -25,6 +25,9 @@ class UploadsReachability extends Base {
      */
     constructor(options: Object) {
         super({
+            // `id` is required for the preflight request, here it's set to `folder_0` because
+            // the preflight request is for checking the availability of a host, not about a specific
+            // upload attempt
             id: 'folder_0',
             ...options
         });
@@ -73,7 +76,7 @@ class UploadsReachability extends Base {
         }
 
         try {
-            await fetch(`${uploadHost}/reachability-test-foo`);
+            await window.fetch(`${uploadHost}/reachability-test-foo`);
         } catch (error) {
             return false;
         }
@@ -93,6 +96,7 @@ class UploadsReachability extends Base {
 
         await this.xhr.options({
             url: `${this.getBaseUrl()}/files/content`,
+            // Random data for preflight check
             data: {
                 name: 'test_name',
                 parent: { id: '0' },
@@ -104,14 +108,25 @@ class UploadsReachability extends Base {
             errorHandler: () => {}
         });
 
-        if (preflightResponse) {
-            const { upload_url } = preflightResponse;
+        return this.handlePreflightResponse(preflightResponse);
+    }
 
-            const splitUrl = upload_url.split('/');
-            return `${splitUrl[0]}//${splitUrl[2]}`;
+    /**
+     * Resolves preflight response to a reachable upload host
+     * 
+     * @private
+     * @param {?Object} response
+     * @return {string}
+     */
+    handlePreflightResponse(response?: Object) {
+        if (!response) {
+            return DEFAULT_HOSTNAME_UPLOAD;
         }
 
-        return DEFAULT_HOSTNAME_UPLOAD;
+        const { upload_url } = response;
+
+        const splitUrl = upload_url.split('/');
+        return `${splitUrl[0]}//${splitUrl[2]}`;
     }
 }
 
