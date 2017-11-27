@@ -4,8 +4,6 @@
  * @author Box
  */
 
-import 'regenerator-runtime/runtime';
-
 import Base from '../Base';
 import LocalStore from '../../util/LocalStore';
 import { DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
