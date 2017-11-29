@@ -329,7 +329,7 @@ class Xhr {
      * @param {Object} [headers] - Key-value map of headers
      * @param {Function} successHandler - Load success handler
      * @param {Function} errorHandler - Error handler
-     * @returns {void}
+     * @return {void}
      */
     options({
         id,

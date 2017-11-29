@@ -1,7 +1,7 @@
 import RushaLib from './rusha';
 
 /**
- * @returns {Worker} Web worker
+ * @return {Worker} Web worker
  */
 function createWorker() {
     const workerCodeBlob = new Blob([RushaLib], { type: 'application/javascript' });

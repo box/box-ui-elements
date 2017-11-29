@@ -25,36 +25,11 @@ describe('util/uploads', () => {
     describe('getFileLastModifiedAsISONoMSIfPossible()', () => {
         withData(
             {
-                'file with lastModifiedDate': [
-                    {
-                        lastModifiedDate: new Date('2017-01-02T03:04:05.678Z')
-                    },
-                    '2017-01-02T03:04:05Z'
-                ],
-                'file with lastModifiedDate and lastModified': [
-                    {
-                        lastModifiedDate: new Date('2017-01-02T03:04:05.678Z'),
-                        lastModified: 12345 // should not get used
-                    },
-                    '2017-01-02T03:04:05Z'
-                ],
-                'file with lastModified but not lastModifiedDate': [
+                'file with valid lastModified': [
                     {
                         lastModified: 1483326245678
                     },
                     '2017-01-02T03:04:05Z'
-                ],
-                'file where lastModifiedDate is not a Date': [
-                    {
-                        lastModifiedDate: {}
-                    },
-                    null
-                ],
-                'file where lastModifiedDate is an invalid Date': [
-                    {
-                        lastModifiedDate: new Date('not valid')
-                    },
-                    null
                 ],
                 'file with non-numeric lastModified (string)': [
                     {
@@ -77,13 +52,13 @@ describe('util/uploads', () => {
                     },
                     null
                 ],
-                'file with neither lastModifiedDate nor lastModified': [{}, null]
+                'file no lastModified': [{}, null]
             },
             (file, expectedResult) => {
                 it('should return the properly formatted date when possible and return null otherwise', () => {
                     expect(getFileLastModifiedAsISONoMSIfPossible(file)).to.equal(expectedResult);
                 });
-            }
+            },
         );
     });
 
@@ -103,7 +78,7 @@ describe('util/uploads', () => {
                 it('should return correct results', () => {
                     expect(tryParseJson(str)).to.deep.equal(expectedResult);
                 });
-            }
+            },
         );
     });
 

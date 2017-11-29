@@ -12,18 +12,19 @@
  * http://stackoverflow.com/questions/1353684/detecting-an-invalid-date-date-instance-in-javascript
  *
  * @param {Date} date
- * @returns {boolean}
+ * @return {boolean}
  */
-function isValidDateObject(date: Date) {
+function isValidDateObject(date: Date): boolean {
     return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
 }
 
 /**
  * Remove milliseconds from date time string
+ * 
  * @param {Date} date
- * @returns {string}
+ * @return {string}
  */
-function toISOStringNoMS(date: Date) {
+function toISOStringNoMS(date: Date): string {
     return date.toISOString().replace(/\.[0-9]{3}/, '');
 }
 
@@ -33,13 +34,9 @@ function toISOStringNoMS(date: Date) {
  * (Nothing on the Internet guarantees that the file object has this info.)
  *
  * @param {File} file
- * @returns {?string}
+ * @return {?string}
  */
-function getFileLastModifiedAsISONoMSIfPossible(file: File) {
-    if (isValidDateObject(file.lastModifiedDate)) {
-        return toISOStringNoMS(file.lastModifiedDate);
-    }
-
+function getFileLastModifiedAsISONoMSIfPossible(file: File): ?string {
     if (
         file.lastModified &&
         (typeof file.lastModified === 'string' ||
@@ -58,10 +55,11 @@ function getFileLastModifiedAsISONoMSIfPossible(file: File) {
 /**
  * If maybeJson is valid JSON string, return the result of calling JSON.parse
  * on it.  Otherwise, return null.
+ * 
  * @param {string} maybeJson
- * @returns {mixed}
+ * @return {?Object}
  */
-function tryParseJson(maybeJson: string) {
+function tryParseJson(maybeJson: string): ?Object {
     try {
         return JSON.parse(maybeJson);
     } catch (e) {
@@ -69,30 +67,23 @@ function tryParseJson(maybeJson: string) {
     }
 }
 
-function clearXhrIdleInterval(interval: ?number) {
-    if (!interval) {
-        return;
-    }
-
-    clearInterval(interval);
-}
-
 /**
  * Returns a handler for setInterval used in xhrSendWithIdleTimeout()
+ * 
  * @param {number} lastProgress 
  * @param {number} timeoutMs 
  * @param {XMLHttpRequest} xhr 
  * @param {function} clear 
  * @param {?function} onTimeout
- * @returns {function}
+ * @return {function}
  */
 function getXhrIdleIntervalHandler(
     lastProgress: number,
     timeoutMs: number,
     xhr: XMLHttpRequest,
     clear: Function,
-    onTimeout?: Function
-) {
+    onTimeout?: Function,
+): Function {
     return () => {
         if (Date.now() - lastProgress <= timeoutMs) {
             return;
@@ -109,13 +100,14 @@ function getXhrIdleIntervalHandler(
 
 /**
  * Executes an upload via XMLHTTPRequest and aborts it if there is no progress event for at least timeoutMs.
+ * 
  * @param {XMLHttpRequest} xhr
- * @param {object} data Will be passed to xhr.send()
- * @param {number} timeoutMs idle timeout, in milliseconds.
- * @param {function} onTimeout callback invoked when request has timed out
- * @returns {void}
+ * @param {object} data - Will be passed to xhr.send()
+ * @param {number} timeoutMs - idle timeout, in milliseconds.
+ * @param {function} onTimeout - callback invoked when request has timed out
+ * @return {void}
  */
-function xhrSendWithIdleTimeout(xhr: XMLHttpRequest, data: Date, timeoutMs: number, onTimeout?: Function) {
+function xhrSendWithIdleTimeout(xhr: XMLHttpRequest, data: Date, timeoutMs: number, onTimeout?: Function): void {
     let interval;
     let lastLoaded = 0;
     let lastProgress = Date.now();
@@ -127,8 +119,12 @@ function xhrSendWithIdleTimeout(xhr: XMLHttpRequest, data: Date, timeoutMs: numb
         }
     });
 
-    function clear() {
-        clearXhrIdleInterval(interval);
+    function clear(): void {
+        if (!interval) {
+            return;
+        }
+
+        clearInterval(interval);
         interval = null;
     }
 
