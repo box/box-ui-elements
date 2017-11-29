@@ -8,7 +8,7 @@
  * Checks whether the given date is today.
  *
  * @param {Date} dateValue - date to check
- * @returns {boolean}
+ * @return {boolean}
  */
 function isToday(dateValue: Date) {
     const currentDate = new Date();
@@ -20,7 +20,7 @@ function isToday(dateValue: Date) {
  * Checks whether the given date is yesterday.
  *
  * @param {Date} dateValue - date to check
- * @returns {boolean}
+ * @return {boolean}
  */
 function isYesterday(dateValue: Date) {
     const yesterday: Date = new Date();

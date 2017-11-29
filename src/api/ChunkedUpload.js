@@ -413,7 +413,7 @@ class ChunkedUpload extends BaseUpload {
      * Cancels an upload in progress by cancelling all upload chunks.
      * This cannot be undone or resumed.
      *
-     * @returns {void}
+     * @return {void}
      */
     cancel(): void {
         if (this.isDestroyed()) {

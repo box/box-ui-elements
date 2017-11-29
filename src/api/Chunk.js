@@ -86,7 +86,7 @@ class Chunk extends BaseUpload {
     /**
      * Uploads this chunk via the API. Will retry on network failures.
      *
-     * @returns {void}
+     * @return {void}
      */
     upload(): void {
         if (this.isDestroyed()) {
@@ -115,7 +115,7 @@ class Chunk extends BaseUpload {
     /**
      * Cancels upload for this chunk.
      *
-     * @returns {void}
+     * @return {void}
      */
     cancel(): void {
         if (this.xhr && typeof this.xhr.abort === 'function') {

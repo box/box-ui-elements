@@ -12,7 +12,82 @@ const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 const CONTENT_TYPE_HEADER = 'Content-Type';
 const SUCCESS_RESPONSE_FILTER = ({ response }) => response;
+const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const error = new Error('Bad id or auth token!');
+
+/**
+ * Returns a handler for setInterval used in xhrSendWithIdleTimeout()
+ * 
+ * @param {number} lastProgress 
+ * @param {number} timeoutMs 
+ * @param {XMLHttpRequest} xhr 
+ * @param {function} clear 
+ * @param {?function} onTimeout
+ * @return {function}
+ */
+function getXhrIdleIntervalHandler(
+    lastProgress: number,
+    timeoutMs: number,
+    xhr: XMLHttpRequest,
+    clear: Function,
+    onTimeout?: Function
+): Function {
+    return () => {
+        if (Date.now() - lastProgress <= timeoutMs) {
+            return;
+        }
+
+        xhr.abort();
+        clear();
+
+        if (onTimeout) {
+            onTimeout();
+        }
+    };
+}
+
+/**
+ * Executes an upload via XMLHTTPRequest and aborts it if there is no progress event for at least timeoutMs.
+ * 
+ * @param {XMLHttpRequest} xhr
+ * @param {object} data - Will be passed to xhr.send()
+ * @param {number} [timeoutMs] - idle timeout, in milliseconds.
+ * @param {function} [onTimeout] - callback invoked when request has timed out
+ * @return {void}
+ */
+function xhrSendWithIdleTimeout(
+    xhr: XMLHttpRequest,
+    data: Object,
+    timeoutMs?: number = DEFAULT_UPLOAD_TIMEOUT_MS,
+    onTimeout?: Function
+): void {
+    let interval;
+    let lastLoaded = 0;
+    let lastProgress = Date.now();
+
+    xhr.upload.addEventListener('progress', (event: ProgressEvent) => {
+        if (event.loaded > lastLoaded) {
+            lastLoaded = event.loaded;
+            lastProgress = Date.now();
+        }
+    });
+
+    function clear(): void {
+        if (!interval) {
+            return;
+        }
+
+        clearInterval(interval);
+        interval = null;
+    }
+
+    xhr.addEventListener('abort', clear);
+    xhr.addEventListener('load', clear);
+    xhr.addEventListener('error', clear);
+
+    interval = setInterval(getXhrIdleIntervalHandler(lastProgress, timeoutMs, xhr, clear, onTimeout), 1000);
+    xhr.send(data);
+}
 
 class Xhr {
     id: ?string;
@@ -329,7 +404,7 @@ class Xhr {
      * @param {Object} [headers] - Key-value map of headers
      * @param {Function} successHandler - Load success handler
      * @param {Function} errorHandler - Error handler
-     * @returns {void}
+     * @return {void}
      */
     options({
         id,
@@ -376,6 +451,9 @@ class Xhr {
      * @param {Function} successHandler - Load success handler
      * @param {Function} errorHandler - Error handler
      * @param {Function} progressHandler - Progress handler
+     * @param {boolean} [withIdleTimeout] - enable idle timeout
+     * @param {number} [idleTimeoutDuration] - idle timeout duration
+     * @param {Function} [idleTimeoutHandler]
      * @return {void}
      */
     uploadFile({
@@ -386,7 +464,10 @@ class Xhr {
         method = 'POST',
         successHandler,
         errorHandler,
-        progressHandler
+        progressHandler,
+        withIdleTimeout = false,
+        idleTimeoutDuration = DEFAULT_UPLOAD_TIMEOUT_MS,
+        idleTimeoutHandler
     }: {
         url: string,
         id?: string,
@@ -395,7 +476,10 @@ class Xhr {
         method?: Method,
         successHandler: Function,
         errorHandler: Function,
-        progressHandler: Function
+        progressHandler: Function,
+        withIdleTimeout?: boolean,
+        idleTimeoutDuration?: number,
+        idleTimeoutHandler?: Function
     }): Promise<any> {
         let formData;
         if (data && !(data instanceof Blob) && data.attributes) {
@@ -441,10 +525,11 @@ class Xhr {
                     this.xhr.upload.addEventListener('progress', progressHandler);
                 }
 
-                if (formData) {
-                    this.xhr.send(formData);
+                const dataSent = formData || data;
+                if (withIdleTimeout) {
+                    xhrSendWithIdleTimeout(this.xhr, dataSent, idleTimeoutDuration, idleTimeoutHandler);
                 } else {
-                    this.xhr.send(data);
+                    this.xhr.send(dataSent);
                 }
             })
             .catch(errorHandler);
@@ -470,3 +555,4 @@ class Xhr {
 }
 
 export default Xhr;
+export { xhrSendWithIdleTimeout };

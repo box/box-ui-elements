@@ -117,7 +117,7 @@ class TokenService {
      *
      * @private
      * @param {string[]} ids - List of IDs to check
-     * @returns {void}
+     * @return {void}
      */
     cleanUpExpiredTokens(ids: string[]) {
         const now = Date.now();
