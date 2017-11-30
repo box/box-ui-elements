@@ -3,6 +3,7 @@
  * @file Multiput upload part
  * @author Box
  */
+import Base from '../Base';
 
 const PART_STATE_NOT_STARTED: 0 = 0;
 const PART_STATE_COMPUTING_DIGEST: 1 = 1;
@@ -10,7 +11,7 @@ const PART_STATE_DIGEST_READY: 2 = 2;
 const PART_STATE_UPLOADING: 3 = 3;
 const PART_STATE_UPLOADED: 4 = 4;
 
-class MultiputPart {
+class MultiputPart extends Base {
     index: number;
     numDigestRetriesPerformed: number;
     numUploadRetriesPerformed: number;
@@ -25,17 +26,19 @@ class MultiputPart {
         | typeof PART_STATE_UPLOADED;
     timing: Object;
     uploadedBytes: number;
-    xhr: ?XMLHttpRequest;
 
     /**
      * [constructor]
      *
+     * @param {object} options
      * @param {number} index - 0-based index of this part in array of all parts
      * @param {number} offset - Starting byte offset of this part's range
      * @param {number} size - Size of this part in bytes
      * @return {void}
      */
-    constructor(index: number, offset: number, size: number): void {
+    constructor(options: Object, index: number, offset: number, size: number): void {
+        super(options);
+
         this.index = index;
         this.numDigestRetriesPerformed = 0;
         this.numUploadRetriesPerformed = 0;
@@ -45,7 +48,6 @@ class MultiputPart {
         this.state = PART_STATE_NOT_STARTED;
         this.timing = {};
         this.uploadedBytes = 0;
-        this.xhr = null;
     }
 }
 

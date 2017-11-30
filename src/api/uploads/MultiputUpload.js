@@ -37,6 +37,7 @@ class MultiputUpload extends Base {
     onCompleted: ?Function;
     onFailure: ?Function;
     onProgress: ?Function;
+    options: Object;
     partSize: number;
     parts: Array<MultiputPart>;
     partsDigestComputing: number;
@@ -45,14 +46,13 @@ class MultiputUpload extends Base {
     partsUploaded: number;
     partsUploading: number;
     sessionEndpoints: Object;
+    sessionId: ?string;
     totalUploadedBytes: number;
     worker: Worker;
-    sessionId: ?string;
 
     /**
      * [constructor]
      * 
-     * @private
      * @param {object} options
      * @param {File} file
      * @param {string} createSessionUrl
@@ -116,6 +116,7 @@ class MultiputUpload extends Base {
         this.ended = false;
         this.worker = createWorker();
         this.clientId = null;
+        this.options = options;
     }
 
     /**
@@ -317,7 +318,12 @@ class MultiputUpload extends Base {
 
         for (let i = 0; i < this.partsNotStarted; i += 1) {
             const offset = i * this.partSize;
-            const part = new MultiputPart(i, offset, Math.min(offset + this.partSize, this.file.size) - offset);
+            const part = new MultiputPart(
+                this.options,
+                i,
+                offset,
+                Math.min(offset + this.partSize, this.file.size) - offset
+            );
             this.parts.push(part);
         }
     };
