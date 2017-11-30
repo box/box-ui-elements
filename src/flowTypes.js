@@ -279,3 +279,13 @@ export type SkillData = {
     duration?: number,
     entries: SkillDataEntry[]
 };
+
+export type MultiputConfig = {
+    console: boolean,
+    digestReadahead: number,
+    initialRetryDelayMs: number,
+    maxRetryDelayMs: number,
+    parallelism: number,
+    requestTimeout: number,
+    retries: number
+};

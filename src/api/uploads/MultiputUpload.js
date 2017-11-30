@@ -8,17 +8,17 @@ import Base from '../Base';
 import { getFileLastModifiedAsISONoMSIfPossible } from '../../util/uploads';
 import createWorker from '../../util/uploadsSHA1Worker';
 import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY } from './MultiputPart';
-import type { StringAnyMap } from '../../flowTypes';
+import type { StringAnyMap, MultiputConfig } from '../../flowTypes';
 
-const DEFAULT_MULTIPUT_CONFIG = {
-    console: false,
-    digestReadahead: 5,
-    initialRetryDelayMs: 5000,
-    maxRetryDelayMs: 60000,
-    parallelism: 5,
-    partSize: null,
-    requestTimeout: 120000,
-    retries: 5
+const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
+    console: false, // Whether to display informational messages to console
+    digestReadahead: 5, // How many parts past those currently uploading to precompute digest for
+    initialRetryDelayMs: 5000, // Base for exponential backoff on retries
+    maxRetryDelayMs: 60000, // Upper bound for time between retries
+    parallelism: 5, // Maximum number of parts to upload at a time
+    requestTimeout: 120000, // Idle timeout on part upload, overall request timeout on other requests
+    // eslint-disable-next-line max-len
+    retries: 5 // How many times to retry requests such as upload part or commit. Note that total number of attempts will be retries + 1 in worst case where all attempts fail.
 };
 
 class MultiputUpload extends Base {
@@ -28,7 +28,6 @@ class MultiputUpload extends Base {
     createSessionNumRetriesPerformed: number;
     destinationFile: ?string;
     destinationFolder: ?string;
-    ended: boolean;
     file: File;
     fileSha1: ?string;
     firstUnuploadedPartIndex: number;
@@ -58,7 +57,7 @@ class MultiputUpload extends Base {
      * @param {string} createSessionUrl
      * @param {string} [destinationFolder] - Untyped folder id (e.g. no "d_" prefix)
      * @param {string} [destinationFile] - Untyped file id (e.g. no "f_" prefix)
-     * @param {object} config
+     * @param {MultiputConfig} config
      */
     constructor(
         options: Object,
@@ -66,7 +65,7 @@ class MultiputUpload extends Base {
         createSessionUrl: string,
         destinationFolder?: string,
         destinationFile?: string,
-        config: Object
+        config: MultiputConfig
     ) {
         super(options);
 
@@ -88,10 +87,6 @@ class MultiputUpload extends Base {
             abort: null,
             logEvent: null
         };
-        // Set a default logEvent endpoint so that we can report failures from createSession.
-        // This value will be overwritten on successful response from createSession.
-        // This assumes that the createSessionUrl already contains the upload session id.
-        this.sessionEndpoints.logEvent = `${createSessionUrl.replace(/files\/\d+/, 'files')}/log`;
         // Explicitly cast these two to string because sometimes they get passed as int, and
         // sending folder_id as a number instead of a string in the JSON body of createSession
         // results in an API error.
@@ -113,7 +108,6 @@ class MultiputUpload extends Base {
         this.partSize = 0;
         this.parts = [];
         this.commitRetryCount = 0;
-        this.ended = false;
         this.worker = createWorker();
         this.clientId = null;
         this.options = options;
@@ -214,6 +208,8 @@ class MultiputUpload extends Base {
         while (this.canStartMorePartUploads()) {
             this.uploadNextPart();
         }
+
+        // TODO: compute digests for parts
     };
 
     /**
@@ -314,7 +310,6 @@ class MultiputUpload extends Base {
      */
     populateParts = (): void => {
         this.partsNotStarted = Math.ceil(this.file.size / this.partSize);
-        this.parts = [];
 
         for (let i = 0; i < this.partsNotStarted; i += 1) {
             const offset = i * this.partSize;
