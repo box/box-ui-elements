@@ -57,15 +57,15 @@ class MultiputUpload extends Base {
      * @param {string} createSessionUrl
      * @param {string} [destinationFolder] - Untyped folder id (e.g. no "d_" prefix)
      * @param {string} [destinationFile] - Untyped file id (e.g. no "f_" prefix)
-     * @param {MultiputConfig} config
+     * @param {MultiputConfig} [config]
      */
     constructor(
         options: Object,
         file: File,
         createSessionUrl: string,
-        destinationFolder?: string,
-        destinationFile?: string,
-        config: MultiputConfig
+        destinationFolder?: ?string,
+        destinationFile?: ?string,
+        config?: MultiputConfig
     ) {
         super(options);
 
@@ -201,6 +201,7 @@ class MultiputUpload extends Base {
 
         if (this.partsUploaded === this.parts.length && this.fileSha1) {
             this.commitSession();
+            return;
         }
 
         this.updateFirstUnuploadedPartIndex();
@@ -280,7 +281,7 @@ class MultiputUpload extends Base {
      * @private
      * @return {boolean}
      */
-    canStartMorePartUploads = (): boolean => !this.ended && this.partsUploading < this.config.parallelism;
+    canStartMorePartUploads = (): boolean => !this.isDestroyed() && this.partsUploading < this.config.parallelism;
 
     /**
      * Functions that walk the parts array get called a lot, so we cache which part we should
