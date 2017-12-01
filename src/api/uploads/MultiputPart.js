@@ -49,6 +49,15 @@ class MultiputPart extends Base {
         this.timing = {};
         this.uploadedBytes = 0;
     }
+
+    /**
+     * Upload the part
+     * TODO: implement this
+     * 
+     * @public
+     * @return {void}
+     */
+    upload = (): void => {};
 }
 
 export default MultiputPart;

@@ -257,22 +257,11 @@ class MultiputUpload extends Base {
                 // can get called on retries
                 this.partsDigestReady -= 1;
                 this.partsUploading += 1;
-                this.uploadPart(part);
+                part.upload();
                 break;
             }
         }
     };
-
-    /**
-     * Upload given part
-     * TODO: implement this
-     * 
-     * @private
-     * @param {MultiputPart} part
-     * @return {void}
-     */
-    // eslint-disable-next-line
-    uploadPart = (part: MultiputPart): void => {};
 
     /**
      * Checks if upload pipeline is full
