@@ -48,8 +48,12 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.populateParts();
 
             // Verify
-            assert.deepEqual(multiputUploadTest.parts, expectedParts, 'file.parts should meet expectations');
-            assert.equal(multiputUploadTest.partsNotStarted, 3, 'partsNotStarted should be set to 0');
+            assert.equal(multiputUploadTest.partsNotStarted, 3, 'partsNotStarted should be set to 3');
+            for (let i = 0; i < 3; i += 1) {
+                assert.equal(multiputUploadTest.parts[i].offset, expectedParts[i].offset);
+                assert.equal(multiputUploadTest.parts[i].size, expectedParts[i].size);
+                assert.equal(multiputUploadTest.parts[i].index, expectedParts[i].index);
+            }
         });
     });
 
@@ -72,7 +76,7 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.partsDigestReady = 1;
 
             // Expectations
-            sandbox.mock(multiputUploadTest).expects('uploadPart').withArgs(multiputUploadTest.parts[2]);
+            sandbox.mock(multiputUploadTest.parts[2]).expects('upload');
 
             // Execute
             multiputUploadTest.uploadNextPart();
@@ -90,7 +94,7 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.partsDigestReady = 3;
 
             // Expectations
-            sandbox.mock(multiputUploadTest).expects('uploadPart').withArgs(multiputUploadTest.parts[0]);
+            sandbox.mock(multiputUploadTest.parts[0]).expects('upload');
 
             // Execute
             multiputUploadTest.uploadNextPart();
@@ -208,8 +212,12 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.populateParts();
 
             // Verify
-            assert.deepEqual(multiputUploadTest.parts, expectedParts, 'file.parts should meet expectations');
-            assert.equal(multiputUploadTest.partsNotStarted, 3, 'partsNotStarted should be set to 0');
+            assert.equal(multiputUploadTest.partsNotStarted, 3, 'partsNotStarted should be set to 3');
+            for (let i = 0; i < 3; i += 1) {
+                assert.equal(multiputUploadTest.parts[i].offset, expectedParts[i].offset);
+                assert.equal(multiputUploadTest.parts[i].size, expectedParts[i].size);
+                assert.equal(multiputUploadTest.parts[i].index, expectedParts[i].index);
+            }
         });
     });
 
