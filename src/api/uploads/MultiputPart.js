@@ -290,12 +290,12 @@ class MultiputPart extends BaseMultiput {
     }
 
     /**
-	 * List specified parts
+     * List specified parts
      * 
-	 * @param {number} partIndex - Index of starting part. Optional.
-	 * @param {number} limit - Number of parts to be listed. Optional.
-	 * @return {Promise<Array<Object>>} Array of parts
-	 */
+     * @param {number} partIndex - Index of starting part. Optional.
+     * @param {number} limit - Number of parts to be listed. Optional.
+     * @return {Promise<Array<Object>>} Array of parts
+     */
     listParts = async (partIndex: number, limit: number): Promise<Array<Object>> => {
         const params = {
             offset: partIndex,

@@ -183,13 +183,13 @@ class MultiputUpload extends BaseMultiput {
     };
 
     /**
-	 * Create session error handler.
-	 * Retries the create session request or fails the upload.
+     * Create session error handler.
+     * Retries the create session request or fails the upload.
      * 
      * @private
      * @param {Object} response
-	 * @return {void}
-	 */
+     * @return {void}
+     */
     createUploadSessionErrorHandler = (response: Object): void => {
         if (this.isDestroyed()) {
             return;
@@ -205,11 +205,11 @@ class MultiputUpload extends BaseMultiput {
     };
 
     /**
-	 * Schedule a retry for create session request upon failure
+     * Schedule a retry for create session request upon failure
      * 
      * @private
-	 * @return {void}
-	 */
+     * @return {void}
+     */
     createUploadSessionRetry = (): void => {
         const retryDelayMs = getBoundedExpBackoffRetryDelay(
             this.config.initialRetryDelayMs,
@@ -322,13 +322,13 @@ class MultiputUpload extends BaseMultiput {
     };
 
     /**
-	 * Update upload progress
+     * Update upload progress
      * 
      * @private
-	 * @param {number} prevUploadedBytes
-	 * @param {number} newUploadedBytes
-	 * @return {void}
-	 */
+     * @param {number} prevUploadedBytes
+     * @param {number} newUploadedBytes
+     * @return {void}
+     */
     updateProgress = (prevUploadedBytes: number, newUploadedBytes: number): void => {
         if (this.isDestroyed()) {
             return;
@@ -370,12 +370,12 @@ class MultiputUpload extends BaseMultiput {
     };
 
     /**
-	 * We compute digest for parts one at a time.  This is done for simplicity and also to guarantee that
-	 * we send parts in order to the web worker (which is computing the digest for the entire file).
+     * We compute digest for parts one at a time.  This is done for simplicity and also to guarantee that
+     * we send parts in order to the web worker (which is computing the digest for the entire file).
      * 
      * @private
-	 * @return {boolean} true if there is work to do, false otherwise.
-	 */
+     * @return {boolean} true if there is work to do, false otherwise.
+     */
     shouldComputeDigestForNextPart = (): boolean =>
         !this.isDestroyed() &&
         this.numPartsDigestComputing === 0 &&
@@ -383,11 +383,11 @@ class MultiputUpload extends BaseMultiput {
         this.numPartsDigestReady < this.config.digestReadahead;
 
     /**
-	 * Find first part in parts array that doesn't have a digest, and compute its digest.
+     * Find first part in parts array that doesn't have a digest, and compute its digest.
 
      * @private
-	 * @return {void}
-	 */
+     * @return {void}
+     */
     computeDigestForNextPart = (): void => {
         for (let i = this.firstUnuploadedPartIndex; i < this.parts.length; i += 1) {
             const part = this.parts[i];
@@ -403,12 +403,12 @@ class MultiputUpload extends BaseMultiput {
     };
 
     /**
-	 * Compute digest for this part
+     * Compute digest for this part
      * 
      * @private
-	 * @param {MultiputPart} part
-	 * @return {Promise}
-	 */
+     * @param {MultiputPart} part
+     * @return {Promise}
+     */
     computeDigestForPart = async (part: MultiputPart): Promise<> => {
         const blob = this.file.slice(part.offset, part.offset + part.size);
         const reader = new FileReader();

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Multiput upload part
+ * @file Multiput upload base class
  * @author Box
  */
 import Base from '../Base';
@@ -37,12 +37,12 @@ class BaseMultiput extends Base {
     }
 
     /**
-	 * If console logging is enabled in config, log a message to console
+     * If console logging is enabled in config, log a message to console
      * 
      * @private
-	 * @param {string} msg
-	 * @return {void}
-	 */
+     * @param {string} msg
+     * @return {void}
+     */
     consoleLog = (msg: string): void => {
         if (this.config.console && window.console) {
             // eslint-disable-next-line no-console
@@ -51,13 +51,13 @@ class BaseMultiput extends Base {
     };
 
     /**
-	 * If console logging is enabled in config, call passed in function to generate a message and log it
-	 * to console.
+     * If console logging is enabled in config, call passed in function to generate a message and log it
+     * to console.
      * 
      * @private
-	 * @param {function} msgFunc
-	 * @return {void}
-	 */
+     * @param {function} msgFunc
+     * @return {void}
+     */
     consoleLogFunc = (msgFunc: Function): void => {
         if (this.config.console && window.console) {
             this.consoleLog(msgFunc());
@@ -65,12 +65,12 @@ class BaseMultiput extends Base {
     };
 
     /**
-	 * POST log event
+     * POST log event
      * 
-	 * @param {string} eventType
-	 * @param {string} [eventInfo]
-	 * @return {Promise}
-	 */
+     * @param {string} eventType
+     * @param {string} [eventInfo]
+     * @return {Promise}
+     */
     logEvent = (eventType: string, eventInfo?: string) => {
         const data: {
             event_type: string,
