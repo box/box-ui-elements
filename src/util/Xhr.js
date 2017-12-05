@@ -513,7 +513,7 @@ class Xhr {
      * Executes an upload via XMLHTTPRequest and aborts it if there is no progress event for at least timeoutMs.
      * 
      * @private
-     * @param {object} data - Will be passed to xhr.send()
+     * @param {Object} data - Will be passed to xhr.send()
      * @param {number} [timeoutMs] - idle timeout, in milliseconds.
      * @param {function} [onTimeout] - callback invoked when request has timed out
      * @return {void}

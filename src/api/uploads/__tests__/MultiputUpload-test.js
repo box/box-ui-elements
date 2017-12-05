@@ -14,7 +14,7 @@ const config = {
 };
 let file;
 const createSessionUrl = 'https://test.box.com/createSession';
-const destinationFolder = '123';
+const destinationFolderId = '123';
 
 describe('api/MultiputUpload', () => {
     let multiputUploadTest;
@@ -24,7 +24,7 @@ describe('api/MultiputUpload', () => {
             name: 'test.txt',
             slice() {}
         };
-        multiputUploadTest = new MultiputUpload(config, file, createSessionUrl, destinationFolder, null);
+        multiputUploadTest = new MultiputUpload(config, file, createSessionUrl, destinationFolderId, null);
     });
 
     afterEach(() => {
@@ -48,7 +48,7 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.populateParts();
 
             // Verify
-            assert.equal(multiputUploadTest.partsNotStarted, 3, 'partsNotStarted should be set to 3');
+            assert.equal(multiputUploadTest.numPartsNotStarted, 3, 'numPartsNotStarted should be set to 3');
             for (let i = 0; i < 3; i += 1) {
                 assert.equal(multiputUploadTest.parts[i].offset, expectedParts[i].offset);
                 assert.equal(multiputUploadTest.parts[i].size, expectedParts[i].size);
@@ -60,7 +60,7 @@ describe('api/MultiputUpload', () => {
     describe('uploadNextPart()', () => {
         beforeEach(() => {
             multiputUploadTest.firstUnuploadedPartIndex = 0;
-            multiputUploadTest.partsUploading = 0;
+            multiputUploadTest.numPartsUploading = 0;
             multiputUploadTest.parts = [
                 new MultiputPart(config, 0, 0, 1024),
                 new MultiputPart(config, 1, 1024, 1024),
@@ -73,7 +73,7 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.parts[0].state = PART_STATE_UPLOADED;
             multiputUploadTest.parts[1].state = PART_STATE_COMPUTING_DIGEST;
             multiputUploadTest.parts[2].state = PART_STATE_DIGEST_READY;
-            multiputUploadTest.partsDigestReady = 1;
+            multiputUploadTest.numPartsDigestReady = 1;
 
             // Expectations
             sandbox.mock(multiputUploadTest.parts[2]).expects('upload');
@@ -82,8 +82,8 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.uploadNextPart();
 
             // Verify
-            assert.equal(multiputUploadTest.partsDigestReady, 0);
-            assert.equal(multiputUploadTest.partsUploading, 1);
+            assert.equal(multiputUploadTest.numPartsDigestReady, 0);
+            assert.equal(multiputUploadTest.numPartsUploading, 1);
         });
 
         it('should upload only one part', () => {
@@ -91,7 +91,7 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.parts[0].state = PART_STATE_DIGEST_READY;
             multiputUploadTest.parts[1].state = PART_STATE_DIGEST_READY;
             multiputUploadTest.parts[2].state = PART_STATE_DIGEST_READY;
-            multiputUploadTest.partsDigestReady = 3;
+            multiputUploadTest.numPartsDigestReady = 3;
 
             // Expectations
             sandbox.mock(multiputUploadTest.parts[0]).expects('upload');
@@ -100,8 +100,8 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.uploadNextPart();
 
             // Verify
-            assert.equal(multiputUploadTest.partsDigestReady, 2);
-            assert.equal(multiputUploadTest.partsUploading, 1);
+            assert.equal(multiputUploadTest.numPartsDigestReady, 2);
+            assert.equal(multiputUploadTest.numPartsUploading, 1);
         });
     });
 
@@ -116,11 +116,11 @@ describe('api/MultiputUpload', () => {
                 'upload pipeline full': [false, false, 2],
                 'upload pipeline not full and not ended': [true, false, 1]
             },
-            (expected, ended, partsUploading) => {
+            (expected, ended, numPartsUploading) => {
                 it('should return correct value:', () => {
                     // Setup
                     multiputUploadTest.destroyed = ended;
-                    multiputUploadTest.partsUploading = partsUploading;
+                    multiputUploadTest.numPartsUploading = numPartsUploading;
                     // Execute
                     const result = multiputUploadTest.canStartMorePartUploads();
                     // Verify
@@ -212,7 +212,7 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.populateParts();
 
             // Verify
-            assert.equal(multiputUploadTest.partsNotStarted, 3, 'partsNotStarted should be set to 3');
+            assert.equal(multiputUploadTest.numPartsNotStarted, 3, 'numPartsNotStarted should be set to 3');
             for (let i = 0; i < 3; i += 1) {
                 assert.equal(multiputUploadTest.parts[i].offset, expectedParts[i].offset);
                 assert.equal(multiputUploadTest.parts[i].size, expectedParts[i].size);
@@ -322,7 +322,7 @@ describe('api/MultiputUpload', () => {
         // eslint-disable-next-line
         it('should call failSessionIfFileChangeDetected and return when it returns true, even when everything is ready for commit otherwise', () => {
             // Setup
-            multiputUploadTest.partsUploaded = 1;
+            multiputUploadTest.numPartsUploaded = 1;
             multiputUploadTest.fileSha1 = 'test';
 
             // Expectations
@@ -338,7 +338,7 @@ describe('api/MultiputUpload', () => {
 
         it('should only invoke commitSession if all parts are uploaded and SHA-1 done', () => {
             // Setup
-            multiputUploadTest.partsUploaded = 1;
+            multiputUploadTest.numPartsUploaded = 1;
             multiputUploadTest.fileSha1 = 'test';
             sandbox.stub(multiputUploadTest, 'failSessionIfFileChangeDetected').returns(false);
 
@@ -353,7 +353,7 @@ describe('api/MultiputUpload', () => {
 
         it('should not invoke commitSession when all parts are uploaded but SHA-1 not done', () => {
             // Setup
-            multiputUploadTest.partsUploaded = 1;
+            multiputUploadTest.numPartsUploaded = 1;
             multiputUploadTest.fileSha1 = undefined;
             sandbox.stub(multiputUploadTest, 'failSessionIfFileChangeDetected').returns(false);
             sandbox.stub(multiputUploadTest, 'canStartMorePartUploads').returns(false);

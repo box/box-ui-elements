@@ -16,7 +16,7 @@ const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     initialRetryDelayMs: 5000, // Base for exponential backoff on retries
     maxRetryDelayMs: 60000, // Upper bound for time between retries
     parallelism: 5, // Maximum number of parts to upload at a time
-    requestTimeout: 120000, // Idle timeout on part upload, overall request timeout on other requests
+    requestTimeoutMs: 120000, // Idle timeout on part upload, overall request timeout on other requests
     // eslint-disable-next-line max-len
     retries: 5 // How many times to retry requests such as upload part or commit. Note that total number of attempts will be retries + 1 in worst case where all attempts fail.
 };
@@ -26,8 +26,8 @@ class MultiputUpload extends Base {
     commitRetryCount: number;
     config: Object;
     createSessionNumRetriesPerformed: number;
-    destinationFile: ?string;
-    destinationFolder: ?string;
+    destinationFileId: ?string;
+    destinationFolderId: ?string;
     file: File;
     fileSha1: ?string;
     firstUnuploadedPartIndex: number;
@@ -39,11 +39,11 @@ class MultiputUpload extends Base {
     options: Object;
     partSize: number;
     parts: Array<MultiputPart>;
-    partsDigestComputing: number;
-    partsDigestReady: number;
-    partsNotStarted: number;
-    partsUploaded: number;
-    partsUploading: number;
+    numPartsDigestComputing: number;
+    numPartsDigestReady: number;
+    numPartsNotStarted: number;
+    numPartsUploaded: number;
+    numPartsUploading: number;
     sessionEndpoints: Object;
     sessionId: ?string;
     totalUploadedBytes: number;
@@ -52,25 +52,25 @@ class MultiputUpload extends Base {
     /**
      * [constructor]
      * 
-     * @param {object} options
+     * @param {Object} options
      * @param {File} file
      * @param {string} createSessionUrl
-     * @param {string} [destinationFolder] - Untyped folder id (e.g. no "d_" prefix)
-     * @param {string} [destinationFile] - Untyped file id (e.g. no "f_" prefix)
+     * @param {string} [destinationFolderId] - Untyped folder id (e.g. no "d_" prefix)
+     * @param {string} [destinationFileId] - Untyped file id (e.g. no "f_" prefix)
      * @param {MultiputConfig} [config]
      */
     constructor(
         options: Object,
         file: File,
         createSessionUrl: string,
-        destinationFolder?: ?string,
-        destinationFile?: ?string,
+        destinationFolderId?: ?string,
+        destinationFileId?: ?string,
         config?: MultiputConfig
     ) {
         super(options);
 
-        if (destinationFolder !== null && destinationFile !== null) {
-            throw new Error('Both destinationFolder and destinationFile set');
+        if (destinationFolderId !== null && destinationFileId !== null) {
+            throw new Error('Both destinationFolderId and destinationFileId set');
         }
         this.file = file;
 
@@ -87,19 +87,17 @@ class MultiputUpload extends Base {
             abort: null,
             logEvent: null
         };
-        // Explicitly cast these two to string because sometimes they get passed as int, and
-        // sending folder_id as a number instead of a string in the JSON body of createSession
-        // results in an API error.
-        this.destinationFolder = destinationFolder;
-        this.destinationFile = destinationFile;
+
+        this.destinationFolderId = destinationFolderId;
+        this.destinationFileId = destinationFileId;
         this.config = config || DEFAULT_MULTIPUT_CONFIG;
         this.fileSha1 = null;
         this.totalUploadedBytes = 0;
-        this.partsNotStarted = 0; // # of parts yet to be processed
-        this.partsDigestComputing = 0; // # of parts sent to the digest worker
-        this.partsDigestReady = 0; // # of parts with digest finished that are waiting to be uploaded.
-        this.partsUploading = 0; // # of parts with upload requests currently inflight
-        this.partsUploaded = 0; // # of parts successfully uploaded
+        this.numPartsNotStarted = 0; // # of parts yet to be processed
+        this.numPartsDigestComputing = 0; // # of parts sent to the digest worker
+        this.numPartsDigestReady = 0; // # of parts with digest finished that are waiting to be uploaded.
+        this.numPartsUploading = 0; // # of parts with upload requests currently inflight
+        this.numPartsUploaded = 0; // # of parts successfully uploaded
         this.firstUnuploadedPartIndex = 0; // Index of first part that hasn't been uploaded yet.
         this.onProgress = null;
         this.onCompleted = null;
@@ -135,8 +133,8 @@ class MultiputUpload extends Base {
             file_name: this.file.name
         };
 
-        if (this.destinationFolder) {
-            postData.folder_id = this.destinationFolder;
+        if (this.destinationFolderId) {
+            postData.folder_id = this.destinationFolderId;
         }
 
         try {
@@ -199,7 +197,7 @@ class MultiputUpload extends Base {
             return;
         }
 
-        if (this.partsUploaded === this.parts.length && this.fileSha1) {
+        if (this.numPartsUploaded === this.parts.length && this.fileSha1) {
             this.commitSession();
             return;
         }
@@ -255,8 +253,8 @@ class MultiputUpload extends Base {
             if (part.state === PART_STATE_DIGEST_READY) {
                 // Update the counters here instead of uploadPart because uploadPart
                 // can get called on retries
-                this.partsDigestReady -= 1;
-                this.partsUploading += 1;
+                this.numPartsDigestReady -= 1;
+                this.numPartsUploading += 1;
                 part.upload();
                 break;
             }
@@ -270,7 +268,7 @@ class MultiputUpload extends Base {
      * @private
      * @return {boolean}
      */
-    canStartMorePartUploads = (): boolean => !this.isDestroyed() && this.partsUploading < this.config.parallelism;
+    canStartMorePartUploads = (): boolean => !this.isDestroyed() && this.numPartsUploading < this.config.parallelism;
 
     /**
      * Functions that walk the parts array get called a lot, so we cache which part we should
@@ -280,14 +278,10 @@ class MultiputUpload extends Base {
      * @return {void}
      */
     updateFirstUnuploadedPartIndex = (): void => {
-        for (let i = this.firstUnuploadedPartIndex; i < this.parts.length; i += 1) {
-            const part = this.parts[i];
-
-            if (i === this.firstUnuploadedPartIndex && part.state === PART_STATE_UPLOADED) {
-                this.firstUnuploadedPartIndex = i + 1;
-            } else {
-                break;
-            }
+        let part = this.parts[this.firstUnuploadedPartIndex];
+        while (part && part.state === PART_STATE_UPLOADED) {
+            this.firstUnuploadedPartIndex += 1;
+            part = this.parts[this.firstUnuploadedPartIndex];
         }
     };
 
@@ -299,9 +293,9 @@ class MultiputUpload extends Base {
      * @return {void}
      */
     populateParts = (): void => {
-        this.partsNotStarted = Math.ceil(this.file.size / this.partSize);
+        this.numPartsNotStarted = Math.ceil(this.file.size / this.partSize);
 
-        for (let i = 0; i < this.partsNotStarted; i += 1) {
+        for (let i = 0; i < this.numPartsNotStarted; i += 1) {
             const offset = i * this.partSize;
             const part = new MultiputPart(
                 this.options,

@@ -30,7 +30,7 @@ class MultiputPart extends Base {
     /**
      * [constructor]
      *
-     * @param {object} options
+     * @param {Object} options
      * @param {number} index - 0-based index of this part in array of all parts
      * @param {number} offset - Starting byte offset of this part's range
      * @param {number} size - Size of this part in bytes
