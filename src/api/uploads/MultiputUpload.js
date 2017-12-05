@@ -4,27 +4,34 @@
  * @author Box
  */
 
-import Base from '../Base';
-import { getFileLastModifiedAsISONoMSIfPossible } from '../../util/uploads';
+import BaseMultiput from './BaseMultiput';
+import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from '../../util/uploads';
+import { retryNumOfTimes } from '../../util/function';
+import { digest } from '../../util/webcrypto';
 import createWorker from '../../util/uploadsSHA1Worker';
-import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY } from './MultiputPart';
+import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
 import type { StringAnyMap, MultiputConfig } from '../../flowTypes';
 
-const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
-    console: false, // Whether to display informational messages to console
-    digestReadahead: 5, // How many parts past those currently uploading to precompute digest for
-    initialRetryDelayMs: 5000, // Base for exponential backoff on retries
-    maxRetryDelayMs: 60000, // Upper bound for time between retries
-    parallelism: 5, // Maximum number of parts to upload at a time
-    requestTimeoutMs: 120000, // Idle timeout on part upload, overall request timeout on other requests
-    // eslint-disable-next-line max-len
-    retries: 5 // How many times to retry requests such as upload part or commit. Note that total number of attempts will be retries + 1 in worst case where all attempts fail.
-};
+// Constants used for specifying log event types.
+/* eslint-disable no-unused-vars */
+const LOG_EVENT_TYPE_COMMIT_CONFLICT = 'commit_conflict';
+// This type is a catch-all for create session errors that aren't 5xx's (for which we'll do
+// retries) and aren't specific 4xx's we know how to specifically handle (e.g. out of storage).
+const LOG_EVENT_TYPE_CREATE_SESSION_MISC_ERROR = 'create_session_misc_error';
+const LOG_EVENT_TYPE_CREATE_SESSION_RETRIES_EXCEEDED = 'create_session_retries_exceeded';
+const LOG_EVENT_TYPE_FILE_CHANGED_DURING_UPLOAD = 'file_changed_during_upload';
+const LOG_EVENT_TYPE_PART_UPLOAD_RETRIES_EXCEEDED = 'part_upload_retries_exceeded';
+const LOG_EVENT_TYPE_COMMIT_RETRIES_EXCEEDED = 'commit_retries_exceeded';
+const LOG_EVENT_TYPE_WEB_WORKER_ERROR = 'web_worker_error';
+const LOG_EVENT_TYPE_FILE_READER_RECEIVED_NOT_FOUND_ERROR = 'file_reader_received_not_found_error';
+const LOG_EVENT_TYPE_PART_DIGEST_RETRIES_EXCEEDED = 'part_digest_retries_exceeded';
+const LOG_EVENT_TYPE_LOGGED_OUT = 'logged_out';
+/* eslint-enable no-unused-vars */
+const noop = () => {};
 
-class MultiputUpload extends Base {
+class MultiputUpload extends BaseMultiput {
     clientId: ?string;
     commitRetryCount: number;
-    config: Object;
     createSessionNumRetriesPerformed: number;
     destinationFileId: ?string;
     destinationFolderId: ?string;
@@ -33,9 +40,9 @@ class MultiputUpload extends Base {
     firstUnuploadedPartIndex: number;
     initialFileLastModified: ?string;
     initialFileSize: number;
-    onCompleted: ?Function;
-    onFailure: ?Function;
-    onProgress: ?Function;
+    onSuccess: Function;
+    onError: Function;
+    onProgress: Function;
     options: Object;
     partSize: number;
     parts: Array<MultiputPart>;
@@ -45,9 +52,10 @@ class MultiputUpload extends Base {
     numPartsUploaded: number;
     numPartsUploading: number;
     sessionEndpoints: Object;
-    sessionId: ?string;
+    sessionId: string;
     totalUploadedBytes: number;
     worker: Worker;
+    createSessionTimeout: ?number;
 
     /**
      * [constructor]
@@ -58,6 +66,9 @@ class MultiputUpload extends Base {
      * @param {string} [destinationFolderId] - Untyped folder id (e.g. no "d_" prefix)
      * @param {string} [destinationFileId] - Untyped file id (e.g. no "f_" prefix)
      * @param {MultiputConfig} [config]
+     * @param {Function} [onError]
+     * @param {Function} [onProgress]
+     * @param {Function} [onSuccess]
      */
     constructor(
         options: Object,
@@ -65,9 +76,23 @@ class MultiputUpload extends Base {
         createSessionUrl: string,
         destinationFolderId?: ?string,
         destinationFileId?: ?string,
-        config?: MultiputConfig
+        config?: MultiputConfig,
+        onError?: Function,
+        onProgress?: Function,
+        onSuccess?: Function
     ) {
-        super(options);
+        super(
+            options,
+            {
+                createSession: createSessionUrl,
+                uploadPart: null,
+                listParts: null,
+                commit: null,
+                abort: null,
+                logEvent: null
+            },
+            config
+        );
 
         if (destinationFolderId !== null && destinationFileId !== null) {
             throw new Error('Both destinationFolderId and destinationFileId set');
@@ -78,19 +103,8 @@ class MultiputUpload extends Base {
         // a file change during the upload.
         this.initialFileSize = this.file.size;
         this.initialFileLastModified = getFileLastModifiedAsISONoMSIfPossible(this.file);
-
-        this.sessionEndpoints = {
-            createSession: createSessionUrl,
-            uploadPart: null,
-            listParts: null,
-            commit: null,
-            abort: null,
-            logEvent: null
-        };
-
         this.destinationFolderId = destinationFolderId;
         this.destinationFileId = destinationFileId;
-        this.config = config || DEFAULT_MULTIPUT_CONFIG;
         this.fileSha1 = null;
         this.totalUploadedBytes = 0;
         this.numPartsNotStarted = 0; // # of parts yet to be processed
@@ -99,9 +113,9 @@ class MultiputUpload extends Base {
         this.numPartsUploading = 0; // # of parts with upload requests currently inflight
         this.numPartsUploaded = 0; // # of parts successfully uploaded
         this.firstUnuploadedPartIndex = 0; // Index of first part that hasn't been uploaded yet.
-        this.onProgress = null;
-        this.onCompleted = null;
-        this.onFailure = null;
+        this.onProgress = onProgress || noop;
+        this.onSuccess = onSuccess || noop;
+        this.onError = onError || noop;
         this.createSessionNumRetriesPerformed = 0;
         this.partSize = 0;
         this.parts = [];
@@ -139,22 +153,73 @@ class MultiputUpload extends Base {
 
         try {
             const data = await this.xhr.post({ url: this.sessionEndpoints.createSessionUrl, data: postData });
-            this.uploadSessionSuccessHandler(data);
+            this.createUploadSessionSuccessHandler(data);
         } catch (error) {
-            this.uploadSessionErrorHandler(error);
+            const { response } = error;
+
+            if (response.status >= 500 && response.status < 600) {
+                this.createUploadSessionErrorHandler(response);
+            }
+
+            // Recover from 409 session_conflict.  The server will return the session information
+            // in context_info, so treat it as a success.
+            if (response && response.status === 409 && response.code === 'session_conflict') {
+                this.createUploadSessionSuccessHandler(response.context_info.session);
+                return;
+            }
+
+            if (
+                (response && (response.status === 403 && response.code === 'storage_limit_exceeded')) ||
+                (response.status === 403 && response.code === 'access_denied_insufficient_permissions') ||
+                (response.status === 409 && response.code === 'item_name_in_use')
+            ) {
+                this.onError(response);
+                return;
+            }
+
+            // All other cases get treated as an upload failure.
+            this.sessionErrorHandler(response, LOG_EVENT_TYPE_CREATE_SESSION_MISC_ERROR, JSON.stringify(response));
         }
     };
 
     /**
-     * Upload session session error handler.
-     * Retries the create session request or fails the upload.
-     * TODO: implement this
+	 * Create session error handler.
+	 * Retries the create session request or fails the upload.
      * 
      * @private
-     * @return {void}
-     */
-    // eslint-disable-next-line
-    uploadSessionErrorHandler = (error: Error): void => {};
+     * @param {Object} response
+	 * @return {void}
+	 */
+    createUploadSessionErrorHandler = (response: Object): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        if (this.createSessionNumRetriesPerformed < this.config.retries) {
+            this.createUploadSessionRetry();
+            return;
+        }
+
+        this.consoleLog('Too many create session failures, failing upload');
+        this.sessionErrorHandler(response, LOG_EVENT_TYPE_CREATE_SESSION_RETRIES_EXCEEDED, JSON.stringify(response));
+    };
+
+    /**
+	 * Schedule a retry for create session request upon failure
+     * 
+     * @private
+	 * @return {void}
+	 */
+    createUploadSessionRetry = (): void => {
+        const retryDelayMs = getBoundedExpBackoffRetryDelay(
+            this.config.initialRetryDelayMs,
+            this.config.maxRetryDelayMs,
+            this.createSessionNumRetriesPerformed
+        );
+        this.createSessionNumRetriesPerformed += 1;
+        this.consoleLog(`Retrying create session in ${retryDelayMs} ms`);
+        this.createSessionTimeout = setTimeout(this.createUploadSession, retryDelayMs);
+    };
 
     /**
      * Handles a upload session success response
@@ -163,7 +228,7 @@ class MultiputUpload extends Base {
      * @param {Object} data - Upload session creation success data
      * @return {void}
      */
-    uploadSessionSuccessHandler = (data: any): void => {
+    createUploadSessionSuccessHandler = (data: any): void => {
         if (this.isDestroyed()) {
             return;
         }
@@ -183,6 +248,97 @@ class MultiputUpload extends Base {
 
         this.populateParts();
         this.processNextParts();
+    };
+
+    /**
+     * Session error handler.
+     * Retries the create session request or fails the upload.
+     * 
+     * @private
+     * @param {?Object} response
+     * @param {string} logEventType
+     * @param {string} [logMessage]
+     * @return {void}
+     */
+    sessionErrorHandler = async (response: ?Object, logEventType: string, logMessage?: string): Promise<> => {
+        this.destroy();
+        this.onError(response);
+
+        try {
+            await retryNumOfTimes(
+                (resolve: Function, reject: Function): void => {
+                    this.logEvent(logEventType, logMessage).then(resolve).catch(reject);
+                },
+                this.config.retries,
+                this.config.initialRetryDelayMs
+            );
+
+            this.abortSession();
+        } catch (err) {
+            this.abortSession();
+        }
+    };
+
+    /**
+     * Aborts the upload session
+     * 
+     * @private
+     * @return {void}
+     */
+    abortSession = (): void => {
+        if (this.worker) {
+            this.worker.terminate();
+        }
+
+        if (this.sessionEndpoints.abort) {
+            this.xhr.delete(this.sessionEndpoints.abort);
+        }
+    };
+
+    /**
+     * Part upload success handler
+     * 
+     * @private
+     * @param {MultiputPart} part
+     * @return {void}
+     */
+    partUploadSuccessHandler = (part: MultiputPart): void => {
+        this.numPartsUploading -= 1;
+        this.numPartsUploaded += 1;
+        this.updateProgress(part.uploadedBytes, part.size);
+        this.processNextParts();
+    };
+
+    /**
+     * Part upload error handler
+     * 
+     * @private
+     * @param {Error} error
+     * @param {string} eventInfo
+     * @return {void}
+     */
+    partUploadErrorHandler = (error: Error, eventInfo: string): void => {
+        this.sessionErrorHandler(null, LOG_EVENT_TYPE_PART_UPLOAD_RETRIES_EXCEEDED, eventInfo);
+    };
+
+    /**
+	 * Update upload progress
+     * 
+     * @private
+	 * @param {number} prevUploadedBytes
+	 * @param {number} newUploadedBytes
+	 * @return {void}
+	 */
+    updateProgress = (prevUploadedBytes: number, newUploadedBytes: number): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        this.totalUploadedBytes += newUploadedBytes - prevUploadedBytes;
+
+        if (this.onProgress) {
+            this.onProgress(this.totalUploadedBytes);
+        }
     };
 
     /**
@@ -208,8 +364,115 @@ class MultiputUpload extends Base {
             this.uploadNextPart();
         }
 
-        // TODO: compute digests for parts
+        if (this.shouldComputeDigestForNextPart()) {
+            this.computeDigestForNextPart();
+        }
     };
+
+    /**
+	 * We compute digest for parts one at a time.  This is done for simplicity and also to guarantee that
+	 * we send parts in order to the web worker (which is computing the digest for the entire file).
+     * 
+     * @private
+	 * @return {boolean} true if there is work to do, false otherwise.
+	 */
+    shouldComputeDigestForNextPart = (): boolean =>
+        !this.isDestroyed() &&
+        this.numPartsDigestComputing === 0 &&
+        this.numPartsNotStarted > 0 &&
+        this.numPartsDigestReady < this.config.digestReadahead;
+
+    /**
+	 * Find first part in parts array that doesn't have a digest, and compute its digest.
+
+     * @private
+	 * @return {void}
+	 */
+    computeDigestForNextPart = (): void => {
+        for (let i = this.firstUnuploadedPartIndex; i < this.parts.length; i += 1) {
+            const part = this.parts[i];
+            if (part.state === PART_STATE_NOT_STARTED) {
+                // Update the counters here instead of computeDigestForPart because computeDigestForPart
+                // can get called on retries
+                this.numPartsNotStarted -= 1;
+                this.numPartsDigestComputing += 1;
+                this.computeDigestForPart(part);
+                break;
+            }
+        }
+    };
+
+    /**
+	 * Compute digest for this part
+     * 
+     * @private
+	 * @param {MultiputPart} part
+	 * @return {Promise}
+	 */
+    computeDigestForPart = async (part: MultiputPart): Promise<> => {
+        const blob = this.file.slice(part.offset, part.offset + part.size);
+        const reader = new FileReader();
+        const startTimestamp = Date.now();
+        let readCompleteTimestamp = startTimestamp;
+
+        try {
+            const buffer: ArrayBuffer = await new Promise((resolve, reject) => {
+                reader.readAsArrayBuffer(blob);
+                reader.onload = () => {
+                    readCompleteTimestamp = Date.now();
+                    // Cast reader.result to any type to make flow happy
+                    // reader.result is actually ArrayBuffer
+                    resolve((reader.result: any));
+                };
+                reader.onerror = reject;
+            });
+
+            const sha256 = await digest('SHA-256', buffer);
+
+            this.sendPartToWorker(part, buffer);
+
+            part.sha256 = sha256;
+            part.state = PART_STATE_DIGEST_READY;
+            part.blob = blob;
+
+            this.numPartsDigestReady += 1;
+            const digestCompleteTimestamp = Date.now();
+
+            part.timing = {
+                partDigestTime: digestCompleteTimestamp - startTimestamp,
+                readTime: readCompleteTimestamp - startTimestamp,
+                subtleCryptoTime: digestCompleteTimestamp - readCompleteTimestamp
+            };
+
+            this.processNextParts();
+        } catch (error) {
+            this.onPartDigestError(error);
+        }
+    };
+
+    /**
+     * Sends a part to the worker
+     * 
+     * @private
+     * @param {MultiputPart} part
+     * @param {ArrayBuffer} buffer
+     * @return {void}
+     * TODO: implement this
+     */
+    // eslint-disable-next-line
+    sendPartToWorker = (part: MultiputPart, buffer: ArrayBuffer): void => {};
+
+    /**
+     * Error handler for part digest computation
+     * 
+     * @private
+     * @param {MultiputPart} part
+     * @param {ArrayBuffer} buffer
+     * @return {void}
+     * TODO: implement this
+     */
+    // eslint-disable-next-line
+    onPartDigestError = (error: Error): void => {};
 
     /**
      * Send a request to commit the upload.
@@ -239,6 +502,16 @@ class MultiputUpload extends Base {
      * @return {void}
      */
     commitSessionErrorHandler = (): void => {};
+
+    /**
+     * Retry commit.
+     * Retries the commit or fails the multiput session.
+     * TODO: implement this
+     * 
+     * @private
+     * @return {void}
+     */
+    commitSessionRetry = (): void => {};
 
     /**
      * Find first part in parts array that we can upload, and upload it.
@@ -286,6 +559,13 @@ class MultiputUpload extends Base {
     };
 
     /**
+     * Get number of parts being uploaded
+     * 
+     * @return {number}
+     */
+    getNumPartsUploading = (): number => this.numPartsUploading;
+
+    /**
      * After session is created and we know the part size, populate the parts
      * array.
      * 
@@ -301,7 +581,15 @@ class MultiputUpload extends Base {
                 this.options,
                 i,
                 offset,
-                Math.min(offset + this.partSize, this.file.size) - offset
+                Math.min(offset + this.partSize, this.file.size) - offset,
+                this.sessionId,
+                this.sessionEndpoints,
+                this.config,
+                this.getPartsState,
+                this.getNumPartsUploading,
+                this.partUploadSuccessHandler,
+                this.updateProgress,
+                this.partUploadErrorHandler
             );
             this.parts.push(part);
         }
@@ -347,6 +635,44 @@ class MultiputUpload extends Base {
      * @return {void}
      */
     cancel(): void {}
+
+    /**
+     * Get parts state in string
+     * 
+     * @return {string}
+     */
+    getPartsState = (): string => {
+        const state: {
+            notStarted: number,
+            digestComputing: number,
+            digestReady: number,
+            uploading: number,
+            uploaded: number,
+            firstUnuploadedPart: number,
+            partsWindow?: Array<string>
+        } = {
+            notStarted: this.numPartsNotStarted,
+            digestComputing: this.numPartsDigestComputing,
+            digestReady: this.numPartsDigestReady,
+            uploading: this.numPartsUploading,
+            uploaded: this.numPartsUploaded,
+            firstUnuploadedPart: this.firstUnuploadedPartIndex
+        };
+
+        if (this.parts === null) {
+            return JSON.stringify(state);
+        }
+
+        const parts = [];
+        let i = this.firstUnuploadedPartIndex;
+        while (this.parts[i] && this.parts[i].state === PART_STATE_NOT_STARTED) {
+            parts.push(this.parts[i].stringify());
+            i += 1;
+        }
+
+        state.partsWindow = parts;
+        return JSON.stringify(state);
+    };
 }
 
 export default MultiputUpload;

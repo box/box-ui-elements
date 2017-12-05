@@ -286,6 +286,6 @@ export type MultiputConfig = {
     initialRetryDelayMs: number,
     maxRetryDelayMs: number,
     parallelism: number,
-    requestTimeoutMs: number,
+    requestTimeoutMS: number,
     retries: number
 };

@@ -221,7 +221,7 @@ describe('api/MultiputUpload', () => {
         });
     });
 
-    describe('uploadSessionSuccessHandler()', () => {
+    describe('createUploadSessionSuccessHandler()', () => {
         const data = {
             id: 1,
             part_size: 1,
@@ -243,7 +243,7 @@ describe('api/MultiputUpload', () => {
             sandbox.mock(multiputUploadTest).expects('processNextParts').never();
 
             // Execute
-            multiputUploadTest.uploadSessionSuccessHandler(data);
+            multiputUploadTest.createUploadSessionSuccessHandler(data);
         });
 
         it('should update attributes properly, populate parts and process parts when not destroyed', () => {
@@ -257,7 +257,7 @@ describe('api/MultiputUpload', () => {
             sandbox.mock(multiputUploadTest).expects('processNextParts');
 
             // Execute
-            multiputUploadTest.uploadSessionSuccessHandler(data);
+            multiputUploadTest.createUploadSessionSuccessHandler(data);
 
             // Verify
             assert.equal(multiputUploadTest.sessionId, data.id);
@@ -281,22 +281,26 @@ describe('api/MultiputUpload', () => {
             await multiputUploadTest.createUploadSession();
         });
 
-        it('should call uploadSessionSuccessHandler when the session is created successfully', async () => {
+        it('should call createUploadSessionSuccessHandler when the session is created successfully', async () => {
             const data = { a: 2 };
 
             multiputUploadTest.destroyed = false;
             multiputUploadTest.xhr.post = sandbox.mock().resolves(data);
-            multiputUploadTest.uploadSessionSuccessHandler = sandbox.mock().withArgs(data);
+            multiputUploadTest.createUploadSessionSuccessHandler = sandbox.mock().withArgs(data);
 
             await multiputUploadTest.createUploadSession();
         });
 
-        it('should call uploadSessionErrorHandler when the session creation failed', async () => {
-            const error = { no: 2 };
+        it('should call createUploadSessionErrorHandler when the session creation failed', async () => {
+            const error = {
+                response: {
+                    status: 500
+                }
+            };
 
             multiputUploadTest.destroyed = false;
             multiputUploadTest.xhr.post = sandbox.mock().rejects(error);
-            multiputUploadTest.uploadSessionErrorHandler = sandbox.mock().withArgs(error);
+            multiputUploadTest.createUploadSessionErrorHandler = sandbox.mock().withArgs(error.response);
 
             await multiputUploadTest.createUploadSession();
         });
