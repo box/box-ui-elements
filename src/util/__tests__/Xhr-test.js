@@ -1,4 +1,4 @@
-import { xhrSendWithIdleTimeout } from '../Xhr';
+import Xhr from '../Xhr';
 
 const sandbox = sinon.sandbox.create();
 
@@ -9,9 +9,13 @@ describe('util/Xhr', () => {
 
     describe('xhrSendWithIdleTimeout()', () => {
         let xhr;
+        let xhrInstance;
 
         beforeEach(() => {
             xhr = sandbox.useFakeXMLHttpRequest();
+            xhrInstance = new Xhr({
+                token: '123'
+            });
         });
 
         afterEach(() => {
@@ -22,7 +26,8 @@ describe('util/Xhr', () => {
             const request = new XMLHttpRequest();
             const data = {};
             sandbox.mock(request).expects('send').withArgs(data);
-            xhrSendWithIdleTimeout(request, data, 1000);
+            xhrInstance.xhr = request;
+            xhrInstance.xhrSendWithIdleTimeout(data, 1000);
         });
 
         it('should call abort() and callback on underlying XHR after timeout', () => {
@@ -35,7 +40,8 @@ describe('util/Xhr', () => {
             }
 
             request.open('GET', 'fake', true);
-            xhrSendWithIdleTimeout(request, data, 100, callback);
+            xhrInstance.xhr = request;
+            xhrInstance.xhrSendWithIdleTimeout(request, data, 100, callback);
 
             setTimeout(() => {
                 sandbox.mock(request).expects('abort');
@@ -48,7 +54,8 @@ describe('util/Xhr', () => {
             const data = {};
 
             request.open('GET', 'fake', true);
-            xhrSendWithIdleTimeout(request, data, 100);
+            xhrInstance.xhr = request;
+            xhrInstance.xhrSendWithIdleTimeout(request, data, 100);
 
             setTimeout(() => {
                 sandbox.mock(request).expects('abort');
@@ -61,7 +68,9 @@ describe('util/Xhr', () => {
             const data = {};
 
             request.open('GET', 'fake', true);
-            xhrSendWithIdleTimeout(request, data, 100);
+            xhrInstance.xhr = request;
+            xhrInstance.xhrSendWithIdleTimeout(request, data, 100);
+
             setTimeout(() => {
                 sandbox.mock(request).expects('abort').never();
                 request.upload.eventListeners.progress[0]({ loaded: 1 });

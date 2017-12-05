@@ -33,7 +33,7 @@ function digest(algorithm: string, buffer: Uint8Array): Promise<Uint8Array> {
     return new Promise((resolve, reject) => {
         const cryptoOperation = cryptoRef.subtle.digest({ name: algorithm }, buffer);
 
-        cryptoOperation.oncomplete = function(event) {
+        cryptoOperation.oncomplete = (event) => {
             resolve(event.target.result);
         };
 
