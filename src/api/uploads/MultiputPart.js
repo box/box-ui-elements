@@ -86,7 +86,7 @@ class MultiputPart extends BaseMultiput {
         this.timing = {};
         this.uploadedBytes = 0;
         this.data = {};
-        this.uploadUrl = `${this.uploadHost}/api/2.0/files/upload_sessions/${sessionId}`;
+        this.uploadUrl = sessionEndpoints.upload_part;
         this.config = config;
         this.rangeEnd = offset + size - 1;
         this.onSuccess = onSuccess || noop;
@@ -110,7 +110,7 @@ class MultiputPart extends BaseMultiput {
         });
 
     /**
-     * Returns file part associated with this Part.
+     * Returns file part information from the server after part upload is successful
      *
      * @return {Object}
      */
@@ -122,8 +122,16 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     upload = (): void => {
-        if (this.isDestroyed() || !this.sha256 || !this.blob) {
+        if (this.isDestroyed()) {
             return;
+        }
+
+        if (!this.sha256) {
+            throw new Error('Part SHA-256 unavailable');
+        }
+
+        if (!this.blob) {
+            throw new Error('Part blob unavailable');
         }
 
         const clientEventInfo = {
@@ -151,7 +159,7 @@ class MultiputPart extends BaseMultiput {
             errorHandler: this.uploadErrorHandler,
             progressHandler: this.uploadProgressHandler,
             withIdleTimeout: true,
-            idleTimeoutDuration: this.config.requestTimeoutMS
+            idleTimeoutDuration: this.config.requestTimeoutMs
         });
     };
 
@@ -189,8 +197,10 @@ class MultiputPart extends BaseMultiput {
         }
 
         const newUploadedBytes = parseInt(event.loaded, 10);
-        this.onProgress(this.uploadedBytes, newUploadedBytes);
+        const prevUploadedBytes = this.uploadedBytes;
         this.uploadedBytes = newUploadedBytes;
+
+        this.onProgress(prevUploadedBytes, newUploadedBytes);
     };
 
     /**
@@ -204,7 +214,7 @@ class MultiputPart extends BaseMultiput {
             return;
         }
 
-        this.consoleLog(
+        this.consoleLogFunc(
             () =>
                 `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr
                     .readyState}. Parts state ${this.getPartsState()}`

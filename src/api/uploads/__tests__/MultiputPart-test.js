@@ -34,22 +34,26 @@ describe('api/MultiputPart', () => {
     });
 
     describe('upload()', () => {
-        it('should noop if sha256 is not available', () => {
+        it('should throw error if sha256 is not available', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.blob = {};
 
             MultiputPartTest.xhr.uploadFile = sandbox.mock().never();
 
-            MultiputPartTest.upload();
+            assert.throws(() => {
+                MultiputPartTest.upload();
+            });
         });
 
-        it('should noop if blob is not available', () => {
+        it('should throw error if blob is not available', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.sha256 = '123';
 
             MultiputPartTest.xhr.uploadFile = sandbox.mock().never();
 
-            MultiputPartTest.upload();
+            assert.throws(() => {
+                MultiputPartTest.upload();
+            });
         });
 
         it('should upload file properly', () => {

@@ -40,9 +40,9 @@ describe('api/MultiputUpload', () => {
 
             // Expectations
             const expectedParts = [
-                new MultiputPart(config, 0, 0, 400000),
-                new MultiputPart(config, 1, 400000, 400000),
-                new MultiputPart(config, 2, 800000, 200000)
+                new MultiputPart(config, 0, 0, 400000, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart(config, 1, 400000, 400000, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart(config, 2, 800000, 200000, 1, { upload_part: 'www.box.com' })
             ];
 
             // Execute
@@ -63,9 +63,9 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.firstUnuploadedPartIndex = 0;
             multiputUploadTest.numPartsUploading = 0;
             multiputUploadTest.parts = [
-                new MultiputPart(config, 0, 0, 1024),
-                new MultiputPart(config, 1, 1024, 1024),
-                new MultiputPart(config, 2, 2048, 1024)
+                new MultiputPart(config, 0, 0, 1024, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart(config, 1, 1024, 1024, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart(config, 2, 2048, 1024, 1, { upload_part: 'www.box.com' })
             ];
         });
 
@@ -135,9 +135,9 @@ describe('api/MultiputUpload', () => {
         beforeEach(() => {
             multiputUploadTest.firstUnuploadedPartIndex = 0;
             multiputUploadTest.parts = [
-                new MultiputPart(config, 0, 0, 1024),
-                new MultiputPart(config, 1, 1024, 1024),
-                new MultiputPart(config, 2, 2048, 1024)
+                new MultiputPart(config, 0, 0, 1024, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart(config, 1, 1024, 1024, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart(config, 2, 2048, 1024, 1, { upload_part: 'www.box.com' })
             ];
         });
 
@@ -204,9 +204,9 @@ describe('api/MultiputUpload', () => {
 
             // Expectations
             const expectedParts = [
-                new MultiputPart(config, 0, 0, 400000),
-                new MultiputPart(config, 1, 400000, 400000),
-                new MultiputPart(config, 2, 800000, 200000)
+                new MultiputPart(config, 0, 0, 400000, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart(config, 1, 400000, 400000, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart(config, 2, 800000, 200000, 1, { upload_part: 'www.box.com' })
             ];
 
             // Execute
@@ -551,9 +551,9 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.firstUnuploadedPartIndex = 0;
             multiputUploadTest.numPartsDigestComputing = 0;
             multiputUploadTest.parts = [
-                new MultiputPart(0, 0, 1024),
-                new MultiputPart(1, 1024, 1024),
-                new MultiputPart(2, 2048, 1024)
+                new MultiputPart({}, 0, 0, 1024, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart({}, 1, 1024, 1024, 1, { upload_part: 'www.box.com' }),
+                new MultiputPart({}, 2, 2048, 1024, 1, { upload_part: 'www.box.com' })
             ];
         });
 
