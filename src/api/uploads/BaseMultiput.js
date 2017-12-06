@@ -7,7 +7,6 @@ import Base from '../Base';
 import type { MultiputConfig } from '../../flowTypes';
 
 const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
-    console: false, // Whether to display informational messages to console
     digestReadahead: 5, // How many parts past those currently uploading to precompute digest for
     initialRetryDelayMs: 5000, // Base for exponential backoff on retries
     maxRetryDelayMs: 60000, // Upper bound for time between retries
@@ -20,6 +19,7 @@ const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
 class BaseMultiput extends Base {
     config: MultiputConfig;
     sessionEndpoints: Object;
+    canConsoleLog: boolean;
 
     /**
      * [constructor]
@@ -34,7 +34,22 @@ class BaseMultiput extends Base {
 
         this.config = config || DEFAULT_MULTIPUT_CONFIG;
         this.sessionEndpoints = sessionEndpoints;
+        this.canConsoleLog = options.consoleLog && !!window.console && !!window.console.log;
     }
+
+    /**
+     * Console log a function returned message
+     * 
+     * @param {Function} msgFunc
+     * @return {void}
+     */
+    consoleLogFunc = (msgFunc: Function): void => {
+        if (!this.canConsoleLog) {
+            return;
+        }
+
+        this.consoleLog(msgFunc());
+    };
 
     /**
      * POST log event

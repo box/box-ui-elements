@@ -283,7 +283,6 @@ export type SkillData = {
 };
 
 export type MultiputConfig = {
-    console: boolean,
     digestReadahead: number,
     initialRetryDelayMs: number,
     maxRetryDelayMs: number,
