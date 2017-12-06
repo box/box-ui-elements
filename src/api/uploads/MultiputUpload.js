@@ -11,7 +11,7 @@ import { retryNumOfTimes } from '../../util/function';
 import { digest } from '../../util/webcrypto';
 import createWorker from '../../util/uploadsSHA1Worker';
 import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
-import type { StringAnyMap, MultiputConfig } from '../../flowTypes';
+import type { StringAnyMap, MultiputConfig, Options } from '../../flowTypes';
 
 // Constants used for specifying log event types.
 /* eslint-disable no-unused-vars */
@@ -43,7 +43,7 @@ class MultiputUpload extends BaseMultiput {
     onSuccess: Function;
     onError: Function;
     onProgress: Function;
-    options: Object;
+    options: Options;
     partSize: number;
     parts: Array<MultiputPart>;
     numPartsDigestComputing: number;
@@ -60,7 +60,7 @@ class MultiputUpload extends BaseMultiput {
     /**
      * [constructor]
      * 
-     * @param {Object} options
+     * @param {Options} options
      * @param {File} file
      * @param {string} createSessionUrl
      * @param {string} [destinationFolderId] - Untyped folder id (e.g. no "d_" prefix)
@@ -71,7 +71,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Function} [onSuccess]
      */
     constructor(
-        options: Object,
+        options: Options,
         file: File,
         createSessionUrl: string,
         destinationFolderId?: ?string,
@@ -335,10 +335,7 @@ class MultiputUpload extends BaseMultiput {
         }
 
         this.totalUploadedBytes += newUploadedBytes - prevUploadedBytes;
-
-        if (this.onProgress) {
-            this.onProgress(this.totalUploadedBytes);
-        }
+        this.onProgress(this.totalUploadedBytes);
     };
 
     /**
@@ -397,10 +394,29 @@ class MultiputUpload extends BaseMultiput {
                 this.numPartsNotStarted -= 1;
                 this.numPartsDigestComputing += 1;
                 this.computeDigestForPart(part);
-                break;
+                return;
             }
         }
     };
+
+    /**
+     * Read a blob with FileReader
+     * 
+     * @param {FileReader} reader
+     * @param {Blob} blob
+     * @return {Promise}
+     */
+    readFile = (reader: FileReader, blob: Blob): Promise<> =>
+        new Promise((resolve, reject) => {
+            reader.readAsArrayBuffer(blob);
+            reader.onload = () => {
+                resolve({
+                    buffer: reader.result,
+                    readCompleteTimestamp: Date.now()
+                });
+            };
+            reader.onerror = reject;
+        });
 
     /**
      * Compute digest for this part
@@ -411,22 +427,14 @@ class MultiputUpload extends BaseMultiput {
      */
     computeDigestForPart = async (part: MultiputPart): Promise<> => {
         const blob = this.file.slice(part.offset, part.offset + part.size);
-        const reader = new FileReader();
+        const reader = new window.FileReader();
         const startTimestamp = Date.now();
-        let readCompleteTimestamp = startTimestamp;
 
         try {
-            const buffer: ArrayBuffer = await new Promise((resolve, reject) => {
-                reader.readAsArrayBuffer(blob);
-                reader.onload = () => {
-                    readCompleteTimestamp = Date.now();
-                    // Cast reader.result to any type to make flow happy
-                    // reader.result is actually ArrayBuffer
-                    resolve((reader.result: any));
-                };
-                reader.onerror = reject;
-            });
-
+            const {
+                buffer,
+                readCompleteTimestamp
+            }: { buffer: ArrayBuffer, readCompleteTimestamp: number } = await this.readFile(reader, blob);
             const sha256 = await digest('SHA-256', buffer);
 
             this.sendPartToWorker(part, buffer);

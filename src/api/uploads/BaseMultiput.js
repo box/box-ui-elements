@@ -4,7 +4,7 @@
  * @author Box
  */
 import Base from '../Base';
-import type { MultiputConfig } from '../../flowTypes';
+import type { MultiputConfig, Options } from '../../flowTypes';
 
 const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     digestReadahead: 5, // How many parts past those currently uploading to precompute digest for
@@ -24,17 +24,17 @@ class BaseMultiput extends Base {
     /**
      * [constructor]
      *
-     * @param {Object} options
+     * @param {Options} options
      * @param {Object} sessionEndpoints
      * @param {MultiputConfig} [config]
      * @return {void}
      */
-    constructor(options: Object, sessionEndpoints: Object, config?: MultiputConfig): void {
+    constructor(options: Options, sessionEndpoints: Object, config?: MultiputConfig): void {
         super(options);
 
         this.config = config || DEFAULT_MULTIPUT_CONFIG;
         this.sessionEndpoints = sessionEndpoints;
-        this.canConsoleLog = options.consoleLog && !!window.console && !!window.console.log;
+        this.canConsoleLog = !!options.consoleLog && !!window.console && !!window.console.log;
     }
 
     /**

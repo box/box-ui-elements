@@ -73,8 +73,8 @@ class Base {
         });
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
-        this.consoleLog = options.consoleLog && !!window.console ? window.console.log || noop : noop;
-        this.consoleError = options.consoleError && !!window.console ? window.console.error || noop : noop;
+        this.consoleLog = !!options.consoleLog && !!window.console ? window.console.log || noop : noop;
+        this.consoleError = !!options.consoleError && !!window.console ? window.console.error || noop : noop;
     }
 
     /**

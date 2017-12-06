@@ -5,7 +5,7 @@
  */
 import noop from 'lodash.noop';
 import BaseMultiput from './BaseMultiput';
-import type { MultiputConfig } from '../../flowTypes';
+import type { MultiputConfig, Options } from '../../flowTypes';
 import { updateQueryParameters } from '../../util/url';
 import { getBoundedExpBackoffRetryDelay } from '../../util/uploads';
 
@@ -47,7 +47,7 @@ class MultiputPart extends BaseMultiput {
     /**
      * [constructor]
      *
-     * @param {Object} options
+     * @param {Options} options
      * @param {number} index - 0-based index of this part in array of all parts
      * @param {number} offset - Starting byte offset of this part's range
      * @param {number} size - Size of this part in bytes
@@ -62,7 +62,7 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     constructor(
-        options: Object,
+        options: Options,
         index: number,
         offset: number,
         size: number,
@@ -165,6 +165,7 @@ class MultiputPart extends BaseMultiput {
         if (this.isDestroyed()) {
             return;
         }
+
         this.state = PART_STATE_UPLOADED;
         this.consoleLogFunc(() => `Upload completed: ${this.toJSON()}. Parts state: ${this.getPartsState()}`);
         this.data = data;
@@ -183,6 +184,10 @@ class MultiputPart extends BaseMultiput {
      * @return {void}
      */
     uploadProgressHandler = (event: ProgressEvent) => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
         const newUploadedBytes = parseInt(event.loaded, 10);
         this.onProgress(this.uploadedBytes, newUploadedBytes);
         this.uploadedBytes = newUploadedBytes;
