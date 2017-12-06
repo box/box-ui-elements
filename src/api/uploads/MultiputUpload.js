@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import noop from 'lodash.noop';
 import BaseMultiput from './BaseMultiput';
 import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from '../../util/uploads';
 import { retryNumOfTimes } from '../../util/function';
@@ -27,7 +28,6 @@ const LOG_EVENT_TYPE_FILE_READER_RECEIVED_NOT_FOUND_ERROR = 'file_reader_receive
 const LOG_EVENT_TYPE_PART_DIGEST_RETRIES_EXCEEDED = 'part_digest_retries_exceeded';
 const LOG_EVENT_TYPE_LOGGED_OUT = 'logged_out';
 /* eslint-enable no-unused-vars */
-const noop = () => {};
 
 class MultiputUpload extends BaseMultiput {
     clientId: ?string;
@@ -666,7 +666,7 @@ class MultiputUpload extends BaseMultiput {
         const parts = [];
         let i = this.firstUnuploadedPartIndex;
         while (this.parts[i] && this.parts[i].state === PART_STATE_NOT_STARTED) {
-            parts.push(this.parts[i].stringify());
+            parts.push(JSON.stringify(this.parts[i]));
             i += 1;
         }
 

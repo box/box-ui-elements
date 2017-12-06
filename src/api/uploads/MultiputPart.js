@@ -3,9 +3,10 @@
  * @file Multiput upload part
  * @author Box
  */
+import noop from 'lodash.noop';
 import BaseMultiput from './BaseMultiput';
 import type { MultiputConfig } from '../../flowTypes';
-import { updateQueryStringParameters } from '../../util/url';
+import { updateQueryParameters } from '../../util/url';
 import { getBoundedExpBackoffRetryDelay } from '../../util/uploads';
 
 const PART_STATE_NOT_STARTED: 0 = 0;
@@ -13,7 +14,6 @@ const PART_STATE_COMPUTING_DIGEST: 1 = 1;
 const PART_STATE_DIGEST_READY: 2 = 2;
 const PART_STATE_UPLOADING: 3 = 3;
 const PART_STATE_UPLOADED: 4 = 4;
-const noop = () => {};
 
 class MultiputPart extends BaseMultiput {
     index: number;
@@ -96,7 +96,7 @@ class MultiputPart extends BaseMultiput {
         this.getNumPartsUploading = getNumPartsUploading;
     }
 
-    stringify = () =>
+    toJSON = () =>
         JSON.stringify({
             index: this.index,
             offset: this.offset,
@@ -106,7 +106,6 @@ class MultiputPart extends BaseMultiput {
             numUploadRetriesPerformed: this.numUploadRetriesPerformed,
             numDigestRetriesPerformed: this.numDigestRetriesPerformed,
             sha256: this.sha256,
-            xhr: this.xhr.xhr,
             timing: this.timing
         });
 
@@ -167,7 +166,7 @@ class MultiputPart extends BaseMultiput {
             return;
         }
         this.state = PART_STATE_UPLOADED;
-        this.consoleLogFunc(() => `Upload completed: ${this.stringify()}. Parts state: ${this.getPartsState()}`);
+        this.consoleLog(`Upload completed: ${this.toJSON()}. Parts state: ${this.getPartsState()}`);
         this.data = data;
         this.blob = null;
         this.timing.uploadTime = Date.now() - this.startTimestamp;
@@ -200,10 +199,9 @@ class MultiputPart extends BaseMultiput {
             return;
         }
 
-        this.consoleLogFunc(
-            () =>
-                `Upload failure ${error.message} for part ${this.stringify()}. XHR state: ${this.xhr.xhr
-                    .readyState}. Parts state ${this.getPartsState()}`
+        this.consoleLog(
+            `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr
+                .readyState}. Parts state ${this.getPartsState()}`
         );
         const eventInfo = {
             message: error.message,
@@ -231,7 +229,7 @@ class MultiputPart extends BaseMultiput {
         );
 
         this.numUploadRetriesPerformed += 1;
-        this.consoleLog(`Retrying uploading part ${this.stringify()} in ${retryDelayMs} ms`);
+        this.consoleLog(`Retrying uploading part ${this.toJSON()} in ${retryDelayMs} ms`);
         this.retryTimeout = setTimeout(this.retryUpload, retryDelayMs);
     };
 
@@ -248,25 +246,25 @@ class MultiputPart extends BaseMultiput {
         try {
             if (this.uploadedBytes < this.size) {
                 // Not all bytes were uploaded to the server. So upload part again.
-                throw new Error();
+                throw new Error('Incomplete part.');
             }
 
             const parts = await this.listParts(this.index, 1);
 
             if (parts && parts.length === 1 && parts[0].offset === this.offset && parts[0].part_id) {
-                this.consoleLog(`Part ${this.stringify()} is available on server. Not re-uploading.`);
+                this.consoleLog(`Part ${this.toJSON()} is available on server. Not re-uploading.`);
                 this.id = parts[0].part_id;
                 this.uploadSuccessHandler({
                     part: parts[0]
                 });
                 return;
             }
-            this.consoleLog(`Part ${this.stringify()} is not available on server. Re-uploading.`);
-            throw new Error();
+            this.consoleLog(`Part ${this.toJSON()} is not available on server. Re-uploading.`);
+            throw new Error('Part not found on the server');
         } catch (error) {
             const { response } = error;
             if (response && response.status) {
-                this.consoleLog(`Error ${response.status} while listing part ${this.stringify()}. Re-uploading.`);
+                this.consoleLog(`Error ${response.status} while listing part ${this.toJSON()}. Re-uploading.`);
             }
             this.numUploadRetriesPerformed += 1;
             this.upload();
@@ -302,7 +300,7 @@ class MultiputPart extends BaseMultiput {
             limit
         };
 
-        const endpoint = updateQueryStringParameters(this.sessionEndpoints.listParts, params);
+        const endpoint = updateQueryParameters(this.sessionEndpoints.listParts, params);
         const response = await this.xhr.get({
             url: endpoint
         });

@@ -243,7 +243,9 @@ export type Options = {
     cache?: Cache,
     apiHost?: string,
     uploadHost?: string,
-    responseFilter?: Function
+    responseFilter?: Function,
+    consoleLog?: boolean,
+    consoleError?: boolean
 };
 
 export type Recent = {

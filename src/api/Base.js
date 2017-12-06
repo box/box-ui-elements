@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import noop from 'lodash.noop';
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
@@ -41,6 +42,16 @@ class Base {
     options: Options;
 
     /**
+     * @property {Function}
+     */
+    consoleLog: Function;
+
+    /**
+     * @property {Function}
+     */
+    consoleError: Function;
+
+    /**
      * [constructor]
      *
      * @param {Object} [options]
@@ -62,6 +73,8 @@ class Base {
         });
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
+        this.consoleLog = options.consoleLog && !!window.console ? window.console.log || noop : noop;
+        this.consoleError = options.consoleError && !!window.console ? window.console.error || noop : noop;
     }
 
     /**

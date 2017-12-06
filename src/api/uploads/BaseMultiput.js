@@ -37,34 +37,6 @@ class BaseMultiput extends Base {
     }
 
     /**
-     * If console logging is enabled in config, log a message to console
-     * 
-     * @private
-     * @param {string} msg
-     * @return {void}
-     */
-    consoleLog = (msg: string): void => {
-        if (this.config.console && window.console) {
-            // eslint-disable-next-line no-console
-            console.log(`${new Date().toString()} ${msg}`);
-        }
-    };
-
-    /**
-     * If console logging is enabled in config, call passed in function to generate a message and log it
-     * to console.
-     * 
-     * @private
-     * @param {function} msgFunc
-     * @return {void}
-     */
-    consoleLogFunc = (msgFunc: Function): void => {
-        if (this.config.console && window.console) {
-            this.consoleLog(msgFunc());
-        }
-    };
-
-    /**
      * POST log event
      * 
      * @param {string} eventType
