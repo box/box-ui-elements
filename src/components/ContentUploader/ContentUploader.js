@@ -12,6 +12,7 @@ import uniqueid from 'lodash.uniqueid';
 import cloneDeep from 'lodash.clonedeep';
 import API from '../../api';
 import DroppableContent from './DroppableContent';
+import UploadsManager from './UploadsManager';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
@@ -57,7 +58,8 @@ type Props = {
     language?: string,
     messages?: StringMap,
     responseFilter?: Function,
-    intl: any
+    intl: any,
+    windowView?: boolean
 };
 
 type DefaultProps = {|
@@ -75,13 +77,15 @@ type DefaultProps = {|
 |};
 
 type State = {
-    view: View,
+    errorCode?: string,
+    isUploadsManagerExpanded: boolean,
     items: UploadItem[],
-    errorCode?: string
+    view: View
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
+const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 
 class ContentUploader extends Component<DefaultProps, Props, State> {
     id: string;
@@ -90,6 +94,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     rootElement: HTMLElement;
     appElement: HTMLElement;
     sha1Worker: any;
+
+    state = {
+        isUploadsManagerExpanded: false
+    };
 
     static defaultProps: DefaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -102,7 +110,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         onClose: noop,
         onComplete: noop,
         onError: noop,
-        onUpload: noop
+        onUpload: noop,
+        windowView: false
     };
 
     /**
@@ -293,7 +302,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     upload = () => {
         const { items } = this.state;
         items.forEach((uploadItem) => {
-            if (uploadItem.status !== STATUS_IN_PROGRESS) {
+            if (uploadItem.status !== STATUS_IN_PROGRESS && uploadItem.status !== STATUS_COMPLETE) {
                 this.uploadFile(uploadItem);
             }
         });
@@ -385,19 +394,24 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     updateViewAndCollection(items: UploadItem[]) {
-        const { onComplete }: Props = this.props;
+        const { onComplete, windowView }: Props = this.props;
         const someUploadIsInProgress = items.some((uploadItem) => uploadItem.status !== STATUS_COMPLETE);
+        const someUploadHasFailed = items.some((uploadItem) => uploadItem.status === STATUS_ERROR);
         const allFilesArePending = !items.some((uploadItem) => uploadItem.status !== STATUS_PENDING);
 
         let view = '';
         if ((items && items.length === 0) || allFilesArePending) {
             view = VIEW_UPLOAD_EMPTY;
+        } else if (someUploadHasFailed && windowView) {
+            view = VIEW_ERROR;
         } else if (someUploadIsInProgress) {
             view = VIEW_UPLOAD_IN_PROGRESS;
         } else {
             view = VIEW_UPLOAD_SUCCESS;
             onComplete(cloneDeep(items.map((item) => item.boxFile)));
-            items = []; // Reset item collection after successful upload
+            if (!windowView) {
+                items = []; // Reset item collection after successful upload
+            }
         }
 
         const state: State = {
@@ -485,40 +499,154 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     };
 
     /**
+     * Expands the upload manager
+     * 
+     * @return {void}
+     */
+    expandUploadsManager = (): void => {
+        if (!this.props.windowView) {
+            return;
+        }
+
+        clearTimeout(this.resetItemsTimeout);
+
+        this.setState({
+            isUploadsManagerExpanded: true
+        });
+    };
+
+    /**
+     * Minimizes the upload manager
+     * 
+     * @return {void}
+     */
+    minimizeUploadsManager = (): void => {
+        if (!this.props.windowView) {
+            return;
+        }
+
+        this.setState({
+            isUploadsManagerExpanded: false
+        });
+
+        this.hideUploadsManager();
+    };
+
+    /**
+     * Hides the upload manager
+     * 
+     * @return {void}
+     */
+    hideUploadsManager = () => {
+        this.resetItemsTimeout = setTimeout(
+            this.resetUploadsManagerItemsWhenUploadsComplete,
+            HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT
+        );
+    };
+
+    /**
+     * Toggles the upload manager
+     * 
+     * @return {void}
+     */
+    toggleUploadsManager = (): void => {
+        const { isUploadsManagerExpanded } = this.state;
+        if (isUploadsManagerExpanded) {
+            this.minimizeUploadsManager();
+            return;
+        }
+
+        this.expandUploadsManager();
+    };
+
+    /**
+     * Empties the items queue
+     * 
+     * @return {void}
+     */
+    resetUploadsManagerItemsWhenUploadsComplete = (): void => {
+        const { isUploadsManagerExpanded, view } = this.state;
+        const { windowView } = this.props;
+
+        // Do not reset items when upload manger is expanded or there're uploads in progress
+        if ((isUploadsManagerExpanded && windowView) || view === VIEW_UPLOAD_IN_PROGRESS) {
+            return;
+        }
+
+        this.setState({
+            items: []
+        });
+    };
+
+    /**
+     * Adds file to the upload queue and starts upload immediately
+     * 
+     * @param {File[]} files - Files to be added to upload queue
+     * @return {void}
+     */
+    addFilesToUploadQueueAndStartUpload = (files: File[]): void => {
+        this.addFilesToUploadQueue(files);
+        this.upload();
+    };
+
+    /**
      * Renders the content uploader
      *
      * @inheritdoc
      * @return {Component}
      */
     render() {
-        const { language, messages, onClose, className, measureRef, isTouch, fileLimit }: Props = this.props;
-        const { view, items, errorCode }: State = this.state;
+        const {
+            language,
+            messages,
+            onClose,
+            className,
+            measureRef,
+            isTouch,
+            fileLimit,
+            windowView
+        }: Props = this.props;
+        const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);
-        const styleClassName = classNames('buik buik-app-element bcu', className);
+        const styleClassName = classNames('bcu', className, {
+            'buik-app-element': !windowView,
+            buik: !windowView
+        });
 
         return (
             <Internationalize language={language} messages={messages}>
-                <div className={styleClassName} id={this.id} ref={measureRef}>
-                    <DroppableContent
-                        addFiles={this.addFilesToUploadQueue}
-                        allowedTypes={['Files']}
-                        items={items}
-                        isTouch={isTouch}
-                        view={view}
-                        onClick={this.onClick}
-                    />
-                    <Footer
-                        hasFiles={hasFiles}
-                        isLoading={isLoading}
-                        errorCode={errorCode}
-                        fileLimit={fileLimit}
-                        onCancel={this.cancel}
-                        onClose={onClose}
-                        onUpload={this.upload}
-                    />
-                </div>
+                {windowView
+                    ? <div className={styleClassName} id={this.id} ref={measureRef}>
+                        <UploadsManager
+                            addFiles={this.addFilesToUploadQueue}
+                            isExpanded={isUploadsManagerExpanded}
+                            items={items}
+                            onItemActionClick={this.onClick}
+                            toggleUploadsManager={this.toggleUploadsManager}
+                            view={view}
+                          />
+                    </div>
+                    : <div className={styleClassName} id={this.id} ref={measureRef}>
+                        <DroppableContent
+                            addFiles={this.addFilesToUploadQueue}
+                            allowedTypes={['Files']}
+                            items={items}
+                            isTouch={isTouch}
+                            view={view}
+                            onClick={this.onClick}
+                          />
+                        <Footer
+                            hasFiles={hasFiles}
+                            isLoading={isLoading}
+                            errorCode={errorCode}
+                            fileLimit={fileLimit}
+                            onCancel={this.cancel}
+                            onClose={onClose}
+                            onUpload={this.upload}
+                          />
+                    </div>}
             </Internationalize>
         );
     }

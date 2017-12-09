@@ -53,8 +53,9 @@ class ContentUploader extends ES6Wrapper {
 
     /** @inheritdoc */
     render() {
-        const { modal, ...rest }: { modal?: ModalOptions } = this.options;
+        const { modal, windowView = false, ...rest }: { modal?: ModalOptions, windowView?: boolean } = this.options;
         const UploaderComponent = modal ? ContentUploaderPopup : ContentUploaderComponent;
+
         render(
             <UploaderComponent
                 language={this.language}
@@ -67,6 +68,7 @@ class ContentUploader extends ES6Wrapper {
                 onError={this.onError}
                 onUpload={this.onUpload}
                 modal={modal}
+                windowView={windowView}
                 {...rest}
             />,
             this.container

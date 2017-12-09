@@ -1,0 +1,118 @@
+@import '../variables';
+
+.buik.uploads-manager-container {
+    bottom: 0;
+    max-height: 0;
+    position: fixed;
+    transition: max-height .5s;
+    width: 100%;
+
+    &.is-visible {
+        max-height: 60px;
+    }
+
+    .uploads-manager-item-list {
+        display: none;
+        height: 375px;
+
+        .buik-btn-plain:focus {
+            border: 1px solid $bfive;
+        }
+    }
+
+    &.is-expanded {
+        max-height: 435px;
+
+        .uploads-manager-item-list {
+            display: block;
+        }
+
+        .overall-progress-bar:hover .uploads-manager-toggle {
+            &::before {
+                bottom: 6px;
+                left: 6px;
+            }
+    
+            &::after {
+                right: 6px;
+                top: 6px;
+            }
+        }
+
+        .uploads-manager-toggle {
+            &::before {
+                bottom: 7px;
+                left: 7px;
+            }
+    
+            &::after {
+                right: 7px;
+                top: 7px;
+            }
+        }
+    }
+
+    .bcu-item-row {
+        padding-right: 5px;
+    }
+
+    .bcu-item-icon-name {
+        padding-left: 5px;
+    }
+
+    .bcu-progress {
+        box-shadow: none;
+    }
+
+    .bcu-item-list {
+        position: relative;
+    }
+
+    .uploads-manager-toggle {
+        background: 0 0;
+        border: 0;
+        bottom: 0;
+        height: 10px;
+        margin: auto 0;
+        position: absolute;
+        right: 30px;
+        top: 0;
+        vertical-align: middle;
+        width: 10px;
+
+        &::before,
+        &::after {
+            border: 0 solid $white;
+            content: "";
+            height: 6px;
+            position: absolute;
+            width: 6px;
+        }
+
+        &::before {
+            border-bottom-width: 2px;
+            border-left-width: 2px;
+            bottom: 0;
+            left: 0;
+        }
+
+        &::after {
+            border-right-width: 2px;
+            border-top-width: 2px;
+            right: 0;
+            top: 0;
+        }
+    }
+
+    .overall-progress-bar:hover .uploads-manager-toggle {
+        &::before {
+            bottom: -3px;
+            left: -3px;
+        }
+
+        &::after {
+            right: -3px;
+            top: -3px;
+        }
+    }
+}

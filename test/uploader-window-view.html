@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Box Content Uploader Test Page</title>
+    <style>
+        body,
+        html {
+            background: #ccc;
+            border: 0 none;
+            box-sizing: border-box !important;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .uploader1 {
+            width: 100%;
+            overflow: auto;
+        }
+
+        .container {
+            margin: 50px 0;
+        }
+
+        .inputs {
+            margin: 50px;
+        }
+
+        .inputs div {
+            display: flex;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../dev/en-US/uploader.css" />
+</head>
+
+<body>
+    <div class="inputs">
+        <div>
+            <label>
+                <div>Folder Id</div>
+                <input class="folder" type="text" placeholder="Enter root folder id" value="0" />
+            </label>
+            <label>
+                <div>Auth Token</div>
+                <input class="token" type="text" placeholder="Enter auth token" />
+            </label>
+
+            <label>
+                <div>Choose File To Upload</div>
+                <input class="file-input" multiple type='file' />
+            </label>
+        </div>
+        <button type="button" onclick="load()">Submit</button>
+    </div>
+    <div class="container">
+        <h1>Upload Manager - Choose File to Upload </h1>
+        <div class="uploader1"></div>
+    </div>
+    <script src="../dev/en-US/uploader.js"></script>
+    <script>
+        let resetTimeout;
+        // Set token and folder ID to locally stored values if available
+        (function () {
+            const storageToken = localStorage.getItem('token');
+            const storageFolder = localStorage.getItem('folderId');
+
+            document.querySelector('.token').value = storageToken || null;
+            document.querySelector('.folder').value = storageFolder || 0;
+        })();
+
+        function load() {
+            const { ContentUploader } = Box;
+
+            const token = document.querySelector('.token').value || localStorage.getItem('token');
+            const folderId = document.querySelector('.folder').value || localStorage.getItem('folderId');
+            const fileInput = document.querySelector('.file-input');
+
+            localStorage.setItem('token', token);
+            localStorage.setItem('folderId', folderId);
+
+            const typedId = `folder_${folderId}`;
+
+            const tokenGenerator = () => {
+
+                // Resolve with a map of typed ID (aka file_{FILE_ID} or folder_{FOLDER_ID}) -> token to use
+                const tokenMap = {
+                    [typedId]: token
+                }
+
+                return Promise.resolve(tokenMap);
+            };
+
+            uploader1 = new ContentUploader();
+            document.querySelector('.uploader1').innerHTML = '';
+
+            uploader1.on('upload', (data) => {
+                console.log(`Successfully uploaded a file: ${data ? data.id : 'No File ID'}`);
+            });
+            uploader1.on('error', (data) => {
+                console.log(`Failed to upload: ${JSON.stringify(data)}`);
+                uploader1.component.expandUploadManager();
+            });
+
+            uploader1.on('complete', (data) => {
+                console.log(`All files successfully uploaded: ${JSON.stringify(data)}`);
+                uploader1.component.hideUploadManager();
+            });
+
+            uploader1.show(folderId, tokenGenerator, {
+                container: '.uploader1',
+                windowView: true,
+            });
+
+            fileInput.onchange = function (event) {
+                uploader1.component.addFilesToUploadQueueAndStartUpload(event.target.files)
+            };
+        }
+        load();
+    </script>
+</body>
+
+</html>
