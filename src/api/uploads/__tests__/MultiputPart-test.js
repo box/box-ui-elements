@@ -12,7 +12,6 @@ describe('api/MultiputPart', () => {
     const sessionId = 1;
     const sessionEndpoints = {};
     const config = {};
-    const getPartsState = sandbox.stub();
     const getNumPartsUploading = sandbox.stub();
     let MultiputPartTest;
     beforeEach(() => {
@@ -24,7 +23,6 @@ describe('api/MultiputPart', () => {
             sessionId,
             sessionEndpoints,
             config,
-            getPartsState,
             getNumPartsUploading
         );
     });

@@ -40,7 +40,6 @@ class MultiputPart extends BaseMultiput {
     blob: ?Blob;
     rangeEnd: number;
     startTimestamp: number;
-    getPartsState: Function;
     getNumPartsUploading: Function;
 
     /**
@@ -53,7 +52,6 @@ class MultiputPart extends BaseMultiput {
      * @param {number} sessionId
      * @param {Object} sessionEndpoints
      * @param {MultiputConfig} config
-     * @param {Function} getPartsState
      * @param {Function} getNumPartsUploading
      * @param {Function} [onSuccess]
      * @param {Function} [onProgress]
@@ -68,7 +66,6 @@ class MultiputPart extends BaseMultiput {
         sessionId: string,
         sessionEndpoints: Object,
         config: MultiputConfig,
-        getPartsState: Function,
         getNumPartsUploading: Function,
         onSuccess?: Function,
         onProgress?: Function,
@@ -90,7 +87,6 @@ class MultiputPart extends BaseMultiput {
         this.onSuccess = onSuccess || noop;
         this.onError = onError || noop;
         this.onProgress = onProgress || noop;
-        this.getPartsState = getPartsState;
         this.getNumPartsUploading = getNumPartsUploading;
     }
 
@@ -173,7 +169,7 @@ class MultiputPart extends BaseMultiput {
         }
 
         this.state = PART_STATE_UPLOADED;
-        this.consoleLogFunc(() => `Upload completed: ${this.toJSON()}. Parts state: ${this.getPartsState()}`);
+        this.consoleLogFunc(() => `Upload completed: ${this.toJSON()}.`);
         this.data = data;
         this.blob = null;
         this.timing.uploadTime = Date.now() - this.startTimestamp;
@@ -213,9 +209,7 @@ class MultiputPart extends BaseMultiput {
         }
 
         this.consoleLogFunc(
-            () =>
-                `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr
-                    .readyState}. Parts state ${this.getPartsState()}`
+            () => `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr.readyState}.`
         );
         const eventInfo = {
             message: error.message,

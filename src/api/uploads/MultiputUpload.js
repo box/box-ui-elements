@@ -593,7 +593,6 @@ class MultiputUpload extends BaseMultiput {
                 this.sessionId,
                 this.sessionEndpoints,
                 this.config,
-                this.getPartsState,
                 this.getNumPartsUploading,
                 this.partUploadSuccessHandler,
                 this.updateProgress,
@@ -643,44 +642,6 @@ class MultiputUpload extends BaseMultiput {
      * @return {void}
      */
     cancel(): void {}
-
-    /**
-     * Get parts state in string
-     * 
-     * @return {string}
-     */
-    getPartsState = (): string => {
-        const state: {
-            notStarted: number,
-            digestComputing: number,
-            digestReady: number,
-            uploading: number,
-            uploaded: number,
-            firstUnuploadedPart: number,
-            partsWindow?: Array<string>
-        } = {
-            notStarted: this.numPartsNotStarted,
-            digestComputing: this.numPartsDigestComputing,
-            digestReady: this.numPartsDigestReady,
-            uploading: this.numPartsUploading,
-            uploaded: this.numPartsUploaded,
-            firstUnuploadedPart: this.firstUnuploadedPartIndex
-        };
-
-        if (this.parts === null) {
-            return JSON.stringify(state);
-        }
-
-        const parts = [];
-        let i = this.firstUnuploadedPartIndex;
-        while (this.parts[i] && this.parts[i].state === PART_STATE_NOT_STARTED) {
-            parts.push(JSON.stringify(this.parts[i]));
-            i += 1;
-        }
-
-        state.partsWindow = parts;
-        return JSON.stringify(state);
-    };
 }
 
 export default MultiputUpload;
