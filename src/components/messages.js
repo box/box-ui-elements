@@ -451,7 +451,7 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
     uploadsManagerUploadFailed: {
         id: 'be.uploadsManagerUploadFailed',
         description: 'Text shown when uploads failed',
-        defaultMessage: 'Some Uploads Failed.'
+        defaultMessage: 'Some Uploads Failed'
     }
 });
 

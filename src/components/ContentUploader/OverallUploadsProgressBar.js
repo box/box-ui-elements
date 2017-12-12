@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import ProgressBar from './ProgressBar';
 import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR } from '../../constants';
+import type { UploadItem, View } from '../../flowTypes';
 
 import './OverallUploadsProgressBar.scss';
 
@@ -20,6 +21,12 @@ type Props = {
     view: View
 };
 
+/**
+ * Get upload status
+ * 
+ * @param {View} view
+ * @return {FormattedMessage|string} 
+ */
 const getUploadStatus = (view) => {
     switch (view) {
         case VIEW_UPLOAD_IN_PROGRESS:

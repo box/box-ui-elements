@@ -32,7 +32,15 @@ import {
     STATUS_ERROR,
     ERROR_CODE_UPLOAD_FILE_LIMIT
 } from '../../constants';
-import type { BoxItem, UploadItem, View, Token, StringMap } from '../../flowTypes';
+import type {
+    BoxItem,
+    UploadItem,
+    View,
+    Token,
+    StringMap,
+    UploadItemAPIOptions,
+    UploadFileWithAPIOptions
+} from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 
@@ -59,7 +67,8 @@ type Props = {
     messages?: StringMap,
     responseFilter?: Function,
     intl: any,
-    windowView?: boolean
+    windowView?: boolean,
+    files?: Array<UploadFileWithAPIOptions>
 };
 
 type DefaultProps = {|
@@ -73,7 +82,9 @@ type DefaultProps = {|
     onClose: Function,
     onComplete: Function,
     onError: Function,
-    onUpload: Function
+    onUpload: Function,
+    windowView: boolean,
+    files: Array<UploadFileWithAPIOptions>
 |};
 
 type State = {
@@ -86,6 +97,7 @@ type State = {
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
+const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
 class ContentUploader extends Component<DefaultProps, Props, State> {
     id: string;
@@ -94,10 +106,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     rootElement: HTMLElement;
     appElement: HTMLElement;
     sha1Worker: any;
-
-    state = {
-        isUploadsManagerExpanded: false
-    };
+    resetItemsTimeout: ?number;
 
     static defaultProps: DefaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -111,7 +120,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         onComplete: noop,
         onError: noop,
         onUpload: noop,
-        windowView: false
+        windowView: false,
+        files: []
     };
 
     /**
@@ -126,7 +136,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         this.state = {
             view: rootFolderId && token ? VIEW_UPLOAD_EMPTY : VIEW_ERROR,
             items: [],
-            errorCode: ''
+            errorCode: '',
+            isUploadsManagerExpanded: false
         };
         this.id = uniqueid('bcu_');
         this.sha1Worker = createWorker();
@@ -145,11 +156,28 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     }
 
     /**
+     * Adds new items to the queue when files prop gets updated in window view 
+     * 
+     * @param {Props} nextProps
+     * @return {void}
+     */
+    componentWillReceiveProps(nextProps: Props) {
+        const { files, windowView } = nextProps;
+
+        if (!windowView || !files || !files.length) {
+            return;
+        }
+
+        this.addFilesWithOptionsToUploadQueueAndStartUpload(files);
+    }
+
+    /**
      * Create and return new instance of API creator
      *
+     * @param {UploadItemAPIOptions} [uploadAPIOptions]
      * @return {API}
      */
-    createAPIFactory(): API {
+    createAPIFactory(uploadAPIOptions?: UploadItemAPIOptions): API {
         const {
             rootFolderId,
             token,
@@ -160,6 +188,12 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             clientName,
             responseFilter
         } = this.props;
+
+        const itemFolderId =
+            uploadAPIOptions && uploadAPIOptions.folderId
+                ? `folder_${uploadAPIOptions.folderId}`
+                : `folder_${rootFolderId}`;
+
         return new API({
             token,
             sharedLink,
@@ -168,7 +202,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             uploadHost,
             clientName,
             responseFilter,
-            id: `folder_${rootFolderId}`
+            id: itemFolderId,
+            ...uploadAPIOptions
         });
     }
 
@@ -177,17 +212,28 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      *
      * @private
      * @param {File[]} files - Files to be added to upload queue
+     * @param {UploadItemAPIOptions} [uploadAPIOptions]
      * @return {void}
      */
-    addFilesToUploadQueue = (files: File[]) => {
-        const { fileLimit } = this.props;
+    addFilesToUploadQueue = (files: File[], uploadAPIOptions?: UploadItemAPIOptions) => {
+        const { fileLimit, windowView } = this.props;
         const { view, items } = this.state;
+
+        clearTimeout(this.resetItemsTimeout);
 
         // Filter out files that are already in the upload queue
         const newItems = [].filter
             .call(files, (file) => {
                 const { name } = file;
-                return !items.some((item) => item.name === name);
+                return !items.some((item) => {
+                    if (!uploadAPIOptions) {
+                        return item.name === name;
+                    }
+                    return (
+                        item.name === name &&
+                        (item.folderId === uploadAPIOptions.folderId || item.fileId === uploadAPIOptions.fileId)
+                    );
+                });
 
                 // Convert files from the file API to upload items
             })
@@ -200,8 +246,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                     extension = '';
                 }
 
-                const api = this.getUploadAPI(file);
-                const uploadItem = {
+                const api = this.getUploadAPI(file, uploadAPIOptions);
+                const uploadItem: UploadItem = {
                     api,
                     extension,
                     file,
@@ -211,11 +257,16 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                     status: STATUS_PENDING
                 };
 
+                if (uploadAPIOptions) {
+                    uploadItem.options = uploadAPIOptions;
+                }
+
                 return uploadItem;
             });
 
         let updatedItems = [];
-        const totalNumOfItems = items.length + newItems.length;
+        const prevItemsNum = items.length;
+        const totalNumOfItems = prevItemsNum + newItems.length;
 
         // Don't add more than fileLimit # of items
         if (totalNumOfItems > fileLimit) {
@@ -226,6 +277,15 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         } else {
             updatedItems = items.concat(newItems);
             this.setState({ errorCode: '' });
+
+            // If the number of items being uploaded passes the threshold, expand the upload manager
+            if (
+                prevItemsNum < EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
+                totalNumOfItems >= EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
+                windowView
+            ) {
+                this.expandUploadsManager();
+            }
         }
 
         this.updateViewAndCollection(updatedItems);
@@ -241,12 +301,13 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      *
      * @private
      * @param {File} file - File to get a new API instance for
+     * @param {UploadItemAPIOptions} [uploadAPIOptions]
      * @return {UploadAPI} - Instance of Upload API
      */
-    getUploadAPI(file) {
+    getUploadAPI(file, uploadAPIOptions?: UploadItemAPIOptions) {
         const { chunked } = this.props;
         const { size } = file;
-        const factory = this.createAPIFactory();
+        const factory = this.createAPIFactory(uploadAPIOptions);
 
         if (chunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
             return factory.getChunkedUploadAPI();
@@ -316,10 +377,15 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      */
     uploadFile(item: UploadItem) {
         const { rootFolderId } = this.props;
-        const { api, file } = item;
+        const { api, file, options } = item;
+
+        let folderId = rootFolderId;
+        if (options && options.folderId) {
+            folderId = options.folderId;
+        }
 
         api.upload({
-            id: rootFolderId,
+            id: folderId,
             file,
             sha1Worker: this.sha1Worker,
             successCallback: (entries) => this.handleUploadSuccess(item, entries),
@@ -342,13 +408,13 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     resetFile(item: UploadItem) {
-        const { api, file } = item;
+        const { api, file, options } = item;
         if (api && typeof api.cancel === 'function') {
             api.cancel();
         }
 
         // Reset API, progress & status
-        item.api = this.getUploadAPI(file);
+        item.api = this.getUploadAPI(file, options);
         item.progress = 0;
         item.status = STATUS_PENDING;
 
@@ -367,7 +433,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     handleUploadSuccess = (item: UploadItem, entries?: BoxItem[]) => {
-        const { onUpload } = this.props;
+        const { onUpload, windowView } = this.props;
 
         item.progress = 100;
         item.status = STATUS_COMPLETE;
@@ -384,6 +450,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         onUpload(item.boxFile);
 
         this.updateViewAndCollection(items);
+
+        if (windowView) {
+            this.hideUploadsManager();
+        }
     };
 
     /**
@@ -416,7 +486,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
         const state: State = {
             items,
-            view
+            view,
+            isUploadsManagerExpanded: this.state.isUploadsManagerExpanded
         };
 
         if (items.length === 0) {
@@ -435,7 +506,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     handleUploadError = (item: UploadItem, error: Error) => {
-        const { onError } = this.props;
+        const { onError, windowView } = this.props;
         const { file } = item;
 
         item.status = STATUS_ERROR;
@@ -450,6 +521,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         });
 
         this.updateViewAndCollection(items);
+
+        if (windowView) {
+            this.expandUploadsManager();
+        }
     };
 
     /**
@@ -582,10 +657,14 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * Adds file to the upload queue and starts upload immediately
      * 
      * @param {File[]} files - Files to be added to upload queue
+     * @param {UploadFileWithAPIOptions} [uploadAPIOptions]
      * @return {void}
      */
-    addFilesToUploadQueueAndStartUpload = (files: File[]): void => {
-        this.addFilesToUploadQueue(files);
+    addFilesWithOptionsToUploadQueueAndStartUpload = (files: UploadFileWithAPIOptions[]): void => {
+        files.forEach(({ file, options }) => {
+            this.addFilesToUploadQueue([file], options);
+        });
+
         this.upload();
     };
 
