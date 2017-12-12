@@ -68,7 +68,10 @@ type Props = {
     responseFilter?: Function,
     intl: any,
     windowView?: boolean,
-    files?: Array<UploadFileWithAPIOptions>
+    files?: Array<UploadFileWithAPIOptions>,
+    isUploadsManagerExpanded?: boolean,
+    onExpand?: Function,
+    onMinimize?: Function
 };
 
 type DefaultProps = {|
@@ -84,12 +87,14 @@ type DefaultProps = {|
     onError: Function,
     onUpload: Function,
     windowView: boolean,
-    files: Array<UploadFileWithAPIOptions>
+    files: Array<UploadFileWithAPIOptions>,
+    isUploadsManagerExpanded: boolean,
+    onExpand: Function,
+    onMinimize: Function
 |};
 
 type State = {
     errorCode?: string,
-    isUploadsManagerExpanded: boolean,
     items: UploadItem[],
     view: View
 };
@@ -121,7 +126,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         onError: noop,
         onUpload: noop,
         windowView: false,
-        files: []
+        files: [],
+        isUploadsManagerExpanded: false,
+        onExpand: noop,
+        onMinimize: noop
     };
 
     /**
@@ -136,8 +144,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         this.state = {
             view: rootFolderId && token ? VIEW_UPLOAD_EMPTY : VIEW_ERROR,
             items: [],
-            errorCode: '',
-            isUploadsManagerExpanded: false
+            errorCode: ''
         };
         this.id = uniqueid('bcu_');
         this.sha1Worker = createWorker();
@@ -483,8 +490,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
         const state: State = {
             items,
-            view,
-            isUploadsManagerExpanded: this.state.isUploadsManagerExpanded
+            view
         };
 
         if (items.length === 0) {
@@ -576,15 +582,15 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     expandUploadsManager = (): void => {
-        if (!this.props.windowView) {
+        const { windowView, onExpand } = this.props;
+
+        if (!windowView || !onExpand) {
             return;
         }
 
         clearTimeout(this.resetItemsTimeout);
 
-        this.setState({
-            isUploadsManagerExpanded: true
-        });
+        onExpand();
     };
 
     /**
@@ -593,15 +599,13 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     minimizeUploadsManager = (): void => {
-        if (!this.props.windowView) {
+        const { windowView, onMinimize } = this.props;
+
+        if (!windowView || !onMinimize) {
             return;
         }
 
-        this.setState({
-            isUploadsManagerExpanded: false
-        });
-
-        this.hideUploadsManager();
+        onMinimize();
     };
 
     /**
@@ -622,7 +626,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     toggleUploadsManager = (): void => {
-        const { isUploadsManagerExpanded } = this.state;
+        const { isUploadsManagerExpanded } = this.props;
         if (isUploadsManagerExpanded) {
             this.minimizeUploadsManager();
             return;
@@ -637,8 +641,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     resetUploadsManagerItemsWhenUploadsComplete = (): void => {
-        const { isUploadsManagerExpanded, view } = this.state;
-        const { windowView } = this.props;
+        const { view } = this.state;
+        const { windowView, isUploadsManagerExpanded } = this.props;
 
         // Do not reset items when upload manger is expanded or there're uploads in progress
         if ((isUploadsManagerExpanded && windowView) || view === VIEW_UPLOAD_IN_PROGRESS) {
@@ -679,9 +683,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             measureRef,
             isTouch,
             fileLimit,
-            windowView
+            windowView,
+            isUploadsManagerExpanded = false
         }: Props = this.props;
-        const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
+        const { view, items, errorCode }: State = this.state;
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);
@@ -695,7 +700,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                 {windowView
                     ? <div className={styleClassName} id={this.id} ref={measureRef}>
                         <UploadsManager
-                            addFiles={this.addFilesToUploadQueue}
                             isExpanded={isUploadsManagerExpanded}
                             items={items}
                             onItemActionClick={this.onClick}
