@@ -290,3 +290,14 @@ export type MultiputConfig = {
     requestTimeoutMs: number,
     retries: number
 };
+
+export type MultiputPart = {
+    offset: number,
+    part_id: string,
+    sha1: string,
+    size: number
+};
+
+export type MultiputData = {
+    part?: MultiputPart
+};

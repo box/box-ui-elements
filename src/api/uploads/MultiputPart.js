@@ -5,7 +5,7 @@
  */
 import noop from 'lodash.noop';
 import BaseMultiput from './BaseMultiput';
-import type { MultiputConfig, Options } from '../../flowTypes';
+import type { MultiputConfig, Options, MultiputData } from '../../flowTypes';
 import { updateQueryParameters } from '../../util/url';
 import { getBoundedExpBackoffRetryDelay } from '../../util/uploads';
 
@@ -30,13 +30,12 @@ class MultiputPart extends BaseMultiput {
         | typeof PART_STATE_UPLOADED;
     timing: Object;
     uploadedBytes: number;
-    uploadUrl: string;
     onProgress: Function;
     onSuccess: Function;
     onError: Function;
-    data: Object;
+    data: MultiputData;
     config: MultiputConfig;
-    id: number;
+    id: string;
     retryTimeout: ?number;
     blob: ?Blob;
     rangeEnd: number;
@@ -86,7 +85,6 @@ class MultiputPart extends BaseMultiput {
         this.timing = {};
         this.uploadedBytes = 0;
         this.data = {};
-        this.uploadUrl = sessionEndpoints.upload_part;
         this.config = config;
         this.rangeEnd = offset + size - 1;
         this.onSuccess = onSuccess || noop;
@@ -114,7 +112,7 @@ class MultiputPart extends BaseMultiput {
      *
      * @return {Object}
      */
-    getPart = (): Object => this.data.part;
+    getPart = (): Object => this.data.part || {};
 
     /**
      * Uploads this Part via the API. Will retry on network failures.
@@ -151,7 +149,7 @@ class MultiputPart extends BaseMultiput {
         this.startTimestamp = Date.now();
 
         this.xhr.uploadFile({
-            url: this.uploadUrl,
+            url: this.sessionEndpoints.upload_part,
             data: this.blob,
             headers,
             method: 'PUT',
