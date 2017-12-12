@@ -18,10 +18,10 @@ function getCrypto(): Object {
  * hash function and text given as parameters
  * 
  * @param {string} algorithm
- * @param {Uint8Array} buffer
+ * @param {ArrayBuffer} buffer
  * @return {Promise} Promise - resolves with an ArrayBuffer containing the digest result
  */
-function digest(algorithm: string, buffer: Uint8Array): Promise<Uint8Array> {
+function digest(algorithm: string, buffer: ArrayBuffer): Promise<string> {
     const cryptoRef = getCrypto();
 
     if (cryptoRef !== window.msCrypto) {

@@ -243,7 +243,9 @@ export type Options = {
     cache?: Cache,
     apiHost?: string,
     uploadHost?: string,
-    responseFilter?: Function
+    responseFilter?: Function,
+    consoleLog?: boolean,
+    consoleError?: boolean
 };
 
 export type Recent = {
@@ -281,11 +283,21 @@ export type SkillData = {
 };
 
 export type MultiputConfig = {
-    console: boolean,
     digestReadahead: number,
     initialRetryDelayMs: number,
     maxRetryDelayMs: number,
     parallelism: number,
     requestTimeoutMs: number,
     retries: number
+};
+
+export type MultiputPart = {
+    offset: number,
+    part_id: string,
+    sha1: string,
+    size: number
+};
+
+export type MultiputData = {
+    part?: MultiputPart
 };
