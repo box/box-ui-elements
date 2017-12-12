@@ -656,8 +656,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     /**
      * Adds file to the upload queue and starts upload immediately
      * 
-     * @param {File[]} files - Files to be added to upload queue
-     * @param {UploadFileWithAPIOptions} [uploadAPIOptions]
+     * @param {UploadFileWithAPIOptions[]} files - Files to be added to upload queue
      * @return {void}
      */
     addFilesWithOptionsToUploadQueueAndStartUpload = (files: UploadFileWithAPIOptions[]): void => {
