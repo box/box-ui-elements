@@ -257,8 +257,7 @@ export type Options = {
     cache?: Cache,
     apiHost?: string,
     uploadHost?: string,
-    responseFilter?: Function,
-    fileId?: string
+    responseFilter?: Function
 };
 
 export type Recent = {

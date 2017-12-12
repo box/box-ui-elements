@@ -379,13 +379,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         const { rootFolderId } = this.props;
         const { api, file, options } = item;
 
-        let folderId = rootFolderId;
-        if (options && options.folderId) {
-            folderId = options.folderId;
-        }
-
         api.upload({
-            id: folderId,
+            // TODO: rename id to folderId
+            id: options && options.folderId ? options.folderId : rootFolderId,
+            fileId: options && options.fileId ? options.fileId : null,
             file,
             sha1Worker: this.sha1Worker,
             successCallback: (entries) => this.handleUploadSuccess(item, entries),
