@@ -12,153 +12,148 @@ import RecentsAPI from '../Recents';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
-const sandbox = sinon.sandbox.create();
 
 describe('api/APIFactory', () => {
     beforeEach(() => {
         factory = new APIFactory();
     });
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('getCache()', () => {
-        it('should return a cache instance', () => {
-            expect(factory.getCache() instanceof Cache).to.be.true;
+        test('should return a cache instance', () => {
+            expect(factory.getCache()).toBeInstanceOf(Cache);
         });
     });
 
     describe('destroy()', () => {
-        it('should destroy all APIs', () => {
-            factory.fileAPI = { destroy: sandbox.mock() };
-            factory.folderAPI = { destroy: sandbox.mock() };
-            factory.weblinkAPI = { destroy: sandbox.mock() };
-            factory.searchAPI = { destroy: sandbox.mock() };
-            factory.plainUploadAPI = { destroy: sandbox.mock() };
-            factory.chunkedUploadAPI = { destroy: sandbox.mock() };
-            factory.recentsAPI = { destroy: sandbox.mock() };
+        test('should destroy all APIs', () => {
+            factory.fileAPI = { destroy: jest.fn() };
+            factory.folderAPI = { destroy: jest.fn() };
+            factory.weblinkAPI = { destroy: jest.fn() };
+            factory.searchAPI = { destroy: jest.fn() };
+            factory.plainUploadAPI = { destroy: jest.fn() };
+            factory.chunkedUploadAPI = { destroy: jest.fn() };
+            factory.recentsAPI = { destroy: jest.fn() };
             factory.destroy();
-            expect(factory.fileAPI).to.equal(undefined);
-            expect(factory.folderAPI).to.equal(undefined);
-            expect(factory.weblinkAPI).to.equal(undefined);
-            expect(factory.searchAPI).to.equal(undefined);
-            expect(factory.plainUploadAPI).to.equal(undefined);
-            expect(factory.chunkedUploadAPI).to.equal(undefined);
-            expect(factory.recentsAPI).to.equal(undefined);
+            expect(factory.fileAPI).toBeUndefined();
+            expect(factory.folderAPI).toBeUndefined();
+            expect(factory.weblinkAPI).toBeUndefined();
+            expect(factory.searchAPI).toBeUndefined();
+            expect(factory.plainUploadAPI).toBeUndefined();
+            expect(factory.chunkedUploadAPI).toBeUndefined();
+            expect(factory.recentsAPI).toBeUndefined();
         });
-        it('should not destroy cache by default', () => {
+        test('should not destroy cache by default', () => {
             const cache = factory.options.cache;
             cache.set('foo', 'bar');
             factory.destroy();
-            expect(factory.options.cache).to.equal(cache);
-            expect(factory.options.cache.get('foo')).to.equal('bar');
+            expect(factory.options.cache).toBe(cache);
+            expect(factory.options.cache.get('foo')).toBe('bar');
         });
-        it('should destroy cache by asked', () => {
+        test('should destroy cache when asked', () => {
             const cache = factory.options.cache;
             cache.set('foo', 'bar');
             factory.destroy(true);
-            expect(factory.options.cache).to.not.equal(cache);
-            expect(factory.options.cache.get('foo')).to.equal(undefined);
+            expect(factory.options.cache).not.toBe(cache);
+            expect(factory.options.cache.get('foo')).toBeUndefined();
         });
     });
 
     describe('getAPI()', () => {
-        it('should return file api when type is file', () => {
-            expect(factory.getAPI('file') instanceof FileAPI).to.be.true;
+        test('should return file api when type is file', () => {
+            expect(factory.getAPI('file')).toBeInstanceOf(FileAPI);
         });
-        it('should return folder api when type is folder', () => {
-            expect(factory.getAPI('folder') instanceof FolderAPI).to.be.true;
+        test('should return folder api when type is folder', () => {
+            expect(factory.getAPI('folder')).toBeInstanceOf(FolderAPI);
         });
-        it('should return web link api when type is web_link', () => {
-            expect(factory.getAPI('web_link') instanceof WebLinkAPI).to.be.true;
+        test('should return web link api when type is web_link', () => {
+            expect(factory.getAPI('web_link')).toBeInstanceOf(WebLinkAPI);
         });
-        it('should throw error when type is incorrect', () => {
-            expect(factory.getAPI.bind(factory, 'foo')).to.throw(Error, /Unknown Type/);
+        test('should throw error when type is incorrect', () => {
+            expect(factory.getAPI.bind(factory, 'foo')).toThrow(Error, /Unknown Type/);
         });
     });
 
     describe('getFileAPI()', () => {
-        it('should call destroy and return file API', () => {
-            const spy = sandbox.spy(factory, 'destroy');
+        test('should call destroy and return file API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
             const fileAPI = factory.getFileAPI();
-            expect(spy).to.be.called;
-            expect(fileAPI instanceof FileAPI).to.be.true;
-            expect(fileAPI.options.cache instanceof Cache).to.be.true;
-            expect(fileAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
-            expect(fileAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
+            expect(spy).toBeCalled();
+            expect(fileAPI).toBeInstanceOf(FileAPI);
+            expect(fileAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 
     describe('getWebLinkAPI()', () => {
-        it('should call destroy and return web link API', () => {
-            const spy = sandbox.spy(factory, 'destroy');
+        test('should call destroy and return web link API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
             const webLinkAPI = factory.getWebLinkAPI();
-            expect(spy).to.be.called;
-            expect(webLinkAPI instanceof WebLinkAPI).to.be.true;
-            expect(webLinkAPI.options.cache instanceof Cache).to.be.true;
-            expect(webLinkAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
-            expect(webLinkAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
+            expect(spy).toBeCalled();
+            expect(webLinkAPI).toBeInstanceOf(WebLinkAPI);
+            expect(webLinkAPI.options.cache).toBeInstanceOf(Cache);
+            expect(webLinkAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(webLinkAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 
     describe('getPlainUploadAPI()', () => {
-        it('should call destroy and return plain upload API', () => {
-            const spy = sandbox.spy(factory, 'destroy');
+        test('should call destroy and return plain upload API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
             const plainUploadAPI = factory.getPlainUploadAPI();
-            expect(spy).to.be.called;
-            expect(plainUploadAPI instanceof PlainUploadAPI).to.be.true;
-            expect(plainUploadAPI.options.cache instanceof Cache).to.be.true;
-            expect(plainUploadAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
-            expect(plainUploadAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
+            expect(spy).toBeCalled();
+            expect(plainUploadAPI).toBeInstanceOf(PlainUploadAPI);
+            expect(plainUploadAPI.options.cache).toBeInstanceOf(Cache);
+            expect(plainUploadAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(plainUploadAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 
     describe('getChunkedUploadAPI()', () => {
-        it('should call destroy and return chunked upload API', () => {
-            const spy = sandbox.spy(factory, 'destroy');
+        test('should call destroy and return chunked upload API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
             const chunkedUploadAPI = factory.getChunkedUploadAPI();
-            expect(spy).to.be.called;
-            expect(chunkedUploadAPI instanceof ChunkedUploadAPI).to.be.true;
-            expect(chunkedUploadAPI.options.cache instanceof Cache).to.be.true;
-            expect(chunkedUploadAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
-            expect(chunkedUploadAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
+            expect(spy).toBeCalled();
+            expect(chunkedUploadAPI).toBeInstanceOf(ChunkedUploadAPI);
+            expect(chunkedUploadAPI.options.cache).toBeInstanceOf(Cache);
+            expect(chunkedUploadAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(chunkedUploadAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 
     describe('getFolderAPI()', () => {
-        it('should call destroy and return folder API', () => {
-            const spy = sandbox.spy(factory, 'destroy');
+        test('should call destroy and return folder API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
             const folderAPI = factory.getFolderAPI();
-            expect(spy).to.be.called;
-            expect(folderAPI instanceof FolderAPI).to.be.true;
-            expect(folderAPI.options.cache instanceof Cache).to.be.true;
-            expect(folderAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
-            expect(folderAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
+            expect(spy).toBeCalled();
+            expect(folderAPI).toBeInstanceOf(FolderAPI);
+            expect(folderAPI.options.cache).toBeInstanceOf(Cache);
+            expect(folderAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(folderAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 
     describe('getSearchAPI()', () => {
-        it('should call destroy and return search API', () => {
-            const spy = sandbox.spy(factory, 'destroy');
+        test('should call destroy and return search API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
             const searchAPI = factory.getSearchAPI();
-            expect(spy).to.be.called;
-            expect(searchAPI instanceof SearchAPI).to.be.true;
-            expect(searchAPI.options.cache instanceof Cache).to.be.true;
-            expect(searchAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
-            expect(searchAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
+            expect(spy).toBeCalled();
+            expect(searchAPI).toBeInstanceOf(SearchAPI);
+            expect(searchAPI.options.cache).toBeInstanceOf(Cache);
+            expect(searchAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(searchAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 
     describe('getRecentsAPI()', () => {
-        it('should call destroy and return recents API', () => {
-            const spy = sandbox.spy(factory, 'destroy');
+        test('should call destroy and return recents API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
             const recentsAPI = factory.getRecentsAPI();
-            expect(spy).to.be.called;
-            expect(recentsAPI instanceof RecentsAPI).to.be.true;
-            expect(recentsAPI.options.cache instanceof Cache).to.be.true;
-            expect(recentsAPI.options.apiHost).to.equal(DEFAULT_HOSTNAME_API);
-            expect(recentsAPI.options.uploadHost).to.equal(DEFAULT_HOSTNAME_UPLOAD);
+            expect(spy).toBeCalled();
+            expect(recentsAPI).toBeInstanceOf(RecentsAPI);
+            expect(recentsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(recentsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(recentsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

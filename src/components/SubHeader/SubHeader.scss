@@ -9,15 +9,15 @@
     justify-content: space-between;
     padding: 0 25px;
 
+    .buik-is-small & {
+        padding: 0 18px;
+    }
+
     .bce:not(.buik-is-small) & {
         box-shadow: none;
     }
 
     .bce.buik-is-small & {
         border-bottom: 0 none;
-    }
-
-    .buik-is-small & {
-        padding: 0 18px;
     }
 }

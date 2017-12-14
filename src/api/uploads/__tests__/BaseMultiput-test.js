@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-expressions, no-underscore-dangle */
 import { withData } from 'leche';
-
 import BaseMultiput from '../BaseMultiput';
 
-const sandbox = sinon.sandbox.create();
-
-describe('api/BaseMultiput', () => {
+describe('api/uploads/BaseMultiput', () => {
     let BaseMultiputTest;
+
     beforeEach(() => {
         BaseMultiputTest = new BaseMultiput(
             {
@@ -15,10 +12,6 @@ describe('api/BaseMultiput', () => {
             {},
             {}
         );
-    });
-
-    afterEach(() => {
-        sandbox.verifyAndRestore();
     });
 
     describe('logEvent()', () => {
@@ -42,34 +35,35 @@ describe('api/BaseMultiput', () => {
                 ]
             ],
             (eventInfo, expectedData) => {
-                it('should POST to the correct endpoint', async () => {
+                test('should POST to the correct endpoint', async () => {
                     BaseMultiputTest.sessionEndpoints.logEvent = 'logEvent';
-                    BaseMultiputTest.xhr.post = sandbox
-                        .mock()
-                        .withArgs({
-                            url: 'logEvent',
-                            data: expectedData
-                        })
-                        .returns('expected');
+                    BaseMultiputTest.xhr.post = jest.fn().mockReturnValueOnce('expected');
 
-                    assert.equal(await BaseMultiputTest.logEvent(event_type, eventInfo), 'expected');
+                    expect(await BaseMultiputTest.logEvent(event_type, eventInfo)).toBe('expected');
+                    expect(BaseMultiputTest.xhr.post).toHaveBeenCalledWith({
+                        url: 'logEvent',
+                        data: expectedData
+                    });
                 });
             }
         );
     });
 
     describe('consoleLogFunc()', () => {
-        it('should not call msgFunc when canConsoleLog is false', async () => {
+        test('should not call msgFunc when canConsoleLog is false', async () => {
             BaseMultiputTest.canConsoleLog = false;
-
-            BaseMultiputTest.consoleLogFunc(sandbox.mock().never());
+            const mock = jest.fn();
+            BaseMultiputTest.consoleLogFunc(mock);
+            expect(mock).not.toHaveBeenCalled();
         });
 
-        it('should console log the return value of msgFunc when canConsoleLog is true', async () => {
+        test('should console log the return value of msgFunc when canConsoleLog is true', async () => {
             BaseMultiputTest.canConsoleLog = true;
-            BaseMultiputTest.consoleLog = sandbox.mock().withArgs('expected');
+            BaseMultiputTest.consoleLog = jest.fn();
 
-            BaseMultiputTest.consoleLogFunc(sandbox.mock().returns('expected'));
+            const mock = jest.fn().mockReturnValueOnce('expected');
+            BaseMultiputTest.consoleLogFunc(mock);
+            expect(BaseMultiputTest.consoleLog).toHaveBeenCalledWith('expected');
         });
     });
 });

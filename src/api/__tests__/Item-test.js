@@ -1,6 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable arrow-body-style */
-
 import noop from 'lodash.noop';
 import Item from '../Item';
 import Cache from '../../util/Cache';
@@ -9,7 +6,6 @@ let item;
 let file;
 let folder;
 let cache;
-const sandbox = sinon.sandbox.create();
 
 describe('api/Item', () => {
     beforeEach(() => {
@@ -17,117 +13,124 @@ describe('api/Item', () => {
         cache = new Cache();
     });
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('getParentCacheKey()', () => {
-        it('should return correct key', () => {
-            expect(item.getParentCacheKey('foo')).to.equal('folder_foo');
+        test('should return correct key', () => {
+            expect(item.getParentCacheKey('foo')).toBe('folder_foo');
         });
     });
 
     describe('getCacheKey()', () => {
-        it('should return correct key', () => {
-            expect(item.getCacheKey('foo')).to.equal('getCacheKey(foo) should be overriden');
+        test('should return correct key', () => {
+            expect(item.getCacheKey('foo')).toBe('getCacheKey(foo) should be overriden');
         });
     });
 
     describe('getUrl()', () => {
-        it('should return correct folder api url', () => {
-            expect(item.getUrl('foo')).to.equal('getUrl(foo) should be overriden');
+        test('should return correct folder api url', () => {
+            expect(item.getUrl('foo')).toBe('getUrl(foo) should be overriden');
         });
     });
 
     describe('errorHandler()', () => {
-        it('should not do anything if destroyed', () => {
-            item.isDestroyed = sandbox.mock().returns(true);
-            item.errorCallback = sandbox.mock().never();
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            item.errorCallback = jest.fn();
             item.errorHandler('foo');
+            expect(item.errorCallback).not.toHaveBeenCalled();
         });
 
-        it('should not do anything if no response', () => {
-            item.errorCallback = sandbox.mock().never();
+        test('should not do anything if no response', () => {
+            item.errorCallback = jest.fn();
             item.errorHandler('foo');
+            expect(item.errorCallback).not.toHaveBeenCalled();
         });
 
-        it('should call error callback', () => {
-            const json = () => {
-                return {
-                    then: sandbox.mock().withArgs(item.errorCallback)
-                };
-            };
+        test('should call error callback', () => {
+            const thenMock = jest.fn();
+            const json = () => ({
+                then: thenMock
+            });
             item.errorHandler({ response: { json } });
+            expect(thenMock).toHaveBeenCalledWith(item.errorCallback);
         });
 
-        it('should throw error when getting error event', () => {
-            item.errorCallback = sandbox.mock();
-            expect(item.errorHandler.bind(item, new Error())).to.throw(Error);
+        test('should throw error when getting error event', () => {
+            item.errorCallback = jest.fn();
+            expect(item.errorHandler.bind(item, new Error())).toThrow(Error);
         });
     });
 
     describe('merge()', () => {
-        it('should not do anything if destroyed', () => {
-            item.isDestroyed = sandbox.mock().returns(true);
-            item.errorCallback = sandbox.mock().never();
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            item.errorCallback = jest.fn();
             item.merge('foo', 'bar', 'baz');
+            expect(item.errorCallback).not.toHaveBeenCalled();
         });
-        it('should merge new value', () => {
+        test('should merge new value', () => {
             cache.set('key', {
                 foo: 'foo'
             });
-            item.getCache = sandbox.mock().returns(cache);
-            item.successCallback = sandbox.mock().withArgs({
+            item.getCache = jest.fn().mockReturnValueOnce(cache);
+            item.successCallback = jest.fn();
+            item.merge('key', 'foo', 'bar');
+            expect(item.successCallback).toHaveBeenCalled();
+            expect(item.successCallback).toHaveBeenCalledWith({
                 foo: 'bar'
             });
-            item.merge('key', 'foo', 'bar');
         });
     });
 
     describe('postDeleteCleanup()', () => {
-        it('should not do anything if destroyed', () => {
-            item.isDestroyed = sandbox.mock().returns(true);
-            item.errorCallback = sandbox.mock().never();
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            item.errorCallback = jest.fn();
             item.postDeleteCleanup();
+            expect(item.errorCallback).not.toHaveBeenCalled();
         });
-        it('should unset cache and call success callback', () => {
+        test('should unset cache and call success callback', () => {
+            const unsetAllMock = jest.fn();
             cache.set('key', {
                 foo: 'foo'
             });
-            item.getCache = () => {
-                return {
-                    unsetAll: sandbox.mock().withArgs('search_')
-                };
-            };
-            item.successCallback = sandbox.mock();
+            item.getCache = () => ({
+                unsetAll: unsetAllMock
+            });
+            item.successCallback = jest.fn();
             item.postDeleteCleanup();
+            expect(item.successCallback).toHaveBeenCalled();
+            expect(unsetAllMock).toHaveBeenCalledWith('search_');
         });
     });
 
     describe('renameSuccessHandler()', () => {
-        it('should unset cache and call merge', () => {
+        test('should unset cache and call merge', () => {
+            const unsetAllMock = jest.fn();
             item.id = 'id';
-            item.getCache = () => {
-                return {
-                    unsetAll: sandbox.mock().withArgs('search_')
-                };
-            };
-            item.getCacheKey = sandbox.mock().withArgs('id').returns('key');
-            item.merge = sandbox.mock().withArgs('key', 'name', 'name');
+            item.getCache = () => ({
+                unsetAll: unsetAllMock
+            });
+            item.getCacheKey = jest.fn().mockReturnValueOnce('key');
+            item.merge = jest.fn();
             item.renameSuccessHandler({
                 name: 'name'
             });
+            expect(unsetAllMock).toHaveBeenCalledWith('search_');
+            expect(item.getCacheKey).toHaveBeenCalledWith('id');
+            expect(item.merge).toHaveBeenCalledWith('key', 'name', 'name');
         });
     });
 
     describe('shareSuccessHandler()', () => {
-        it('should call merge', () => {
+        test('should call merge', () => {
             item.id = 'id';
-            item.getCacheKey = sandbox.mock().withArgs('id').returns('key');
-            item.merge = sandbox.mock().withArgs('key', 'shared_link', 'link');
+            item.getCacheKey = jest.fn().mockReturnValueOnce('key');
+            item.merge = jest.fn();
             item.shareSuccessHandler({
                 shared_link: 'link'
             });
+            expect(item.getCacheKey).toHaveBeenCalledWith('id');
+            expect(item.merge).toHaveBeenCalledWith('key', 'shared_link', 'link');
         });
     });
 
@@ -141,64 +144,73 @@ describe('api/Item', () => {
             };
         });
 
-        it('should not do anything if destroyed', () => {
-            item.isDestroyed = sandbox.mock().returns(true);
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
             item.xhr = null;
-            return item.rename().should.be.rejected;
+            return expect(item.rename()).rejects.toBeUndefined();
         });
 
-        it('should not do anything if id is missing', () => {
+        test('should not do anything if id is missing', () => {
             delete file.id;
             item.xhr = null;
-            return item.rename(file, 'name', 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.rename(file, 'name', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if permissions is missing', () => {
+        test('should not do anything if permissions is missing', () => {
             delete file.permissions;
             item.xhr = null;
-            return item.rename(file, 'name', 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.rename(file, 'name', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if can rename is false', () => {
+        test('should not do anything if can rename is false', () => {
             delete file.permissions.can_rename;
             item.xhr = null;
-            return item.rename(file, 'name', 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.rename(file, 'name', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should make xhr to rename item and call success callback', () => {
-            item.renameSuccessHandler = sandbox.mock().withArgs('success');
-            item.errorHandler = sandbox.mock().never();
-            item.getUrl = sandbox.mock().withArgs('id').returns('url');
+        test('should make xhr to rename item and call success callback', () => {
+            item.renameSuccessHandler = jest.fn();
+            item.errorHandler = jest.fn();
+            item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: sandbox.mock().withArgs({ url: 'url', data: { name: 'name' } }).returns(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
             return item.rename(file, 'name', 'success', 'error').then(() => {
-                expect(item.successCallback).to.equal('success');
-                expect(item.errorCallback).to.equal('error');
-                expect(item.id).to.equal('id');
+                expect(item.renameSuccessHandler).toHaveBeenCalledWith('success');
+                expect(item.errorHandler).not.toHaveBeenCalled();
+                expect(item.successCallback).toBe('success');
+                expect(item.errorCallback).toBe('error');
+                expect(item.id).toBe('id');
+                expect(item.xhr.put).toHaveBeenCalledWith({ url: 'url', data: { name: 'name' } });
+                expect(item.getUrl).toHaveBeenCalledWith('id');
             });
         });
 
-        it('should make xhr to rename item and call error callback', () => {
-            item.renameSuccessHandler = sandbox.mock().never();
-            item.errorHandler = sandbox.mock().withArgs('error');
-            item.getUrl = sandbox.mock().withArgs('id').returns('url');
+        test('should make xhr to rename item and call error callback', () => {
+            item.renameSuccessHandler = jest.fn();
+            item.errorHandler = jest.fn();
+            item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: sandbox.mock().withArgs({ url: 'url', data: { name: 'name' } }).returns(Promise.reject('error'))
+                put: jest.fn().mockReturnValueOnce(Promise.reject('error'))
             };
             return item.rename(file, 'name', 'success', 'error').then(() => {
-                expect(item.successCallback).to.equal('success');
-                expect(item.errorCallback).to.equal('error');
-                expect(item.id).to.equal('id');
+                expect(item.errorHandler).toHaveBeenCalledWith('error');
+                expect(item.renameSuccessHandler).not.toHaveBeenCalled();
+                expect(item.successCallback).toBe('success');
+                expect(item.errorCallback).toBe('error');
+                expect(item.id).toBe('id');
+                expect(item.xhr.put).toHaveBeenCalledWith({ url: 'url', data: { name: 'name' } });
+                expect(item.getUrl).toHaveBeenCalledWith('id');
             });
         });
 
-        it('should default to noop error callback', () => {
+        test('should default to noop error callback', () => {
             item.xhr = {
-                put: sandbox.mock().returns(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
-            item.rename(file, 'name', 'success');
-            expect(item.errorCallback).to.equal(noop);
+            return item.rename(file, 'name', 'success').catch(() => {
+                expect(item.errorCallback).toBe(noop);
+            });
         });
     });
 
@@ -213,93 +225,97 @@ describe('api/Item', () => {
             };
         });
 
-        it('should not do anything if destroyed', () => {
-            item.isDestroyed = sandbox.mock().returns(true);
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
             item.xhr = null;
-            return item.share().should.be.rejected;
+            return expect(item.share()).rejects.toBeUndefined();
         });
 
-        it('should not do anything if id is missing', () => {
+        test('should not do anything if id is missing', () => {
             delete file.id;
             item.xhr = null;
-            return item.share(file, 'access', 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if permissions is missing', () => {
+        test('should not do anything if permissions is missing', () => {
             delete file.permissions;
             item.xhr = null;
-            return item.share(file, 'access', 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if can share is false', () => {
+        test('should not do anything if can share is false', () => {
             delete file.permissions.can_share;
             item.xhr = null;
-            return item.share(file, 'access', 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if can set share access is false', () => {
+        test('should not do anything if can set share access is false', () => {
             delete file.permissions.can_set_share_access;
             item.xhr = null;
-            return item.share(file, 'access', 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.share(file, 'access', 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should make xhr to share item and call success callback with access', () => {
-            item.shareSuccessHandler = sandbox.mock().withArgs('success');
-            item.errorHandler = sandbox.mock().never();
-            item.getUrl = sandbox.mock().withArgs('id').returns('url');
+        test('should make xhr to share item and call success callback with access', () => {
+            item.shareSuccessHandler = jest.fn();
+            item.errorHandler = jest.fn();
+            item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: sandbox
-                    .mock()
-                    .withArgs({ url: 'url', data: { shared_link: { access: 'access' } } })
-                    .returns(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
             return item.share(file, 'access', 'success', 'error').then(() => {
-                expect(item.successCallback).to.equal('success');
-                expect(item.errorCallback).to.equal('error');
-                expect(item.id).to.equal('id');
+                expect(item.shareSuccessHandler).toHaveBeenCalledWith('success');
+                expect(item.errorHandler).not.toHaveBeenCalled();
+                expect(item.successCallback).toBe('success');
+                expect(item.errorCallback).toBe('error');
+                expect(item.id).toBe('id');
+                expect(item.xhr.put).toHaveBeenCalledWith({ url: 'url', data: { shared_link: { access: 'access' } } });
+                expect(item.getUrl).toHaveBeenCalledWith('id');
             });
         });
 
-        it('should make xhr to share item and call success callback with access null', () => {
-            item.shareSuccessHandler = sandbox.mock().withArgs('success');
-            item.errorHandler = sandbox.mock().never();
-            item.getUrl = sandbox.mock().withArgs('id').returns('url');
+        test('should make xhr to share item and call success callback with access null', () => {
+            item.shareSuccessHandler = jest.fn();
+            item.errorHandler = jest.fn();
+            item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: sandbox
-                    .mock()
-                    .withArgs({ url: 'url', data: { shared_link: null } })
-                    .returns(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
             return item.share(file, 'none', 'success', 'error').then(() => {
-                expect(item.successCallback).to.equal('success');
-                expect(item.errorCallback).to.equal('error');
-                expect(item.id).to.equal('id');
+                expect(item.shareSuccessHandler).toHaveBeenCalledWith('success');
+                expect(item.errorHandler).not.toHaveBeenCalled();
+                expect(item.successCallback).toBe('success');
+                expect(item.errorCallback).toBe('error');
+                expect(item.id).toBe('id');
+                expect(item.xhr.put).toHaveBeenCalledWith({ url: 'url', data: { shared_link: null } });
+                expect(item.getUrl).toHaveBeenCalledWith('id');
             });
         });
 
-        it('should make xhr to share item and call error callback', () => {
-            item.shareSuccessHandler = sandbox.mock().never();
-            item.errorHandler = sandbox.mock().withArgs('error');
-            item.getUrl = sandbox.mock().withArgs('id').returns('url');
+        test('should make xhr to share item and call error callback', () => {
+            item.shareSuccessHandler = jest.fn();
+            item.errorHandler = jest.fn();
+            item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: sandbox
-                    .mock()
-                    .withArgs({ url: 'url', data: { shared_link: { access: 'access' } } })
-                    .returns(Promise.reject('error'))
+                put: jest.fn().mockReturnValueOnce(Promise.reject('error'))
             };
             return item.share(file, 'access', 'success', 'error').then(() => {
-                expect(item.successCallback).to.equal('success');
-                expect(item.errorCallback).to.equal('error');
-                expect(item.id).to.equal('id');
+                expect(item.errorHandler).toHaveBeenCalledWith('error');
+                expect(item.shareSuccessHandler).not.toHaveBeenCalled();
+                expect(item.successCallback).toBe('success');
+                expect(item.errorCallback).toBe('error');
+                expect(item.id).toBe('id');
+                expect(item.xhr.put).toHaveBeenCalledWith({ url: 'url', data: { shared_link: { access: 'access' } } });
+                expect(item.getUrl).toHaveBeenCalledWith('id');
             });
         });
 
-        it('should default to noop error callback', () => {
+        test('should default to noop error callback', () => {
             item.xhr = {
-                put: sandbox.mock().returns(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
-            item.share(file, 'access', 'success');
-            expect(item.errorCallback).to.equal(noop);
+            return item.share(file, 'access', 'success').catch(() => {
+                expect(item.errorCallback).toBe(noop);
+            });
         });
     });
 
@@ -317,99 +333,112 @@ describe('api/Item', () => {
             };
         });
 
-        it('should not do anything if destroyed', () => {
-            item.isDestroyed = sandbox.mock().returns(true);
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
             item.xhr = null;
-            return item.delete().should.be.rejected;
+            return expect(item.delete()).rejects.toBeUndefined();
         });
 
-        it('should not do anything if id is missing', () => {
+        test('should not do anything if id is missing', () => {
             delete file.id;
             item.xhr = null;
-            return item.delete(file, 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if parent is missing', () => {
+        test('should not do anything if parent is missing', () => {
             delete file.parent;
             item.xhr = null;
-            return item.delete(file, 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if parent id is missing', () => {
+        test('should not do anything if parent id is missing', () => {
             delete file.parent.id;
             item.xhr = null;
-            return item.delete(file, 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if type is missing', () => {
+        test('should not do anything if type is missing', () => {
             delete file.type;
             item.xhr = null;
-            return item.delete(file, 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if permissions is missing', () => {
+        test('should not do anything if permissions is missing', () => {
             delete file.permissions;
             item.xhr = null;
-            return item.delete(file, 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should not do anything if can delete is false', () => {
+        test('should not do anything if can delete is false', () => {
             delete file.permissions.can_delete;
             item.xhr = null;
-            return item.delete(file, 'success', sandbox.mock()).should.be.rejected;
+            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
-        it('should make xhr to delete file and call success callback', () => {
-            item.deleteSuccessHandler = sandbox.mock().withArgs('success');
-            item.errorHandler = sandbox.mock().never();
-            item.getUrl = sandbox.mock().withArgs('id').returns('url');
+        test('should make xhr to delete file and call success callback', () => {
+            item.deleteSuccessHandler = jest.fn();
+            item.errorHandler = jest.fn();
+            item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                delete: sandbox.mock().withArgs({ url: 'url' }).returns(Promise.resolve('success'))
+                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
             return item.delete(file, 'success', 'error').then(() => {
-                expect(item.successCallback).to.equal('success');
-                expect(item.errorCallback).to.equal('error');
-                expect(item.id).to.equal('id');
-                expect(item.parentId).to.equal('parentId');
+                expect(item.deleteSuccessHandler).toHaveBeenCalledWith('success');
+                expect(item.errorHandler).not.toHaveBeenCalled();
+                expect(item.successCallback).toBe('success');
+                expect(item.errorCallback).toBe('error');
+                expect(item.id).toBe('id');
+                expect(item.parentId).toBe('parentId');
+                expect(item.xhr.delete).toHaveBeenCalledWith({ url: 'url' });
+                expect(item.getUrl).toHaveBeenCalledWith('id');
             });
         });
 
-        it('should make xhr to delete folder and call success callback', () => {
+        test('should make xhr to delete folder and call success callback', () => {
             file.type = 'folder';
-            item.deleteSuccessHandler = sandbox.mock().withArgs('success');
-            item.errorHandler = sandbox.mock().never();
-            item.getUrl = sandbox.mock().withArgs('id').returns('url');
+            item.deleteSuccessHandler = jest.fn();
+            item.errorHandler = jest.fn();
+            item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                delete: sandbox.mock().withArgs({ url: 'url?recursive=true' }).returns(Promise.resolve('success'))
+                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
             return item.delete(file, 'success', 'error').then(() => {
-                expect(item.successCallback).to.equal('success');
-                expect(item.errorCallback).to.equal('error');
-                expect(item.id).to.equal('id');
-                expect(item.parentId).to.equal('parentId');
+                expect(item.deleteSuccessHandler).toHaveBeenCalledWith('success');
+                expect(item.errorHandler).not.toHaveBeenCalled();
+                expect(item.successCallback).toBe('success');
+                expect(item.errorCallback).toBe('error');
+                expect(item.id).toBe('id');
+                expect(item.parentId).toBe('parentId');
+                expect(item.xhr.delete).toHaveBeenCalledWith({ url: 'url?recursive=true' });
+                expect(item.getUrl).toHaveBeenCalledWith('id');
             });
         });
 
-        it('should make xhr to share item and call error callback', () => {
-            item.shareSuccessHandler = sandbox.mock().never();
-            item.errorHandler = sandbox.mock().withArgs('error');
-            item.getUrl = sandbox.mock().withArgs('id').returns('url');
+        test('should make xhr to share item and call error callback', () => {
+            item.deleteSuccessHandler = jest.fn();
+            item.errorHandler = jest.fn();
+            item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                delete: sandbox.mock().withArgs({ url: 'url' }).returns(Promise.reject('error'))
+                delete: jest.fn().mockReturnValueOnce(Promise.reject('error'))
             };
             return item.delete(file, 'success', 'error').then(() => {
-                expect(item.successCallback).to.equal('success');
-                expect(item.errorCallback).to.equal('error');
-                expect(item.id).to.equal('id');
-                expect(item.parentId).to.equal('parentId');
+                expect(item.errorHandler).toHaveBeenCalledWith('error');
+                expect(item.deleteSuccessHandler).not.toHaveBeenCalled();
+                expect(item.successCallback).toBe('success');
+                expect(item.errorCallback).toBe('error');
+                expect(item.id).toBe('id');
+                expect(item.parentId).toBe('parentId');
+                expect(item.xhr.delete).toHaveBeenCalledWith({ url: 'url' });
+                expect(item.getUrl).toHaveBeenCalledWith('id');
             });
         });
-        it('should default to noop error callback', () => {
+        test('should default to noop error callback', () => {
             item.xhr = {
-                delete: sandbox.mock().returns(Promise.resolve('success'))
+                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
-            item.delete(file, 'success');
-            expect(item.errorCallback).to.equal(noop);
+            return item.delete(file, 'success').catch(() => {
+                expect(item.errorCallback).toBe(noop);
+            });
         });
     });
 
@@ -424,68 +453,82 @@ describe('api/Item', () => {
             };
         });
 
-        it('should not do anything if destroyed', () => {
-            item.isDestroyed = sandbox.mock().returns(true);
-            item.postDeleteCleanup = sandbox.mock().never();
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            item.postDeleteCleanup = jest.fn();
             item.deleteSuccessHandler();
+            expect(item.postDeleteCleanup).not.toHaveBeenCalled();
         });
 
-        it('should parse the response, flatten the collection and call finish', () => {
+        test('should parse the response, flatten the collection and call finish', () => {
             cache.set('parent', folder);
             item.id = 'id';
             item.parentId = 'parentId';
-            item.postDeleteCleanup = sandbox.mock();
-            item.getCache = sandbox.mock().returns(cache);
-            item.getCacheKey = sandbox.mock().withArgs('id').returns('child');
-            item.getParentCacheKey = sandbox.mock().withArgs('parentId').returns('parent');
-            item.merge = sandbox.mock().withArgs('parent', 'item_collection', {
-                total_count: 3,
-                entries: ['file_item1', 'file_item2', 'file_item3']
-            });
+            item.postDeleteCleanup = jest.fn();
+            item.getCache = jest.fn().mockReturnValueOnce(cache);
+            item.getCacheKey = jest.fn().mockReturnValueOnce('child');
+            item.getParentCacheKey = jest.fn().mockReturnValueOnce('parent');
+            item.merge = jest.fn();
             item.deleteSuccessHandler();
 
-            expect(cache.get('parent')).to.deep.equal({
+            expect(cache.get('parent')).toEqual({
                 id: 'parentId',
                 item_collection: {
                     total_count: 3,
                     entries: ['file_item1', 'file_item2', 'file_item3']
                 }
             });
-            expect(cache.get('child')).to.equal(undefined);
+            expect(cache.get('child')).toBe(undefined);
+            expect(item.getCacheKey).toHaveBeenCalledWith('id');
+            expect(item.postDeleteCleanup).toHaveBeenCalled();
+            expect(item.getParentCacheKey).toHaveBeenCalledWith('parentId');
+            expect(item.merge).toHaveBeenCalledWith('parent', 'item_collection', {
+                total_count: 3,
+                entries: ['file_item1', 'file_item2', 'file_item3']
+            });
         });
 
-        it('should throw bad item error when entries is missing', () => {
+        test('should throw bad item error when entries is missing', () => {
             delete folder.item_collection.entries;
             cache.set('parent', folder);
 
             item.id = 'id';
             item.parentId = 'parentId';
-            item.postDeleteCleanup = sandbox.mock().never();
-            item.getCache = sandbox.mock().returns(cache);
-            item.getCacheKey = sandbox.mock().never();
-            item.getParentCacheKey = sandbox.mock().withArgs('parentId').returns('parent');
-            expect(item.deleteSuccessHandler.bind(folder)).to.throw(Error, /Bad box item/);
+            item.postDeleteCleanup = jest.fn();
+            item.getCache = jest.fn().mockReturnValueOnce(cache);
+            item.getCacheKey = jest.fn();
+            item.getParentCacheKey = jest.fn().mockReturnValueOnce('parent');
+            expect(item.deleteSuccessHandler.bind(folder)).toThrow(Error, /Bad box item/);
+            expect(item.getCacheKey).not.toHaveBeenCalled();
+            expect(item.postDeleteCleanup).not.toHaveBeenCalled();
+            expect(item.getParentCacheKey).toHaveBeenCalledWith('parentId');
         });
 
-        it('should just cleanup when parent folder is not there', () => {
+        test('should just cleanup when parent folder is not there', () => {
             item.parentId = 'parentId';
-            item.postDeleteCleanup = sandbox.mock();
-            item.getCache = sandbox.mock().returns(cache);
-            item.getCacheKey = sandbox.mock().never();
-            item.getParentCacheKey = sandbox.mock().withArgs('parentId').returns('parent');
+            item.postDeleteCleanup = jest.fn();
+            item.getCache = jest.fn().mockReturnValueOnce(cache);
+            item.getCacheKey = jest.fn();
+            item.getParentCacheKey = jest.fn().mockReturnValueOnce('parent');
             item.deleteSuccessHandler();
+            expect(item.getCacheKey).not.toHaveBeenCalled();
+            expect(item.postDeleteCleanup).toHaveBeenCalled();
+            expect(item.getParentCacheKey).toHaveBeenCalledWith('parentId');
         });
 
-        it('should just cleanup when parent folders item collection is not there', () => {
+        test('should just cleanup when parent folders item collection is not there', () => {
             delete folder.item_collection;
             cache.set('parent', folder);
 
             item.parentId = 'parentId';
-            item.postDeleteCleanup = sandbox.mock();
-            item.getCache = sandbox.mock().returns(cache);
-            item.getCacheKey = sandbox.mock().never();
-            item.getParentCacheKey = sandbox.mock().withArgs('parentId').returns('parent');
+            item.postDeleteCleanup = jest.fn();
+            item.getCache = jest.fn().mockReturnValueOnce(cache);
+            item.getCacheKey = jest.fn();
+            item.getParentCacheKey = jest.fn().mockReturnValueOnce('parent');
             item.deleteSuccessHandler();
+            expect(item.getCacheKey).not.toHaveBeenCalled();
+            expect(item.postDeleteCleanup).toHaveBeenCalled();
+            expect(item.getParentCacheKey).toHaveBeenCalledWith('parentId');
         });
     });
 });
