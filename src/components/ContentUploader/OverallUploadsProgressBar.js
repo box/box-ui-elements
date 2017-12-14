@@ -8,14 +8,14 @@ import { FormattedMessage } from 'react-intl';
 
 import messages from '../messages';
 import ProgressBar from './ProgressBar';
-import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR } from '../../constants';
-import type { UploadItem, View } from '../../flowTypes';
+import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR, VIEW_UPLOAD_EMPTY } from '../../constants';
+import type { View } from '../../flowTypes';
 
 import './OverallUploadsProgressBar.scss';
 
 type Props = {
     isVisible: boolean,
-    items: UploadItem[],
+    percent: number,
     onClick: Function,
     onKeyDown: Function,
     view: View
@@ -32,6 +32,7 @@ const getUploadStatus = (view) => {
         case VIEW_UPLOAD_IN_PROGRESS:
             return <FormattedMessage {...messages.uploadsManagerUploadInProgress} />;
         case VIEW_UPLOAD_SUCCESS:
+        case VIEW_UPLOAD_EMPTY:
             return <FormattedMessage {...messages.uploadsManagerUploadComplete} />;
         case VIEW_ERROR:
             return <FormattedMessage {...messages.uploadsManagerUploadFailed} />;
@@ -40,26 +41,29 @@ const getUploadStatus = (view) => {
     }
 };
 
-const OverallUploadsProgressBar = ({ items, view, onClick, onKeyDown, isVisible }: Props) => {
-    const totalSize = items.reduce((updatedSize, item) => updatedSize + item.size, 0);
-    const totalUploaded = items.reduce((updatedSize, item) => updatedSize + item.size * item.progress / 100.0, 0);
-    const uploadProgress = totalUploaded / totalSize * 100;
+const getPercent = (view, percent) => {
+    if (view === VIEW_UPLOAD_SUCCESS || view === VIEW_UPLOAD_EMPTY) {
+        return 100;
+    } else if (view === VIEW_ERROR) {
+        return 0;
+    }
 
-    return (
-        <div
-            className='overall-progress-bar'
-            onClick={onClick}
-            onKeyDown={onKeyDown}
-            role='button'
-            tabIndex={isVisible ? '0' : '-1'}
-        >
-            <span className='upload-status'>
-                {getUploadStatus(view)}
-            </span>
-            <ProgressBar percent={uploadProgress} />
-            <span className='uploads-manager-toggle' />
-        </div>
-    );
+    return percent;
 };
+
+const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible }: Props) =>
+    <div
+        className='overall-progress-bar'
+        onClick={onClick}
+        onKeyDown={onKeyDown}
+        role='button'
+        tabIndex={isVisible ? '0' : '-1'}
+    >
+        <span className='upload-status'>
+            {getUploadStatus(view)}
+        </span>
+        <ProgressBar percent={getPercent(view, percent)} />
+        <span className='uploads-manager-toggle' />
+    </div>;
 
 export default OverallUploadsProgressBar;

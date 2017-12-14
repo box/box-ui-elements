@@ -68,10 +68,13 @@ type Props = {
     responseFilter?: Function,
     intl: any,
     windowView?: boolean,
-    files?: Array<UploadFileWithAPIOptions>,
-    isUploadsManagerExpanded?: boolean,
+    files?: Array<UploadFileWithAPIOptions | File>,
     onExpand?: Function,
-    onMinimize?: Function
+    onMinimize?: Function,
+    onUploadsManagerCancel: Function,
+    onUploadsManagerComplete: Function,
+    onUploadsManagerError: Function,
+    onUploadsManagerUpload: Function
 };
 
 type DefaultProps = {|
@@ -87,16 +90,20 @@ type DefaultProps = {|
     onError: Function,
     onUpload: Function,
     windowView: boolean,
-    files: Array<UploadFileWithAPIOptions>,
-    isUploadsManagerExpanded: boolean,
+    files: Array<UploadFileWithAPIOptions | File>,
     onExpand: Function,
-    onMinimize: Function
+    onMinimize: Function,
+    onUploadsManagerCancel: Function,
+    onUploadsManagerComplete: Function,
+    onUploadsManagerError: Function,
+    onUploadsManagerUpload: Function
 |};
 
 type State = {
     errorCode?: string,
     items: UploadItem[],
-    view: View
+    view: View,
+    isUploadsManagerExpanded: boolean
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
@@ -127,9 +134,12 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         onUpload: noop,
         windowView: false,
         files: [],
-        isUploadsManagerExpanded: false,
         onExpand: noop,
-        onMinimize: noop
+        onMinimize: noop,
+        onUploadsManagerCancel: noop,
+        onUploadsManagerComplete: noop,
+        onUploadsManagerError: noop,
+        onUploadsManagerUpload: noop
     };
 
     /**
@@ -144,7 +154,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         this.state = {
             view: rootFolderId && token ? VIEW_UPLOAD_EMPTY : VIEW_ERROR,
             items: [],
-            errorCode: ''
+            errorCode: '',
+            isUploadsManagerExpanded: false
         };
         this.id = uniqueid('bcu_');
         this.sha1Worker = createWorker();
@@ -175,6 +186,12 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             return;
         }
 
+        const newFiles = this.getNewFiles(files, windowView);
+
+        if (newFiles.length <= 0) {
+            return;
+        }
+
         this.addFilesWithOptionsToUploadQueueAndStartUpload(files);
     }
 
@@ -200,8 +217,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             uploadAPIOptions && uploadAPIOptions.folderId
                 ? `folder_${uploadAPIOptions.folderId}`
                 : `folder_${rootFolderId}`;
-
-        return new API({
+        const options = {
             token,
             sharedLink,
             sharedLinkPassword,
@@ -211,8 +227,40 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             responseFilter,
             id: itemFolderId,
             ...uploadAPIOptions
-        });
+        };
+        return new API(options);
     }
+
+    /**
+     * Get files that are new to the content uploader
+     * 
+     * @param {Array<UploadFileWithAPIOptions | File>} files
+     * @param {boolean} withApiOptions
+     */
+    getNewFiles = (files: Array<UploadFileWithAPIOptions | File>, withApiOptions) => {
+        const { items } = this.state;
+        return [].filter.call(files, (file) => {
+            let uploadFile = file;
+            let uploadAPIOptions = {};
+            let uploadInitTimestamp = null;
+
+            if (withApiOptions) {
+                uploadFile = file.file;
+                uploadAPIOptions = file.options;
+                uploadInitTimestamp = file.uploadInitTimestamp;
+            }
+            const { name } = uploadFile;
+            return !items.some((item) => {
+                if (!uploadAPIOptions) {
+                    return item.name === name;
+                }
+                return (
+                    item.name === name &&
+                    (item.folderId === uploadAPIOptions.folderId && item.uploadInitTimestamp === uploadInitTimestamp)
+                );
+            });
+        });
+    };
 
     /**
      * Converts File API to upload items and adds to upload queue.
@@ -222,54 +270,49 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @param {UploadItemAPIOptions} [uploadAPIOptions]
      * @return {void}
      */
-    addFilesToUploadQueue = (files: File[], uploadAPIOptions?: UploadItemAPIOptions) => {
+    addFilesToUploadQueue = (files: Array<UploadFileWithAPIOptions | File>, withApiOptions, itemUpdateCallback) => {
         const { fileLimit, windowView } = this.props;
         const { view, items } = this.state;
 
         clearTimeout(this.resetItemsTimeout);
 
-        // Filter out files that are already in the upload queue
-        const newItems = [].filter
-            .call(files, (file) => {
-                const { name } = file;
-                return !items.some((item) => {
-                    if (!uploadAPIOptions) {
-                        return item.name === name;
-                    }
-                    return (
-                        item.name === name &&
-                        (item.folderId === uploadAPIOptions.folderId || item.fileId === uploadAPIOptions.fileId)
-                    );
-                });
+        // Convert files from the file API to upload items
+        const newItems = this.getNewFiles(files, withApiOptions).map((file) => {
+            let uploadFile = file;
+            let uploadAPIOptions = {};
+            let uploadInitTimestamp = null;
 
-                // Convert files from the file API to upload items
-            })
-            .map((file) => {
-                const { name, size } = file;
+            if (withApiOptions) {
+                uploadFile = file.file;
+                uploadAPIOptions = file.options;
+                uploadInitTimestamp = file.uploadInitTimestamp;
+            }
+            const { name, size } = uploadFile;
 
-                // Extract extension or use empty string if file has no extension
-                let extension = name.substr(name.lastIndexOf('.') + 1);
-                if (extension.length === name.length) {
-                    extension = '';
-                }
+            // Extract extension or use empty string if file has no extension
+            let extension = name.substr(name.lastIndexOf('.') + 1);
+            if (extension.length === name.length) {
+                extension = '';
+            }
 
-                const api = this.getUploadAPI(file, uploadAPIOptions);
-                const uploadItem: UploadItem = {
-                    api,
-                    extension,
-                    file,
-                    name,
-                    progress: 0,
-                    size,
-                    status: STATUS_PENDING
-                };
+            const api = this.getUploadAPI(uploadFile, uploadAPIOptions);
+            const uploadItem: UploadItem = {
+                api,
+                extension,
+                file: uploadFile,
+                name,
+                progress: 0,
+                size,
+                status: STATUS_PENDING,
+                uploadInitTimestamp
+            };
 
-                if (uploadAPIOptions) {
-                    uploadItem.options = uploadAPIOptions;
-                }
+            if (uploadAPIOptions) {
+                uploadItem.options = uploadAPIOptions;
+            }
 
-                return uploadItem;
-            });
+            return uploadItem;
+        });
 
         let updatedItems = [];
         const prevItemsNum = items.length;
@@ -295,7 +338,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             }
         }
 
-        this.updateViewAndCollection(updatedItems);
+        this.updateViewAndCollection(updatedItems, itemUpdateCallback);
 
         // Automatically start upload if other files are being uploaded
         if (view === VIEW_UPLOAD_IN_PROGRESS) {
@@ -330,6 +373,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     removeFileFromUploadQueue(item: UploadItem) {
+        const { onUploadsManagerCancel } = this.props;
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
 
@@ -339,7 +383,13 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         const { items } = this.state;
         items.splice(items.indexOf(item), 1);
 
-        this.updateViewAndCollection(items);
+        let callback = noop;
+        if (this.props.windowView && !items.length) {
+            // minimize the uploads manager when items is empty after the removal
+            callback = this.minimizeUploadsManager;
+        }
+        onUploadsManagerCancel(item);
+        this.updateViewAndCollection(items, callback);
     }
 
     /**
@@ -437,7 +487,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     handleUploadSuccess = (item: UploadItem, entries?: BoxItem[]) => {
-        const { onUpload, windowView } = this.props;
+        const { onUpload, onUploadsManagerUpload, windowView } = this.props;
 
         item.progress = 100;
         item.status = STATUS_COMPLETE;
@@ -451,7 +501,11 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         items[items.indexOf(item)] = item;
 
         // Broadcast that a file has been uploaded
-        onUpload(item.boxFile);
+        if (windowView) {
+            onUploadsManagerUpload(item);
+        } else {
+            onUpload(item.boxFile);
+        }
 
         this.updateViewAndCollection(items);
 
@@ -467,8 +521,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @param {UploadItem[]} item - Itmes to update collection with
      * @return {void}
      */
-    updateViewAndCollection(items: UploadItem[]) {
-        const { onComplete, windowView }: Props = this.props;
+    updateViewAndCollection(items: UploadItem[], callback) {
+        const { onComplete, onUploadsManagerComplete, windowView }: Props = this.props;
         const someUploadIsInProgress = items.some((uploadItem) => uploadItem.status !== STATUS_COMPLETE);
         const someUploadHasFailed = items.some((uploadItem) => uploadItem.status === STATUS_ERROR);
         const allFilesArePending = !items.some((uploadItem) => uploadItem.status !== STATUS_PENDING);
@@ -482,22 +536,27 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             view = VIEW_UPLOAD_IN_PROGRESS;
         } else {
             view = VIEW_UPLOAD_SUCCESS;
-            onComplete(cloneDeep(items.map((item) => item.boxFile)));
+
             if (!windowView) {
+                onComplete(cloneDeep(items.map((item) => item.boxFile)));
                 items = []; // Reset item collection after successful upload
+            } else {
+                clearTimeout(this.resetItemsTimeout);
+                onUploadsManagerComplete(items);
             }
         }
 
         const state: State = {
             items,
-            view
+            view,
+            isUploadsManagerExpanded: this.state.isUploadsManagerExpanded
         };
 
         if (items.length === 0) {
             state.errorCode = '';
         }
 
-        this.setState(state);
+        this.setState(state, callback);
     }
 
     /**
@@ -509,7 +568,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     handleUploadError = (item: UploadItem, error: Error) => {
-        const { onError, windowView } = this.props;
+        const { onError, onUploadsManagerError, windowView } = this.props;
         const { file } = item;
 
         item.status = STATUS_ERROR;
@@ -518,10 +577,17 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         items[items.indexOf(item)] = item;
 
         // Broadcast that there was an error uploading a file
-        onError({
-            file,
-            error
-        });
+        if (windowView) {
+            onUploadsManagerError({
+                item,
+                error
+            });
+        } else {
+            onError({
+                file,
+                error
+            });
+        }
 
         this.updateViewAndCollection(items);
 
@@ -591,6 +657,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         clearTimeout(this.resetItemsTimeout);
 
         onExpand();
+        this.setState({ isUploadsManagerExpanded: true });
     };
 
     /**
@@ -606,6 +673,9 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         }
 
         onMinimize();
+        this.setState({ isUploadsManagerExpanded: false });
+
+        this.hideUploadsManager();
     };
 
     /**
@@ -626,7 +696,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     toggleUploadsManager = (): void => {
-        const { isUploadsManagerExpanded } = this.props;
+        const { isUploadsManagerExpanded } = this.state;
+
         if (isUploadsManagerExpanded) {
             this.minimizeUploadsManager();
             return;
@@ -641,13 +712,17 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     resetUploadsManagerItemsWhenUploadsComplete = (): void => {
-        const { view } = this.state;
-        const { windowView, isUploadsManagerExpanded } = this.props;
+        const { view, items, isUploadsManagerExpanded } = this.state;
+        const { windowView, onUploadsManagerCancel } = this.props;
 
         // Do not reset items when upload manger is expanded or there're uploads in progress
-        if ((isUploadsManagerExpanded && windowView) || view === VIEW_UPLOAD_IN_PROGRESS) {
+        if ((isUploadsManagerExpanded && windowView && !!items.length) || view === VIEW_UPLOAD_IN_PROGRESS) {
             return;
         }
+
+        items.forEach((item) => {
+            onUploadsManagerCancel(item);
+        });
 
         this.setState({
             items: []
@@ -657,15 +732,11 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     /**
      * Adds file to the upload queue and starts upload immediately
      * 
-     * @param {UploadFileWithAPIOptions[]} files - Files to be added to upload queue
+     * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
      * @return {void}
      */
-    addFilesWithOptionsToUploadQueueAndStartUpload = (files: UploadFileWithAPIOptions[]): void => {
-        files.forEach(({ file, options }) => {
-            this.addFilesToUploadQueue([file], options);
-        });
-
-        this.upload();
+    addFilesWithOptionsToUploadQueueAndStartUpload = (files: Array<UploadFileWithAPIOptions | File>): void => {
+        this.addFilesToUploadQueue(files, true, this.upload);
     };
 
     /**
@@ -683,10 +754,9 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             measureRef,
             isTouch,
             fileLimit,
-            windowView,
-            isUploadsManagerExpanded = false
+            windowView
         }: Props = this.props;
-        const { view, items, errorCode }: State = this.state;
+        const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);

@@ -348,22 +348,24 @@ class Xhr {
         errorHandler: Function,
         progressHandler?: Function
     }): Promise<StringAnyMap> {
-        return this.getHeaders(id, headers).then((hdrs) =>
-            fetch(url, {
-                method: 'OPTIONS',
-                headers: hdrs,
-                body: Xhr.stringifyData(data)
-            })
-                .then(Xhr.parseJSON)
-                .then((response: StringAnyMap) => {
-                    if (response.type === 'error') {
-                        errorHandler(response);
-                    } else {
-                        successHandler(response);
-                    }
+        return this.getHeaders(id, headers)
+            .then((hdrs) =>
+                fetch(url, {
+                    method: 'OPTIONS',
+                    headers: hdrs,
+                    body: Xhr.stringifyData(data)
                 })
-                .catch(errorHandler)
-        );
+                    .then(Xhr.parseJSON)
+                    .then((response: StringAnyMap) => {
+                        if (response.type === 'error') {
+                            errorHandler(response);
+                        } else {
+                            successHandler(response);
+                        }
+                    })
+                    .catch(errorHandler)
+            )
+            .catch(errorHandler);
     }
 
     /**

@@ -224,6 +224,7 @@ export type UploadItemAPIOptions = {
 
 export type UploadFileWithAPIOptions = {
     file: File,
+    uploadInitTimestamp?: number,
     options?: UploadItemAPIOptions
 };
 

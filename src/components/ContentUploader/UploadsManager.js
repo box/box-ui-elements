@@ -38,6 +38,10 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
         }
     };
 
+    const totalSize = items.reduce((updatedSize, item) => updatedSize + item.size, 0);
+    const totalUploaded = items.reduce((updatedSize, item) => updatedSize + item.size * item.progress / 100.0, 0);
+    const percent = totalUploaded / totalSize * 100;
+
     return (
         <div
             className={classNames('buik uploads-manager-container', {
@@ -47,7 +51,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
         >
             <OverallUploadsProgressBar
                 isVisible={isVisible}
-                items={items}
+                percent={percent}
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}
                 view={view}
