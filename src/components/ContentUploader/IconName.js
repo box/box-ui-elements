@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
+import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
 import ItemName from './ItemName';
-import FileIcon from '../icons/file';
 import './IconName.scss';
 
 type Props = {

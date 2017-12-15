@@ -1,4 +1,6 @@
+@import '~box-react-ui/lib/styles/variables';
 @import './variables';
+@import '~box-react-ui/lib/styles/common/buttons';
 
 .buik {
     background: $white;
@@ -316,7 +318,7 @@
         justify-content: center;
         padding: 15px 0 0;
 
-        .buik-btn {
+        .btn {
             margin-left: 8px;
         }
     }
@@ -373,4 +375,48 @@
     @extend .buik-modal-wrapper-overlay;
 
     position: absolute;
+}
+
+/* box-react-ui overrides */
+.btn-plain {
+    background: none;
+    border: 0 none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 16px;
+    margin: 0;
+    max-width: 100%;
+    outline: none;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-shadow: none;
+    white-space: nowrap;
+    zoom: 1;
+
+    &::-moz-focus-inner {
+        border: 0 none;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+.dropdown-menu-element {
+    /* stylelint-disable declaration-no-important */
+    box-sizing: border-box !important;
+    /* stylelint-enable declaration-no-important */
+    font-family: $font;
+    font-size: 13px;
+
+    * {
+        /* stylelint-disable declaration-no-important */
+        box-sizing: border-box !important;
+        /* stylelint-enable declaration-no-important */
+    }
 }

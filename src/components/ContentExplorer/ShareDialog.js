@@ -8,9 +8,10 @@ import React from 'react';
 import Modal from 'react-modal';
 import noop from 'lodash.noop';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
+import Button from 'box-react-ui/lib/components/button/Button';
 import messages from '../messages';
 import ShareAccessSelect from '../ShareAccessSelect';
-import { Button, PrimaryButton } from '../Button';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './ShareDialog.scss';
@@ -23,6 +24,7 @@ type Props = {
     item: BoxItem,
     isLoading: boolean,
     parentElement: HTMLElement,
+    appElement: HTMLElement,
     intl: any
 };
 
@@ -34,6 +36,7 @@ const ShareDialog = ({
     item,
     isLoading,
     parentElement,
+    appElement,
     intl
 }: Props) => {
     let textInput = null;
@@ -60,6 +63,7 @@ const ShareDialog = ({
             overlayClassName={CLASS_MODAL_OVERLAY}
             onRequestClose={onCancel}
             contentLabel={intl.formatMessage(messages.shareDialogLabel)}
+            appElement={appElement}
         >
             <div className='buik-modal-content'>
                 <label>
@@ -73,7 +77,7 @@ const ShareDialog = ({
                             }}
                             value={url}
                         />
-                        <PrimaryButton className='buik-modal-button-copy' onClick={copy} autoFocus>
+                        <PrimaryButton type='button' className='buik-modal-button-copy' onClick={copy} autoFocus>
                             <FormattedMessage {...messages.copy} />
                         </PrimaryButton>
                     </span>
@@ -86,7 +90,7 @@ const ShareDialog = ({
                     onChange={onShareAccessChange}
                     item={item}
                 />
-                <Button onClick={onCancel} isLoading={isLoading}>
+                <Button type='button' onClick={onCancel} isLoading={isLoading}>
                     <FormattedMessage {...messages.close} />
                 </Button>
             </div>

@@ -6,7 +6,7 @@
 
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
-import { PlainButton } from '../Button';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import './SidebarSection.scss';
 
 type Props = {
@@ -81,7 +81,7 @@ class SidebarSection extends PureComponent<DefaultProps, Props, State> {
 
         return (
             <div className={sectionClassName}>
-                <PlainButton onClick={this.toggleVisibility} className='bcs-section-title'>
+                <PlainButton type='button' onClick={this.toggleVisibility} className='bcs-section-title'>
                     {title}
                 </PlainButton>
                 {isOpen &&

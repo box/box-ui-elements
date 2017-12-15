@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { PlainButton } from '../Button';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import { BOX_BLUE } from '../../constants';
 import type { SkillDataEntryType } from '../../flowTypes';
 import './Line.scss';
@@ -40,7 +40,7 @@ const Line = ({ type, start, end = 0, duration, color = BOX_BLUE, getPreviewer }
             viewer.play(start);
         }
     };
-    return <PlainButton className='buik-timeline-time' style={styles} onClick={onClick} />;
+    return <PlainButton type='button' className='buik-timeline-time' style={styles} onClick={onClick} />;
 };
 
 export default Line;

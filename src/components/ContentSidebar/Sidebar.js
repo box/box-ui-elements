@@ -7,13 +7,13 @@
 import React, { PureComponent } from 'react';
 import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import DetailsSidebar from './DetailsSidebar';
 import IconComments from '../icons/IconComments';
 import IconTasks from '../icons/IconTasks';
 import IconVersions from '../icons/IconVersions';
 import IconApps from '../icons/IconApps';
 import IconDetails from '../icons/IconDetails';
-import { PlainButton } from '../Button';
 import { BOX_BLUE } from '../../constants';
 import messages from '../messages';
 import type { BoxItem } from '../../flowTypes';

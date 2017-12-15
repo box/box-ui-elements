@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { BOX_BLUE, BOX_BLUE_LIGHT } from '../../../constants';
-import type { IconType } from '../../../flowTypes';
+import { BOX_BLUE, BOX_BLUE_LIGHT } from '../../constants';
+import type { IconType } from '../../flowTypes';
 
 const IconUploadSuccessState = ({
     className = '',

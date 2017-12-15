@@ -6,8 +6,8 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import messages from '../messages';
-import { PlainButton } from '../Button';
 import IconCross from '../icons/IconCross';
 import IconSidebar from '../icons/IconSidebar';
 import { getIcon } from '../Item/iconCellRenderer';
@@ -41,11 +41,17 @@ const Header = ({ file, isSidebarVisible, onClose, hasSidebarButton, onSidebarTo
             </div>
             <div className='bcpr-btns'>
                 {hasSidebarButton &&
-                    <PlainButton className='bcpr-btn' onClick={onSidebarToggle} title={sidebar} aria-label={sidebar}>
+                    <PlainButton
+                        type='button'
+                        className='bcpr-btn'
+                        onClick={onSidebarToggle}
+                        title={sidebar}
+                        aria-label={sidebar}
+                    >
                         <IconSidebar color={isSidebarVisible ? BOX_BLUE : '#777'} width={16} height={16} />
                     </PlainButton>}
                 {onClose &&
-                    <PlainButton className='bcpr-btn' onClick={onClose} title={close} aria-label={close}>
+                    <PlainButton type='button' className='bcpr-btn' onClick={onClose} title={close} aria-label={close}>
                         <IconCross color='#777' width={14} height={14} />
                     </PlainButton>}
             </div>

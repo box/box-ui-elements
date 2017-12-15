@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { PlainButton } from '../Button';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import Line from './Line';
 import type { TimeSlice, SkillDataEntryType } from '../../flowTypes';
 import './Timeline.scss';
@@ -49,7 +49,7 @@ const Timeline = ({
             {(text || url) &&
                 <div className='buik-timeline-label'>
                     {type === 'image'
-                        ? <PlainButton onClick={startNextSegment}>
+                        ? <PlainButton type='button' onClick={startNextSegment}>
                             <div className='buik-timeline-image-container'>
                                 <img alt={text} title={text} src={url} />
                             </div>

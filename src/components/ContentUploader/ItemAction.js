@@ -5,11 +5,11 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconCross from '../icons/IconCross';
 import IconCheck from '../icons/IconCheck';
 import IconRetry from '../icons/IconRetry';
 import IconInProgress from './IconInProgress';
-import { PlainButton } from '../Button';
 import messages from '../messages';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 import type { UploadStatus } from '../../flowTypes';
@@ -45,7 +45,7 @@ const ItemAction = ({ status, onClick, intl }: Props) => {
 
     return (
         <div className='bcu-item-action'>
-            <PlainButton onClick={onClick} title={title}>
+            <PlainButton type='button' onClick={onClick} title={title}>
                 {icon}
             </PlainButton>
         </div>

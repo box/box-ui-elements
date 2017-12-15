@@ -6,8 +6,10 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
+import Button from 'box-react-ui/lib/components/button/Button';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import messages from '../messages';
-import { Button, PrimaryButton, PlainButton } from '../Button';
 import './Footer.scss';
 
 type Props = {
@@ -31,7 +33,7 @@ const Footer = ({
 }: Props) =>
     <div className='bcp-footer'>
         <div className='bcp-footer-left'>
-            <PlainButton onClick={onSelectedClick}>
+            <PlainButton type='button' onClick={onSelectedClick}>
                 <span className='bcp-selected-count'>{selectedCount}</span>
                 &nbsp;
                 <FormattedMessage {...messages.selected} />
@@ -44,10 +46,10 @@ const Footer = ({
                 : null}
         </div>
         <div className='bcp-footer-right'>
-            <Button onClick={onCancel}>
+            <Button type='button' onClick={onCancel}>
                 {cancelButtonLabel || <FormattedMessage {...messages.cancel} />}
             </Button>
-            <PrimaryButton onClick={onChoose}>
+            <PrimaryButton type='button' onClick={onChoose}>
                 {chooseButtonLabel || <FormattedMessage {...messages.choose} />}
             </PrimaryButton>
         </div>

@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
+import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
+import FolderIcon from 'box-react-ui/lib/icons/folder-icon/FolderIcon';
 import IconWebLink from '../icons/IconWebLink';
-import FileIcon from '../icons/file';
-import FolderIcon from '../icons/folder';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './IconCell.scss';
