@@ -242,21 +242,20 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         return [].filter.call(files, (file) => {
             let uploadFile = file;
             let uploadAPIOptions = {};
-            let uploadInitTimestamp = null;
 
             if (withApiOptions) {
                 uploadFile = file.file;
                 uploadAPIOptions = file.options;
-                uploadInitTimestamp = file.uploadInitTimestamp;
             }
             const { name } = uploadFile;
             return !items.some((item) => {
-                if (!uploadAPIOptions) {
+                if (!uploadAPIOptions || !item.options) {
                     return item.name === name;
                 }
                 return (
                     item.name === name &&
-                    (item.folderId === uploadAPIOptions.folderId && item.uploadInitTimestamp === uploadInitTimestamp)
+                    (item.options.folderId === uploadAPIOptions.folderId &&
+                        item.options.uploadInitTimestamp === uploadAPIOptions.uploadInitTimestamp)
                 );
             });
         });
@@ -280,12 +279,10 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         const newItems = this.getNewFiles(files, withApiOptions).map((file) => {
             let uploadFile = file;
             let uploadAPIOptions = {};
-            let uploadInitTimestamp = null;
 
             if (withApiOptions) {
                 uploadFile = file.file;
                 uploadAPIOptions = file.options;
-                uploadInitTimestamp = file.uploadInitTimestamp;
             }
             const { name, size } = uploadFile;
 
@@ -303,8 +300,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                 name,
                 progress: 0,
                 size,
-                status: STATUS_PENDING,
-                uploadInitTimestamp
+                status: STATUS_PENDING
             };
 
             if (uploadAPIOptions) {

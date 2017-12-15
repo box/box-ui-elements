@@ -219,12 +219,12 @@ export type UploadItemAPIOptions = {
     fileId?: string,
     folderId?: string,
     token?: Token,
-    uploadHost?: string
+    uploadHost?: string,
+    uploadInitTimestamp?: number
 };
 
 export type UploadFileWithAPIOptions = {
     file: File,
-    uploadInitTimestamp?: number,
     options?: UploadItemAPIOptions
 };
 
