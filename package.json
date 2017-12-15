@@ -87,9 +87,6 @@
       "!**/node_modules/**",
       "!**/__tests__/**"
     ],
-    "setupFiles": [
-      "<rootDir>/node_modules/babel-polyfill/dist/polyfill.js"
-    ],
     "setupTestFrameworkScriptFile": "<rootDir>/build/enzyme-adapter.js"
   },
   "devEngines": {
