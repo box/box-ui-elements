@@ -5,7 +5,8 @@ describe('api/uploads/MultiputPart', () => {
     const options = {};
     const index = 0;
     const offset = 0;
-    const size = 1;
+    const partSize = 1;
+    const fileSize = 10;
     const sessionId = 1;
     const sessionEndpoints = {};
     const config = {};
@@ -17,7 +18,8 @@ describe('api/uploads/MultiputPart', () => {
             options,
             index,
             offset,
-            size,
+            partSize,
+            fileSize,
             sessionId,
             sessionEndpoints,
             config,

@@ -21,7 +21,7 @@ function getCrypto(): Object {
  * @param {ArrayBuffer} buffer
  * @return {Promise} Promise - resolves with an ArrayBuffer containing the digest result
  */
-function digest(algorithm: string, buffer: ArrayBuffer): Promise<string> {
+function digest(algorithm: string, buffer: ArrayBuffer): Promise<ArrayBuffer> {
     const cryptoRef = getCrypto();
 
     if (cryptoRef !== window.msCrypto) {

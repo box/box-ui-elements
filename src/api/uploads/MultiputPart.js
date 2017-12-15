@@ -21,7 +21,7 @@ class MultiputPart extends BaseMultiput {
     numUploadRetriesPerformed: number;
     offset: number;
     sha256: string;
-    size: number;
+    partSize: number;
     state:
         | typeof PART_STATE_NOT_STARTED
         | typeof PART_STATE_COMPUTING_DIGEST
@@ -41,6 +41,7 @@ class MultiputPart extends BaseMultiput {
     rangeEnd: number;
     startTimestamp: number;
     getNumPartsUploading: Function;
+    fileSize: number;
 
     /**
      * [constructor]
@@ -48,7 +49,7 @@ class MultiputPart extends BaseMultiput {
      * @param {Options} options
      * @param {number} index - 0-based index of this part in array of all parts
      * @param {number} offset - Starting byte offset of this part's range
-     * @param {number} size - Size of this part in bytes
+     * @param {number} partSize - Size of this part in bytes
      * @param {number} sessionId
      * @param {Object} sessionEndpoints
      * @param {MultiputConfig} config
@@ -62,7 +63,8 @@ class MultiputPart extends BaseMultiput {
         options: Options,
         index: number,
         offset: number,
-        size: number,
+        partSize: number,
+        fileSize: number,
         sessionId: string,
         sessionEndpoints: Object,
         config: MultiputConfig,
@@ -77,13 +79,17 @@ class MultiputPart extends BaseMultiput {
         this.numDigestRetriesPerformed = 0;
         this.numUploadRetriesPerformed = 0;
         this.offset = offset;
-        this.size = size;
+        this.partSize = partSize;
+        this.fileSize = fileSize;
         this.state = PART_STATE_NOT_STARTED;
         this.timing = {};
         this.uploadedBytes = 0;
         this.data = {};
         this.config = config;
-        this.rangeEnd = offset + size - 1;
+        this.rangeEnd = offset + partSize - 1;
+        if (this.rangeEnd > fileSize - 1) {
+            this.rangeEnd = fileSize - 1;
+        }
         this.onSuccess = onSuccess || noop;
         this.onError = onError || noop;
         this.onProgress = onProgress || noop;
@@ -94,7 +100,7 @@ class MultiputPart extends BaseMultiput {
         JSON.stringify({
             index: this.index,
             offset: this.offset,
-            size: this.size,
+            partSize: this.partSize,
             state: this.state,
             uploadedBytes: this.uploadedBytes,
             numUploadRetriesPerformed: this.numUploadRetriesPerformed,
@@ -138,14 +144,16 @@ class MultiputPart extends BaseMultiput {
         const headers = {
             'Content-Type': 'application/octet-stream',
             Digest: `sha-256=${this.sha256}`,
-            'Content-Range': `bytes ${this.offset}-${this.rangeEnd}/${this.size}`,
+            'Content-Range': `bytes ${this.offset}-${this.rangeEnd}/${this.fileSize}`,
             'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo)
         };
+
+        this.state = PART_STATE_UPLOADING;
 
         this.startTimestamp = Date.now();
 
         this.xhr.uploadFile({
-            url: this.sessionEndpoints.upload_part,
+            url: this.sessionEndpoints.uploadPart,
             data: this.blob,
             headers,
             method: 'PUT',
@@ -176,7 +184,7 @@ class MultiputPart extends BaseMultiput {
 
         this.onSuccess(this);
 
-        this.uploadedBytes = this.size;
+        this.uploadedBytes = this.partSize;
     };
 
     /**
@@ -252,7 +260,7 @@ class MultiputPart extends BaseMultiput {
         }
 
         try {
-            if (this.uploadedBytes < this.size) {
+            if (this.uploadedBytes < this.partSize) {
                 // Not all bytes were uploaded to the server. So upload part again.
                 throw new Error('Incomplete part.');
             }

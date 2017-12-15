@@ -6,6 +6,7 @@
 
 import Cache from '../util/Cache';
 import ChunkedUploadAPI from './ChunkedUpload';
+import MultiputUploadAPI from './uploads/MultiputUpload';
 import PlainUploadAPI from './PlainUpload';
 import FolderAPI from './Folder';
 import FileAPI from './File';
@@ -45,6 +46,11 @@ class APIFactory {
      * @property {ChunkedUploadAPI}
      */
     chunkedUploadAPI: ChunkedUploadAPI;
+
+    /**
+     * @property {MultiputUploadAPI}
+     */
+    multiputUploadAPI: MultiputUploadAPI;
 
     /**
      * @property {SearchAPI}
@@ -98,6 +104,10 @@ class APIFactory {
         if (this.chunkedUploadAPI) {
             this.chunkedUploadAPI.destroy();
             delete this.chunkedUploadAPI;
+        }
+        if (this.multiputUploadAPI) {
+            this.multiputUploadAPI.destroy();
+            delete this.multiputUploadAPI;
         }
         if (this.folderAPI) {
             this.folderAPI.destroy();
@@ -194,6 +204,17 @@ class APIFactory {
         this.destroy();
         this.chunkedUploadAPI = new ChunkedUploadAPI(this.options);
         return this.chunkedUploadAPI;
+    }
+
+    /**
+     * API for multiput uploads (the new chunked uploads)
+     *
+     * @return {UploadAPI} UploadAPI instance
+     */
+    getMultiputUploadAPI(): MultiputUploadAPI {
+        this.destroy();
+        this.multiputUploadAPI = new MultiputUploadAPI(this.options);
+        return this.multiputUploadAPI;
     }
 
     /**
