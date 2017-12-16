@@ -24,6 +24,7 @@ class BaseUpload extends Base {
         }
 
         const extension = this.fileName.substr(this.fileName.lastIndexOf('.')) || '';
+        // foo.txt => foo-1513385827917.txt
         this.fileName = `${this.fileName.substr(0, this.fileName.lastIndexOf('.'))}-${Date.now()}${extension}`;
     };
 
