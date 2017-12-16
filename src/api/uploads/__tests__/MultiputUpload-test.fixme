@@ -15,9 +15,9 @@ const config = {
 };
 let file;
 const createSessionUrl = 'https://test.box.com/createSession';
-const destinationFolderId = '123';
+const partSize = 9;
 
-describe('api/MultiputUpload', () => {
+describe.only('api/MultiputUpload', () => {
     let multiputUploadTest;
     beforeEach(() => {
         file = {
@@ -25,37 +25,14 @@ describe('api/MultiputUpload', () => {
             name: 'test.txt',
             slice() {}
         };
-        multiputUploadTest = new MultiputUpload(config, file, createSessionUrl, destinationFolderId, null);
+        multiputUploadTest = new MultiputUpload(config);
+        multiputUploadTest.file = file;
+        multiputUploadTest.partSize = partSize;
     });
 
     afterEach(() => {
         sandbox.verifyAndRestore();
         MultiputUpload.__ResetDependency__('getFileLastModifiedAsISONoMSIfPossible');
-    });
-
-    describe('populateParts()', () => {
-        it('should create correct parts array', () => {
-            // Setup
-            multiputUploadTest.partSize = 400000;
-
-            // Expectations
-            const expectedParts = [
-                new MultiputPart(config, 0, 0, 400000, 1, { upload_part: 'www.box.com' }),
-                new MultiputPart(config, 1, 400000, 400000, 1, { upload_part: 'www.box.com' }),
-                new MultiputPart(config, 2, 800000, 200000, 1, { upload_part: 'www.box.com' })
-            ];
-
-            // Execute
-            multiputUploadTest.populateParts();
-
-            // Verify
-            assert.equal(multiputUploadTest.numPartsNotStarted, 3, 'numPartsNotStarted should be set to 3');
-            for (let i = 0; i < 3; i += 1) {
-                assert.equal(multiputUploadTest.parts[i].offset, expectedParts[i].offset);
-                assert.equal(multiputUploadTest.parts[i].size, expectedParts[i].size);
-                assert.equal(multiputUploadTest.parts[i].index, expectedParts[i].index);
-            }
-        });
     });
 
     describe('uploadNextPart()', () => {
@@ -113,15 +90,17 @@ describe('api/MultiputUpload', () => {
 
         withData(
             {
-                'ended is true': [false, true],
-                'upload pipeline full': [false, false, 2],
-                'upload pipeline not full and not ended': [true, false, 1]
+                'ended is true': [false, true, 1],
+                'upload pipeline full': [false, false, 2, 1],
+                'upload pipeline not full and not ended': [true, false, 1, 1],
+                'upload pipeline not full and not ended but no digest is ready': [false, false, 1, 0]
             },
-            (expected, ended, numPartsUploading) => {
+            (expected, ended, numPartsUploading, numPartsDigestReady) => {
                 it('should return correct value:', () => {
                     // Setup
                     multiputUploadTest.destroyed = ended;
                     multiputUploadTest.numPartsUploading = numPartsUploading;
+                    multiputUploadTest.numPartsDigestReady = numPartsDigestReady;
                     // Execute
                     const result = multiputUploadTest.canStartMorePartUploads();
                     // Verify
@@ -201,7 +180,6 @@ describe('api/MultiputUpload', () => {
         it('should create correct parts array', () => {
             // Setup
             multiputUploadTest.partSize = 400000;
-
             // Expectations
             const expectedParts = [
                 new MultiputPart(config, 0, 0, 400000, 1, { upload_part: 'www.box.com' }),
@@ -222,7 +200,7 @@ describe('api/MultiputUpload', () => {
         });
     });
 
-    describe('createUploadSessionSuccessHandler()', () => {
+    describe('createSessionSuccessHandler()', () => {
         const data = {
             id: 1,
             part_size: 1,
@@ -244,7 +222,7 @@ describe('api/MultiputUpload', () => {
             sandbox.mock(multiputUploadTest).expects('processNextParts').never();
 
             // Execute
-            multiputUploadTest.createUploadSessionSuccessHandler(data);
+            multiputUploadTest.createSessionSuccessHandler(data);
         });
 
         it('should update attributes properly, populate parts and process parts when not destroyed', () => {
@@ -252,13 +230,14 @@ describe('api/MultiputUpload', () => {
             multiputUploadTest.destroyed = false;
             multiputUploadTest.sessionId = 0;
             multiputUploadTest.partSize = 0;
+            multiputUploadTest.sessionEndpoints.createSession = createSessionUrl;
 
             // Expectations
             sandbox.mock(multiputUploadTest).expects('populateParts');
             sandbox.mock(multiputUploadTest).expects('processNextParts');
 
             // Execute
-            multiputUploadTest.createUploadSessionSuccessHandler(data);
+            multiputUploadTest.createSessionSuccessHandler(data);
 
             // Verify
             assert.equal(multiputUploadTest.sessionId, data.id);
@@ -274,25 +253,25 @@ describe('api/MultiputUpload', () => {
         });
     });
 
-    describe('createUploadSession()', () => {
+    describe('createSession()', () => {
         it('should noop when is destroyed', async () => {
             multiputUploadTest.xhr.post = sandbox.mock().never();
             multiputUploadTest.destroyed = true;
 
-            await multiputUploadTest.createUploadSession();
+            await multiputUploadTest.createSession();
         });
 
-        it('should call createUploadSessionSuccessHandler when the session is created successfully', async () => {
+        it('should call createSessionSuccessHandler when the session is created successfully', async () => {
             const data = { a: 2 };
 
             multiputUploadTest.destroyed = false;
             multiputUploadTest.xhr.post = sandbox.mock().resolves(data);
-            multiputUploadTest.createUploadSessionSuccessHandler = sandbox.mock().withArgs(data);
+            multiputUploadTest.createSessionSuccessHandler = sandbox.mock().withArgs(data);
 
-            await multiputUploadTest.createUploadSession();
+            await multiputUploadTest.createSession();
         });
 
-        it('should call createUploadSessionErrorHandler when the session creation failed', async () => {
+        it('should call createSessionErrorHandler when the session creation failed', async () => {
             const error = {
                 response: {
                     status: 500
@@ -300,54 +279,26 @@ describe('api/MultiputUpload', () => {
             };
 
             multiputUploadTest.destroyed = false;
+            multiputUploadTest.getErrorResponse = sandbox.stub().returns(error.response);
             multiputUploadTest.xhr.post = sandbox.mock().rejects(error);
-            multiputUploadTest.createUploadSessionErrorHandler = sandbox.mock().withArgs(error.response);
+            multiputUploadTest.createSessionErrorHandler = sandbox.mock().withArgs(error);
 
-            await multiputUploadTest.createUploadSession();
-        });
-
-        it('should invoke createUploadSessionSuccessHandler on 409 session_conflict', async () => {
-            // Setup
-            const response = {
-                status: 409,
-                code: 'session_conflict',
-                context_info: {
-                    session: {
-                        part_size: 1234,
-                        session_endpoints: {
-                            upload_part: 'testUploadPartUrl',
-                            commit: 'testCommitUrl',
-                            abort: 'testAbortUrl'
-                        }
-                    }
-                }
-            };
-
-            // Expectations
-            sandbox
-                .mock(multiputUploadTest)
-                .expects('createUploadSessionSuccessHandler')
-                .withExactArgs(response.context_info.session);
-
-            // Execute
-            multiputUploadTest.xhr.post = sandbox.mock().rejects({
-                response
-            });
-
-            await multiputUploadTest.createUploadSession();
+            await multiputUploadTest.createSession();
         });
 
         withData(
             {
-                'file name conflict': [{ code: 'item_name_in_use', status: 409 }],
                 'storage limit exceeded': [{ code: 'storage_limit_exceeded', status: 403 }],
                 'insufficient permissions': [{ code: 'access_denied_insufficient_permissions', status: 403 }]
             },
             (response) => {
-                it('should invoke onError but not sessionErrorHandler on expected failure', async () => {
+                it('should invoke errorCallback but not sessionErrorHandler on expected failure', async () => {
                     // Setup
 
-                    multiputUploadTest.onError = sandbox.mock().withArgs(response);
+                    multiputUploadTest.errorCallback = sandbox.mock().withArgs({
+                        response
+                    });
+                    multiputUploadTest.getErrorResponse = sandbox.stub().returns(response);
 
                     // Expectations
                     sandbox.mock(multiputUploadTest).expects('sessionErrorHandler').never();
@@ -356,7 +307,7 @@ describe('api/MultiputUpload', () => {
                     multiputUploadTest.xhr.post = sandbox.mock().rejects({
                         response
                     });
-                    await multiputUploadTest.createUploadSession();
+                    await multiputUploadTest.createSession();
                 });
             }
         );
@@ -365,42 +316,47 @@ describe('api/MultiputUpload', () => {
             {
                 'maybeResponse null': [{ status: 403 }],
                 'no code': [{ status: 403, a: 1 }],
-                '403 with code that is not storage_limit_exceeded': [{ status: '403', code: 'foo' }],
-                '409 with code that is not item_name_in_use': [{ status: 409, code: 'foo' }]
+                '403 with code that is not storage_limit_exceeded': [{ status: '403', code: 'foo' }]
             },
             (response) => {
                 it('should invoke sessionErrorHandler on other non-201 status code', async () => {
                     // Expectations
-                    sandbox
-                        .mock(multiputUploadTest)
-                        .expects('sessionErrorHandler')
-                        .withExactArgs(response, 'create_session_misc_error', JSON.stringify(response));
+                    multiputUploadTest.getErrorResponse = sandbox.stub().returns(response);
+                    sandbox.mock(multiputUploadTest).expects('sessionErrorHandler').withExactArgs(
+                        {
+                            response
+                        },
+                        'create_session_misc_error',
+                        JSON.stringify({
+                            response
+                        })
+                    );
                     // Execute
                     multiputUploadTest.xhr.post = sandbox.mock().rejects({
                         response
                     });
-                    await multiputUploadTest.createUploadSession();
+                    await multiputUploadTest.createSession();
                 });
             }
         );
     });
 
-    describe('createUploadSessionErrorHandler()', () => {
+    describe('createSessionErrorHandler()', () => {
         it('should should noop when isDestroyed', () => {
             // Expectations
             sandbox.mock(multiputUploadTest).expects('isDestroyed').returns(true);
 
-            sandbox.mock(multiputUploadTest).expects('createUploadSessionRetry').never();
+            sandbox.mock(multiputUploadTest).expects('createSessionRetry').never();
             sandbox.mock(multiputUploadTest).expects('sessionErrorHandler').never();
 
-            multiputUploadTest.createUploadSessionErrorHandler();
+            multiputUploadTest.createSessionErrorHandler();
         });
 
         it('should retry if retries not exhausted', () => {
             // Expectations
-            sandbox.mock(multiputUploadTest).expects('createUploadSessionRetry');
+            sandbox.mock(multiputUploadTest).expects('createSessionRetry');
             // Execute
-            multiputUploadTest.createUploadSessionErrorHandler();
+            multiputUploadTest.createSessionErrorHandler();
         });
 
         it('should fail if retries exhausted', () => {
@@ -414,11 +370,11 @@ describe('api/MultiputUpload', () => {
                 .expects('sessionErrorHandler')
                 .withArgs(response, 'create_session_retries_exceeded', JSON.stringify(response));
             // Execute
-            multiputUploadTest.createUploadSessionErrorHandler(response);
+            multiputUploadTest.createSessionErrorHandler(response);
         });
     });
 
-    describe('createUploadSessionRetry()', () => {
+    describe('createSessionRetry()', () => {
         it('should call createSession again after exponential backoff based on retry count', () => {
             // Setup
             multiputUploadTest.createSessionNumRetriesPerformed = 5;
@@ -437,10 +393,10 @@ describe('api/MultiputUpload', () => {
             );
 
             // Execute
-            multiputUploadTest.createUploadSessionRetry();
+            multiputUploadTest.createSessionRetry();
             // Verify
             setTimeout(() => {
-                mock.expects('createUploadSession');
+                mock.expects('createSession');
                 assert.equal(
                     multiputUploadTest.createSessionNumRetriesPerformed,
                     6,
@@ -456,7 +412,8 @@ describe('api/MultiputUpload', () => {
         it('should destroy, log and call error handler properly', async () => {
             MultiputUpload.__Rewire__('retryNumOfTimes', sandbox.mock().resolves());
             multiputUploadTest.destroy = sandbox.mock();
-            multiputUploadTest.onError = sandbox.mock();
+            multiputUploadTest.sessionEndpoints.logEvent = 'logEvent';
+            multiputUploadTest.errorCallback = sandbox.mock();
             multiputUploadTest.abortSession = sandbox.mock();
 
             await multiputUploadTest.sessionErrorHandler(null, '123', '123');
@@ -466,7 +423,7 @@ describe('api/MultiputUpload', () => {
 
     describe('abortSession()', () => {
         it('should terminate the worker and abort session', () => {
-            multiputUploadTest.worker = {
+            multiputUploadTest.sha1Worker = {
                 terminate: sandbox.mock()
             };
             multiputUploadTest.xhr.delete = sandbox.mock();
@@ -484,7 +441,7 @@ describe('api/MultiputUpload', () => {
             };
             multiputUploadTest.numPartsUploading = 10;
             multiputUploadTest.numPartsUploaded = 10;
-            multiputUploadTest.updateProgress = sandbox.mock().withArgs(part.uploadedBytes, part.size);
+            multiputUploadTest.updateProgress = sandbox.mock().withArgs(part.uploadedBytes, partSize);
             multiputUploadTest.processNextParts = sandbox.mock();
 
             multiputUploadTest.partUploadSuccessHandler(part);
@@ -492,24 +449,15 @@ describe('api/MultiputUpload', () => {
     });
 
     describe('updateProgress()', () => {
-        it('should call onProgress() properly', () => {
+        it('should call progressCallback() properly', () => {
             const prevUploadedBytes = 10;
             const newUploadedBytes = 20;
 
             multiputUploadTest.totalUploadedBytes = 100;
-            multiputUploadTest.onProgress = sandbox.mock().withArgs(110);
-
-            multiputUploadTest.updateProgress(prevUploadedBytes, newUploadedBytes);
-        });
-    });
-
-    describe('updateProgress()', () => {
-        it('should call onProgress() properly', () => {
-            const prevUploadedBytes = 10;
-            const newUploadedBytes = 20;
-
-            multiputUploadTest.totalUploadedBytes = 100;
-            multiputUploadTest.onProgress = sandbox.mock().withArgs(110);
+            multiputUploadTest.progressCallback = sandbox.mock().withArgs({
+                loaded: 110,
+                total: file.size
+            });
 
             multiputUploadTest.updateProgress(prevUploadedBytes, newUploadedBytes);
         });
@@ -641,7 +589,6 @@ describe('api/MultiputUpload', () => {
         it('should call failSessionIfFileChangeDetected and return when it returns true, even when everything is ready for commit otherwise', () => {
             // Setup
             multiputUploadTest.numPartsUploaded = 1;
-            multiputUploadTest.fileSha1 = 'test';
 
             // Expectations
             sandbox.mock(multiputUploadTest).expects('failSessionIfFileChangeDetected').returns(true);
@@ -649,36 +596,6 @@ describe('api/MultiputUpload', () => {
             sandbox.mock(multiputUploadTest).expects('commitSession').never();
             sandbox.mock(multiputUploadTest).expects('updateFirstUnuploadedPartIndex').never();
             sandbox.mock(multiputUploadTest).expects('uploadNextPart').never();
-
-            // Execute
-            multiputUploadTest.processNextParts();
-        });
-
-        it('should only invoke commitSession if all parts are uploaded and SHA-1 done', () => {
-            // Setup
-            multiputUploadTest.numPartsUploaded = 1;
-            multiputUploadTest.fileSha1 = 'test';
-            sandbox.stub(multiputUploadTest, 'failSessionIfFileChangeDetected').returns(false);
-
-            // Expectations
-            sandbox.mock(multiputUploadTest).expects('commitSession');
-            sandbox.mock(multiputUploadTest).expects('updateFirstUnuploadedPartIndex').never();
-            sandbox.mock(multiputUploadTest).expects('uploadNextPart').never();
-
-            // Execute
-            multiputUploadTest.processNextParts();
-        });
-
-        it('should not invoke commitSession when all parts are uploaded but SHA-1 not done', () => {
-            // Setup
-            multiputUploadTest.numPartsUploaded = 1;
-            multiputUploadTest.fileSha1 = undefined;
-            sandbox.stub(multiputUploadTest, 'failSessionIfFileChangeDetected').returns(false);
-            sandbox.stub(multiputUploadTest, 'canStartMorePartUploads').returns(false);
-
-            // Expectations
-            sandbox.mock(multiputUploadTest).expects('commitSession').never();
-            sandbox.mock(multiputUploadTest).expects('updateFirstUnuploadedPartIndex');
 
             // Execute
             multiputUploadTest.processNextParts();
