@@ -6,6 +6,10 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Button from 'box-react-ui/lib/components/button/Button';
+import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
+import Menu from 'box-react-ui/lib/components/menu/Menu';
+import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import messages from '../messages';
 import {
     SORT_ASC,
@@ -18,9 +22,6 @@ import {
     FIELD_INTERACTED_AT,
     FIELD_SIZE
 } from '../../constants';
-import DropdownMenu from '../DropdownMenu';
-import { Menu, MenuItem } from '../Menu';
-import { Button } from '../Button';
 import IconSort from '../icons/IconSort';
 import IconCheck from '../icons/IconCheck';
 import type { SortBy, SortDirection, SortableOptions } from '../../flowTypes';
@@ -55,7 +56,7 @@ function getMenuItem(
 
 const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Props) =>
     <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-sort'>
-        <Button isDisabled={!isLoaded} className='buik-sort-btn'>
+        <Button type='button' isDisabled={!isLoaded} className='buik-sort-btn'>
             <IconSort />
         </Button>
         <Menu className='buik-menu-sort'>

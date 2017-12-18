@@ -7,8 +7,9 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
+import Button from 'box-react-ui/lib/components/button/Button';
 import messages from '../messages';
-import { Button, PrimaryButton } from '../Button';
 import {
     CLASS_MODAL_CONTENT,
     CLASS_MODAL_OVERLAY,
@@ -24,11 +25,21 @@ type Props = {
     isLoading: boolean,
     errorCode: string,
     parentElement: HTMLElement,
+    appElement: HTMLElement,
     intl: any
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
-const CreateFolderDialog = ({ isOpen, onCreate, onCancel, isLoading, errorCode, parentElement, intl }: Props) => {
+const CreateFolderDialog = ({
+    isOpen,
+    onCreate,
+    onCancel,
+    isLoading,
+    errorCode,
+    parentElement,
+    appElement,
+    intl
+}: Props) => {
     let textInput = null;
     let error;
 
@@ -86,6 +97,7 @@ const CreateFolderDialog = ({ isOpen, onCreate, onCancel, isLoading, errorCode, 
             overlayClassName={CLASS_MODAL_OVERLAY}
             onRequestClose={onCancel}
             contentLabel={intl.formatMessage(messages.createDialogLabel)}
+            appElement={appElement}
         >
             <label>
                 {error
@@ -97,10 +109,10 @@ const CreateFolderDialog = ({ isOpen, onCreate, onCancel, isLoading, errorCode, 
                 <input type='text' required ref={ref} onKeyDown={onKeyDown} />
             </label>
             <div className='buik-modal-btns'>
-                <PrimaryButton onClick={create} isLoading={isLoading}>
+                <PrimaryButton type='button' onClick={create} isLoading={isLoading}>
                     <FormattedMessage {...messages.create} />
                 </PrimaryButton>
-                <Button onClick={onCancel} isDisabled={isLoading}>
+                <Button type='button' onClick={onCancel} isDisabled={isLoading}>
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

@@ -5,8 +5,9 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
+import Button from 'box-react-ui/lib/components/button/Button';
 import messages from '../messages';
-import { Button, PrimaryButton } from '../Button';
 import { ERROR_CODE_UPLOAD_FILE_LIMIT } from '../../constants';
 import './Footer.scss';
 
@@ -34,7 +35,7 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
         <div className='bcu-footer'>
             <div className='bcu-footer-left'>
                 {onClose
-                    ? <Button isDisabled={hasFiles} onClick={onClose}>
+                    ? <Button type='button' isDisabled={hasFiles} onClick={onClose}>
                         <FormattedMessage {...messages.close} />
                     </Button>
                     : null}
@@ -44,10 +45,10 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
                     {message}
                 </div>}
             <div className='bcu-footer-right'>
-                <Button isDisabled={!hasFiles} onClick={onCancel}>
+                <Button type='button' isDisabled={!hasFiles} onClick={onCancel}>
                     <FormattedMessage {...messages.cancelUploads} />
                 </Button>
-                <PrimaryButton isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload}>
+                <PrimaryButton type='button' isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload}>
                     <FormattedMessage {...messages.upload} />
                 </PrimaryButton>
             </div>

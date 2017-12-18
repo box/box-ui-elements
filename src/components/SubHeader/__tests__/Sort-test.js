@@ -1,10 +1,11 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import { Button } from '../../Button';
+import Button from 'box-react-ui/lib/components/button/Button';
+import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
+import Menu from 'box-react-ui/lib/components/menu/Menu';
+import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import Sort from '../Sort';
 import messages from '../../messages';
-import DropdownMenu from '../../DropdownMenu';
-import { Menu, MenuItem } from '../../Menu';
 import { SORT_ASC, SORT_DESC } from '../../../constants';
 
 describe('components/SubHeader/Sort', () => {

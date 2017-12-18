@@ -22,6 +22,7 @@ type Props = {
     uploadHost: string,
     onClose: Function,
     parentElement: HTMLElement,
+    appElement: HTMLElement,
     onUpload: Function,
     intl: any
 };
@@ -37,6 +38,7 @@ const UploadDialog = ({
     uploadHost,
     onClose,
     parentElement,
+    appElement,
     onUpload,
     intl
 }: Props) =>
@@ -48,6 +50,7 @@ const UploadDialog = ({
         overlayClassName={CLASS_MODAL_OVERLAY}
         onRequestClose={onClose}
         contentLabel={intl.formatMessage(messages.upload)}
+        appElement={appElement}
     >
         <ContentUploader
             rootFolderId={currentFolderId}

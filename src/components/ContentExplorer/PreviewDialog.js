@@ -21,6 +21,7 @@ type Props = {
     item: BoxItem,
     token: Token,
     parentElement: HTMLElement,
+    appElement: HTMLElement,
     isTouch: boolean,
     onPreview: Function,
     hasPreviewSidebar: boolean,
@@ -37,6 +38,7 @@ const PreviewDialog = ({
     item,
     isOpen,
     parentElement,
+    appElement,
     token,
     cache,
     currentCollection,
@@ -69,6 +71,7 @@ const PreviewDialog = ({
             overlayClassName={CLASS_MODAL_OVERLAY}
             contentLabel={intl.formatMessage(messages.preview)}
             onRequestClose={onCancel}
+            appElement={appElement}
         >
             <ContentPreview
                 skipServerUpdate

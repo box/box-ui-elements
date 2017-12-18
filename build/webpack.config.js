@@ -1,21 +1,29 @@
 const path = require('path');
 const packageJSON = require('../package.json');
-const commonConfig = require('./webpack.common.config');
 const TranslationsPlugin = require('./TranslationsPlugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const license = require('./license');
 
+const DefinePlugin = webpack.DefinePlugin;
+const BannerPlugin = webpack.BannerPlugin;
 const noReactSuffix = '.no.react';
 const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'dev';
 const language = process.env.LANGUAGE;
 const outputDir = process.env.OUTPUT;
+const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
 
+
 function getConfig(isReactExternalized) {
-    const config = Object.assign(commonConfig(language), {
+    const config = {
+        bail: true,
         entry: {
             picker: path.resolve('src/wrappers/ContentPickers.js'),
             uploader: path.resolve('src/wrappers/ContentUploader.js'),
@@ -28,8 +36,75 @@ function getConfig(isReactExternalized) {
             path: outputPath,
             filename: `[name]${isReactExternalized ? noReactSuffix : ''}.js`,
             publicPath: `/${version}/${language}/`
+        },
+        resolve: {
+            modules: ['src', 'node_modules'],
+            alias: {
+                'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
+                'box-ui-elements-locale-data': path.resolve(`i18n/${language}`)
+            }
+        },
+        resolveLoader: {
+            modules: [path.resolve('src'), path.resolve('node_modules')]
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.js$/,
+                    loader: 'babel-loader?cacheDirectory',
+                    exclude: /(node_modules)/
+                },
+                {
+                    test: /\.s?css$/,
+                    use: ExtractTextPlugin.extract({
+                        fallback: 'style-loader',
+                        use: [
+                            {
+                                loader: 'css-loader',
+                                options: { importLoaders: 1 }
+                            },
+                            {
+                                loader: 'postcss-loader'
+                            },
+                            {
+                                loader: 'sass-loader'
+                            }
+                        ]
+                    })
+                }
+            ]
+        },
+        plugins: [
+            new BannerPlugin(license),
+            new OptimizeCssAssetsPlugin({
+                cssProcessorOptions: {
+                    safe: true
+                }
+            }),
+            new ExtractTextPlugin({
+                filename: '[name].css',
+                allChunks: true
+            }),
+            new DefinePlugin({
+                __LANGUAGE__: JSON.stringify(language),
+                __VERSION__: JSON.stringify(version),
+                'process.env': {
+                    NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+                    BABEL_ENV: JSON.stringify(process.env.BABEL_ENV)
+                }
+            })
+        ],
+        stats: {
+            assets: true,
+            colors: true,
+            version: false,
+            hash: false,
+            timings: true,
+            chunks: false,
+            chunkModules: false,
+            children: false
         }
-    });
+    };
 
     if (isDev) {
         config.devtool = 'inline-source-map';

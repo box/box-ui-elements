@@ -137,7 +137,7 @@ export const CLASS_MODAL_OVERLAY = 'buik-modal-dialog-overlay';
 export const CLASS_IS_COMPACT = 'buik-is-small';
 export const CLASS_IS_TOUCH = 'buik-is-touch';
 export const CLASS_MODAL = 'buik-modal';
-export const CLASS_BUTTON_CONTENT_SPAN = 'buik-btn-content';
+export const CLASS_BUTTON_CONTENT_SPAN = 'btn-content';
 export const CLASS_CHECKBOX_SPAN = 'buik-checkbox-span';
 
 /* ------------------ Error Codes  ---------------------- */

@@ -6,9 +6,10 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import DropdownMenu from '../DropdownMenu';
-import { Menu, MenuItem } from '../Menu';
-import { Button } from '../Button';
+import Button from 'box-react-ui/lib/components/button/Button';
+import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
+import Menu from 'box-react-ui/lib/components/menu/Menu';
+import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import Browser from '../../util/Browser';
 import messages from '../messages';
 import {
@@ -66,7 +67,7 @@ export default (
     return (
         <div className='bce-more-options'>
             <DropdownMenu isRightAligned constrainToScrollParent>
-                <Button onFocus={onFocus} className='bce-btn-more-options'>
+                <Button type='button' onFocus={onFocus} className='bce-btn-more-options'>
                     ···
                 </Button>
                 <Menu>
@@ -103,7 +104,7 @@ export default (
                 </Menu>
             </DropdownMenu>
             {allowShare && !isSmall
-                ? <Button onFocus={onFocus} onClick={onShare}>
+                ? <Button type='button' onFocus={onFocus} onClick={onShare}>
                     <FormattedMessage {...messages.share} />
                 </Button>
                 : null}

@@ -6,10 +6,11 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Button from 'box-react-ui/lib/components/button/Button';
+import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
+import Menu from 'box-react-ui/lib/components/menu/Menu';
+import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import messages from '../messages';
-import DropdownMenu from '../DropdownMenu';
-import { Menu, MenuItem } from '../Menu';
-import { Button } from '../Button';
 import IconPlus from '../icons/IconPlus';
 import './Add.scss';
 
@@ -23,10 +24,10 @@ type Props = {
 
 const Add = ({ onUpload, onCreate, isLoaded, showUpload = true, showCreate = true }: Props) =>
     <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-add'>
-        <Button className='buik-btn-add' isDisabled={!isLoaded}>
+        <Button type='button' className='buik-btn-add' isDisabled={!isLoaded}>
             <IconPlus />
         </Button>
-        <Menu className='buik-menu-add'>
+        <Menu>
             {showUpload &&
                 <MenuItem onClick={onUpload}>
                     <FormattedMessage {...messages.upload} />

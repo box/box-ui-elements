@@ -1,12 +1,12 @@
 .buik-sort-selected {
-    flex: 0 0 20px;
+    flex: 0 0 22px;
 }
 
-.buik-menu-sort.buik-aria-menu [role=menuitem] {
-    display: flex;
+.buik-menu-sort.aria-menu .menu-item {
+    padding-right: 40px;
 }
 
-.buik-btn.buik-sort-btn {
+.btn.buik-sort-btn {
     padding: 7px 6px;
 
     .bce:not(.buik-is-small) & {
