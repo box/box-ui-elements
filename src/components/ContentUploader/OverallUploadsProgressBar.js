@@ -53,17 +53,17 @@ const getPercent = (view, percent) => {
 
 const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible }: Props) =>
     <div
-        className='overall-progress-bar'
+        className='bcu-overall-progress-bar'
         onClick={onClick}
         onKeyDown={onKeyDown}
         role='button'
         tabIndex={isVisible ? '0' : '-1'}
     >
-        <span className='upload-status'>
+        <span className='bcu-upload-status'>
             {getUploadStatus(view)}
         </span>
         <ProgressBar percent={getPercent(view, percent)} />
-        <span className='uploads-manager-toggle' />
+        <span className='bcu-uploads-manager-toggle' />
     </div>;
 
 export default OverallUploadsProgressBar;

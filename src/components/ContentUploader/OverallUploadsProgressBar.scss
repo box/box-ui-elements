@@ -1,6 +1,6 @@
 @import '../variables';
 
-.overall-progress-bar {
+.bcu-overall-progress-bar {
     align-items: center;
     background: $blue;
     color: $white;
@@ -25,7 +25,7 @@
         background: transparent;
     }
 
-    .upload-status {
+    .bcu-upload-status {
         flex: none;
         font-size: 16px;
         margin-right: 20px;

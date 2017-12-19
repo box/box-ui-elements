@@ -6,6 +6,7 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import Tooltip from 'box-react-ui/lib/components/tooltip';
 import IconCross from '../icons/IconCross';
 import IconCheck from '../icons/IconCheck';
 import IconRetry from '../icons/IconRetry';
@@ -24,15 +25,17 @@ type Props = {
 const ItemAction = ({ status, onClick, intl }: Props) => {
     let icon = <IconCross />;
     let title = intl.formatMessage(messages.cancel);
+    let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
 
     switch (status) {
         case STATUS_COMPLETE:
-            icon = <IconCheck />;
+            icon = <IconCheck color='#26C281' />;
             title = intl.formatMessage(messages.remove);
             break;
         case STATUS_ERROR:
             icon = <IconRetry />;
             title = intl.formatMessage(messages.retry);
+            tooltip = intl.formatMessage(messages.uploadsRetryButtonTooltip);
             break;
         case STATUS_IN_PROGRESS:
             icon = <IconInProgress />;
@@ -45,9 +48,11 @@ const ItemAction = ({ status, onClick, intl }: Props) => {
 
     return (
         <div className='bcu-item-action'>
-            <PlainButton type='button' onClick={onClick} title={title}>
-                {icon}
-            </PlainButton>
+            <Tooltip text={tooltip} position='top-left'>
+                <PlainButton type='button' onClick={onClick} title={title}>
+                    {icon}
+                </PlainButton>
+            </Tooltip>
         </div>
     );
 };

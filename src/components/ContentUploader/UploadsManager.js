@@ -46,7 +46,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
         <div
             className={classNames('buik uploads-manager-container', {
                 'is-expanded': isExpanded,
-                'is-visible': isVisible
+                'bcu-is-visible': isVisible
             })}
         >
             <OverallUploadsProgressBar
@@ -56,7 +56,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
                 onKeyDown={handleProgressBarKeyDown}
                 view={view}
             />
-            <div className='uploads-manager-item-list'>
+            <div className='bcu-uploads-manager-item-list'>
                 <ItemList items={items} view={view} onClick={onItemActionClick} />
             </div>
         </div>

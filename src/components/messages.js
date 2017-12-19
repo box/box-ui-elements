@@ -452,6 +452,16 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         id: 'be.uploadsManagerUploadFailed',
         description: 'Text shown when uploads failed',
         defaultMessage: 'Some Uploads Failed'
+    },
+    uploadsCancelButtonTooltip: {
+        id: 'be.uploadsCancelButtonTooltip',
+        description: 'Cancel upload button tooltip',
+        defaultMessage: 'Cancel this upload'
+    },
+    uploadsRetryButtonTooltip: {
+        id: 'be.uploadsRetryButtonTooltip',
+        description: 'Retry upload button tooltip',
+        defaultMessage: 'Retry upload'
     }
 });
 
