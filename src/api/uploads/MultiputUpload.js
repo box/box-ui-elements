@@ -13,10 +13,10 @@ import hexToBase64 from '../../util/base64';
 import { DEFAULT_RETRY_DELAY_MS } from '../../constants';
 import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
 import type { StringAnyMap, MultiputConfig, Options } from '../../flowTypes';
+import createWorker from '../../util/uploadsSHA1Worker';
 
 // Constants used for specifying log event types.
-/* eslint-disable no-unused-vars */
-const LOG_EVENT_TYPE_COMMIT_CONFLICT = 'commit_conflict';
+
 // This type is a catch-all for create session errors that aren't 5xx's (for which we'll do
 // retries) and aren't specific 4xx's we know how to specifically handle (e.g. out of storage).
 const LOG_EVENT_TYPE_CREATE_SESSION_MISC_ERROR = 'create_session_misc_error';
@@ -27,8 +27,6 @@ const LOG_EVENT_TYPE_COMMIT_RETRIES_EXCEEDED = 'commit_retries_exceeded';
 const LOG_EVENT_TYPE_WEB_WORKER_ERROR = 'web_worker_error';
 const LOG_EVENT_TYPE_FILE_READER_RECEIVED_NOT_FOUND_ERROR = 'file_reader_received_not_found_error';
 const LOG_EVENT_TYPE_PART_DIGEST_RETRIES_EXCEEDED = 'part_digest_retries_exceeded';
-const LOG_EVENT_TYPE_LOGGED_OUT = 'logged_out';
-/* eslint-enable no-unused-vars */
 
 class MultiputUpload extends BaseMultiput {
     clientId: ?string;
@@ -58,6 +56,10 @@ class MultiputUpload extends BaseMultiput {
     sha1Worker: Worker;
     createSessionTimeout: ?number;
     commitSessionTimeout: ?number;
+    fileName: string;
+    fileId: ?string;
+    overwrite: boolean;
+
     /**
      * [constructor]
      * 
@@ -112,7 +114,6 @@ class MultiputUpload extends BaseMultiput {
         errorCallback,
         progressCallback,
         successCallback,
-        sha1Worker,
         overwrite = true,
         fileId
     }: {
@@ -121,7 +122,6 @@ class MultiputUpload extends BaseMultiput {
         errorCallback?: Function,
         progressCallback?: Function,
         successCallback?: Function,
-        sha1Worker: Worker,
         overwrite?: boolean,
         fileId?: string
     }): void => {
@@ -135,7 +135,10 @@ class MultiputUpload extends BaseMultiput {
         this.errorCallback = errorCallback || noop;
         this.progressCallback = progressCallback || noop;
         this.successCallback = successCallback || noop;
-        this.sha1Worker = sha1Worker;
+
+        this.sha1Worker = createWorker();
+        this.sha1Worker.addEventListener('message', this.onWorkerMessage);
+
         this.overwrite = overwrite;
         this.fileId = fileId;
 
@@ -380,7 +383,7 @@ class MultiputUpload extends BaseMultiput {
             return;
         }
 
-        if (this.numPartsUploaded === this.parts.length) {
+        if (this.numPartsUploaded === this.parts.length && this.fileSha1) {
             this.commitSession();
             return;
         }
@@ -483,34 +486,41 @@ class MultiputUpload extends BaseMultiput {
                 readTime: readCompleteTimestamp - startTimestamp,
                 subtleCryptoTime: digestCompleteTimestamp - readCompleteTimestamp
             };
-            this.numPartsDigestComputing -= 1;
 
             this.processNextParts();
         } catch (error) {
-            this.onPartDigestError(error);
+            this.onPartDigestError(error, part);
         }
     };
 
     /**
-     * Get SHA1 digest of file. This happens asynchronously since it's possible that the digest hasn't been updated
-     * with all of the parts yet.
+	 * Deal with a message from the worker (either a part sha-1 ready, file sha-1 ready, or error).
      *
-     * @return {Promise<string>} Promise that resolves with digest
-     */
-    getFileSha1 = (): Promise<string> =>
-        new Promise((resolve) => {
-            if (this.fileSha1) {
-                resolve(this.fileSha1);
-                return;
-            }
+     * @private
+     * @param {object} event
+	 * @return {void}
+	 */
+    onWorkerMessage = (event: Object) => {
+        if (this.isDestroyed()) {
+            return;
+        }
 
-            this.sha1Worker.postMessage({ id: this.sessionId, file: this.file });
-            this.sha1Worker.addEventListener('message', ({ data }: any) => {
-                if (data && data.id === this.sessionId) {
-                    resolve(hexToBase64(data.hash));
-                }
-            });
-        });
+        const data = event.data;
+        if (data.type === 'partDone') {
+            this.numPartsDigestComputing -= 1;
+            const part = data.part;
+            this.parts[part.index].timing.fileDigestTime = data.duration;
+            this.processNextParts();
+        } else if (data.type === 'done') {
+            this.fileSha1 = hexToBase64(data.sha1);
+            this.sha1Worker.terminate();
+            if (this.partsUploaded === this.parts.length) {
+                this.commitSession();
+            }
+        } else if (data.type === 'error') {
+            this.sessionErrorHandler(null, LOG_EVENT_TYPE_WEB_WORKER_ERROR, JSON.stringify(data));
+        }
+    };
 
     /**
      * Sends a part to the sha1Worker
@@ -519,22 +529,61 @@ class MultiputUpload extends BaseMultiput {
      * @param {MultiputPart} part
      * @param {ArrayBuffer} buffer
      * @return {void}
-     * TODO: implement this
      */
-    // eslint-disable-next-line
-    sendPartToWorker = (part: MultiputPart, buffer: ArrayBuffer): void => {};
+    sendPartToWorker = (part: MultiputPart, buffer: ArrayBuffer): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+        // Don't send entire part since XHR can't be cloned
+        const partInformation = { index: part.index, offset: part.offset, size: part.partSize };
+        this.sha1Worker.postMessage(
+            { part: partInformation, fileSize: this.file.size, partContents: buffer },
+            [buffer] // This transfers the ArrayBuffer to the worker context without copying contents.
+        );
+        this.consoleLog(`Part sent to worker: ${JSON.stringify(part)}.}`);
+    };
 
     /**
      * Error handler for part digest computation
      * 
      * @private
+     * @param {Error} error
      * @param {MultiputPart} part
-     * @param {ArrayBuffer} buffer
      * @return {void}
-     * TODO: implement this
      */
-    // eslint-disable-next-line
-    onPartDigestError = (error: Error): void => {};
+    onPartDigestError = (error: Error, part: MultiputPart): void => {
+        this.consoleLog(`Error computing digest for part ${JSON.stringify(part)}: ${JSON.stringify(error)}`);
+
+        // When a FileReader is processing a file that changes on disk, Chrome reports a 'NotFoundError'
+        // and Safari reports a 'NOT_FOUND_ERR'. (Other browsers seem to allow the reader to keep
+        // going, either with the old version of the new file or the new one.) Since the error name
+        // implies that retrying will not help, we fail the session.
+        if (error.name === 'NotFoundError' || error.name === 'NOT_FOUND_ERR') {
+            this.sessionErrorHandler(null, LOG_EVENT_TYPE_FILE_READER_RECEIVED_NOT_FOUND_ERROR, JSON.stringify(error));
+            return;
+        }
+
+        if (this.failSessionIfFileChangeDetected()) {
+            return;
+        }
+
+        if (part.numDigestRetriesPerformed >= this.config.retries) {
+            this.sessionErrorHandler(null, LOG_EVENT_TYPE_PART_DIGEST_RETRIES_EXCEEDED, JSON.stringify(error));
+            return;
+        }
+
+        const retryDelayMs = getBoundedExpBackoffRetryDelay(
+            this.config.initialRetryDelayMs,
+            this.config.maxRetryDelayMs,
+            part.numDigestRetriesPerformed
+        );
+        part.numDigestRetriesPerformed += 1;
+        this.consoleLog(`Retrying digest work for part ${JSON.stringify(part)} in ${retryDelayMs} ms`);
+
+        setTimeout(() => {
+            this.computeDigestForPart(part);
+        }, retryDelayMs);
+    };
 
     /**
      * Send a request to commit the upload.
@@ -572,8 +621,6 @@ class MultiputUpload extends BaseMultiput {
             postData.attributes.content_modified_at = fileLastModified;
         }
 
-        const sha1 = await this.getFileSha1();
-
         const clientEventInfo = {
             avg_part_read_time: Math.round(stats.totalPartReadTime / this.parts.length),
             avg_part_digest_time: Math.round(stats.totalPartDigestTime / this.parts.length),
@@ -581,8 +628,10 @@ class MultiputUpload extends BaseMultiput {
             avg_part_upload_time: Math.round(stats.totalPartUploadTime / this.parts.length)
         };
 
+        // To make flow stop complaining about this.fileSha1 could potentially be undefined/null
+        const fileSha1: string = (this.fileSha1: any);
         const headers = {
-            Digest: `sha=${sha1}`,
+            Digest: `sha=${fileSha1}`,
             'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo)
         };
 
@@ -742,11 +791,12 @@ class MultiputUpload extends BaseMultiput {
 
         for (let i = 0; i < this.numPartsNotStarted; i += 1) {
             const offset = i * this.partSize;
+            const currentPartSize = Math.min(offset + this.partSize, this.file.size) - offset;
             const part = new MultiputPart(
                 this.options,
                 i,
                 offset,
-                this.partSize,
+                currentPartSize,
                 this.file.size,
                 this.sessionId,
                 this.sessionEndpoints,
@@ -831,6 +881,42 @@ class MultiputUpload extends BaseMultiput {
         clearTimeout(this.commitSessionTimeout);
         this.abortSession();
         this.destroy();
+    };
+
+    /**
+     * Resolves upload conflict by overwriting or renaming
+     * 
+     * @param {Object} response
+     * @return {Promise}
+     */
+    resolveConflict = async (response: Object): Promise<> => {
+        if (this.overwrite && response.context_info) {
+            this.fileId = response.context_info.conflicts.id;
+            return;
+        }
+
+        const extension = this.fileName.substr(this.fileName.lastIndexOf('.')) || '';
+        // foo.txt => foo-1513385827917.txt
+        this.fileName = `${this.fileName.substr(0, this.fileName.lastIndexOf('.'))}-${Date.now()}${extension}`;
+    };
+
+    /**
+     * Returns detailed error response
+     * 
+     * @param {Object} error
+     * @return {Promise<Object>}
+     */
+    getErrorResponse = async (error: Object): Promise<Object> => {
+        const { response } = error;
+        if (!response) {
+            return {};
+        }
+
+        if (response.status === 401 || response.status === 403) {
+            return response;
+        }
+
+        return response.json();
     };
 }
 

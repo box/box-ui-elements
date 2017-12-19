@@ -46,7 +46,6 @@
     "clean": "rm -rf dist lib reports/* i18n/json i18n/*.js",
     "copy-lib": "./node_modules/.bin/cpx './src/{**/!(__tests__)/*,*}' lib",
     "commitmsg": "conventional-changelog-lint -e",
-    "debug": "NODE_ENV=test ./node_modules/.bin/karma start build/karma.conf.js --no-single-run --auto-watch",
     "deploy": "yarn run pre-build && LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev ./node_modules/.bin/webpack-dev-server --config build/webpack.config.js",
     "github-release": "./node_modules/.bin/conventional-github-releaser",
     "lint": "NODE_ENV=dev ./node_modules/.bin/eslint src && ./node_modules/.bin/stylelint 'src/**/*.scss'",

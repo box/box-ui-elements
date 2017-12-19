@@ -3,7 +3,7 @@
  * @file Multiput upload base class
  * @author Box
  */
-import BaseUpload from './BaseUpload';
+import Base from '../Base';
 import type { MultiputConfig, Options } from '../../flowTypes';
 
 const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
@@ -16,10 +16,9 @@ const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     retries: 5 // How many times to retry requests such as upload part or commit. Note that total number of attempts will be retries + 1 in worst case where all attempts fail.
 };
 
-class BaseMultiput extends BaseUpload {
+class BaseMultiput extends Base {
     config: MultiputConfig;
     sessionEndpoints: Object;
-    canConsoleLog: boolean;
 
     /**
      * [constructor]
@@ -34,22 +33,7 @@ class BaseMultiput extends BaseUpload {
 
         this.config = config || DEFAULT_MULTIPUT_CONFIG;
         this.sessionEndpoints = sessionEndpoints;
-        this.canConsoleLog = !!options.consoleLog && !!window.console && !!window.console.log;
     }
-
-    /**
-     * Console log a function returned message
-     * 
-     * @param {Function} msgFunc
-     * @return {void}
-     */
-    consoleLogFunc = (msgFunc: Function): void => {
-        if (!this.canConsoleLog) {
-            return;
-        }
-
-        this.consoleLog(msgFunc());
-    };
 
     /**
      * POST log event
