@@ -405,6 +405,19 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     };
 
     /**
+     * Checks whether should upload an item
+     * 
+     * @private
+     * @param {UploadItem} item
+     * @return {boolean}
+     */
+    shouldUploadItem = (item) => {
+        const { windowView } = this.props;
+
+        return windowView ? item.status === STATUS_PENDING : item.status !== STATUS_IN_PROGRESS;
+    };
+
+    /**
      * Uploads all items in the upload collection.
      *
      * @private
@@ -413,7 +426,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     upload = () => {
         const { items } = this.state;
         items.forEach((uploadItem) => {
-            if (uploadItem.status !== STATUS_IN_PROGRESS && uploadItem.status !== STATUS_COMPLETE) {
+            if (this.shouldUploadItem(uploadItem)) {
                 this.uploadFile(uploadItem);
             }
         });
@@ -518,6 +531,9 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         const someUploadIsInProgress = items.some((uploadItem) => uploadItem.status !== STATUS_COMPLETE);
         const someUploadHasFailed = items.some((uploadItem) => uploadItem.status === STATUS_ERROR);
         const allFilesArePending = !items.some((uploadItem) => uploadItem.status !== STATUS_PENDING);
+        const noFileIsPendingOrInProgress = items.every(
+            (uploadItem) => uploadItem.status !== STATUS_PENDING && uploadItem.status !== STATUS_IN_PROGRESS
+        );
 
         let view = '';
         if ((items && items.length === 0) || allFilesArePending) {
@@ -532,10 +548,12 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             if (!windowView) {
                 onComplete(cloneDeep(items.map((item) => item.boxFile)));
                 items = []; // Reset item collection after successful upload
-            } else {
-                clearTimeout(this.resetItemsTimeout);
-                onUploadsManagerComplete(items);
             }
+        }
+
+        if (noFileIsPendingOrInProgress && windowView) {
+            clearTimeout(this.resetItemsTimeout);
+            onUploadsManagerComplete(items);
         }
 
         const state: State = {

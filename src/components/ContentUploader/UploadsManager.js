@@ -9,6 +9,7 @@ import ItemList from './ItemList';
 import OverallUploadsProgressBar from './OverallUploadsProgressBar';
 import './UploadsManager.scss';
 import type { UploadItem, View } from '../../flowTypes';
+import { STATUS_ERROR } from '../../constants';
 
 type Props = {
     isExpanded: boolean,
@@ -38,8 +39,15 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
         }
     };
 
-    const totalSize = items.reduce((updatedSize, item) => updatedSize + item.size, 0);
-    const totalUploaded = items.reduce((updatedSize, item) => updatedSize + item.size * item.progress / 100.0, 0);
+    const totalSize = items.reduce(
+        (updatedSize, item) => (item.status === STATUS_ERROR ? updatedSize : updatedSize + item.size),
+        0
+    );
+    const totalUploaded = items.reduce(
+        (updatedSize, item) =>
+            item.status === STATUS_ERROR ? updatedSize : updatedSize + item.size * item.progress / 100.0,
+        0
+    );
     const percent = totalUploaded / totalSize * 100;
 
     return (
