@@ -8,7 +8,7 @@
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
-import ChunkedUploadAPI from './api/ChunkedUpload';
+import MultiputUploadAPI from './api/uploads/MultiputUpload';
 import PlainUploadAPI from './api/PlainUpload';
 import Cache from './util/Cache';
 import {
@@ -203,7 +203,7 @@ export type Collection = {
 };
 
 export type UploadItem = {
-    api: PlainUploadAPI | ChunkedUploadAPI,
+    api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
     extension: string,
     file: File,

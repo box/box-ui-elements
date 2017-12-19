@@ -15,7 +15,6 @@ import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
-import createWorker from '../../util/uploadsSHA1Worker';
 import {
     DEFAULT_ROOT,
     CLIENT_NAME_CONTENT_UPLOADER,
@@ -89,7 +88,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     props: Props;
     rootElement: HTMLElement;
     appElement: HTMLElement;
-    sha1Worker: any;
 
     static defaultProps: DefaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -120,7 +118,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             errorCode: ''
         };
         this.id = uniqueid('bcu_');
-        this.sha1Worker = createWorker();
     }
 
     /**
@@ -312,7 +309,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
         api.upload({
             id: rootFolderId,
             file,
-            sha1Worker: this.sha1Worker,
             successCallback: (entries) => this.handleUploadSuccess(item, entries),
             errorCallback: (error) => this.handleUploadError(item, error),
             progressCallback: (event) => this.handleUploadProgress(item, event),

@@ -177,7 +177,7 @@ class MultiputPart extends BaseMultiput {
         }
 
         this.state = PART_STATE_UPLOADED;
-        this.consoleLogFunc(() => `Upload completed: ${this.toJSON()}.`);
+        this.consoleLog(`Upload completed: ${this.toJSON()}.`);
         this.data = data;
         this.blob = null;
         this.timing.uploadTime = Date.now() - this.startTimestamp;
@@ -216,8 +216,8 @@ class MultiputPart extends BaseMultiput {
             return;
         }
 
-        this.consoleLogFunc(
-            () => `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr.readyState}.`
+        this.consoleLog(
+            `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr.readyState}.`
         );
         const eventInfo = {
             message: error.message,

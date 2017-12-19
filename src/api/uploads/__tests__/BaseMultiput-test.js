@@ -48,22 +48,4 @@ describe('api/uploads/BaseMultiput', () => {
             }
         );
     });
-
-    describe('consoleLogFunc()', () => {
-        test('should not call msgFunc when canConsoleLog is false', async () => {
-            BaseMultiputTest.canConsoleLog = false;
-            const mock = jest.fn();
-            BaseMultiputTest.consoleLogFunc(mock);
-            expect(mock).not.toHaveBeenCalled();
-        });
-
-        test('should console log the return value of msgFunc when canConsoleLog is true', async () => {
-            BaseMultiputTest.canConsoleLog = true;
-            BaseMultiputTest.consoleLog = jest.fn();
-
-            const mock = jest.fn().mockReturnValueOnce('expected');
-            BaseMultiputTest.consoleLogFunc(mock);
-            expect(BaseMultiputTest.consoleLog).toHaveBeenCalledWith('expected');
-        });
-    });
 });
