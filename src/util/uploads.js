@@ -67,4 +67,17 @@ function tryParseJson(maybeJson: string): ?Object {
     }
 }
 
-export { toISOStringNoMS, getFileLastModifiedAsISONoMSIfPossible, tryParseJson };
+/**
+ * Get bounded exponential backoff retry delay
+ * 
+ * @param {number} initialRetryDelay
+ * @param {number} maxRetryDelay
+ * @param {number} retryNum - Current retry number (first retry will have value of 0).
+ * @return {number}
+ */
+function getBoundedExpBackoffRetryDelay(initialRetryDelay: number, maxRetryDelay: number, retryNum: number) {
+    const delay = initialRetryDelay * retryNum ** 2;
+    return delay > maxRetryDelay ? maxRetryDelay : delay;
+}
+
+export { toISOStringNoMS, getFileLastModifiedAsISONoMSIfPossible, tryParseJson, getBoundedExpBackoffRetryDelay };

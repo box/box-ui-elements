@@ -7,10 +7,10 @@
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash.uniqueid';
 import noop from 'lodash.noop';
+import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import DetailsSidebar from './DetailsSidebar';
 import API from '../../api';
 import Cache from '../../util/Cache';
-import LoadingIndicator from '../LoadingIndicator';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
 import type { Token, BoxItem, StringMap } from '../../flowTypes';

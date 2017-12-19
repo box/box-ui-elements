@@ -15,21 +15,11 @@
     border-top: 1px solid $off-white;
     outline: none;
 
-    &:hover,
-    &:active,
-    &:focus {
-        background-color: $lighter-light-blue;
-        border-left-color: $dark-cerulean;
+    &.bcp-item-row-selected {
+        background-color: $light-blue;
+        border-top-color: $grey-blue;
 
-        select {
-            &.bcp-shared-access-select {
-                background-color: $white;
-                background-image: linear-gradient(45deg, transparent 50%, $sevens 50%), linear-gradient(135deg, $sevens 50%, transparent 50%);
-                border-color: $see-see;
-            }
-        }
-
-        .buik-btn-plain,
+        .btn-plain,
         .buik-item-label {
             color: $dark-cerulean;
         }
@@ -49,22 +39,8 @@
         }
     }
 
-    &.bcp-item-row-selected {
-        background-color: $light-blue;
-        border-top-color: $grey-blue;
-
-        .buik-btn-plain,
-        .buik-item-label {
-            color: $dark-cerulean;
-        }
-    }
-
     &.bcp-item-row-unselectable .ReactVirtualized__Table__rowColumn {
         opacity: .3;
-    }
-
-    &.bcp-item-row-selected + & {
-        border-top-color: $grey-blue;
     }
 
     select {
@@ -81,5 +57,29 @@
                 outline: none;
             }
         }
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: $lighter-light-blue;
+        border-left-color: $dark-cerulean;
+
+        select {
+            &.bcp-shared-access-select {
+                background-color: $white;
+                background-image: linear-gradient(45deg, transparent 50%, $sevens 50%), linear-gradient(135deg, $sevens 50%, transparent 50%);
+                border-color: $see-see;
+            }
+        }
+
+        .btn-plain,
+        .buik-item-label {
+            color: $dark-cerulean;
+        }
+    }
+
+    &.bcp-item-row-selected + & {
+        border-top-color: $grey-blue;
     }
 }

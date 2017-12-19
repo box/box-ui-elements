@@ -6,7 +6,7 @@
 
 /**
  * Returns the correct crypto library based on browser implementation
- * 
+ *
  * @return {Object}
  */
 function getCrypto(): Object {
@@ -16,12 +16,12 @@ function getCrypto(): Object {
 /**
  * Returns a Promise of a digest generated from the
  * hash function and text given as parameters
- * 
+ *
  * @param {string} algorithm
- * @param {Uint8Array} buffer
+ * @param {ArrayBuffer} buffer
  * @return {Promise} Promise - resolves with an ArrayBuffer containing the digest result
  */
-function digest(algorithm: string, buffer: Uint8Array): Promise<Uint8Array> {
+function digest(algorithm: string, buffer: ArrayBuffer): Promise<ArrayBuffer> {
     const cryptoRef = getCrypto();
 
     if (cryptoRef !== window.msCrypto) {
@@ -43,7 +43,7 @@ function digest(algorithm: string, buffer: Uint8Array): Promise<Uint8Array> {
 
 /**
  * Given a buffer/byteArray fills it with random values and returns the same array
- * 
+ *
  * @param {Uint8Array} buffer
  * @return {Uint8Array}
  */

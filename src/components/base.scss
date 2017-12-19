@@ -1,4 +1,6 @@
+@import '~box-react-ui/lib/styles/variables';
 @import './variables';
+@import '~box-react-ui/lib/styles/common/buttons';
 
 .buik {
     background: $white;
@@ -26,7 +28,7 @@
         opacity: .6;
     }
 
-    /* stylelint-disable selector-no-vendor-prefix */
+    /* stylelint-disable */
     ::-webkit-input-placeholder {
         @include placeholder;
     }
@@ -50,13 +52,12 @@
     }
 
     ::-webkit-scrollbar-thumb {
-        /* stylelint-disable selector-pseudo-class-no-unknown */
         &:vertical {
             background-color: $lighter-black;
             border-radius: 6px;
 
             &:hover {
-                background: $darker-black;
+                background-color: $darker-black;
             }
         }
 
@@ -65,16 +66,15 @@
             border-radius: 6px;
 
             &:hover {
-                background: $darker-black;
+                background-color: $darker-black;
             }
         }
-        /* stylelint-enable selector-pseudo-class-no-unknown */
     }
 
     ::-webkit-file-upload-button {
         cursor: pointer;
     }
-    /* stylelint-enable selector-no-vendor-prefix */
+    /* stylelint-enable */
 
     * {
         /* stylelint-disable declaration-no-important */
@@ -124,7 +124,7 @@
             color: $off-white;
         }
 
-        /* stylelint-disable declaration-no-important */
+        /* stylelint-disable */
         &:-moz-focusring,
         &::-moz-focus-inner {
             color: transparent !important;
@@ -134,7 +134,7 @@
         &::-ms-expand {
             display: none !important;
         }
-        /* stylelint-enable declaration-no-important */
+        /* stylelint-enable */
     }
 
     input[type="text"],
@@ -167,10 +167,6 @@
             border: 1px solid $red;
         }
 
-        &:invalid:focus {
-            border: 1px solid $see-see;
-        }
-
         &:disabled {
             background-color: $haze;
             border-color: $efive;
@@ -184,6 +180,10 @@
             &::placeholder {
                 color: $see-see;
             }
+        }
+
+        &:invalid:focus {
+            border: 1px solid $see-see;
         }
     }
 
@@ -318,7 +318,7 @@
         justify-content: center;
         padding: 15px 0 0;
 
-        .buik-btn {
+        .btn {
             margin-left: 8px;
         }
     }
@@ -375,4 +375,48 @@
     @extend .buik-modal-wrapper-overlay;
 
     position: absolute;
+}
+
+/* box-react-ui overrides */
+.btn-plain {
+    background: none;
+    border: 0 none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 16px;
+    margin: 0;
+    max-width: 100%;
+    outline: none;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-shadow: none;
+    white-space: nowrap;
+    zoom: 1;
+
+    &::-moz-focus-inner {
+        border: 0 none;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: underline;
+    }
+}
+
+.dropdown-menu-element {
+    /* stylelint-disable declaration-no-important */
+    box-sizing: border-box !important;
+    /* stylelint-enable declaration-no-important */
+    font-family: $font;
+    font-size: 13px;
+
+    * {
+        /* stylelint-disable declaration-no-important */
+        box-sizing: border-box !important;
+        /* stylelint-enable declaration-no-important */
+    }
 }

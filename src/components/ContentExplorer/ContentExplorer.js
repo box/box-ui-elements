@@ -6,7 +6,6 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import Modal from 'react-modal';
 import debounce from 'lodash.debounce';
 import noop from 'lodash.noop';
 import uniqueid from 'lodash.uniqueid';
@@ -290,21 +289,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         } else {
             this.fetchFolder(currentFolderId);
         }
-    }
-
-    /**
-     * react-modal expects the Modals app element
-     * to be set so that it can add proper aria tags.
-     * We need to keep setting it, since there might be
-     * multiple widgets on the same page with their own
-     * app elements.
-     *
-     * @private
-     * @param {Object} collection item collection object
-     * @return {void}
-     */
-    setModalAppElement() {
-        Modal.setAppElement(this.appElement);
     }
 
     /**
@@ -650,7 +634,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        this.setModalAppElement();
         this.setState({
             isUploadModalOpen: true
         });
@@ -894,7 +877,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         }
 
         if (!isDeleteModalOpen) {
-            this.setModalAppElement();
             this.setState({ isDeleteModalOpen: true });
             return;
         }
@@ -950,7 +932,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         }
 
         if (!isRenameModalOpen || !nameWithoutExt) {
-            this.setModalAppElement();
             this.setState({ isRenameModalOpen: true, errorCode: '' });
             return;
         }
@@ -1015,7 +996,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         }
 
         if (!isCreateFolderModalOpen || !name) {
-            this.setModalAppElement();
             this.setState({ isCreateFolderModalOpen: true, errorCode: '' });
             return;
         }
@@ -1083,7 +1063,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        this.setModalAppElement();
         this.setState({ isShareModalOpen: true });
     };
 
@@ -1310,6 +1289,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             uploadHost={uploadHost}
                             onClose={this.uploadSuccessHandler}
                             parentElement={this.rootElement}
+                            appElement={this.appElement}
                             onUpload={onUpload}
                           />
                         : null}
@@ -1321,6 +1301,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             isLoading={isLoading}
                             errorCode={errorCode}
                             parentElement={this.rootElement}
+                            appElement={this.appElement}
                           />
                         : null}
                     {canDelete && selected && !!this.appElement
@@ -1331,6 +1312,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             item={selected}
                             isLoading={isLoading}
                             parentElement={this.rootElement}
+                            appElement={this.appElement}
                           />
                         : null}
                     {canRename && selected && !!this.appElement
@@ -1342,6 +1324,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             isLoading={isLoading}
                             errorCode={errorCode}
                             parentElement={this.rootElement}
+                            appElement={this.appElement}
                           />
                         : null}
                     {canShare && selected && !!this.appElement
@@ -1353,6 +1336,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             item={selected}
                             isLoading={isLoading}
                             parentElement={this.rootElement}
+                            appElement={this.appElement}
                           />
                         : null}
                     {canPreview && selected && !!this.appElement
@@ -1364,6 +1348,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             currentCollection={currentCollection}
                             token={token}
                             parentElement={this.rootElement}
+                            appElement={this.appElement}
                             onPreview={onPreview}
                             hasPreviewSidebar={hasPreviewSidebar}
                             cache={this.api.getCache()}

@@ -1,80 +1,80 @@
 import Xhr from '../Xhr';
 
-const sandbox = sinon.sandbox.create();
-
 describe('util/Xhr', () => {
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('xhrSendWithIdleTimeout()', () => {
-        let xhr;
         let xhrInstance;
+        // let clock;
 
         beforeEach(() => {
-            xhr = sandbox.useFakeXMLHttpRequest();
+            // clock = jest.useFakeTimers();
             xhrInstance = new Xhr({
                 token: '123'
             });
         });
 
         afterEach(() => {
-            xhr.restore();
+            jest.clearAllTimers();
         });
 
-        it('should call send() on underlying XHR', () => {
+        test('should call send() on underlying XHR', () => {
             const request = new XMLHttpRequest();
             const data = {};
-            sandbox.mock(request).expects('send').withArgs(data);
+
+            request.send = jest.fn();
             xhrInstance.xhr = request;
             xhrInstance.xhrSendWithIdleTimeout(data, 1000);
+            expect(request.send).toHaveBeenCalledWith(data);
         });
 
-        it('should call abort() and callback on underlying XHR after timeout', () => {
-            const request = new XMLHttpRequest();
-            const data = {};
-            let calls = 0;
+        // test('should call abort() and callback on underlying XHR after timeout', () => {
+        //     const request = new XMLHttpRequest();
+        //     const data = {};
+        //     const callback = jest.fn();
 
-            function callback() {
-                calls += 1;
-            }
+        //     xhrInstance.abort = jest.fn();
+        //     request.send = jest.fn();
+        //     xhrInstance.xhr = request;
+        //     xhrInstance.xhrSendWithIdleTimeout(data, 100, callback);
 
-            request.open('GET', 'fake', true);
-            xhrInstance.xhr = request;
-            xhrInstance.xhrSendWithIdleTimeout(request, data, 100, callback);
+        //     clock.runTimersToTime(2000);
+        //     expect(xhrInstance.abort).toHaveBeenCalled();
+        //     expect(callback).toBeHaveBeenCalled();
+        // });
 
-            setTimeout(() => {
-                sandbox.mock(request).expects('abort');
-                assert.equal(calls, 1, 'callback not called exactly once');
-            }, 2000);
-        });
+        // test('should call abort() if loaded has not changed', () => {
+        //     const request = new XMLHttpRequest();
+        //     const data = {};
 
-        it('should call abort() if loaded has not changed', () => {
-            const request = new XMLHttpRequest();
-            const data = {};
+        //     request.open('GET', 'fake', true);
+        //     xhrInstance.xhr = request;
+        //     xhrInstance.xhrSendWithIdleTimeout(request, data, 100);
 
-            request.open('GET', 'fake', true);
-            xhrInstance.xhr = request;
-            xhrInstance.xhrSendWithIdleTimeout(request, data, 100);
+        //     setTimeout(() => {
+        //         sandbox.mock(request).expects('abort');
+        //         request.upload.eventListeners.progress[0]({ loaded: 0 });
+        //     }, 100);
 
-            setTimeout(() => {
-                sandbox.mock(request).expects('abort');
-                request.upload.eventListeners.progress[0]({ loaded: 0 });
-            }, 100);
-        });
+        //     clock.runTimersToTime(100);
+        //     expect(request.abort).toHaveBeenCalled();
+        //     expect(calls).toBe(1);
+        // });
 
-        it('should not call abort() if there has been progress', () => {
-            const request = new XMLHttpRequest();
-            const data = {};
+        // test('should not call abort() if there has been progress', () => {
+        //     const request = new XMLHttpRequest();
+        //     const data = {};
 
-            request.open('GET', 'fake', true);
-            xhrInstance.xhr = request;
-            xhrInstance.xhrSendWithIdleTimeout(request, data, 100);
+        //     request.open('GET', 'fake', true);
+        //     xhrInstance.xhr = request;
+        //     xhrInstance.xhrSendWithIdleTimeout(request, data, 100);
 
-            setTimeout(() => {
-                sandbox.mock(request).expects('abort').never();
-                request.upload.eventListeners.progress[0]({ loaded: 1 });
-            }, 100);
-        });
+        //     setTimeout(() => {
+        //         sandbox.mock(request).expects('abort').never();
+        //         request.upload.eventListeners.progress[0]({ loaded: 1 });
+        //     }, 100);
+
+        //     clock.runTimersToTime(100);
+        //     expect(request.abort).toHaveBeenCalled();
+        //     expect(calls).toBe(1);
+        // });
     });
 });

@@ -14,6 +14,23 @@
     border-top: 1px solid $off-white;
     outline: none;
 
+    .bce-item-coloumn {
+        color: $sevens;
+    }
+
+    .bce-more-options {
+        opacity: 0;
+
+        .btn {
+            background-color: transparent;
+            margin-left: 8px;
+        }
+
+        .buik-is-touch & {
+            opacity: 1;
+        }
+    }
+
     &:hover,
     &:active,
     &:focus {
@@ -25,13 +42,23 @@
         }
 
         .bce-item-coloumn,
-        .buik-btn-plain {
+        .btn-plain {
             color: $dark-cerulean;
         }
     }
 
-    .bce-item-coloumn {
-        color: $sevens;
+    &.bce-item-row-selected {
+        background-color: $light-blue;
+        border-top-color: $grey-blue;
+
+        .bce-more-options {
+            opacity: 1;
+        }
+
+        .bce-item-coloumn,
+        .btn-plain {
+            color: $dark-cerulean;
+        }
     }
 
     &:first-child {
@@ -48,35 +75,8 @@
         }
     }
 
-    &.bce-item-row-selected {
-        background-color: $light-blue;
-        border-top-color: $grey-blue;
-
-        .bce-more-options {
-            opacity: 1;
-        }
-
-        .bce-item-coloumn,
-        .buik-btn-plain {
-            color: $dark-cerulean;
-        }
-    }
-
     &.bce-item-row-selected + & {
         border-top-color: $grey-blue;
-    }
-
-    .bce-more-options {
-        opacity: 0;
-
-        .buik-btn {
-            background-color: transparent;
-            margin-left: 8px;
-        }
-
-        .buik-is-touch & {
-            opacity: 1;
-        }
     }
 }
 

@@ -6,7 +6,6 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import Modal from 'react-modal';
 import debounce from 'lodash.debounce';
 import uniqueid from 'lodash.uniqueid';
 import noop from 'lodash.noop';
@@ -222,21 +221,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     clearCache(): void {
         this.api.destroy(true);
-    }
-
-    /**
-     * react-modal expects the Modals app element
-     * to be set so that it can add proper aria tags.
-     * We need to keep setting it, since there might be
-     * multiple widgets on the same page with their own
-     * app elements.
-     *
-     * @private
-     * @param {Object} collection item collection object
-     * @return {void}
-     */
-    setModalAppElement() {
-        Modal.setAppElement(this.appElement);
     }
 
     /**
@@ -615,7 +599,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        this.setModalAppElement();
         this.setState({
             isUploadModalOpen: true
         });
@@ -668,7 +651,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         }
 
         if (!isCreateFolderModalOpen || !name) {
-            this.setModalAppElement();
             this.setState({ isCreateFolderModalOpen: true, errorCode: '' });
             return;
         }
@@ -1055,6 +1037,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                             uploadHost={uploadHost}
                             onClose={this.uploadSuccessHandler}
                             parentElement={this.rootElement}
+                            appElement={this.appElement}
                           />
                         : null}
                     {allowCreate && !!this.appElement
@@ -1065,6 +1048,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                             isLoading={isLoading}
                             errorCode={errorCode}
                             parentElement={this.rootElement}
+                            appElement={this.appElement}
                           />
                         : null}
                 </div>

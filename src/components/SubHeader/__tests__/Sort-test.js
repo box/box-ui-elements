@@ -1,185 +1,108 @@
-/* eslint-disable no-unused-expressions */
-
 import React from 'react';
 import { mount, shallow } from 'enzyme';
+import Button from 'box-react-ui/lib/components/button/Button';
+import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
+import Menu from 'box-react-ui/lib/components/menu/Menu';
+import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import Sort from '../Sort';
 import messages from '../../messages';
-import DropdownMenu from '../../DropdownMenu';
-import { Menu, MenuItem } from '../../Menu';
-import { Button } from '../../Button';
 import { SORT_ASC, SORT_DESC } from '../../../constants';
 
-const sandbox = sinon.sandbox.create();
-
 describe('components/SubHeader/Sort', () => {
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
-    it('should render a button and menu with 6 menu items', () => {
+    test('should render a button and menu with 6 menu items', () => {
         const wrapper = shallow(
-            <Sort isLoaded={false} sortBy='name' sortDirection={SORT_ASC} onSortChange={sandbox.stub()} />
+            <Sort isLoaded={false} sortBy='name' sortDirection={SORT_ASC} onSortChange={jest.fn()} />
         );
-        expect(wrapper.find(Button)).to.have.length(1);
-        expect(wrapper.find(DropdownMenu)).to.have.length(1);
-        expect(wrapper.find(Menu)).to.have.length(1);
-        expect(wrapper.find(MenuItem)).to.have.length(6);
+        expect(wrapper.find(Button)).toHaveLength(1);
+        expect(wrapper.find(DropdownMenu)).toHaveLength(1);
+        expect(wrapper.find(Menu)).toHaveLength(1);
+        expect(wrapper.find(MenuItem)).toHaveLength(6);
     });
 
-    it('should render a select with 6 options', () => {
+    test('should render a select with 6 options', () => {
         const wrapper = shallow(
-            <Sort isLoaded={false} sortBy='name' sortDirection={SORT_ASC} onSortChange={sandbox.stub()} />
+            <Sort isLoaded={false} sortBy='name' sortDirection={SORT_ASC} onSortChange={jest.fn()} />
         );
         const options = wrapper.find(MenuItem);
-        expect(options).to.have.length(6);
+        expect(options).toHaveLength(6);
 
-        expect(
-            options
-                .at(0)
-                .childAt(0)
-                .text()
-        ).to.equal('<IconCheck />');
-        expect(
-            options
-                .at(0)
-                .childAt(1)
-                .prop('id')
-        ).to.equal(messages.nameASC.id);
+        expect(options.at(0).childAt(0).text()).toBe('<IconCheck />');
+        expect(options.at(0).childAt(1).prop('id')).toBe(messages.nameASC.id);
 
-        expect(
-            options
-                .at(1)
-                .childAt(0)
-                .text()
-        ).to.equal('');
-        expect(
-            options
-                .at(1)
-                .childAt(1)
-                .prop('id')
-        ).to.equal(messages.nameDESC.id);
+        expect(options.at(1).childAt(0).text()).toBe('');
+        expect(options.at(1).childAt(1).prop('id')).toBe(messages.nameDESC.id);
 
-        expect(
-            options
-                .at(2)
-                .childAt(0)
-                .text()
-        ).to.equal('');
-        expect(
-            options
-                .at(2)
-                .childAt(1)
-                .prop('id')
-        ).to.equal(messages.dateASC.id);
+        expect(options.at(2).childAt(0).text()).toBe('');
+        expect(options.at(2).childAt(1).prop('id')).toBe(messages.dateASC.id);
 
-        expect(
-            options
-                .at(3)
-                .childAt(0)
-                .text()
-        ).to.equal('');
-        expect(
-            options
-                .at(3)
-                .childAt(1)
-                .prop('id')
-        ).to.equal(messages.dateDESC.id);
+        expect(options.at(3).childAt(0).text()).toBe('');
+        expect(options.at(3).childAt(1).prop('id')).toBe(messages.dateDESC.id);
 
-        expect(
-            options
-                .at(4)
-                .childAt(0)
-                .text()
-        ).to.equal('');
-        expect(
-            options
-                .at(4)
-                .childAt(1)
-                .prop('id')
-        ).to.equal(messages.sizeASC.id);
+        expect(options.at(4).childAt(0).text()).toBe('');
+        expect(options.at(4).childAt(1).prop('id')).toBe(messages.sizeASC.id);
 
-        expect(
-            options
-                .at(5)
-                .childAt(0)
-                .text()
-        ).to.equal('');
-        expect(
-            options
-                .at(5)
-                .childAt(1)
-                .prop('id')
-        ).to.equal(messages.sizeDESC.id);
+        expect(options.at(5).childAt(0).text()).toBe('');
+        expect(options.at(5).childAt(1).prop('id')).toBe(messages.sizeDESC.id);
     });
 
-    it('should pass correct parameters when clicked', () => {
-        const sort = sandbox.stub();
+    test('should pass correct parameters when clicked', () => {
+        const sort = jest.fn();
         const wrapper = shallow(<Sort isLoaded={false} sortBy='name' sortDirection={SORT_ASC} onSortChange={sort} />);
         const options = wrapper.find(MenuItem);
 
         options.at(0).simulate('click');
-        expect(sort.withArgs('name', SORT_ASC)).to.be.called;
+        expect(sort).toHaveBeenCalledWith('name', SORT_ASC);
 
         options.at(1).simulate('click');
-        expect(sort.withArgs('name', SORT_DESC)).to.be.called;
+        expect(sort).toHaveBeenCalledWith('name', SORT_DESC);
 
         options.at(2).simulate('click');
-        expect(sort.withArgs('modified_at', SORT_ASC)).to.be.called;
+        expect(sort).toHaveBeenCalledWith('modified_at', SORT_ASC);
 
         options.at(3).simulate('click');
-        expect(sort.withArgs('modified_at', SORT_DESC)).to.be.called;
+        expect(sort).toHaveBeenCalledWith('modified_at', SORT_DESC);
 
         options.at(4).simulate('click');
-        expect(sort.withArgs('size', SORT_ASC)).to.be.called;
+        expect(sort).toHaveBeenCalledWith('size', SORT_ASC);
 
         options.at(5).simulate('click');
-        expect(sort.withArgs('size', SORT_DESC)).to.be.called;
+        expect(sort).toHaveBeenCalledWith('size', SORT_DESC);
     });
 
-    it('should pass correct parameters when clicked when view is recents', () => {
-        const sort = sandbox.stub();
+    test('should pass correct parameters when clicked when view is recents', () => {
+        const sort = jest.fn();
         const wrapper = shallow(
             <Sort isRecents isLoaded={false} sortBy='name' sortDirection={SORT_ASC} onSortChange={sort} />
         );
         const options = wrapper.find(MenuItem);
 
         options.at(2).simulate('click');
-        expect(sort.withArgs('interacted_at', SORT_ASC)).to.be.called;
+        expect(sort).toHaveBeenCalledWith('interacted_at', SORT_ASC);
 
         options.at(3).simulate('click');
-        expect(sort.withArgs('interacted_at', SORT_DESC)).to.be.called;
+        expect(sort).toHaveBeenCalledWith('interacted_at', SORT_DESC);
     });
 
-    it('should render a select with correct option selected', () => {
+    test('should render a select with correct option selected', () => {
         const wrapper = shallow(
-            <Sort isLoaded={false} sortBy='modified_at' sortDirection={SORT_DESC} onSortChange={sandbox.stub()} />
+            <Sort isLoaded={false} sortBy='modified_at' sortDirection={SORT_DESC} onSortChange={jest.fn()} />
         );
         const options = wrapper.find(MenuItem);
-        expect(options).to.have.length(6);
+        expect(options).toHaveLength(6);
 
-        expect(
-            options
-                .at(3)
-                .childAt(0)
-                .text()
-        ).to.equal('<IconCheck />');
-        expect(
-            options
-                .at(3)
-                .childAt(1)
-                .prop('id')
-        ).to.equal(messages.dateDESC.id);
+        expect(options.at(3).childAt(0).text()).toBe('<IconCheck />');
+        expect(options.at(3).childAt(1).prop('id')).toBe(messages.dateDESC.id);
     });
 
-    it('should render a disabled button when isLoaded is false', () => {
+    test('should render a disabled button when isLoaded is false', () => {
         const wrapper = shallow(
-            <Sort isLoaded={false} sortBy='name' sortDirection={SORT_ASC} onSortChange={sandbox.stub()} />
+            <Sort isLoaded={false} sortBy='name' sortDirection={SORT_ASC} onSortChange={jest.fn()} />
         );
-        expect(wrapper.find(Button).prop('isDisabled')).to.equal(true);
+        expect(wrapper.find(Button).prop('isDisabled')).toBe(true);
     });
 
-    it('should render a non-disabled button when isLoaded is true', () => {
-        const wrapper = mount(<Sort isLoaded sortBy='name' sortDirection={SORT_ASC} onSortChange={sandbox.stub()} />);
-        expect(wrapper.find(Button).prop('isDisabled')).to.equal(false);
+    test('should render a non-disabled button when isLoaded is true', () => {
+        const wrapper = mount(<Sort isLoaded sortBy='name' sortDirection={SORT_ASC} onSortChange={jest.fn()} />);
+        expect(wrapper.find(Button).prop('isDisabled')).toBe(false);
     });
 });

@@ -6,10 +6,10 @@
 import React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
+import ErrorEmptyState from 'box-react-ui/lib/icons/states/ErrorEmptyState';
 import messages from '../messages';
-import IconErrorEmptyState from '../icons/states/IconErrorEmptyState';
-import IconUploadStartState from '../icons/states/IconUploadStartState';
-import IconUploadSuccessState from '../icons/states/IconUploadSuccessState';
+import IconUploadStartState from '../icons/IconUploadStartState';
+import IconUploadSuccessState from '../icons/IconUploadSuccessState';
 import UploadStateContent from './UploadStateContent';
 import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
 import type { View } from '../../flowTypes';
@@ -30,7 +30,7 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect }: Pro
     /* eslint-disable jsx-a11y/label-has-for */
     switch (view) {
         case VIEW_ERROR:
-            icon = <IconErrorEmptyState />;
+            icon = <ErrorEmptyState />;
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadError} />} />;
             break;
         case VIEW_UPLOAD_EMPTY:

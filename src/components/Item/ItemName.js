@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { PlainButton } from '../Button';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import { TYPE_FOLDER, TYPE_WEBLINK } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './ItemName.scss';
@@ -25,7 +25,7 @@ const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
     const onItemClick: Function = (): void => onClick(item);
 
     return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview))
-        ? <PlainButton className='buik-item-label' onFocus={onItemFocus} onClick={onItemClick}>
+        ? <PlainButton type='button' className='buik-item-label' onFocus={onItemFocus} onClick={onItemClick}>
             {name}
         </PlainButton>
         : <span className='buik-item-label'>

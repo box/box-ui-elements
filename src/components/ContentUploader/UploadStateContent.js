@@ -19,7 +19,7 @@ const UploadStateContent = ({ message, inputLabel, useButton = false, onChange }
             {message}
         </div>
         : null;
-    const inputLabelClass = useButton ? 'buik-btn buik-btn-primary buik-input-btn' : 'buik-input-link';
+    const inputLabelClass = useButton ? 'btn btn-primary buik-input-btn' : 'buik-input-link';
     const inputContent = (
         <label className={inputLabelClass}>
             {inputLabel}

@@ -22,39 +22,39 @@ const folder = new FolderAPI({ cache });
 const weblink = new WebLinkAPI({ cache });
 
 describe('util/flatten', () => {
-    it('should flatten the list and create new cache entries', () => {
+    test('should flatten the list and create new cache entries', () => {
         const items = flatten(list, folder, file, weblink);
-        expect(items).to.deep.equal(['folder_1', 'file_2', 'web_link_3']);
-        expect(folder.getCache().get('folder_1')).to.deep.equal(list[0]);
-        expect(file.getCache().get('file_2')).to.deep.equal(list[1]);
-        expect(weblink.getCache().get('web_link_3')).to.deep.equal(list[2]);
+        expect(items).toEqual(['folder_1', 'file_2', 'web_link_3']);
+        expect(folder.getCache().get('folder_1')).toEqual(list[0]);
+        expect(file.getCache().get('file_2')).toEqual(list[1]);
+        expect(weblink.getCache().get('web_link_3')).toEqual(list[2]);
     });
 
-    it('should flatten the list and merge into existing cache entries', () => {
-        expect(folder.getCache().get('folder_1')).to.deep.equal(list[0]);
-        expect(file.getCache().get('file_2')).to.deep.equal(list[1]);
-        expect(weblink.getCache().get('web_link_3')).to.deep.equal(list[2]);
+    test('should flatten the list and merge into existing cache entries', () => {
+        expect(folder.getCache().get('folder_1')).toEqual(list[0]);
+        expect(file.getCache().get('file_2')).toEqual(list[1]);
+        expect(weblink.getCache().get('web_link_3')).toEqual(list[2]);
 
         const items = flatten(newList, folder, file, weblink);
-        expect(items).to.deep.equal(['folder_1', 'file_2', 'web_link_3']);
+        expect(items).toEqual(['folder_1', 'file_2', 'web_link_3']);
 
-        expect(folder.getCache().get('folder_1')).to.deep.equal(newList[0]);
-        expect(file.getCache().get('file_2')).to.deep.equal(newList[1]);
-        expect(weblink.getCache().get('web_link_3')).to.deep.equal(newList[2]);
+        expect(folder.getCache().get('folder_1')).toEqual(newList[0]);
+        expect(file.getCache().get('file_2')).toEqual(newList[1]);
+        expect(weblink.getCache().get('web_link_3')).toEqual(newList[2]);
     });
 
-    it('should throw with a bad type', () => {
+    test('should throw with a bad type', () => {
         const badList = [{ id: '1', type: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).to.throw(Error, /Unknown Type/);
+        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Unknown Type/);
     });
 
-    it('should throw with a bad item when no id', () => {
+    test('should throw with a bad item when no id', () => {
         const badList = [{ type: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).to.throw(Error, /Bad box item/);
+        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Bad box item/);
     });
 
-    it('should throw with a bad item when no type', () => {
+    test('should throw with a bad item when no type', () => {
         const badList = [{ id: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).to.throw(Error, /Bad box item/);
+        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Bad box item/);
     });
 });

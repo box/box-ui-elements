@@ -1,19 +1,12 @@
 import { withData } from 'leche';
-
 import { toISOStringNoMS, getFileLastModifiedAsISONoMSIfPossible, tryParseJson } from '../uploads';
 
-const sandbox = sinon.sandbox.create();
-
 describe('util/uploads', () => {
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('toISOStringNoMS()', () => {
-        it('should format the time string properly', () => {
+        test('should format the time string properly', () => {
             const d = new Date(1273912371111);
 
-            expect(toISOStringNoMS(d)).to.equal('2010-05-15T08:32:51Z');
+            expect(toISOStringNoMS(d)).toBe('2010-05-15T08:32:51Z');
         });
     });
 
@@ -50,8 +43,8 @@ describe('util/uploads', () => {
                 'file no lastModified': [{}, null]
             },
             (file, expectedResult) => {
-                it('should return the properly formatted date when possible and return null otherwise', () => {
-                    expect(getFileLastModifiedAsISONoMSIfPossible(file)).to.equal(expectedResult);
+                test('should return the properly formatted date when possible and return null otherwise', () => {
+                    expect(getFileLastModifiedAsISONoMSIfPossible(file)).toBe(expectedResult);
                 });
             }
         );
@@ -70,8 +63,8 @@ describe('util/uploads', () => {
                 ['{"a": 1}', { a: 1 }]
             ],
             (str, expectedResult) => {
-                it('should return correct results', () => {
-                    expect(tryParseJson(str)).to.deep.equal(expectedResult);
+                test('should return correct results', () => {
+                    expect(tryParseJson(str)).toEqual(expectedResult);
                 });
             }
         );

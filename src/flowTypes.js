@@ -8,7 +8,7 @@
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
-import ChunkedUploadAPI from './api/ChunkedUpload';
+import MultiputUploadAPI from './api/uploads/MultiputUpload';
 import PlainUploadAPI from './api/PlainUpload';
 import Cache from './util/Cache';
 import {
@@ -203,7 +203,7 @@ export type Collection = {
 };
 
 export type UploadItem = {
-    api: PlainUploadAPI | ChunkedUploadAPI,
+    api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
     extension: string,
     file: File,
@@ -258,7 +258,9 @@ export type Options = {
     cache?: Cache,
     apiHost?: string,
     uploadHost?: string,
-    responseFilter?: Function
+    responseFilter?: Function,
+    consoleLog?: boolean,
+    consoleError?: boolean
 };
 
 export type Recent = {
@@ -296,11 +298,21 @@ export type SkillData = {
 };
 
 export type MultiputConfig = {
-    console: boolean,
     digestReadahead: number,
     initialRetryDelayMs: number,
     maxRetryDelayMs: number,
     parallelism: number,
     requestTimeoutMs: number,
     retries: number
+};
+
+export type MultiputPart = {
+    offset: number,
+    part_id: string,
+    sha1: string,
+    size: number
+};
+
+export type MultiputData = {
+    part?: MultiputPart
 };

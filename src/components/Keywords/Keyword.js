@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { PlainButton } from '../Button';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 // import IconCross from '../icons/IconCross';
 import type { SkillDataEntry } from '../../flowTypes';
 import './Keyword.scss';
@@ -26,7 +26,7 @@ const Keyword = ({ keyword, onClick, isSelected }: Props) =>
         </PlainButton>
     </span>;
 
-// <PlainButton className='buik-file-keyword-delete'>
+// <PlainButton type='button' className='buik-file-keyword-delete'>
 //     <IconCross color='#777' width={8} height={8} />
 // </PlainButton>
 

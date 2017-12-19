@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Button } from '../Button';
+import Button from 'box-react-ui/lib/components/button/Button';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import ItemName from '../Item/ItemName';
 import ItemSubDetails from '../Item/ItemSubDetails';
@@ -29,7 +29,7 @@ export default (onExpanderClick: Function, onItemClick: Function, isSmall: boole
     return (
         <div className='bft-cell-node' style={{ paddingLeft }}>
             {rowData.type === TYPE_FOLDER
-                ? <Button onClick={onClick} className='bft-cell-node-btn' isDisabled={isLoading}>
+                ? <Button type='button' onClick={onClick} className='bft-cell-node-btn' isDisabled={isLoading}>
                     {selected ? '-' : '+'}
                 </Button>
                 : <div className='bft-cell-node-btn' />}

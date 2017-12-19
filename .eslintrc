@@ -21,11 +21,9 @@
         "beforeEach": false,
         "describe": false,
         "expect": false,
-        "it": false,
-        "sinon": false,
-        "assert": false,
-        "fixture": false,
-        "Box": false
+        "test": false,
+        "Box": false,
+        "jest": false
     },
     "rules": {
         "camelcase": [0],

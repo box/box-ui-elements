@@ -16,7 +16,6 @@ import UploadsManager from './UploadsManager';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
-import createWorker from '../../util/uploadsSHA1Worker';
 import {
     DEFAULT_ROOT,
     CLIENT_NAME_CONTENT_UPLOADER,
@@ -117,7 +116,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     props: Props;
     rootElement: HTMLElement;
     appElement: HTMLElement;
-    sha1Worker: any;
     resetItemsTimeout: ?number;
 
     static defaultProps: DefaultProps = {
@@ -158,7 +156,6 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
             isUploadsManagerExpanded: false
         };
         this.id = uniqueid('bcu_');
-        this.sha1Worker = createWorker();
     }
 
     /**
@@ -434,14 +431,13 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
         api.upload({
             // TODO: rename id to folderId
-            id: options && options.folderId ? options.folderId : rootFolderId,
-            fileId: options && options.fileId ? options.fileId : null,
             file,
-            sha1Worker: this.sha1Worker,
-            successCallback: (entries) => this.handleUploadSuccess(item, entries),
+            id: options && options.folderId ? options.folderId : rootFolderId,
             errorCallback: (error) => this.handleUploadError(item, error),
             progressCallback: (event) => this.handleUploadProgress(item, event),
-            overwrite: true
+            successCallback: (entries) => this.handleUploadSuccess(item, entries),
+            overwrite: true,
+            fileId: options && options.fileId ? options.fileId : undefined
         });
 
         item.status = STATUS_IN_PROGRESS;
