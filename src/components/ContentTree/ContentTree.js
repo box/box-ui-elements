@@ -7,8 +7,8 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import Content from './Content';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';

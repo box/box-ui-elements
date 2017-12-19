@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import Item from './Item';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';

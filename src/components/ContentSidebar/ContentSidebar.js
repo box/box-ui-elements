@@ -5,8 +5,8 @@
  */
 
 import React, { PureComponent } from 'react';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import DetailsSidebar from './DetailsSidebar';
 import API from '../../api';

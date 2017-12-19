@@ -10,8 +10,8 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
 import Menu from 'box-react-ui/lib/components/menu/Menu';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
+import IconAddThin from 'box-react-ui/lib/icons/general/IconAddThin';
 import messages from '../messages';
-import IconPlus from '../icons/IconPlus';
 import './Add.scss';
 
 type Props = {
@@ -25,7 +25,7 @@ type Props = {
 const Add = ({ onUpload, onCreate, isLoaded, showUpload = true, showCreate = true }: Props) =>
     <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-add'>
         <Button type='button' className='buik-btn-add' isDisabled={!isLoaded}>
-            <IconPlus />
+            <IconAddThin />
         </Button>
         <Menu>
             {showUpload &&

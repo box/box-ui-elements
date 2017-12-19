@@ -71,6 +71,7 @@
                 localStorage.setItem('folder', folderId);
 
                 const explorer1 = new ContentExplorer();
+                window.explorer1 = explorer1;
                 explorer1.addListener('download', function(data) {
                     console.log('%c==========Download===========', 'background: #222; color: #bada55');
                     console.log('%c' + JSON.stringify(data, null, 2), 'background: #222; color: #bada55');

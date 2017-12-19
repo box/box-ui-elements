@@ -1,4 +1,4 @@
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import Item from '../Item';
 import Cache from '../../util/Cache';
 
