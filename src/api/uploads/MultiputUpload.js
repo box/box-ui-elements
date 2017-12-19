@@ -193,7 +193,7 @@ class MultiputUpload extends BaseMultiput {
                 (response && (response.status === 403 && response.code === 'storage_limit_exceeded')) ||
                 (response.status === 403 && response.code === 'access_denied_insufficient_permissions')
             ) {
-                this.errorCallback(error);
+                this.errorCallback(response);
                 return;
             }
 
@@ -288,7 +288,8 @@ class MultiputUpload extends BaseMultiput {
      */
     sessionErrorHandler = async (error: ?Error, logEventType: string, logMessage?: string): Promise<> => {
         this.destroy();
-        this.errorCallback(error);
+        const errorResponse = error || (await this.getErrorResponse(error));
+        this.errorCallback(errorResponse);
 
         try {
             if (!this.sessionEndpoints.logEvent) {
@@ -912,7 +913,7 @@ class MultiputUpload extends BaseMultiput {
             return {};
         }
 
-        if (response.status === 401 || response.status === 403) {
+        if (response.status === 401) {
             return response;
         }
 
