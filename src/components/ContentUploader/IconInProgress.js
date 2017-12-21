@@ -8,10 +8,11 @@ import React from 'react';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 
-const IconInProgress = () =>
+const IconInProgress = () => (
     <div className='buik-icon-in-progress'>
         <IconClose />
         <LoadingIndicator />
-    </div>;
+    </div>
+);
 
 export default IconInProgress;

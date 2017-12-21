@@ -26,13 +26,9 @@ const ItemSubDetails = ({ view, item, intl }: Props) => {
 
     return (
         <span>
-            <span>
-                {message}&nbsp;
-            </span>
+            <span>{message}&nbsp;</span>
             <Datefield date={date} />
-            <span>
-                &nbsp;-&nbsp;{getSize(size)}
-            </span>
+            <span>&nbsp;-&nbsp;{getSize(size)}</span>
         </span>
     );
 };

@@ -26,23 +26,83 @@ describe('components/SubHeader/Sort', () => {
         const options = wrapper.find(MenuItem);
         expect(options).toHaveLength(6);
 
-        expect(options.at(0).childAt(0).text()).toBe('<IconCheck />');
-        expect(options.at(0).childAt(1).prop('id')).toBe(messages.nameASC.id);
+        expect(
+            options
+                .at(0)
+                .childAt(0)
+                .text()
+        ).toBe('<IconCheck />');
+        expect(
+            options
+                .at(0)
+                .childAt(1)
+                .prop('id')
+        ).toBe(messages.nameASC.id);
 
-        expect(options.at(1).childAt(0).text()).toBe('');
-        expect(options.at(1).childAt(1).prop('id')).toBe(messages.nameDESC.id);
+        expect(
+            options
+                .at(1)
+                .childAt(0)
+                .text()
+        ).toBe('');
+        expect(
+            options
+                .at(1)
+                .childAt(1)
+                .prop('id')
+        ).toBe(messages.nameDESC.id);
 
-        expect(options.at(2).childAt(0).text()).toBe('');
-        expect(options.at(2).childAt(1).prop('id')).toBe(messages.dateASC.id);
+        expect(
+            options
+                .at(2)
+                .childAt(0)
+                .text()
+        ).toBe('');
+        expect(
+            options
+                .at(2)
+                .childAt(1)
+                .prop('id')
+        ).toBe(messages.dateASC.id);
 
-        expect(options.at(3).childAt(0).text()).toBe('');
-        expect(options.at(3).childAt(1).prop('id')).toBe(messages.dateDESC.id);
+        expect(
+            options
+                .at(3)
+                .childAt(0)
+                .text()
+        ).toBe('');
+        expect(
+            options
+                .at(3)
+                .childAt(1)
+                .prop('id')
+        ).toBe(messages.dateDESC.id);
 
-        expect(options.at(4).childAt(0).text()).toBe('');
-        expect(options.at(4).childAt(1).prop('id')).toBe(messages.sizeASC.id);
+        expect(
+            options
+                .at(4)
+                .childAt(0)
+                .text()
+        ).toBe('');
+        expect(
+            options
+                .at(4)
+                .childAt(1)
+                .prop('id')
+        ).toBe(messages.sizeASC.id);
 
-        expect(options.at(5).childAt(0).text()).toBe('');
-        expect(options.at(5).childAt(1).prop('id')).toBe(messages.sizeDESC.id);
+        expect(
+            options
+                .at(5)
+                .childAt(0)
+                .text()
+        ).toBe('');
+        expect(
+            options
+                .at(5)
+                .childAt(1)
+                .prop('id')
+        ).toBe(messages.sizeDESC.id);
     });
 
     test('should pass correct parameters when clicked', () => {
@@ -90,8 +150,18 @@ describe('components/SubHeader/Sort', () => {
         const options = wrapper.find(MenuItem);
         expect(options).toHaveLength(6);
 
-        expect(options.at(3).childAt(0).text()).toBe('<IconCheck />');
-        expect(options.at(3).childAt(1).prop('id')).toBe(messages.dateDESC.id);
+        expect(
+            options
+                .at(3)
+                .childAt(0)
+                .text()
+        ).toBe('<IconCheck />');
+        expect(
+            options
+                .at(3)
+                .childAt(1)
+                .prop('id')
+        ).toBe(messages.dateDESC.id);
     });
 
     test('should render a disabled button when isLoaded is false', () => {

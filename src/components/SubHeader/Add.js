@@ -22,21 +22,24 @@ type Props = {
     isLoaded: boolean
 };
 
-const Add = ({ onUpload, onCreate, isLoaded, showUpload = true, showCreate = true }: Props) =>
+const Add = ({ onUpload, onCreate, isLoaded, showUpload = true, showCreate = true }: Props) => (
     <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-add'>
         <Button type='button' className='buik-btn-add' isDisabled={!isLoaded}>
             <IconAddThin />
         </Button>
         <Menu>
-            {showUpload &&
+            {showUpload && (
                 <MenuItem onClick={onUpload}>
                     <FormattedMessage {...messages.upload} />
-                </MenuItem>}
-            {showCreate &&
+                </MenuItem>
+            )}
+            {showCreate && (
                 <MenuItem onClick={onCreate}>
                     <FormattedMessage {...messages.newFolder} />
-                </MenuItem>}
+                </MenuItem>
+            )}
         </Menu>
-    </DropdownMenu>;
+    </DropdownMenu>
+);
 
 export default Add;

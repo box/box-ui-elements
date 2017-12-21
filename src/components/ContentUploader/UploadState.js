@@ -37,19 +37,21 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect }: Pro
             icon = <UploadStartState />;
             /* eslint-disable no-nested-ternary */
             content =
-                canDrop && hasItems
-                    ? <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />
-                    : isTouch
-                      ? <UploadStateContent
-                          inputLabel={<FormattedMessage {...messages.uploadNoDragDrop} />}
-                          useButton
-                          onChange={onSelect}
-                        />
-                      : <UploadStateContent
-                          inputLabel={<FormattedMessage {...messages.uploadEmptyInput} />}
-                          message={<FormattedMessage {...messages.uploadEmpty} />}
-                          onChange={onSelect}
-                        />;
+                canDrop && hasItems ? (
+                    <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />
+                ) : isTouch ? (
+                    <UploadStateContent
+                        inputLabel={<FormattedMessage {...messages.uploadNoDragDrop} />}
+                        useButton
+                        onChange={onSelect}
+                    />
+                ) : (
+                    <UploadStateContent
+                        inputLabel={<FormattedMessage {...messages.uploadEmptyInput} />}
+                        message={<FormattedMessage {...messages.uploadEmpty} />}
+                        onChange={onSelect}
+                    />
+                );
             /* eslint-enable no-nested-ternary */
             break;
         case VIEW_UPLOAD_IN_PROGRESS:

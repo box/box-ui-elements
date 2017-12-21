@@ -7,7 +7,4 @@
 import React from 'react';
 import getSize from '../../util/size';
 
-export default () => ({ cellData }: { cellData: number }) =>
-    <span>
-        {getSize(cellData)}
-    </span>;
+export default () => ({ cellData }: { cellData: number }) => <span>{getSize(cellData)}</span>;

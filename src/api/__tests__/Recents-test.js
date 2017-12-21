@@ -113,16 +113,17 @@ describe('api/Recents', () => {
             });
         });
         test('should make xhr to get recents and call error callback', () => {
+            const error = new Error('error');
             recents.recentsSuccessHandler = jest.fn();
             recents.recentsErrorHandler = jest.fn();
             recents.includePreviewFields = true;
             recents.includePreviewSidebarFields = true;
             recents.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve('error'))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve(error))
             };
 
             return recents.recentsRequest().then(() => {
-                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith('error');
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(error);
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',

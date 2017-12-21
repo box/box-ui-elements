@@ -100,11 +100,11 @@ const CreateFolderDialog = ({
             appElement={appElement}
         >
             <label>
-                {error
-                    ? <div className='buik-modal-error'>
+                {error ? (
+                    <div className='buik-modal-error'>
                         <FormattedMessage {...error} />
                     </div>
-                    : null}
+                ) : null}
                 <FormattedMessage tagName='div' {...messages.createDialogText} />
                 <input type='text' required ref={ref} onKeyDown={onKeyDown} />
             </label>

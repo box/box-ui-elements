@@ -66,7 +66,7 @@ class ContentPicker extends ES6Wrapper {
                 type={this.getType()}
                 onCancel={this.onCancel}
                 onChoose={this.onChoose}
-                modal={modal}
+                modal={((modal: any): ModalOptions)}
                 {...rest}
             />,
             this.container

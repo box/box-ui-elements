@@ -41,7 +41,7 @@ const UploadDialog = ({
     appElement,
     onUpload,
     intl
-}: Props) =>
+}: Props) => (
     <Modal
         isOpen={isOpen}
         parentSelector={() => parentElement}
@@ -62,6 +62,7 @@ const UploadDialog = ({
             onClose={onClose}
             onComplete={onUpload}
         />
-    </Modal>;
+    </Modal>
+);
 
 export default injectIntl(UploadDialog);

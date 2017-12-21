@@ -18,7 +18,7 @@ type Props = {
     onClick: Function
 };
 
-const ItemList = ({ items, onClick }: Props) =>
+const ItemList = ({ items, onClick }: Props) => (
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer();
@@ -43,6 +43,7 @@ const ItemList = ({ items, onClick }: Props) =>
                 </Table>
             );
         }}
-    </AutoSizer>;
+    </AutoSizer>
+);
 
 export default ItemList;

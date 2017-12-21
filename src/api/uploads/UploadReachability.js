@@ -34,7 +34,7 @@ class UploadsReachability extends Base {
 
     /**
      * Gets a reachable host for upload
-     * 
+     *
      * @return {Promise}
      */
     async getReachableUploadHost() {
@@ -62,7 +62,7 @@ class UploadsReachability extends Base {
 
     /**
      * Checks if a host is reachable
-     * 
+     *
      * @private
      * @param {string} uploadHost
      * @return {Promise}
@@ -85,7 +85,7 @@ class UploadsReachability extends Base {
 
     /**
      * Get upload host name from the preflight request response
-     * 
+     *
      * @private
      * @return {Promise}
      */
@@ -111,7 +111,7 @@ class UploadsReachability extends Base {
 
     /**
      * Resolves preflight response to a reachable upload host
-     * 
+     *
      * @private
      * @param {?Object} response
      * @return {string}

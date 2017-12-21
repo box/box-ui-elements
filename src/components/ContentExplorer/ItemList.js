@@ -137,9 +137,9 @@ const ItemList = ({
             scrollToRow={focusedRow}
             onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bce-item-row-${scrollToRow}`)}
         >
-            {({ onSectionRendered, scrollToRow, focusOnRender }) =>
+            {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
-                    {({ width, height }) =>
+                    {({ width, height }) => (
                         <Table
                             width={width}
                             height={height}
@@ -176,24 +176,23 @@ const ItemList = ({
                                 width={300}
                                 flexGrow={1}
                             />
-                            {isSmall
-                                ? null
-                                : <Column
+                            {isSmall ? null : (
+                                <Column
                                     className='bce-item-coloumn'
                                     label={
-                                          isRecents
-                                              ? intl.formatMessage(messages.interacted)
-                                              : intl.formatMessage(messages.modified)
-                                      }
+                                        isRecents
+                                            ? intl.formatMessage(messages.interacted)
+                                            : intl.formatMessage(messages.modified)
+                                    }
                                     dataKey={isRecents ? FIELD_INTERACTED_AT : FIELD_MODIFIED_AT}
                                     cellRenderer={dateCell}
                                     headerRenderer={headerCellRenderer}
                                     width={135}
                                     flexShrink={0}
-                                  />}
-                            {isSmall
-                                ? null
-                                : <Column
+                                />
+                            )}
+                            {isSmall ? null : (
+                                <Column
                                     className='bce-item-coloumn'
                                     label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
@@ -201,7 +200,8 @@ const ItemList = ({
                                     headerRenderer={headerCellRenderer}
                                     width={80}
                                     flexShrink={0}
-                                  />}
+                                />
+                            )}
                             <Column
                                 disableSort
                                 dataKey={FIELD_ID}
@@ -209,8 +209,10 @@ const ItemList = ({
                                 width={isSmall || !canShare ? 58 : 140}
                                 flexShrink={0}
                             />
-                        </Table>}
-                </AutoSizer>}
+                        </Table>
+                    )}
+                </AutoSizer>
+            )}
         </KeyBinder>
     );
 };

@@ -18,13 +18,13 @@ type Props = {
 };
 
 const Breadcrumb = ({ name = '', onClick, isLast, delimiter }: Props) => {
-    const title = onClick
-        ? <PlainButton type='button' onClick={onClick}>
+    const title = onClick ? (
+        <PlainButton type='button' onClick={onClick}>
             {name}
         </PlainButton>
-        : <span>
-            {name}
-        </span>;
+    ) : (
+        <span>{name}</span>
+    );
     return (
         <span className='buik-breadcrumb'>
             {title}

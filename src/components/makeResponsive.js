@@ -10,10 +10,6 @@ import classNames from 'classnames';
 import { SIZE_LARGE, SIZE_SMALL, CLASS_IS_COMPACT, CLASS_IS_TOUCH } from '../constants';
 import type { Size, ClassComponent } from '../flowTypes';
 
-type DefaultProps = {|
-    isTouch: boolean
-|};
-
 type Props = {
     isTouch: boolean,
     size: Size,
@@ -27,8 +23,8 @@ type State = {
 
 const HAS_TOUCH = 'ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch);
 
-function makeResponsive(Wrapped: ClassComponent<any, any, any>): ClassComponent<any, any, any> {
-    return class extends PureComponent<DefaultProps, Props, State> {
+function makeResponsive(Wrapped: ClassComponent<any, any>): ClassComponent<any, any> {
+    return class extends PureComponent<Props, State> {
         props: Props;
         state: State;
 
@@ -105,7 +101,7 @@ function makeResponsive(Wrapped: ClassComponent<any, any, any>): ClassComponent<
 
             return (
                 <Measure bounds onResize={this.onResize}>
-                    {({ measureRef }) =>
+                    {({ measureRef }) => (
                         <Wrapped
                             ref={componentRef}
                             isTouch={isTouch}
@@ -114,7 +110,8 @@ function makeResponsive(Wrapped: ClassComponent<any, any, any>): ClassComponent<
                             measureRef={measureRef}
                             className={styleClassName}
                             {...rest}
-                        />}
+                        />
+                    )}
                 </Measure>
             );
         }

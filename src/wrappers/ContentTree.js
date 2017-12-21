@@ -45,7 +45,7 @@ class ContentTree extends ES6Wrapper {
                 rootFolderId={this.id}
                 token={this.token}
                 onClick={this.onClick}
-                modal={modal}
+                modal={((modal: any): ModalOptions)}
                 {...rest}
             />,
             this.container

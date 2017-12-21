@@ -79,13 +79,14 @@ const SidebarSkills = ({ metadata, getPreviewer }: Props) => {
                 (skill: SkillData, index) =>
                     /* eslint-disable react/no-array-index-key */
                     Array.isArray(skill.entries) &&
-                    skill.entries.length > 0 &&
-                    <SidebarSection
-                        key={index}
-                        title={skill.title || <FormattedMessage {...messages[`${skill.skills_data_type}Skill`]} />}
-                    >
-                        {getCard(skill, getPreviewer)}
-                    </SidebarSection>
+                    skill.entries.length > 0 && (
+                        <SidebarSection
+                            key={index}
+                            title={skill.title || <FormattedMessage {...messages[`${skill.skills_data_type}Skill`]} />}
+                        >
+                            {getCard(skill, getPreviewer)}
+                        </SidebarSection>
+                    )
                 /* eslint-enable react/no-array-index-key */
             )}
         </div>

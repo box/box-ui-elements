@@ -26,12 +26,12 @@ class LocalStore {
     }
 
     /**
-	 * Builds a key for the session store
-	 * @private
-	 * @param  {string} key
-	 *
-	 * @return {string}
-	 */
+     * Builds a key for the session store
+     * @private
+     * @param  {string} key
+     *
+     * @return {string}
+     */
     buildKey(key: string): string {
         return `${KEY_PREFIX}/${SERVICE_VERSION}/${key}`;
     }

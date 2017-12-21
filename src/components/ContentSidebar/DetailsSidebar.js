@@ -48,7 +48,7 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {hasDescription &&
+            {hasDescription && (
                 <div className='bcs-details-description'>
                     <label>
                         <FormattedMessage {...messages.sidebarDescription} />
@@ -58,11 +58,13 @@ const DetailsSidebar = ({
                             defaultValue={file.description}
                         />
                     </label>
-                </div>}
-            {hasProperties &&
+                </div>
+            )}
+            {hasProperties && (
                 <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
                     <FileProperties file={file} ensurePrivacy={ensurePrivacy} />
-                </SidebarSection>}
+                </SidebarSection>
+            )}
             {hasSkills && <SidebarSkills metadata={file.metadata} getPreviewer={getPreviewer} />}
         </SidebarContent>
     );

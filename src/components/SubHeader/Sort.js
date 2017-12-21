@@ -46,15 +46,13 @@ function getMenuItem(
     const isSame = by === sortBy && direction === sortDirection;
     return (
         <MenuItem onClick={() => onSortChange(by, direction)}>
-            <div className='buik-sort-selected'>
-                {isSame ? <IconCheck width={16} height={16} /> : null}
-            </div>
+            <div className='buik-sort-selected'>{isSame ? <IconCheck width={16} height={16} /> : null}</div>
             <FormattedMessage {...messages[`${sort}${direction}`]} />
         </MenuItem>
     );
 }
 
-const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Props) =>
+const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
     <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-sort'>
         <Button type='button' isDisabled={!isLoaded} className='buik-sort-btn'>
             <IconSort />
@@ -81,6 +79,7 @@ const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Prop
             {getMenuItem(SORT_SIZE, FIELD_SIZE, SORT_ASC, sortBy, sortDirection, onSortChange)}
             {getMenuItem(SORT_SIZE, FIELD_SIZE, SORT_DESC, sortBy, sortDirection, onSortChange)}
         </Menu>
-    </DropdownMenu>;
+    </DropdownMenu>
+);
 
 export default Sort;

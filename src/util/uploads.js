@@ -15,12 +15,12 @@
  * @return {boolean}
  */
 function isValidDateObject(date: Date): boolean {
-    return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
+    return Object.prototype.toString.call(date) === '[object Date]' && !Number.isNaN(date.getTime());
 }
 
 /**
  * Remove milliseconds from date time string
- * 
+ *
  * @param {Date} date
  * @return {string}
  */
@@ -55,7 +55,7 @@ function getFileLastModifiedAsISONoMSIfPossible(file: File): ?string {
 /**
  * If maybeJson is valid JSON string, return the result of calling JSON.parse
  * on it.  Otherwise, return null.
- * 
+ *
  * @param {string} maybeJson
  * @return {?Object}
  */
@@ -69,7 +69,7 @@ function tryParseJson(maybeJson: string): ?Object {
 
 /**
  * Get bounded exponential backoff retry delay
- * 
+ *
  * @param {number} initialRetryDelay
  * @param {number} maxRetryDelay
  * @param {number} retryNum - Current retry number (first retry will have value of 0).

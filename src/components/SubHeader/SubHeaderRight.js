@@ -42,15 +42,16 @@ const SubHeaderRight = ({
         <div className='buik-sub-header-right'>
             {showSort &&
                 !!sortBy &&
-                !!sortDirection &&
-                <Sort
-                    isRecents={isRecents}
-                    isLoaded={isLoaded}
-                    sortBy={sortBy}
-                    sortDirection={sortDirection}
-                    onSortChange={onSortChange}
-                />}
-            {showAdd &&
+                !!sortDirection && (
+                    <Sort
+                        isRecents={isRecents}
+                        isLoaded={isLoaded}
+                        sortBy={sortBy}
+                        sortDirection={sortDirection}
+                        onSortChange={onSortChange}
+                    />
+                )}
+            {showAdd && (
                 <Add
                     showUpload={canUpload}
                     showCreate={canCreateNewFolder}
@@ -58,7 +59,8 @@ const SubHeaderRight = ({
                     onCreate={onCreate}
                     isDisabled={!isFolder}
                     isLoaded={isLoaded}
-                />}
+                />
+            )}
         </div>
     );
 };

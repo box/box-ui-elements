@@ -126,37 +126,7 @@ type State = {
     focusedRow: number
 };
 
-type DefaultProps = {|
-    rootFolderId: string,
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-    canDownload: boolean,
-    canDelete: boolean,
-    canUpload: boolean,
-    canRename: boolean,
-    canPreview: boolean,
-    canShare: boolean,
-    canSetShareAccess: boolean,
-    canCreateNewFolder: boolean,
-    autoFocus: boolean,
-    apiHost: string,
-    appHost: string,
-    staticHost: string,
-    uploadHost: string,
-    className: string,
-    onDelete: Function,
-    onDownload: Function,
-    onPreview: Function,
-    onRename: Function,
-    onCreate: Function,
-    onSelect: Function,
-    onUpload: Function,
-    onNavigate: Function,
-    defaultView: DefaultView,
-    hasPreviewSidebar: boolean
-|};
-
-class ContentExplorer extends Component<DefaultProps, Props, State> {
+class ContentExplorer extends Component<Props, State> {
     id: string;
     api: API;
     state: State;
@@ -167,7 +137,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
     globalModifier: boolean;
     firstLoad: boolean = true; // Keeps track of very 1st load
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
         sortBy: FIELD_NAME,
         sortDirection: SORT_ASC,
@@ -1109,7 +1079,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent & { target: HTMLElement }) => {
+    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
         if (isInputElement(event.target)) {
             return;
         }
@@ -1278,8 +1248,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             onSortChange={this.sort}
                         />
                     </div>
-                    {allowUpload && !!this.appElement
-                        ? <UploadDialog
+                    {allowUpload && !!this.appElement ? (
+                        <UploadDialog
                             isOpen={isUploadModalOpen}
                             currentFolderId={id}
                             token={token}
@@ -1291,10 +1261,10 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             parentElement={this.rootElement}
                             appElement={this.appElement}
                             onUpload={onUpload}
-                          />
-                        : null}
-                    {allowCreate && !!this.appElement
-                        ? <CreateFolderDialog
+                        />
+                    ) : null}
+                    {allowCreate && !!this.appElement ? (
+                        <CreateFolderDialog
                             isOpen={isCreateFolderModalOpen}
                             onCreate={this.createFolderCallback}
                             onCancel={this.closeModals}
@@ -1302,10 +1272,10 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             errorCode={errorCode}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
-                          />
-                        : null}
-                    {canDelete && selected && !!this.appElement
-                        ? <DeleteConfirmationDialog
+                        />
+                    ) : null}
+                    {canDelete && selected && !!this.appElement ? (
+                        <DeleteConfirmationDialog
                             isOpen={isDeleteModalOpen}
                             onDelete={this.deleteCallback}
                             onCancel={this.closeModals}
@@ -1313,10 +1283,10 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             isLoading={isLoading}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
-                          />
-                        : null}
-                    {canRename && selected && !!this.appElement
-                        ? <RenameDialog
+                        />
+                    ) : null}
+                    {canRename && selected && !!this.appElement ? (
+                        <RenameDialog
                             isOpen={isRenameModalOpen}
                             onRename={this.renameCallback}
                             onCancel={this.closeModals}
@@ -1325,10 +1295,10 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             errorCode={errorCode}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
-                          />
-                        : null}
-                    {canShare && selected && !!this.appElement
-                        ? <ShareDialog
+                        />
+                    ) : null}
+                    {canShare && selected && !!this.appElement ? (
+                        <ShareDialog
                             isOpen={isShareModalOpen}
                             canSetShareAccess={canSetShareAccess}
                             onShareAccessChange={this.changeShareAccess}
@@ -1337,10 +1307,10 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             isLoading={isLoading}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
-                          />
-                        : null}
-                    {canPreview && selected && !!this.appElement
-                        ? <PreviewDialog
+                        />
+                    ) : null}
+                    {canPreview && selected && !!this.appElement ? (
+                        <PreviewDialog
                             isOpen={isPreviewModalOpen}
                             isTouch={isTouch}
                             onCancel={this.closeModals}
@@ -1357,8 +1327,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                             staticHost={staticHost}
                             sharedLink={sharedLink}
                             sharedLinkPassword={sharedLinkPassword}
-                          />
-                        : null}
+                        />
+                    ) : null}
                 </div>
             </Internationalize>
         );
