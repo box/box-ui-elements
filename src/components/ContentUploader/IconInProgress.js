@@ -6,12 +6,11 @@
 
 import React from 'react';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import IconCross from '../icons/IconCross';
-import type { IconType } from '../../flowTypes';
+import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 
-const IconInProgress = ({ color = '#222', className = '', width = 14, height = 14 }: IconType) =>
+const IconInProgress = () =>
     <div className='buik-icon-in-progress'>
-        <IconCross className={className} color={color} width={width} height={height} />
+        <IconClose />
         <LoadingIndicator />
     </div>;
 

@@ -6,10 +6,10 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import debounce from 'lodash.debounce';
-import noop from 'lodash.noop';
-import uniqueid from 'lodash.uniqueid';
-import cloneDeep from 'lodash.clonedeep';
+import debounce from 'lodash/debounce';
+import noop from 'lodash/noop';
+import uniqueid from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 import Content from './Content';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import RenameDialog from './RenameDialog';

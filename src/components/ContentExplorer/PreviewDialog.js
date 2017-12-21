@@ -7,7 +7,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { injectIntl } from 'react-intl';
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from 'lodash/cloneDeep';
 import ContentPreview from '../ContentPreview';
 import messages from '../messages';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';

@@ -3,7 +3,7 @@
  * @file Multiput upload part
  * @author Box
  */
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import BaseMultiput from './BaseMultiput';
 import type { MultiputConfig, Options, MultiputData } from '../../flowTypes';
 import { updateQueryParameters } from '../../util/url';

@@ -112,9 +112,6 @@ export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
-export const BOX_BLUE = '#0061d5';
-export const BOX_BLUE_LIGHT = '#dbe8f8';
-export const COLOR_RED = '#c82341';
 export const CLIENT_NAME_CONTENT_TREE = 'ContentTree';
 export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
 export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
@@ -158,3 +155,10 @@ export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP
 /* ------------------ Uploader  ---------------------- */
 export const DEFAULT_RETRY_DELAY_MS = 3000;
 export const MS_IN_S = 1000;
+
+/* ------------------ Colors  ---------------------- */
+export const COLOR_BOX_BLUE = '#0061d5';
+export const COLOR_BOX_BLUE_LIGHT = '#dbe8f8';
+export const COLOR_RED = '#c82341';
+export const COLOR_777 = '#777777';
+export const COLOR_DOWNTOWN_GREY = '#999ea4';

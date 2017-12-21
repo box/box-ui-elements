@@ -6,9 +6,9 @@
 
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import debounce from 'lodash.debounce';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import debounce from 'lodash/debounce';
+import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import Footer from './Footer';
 import Content from './Content';
 import Header from '../Header';

@@ -5,8 +5,8 @@
  */
 
 import React, { PureComponent } from 'react';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';

@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import { BOX_BLUE } from '../../constants';
+import { COLOR_BOX_BLUE } from '../../constants';
 import type { SkillDataEntryType } from '../../flowTypes';
 import './Line.scss';
 
@@ -22,7 +22,7 @@ type Props = {
 const LENGTH_IMAGE_ITEMLINE = 215;
 const LENGTH_TEXT_ITEMLINE = 270;
 
-const Line = ({ type, start, end = 0, duration, color = BOX_BLUE, getPreviewer }: Props) => {
+const Line = ({ type, start, end = 0, duration, color = COLOR_BOX_BLUE, getPreviewer }: Props) => {
     if (typeof start !== 'number' || !duration) {
         return null;
     }

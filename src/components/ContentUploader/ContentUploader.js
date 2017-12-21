@@ -7,9 +7,9 @@
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import noop from 'lodash.noop';
-import uniqueid from 'lodash.uniqueid';
-import cloneDeep from 'lodash.clonedeep';
+import noop from 'lodash/noop';
+import uniqueid from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 import API from '../../api';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
