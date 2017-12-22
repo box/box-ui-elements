@@ -68,7 +68,7 @@ class APIFactory {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {API} Api instance
      */
-    constructor(options: Options = {}) {
+    constructor(options: Options) {
         this.options = Object.assign({}, options, {
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,

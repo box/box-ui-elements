@@ -51,6 +51,8 @@ class Base {
      * @property {Function}
      */
     consoleError: Function;
+    
+    uploadsReachability: UploadsReachability;
 
     /**
      * [constructor]
@@ -63,7 +65,7 @@ class Base {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {Base} Base instance
      */
-    constructor(options: Options = {}) {
+    constructor(options: Options) {
         this.cache = options.cache || new Cache();
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;

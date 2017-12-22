@@ -9,21 +9,25 @@ import {
     DEFAULT_HOSTNAME_UPLOAD
 } from '../../constants';
 import Xhr from '../../util/Xhr';
+import type { Token } from '../../flowTypes';
 
 const CACHED_RESULTS_LOCAL_STORE_KEY = 'uploads-reachability-cached-results';
 
+
 class UploadsReachability {
-    localStore: LocalStore;
     apiHost: string;
+    baseUrl: string;
+    localStore: LocalStore;
+    xhr: Xhr;
 
     /**
      * [constructor]
      *
-     * @param {string} token - Auth token
+     * @param {Token} token - Auth token
      * @param {string} apiHost - Api host
      * @return {void}
      */
-    constructor(token: string, apiHost: string) {
+    constructor(token: Token, apiHost: string) {
         this.xhr = new Xhr({
             // `id` is required for the preflight request, here it's set to `folder_0` because
             // the preflight request is for checking the availability of a host, not about a specific
