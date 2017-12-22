@@ -21,15 +21,15 @@ class PlainUpload extends BaseUpload {
      * Handles a upload preflight success response
      *
      * @param {Object} data - Preflight success data
-     * @return {void}
+     * @return {Promise<>}
      */
-    uploadPreflightSuccessHandler = ({ upload_url }: { upload_url: string }) => {
+    uploadPreflightSuccessHandler = async ({ upload_url }: { upload_url: string }): Promise<> => {
         if (this.isDestroyed()) {
             return;
         }
 
         // Make an actual POST request to the fast upload URL returned by pre-flight
-        this.makeRequest({
+        await this.makeRequest({
             url: upload_url
         });
     };
@@ -122,12 +122,14 @@ class PlainUpload extends BaseUpload {
      * @param {boolean} [options.url] - Upload URL to use
      * @param {string} [options.fileId] - ID of file to replace
      * @param {string} [options.fileName] - New name for file
-     * @return {void}
+     * @return {Promise<>}
      */
-    makeRequest({ url, fileId, fileName }: { url?: string, fileId?: string, fileName?: string }): void {
+    async makeRequest({ url, fileId, fileName }: { url?: string, fileId?: string, fileName?: string }): Promise<> {
         if (this.isDestroyed()) {
             return;
         }
+
+        await this.updateReachableUploadHost();
 
         // Use provided upload URL if passed in, otherwise construct
         let uploadUrl = url;

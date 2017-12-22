@@ -4,7 +4,10 @@ let upload;
 
 describe('api/PlainUpload', () => {
     beforeEach(() => {
-        upload = new PlainUpload();
+        upload = new PlainUpload({
+            token: '123'
+        });
+        upload.updateReachableUploadHost = () => Promise.resolve();
     });
 
     describe('uploadPreflightSuccessHandler()', () => {
@@ -13,8 +16,9 @@ describe('api/PlainUpload', () => {
             upload.makeRequest = jest.fn();
             upload.uploadPreflightSuccessHandler({
                 upload_url: 'test'
-            });
-            expect(upload.makeRequest).not.toHaveBeenCalled();
+            }).then(() => {
+                expect(upload.makeRequest).not.toHaveBeenCalled();
+            })
         });
 
         test('should make an upload request with the returned url', () => {
@@ -25,8 +29,11 @@ describe('api/PlainUpload', () => {
 
             upload.uploadPreflightSuccessHandler({
                 upload_url: uploadUrl
-            });
-            expect(upload.makeRequest).toHaveBeenCalledWith({ url: uploadUrl });
+            }).then(() => {
+                expect(upload.makeRequest).toHaveBeenCalledWith({
+                    url: uploadUrl
+                });
+            })
         });
     });
 
@@ -46,7 +53,9 @@ describe('api/PlainUpload', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
             upload.successCallback = jest.fn();
 
-            upload.uploadSuccessHandler({ entries });
+            upload.uploadSuccessHandler({
+                entries
+            });
             expect(upload.successCallback).toHaveBeenCalledWith(entries);
         });
     });
@@ -163,19 +172,19 @@ describe('api/PlainUpload', () => {
     });
 
     describe('makeRequest', () => {
-        test('should not do anything if API is destroyed', () => {
+        test('should not do anything if API is destroyed', async() => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.xhr = {
                 uploadFile: jest.fn()
             };
-            upload.makeRequest({
+            await upload.makeRequest({
                 fileId: '123',
                 fileName: 'hunter'
-            });
+            })
             expect(upload.xhr.uploadFile).not.toHaveBeenCalled();
         });
 
-        test('should generate upload URL and make request if no URL is provided', () => {
+        test('should generate upload URL and make request if no URL is provided', async() => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
 
             upload.file = {
@@ -186,7 +195,7 @@ describe('api/PlainUpload', () => {
                 uploadFile: jest.fn()
             };
 
-            upload.makeRequest({});
+            await upload.makeRequest({});
             expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
                 url: `${upload.uploadHost}/api/2.0/files/content`,
                 data: {
@@ -199,7 +208,7 @@ describe('api/PlainUpload', () => {
             });
         });
 
-        test('should upload to new file version if file ID is provided', () => {
+        test('should upload to new file version if file ID is provided', async() => {
             const fileId = '123';
 
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
@@ -211,7 +220,7 @@ describe('api/PlainUpload', () => {
                 uploadFile: jest.fn()
             };
 
-            upload.makeRequest({
+            await upload.makeRequest({
                 fileId
             });
             expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
@@ -223,7 +232,7 @@ describe('api/PlainUpload', () => {
             });
         });
 
-        test('should stringify name and parent for upload data', () => {
+        test('should stringify name and parent for upload data', async() => {
             const name = 'titan';
             const parentId = '123';
             JSON.stringify = jest.fn();
@@ -234,7 +243,7 @@ describe('api/PlainUpload', () => {
                 uploadFile: jest.fn()
             };
 
-            upload.makeRequest({
+            await upload.makeRequest({
                 fileName: name
             });
             expect(JSON.stringify).toHaveBeenCalledWith({

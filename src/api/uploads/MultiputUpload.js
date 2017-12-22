@@ -93,7 +93,6 @@ class MultiputUpload extends BaseMultiput {
         this.partSize = 0;
         this.commitRetryCount = 0;
         this.clientId = null;
-        this.sessionEndpoints.createSession = `${this.uploadHost}/api/2.0/files/upload_sessions`;
     }
 
     /**
@@ -157,6 +156,9 @@ class MultiputUpload extends BaseMultiput {
             return;
         }
 
+        await this.updateReachableUploadHost();
+        let createSessionUrl = `${this.uploadHost}/api/2.0/files/upload_sessions`;
+
         // Set up post body
         const postData: StringAnyMap = {
             file_size: this.file.size,
@@ -164,7 +166,7 @@ class MultiputUpload extends BaseMultiput {
         };
 
         if (this.fileId) {
-            this.sessionEndpoints.createSession = this.sessionEndpoints.createSession.replace(
+            createSessionUrl = createSessionUrl.replace(
                 'upload_sessions',
                 `${this.fileId}/upload_sessions`
             );
@@ -173,7 +175,7 @@ class MultiputUpload extends BaseMultiput {
         }
 
         try {
-            const data = await this.xhr.post({ url: this.sessionEndpoints.createSession, data: postData });
+            const data = await this.xhr.post({ url: createSessionUrl, data: postData });
             this.createSessionSuccessHandler(data);
         } catch (error) {
             const response = await this.getErrorResponse(error);

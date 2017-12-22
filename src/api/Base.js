@@ -6,6 +6,7 @@
 
 import noop from 'lodash.noop';
 import Xhr from '../util/Xhr';
+import UploadsReachability from './uploads/UploadReachability';
 import Cache from '../util/Cache';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
 import type { Options } from '../flowTypes';
@@ -73,6 +74,7 @@ class Base {
         });
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
+        this.uploadsReachability = new UploadsReachability(options.token, this.apiHost);
         this.consoleLog = !!options.consoleLog && !!window.console ? window.console.log || noop : noop;
         this.consoleError = !!options.consoleError && !!window.console ? window.console.error || noop : noop;
     }
@@ -84,6 +86,17 @@ class Base {
      */
     destroy(): void {
         this.destroyed = true;
+    }
+
+    /**
+     * Update upload host with reachable url
+     * 
+     * @return {Promise<>}
+     */
+    async updateReachableUploadHost(): Promise<> {
+        this.uploadHost = await this.uploadsReachability.getReachableUploadHost();
+        this.options.uploadHost = this.uploadHost;
+        this.xhr = new Xhr(this.options);
     }
 
     /**
