@@ -23,7 +23,7 @@ type State = {
     showSidebar: boolean
 };
 
-class Sidebar extends PureComponent<void, Props, State> {
+class Sidebar extends PureComponent<Props, State> {
     props: Props;
     state: State;
 

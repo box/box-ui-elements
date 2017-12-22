@@ -23,7 +23,7 @@ class ES6Wrapper extends EventEmitter {
     /**
      * @property {HTMLElement}
      */
-    container: ?HTMLElement;
+    container: HTMLElement;
 
     /**
      * @property {string}
@@ -87,7 +87,8 @@ class ES6Wrapper extends EventEmitter {
         this.options.version = __VERSION__;
         this.emit = this.emit.bind(this);
         const container = options.container || DEFAULT_CONTAINER;
-        this.container = container instanceof HTMLElement ? container : document.querySelector(container);
+        this.container =
+            container instanceof HTMLElement ? container : ((document.querySelector(container): any): HTMLElement);
         this.render();
     }
 

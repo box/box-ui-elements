@@ -28,9 +28,6 @@ function getLogo(isSmall: boolean, url?: string) {
     );
 }
 
-const Logo = ({ url, isSmall }: Props) =>
-    <div className='buik-logo'>
-        {getLogo(isSmall, url)}
-    </div>;
+const Logo = ({ url, isSmall }: Props) => <div className='buik-logo'>{getLogo(isSmall, url)}</div>;
 
 export default Logo;

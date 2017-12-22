@@ -27,20 +27,6 @@ import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
 
-type DefaultProps = {|
-    apiHost: string,
-    appHost: string,
-    staticHost: string,
-    staticPath: string,
-    language: string,
-    version: string,
-    hasSidebar: boolean,
-    hasHeader: boolean,
-    className: string,
-    onLoad: Function,
-    onNavigate: Function
-|};
-
 type Props = {
     file?: BoxItem,
     fileId?: string,
@@ -72,14 +58,14 @@ type State = {
     showSidebar: boolean
 };
 
-class ContentPreview extends PureComponent<DefaultProps, Props, State> {
+class ContentPreview extends PureComponent<Props, State> {
     id: string;
     props: Props;
     state: State;
     preview: any;
     api: API;
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
@@ -428,19 +414,20 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={`buik bcpr ${className}`}>
-                    {hasHeader &&
+                    {hasHeader && (
                         <Header
                             file={file}
                             hasSidebarButton={hasSidebarButton}
                             isSidebarVisible={isSidebarVisible}
                             onClose={onClose}
                             onSidebarToggle={onSidebarToggle}
-                        />}
+                        />
+                    )}
                     <div className='bcpr-body'>
                         <Measure bounds onResize={this.onResize}>
                             {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
                         </Measure>
-                        {isSidebarVisible &&
+                        {isSidebarVisible && (
                             <ContentSidebar
                                 hasProperties
                                 hasSkills
@@ -450,7 +437,8 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
                                 getPreviewer={this.getPreviewer}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
-                            />}
+                            />
+                        )}
                     </div>
                 </div>
             </Internationalize>

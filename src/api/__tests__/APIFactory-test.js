@@ -43,14 +43,14 @@ describe('api/APIFactory', () => {
             expect(factory.recentsAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
-            const cache = factory.options.cache;
+            const { cache } = factory.options;
             cache.set('foo', 'bar');
             factory.destroy();
             expect(factory.options.cache).toBe(cache);
             expect(factory.options.cache.get('foo')).toBe('bar');
         });
         test('should destroy cache when asked', () => {
-            const cache = factory.options.cache;
+            const { cache } = factory.options;
             cache.set('foo', 'bar');
             factory.destroy(true);
             expect(factory.options.cache).not.toBe(cache);

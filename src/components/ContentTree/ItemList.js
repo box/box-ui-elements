@@ -21,9 +21,9 @@ type Props = {
     isLoading: boolean
 };
 
-const ItemList = ({ isSmall, isLoading, onItemClick, onExpanderClick, items = [], tableRef }: Props) =>
+const ItemList = ({ isSmall, isLoading, onItemClick, onExpanderClick, items = [], tableRef }: Props) => (
     <AutoSizer>
-        {({ width, height }) =>
+        {({ width, height }) => (
             <Table
                 width={width}
                 height={height}
@@ -40,7 +40,9 @@ const ItemList = ({ isSmall, isLoading, onItemClick, onExpanderClick, items = []
                     width={300}
                     flexGrow={1}
                 />
-            </Table>}
-    </AutoSizer>;
+            </Table>
+        )}
+    </AutoSizer>
+);
 
 export default ItemList;

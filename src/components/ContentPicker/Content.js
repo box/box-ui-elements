@@ -58,14 +58,15 @@ const Content = ({
     onShareAccessChange,
     onFocusChange,
     extensionsWhitelist
-}: Props) =>
+}: Props) => (
     <div className='bcp-content'>
-        {view === VIEW_ERROR || view === VIEW_SELECTED
-            ? null
-            : <ProgressBar percent={currentCollection.percentLoaded} />}
-        {isEmpty(view, currentCollection)
-            ? <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
-            : <ItemList
+        {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
+            <ProgressBar percent={currentCollection.percentLoaded} />
+        )}
+        {isEmpty(view, currentCollection) ? (
+            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
+        ) : (
+            <ItemList
                 view={view}
                 rootId={rootId}
                 isSmall={isSmall}
@@ -81,7 +82,9 @@ const Content = ({
                 onFocusChange={onFocusChange}
                 onShareAccessChange={onShareAccessChange}
                 extensionsWhitelist={extensionsWhitelist}
-              />}
-    </div>;
+            />
+        )}
+    </div>
+);
 
 export default Content;

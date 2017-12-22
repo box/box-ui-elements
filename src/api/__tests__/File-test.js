@@ -48,13 +48,14 @@ describe('api/File', () => {
         });
 
         test('should make xhr to get download url and call error callback', () => {
-            const success = jest.fn();
-            const error = jest.fn();
-            const get = jest.fn().mockReturnValueOnce(Promise.reject('error'));
+            const error = new Error('error');
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+            const get = jest.fn().mockReturnValueOnce(Promise.reject(error));
             file.xhr = { get };
-            return file.getDownloadUrl('foo', success, error).then(() => {
-                expect(success).not.toHaveBeenCalled();
-                expect(error).toHaveBeenCalledWith('error');
+            return file.getDownloadUrl('foo', successCb, errorCb).then(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).toHaveBeenCalledWith(error);
                 expect(get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/files/foo',
                     params: { fields: 'download_url' }
@@ -115,16 +116,17 @@ describe('api/File', () => {
         });
 
         test('should call error callback when xhr fails', () => {
+            const error = new Error('error');
             file.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.reject('error'))
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
 
-            const success = jest.fn();
-            const error = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
 
-            return file.file('id', success, error, false, true).then(() => {
-                expect(success).not.toHaveBeenCalled();
-                expect(error).toHaveBeenCalledWith('error');
+            return file.file('id', successCb, errorCb, false, true).then(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).toHaveBeenCalledWith(error);
                 expect(file.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',

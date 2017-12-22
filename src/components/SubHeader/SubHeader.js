@@ -36,7 +36,7 @@ const SubHeader = ({
     canCreateNewFolder,
     view,
     isSmall
-}: Props) =>
+}: Props) => (
     <div className='buik-sub-header'>
         <SubHeaderLeft
             rootId={rootId}
@@ -55,6 +55,7 @@ const SubHeader = ({
             onCreate={onCreate}
             onSortChange={onSortChange}
         />
-    </div>;
+    </div>
+);
 
 export default SubHeader;

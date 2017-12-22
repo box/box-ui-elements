@@ -35,12 +35,10 @@ const Header = ({ file, isSidebarVisible, onClose, hasSidebarButton, onSidebarTo
         <div className='bcpr-header'>
             <div className='bcpr-name'>
                 {file ? getIcon(24, file) : null}
-                <span>
-                    {name}
-                </span>
+                <span>{name}</span>
             </div>
             <div className='bcpr-btns'>
-                {hasSidebarButton &&
+                {hasSidebarButton && (
                     <PlainButton
                         type='button'
                         className='bcpr-btn'
@@ -49,11 +47,13 @@ const Header = ({ file, isSidebarVisible, onClose, hasSidebarButton, onSidebarTo
                         aria-label={sidebar}
                     >
                         <IconSidebar color={isSidebarVisible ? COLOR_BOX_BLUE : COLOR_777} width={16} height={16} />
-                    </PlainButton>}
-                {onClose &&
+                    </PlainButton>
+                )}
+                {onClose && (
                     <PlainButton type='button' className='bcpr-btn' onClick={onClose} title={close} aria-label={close}>
                         <IconClose color={COLOR_777} />
-                    </PlainButton>}
+                    </PlainButton>
+                )}
             </div>
         </div>
     );

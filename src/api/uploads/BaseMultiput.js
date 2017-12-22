@@ -37,7 +37,7 @@ class BaseMultiput extends Base {
 
     /**
      * POST log event
-     * 
+     *
      * @param {string} eventType
      * @param {string} [eventInfo]
      * @return {Promise}

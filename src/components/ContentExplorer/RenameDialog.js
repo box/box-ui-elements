@@ -111,11 +111,11 @@ const RenameDialog = ({
             appElement={appElement}
         >
             <label>
-                {error
-                    ? <div className='buik-modal-error'>
+                {error ? (
+                    <div className='buik-modal-error'>
                         <FormattedMessage {...error} values={{ name: nameWithoutExt }} />
                     </div>
-                    : null}
+                ) : null}
                 <FormattedMessage tagName='div' {...messages.renameDialogText} values={{ name: nameWithoutExt }} />
                 <input type='text' required ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} />
             </label>

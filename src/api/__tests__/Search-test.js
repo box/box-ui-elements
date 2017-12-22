@@ -176,15 +176,16 @@ describe('api/Search', () => {
         });
 
         test('should make xhr to search and call error callback', () => {
+            const error = new Error('error');
             search.searchSuccessHandler = jest.fn();
             search.searchErrorHandler = jest.fn();
             search.includePreviewFields = true;
             search.includePreviewSidebarFields = true;
             search.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.reject('error'))
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
             return search.searchRequest().then(() => {
-                expect(search.searchErrorHandler).toHaveBeenCalledWith('error');
+                expect(search.searchErrorHandler).toHaveBeenCalledWith(error);
                 expect(search.searchSuccessHandler).not.toHaveBeenCalled();
                 expect(search.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/search',

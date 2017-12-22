@@ -109,29 +109,9 @@ type State = {
     focusedRow: number
 };
 
-type DefaultProps = {|
-    type: string,
-    rootFolderId: string,
-    onChoose: Function,
-    onCancel: Function,
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-    extensions: string[],
-    maxSelectable: number,
-    canUpload: boolean,
-    canSetShareAccess: boolean,
-    canCreateNewFolder: boolean,
-    autoFocus: boolean,
-    apiHost: string,
-    uploadHost: string,
-    clientName: string,
-    className: string,
-    defaultView: DefaultView
-|};
-
 const defaultType = `${TYPE_FILE},${TYPE_WEBLINK}`;
 
-class ContentPicker extends Component<DefaultProps, Props, State> {
+class ContentPicker extends Component<Props, State> {
     id: string;
     api: API;
     state: State;
@@ -142,7 +122,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     globalModifier: boolean;
     firstLoad: boolean = true; // Keeps track of very 1st load
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         type: defaultType,
         rootFolderId: DEFAULT_ROOT,
         onChoose: noop,
@@ -835,7 +815,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent & { target: HTMLElement }) => {
+    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
         if (isInputElement(event.target)) {
             return;
         }
@@ -1026,8 +1006,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                             cancelButtonLabel={cancelButtonLabel}
                         />
                     </div>
-                    {allowUpload && !!this.appElement
-                        ? <UploadDialog
+                    {allowUpload && !!this.appElement ? (
+                        <UploadDialog
                             isOpen={isUploadModalOpen}
                             currentFolderId={id}
                             token={token}
@@ -1038,10 +1018,10 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                             onClose={this.uploadSuccessHandler}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
-                          />
-                        : null}
-                    {allowCreate && !!this.appElement
-                        ? <CreateFolderDialog
+                        />
+                    ) : null}
+                    {allowCreate && !!this.appElement ? (
+                        <CreateFolderDialog
                             isOpen={isCreateFolderModalOpen}
                             onCreate={this.createFolderCallback}
                             onCancel={this.closeModals}
@@ -1049,8 +1029,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                             errorCode={errorCode}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
-                          />
-                        : null}
+                        />
+                    ) : null}
                 </div>
             </Internationalize>
         );

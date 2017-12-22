@@ -23,9 +23,11 @@ type Props = {
 const EmptyState = ({ view, isLoading }: Props) => {
     let type;
     const message =
-        isLoading && view === VIEW_FOLDER
-            ? <FormattedMessage {...messages.loadingState} />
-            : <FormattedMessage {...messages[`${view}State`]} />;
+        isLoading && view === VIEW_FOLDER ? (
+            <FormattedMessage {...messages.loadingState} />
+        ) : (
+            <FormattedMessage {...messages[`${view}State`]} />
+        );
 
     switch (view) {
         case VIEW_ERROR:
@@ -44,9 +46,7 @@ const EmptyState = ({ view, isLoading }: Props) => {
     return (
         <div className='buik-empty'>
             {type}
-            <div>
-                {message}
-            </div>
+            <div>{message}</div>
         </div>
     );
 };

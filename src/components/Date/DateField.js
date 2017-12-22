@@ -24,11 +24,7 @@ const DateField = ({ date, intl, relative = true }: Props) => {
     }
 
     const formattedDate = intl.formatDate(d, { weekday: 'short', month: 'short', year: 'numeric', day: 'numeric' });
-    return (
-        <span>
-            {formattedDate.replace(/,/g, '')}
-        </span>
-    );
+    return <span>{formattedDate.replace(/,/g, '')}</span>;
 };
 
 export default injectIntl(DateField);

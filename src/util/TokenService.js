@@ -186,10 +186,9 @@ class TokenService {
      */
     getChunksOfIds(ids: string[]): string[][] {
         const chunks: string[][] = [];
-        const requestLimit: number = this.requestLimit;
         const len: number = ids.length;
-        for (let i: number = 0; i < len; i += requestLimit) {
-            chunks.push(ids.slice(i, i + requestLimit));
+        for (let i: number = 0; i < len; i += this.requestLimit) {
+            chunks.push(ids.slice(i, i + this.requestLimit));
         }
         return chunks;
     }

@@ -200,7 +200,10 @@ class Item extends Base {
         this.errorCallback = errorCallback;
 
         const url = `${this.getUrl(id)}${type === TYPE_FOLDER ? '?recursive=true' : ''}`;
-        return this.xhr.delete({ url }).then(this.deleteSuccessHandler).catch(this.errorHandler);
+        return this.xhr
+            .delete({ url })
+            .then(this.deleteSuccessHandler)
+            .catch(this.errorHandler);
     }
 
     /**

@@ -541,11 +541,10 @@ const createWorker = () => {
 
         // self inside a worker refers to a DedicatedWorkerGlobalScope
         // https://developer.mozilla.org/en-US/docs/Web/API/DedicatedWorkerGlobalScope
+        // eslint-disable-next-line
         self.onmessage = (event) => {
-            const data = event.data;
-            const part = data.part;
-            const fileSize = data.fileSize;
-            const partContents = data.partContents;
+            const { data } = event;
+            const { part, fileSize, partContents } = data;
 
             const startTimestamp = Date.now();
 
@@ -559,6 +558,7 @@ const createWorker = () => {
                 // We send the partContents back to the main thread because, at least in Chrome v62, we see
                 // that this ArrayBuffer is not garbage collected as promptly when left in the web worker
                 // context
+                // eslint-disable-next-line
                 self.postMessage(
                     {
                         type: 'partDone',
@@ -571,7 +571,7 @@ const createWorker = () => {
                 expectedOffset += part.size;
                 if (part.offset + part.size === fileSize) {
                     const hash = fileSha1.end();
-                    self.postMessage({ type: 'done', sha1: hash });
+                    self.postMessage({ type: 'done', sha1: hash }); // eslint-disable-line no-restricted-globals
                 }
             } catch (err) {
                 const message = {
@@ -580,7 +580,7 @@ const createWorker = () => {
                     message: err.message,
                     part
                 };
-                self.postMessage(message);
+                self.postMessage(message); // eslint-disable-line no-restricted-globals
             }
         };
     }

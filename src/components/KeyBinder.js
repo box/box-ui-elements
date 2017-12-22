@@ -9,17 +9,6 @@ import noop from 'lodash/noop';
 import { isInputElement } from '../util/dom';
 import type { BoxItem } from '../flowTypes';
 
-type DefaultProps = {
-    scrollToColumn: number,
-    scrollToRow: number,
-    onRename: Function,
-    onShare: Function,
-    onDownload: Function,
-    onOpen: Function,
-    onSelect: Function,
-    onDelete: Function
-};
-
 type Props = {
     children: Function,
     className: string,
@@ -35,7 +24,7 @@ type Props = {
     onSelect: Function,
     onDelete: Function,
     items: BoxItem[],
-    id: string
+    id: string | void
 };
 
 type State = {
@@ -44,7 +33,7 @@ type State = {
     focusOnRender: boolean
 };
 
-class KeyBinder extends PureComponent<DefaultProps, Props, State> {
+class KeyBinder extends PureComponent<Props, State> {
     state: State;
     props: Props;
     columnStartIndex: number;
@@ -52,7 +41,7 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
     rowStartIndex: number;
     rowStopIndex: number;
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         scrollToColumn: 0,
         scrollToRow: 0,
         onRename: noop,
@@ -126,7 +115,7 @@ class KeyBinder extends PureComponent<DefaultProps, Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent & { target: HTMLElement }): void => {
+    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
         if (isInputElement(event.target)) {
             return;
         }

@@ -16,7 +16,7 @@ type Props = {
     onClick: Function
 };
 
-const Keyword = ({ keyword, onClick, isSelected }: Props) =>
+const Keyword = ({ keyword, onClick, isSelected }: Props) => (
     <span className='buik-file-keyword'>
         <PlainButton
             className={`buik-file-keyword-word ${isSelected ? 'buik-file-keyword-selected' : ''}`}
@@ -24,7 +24,8 @@ const Keyword = ({ keyword, onClick, isSelected }: Props) =>
         >
             {keyword.text}
         </PlainButton>
-    </span>;
+    </span>
+);
 
 // <PlainButton type='button' className='buik-file-keyword-delete'>
 //     <IconCross color='#777' width={8} height={8} />
