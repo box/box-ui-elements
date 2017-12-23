@@ -4,7 +4,7 @@ let webLink;
 
 describe('api/WebLink', () => {
     beforeEach(() => {
-        webLink = new WebLink();
+        webLink = new WebLink({});
     });
 
     describe('getCacheKey()', () => {

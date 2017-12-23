@@ -51,7 +51,7 @@ class Base {
      * @property {Function}
      */
     consoleError: Function;
-    
+
     uploadsReachability: UploadsReachability;
 
     /**
@@ -92,10 +92,10 @@ class Base {
 
     /**
      * Update upload host with reachable url
-     * 
-     * @return {Promise<>}
+     *
+     * @return {Promise<*>}
      */
-    async updateReachableUploadHost(): Promise<> {
+    async updateReachableUploadHost(): Promise<*> {
         this.uploadHost = await this.uploadsReachability.getReachableUploadHost();
         this.options.uploadHost = this.uploadHost;
         this.xhr = new Xhr(this.options);

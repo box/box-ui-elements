@@ -15,7 +15,7 @@ let factory;
 
 describe('api/APIFactory', () => {
     beforeEach(() => {
-        factory = new APIFactory();
+        factory = new APIFactory({});
     });
 
     describe('getCache()', () => {

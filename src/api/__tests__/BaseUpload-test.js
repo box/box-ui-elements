@@ -6,7 +6,7 @@ let file;
 
 describe('api/BaseUpload', () => {
     beforeEach(() => {
-        upload = new BaseUpload();
+        upload = new BaseUpload({});
         clock = jest.useFakeTimers();
         file = {
             name: 'foo'

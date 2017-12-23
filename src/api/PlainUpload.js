@@ -21,9 +21,9 @@ class PlainUpload extends BaseUpload {
      * Handles a upload preflight success response
      *
      * @param {Object} data - Preflight success data
-     * @return {Promise<>}
+     * @return {Promise<*>}
      */
-    uploadPreflightSuccessHandler = async ({ upload_url }: { upload_url: string }): Promise<> => {
+    uploadPreflightSuccessHandler = async ({ upload_url }: { upload_url: string }): Promise<*> => {
         if (this.isDestroyed()) {
             return;
         }
@@ -122,9 +122,9 @@ class PlainUpload extends BaseUpload {
      * @param {boolean} [options.url] - Upload URL to use
      * @param {string} [options.fileId] - ID of file to replace
      * @param {string} [options.fileName] - New name for file
-     * @return {Promise<>}
+     * @return {Promise<*>}
      */
-    async makeRequest({ url, fileId, fileName }: { url?: string, fileId?: string, fileName?: string }): Promise<> {
+    async makeRequest({ url, fileId, fileName }: { url?: string, fileId?: string, fileName?: string }): Promise<*> {
         if (this.isDestroyed()) {
             return;
         }
