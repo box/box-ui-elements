@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import BaseMultiput from './BaseMultiput';
 import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from '../../util/uploads';
 import { retryNumOfTimes } from '../../util/function';
@@ -62,7 +62,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * [constructor]
-     * 
+     *
      * @param {Options} options
      * @param {MultiputConfig} [config]
      */
@@ -97,8 +97,8 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Upload a given file
-     * 
-     * 
+     *
+     *
      * @param {Object} options
      * @param {File} options.file
      * @param {string} [options.id] - Untyped folder id (e.g. no "d_" prefix)
@@ -151,7 +151,7 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    createSession = async (): Promise<> => {
+    createSession = async (): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
@@ -213,7 +213,7 @@ class MultiputUpload extends BaseMultiput {
     /**
      * Create session error handler.
      * Retries the create session request or fails the upload.
-     * 
+     *
      * @private
      * @param {Error} error
      * @return {void}
@@ -234,7 +234,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Schedule a retry for create session request upon failure
-     * 
+     *
      * @private
      * @return {void}
      */
@@ -281,14 +281,14 @@ class MultiputUpload extends BaseMultiput {
     /**
      * Session error handler.
      * Retries the create session request or fails the upload.
-     * 
+     *
      * @private
      * @param {?Error} error
      * @param {string} logEventType
      * @param {string} [logMessage]
      * @return {Promise}
      */
-    sessionErrorHandler = async (error: ?Error, logEventType: string, logMessage?: string): Promise<> => {
+    sessionErrorHandler = async (error: ?Error, logEventType: string, logMessage?: string): Promise<any> => {
         this.destroy();
         this.errorCallback(error);
 
@@ -299,7 +299,9 @@ class MultiputUpload extends BaseMultiput {
 
             await retryNumOfTimes(
                 (resolve: Function, reject: Function): void => {
-                    this.logEvent(logEventType, logMessage).then(resolve).catch(reject);
+                    this.logEvent(logEventType, logMessage)
+                        .then(resolve)
+                        .catch(reject);
                 },
                 this.config.retries,
                 this.config.initialRetryDelayMs
@@ -313,7 +315,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Aborts the upload session
-     * 
+     *
      * @private
      * @return {void}
      */
@@ -329,7 +331,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Part upload success handler
-     * 
+     *
      * @private
      * @param {MultiputPart} part
      * @return {void}
@@ -343,7 +345,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Part upload error handler
-     * 
+     *
      * @private
      * @param {Error} error
      * @param {string} eventInfo
@@ -355,7 +357,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Update upload progress
-     * 
+     *
      * @private
      * @param {number} prevUploadedBytes
      * @param {number} newUploadedBytes
@@ -376,7 +378,7 @@ class MultiputUpload extends BaseMultiput {
     /**
      * Attempts to process more parts, except in the case where everything is done or we detect
      * a file change (in which case we want to abort and not process more parts).
-     * 
+     *
      * @private
      * @return {void}
      */
@@ -404,7 +406,7 @@ class MultiputUpload extends BaseMultiput {
     /**
      * We compute digest for parts one at a time.  This is done for simplicity and also to guarantee that
      * we send parts in order to the web sha1Worker (which is computing the digest for the entire file).
-     * 
+     *
      * @private
      * @return {boolean} true if there is work to do, false otherwise.
      */
@@ -436,12 +438,12 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Read a blob with FileReader
-     * 
+     *
      * @param {FileReader} reader
      * @param {Blob} blob
      * @return {Promise}
      */
-    readFile = (reader: FileReader, blob: Blob): Promise<> =>
+    readFile = (reader: FileReader, blob: Blob): Promise<any> =>
         new Promise((resolve, reject) => {
             reader.readAsArrayBuffer(blob);
             reader.onload = () => {
@@ -455,12 +457,12 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Compute digest for this part
-     * 
+     *
      * @private
      * @param {MultiputPart} part
      * @return {Promise}
      */
-    computeDigestForPart = async (part: MultiputPart): Promise<> => {
+    computeDigestForPart = async (part: MultiputPart): Promise<any> => {
         const blob = this.file.slice(part.offset, part.offset + this.partSize);
         const reader = new window.FileReader();
         const startTimestamp = Date.now();
@@ -496,21 +498,21 @@ class MultiputUpload extends BaseMultiput {
     };
 
     /**
-	 * Deal with a message from the worker (either a part sha-1 ready, file sha-1 ready, or error).
+     * Deal with a message from the worker (either a part sha-1 ready, file sha-1 ready, or error).
      *
      * @private
      * @param {object} event
-	 * @return {void}
-	 */
+     * @return {void}
+     */
     onWorkerMessage = (event: Object) => {
         if (this.isDestroyed()) {
             return;
         }
 
-        const data = event.data;
+        const { data } = event;
         if (data.type === 'partDone') {
             this.numPartsDigestComputing -= 1;
-            const part = data.part;
+            const { part } = data;
             this.parts[part.index].timing.fileDigestTime = data.duration;
             this.processNextParts();
         } else if (data.type === 'done') {
@@ -526,7 +528,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Sends a part to the sha1Worker
-     * 
+     *
      * @private
      * @param {MultiputPart} part
      * @param {ArrayBuffer} buffer
@@ -547,7 +549,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Error handler for part digest computation
-     * 
+     *
      * @private
      * @param {Error} error
      * @param {MultiputPart} part
@@ -589,11 +591,11 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Send a request to commit the upload.
-     * 
+     *
      * @private
      * @return {Promise}
      */
-    commitSession = async (): Promise<> => {
+    commitSession = async (): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
@@ -645,7 +647,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Commit response handler.  Succeeds the upload, retries the commit on 202
-     * 
+     *
      * @private
      * @param {Object} response
      * @return {void}
@@ -672,7 +674,7 @@ class MultiputUpload extends BaseMultiput {
     /**
      * Commit error handler.
      * Retries the commit or fails the multiput session.
-     * 
+     *
      * @private
      * @param {Object} error
      * @return {void}
@@ -696,7 +698,7 @@ class MultiputUpload extends BaseMultiput {
     /**
      * Retry commit.
      * Retries the commit or fails the multiput session.
-     * 
+     *
      * @private
      * @param {Object} response
      * @return {void}
@@ -708,7 +710,7 @@ class MultiputUpload extends BaseMultiput {
         if (headers) {
             const retryAfterSec = parseInt(headers.get('Retry-After'), 10);
 
-            if (!isNaN(retryAfterSec)) {
+            if (!Number.isNaN(retryAfterSec)) {
                 retryAfterMs = retryAfterSec * 1000;
             }
         }
@@ -731,7 +733,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Find first part in parts array that we can upload, and upload it.
-     * 
+     *
      * @private
      * @return {void}
      */
@@ -752,7 +754,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Checks if upload pipeline is full
-     * 
+     *
      * @private
      * @return {boolean}
      */
@@ -762,7 +764,7 @@ class MultiputUpload extends BaseMultiput {
     /**
      * Functions that walk the parts array get called a lot, so we cache which part we should
      * start work at to avoid always iterating through entire parts list.
-     * 
+     *
      * @private
      * @return {void}
      */
@@ -776,7 +778,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Get number of parts being uploaded
-     * 
+     *
      * @return {number}
      */
     getNumPartsUploading = (): number => this.numPartsUploading;
@@ -784,7 +786,7 @@ class MultiputUpload extends BaseMultiput {
     /**
      * After session is created and we know the part size, populate the parts
      * array.
-     * 
+     *
      * @private
      * @return {void}
      */
@@ -887,11 +889,11 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Resolves upload conflict by overwriting or renaming
-     * 
+     *
      * @param {Object} response
      * @return {Promise}
      */
-    resolveConflict = async (response: Object): Promise<> => {
+    resolveConflict = async (response: Object): Promise<any> => {
         if (this.overwrite && response.context_info) {
             this.fileId = response.context_info.conflicts.id;
             return;
@@ -904,7 +906,7 @@ class MultiputUpload extends BaseMultiput {
 
     /**
      * Returns detailed error response
-     * 
+     *
      * @param {Object} error
      * @return {Promise<Object>}
      */

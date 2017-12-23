@@ -22,7 +22,7 @@ function retryNumOfTimes(
     times: number,
     initialTimeout?: number = 0,
     backoffFactor?: number = 1
-): Promise<> {
+): Promise<any> {
     let tries = 0;
     let timeout = initialTimeout;
 

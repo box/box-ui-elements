@@ -70,14 +70,15 @@ const Content = ({
     onItemShare,
     onItemPreview,
     onSortChange
-}: Props) =>
+}: Props) => (
     <div className='bce-content'>
-        {view === VIEW_ERROR || view === VIEW_SELECTED
-            ? null
-            : <ProgressBar percent={currentCollection.percentLoaded} />}
-        {isEmpty(view, currentCollection)
-            ? <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
-            : <ItemList
+        {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
+            <ProgressBar percent={currentCollection.percentLoaded} />
+        )}
+        {isEmpty(view, currentCollection) ? (
+            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
+        ) : (
+            <ItemList
                 view={view}
                 isSmall={isSmall}
                 isTouch={isTouch}
@@ -99,7 +100,9 @@ const Content = ({
                 onItemShare={onItemShare}
                 onItemPreview={onItemPreview}
                 onSortChange={onSortChange}
-              />}
-    </div>;
+            />
+        )}
+    </div>
+);
 
 export default Content;

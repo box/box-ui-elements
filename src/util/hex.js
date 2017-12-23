@@ -6,7 +6,7 @@
 
 /**
  * Converts an array buffer to Hex
- * 
+ *
  * @param {Uint8Array} arrayBuffer The buffer to convert
  * @return {string} The hex converted value
  */

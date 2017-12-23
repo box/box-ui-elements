@@ -71,43 +71,43 @@ export default (
                     ···
                 </Button>
                 <Menu>
-                    {allowPreview
-                        ? <MenuItem onClick={onPreview}>
+                    {allowPreview ? (
+                        <MenuItem onClick={onPreview}>
                             <FormattedMessage {...messages.preview} />
                         </MenuItem>
-                        : null}
-                    {allowOpen
-                        ? <MenuItem onClick={onPreview}>
+                    ) : null}
+                    {allowOpen ? (
+                        <MenuItem onClick={onPreview}>
                             <FormattedMessage {...messages.open} />
                         </MenuItem>
-                        : null}
-                    {allowDelete
-                        ? <MenuItem onClick={onDelete}>
+                    ) : null}
+                    {allowDelete ? (
+                        <MenuItem onClick={onDelete}>
                             <FormattedMessage {...messages.delete} />
                         </MenuItem>
-                        : null}
-                    {allowDownload
-                        ? <MenuItem onClick={onDownload}>
+                    ) : null}
+                    {allowDownload ? (
+                        <MenuItem onClick={onDownload}>
                             <FormattedMessage {...messages.download} />
                         </MenuItem>
-                        : null}
-                    {allowRename
-                        ? <MenuItem onClick={onRename}>
+                    ) : null}
+                    {allowRename ? (
+                        <MenuItem onClick={onRename}>
                             <FormattedMessage {...messages.rename} />
                         </MenuItem>
-                        : null}
-                    {allowShare
-                        ? <MenuItem onClick={onShare}>
+                    ) : null}
+                    {allowShare ? (
+                        <MenuItem onClick={onShare}>
                             <FormattedMessage {...messages.share} />
                         </MenuItem>
-                        : null}
+                    ) : null}
                 </Menu>
             </DropdownMenu>
-            {allowShare && !isSmall
-                ? <Button type='button' onFocus={onFocus} onClick={onShare}>
+            {allowShare && !isSmall ? (
+                <Button type='button' onFocus={onFocus} onClick={onShare}>
                     <FormattedMessage {...messages.share} />
                 </Button>
-                : null}
+            ) : null}
         </div>
     );
 };

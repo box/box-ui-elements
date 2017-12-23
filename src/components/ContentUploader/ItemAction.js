@@ -6,12 +6,12 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import IconCross from '../icons/IconCross';
-import IconCheck from '../icons/IconCheck';
-import IconRetry from '../icons/IconRetry';
+import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
+import IconClose from 'box-react-ui/lib/icons/general/IconClose';
+import IconRetry from 'box-react-ui/lib/icons/general/IconRetry';
 import IconInProgress from './IconInProgress';
 import messages from '../messages';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR, COLOR_BOX_BLUE } from '../../constants';
 import type { UploadStatus } from '../../flowTypes';
 import './ItemAction.scss';
 
@@ -22,12 +22,12 @@ type Props = {
 };
 
 const ItemAction = ({ status, onClick, intl }: Props) => {
-    let icon = <IconCross />;
+    let icon = <IconClose />;
     let title = intl.formatMessage(messages.cancel);
 
     switch (status) {
         case STATUS_COMPLETE:
-            icon = <IconCheck />;
+            icon = <IconCheck color={COLOR_BOX_BLUE} />;
             title = intl.formatMessage(messages.remove);
             break;
         case STATUS_ERROR:

@@ -11,5 +11,6 @@ type Props = {
     rowData: UploadItem
 };
 
-export default (onClick: Function) => ({ rowData }: Props) =>
-    <ItemAction {...rowData} onClick={() => onClick(rowData)} />;
+export default (onClick: Function) => ({ rowData }: Props) => (
+    <ItemAction {...rowData} onClick={() => onClick(rowData)} />
+);

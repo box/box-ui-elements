@@ -5,6 +5,7 @@
  */
 
 import EventEmitter from 'events';
+import ReactDOM from 'react-dom';
 import { addLocaleData } from 'react-intl';
 import 'regenerator-runtime/runtime';
 import { DEFAULT_CONTAINER } from '../constants';
@@ -22,7 +23,7 @@ class ES6Wrapper extends EventEmitter {
     /**
      * @property {HTMLElement}
      */
-    container: ?HTMLElement;
+    container: HTMLElement;
 
     /**
      * @property {string}
@@ -86,7 +87,8 @@ class ES6Wrapper extends EventEmitter {
         this.options.version = __VERSION__;
         this.emit = this.emit.bind(this);
         const container = options.container || DEFAULT_CONTAINER;
-        this.container = container instanceof HTMLElement ? container : document.querySelector(container);
+        this.container =
+            container instanceof HTMLElement ? container : ((document.querySelector(container): any): HTMLElement);
         this.render();
     }
 
@@ -100,6 +102,7 @@ class ES6Wrapper extends EventEmitter {
      */
     hide(): void {
         this.removeAllListeners();
+        ReactDOM.unmountComponentAtNode(this.container);
         if (this.container) {
             this.container.innerHTML = '';
         }

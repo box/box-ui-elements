@@ -41,21 +41,13 @@ const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl 
 
     return (
         <select className={className} value={access} onChange={changeHandler}>
-            {allowOpen
-                ? <option value={ACCESS_OPEN}>
-                    {intl.formatMessage(messages.shareAccessOpen)}
-                </option>
-                : null}
-            {allowCollab
-                ? <option value={ACCESS_COLLAB}>
-                    {intl.formatMessage(messages.shareAccessCollab)}
-                </option>
-                : null}
-            {allowCompany
-                ? <option value={ACCESS_COMPANY}>
-                    {intl.formatMessage(messages.shareAccessCompany)}
-                </option>
-                : null}
+            {allowOpen ? <option value={ACCESS_OPEN}>{intl.formatMessage(messages.shareAccessOpen)}</option> : null}
+            {allowCollab ? (
+                <option value={ACCESS_COLLAB}>{intl.formatMessage(messages.shareAccessCollab)}</option>
+            ) : null}
+            {allowCompany ? (
+                <option value={ACCESS_COMPANY}>{intl.formatMessage(messages.shareAccessCompany)}</option>
+            ) : null}
             <option value={ACCESS_NONE}>
                 {access === ACCESS_NONE
                     ? intl.formatMessage(messages.shareAccessNone)

@@ -7,11 +7,11 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import IconSidebar from 'box-react-ui/lib/icons/general/IconSidebar';
+import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import messages from '../messages';
-import IconCross from '../icons/IconCross';
-import IconSidebar from '../icons/IconSidebar';
 import { getIcon } from '../Item/iconCellRenderer';
-import { BOX_BLUE } from '../../constants';
+import { COLOR_BOX_BLUE, COLOR_777 } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './Header.scss';
 
@@ -35,12 +35,10 @@ const Header = ({ file, isSidebarVisible, onClose, hasSidebarButton, onSidebarTo
         <div className='bcpr-header'>
             <div className='bcpr-name'>
                 {file ? getIcon(24, file) : null}
-                <span>
-                    {name}
-                </span>
+                <span>{name}</span>
             </div>
             <div className='bcpr-btns'>
-                {hasSidebarButton &&
+                {hasSidebarButton && (
                     <PlainButton
                         type='button'
                         className='bcpr-btn'
@@ -48,12 +46,14 @@ const Header = ({ file, isSidebarVisible, onClose, hasSidebarButton, onSidebarTo
                         title={sidebar}
                         aria-label={sidebar}
                     >
-                        <IconSidebar color={isSidebarVisible ? BOX_BLUE : '#777'} width={16} height={16} />
-                    </PlainButton>}
-                {onClose &&
+                        <IconSidebar color={isSidebarVisible ? COLOR_BOX_BLUE : COLOR_777} width={16} height={16} />
+                    </PlainButton>
+                )}
+                {onClose && (
                     <PlainButton type='button' className='bcpr-btn' onClick={onClose} title={close} aria-label={close}>
-                        <IconCross color='#777' width={14} height={14} />
-                    </PlainButton>}
+                        <IconClose color={COLOR_777} />
+                    </PlainButton>
+                )}
             </div>
         </div>
     );

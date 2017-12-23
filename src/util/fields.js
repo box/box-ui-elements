@@ -81,7 +81,9 @@ const PREVIEW_FIELDS_TO_FETCH = [
  * @return {string} comma seperated list of fields
  */
 function getFieldsIncludingPreviewSidebar(): string {
-    return BASE_FIELDS_TO_FETCH.concat(SIDEBAR_FIELDS_TO_FETCH).concat(PREVIEW_FIELDS_TO_FETCH).join(',');
+    return BASE_FIELDS_TO_FETCH.concat(SIDEBAR_FIELDS_TO_FETCH)
+        .concat(PREVIEW_FIELDS_TO_FETCH)
+        .join(',');
 }
 
 /**

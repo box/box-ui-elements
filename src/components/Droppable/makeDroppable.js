@@ -13,10 +13,6 @@ type Props = {
     className: string
 };
 
-type DefaultProps = {
-    className: string
-};
-
 type State = {
     canDrop: boolean,
     isDragging: boolean,
@@ -25,15 +21,15 @@ type State = {
 
 /* eslint-disable no-plusplus */
 const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, onDrop?: Function }) => (
-    Wrapped: ClassComponent<any, any, any>
-): ClassComponent<any, any, any> =>
-    class DroppableComponent extends PureComponent<DefaultProps, Props, State> {
+    Wrapped: ClassComponent<any, any>
+): ClassComponent<any, any> =>
+    class DroppableComponent extends PureComponent<Props, State> {
         props: Props;
         state: State;
         enterLeaveCounter: number;
         droppableEl: Element;
 
-        static defaultProps: DefaultProps = {
+        static defaultProps = {
             className: ''
         };
 
@@ -58,7 +54,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
          * @inheritdoc
          */
         componentDidMount() {
-            const droppableEl = findDOMNode(this);
+            const droppableEl = findDOMNode(this); // eslint-disable-line react/no-find-dom-node
             if (!droppableEl || !(droppableEl instanceof Element)) {
                 throw new Error('Bad mount in makeDroppable');
             }

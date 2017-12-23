@@ -7,8 +7,8 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import Content from './Content';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
@@ -56,24 +56,14 @@ type State = {
     view: View
 };
 
-type DefaultProps = {|
-    type: string,
-    rootFolderId: string,
-    onClick: Function,
-    apiHost: string,
-    clientName: string,
-    autoFocus: boolean,
-    className: string
-|};
-
-class ContentTree extends Component<DefaultProps, Props, State> {
+class ContentTree extends Component<Props, State> {
     id: string;
     api: API;
     state: State;
     props: Props;
     table: any;
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         type: `${TYPE_FILE},${TYPE_WEBLINK},${TYPE_FOLDER}`,
         rootFolderId: DEFAULT_ROOT,
         onClick: noop,
@@ -239,7 +229,7 @@ class ContentTree extends Component<DefaultProps, Props, State> {
         ) {
             return;
         }
-        const grid: any = findDOMNode(this.table.Grid);
+        const grid: any = findDOMNode(this.table.Grid); // eslint-disable-line react/no-find-dom-node
         grid.focus();
     }
 

@@ -7,9 +7,9 @@
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import noop from 'lodash.noop';
-import uniqueid from 'lodash.uniqueid';
-import cloneDeep from 'lodash.clonedeep';
+import noop from 'lodash/noop';
+import uniqueid from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 import API from '../../api';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
@@ -59,20 +59,6 @@ type Props = {
     intl: any
 };
 
-type DefaultProps = {|
-    rootFolderId: string,
-    apiHost: string,
-    chunked: boolean,
-    className: string,
-    clientName: string,
-    fileLimit: number,
-    uploadHost: string,
-    onClose: Function,
-    onComplete: Function,
-    onError: Function,
-    onUpload: Function
-|};
-
 type State = {
     view: View,
     items: UploadItem[],
@@ -82,14 +68,14 @@ type State = {
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 
-class ContentUploader extends Component<DefaultProps, Props, State> {
+class ContentUploader extends Component<Props, State> {
     id: string;
     state: State;
     props: Props;
     rootElement: HTMLElement;
     appElement: HTMLElement;
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
         apiHost: DEFAULT_HOSTNAME_API,
         chunked: true,
@@ -361,7 +347,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
         // Cache Box File object of successfully uploaded item
         if (entries && entries.length === 1) {
-            item.boxFile = entries[0];
+            const [boxFile] = entries;
+            item.boxFile = boxFile;
         }
 
         const { items } = this.state;

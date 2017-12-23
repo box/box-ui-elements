@@ -43,7 +43,7 @@ class UploadsReachability {
 
     /**
      * Gets a reachable host for upload
-     * 
+     *
      * @return {Promise}
      */
     async getReachableUploadHost() {
@@ -71,7 +71,7 @@ class UploadsReachability {
 
     /**
      * Checks if a host is reachable
-     * 
+     *
      * @private
      * @param {string} uploadHost
      * @return {Promise}
@@ -94,7 +94,7 @@ class UploadsReachability {
 
     /**
      * Get upload host name from the preflight request response
-     * 
+     *
      * @private
      * @return {Promise}
      */
@@ -122,7 +122,7 @@ class UploadsReachability {
 
     /**
      * Resolves preflight response to a reachable upload host
-     * 
+     *
      * @private
      * @param {?Object} response
      * @return {string}

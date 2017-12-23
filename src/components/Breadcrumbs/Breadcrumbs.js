@@ -68,7 +68,7 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
 
     // The crumbs given may have ancestors higher than the root. We need to filter them out.
     const filteredCrumbs = filterCrumbs(rootId, crumbs);
-    const length = filteredCrumbs.length;
+    const { length } = filteredCrumbs;
 
     // Always show the last/leaf breadcrumb.
     const crumb = filteredCrumbs[length - 1];

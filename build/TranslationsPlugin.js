@@ -3,7 +3,7 @@
 'use strict';
 
 const path = require('path');
-const buildTranslations = require('./buildTranslations');
+const buildTranslations = require('box-react-ui/lib/build-utils/buildTranslations');
 
 const i18n = path.resolve('i18n'); // Where the .properties files are dumped
 const jsonDir = path.join(i18n, 'json'); // Where the react-intl plugin dumps json

@@ -21,14 +21,9 @@ const SidebarContent = ({ title, hasTitle, children }: Props) => {
 
     return (
         <div className='bcs-content'>
-            {hasTitle &&
-                <h3 className='bcs-title'>
-                    {title}
-                </h3>}
+            {hasTitle && <h3 className='bcs-title'>{title}</h3>}
             <div className={scrollContentClassName}>
-                <div className='bcs-scroll-content'>
-                    {children}
-                </div>
+                <div className='bcs-scroll-content'>{children}</div>
             </div>
         </div>
     );

@@ -10,6 +10,8 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
 import Menu from 'box-react-ui/lib/components/menu/Menu';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
+import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
+import IconSort from 'box-react-ui/lib/icons/general/IconSort';
 import messages from '../messages';
 import {
     SORT_ASC,
@@ -22,8 +24,6 @@ import {
     FIELD_INTERACTED_AT,
     FIELD_SIZE
 } from '../../constants';
-import IconSort from '../icons/IconSort';
-import IconCheck from '../icons/IconCheck';
 import type { SortBy, SortDirection, SortableOptions } from '../../flowTypes';
 import './Sort.scss';
 
@@ -46,15 +46,13 @@ function getMenuItem(
     const isSame = by === sortBy && direction === sortDirection;
     return (
         <MenuItem onClick={() => onSortChange(by, direction)}>
-            <div className='buik-sort-selected'>
-                {isSame ? <IconCheck width={12} height={10} /> : null}
-            </div>
+            <div className='buik-sort-selected'>{isSame ? <IconCheck width={16} height={16} /> : null}</div>
             <FormattedMessage {...messages[`${sort}${direction}`]} />
         </MenuItem>
     );
 }
 
-const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Props) =>
+const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
     <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-sort'>
         <Button type='button' isDisabled={!isLoaded} className='buik-sort-btn'>
             <IconSort />
@@ -81,6 +79,7 @@ const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Prop
             {getMenuItem(SORT_SIZE, FIELD_SIZE, SORT_ASC, sortBy, sortDirection, onSortChange)}
             {getMenuItem(SORT_SIZE, FIELD_SIZE, SORT_DESC, sortBy, sortDirection, onSortChange)}
         </Menu>
-    </DropdownMenu>;
+    </DropdownMenu>
+);
 
 export default Sort;

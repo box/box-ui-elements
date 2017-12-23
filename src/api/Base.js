@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import Xhr from '../util/Xhr';
 import UploadsReachability from './uploads/UploadReachability';
 import Cache from '../util/Cache';

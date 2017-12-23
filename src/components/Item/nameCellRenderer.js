@@ -19,7 +19,7 @@ export default (
     canPreview: boolean = false,
     showDetails: boolean = true,
     isTouch: boolean = false
-) => ({ rowData }: { rowData: BoxItem }) =>
+) => ({ rowData }: { rowData: BoxItem }) => (
     <div className='buik-item-name'>
         <ItemName
             isTouch={isTouch}
@@ -28,7 +28,8 @@ export default (
             onClick={onItemClick}
             onFocus={onItemSelect}
         />
-        {view === VIEW_SEARCH || showDetails
-            ? <ItemDetails item={rowData} view={view} rootId={rootId} onItemClick={onItemClick} />
-            : null}
-    </div>;
+        {view === VIEW_SEARCH || showDetails ? (
+            <ItemDetails item={rowData} view={view} rootId={rootId} onItemClick={onItemClick} />
+        ) : null}
+    </div>
+);

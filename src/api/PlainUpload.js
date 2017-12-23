@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import BaseUpload from './BaseUpload';
 import type { BoxItem } from '../flowTypes';
 
