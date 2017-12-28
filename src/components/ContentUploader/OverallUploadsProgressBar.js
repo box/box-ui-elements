@@ -23,9 +23,9 @@ type Props = {
 
 /**
  * Get upload status
- * 
+ *
  * @param {View} view
- * @return {FormattedMessage|string} 
+ * @return {FormattedMessage|string}
  */
 const getUploadStatus = (view) => {
     switch (view) {
@@ -51,7 +51,7 @@ const getPercent = (view, percent) => {
     return percent;
 };
 
-const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible }: Props) =>
+const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible }: Props) => (
     <div
         className='bcu-overall-progress-bar'
         onClick={onClick}
@@ -59,11 +59,10 @@ const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisibl
         role='button'
         tabIndex={isVisible ? '0' : '-1'}
     >
-        <span className='bcu-upload-status'>
-            {getUploadStatus(view)}
-        </span>
+        <span className='bcu-upload-status'>{getUploadStatus(view)}</span>
         <ProgressBar percent={getPercent(view, percent)} />
         <span className='bcu-uploads-manager-toggle' />
-    </div>;
+    </div>
+);
 
 export default OverallUploadsProgressBar;

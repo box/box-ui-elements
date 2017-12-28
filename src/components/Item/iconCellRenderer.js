@@ -7,7 +7,7 @@
 import React from 'react';
 import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
 import FolderIcon from 'box-react-ui/lib/icons/folder-icon/FolderIcon';
-import IconWebLink from '../icons/IconWebLink';
+import BookmarkIcon from 'box-react-ui/lib/icons/bookmark-icon/BookmarkIcon';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './IconCell.scss';
@@ -20,13 +20,12 @@ export function getIcon(dimension: number, rowData: BoxItem) {
         case TYPE_FILE:
             return <FileIcon dimension={dimension} extension={extension} />;
         case TYPE_WEBLINK:
-            return <IconWebLink width={dimension} />;
+            return <BookmarkIcon width={dimension} />;
         default:
             throw new Error('Unsupported item type!');
     }
 }
 
-export default (dimension: number = 32): Function => ({ rowData }: { rowData: BoxItem }) =>
-    <div className='buik-item-icon'>
-        {getIcon(dimension, rowData)}
-    </div>;
+export default (dimension: number = 32): Function => ({ rowData }: { rowData: BoxItem }) => (
+    <div className='buik-item-icon'>{getIcon(dimension, rowData)}</div>
+);

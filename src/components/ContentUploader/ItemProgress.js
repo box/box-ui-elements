@@ -11,12 +11,11 @@ type Props = {
     progress: number
 };
 
-const ItemProgress = ({ progress }: Props) =>
+const ItemProgress = ({ progress }: Props) => (
     <div className='bcu-item-progress'>
         <ProgressBar percent={progress} />
-        <div className='bcu-progress-label'>
-            {progress}%
-        </div>
-    </div>;
+        <div className='bcu-progress-label'>{progress}%</div>
+    </div>
+);
 
 export default ItemProgress;

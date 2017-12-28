@@ -18,11 +18,14 @@ type Props = {
     view: View
 };
 
-const ItemDetails = ({ view, rootId, item, onItemClick }: Props) =>
+const ItemDetails = ({ view, rootId, item, onItemClick }: Props) => (
     <div className='buik-item-details'>
-        {view === VIEW_SELECTED || view === VIEW_SEARCH
-            ? <InlineBreadcrumbs rootId={rootId} item={item} onItemClick={onItemClick} />
-            : <ItemSubDetails view={view} item={item} />}
-    </div>;
+        {view === VIEW_SELECTED || view === VIEW_SEARCH ? (
+            <InlineBreadcrumbs rootId={rootId} item={item} onItemClick={onItemClick} />
+        ) : (
+            <ItemSubDetails view={view} item={item} />
+        )}
+    </div>
+);
 
 export default ItemDetails;

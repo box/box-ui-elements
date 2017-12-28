@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import Base from './Base';
 import getBadItemError from '../util/error';
 import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
@@ -200,7 +200,10 @@ class Item extends Base {
         this.errorCallback = errorCallback;
 
         const url = `${this.getUrl(id)}${type === TYPE_FOLDER ? '?recursive=true' : ''}`;
-        return this.xhr.delete({ url }).then(this.deleteSuccessHandler).catch(this.errorHandler);
+        return this.xhr
+            .delete({ url })
+            .then(this.deleteSuccessHandler)
+            .catch(this.errorHandler);
     }
 
     /**

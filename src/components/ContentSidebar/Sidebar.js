@@ -9,12 +9,6 @@ import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import DetailsSidebar from './DetailsSidebar';
-import IconComments from '../icons/IconComments';
-import IconTasks from '../icons/IconTasks';
-import IconVersions from '../icons/IconVersions';
-import IconApps from '../icons/IconApps';
-import IconDetails from '../icons/IconDetails';
-import { BOX_BLUE } from '../../constants';
 import messages from '../messages';
 import type { BoxItem } from '../../flowTypes';
 import './Sidebar.scss';
@@ -29,7 +23,7 @@ type State = {
     showSidebar: boolean
 };
 
-class Sidebar extends PureComponent<void, Props, State> {
+class Sidebar extends PureComponent<Props, State> {
     props: Props;
     state: State;
 
@@ -79,26 +73,16 @@ class Sidebar extends PureComponent<void, Props, State> {
         return (
             <div className={sidebarClassName}>
                 <div className='bcs-btns'>
-                    <PlainButton>
-                        <IconComments />
-                    </PlainButton>
-                    <PlainButton>
-                        <IconTasks />
-                    </PlainButton>
-                    <PlainButton>
-                        <IconApps />
-                    </PlainButton>
-                    <PlainButton>
-                        <IconVersions />
-                    </PlainButton>
+                    <PlainButton />
+                    <PlainButton />
+                    <PlainButton />
+                    <PlainButton />
                     <PlainButton
                         onClick={this.toggleSidebar}
                         title={sidebarTitle}
                         aria-label={sidebarTitle}
                         className={sidebarBtnClassName}
-                    >
-                        <IconDetails color={showSidebar ? BOX_BLUE : '#aaa'} />
-                    </PlainButton>
+                    />
                 </div>
                 {!!file && showSidebar && <DetailsSidebar file={file} getPreviewer={getPreviewer} />}
             </div>

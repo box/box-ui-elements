@@ -1,4 +1,4 @@
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import Item from '../Item';
 import Cache from '../../util/Cache';
 
@@ -187,14 +187,15 @@ describe('api/Item', () => {
         });
 
         test('should make xhr to rename item and call error callback', () => {
+            const error = new Error('error');
             item.renameSuccessHandler = jest.fn();
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.reject('error'))
+                put: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
             return item.rename(file, 'name', 'success', 'error').then(() => {
-                expect(item.errorHandler).toHaveBeenCalledWith('error');
+                expect(item.errorHandler).toHaveBeenCalledWith(error);
                 expect(item.renameSuccessHandler).not.toHaveBeenCalled();
                 expect(item.successCallback).toBe('success');
                 expect(item.errorCallback).toBe('error');
@@ -292,14 +293,15 @@ describe('api/Item', () => {
         });
 
         test('should make xhr to share item and call error callback', () => {
+            const error = new Error('error');
             item.shareSuccessHandler = jest.fn();
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.reject('error'))
+                put: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
             return item.share(file, 'access', 'success', 'error').then(() => {
-                expect(item.errorHandler).toHaveBeenCalledWith('error');
+                expect(item.errorHandler).toHaveBeenCalledWith(error);
                 expect(item.shareSuccessHandler).not.toHaveBeenCalled();
                 expect(item.successCallback).toBe('success');
                 expect(item.errorCallback).toBe('error');
@@ -415,14 +417,15 @@ describe('api/Item', () => {
         });
 
         test('should make xhr to share item and call error callback', () => {
+            const error = new Error('error');
             item.deleteSuccessHandler = jest.fn();
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                delete: jest.fn().mockReturnValueOnce(Promise.reject('error'))
+                delete: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
             return item.delete(file, 'success', 'error').then(() => {
-                expect(item.errorHandler).toHaveBeenCalledWith('error');
+                expect(item.errorHandler).toHaveBeenCalledWith(error);
                 expect(item.deleteSuccessHandler).not.toHaveBeenCalled();
                 expect(item.successCallback).toBe('success');
                 expect(item.errorCallback).toBe('error');

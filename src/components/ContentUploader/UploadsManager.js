@@ -24,7 +24,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
 
     /**
      * Keydown handler for progress bar
-     * 
+     *
      * @param {SyntheticKeyboardEvent} event
      * @return {void}
      */

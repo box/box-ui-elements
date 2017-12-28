@@ -6,7 +6,7 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import Button from 'box-react-ui/lib/components/button/Button';

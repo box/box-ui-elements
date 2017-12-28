@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconBoxLogo from '../icons/IconBoxLogo';
+import IconLogo from 'box-react-ui/lib/icons/general/IconLogo';
 import messages from '../messages';
 import './Logo.scss';
 
@@ -17,7 +17,7 @@ type Props = {
 
 function getLogo(isSmall: boolean, url?: string) {
     if (url === 'box') {
-        return <IconBoxLogo />;
+        return <IconLogo />;
     } else if (typeof url === 'string') {
         return <img alt='' src={url} className='buik-logo-custom' />;
     }
@@ -28,9 +28,6 @@ function getLogo(isSmall: boolean, url?: string) {
     );
 }
 
-const Logo = ({ url, isSmall }: Props) =>
-    <div className='buik-logo'>
-        {getLogo(isSmall, url)}
-    </div>;
+const Logo = ({ url, isSmall }: Props) => <div className='buik-logo'>{getLogo(isSmall, url)}</div>;
 
 export default Logo;

@@ -30,7 +30,7 @@ const Footer = ({
     onChoose,
     chooseButtonLabel,
     cancelButtonLabel
-}: Props) =>
+}: Props) => (
     <div className='bcp-footer'>
         <div className='bcp-footer-left'>
             <PlainButton type='button' onClick={onSelectedClick}>
@@ -39,11 +39,11 @@ const Footer = ({
                 <FormattedMessage {...messages.selected} />
             </PlainButton>
             &nbsp;
-            {hasHitSelectionLimit
-                ? <span className='bcp-selected-max'>
+            {hasHitSelectionLimit ? (
+                <span className='bcp-selected-max'>
                     <FormattedMessage {...messages.max} />
                 </span>
-                : null}
+            ) : null}
         </div>
         <div className='bcp-footer-right'>
             <Button type='button' onClick={onCancel}>
@@ -53,6 +53,7 @@ const Footer = ({
                 {chooseButtonLabel || <FormattedMessage {...messages.choose} />}
             </PrimaryButton>
         </div>
-    </div>;
+    </div>
+);
 
 export default Footer;

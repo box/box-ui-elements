@@ -26,15 +26,9 @@ const FileProperties = ({ file, ensurePrivacy }: Props) => {
     return (
         <dl>
             {showOwner && <FormattedMessage tagName='dt' {...messages.owner} />}
-            {showOwner &&
-                <dd>
-                    {owner}
-                </dd>}
+            {showOwner && <dd>{owner}</dd>}
             {showUploader && <FormattedMessage tagName='dt' {...messages.uploader} />}
-            {showUploader &&
-                <dd>
-                    {uploader}
-                </dd>}
+            {showUploader && <dd>{uploader}</dd>}
             <FormattedMessage tagName='dt' {...messages.created} />
             <dd>
                 <DateField date={created_at} relative={false} />
@@ -48,9 +42,7 @@ const FileProperties = ({ file, ensurePrivacy }: Props) => {
                 <FormattedTime value={modified_at} />
             </dd>
             <FormattedMessage tagName='dt' {...messages.size} />
-            <dd>
-                {getSize(size)}
-            </dd>
+            <dd>{getSize(size)}</dd>
         </dl>
     );
 };

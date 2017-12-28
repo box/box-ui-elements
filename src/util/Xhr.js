@@ -362,6 +362,7 @@ class Xhr {
                         } else {
                             successHandler(response);
                         }
+                        return response;
                     })
                     .catch(errorHandler)
             )
@@ -483,11 +484,11 @@ class Xhr {
 
     /**
      * Returns a handler for setInterval used in xhrSendWithIdleTimeout()
-     * 
+     *
      * @private
-     * @param {number} lastProgress 
-     * @param {number} timeoutMs 
-     * @param {function} clear 
+     * @param {number} lastProgress
+     * @param {number} timeoutMs
+     * @param {function} clear
      * @param {?function} onTimeout
      * @return {function}
      */
@@ -513,7 +514,7 @@ class Xhr {
 
     /**
      * Executes an upload via XMLHTTPRequest and aborts it if there is no progress event for at least timeoutMs.
-     * 
+     *
      * @private
      * @param {Object} data - Will be passed to xhr.send()
      * @param {number} [timeoutMs] - idle timeout, in milliseconds.

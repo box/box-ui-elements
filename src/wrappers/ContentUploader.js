@@ -67,8 +67,8 @@ class ContentUploader extends ES6Wrapper {
                 onComplete={this.onComplete}
                 onError={this.onError}
                 onUpload={this.onUpload}
-                modal={modal}
                 windowView={windowView}
+                modal={((modal: any): ModalOptions)}
                 {...rest}
             />,
             this.container

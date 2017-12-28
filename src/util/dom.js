@@ -13,7 +13,7 @@ import { CLASS_CHECKBOX_SPAN, CLASS_BUTTON_CONTENT_SPAN } from '../constants';
  * @param {HTMLElement|null} element - the dom element to check
  * @return {boolean} true if its one of the above elements
  */
-export function isInputElement(element: HTMLElement | null): boolean {
+export function isInputElement(element: HTMLElement | EventTarget | null): boolean {
     if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
@@ -28,7 +28,7 @@ export function isInputElement(element: HTMLElement | null): boolean {
  * @param {HTMLElement|null} element - the dom element to check
  * @return {boolean} true if its one of the above elements
  */
-export function isFocusableElement(element: HTMLElement | null): boolean {
+export function isFocusableElement(element: HTMLElement | EventTarget | null): boolean {
     if (!element || !(element instanceof HTMLElement)) {
         return false;
     }

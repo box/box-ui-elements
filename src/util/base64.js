@@ -16,7 +16,11 @@ export default function hexToBase64(str: string): string {
         // $FlowFixMe - ignore flow errors from next line
         String.fromCharCode.apply(
             null,
-            str.replace(/\r|\n/g, '').replace(/([\da-fA-F]{2}) ?/g, '0x$1 ').replace(/ +$/, '').split(' ')
+            str
+                .replace(/\r|\n/g, '')
+                .replace(/([\da-fA-F]{2}) ?/g, '0x$1 ')
+                .replace(/ +$/, '')
+                .split(' ')
         )
     );
 }

@@ -3,7 +3,7 @@
  * @file Multiput upload part
  * @author Box
  */
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import BaseMultiput from './BaseMultiput';
 import type { MultiputConfig, Options, MultiputData } from '../../flowTypes';
 import { updateQueryParameters } from '../../util/url';
@@ -167,7 +167,7 @@ class MultiputPart extends BaseMultiput {
 
     /**
      * Handler for upload part success
-     * 
+     *
      * @param {Object} data
      * @return {void}
      */
@@ -189,7 +189,7 @@ class MultiputPart extends BaseMultiput {
 
     /**
      * Handler for upload part progress event
-     * 
+     *
      * @param {ProgressEvent} data
      * @return {void}
      */
@@ -207,7 +207,7 @@ class MultiputPart extends BaseMultiput {
 
     /**
      * Handler for upload part error
-     * 
+     *
      * @param {Error} error
      * @return {void}
      */
@@ -251,10 +251,10 @@ class MultiputPart extends BaseMultiput {
 
     /**
      * Retry uploading part
-     * 
+     *
      * @return {Promise}
      */
-    retryUpload = async (): Promise<> => {
+    retryUpload = async (): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
@@ -305,7 +305,7 @@ class MultiputPart extends BaseMultiput {
 
     /**
      * List specified parts
-     * 
+     *
      * @param {number} partIndex - Index of starting part. Optional.
      * @param {number} limit - Number of parts to be listed. Optional.
      * @return {Promise<Array<Object>>} Array of parts

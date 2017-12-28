@@ -19,7 +19,7 @@ const Timelines = ({ skill: { entries, duration }, getPreviewer }: Props) => {
     return (
         <div className='buik-timelines'>
             {entries.map(
-                ({ type, text, url, appears }: SkillDataEntry, index) =>
+                ({ type, text, url, appears }: SkillDataEntry, index) => (
                     /* eslint-disable react/no-array-index-key */
                     <Timeline
                         key={index}
@@ -31,6 +31,7 @@ const Timelines = ({ skill: { entries, duration }, getPreviewer }: Props) => {
                         duration={duration}
                         getPreviewer={getPreviewer}
                     />
+                )
                 /* eslint-enable react/no-array-index-key */
             )}
         </div>

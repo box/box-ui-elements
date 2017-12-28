@@ -52,7 +52,7 @@ class BaseUpload extends Base {
             if (error.headers) {
                 const retryAfterSec = parseInt(error.headers.get('Retry-After'), 10);
 
-                if (!isNaN(retryAfterSec)) {
+                if (!Number.isNaN(retryAfterSec)) {
                     retryAfterMs = retryAfterSec * MS_IN_S;
                 }
             }

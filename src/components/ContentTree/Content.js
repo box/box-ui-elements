@@ -33,14 +33,15 @@ function isEmpty(view: View, currentCollection: Collection): boolean {
     return view === VIEW_ERROR || items.length === 0;
 }
 
-const Content = ({ view, isSmall, currentCollection, tableRef, onItemClick, onExpanderClick }: Props) =>
+const Content = ({ view, isSmall, currentCollection, tableRef, onItemClick, onExpanderClick }: Props) => (
     <div className='bct-content'>
-        {isEmpty(view, currentCollection)
-            ? <div className='buik-empty'>
+        {isEmpty(view, currentCollection) ? (
+            <div className='buik-empty'>
                 <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
                 <ProgressBar percent={currentCollection.percentLoaded} />
             </div>
-            : <div className='bct-item-list'>
+        ) : (
+            <div className='bct-item-list'>
                 <ItemList
                     isSmall={isSmall}
                     items={currentCollection.items}
@@ -48,9 +49,11 @@ const Content = ({ view, isSmall, currentCollection, tableRef, onItemClick, onEx
                     onItemClick={onItemClick}
                     onExpanderClick={onExpanderClick}
                     isLoading={currentCollection.percentLoaded !== 100}
-                  />
+                />
                 <ProgressBar percent={currentCollection.percentLoaded} />
-            </div>}
-    </div>;
+            </div>
+        )}
+    </div>
+);
 
 export default Content;

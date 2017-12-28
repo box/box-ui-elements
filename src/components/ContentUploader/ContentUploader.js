@@ -7,9 +7,9 @@
 /* eslint-disable no-param-reassign */
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import noop from 'lodash.noop';
-import uniqueid from 'lodash.uniqueid';
-import cloneDeep from 'lodash.clonedeep';
+import noop from 'lodash/noop';
+import uniqueid from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 import API from '../../api';
 import DroppableContent from './DroppableContent';
 import UploadsManager from './UploadsManager';
@@ -76,28 +76,6 @@ type Props = {
     onUploadsManagerUpload: Function
 };
 
-type DefaultProps = {|
-    rootFolderId: string,
-    apiHost: string,
-    chunked: boolean,
-    className: string,
-    clientName: string,
-    fileLimit: number,
-    uploadHost: string,
-    onClose: Function,
-    onComplete: Function,
-    onError: Function,
-    onUpload: Function,
-    windowView: boolean,
-    files: Array<UploadFileWithAPIOptions | File>,
-    onExpand: Function,
-    onMinimize: Function,
-    onUploadsManagerCancel: Function,
-    onUploadsManagerComplete: Function,
-    onUploadsManagerError: Function,
-    onUploadsManagerUpload: Function
-|};
-
 type State = {
     errorCode?: string,
     items: UploadItem[],
@@ -110,7 +88,7 @@ const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 
-class ContentUploader extends Component<DefaultProps, Props, State> {
+class ContentUploader extends Component<Props, State> {
     id: string;
     state: State;
     props: Props;
@@ -118,7 +96,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     appElement: HTMLElement;
     resetItemsTimeout: ?number;
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
         apiHost: DEFAULT_HOSTNAME_API,
         chunked: true,
@@ -171,8 +149,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
     }
 
     /**
-     * Adds new items to the queue when files prop gets updated in window view 
-     * 
+     * Adds new items to the queue when files prop gets updated in window view
+     *
      * @param {Props} nextProps
      * @return {void}
      */
@@ -230,7 +208,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     /**
      * Get files that are new to the content uploader
-     * 
+     *
      * @param {Array<UploadFileWithAPIOptions | File>} files
      * @param {boolean} withApiOptions
      */
@@ -406,7 +384,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     /**
      * Checks whether should upload an item
-     * 
+     *
      * @private
      * @param {UploadItem} item
      * @return {boolean}
@@ -499,7 +477,8 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
         // Cache Box File object of successfully uploaded item
         if (entries && entries.length === 1) {
-            item.boxFile = entries[0];
+            const [boxFile] = entries;
+            item.boxFile = boxFile;
         }
 
         const { items } = this.state;
@@ -654,7 +633,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     /**
      * Expands the upload manager
-     * 
+     *
      * @return {void}
      */
     expandUploadsManager = (): void => {
@@ -672,7 +651,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     /**
      * Minimizes the upload manager
-     * 
+     *
      * @return {void}
      */
     minimizeUploadsManager = (): void => {
@@ -690,7 +669,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     /**
      * Hides the upload manager
-     * 
+     *
      * @return {void}
      */
     hideUploadsManager = () => {
@@ -702,7 +681,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     /**
      * Toggles the upload manager
-     * 
+     *
      * @return {void}
      */
     toggleUploadsManager = (): void => {
@@ -718,7 +697,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     /**
      * Empties the items queue
-     * 
+     *
      * @return {void}
      */
     resetUploadsManagerItemsWhenUploadsComplete = (): void => {
@@ -741,7 +720,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
     /**
      * Adds file to the upload queue and starts upload immediately
-     * 
+     *
      * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
      * @return {void}
      */
@@ -777,17 +756,18 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
 
         return (
             <Internationalize language={language} messages={messages}>
-                {windowView
-                    ? <div className={styleClassName} id={this.id} ref={measureRef}>
+                {windowView ? (
+                    <div className={styleClassName} id={this.id} ref={measureRef}>
                         <UploadsManager
                             isExpanded={isUploadsManagerExpanded}
                             items={items}
                             onItemActionClick={this.onClick}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
-                          />
+                        />
                     </div>
-                    : <div className={styleClassName} id={this.id} ref={measureRef}>
+                ) : (
+                    <div className={styleClassName} id={this.id} ref={measureRef}>
                         <DroppableContent
                             addFiles={this.addFilesToUploadQueue}
                             allowedTypes={['Files']}
@@ -795,7 +775,7 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                             isTouch={isTouch}
                             view={view}
                             onClick={this.onClick}
-                          />
+                        />
                         <Footer
                             hasFiles={hasFiles}
                             isLoading={isLoading}
@@ -804,8 +784,9 @@ class ContentUploader extends Component<DefaultProps, Props, State> {
                             onCancel={this.cancel}
                             onClose={onClose}
                             onUpload={this.upload}
-                          />
-                    </div>}
+                        />
+                    </div>
+                )}
             </Internationalize>
         );
     }

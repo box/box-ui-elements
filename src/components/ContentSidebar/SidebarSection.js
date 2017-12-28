@@ -16,16 +16,11 @@ type Props = {
     isOpen: boolean
 };
 
-type DefaultProps = {|
-    className: string,
-    isOpen: boolean
-|};
-
 type State = {
     isOpen: boolean
 };
 
-class SidebarSection extends PureComponent<DefaultProps, Props, State> {
+class SidebarSection extends PureComponent<Props, State> {
     props: Props;
     state: State;
 
@@ -84,10 +79,7 @@ class SidebarSection extends PureComponent<DefaultProps, Props, State> {
                 <PlainButton type='button' onClick={this.toggleVisibility} className='bcs-section-title'>
                     {title}
                 </PlainButton>
-                {isOpen &&
-                    <div className='bcs-section-content'>
-                        {children}
-                    </div>}
+                {isOpen && <div className='bcs-section-content'>{children}</div>}
             </div>
         );
     }

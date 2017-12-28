@@ -18,7 +18,7 @@ type State = {
     keyword?: SkillDataEntry
 };
 
-class FileKeywords extends PureComponent<void, Props, State> {
+class FileKeywords extends PureComponent<Props, State> {
     props: Props;
     state: State = {};
 
@@ -33,7 +33,7 @@ class FileKeywords extends PureComponent<void, Props, State> {
         return (
             <div className='buik-file-keywords'>
                 {entries.map(
-                    (entry: SkillDataEntry, index) =>
+                    (entry: SkillDataEntry, index) => (
                         /* eslint-disable react/no-array-index-key */
                         <FileKeyword
                             key={index}
@@ -41,19 +41,21 @@ class FileKeywords extends PureComponent<void, Props, State> {
                             isSelected={keyword === entry}
                             onClick={this.onClick}
                         />
+                    )
                     /* eslint-enable react/no-array-index-key */
                 )}
                 {!!keyword &&
                     Array.isArray(keyword.appears) &&
-                    keyword.appears.length > 0 &&
-                    <div className='buik-timelines'>
-                        <Timeline
-                            type={keyword.type}
-                            timeslices={keyword.appears}
-                            duration={duration}
-                            getPreviewer={getPreviewer}
-                        />
-                    </div>}
+                    keyword.appears.length > 0 && (
+                        <div className='buik-timelines'>
+                            <Timeline
+                                type={keyword.type}
+                                timeslices={keyword.appears}
+                                duration={duration}
+                                getPreviewer={getPreviewer}
+                            />
+                        </div>
+                    )}
             </div>
         );
     }

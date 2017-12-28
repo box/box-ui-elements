@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';

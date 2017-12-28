@@ -5,8 +5,8 @@
  */
 
 import React, { PureComponent } from 'react';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import DetailsSidebar from './DetailsSidebar';
 import API from '../../api';
@@ -17,20 +17,6 @@ import type { Token, BoxItem, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentSidebar.scss';
-
-type DefaultProps = {|
-    apiHost: string,
-    clientName: string,
-    getPreviewer: Function,
-    hasTitle: boolean,
-    hasSkills: boolean,
-    hasDescription: boolean,
-    hasProperties: boolean,
-    hasMetadata: boolean,
-    hasAccessStats: boolean,
-    hasClassification: boolean,
-    hasActivityFeed: boolean
-|};
 
 type Props = {
     fileId?: string,
@@ -58,14 +44,14 @@ type State = {
     file?: BoxItem
 };
 
-class ContentSidebar extends PureComponent<DefaultProps, Props, State> {
+class ContentSidebar extends PureComponent<Props, State> {
     id: string;
     props: Props;
     state: State;
     rootElement: HTMLElement;
     api: API;
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         apiHost: DEFAULT_HOSTNAME_API,
         getPreviewer: noop,
@@ -248,8 +234,8 @@ class ContentSidebar extends PureComponent<DefaultProps, Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div className='buik bcs'>
-                    {file
-                        ? <DetailsSidebar
+                    {file ? (
+                        <DetailsSidebar
                             file={file}
                             getPreviewer={getPreviewer}
                             ensurePrivacy={!!sharedLink}
@@ -260,10 +246,12 @@ class ContentSidebar extends PureComponent<DefaultProps, Props, State> {
                             hasMetadata={hasMetadata}
                             hasAccessStats={hasAccessStats}
                             hasClassification={hasClassification}
-                          />
-                        : <div className='bcs-loading'>
+                        />
+                    ) : (
+                        <div className='bcs-loading'>
                             <LoadingIndicator />
-                        </div>}
+                        </div>
+                    )}
                 </div>
             </Internationalize>
         );

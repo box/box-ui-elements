@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { DELIMITER_CARET } from '../../constants';
-import IconRightArrow from '../icons/IconRightArrow';
+import IconChevron from 'box-react-ui/lib/icons/general/IconChevron';
+import { DELIMITER_CARET, COLOR_DOWNTOWN_GREY } from '../../constants';
 import type { Delimiter } from '../../flowTypes';
 
 type Props = {
@@ -14,10 +14,10 @@ type Props = {
 };
 
 const BreadcrumbDelimiter = ({ delimiter }: Props) =>
-    delimiter === DELIMITER_CARET
-        ? <span className='buik-breadcrumb-seperator'>
-            <IconRightArrow />
-        </span>
-        : <span>/</span>;
+    delimiter === DELIMITER_CARET ? (
+        <IconChevron className='buik-breadcrumb-seperator' color={COLOR_DOWNTOWN_GREY} direction='right' size='7px' />
+    ) : (
+        <span>/</span>
+    );
 
 export default BreadcrumbDelimiter;

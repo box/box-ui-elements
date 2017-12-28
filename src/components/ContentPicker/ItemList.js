@@ -112,9 +112,9 @@ const ItemList = ({
             scrollToRow={focusedRow}
             onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bcp-item-row-${scrollToRow}`)}
         >
-            {({ onSectionRendered, scrollToRow, focusOnRender }) =>
+            {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
-                    {({ width, height }) =>
+                    {({ width, height }) => (
                         <Table
                             width={width}
                             height={height}
@@ -141,22 +141,24 @@ const ItemList = ({
                                 flexShrink={0}
                             />
                             <Column dataKey={FIELD_NAME} cellRenderer={nameCell} width={300} flexGrow={1} />
-                            {isSmall
-                                ? null
-                                : <Column
+                            {isSmall ? null : (
+                                <Column
                                     dataKey={FIELD_SHARED_LINK}
                                     cellRenderer={shareAccessCell}
                                     width={220}
                                     flexShrink={0}
-                                  />}
+                                />
+                            )}
                             <Column
                                 dataKey={FIELD_ID}
                                 cellRenderer={checkboxCell}
                                 width={isSmall ? 20 : 30}
                                 flexShrink={0}
                             />
-                        </Table>}
-                </AutoSizer>}
+                        </Table>
+                    )}
+                </AutoSizer>
+            )}
         </KeyBinder>
     );
 };
