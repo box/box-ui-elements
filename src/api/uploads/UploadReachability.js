@@ -5,14 +5,11 @@
  */
 
 import LocalStore from '../../util/LocalStore';
-import {
-    DEFAULT_HOSTNAME_UPLOAD
-} from '../../constants';
+import { DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 import Xhr from '../../util/Xhr';
 import type { Token } from '../../flowTypes';
 
 const CACHED_RESULTS_LOCAL_STORE_KEY = 'uploads-reachability-cached-results';
-
 
 class UploadsReachability {
     apiHost: string;
@@ -127,14 +124,12 @@ class UploadsReachability {
      * @param {?Object} response
      * @return {string}
      */
-    handlePreflightResponse(response ? : Object) {
+    handlePreflightResponse(response?: Object) {
         if (!response) {
             return DEFAULT_HOSTNAME_UPLOAD;
         }
 
-        const {
-            upload_url
-        } = response;
+        const { upload_url } = response;
 
         const splitUrl = upload_url.split('/');
         return `${splitUrl[0]}//${splitUrl[2]}`;

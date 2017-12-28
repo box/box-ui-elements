@@ -166,10 +166,7 @@ class MultiputUpload extends BaseMultiput {
         };
 
         if (this.fileId) {
-            createSessionUrl = createSessionUrl.replace(
-                'upload_sessions',
-                `${this.fileId}/upload_sessions`
-            );
+            createSessionUrl = createSessionUrl.replace('upload_sessions', `${this.fileId}/upload_sessions`);
         } else {
             postData.folder_id = this.folderId;
         }

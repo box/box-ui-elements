@@ -9,7 +9,6 @@ describe('api/UploadsReachability', () => {
     const token = '123';
     const apiHost = 'abc.box.com';
 
-
     beforeEach(() => {
         uploadsReachabilityTest = new UploadsReachability(token, apiHost);
     });
