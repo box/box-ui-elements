@@ -75,6 +75,7 @@ class ContentUploader extends Component<Props, State> {
     props: Props;
     rootElement: HTMLElement;
     appElement: HTMLElement;
+    numItemsUploading: number = 0;
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -105,7 +106,6 @@ class ContentUploader extends Component<Props, State> {
             errorCode: ''
         };
         this.id = uniqueid('bcu_');
-        this.numItemsUploading = 0;
     }
 
     /**
