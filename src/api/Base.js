@@ -69,6 +69,7 @@ class Base {
         this.cache = options.cache || new Cache();
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
+        // @TODO: avoid keeping another copy of data in this.options
         this.options = Object.assign({}, options, {
             apiHost: this.apiHost,
             uploadHost: this.uploadHost,
@@ -98,7 +99,6 @@ class Base {
     async updateReachableUploadHost(): Promise<*> {
         this.uploadHost = await this.uploadsReachability.getReachableUploadHost();
         this.options.uploadHost = this.uploadHost;
-        this.xhr = new Xhr(this.options);
     }
 
     /**
