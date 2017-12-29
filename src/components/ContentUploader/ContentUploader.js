@@ -67,6 +67,7 @@ type State = {
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
+const UPLOAD_CONCURRENCY = 6;
 
 class ContentUploader extends Component<Props, State> {
     id: string;
@@ -74,6 +75,7 @@ class ContentUploader extends Component<Props, State> {
     props: Props;
     rootElement: HTMLElement;
     appElement: HTMLElement;
+    numItemsUploading: number = 0;
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -276,7 +278,7 @@ class ContentUploader extends Component<Props, State> {
     upload = () => {
         const { items } = this.state;
         items.forEach((uploadItem) => {
-            if (uploadItem.status !== STATUS_IN_PROGRESS) {
+            if (uploadItem.status === STATUS_PENDING) {
                 this.uploadFile(uploadItem);
             }
         });
@@ -291,6 +293,12 @@ class ContentUploader extends Component<Props, State> {
     uploadFile(item: UploadItem) {
         const { rootFolderId } = this.props;
         const { api, file } = item;
+
+        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
+            return;
+        }
+
+        this.numItemsUploading += 1;
 
         api.upload({
             id: rootFolderId,
@@ -344,6 +352,7 @@ class ContentUploader extends Component<Props, State> {
 
         item.progress = 100;
         item.status = STATUS_COMPLETE;
+        this.numItemsUploading -= 1;
 
         // Cache Box File object of successfully uploaded item
         if (entries && entries.length === 1) {
@@ -358,6 +367,7 @@ class ContentUploader extends Component<Props, State> {
         onUpload(item.boxFile);
 
         this.updateViewAndCollection(items);
+        this.upload();
     };
 
     /**
@@ -408,6 +418,7 @@ class ContentUploader extends Component<Props, State> {
         const { file } = item;
 
         item.status = STATUS_ERROR;
+        this.numItemsUploading -= 1;
 
         const { items } = this.state;
         items[items.indexOf(item)] = item;
@@ -419,6 +430,7 @@ class ContentUploader extends Component<Props, State> {
         });
 
         this.updateViewAndCollection(items);
+        this.upload();
     };
 
     /**
