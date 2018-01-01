@@ -58,6 +58,7 @@ type Props = {
     onComplete: Function,
     onError: Function,
     onUpload: Function,
+    onCancel: Function,
     isSmall: boolean,
     isLarge: boolean,
     isTouch: boolean,
@@ -66,14 +67,11 @@ type Props = {
     messages?: StringMap,
     responseFilter?: Function,
     intl: any,
-    windowView?: boolean,
+    useUploadsManager?: boolean,
     files?: Array<UploadFileWithAPIOptions | File>,
     onExpand?: Function,
     onMinimize?: Function,
-    onUploadsManagerCancel: Function,
-    onUploadsManagerComplete: Function,
-    onUploadsManagerError: Function,
-    onUploadsManagerUpload: Function
+    onUpload: Function
 };
 
 type State = {
@@ -108,14 +106,11 @@ class ContentUploader extends Component<Props, State> {
         onComplete: noop,
         onError: noop,
         onUpload: noop,
-        windowView: false,
+        useUploadsManager: false,
         files: [],
         onExpand: noop,
         onMinimize: noop,
-        onUploadsManagerCancel: noop,
-        onUploadsManagerComplete: noop,
-        onUploadsManagerError: noop,
-        onUploadsManagerUpload: noop
+        onCancel: noop
     };
 
     /**
@@ -155,15 +150,9 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props) {
-        const { files, windowView } = nextProps;
+        const { files, useUploadsManager } = nextProps;
 
-        if (!windowView || !files || !files.length) {
-            return;
-        }
-
-        const newFiles = this.getNewFiles(files, windowView);
-
-        if (newFiles.length <= 0) {
+        if (!useUploadsManager || !files || !files.length) {
             return;
         }
 
@@ -207,10 +196,10 @@ class ContentUploader extends Component<Props, State> {
     }
 
     /**
-     * Get files that are new to the content uploader
+     * Given an array of files, return the files that are new to the Content Uploader
      *
      * @param {Array<UploadFileWithAPIOptions | File>} files
-     * @param {boolean} withApiOptions
+     * @param {boolean} withApiOptions - whether file objects contain Api options
      */
     getNewFiles = (files: Array<UploadFileWithAPIOptions | File>, withApiOptions) => {
         const { items } = this.state;
@@ -240,12 +229,13 @@ class ContentUploader extends Component<Props, State> {
      * Converts File API to upload items and adds to upload queue.
      *
      * @private
-     * @param {File[]} files - Files to be added to upload queue
-     * @param {UploadItemAPIOptions} [uploadAPIOptions]
+     * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
+     * @param {boolean} withApiOptions - whether file objects contain Api options
+     * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
      * @return {void}
      */
     addFilesToUploadQueue = (files: Array<UploadFileWithAPIOptions | File>, withApiOptions, itemUpdateCallback) => {
-        const { fileLimit, windowView } = this.props;
+        const { fileLimit, useUploadsManager } = this.props;
         const { view, items } = this.state;
 
         clearTimeout(this.resetItemsTimeout);
@@ -285,6 +275,10 @@ class ContentUploader extends Component<Props, State> {
             return uploadItem;
         });
 
+        if (newItems.length <= 0) {
+            return;
+        }
+
         let updatedItems = [];
         const prevItemsNum = items.length;
         const totalNumOfItems = prevItemsNum + newItems.length;
@@ -303,7 +297,7 @@ class ContentUploader extends Component<Props, State> {
             if (
                 prevItemsNum < EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
                 totalNumOfItems >= EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
-                windowView
+                useUploadsManager
             ) {
                 this.expandUploadsManager();
             }
@@ -344,7 +338,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     removeFileFromUploadQueue(item: UploadItem) {
-        const { onUploadsManagerCancel } = this.props;
+        const { onCancel } = this.props;
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
 
@@ -354,12 +348,10 @@ class ContentUploader extends Component<Props, State> {
         const { items } = this.state;
         items.splice(items.indexOf(item), 1);
 
-        let callback = noop;
-        if (this.props.windowView && !items.length) {
-            // minimize the uploads manager when items is empty after the removal
-            callback = this.minimizeUploadsManager;
-        }
-        onUploadsManagerCancel(item);
+        // Minimize uploads manager if there are no more items
+        const callback = this.props.useUploadsManager && !items.length ? this.minimizeUploadsManager : noop;
+
+        onCancel(item);
         this.updateViewAndCollection(items, callback);
     }
 
@@ -389,10 +381,10 @@ class ContentUploader extends Component<Props, State> {
      * @param {UploadItem} item
      * @return {boolean}
      */
-    shouldUploadItem = (item) => {
-        const { windowView } = this.props;
+    isReadyToUpload = (item) => {
+        const { useUploadsManager } = this.props;
 
-        return windowView ? item.status === STATUS_PENDING : item.status !== STATUS_IN_PROGRESS;
+        return useUploadsManager ? item.status === STATUS_PENDING : item.status !== STATUS_IN_PROGRESS;
     };
 
     /**
@@ -404,7 +396,7 @@ class ContentUploader extends Component<Props, State> {
     upload = () => {
         const { items } = this.state;
         items.forEach((uploadItem) => {
-            if (this.shouldUploadItem(uploadItem)) {
+            if (this.isReadyToUpload(uploadItem)) {
                 this.uploadFile(uploadItem);
             }
         });
@@ -470,7 +462,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     handleUploadSuccess = (item: UploadItem, entries?: BoxItem[]) => {
-        const { onUpload, onUploadsManagerUpload, windowView } = this.props;
+        const { onUpload, useUploadsManager } = this.props;
 
         item.progress = 100;
         item.status = STATUS_COMPLETE;
@@ -485,17 +477,14 @@ class ContentUploader extends Component<Props, State> {
         items[items.indexOf(item)] = item;
 
         // Broadcast that a file has been uploaded
-        if (windowView) {
-            onUploadsManagerUpload(item);
+        if (useUploadsManager) {
+            onUpload(item);
+            this.hideUploadsManager();
         } else {
             onUpload(item.boxFile);
         }
 
         this.updateViewAndCollection(items);
-
-        if (windowView) {
-            this.hideUploadsManager();
-        }
     };
 
     /**
@@ -506,7 +495,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     updateViewAndCollection(items: UploadItem[], callback) {
-        const { onComplete, onUploadsManagerComplete, windowView }: Props = this.props;
+        const { onComplete, useUploadsManager }: Props = this.props;
         const someUploadIsInProgress = items.some((uploadItem) => uploadItem.status !== STATUS_COMPLETE);
         const someUploadHasFailed = items.some((uploadItem) => uploadItem.status === STATUS_ERROR);
         const allFilesArePending = !items.some((uploadItem) => uploadItem.status !== STATUS_PENDING);
@@ -517,22 +506,22 @@ class ContentUploader extends Component<Props, State> {
         let view = '';
         if ((items && items.length === 0) || allFilesArePending) {
             view = VIEW_UPLOAD_EMPTY;
-        } else if (someUploadHasFailed && windowView) {
+        } else if (someUploadHasFailed && useUploadsManager) {
             view = VIEW_ERROR;
         } else if (someUploadIsInProgress) {
             view = VIEW_UPLOAD_IN_PROGRESS;
         } else {
             view = VIEW_UPLOAD_SUCCESS;
 
-            if (!windowView) {
+            if (!useUploadsManager) {
                 onComplete(cloneDeep(items.map((item) => item.boxFile)));
                 items = []; // Reset item collection after successful upload
             }
         }
 
-        if (noFileIsPendingOrInProgress && windowView) {
+        if (noFileIsPendingOrInProgress && useUploadsManager) {
             clearTimeout(this.resetItemsTimeout);
-            onUploadsManagerComplete(items);
+            onComplete(items);
         }
 
         const state: State = {
@@ -557,7 +546,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     handleUploadError = (item: UploadItem, error: Error) => {
-        const { onError, onUploadsManagerError, windowView } = this.props;
+        const { onError, useUploadsManager } = this.props;
         const { file } = item;
 
         item.status = STATUS_ERROR;
@@ -566,21 +555,21 @@ class ContentUploader extends Component<Props, State> {
         items[items.indexOf(item)] = item;
 
         // Broadcast that there was an error uploading a file
-        if (windowView) {
-            onUploadsManagerError({
+        const errorData = useUploadsManager
+            ? {
                 item,
                 error
-            });
-        } else {
-            onError({
+            }
+            : {
                 file,
                 error
-            });
-        }
+            };
+
+        onError(errorData);
 
         this.updateViewAndCollection(items);
 
-        if (windowView) {
+        if (useUploadsManager) {
             this.expandUploadsManager();
         }
     };
@@ -637,9 +626,9 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     expandUploadsManager = (): void => {
-        const { windowView, onExpand } = this.props;
+        const { useUploadsManager, onExpand } = this.props;
 
-        if (!windowView || !onExpand) {
+        if (!useUploadsManager || !onExpand) {
             return;
         }
 
@@ -655,9 +644,9 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     minimizeUploadsManager = (): void => {
-        const { windowView, onMinimize } = this.props;
+        const { useUploadsManager, onMinimize } = this.props;
 
-        if (!windowView || !onMinimize) {
+        if (!useUploadsManager || !onMinimize) {
             return;
         }
 
@@ -689,10 +678,9 @@ class ContentUploader extends Component<Props, State> {
 
         if (isUploadsManagerExpanded) {
             this.minimizeUploadsManager();
-            return;
+        } else {
+            this.expandUploadsManager();
         }
-
-        this.expandUploadsManager();
     };
 
     /**
@@ -702,15 +690,15 @@ class ContentUploader extends Component<Props, State> {
      */
     resetUploadsManagerItemsWhenUploadsComplete = (): void => {
         const { view, items, isUploadsManagerExpanded } = this.state;
-        const { windowView, onUploadsManagerCancel } = this.props;
+        const { useUploadsManager, onCancel } = this.props;
 
         // Do not reset items when upload manger is expanded or there're uploads in progress
-        if ((isUploadsManagerExpanded && windowView && !!items.length) || view === VIEW_UPLOAD_IN_PROGRESS) {
+        if ((isUploadsManagerExpanded && useUploadsManager && !!items.length) || view === VIEW_UPLOAD_IN_PROGRESS) {
             return;
         }
 
         items.forEach((item) => {
-            onUploadsManagerCancel(item);
+            onCancel(item);
         });
 
         this.setState({
@@ -743,20 +731,20 @@ class ContentUploader extends Component<Props, State> {
             measureRef,
             isTouch,
             fileLimit,
-            windowView
+            useUploadsManager
         }: Props = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);
         const styleClassName = classNames('bcu', className, {
-            'buik-app-element': !windowView,
-            buik: !windowView
+            'buik-app-element': !useUploadsManager,
+            buik: !useUploadsManager
         });
 
         return (
             <Internationalize language={language} messages={messages}>
-                {windowView ? (
+                {useUploadsManager ? (
                     <div className={styleClassName} id={this.id} ref={measureRef}>
                         <UploadsManager
                             isExpanded={isUploadsManagerExpanded}

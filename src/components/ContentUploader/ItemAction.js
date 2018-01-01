@@ -12,9 +12,11 @@ import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import IconRetry from 'box-react-ui/lib/icons/general/IconRetry';
 import IconInProgress from './IconInProgress';
 import messages from '../messages';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR, COLOR_BOX_BLUE } from '../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 import type { UploadStatus } from '../../flowTypes';
 import './ItemAction.scss';
+
+const ICON_CHECK_COLOR = '#26C281';
 
 type Props = {
     status: UploadStatus,
@@ -29,7 +31,7 @@ const ItemAction = ({ status, onClick, intl }: Props) => {
 
     switch (status) {
         case STATUS_COMPLETE:
-            icon = <IconCheck color={COLOR_BOX_BLUE} />;
+            icon = <IconCheck color={ICON_CHECK_COLOR} />;
             title = intl.formatMessage(messages.remove);
             break;
         case STATUS_ERROR:
