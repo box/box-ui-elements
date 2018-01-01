@@ -85,6 +85,7 @@ const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
 const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
+const UPLOAD_CONCURRENCY = 6;
 
 class ContentUploader extends Component<Props, State> {
     id: string;
@@ -93,6 +94,7 @@ class ContentUploader extends Component<Props, State> {
     rootElement: HTMLElement;
     appElement: HTMLElement;
     resetItemsTimeout: ?number;
+    numItemsUploading: number = 0;
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -375,19 +377,6 @@ class ContentUploader extends Component<Props, State> {
     };
 
     /**
-     * Checks whether should upload an item
-     *
-     * @private
-     * @param {UploadItem} item
-     * @return {boolean}
-     */
-    isReadyToUpload = (item) => {
-        const { useUploadsManager } = this.props;
-
-        return useUploadsManager ? item.status === STATUS_PENDING : item.status !== STATUS_IN_PROGRESS;
-    };
-
-    /**
      * Uploads all items in the upload collection.
      *
      * @private
@@ -396,7 +385,7 @@ class ContentUploader extends Component<Props, State> {
     upload = () => {
         const { items } = this.state;
         items.forEach((uploadItem) => {
-            if (this.isReadyToUpload(uploadItem)) {
+            if (uploadItem.status === STATUS_PENDING) {
                 this.uploadFile(uploadItem);
             }
         });
@@ -411,6 +400,12 @@ class ContentUploader extends Component<Props, State> {
     uploadFile(item: UploadItem) {
         const { rootFolderId } = this.props;
         const { api, file, options } = item;
+
+        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
+            return;
+        }
+
+        this.numItemsUploading += 1;
 
         api.upload({
             // TODO: rename id to folderId
@@ -466,6 +461,7 @@ class ContentUploader extends Component<Props, State> {
 
         item.progress = 100;
         item.status = STATUS_COMPLETE;
+        this.numItemsUploading -= 1;
 
         // Cache Box File object of successfully uploaded item
         if (entries && entries.length === 1) {
@@ -485,6 +481,7 @@ class ContentUploader extends Component<Props, State> {
         }
 
         this.updateViewAndCollection(items);
+        this.upload();
     };
 
     /**
@@ -550,6 +547,7 @@ class ContentUploader extends Component<Props, State> {
         const { file } = item;
 
         item.status = STATUS_ERROR;
+        this.numItemsUploading -= 1;
 
         const { items } = this.state;
         items[items.indexOf(item)] = item;
@@ -572,6 +570,8 @@ class ContentUploader extends Component<Props, State> {
         if (useUploadsManager) {
             this.expandUploadsManager();
         }
+
+        this.upload();
     };
 
     /**
