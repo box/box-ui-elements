@@ -77,6 +77,7 @@ type Props = {
 type State = {
     errorCode?: string,
     items: UploadItem[],
+    itemIds: Object,
     view: View,
     isUploadsManagerExpanded: boolean
 };
@@ -128,6 +129,7 @@ class ContentUploader extends Component<Props, State> {
             view: rootFolderId && token ? VIEW_UPLOAD_EMPTY : VIEW_ERROR,
             items: [],
             errorCode: '',
+            itemIds: {},
             isUploadsManagerExpanded: false
         };
         this.id = uniqueid('bcu_');
@@ -204,28 +206,24 @@ class ContentUploader extends Component<Props, State> {
      * @param {boolean} withApiOptions - whether file objects contain Api options
      */
     getNewFiles = (files: Array<UploadFileWithAPIOptions | File>, withApiOptions) => {
-        const { items } = this.state;
-        return [].filter.call(files, (file) => {
-            let uploadFile = file;
-            let uploadAPIOptions = {};
+        const { itemIds } = this.state;
 
-            if (withApiOptions) {
-                uploadFile = file.file;
-                uploadAPIOptions = file.options;
-            }
-            const { name } = uploadFile;
-            return !items.some((item) => {
-                if (!uploadAPIOptions || !item.options) {
-                    return item.name === name;
-                }
-                return (
-                    item.name === name &&
-                    (item.options.folderId === uploadAPIOptions.folderId &&
-                        item.options.uploadInitTimestamp === uploadAPIOptions.uploadInitTimestamp)
-                );
-            });
-        });
+        return [].filter.call(files, (file) => !(this.getFileId(file, withApiOptions) in itemIds));
     };
+
+    /**
+     * Generates file id based on file properties
+     * 
+     * @param {UploadFileWithAPIOptions | File} file 
+     * @param {boolean} withApiOptions - whether file objects contain Api options
+     */
+    getFileId(file, withApiOptions) {
+        if (!withApiOptions || !file.options) {
+            return file.file.name;
+        }
+
+        return `${file.file.name}_${file.options.folderId}_${file.options.uploadInitTimestamp}`;
+    }
 
     /**
      * Converts File API to upload items and adds to upload queue.
@@ -353,7 +351,7 @@ class ContentUploader extends Component<Props, State> {
         // Minimize uploads manager if there are no more items
         const callback = this.props.useUploadsManager && !items.length ? this.minimizeUploadsManager : noop;
 
-        onCancel(item);
+        onCancel([item]);
         this.updateViewAndCollection(items, callback);
     }
 
@@ -400,12 +398,6 @@ class ContentUploader extends Component<Props, State> {
     uploadFile(item: UploadItem) {
         const { rootFolderId } = this.props;
         const { api, file, options } = item;
-
-        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
-            return;
-        }
-
-        this.numItemsUploading += 1;
 
         if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
             return;
@@ -527,8 +519,14 @@ class ContentUploader extends Component<Props, State> {
             onComplete(items);
         }
 
+        const itemIds = {};
+        items.forEach((item) => {
+            itemIds[this.getFileId(item)] = true
+        });
+
         const state: State = {
             items,
+            itemIds,
             view,
             isUploadsManagerExpanded: this.state.isUploadsManagerExpanded
         };
@@ -703,12 +701,11 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
-        items.forEach((item) => {
-            onCancel(item);
-        });
+        onCancel(items);
 
         this.setState({
-            items: []
+            items: [],
+            itemIds: {}
         });
     };
 
