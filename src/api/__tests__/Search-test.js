@@ -14,7 +14,7 @@ let searchResults;
 
 describe('api/Search', () => {
     beforeEach(() => {
-        search = new Search();
+        search = new Search({});
         cache = new Cache();
     });
 

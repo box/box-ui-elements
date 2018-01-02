@@ -8,7 +8,7 @@ let cache;
 
 describe('api/File', () => {
     beforeEach(() => {
-        file = new File();
+        file = new File({});
         cache = new Cache();
     });
 

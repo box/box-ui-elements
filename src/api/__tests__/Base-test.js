@@ -6,7 +6,7 @@ let base;
 
 describe('api/Base', () => {
     beforeEach(() => {
-        base = new Base();
+        base = new Base({});
     });
 
     test('should should have correct defaults on construct', () => {

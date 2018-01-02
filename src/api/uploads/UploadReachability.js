@@ -4,31 +4,37 @@
  * @author Box
  */
 
-import Base from '../Base';
 import LocalStore from '../../util/LocalStore';
 import { DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
+import Xhr from '../../util/Xhr';
+import type { Token } from '../../flowTypes';
 
 const CACHED_RESULTS_LOCAL_STORE_KEY = 'uploads-reachability-cached-results';
 
-class UploadsReachability extends Base {
+class UploadsReachability {
+    apiHost: string;
+    baseUrl: string;
     localStore: LocalStore;
+    xhr: Xhr;
 
     /**
      * [constructor]
      *
-     * @param {Object} [options]
-     * @param {string} [options.token] - Auth token
-     * @param {string} [options.apiHost] - Api host
+     * @param {Token} token - Auth token
+     * @param {string} apiHost - Api host
      * @return {void}
      */
-    constructor(options: Object) {
-        super({
+    constructor(token: Token, apiHost: string) {
+        this.xhr = new Xhr({
             // `id` is required for the preflight request, here it's set to `folder_0` because
             // the preflight request is for checking the availability of a host, not about a specific
             // upload attempt
             id: 'folder_0',
-            ...options
+            token
         });
+
+        const suffix: string = apiHost.endsWith('/') ? '2.0' : '/2.0';
+        this.baseUrl = `${apiHost}${suffix}`;
         this.localStore = new LocalStore();
     }
 
@@ -93,11 +99,13 @@ class UploadsReachability extends Base {
         let preflightResponse;
 
         await this.xhr.options({
-            url: `${this.getBaseUrl()}/files/content`,
+            url: `${this.baseUrl}/files/content`,
             // Random data for preflight check
             data: {
                 name: 'test_name',
-                parent: { id: '0' },
+                parent: {
+                    id: '0'
+                },
                 size: '10'
             },
             successHandler: (response) => {

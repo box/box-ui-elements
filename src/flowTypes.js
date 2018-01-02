@@ -235,7 +235,7 @@ export type Crumb = {
 
 export type Options = {
     id?: string,
-    token?: Token,
+    token: Token,
     clientName?: string,
     version?: string,
     sharedLink?: string,

@@ -14,7 +14,7 @@ let folderResults;
 
 describe('api/Folder', () => {
     beforeEach(() => {
-        folder = new Folder();
+        folder = new Folder({});
         cache = new Cache();
     });
 

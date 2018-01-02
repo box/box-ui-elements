@@ -18,7 +18,7 @@ const error = new Error('Bad id or auth token!');
 class Xhr {
     id: ?string;
     clientName: ?string;
-    token: ?Token;
+    token: Token;
     version: ?string;
     sharedLink: ?string;
     sharedLinkPassword: ?string;

@@ -9,7 +9,7 @@ let cache;
 
 describe('api/Item', () => {
     beforeEach(() => {
-        item = new Item();
+        item = new Item({});
         cache = new Cache();
     });
 

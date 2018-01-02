@@ -6,9 +6,11 @@ import { DEFAULT_HOSTNAME_UPLOAD } from '../../../constants';
 
 describe('api/UploadsReachability', () => {
     let uploadsReachabilityTest;
+    const token = '123';
+    const apiHost = 'abc.box.com';
 
     beforeEach(() => {
-        uploadsReachabilityTest = new UploadsReachability();
+        uploadsReachabilityTest = new UploadsReachability(token, apiHost);
     });
 
     describe('isUploadHostReachable()', () => {
