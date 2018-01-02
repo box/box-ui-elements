@@ -407,6 +407,12 @@ class ContentUploader extends Component<Props, State> {
 
         this.numItemsUploading += 1;
 
+        if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
+            return;
+        }
+
+        this.numItemsUploading += 1;
+
         api.upload({
             // TODO: rename id to folderId
             file,

@@ -9,7 +9,7 @@ let cache;
 
 describe('api/Recents', () => {
     beforeEach(() => {
-        recents = new Recents();
+        recents = new Recents({});
         cache = new Cache();
     });
 
