@@ -1,6 +1,14 @@
+<a name="3.0.1"></a>
+## 3.0.1 (2018-01-03)
+
+* Fix: Publish script ([2229485](https://github.com/box/box-ui-elements/commit/2229485))
+
+
+
 <a name="3.0.0"></a>
 # 3.0.0 (2018-01-03)
 
+* Release: 3.0.0 ([a3d23c8](https://github.com/box/box-ui-elements/commit/a3d23c8))
 *  Update: get reachable upload host using UploadReachability (#137) ([391d98e](https://github.com/box/box-ui-elements/commit/391d98e))
 * Allow preview modal to close (#123) ([323d3f5](https://github.com/box/box-ui-elements/commit/323d3f5)), closes [#123](https://github.com/box/box-ui-elements/issues/123)
 * Update: limit upload concurrency (#138) ([9860800](https://github.com/box/box-ui-elements/commit/9860800))
