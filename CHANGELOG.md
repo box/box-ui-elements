@@ -1,6 +1,29 @@
+<a name="3.0.0"></a>
+# 3.0.0 (2018-01-03)
+
+*  Update: get reachable upload host using UploadReachability (#137) ([391d98e](https://github.com/box/box-ui-elements/commit/391d98e))
+* Allow preview modal to close (#123) ([323d3f5](https://github.com/box/box-ui-elements/commit/323d3f5)), closes [#123](https://github.com/box/box-ui-elements/issues/123)
+* Update: limit upload concurrency (#138) ([9860800](https://github.com/box/box-ui-elements/commit/9860800))
+* Update: support progressive file hashing with uploadsSHA1Worker (#134) ([117a948](https://github.com/box/box-ui-elements/commit/117a948))
+* Upgrade: Latest eslint, flow and prettier (#136) ([9fed626](https://github.com/box/box-ui-elements/commit/9fed626))
+* Breaking: Migrating core components to box-react-ui package (#133) ([9d66634](https://github.com/box/box-ui-elements/commit/9d66634))
+* Breaking: Migrating to icons in box-react-ui (#135) ([bd77972](https://github.com/box/box-ui-elements/commit/bd77972))
+* Breaking: Package upgrades and migration to jest (#130) ([0541034](https://github.com/box/box-ui-elements/commit/0541034))
+* New: Multiput Upload Part 3 (#132) ([9bcd3df](https://github.com/box/box-ui-elements/commit/9bcd3df))
+* New: MultiputUpload part1 (#125) ([329f76c](https://github.com/box/box-ui-elements/commit/329f76c))
+* New: MultiputUpload part2 (#127) ([f8c9821](https://github.com/box/box-ui-elements/commit/f8c9821))
+* New: UploadsReachability (#122) ([eafe175](https://github.com/box/box-ui-elements/commit/eafe175))
+* New: webcrypto, uploads and function utilities (#124) ([0f1a19e](https://github.com/box/box-ui-elements/commit/0f1a19e))
+* Chore: Remove unnecessary inclusion of babel-polyfill (#131) ([e9ac511](https://github.com/box/box-ui-elements/commit/e9ac511))
+* Mojito: Update translations (#126) ([359705b](https://github.com/box/box-ui-elements/commit/359705b))
+* Fix: CLA link ([83a1843](https://github.com/box/box-ui-elements/commit/83a1843))
+
+
+
 <a name="2.2.0"></a>
 # 2.2.0 (2017-11-17)
 
+* Release: 2.2.0 ([eedf560](https://github.com/box/box-ui-elements/commit/eedf560))
 * Chore: Speed up release build (#121) ([634e7a3](https://github.com/box/box-ui-elements/commit/634e7a3))
 
 
