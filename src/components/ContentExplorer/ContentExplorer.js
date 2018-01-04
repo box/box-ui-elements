@@ -1215,6 +1215,7 @@ class ContentExplorer extends Component<Props, State> {
                             rootId={rootFolderId}
                             isSmall={isSmall}
                             rootName={rootName}
+                            rootElement={this.rootElement}
                             currentCollection={currentCollection}
                             canUpload={allowUpload}
                             canCreateNewFolder={allowCreate}

@@ -36,7 +36,8 @@ export default (
     onItemRename: Function,
     onItemShare: Function,
     onItemPreview: Function,
-    isSmall: boolean
+    isSmall: boolean,
+    rootElement: HTMLElement
 ) => ({ rowData }: { rowData: BoxItem }) => {
     const onFocus = () => onItemSelect(rowData);
     const onDelete = () => onItemDelete(rowData);
@@ -66,7 +67,7 @@ export default (
 
     return (
         <div className='bce-more-options'>
-            <DropdownMenu isRightAligned constrainToScrollParent>
+            <DropdownMenu isRightAligned constrainToScrollParent bodyElement={rootElement}>
                 <Button type='button' onFocus={onFocus} className='bce-btn-more-options'>
                     ···
                 </Button>

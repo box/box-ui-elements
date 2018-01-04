@@ -14,6 +14,7 @@ import type { View, Collection } from '../../flowTypes';
 type Props = {
     rootId: string,
     rootName?: string,
+    rootElement: HTMLElement,
     onItemClick: Function,
     currentCollection: Collection,
     view: View,
@@ -21,7 +22,16 @@ type Props = {
     intl: any
 };
 
-const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick, intl }: Props) => {
+const SubHeaderLeft = ({
+    view,
+    rootElement,
+    isSmall,
+    rootId,
+    rootName,
+    currentCollection,
+    onItemClick,
+    intl
+}: Props) => {
     let crumbs;
 
     if (view === VIEW_FOLDER || view === VIEW_SEARCH) {
@@ -56,6 +66,7 @@ const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onI
         <Breadcrumbs
             isSmall={isSmall}
             rootId={rootId}
+            rootElement={rootElement}
             crumbs={crumbs}
             onCrumbClick={onItemClick}
             delimiter={DELIMITER_CARET}

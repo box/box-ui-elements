@@ -15,7 +15,8 @@ import './BreadcrumbDropdown.scss';
 type Props = {
     className: string,
     onCrumbClick: Function,
-    crumbs: Crumb[]
+    crumbs: Crumb[],
+    rootElement: HTMLElement
 };
 
 const BreadcrumbDropdown = ({ crumbs, onCrumbClick, className = '' }: Props) => (
@@ -23,7 +24,7 @@ const BreadcrumbDropdown = ({ crumbs, onCrumbClick, className = '' }: Props) => 
         <PlainButton type='button' className={`buik-breadcrumbs-drop-down ${className}`}>
             ···
         </PlainButton>
-        <Menu>
+        <Menu className='buik-breadcrumbs-drop-down-menu'>
             {crumbs.map(({ id, name }: Crumb) => (
                 <MenuItem key={id} onClick={() => onCrumbClick(id)}>
                     {name}

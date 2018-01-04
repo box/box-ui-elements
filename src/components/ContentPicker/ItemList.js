@@ -56,7 +56,7 @@ const ItemList = ({
     tableRef
 }: Props) => {
     const iconCell = iconCellRenderer();
-    const nameCell = nameCellRenderer(rootId, view, onItemClick);
+    const nameCell = nameCellRenderer(rootId, view, rootElement, onItemClick);
     const checkboxCell = checkboxCellRenderer(onItemSelect, selectableType, extensionsWhitelist, hasHitSelectionLimit);
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
