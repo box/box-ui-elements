@@ -18,11 +18,13 @@ type Props = {
     onCreate: Function,
     canUpload: boolean,
     canCreateNewFolder: boolean,
-    view: View
+    view: View,
+    rootElement: HTMLElement
 };
 
 const SubHeaderRight = ({
     view,
+    rootElement,
     onUpload,
     onCreate,
     canUpload,
@@ -44,6 +46,7 @@ const SubHeaderRight = ({
                 !!sortBy &&
                 !!sortDirection && (
                     <Sort
+                        rootElement={rootElement}
                         isRecents={isRecents}
                         isLoaded={isLoaded}
                         sortBy={sortBy}
@@ -53,6 +56,7 @@ const SubHeaderRight = ({
                 )}
             {showAdd && (
                 <Add
+                    rootElement={rootElement}
                     showUpload={canUpload}
                     showCreate={canCreateNewFolder}
                     onUpload={onUpload}
