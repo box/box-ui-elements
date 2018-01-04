@@ -1,6 +1,14 @@
+<a name="3.1.0"></a>
+# 3.1.0 (2018-01-04)
+
+* Fix: Scope box-react-ui style overrides to box elements (#142) ([225d569](https://github.com/box/box-ui-elements/commit/225d569))
+
+
+
 <a name="3.0.1"></a>
 ## 3.0.1 (2018-01-03)
 
+* Release: 3.0.1 ([05c4277](https://github.com/box/box-ui-elements/commit/05c4277))
 * Fix: Publish script ([2229485](https://github.com/box/box-ui-elements/commit/2229485))
 
 
