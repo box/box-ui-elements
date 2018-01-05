@@ -25,7 +25,7 @@ type Props = {
 
 const Add = ({ onUpload, onCreate, isLoaded, showUpload = true, showCreate = true, rootElement }: Props) => (
     <DropdownMenu isRightAligned constrainToScrollParent bodyElement={rootElement}>
-        <Button type='button' className='buik-btn-add' isDisabled={!isLoaded}>
+        <Button type='button' className='be-btn-add' isDisabled={!isLoaded}>
             <IconAddThin />
         </Button>
         <Menu>

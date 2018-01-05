@@ -47,7 +47,7 @@ const DeleteConfirmationDialog = ({
             appElement={appElement}
         >
             <FormattedMessage {...message} values={{ name: item.name }} />
-            <div className='buik-modal-btns'>
+            <div className='be-modal-btns'>
                 <PrimaryButton type='button' onClick={onDelete} isLoading={isLoading}>
                     <FormattedMessage {...messages.delete} />
                 </PrimaryButton>

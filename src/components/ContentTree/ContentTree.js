@@ -321,7 +321,7 @@ class ContentTree extends Component<Props, State> {
             measureRef
         }: Props = this.props;
         const { view, currentCollection }: State = this.state;
-        const styleClassName = classNames('buik bct buik-app-element', className);
+        const styleClassName = classNames('be bct be-app-element', className);
 
         return (
             <Internationalize language={language} messages={messages}>

@@ -40,7 +40,7 @@ const Line = ({ type, start, end = 0, duration, color = COLOR_BOX_BLUE, getPrevi
             viewer.play(start);
         }
     };
-    return <PlainButton type='button' className='buik-timeline-time' style={styles} onClick={onClick} />;
+    return <PlainButton type='button' className='be-timeline-time' style={styles} onClick={onClick} />;
 };
 
 export default Line;

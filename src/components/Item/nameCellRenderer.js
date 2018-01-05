@@ -21,7 +21,7 @@ export default (
     showDetails: boolean = true,
     isTouch: boolean = false
 ) => ({ rowData }: { rowData: BoxItem }) => (
-    <div className='buik-item-name'>
+    <div className='be-item-name'>
         <ItemName
             isTouch={isTouch}
             item={rowData}

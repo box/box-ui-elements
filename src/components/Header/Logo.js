@@ -19,15 +19,15 @@ function getLogo(isSmall: boolean, url?: string) {
     if (url === 'box') {
         return <IconLogo />;
     } else if (typeof url === 'string') {
-        return <img alt='' src={url} className='buik-logo-custom' />;
+        return <img alt='' src={url} className='be-logo-custom' />;
     }
     return (
-        <div className='buik-logo-placeholder'>
+        <div className='be-logo-placeholder'>
             <FormattedMessage {...messages.logo} />
         </div>
     );
 }
 
-const Logo = ({ url, isSmall }: Props) => <div className='buik-logo'>{getLogo(isSmall, url)}</div>;
+const Logo = ({ url, isSmall }: Props) => <div className='be-logo'>{getLogo(isSmall, url)}</div>;
 
 export default Logo;

@@ -1,6 +1,6 @@
 @import '../variables';
 
-.buik-timeline {
+.be-timeline {
     display: flex;
     padding: 0 0 20px;
 
@@ -9,13 +9,13 @@
     }
 }
 
-.buik-timeline-wrapper {
+.be-timeline-wrapper {
     flex: 1;
     height: 6px;
     position: relative;
 }
 
-.buik-timeline-line {
+.be-timeline-line {
     background-color: $blue;
     border-radius: 6px;
     height: 6px;
@@ -23,15 +23,15 @@
     position: absolute;
 }
 
-.buik-timeline-image {
+.be-timeline-image {
     align-items: center;
 
-    .buik-timeline-image-container {
+    .be-timeline-image-container {
         border-radius: 100%;
         overflow: hidden;
     }
 
-    .buik-timeline-label img {
+    .be-timeline-label img {
         filter: brightness(1.5);
         height: 45px;
         transition: transform .3s;
@@ -43,26 +43,26 @@
         }
     }
 
-    .buik-timeline-wrapper {
+    .be-timeline-wrapper {
         margin-left: 10px;
     }
 
-    .buik-timeline-line {
+    .be-timeline-line {
         width: 215px;
     }
 }
 
-.buik-timeline-text {
+.be-timeline-text {
     color: $sevens;
     flex-direction: column;
     font-size: 12px;
     height: 50px;
 
-    .buik-timeline-label {
+    .be-timeline-label {
         padding-bottom: 6px;
     }
 
-    .buik-timeline-line {
+    .be-timeline-line {
         width: 270px;
     }
 }

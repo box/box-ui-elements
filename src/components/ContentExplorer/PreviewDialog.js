@@ -66,7 +66,7 @@ const PreviewDialog = ({
         <Modal
             isOpen={isOpen}
             parentSelector={() => parentElement}
-            portalClassName={`${CLASS_MODAL} buik-modal-preview`}
+            portalClassName={`${CLASS_MODAL} be-modal-preview`}
             className={CLASS_MODAL_CONTENT_FULL_BLEED}
             overlayClassName={CLASS_MODAL_OVERLAY}
             contentLabel={intl.formatMessage(messages.preview)}

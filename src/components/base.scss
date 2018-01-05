@@ -2,7 +2,7 @@
 @import './variables';
 @import '~box-react-ui/lib/styles/common/buttons';
 
-.buik {
+.be {
     @include reset;
 
     background: $white;
@@ -20,10 +20,8 @@
     user-select: none;
     width: 100%;
 
-    @mixin placeholder {
-        font-family: $font;
-        font-weight: 200;
-        opacity: .6;
+    .ReactModal__Body--open & {
+        position: relative;
     }
 
     /* stylelint-disable */
@@ -195,10 +193,6 @@
         }
     }
 
-    .ReactModal__Body--open & {
-        position: relative;
-    }
-
     .btn-plain {
         background: none;
         border: 0 none;
@@ -230,7 +224,7 @@
     }
 }
 
-.buik-app-element {
+.be-app-element {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -238,7 +232,7 @@
 }
 
 // Input element styled like a link
-.buik-input-link {
+.be-input-link {
     color: $blue;
     cursor: pointer;
     display: block;
@@ -255,7 +249,7 @@
 }
 
 // Input styled like a button
-.buik-input-btn {
+.be-input-btn {
     cursor: pointer;
     display: block;
 
@@ -264,130 +258,6 @@
     }
 }
 
-.buik-checkbox {
-    cursor: pointer;
-    display: block;
-    position: relative;
-
-    > input {
-        &[type='checkbox'] {
-            flex: none;
-            height: 14px;
-            margin: 3px 0 0;
-            opacity: 0;
-            width: 14px;
-
-            + span {
-                &::before {
-                    background: $white;
-                    border: 1px solid $see-see;
-                    border-radius: 2px;
-                    content: '';
-                    height: 14px;
-                    left: 0;
-                    position: absolute;
-                    top: 3px;
-                    width: 14px;
-                }
-
-                &::after {
-                    backface-visibility: hidden;
-                    border-bottom: 2px solid $blue;
-                    border-right: 2px solid $blue;
-                    content: '';
-                    height: 7px;
-                    left: 5px;
-                    position: absolute;
-                    top: 6px;
-                    transform: rotate(45deg) scale(0);
-                    width: 4px;
-                }
-            }
-
-            &:checked {
-                + span {
-                    &::after {
-                        transform: rotate(45deg) scale(1);
-                    }
-                }
-            }
-
-            &:focus {
-                + span {
-                    &::before {
-                        border-color: $blue;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.buik-hidden {
+.be-hidden {
     display: none;
-}
-
-.buik-modal {
-    .buik-modal-btns {
-        display: flex;
-        justify-content: center;
-        padding: 15px 0 0;
-
-        .btn {
-            margin-left: 8px;
-        }
-    }
-
-    .buik-modal-error {
-        color: $red;
-    }
-}
-
-.buik-modal-wrapper-content,
-.buik-modal-dialog-content-full-bleed {
-    background-color: $white;
-    border: 0 none;
-    border-radius: 0;
-    bottom: 0;
-    left: 0;
-    margin: 0;
-    outline: none;
-    padding: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-.buik-modal-wrapper-overlay {
-    background-color: $darker-black;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-}
-
-.buik-modal-dialog-content {
-    @extend .buik-modal-wrapper-content;
-
-    border-radius: 4px;
-    bottom: auto;
-    left: 50%;
-    margin-right: -50%;
-    padding: 25px;
-    position: absolute;
-    right: auto;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-
-    .buik-is-small & {
-        width: 340px;
-    }
-}
-
-.buik-modal-dialog-overlay {
-    @extend .buik-modal-wrapper-overlay;
-
-    position: absolute;
 }

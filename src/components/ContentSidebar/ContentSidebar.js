@@ -233,7 +233,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={messages}>
-                <div className='buik bcs'>
+                <div className='be bcs'>
                     {file ? (
                         <DetailsSidebar
                             file={file}

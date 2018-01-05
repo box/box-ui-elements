@@ -1343,9 +1343,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-box-react-ui@^21.1.0:
-  version "21.1.0"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-21.1.0.tgz#698bc1003c308216ba39d2050e1c1f4937e5d4d3"
+box-react-ui@^21.2.0:
+  version "21.2.0"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-21.2.0.tgz#76b22451fdb3e6242a92f885cf695a5d21e7261f"
   dependencies:
     yui "^3.18.1"
 

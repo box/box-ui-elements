@@ -21,7 +21,7 @@ type Props = {
 
 const BreadcrumbDropdown = ({ crumbs, onCrumbClick, className = '', rootElement }: Props) => (
     <DropdownMenu constrainToScrollParent bodyElement={rootElement}>
-        <PlainButton type='button' className={`buik-breadcrumbs-drop-down ${className}`}>
+        <PlainButton type='button' className={`be-breadcrumbs-drop-down ${className}`}>
             ···
         </PlainButton>
         <Menu>

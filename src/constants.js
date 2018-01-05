@@ -99,7 +99,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.13.0';
+export const DEFAULT_PREVIEW_VERSION = '1.24.0';
 export const DEFAULT_PREVIEW_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -128,14 +128,12 @@ export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 
 /* ------------------- Styles ------------------------ */
-export const CLASS_MODAL_CONTENT = 'buik-modal-dialog-content';
-export const CLASS_MODAL_CONTENT_FULL_BLEED = 'buik-modal-dialog-content-full-bleed';
-export const CLASS_MODAL_OVERLAY = 'buik-modal-dialog-overlay';
-export const CLASS_IS_COMPACT = 'buik-is-small';
-export const CLASS_IS_TOUCH = 'buik-is-touch';
-export const CLASS_MODAL = 'buik-modal';
-export const CLASS_BUTTON_CONTENT_SPAN = 'btn-content';
-export const CLASS_CHECKBOX_SPAN = 'buik-checkbox-span';
+export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
+export const CLASS_MODAL_CONTENT_FULL_BLEED = 'be-modal-dialog-content-full-bleed';
+export const CLASS_MODAL_OVERLAY = 'be-modal-dialog-overlay';
+export const CLASS_IS_COMPACT = 'be-is-small';
+export const CLASS_IS_TOUCH = 'be-is-touch';
+export const CLASS_MODAL = 'be-modal';
 
 /* ------------------ Error Codes  ---------------------- */
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
