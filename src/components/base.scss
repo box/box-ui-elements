@@ -11,16 +11,12 @@
     box-sizing: border-box !important;
     /* stylelint-enable declaration-no-important */
     color: $twos;
-    font-family: $font;
-    font-size: 13px;
     height: 100%;
     letter-spacing: .13px;
     margin: 0;
     outline: none;
     overflow: hidden;
     padding: 0;
-    position: relative;
-    text-rendering: optimizeLegibility;
     user-select: none;
     width: 100%;
 
@@ -197,6 +193,10 @@
                 margin: 0 0 20px;
             }
         }
+    }
+
+    .ReactModal__Body--open & {
+        position: relative;
     }
 
     .btn-plain {
