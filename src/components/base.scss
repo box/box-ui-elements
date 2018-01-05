@@ -3,6 +3,8 @@
 @import '~box-react-ui/lib/styles/common/buttons';
 
 .buik {
+    @include reset;
+
     background: $white;
     border: 0 none;
     /* stylelint-disable declaration-no-important */
@@ -75,23 +77,6 @@
         cursor: pointer;
     }
     /* stylelint-enable */
-
-    * {
-        /* stylelint-disable declaration-no-important */
-        box-sizing: border-box !important;
-        /* stylelint-enable declaration-no-important */
-        font-family: $font;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-
-        &::after,
-        &::before {
-            box-sizing: inherit;
-            color: inherit;
-            font-family: inherit;
-            text-rendering: inherit;
-        }
-    }
 
     select {
         appearance: none;
@@ -211,6 +196,36 @@
             &:not(:last-child) {
                 margin: 0 0 20px;
             }
+        }
+    }
+
+    .btn-plain {
+        background: none;
+        border: 0 none;
+        color: inherit;
+        cursor: pointer;
+        font-size: 13px;
+        line-height: 16px;
+        margin: 0;
+        max-width: 100%;
+        outline: none;
+        overflow: hidden;
+        padding: 0;
+        text-align: center;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        text-shadow: none;
+        white-space: nowrap;
+        zoom: 1;
+
+        &::-moz-focus-inner {
+            border: 0 none;
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+            text-decoration: underline;
         }
     }
 }
@@ -375,53 +390,4 @@
     @extend .buik-modal-wrapper-overlay;
 
     position: absolute;
-}
-
-/* box-react-ui overrides */
-.btn-plain {
-    background: none;
-    border: 0 none;
-    color: inherit;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 16px;
-    margin: 0;
-    max-width: 100%;
-    outline: none;
-    overflow: hidden;
-    padding: 0;
-    text-align: center;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    text-shadow: none;
-    white-space: nowrap;
-    zoom: 1;
-
-    &::-moz-focus-inner {
-        border: 0 none;
-    }
-
-    &:hover,
-    &:active,
-    &:focus {
-        text-decoration: underline;
-    }
-}
-
-.dropdown-menu-element {
-    /* stylelint-disable declaration-no-important */
-    box-sizing: border-box !important;
-    /* stylelint-enable declaration-no-important */
-    font-family: $font;
-    font-size: 13px;
-
-    * {
-        /* stylelint-disable declaration-no-important */
-        box-sizing: border-box !important;
-        /* stylelint-enable declaration-no-important */
-    }
-}
-
-.tooltip-element {
-    font-family: $font;
 }

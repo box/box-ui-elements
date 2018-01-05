@@ -32,7 +32,8 @@ type Props = {
     isLoaded: boolean,
     sortBy: SortBy,
     sortDirection: SortDirection,
-    isRecents: boolean
+    isRecents: boolean,
+    rootElement: HTMLElement
 };
 
 function getMenuItem(
@@ -52,9 +53,9 @@ function getMenuItem(
     );
 }
 
-const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
-    <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-sort'>
-        <Button type='button' isDisabled={!isLoaded} className='buik-sort-btn'>
+const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange, rootElement }: Props) => (
+    <DropdownMenu isRightAligned constrainToScrollParent bodyElement={rootElement}>
+        <Button type='button' isDisabled={!isLoaded} className='buik-btn-sort'>
             <IconSort />
         </Button>
         <Menu className='buik-menu-sort'>

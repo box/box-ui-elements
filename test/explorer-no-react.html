@@ -44,7 +44,7 @@
                 </label>
                 <label>
                     <div>Current Folder Id</div>
-                    <input class="currentFolder" type="text" placeholder="Enter root folder id" value="38437418331" />
+                    <input class="currentFolder" type="text" placeholder="Enter root folder id" value="42732985861" />
                 </label>
                 <label>
                     <div>Auth Token</div>
@@ -89,7 +89,7 @@
                         // Only apply filtering if it was a certain API request
                         if (method === 'GET' && /^\/folders/.test(api) && !!item_collection) {
                             const originalLength = item_collection.entries.length; // Keep track of items originally sent
-                            item_collection.entries = item_collection.entries.filter((item) => item.type === 'folder'); // Filter out unwanted items
+                            item_collection.entries = item_collection.entries.filter((item) => item.extension === 'png'); // Filter out unwanted items
                             const newLength = item_collection.entries.length; // Calculate the new item list length
                             item_collection.total_count -= (originalLength - newLength); // Update the total_count value based on the difference
                         }

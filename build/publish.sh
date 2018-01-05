@@ -54,7 +54,7 @@ pre_build() {
     echo "-------------------------------------------------------------"
     echo "Starting install, clean and pre build for version" $VERSION
     echo "----------------------------------------------------"
-    if yarn run pre-buid; then
+    if yarn run pre-build; then
         echo "----------------------------------------------------"
         echo "Pre build complete for version" $VERSION
         echo "----------------------------------------------------"

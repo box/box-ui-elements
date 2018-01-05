@@ -15,13 +15,14 @@ type Props = {
     rootId: string,
     item: BoxItem,
     onItemClick: Function,
-    view: View
+    view: View,
+    rootElement: HTMLElement
 };
 
-const ItemDetails = ({ view, rootId, item, onItemClick }: Props) => (
+const ItemDetails = ({ view, rootId, item, onItemClick, rootElement }: Props) => (
     <div className='buik-item-details'>
         {view === VIEW_SELECTED || view === VIEW_SEARCH ? (
-            <InlineBreadcrumbs rootId={rootId} item={item} onItemClick={onItemClick} />
+            <InlineBreadcrumbs rootId={rootId} item={item} onItemClick={onItemClick} rootElement={rootElement} />
         ) : (
             <ItemSubDetails view={view} item={item} />
         )}
