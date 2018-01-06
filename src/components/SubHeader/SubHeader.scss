@@ -1,6 +1,6 @@
 @import '../variables';
 
-.buik-sub-header {
+.be-sub-header {
     align-items: center;
     border-bottom: 1px solid $off-white;
     box-shadow: 0 4px 6px -2px $transparent-black;
@@ -9,15 +9,15 @@
     justify-content: space-between;
     padding: 0 20px 0 25px;
 
-    .buik-is-small & {
+    .be-is-small & {
         padding: 0 15px 0 18px;
     }
 
-    .bce:not(.buik-is-small) & {
+    .bce:not(.be-is-small) & {
         box-shadow: none;
     }
 
-    .bce.buik-is-small & {
+    .bce.be-is-small & {
         border-bottom: 0 none;
     }
 }

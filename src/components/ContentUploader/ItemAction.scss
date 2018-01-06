@@ -14,7 +14,7 @@
             display: block;
         }
 
-        .buik-icon-in-progress {
+        .be-icon-in-progress {
             height: 24px;
             width: 24px;
 
@@ -25,7 +25,7 @@
         }
 
         // Display cross icon on hover and hide loading indicator
-        &:hover .buik-icon-in-progress {
+        &:hover .be-icon-in-progress {
             svg {
                 display: block;
             }

@@ -45,12 +45,12 @@ const Timeline = ({
     };
 
     return (
-        <div className={`buik-timeline buik-timeline-${type}`}>
+        <div className={`be-timeline be-timeline-${type}`}>
             {(text || url) && (
-                <div className='buik-timeline-label'>
+                <div className='be-timeline-label'>
                     {type === 'image' ? (
                         <PlainButton type='button' onClick={startNextSegment}>
-                            <div className='buik-timeline-image-container'>
+                            <div className='be-timeline-image-container'>
                                 <img alt={text} title={text} src={url} />
                             </div>
                         </PlainButton>
@@ -59,8 +59,8 @@ const Timeline = ({
                     )}
                 </div>
             )}
-            <div className='buik-timeline-wrapper'>
-                <div className='buik-timeline-line' style={{ backgroundColor: color }} />
+            <div className='be-timeline-wrapper'>
+                <div className='be-timeline-line' style={{ backgroundColor: color }} />
                 {timeslices.map(
                     ({ start, end }: TimeSlice, index) => (
                         /* eslint-disable react/no-array-index-key */

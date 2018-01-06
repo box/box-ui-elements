@@ -491,7 +491,7 @@ class ContentUploader extends Component<Props, State> {
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);
-        const styleClassName = classNames('buik buik-app-element bcu', className);
+        const styleClassName = classNames('be be-app-element bcu', className);
 
         return (
             <Internationalize language={language} messages={messages}>

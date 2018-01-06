@@ -1,11 +1,11 @@
 @import '../variables';
 
-.buik-modal.buik-modal-share {
+.be-modal.be-modal-share {
     .bce-shared-access-select {
         height: 27px;
     }
 
-    .buik-modal-content {
+    .be-modal-content {
         position: relative;
 
         input[type="text"] {
@@ -14,13 +14,13 @@
             text-overflow: ellipsis;
             width: 296px;
 
-            .buik-is-small & {
+            .be-is-small & {
                 width: 237px;
             }
         }
     }
 
-    .buik-modal-button-copy {
+    .be-modal-button-copy {
         border-radius: 0 3px 3px 0;
         font-size: 10px;
         font-weight: bold;
@@ -32,7 +32,7 @@
         text-transform: uppercase;
     }
 
-    .buik-modal-btns {
+    .be-modal-btns {
         align-items: center;
         justify-content: space-between;
     }

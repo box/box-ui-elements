@@ -58,6 +58,7 @@ import type {
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
+import '../modal.scss';
 
 type BoxItemMap = { [string]: BoxItem };
 
@@ -825,7 +826,7 @@ class ContentPicker extends Component<Props, State> {
 
         switch (key) {
             case '/':
-                focus(this.rootElement, '.buik-search input[type="search"]', false);
+                focus(this.rootElement, '.be-search input[type="search"]', false);
                 event.preventDefault();
                 break;
             case 'arrowdown':
@@ -837,7 +838,7 @@ class ContentPicker extends Component<Props, State> {
                 break;
             case 'b':
                 if (this.globalModifier) {
-                    focus(this.rootElement, '.buik-breadcrumb button', false);
+                    focus(this.rootElement, '.be-breadcrumb button', false);
                     event.preventDefault();
                 }
                 break;
@@ -951,14 +952,14 @@ class ContentPicker extends Component<Props, State> {
         const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && maxSelectable !== 1;
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
-        const styleClassName = classNames('buik bcp', className);
+        const styleClassName = classNames('be bcp', className);
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef}>
-                    <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                    <div className='be-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
                             isSmall={isSmall}

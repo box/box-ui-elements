@@ -20,7 +20,7 @@
         border-top-color: $grey-blue;
 
         .btn-plain,
-        .buik-item-label {
+        .be-item-label {
             color: $dark-cerulean;
         }
     }
@@ -59,6 +59,15 @@
         }
     }
 
+    .checkbox-container {
+        margin: 0;
+
+        span,
+        input {
+            cursor: pointer;
+        }
+    }
+
     &:hover,
     &:active,
     &:focus {
@@ -74,7 +83,7 @@
         }
 
         .btn-plain,
-        .buik-item-label {
+        .be-item-label {
             color: $dark-cerulean;
         }
     }

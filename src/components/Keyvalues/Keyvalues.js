@@ -13,14 +13,14 @@ type Props = {
 };
 
 const Keyvalues = ({ skill: { entries } }: Props) => (
-    <div className='buik-keyvalues'>
+    <div className='be-keyvalues'>
         {Array.isArray(entries) &&
             entries.map(
                 ({ label, text }: SkillDataEntry, index) =>
                     !!label &&
                     !!text && (
                         /* eslint-disable react/no-array-index-key */
-                        <dl className='buik-keyvalue' key={index}>
+                        <dl className='be-keyvalue' key={index}>
                             <dt>{label}</dt>
                             <dd>{text}</dd>
                         </dl>

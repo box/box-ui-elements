@@ -23,7 +23,7 @@ const InlineBreadcrumbs = ({ rootId, item, onItemClick, rootElement }: Props) =>
     const { path_collection }: BoxItem = item;
     const { entries: breadcrumbs = [] } = path_collection || {};
     return (
-        <span className='buik-inline-breadcrumbs'>
+        <span className='be-inline-breadcrumbs'>
             <FormattedMessage {...messages.in} />
             &nbsp;
             <Breadcrumbs

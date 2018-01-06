@@ -1,16 +1,16 @@
 @import '../variables';
 
-.buik-inline-breadcrumbs {
+.be-inline-breadcrumbs {
     color: $sevens;
     display: flex;
     font-size: 11px;
     min-width: 0;
 
-    .buik-breadcrumbs {
+    .be-breadcrumbs {
         padding-right: 0;
     }
 
-    .buik-breadcrumb {
+    .be-breadcrumb {
         &:first-child {
             min-width: 43px;
         }
@@ -21,7 +21,7 @@
         }
     }
 
-    .buik-breadcrumb-more {
+    .be-breadcrumb-more {
         min-width: 16px;
     }
 }

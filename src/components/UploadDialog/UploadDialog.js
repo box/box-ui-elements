@@ -45,7 +45,7 @@ const UploadDialog = ({
     <Modal
         isOpen={isOpen}
         parentSelector={() => parentElement}
-        portalClassName={`${CLASS_MODAL} buik-modal-upload`}
+        portalClassName={`${CLASS_MODAL} be-modal-upload`}
         className={CLASS_MODAL_CONTENT_FULL_BLEED}
         overlayClassName={CLASS_MODAL_OVERLAY}
         onRequestClose={onClose}

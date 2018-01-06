@@ -28,7 +28,7 @@ const isValidStartTime = (cellData?: TimeSlice[]): boolean =>
 
 const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
     entries.length === 1 && !isValidStartTime(entries[0].appears) ? (
-        <span className='buik-transcript'>{entries[0].text}</span>
+        <span className='be-transcript'>{entries[0].text}</span>
     ) : (
         <AutoSizer disableHeight>
             {({ width }) => (
@@ -40,7 +40,7 @@ const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
                     rowHeight={cache.rowHeight}
                     rowCount={entries.length}
                     rowGetter={({ index }) => entries[index]}
-                    className='buik-transcript'
+                    className='be-transcript'
                     deferredMeasurementCache={cache}
                     onRowClick={({ rowData }: { rowData: SkillDataEntry }): void => {
                         const viewer = getPreviewer ? getPreviewer() : null;
@@ -62,7 +62,7 @@ const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
                         dataKey='appears'
                         width={60}
                         flexShrink={0}
-                        className='buik-transcript-time-column'
+                        className='be-transcript-time-column'
                         cellRenderer={({ cellData }): string =>
                             isValidStartTime(cellData) ? formatTime(cellData[0].start) : '--'
                         }
@@ -80,7 +80,7 @@ const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
                                 rowIndex={rowIndex}
                             >
                                 <div
-                                    className='buik-transcript-column'
+                                    className='be-transcript-column'
                                     style={{
                                         whiteSpace: 'normal'
                                     }}

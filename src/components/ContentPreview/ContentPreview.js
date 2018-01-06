@@ -413,7 +413,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={`buik bcpr ${className}`}>
+                <div id={this.id} className={`be bcpr ${className}`}>
                     {hasHeader && (
                         <Header
                             file={file}

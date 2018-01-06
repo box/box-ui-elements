@@ -58,14 +58,14 @@ const ShareDialog = ({
         <Modal
             isOpen={isOpen}
             parentSelector={() => parentElement}
-            portalClassName={`${CLASS_MODAL} buik-modal-share`}
+            portalClassName={`${CLASS_MODAL} be-modal-share`}
             className={CLASS_MODAL_CONTENT}
             overlayClassName={CLASS_MODAL_OVERLAY}
             onRequestClose={onCancel}
             contentLabel={intl.formatMessage(messages.shareDialogLabel)}
             appElement={appElement}
         >
-            <div className='buik-modal-content'>
+            <div className='be-modal-content'>
                 <label>
                     <FormattedMessage tagName='div' {...messages.shareDialogText} />
                     <span>
@@ -77,13 +77,13 @@ const ShareDialog = ({
                             }}
                             value={url}
                         />
-                        <PrimaryButton type='button' className='buik-modal-button-copy' onClick={copy} autoFocus>
+                        <PrimaryButton type='button' className='be-modal-button-copy' onClick={copy} autoFocus>
                             <FormattedMessage {...messages.copy} />
                         </PrimaryButton>
                     </span>
                 </label>
             </div>
-            <div className='buik-modal-btns'>
+            <div className='be-modal-btns'>
                 <ShareAccessSelect
                     className='bce-shared-access-select'
                     canSetShareAccess={canSetShareAccess}

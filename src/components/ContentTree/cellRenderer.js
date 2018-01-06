@@ -36,10 +36,10 @@ export default (onExpanderClick: Function, onItemClick: Function, isSmall: boole
                 <div className='bft-cell-node-btn' />
             )}
             {iconCellRenderer(isSmall ? 24 : 32)({ rowData })}
-            <div className='buik-item-name'>
+            <div className='be-item-name'>
                 <ItemName isTouch={false} item={rowData} canPreview onClick={onItemClick} />
                 {isSmall ? null : (
-                    <div className='buik-item-details'>
+                    <div className='be-item-details'>
                         <ItemSubDetails view={VIEW_FOLDER} item={rowData} />
                     </div>
                 )}

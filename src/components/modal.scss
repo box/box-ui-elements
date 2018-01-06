@@ -1,0 +1,67 @@
+@import '~box-react-ui/lib/styles/variables';
+@import './variables';
+
+.be-modal {
+    .be-modal-btns {
+        display: flex;
+        justify-content: center;
+        padding: 15px 0 0;
+
+        .btn {
+            margin-left: 8px;
+        }
+    }
+
+    .be-modal-error {
+        color: $red;
+    }
+}
+
+.be-modal-wrapper-content,
+.be-modal-dialog-content-full-bleed {
+    background-color: $white;
+    border: 0 none;
+    border-radius: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    outline: none;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.be-modal-wrapper-overlay {
+    background-color: $darker-black;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+.be-modal-dialog-content {
+    @extend .be-modal-wrapper-content;
+
+    border-radius: 4px;
+    bottom: auto;
+    left: 50%;
+    margin-right: -50%;
+    padding: 25px;
+    position: absolute;
+    right: auto;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+
+    .be-is-small & {
+        width: 340px;
+    }
+}
+
+.be-modal-dialog-overlay {
+    @extend .be-modal-wrapper-overlay;
+
+    position: absolute;
+}

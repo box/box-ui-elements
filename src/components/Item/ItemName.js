@@ -25,11 +25,11 @@ const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
     const onItemClick: Function = (): void => onClick(item);
 
     return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
-        <PlainButton type='button' className='buik-item-label' onFocus={onItemFocus} onClick={onItemClick}>
+        <PlainButton type='button' className='be-item-label' onFocus={onItemFocus} onClick={onItemClick}>
             {name}
         </PlainButton>
     ) : (
-        <span className='buik-item-label'>{name}</span>
+        <span className='be-item-label'>{name}</span>
     );
 };
 

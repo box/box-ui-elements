@@ -14,7 +14,7 @@
     }
 
     .bcp-selected-max {
-        animation: buik_pulse .5s 2 linear;
+        animation: be_pulse .5s 2 linear;
         color: $red;
         display: inline-block;
         font-size: 11px;
@@ -25,7 +25,7 @@
     }
 }
 
-@keyframes buik_pulse {
+@keyframes be_pulse {
     0%,
     100% {
         transform: scale(1);
