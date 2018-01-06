@@ -69,7 +69,6 @@ type Props = {
     intl: any,
     useUploadsManager?: boolean,
     files?: Array<UploadFileWithAPIOptions | File>,
-    onExpand?: Function,
     onMinimize?: Function,
     onUpload: Function
 };
@@ -111,7 +110,6 @@ class ContentUploader extends Component<Props, State> {
         onUpload: noop,
         useUploadsManager: false,
         files: [],
-        onExpand: noop,
         onMinimize: noop,
         onCancel: noop
     };
@@ -630,15 +628,14 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     expandUploadsManager = (): void => {
-        const { useUploadsManager, onExpand } = this.props;
+        const { useUploadsManager } = this.props;
 
-        if (!useUploadsManager || !onExpand) {
+        if (!useUploadsManager) {
             return;
         }
 
         clearTimeout(this.resetItemsTimeout);
 
-        onExpand();
         this.setState({ isUploadsManagerExpanded: true });
     };
 
