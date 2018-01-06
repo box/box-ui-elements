@@ -44,7 +44,7 @@ const EmptyState = ({ view, isLoading }: Props) => {
             break;
     }
     return (
-        <div className='buik-empty'>
+        <div className='be-empty'>
             {type}
             <div>{message}</div>
         </div>

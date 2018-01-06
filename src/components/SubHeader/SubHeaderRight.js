@@ -41,7 +41,7 @@ const SubHeaderRight = ({
     const isLoaded: boolean = percentLoaded === 100;
 
     return (
-        <div className='buik-sub-header-right'>
+        <div className='be-sub-header-right'>
             {showSort &&
                 !!sortBy &&
                 !!sortDirection && (

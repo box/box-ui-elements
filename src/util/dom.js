@@ -4,8 +4,6 @@
  * @author Box
  */
 
-import { CLASS_CHECKBOX_SPAN, CLASS_BUTTON_CONTENT_SPAN } from '../constants';
-
 /**
  * Checks if an html element is some type of input-able
  * element or text area type where characters can be typed.
@@ -33,14 +31,19 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
         return false;
     }
     const tag = element.tagName.toLowerCase();
-    return (
-        isInputElement(element) ||
-        tag === 'button' ||
-        tag === 'a' ||
-        tag === 'option' ||
-        element.classList.contains(CLASS_CHECKBOX_SPAN) ||
-        element.classList.contains(CLASS_BUTTON_CONTENT_SPAN)
-    );
+
+    // Box React UI sensitive checks
+    const isCheckbox =
+        element.classList.contains('checkbox-pointer-target') ||
+        (element.parentElement instanceof HTMLElement
+            ? element.parentElement.classList.contains('checkbox-label')
+            : false);
+
+    const isButton =
+        element.classList.contains('btn-content') ||
+        (element.parentElement instanceof HTMLElement ? element.parentElement.classList.contains('btn') : false);
+
+    return isInputElement(element) || tag === 'button' || tag === 'a' || tag === 'option' || isCheckbox || isButton;
 }
 
 /**

@@ -26,9 +26,9 @@ const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) 
     const isFolder = view === VIEW_FOLDER;
     const isSearch = view === VIEW_SEARCH;
     return (
-        <div className='buik-header'>
+        <div className='be-header'>
             <Logo url={logoUrl} isSmall={isSmall} />
-            <div className='buik-search'>
+            <div className='be-search'>
                 <input
                     type='search'
                     disabled={!isFolder && !isSearch}

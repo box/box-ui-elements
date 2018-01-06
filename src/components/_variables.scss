@@ -27,22 +27,28 @@ $lighter-light-blue: rgba($light-blue, .4) !default;
 
 $font: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
+@mixin rendering {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
 @mixin reset {
+    @include rendering;
+
     /* stylelint-disable declaration-no-important */
     box-sizing: border-box !important;
     /* stylelint-enable declaration-no-important */
     font-family: $font;
     font-size: 13px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 
     * {
+        @include rendering;
+
         /* stylelint-disable declaration-no-important */
         box-sizing: border-box !important;
         /* stylelint-enable declaration-no-important */
-        font-family: $font;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+        font-family: inherit;
 
         &::after,
         &::before {
@@ -52,4 +58,10 @@ $font: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
             text-rendering: inherit;
         }
     }
+}
+
+@mixin placeholder {
+    font-family: $font;
+    font-weight: 200;
+    opacity: .6;
 }

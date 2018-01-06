@@ -20,7 +20,7 @@ type Props = {
 };
 
 const ItemDetails = ({ view, rootId, item, onItemClick, rootElement }: Props) => (
-    <div className='buik-item-details'>
+    <div className='be-item-details'>
         {view === VIEW_SELECTED || view === VIEW_SEARCH ? (
             <InlineBreadcrumbs rootId={rootId} item={item} onItemClick={onItemClick} rootElement={rootElement} />
         ) : (

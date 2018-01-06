@@ -53,12 +53,12 @@ function getBreadcrumb(
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (
-            <span className='buik-breadcrumb-more'>
+            <span className='be-breadcrumb-more'>
                 <BreadcrumbDropdown
                     rootElement={rootElement}
                     onCrumbClick={onCrumbClick}
                     crumbs={crumbs}
-                    className={condensed ? 'buik-breadcrumbs-condensed' : ''}
+                    className={condensed ? 'be-breadcrumbs-condensed' : ''}
                 />
                 <BreadcrumbDelimiter delimiter={condensed ? DELIMITER_SLASH : DELIMITER_CARET} />
             </span>
@@ -98,7 +98,7 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false,
         length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter, rootElement) : null;
 
     return (
-        <div className='buik-breadcrumbs'>
+        <div className='be-breadcrumbs'>
             {isSmall ? null : firstBreadcrumb}
             {isSmall ? null : moreBreadcrumbs}
             {secondLastBreadcrumb}

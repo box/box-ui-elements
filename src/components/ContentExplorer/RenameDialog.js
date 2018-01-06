@@ -103,7 +103,7 @@ const RenameDialog = ({
         <Modal
             isOpen={isOpen}
             parentSelector={() => parentElement}
-            portalClassName={`${CLASS_MODAL} buik-modal-rename`}
+            portalClassName={`${CLASS_MODAL} be-modal-rename`}
             className={CLASS_MODAL_CONTENT}
             overlayClassName={CLASS_MODAL_OVERLAY}
             onRequestClose={onCancel}
@@ -112,14 +112,14 @@ const RenameDialog = ({
         >
             <label>
                 {error ? (
-                    <div className='buik-modal-error'>
+                    <div className='be-modal-error'>
                         <FormattedMessage {...error} values={{ name: nameWithoutExt }} />
                     </div>
                 ) : null}
                 <FormattedMessage tagName='div' {...messages.renameDialogText} values={{ name: nameWithoutExt }} />
                 <input type='text' required ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} />
             </label>
-            <div className='buik-modal-btns'>
+            <div className='be-modal-btns'>
                 <PrimaryButton type='button' onClick={rename} isLoading={isLoading}>
                     <FormattedMessage {...messages.rename} />
                 </PrimaryButton>

@@ -31,7 +31,7 @@ class FileKeywords extends PureComponent<Props, State> {
         const { entries, duration }: SkillData = skill;
         const { keyword }: State = this.state;
         return (
-            <div className='buik-file-keywords'>
+            <div className='be-file-keywords'>
                 {entries.map(
                     (entry: SkillDataEntry, index) => (
                         /* eslint-disable react/no-array-index-key */
@@ -47,7 +47,7 @@ class FileKeywords extends PureComponent<Props, State> {
                 {!!keyword &&
                     Array.isArray(keyword.appears) &&
                     keyword.appears.length > 0 && (
-                        <div className='buik-timelines'>
+                        <div className='be-timelines'>
                             <Timeline
                                 type={keyword.type}
                                 timeslices={keyword.appears}

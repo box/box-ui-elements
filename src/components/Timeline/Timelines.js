@@ -17,7 +17,7 @@ type Props = {
 const Timelines = ({ skill: { entries, duration }, getPreviewer }: Props) => {
     const colors = randomcolor({ count: entries.length, luminosity: 'dark' });
     return (
-        <div className='buik-timelines'>
+        <div className='be-timelines'>
             {entries.map(
                 ({ type, text, url, appears }: SkillDataEntry, index) => (
                     /* eslint-disable react/no-array-index-key */

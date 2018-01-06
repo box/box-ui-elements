@@ -1,6 +1,14 @@
+<a name="3.2.0"></a>
+# 3.2.0 (2018-01-05)
+
+* Fix: Have tethered breadcrumbs drop down be part of the element DOM (#143) ([602674e](https://github.com/box/box-ui-elements/commit/602674e))
+
+
+
 <a name="3.1.0"></a>
 # 3.1.0 (2018-01-04)
 
+* Release: 3.1.0 ([caf8d2c](https://github.com/box/box-ui-elements/commit/caf8d2c))
 * Fix: Scope box-react-ui style overrides to box elements (#142) ([225d569](https://github.com/box/box-ui-elements/commit/225d569))
 
 

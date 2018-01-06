@@ -64,6 +64,7 @@ import type {
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
+import '../modal.scss';
 
 type Props = {
     rootFolderId: string,
@@ -1089,7 +1090,7 @@ class ContentExplorer extends Component<Props, State> {
 
         switch (key) {
             case '/':
-                focus(this.rootElement, '.buik-search input[type="search"]', false);
+                focus(this.rootElement, '.be-search input[type="search"]', false);
                 event.preventDefault();
                 break;
             case 'arrowdown':
@@ -1101,7 +1102,7 @@ class ContentExplorer extends Component<Props, State> {
                 break;
             case 'b':
                 if (this.globalModifier) {
-                    focus(this.rootElement, '.buik-breadcrumb button', false);
+                    focus(this.rootElement, '.be-breadcrumb button', false);
                     event.preventDefault();
                 }
                 break;
@@ -1193,7 +1194,7 @@ class ContentExplorer extends Component<Props, State> {
 
         const { id, permissions }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
-        const styleClassName = classNames('buik bce', className);
+        const styleClassName = classNames('be bce', className);
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
 
@@ -1202,7 +1203,7 @@ class ContentExplorer extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef}>
-                    <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                    <div className='be-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
                             isSmall={isSmall}

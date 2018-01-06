@@ -740,9 +740,10 @@ class ContentUploader extends Component<Props, State> {
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);
+
         const styleClassName = classNames('bcu', className, {
-            'buik-app-element': !useUploadsManager,
-            buik: !useUploadsManager
+            'be-app-element': !useUploadsManager,
+            be: !useUploadsManager
         });
 
         return (

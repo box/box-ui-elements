@@ -1,16 +1,16 @@
 @import '../variables';
 
-.buik-file-keywords {
-    .buik-timelines {
+.be-file-keywords {
+    .be-timelines {
         margin: 20px 0 0;
     }
 
-    .buik-timeline {
+    .be-timeline {
         height: 20px;
     }
 }
 
-.buik-file-keyword {
+.be-file-keyword {
     display: inline-block;
     margin: 0 3px 8px;
 
@@ -19,7 +19,7 @@
         color: $sevens;
         padding: 5px 10px;
 
-        &.buik-file-keyword-word {
+        &.be-file-keyword-word {
             border-radius: 13px;
             // border-radius: 8px 0 0 8px;
             // border-right: 0 none;
@@ -27,7 +27,7 @@
             white-space: normal;
         }
 
-        &.buik-file-keyword-delete {
+        &.be-file-keyword-delete {
             border-left: 0 none;
             border-radius: 0 8px 8px 0;
         }
@@ -35,7 +35,7 @@
         &:focus,
         &:active,
         &:hover,
-        &.buik-file-keyword-selected {
+        &.be-file-keyword-selected {
             background-color: $blue;
             border-color: $blue;
             color: $white;

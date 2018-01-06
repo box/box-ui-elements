@@ -26,7 +26,7 @@ const Breadcrumb = ({ name = '', onClick, isLast, delimiter }: Props) => {
         <span>{name}</span>
     );
     return (
-        <span className='buik-breadcrumb'>
+        <span className='be-breadcrumb'>
             {title}
             {isLast ? null : <BreadcrumbDelimiter delimiter={delimiter} />}
         </span>
