@@ -1,6 +1,6 @@
 @import '../variables';
 
-.buik.uploads-manager-container {
+.buik.bcu-uploads-manager-container {
     bottom: 0;
     max-height: 0;
     position: fixed;
@@ -70,7 +70,7 @@
         }
     }
 
-    &.is-expanded {
+    &.bcu-is-expanded {
         max-height: 435px;
 
         .bcu-uploads-manager-item-list {
@@ -102,7 +102,7 @@
         }
     }
 
-    &.is-expanded .bcu-overall-progress-bar:hover .bcu-uploads-manager-toggle {
+    &.bcu-is-expanded .bcu-overall-progress-bar:hover .bcu-uploads-manager-toggle {
         &::before {
             bottom: 6px;
             left: 6px;

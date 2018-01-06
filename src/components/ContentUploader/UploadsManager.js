@@ -52,8 +52,8 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
 
     return (
         <div
-            className={classNames('buik uploads-manager-container', {
-                'is-expanded': isExpanded,
+            className={classNames('buik bcu-uploads-manager-container', {
+                'bcu-is-expanded': isExpanded,
                 'bcu-is-visible': isVisible
             })}
         >
