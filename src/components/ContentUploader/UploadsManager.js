@@ -16,10 +16,11 @@ type Props = {
     items: UploadItem[],
     onItemActionClick: Function,
     toggleUploadsManager: Function,
-    view: View
+    view: View,
+    rootElement: HTMLElement
 };
 
-const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, isExpanded }: Props) => {
+const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, isExpanded, rootElement }: Props) => {
     const isVisible = items.length > 0;
 
     /**
@@ -28,7 +29,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
      * @param {SyntheticKeyboardEvent} event
      * @return {void}
      */
-    const handleProgressBarKeyDown = (event: SyntheticKeyboardEvent): void => {
+    const handleProgressBarKeyDown = (event: SyntheticKeyboardEvent<*>): void => {
         switch (event.key) {
             case 'Enter':
             case 'Space':
@@ -65,7 +66,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
                 view={view}
             />
             <div className='bcu-uploads-manager-item-list'>
-                <ItemList items={items} view={view} onClick={onItemActionClick} />
+                <ItemList items={items} view={view} onClick={onItemActionClick} rootElement={rootElement} />
             </div>
         </div>
     );

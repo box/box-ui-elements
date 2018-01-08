@@ -211,12 +211,16 @@ class ContentUploader extends Component<Props, State> {
 
     /**
      * Generates file id based on file properties
-     * 
-     * @param {UploadFileWithAPIOptions | File} file 
+     *
+     * @param {UploadFileWithAPIOptions | File} file
      * @param {boolean} withApiOptions - whether file objects contain Api options
      */
     getFileId(file, withApiOptions) {
-        if (!withApiOptions || !file.options) {
+        if (!withApiOptions) {
+            return file.name;
+        }
+        
+        if (!file.options || !file.options.folderId || !file.options.uploadInitTimestamp) {
             return file.file.name;
         }
 
@@ -519,7 +523,7 @@ class ContentUploader extends Component<Props, State> {
 
         const itemIds = {};
         items.forEach((item) => {
-            itemIds[this.getFileId(item)] = true
+            itemIds[this.getFileId(item)] = true;
         });
 
         const state: State = {
@@ -753,6 +757,7 @@ class ContentUploader extends Component<Props, State> {
                             onItemActionClick={this.onClick}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
+                            rootElement={this.rootElement}
                         />
                     </div>
                 ) : (
@@ -764,6 +769,7 @@ class ContentUploader extends Component<Props, State> {
                             isTouch={isTouch}
                             view={view}
                             onClick={this.onClick}
+                            rootElement={this.rootElement}
                         />
                         <Footer
                             hasFiles={hasFiles}

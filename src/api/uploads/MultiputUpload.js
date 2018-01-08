@@ -287,7 +287,7 @@ class MultiputUpload extends BaseMultiput {
      */
     sessionErrorHandler = async (error: ?Error, logEventType: string, logMessage?: string): Promise<any> => {
         this.destroy();
-        const errorResponse = error || (await this.getErrorResponse(error));
+        const errorResponse = await this.getErrorResponse(error);
         this.errorCallback(errorResponse);
 
         try {
@@ -908,7 +908,11 @@ class MultiputUpload extends BaseMultiput {
      * @param {Object} error
      * @return {Promise<Object>}
      */
-    getErrorResponse = async (error: Object): Promise<Object> => {
+    getErrorResponse = async (error: ?Object): Promise<Object> => {
+        if (!error) {
+            return {};
+        }
+
         const { response } = error;
         if (!response) {
             return {};

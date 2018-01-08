@@ -21,13 +21,14 @@ const ICON_CHECK_COLOR = '#26C281';
 type Props = {
     status: UploadStatus,
     onClick: Function,
-    intl: any
+    intl: any,
+    rootElement: HTMLElement
 };
 
-const ItemAction = ({ status, onClick, intl }: Props) => {
+const ItemAction = ({ status, onClick, intl, rootElement }: Props) => {
     let icon = <IconClose />;
     let title = intl.formatMessage(messages.cancel);
-    let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
+    let tooltip = '';
 
     switch (status) {
         case STATUS_COMPLETE:
@@ -37,24 +38,32 @@ const ItemAction = ({ status, onClick, intl }: Props) => {
         case STATUS_ERROR:
             icon = <IconRetry />;
             title = intl.formatMessage(messages.retry);
-            tooltip = intl.formatMessage(messages.uploadsRetryButtonTooltip);
             break;
         case STATUS_IN_PROGRESS:
             icon = <IconInProgress />;
             title = intl.formatMessage(messages.remove);
+            tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
             break;
         case STATUS_PENDING:
         default:
         // empty
     }
 
+    const button = (
+        <PlainButton type='button' onClick={onClick} title={title}>
+            {icon}
+        </PlainButton>
+    );
+
     return (
         <div className='bcu-item-action'>
-            <Tooltip text={tooltip} position='top-left'>
-                <PlainButton type='button' onClick={onClick} title={title}>
-                    {icon}
-                </PlainButton>
-            </Tooltip>
+            {tooltip ? (
+                <Tooltip text={tooltip} position='top-left' bodyElement={rootElement}>
+                    {button}
+                </Tooltip>
+            ) : (
+                button
+            )}
         </div>
     );
 };
