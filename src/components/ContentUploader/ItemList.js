@@ -40,7 +40,13 @@ const ItemList = ({ items, onClick, rootElement }: Props) => (
                 >
                     <Column cellRenderer={nameCell} dataKey='name' flexGrow={1} flexShrink={1} width={300} />
                     <Column cellRenderer={progressCell} dataKey='progress' flexGrow={1} flexShrink={1} width={300} />
-                    <Column cellRenderer={actionCell} dataKey='status' flexShrink={0} width={25} style={{marginRight: 18}}/>
+                    <Column
+                        cellRenderer={actionCell}
+                        dataKey='status'
+                        flexShrink={0}
+                        width={25}
+                        style={{ marginRight: 18 }}
+                    />
                 </Table>
             );
         }}

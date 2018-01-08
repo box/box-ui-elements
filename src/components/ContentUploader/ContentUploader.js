@@ -219,7 +219,7 @@ class ContentUploader extends Component<Props, State> {
         if (!withApiOptions) {
             return file.name;
         }
-        
+
         if (!file.options || !file.options.folderId || !file.options.uploadInitTimestamp) {
             return file.file.name;
         }
