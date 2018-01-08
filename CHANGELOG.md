@@ -1,6 +1,15 @@
+<a name="3.3.0"></a>
+# 3.3.0 (2018-01-08)
+
+* Mojito: Update translations (#145) ([d41c54f](https://github.com/box/box-ui-elements/commit/d41c54f))
+* Breaking: Making style naming consistent (#144) ([63bd5f3](https://github.com/box/box-ui-elements/commit/63bd5f3))
+
+
+
 <a name="3.2.0"></a>
 # 3.2.0 (2018-01-05)
 
+* Release: 3.2.0 ([54ba418](https://github.com/box/box-ui-elements/commit/54ba418))
 * Fix: Have tethered breadcrumbs drop down be part of the element DOM (#143) ([602674e](https://github.com/box/box-ui-elements/commit/602674e))
 
 
