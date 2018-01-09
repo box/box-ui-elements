@@ -9,7 +9,7 @@ import { DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 import Xhr from '../../util/Xhr';
 import type { Token } from '../../flowTypes';
 
-const CACHED_RESULTS_LOCAL_STORE_KEY = 'uploads-reachability-cached-results';
+const CACHED_RESULTS_LOCAL_STORE_KEY = 'bcu-uploads-reachability-cached-results';
 
 class UploadsReachability {
     apiHost: string;
@@ -80,7 +80,7 @@ class UploadsReachability {
         }
 
         try {
-            await window.fetch(`${uploadHost}/reachability-test-foo`);
+            await window.fetch(`${uploadHost}/api/2.0/files/upload_sessions/0`);
         } catch (error) {
             return false;
         }

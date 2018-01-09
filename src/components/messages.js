@@ -437,6 +437,31 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         id: 'be.errorBreadcrumb',
         description: 'Shown as the title in the sub header while showing an error.',
         defaultMessage: 'Error'
+    },
+    uploadsManagerUploadInProgress: {
+        id: 'be.uploadsManagerUploadInProgress',
+        description: 'Text shown when uploads are in progress',
+        defaultMessage: 'Uploading'
+    },
+    uploadsManagerUploadComplete: {
+        id: 'be.uploadsManagerUploadComplete',
+        description: 'Text shown when uploads are completed',
+        defaultMessage: 'Completed'
+    },
+    uploadsManagerUploadFailed: {
+        id: 'be.uploadsManagerUploadFailed',
+        description: 'Text shown when uploads failed',
+        defaultMessage: 'Some Uploads Failed'
+    },
+    uploadsCancelButtonTooltip: {
+        id: 'be.uploadsCancelButtonTooltip',
+        description: 'Cancel upload button tooltip',
+        defaultMessage: 'Cancel this upload'
+    },
+    uploadsRetryButtonTooltip: {
+        id: 'be.uploadsRetryButtonTooltip',
+        description: 'Retry upload button tooltip',
+        defaultMessage: 'Retry upload'
     }
 });
 

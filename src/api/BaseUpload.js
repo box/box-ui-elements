@@ -7,6 +7,8 @@
 import Base from './Base';
 import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../constants';
 
+const MAX_RETRY = 5;
+
 class BaseUpload extends Base {
     file: File;
     overwrite: boolean;
@@ -71,7 +73,7 @@ class BaseUpload extends Base {
         ) {
             this.errorCallback(error);
             // Retry with exponential backoff for other failures since these are likely to be network errors
-        } else {
+        } else if (this.retryCount < MAX_RETRY) {
             this.retryTimeout = setTimeout(
                 () =>
                     retryUploadFunc({
@@ -80,6 +82,8 @@ class BaseUpload extends Base {
                 2 ** this.retryCount * MS_IN_S
             );
             this.retryCount += 1;
+        } else {
+            this.errorCallback(error);
         }
     };
 }

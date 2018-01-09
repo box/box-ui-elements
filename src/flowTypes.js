@@ -210,7 +210,22 @@ export type UploadItem = {
     name: string,
     progress: number,
     size: number,
-    status: UploadStatus
+    status: UploadStatus,
+    options?: UploadItemAPIOptions
+};
+
+export type UploadItemAPIOptions = {
+    apiHost?: string,
+    fileId?: string,
+    folderId?: string,
+    token?: Token,
+    uploadHost?: string,
+    uploadInitTimestamp?: number
+};
+
+export type UploadFileWithAPIOptions = {
+    file: File,
+    options?: UploadItemAPIOptions
 };
 
 export type ModalOptions = {
