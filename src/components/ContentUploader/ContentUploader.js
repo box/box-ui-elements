@@ -515,7 +515,6 @@ class ContentUploader extends Component<Props, State> {
         }
 
         if (noFileIsPendingOrInProgress && useUploadsManager) {
-            clearTimeout(this.resetItemsTimeout);
             onComplete(items);
         }
 
@@ -700,7 +699,6 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
-        this.minimizeUploadsManager();
         onCancel(items);
 
         this.setState({
