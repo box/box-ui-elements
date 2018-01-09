@@ -201,26 +201,24 @@ class ContentUploader extends Component<Props, State> {
      * Given an array of files, return the files that are new to the Content Uploader
      *
      * @param {Array<UploadFileWithAPIOptions | File>} files
-     * @param {boolean} withApiOptions - whether file objects contain Api options
      */
-    getNewFiles = (files: Array<UploadFileWithAPIOptions | File>, withApiOptions) => {
+    getNewFiles = (files: Array<UploadFileWithAPIOptions | File>) => {
         const { itemIds } = this.state;
 
-        return [].filter.call(files, (file) => !(this.getFileId(file, withApiOptions) in itemIds));
+        return [].filter.call(files, (file) => !(this.getFileId(file) in itemIds));
     };
 
     /**
      * Generates file id based on file properties
      *
      * @param {UploadFileWithAPIOptions | File} file
-     * @param {boolean} withApiOptions - whether file objects contain Api options
      */
-    getFileId(file, withApiOptions) {
-        if (!withApiOptions) {
+    getFileId(file) {
+        if (!file.options) {
             return file.name;
         }
 
-        if (!file.options || !file.options.folderId || !file.options.uploadInitTimestamp) {
+        if (!file.options.folderId || !file.options.uploadInitTimestamp) {
             return file.file.name;
         }
 
@@ -243,7 +241,7 @@ class ContentUploader extends Component<Props, State> {
         clearTimeout(this.resetItemsTimeout);
 
         // Convert files from the file API to upload items
-        const newItems = this.getNewFiles(files, withApiOptions).map((file) => {
+        const newItems = this.getNewFiles(files).map((file) => {
             let uploadFile = file;
             let uploadAPIOptions = {};
 
@@ -702,6 +700,7 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
+        this.minimizeUploadsManager();
         onCancel(items);
 
         this.setState({
