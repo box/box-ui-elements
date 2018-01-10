@@ -556,6 +556,7 @@ class ContentUploader extends Component<Props, State> {
         const { file } = item;
 
         item.status = STATUS_ERROR;
+        item.error = error;
         this.numItemsUploading -= 1;
 
         const { items } = this.state;

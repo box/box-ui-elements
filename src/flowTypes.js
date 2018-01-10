@@ -205,6 +205,7 @@ export type Collection = {
 export type UploadItem = {
     api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
+    error?: Object,
     extension: string,
     file: File,
     name: string,

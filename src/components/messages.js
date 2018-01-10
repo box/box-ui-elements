@@ -462,6 +462,26 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         id: 'be.uploadsRetryButtonTooltip',
         description: 'Retry upload button tooltip',
         defaultMessage: 'Retry upload'
+    },
+    uploadsFileSizeLimitExceededErrorMessage: {
+        id: 'be.uploadsFileSizeLimitExceededErrorMessage',
+        description: 'Error message shown when file size exceeds the limit',
+        defaultMessage: 'File size exceeds the folder owner\'s file size limit'
+    },
+    uploadsStorageLimitErrorMessage: {
+        id: 'be.uploadsStorageLimitErrorMessage',
+        description: 'Error message shown when account storage limit has been reached',
+        defaultMessage: 'Account storage limit reached'
+    },
+    uploadsPendingFolderSizeLimitErrorMessage: {
+        id: 'be.uploadsPendingFolderSizeLimitErrorMessage',
+        description: 'Error message shown when pending app folder size exceeds the limit',
+        defaultMessage: 'Pending app folder size limit exceeded'
+    },
+    uploadsDefaultErrorMessage: {
+        id: 'be.uploadsDefaultErrorMessage',
+        description: 'Default error message shown when upload fails',
+        defaultMessage: 'Something went wrong with the upload. Please try again.'
     }
 });
 
