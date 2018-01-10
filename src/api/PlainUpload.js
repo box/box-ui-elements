@@ -10,7 +10,8 @@ import type { BoxItem } from '../flowTypes';
 
 class PlainUpload extends BaseUpload {
     file: File;
-    id: string;
+    folderId: string;
+    fileId: ?string;
     overwrite: boolean;
     retryTimeout: number;
     successCallback: Function;
@@ -94,6 +95,10 @@ class PlainUpload extends BaseUpload {
             return;
         }
 
+        if (!this.fileId && !!fileId) {
+            this.fileId = fileId;
+        }
+
         let url = `${this.getBaseUrl()}/files/content`;
         if (fileId) {
             url = url.replace('content', `${fileId}/content`);
@@ -102,7 +107,7 @@ class PlainUpload extends BaseUpload {
         const { size, name } = this.file;
         const attributes = {
             name: fileName || name,
-            parent: { id: this.id },
+            parent: { id: this.folderId },
             size
         };
 
@@ -120,11 +125,9 @@ class PlainUpload extends BaseUpload {
      *
      * @param {Object} - Request options
      * @param {boolean} [options.url] - Upload URL to use
-     * @param {string} [options.fileId] - ID of file to replace
-     * @param {string} [options.fileName] - New name for file
      * @return {Promise<*>}
      */
-    async makeRequest({ url, fileId, fileName }: { url?: string, fileId?: string, fileName?: string }): Promise<*> {
+    async makeRequest({ url }: { url?: string }): Promise<*> {
         if (this.isDestroyed()) {
             return;
         }
@@ -136,14 +139,14 @@ class PlainUpload extends BaseUpload {
         if (!uploadUrl) {
             uploadUrl = `${this.uploadHost}/api/2.0/files/content`;
 
-            if (fileId) {
-                uploadUrl = uploadUrl.replace('content', `${fileId}/content`);
+            if (this.fileId) {
+                uploadUrl = uploadUrl.replace('content', `${this.fileId}/content`);
             }
         }
 
         const attributes = JSON.stringify({
-            name: fileName || this.file.name,
-            parent: { id: this.id }
+            name: this.file.name,
+            parent: { id: this.folderId }
         });
 
         this.xhr.uploadFile({
@@ -163,7 +166,8 @@ class PlainUpload extends BaseUpload {
      * Otherwise, re-upload with a different name.
      *
      * @param {Object} options - Upload options
-     * @param {string} options.id - Folder id
+     * @param {string} options.folderId - untyped folder id
+     * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
      * @param {File} options.file - File blob object
      * @param {Function} [options.successCallback] - Function to call with response
      * @param {Function} [options.errorCallback] - Function to call with errors
@@ -172,14 +176,16 @@ class PlainUpload extends BaseUpload {
      * @return {void}
      */
     upload({
-        id,
+        folderId,
+        fileId,
         file,
         successCallback = noop,
         errorCallback = noop,
         progressCallback = noop,
         overwrite = true
     }: {
-        id: string,
+        folderId: string,
+        fileId: ?string,
         file: File,
         successCallback: Function,
         errorCallback: Function,
@@ -191,14 +197,15 @@ class PlainUpload extends BaseUpload {
         }
 
         // Save references
-        this.id = id;
+        this.folderId = folderId;
+        this.fileId = fileId;
         this.file = file;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         this.progressCallback = progressCallback;
         this.overwrite = overwrite;
 
-        this.makePreflightRequest({});
+        this.makePreflightRequest(fileId ? { fileId } : {});
     }
 
     /**
