@@ -126,7 +126,7 @@ describe('api/PlainUpload', () => {
                 size: 1,
                 name: 'zavala'
             };
-            upload.id = '123';
+            upload.folderId = '123';
 
             upload.xhr = {
                 options: jest.fn()
@@ -138,7 +138,7 @@ describe('api/PlainUpload', () => {
                 data: {
                     name: upload.file.name,
                     parent: {
-                        id: upload.id
+                        id: upload.folderId
                     },
                     size: upload.file.size
                 },
@@ -157,7 +157,7 @@ describe('api/PlainUpload', () => {
                 size: 1,
                 name: 'zavala'
             };
-            upload.id = '123';
+            upload.folderId = '123';
 
             upload.xhr = {
                 options: jest.fn()
@@ -194,7 +194,7 @@ describe('api/PlainUpload', () => {
             upload.file = {
                 name: 'warlock'
             };
-            upload.id = '123';
+            upload.folderId = '123';
             upload.xhr = {
                 uploadFile: jest.fn()
             };
@@ -219,42 +219,19 @@ describe('api/PlainUpload', () => {
             upload.file = {
                 name: 'warlock'
             };
-            upload.id = '123';
+            upload.fileId = fileId;
+            upload.folderId = '123';
             upload.xhr = {
                 uploadFile: jest.fn()
             };
 
-            await upload.makeRequest({
-                fileId
-            });
+            await upload.makeRequest({});
             expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
                 url: `${upload.uploadHost}/api/2.0/files/${fileId}/content`,
                 data: expect.any(Object),
                 successHandler: expect.any(Function),
                 errorHandler: expect.any(Function),
                 progressHandler: expect.any(Function)
-            });
-        });
-
-        test('should stringify name and parent for upload data', async () => {
-            const name = 'titan';
-            const parentId = '123';
-            JSON.stringify = jest.fn();
-
-            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.id = parentId;
-            upload.xhr = {
-                uploadFile: jest.fn()
-            };
-
-            await upload.makeRequest({
-                fileName: name
-            });
-            expect(JSON.stringify).toHaveBeenCalledWith({
-                name,
-                parent: {
-                    id: parentId
-                }
             });
         });
     });
@@ -268,7 +245,7 @@ describe('api/PlainUpload', () => {
         });
 
         test('should set properties and make preflight request', () => {
-            const id = '123';
+            const folderId = '123';
             const file = {};
             const successCallback = () => {};
             const errorCallback = () => {};
@@ -278,7 +255,7 @@ describe('api/PlainUpload', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
             upload.makePreflightRequest = jest.fn();
             upload.upload({
-                id,
+                folderId,
                 file,
                 successCallback,
                 errorCallback,
@@ -286,7 +263,7 @@ describe('api/PlainUpload', () => {
                 overwrite
             });
 
-            expect(upload.id).toBe(id);
+            expect(upload.folderId).toBe(folderId);
             expect(upload.file).toBe(file);
             expect(upload.successCallback).toBe(successCallback);
             expect(upload.errorCallback).toBe(errorCallback);

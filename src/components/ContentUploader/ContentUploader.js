@@ -29,7 +29,9 @@ import {
     STATUS_IN_PROGRESS,
     STATUS_COMPLETE,
     STATUS_ERROR,
-    ERROR_CODE_UPLOAD_FILE_LIMIT
+    ERROR_CODE_UPLOAD_FILE_LIMIT,
+    TYPED_ID_FOLDER_PREFIX,
+    TYPED_ID_FILE_PREFIX
 } from '../../constants';
 import type {
     BoxItem,
@@ -181,8 +183,11 @@ class ContentUploader extends Component<Props, State> {
 
         const itemFolderId =
             uploadAPIOptions && uploadAPIOptions.folderId
-                ? `folder_${uploadAPIOptions.folderId}`
-                : `folder_${rootFolderId}`;
+                ? `${TYPED_ID_FOLDER_PREFIX}${uploadAPIOptions.folderId}`
+                : `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`;
+        const itemFileId =
+            uploadAPIOptions && uploadAPIOptions.fileId ? `${TYPED_ID_FILE_PREFIX}${uploadAPIOptions.fileId}` : null;
+
         const options = {
             token,
             sharedLink,
@@ -191,7 +196,7 @@ class ContentUploader extends Component<Props, State> {
             uploadHost,
             clientName,
             responseFilter,
-            id: itemFolderId,
+            id: itemFileId || itemFolderId,
             ...uploadAPIOptions
         };
         return new API(options);
@@ -405,16 +410,17 @@ class ContentUploader extends Component<Props, State> {
 
         this.numItemsUploading += 1;
 
-        api.upload({
-            // TODO: rename id to folderId
+        const uploadOptions: Object = {
             file,
-            id: options && options.folderId ? options.folderId : rootFolderId,
+            folderId: options && options.folderId ? options.folderId : rootFolderId,
             errorCallback: (error) => this.handleUploadError(item, error),
             progressCallback: (event) => this.handleUploadProgress(item, event),
             successCallback: (entries) => this.handleUploadSuccess(item, entries),
             overwrite: true,
-            fileId: options && options.fileId ? options.fileId : undefined
-        });
+            fileId: options && options.fileId ? options.fileId : null
+        };
+
+        api.upload(uploadOptions);
 
         item.status = STATUS_IN_PROGRESS;
         const { items } = this.state;
