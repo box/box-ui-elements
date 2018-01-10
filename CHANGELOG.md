@@ -1,6 +1,19 @@
+<a name="3.4.0"></a>
+# 3.4.0 (2018-01-10)
+
+* Docs: Fix README typo ([5d0b79d](https://github.com/box/box-ui-elements/commit/5d0b79d))
+* Mojito: Update translations (#147) ([1de962e](https://github.com/box/box-ui-elements/commit/1de962e))
+* Mojito: Update translations (#149) ([5fa107f](https://github.com/box/box-ui-elements/commit/5fa107f))
+* New: error messages for failed upload items in ContentUploader (#148) ([e2393ec](https://github.com/box/box-ui-elements/commit/e2393ec))
+* New: Uploads Manager (#128) ([6791706](https://github.com/box/box-ui-elements/commit/6791706))
+* Update: support uploading new version (#146) ([fe9a0c9](https://github.com/box/box-ui-elements/commit/fe9a0c9))
+
+
+
 <a name="3.3.0"></a>
 # 3.3.0 (2018-01-08)
 
+* Release: 3.3.0 ([40121b8](https://github.com/box/box-ui-elements/commit/40121b8))
 * Mojito: Update translations (#145) ([d41c54f](https://github.com/box/box-ui-elements/commit/d41c54f))
 * Breaking: Making style naming consistent (#144) ([63bd5f3](https://github.com/box/box-ui-elements/commit/63bd5f3))
 
