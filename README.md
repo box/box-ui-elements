@@ -237,7 +237,7 @@ render(
 | language | string |  | *See the [Internationalization](#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | rootFolderId | string | `0` | The root folder for the content tree. |
-| type | string | `file, web_link, folder` | Indicates which type of items show up in the tree. Should be a comma seperated combination of `file`, `folder` or `web_link`. |
+| type | string | `file, web_link, folder` | Indicates which type of items show up in the tree. Should be a comma separated combination of `file`, `folder` or `web_link`. |
 | onClick | function([Folder](https://developer.box.com/reference#folder-object)&#124;[File](https://developer.box.com/reference#file-object)&#124;[Web Link](https://developer.box.com/reference#web-link-object)) |  | Callback function for when an item is clicked. |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | autoFocus | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
