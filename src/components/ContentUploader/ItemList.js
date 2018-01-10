@@ -39,7 +39,14 @@ const ItemList = ({ items, onClick, rootElement }: Props) => (
                     width={width}
                 >
                     <Column cellRenderer={nameCell} dataKey='name' flexGrow={1} flexShrink={1} width={300} />
-                    <Column cellRenderer={progressCell} dataKey='progress' flexGrow={1} flexShrink={1} width={300} />
+                    <Column
+                        cellRenderer={progressCell}
+                        dataKey='progress'
+                        flexGrow={1}
+                        flexShrink={1}
+                        width={300}
+                        style={{ textAlign: 'right' }}
+                    />
                     <Column
                         cellRenderer={actionCell}
                         dataKey='status'
