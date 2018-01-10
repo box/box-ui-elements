@@ -33,7 +33,7 @@ class MultiputUpload extends BaseMultiput {
     commitRetryCount: number;
     createSessionNumRetriesPerformed: number;
     destinationFileId: ?string;
-    folderId: ?string;
+    folderId: string;
     file: File;
     fileSha1: ?string;
     firstUnuploadedPartIndex: number;
@@ -101,7 +101,8 @@ class MultiputUpload extends BaseMultiput {
      *
      * @param {Object} options
      * @param {File} options.file
-     * @param {string} [options.id] - Untyped folder id (e.g. no "d_" prefix)
+     * @param {string} options.folderId - Untyped folder id (e.g. no "folder_" prefix)
+     * @param {string} [options.fileId] - Untyped file id (e.g. no "file_" prefix)
      * @param {Function} [options.errorCallback]
      * @param {Function} [options.progressCallback]
      * @param {Function} [options.successCallback]
@@ -109,7 +110,7 @@ class MultiputUpload extends BaseMultiput {
      */
     upload = ({
         file,
-        id,
+        folderId,
         errorCallback,
         progressCallback,
         successCallback,
@@ -117,12 +118,12 @@ class MultiputUpload extends BaseMultiput {
         fileId
     }: {
         file: File,
-        id?: ?string,
+        folderId: string,
         errorCallback?: Function,
         progressCallback?: Function,
         successCallback?: Function,
         overwrite?: boolean,
-        fileId?: string
+        fileId: ?string
     }): void => {
         this.file = file;
         this.fileName = this.file.name;
@@ -130,7 +131,7 @@ class MultiputUpload extends BaseMultiput {
         // a file change during the upload.
         this.initialFileSize = this.file.size;
         this.initialFileLastModified = getFileLastModifiedAsISONoMSIfPossible(this.file);
-        this.folderId = id;
+        this.folderId = folderId;
         this.errorCallback = errorCallback || noop;
         this.progressCallback = progressCallback || noop;
         this.successCallback = successCallback || noop;
@@ -472,7 +473,11 @@ class MultiputUpload extends BaseMultiput {
             }: { buffer: ArrayBuffer, readCompleteTimestamp: number } = await this.readFile(reader, blob);
             const sha256ArrayBuffer = await digest('SHA-256', buffer);
             const sha256 = btoa(
-                new Uint8Array(sha256ArrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                Array.prototype.reduce.call(
+                    new Uint8Array(sha256ArrayBuffer),
+                    (data, byte) => data + String.fromCharCode(byte),
+                    ''
+                )
             );
             this.sendPartToWorker(part, buffer);
 
