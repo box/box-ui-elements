@@ -18,7 +18,8 @@ type State = {
 class ProgressBar extends PureComponent<Props, State> {
     props: Props;
     state: State;
-    timeout: number;
+    timeout: TimeoutID;
+    interval: IntervalID;
 
     static defaultProps = { percent: 0 };
 
@@ -34,13 +35,22 @@ class ProgressBar extends PureComponent<Props, State> {
     }
 
     /**
+     * Clears any timeouts and intervals
+     *
+     * @return {void}
+     */
+    clearTimeoutAndInterval() {
+        clearInterval(this.interval);
+        clearTimeout(this.timeout);
+    }
+
+    /**
      * Updates state from new props
      *
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props) {
-        clearInterval(this.timeout);
-        clearTimeout(this.timeout);
+        this.clearTimeoutAndInterval();
         const { percent }: Props = nextProps;
         this.setState({ percent }, this.startProgress);
     }
@@ -51,8 +61,7 @@ class ProgressBar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillUnmount() {
-        clearInterval(this.timeout);
-        clearTimeout(this.timeout);
+        this.clearTimeoutAndInterval();
     }
 
     /**
@@ -64,7 +73,7 @@ class ProgressBar extends PureComponent<Props, State> {
     startProgress = () => {
         const { percent }: State = this.state;
         if (percent === 0) {
-            this.timeout = setInterval(this.incrementProgress, 100);
+            this.interval = setInterval(this.incrementProgress, 100);
         } else if (percent === 100) {
             // Timeout helps transition of hiding the bar to finish
             this.timeout = setTimeout(this.resetProgress, 600);

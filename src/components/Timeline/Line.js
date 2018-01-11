@@ -7,11 +7,11 @@
 import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import { COLOR_BOX_BLUE } from '../../constants';
-import type { SkillDataEntryType } from '../../flowTypes';
+import type { SkillCardEntryType } from '../../flowTypes';
 import './Line.scss';
 
 type Props = {
-    type: SkillDataEntryType,
+    type: SkillCardEntryType,
     start: number,
     duration: number,
     color?: string,

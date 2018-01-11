@@ -81,9 +81,7 @@ export const FIELD_SHA1 = 'sha1';
 export const FIELD_WATERMARK_INFO = 'watermark_info';
 export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
 export const FIELD_FILE_VERSION = 'file_version';
-export const METADATA_KEYWORDS = 'metadata.global.box-skills-keywords-demo';
-export const METADATA_TIMELINES = 'metadata.global.box-skills-timelines-demo';
-export const METADATA_TRANSCRIPTS = 'metadata.global.box-skills-transcripts-demo';
+export const METADATA_SKILLS = 'metadata.global.boxSkillsCards';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';

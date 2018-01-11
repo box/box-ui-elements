@@ -54,8 +54,8 @@ class MultiputUpload extends BaseMultiput {
     sessionId: string;
     totalUploadedBytes: number;
     sha1Worker: Worker;
-    createSessionTimeout: ?number;
-    commitSessionTimeout: ?number;
+    createSessionTimeout: TimeoutID;
+    commitSessionTimeout: TimeoutID;
     fileName: string;
     fileId: ?string;
     overwrite: boolean;

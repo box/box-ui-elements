@@ -12,13 +12,12 @@
     border-bottom: 1px solid $off-white;
     padding: 5px 0 10px;
     text-align: left;
-    text-decoration: none;
     width: 100%;
 
-    .btn-content {
-        cursor: pointer;
-        max-width: 250px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    &:hover,
+    &:active,
+    &:focus {
+        border-bottom-color: $blue;
+        text-decoration: none;
     }
 }

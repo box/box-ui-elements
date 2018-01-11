@@ -10,11 +10,11 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
 import 'react-virtualized/styles.css';
 import { formatTime } from '../../util/datetime';
-import type { SkillData, TimeSlice, SkillDataEntry } from '../../flowTypes';
+import type { SkillCard, SkillCardEntryTimeSlice, SkillCardEntry } from '../../flowTypes';
 import './Transcript.scss';
 
 type Props = {
-    skill: SkillData,
+    skill: SkillCard,
     getPreviewer?: Function
 };
 
@@ -23,7 +23,7 @@ const cache = new CellMeasurerCache({
     fixedWidth: true
 });
 
-const isValidStartTime = (cellData?: TimeSlice[]): boolean =>
+const isValidStartTime = (cellData?: SkillCardEntryTimeSlice[]): boolean =>
     Array.isArray(cellData) && !!cellData[0] && typeof cellData[0].start === 'number';
 
 const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
@@ -42,7 +42,7 @@ const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
                     rowGetter={({ index }) => entries[index]}
                     className='be-transcript'
                     deferredMeasurementCache={cache}
-                    onRowClick={({ rowData }: { rowData: SkillDataEntry }): void => {
+                    onRowClick={({ rowData }: { rowData: SkillCardEntry }): void => {
                         const viewer = getPreviewer ? getPreviewer() : null;
                         const cellData = rowData.appears;
                         if (

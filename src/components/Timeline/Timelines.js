@@ -7,10 +7,10 @@
 import React from 'react';
 import randomcolor from 'randomcolor';
 import Timeline from './Timeline';
-import type { SkillData, SkillDataEntry } from '../../flowTypes';
+import type { SkillCard, SkillCardEntry } from '../../flowTypes';
 
 type Props = {
-    skill: SkillData,
+    skill: SkillCard,
     getPreviewer?: Function
 };
 
@@ -19,13 +19,13 @@ const Timelines = ({ skill: { entries, duration }, getPreviewer }: Props) => {
     return (
         <div className='be-timelines'>
             {entries.map(
-                ({ type, text, url, appears }: SkillDataEntry, index) => (
+                ({ type, text, image_url, appears }: SkillCardEntry, index) => (
                     /* eslint-disable react/no-array-index-key */
                     <Timeline
                         key={index}
                         type={type}
                         text={text}
-                        url={url}
+                        url={image_url}
                         color={colors[index]}
                         timeslices={appears}
                         duration={duration}
