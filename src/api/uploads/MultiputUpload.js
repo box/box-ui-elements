@@ -324,7 +324,9 @@ class MultiputUpload extends BaseMultiput {
         }
 
         if (this.sessionEndpoints.abort) {
-            this.xhr.delete(this.sessionEndpoints.abort);
+            this.xhr.delete({
+                url: this.sessionEndpoints.abort
+            });
         }
     };
 
