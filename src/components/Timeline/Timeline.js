@@ -7,15 +7,15 @@
 import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import Line from './Line';
-import type { TimeSlice, SkillDataEntryType } from '../../flowTypes';
+import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../flowTypes';
 import './Timeline.scss';
 
 type Props = {
-    type?: SkillDataEntryType,
+    type?: SkillCardEntryType,
     color?: string,
     text?: string,
     url?: string,
-    timeslices?: TimeSlice[],
+    timeslices?: SkillCardEntryTimeSlice[],
     duration?: number,
     getPreviewer?: Function
 };
@@ -29,7 +29,7 @@ const Timeline = ({
     timeslices = [],
     getPreviewer
 }: Props) => {
-    let nextTimeSliceIndex = 0;
+    let nextSkillCardEntryTimeSliceIndex = 0;
     const startNextSegment = () => {
         const viewer = getPreviewer ? getPreviewer() : null;
         if (
@@ -37,10 +37,10 @@ const Timeline = ({
             viewer.isLoaded() &&
             !viewer.isDestroyed() &&
             typeof viewer.play === 'function' &&
-            timeslices[nextTimeSliceIndex]
+            timeslices[nextSkillCardEntryTimeSliceIndex]
         ) {
-            viewer.play(timeslices[nextTimeSliceIndex].start);
-            nextTimeSliceIndex = (nextTimeSliceIndex + 1) % timeslices.length;
+            viewer.play(timeslices[nextSkillCardEntryTimeSliceIndex].start);
+            nextSkillCardEntryTimeSliceIndex = (nextSkillCardEntryTimeSliceIndex + 1) % timeslices.length;
         }
     };
 
@@ -62,7 +62,7 @@ const Timeline = ({
             <div className='be-timeline-wrapper'>
                 <div className='be-timeline-line' style={{ backgroundColor: color }} />
                 {timeslices.map(
-                    ({ start, end }: TimeSlice, index) => (
+                    ({ start, end }: SkillCardEntryTimeSlice, index) => (
                         /* eslint-disable react/no-array-index-key */
                         <Line
                             key={index}

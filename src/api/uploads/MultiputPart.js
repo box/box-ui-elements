@@ -36,7 +36,7 @@ class MultiputPart extends BaseMultiput {
     data: MultiputData;
     config: MultiputConfig;
     id: string;
-    retryTimeout: ?number;
+    retryTimeout: TimeoutID;
     blob: ?Blob;
     rangeEnd: number;
     startTimestamp: number;

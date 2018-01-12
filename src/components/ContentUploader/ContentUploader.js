@@ -95,7 +95,7 @@ class ContentUploader extends Component<Props, State> {
     props: Props;
     rootElement: HTMLElement;
     appElement: HTMLElement;
-    resetItemsTimeout: ?number;
+    resetItemsTimeout: TimeoutID;
     numItemsUploading: number = 0;
 
     static defaultProps = {

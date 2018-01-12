@@ -103,10 +103,36 @@ export type User = {
     type: 'user'
 };
 
+export type SkillCardType = 'keyword' | 'transcript' | 'timeline' | 'keyvalue';
+export type SkillCardEntryType = 'text' | 'image';
+
+export type SkillCardEntryTimeSlice = {
+    start: number,
+    end?: number
+};
+
+export type SkillCardEntry = {
+    type?: SkillCardEntryType,
+    text?: string,
+    label?: string,
+    image_url?: string,
+    appears?: SkillCardEntryTimeSlice[]
+};
+
+export type SkillCard = {
+    type: 'skill_card',
+    skill_card_type: SkillCardType,
+    title?: string,
+    duration?: number,
+    entries: SkillCardEntry[]
+};
+
+export type SkillCards = {
+    cards: SkillCard[]
+};
+
 export type MetadataTemplate = {
-    'box-skills-keywords-demo'?: { keywords: string },
-    'box-skills-timelines-demo'?: { timelines: string },
-    'box-skills-transcripts-demo'?: { transcripts: string }
+    boxSkillsCards?: SkillCards
 };
 
 export type MetadataType = {
@@ -272,30 +298,6 @@ export type Recent = {
 export type RecentCollection = {
     order: Order,
     entries: Recent[]
-};
-
-export type SkillDataType = 'keyword' | 'transcript' | 'timeline';
-export type SkillDataEntryType = 'text' | 'image';
-
-export type TimeSlice = {
-    start: number,
-    end?: number
-};
-
-export type SkillDataEntry = {
-    type?: SkillDataEntryType,
-    text?: string,
-    label?: string,
-    url?: string,
-    appears?: TimeSlice[]
-};
-
-export type SkillData = {
-    type: 'skills_data',
-    skills_data_type: SkillDataType,
-    title?: string,
-    duration?: number,
-    entries: SkillDataEntry[]
 };
 
 export type MultiputConfig = {

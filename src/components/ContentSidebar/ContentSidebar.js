@@ -26,7 +26,6 @@ type Props = {
     getPreviewer: Function,
     hasTitle: boolean,
     hasSkills: boolean,
-    hasDescription: boolean,
     hasProperties: boolean,
     hasMetadata: boolean,
     hasAccessStats: boolean,
@@ -57,7 +56,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         getPreviewer: noop,
         hasTitle: false,
         hasSkills: false,
-        hasDescription: false,
         hasProperties: false,
         hasMetadata: false,
         hasAccessStats: false,
@@ -154,16 +152,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {Boolean} true if we should fetch or render
      */
     shouldFetchOrRender(): boolean {
-        const {
-            hasSkills,
-            hasDescription,
-            hasProperties,
-            hasMetadata,
-            hasAccessStats,
-            hasClassification
-        }: Props = this.props;
+        const { hasSkills, hasProperties, hasMetadata, hasAccessStats, hasClassification }: Props = this.props;
 
-        return hasSkills || hasDescription || hasProperties || hasMetadata || hasAccessStats || hasClassification;
+        return hasSkills || hasProperties || hasMetadata || hasAccessStats || hasClassification;
     }
 
     /**
@@ -218,7 +209,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             getPreviewer,
             hasTitle,
             hasSkills,
-            hasDescription,
             hasProperties,
             hasMetadata,
             hasAccessStats,
@@ -241,7 +231,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                             ensurePrivacy={!!sharedLink}
                             hasTitle={hasTitle}
                             hasSkills={hasSkills}
-                            hasDescription={hasDescription}
                             hasProperties={hasProperties}
                             hasMetadata={hasMetadata}
                             hasAccessStats={hasAccessStats}

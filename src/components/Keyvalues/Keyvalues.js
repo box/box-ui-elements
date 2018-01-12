@@ -5,18 +5,18 @@
  */
 
 import React from 'react';
-import type { SkillData, SkillDataEntry } from '../../flowTypes';
+import type { SkillCard, SkillCardEntry } from '../../flowTypes';
 import './Keyvalues.scss';
 
 type Props = {
-    skill: SkillData
+    skill: SkillCard
 };
 
 const Keyvalues = ({ skill: { entries } }: Props) => (
     <div className='be-keyvalues'>
         {Array.isArray(entries) &&
             entries.map(
-                ({ label, text }: SkillDataEntry, index) =>
+                ({ label, text }: SkillCardEntry, index) =>
                     !!label &&
                     !!text && (
                         /* eslint-disable react/no-array-index-key */

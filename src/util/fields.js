@@ -30,9 +30,7 @@ import {
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_FILE_VERSION,
-    METADATA_KEYWORDS,
-    METADATA_TIMELINES,
-    METADATA_TRANSCRIPTS
+    METADATA_SKILLS
 } from '../constants';
 
 // Minimum set of fields needed for Content Explorer / Picker
@@ -61,9 +59,7 @@ const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_MODIFIED_BY,
     FIELD_OWNED_BY,
     FIELD_DESCRIPTION,
-    METADATA_KEYWORDS,
-    METADATA_TIMELINES,
-    METADATA_TRANSCRIPTS
+    METADATA_SKILLS
 ];
 
 // Additional fields needed for preview

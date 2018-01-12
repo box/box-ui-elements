@@ -13,7 +13,6 @@ class PlainUpload extends BaseUpload {
     folderId: string;
     fileId: ?string;
     overwrite: boolean;
-    retryTimeout: number;
     successCallback: Function;
     errorCallback: Function;
     progressCallback: Function;

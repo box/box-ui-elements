@@ -1,39 +1,39 @@
 /**
  * @flow
- * @file File Keywords SkillData component
+ * @file File Keywords SkillCard component
  * @author Box
  */
 
 import React, { PureComponent } from 'react';
 import FileKeyword from './Keyword';
 import { Timeline } from '../Timeline';
-import type { SkillData, SkillDataEntry } from '../../flowTypes';
+import type { SkillCard, SkillCardEntry } from '../../flowTypes';
 
 type Props = {
-    skill: SkillData,
+    skill: SkillCard,
     getPreviewer?: Function
 };
 
 type State = {
-    keyword?: SkillDataEntry
+    keyword?: SkillCardEntry
 };
 
 class FileKeywords extends PureComponent<Props, State> {
     props: Props;
     state: State = {};
 
-    onClick = (keyword: SkillDataEntry) => {
+    onClick = (keyword: SkillCardEntry) => {
         this.setState({ keyword });
     };
 
     render() {
         const { skill, getPreviewer }: Props = this.props;
-        const { entries, duration }: SkillData = skill;
+        const { entries, duration }: SkillCard = skill;
         const { keyword }: State = this.state;
         return (
             <div className='be-file-keywords'>
                 {entries.map(
-                    (entry: SkillDataEntry, index) => (
+                    (entry: SkillCardEntry, index) => (
                         /* eslint-disable react/no-array-index-key */
                         <FileKeyword
                             key={index}

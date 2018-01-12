@@ -278,13 +278,13 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Label for the hide sidebar button.',
         defaultMessage: 'Hide Sidebar'
     },
-    sidebarDescription: {
-        id: 'be.sidebarDescription',
+    description: {
+        id: 'be.description',
         description: 'Label for the description field in the preview sidebar.',
         defaultMessage: 'Description'
     },
-    sidebarDescriptionPlaceholder: {
-        id: 'be.sidebarDescriptionPlaceholder',
+    descriptionPlaceholder: {
+        id: 'be.descriptionPlaceholder',
         description: 'Placeholder for file description in preview sidebar.',
         defaultMessage: 'Enter a description'
     },

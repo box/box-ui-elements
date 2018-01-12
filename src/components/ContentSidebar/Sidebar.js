@@ -8,7 +8,7 @@ import React, { PureComponent } from 'react';
 import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import DetailsSidebar from './DetailsSidebar';
+// import DetailsSidebar from './DetailsSidebar';
 import messages from '../messages';
 import type { BoxItem } from '../../flowTypes';
 import './Sidebar.scss';
@@ -58,7 +58,7 @@ class Sidebar extends PureComponent<Props, State> {
      * @inheritdoc
      */
     render() {
-        const { file, getPreviewer, intl }: Props = this.props;
+        const { intl }: Props = this.props;
         const { showSidebar }: State = this.state;
         const sidebarTitle = intl.formatMessage(messages.sidebarDetailsTitle);
 
@@ -84,7 +84,7 @@ class Sidebar extends PureComponent<Props, State> {
                         className={sidebarBtnClassName}
                     />
                 </div>
-                {!!file && showSidebar && <DetailsSidebar file={file} getPreviewer={getPreviewer} />}
+                {/* !!file && showSidebar && <DetailsSidebar file={file} getPreviewer={getPreviewer} /> */}
             </div>
         );
     }

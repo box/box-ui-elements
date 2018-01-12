@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file File Properties SkillData component
+ * @file File Properties SkillCard component
  * @author Box
  */
 
@@ -17,7 +17,7 @@ type Props = {
 };
 
 const FileProperties = ({ file, ensurePrivacy }: Props) => {
-    const { owned_by, created_by, created_at = '', modified_at = '', size = 0 }: BoxItem = file;
+    const { owned_by, created_by, created_at = '', modified_at = '', size = 0, description = '' }: BoxItem = file;
     const { name: owner = '' } = owned_by || {};
     const { name: uploader = '' } = created_by || {};
     const showOwner = !!owner && !ensurePrivacy;
@@ -25,6 +25,8 @@ const FileProperties = ({ file, ensurePrivacy }: Props) => {
 
     return (
         <dl>
+            {!!description && <FormattedMessage tagName='dt' {...messages.description} />}
+            {!!description && <dd>{description}</dd>}
             {showOwner && <FormattedMessage tagName='dt' {...messages.owner} />}
             {showOwner && <dd>{owner}</dd>}
             {showUploader && <FormattedMessage tagName='dt' {...messages.uploader} />}

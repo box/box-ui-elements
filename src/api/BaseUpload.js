@@ -13,7 +13,7 @@ class BaseUpload extends Base {
     file: File;
     overwrite: boolean;
     retryCount: number = 0;
-    retryTimeout: number;
+    retryTimeout: TimeoutID;
     errorCallback: Function;
 
     /**
