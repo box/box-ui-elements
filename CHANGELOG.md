@@ -1,6 +1,18 @@
+<a name="3.4.1"></a>
+## 3.4.1 (2018-01-12)
+
+* Fix: MultiputUpload should abort session properly (#154) ([7897c0b](https://github.com/box/box-ui-elements/commit/7897c0b))
+* Fix: Temporarily add back keyvalue cards from old metadata (#153) ([392348a](https://github.com/box/box-ui-elements/commit/392348a))
+* Fix: upload reachability test should accept empty preflight response (#152) ([5e7a39a](https://github.com/box/box-ui-elements/commit/5e7a39a))
+* Mojito: Update translations (#151) ([7d0746d](https://github.com/box/box-ui-elements/commit/7d0746d))
+* Update: Migrating to new metadata templates for skills (#150) ([541a7a1](https://github.com/box/box-ui-elements/commit/541a7a1))
+
+
+
 <a name="3.4.0"></a>
 # 3.4.0 (2018-01-10)
 
+* Release: 3.4.0 ([5c92eaa](https://github.com/box/box-ui-elements/commit/5c92eaa))
 * Docs: Fix README typo ([5d0b79d](https://github.com/box/box-ui-elements/commit/5d0b79d))
 * Mojito: Update translations (#147) ([1de962e](https://github.com/box/box-ui-elements/commit/1de962e))
 * Mojito: Update translations (#149) ([5fa107f](https://github.com/box/box-ui-elements/commit/5fa107f))
