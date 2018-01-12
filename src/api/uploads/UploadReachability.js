@@ -125,13 +125,11 @@ class UploadsReachability {
      * @return {string}
      */
     handlePreflightResponse(response?: Object) {
-        if (!response) {
+        if (!response || !response.upload_url) {
             return DEFAULT_HOSTNAME_UPLOAD;
         }
 
-        const { upload_url } = response;
-
-        const splitUrl = upload_url.split('/');
+        const splitUrl = response.upload_url.split('/');
         return `${splitUrl[0]}//${splitUrl[2]}`;
     }
 }
