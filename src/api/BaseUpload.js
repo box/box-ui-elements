@@ -30,7 +30,9 @@ class BaseUpload extends Base {
         // TODO(tonyjin): Normalize error object and clean up error handling
 
         // Automatically handle name conflict errors
-        if (error && error.status === 409) {
+        if (this.retryCount >= MAX_RETRY) {
+            this.errorCallback(error);
+        } else if (error && error.status === 409) {
             if (this.overwrite) {
                 // Error response contains file ID to upload a new file version for
                 retryUploadFunc({
@@ -45,6 +47,7 @@ class BaseUpload extends Base {
                     fileName: `${fileName.substr(0, fileName.lastIndexOf('.'))}-${Date.now()}${extension}`
                 });
             }
+            this.retryCount += 1;
             // When rate limited, retry after interval defined in header
         } else if (error && (error.status === 429 || error.code === 'too_many_requests')) {
             let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
@@ -64,6 +67,7 @@ class BaseUpload extends Base {
                     }),
                 retryAfterMs
             );
+            this.retryCount += 1;
 
             // If another error status that isn't name conflict or rate limiting, fail upload
         } else if (
@@ -73,7 +77,7 @@ class BaseUpload extends Base {
         ) {
             this.errorCallback(error);
             // Retry with exponential backoff for other failures since these are likely to be network errors
-        } else if (this.retryCount < MAX_RETRY) {
+        } else {
             this.retryTimeout = setTimeout(
                 () =>
                     retryUploadFunc({
@@ -82,8 +86,6 @@ class BaseUpload extends Base {
                 2 ** this.retryCount * MS_IN_S
             );
             this.retryCount += 1;
-        } else {
-            this.errorCallback(error);
         }
     };
 }
