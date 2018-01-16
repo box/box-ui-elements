@@ -16,6 +16,10 @@ The instructions below describe how to use the UI Elements in a [React](https://
 
 To prevent duplication, the UI Elements require certain peer dependencies to be installed manually. For a list of required peer dependencies, see [package.json](package.json).
 
+This project also requires [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime), since our source code uses async/await. This can be achieved by installing the dependency (also listed as part of the peer dependencies) and then adding the following line in your parent React project:
+
+`import 'regenerator-runtime/runtime';`
+
 ## Browser Support
 * Desktop Chrome, Firefox, Safari, Edge (latest 2 versions)
 * Limited support for Internet Explorer 11 (requires ES2015 polyfill)
