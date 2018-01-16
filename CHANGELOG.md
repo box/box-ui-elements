@@ -1,6 +1,16 @@
+<a name="3.5.0"></a>
+# 3.5.0 (2018-01-16)
+
+* Fix: Button scoping issues (#160) ([4ba6132](https://github.com/box/box-ui-elements/commit/4ba6132))
+* Fix: upload item action should show tooltip properly (#159) ([041f9ba](https://github.com/box/box-ui-elements/commit/041f9ba))
+* Fix: upload should not retry infinitely on 409 or 429 (#158) ([1cb1268](https://github.com/box/box-ui-elements/commit/1cb1268))
+
+
+
 <a name="3.4.1"></a>
 ## 3.4.1 (2018-01-12)
 
+* Release: 3.4.1 ([6f02373](https://github.com/box/box-ui-elements/commit/6f02373))
 * Fix: MultiputUpload should abort session properly (#154) ([7897c0b](https://github.com/box/box-ui-elements/commit/7897c0b))
 * Fix: Temporarily add back keyvalue cards from old metadata (#153) ([392348a](https://github.com/box/box-ui-elements/commit/392348a))
 * Fix: upload reachability test should accept empty preflight response (#152) ([5e7a39a](https://github.com/box/box-ui-elements/commit/5e7a39a))
