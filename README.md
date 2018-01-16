@@ -14,11 +14,7 @@ The instructions below describe how to use the UI Elements in a [React](https://
 ## Installation
 `yarn add box-ui-elements` or `npm install box-ui-elements`
 
-To prevent duplication, the UI Elements require certain peer dependencies to be installed manually. For a list of required peer dependencies, see [package.json](package.json).
-
-This project also requires [regenerator-runtime](https://www.npmjs.com/package/regenerator-runtime), since our source code uses async/await. This can be achieved by installing the dependency (also listed as part of the peer dependencies) and then adding the following line in your parent React project:
-
-`import 'regenerator-runtime/runtime';`
+To prevent library duplication, the UI Elements require certain peer dependencies to be installed manually. For a list of required peer dependencies, see [package.json](package.json).
 
 ## Browser Support
 * Desktop Chrome, Firefox, Safari, Edge (latest 2 versions)
