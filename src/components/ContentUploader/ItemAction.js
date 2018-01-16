@@ -27,43 +27,32 @@ type Props = {
 
 const ItemAction = ({ status, onClick, intl, rootElement }: Props) => {
     let icon = <IconClose />;
-    let title = intl.formatMessage(messages.cancel);
-    let tooltip = '';
+    let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
 
     switch (status) {
         case STATUS_COMPLETE:
             icon = <IconCheck color={ICON_CHECK_COLOR} />;
-            title = intl.formatMessage(messages.remove);
+            tooltip = intl.formatMessage(messages.remove);
             break;
         case STATUS_ERROR:
             icon = <IconRetry />;
-            title = intl.formatMessage(messages.retry);
+            tooltip = intl.formatMessage(messages.retry);
             break;
         case STATUS_IN_PROGRESS:
             icon = <IconInProgress />;
-            title = intl.formatMessage(messages.remove);
-            tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
             break;
         case STATUS_PENDING:
         default:
         // empty
     }
 
-    const button = (
-        <PlainButton type='button' onClick={onClick} title={title}>
-            {icon}
-        </PlainButton>
-    );
-
     return (
         <div className='bcu-item-action'>
-            {tooltip ? (
-                <Tooltip text={tooltip} position='top-left' bodyElement={rootElement}>
-                    {button}
-                </Tooltip>
-            ) : (
-                button
-            )}
+            <Tooltip text={tooltip} position='top-left' bodyElement={rootElement}>
+                <PlainButton type='button' onClick={onClick}>
+                    {icon}
+                </PlainButton>
+            </Tooltip>
         </div>
     );
 };
