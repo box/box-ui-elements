@@ -1,6 +1,15 @@
+<a name="3.5.1"></a>
+## 3.5.1 (2018-01-16)
+
+* Update: Add documentation for regenerator runtime ([985d6b6](https://github.com/box/box-ui-elements/commit/985d6b6))
+* Update: Import regnerator runtime as part of React components (#161) ([f6ef28d](https://github.com/box/box-ui-elements/commit/f6ef28d))
+
+
+
 <a name="3.5.0"></a>
 # 3.5.0 (2018-01-16)
 
+* Release: 3.5.0 ([dba942f](https://github.com/box/box-ui-elements/commit/dba942f))
 * Fix: Button scoping issues (#160) ([4ba6132](https://github.com/box/box-ui-elements/commit/4ba6132))
 * Fix: upload item action should show tooltip properly (#159) ([041f9ba](https://github.com/box/box-ui-elements/commit/041f9ba))
 * Fix: upload should not retry infinitely on 409 or 429 (#158) ([1cb1268](https://github.com/box/box-ui-elements/commit/1cb1268))
