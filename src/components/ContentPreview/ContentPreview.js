@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-/* eslint-disable no-param-reassign */
+import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
@@ -516,7 +516,8 @@ class ContentUploader extends Component<Props, State> {
 
             if (!useUploadsManager) {
                 onComplete(cloneDeep(items.map((item) => item.boxFile)));
-                items = []; // Reset item collection after successful upload
+                // Reset item collection after successful upload
+                items = []; // eslint-disable-line
             }
         }
 

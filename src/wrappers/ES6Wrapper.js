@@ -7,7 +7,6 @@
 import EventEmitter from 'events';
 import ReactDOM from 'react-dom';
 import { addLocaleData } from 'react-intl';
-import 'regenerator-runtime/runtime';
 import { DEFAULT_CONTAINER } from '../constants';
 import i18n from '../i18n';
 import type { StringMap, Token } from '../flowTypes';
