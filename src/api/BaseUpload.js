@@ -29,9 +29,9 @@ class BaseUpload extends Base {
 
         // TODO(tonyjin): Normalize error object and clean up error handling
 
-        // Automatically handle name conflict errors
         if (this.retryCount >= MAX_RETRY) {
             this.errorCallback(error);
+            // Automatically handle name conflict errors
         } else if (error && error.status === 409) {
             if (this.overwrite) {
                 // Error response contains file ID to upload a new file version for
