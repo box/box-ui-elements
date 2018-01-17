@@ -51,7 +51,7 @@ function getConfig(isReactExternalized) {
             rules: [
                 {
                     test: /\.js$/,
-                    loader: 'babel-loader?cacheDirectory',
+                    loader: 'babel-loader',
                     exclude: /(node_modules)/
                 },
                 {
@@ -120,8 +120,6 @@ function getConfig(isReactExternalized) {
     if (isRelease) {
         config.plugins.push(
             new UglifyJsPlugin({
-                cache: true,
-                parallel: true,
                 uglifyOptions: {
                     ecma: 5,
                     compress: {
