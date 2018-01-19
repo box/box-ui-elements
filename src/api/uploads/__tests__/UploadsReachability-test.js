@@ -44,7 +44,7 @@ describe('api/UploadsReachability', () => {
     describe('handlePreflightResponse()', () => {
         withData(
             [
-                [{random: 1}, DEFAULT_HOSTNAME_UPLOAD],
+                [{ random: 1 }, DEFAULT_HOSTNAME_UPLOAD],
                 [undefined, DEFAULT_HOSTNAME_UPLOAD],
                 [null, DEFAULT_HOSTNAME_UPLOAD],
                 [{ upload_url: 'http://random.com/hello123' }, 'http://random.com']
