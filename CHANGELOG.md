@@ -1,6 +1,16 @@
+<a name="3.5.2"></a>
+## 3.5.2 (2018-01-19)
+
+* Fix: chunked upload throws exception from web worker (#164) ([afab169](https://github.com/box/box-ui-elements/commit/afab169))
+* Chore: accelerate prod build with worker-farm (#162) ([fe3daf0](https://github.com/box/box-ui-elements/commit/fe3daf0))
+* Mojito: Update translations (#163) ([a7f846c](https://github.com/box/box-ui-elements/commit/a7f846c))
+
+
+
 <a name="3.5.1"></a>
 ## 3.5.1 (2018-01-16)
 
+* Release: 3.5.1 ([ccf3344](https://github.com/box/box-ui-elements/commit/ccf3344))
 * Update: Add documentation for regenerator runtime ([985d6b6](https://github.com/box/box-ui-elements/commit/985d6b6))
 * Update: Import regnerator runtime as part of React components (#161) ([f6ef28d](https://github.com/box/box-ui-elements/commit/f6ef28d))
 
