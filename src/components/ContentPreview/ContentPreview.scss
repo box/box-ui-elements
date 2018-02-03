@@ -3,13 +3,24 @@
 .bcpr {
     display: flex;
     flex-direction: column;
-}
 
-.bcpr-body {
-    display: flex;
-    flex: 1;
-}
+    .bcpr-body {
+        display: flex;
+        flex: 1;
+    }
 
-.bcpr-content {
-    flex: 1;
+    .bcpr-content {
+        flex: 1;
+    }
+
+    &.be-is-small {
+        .bcpr-body {
+            position: relative;
+        }
+
+        .bcs {
+            position: absolute;
+            right: 0;
+        }
+    }
 }

@@ -12,15 +12,27 @@ import Keywords from '../Keywords';
 import Transcript from '../Transcript';
 import Timelines from '../Timeline';
 import Keyvalues from '../Keyvalues';
-import type { SkillCard, MetadataType } from '../../flowTypes';
+import type { SkillCards, SkillCard, MetadataType } from '../../flowTypes';
+import './SidebarSkills.scss';
 
 type Props = {
     metadata?: MetadataType,
-    getPreviewer: Function
+    getPreviewer: Function,
+    rootElement: HTMLElement,
+    appElement: HTMLElement
 };
 
-function getCard(skill: SkillCard, getPreviewer: Function) {
-    const { skill_card_type } = skill;
+function getCard(skill: SkillCard, getPreviewer: Function, rootElement: HTMLElement, appElement: HTMLElement) {
+    const { skill_card_type, error } = skill;
+
+    if (error) {
+        return (
+            <span className='be-skills-error'>
+                <FormattedMessage {...messages.skillUnknownError} />
+            </span>
+        );
+    }
+
     switch (skill_card_type) {
         case 'keyword':
             return <Keywords skill={skill} getPreviewer={getPreviewer} />;
@@ -29,57 +41,42 @@ function getCard(skill: SkillCard, getPreviewer: Function) {
         case 'timeline':
             return <Timelines skill={skill} getPreviewer={getPreviewer} />;
         case 'transcript':
-            return <Transcript skill={skill} getPreviewer={getPreviewer} />;
+            return (
+                <Transcript
+                    skill={skill}
+                    getPreviewer={getPreviewer}
+                    rootElement={rootElement}
+                    appElement={appElement}
+                />
+            );
         default:
             return null;
     }
 }
 
-const SidebarSkills = ({ metadata, getPreviewer }: Props) => {
-    if (!metadata || !metadata.global) {
+const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement }: Props) => {
+    if (
+        !metadata ||
+        !metadata.global ||
+        !metadata.global.boxSkillsCards ||
+        !Array.isArray(metadata.global.boxSkillsCards.cards) ||
+        metadata.global.boxSkillsCards.cards.length < 1
+    ) {
         return null;
     }
 
-    let cards = [];
+    const { cards }: SkillCards = metadata.global.boxSkillsCards;
 
-    if (metadata.global.boxSkillsCards && Array.isArray(metadata.global.boxSkillsCards.cards)) {
-        cards = cards.concat(metadata.global.boxSkillsCards.cards);
-    }
-
-    // Hack
-    try {
-        // $FlowFixMe
-        const keywords = metadata.global['box-skills-keywords-demo'];
-        const keyvalues = JSON.parse(keywords.keywords)
-            .filter(({ skills_data_type }) => skills_data_type === 'keyvalue')
-            .map((keyvalue) => {
-                keyvalue.skill_card_type = 'keyvalue';
-                keyvalue.type = 'skill_card';
-                return keyvalue;
-            });
-        if (Array.isArray(keyvalues) && keyvalues.length > 0) {
-            cards = cards.concat(keyvalues);
-        }
-    } catch (e) {
-        // ignore
-    }
-    // Hack end
-
-    if (cards.length === 0) {
-        return null;
-    }
-
+    /* eslint-disable react/no-array-index-key */
     return cards.map(
         (card: SkillCard, index) =>
             !!card &&
-            /* eslint-disable react/no-array-index-key */
-            Array.isArray(card.entries) &&
-            card.entries.length > 0 && (
+            (card.error || (Array.isArray(card.entries) && card.entries.length > 0)) && (
                 <SidebarSection
                     key={index}
                     title={card.title || <FormattedMessage {...messages[`${card.skill_card_type}Skill`]} />}
                 >
-                    {getCard(card, getPreviewer)}
+                    {getCard(card, getPreviewer, rootElement, appElement)}
                 </SidebarSection>
             )
         /* eslint-enable react/no-array-index-key */

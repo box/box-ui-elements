@@ -17,13 +17,16 @@ import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constan
 import type { Token, BoxItem, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
+import '../modal.scss';
 import './ContentSidebar.scss';
 
 type Props = {
     fileId?: string,
+    isSmall?: boolean,
     clientName: string,
     apiHost: string,
     token: Token,
+    className: string,
     getPreviewer: Function,
     hasTitle: boolean,
     hasSkills: boolean,
@@ -49,9 +52,12 @@ class ContentSidebar extends PureComponent<Props, State> {
     props: Props;
     state: State;
     rootElement: HTMLElement;
+    appElement: HTMLElement;
     api: API;
 
     static defaultProps = {
+        className: '',
+        isSmall: false,
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         apiHost: DEFAULT_HOSTNAME_API,
         getPreviewer: noop,
@@ -117,6 +123,8 @@ class ContentSidebar extends PureComponent<Props, State> {
     componentDidMount() {
         const { fileId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
+        // $FlowFixMe: child will exist
+        this.appElement = this.rootElement.firstElementChild;
         if (fileId) {
             this.fetchFile(fileId);
         }
@@ -214,7 +222,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasMetadata,
             hasAccessStats,
             hasClassification,
-            sharedLink
+            sharedLink,
+            className
         }: Props = this.props;
         const { file }: State = this.state;
 
@@ -224,24 +233,28 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={messages}>
-                <div className='be bcs'>
-                    {file ? (
-                        <DetailsSidebar
-                            file={file}
-                            getPreviewer={getPreviewer}
-                            ensurePrivacy={!!sharedLink}
-                            hasTitle={hasTitle}
-                            hasSkills={hasSkills}
-                            hasProperties={hasProperties}
-                            hasMetadata={hasMetadata}
-                            hasAccessStats={hasAccessStats}
-                            hasClassification={hasClassification}
-                        />
-                    ) : (
-                        <div className='bcs-loading'>
-                            <LoadingIndicator />
-                        </div>
-                    )}
+                <div id={this.id} className={`be bcs ${className}`}>
+                    <div className='be-app-element'>
+                        {file ? (
+                            <DetailsSidebar
+                                file={file}
+                                getPreviewer={getPreviewer}
+                                ensurePrivacy={!!sharedLink}
+                                hasTitle={hasTitle}
+                                hasSkills={hasSkills}
+                                hasProperties={hasProperties}
+                                hasMetadata={hasMetadata}
+                                hasAccessStats={hasAccessStats}
+                                hasClassification={hasClassification}
+                                appElement={this.appElement}
+                                rootElement={this.rootElement}
+                            />
+                        ) : (
+                            <div className='bcs-loading'>
+                                <LoadingIndicator />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </Internationalize>
         );

@@ -13,6 +13,7 @@ import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
 import Cache from '../../util/Cache';
+import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_API,
@@ -32,6 +33,7 @@ type Props = {
     file?: BoxItem,
     fileId?: string,
     version: string,
+    isSmall: boolean,
     showSidebar?: boolean,
     hasSidebar: boolean,
     hasHeader: boolean,
@@ -41,6 +43,7 @@ type Props = {
     staticPath: string,
     token: Token,
     className: string,
+    measureRef: Function,
     onLoad: Function,
     onNavigate: Function,
     onClose?: Function,
@@ -88,9 +91,9 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        const { file, hasSidebar, cache, token, sharedLink, sharedLinkPassword, apiHost } = props;
+        const { file, hasSidebar, cache, token, sharedLink, sharedLinkPassword, apiHost, isSmall } = props;
 
-        this.state = { file, showSidebar: hasSidebar };
+        this.state = { file, showSidebar: hasSidebar && !isSmall };
         this.id = uniqueid('bcpr_');
         this.api = new API({
             cache,
@@ -123,11 +126,12 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { file, fileId, token }: Props = this.props;
+        const { file, fileId, token, isSmall, hasSidebar }: Props = this.props;
 
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
         const hasFileChanged = nextProps.file !== file;
+        const hasSizeChanged = nextProps.isSmall !== isSmall;
 
         const newState = {};
 
@@ -141,6 +145,10 @@ class ContentPreview extends PureComponent<Props, State> {
                 this.preview.destroy();
                 this.preview = undefined;
             }
+        }
+
+        if (hasSizeChanged) {
+            newState.showSidebar = hasSidebar && !nextProps.isSmall;
         }
 
         // Only update the state if there is something to update
@@ -371,9 +379,10 @@ class ContentPreview extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    toggleSidebar = (): void => {
+    toggleSidebar = (show: ?boolean): void => {
+        const { hasSidebar }: Props = this.props;
         this.setState((prevState) => ({
-            showSidebar: !prevState.showSidebar
+            showSidebar: typeof show === 'boolean' ? hasSidebar && show : hasSidebar && !prevState.showSidebar
         }));
     };
 
@@ -386,6 +395,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     render() {
         const {
+            isSmall,
             token,
             language,
             messages,
@@ -394,6 +404,7 @@ class ContentPreview extends PureComponent<Props, State> {
             hasSidebar,
             hasHeader,
             onClose,
+            measureRef,
             sharedLink,
             sharedLinkPassword
         }: Props = this.props;
@@ -414,7 +425,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={`be bcpr ${className}`}>
+                <div id={this.id} className={`be bcpr ${className}`} ref={measureRef}>
                     {hasHeader && (
                         <Header
                             file={file}
@@ -426,10 +437,11 @@ class ContentPreview extends PureComponent<Props, State> {
                     )}
                     <div className='bcpr-body'>
                         <Measure bounds onResize={this.onResize}>
-                            {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
+                            {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
                         </Measure>
                         {isSidebarVisible && (
                             <ContentSidebar
+                                isSmall={isSmall}
                                 hasProperties
                                 hasSkills
                                 cache={this.api.getCache()}
@@ -447,4 +459,4 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 }
 
-export default ContentPreview;
+export default makeResponsive(ContentPreview);

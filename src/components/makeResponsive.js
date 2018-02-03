@@ -23,7 +23,7 @@ type State = {
 
 const HAS_TOUCH = 'ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch);
 
-function makeResponsive(Wrapped: ClassComponent<any, any>): ClassComponent<any, any> {
+function makeResponsive(Wrapped: ClassComponent<any, any>, crossoverWidth: number = 600): ClassComponent<any, any> {
     return class extends PureComponent<Props, State> {
         props: Props;
         state: State;
@@ -54,7 +54,7 @@ function makeResponsive(Wrapped: ClassComponent<any, any>): ClassComponent<any, 
          */
         onResize = ({ bounds: { width } }: { bounds: ClientRect }) => {
             this.setState({
-                size: width <= 600 ? SIZE_SMALL : SIZE_LARGE
+                size: width <= crossoverWidth ? SIZE_SMALL : SIZE_LARGE
             });
         };
 

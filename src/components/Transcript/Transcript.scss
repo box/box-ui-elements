@@ -2,11 +2,8 @@
 
 .be-transcript {
     color: $sevens;
+    font-family: monospace;
     font-size: 11px;
-
-    * {
-        font-family: monospace;
-    }
 
     // sass-lint:disable class-name-format
     .ReactVirtualized__Table__Grid {
@@ -35,5 +32,17 @@
             background-color: $lighter-light-blue;
             outline: none;
         }
+    }
+}
+
+.be .btn-plain.be-transcript-expand {
+    height: 35px;
+    position: absolute;
+    right: -5px;
+    top: -48px;
+    width: 30px;
+
+    &:hover svg path {
+        fill: $sevens;
     }
 }

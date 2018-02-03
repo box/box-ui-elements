@@ -4,95 +4,70 @@
  * @author Box
  */
 
-import React from 'react';
-import { Table, Column } from 'react-virtualized/dist/es/Table';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
-import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
-import 'react-virtualized/styles.css';
-import { formatTime } from '../../util/datetime';
-import type { SkillCard, SkillCardEntryTimeSlice, SkillCardEntry } from '../../flowTypes';
+import React, { Component } from 'react';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
+import TranscriptData from './TranscriptData';
+import TranscriptDialog from './TranscriptDialog';
+import isValidStartTime from './timeSliceUtil';
+import { COLOR_DOWNTOWN_GREY } from '../../constants';
+import type { SkillCard } from '../../flowTypes';
 import './Transcript.scss';
 
 type Props = {
     skill: SkillCard,
-    getPreviewer?: Function
+    getPreviewer?: Function,
+    rootElement: HTMLElement,
+    appElement: HTMLElement
 };
 
-const cache = new CellMeasurerCache({
-    minHeight: 10,
-    fixedWidth: true
-});
+type State = {
+    isModalOpen: boolean
+};
 
-const isValidStartTime = (cellData?: SkillCardEntryTimeSlice[]): boolean =>
-    Array.isArray(cellData) && !!cellData[0] && typeof cellData[0].start === 'number';
+class Transcript extends Component<Props, State> {
+    props: Props;
+    state: State = { isModalOpen: false };
 
-const Transcript = ({ skill: { entries }, getPreviewer }: Props) =>
-    entries.length === 1 && !isValidStartTime(entries[0].appears) ? (
-        <span className='be-transcript'>{entries[0].text}</span>
-    ) : (
-        <AutoSizer disableHeight>
-            {({ width }) => (
-                <Table
-                    width={width}
-                    height={300}
-                    disableHeader
-                    headerHeight={0}
-                    rowHeight={cache.rowHeight}
-                    rowCount={entries.length}
-                    rowGetter={({ index }) => entries[index]}
-                    className='be-transcript'
-                    deferredMeasurementCache={cache}
-                    onRowClick={({ rowData }: { rowData: SkillCardEntry }): void => {
-                        const viewer = getPreviewer ? getPreviewer() : null;
-                        const cellData = rowData.appears;
-                        if (
-                            isValidStartTime(cellData) &&
-                            viewer &&
-                            viewer.isLoaded() &&
-                            !viewer.isDestroyed() &&
-                            typeof viewer.play === 'function'
-                        ) {
-                            // $FlowFixMe Already checked above
-                            const { start } = cellData[0];
-                            viewer.play(start);
-                        }
-                    }}
-                >
-                    <Column
-                        dataKey='appears'
-                        width={60}
-                        flexShrink={0}
-                        className='be-transcript-time-column'
-                        cellRenderer={({ cellData }): string =>
-                            isValidStartTime(cellData) ? formatTime(cellData[0].start) : '--'
-                        }
-                    />
-                    <Column
-                        dataKey='text'
-                        width={230}
-                        flexGrow={1}
-                        cellRenderer={({ dataKey, parent, rowIndex, cellData }) => (
-                            <CellMeasurer
-                                cache={cache}
-                                columnIndex={0}
-                                key={dataKey}
-                                parent={parent}
-                                rowIndex={rowIndex}
-                            >
-                                <div
-                                    className='be-transcript-column'
-                                    style={{
-                                        whiteSpace: 'normal'
-                                    }}
-                                >
-                                    {(cellData || '').replace(/\r?\n|\r/g, '')}
-                                </div>
-                            </CellMeasurer>
-                        )}
-                    />
-                </Table>
-            )}
-        </AutoSizer>
-    );
+    /**
+     * Handles showing or hiding of transcript modal
+     *
+     * @private
+     * @return {void}
+     */
+    toggleModal = (): void => {
+        this.setState((prevState) => ({
+            isModalOpen: !prevState.isModalOpen
+        }));
+    };
+
+    render() {
+        const { skill: { entries, title }, getPreviewer, rootElement, appElement }: Props = this.props;
+        const { isModalOpen }: State = this.state;
+
+        if (entries.length === 1 && !isValidStartTime(entries[0].appears)) {
+            return <span className='be-transcript'>{entries[0].text}</span>;
+        }
+
+        const height = Math.min(300, entries.length * 50);
+
+        return (
+            <div style={{ height }}>
+                <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleModal}>
+                    <IconExpand color={COLOR_DOWNTOWN_GREY} />
+                </PlainButton>
+                <TranscriptData data={entries} getPreviewer={getPreviewer} />
+                <TranscriptDialog
+                    title={title}
+                    isOpen={isModalOpen}
+                    onCancel={this.toggleModal}
+                    data={entries}
+                    rootElement={rootElement}
+                    appElement={appElement}
+                />
+            </div>
+        );
+    }
+}
 
 export default Transcript;

@@ -1,10 +1,13 @@
 @import '../variables';
 
 .be.bcs {
+    background-color: $haze;
     display: flex;
     width: 340px;
 }
 
 .bcs-loading {
+    align-items: center;
+    display: flex;
     flex: 1;
 }
