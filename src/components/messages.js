@@ -313,6 +313,11 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Label for transcripts skill section in the preview sidebar',
         defaultMessage: 'Transcripts'
     },
+    skillUnknownError: {
+        id: 'be.skillUnknownError',
+        description: 'Default error message when skills fail to run',
+        defaultMessage: 'Something went wrong while running this skill or fetching its data.'
+    },
     uploadErrorTooManyFiles: {
         id: 'be.uploadErrorTooManyFiles',
         description: 'Message shown when too many files are uploaded at once',

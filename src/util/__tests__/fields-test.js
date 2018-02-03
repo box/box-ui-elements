@@ -25,8 +25,7 @@ import {
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_FILE_VERSION,
-    METADATA_SKILLS,
-    METADATA_KEYWORDS
+    METADATA_SKILLS
 } from '../../constants';
 
 describe('util/fields/getFields()', () => {
@@ -103,7 +102,6 @@ describe('util/fields/getFields()', () => {
                 FIELD_OWNED_BY,
                 FIELD_DESCRIPTION,
                 METADATA_SKILLS,
-                METADATA_KEYWORDS,
                 FIELD_REPRESENTATIONS,
                 FIELD_SHA1,
                 FIELD_WATERMARK_INFO,

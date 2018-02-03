@@ -22,7 +22,9 @@ type Props = {
     hasMetadata: boolean,
     hasAccessStats: boolean,
     hasClassification: boolean,
-    ensurePrivacy: boolean
+    ensurePrivacy: boolean,
+    rootElement: HTMLElement,
+    appElement: HTMLElement
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -35,7 +37,9 @@ const DetailsSidebar = ({
     hasMetadata,
     hasAccessStats,
     hasClassification,
-    ensurePrivacy
+    ensurePrivacy,
+    rootElement,
+    appElement
 }: Props) => {
     if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification) {
         return null;
@@ -43,7 +47,14 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {hasSkills && <SidebarSkills metadata={file.metadata} getPreviewer={getPreviewer} />}
+            {hasSkills && (
+                <SidebarSkills
+                    metadata={file.metadata}
+                    getPreviewer={getPreviewer}
+                    rootElement={rootElement}
+                    appElement={appElement}
+                />
+            )}
             {hasProperties && (
                 <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
                     <FileProperties file={file} ensurePrivacy={ensurePrivacy} />

@@ -1,11 +1,11 @@
 @import '../variables';
 
-.bcs-section {
-    margin: 0 20px 20px 30px; // Right margin less as parent width leaves some gap for scrollbar
-}
-
 .bcs-section-content {
     padding: 15px 0 5px;
+}
+
+.bcs-section {
+    margin: 0 20px 20px 30px;
 }
 
 .be .btn-plain.bcs-section-title {

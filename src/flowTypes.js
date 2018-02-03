@@ -124,7 +124,8 @@ export type SkillCard = {
     skill_card_type: SkillCardType,
     title?: string,
     duration?: number,
-    entries: SkillCardEntry[]
+    entries: SkillCardEntry[],
+    error?: string
 };
 
 export type SkillCards = {
