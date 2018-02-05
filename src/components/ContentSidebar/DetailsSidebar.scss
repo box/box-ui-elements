@@ -1,0 +1,7 @@
+.be .item-properties dd {
+    margin-left: 0;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}

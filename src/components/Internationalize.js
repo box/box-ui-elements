@@ -11,7 +11,6 @@ import type { StringMap } from '../flowTypes';
 type Props = {
     language?: string,
     messages?: StringMap,
-
     children?: any
 };
 

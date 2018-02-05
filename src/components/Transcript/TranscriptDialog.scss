@@ -9,7 +9,7 @@
         font-family: monospace;
         font-size: 12px;
         overflow: auto;
-        padding: 0 15px;
+        padding: 0 30px;
         user-select: text;
 
         p {
@@ -26,7 +26,7 @@
         border-bottom: 1px solid $off-white;
         display: flex;
         justify-content: space-between;
-        margin: 0 15px;
+        margin: 0 30px;
         padding: 15px 0 10px;
 
         .be & .btn-plain.be-transcript-copy,
