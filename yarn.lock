@@ -1387,9 +1387,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-box-react-ui@^21.8.0:
-  version "21.8.0"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-21.8.0.tgz#4d613075cac84933a897d5223d93e2bafa9be8b2"
+box-react-ui@^21.9.1:
+  version "21.9.1"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-21.9.1.tgz#1232a3ec124cc730f987d0ea1d725e6057ef72b2"
   dependencies:
     yui "^3.18.1"
 
@@ -3907,6 +3907,10 @@ fileset@^2.0.2:
 filesize@^3.5.9:
   version "3.5.10"
   resolved "https://registry.yarnpkg.com/filesize/-/filesize-3.5.10.tgz#fc8fa23ddb4ef9e5e0ab6e1e64f679a24a56761f"
+
+filesize@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/filesize/-/filesize-3.6.0.tgz#22d079615624bb6fd3c04026120628a41b3f4efa"
 
 fill-range@^2.1.0:
   version "2.2.3"
@@ -8090,6 +8094,10 @@ react-modal@^3.1.11:
     exenv "^1.2.0"
     prop-types "^15.5.10"
     warning "^3.0.0"
+
+react-process-string@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-process-string/-/react-process-string-1.2.0.tgz#6043a1dc919b9f887fe3ab6d6ddaffd50c8a0c28"
 
 react-reconciler@^0.7.0:
   version "0.7.0"

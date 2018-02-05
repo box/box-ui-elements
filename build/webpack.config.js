@@ -41,7 +41,8 @@ function getConfig(isReactExternalized) {
             modules: ['src', 'node_modules'],
             alias: {
                 'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
-                'box-ui-elements-locale-data': path.resolve(`i18n/${language}`)
+                'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
+                'box-react-ui-locale-data': path.resolve(`node_modules/box-react-ui/i18n/${language}`)
             }
         },
         resolveLoader: {

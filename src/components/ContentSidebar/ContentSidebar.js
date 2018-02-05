@@ -222,7 +222,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasMetadata,
             hasAccessStats,
             hasClassification,
-            sharedLink,
             className
         }: Props = this.props;
         const { file }: State = this.state;
@@ -239,7 +238,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                             <DetailsSidebar
                                 file={file}
                                 getPreviewer={getPreviewer}
-                                ensurePrivacy={!!sharedLink}
                                 hasTitle={hasTitle}
                                 hasSkills={hasSkills}
                                 hasProperties={hasProperties}

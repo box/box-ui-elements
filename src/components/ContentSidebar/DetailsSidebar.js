@@ -5,13 +5,16 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import getProp from 'lodash/get';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
+import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import messages from '../messages';
 import SidebarSection from './SidebarSection';
-import FileProperties from '../FileProperties';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './SidebarSkills';
 import type { BoxItem } from '../../flowTypes';
+import './DetailsSidebar.scss';
 
 type Props = {
     file: BoxItem,
@@ -22,9 +25,9 @@ type Props = {
     hasMetadata: boolean,
     hasAccessStats: boolean,
     hasClassification: boolean,
-    ensurePrivacy: boolean,
     rootElement: HTMLElement,
-    appElement: HTMLElement
+    appElement: HTMLElement,
+    intl: any
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -37,9 +40,9 @@ const DetailsSidebar = ({
     hasMetadata,
     hasAccessStats,
     hasClassification,
-    ensurePrivacy,
     rootElement,
-    appElement
+    appElement,
+    intl
 }: Props) => {
     if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification) {
         return null;
@@ -57,11 +60,18 @@ const DetailsSidebar = ({
             )}
             {hasProperties && (
                 <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
-                    <FileProperties file={file} ensurePrivacy={ensurePrivacy} />
+                    <ItemProperties
+                        createdAt={file.created_at}
+                        description={file.description}
+                        modifiedAt={file.modified_at}
+                        owner={getProp(file, 'owned_by.name')}
+                        size={getFileSize(file.size, intl.locale)}
+                        uploader={getProp(file, 'created_by.name')}
+                    />
                 </SidebarSection>
             )}
         </SidebarContent>
     );
 };
 
-export default DetailsSidebar;
+export default injectIntl(DetailsSidebar);

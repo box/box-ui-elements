@@ -172,27 +172,6 @@
         }
     }
 
-    dl {
-        margin: 0;
-        padding: 0;
-
-        dt {
-            color: $sevens;
-            font-size: 13px;
-            line-height: 16px;
-            padding-bottom: 3px;
-        }
-
-        dd {
-            line-height: 16px;
-            margin: 0;
-
-            &:not(:last-child) {
-                margin: 0 0 20px;
-            }
-        }
-    }
-
     .btn-plain {
         background: none;
         border: 0 none;
