@@ -10,18 +10,20 @@
         height: 50px; // Same as section top below
         line-height: 50px;
         margin: 0;
-        padding: 0 15px;
+        padding: 0 30px;
     }
 
     .bcs-scroll-content-wrapper {
         bottom: 0;
         left: 0;
         overflow: auto;
+        padding-top: 20px;
         position: absolute; // Prevents non-sidebar parts from re-painting
         right: 0;
-        top: 20px;
+        top: 0;
 
         &.bcs-section-has-title {
+            padding-top: 0;
             top: 50px; // Same as title above
         }
 

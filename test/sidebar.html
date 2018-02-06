@@ -25,6 +25,8 @@
             <div class="sidebar1"></div>
             <div class="gap">&nbsp;&nbsp;</div>
             <div class="sidebar2"></div>
+            <div class="gap">&nbsp;&nbsp;</div>
+            <div class="sidebar3"></div>
         </div>
         <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
         <script src="../dev/en-US/sidebar.js"></script>
@@ -34,7 +36,7 @@
         <script>
             window.onload = function() {
                 const { ContentSidebar } = Box;
-                const token = 'W1uPV0nM1ggDpoAjc7fzRIF9cFvEkKjc';
+                const token = 'LqtJceYoP0oNRBY2YxBX50AqR0KxOQXi';
 
                 const sidebar1 = new ContentSidebar();
                 sidebar1.show('233852272782', token, {
@@ -46,7 +48,15 @@
                 sidebar2.show('233852272782', token, {
                     container: '.sidebar2',
                     hasProperties: true,
-                    hasTitle: true,
+                    hasSkills: true,
+                    hasTitle: true
+                });
+
+                const sidebar3 = new ContentSidebar();
+                sidebar3.show('233852272782', token, {
+                    container: '.sidebar3',
+                    hasProperties: true,
+                    hasActivityFeed: true,
                     hasSkills: true
                 });
             }

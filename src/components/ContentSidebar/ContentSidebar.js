@@ -9,7 +9,7 @@ import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import DetailsSidebar from './DetailsSidebar';
+import Sidebar from './Sidebar';
 import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
@@ -222,6 +222,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasMetadata,
             hasAccessStats,
             hasClassification,
+            hasActivityFeed,
             className
         }: Props = this.props;
         const { file }: State = this.state;
@@ -235,7 +236,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 <div id={this.id} className={`be bcs ${className}`}>
                     <div className='be-app-element'>
                         {file ? (
-                            <DetailsSidebar
+                            <Sidebar
                                 file={file}
                                 getPreviewer={getPreviewer}
                                 hasTitle={hasTitle}
@@ -244,6 +245,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasMetadata={hasMetadata}
                                 hasAccessStats={hasAccessStats}
                                 hasClassification={hasClassification}
+                                hasActivityFeed={hasActivityFeed}
                                 appElement={this.appElement}
                                 rootElement={this.rootElement}
                             />
