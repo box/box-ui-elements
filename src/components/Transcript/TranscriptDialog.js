@@ -13,7 +13,7 @@ import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from '../../util/datetime';
 import { copy } from '../../util/download';
 import messages from '../messages';
-import isValidStartTime from './timeSliceUtil';
+import isValidStartTime from './timeSliceUtils';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL, COLOR_DOWNTOWN_GREY } from '../../constants';
 import type { SkillCardEntry } from '../../flowTypes';
 import './TranscriptDialog.scss';

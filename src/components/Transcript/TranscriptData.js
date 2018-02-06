@@ -10,7 +10,7 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
 import 'react-virtualized/styles.css';
 import { formatTime } from '../../util/datetime';
-import isValidStartTime from './timeSliceUtil';
+import isValidStartTime from './timeSliceUtils';
 import type { SkillCardEntry } from '../../flowTypes';
 import './Transcript.scss';
 
