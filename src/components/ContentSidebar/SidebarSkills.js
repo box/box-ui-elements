@@ -55,32 +55,19 @@ function getCard(skill: SkillCard, getPreviewer: Function, rootElement: HTMLElem
 }
 
 const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement }: Props) => {
-    if (
-        !metadata ||
-        !metadata.global ||
-        !metadata.global.boxSkillsCards ||
-        !Array.isArray(metadata.global.boxSkillsCards.cards) ||
-        metadata.global.boxSkillsCards.cards.length < 1
-    ) {
-        return null;
-    }
-
+    // $FlowFixMe
     const { cards }: SkillCards = metadata.global.boxSkillsCards;
 
-    /* eslint-disable react/no-array-index-key */
-    return cards.map(
-        (card: SkillCard, index) =>
-            !!card &&
-            (card.error || (Array.isArray(card.entries) && card.entries.length > 0)) && (
-                <SidebarSection
-                    key={index}
-                    title={card.title || <FormattedMessage {...messages[`${card.skill_card_type}Skill`]} />}
-                >
-                    {getCard(card, getPreviewer, rootElement, appElement)}
-                </SidebarSection>
-            )
+    return cards.map((card: SkillCard, index) => (
+        /* eslint-disable react/no-array-index-key */
+        <SidebarSection
+            key={index}
+            title={card.title || <FormattedMessage {...messages[`${card.skill_card_type}Skill`]} />}
+        >
+            {getCard(card, getPreviewer, rootElement, appElement)}
+        </SidebarSection>
         /* eslint-enable react/no-array-index-key */
-    );
+    ));
 };
 
 export default SidebarSkills;
