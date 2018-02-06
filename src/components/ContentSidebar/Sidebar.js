@@ -4,90 +4,76 @@
  * @author Box
  */
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { injectIntl } from 'react-intl';
-import classNames from 'classnames';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-// import DetailsSidebar from './DetailsSidebar';
+import TabView from 'box-react-ui/lib/components/tab-view/TabView';
+import Tab from 'box-react-ui/lib/components/tab-view/Tab';
+import DetailsSidebar from './DetailsSidebar';
 import messages from '../messages';
 import type { BoxItem } from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
-    file?: BoxItem,
+    file: BoxItem,
     getPreviewer: Function,
+    hasTitle: boolean,
+    hasSkills: boolean,
+    hasProperties: boolean,
+    hasMetadata: boolean,
+    hasAccessStats: boolean,
+    hasClassification: boolean,
+    hasActivityFeed: boolean,
+    rootElement: HTMLElement,
+    appElement: HTMLElement,
     intl: any
 };
 
-type State = {
-    showSidebar: boolean
+const Sidebar = ({
+    file,
+    getPreviewer,
+    hasTitle,
+    hasSkills,
+    hasProperties,
+    hasMetadata,
+    hasAccessStats,
+    hasClassification,
+    hasActivityFeed,
+    rootElement,
+    appElement,
+    intl
+}: Props) => {
+    const Details = (
+        <DetailsSidebar
+            file={file}
+            getPreviewer={getPreviewer}
+            hasTitle={hasTitle}
+            hasSkills={hasSkills}
+            hasProperties={hasProperties}
+            hasMetadata={hasMetadata}
+            hasAccessStats={hasAccessStats}
+            hasClassification={hasClassification}
+            appElement={appElement}
+            rootElement={rootElement}
+        />
+    );
+
+    if (!hasActivityFeed) {
+        return Details;
+    }
+
+    return (
+        <TabView defaultSelectedIndex={1}>
+            <Tab title={intl.formatMessage(messages.sidebarDetailsTitle)}>{Details}</Tab>
+            <Tab title='Activity'>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
+                into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+                release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
+                software like Aldus PageMaker including versions of Lorem Ipsum.
+            </Tab>
+        </TabView>
+    );
 };
-
-class Sidebar extends PureComponent<Props, State> {
-    props: Props;
-    state: State;
-
-    /**
-     * [constructor]
-     *
-     * @private
-     * @return {Sidebar}
-     */
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            showSidebar: true
-        };
-    }
-
-    /**
-     * Handles showing or hiding of hasSidebar
-     *
-     * @private
-     * @return {void}
-     */
-    toggleSidebar = (): void => {
-        this.setState((prevState) => ({
-            showSidebar: !prevState.showSidebar
-        }));
-    };
-
-    /**
-     * Renders the sidebar
-     *
-     * @inheritdoc
-     */
-    render() {
-        const { intl }: Props = this.props;
-        const { showSidebar }: State = this.state;
-        const sidebarTitle = intl.formatMessage(messages.sidebarDetailsTitle);
-
-        const sidebarClassName = classNames('bcs', {
-            'bcs-visible': showSidebar
-        });
-
-        const sidebarBtnClassName = classNames({
-            'bcs-btn-selected': showSidebar
-        });
-
-        return (
-            <div className={sidebarClassName}>
-                <div className='bcs-btns'>
-                    <PlainButton />
-                    <PlainButton />
-                    <PlainButton />
-                    <PlainButton />
-                    <PlainButton
-                        onClick={this.toggleSidebar}
-                        title={sidebarTitle}
-                        aria-label={sidebarTitle}
-                        className={sidebarBtnClassName}
-                    />
-                </div>
-                {/* !!file && showSidebar && <DetailsSidebar file={file} getPreviewer={getPreviewer} /> */}
-            </div>
-        );
-    }
-}
 
 export default injectIntl(Sidebar);

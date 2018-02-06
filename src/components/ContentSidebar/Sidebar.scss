@@ -1,31 +1,21 @@
 @import '../variables';
 
 .bcs {
-    background-color: $almost-white;
-    display: flex;
-    flex: 0 0 61px;
-
-    &.bcs-visible {
-        border-right: 1px solid $off-white;
-        flex: 0 0 420px;
+    .tab-view {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
     }
 
-    .bcs-btns {
-        background-color: $white;
-        border-right: 1px solid $off-white;
-        display: flex;
-        flex-direction: column;
+    .tabs {
+        margin: 0 30px;
+    }
 
-        .be & .btn-plain {
-            border-left: 2px solid transparent;
-            border-radius: 0;
-            height: 60px;
-            width: 60px;
+    .tab-panels {
+        padding-top: 0;
 
-            &:hover,
-            &.bcs-btn-selected {
-                border-left-color: $blue;
-            }
+        .tab-panel.is-selected {
+            display: flex;
         }
     }
 }
