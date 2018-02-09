@@ -20,6 +20,14 @@
             .sidebar {
                 display: flex;
             }
+
+            .inputs {
+                padding: 15px;
+            }
+
+            .inputs input {
+                margin-bottom: 10px;
+            }
         </style>
         <div class="sidebar">
             <div class="sidebar1"></div>
@@ -27,7 +35,20 @@
             <div class="sidebar2"></div>
             <div class="gap">&nbsp;&nbsp;</div>
             <div class="sidebar3"></div>
-        </div>
+            <div class="inputs">
+                <div>
+                    <label>
+                        <div>File Id</div>
+                        <input class="file" type="text" placeholder="Enter file id" value="0" />
+                    </label>
+                    <label>
+                        <div>Auth Token</div>
+                        <input class="token" type="text" placeholder="Enter auth token" />
+                    </label>
+                </div>
+                <button type="button" onclick="load()">Submit</button>
+            </div>
+            </div>
         <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
         <script src="../dev/en-US/sidebar.js"></script>
     </head>
@@ -35,17 +56,37 @@
         <div class="preivew sidebar1"></div>
         <script>
             window.onload = function() {
+                const storageToken = sessionStorage.getItem('token');
+                const storageFile = sessionStorage.getItem('fileId');
+
+                document.querySelector('.token').value = storageToken || '';
+                document.querySelector('.file').value = storageFile || '';
+            
+                load();
+            }
+
+            function load() {
                 const { ContentSidebar } = Box;
-                const token = 'fs1Vf0uECPPk0y8IT73Y0D8rX9aWtxAj';
+
+                const token = document.querySelector('.token').value || sessionStorage.getItem('token');
+                const fileId = document.querySelector('.file').value || sessionStorage.getItem('fileId');
+
+                if (token === 'null' || fileId === 'null') {
+                    console.error('No token or file ID provided!');
+                    return;
+                }
+
+                sessionStorage.setItem('token', token);
+                sessionStorage.setItem('fileId', fileId);
 
                 const sidebar1 = new ContentSidebar();
-                sidebar1.show('233852272782', token, {
+                sidebar1.show(fileId, token, {
                     container: '.sidebar1',
                     hasProperties: true
                 });
 
                 const sidebar2 = new ContentSidebar();
-                sidebar2.show('233852272782', token, {
+                sidebar2.show(fileId, token, {
                     container: '.sidebar2',
                     hasProperties: true,
                     hasSkills: true,
@@ -53,7 +94,7 @@
                 });
 
                 const sidebar3 = new ContentSidebar();
-                sidebar3.show('233852272782', token, {
+                sidebar3.show(fileId, token, {
                     container: '.sidebar3',
                     hasProperties: true,
                     hasActivityFeed: true,
