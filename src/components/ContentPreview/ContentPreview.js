@@ -30,8 +30,7 @@ import '../base.scss';
 import './ContentPreview.scss';
 
 type Props = {
-    file?: BoxItem,
-    fileId?: string,
+    fileId: string,
     version: string,
     isSmall: boolean,
     showSidebar?: boolean,
@@ -47,7 +46,6 @@ type Props = {
     onLoad: Function,
     onNavigate: Function,
     onClose?: Function,
-    skipServerUpdate?: boolean,
     language: string,
     messages?: StringMap,
     cache?: Cache,
@@ -91,9 +89,9 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        const { file, hasSidebar, cache, token, sharedLink, sharedLinkPassword, apiHost, isSmall } = props;
+        const { hasSidebar, cache, token, sharedLink, sharedLinkPassword, apiHost, isSmall } = props;
 
-        this.state = { file, showSidebar: hasSidebar && !isSmall };
+        this.state = { showSidebar: hasSidebar && !isSmall };
         this.id = uniqueid('bcpr_');
         this.api = new API({
             cache,
@@ -126,66 +124,51 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { file, fileId, token, isSmall, hasSidebar }: Props = this.props;
+        const { fileId, token, isSmall, hasSidebar }: Props = this.props;
 
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
-        const hasFileChanged = nextProps.file !== file;
         const hasSizeChanged = nextProps.isSmall !== isSmall;
 
         const newState = {};
 
-        if (hasTokenChanged || hasFileChanged || hasFileIdChanged) {
-            if (hasFileChanged) {
-                newState.file = nextProps.file;
-            } else {
-                newState.file = undefined;
-            }
+        if (hasTokenChanged || hasFileIdChanged) {
+            newState.file = undefined;
             if (this.preview) {
                 this.preview.destroy();
                 this.preview = undefined;
             }
+            this.fetchFile(nextProps.fileId);
         }
 
         if (hasSizeChanged) {
-            newState.showSidebar = hasSidebar && !nextProps.isSmall;
-        }
-
-        // Only update the state if there is something to update
-        if (Object.keys(newState).length) {
-            this.setState(newState);
+            this.setState({
+                showSidebar: hasSidebar && !nextProps.isSmall
+            });
         }
     }
 
     /**
-     * Called after shell mounts
+     * Called after shell mounts.
+     * Once the component mounts fetch the file.
      *
      * @private
      * @return {void}
      */
     componentDidMount(): void {
-        this.loadAssetsAndPreview();
+        const { fileId }: Props = this.props;
+        this.loadStylesheet();
+        this.loadScript();
+        this.fetchFile(fileId);
     }
 
     /**
-     * Called after shell updates
+     * Called after shell re-mounts
      *
      * @private
      * @return {void}
      */
     componentDidUpdate(): void {
-        this.loadAssetsAndPreview();
-    }
-
-    /**
-     * Loads assets and preview
-     *
-     * @private
-     * @return {void}
-     */
-    loadAssetsAndPreview(): void {
-        this.loadStylesheet();
-        this.loadScript();
         this.loadPreview();
     }
 
@@ -263,46 +246,27 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = (): void => {
-        if (!this.isPreviewLibraryLoaded() || this.preview) {
-            return;
-        }
-
         const { Preview } = global.Box;
         const { fileId, token, onLoad, onNavigate, ...rest }: Props = this.props;
         const { file }: State = this.state;
-        const fileOrFileId = file ? Object.assign({}, file) : fileId;
 
-        if ((!file && !fileId) || !token) {
-            throw new Error('Missing file or fileId and/or token for Preview!');
+        if (!this.isPreviewLibraryLoaded() || this.preview || !file || !token) {
+            return;
         }
 
         this.preview = new Preview();
         this.preview.addListener('navigate', (id: string) => {
-            this.updateHeaderAndSidebar(id);
+            this.fetchFile(id);
             onNavigate(id);
         });
         this.preview.addListener('load', onLoad);
-        this.preview.show(fileOrFileId, token, {
+        this.preview.show(file, token, {
             container: `#${this.id} .bcpr-content`,
             header: 'none',
+            skipServerUpdate: true,
             ...rest
         });
-        this.updateHeaderAndSidebar(file ? file.id : fileId);
     };
-
-    /**
-     * Updates header and sidebar
-     *
-     * @private
-     * @param {String} id - file id
-     * @return {void}
-     */
-    updateHeaderAndSidebar(id?: string): void {
-        if (!id) {
-            throw new Error('Invalid id for Preview!');
-        }
-        this.fetchFile(id);
-    }
 
     /**
      * Tells the preview to resize
@@ -348,6 +312,9 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFile(id: string, forceFetch: boolean = false): void {
+        if (!id) {
+            throw new Error('Invalid id for Preview!');
+        }
         const { hasSidebar }: Props = this.props;
         this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch, hasSidebar);
     }
@@ -411,14 +378,14 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const { file, showSidebar: showSidebarState }: State = this.state;
 
-        let isSidebarVisible = hasSidebar && showSidebarState;
+        let isSidebarVisible = !!file && hasSidebar && showSidebarState;
         let hasSidebarButton = hasSidebar;
         let onSidebarToggle = this.toggleSidebar;
 
         if (typeof showSidebar === 'boolean') {
             // The parent component passed in the showSidebar property.
             // Sidebar should be controlled by the parent and not by local state.
-            isSidebarVisible = hasSidebar && showSidebar;
+            isSidebarVisible = !!file && hasSidebar && showSidebar;
             hasSidebarButton = false;
             onSidebarToggle = null;
         }
