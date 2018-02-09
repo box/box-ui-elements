@@ -74,12 +74,11 @@ const PreviewDialog = ({
             appElement={appElement}
         >
             <ContentPreview
-                skipServerUpdate
+                fileId={item.id}
                 apiHost={apiHost}
                 appHost={appHost}
                 staticHost={staticHost}
                 cache={cache}
-                file={item}
                 token={token}
                 hasHeader
                 collection={files}

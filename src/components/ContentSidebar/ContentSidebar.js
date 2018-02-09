@@ -161,9 +161,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {Boolean} true if we should fetch or render
      */
     shouldFetchOrRender(): boolean {
-        const { hasSkills, hasProperties, hasMetadata, hasAccessStats, hasClassification }: Props = this.props;
+        const {
+            hasSkills,
+            hasProperties,
+            hasMetadata,
+            hasAccessStats,
+            hasClassification,
+            hasActivityFeed
+        }: Props = this.props;
 
-        return hasSkills || hasProperties || hasMetadata || hasAccessStats || hasClassification;
+        return hasSkills || hasProperties || hasMetadata || hasAccessStats || hasClassification || hasActivityFeed;
     }
 
     /**
