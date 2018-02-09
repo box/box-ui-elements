@@ -1,6 +1,18 @@
+<a name="3.6.1"></a>
+## <small>3.6.1 (2018-02-09)</small>
+
+* Update: Simplifying loading of preview to prevent duplicate API calls (#177) ([66620b8](https://github.com/box/box-ui-elements/commit/66620b8)), closes [#177](https://github.com/box/box-ui-elements/issues/177)
+* Update: When skills are present show the details sidebar (#174) ([8df1428](https://github.com/box/box-ui-elements/commit/8df1428)), closes [#174](https://github.com/box/box-ui-elements/issues/174)
+* Chore: Adding fileId and token inputs to sidebar.html (#176) ([48f2278](https://github.com/box/box-ui-elements/commit/48f2278)), closes [#176](https://github.com/box/box-ui-elements/issues/176)
+* Mojito: Update translations (#175) ([6c7f84e](https://github.com/box/box-ui-elements/commit/6c7f84e)), closes [#175](https://github.com/box/box-ui-elements/issues/175)
+* New: Placeholder for Activity Feed (#173) ([31fcf78](https://github.com/box/box-ui-elements/commit/31fcf78)), closes [#173](https://github.com/box/box-ui-elements/issues/173)
+
+
+
 <a name="3.6.0"></a>
 ## 3.6.0 (2018-02-05)
 
+* Release: 3.6.0 ([25b515d](https://github.com/box/box-ui-elements/commit/25b515d))
 * Breaking: Import Item Properties from box-react-ui (#169) ([5565981](https://github.com/box/box-ui-elements/commit/5565981)), closes [#169](https://github.com/box/box-ui-elements/issues/169)
 * Mojito: Update translations (#168) ([9695cbe](https://github.com/box/box-ui-elements/commit/9695cbe)), closes [#168](https://github.com/box/box-ui-elements/issues/168)
 * Update: UI changes for transcript cards (#167) ([ba0e485](https://github.com/box/box-ui-elements/commit/ba0e485)), closes [#167](https://github.com/box/box-ui-elements/issues/167)
