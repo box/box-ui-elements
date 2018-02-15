@@ -141,6 +141,7 @@ render(
 | language | string |  | *See the [Internationalization](#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | rootFolderId | string | `0` | The root folder for the content picker. |
+| currentFolderId | string | | The current folder shown for the content picker. This should be a sub folder to the root folder. |
 | type | string | `file, web_link` | Indicates which type of items can be picked. Should be a comma seperated combination of `file`, `folder` or `web_link`. |
 | sortBy | string | `name` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | sortDirection | string | `asc` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |

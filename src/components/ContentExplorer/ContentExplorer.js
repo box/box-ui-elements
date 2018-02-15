@@ -272,10 +272,11 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props) {
-        const { currentFolderId }: Props = this.props;
-        const { currentFolderId: newFolderId }: Props = nextProps;
-        if (currentFolderId !== newFolderId) {
-            this.fetchFolder(newFolderId);
+        const { currentFolderId }: Props = nextProps;
+        const { currentCollection: { id } }: State = this.state;
+
+        if (typeof currentFolderId === 'string' && id !== currentFolderId) {
+            this.fetchFolder(currentFolderId);
         }
     }
 
