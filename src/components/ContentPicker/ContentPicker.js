@@ -66,6 +66,7 @@ type BoxItemMap = { [string]: BoxItem };
 type Props = {
     type: string,
     rootFolderId: string,
+    currentFolderId?: string,
     onChoose: Function,
     onCancel: Function,
     sortBy: SortBy,
@@ -224,15 +225,32 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     componentDidMount() {
+        const { defaultView, currentFolderId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         // $FlowFixMe: child will exist
         this.appElement = this.rootElement.firstElementChild;
 
-        const { defaultView }: Props = this.props;
         if (defaultView === DEFAULT_VIEW_RECENTS) {
             this.showRecents(true);
         } else {
-            this.fetchFolder();
+            this.fetchFolder(currentFolderId);
+        }
+    }
+
+    /**
+     * Fetches the current folder if different
+     * from what was already fetched before.
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    componentWillReceiveProps(nextProps: Props) {
+        const { currentFolderId }: Props = nextProps;
+        const { currentCollection: { id } }: State = this.state;
+
+        if (typeof currentFolderId === 'string' && id !== currentFolderId) {
+            this.fetchFolder(currentFolderId);
         }
     }
 
