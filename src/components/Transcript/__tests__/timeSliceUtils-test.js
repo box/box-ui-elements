@@ -1,23 +1,23 @@
-import isValidStartTime from '../timeSliceUtils';
+import { isValidTimeSlice } from '../timeSliceUtils';
 
-describe('components/Transcript/timeSliceUtils/isValidStartTime', () => {
+describe('components/Transcript/timeSliceUtils/isValidTimeSlice', () => {
     test('should return false when no time slices', () => {
-        expect(isValidStartTime()).toBeFalsy();
+        expect(isValidTimeSlice()).toBeFalsy();
     });
 
     test('should return false when empty time slices', () => {
-        expect(isValidStartTime([])).toBeFalsy();
+        expect(isValidTimeSlice([])).toBeFalsy();
     });
 
     test('should return false when bad time slice', () => {
-        expect(isValidStartTime([{}])).toBeFalsy();
+        expect(isValidTimeSlice([{}])).toBeFalsy();
     });
 
     test('should return false when bad time slice start', () => {
-        expect(isValidStartTime([{ start: null }])).toBeFalsy();
+        expect(isValidTimeSlice([{ start: null }])).toBeFalsy();
     });
 
     test('should return true when good time slice start', () => {
-        expect(isValidStartTime([{ start: 10 }])).toBeTruthy();
+        expect(isValidTimeSlice([{ start: 10 }])).toBeTruthy();
     });
 });

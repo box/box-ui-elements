@@ -9,7 +9,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import TranscriptData from './TranscriptData';
 import TranscriptDialog from './TranscriptDialog';
-import isValidStartTime from './timeSliceUtils';
+import { isValidTimeSlice } from './timeSliceUtils';
 import { COLOR_DOWNTOWN_GREY } from '../../constants';
 import type { SkillCard } from '../../flowTypes';
 import './Transcript.scss';
@@ -18,7 +18,8 @@ type Props = {
     skill: SkillCard,
     getPreviewer?: Function,
     rootElement: HTMLElement,
-    appElement: HTMLElement
+    appElement: HTMLElement,
+    onInteraction: Function
 };
 
 type State = {
@@ -42,10 +43,10 @@ class Transcript extends Component<Props, State> {
     };
 
     render() {
-        const { skill: { entries, title }, getPreviewer, rootElement, appElement }: Props = this.props;
+        const { skill: { entries, title }, getPreviewer, rootElement, appElement, onInteraction }: Props = this.props;
         const { isModalOpen }: State = this.state;
 
-        if (entries.length === 1 && !isValidStartTime(entries[0].appears)) {
+        if (entries.length === 1 && !isValidTimeSlice(entries[0].appears)) {
             return <span className='be-transcript'>{entries[0].text}</span>;
         }
 
@@ -56,7 +57,7 @@ class Transcript extends Component<Props, State> {
                 <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleModal}>
                     <IconExpand color={COLOR_DOWNTOWN_GREY} />
                 </PlainButton>
-                <TranscriptData data={entries} getPreviewer={getPreviewer} />
+                <TranscriptData data={entries} getPreviewer={getPreviewer} onInteraction={onInteraction} />
                 <TranscriptDialog
                     title={title}
                     isOpen={isModalOpen}
@@ -64,6 +65,7 @@ class Transcript extends Component<Props, State> {
                     data={entries}
                     rootElement={rootElement}
                     appElement={appElement}
+                    onInteraction={onInteraction}
                 />
             </div>
         );

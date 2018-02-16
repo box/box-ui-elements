@@ -44,7 +44,11 @@ import {
     FIELD_INTERACTED_AT,
     FIELD_SIZE,
     DEFAULT_VIEW_RECENTS,
-    DEFAULT_VIEW_FILES
+    DEFAULT_VIEW_FILES,
+    SKILL_KEYWORD,
+    SKILL_TIMELINE,
+    SKILL_TRANSCRIPT,
+    SKILL_KEYVALUE
 } from './constants';
 
 export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
@@ -103,7 +107,11 @@ export type User = {
     type: 'user'
 };
 
-export type SkillCardType = 'keyword' | 'transcript' | 'timeline' | 'keyvalue';
+export type SkillCardType =
+    | typeof SKILL_KEYWORD
+    | typeof SKILL_TIMELINE
+    | typeof SKILL_TRANSCRIPT
+    | typeof SKILL_KEYVALUE;
 export type SkillCardEntryType = 'text' | 'image';
 
 export type SkillCardEntryTimeSlice = {

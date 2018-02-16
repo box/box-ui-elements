@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import cloneDeep from 'lodash/cloneDeep';
 import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import Keywords from '../Keywords';
@@ -19,11 +20,24 @@ type Props = {
     metadata?: MetadataType,
     getPreviewer: Function,
     rootElement: HTMLElement,
-    appElement: HTMLElement
+    appElement: HTMLElement,
+    onInteraction: Function
 };
 
-function getCard(skill: SkillCard, getPreviewer: Function, rootElement: HTMLElement, appElement: HTMLElement) {
+function getCard(
+    skill: SkillCard,
+    getPreviewer: Function,
+    rootElement: HTMLElement,
+    appElement: HTMLElement,
+    onInteraction: Function
+) {
     const { skill_card_type, error } = skill;
+    const onSkillInteraction = (data: any) => {
+        onInteraction({
+            skill: cloneDeep(skill),
+            interaction: cloneDeep(data)
+        });
+    };
 
     if (error) {
         return (
@@ -35,11 +49,11 @@ function getCard(skill: SkillCard, getPreviewer: Function, rootElement: HTMLElem
 
     switch (skill_card_type) {
         case 'keyword':
-            return <Keywords skill={skill} getPreviewer={getPreviewer} />;
+            return <Keywords skill={skill} getPreviewer={getPreviewer} onInteraction={onSkillInteraction} />;
         case 'keyvalue':
             return <Keyvalues skill={skill} />;
         case 'timeline':
-            return <Timelines skill={skill} getPreviewer={getPreviewer} />;
+            return <Timelines skill={skill} getPreviewer={getPreviewer} onInteraction={onSkillInteraction} />;
         case 'transcript':
             return (
                 <Transcript
@@ -47,6 +61,7 @@ function getCard(skill: SkillCard, getPreviewer: Function, rootElement: HTMLElem
                     getPreviewer={getPreviewer}
                     rootElement={rootElement}
                     appElement={appElement}
+                    onInteraction={onSkillInteraction}
                 />
             );
         default:
@@ -54,7 +69,7 @@ function getCard(skill: SkillCard, getPreviewer: Function, rootElement: HTMLElem
     }
 }
 
-const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement }: Props) => {
+const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement, onInteraction }: Props) => {
     // $FlowFixMe
     const { cards }: SkillCards = metadata.global.boxSkillsCards;
 
@@ -64,7 +79,7 @@ const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement }: Prop
             key={index}
             title={card.title || <FormattedMessage {...messages[`${card.skill_card_type}Skill`]} />}
         >
-            {getCard(card, getPreviewer, rootElement, appElement)}
+            {getCard(card, getPreviewer, rootElement, appElement, onInteraction)}
         </SidebarSection>
         /* eslint-enable react/no-array-index-key */
     ));

@@ -158,3 +158,9 @@ export const COLOR_BOX_BLUE_LIGHT = '#dbe8f8';
 export const COLOR_RED = '#c82341';
 export const COLOR_777 = '#777777';
 export const COLOR_DOWNTOWN_GREY = '#999ea4';
+
+/* ------------------ Skills  ---------------------- */
+export const SKILL_TRANSCRIPT: 'transcript' = 'transcript';
+export const SKILL_KEYWORD: 'keyword' = 'keyword';
+export const SKILL_TIMELINE: 'timeline' = 'timeline';
+export const SKILL_KEYVALUE: 'keyvalue' = 'keyvalue';

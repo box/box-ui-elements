@@ -20,7 +20,7 @@ const Keyword = ({ keyword, onClick, isSelected }: Props) => (
     <span className='be-file-keyword'>
         <PlainButton
             className={`be-file-keyword-word ${isSelected ? 'be-file-keyword-selected' : ''}`}
-            onClick={() => onClick(keyword)}
+            onClick={onClick}
         >
             {keyword.text}
         </PlainButton>

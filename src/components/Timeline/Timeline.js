@@ -7,6 +7,7 @@
 import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import Line from './Line';
+import { isValidStartTime } from '../Transcript/timeSliceUtils';
 import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../flowTypes';
 import './Timeline.scss';
 
@@ -17,7 +18,8 @@ type Props = {
     url?: string,
     timeslices?: SkillCardEntryTimeSlice[],
     duration?: number,
-    getPreviewer?: Function
+    getPreviewer?: Function,
+    onInteraction: Function
 };
 
 const Timeline = ({
@@ -27,20 +29,21 @@ const Timeline = ({
     url = '',
     duration = 0,
     timeslices = [],
-    getPreviewer
+    getPreviewer,
+    onInteraction
 }: Props) => {
     let nextSkillCardEntryTimeSliceIndex = 0;
     const startNextSegment = () => {
         const viewer = getPreviewer ? getPreviewer() : null;
-        if (
-            viewer &&
-            viewer.isLoaded() &&
-            !viewer.isDestroyed() &&
-            typeof viewer.play === 'function' &&
-            timeslices[nextSkillCardEntryTimeSliceIndex]
-        ) {
-            viewer.play(timeslices[nextSkillCardEntryTimeSliceIndex].start);
-            nextSkillCardEntryTimeSliceIndex = (nextSkillCardEntryTimeSliceIndex + 1) % timeslices.length;
+        const timeslice = timeslices[nextSkillCardEntryTimeSliceIndex];
+        const validTime = isValidStartTime(timeslice);
+
+        if (validTime) {
+            onInteraction({ target: 'face' });
+            if (viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
+                viewer.play(timeslice.start);
+                nextSkillCardEntryTimeSliceIndex = (nextSkillCardEntryTimeSliceIndex + 1) % timeslices.length;
+            }
         }
     };
 
@@ -72,6 +75,7 @@ const Timeline = ({
                             end={end}
                             duration={duration}
                             getPreviewer={getPreviewer}
+                            onInteraction={onInteraction}
                         />
                     )
                     /* eslint-enable react/no-array-index-key */

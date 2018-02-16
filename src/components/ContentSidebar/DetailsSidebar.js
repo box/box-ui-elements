@@ -27,6 +27,7 @@ type Props = {
     hasClassification: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
+    onInteraction: Function,
     intl: any
 };
 
@@ -42,6 +43,7 @@ const DetailsSidebar = ({
     hasClassification,
     rootElement,
     appElement,
+    onInteraction,
     intl
 }: Props) => {
     if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification) {
@@ -56,6 +58,7 @@ const DetailsSidebar = ({
                     getPreviewer={getPreviewer}
                     rootElement={rootElement}
                     appElement={appElement}
+                    onInteraction={onInteraction}
                 />
             )}
             {hasProperties && (
