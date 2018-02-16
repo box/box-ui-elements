@@ -9,10 +9,19 @@ import type { SkillCardEntryTimeSlice } from '../../flowTypes';
 /**
  * Returns true if there is a valid start time
  *
- * @param {SkillCardEntrytimeslices} timeslices - skill entry time slice
- * @return {boolean} if there are valid skills to show
+ * @param {SkillCardEntryTimeSlice} timeslices - skill entry time slice
+ * @return {boolean} if there is a valid start time
  */
-const isValidStartTime = (timeslices?: SkillCardEntryTimeSlice[]): boolean =>
-    Array.isArray(timeslices) && !!timeslices[0] && typeof timeslices[0].start === 'number';
+const isValidStartTime = (timeslice: SkillCardEntryTimeSlice): boolean =>
+    !!timeslice && typeof timeslice.start === 'number';
 
-export default isValidStartTime;
+/**
+ * Returns true if there is a valid time slice with valid start time
+ *
+ * @param {SkillCardEntryTimeSlice[]} timeslices - skill entry time slice
+ * @return {boolean} if it is a valid time slice
+ */
+const isValidTimeSlice = (timeslices?: SkillCardEntryTimeSlice[]): boolean =>
+    Array.isArray(timeslices) && isValidStartTime(timeslices[0]);
+
+export { isValidTimeSlice, isValidStartTime };

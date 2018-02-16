@@ -11,23 +11,20 @@ import type { SkillCard, SkillCardEntry } from '../../flowTypes';
 
 type Props = {
     skill: SkillCard,
-    getPreviewer?: Function
+    getPreviewer?: Function,
+    onInteraction: Function
 };
 
 type State = {
     keyword?: SkillCardEntry
 };
 
-class FileKeywords extends PureComponent<Props, State> {
+class Keywords extends PureComponent<Props, State> {
     props: Props;
     state: State = {};
 
-    onClick = (keyword: SkillCardEntry) => {
-        this.setState({ keyword });
-    };
-
     render() {
-        const { skill, getPreviewer }: Props = this.props;
+        const { skill, getPreviewer, onInteraction }: Props = this.props;
         const { entries, duration }: SkillCard = skill;
         const { keyword }: State = this.state;
         return (
@@ -39,7 +36,10 @@ class FileKeywords extends PureComponent<Props, State> {
                             key={index}
                             keyword={entry}
                             isSelected={keyword === entry}
-                            onClick={this.onClick}
+                            onClick={() => {
+                                onInteraction({ target: 'topic' });
+                                this.setState({ keyword: entry });
+                            }}
                         />
                     )
                     /* eslint-enable react/no-array-index-key */
@@ -53,6 +53,7 @@ class FileKeywords extends PureComponent<Props, State> {
                                 timeslices={keyword.appears}
                                 duration={duration}
                                 getPreviewer={getPreviewer}
+                                onInteraction={onInteraction}
                             />
                         </div>
                     )}
@@ -61,4 +62,4 @@ class FileKeywords extends PureComponent<Props, State> {
     }
 }
 
-export default FileKeywords;
+export default Keywords;

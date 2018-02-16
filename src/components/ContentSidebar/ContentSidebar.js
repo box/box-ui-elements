@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
@@ -40,7 +41,8 @@ type Props = {
     cache?: Cache,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function
+    responseFilter?: Function,
+    onInteraction: Function
 };
 
 type State = {
@@ -67,7 +69,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasMetadata: false,
         hasAccessStats: false,
         hasClassification: false,
-        hasActivityFeed: false
+        hasActivityFeed: false,
+        onInteraction: noop
     };
 
     /**
@@ -174,6 +177,19 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Function to log interactions
+     *
+     * @private
+     * @param {Object} data - some data
+     * @return {void}
+     */
+    onInteraction = (data: any): void => {
+        const { onInteraction }: Props = this.props;
+        const { file }: State = this.state;
+        onInteraction(Object.assign({}, { file: cloneDeep(file) }, data));
+    };
+
+    /**
      * Network error callback
      *
      * @private
@@ -255,6 +271,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasActivityFeed={hasActivityFeed}
                                 appElement={this.appElement}
                                 rootElement={this.rootElement}
+                                onInteraction={this.onInteraction}
                             />
                         ) : (
                             <div className='bcs-loading'>

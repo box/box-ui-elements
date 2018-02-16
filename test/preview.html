@@ -22,7 +22,36 @@
             window.onload = function() {
                 const { ContentExplorer } = Box;
                 const explorer = new ContentExplorer();
-                explorer.show('0', 'j4RiyDbA0JsMFX7wEf8mQqkr8VizPogb', {
+                explorer.addListener('interaction', function(data) {
+                    switch (data.interaction.target) {
+                        case 'face':
+                            console.log('%c==========face===========', 'background: orange; color: #000');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: orange; color: #000');
+                            console.log('%c==========face===========', 'background: orange; color: #000');
+                            break;
+                        case 'time-slice':
+                            console.log('%c==========timeline===========', 'background: green; color: #fff');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: green; color: #fff');
+                            console.log('%c==========timeline===========', 'background: green; color: #fff');
+                            break;
+                        case 'topic':
+                            console.log('%c==========keyword===========', 'background: blue; color: #fff');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: blue; color: #fff');
+                            console.log('%c==========keyword===========', 'background: blue; color: #fff');
+                            break;
+                        case 'transcript':
+                            console.log('%c==========transcript===========', 'background: black; color: #fff');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: black; color: #fff');
+                            console.log('%c==========transcript===========', 'background: black; color: #fff');
+                            break;
+                        case 'transcript-copy':
+                            console.log('%c==========transcript-copy===========', 'background: red; color: #fff');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: red; color: #fff');
+                            console.log('%c==========transcript-copy===========', 'background: red; color: #fff');
+                            break;
+                    }
+                });
+                explorer.show('0', 'hYDdQ4D3UU0eveOqrpK87iaP7cC1Zv29', {
                     currentFolderId: '39695871110',
                     hasPreviewSidebar: true,
                     sharedLink: 'https://app.box.com/s/sdfsdf'

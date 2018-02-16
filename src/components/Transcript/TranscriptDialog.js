@@ -13,7 +13,7 @@ import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from '../../util/datetime';
 import { copy } from '../../util/download';
 import messages from '../messages';
-import isValidStartTime from './timeSliceUtils';
+import { isValidTimeSlice } from './timeSliceUtils';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL, COLOR_DOWNTOWN_GREY } from '../../constants';
 import type { SkillCardEntry } from '../../flowTypes';
 import './TranscriptDialog.scss';
@@ -25,20 +25,21 @@ type Props = {
     rootElement: HTMLElement,
     appElement: HTMLElement,
     title?: string,
+    onInteraction: Function,
     intl: any
 };
 
 const transcriptReducer = (accumulator: string, { appears, text }: SkillCardEntry) => {
-    const start: string = isValidStartTime(appears) && Array.isArray(appears) ? formatTime(appears[0].start) : '0:00';
+    const start: string = isValidTimeSlice(appears) && Array.isArray(appears) ? formatTime(appears[0].start) : '0:00';
     return `${accumulator}${start}: ${text || ''}\r\n`;
 };
 
 const transcriptMapper = ({ appears, text }: SkillCardEntry, index) => {
-    const start: string = isValidStartTime(appears) && Array.isArray(appears) ? formatTime(appears[0].start) : '0:00';
+    const start: string = isValidTimeSlice(appears) && Array.isArray(appears) ? formatTime(appears[0].start) : '0:00';
     return <p key={index}>{`${start}: ${text || ''}`}</p>;
 };
 
-const TranscriptDialog = ({ isOpen, onCancel, data, rootElement, appElement, title, intl }: Props) => (
+const TranscriptDialog = ({ isOpen, onCancel, data, rootElement, appElement, title, onInteraction, intl }: Props) => (
     <Modal
         isOpen={isOpen}
         portalClassName={`${CLASS_MODAL} be-modal-transcript`}
@@ -55,7 +56,10 @@ const TranscriptDialog = ({ isOpen, onCancel, data, rootElement, appElement, tit
                 <PlainButton
                     type='button'
                     className='be-transcript-copy'
-                    onClick={() => copy(data.reduce(transcriptReducer, ''))}
+                    onClick={() => {
+                        onInteraction({ target: 'transcript-copy' });
+                        copy(data.reduce(transcriptReducer, ''));
+                    }}
                 >
                     <IconMoveCopy color={COLOR_DOWNTOWN_GREY} />
                 </PlainButton>

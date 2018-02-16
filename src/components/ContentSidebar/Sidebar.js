@@ -26,6 +26,7 @@ type Props = {
     hasActivityFeed: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
+    onInteraction: Function,
     intl: any
 };
 
@@ -41,6 +42,7 @@ const Sidebar = ({
     hasActivityFeed,
     rootElement,
     appElement,
+    onInteraction,
     intl
 }: Props) => {
     const shouldShowSkills = hasSkills && hasSkillsData(file);
@@ -57,6 +59,7 @@ const Sidebar = ({
             hasClassification={hasClassification}
             appElement={appElement}
             rootElement={rootElement}
+            onInteraction={onInteraction}
         />
     );
 

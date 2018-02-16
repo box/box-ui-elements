@@ -10,12 +10,13 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
 import 'react-virtualized/styles.css';
 import { formatTime } from '../../util/datetime';
-import isValidStartTime from './timeSliceUtils';
+import { isValidTimeSlice } from './timeSliceUtils';
 import type { SkillCardEntry } from '../../flowTypes';
 import './Transcript.scss';
 
 type Props = {
     data: SkillCardEntry[],
+    onInteraction: Function,
     getPreviewer?: Function
 };
 
@@ -24,7 +25,7 @@ const cache = new CellMeasurerCache({
     fixedWidth: true
 });
 
-const TranscriptData = ({ data, getPreviewer }: Props) => (
+const TranscriptData = ({ data, getPreviewer, onInteraction }: Props) => (
     <AutoSizer>
         {({ width, height }) => (
             <Table
@@ -39,17 +40,18 @@ const TranscriptData = ({ data, getPreviewer }: Props) => (
                 deferredMeasurementCache={cache}
                 onRowClick={({ rowData }: { rowData: SkillCardEntry }): void => {
                     const viewer = getPreviewer ? getPreviewer() : null;
-                    const cellData = rowData.appears;
-                    if (
-                        isValidStartTime(cellData) &&
-                        viewer &&
-                        viewer.isLoaded() &&
-                        !viewer.isDestroyed() &&
-                        typeof viewer.play === 'function'
-                    ) {
+                    const { appears } = rowData;
+                    const validStartTime = isValidTimeSlice(appears);
+
+                    if (validStartTime) {
                         // $FlowFixMe Already checked above
-                        const { start } = cellData[0];
-                        viewer.play(start);
+                        const entry = appears[0];
+                        onInteraction({ target: 'transcript' });
+
+                        if (viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
+                            const { start } = entry;
+                            viewer.play(start);
+                        }
                     }
                 }}
             >
@@ -59,7 +61,7 @@ const TranscriptData = ({ data, getPreviewer }: Props) => (
                     flexShrink={0}
                     className='be-transcript-time-column'
                     cellRenderer={({ cellData }): string =>
-                        isValidStartTime(cellData) ? formatTime(cellData[0].start) : '--'
+                        isValidTimeSlice(cellData) ? formatTime(cellData[0].start) : '--'
                     }
                 />
                 <Column

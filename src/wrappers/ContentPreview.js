@@ -19,6 +19,7 @@ class ContentPreview extends ES6Wrapper {
                 fileId={this.id}
                 token={this.token}
                 componentRef={this.setComponent}
+                onInteraction={this.onInteraction}
                 {...this.options}
             />,
             this.container

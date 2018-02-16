@@ -152,6 +152,15 @@ class ES6Wrapper extends EventEmitter {
     }
 
     /**
+     * Callback for interaction events
+     *
+     * @return {void}
+     */
+    onInteraction = (data: any): void => {
+        this.emit('interaction', data);
+    };
+
+    /**
      * Wrapper for emit to prevent JS exceptions
      * in the listeners own code.
      *

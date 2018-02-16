@@ -115,6 +115,7 @@ class ContentExplorer extends ES6Wrapper {
                 onUpload={this.onUpload}
                 onCreate={this.onCreate}
                 onNavigate={this.onNavigate}
+                onInteraction={this.onInteraction}
                 {...this.options}
             />,
             this.container

@@ -52,7 +52,8 @@ type Props = {
     collection?: string[],
     logoUrl?: string,
     sharedLink?: string,
-    sharedLinkPassword?: string
+    sharedLinkPassword?: string,
+    onInteraction: Function
 };
 
 type State = {
@@ -78,7 +79,8 @@ class ContentPreview extends PureComponent<Props, State> {
         hasSidebar: false,
         hasHeader: false,
         onLoad: noop,
-        onNavigate: noop
+        onNavigate: noop,
+        onInteraction: noop
     };
 
     /**
@@ -373,7 +375,8 @@ class ContentPreview extends PureComponent<Props, State> {
             onClose,
             measureRef,
             sharedLink,
-            sharedLinkPassword
+            sharedLinkPassword,
+            onInteraction
         }: Props = this.props;
 
         const { file, showSidebar: showSidebarState }: State = this.state;
@@ -417,6 +420,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 getPreviewer={this.getPreviewer}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
+                                onInteraction={onInteraction}
                             />
                         )}
                     </div>

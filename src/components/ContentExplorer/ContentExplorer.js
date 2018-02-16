@@ -106,7 +106,8 @@ type Props = {
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function
+    responseFilter?: Function,
+    onInteraction: Function
 };
 
 type State = {
@@ -166,7 +167,8 @@ class ContentExplorer extends Component<Props, State> {
         onUpload: noop,
         onNavigate: noop,
         defaultView: DEFAULT_VIEW_FILES,
-        hasPreviewSidebar: false
+        hasPreviewSidebar: false,
+        onInteraction: noop
     };
 
     /**
@@ -1174,7 +1176,8 @@ class ContentExplorer extends Component<Props, State> {
             measureRef,
             onPreview,
             onUpload,
-            hasPreviewSidebar
+            hasPreviewSidebar,
+            onInteraction
         }: Props = this.props;
 
         const {
@@ -1331,6 +1334,7 @@ class ContentExplorer extends Component<Props, State> {
                             staticHost={staticHost}
                             sharedLink={sharedLink}
                             sharedLinkPassword={sharedLinkPassword}
+                            onInteraction={onInteraction}
                         />
                     ) : null}
                 </div>

@@ -11,10 +11,11 @@ import type { SkillCard, SkillCardEntry } from '../../flowTypes';
 
 type Props = {
     skill: SkillCard,
+    onInteraction: Function,
     getPreviewer?: Function
 };
 
-const Timelines = ({ skill: { entries, duration }, getPreviewer }: Props) => {
+const Timelines = ({ skill: { entries, duration }, getPreviewer, onInteraction }: Props) => {
     const colors = randomcolor({ count: entries.length, luminosity: 'dark' });
     return (
         <div className='be-timelines'>
@@ -30,6 +31,7 @@ const Timelines = ({ skill: { entries, duration }, getPreviewer }: Props) => {
                         timeslices={appears}
                         duration={duration}
                         getPreviewer={getPreviewer}
+                        onInteraction={onInteraction}
                     />
                 )
                 /* eslint-enable react/no-array-index-key */

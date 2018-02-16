@@ -16,13 +16,14 @@ type Props = {
     duration: number,
     color?: string,
     end?: number,
-    getPreviewer?: Function
+    getPreviewer?: Function,
+    onInteraction: Function
 };
 
 const LENGTH_IMAGE_ITEMLINE = 215;
 const LENGTH_TEXT_ITEMLINE = 270;
 
-const Line = ({ type, start, end = 0, duration, color = COLOR_BOX_BLUE, getPreviewer }: Props) => {
+const Line = ({ type, start, end = 0, duration, color = COLOR_BOX_BLUE, getPreviewer, onInteraction }: Props) => {
     if (typeof start !== 'number' || !duration) {
         return null;
     }
@@ -36,6 +37,7 @@ const Line = ({ type, start, end = 0, duration, color = COLOR_BOX_BLUE, getPrevi
     };
     const onClick = () => {
         const viewer = getPreviewer ? getPreviewer() : null;
+        onInteraction({ target: 'time-slice' });
         if (viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
             viewer.play(start);
         }
