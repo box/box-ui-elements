@@ -1,1 +1,2 @@
-export default from './Transcript';
+// @flow
+export { default } from './Transcript';

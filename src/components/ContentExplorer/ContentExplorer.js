@@ -255,8 +255,7 @@ class ContentExplorer extends Component<Props, State> {
     componentDidMount() {
         const { defaultView, currentFolderId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        // $FlowFixMe: child will exist
-        this.appElement = this.rootElement.firstElementChild;
+        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (defaultView === DEFAULT_VIEW_RECENTS) {
             this.showRecents(true);

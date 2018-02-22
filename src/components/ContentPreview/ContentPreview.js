@@ -65,6 +65,8 @@ type State = {
     showSidebar: boolean
 };
 
+const InvalidIdError = new Error('Invalid id for Preview!');
+
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
     props: Props;
@@ -258,6 +260,39 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Updates preview cache and prefetches a file
+     *
+     * @param {BoxItem>} file - file to prefetch
+     * @return {void}
+     */
+    updatePreviewCacheAndPrefetch(file: BoxItem, token: Token): void {
+        if (!this.preview || !file || !file.id) {
+            return;
+        }
+
+        this.preview.updateFileCache([file]);
+        this.preview.prefetch({ fileId: file.id, token });
+    }
+
+    /**
+     * Gets the file id
+     *
+     * @param {string|BoxItem} file - box file or file id
+     * @return {string} file id
+     */
+    getFileId(file?: string | BoxItem): string {
+        if (typeof file === 'string') {
+            return file;
+        }
+
+        if (typeof file === 'object' && !!file.id) {
+            return file.id;
+        }
+
+        throw InvalidIdError;
+    }
+
+    /**
      * Prefetches the next few preview files if any
      *
      * @param {Array<string|BoxItem>} files - files to prefetch
@@ -266,28 +301,25 @@ class ContentPreview extends PureComponent<Props, State> {
     async prefetch(files: Array<string | BoxItem>): Promise<void> {
         const { token }: Props = this.props;
         const fileAPI = this.api.getFileAPI();
-        const typedIds = files.map(
-            (file) => (typeof file === 'string' ? fileAPI.getTypedFileId(file) : fileAPI.getTypedFileId(file.id))
-        );
 
+        // We try to get tokens in bulk
+        const typedIds = files.map((file) => fileAPI.getTypedFileId(this.getFileId(file)));
         const tokens = await TokenService.getTokens(typedIds, token);
 
         files.forEach((file) => {
-            const typedId = typeof file === 'string' ? fileAPI.getTypedFileId(file) : fileAPI.getTypedFileId(file.id);
+            const fileId = this.getFileId(file);
+            const typedId = fileAPI.getTypedFileId(fileId);
             const fileToken = tokens[typedId];
             const isValidFile = isValidBoxFile(file, true, true);
 
             if (isValidFile) {
-                this.preview.updateFileCache([file]);
-                // $FlowFixMe
-                this.preview.prefetch({ fileId: file.id, token: fileToken });
-            } else if (file) {
+                const boxFile: BoxItem = ((file: any): BoxItem);
+                this.updatePreviewCacheAndPrefetch(boxFile, fileToken);
+            } else {
                 this.fetchFile(
-                    // $FlowFixMe
-                    typeof file === 'string' ? file : file.id,
+                    fileId,
                     (boxfile: BoxItem) => {
-                        this.preview.updateFileCache([boxfile]);
-                        this.preview.prefetch({ fileId: boxfile.id, token: fileToken });
+                        this.updatePreviewCacheAndPrefetch(boxfile, fileToken);
                     },
                     noop
                 );
@@ -387,7 +419,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     fetchFile(id: string, successCallback: ?Function, errorCallback: ?Function): void {
         if (!id) {
-            throw new Error('Invalid id for Preview!');
+            throw InvalidIdError;
         }
         const { hasSidebar }: Props = this.props;
         this.api
@@ -463,7 +495,8 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     navigateToIndex(index) {
         const { collection }: Props = this.props;
-        if (collection.length < 2) {
+        const { length } = collection;
+        if (length < 2 || index < 0 || index > length - 1) {
             return;
         }
 
@@ -480,11 +513,9 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     navigateLeft = () => {
         const currentIndex = this.getFileIndex();
-        if (currentIndex) {
-            const newIndex = currentIndex === 0 ? 0 : currentIndex - 1;
-            if (newIndex !== currentIndex) {
-                this.navigateToIndex(newIndex);
-            }
+        const newIndex = currentIndex === 0 ? 0 : currentIndex - 1;
+        if (newIndex !== currentIndex) {
+            this.navigateToIndex(newIndex);
         }
     };
 
@@ -497,11 +528,9 @@ class ContentPreview extends PureComponent<Props, State> {
     navigateRight = () => {
         const { collection }: Props = this.props;
         const currentIndex = this.getFileIndex();
-        if (currentIndex) {
-            const newIndex = currentIndex === collection.length - 1 ? collection.length - 1 : currentIndex + 1;
-            if (newIndex !== currentIndex) {
-                this.navigateToIndex(newIndex);
-            }
+        const newIndex = currentIndex === collection.length - 1 ? collection.length - 1 : currentIndex + 1;
+        if (newIndex !== currentIndex) {
+            this.navigateToIndex(newIndex);
         }
     };
 
@@ -581,15 +610,16 @@ class ContentPreview extends PureComponent<Props, State> {
         const { collection }: Props = this.props;
         const hasLeftNavigation = collection.length > 1 && this.getFileIndex() > 0;
         const hasRightNavigation = collection.length > 1 && this.getFileIndex() < collection.length - 1;
+        const isValidFile = isValidBoxFile(file, true, true);
 
-        let isSidebarVisible = !!file && hasSidebar && showSidebarState;
+        let isSidebarVisible = isValidFile && hasSidebar && showSidebarState;
         let hasSidebarButton = hasSidebar;
         let onSidebarToggle = this.toggleSidebar;
 
         if (typeof showSidebar === 'boolean') {
             // The parent component passed in the showSidebar property.
             // Sidebar should be controlled by the parent and not by local state.
-            isSidebarVisible = !!file && hasSidebar && showSidebar;
+            isSidebarVisible = isValidFile && hasSidebar && showSidebar;
             hasSidebarButton = false;
             onSidebarToggle = null;
         }
@@ -645,7 +675,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 hasSkills
                                 cache={this.api.getCache()}
                                 token={token}
-                                fileId={file ? file.id : null}
+                                fileId={this.getFileId(file)}
                                 getPreviewer={this.getPreviewer}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}

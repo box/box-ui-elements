@@ -1,1 +1,2 @@
-export default from './ContentPreview';
+// @flow
+export { default } from './ContentPreview';

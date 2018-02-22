@@ -44,7 +44,7 @@ const TranscriptData = ({ data, getPreviewer, onInteraction }: Props) => (
                     const validStartTime = isValidTimeSlice(appears);
 
                     if (validStartTime) {
-                        // $FlowFixMe Already checked above
+                        // $FlowFixMe Already checked above in isValidTimeSlice
                         const entry = appears[0];
                         onInteraction({ target: 'transcript' });
 

@@ -1,1 +1,2 @@
-export default from './APIFactory';
+// @flow
+export { default } from './APIFactory';

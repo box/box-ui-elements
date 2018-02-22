@@ -366,7 +366,6 @@ class Xhr {
         if (data && !(data instanceof Blob) && data.attributes) {
             formData = new FormData();
             Object.keys(data).forEach((key) => {
-                // $FlowFixMe Already checked above
                 formData.append(key, data[key]);
             });
         }

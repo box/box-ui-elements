@@ -21,7 +21,7 @@ type State = {
 
 /* eslint-disable no-plusplus */
 const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, onDrop?: Function }) => (
-    Wrapped: ClassComponent<any, any>
+    Wrapped: Function
 ): ClassComponent<any, any> =>
     class DroppableComponent extends PureComponent<Props, State> {
         props: Props;

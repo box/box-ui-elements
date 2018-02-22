@@ -1,1 +1,2 @@
-export default from './Keywords';
+// @flow
+export { default } from './Keywords';
