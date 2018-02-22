@@ -52,7 +52,7 @@ import {
 } from './constants';
 
 export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
-export type Token = string | Function;
+export type Token = null | typeof undefined | string | Function;
 export type ClassComponent<P, S> = Class<React$Component<P, S>>;
 export type StringMap = { [string]: string };
 export type StringAnyMap = { [string]: any };

@@ -1,6 +1,6 @@
 import Search from '../Search';
 import Cache from '../../util/Cache';
-import getFields from '../../util/fields';
+import { getFieldsAsString } from '../../util/fields';
 import { X_REP_HINTS } from '../../constants';
 import * as sort from '../../util/sorter';
 
@@ -168,7 +168,7 @@ describe('api/Search', () => {
                         query: 'query',
                         ancestor_folder_ids: 'id',
                         limit: 200,
-                        fields: getFields(true)
+                        fields: getFieldsAsString(true)
                     },
                     headers: { 'X-Rep-Hints': X_REP_HINTS }
                 });
@@ -194,7 +194,7 @@ describe('api/Search', () => {
                         query: 'query',
                         ancestor_folder_ids: 'id',
                         limit: 200,
-                        fields: getFields(true, true)
+                        fields: getFieldsAsString(true, true)
                     },
                     headers: { 'X-Rep-Hints': X_REP_HINTS }
                 });

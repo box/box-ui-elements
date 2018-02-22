@@ -3,271 +3,128 @@
  * @file An example of a token managing service
  * @author Box
  */
+
+import { TYPED_ID_FOLDER_PREFIX, TYPED_ID_FILE_PREFIX } from '../constants';
 import type { Token } from '../flowTypes';
 
-const TOO_MANY_REQUESTS = 'Too many tokens requested at a single time!';
-const REQUEST_LIMIT_HARD = 200;
-const REQUEST_LIMIT = 100;
+type TokenMap = { [string]: Token };
 
-type TokenWrapper = {
-    token: Token,
-    promise: Promise<any>,
-    expiration: number
-};
+const error = new Error(
+    'Bad id or auth token. ID should be typed id like file_123 or folder_123! Token should be a string or function.'
+);
 
-type Tokens = {
-    [id: string]: TokenWrapper
-};
-
-type TokenMap = {
-    [id: string]: Token
-};
-
+/**
+ * Helper function to create token map used below.
+ * Maps one or more tokens to multiple files.
+ *
+ * @private
+ * @param {Array} ids - Box file IDs
+ * @param {string} [tokenOrTokens] - Single token or map
+ * @return {Object} ID to token map
+ */
+function createIdTokenMap(ids, tokenOrTokens) {
+    const tokenMap = {};
+    ids.forEach((id) => {
+        if (!tokenOrTokens || typeof tokenOrTokens === 'string') {
+            // All files use the same string or null or undefined token
+            tokenMap[id] = tokenOrTokens;
+        } else if (typeof tokenOrTokens === 'object') {
+            // Map ids and tokens to ids and tokens
+            tokenMap[id] = tokenOrTokens[id];
+        }
+    });
+    return tokenMap;
+}
 class TokenService {
     /**
-     * @property {Object}
-     */
-    tokens: Tokens;
-
-    /**
-     * @property {string}
-     */
-    url: string;
-
-    /**
-     * @property {number}
-     */
-    timeout: number;
-
-    /**
-     * @property {number}
-     */
-    requestLimit: number;
-
-    /**
-     * @property {number}
-     */
-    hardLimit: number;
-
-    /**
-     * @property {Object}
-     */
-    data: { [id: string]: any };
-
-    /**
-     * @property {Object}
-     */
-    headers: { [id: string]: string };
-
-    /**
-     * [constructor]
-     *
-     * @public
-     * @param {string} url - token fetch url
-     * @param {number} timeout - token timeout
-     * @param {number|void} [requestLimit] - optional limits number of tokens fetched per request
-     * @param {number|void} [hardLimit] - optional hard overall limit for number of tokens to fetch
-     * @param {Object|void} [data] - optional data to send to auth end point
-     * @param {Object|void} [headers] - optional headers to send to auth end point
-     * @return {TokenService}
-     */
-    constructor({
-        url,
-        timeout,
-        requestLimit = REQUEST_LIMIT,
-        hardLimit = REQUEST_LIMIT_HARD,
-        data = {},
-        headers = {}
-    }: {
-        url: string,
-        timeout: number,
-        requestLimit: number,
-        hardLimit: number,
-        data: { [id: string]: any },
-        headers: { [id: string]: any }
-    }) {
-        this.url = url;
-        this.timeout = timeout;
-        this.requestLimit = requestLimit;
-        this.hardLimit = hardLimit;
-        this.data = data;
-        this.headers = Object.assign(
-            {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            headers
-        );
-        this.tokens = {};
-    }
-
-    /**
-     * Returns the expiration date for tokens
-     * Threshold is set to 90% of actual token timeout
+     * Gets one token.
+     * The token can either be a simple string or a function that returns
+     * a promise which resolves to a key value map where key is the file
+     * id and value is the token. The function accepts either a simple id
+     * or an array of file ids. The token can also be null or undefined.
      *
      * @private
-     * @return {number}
+     * @param {string} id - box item typed id
+     * @param {string} tokenOrTokenFunction - Optional token or token function
+     * @return {Promise} that resolves to a token
      */
-    getExpiration(): number {
-        return Date.now() + 0.9 * this.timeout;
-    }
+    static getToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
+        // Make sure we are getting typed ids
+        // Tokens should either be null or undefuned or string or functions
+        // Anything else is not supported and throw error
+        if (
+            (tokenOrTokenFunction !== null &&
+                tokenOrTokenFunction !== undefined &&
+                typeof tokenOrTokenFunction !== 'string' &&
+                typeof tokenOrTokenFunction !== 'function') ||
+            (!id.startsWith(TYPED_ID_FOLDER_PREFIX) && !id.startsWith(TYPED_ID_FILE_PREFIX))
+        ) {
+            return Promise.reject(error);
+        }
 
-    /**
-     * Cleans up any file tokens that have passed their expiration times
-     *
-     * @private
-     * @param {string[]} ids - List of IDs to check
-     * @return {void}
-     */
-    cleanUpExpiredTokens(ids: string[]) {
-        const now = Date.now();
-        ids.forEach((id: string) => {
-            const token = this.tokens[id];
-            if (token && token.expiration < now) {
-                delete this.tokens[id];
+        // Token is a simple string or null or undefined
+        if (!tokenOrTokenFunction || typeof tokenOrTokenFunction === 'string') {
+            return Promise.resolve(tokenOrTokenFunction);
+        }
+
+        // Token is a function which returns a promise
+        // that on resolution returns an id to token map.
+        return new Promise(async (resolve: Function, reject: Function) => {
+            // $FlowFixMe
+            const token = await tokenOrTokenFunction(id);
+            if (!token || typeof token === 'string') {
+                resolve(token);
+            } else if (typeof token === 'object') {
+                resolve(token[id]);
+            } else {
+                reject(error);
             }
         });
     }
 
     /**
-     * Returns a list of existing promises for ids
+     * Gets multiple tokens.
+     * The token can either be a simple string or a function that returns
+     * a promise which resolves to a key value map where key is the file
+     * id and value is the token. The function accepts either a simple id
+     * or an array of file ids. The token can also be null or undefined.
      *
      * @private
-     * @param {string[]} ids - List of IDs to check
-     * @return {Promise[]}
+     * @param {Array<string>} idd - box item typed ids
+     * @param {string} tokenOrTokenFunction - Optional token or token function
+     * @return {Promise<TokenMap>} that resolves to a token map
      */
-    getExistingTokenRequestPromises(ids: string[]): Promise<any>[] {
-        return ids.map((id: string) => this.tokens[id].promise);
-    }
-
-    /**
-     * Returns a list of new, unrequested ids
-     *
-     * @private
-     * @param {string[]} ids - List of IDs to check
-     * @return {string[]}
-     */
-    getNewlyRequestedIds(ids: string[]): string[] {
-        return ids.filter((id: string) => !this.tokens[id]);
-    }
-
-    /**
-     * Returns a list of already requested ids
-     *
-     * @private
-     * @param {string[]} ids - List of IDs to check
-     * @return {string[]}
-     */
-    getPreviouslyRequestedIds(ids: string[]): string[] {
-        return ids.filter((id: string) => !!this.tokens[id]);
-    }
-
-    /**
-     * Returns a list of already requested ids
-     *
-     * @private
-     * @param {string[]} ids - List of IDs to check
-     * @return {string[]}
-     */
-    getIdTokenMap(ids: string[]): TokenMap {
-        const map: TokenMap = {};
-        ids.forEach((id: string) => {
-            map[id] = this.tokens[id].token;
-        });
-        return map;
-    }
-
-    /**
-     * Chunks ids into arrays of size requestLimit
-     *
-     * @private
-     * @param {string[]} ids - List of file IDs to check
-     * @return {string[][]} An array of string[]
-     */
-    getChunksOfIds(ids: string[]): string[][] {
-        const chunks: string[][] = [];
-        const len: number = ids.length;
-        for (let i: number = 0; i < len; i += this.requestLimit) {
-            chunks.push(ids.slice(i, i + this.requestLimit));
-        }
-        return chunks;
-    }
-
-    /**
-     * Creates auth tokens for a list of file ids
-     *
-     * @private
-     * @param {string[]} ids File IDs to create tokens for
-     * @return {Promise} Returns a promise that will resolve when tokens are done fetching
-     */
-    createTokens(ids: string[]): Promise<any> {
-        if (ids.length > this.requestLimit) {
-            return Promise.reject(new Error(TOO_MANY_REQUESTS));
+    static getTokens(ids: Array<string>, tokenOrTokenFunction: Token): Promise<TokenMap> {
+        // Make sure we are getting typed ids
+        // Tokens should either be null or undefuned or string or functions
+        // Anything else is not supported and throw error
+        if (
+            (tokenOrTokenFunction !== null &&
+                tokenOrTokenFunction !== undefined &&
+                typeof tokenOrTokenFunction !== 'string' &&
+                typeof tokenOrTokenFunction !== 'function') ||
+            !ids.every((itemId) => itemId.startsWith(TYPED_ID_FOLDER_PREFIX) || itemId.startsWith(TYPED_ID_FILE_PREFIX))
+        ) {
+            return Promise.reject(error);
         }
 
-        const expiration: number = this.getExpiration();
-        const promise: Promise<any> = fetch(this.url, {
-            method: 'POST',
-            headers: this.headers,
-            body: JSON.stringify(Object.assign({ ids }, this.data)).replace(/"\s+|\s+"/g, '"'),
-            credentials: 'same-origin'
-        });
+        // Token is a simple string or null or undefined
+        if (!tokenOrTokenFunction || typeof tokenOrTokenFunction === 'string') {
+            return Promise.resolve(createIdTokenMap(ids, tokenOrTokenFunction));
+        }
 
-        return promise
-            .then((response) => response.json())
-            .then((data) => {
-                ids.forEach((id) => {
-                    this.tokens[id] = { promise, expiration, token: data[id] };
-                });
-            })
-            .catch(() => {
-                ids.forEach((id: string) => delete this.tokens[id]);
-                throw new Error('Auth tokens could not be fetched!');
-            });
-    }
-
-    /**
-     * Returns an id to token map
-     *
-     * @private
-     * @param {string[]} ids List of IDs to check
-     * @return {string[]}
-     */
-    getTokens(ids: string[]): Promise<TokenMap> {
-        this.cleanUpExpiredTokens(ids);
-
-        const previouslyRequestedids = this.getPreviouslyRequestedIds(ids);
-        const newlyRequestedIds = this.getNewlyRequestedIds(ids);
-        const promises = previouslyRequestedids.length
-            ? this.getExistingTokenRequestPromises(previouslyRequestedids)
-            : [];
-        const numberOfNewRequests = newlyRequestedIds.length;
-
-        if (numberOfNewRequests) {
-            if (numberOfNewRequests > this.hardLimit) {
-                return Promise.reject(new Error(TOO_MANY_REQUESTS));
+        // Token is a function which returns a promise
+        // that on resolution returns an id to token map.
+        return new Promise(async (resolve: Function, reject: Function) => {
+            // $FlowFixMe
+            const token = await tokenOrTokenFunction(ids);
+            if (!token || typeof token === 'object' || typeof token === 'string') {
+                resolve(createIdTokenMap(ids, token));
+            } else {
+                reject(error);
             }
-            this.getChunksOfIds(newlyRequestedIds).forEach((chunk: string[]) => {
-                promises.push(this.createTokens(chunk));
-            }, this);
-        }
-
-        return Promise.all(promises).then(() => this.getIdTokenMap(ids));
-    }
-
-    /**
-     * Returns a token for the given item id
-     * or a map of ids to tokens
-     *
-     * @public
-     * @param {string|string[]} id id to check
-     * @return {string|Object}
-     */
-    getToken(id: string | string[]): Promise<Token | TokenMap> {
-        const ids: string[] = Array.isArray(id) ? id : [id];
-        return this.getTokens(ids).then((tokens: TokenMap) => (Array.isArray(id) ? tokens : tokens[id]));
+        });
     }
 }
 
-global.Box.TokenService = TokenService;
 export default TokenService;
