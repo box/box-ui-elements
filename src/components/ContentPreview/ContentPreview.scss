@@ -9,8 +9,48 @@
         flex: 1;
     }
 
+    .bcpr-container {
+        display: flex;
+        flex: 1;
+        position: relative;
+    }
+
     .bcpr-content {
         flex: 1;
+    }
+
+    .bp-navigate {
+        /* stylelint-disable declaration-no-important */
+        display: none !important;
+        /* stylelint-enable declaration-no-important */
+    }
+
+    .bcpr-navigate-right {
+        border-radius: 2px 0 0 2px;
+        right: 0;
+    }
+
+    .bcpr-navigate-left,
+    .bcpr-navigate-right {
+        display: block;
+        height: 64px;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        transition-property: opacity;
+        width: 50px;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .bcpr-nav-is-visible {
+        .bcpr-navigate-left,
+        .bcpr-navigate-right {
+            opacity: 1;
+        }
     }
 
     .bcs {

@@ -1,6 +1,6 @@
 import Recents from '../Recents';
 import Cache from '../../util/Cache';
-import getFields from '../../util/fields';
+import { getFieldsAsString } from '../../util/fields';
 import { X_REP_HINTS } from '../../constants';
 import * as sort from '../../util/sorter';
 
@@ -107,7 +107,7 @@ describe('api/Recents', () => {
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
-                    params: { fields: getFields(true) },
+                    params: { fields: getFieldsAsString(true) },
                     headers: { 'X-Rep-Hints': X_REP_HINTS }
                 });
             });
@@ -127,7 +127,7 @@ describe('api/Recents', () => {
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
-                    params: { fields: getFields(true, true) },
+                    params: { fields: getFieldsAsString(true, true) },
                     headers: { 'X-Rep-Hints': X_REP_HINTS }
                 });
             });

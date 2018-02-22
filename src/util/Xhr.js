@@ -6,6 +6,7 @@
 
 import 'whatwg-fetch';
 import { stringify } from 'querystring';
+import TokenService from './TokenService';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
 const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
@@ -13,7 +14,6 @@ const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 const CONTENT_TYPE_HEADER = 'Content-Type';
 const SUCCESS_RESPONSE_FILTER = ({ response }) => response;
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
-const error = new Error('Bad id or auth token!');
 
 class Xhr {
     id: ?string;
@@ -24,6 +24,7 @@ class Xhr {
     sharedLinkPassword: ?string;
     xhr: XMLHttpRequest;
     responseFilter: Function;
+    tokenService: TokenService;
 
     /**
      * [constructor]
@@ -44,12 +45,6 @@ class Xhr {
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
         this.responseFilter = typeof responseFilter === 'function' ? responseFilter : SUCCESS_RESPONSE_FILTER;
-
-        // Tokens should either be null or undefuned or string or functions
-        // Anything else is not supported and throw error
-        if (token !== null && token !== undefined && typeof token !== 'string' && typeof token !== 'function') {
-            throw error;
-        }
     }
 
     /**
@@ -126,54 +121,13 @@ class Xhr {
     }
 
     /**
-     * The token can either be a simple string or a function that returns
-     * a promise which resolves to a key value map where key is the file
-     * id and value is the token. The function accepts either a simple id
-     * or an array of file ids
-     *
-     * @private
-     * @param {string} [id] - Optional box item id
-     * @return {Promise} that resolves to a token
-     */
-    getToken(id?: string): Promise<?string> {
-        const itemId = id || this.id || '';
-
-        // Make sure we are getting typed ids
-        if (!itemId.includes('_')) {
-            return Promise.reject(error);
-        }
-
-        if (!this.token || typeof this.token === 'string') {
-            // Token is a simple string or null or undefined
-            return Promise.resolve(this.token);
-        }
-
-        // Token is a function which returns a promise
-        // that on resolution returns an id to token map.
-        return new Promise((resolve: Function, reject: Function) => {
-            // $FlowFixMe Nulls and strings already checked above
-            this.token(itemId)
-                .then((token) => {
-                    if (typeof token === 'string') {
-                        resolve(token);
-                    } else if (typeof token === 'object' && !!token[itemId]) {
-                        resolve(token[itemId]);
-                    } else {
-                        reject(error);
-                    }
-                })
-                .catch(reject);
-        });
-    }
-
-    /**
      * Builds a list of required XHR headers.
      *
      * @param {string} [id] - Optional box item id
      * @param {Object} [args] - Optional existing headers
      * @return {Object} Headers
      */
-    getHeaders(id?: string, args: StringMap = {}) {
+    async getHeaders(id?: string, args: StringMap = {}) {
         const headers: StringMap = Object.assign(
             {
                 Accept: 'application/json',
@@ -196,17 +150,15 @@ class Xhr {
             headers[HEADER_CLIENT_VERSION] = this.version;
         }
 
-        return this.getToken(id)
-            .then((token) => {
-                if (token) {
-                    // Only add a token when there was one found
-                    headers.Authorization = `Bearer ${token}`;
-                }
-                return headers;
-            })
-            .catch(() => {
-                throw error;
-            });
+        // If id is passed in, use that, otherwise default to this.id
+        const itemId = id || this.id || '';
+        const token = await TokenService.getToken(itemId, this.token);
+        if (token) {
+            // Only add a token when there was one found
+            headers.Authorization = `Bearer ${token}`;
+        }
+
+        return headers;
     }
 
     /**

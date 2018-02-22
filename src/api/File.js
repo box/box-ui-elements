@@ -5,7 +5,7 @@
  */
 
 import Item from './Item';
-import getFields from '../util/fields';
+import { getFieldsAsString } from '../util/fields';
 import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS, TYPED_ID_FILE_PREFIX } from '../constants';
 import type Cache from '../util/Cache';
 import type { BoxItem } from '../flowTypes';
@@ -106,7 +106,7 @@ class File extends Item {
                 id: this.getTypedFileId(id),
                 url: this.getUrl(id),
                 params: {
-                    fields: getFields(true, includePreviewSidebarFields)
+                    fields: getFieldsAsString(true, includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })

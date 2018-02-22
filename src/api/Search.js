@@ -10,7 +10,7 @@ import FolderAPI from './Folder';
 import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
-import getFields from '../util/fields';
+import { getFieldsAsString } from '../util/fields';
 import { CACHE_PREFIX_SEARCH, X_REP_HINTS } from '../constants';
 import getBadItemError from '../util/error';
 import type Cache from '../util/Cache';
@@ -246,7 +246,7 @@ class Search extends Base {
                     query: this.query,
                     ancestor_folder_ids: this.id,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: getFields(this.includePreviewFields, this.includePreviewSidebarFields)
+                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })

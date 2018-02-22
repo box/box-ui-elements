@@ -10,7 +10,7 @@ import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
-import getFields from '../util/fields';
+import { getFieldsAsString } from '../util/fields';
 import { CACHE_PREFIX_FOLDER, X_REP_HINTS } from '../constants';
 import getBadItemError from '../util/error';
 import type Cache from '../util/Cache';
@@ -242,7 +242,7 @@ class Folder extends Item {
                 params: {
                     offset: this.offset,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: getFields(this.includePreviewFields, this.includePreviewSidebarFields)
+                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
@@ -347,7 +347,7 @@ class Folder extends Item {
             return Promise.reject();
         }
 
-        const url = `${this.getUrl()}?fields=${getFields()}`;
+        const url = `${this.getUrl()}?fields=${getFieldsAsString()}`;
         return this.xhr
             .post({
                 url,

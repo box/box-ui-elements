@@ -7,14 +7,18 @@
 import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
+import throttle from 'lodash/throttle';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
 import Cache from '../../util/Cache';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
+import { isValidBoxFile } from '../../util/fields';
+import TokenService from '../../util/TokenService';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -49,7 +53,7 @@ type Props = {
     language: string,
     messages?: StringMap,
     cache?: Cache,
-    collection?: string[],
+    collection: Array<string | BoxItem>,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
@@ -67,6 +71,8 @@ class ContentPreview extends PureComponent<Props, State> {
     state: State;
     preview: any;
     api: API;
+    previewContainer: ?HTMLDivElement;
+    mouseMoveTimeoutID: TimeoutID;
 
     static defaultProps = {
         className: '',
@@ -80,7 +86,8 @@ class ContentPreview extends PureComponent<Props, State> {
         hasHeader: false,
         onLoad: noop,
         onNavigate: noop,
-        onInteraction: noop
+        onInteraction: noop,
+        collection: []
     };
 
     /**
@@ -114,13 +121,13 @@ class ContentPreview extends PureComponent<Props, State> {
     componentWillUnmount(): void {
         if (this.preview) {
             this.preview.removeAllListeners();
-            this.preview.destroy();
+            this.destroyPreview();
         }
         this.preview = undefined;
     }
 
     /**
-     * Called after shell mounts
+     * Called after receiving new props
      *
      * @private
      * @return {void}
@@ -136,10 +143,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         if (hasTokenChanged || hasFileIdChanged) {
             newState.file = undefined;
-            if (this.preview) {
-                this.preview.destroy();
-                this.preview = undefined;
-            }
+            this.destroyPreview();
             this.fetchFile(nextProps.fileId);
         }
 
@@ -243,25 +247,92 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Calls destroy of preview
+     *
+     * @return {void}
+     */
+    destroyPreview() {
+        if (this.preview) {
+            this.preview.destroy();
+        }
+    }
+
+    /**
+     * Prefetches the next few preview files if any
+     *
+     * @param {Array<string|BoxItem>} files - files to prefetch
+     * @return {void}
+     */
+    async prefetch(files: Array<string | BoxItem>): Promise<void> {
+        const { token }: Props = this.props;
+        const fileAPI = this.api.getFileAPI();
+        const typedIds = files.map(
+            (file) => (typeof file === 'string' ? fileAPI.getTypedFileId(file) : fileAPI.getTypedFileId(file.id))
+        );
+
+        const tokens = await TokenService.getTokens(typedIds, token);
+
+        files.forEach((file) => {
+            const typedId = typeof file === 'string' ? fileAPI.getTypedFileId(file) : fileAPI.getTypedFileId(file.id);
+            const fileToken = tokens[typedId];
+            const isValidFile = isValidBoxFile(file, true, true);
+
+            if (isValidFile) {
+                this.preview.updateFileCache([file]);
+                // $FlowFixMe
+                this.preview.prefetch({ fileId: file.id, token: fileToken });
+            } else if (file) {
+                this.fetchFile(
+                    // $FlowFixMe
+                    typeof file === 'string' ? file : file.id,
+                    (boxfile: BoxItem) => {
+                        this.preview.updateFileCache([boxfile]);
+                        this.preview.prefetch({ fileId: boxfile.id, token: fileToken });
+                    },
+                    noop
+                );
+            }
+        });
+    }
+
+    /**
+     * onLoad function for preview
+     *
+     * @return {void}
+     */
+    onPreviewLoad = (data) => {
+        const { onLoad, collection }: Props = this.props;
+        const currentIndex = this.getFileIndex();
+        const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
+        onLoad(data);
+        if (this.preview && filesToPrefetch.length > 1) {
+            this.prefetch(filesToPrefetch);
+        }
+    };
+
+    /**
      * Loads the preview
      *
      * @return {void}
      */
     loadPreview = (): void => {
         const { Preview } = global.Box;
-        const { fileId, token, onLoad, onNavigate, ...rest }: Props = this.props;
+        const { fileId, token, onLoad, onNavigate, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
-        if (!this.isPreviewLibraryLoaded() || this.preview || !file || !token) {
+        if (!this.isPreviewLibraryLoaded() || !file || !token) {
             return;
         }
 
-        this.preview = new Preview();
-        this.preview.addListener('navigate', (id: string) => {
-            this.fetchFile(id);
-            onNavigate(id);
-        });
-        this.preview.addListener('load', onLoad);
+        if (!this.preview) {
+            this.preview = new Preview();
+            this.preview.addListener('load', this.onPreviewLoad);
+        }
+
+        if (this.preview.getCurrentViewer()) {
+            return;
+        }
+
         this.preview.show(file, token, {
             container: `#${this.id} .bcpr-content`,
             header: 'none',
@@ -276,7 +347,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onResize = (): void => {
-        if (this.preview) {
+        if (this.preview && this.preview.getCurrentViewer()) {
             this.preview.resize();
         }
     };
@@ -310,15 +381,24 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} id file id
-     * @param {Boolean|void} [forceFetch] To void cache
+     * @param {Function|void} [successCallback] - Callback after file is fetched
+     * @param {Function|void} [errorCallback] - Callback after error
      * @return {void}
      */
-    fetchFile(id: string, forceFetch: boolean = false): void {
+    fetchFile(id: string, successCallback: ?Function, errorCallback: ?Function): void {
         if (!id) {
             throw new Error('Invalid id for Preview!');
         }
         const { hasSidebar }: Props = this.props;
-        this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch, hasSidebar);
+        this.api
+            .getFileAPI()
+            .file(
+                id,
+                successCallback || this.fetchFileSuccessCallback,
+                errorCallback || this.errorCallback,
+                false,
+                hasSidebar
+            );
     }
 
     /**
@@ -356,6 +436,124 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
+     * Finds the index of current file inside the collection
+     *
+     * @return {number} -1 if not indexed
+     */
+    getFileIndex() {
+        const { file }: State = this.state;
+        const { collection }: Props = this.props;
+        if (!file || collection.length < 2) {
+            return -1;
+        }
+
+        const index = collection.indexOf(file);
+        if (index < 0) {
+            return collection.indexOf(file.id);
+        }
+        return index;
+    }
+
+    /**
+     * Shows a preview of a file at the specified index in the current collection.
+     *
+     * @public
+     * @param {number} index - Index of file to preview
+     * @return {void}
+     */
+    navigateToIndex(index) {
+        const { collection }: Props = this.props;
+        if (collection.length < 2) {
+            return;
+        }
+
+        const fileOrId = collection[index];
+        this.destroyPreview();
+        this.fetchFile(typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId);
+    }
+
+    /**
+     * Shows a preview of the previous file.
+     *
+     * @public
+     * @return {void}
+     */
+    navigateLeft = () => {
+        const currentIndex = this.getFileIndex();
+        if (currentIndex) {
+            const newIndex = currentIndex === 0 ? 0 : currentIndex - 1;
+            if (newIndex !== currentIndex) {
+                this.navigateToIndex(newIndex);
+            }
+        }
+    };
+
+    /**
+     * Shows a preview of the next file.
+     *
+     * @public
+     * @return {void}
+     */
+    navigateRight = () => {
+        const { collection }: Props = this.props;
+        const currentIndex = this.getFileIndex();
+        if (currentIndex) {
+            const newIndex = currentIndex === collection.length - 1 ? collection.length - 1 : currentIndex + 1;
+            if (newIndex !== currentIndex) {
+                this.navigateToIndex(newIndex);
+            }
+        }
+    };
+
+    /**
+     * Mouse move handler thati s throttled and show
+     * the navigation arrows if applicable.
+     *
+     * @return {void}
+     */
+    mouseMoveHandler = throttle(
+        () => {
+            const viewer = this.getPreviewer();
+            const isPreviewing = !!viewer;
+            const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
+
+            clearTimeout(this.mouseMoveTimeoutID);
+
+            if (!this.previewContainer) {
+                return;
+            }
+
+            // Always assume that navigation arrows will be hidden
+            this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+
+            // Only show it if either we aren't previewing or if we are then the viewer
+            // is not blocking the show. If we are previewing then the viewer may choose
+            // to not allow navigation arrows. This is mostly useful for videos since the
+            // navigation arrows may interfere with the settings menu inside video player.
+            if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
+                this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
+            }
+
+            this.mouseMoveTimeoutID = setTimeout(() => {
+                if (this.previewContainer) {
+                    this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+                }
+            }, 1500);
+        },
+        1000,
+        true
+    );
+
+    /**
+     * Holds the reference the preview container
+     *
+     * @return {void}
+     */
+    containerRef = (container) => {
+        this.previewContainer = container;
+    };
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -380,6 +578,9 @@ class ContentPreview extends PureComponent<Props, State> {
         }: Props = this.props;
 
         const { file, showSidebar: showSidebarState }: State = this.state;
+        const { collection }: Props = this.props;
+        const hasLeftNavigation = collection.length > 1 && this.getFileIndex() > 0;
+        const hasRightNavigation = collection.length > 1 && this.getFileIndex() < collection.length - 1;
 
         let isSidebarVisible = !!file && hasSidebar && showSidebarState;
         let hasSidebarButton = hasSidebar;
@@ -406,9 +607,37 @@ class ContentPreview extends PureComponent<Props, State> {
                         />
                     )}
                     <div className='bcpr-body'>
-                        <Measure bounds onResize={this.onResize}>
-                            {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
-                        </Measure>
+                        <div className='bcpr-container' onMouseMove={this.mouseMoveHandler} ref={this.containerRef}>
+                            <Measure bounds onResize={this.onResize}>
+                                {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
+                            </Measure>
+                            {hasLeftNavigation && (
+                                <PlainButton type='button' className='bcpr-navigate-left' onClick={this.navigateLeft}>
+                                    <svg viewBox='0 0 48 48' focusable='false'>
+                                        <path
+                                            fill='#494949'
+                                            stroke='#DCDCDC'
+                                            strokeMiterlimit='10'
+                                            d='M30.8,33.2L21.7,24l9.2-9.2L28,12L16,24l12,12L30.8,33.2z'
+                                        />
+                                        <path display='none' fill='none' d='M0,0h48v48H0V0z' />
+                                    </svg>
+                                </PlainButton>
+                            )}
+                            {hasRightNavigation && (
+                                <PlainButton type='button' className='bcpr-navigate-right' onClick={this.navigateRight}>
+                                    <svg viewBox='0 0 48 48' focusable='false'>
+                                        <path
+                                            fill='#494949'
+                                            stroke='#DCDCDC'
+                                            strokeMiterlimit='10'
+                                            d='M17.2,14.8l9.2,9.2l-9.2,9.2L20,36l12-12L20,12L17.2,14.8z'
+                                        />
+                                        <path display='none' fill='none' d='M48,48H0L0,0l48,0V48z' />
+                                    </svg>
+                                </PlainButton>
+                            )}
+                        </div>
                         {isSidebarVisible && (
                             <ContentSidebar
                                 isSmall={isSmall}

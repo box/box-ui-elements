@@ -1,6 +1,6 @@
 import Folder from '../Folder';
 import Cache from '../../util/Cache';
-import getFields from '../../util/fields';
+import { getFieldsAsString } from '../../util/fields';
 import { X_REP_HINTS } from '../../constants';
 import * as sort from '../../util/sorter';
 
@@ -156,7 +156,7 @@ describe('api/Folder', () => {
                     params: {
                         offset: 0,
                         limit: 1000,
-                        fields: getFields(true)
+                        fields: getFieldsAsString(true)
                     },
                     headers: {
                         'X-Rep-Hints': X_REP_HINTS
@@ -181,7 +181,7 @@ describe('api/Folder', () => {
                     params: {
                         offset: 0,
                         limit: 1000,
-                        fields: getFields(true, true)
+                        fields: getFieldsAsString(true, true)
                     },
                     headers: {
                         'X-Rep-Hints': X_REP_HINTS
@@ -636,7 +636,7 @@ describe('api/Folder', () => {
                 expect(folder.createSuccessHandler).toHaveBeenCalledWith('success');
                 expect(folder.folderErrorHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.post).toHaveBeenCalledWith({
-                    url: `https://api.box.com/2.0/folders?fields=${getFields()}`,
+                    url: `https://api.box.com/2.0/folders?fields=${getFieldsAsString()}`,
                     data: {
                         name: 'foo',
                         parent: {
@@ -657,7 +657,7 @@ describe('api/Folder', () => {
                 expect(folder.folderErrorHandler).toHaveBeenCalledWith(error);
                 expect(folder.createSuccessHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.post).toHaveBeenCalledWith({
-                    url: `https://api.box.com/2.0/folders?fields=${getFields()}`,
+                    url: `https://api.box.com/2.0/folders?fields=${getFieldsAsString()}`,
                     data: {
                         name: 'foo',
                         parent: {

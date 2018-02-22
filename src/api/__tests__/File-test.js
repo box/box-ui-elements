@@ -1,6 +1,6 @@
 import File from '../File';
 import Cache from '../../util/Cache';
-import getFields from '../../util/fields';
+import { getFieldsAsString } from '../../util/fields';
 import { X_REP_HINTS } from '../../constants';
 
 let file;
@@ -106,7 +106,7 @@ describe('api/File', () => {
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
                     params: {
-                        fields: getFields(true)
+                        fields: getFieldsAsString(true)
                     },
                     headers: {
                         'X-Rep-Hints': X_REP_HINTS
@@ -131,7 +131,7 @@ describe('api/File', () => {
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
                     params: {
-                        fields: getFields(true, true)
+                        fields: getFieldsAsString(true, true)
                     },
                     headers: {
                         'X-Rep-Hints': X_REP_HINTS
@@ -159,7 +159,7 @@ describe('api/File', () => {
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
                     params: {
-                        fields: getFields(true)
+                        fields: getFieldsAsString(true)
                     },
                     headers: {
                         'X-Rep-Hints': X_REP_HINTS
