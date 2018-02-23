@@ -39,7 +39,7 @@
                 <div>
                     <label>
                         <div>File Id</div>
-                        <input class="file" type="text" placeholder="Enter file id" value="233852272782" />
+                        <input class="file" type="text" placeholder="Enter file id" />
                     </label>
                     <label>
                         <div>Auth Token</div>
@@ -60,8 +60,15 @@
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const fileId = document.querySelector('.file').value || localStorage.getItem('file');
 
+                if (!token || !fileId) {
+                    return;
+                }
+
                 localStorage.setItem('token', token);
+                document.querySelector('.token').value = token;
+
                 localStorage.setItem('file', fileId);
+                document.querySelector('.file').value = fileId;
 
                 const sidebar1 = new ContentSidebar();
                 sidebar1.show(fileId, token, {
