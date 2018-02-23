@@ -1,1 +1,2 @@
-export default from './ContentExplorer';
+// @flow
+export { default } from './ContentExplorer';

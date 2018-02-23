@@ -70,7 +70,7 @@ class TokenService {
         // Token is a function which returns a promise
         // that on resolution returns an id to token map.
         return new Promise(async (resolve: Function, reject: Function) => {
-            // $FlowFixMe
+            // $FlowFixMe Already checked null above
             const token = await tokenOrTokenFunction(id);
             if (!token || typeof token === 'string') {
                 resolve(token);
@@ -116,7 +116,7 @@ class TokenService {
         // Token is a function which returns a promise
         // that on resolution returns an id to token map.
         return new Promise(async (resolve: Function, reject: Function) => {
-            // $FlowFixMe
+            // $FlowFixMe Already checked null above
             const token = await tokenOrTokenFunction(ids);
             if (!token || typeof token === 'object' || typeof token === 'string') {
                 resolve(createIdTokenMap(ids, token));

@@ -126,8 +126,8 @@ class ContentSidebar extends PureComponent<Props, State> {
     componentDidMount() {
         const { fileId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        // $FlowFixMe: child will exist
-        this.appElement = this.rootElement.firstElementChild;
+        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
+
         if (fileId) {
             this.fetchFile(fileId);
         }

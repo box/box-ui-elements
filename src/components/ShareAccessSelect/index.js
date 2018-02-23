@@ -1,1 +1,2 @@
-export default from './ShareAccessSelect';
+// @flow
+export { default } from './ShareAccessSelect';

@@ -1,1 +1,2 @@
-export default from './UploadDialog';
+// @flow
+export { default } from './UploadDialog';
