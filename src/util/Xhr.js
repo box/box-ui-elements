@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import 'whatwg-fetch';
+import axios from 'axios';
 import { stringify } from 'querystring';
 import TokenService from './TokenService';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
@@ -17,6 +17,7 @@ const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 
 class Xhr {
     id: ?string;
+    axios: axios;
     clientName: ?string;
     token: Token;
     version: ?string;
@@ -45,47 +46,7 @@ class Xhr {
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
         this.responseFilter = typeof responseFilter === 'function' ? responseFilter : SUCCESS_RESPONSE_FILTER;
-    }
-
-    /**
-     * Helper function to convert HTTP status codes into throwable errors
-     *
-     * @param {Response} response - fetch's Response object
-     * @throws {Error} - Throws when the HTTP status is not 2XX
-     * @return {Response} - Pass-thru the response if ther are no errors
-     */
-    static checkStatus(response: Response): Response {
-        if (response.status >= 200 && response.status < 300) {
-            return response;
-        }
-
-        const err: any = new Error(response.statusText);
-        err.response = response;
-        throw err;
-    }
-
-    /**
-     * Gets the JSON from a response if the response is not 204
-     *
-     * @param {Response} response - fetch's Response object
-     * @return {Object} JS Object representation of the JSON response or the response
-     */
-    static parseJSON(response: Response): Response | Promise<any> {
-        // Return plain response if it is 202 or 204 since they don't have a body
-        if (response.status === 202 || response.status === 204) {
-            return response;
-        }
-        return response.json();
-    }
-
-    /**
-     * Helper function to convert HTTP status codes into throwable errors
-     *
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @return {string} - Stringifyed data
-     */
-    static stringifyData(data: StringAnyMap): string {
-        return JSON.stringify(data).replace(/"\s+|\s+"/g, '"');
+        this.axios = axios.create();
     }
 
     /**
@@ -98,7 +59,7 @@ class Xhr {
         const a = document.createElement('a');
         a.href = url;
 
-        return (response: StringAnyMap): Promise<StringAnyMap> => {
+        return ({ data }: StringAnyMap): Promise<StringAnyMap> => {
             const filteredResponse = this.responseFilter({
                 request: {
                     method,
@@ -114,7 +75,7 @@ class Xhr {
                     hash: a.hash,
                     port: a.port
                 },
-                response
+                response: data
             });
             return filteredResponse instanceof Promise ? filteredResponse : Promise.resolve(filteredResponse);
         };
@@ -185,10 +146,7 @@ class Xhr {
         const fullUrl = querystring.length > 0 ? `${url}?${querystring}` : url;
 
         return this.getHeaders(id, headers).then((hdrs) =>
-            fetch(fullUrl, { headers: hdrs, mode: 'cors' })
-                .then(Xhr.checkStatus)
-                .then(Xhr.parseJSON)
-                .then(this.applyResponseFiltering(fullUrl, 'GET'))
+            this.axios.get(fullUrl, { headers: hdrs }).then(this.applyResponseFiltering(fullUrl, 'GET'))
         );
     }
 
@@ -216,14 +174,12 @@ class Xhr {
         method?: Method
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then((hdrs) =>
-            fetch(url, {
+            this.axios({
+                url,
+                data,
                 method,
-                headers: hdrs,
-                body: Xhr.stringifyData(data)
-            })
-                .then(Xhr.checkStatus)
-                .then(Xhr.parseJSON)
-                .then(this.applyResponseFiltering(url, method, data))
+                headers: hdrs
+            }).then(this.applyResponseFiltering(url, method, data))
         );
     }
 
@@ -302,21 +258,16 @@ class Xhr {
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers)
             .then((hdrs) =>
-                fetch(url, {
-                    method: 'OPTIONS',
-                    headers: hdrs,
-                    body: Xhr.stringifyData(data)
+                this.axios({
+                    url,
+                    data,
+                    method: 'options',
+                    headers: hdrs
                 })
-                    .then(Xhr.parseJSON)
-                    .then((response: StringAnyMap) => {
-                        if (response.type === 'error') {
-                            errorHandler(response);
-                        } else {
-                            successHandler(response);
-                        }
-                        return response;
+                    .then(successHandler)
+                    .catch((error: any) => {
+                        errorHandler(error.response.data);
                     })
-                    .catch(errorHandler)
             )
             .catch(errorHandler);
     }
