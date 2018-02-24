@@ -1394,9 +1394,9 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-box-react-ui@^21.9.1:
-  version "21.9.1"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-21.9.1.tgz#1232a3ec124cc730f987d0ea1d725e6057ef72b2"
+box-react-ui@^22.3.0:
+  version "22.3.0"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-22.3.0.tgz#d38d1a30f297919c6804cb7141cfb93df8a08ec9"
   dependencies:
     yui "^3.18.1"
 
@@ -8135,6 +8135,12 @@ react-tether@^0.6.1:
   dependencies:
     prop-types "^15.5.8"
     tether "^1.4.3"
+
+react-textarea-autosize@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-5.2.1.tgz#2b78f9067180f41b08ac59f78f1581abadd61e54"
+  dependencies:
+    prop-types "^15.6.0"
 
 react-virtualized@^9.18.5:
   version "9.18.5"

@@ -28,6 +28,8 @@ type Props = {
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onInteraction: Function,
+    onDescriptionChange: Function,
+    descriptionTextareaProps: Object,
     intl: any
 };
 
@@ -44,6 +46,8 @@ const DetailsSidebar = ({
     rootElement,
     appElement,
     onInteraction,
+    onDescriptionChange,
+    descriptionTextareaProps,
     intl
 }: Props) => {
     if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification) {
@@ -70,6 +74,8 @@ const DetailsSidebar = ({
                         owner={getProp(file, 'owned_by.name')}
                         size={getFileSize(file.size, intl.locale)}
                         uploader={getProp(file, 'created_by.name')}
+                        onDescriptionChange={onDescriptionChange}
+                        descriptionTextareaProps={descriptionTextareaProps}
                     />
                 </SidebarSection>
             )}

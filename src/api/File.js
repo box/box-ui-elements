@@ -64,6 +64,29 @@ class File extends Item {
     }
 
     /**
+     * API for setting the description of a file
+     *
+     * @param {string} id - file id
+     * @return {void}
+     */
+    setFileDescription(id: string, value: string, successCallback: Function, errorCallback: Function): Promise<void> {
+        const body = {
+            description: value
+        };
+
+        return this.xhr
+            .put({
+                id: this.getTypedFileId(id),
+                url: this.getUrl(id),
+                data: body
+            })
+            .then((data: BoxItem) => {
+                successCallback(data[FIELD_DOWNLOAD_URL]);
+            })
+            .catch(errorCallback);
+    }
+
+    /**
      * Gets a box file
      *
      * @param {string} id - File id

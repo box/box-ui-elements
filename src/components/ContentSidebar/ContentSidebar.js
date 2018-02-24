@@ -202,6 +202,43 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Function to update file description
+     *
+     * @private
+     * @param {string} value - new file description
+     * @return {void}
+     */
+    onDescriptionChange = (value: string): void => {
+        const { file } = this.state;
+        if (!file) {
+            return;
+        }
+
+        const { description, id } = file;
+        if (value === description || !description || !id) {
+            return;
+        }
+
+        this.api.getFileAPI().setFileDescription(id, value, this.setFileDescriptionCallback, this.errorCallback);
+    };
+
+    /**
+     * File update description callback
+     *
+     * @private
+     * @param {string} value - updated file description
+     * @return {void}
+     */
+    setFileDescriptionCallback = (value: string): void => {
+        this.setState({
+            file: {
+                ...this.state.file,
+                description: value
+            }
+        });
+    };
+
+    /**
      * Network error callback
      *
      * @private
@@ -284,6 +321,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 appElement={this.appElement}
                                 rootElement={this.rootElement}
                                 onInteraction={this.onInteraction}
+                                onDescriptionChange={file.can_rename && this.onDescriptionChange}
+                                descriptionTextareaProps={{ maxlength: '255' }}
                             />
                         ) : (
                             <div className='bcs-loading'>

@@ -27,6 +27,8 @@ type Props = {
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onInteraction: Function,
+    onDescriptionChange: Function,
+    descriptionTextareaProps: Object,
     intl: any
 };
 
@@ -43,6 +45,8 @@ const Sidebar = ({
     rootElement,
     appElement,
     onInteraction,
+    onDescriptionChange,
+    descriptionTextareaProps,
     intl
 }: Props) => {
     const shouldShowSkills = hasSkills && hasSkillsData(file);
@@ -60,6 +64,8 @@ const Sidebar = ({
             appElement={appElement}
             rootElement={rootElement}
             onInteraction={onInteraction}
+            onDescriptionChange={onDescriptionChange}
+            descriptionTextareaProps={descriptionTextareaProps}
         />
     );
 
