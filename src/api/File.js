@@ -69,9 +69,21 @@ class File extends Item {
      * @param {string} id - file id
      * @return {void}
      */
-    setFileDescription(id: string, value: string, successCallback: Function, errorCallback: Function): Promise<void> {
+    setFileDescription(
+        file: BoxItem,
+        newDescription: string,
+        successCallback: Function,
+        errorCallback: Function
+    ): Promise<void> {
+        const { id, permissions } = file;
+
+        if (!id || !permissions || !permissions.can_rename) {
+            errorCallback();
+            return Promise.reject();
+        }
+
         const body = {
-            description: value
+            description: newDescription
         };
 
         return this.xhr
@@ -80,8 +92,9 @@ class File extends Item {
                 url: this.getUrl(id),
                 data: body
             })
-            .then((data: BoxItem) => {
-                successCallback(data[FIELD_DOWNLOAD_URL]);
+            .then((updatedFile: BoxItem) => {
+                this.successCallback = successCallback;
+                this.merge(this.getCacheKey(id), 'description', updatedFile.description);
             })
             .catch(errorCallback);
     }

@@ -205,21 +205,28 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Function to update file description
      *
      * @private
-     * @param {string} value - new file description
+     * @param {string} newDescription - new file description
      * @return {void}
      */
-    onDescriptionChange = (value: string): void => {
+    onDescriptionChange = (newDescription: string): void => {
         const { file } = this.state;
         if (!file) {
             return;
         }
 
         const { description, id } = file;
-        if (value === description || !description || !id) {
+        if (newDescription === description || !id) {
             return;
         }
 
-        this.api.getFileAPI().setFileDescription(id, value, this.setFileDescriptionCallback, this.errorCallback);
+        this.api
+            .getFileAPI()
+            .setFileDescription(
+                file,
+                newDescription,
+                this.setFileDescriptionSuccessCallback,
+                this.setFileDescriptionFailCallback
+            );
     };
 
     /**
@@ -229,13 +236,24 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} value - updated file description
      * @return {void}
      */
-    setFileDescriptionCallback = (value: string): void => {
-        this.setState({
-            file: {
-                ...this.state.file,
-                description: value
-            }
-        });
+    setFileDescriptionSuccessCallback = (file: BoxItem): void => {
+        this.onInteraction({ target: 'description-change' });
+        this.setState({ file });
+    };
+
+    /**
+     * Handles a failed file description update
+     *
+     * @private
+     * @param {BoxItem} file - updated file description
+     * @return {void}
+     */
+    setFileDescriptionFailCallback = (e: Error): void => {
+        // This currently no-ops because the state hasn't changed
+        // Change description value back to original once the textarea is programatically editible
+        const { file } = this.state;
+        this.setState({ file });
+        this.errorCallback(e);
     };
 
     /**
@@ -321,8 +339,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 appElement={this.appElement}
                                 rootElement={this.rootElement}
                                 onInteraction={this.onInteraction}
-                                onDescriptionChange={file.can_rename && this.onDescriptionChange}
-                                descriptionTextareaProps={{ maxlength: '255' }}
+                                onDescriptionChange={this.onDescriptionChange}
                             />
                         ) : (
                             <div className='bcs-loading'>
