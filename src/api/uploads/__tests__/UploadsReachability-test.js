@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions, no-underscore-dangle */
 import { withData } from 'leche';
-
+import axios from 'axios';
 import UploadsReachability from '../UploadReachability';
 import { DEFAULT_HOSTNAME_UPLOAD } from '../../../constants';
 
@@ -20,13 +20,13 @@ describe('api/UploadsReachability', () => {
         });
 
         test('should return false when there is an error when making the GET request', async () => {
-            window.fetch = jest.fn().mockReturnValueOnce(Promise.reject());
+            axios.get = jest.fn().mockReturnValueOnce(Promise.reject());
             const res = await uploadsReachabilityTest.isUploadHostReachable('random_url');
             expect(res).toBe(false);
         });
 
         test('should return true when there is no error when making the GET request', async () => {
-            window.fetch = jest.fn().mockReturnValueOnce(Promise.resolve());
+            axios.get = jest.fn().mockReturnValueOnce(Promise.resolve());
             const res = await uploadsReachabilityTest.isUploadHostReachable('random_url');
             expect(res).toBe(true);
         });
