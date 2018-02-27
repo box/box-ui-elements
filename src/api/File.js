@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Helper for the box file api
+ * @file Helper for the box file API
  * @author Box
  */
 
@@ -97,12 +97,13 @@ class File extends Item {
                 url: this.getUrl(id),
                 data: { description }
             })
-            .then((updatedFile: BoxItem) => {
-                this.successCallback = successCallback;
-                this.merge(this.getCacheKey(id), 'description', updatedFile.description);
+            .then((responseFileObject: BoxItem) => {
+                const updatedFile = this.merge(this.getCacheKey(id), 'description', responseFileObject.description);
+                successCallback(updatedFile);
             })
             .catch((e) => {
-                errorCallback(e, file);
+                const originalFile = this.merge(this.getCacheKey(id), 'description', file.description);
+                errorCallback(e, originalFile);
             });
     }
 

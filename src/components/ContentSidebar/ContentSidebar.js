@@ -219,14 +219,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             return;
         }
 
-        // Setting the state no matter what, will reset state and re-render if the API call fails
-        this.setState({
-            file: {
-                ...file,
-                description: newDescription
-            }
-        });
-
         this.api
             .getFileAPI()
             .setFileDescription(
@@ -244,8 +236,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {BoxItem} file - Updated file object
      * @return {void}
      */
-    setFileDescriptionSuccessCallback = (): void => {
+    setFileDescriptionSuccessCallback = (file: BoxItem): void => {
         this.onInteraction({ target: 'description-change' });
+        this.setState({ file });
     };
 
     /**
