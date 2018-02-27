@@ -5,7 +5,7 @@
  */
 
 import comparator from './comparator';
-import getBadItemError from './error';
+import { getBadItemError } from './error';
 import type { FlattenedBoxItem, Order, FlattenedBoxItemCollection, SortBy, SortDirection } from '../flowTypes';
 import type Cache from './Cache';
 

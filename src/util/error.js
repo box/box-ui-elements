@@ -4,7 +4,7 @@
  * @author Box
  */
 
-export default function getBadItemError(): Error {
+export function getBadItemError(): Error {
     return new Error('Bad box item!');
 }
 

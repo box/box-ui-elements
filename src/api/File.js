@@ -8,7 +8,7 @@ import Item from './Item';
 import { getFieldsAsString } from '../util/fields';
 import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS, TYPED_ID_FILE_PREFIX } from '../constants';
 import type Cache from '../util/Cache';
-import getBadItemError, { getBadPermissionsError } from '../util/error';
+import { getBadItemError, getBadPermissionsError } from '../util/error';
 import type { BoxItem } from '../flowTypes';
 
 class File extends Item {

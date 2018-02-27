@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import getBadItemError from './error';
+import { getBadItemError } from './error';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { BoxItem } from '../flowTypes';
 import type File from '../api/File';
