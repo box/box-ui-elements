@@ -24,6 +24,8 @@ type Props = {
     parentElement: HTMLElement,
     appElement: HTMLElement,
     onUpload: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
     intl: any
 };
 
@@ -40,6 +42,8 @@ const UploadDialog = ({
     parentElement,
     appElement,
     onUpload,
+    requestInterceptor,
+    responseInterceptor,
     intl
 }: Props) => (
     <Modal
@@ -61,6 +65,8 @@ const UploadDialog = ({
             uploadHost={uploadHost}
             onClose={onClose}
             onComplete={onUpload}
+            requestInterceptor={requestInterceptor}
+            responseInterceptor={responseInterceptor}
         />
     </Modal>
 );

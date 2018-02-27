@@ -32,6 +32,8 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     onInteraction: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
     intl: any
 };
 
@@ -52,6 +54,8 @@ const PreviewDialog = ({
     sharedLink,
     sharedLinkPassword,
     onInteraction,
+    requestInterceptor,
+    responseInterceptor,
     intl
 }: Props) => {
     const { items }: Collection = currentCollection;
@@ -90,6 +94,8 @@ const PreviewDialog = ({
                 sharedLink={sharedLink}
                 sharedLinkPassword={sharedLinkPassword}
                 onInteraction={onInteraction}
+                requestInterceptor={requestInterceptor}
+                responseInterceptor={responseInterceptor}
             />
         </Modal>
     );

@@ -294,7 +294,8 @@ export type Options = {
     cache?: Cache,
     apiHost?: string,
     uploadHost?: string,
-    responseFilter?: Function,
+    responseInterceptor?: Function,
+    requestInterceptor?: Function,
     consoleLog?: boolean,
     consoleError?: boolean
 };

@@ -94,7 +94,8 @@ type Props = {
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function
+    requestInterceptor?: Function,
+    responseInterceptor?: Function
 };
 
 type State = {
@@ -163,7 +164,8 @@ class ContentPicker extends Component<Props, State> {
             sortBy,
             sortDirection,
             clientName,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             rootFolderId
         } = props;
 
@@ -174,7 +176,8 @@ class ContentPicker extends Component<Props, State> {
             apiHost,
             uploadHost,
             clientName,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
 
@@ -950,7 +953,9 @@ class ContentPicker extends Component<Props, State> {
             className,
             measureRef,
             chooseButtonLabel,
-            cancelButtonLabel
+            cancelButtonLabel,
+            requestInterceptor,
+            responseInterceptor
         }: Props = this.props;
         const {
             view,
@@ -1038,6 +1043,8 @@ class ContentPicker extends Component<Props, State> {
                             onClose={this.uploadSuccessHandler}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
+                            requestInterceptor={requestInterceptor}
+                            responseInterceptor={responseInterceptor}
                         />
                     ) : null}
                     {allowCreate && !!this.appElement ? (

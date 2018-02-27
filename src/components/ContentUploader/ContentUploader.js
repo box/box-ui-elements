@@ -67,7 +67,8 @@ type Props = {
     measureRef: Function,
     language?: string,
     messages?: StringMap,
-    responseFilter?: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
     intl: any,
     useUploadsManager?: boolean,
     files?: Array<UploadFileWithAPIOptions | File>,
@@ -178,7 +179,8 @@ class ContentUploader extends Component<Props, State> {
             apiHost,
             uploadHost,
             clientName,
-            responseFilter
+            requestInterceptor,
+            responseInterceptor
         } = this.props;
 
         const itemFolderId =
@@ -195,7 +197,8 @@ class ContentUploader extends Component<Props, State> {
             apiHost,
             uploadHost,
             clientName,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             id: itemFileId || itemFolderId,
             ...uploadAPIOptions
         };
