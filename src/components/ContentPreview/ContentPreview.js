@@ -57,7 +57,9 @@ type Props = {
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    onInteraction: Function
+    onInteraction: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function
 };
 
 type State = {
@@ -100,7 +102,17 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        const { hasSidebar, cache, token, sharedLink, sharedLinkPassword, apiHost, isSmall } = props;
+        const {
+            hasSidebar,
+            cache,
+            token,
+            sharedLink,
+            sharedLinkPassword,
+            apiHost,
+            isSmall,
+            requestInterceptor,
+            responseInterceptor
+        } = props;
 
         this.state = { showSidebar: hasSidebar && !isSmall };
         this.id = uniqueid('bcpr_');
@@ -110,7 +122,9 @@ class ContentPreview extends PureComponent<Props, State> {
             sharedLink,
             sharedLinkPassword,
             apiHost,
-            clientName: CLIENT_NAME_CONTENT_PREVIEW
+            clientName: CLIENT_NAME_CONTENT_PREVIEW,
+            requestInterceptor,
+            responseInterceptor
         });
     }
 
@@ -603,7 +617,9 @@ class ContentPreview extends PureComponent<Props, State> {
             measureRef,
             sharedLink,
             sharedLinkPassword,
-            onInteraction
+            onInteraction,
+            requestInterceptor,
+            responseInterceptor
         }: Props = this.props;
 
         const { file, showSidebar: showSidebarState }: State = this.state;
@@ -680,6 +696,8 @@ class ContentPreview extends PureComponent<Props, State> {
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 onInteraction={onInteraction}
+                                requestInterceptor={requestInterceptor}
+                                responseInterceptor={responseInterceptor}
                             />
                         )}
                     </div>

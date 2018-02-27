@@ -5,14 +5,12 @@
  */
 
 import axios from 'axios';
-import { stringify } from 'querystring';
 import TokenService from './TokenService';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
 const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 const CONTENT_TYPE_HEADER = 'Content-Type';
-const SUCCESS_RESPONSE_FILTER = ({ response }) => response;
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 
 class Xhr {
@@ -24,7 +22,8 @@ class Xhr {
     sharedLink: ?string;
     sharedLinkPassword: ?string;
     xhr: XMLHttpRequest;
-    responseFilter: Function;
+    responseInterceptor: Function;
+    requestInterceptor: Function;
     tokenService: TokenService;
 
     /**
@@ -36,48 +35,55 @@ class Xhr {
      * @param {string|function} options.token - Auth token
      * @param {string} [options.sharedLink] - Shared link
      * @param {string} [options.sharedLinkPassword] - Shared link password
+     * @param {string} [options.requestInterceptor] - Request interceptor
+     * @param {string} [options.responseInterceptor] - Response interceptor
      * @return {Xhr} Cache instance
      */
-    constructor({ id, clientName, token, version, sharedLink, sharedLinkPassword, responseFilter }: Options = {}) {
+    constructor({
+        id,
+        clientName,
+        token,
+        version,
+        sharedLink,
+        sharedLinkPassword,
+        responseInterceptor,
+        requestInterceptor
+    }: Options = {}) {
         this.id = id;
         this.token = token;
         this.clientName = clientName;
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
-        this.responseFilter = typeof responseFilter === 'function' ? responseFilter : SUCCESS_RESPONSE_FILTER;
         this.axios = axios.create();
+
+        if (typeof responseInterceptor === 'function') {
+            this.axios.interceptors.response.use(responseInterceptor);
+        }
+
+        if (typeof requestInterceptor === 'function') {
+            this.axios.interceptors.request.use(requestInterceptor);
+        }
     }
 
     /**
-     * Function that applies filtering
+     * Utility to parse a URL.
      *
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @return {string} - Stringifyed data
+     * @param {string} url - url to parse
+     * @return {Object} parsed url
      */
-    applyResponseFiltering(url: string, method: Method, body?: StringAnyMap): Function {
+    getParsedUrl(url: string) {
         const a = document.createElement('a');
         a.href = url;
-
-        return ({ data }: StringAnyMap): Promise<StringAnyMap> => {
-            const filteredResponse = this.responseFilter({
-                request: {
-                    method,
-                    url,
-                    body,
-                    api: url.replace(`${a.origin}/2.0`, ''),
-                    host: a.host,
-                    hostname: a.hostname,
-                    pathname: a.pathname,
-                    origin: a.origin,
-                    protocol: a.protocol,
-                    search: a.search,
-                    hash: a.hash,
-                    port: a.port
-                },
-                response: data
-            });
-            return filteredResponse instanceof Promise ? filteredResponse : Promise.resolve(filteredResponse);
+        return {
+            api: url.replace(`${a.origin}/2.0`, ''),
+            host: a.host,
+            hostname: a.hostname,
+            pathname: a.pathname,
+            origin: a.origin,
+            protocol: a.protocol,
+            hash: a.hash,
+            port: a.port
         };
     }
 
@@ -142,11 +148,10 @@ class Xhr {
         params?: StringAnyMap,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        const querystring = stringify(params);
-        const fullUrl = querystring.length > 0 ? `${url}?${querystring}` : url;
-
         return this.getHeaders(id, headers).then((hdrs) =>
-            this.axios.get(fullUrl, { headers: hdrs }).then(this.applyResponseFiltering(fullUrl, 'GET'))
+            this.axios
+                .get(url, { params, headers: hdrs, parsedUrl: this.getParsedUrl(url) })
+                .then((response) => response.data)
         );
     }
 
@@ -178,8 +183,9 @@ class Xhr {
                 url,
                 data,
                 method,
+                parsedUrl: this.getParsedUrl(url),
                 headers: hdrs
-            }).then(this.applyResponseFiltering(url, method, data))
+            }).then((response) => response.data)
         );
     }
 

@@ -49,7 +49,8 @@ type Props = {
     messages?: StringMap,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function
+    requestInterceptor?: Function,
+    responseInterceptor?: Function
 };
 
 type State = {
@@ -83,7 +84,16 @@ class ContentTree extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        const { rootFolderId, token, sharedLink, sharedLinkPassword, apiHost, clientName, responseFilter } = props;
+        const {
+            rootFolderId,
+            token,
+            sharedLink,
+            sharedLinkPassword,
+            apiHost,
+            clientName,
+            requestInterceptor,
+            responseInterceptor
+        } = props;
 
         this.api = new API({
             token,
@@ -91,7 +101,8 @@ class ContentTree extends Component<Props, State> {
             sharedLinkPassword,
             apiHost,
             clientName,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
 
