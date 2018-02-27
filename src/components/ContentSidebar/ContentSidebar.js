@@ -244,7 +244,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {BoxItem} file - Updated file object
      * @return {void}
      */
-    setFileDescriptionSuccessCallback = (file: BoxItem): void => {
+    setFileDescriptionSuccessCallback = (): void => {
         this.onInteraction({ target: 'description-change' });
     };
 
