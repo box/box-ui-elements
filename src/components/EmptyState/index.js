@@ -1,1 +1,2 @@
-export default from './EmptyState';
+// @flow
+export { default } from './EmptyState';

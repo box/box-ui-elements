@@ -50,15 +50,16 @@ function download(string: string, name: string) {
  */
 function copy(string: string) {
     const textarea = document.createElement('textarea');
+    const { body } = document;
+
     textarea.value = string;
     textarea.style.display = 'hidden';
 
-    if (document.body) {
-        document.body.appendChild(textarea);
+    if (body) {
+        body.appendChild(textarea);
         textarea.select();
         document.execCommand('copy');
-        // $FlowFixMe
-        document.body.removeChild(textarea);
+        body.removeChild(textarea);
     }
 }
 

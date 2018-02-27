@@ -106,7 +106,8 @@ type Props = {
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
     onInteraction: Function
 };
 
@@ -188,7 +189,8 @@ class ContentExplorer extends Component<Props, State> {
             uploadHost,
             sortBy,
             sortDirection,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             rootFolderId
         }: Props = props;
 
@@ -198,7 +200,8 @@ class ContentExplorer extends Component<Props, State> {
             sharedLinkPassword,
             apiHost,
             uploadHost,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             clientName: CLIENT_NAME_CONTENT_EXPLORER,
             id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
@@ -255,8 +258,7 @@ class ContentExplorer extends Component<Props, State> {
     componentDidMount() {
         const { defaultView, currentFolderId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        // $FlowFixMe: child will exist
-        this.appElement = this.rootElement.firstElementChild;
+        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (defaultView === DEFAULT_VIEW_RECENTS) {
             this.showRecents(true);
@@ -1177,7 +1179,9 @@ class ContentExplorer extends Component<Props, State> {
             onPreview,
             onUpload,
             hasPreviewSidebar,
-            onInteraction
+            onInteraction,
+            requestInterceptor,
+            responseInterceptor
         }: Props = this.props;
 
         const {
@@ -1268,6 +1272,8 @@ class ContentExplorer extends Component<Props, State> {
                             parentElement={this.rootElement}
                             appElement={this.appElement}
                             onUpload={onUpload}
+                            requestInterceptor={requestInterceptor}
+                            responseInterceptor={responseInterceptor}
                         />
                     ) : null}
                     {allowCreate && !!this.appElement ? (
@@ -1335,6 +1341,8 @@ class ContentExplorer extends Component<Props, State> {
                             sharedLink={sharedLink}
                             sharedLinkPassword={sharedLinkPassword}
                             onInteraction={onInteraction}
+                            requestInterceptor={requestInterceptor}
+                            responseInterceptor={responseInterceptor}
                         />
                     ) : null}
                 </div>

@@ -1,1 +1,2 @@
-export default from './makeDroppable';
+// @flow
+export { default } from './makeDroppable';

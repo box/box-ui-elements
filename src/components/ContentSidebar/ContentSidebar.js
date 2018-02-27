@@ -41,7 +41,8 @@ type Props = {
     cache?: Cache,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
     onInteraction: Function
 };
 
@@ -81,7 +82,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        const { cache, token, sharedLink, sharedLinkPassword, apiHost, clientName } = props;
+        const {
+            cache,
+            token,
+            sharedLink,
+            sharedLinkPassword,
+            apiHost,
+            clientName,
+            requestInterceptor,
+            responseInterceptor
+        } = props;
 
         this.state = {};
         this.id = uniqueid('bcs_');
@@ -91,7 +101,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             sharedLink,
             sharedLinkPassword,
             apiHost,
-            clientName
+            clientName,
+            requestInterceptor,
+            responseInterceptor
         });
     }
 
@@ -126,8 +138,8 @@ class ContentSidebar extends PureComponent<Props, State> {
     componentDidMount() {
         const { fileId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        // $FlowFixMe: child will exist
-        this.appElement = this.rootElement.firstElementChild;
+        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
+
         if (fileId) {
             this.fetchFile(fileId);
         }

@@ -54,7 +54,8 @@
             <button type="button" onclick="load()">Submit</button>
         </div>
         <div class="container">
-            <h1>Content Explorer With Filtering to folders and navigating to another folder on load and token generator</h1>
+            <h1>Content Explorer With request and response intercepting.
+                Only showing PNG files and navigating to another folder on load and token generator</h1>
             <div class="explorer1"></div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
@@ -82,12 +83,24 @@
                     canShare: false,
                     autoFocus: true,
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
-                    responseFilter: ({ request, response }) => {
-                        const { method, api } = request;
-                        const { item_collection } = response;
+                    requestInterceptor: (config) => {
+                        // Add some custom header if needed
+                        config.headers['X-MY-CUSTOM-HEADER'] = 'FuBar';
+                        // Add some custom query param if needed
+                        config.params['Fu'] = 'Bar';
+
+                        console.log(config);
+                        return config;
+                    },
+                    responseInterceptor: (response) => {
+                        const { method, parsedUrl } = response.config;
+                        const { api } = parsedUrl;
+                        const { item_collection } = response.data;
 
                         // Only apply filtering if it was a certain API request
-                        if (method === 'GET' && /^\/folders/.test(api) && !!item_collection) {
+                        // In this example we are filtering out all but PNG files
+                        // The data integreity of the response data must be maintained
+                        if (method === 'get' && /^\/folders/.test(api) && !!item_collection) {
                             const originalLength = item_collection.entries.length; // Keep track of items originally sent
                             item_collection.entries = item_collection.entries.filter((item) => item.extension === 'png'); // Filter out unwanted items
                             const newLength = item_collection.entries.length; // Calculate the new item list length
@@ -95,7 +108,7 @@
                         }
 
                         console.log(response);
-                        return Promise.resolve(response);
+                        return response;
                     }
                 });
             }

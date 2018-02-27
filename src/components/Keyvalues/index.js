@@ -1,1 +1,2 @@
-export default from './Keyvalues';
+// @flow
+export { default } from './Keyvalues';

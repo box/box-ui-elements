@@ -1,1 +1,2 @@
-export default from './ContentSidebar';
+// @flow
+export { default } from './ContentSidebar';

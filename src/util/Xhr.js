@@ -4,26 +4,26 @@
  * @author Box
  */
 
-import 'whatwg-fetch';
-import { stringify } from 'querystring';
+import axios from 'axios';
 import TokenService from './TokenService';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
 const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 const CONTENT_TYPE_HEADER = 'Content-Type';
-const SUCCESS_RESPONSE_FILTER = ({ response }) => response;
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 
 class Xhr {
     id: ?string;
+    axios: axios;
     clientName: ?string;
     token: Token;
     version: ?string;
     sharedLink: ?string;
     sharedLinkPassword: ?string;
     xhr: XMLHttpRequest;
-    responseFilter: Function;
+    responseInterceptor: Function;
+    requestInterceptor: Function;
     tokenService: TokenService;
 
     /**
@@ -35,88 +35,55 @@ class Xhr {
      * @param {string|function} options.token - Auth token
      * @param {string} [options.sharedLink] - Shared link
      * @param {string} [options.sharedLinkPassword] - Shared link password
+     * @param {string} [options.requestInterceptor] - Request interceptor
+     * @param {string} [options.responseInterceptor] - Response interceptor
      * @return {Xhr} Cache instance
      */
-    constructor({ id, clientName, token, version, sharedLink, sharedLinkPassword, responseFilter }: Options = {}) {
+    constructor({
+        id,
+        clientName,
+        token,
+        version,
+        sharedLink,
+        sharedLinkPassword,
+        responseInterceptor,
+        requestInterceptor
+    }: Options = {}) {
         this.id = id;
         this.token = token;
         this.clientName = clientName;
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
-        this.responseFilter = typeof responseFilter === 'function' ? responseFilter : SUCCESS_RESPONSE_FILTER;
-    }
+        this.axios = axios.create();
 
-    /**
-     * Helper function to convert HTTP status codes into throwable errors
-     *
-     * @param {Response} response - fetch's Response object
-     * @throws {Error} - Throws when the HTTP status is not 2XX
-     * @return {Response} - Pass-thru the response if ther are no errors
-     */
-    static checkStatus(response: Response): Response {
-        if (response.status >= 200 && response.status < 300) {
-            return response;
+        if (typeof responseInterceptor === 'function') {
+            this.axios.interceptors.response.use(responseInterceptor);
         }
 
-        const err: any = new Error(response.statusText);
-        err.response = response;
-        throw err;
-    }
-
-    /**
-     * Gets the JSON from a response if the response is not 204
-     *
-     * @param {Response} response - fetch's Response object
-     * @return {Object} JS Object representation of the JSON response or the response
-     */
-    static parseJSON(response: Response): Response | Promise<any> {
-        // Return plain response if it is 202 or 204 since they don't have a body
-        if (response.status === 202 || response.status === 204) {
-            return response;
+        if (typeof requestInterceptor === 'function') {
+            this.axios.interceptors.request.use(requestInterceptor);
         }
-        return response.json();
     }
 
     /**
-     * Helper function to convert HTTP status codes into throwable errors
+     * Utility to parse a URL.
      *
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @return {string} - Stringifyed data
+     * @param {string} url - url to parse
+     * @return {Object} parsed url
      */
-    static stringifyData(data: StringAnyMap): string {
-        return JSON.stringify(data).replace(/"\s+|\s+"/g, '"');
-    }
-
-    /**
-     * Function that applies filtering
-     *
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @return {string} - Stringifyed data
-     */
-    applyResponseFiltering(url: string, method: Method, body?: StringAnyMap): Function {
+    getParsedUrl(url: string) {
         const a = document.createElement('a');
         a.href = url;
-
-        return (response: StringAnyMap): Promise<StringAnyMap> => {
-            const filteredResponse = this.responseFilter({
-                request: {
-                    method,
-                    url,
-                    body,
-                    api: url.replace(`${a.origin}/2.0`, ''),
-                    host: a.host,
-                    hostname: a.hostname,
-                    pathname: a.pathname,
-                    origin: a.origin,
-                    protocol: a.protocol,
-                    search: a.search,
-                    hash: a.hash,
-                    port: a.port
-                },
-                response
-            });
-            return filteredResponse instanceof Promise ? filteredResponse : Promise.resolve(filteredResponse);
+        return {
+            api: url.replace(`${a.origin}/2.0`, ''),
+            host: a.host,
+            hostname: a.hostname,
+            pathname: a.pathname,
+            origin: a.origin,
+            protocol: a.protocol,
+            hash: a.hash,
+            port: a.port
         };
     }
 
@@ -181,14 +148,10 @@ class Xhr {
         params?: StringAnyMap,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        const querystring = stringify(params);
-        const fullUrl = querystring.length > 0 ? `${url}?${querystring}` : url;
-
         return this.getHeaders(id, headers).then((hdrs) =>
-            fetch(fullUrl, { headers: hdrs, mode: 'cors' })
-                .then(Xhr.checkStatus)
-                .then(Xhr.parseJSON)
-                .then(this.applyResponseFiltering(fullUrl, 'GET'))
+            this.axios
+                .get(url, { params, headers: hdrs, parsedUrl: this.getParsedUrl(url) })
+                .then((response) => response.data)
         );
     }
 
@@ -216,14 +179,13 @@ class Xhr {
         method?: Method
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then((hdrs) =>
-            fetch(url, {
+            this.axios({
+                url,
+                data,
                 method,
-                headers: hdrs,
-                body: Xhr.stringifyData(data)
-            })
-                .then(Xhr.checkStatus)
-                .then(Xhr.parseJSON)
-                .then(this.applyResponseFiltering(url, method, data))
+                parsedUrl: this.getParsedUrl(url),
+                headers: hdrs
+            }).then((response) => response.data)
         );
     }
 
@@ -302,21 +264,16 @@ class Xhr {
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers)
             .then((hdrs) =>
-                fetch(url, {
-                    method: 'OPTIONS',
-                    headers: hdrs,
-                    body: Xhr.stringifyData(data)
+                this.axios({
+                    url,
+                    data,
+                    method: 'options',
+                    headers: hdrs
                 })
-                    .then(Xhr.parseJSON)
-                    .then((response: StringAnyMap) => {
-                        if (response.type === 'error') {
-                            errorHandler(response);
-                        } else {
-                            successHandler(response);
-                        }
-                        return response;
+                    .then(successHandler)
+                    .catch((error: any) => {
+                        errorHandler(error.response.data);
                     })
-                    .catch(errorHandler)
             )
             .catch(errorHandler);
     }
@@ -366,7 +323,6 @@ class Xhr {
         if (data && !(data instanceof Blob) && data.attributes) {
             formData = new FormData();
             Object.keys(data).forEach((key) => {
-                // $FlowFixMe Already checked above
                 formData.append(key, data[key]);
             });
         }

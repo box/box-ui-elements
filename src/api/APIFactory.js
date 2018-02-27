@@ -121,8 +121,8 @@ class APIFactory {
      *
      * @return {Cache} cache instance
      */
-    getCache(): ?Cache {
-        return this.options.cache;
+    getCache(): Cache {
+        return ((this.options.cache: any): Cache);
     }
 
     /**

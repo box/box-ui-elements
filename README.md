@@ -103,7 +103,8 @@ render(
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | defaultView | string | `files` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
-| responseFilter | function | | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 
 ### Keyboard Shortcuts
 *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-keyboard-shortcuts).*
@@ -160,7 +161,8 @@ render(
 | chooseButtonLabel | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | cancelButtonLabel | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 | defaultView | string | `files` | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
-| responseFilter | function | | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
+| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-options).* |
 
 ### Keyboard Shortcuts
 *See the [developer docs](https://developer.box.com/docs/box-content-picker#section-keyboard-shortcuts).*
@@ -203,7 +205,8 @@ render(
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
-| responseFilter | function | | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
+| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
+| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 
 
 ## Content Tree ([Documentation](https://developer.box.com/docs/box-content-tree))
@@ -245,7 +248,8 @@ render(
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| responseFilter | function | | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
+| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
+| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 
 
 ## Content Preview ([Documentation](https://developer.box.com/docs/box-content-preview))
@@ -291,6 +295,8 @@ render(
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 
 
 # Questions

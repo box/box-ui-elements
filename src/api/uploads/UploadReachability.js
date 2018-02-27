@@ -4,6 +4,8 @@
  * @author Box
  */
 
+import axios from 'axios';
+import noop from 'lodash/noop';
 import LocalStore from '../../util/LocalStore';
 import { DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 import Xhr from '../../util/Xhr';
@@ -80,7 +82,7 @@ class UploadsReachability {
         }
 
         try {
-            await window.fetch(`${uploadHost}/api/2.0/files/upload_sessions/0`);
+            await axios.get(`${uploadHost}/api/2.0/files/upload_sessions/0`);
         } catch (error) {
             return false;
         }
@@ -111,7 +113,7 @@ class UploadsReachability {
             successHandler: (response) => {
                 preflightResponse = response;
             },
-            errorHandler: () => {}
+            errorHandler: noop
         });
 
         return this.handlePreflightResponse(preflightResponse);

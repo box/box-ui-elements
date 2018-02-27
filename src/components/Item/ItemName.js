@@ -20,7 +20,6 @@ type Props = {
 
 const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
     const { name, type }: BoxItem = item;
-    // $FlowFixMe: flow bug
     const onItemFocus = onFocus ? () => onFocus(item) : null;
     const onItemClick: Function = (): void => onClick(item);
 
