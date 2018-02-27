@@ -52,7 +52,7 @@ const DetailsSidebar = ({
         return null;
     }
 
-    const onDescriptionChangeEditable = getProp(file, 'permissions.can_rename') ? onDescriptionChange : null;
+    const onDescriptionChangeEditable = getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined;
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>

@@ -171,8 +171,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Determines if we should bother fetching or rendering
      *
      * @private
-     * @param {string} id file id
-     * @param {Boolean|void} [forceFetch] To void cache
+     * @param {string} id - file id
+     * @param {Boolean|void} [forceFetch] - To void cache
      * @return {Boolean} true if we should fetch or render
      */
     shouldFetchOrRender(): boolean {
@@ -205,7 +205,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Function to update file description
      *
      * @private
-     * @param {string} newDescription - new file description
+     * @param {string} newDescription - New file description
      * @return {void}
      */
     onDescriptionChange = (newDescription: string): void => {
@@ -218,6 +218,14 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (newDescription === description || !id) {
             return;
         }
+
+        // Setting the state no matter what, will reset state and re-render if the API call fails
+        this.setState({
+            file: {
+                ...file,
+                description: newDescription
+            }
+        });
 
         this.api
             .getFileAPI()
@@ -233,25 +241,23 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File update description callback
      *
      * @private
-     * @param {string} value - updated file description
+     * @param {BoxItem} file - Updated file object
      * @return {void}
      */
     setFileDescriptionSuccessCallback = (file: BoxItem): void => {
         this.onInteraction({ target: 'description-change' });
-        this.setState({ file });
     };
 
     /**
      * Handles a failed file description update
      *
      * @private
-     * @param {BoxItem} file - updated file description
+     * @param {Error} e - API error
+     * @param {BoxItem} file - Original file description
      * @return {void}
      */
-    setFileDescriptionFailCallback = (e: Error): void => {
-        // This currently no-ops because the state hasn't changed
-        // Change description value back to original once the textarea is programatically editible
-        const { file } = this.state;
+    setFileDescriptionFailCallback = (e: Error, file: BoxItem): void => {
+        // Reset the state back to the original description since the API call failed
         this.setState({ file });
         this.errorCallback(e);
     };
@@ -260,7 +266,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Network error callback
      *
      * @private
-     * @param {Error} error error object
+     * @param {Error} error - Error object
      * @return {void}
      */
     errorCallback = (error: Error): void => {
@@ -284,8 +290,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Fetches a file
      *
      * @private
-     * @param {string} id file id
-     * @param {Boolean|void} [forceFetch] To void cache
+     * @param {string} id - File id
+     * @param {Boolean|void} [forceFetch] - To void cache
      * @return {void}
      */
     fetchFile(id: string, forceFetch: boolean = false): void {
