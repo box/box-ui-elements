@@ -61,23 +61,13 @@ describe('api/Item', () => {
     });
 
     describe('merge()', () => {
-        test('should not do anything if destroyed', () => {
-            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
-            item.errorCallback = jest.fn();
-            item.merge('foo', 'bar', 'baz');
-            expect(item.errorCallback).not.toHaveBeenCalled();
-        });
         test('should merge new value', () => {
             cache.set('key', {
                 foo: 'foo'
             });
             item.getCache = jest.fn().mockReturnValueOnce(cache);
-            item.successCallback = jest.fn();
-            item.merge('key', 'foo', 'bar');
-            expect(item.successCallback).toHaveBeenCalled();
-            expect(item.successCallback).toHaveBeenCalledWith({
-                foo: 'bar'
-            });
+            const result = item.merge('key', 'foo', 'bar');
+            expect(result.foo).toEqual('bar');
         });
     });
 
@@ -93,10 +83,10 @@ describe('api/Item', () => {
             cache.set('key', {
                 foo: 'foo'
             });
+            item.successCallback = jest.fn();
             item.getCache = () => ({
                 unsetAll: unsetAllMock
             });
-            item.successCallback = jest.fn();
             item.postDeleteCleanup();
             expect(item.successCallback).toHaveBeenCalled();
             expect(unsetAllMock).toHaveBeenCalledWith('search_');
@@ -112,6 +102,7 @@ describe('api/Item', () => {
             });
             item.getCacheKey = jest.fn().mockReturnValueOnce('key');
             item.merge = jest.fn();
+            item.successCallback = jest.fn();
             item.renameSuccessHandler({
                 name: 'name'
             });
@@ -126,6 +117,7 @@ describe('api/Item', () => {
             item.id = 'id';
             item.getCacheKey = jest.fn().mockReturnValueOnce('key');
             item.merge = jest.fn();
+            item.successCallback = jest.fn();
             item.shareSuccessHandler({
                 shared_link: 'link'
             });
@@ -472,6 +464,7 @@ describe('api/Item', () => {
             item.getCacheKey = jest.fn().mockReturnValueOnce('child');
             item.getParentCacheKey = jest.fn().mockReturnValueOnce('parent');
             item.merge = jest.fn();
+            item.successCallback = jest.fn();
             item.deleteSuccessHandler();
 
             expect(cache.get('parent')).toEqual({
