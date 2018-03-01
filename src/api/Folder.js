@@ -214,19 +214,6 @@ class Folder extends Item {
     };
 
     /**
-     * Handles the folder fetch error
-     *
-     * @param {Error} error fetch error
-     * @return {void}
-     */
-    folderErrorHandler = (error: any): void => {
-        if (this.isDestroyed()) {
-            return;
-        }
-        this.errorCallback(error);
-    };
-
-    /**
      * Does the network request for fetching a folder
      *
      * @return {void}
@@ -247,7 +234,7 @@ class Folder extends Item {
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
             .then(this.folderSuccessHandler)
-            .catch(this.folderErrorHandler);
+            .catch(this.errorHandler);
     }
 
     /**
@@ -359,7 +346,7 @@ class Folder extends Item {
                 }
             })
             .then(this.createSuccessHandler)
-            .catch(this.folderErrorHandler);
+            .catch(this.errorHandler);
     }
 
     /**

@@ -56,6 +56,7 @@ export type Token = null | typeof undefined | string | Function;
 export type ClassComponent<P, S> = Class<React$Component<P, S>>;
 export type StringMap = { [string]: string };
 export type StringAnyMap = { [string]: any };
+export type StringBooleanMap = { [string]: boolean };
 export type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 export type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
 export type DefaultView = typeof DEFAULT_VIEW_RECENTS | typeof DEFAULT_VIEW_FILES;

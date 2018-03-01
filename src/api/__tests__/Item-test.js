@@ -39,24 +39,16 @@ describe('api/Item', () => {
             expect(item.errorCallback).not.toHaveBeenCalled();
         });
 
-        test('should not do anything if no response', () => {
+        test('should call error callback even when no response', () => {
             item.errorCallback = jest.fn();
             item.errorHandler('foo');
-            expect(item.errorCallback).not.toHaveBeenCalled();
+            expect(item.errorCallback).toHaveBeenCalled();
         });
 
-        test('should call error callback', () => {
-            const thenMock = jest.fn();
-            const json = () => ({
-                then: thenMock
-            });
-            item.errorHandler({ response: { json } });
-            expect(thenMock).toHaveBeenCalledWith(item.errorCallback);
-        });
-
-        test('should throw error when getting error event', () => {
+        test('should call error callback with response data', () => {
             item.errorCallback = jest.fn();
-            expect(item.errorHandler.bind(item, new Error())).toThrow(Error);
+            item.errorHandler({ response: { data: 'foo' } });
+            expect(item.errorCallback).toHaveBeenCalledWith('foo');
         });
     });
 

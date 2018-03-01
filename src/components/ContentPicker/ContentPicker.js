@@ -61,8 +61,6 @@ import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
 
-type BoxItemMap = { [string]: BoxItem };
-
 type Props = {
     type: string,
     rootFolderId: string,
@@ -104,7 +102,7 @@ type State = {
     rootName: string,
     errorCode: string,
     currentCollection: Collection,
-    selected: BoxItemMap,
+    selected: { [string]: BoxItem },
     searchQuery: string,
     isLoading: boolean,
     view: View,
@@ -233,7 +231,7 @@ class ContentPicker extends Component<Props, State> {
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (defaultView === DEFAULT_VIEW_RECENTS) {
-            this.showRecents(true);
+            this.showRecents();
         } else {
             this.fetchFolder(currentFolderId);
         }
@@ -312,17 +310,25 @@ class ContentPicker extends Component<Props, State> {
     }
 
     /**
-     * Helper function to refresh the grid.
-     * This is useful when mutating the underlying data
-     * structure and hence the state.
+     * Refreshing the item collection depending
+     * upon the view. Collection is gotten from cache.
+     * Navigation event is prevented.
      *
      * @private
-     * @fires cancel
      * @return {void}
      */
-    refreshGrid = () => {
-        if (this.table) {
-            this.table.forceUpdateGrid();
+    refreshCollection = (): void => {
+        const { currentCollection: { id }, view, searchQuery }: State = this.state;
+        if (view === VIEW_FOLDER && id) {
+            this.fetchFolder(id, false);
+        } else if (view === VIEW_RECENTS) {
+            this.showRecents(false, false);
+        } else if (view === VIEW_SEARCH && searchQuery) {
+            this.search(searchQuery);
+        } else if (view === VIEW_SELECTED) {
+            this.showSelected();
+        } else {
+            throw new Error('Cannot refresh incompatible view!');
         }
     };
 
@@ -334,9 +340,7 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     errorCallback = (error: Error): void => {
-        this.setState({
-            view: VIEW_ERROR
-        });
+        this.setState({ view: VIEW_ERROR });
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
@@ -349,7 +353,7 @@ class ContentPicker extends Component<Props, State> {
      * @param {Object|string} item - the clicked box item
      * @return {void}
      */
-    onItemClick = (item: BoxItem | string) => {
+    onItemClick = (item: BoxItem | string): void => {
         // If the id was passed in, just use that
         if (typeof item === 'string') {
             this.fetchFolder(item);
@@ -369,7 +373,7 @@ class ContentPicker extends Component<Props, State> {
      * @private
      * @return {void}
      */
-    finishNavigation() {
+    finishNavigation(): void {
         const { autoFocus }: Props = this.props;
         const { currentCollection: { percentLoaded } }: State = this.state;
 
@@ -393,9 +397,10 @@ class ContentPicker extends Component<Props, State> {
      *
      * @private
      * @param {Object} collection item collection object
+     * @param {Boolean|void} triggerNavigationEvent - To focus the grid
      * @return {void}
      */
-    fetchFolderSuccessCallback = (collection: Collection): void => {
+    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { rootFolderId }: Props = this.props;
         const { id, name }: Collection = collection;
 
@@ -408,19 +413,24 @@ class ContentPicker extends Component<Props, State> {
         // Close any open modals
         this.closeModals();
 
-        // Set the new state and focus the grid for tabbing
-        this.setState(newState, this.finishNavigation);
-    };
+        if (triggerNavigationEvent) {
+            // Fire folder navigation event
+            this.setState(newState, this.finishNavigation);
+        } else {
+            this.setState(newState);
+        }
+    }
 
     /**
      * Fetches a folder, defaults to fetching root folder
      *
      * @private
      * @param {string|void} [id] folder id
+     * @param {Boolean|void} [triggerNavigationEvent] - To focus the grid
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    fetchFolder = (id?: string, forceFetch: boolean = false): void => {
+    fetchFolder = (id?: string, triggerNavigationEvent: boolean = true, forceFetch: boolean = false): void => {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
@@ -441,9 +451,16 @@ class ContentPicker extends Component<Props, State> {
         });
 
         // Fetch the folder using folder API
-        this.api
-            .getFolderAPI()
-            .folder(folderId, sortBy, sortDirection, this.fetchFolderSuccessCallback, this.errorCallback, forceFetch);
+        this.api.getFolderAPI().folder(
+            folderId,
+            sortBy,
+            sortDirection,
+            (collection: Collection) => {
+                this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
+            },
+            this.errorCallback,
+            forceFetch
+        );
     };
 
     /**
@@ -451,26 +468,28 @@ class ContentPicker extends Component<Props, State> {
      *
      * @private
      * @param {Object} collection item collection object
+     * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @return {void}
      */
-    recentsSuccessCallback = (collection: Collection) => {
-        // Set the new state and focus the grid for tabbing
-        this.setState(
-            {
-                currentCollection: collection
-            },
-            this.finishNavigation
-        );
-    };
+    recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
+        const newState = { currentCollection: collection };
+        if (triggerNavigationEvent) {
+            this.setState(newState, this.finishNavigation);
+        } else {
+            this.setState(newState);
+        }
+    }
 
     /**
-     * Shows recents
+     * Shows recents.
+     * We always try to force fetch recents.
      *
      * @private
+     * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    showRecents = (forceFetch: boolean = false) => {
+    showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
@@ -485,10 +504,17 @@ class ContentPicker extends Component<Props, State> {
         });
 
         // Fetch the folder using folder API
-        this.api
-            .getRecentsAPI()
-            .recents(rootFolderId, by, sortDirection, this.recentsSuccessCallback, this.errorCallback, forceFetch);
-    };
+        this.api.getRecentsAPI().recents(
+            rootFolderId,
+            by,
+            sortDirection,
+            (collection: Collection) => {
+                this.recentsSuccessCallback(collection, triggerNavigationEvent);
+            },
+            this.errorCallback,
+            forceFetch
+        );
+    }
 
     /**
      * Shows the selected items
@@ -506,7 +532,7 @@ class ContentPicker extends Component<Props, State> {
                     sortBy,
                     sortDirection,
                     percentLoaded: 100,
-                    items: Object.keys(selected).map((key) => selected[key])
+                    items: Object.keys(selected).map((key) => this.api.getCache().get(key))
                 }
             },
             this.finishNavigation
@@ -601,9 +627,7 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        this.setState({
-            isUploadModalOpen: true
-        });
+        this.setState({ isUploadModalOpen: true });
     };
 
     /**
@@ -615,7 +639,7 @@ class ContentPicker extends Component<Props, State> {
      */
     uploadSuccessHandler = (): void => {
         const { currentCollection: { id } }: State = this.state;
-        this.fetchFolder(id, true);
+        this.fetchFolder(id, false, true);
     };
 
     /**
@@ -699,17 +723,21 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        const selectedCount: number = Object.keys(selected).length;
+        const selectedKeys: Array<string> = Object.keys(selected);
+        const selectedCount: number = selectedKeys.length;
         const hasHitSelectionLimit: boolean = selectedCount === maxSelectable;
         const isSingleFileSelection: boolean = maxSelectable === 1;
-        const typedId: string = `${type}_${id}`;
-        const existing: BoxItem = selected[typedId];
+        const cacheKey: string = this.api.getAPI(type).getCacheKey(id);
+        const existing: BoxItem = selected[cacheKey];
+        const existingFromCache: BoxItem = this.api.getCache().get(cacheKey);
 
-        if (existing) {
+        // Existing object could have mutated and we just need to update the
+        // reference in the selected map. In that case treat it like a new selection.
+        if (existing && existing === existingFromCache) {
             // We are selecting the same item that was already
             // selected. Unselect it in this case. Toggle case.
-            existing.selected = false;
-            delete selected[typedId];
+            delete existing.selected;
+            delete selected[cacheKey];
         } else {
             // We are selecting a new item that was never
             // selected before. However if we are in a single
@@ -722,17 +750,16 @@ class ContentPicker extends Component<Props, State> {
                 return;
             }
 
-            const keys: Array<string> = Object.keys(selected);
-            if (keys.length > 0 && isSingleFileSelection) {
-                const key: string = keys[0]; // Only 1 in the map
-                const prior: BoxItem = selected[key];
-                prior.selected = false;
-                delete selected[key];
+            // Clear out the prior item for single file selection mode
+            if (selectedCount > 0 && isSingleFileSelection) {
+                const prior = selectedKeys[0]; // only one item
+                delete selected[prior].selected;
+                delete selected[prior];
             }
 
             // Select the new item
             item.selected = true;
-            selected[typedId] = item;
+            selected[cacheKey] = item;
         }
 
         const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
@@ -768,7 +795,12 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        this.api.getAPI(type).share(item, access, this.refreshGrid);
+        this.api.getAPI(type).share(item, access, (updatedItem: BoxItem) => {
+            this.refreshCollection();
+            if (item.selected) {
+                this.select(updatedItem);
+            }
+        });
     };
 
     /**
@@ -780,22 +812,10 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
-        const { currentCollection: { id }, view, searchQuery }: State = this.state;
-        if (!id) {
-            return;
+        const { currentCollection: { id } }: State = this.state;
+        if (id) {
+            this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
-
-        this.setState({ sortBy, sortDirection }, () => {
-            if (view === VIEW_FOLDER) {
-                this.fetchFolder(id);
-            } else if (view === VIEW_SEARCH) {
-                this.search(searchQuery);
-            } else if (view === VIEW_RECENTS) {
-                this.showRecents();
-            } else {
-                throw new Error('Cannot sort incompatible view!');
-            }
-        });
     };
 
     /**
@@ -895,7 +915,7 @@ class ContentPicker extends Component<Props, State> {
                 break;
             case 'r':
                 if (this.globalModifier) {
-                    this.showRecents(true);
+                    this.showRecents();
                     event.preventDefault();
                 }
                 break;
@@ -935,7 +955,6 @@ class ContentPicker extends Component<Props, State> {
         const {
             language,
             messages,
-
             rootFolderId,
             logoUrl,
             canUpload,

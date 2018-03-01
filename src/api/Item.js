@@ -53,13 +53,15 @@ class Item extends Base {
         if (this.isDestroyed()) {
             return;
         }
+
         const { response } = error;
+
         if (response) {
-            response.json().then(this.errorCallback);
-        } else if (error instanceof Error) {
-            this.errorCallback();
-            throw error;
+            this.errorCallback(response.data);
+            return;
         }
+
+        this.errorCallback();
     };
 
     /**
