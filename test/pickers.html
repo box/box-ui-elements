@@ -56,7 +56,7 @@
             <button type="button" onclick="load()">Submit</button>
         </div>
         <div class="container">
-            <h1>Content Picker</h1>
+            <h1>Content Picker (Opens in regression folder)</h1>
             <div class="contentPicker1"></div>
         </div>
         <div class="container">
@@ -183,6 +183,7 @@
                     alert('Cancel pressed on Content Picker, will close popup');
                 });
                 contentPicker1.show(folderId, tokenGenerator2, {
+                    currentFolderId: '4125389473',
                     container: '.contentPicker1',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
                 });

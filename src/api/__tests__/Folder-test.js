@@ -143,14 +143,14 @@ describe('api/Folder', () => {
         });
         test('should make xhr to folder and call success callback', () => {
             folder.folderSuccessHandler = jest.fn();
-            folder.folderErrorHandler = jest.fn();
+            folder.errorHandler = jest.fn();
             folder.includePreviewFields = true;
             folder.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
             return folder.folderRequest().then(() => {
                 expect(folder.folderSuccessHandler).toHaveBeenCalledWith('success');
-                expect(folder.folderErrorHandler).not.toHaveBeenCalled();
+                expect(folder.errorHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/folders/id',
                     params: {
@@ -167,14 +167,14 @@ describe('api/Folder', () => {
         test('should make xhr to folder and call error callback', () => {
             const error = new Error('error');
             folder.folderSuccessHandler = jest.fn();
-            folder.folderErrorHandler = jest.fn();
+            folder.errorHandler = jest.fn();
             folder.includePreviewFields = true;
             folder.includePreviewSidebarFields = true;
             folder.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
             return folder.folderRequest().then(() => {
-                expect(folder.folderErrorHandler).toHaveBeenCalledWith(error);
+                expect(folder.errorHandler).toHaveBeenCalledWith(error);
                 expect(folder.folderSuccessHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/folders/id',
@@ -188,20 +188,6 @@ describe('api/Folder', () => {
                     }
                 });
             });
-        });
-    });
-
-    describe('folderErrorHandler()', () => {
-        test('should not do anything if destroyed', () => {
-            folder.isDestroyed = jest.fn().mockReturnValueOnce(true);
-            folder.errorCallback = jest.fn();
-            folder.folderErrorHandler('foo');
-            expect(folder.errorCallback).not.toHaveBeenCalled();
-        });
-        test('should call error callback', () => {
-            folder.errorCallback = jest.fn();
-            folder.folderErrorHandler('foo');
-            expect(folder.errorCallback).toHaveBeenCalledWith('foo');
         });
     });
 
@@ -628,13 +614,13 @@ describe('api/Folder', () => {
         });
         test('should make xhr to folder create and call success callback', () => {
             folder.createSuccessHandler = jest.fn();
-            folder.folderErrorHandler = jest.fn();
+            folder.errorHandler = jest.fn();
             folder.xhr = {
                 post: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
             return folder.folderCreateRequest('foo').then(() => {
                 expect(folder.createSuccessHandler).toHaveBeenCalledWith('success');
-                expect(folder.folderErrorHandler).not.toHaveBeenCalled();
+                expect(folder.errorHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.post).toHaveBeenCalledWith({
                     url: `https://api.box.com/2.0/folders?fields=${getFieldsAsString()}`,
                     data: {
@@ -649,12 +635,12 @@ describe('api/Folder', () => {
         test('should make xhr to folder and call error callback', () => {
             const error = new Error('error');
             folder.createSuccessHandler = jest.fn();
-            folder.folderErrorHandler = jest.fn();
+            folder.errorHandler = jest.fn();
             folder.xhr = {
                 post: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
             return folder.folderCreateRequest('foo').then(() => {
-                expect(folder.folderErrorHandler).toHaveBeenCalledWith(error);
+                expect(folder.errorHandler).toHaveBeenCalledWith(error);
                 expect(folder.createSuccessHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.post).toHaveBeenCalledWith({
                     url: `https://api.box.com/2.0/folders?fields=${getFieldsAsString()}`,

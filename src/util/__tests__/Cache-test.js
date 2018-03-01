@@ -40,12 +40,15 @@ describe('util/Cache', () => {
         expect(cache.get('foobar')).toBeUndefined();
     });
 
-    test('should merge correctly', () => {
-        cache.set('foo', { a: 1 });
-        cache.merge('foo', { b: 2 });
+    test('should merge correctly without mutating original object', () => {
+        const origObj = { a: 1 };
+        const newObj = { b: 2 };
+        cache.set('foo', origObj);
+        cache.merge('foo', newObj);
         const value = cache.get('foo');
         expect(1).toBe(value.a);
         expect(2).toBe(value.b);
+        expect(value).not.toBe(origObj);
     });
 
     test('should not merge non existant items', () => {

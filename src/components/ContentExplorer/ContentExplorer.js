@@ -48,7 +48,6 @@ import {
     DEFAULT_VIEW_RECENTS,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
-    ERROR_CODE_ITEM_NAME_IN_USE,
     TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
 import type {
@@ -261,7 +260,7 @@ class ContentExplorer extends Component<Props, State> {
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (defaultView === DEFAULT_VIEW_RECENTS) {
-            this.showRecents(true);
+            this.showRecents();
         } else {
             this.fetchFolder(currentFolderId);
         }
@@ -341,14 +340,35 @@ class ContentExplorer extends Component<Props, State> {
     }
 
     /**
+     * Refreshing the item collection depending
+     * upon the view. Collection is gotten from cache.
+     * Navigation event is prevented.
+     *
+     * @private
+     * @return {void}
+     */
+    refreshCollection = () => {
+        const { currentCollection: { id }, view, searchQuery }: State = this.state;
+        if (view === VIEW_FOLDER && id) {
+            this.fetchFolder(id, false);
+        } else if (view === VIEW_RECENTS) {
+            this.showRecents(false, false);
+        } else if (view === VIEW_SEARCH && searchQuery) {
+            this.search(searchQuery);
+        } else {
+            throw new Error('Cannot sort incompatible view!');
+        }
+    };
+
+    /**
      * Folder fetch success callback
      *
      * @private
-     * @param {Boolean|void} [triggerEvent] To trigger navigate event
-     * @param {Object} collection item collection object
+     * @param {Object} collection - item collection object
+     * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    fetchFolderSuccessCallback(collection: Collection, triggerEvent: boolean = true) {
+    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
 
@@ -365,13 +385,15 @@ class ContentExplorer extends Component<Props, State> {
         // Close any open modals
         this.closeModals();
 
-        // Fire folder navigation event
-        if (triggerEvent && !!boxItem) {
-            onNavigate(cloneDeep(boxItem));
+        if (triggerNavigationEvent) {
+            // Fire folder navigation event
+            this.setState(newState, this.finishNavigation);
+            if (boxItem) {
+                onNavigate(cloneDeep(boxItem));
+            }
+        } else {
+            this.setState(newState);
         }
-
-        // Set the new state and focus the grid for tabbing
-        this.setState(newState, this.finishNavigation);
     }
 
     /**
@@ -379,11 +401,11 @@ class ContentExplorer extends Component<Props, State> {
      *
      * @private
      * @param {string|void} [id] folder id
-     * @param {Boolean|void} [triggerEvent] To trigger navigate event
+     * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @param {Boolean|void} [forceFetch] To void the cache
      * @return {void}
      */
-    fetchFolder = (id?: string, triggerEvent: boolean = true, forceFetch: boolean = false) => {
+    fetchFolder = (id?: string, triggerNavigationEvent: boolean = true, forceFetch: boolean = false) => {
         const { rootFolderId, canPreview, hasPreviewSidebar }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
@@ -409,7 +431,7 @@ class ContentExplorer extends Component<Props, State> {
             sortBy,
             sortDirection,
             (collection: Collection) => {
-                this.fetchFolderSuccessCallback(collection, triggerEvent);
+                this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
             forceFetch,
@@ -541,29 +563,32 @@ class ContentExplorer extends Component<Props, State> {
      *
      * @private
      * @param {Object} collection item collection object
+     * @param {Boolean} triggerNavigationEvent - To trigger navigate event
      * @return {void}
      */
-    recentsSuccessCallback = (collection: Collection) => {
+    recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean) {
         // Unselect any rows that were selected
         this.unselect();
 
         // Set the new state and focus the grid for tabbing
-        this.setState(
-            {
-                currentCollection: collection
-            },
-            this.finishNavigation
-        );
-    };
+        const newState = { currentCollection: collection };
+        if (triggerNavigationEvent) {
+            this.setState(newState, this.finishNavigation);
+        } else {
+            this.setState(newState);
+        }
+    }
 
     /**
-     * Shows recents
+     * Shows recents.
+     * We always try to force fetch recents.
      *
      * @private
+     * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    showRecents = (forceFetch: boolean = false) => {
+    showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
         const { rootFolderId, canPreview, hasPreviewSidebar }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
@@ -578,19 +603,19 @@ class ContentExplorer extends Component<Props, State> {
         });
 
         // Fetch the folder using folder API
-        this.api
-            .getRecentsAPI()
-            .recents(
-                rootFolderId,
-                by,
-                sortDirection,
-                this.recentsSuccessCallback,
-                this.errorCallback,
-                forceFetch,
-                canPreview,
-                hasPreviewSidebar
-            );
-    };
+        this.api.getRecentsAPI().recents(
+            rootFolderId,
+            by,
+            sortDirection,
+            (collection: Collection) => {
+                this.recentsSuccessCallback(collection, triggerNavigationEvent);
+            },
+            this.errorCallback,
+            forceFetch,
+            canPreview,
+            hasPreviewSidebar
+        );
+    }
 
     /**
      * Uploads
@@ -655,8 +680,8 @@ class ContentExplorer extends Component<Props, State> {
 
         this.setState({ isLoading: true });
         this.api.getAPI(type).share(selected, access, (updatedItem: BoxItem) => {
-            updatedItem.selected = true;
-            this.setState({ selected: updatedItem, isLoading: false });
+            this.setState({ isLoading: false });
+            this.select(updatedItem);
         });
     };
 
@@ -669,22 +694,10 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
-        const { currentCollection: { id }, view, searchQuery }: State = this.state;
-        if (!id) {
-            return;
+        const { currentCollection: { id } }: State = this.state;
+        if (id) {
+            this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
-
-        this.setState({ sortBy, sortDirection }, () => {
-            if (view === VIEW_FOLDER) {
-                this.fetchFolder(id, false);
-            } else if (view === VIEW_RECENTS) {
-                this.showRecents();
-            } else if (view === VIEW_SEARCH) {
-                this.search(searchQuery);
-            } else {
-                throw new Error('Cannot sort incompatible view!');
-            }
-        });
     };
 
     /**
@@ -836,7 +849,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     deleteCallback = (): void => {
-        const { selected, isDeleteModalOpen, view, searchQuery }: State = this.state;
+        const { selected, isDeleteModalOpen }: State = this.state;
         const { canDelete, onDelete }: Props = this.props;
         if (!selected || !canDelete) {
             return;
@@ -861,15 +874,7 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({ isLoading: true });
         this.api.getAPI(type).delete(selected, () => {
             onDelete(cloneDeep([selected]));
-            if (view === VIEW_FOLDER) {
-                this.fetchFolder(parentId, false);
-            } else if (view === VIEW_RECENTS) {
-                this.showRecents();
-            } else if (view === VIEW_SEARCH) {
-                this.search(searchQuery);
-            } else {
-                throw new Error('Cannot sort incompatible view!');
-            }
+            this.refreshCollection();
         });
     };
 
@@ -924,13 +929,10 @@ class ContentExplorer extends Component<Props, State> {
             selected,
             name,
             (updatedItem: BoxItem) => {
+                this.setState({ isRenameModalOpen: false });
+                this.refreshCollection();
+                this.select(updatedItem);
                 onRename(cloneDeep(selected));
-                updatedItem.selected = true;
-                this.setState({
-                    selected: updatedItem,
-                    isLoading: false,
-                    isRenameModalOpen: false
-                });
             },
             ({ code }) => {
                 this.setState({ errorCode: code, isLoading: false });
@@ -992,13 +994,13 @@ class ContentExplorer extends Component<Props, State> {
             id,
             name,
             (item: BoxItem) => {
-                onCreate(cloneDeep(item));
-                this.fetchFolder(id, false);
+                this.refreshCollection();
                 this.select(item);
+                onCreate(cloneDeep(item));
             },
-            ({ response: { status } }) => {
+            ({ code }) => {
                 this.setState({
-                    errorCode: status === 409 ? ERROR_CODE_ITEM_NAME_IN_USE : ERROR_CODE_ITEM_NAME_INVALID,
+                    errorCode: code,
                     isLoading: false
                 });
             }
@@ -1126,7 +1128,7 @@ class ContentExplorer extends Component<Props, State> {
                 break;
             case 'r':
                 if (this.globalModifier) {
-                    this.showRecents(true);
+                    this.showRecents();
                     event.preventDefault();
                 }
                 break;
@@ -1315,7 +1317,7 @@ class ContentExplorer extends Component<Props, State> {
                             isOpen={isShareModalOpen}
                             canSetShareAccess={canSetShareAccess}
                             onShareAccessChange={this.changeShareAccess}
-                            onCancel={this.closeModals}
+                            onCancel={this.refreshCollection}
                             item={selected}
                             isLoading={isLoading}
                             parentElement={this.rootElement}
