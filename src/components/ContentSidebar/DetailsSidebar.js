@@ -28,6 +28,7 @@ type Props = {
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onInteraction: Function,
+    onDescriptionChange: Function,
     intl: any
 };
 
@@ -44,11 +45,14 @@ const DetailsSidebar = ({
     rootElement,
     appElement,
     onInteraction,
+    onDescriptionChange,
     intl
 }: Props) => {
     if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification) {
         return null;
     }
+
+    const onDescriptionChangeEditable = getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined;
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
@@ -70,6 +74,8 @@ const DetailsSidebar = ({
                         owner={getProp(file, 'owned_by.name')}
                         size={getFileSize(file.size, intl.locale)}
                         uploader={getProp(file, 'created_by.name')}
+                        onDescriptionChange={onDescriptionChangeEditable}
+                        descriptionTextareaProps={{ maxLength: '255' }}
                     />
                 </SidebarSection>
             )}

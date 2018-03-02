@@ -12,7 +12,7 @@ import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import { getFieldsAsString } from '../util/fields';
 import { CACHE_PREFIX_SEARCH, X_REP_HINTS } from '../constants';
-import getBadItemError from '../util/error';
+import { getBadItemError } from '../util/error';
 import type Cache from '../util/Cache';
 import type {
     BoxItemCollection,

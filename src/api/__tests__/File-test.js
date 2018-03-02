@@ -64,6 +64,110 @@ describe('api/File', () => {
         });
     });
 
+    describe('setFileDescription()', () => {
+        const success = jest.fn();
+        const error = jest.fn();
+
+        test('should fail if the file object is bad', () => {
+            file.xhr = jest.fn();
+            return file.setFileDescription({}, 'foo', success, error).catch(() => {
+                expect(file.xhr).not.toHaveBeenCalled();
+                expect(success).not.toHaveBeenCalled();
+                expect(error).toHaveBeenCalled();
+            });
+        });
+
+        test('should fail if we have insufficient permissions', () => {
+            file.xhr = jest.fn();
+            const mockFile = {
+                id: '1',
+                permissions: {
+                    can_rename: false
+                }
+            };
+
+            return file.setFileDescription(mockFile, 'foo', success, error).catch(() => {
+                expect(file.xhr).not.toHaveBeenCalled();
+                expect(success).not.toHaveBeenCalled();
+                expect(error).toHaveBeenCalled();
+            });
+        });
+
+        test('should make an xhr', () => {
+            file.getTypedFileId = jest.fn().mockReturnValue('id');
+            file.getUrl = jest.fn().mockReturnValue('url');
+            file.merge = jest.fn();
+
+            const mockFile = {
+                id: '1',
+                permissions: {
+                    can_rename: true
+                },
+                description: 'foo'
+            };
+            file.xhr = {
+                put: jest.fn().mockReturnValueOnce(Promise.resolve(mockFile))
+            };
+
+            return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
+                expect(file.xhr.put).toHaveBeenCalledWith({
+                    id: 'id',
+                    url: 'url',
+                    data: {
+                        description: 'foo'
+                    }
+                });
+            });
+        });
+
+        test('should merge the new file description in and execute the success callback', () => {
+            file.getCacheKey = jest.fn().mockReturnValue('key');
+            file.merge = jest.fn();
+            const mockFile = {
+                id: '1',
+                permissions: {
+                    can_rename: true
+                },
+                description: 'foo'
+            };
+
+            const mockFileResponse = mockFile;
+            mockFileResponse.description = 'fo';
+
+            file.xhr = {
+                put: jest.fn().mockReturnValueOnce(Promise.resolve(mockFileResponse))
+            };
+
+            return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
+                expect(file.xhr.put).toHaveBeenCalled();
+                expect(file.merge).toHaveBeenCalledWith('key', 'description', 'fo');
+                expect(error).not.toHaveBeenCalled();
+            });
+        });
+
+        test('should call the error callback on failure', () => {
+            file.merge = jest.fn();
+            const mockFile = {
+                id: '1',
+                permissions: {
+                    can_rename: true
+                },
+                description: 'foo'
+            };
+            const mockError = new Error();
+
+            file.xhr = {
+                put: jest.fn().mockReturnValueOnce(Promise.reject(mockError))
+            };
+
+            return file.setFileDescription(mockFile, 'foo', success, error).catch(() => {
+                expect(file.xhr.put).toHaveBeenCalled();
+                expect(file.merge).not.toHaveBeenCalled(mockFile);
+                expect(error).toHaveBeenCalled(error, mockFile);
+            });
+        });
+    });
+
     describe('file()', () => {
         test('should not do anything if destroyed', () => {
             file.isDestroyed = jest.fn().mockReturnValueOnce(true);

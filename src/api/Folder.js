@@ -12,7 +12,7 @@ import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
 import { getFieldsAsString } from '../util/fields';
 import { CACHE_PREFIX_FOLDER, X_REP_HINTS } from '../constants';
-import getBadItemError from '../util/error';
+import { getBadItemError } from '../util/error';
 import type Cache from '../util/Cache';
 import type {
     BoxItem,
