@@ -69,7 +69,7 @@ const DetailsSidebar = ({
                 <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
                     <ItemProperties
                         createdAt={file.created_at}
-                        value={file.description}
+                        description={file.description}
                         modifiedAt={file.modified_at}
                         owner={getProp(file, 'owned_by.name')}
                         size={getFileSize(file.size, intl.locale)}

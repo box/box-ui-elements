@@ -94,8 +94,10 @@ describe('api/File', () => {
         });
 
         test('should make an xhr', () => {
-            file.getTypedFileId = jest.fn().mockReturnThis('id');
-            file.getUrl = jest.fn().mockReturnThis('url');
+            file.getTypedFileId = jest.fn().mockReturnValue('id');
+            file.getUrl = jest.fn().mockReturnValue('url');
+            file.merge = jest.fn();
+
             const mockFile = {
                 id: '1',
                 permissions: {
@@ -107,12 +109,19 @@ describe('api/File', () => {
                 put: jest.fn().mockReturnValueOnce(Promise.resolve(mockFile))
             };
 
-            return file.setFileDescription(mockFile, 'foo', success, error).catch(() => {
-                expect(file.xhr.put).toHaveBeenCalledWith('id', 'url', 'foo');
+            return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
+                expect(file.xhr.put).toHaveBeenCalledWith({
+                    id: 'id',
+                    url: 'url',
+                    data: {
+                        description: 'foo'
+                    }
+                });
             });
         });
 
         test('should merge the new file description in and execute the success callback', () => {
+            file.getCacheKey = jest.fn().mockReturnValue('key');
             file.merge = jest.fn();
             const mockFile = {
                 id: '1',
@@ -121,13 +130,17 @@ describe('api/File', () => {
                 },
                 description: 'foo'
             };
+
+            const mockFileResponse = mockFile;
+            mockFileResponse.description = 'fo';
+
             file.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve(mockFile))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve(mockFileResponse))
             };
 
-            return file.setFileDescription(mockFile, 'foo', success, error).catch(() => {
-                expect(file.xhr).toHaveBeenCalled();
-                expect(file.merge).toHaveBeenCalled(mockFile);
+            return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
+                expect(file.xhr.put).toHaveBeenCalled();
+                expect(file.merge).toHaveBeenCalledWith('key', 'description', 'fo');
                 expect(error).not.toHaveBeenCalled();
             });
         });
