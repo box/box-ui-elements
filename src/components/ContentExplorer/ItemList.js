@@ -13,14 +13,14 @@ import 'react-virtualized/styles.css';
 import KeyBinder from '../KeyBinder';
 import headerCellRenderer from './headerCellRenderer';
 import sizeCellRenderer from './sizeCellRenderer';
-import dateCellRenderer from './dateCellRenderer';
 import nameCellRenderer from '../Item/nameCellRenderer';
+import modifiedCellRenderer from '../Item/modifiedCellRenderer';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { focus } from '../../util/dom';
 import messages from '../messages';
 import {
-    FIELD_NAME,
+    FIELD_NAME,   
     FIELD_ID,
     FIELD_MODIFIED_AT,
     FIELD_INTERACTED_AT,
@@ -89,8 +89,11 @@ const ItemList = ({
         isSmall, // shows details if false
         isTouch
     );
+    const modifiedCell = modifiedCellRenderer(
+    	rootId,
+    	view
+    );
     const iconCell = iconCellRenderer();
-    const dateCell = dateCellRenderer();
     const sizeAccessCell = sizeCellRenderer();
     const moreOptionsCell = moreOptionsCellRenderer(
         canPreview,
@@ -187,9 +190,9 @@ const ItemList = ({
                                             : intl.formatMessage(messages.modified)
                                     }
                                     dataKey={isRecents ? FIELD_INTERACTED_AT : FIELD_MODIFIED_AT}
-                                    cellRenderer={dateCell}
+                                    cellRenderer={modifiedCell}
                                     headerRenderer={headerCellRenderer}
-                                    width={135}
+                                    width={300}
                                     flexShrink={0}
                                 />
                             )}
