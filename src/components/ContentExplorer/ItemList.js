@@ -34,6 +34,7 @@ type Props = {
     view: View,
     rootElement: HTMLElement,
     isSmall: boolean,
+    isMedium: boolean,
     isTouch: boolean,
     rootId: string,
     focusedRow: number,
@@ -58,6 +59,7 @@ type Props = {
 const ItemList = ({
     view,
     isSmall,
+    isMedium,
     isTouch,
     rootId,
     rootElement,
@@ -189,11 +191,11 @@ const ItemList = ({
                                     dataKey={isRecents ? FIELD_INTERACTED_AT : FIELD_MODIFIED_AT}
                                     cellRenderer={dateCell}
                                     headerRenderer={headerCellRenderer}
-                                    width={135}
-                                    flexShrink={0}
+                                    width={isRecents ? 120 : 300}
+                                    flexGrow={1}
                                 />
                             )}
-                            {isSmall ? null : (
+                            {isSmall || isMedium ? null : (
                                 <Column
                                     className='bce-item-coloumn'
                                     label={intl.formatMessage(messages.size)}

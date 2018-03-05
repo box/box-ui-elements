@@ -48,7 +48,8 @@ import {
     SKILL_KEYWORD,
     SKILL_TIMELINE,
     SKILL_TRANSCRIPT,
-    SKILL_KEYVALUE
+    SKILL_KEYVALUE,
+    SIZE_MEDIUM
 } from './constants';
 
 export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
@@ -79,7 +80,7 @@ export type UploadStatus =
     | typeof STATUS_COMPLETE
     | typeof STATUS_ERROR;
 export type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
-export type Size = typeof SIZE_SMALL | typeof SIZE_LARGE;
+export type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 
 export type SharedLink = {
     url: string,

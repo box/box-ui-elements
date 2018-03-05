@@ -9,6 +9,7 @@ import Browser from './util/Browser';
 /* ----------------------- Size ---------------------------- */
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_LARGE: 'large' = 'large';
+export const SIZE_MEDIUM: 'medium' = 'medium';
 
 /* ----------------------- Views ---------------------------- */
 export const VIEW_FOLDER: 'folder' = 'folder';
@@ -129,7 +130,8 @@ export const STATUS_ERROR: 'error' = 'error';
 export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
 export const CLASS_MODAL_CONTENT_FULL_BLEED = 'be-modal-dialog-content-full-bleed';
 export const CLASS_MODAL_OVERLAY = 'be-modal-dialog-overlay';
-export const CLASS_IS_COMPACT = 'be-is-small';
+export const CLASS_IS_SMALL = 'be-is-small';
+export const CLASS_IS_MEDIUM = 'be-is-medium';
 export const CLASS_IS_TOUCH = 'be-is-touch';
 export const CLASS_MODAL = 'be-modal';
 
