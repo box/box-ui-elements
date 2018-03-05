@@ -113,6 +113,11 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Label for in action.',
         defaultMessage: 'In'
     },
+    by: {
+        id: 'be.by',
+        description: 'Label for by in modified column.',
+        defaultMessage: 'by'
+    },    
     selected: {
         id: 'be.selected',
         description: 'Default label for selected items list in the footer.',
