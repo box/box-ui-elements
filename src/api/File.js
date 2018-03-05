@@ -41,7 +41,7 @@ class File extends Item {
      */
     getUrl(id: string): string {
         const suffix: string = id ? `/${id}` : '';
-        return `${this.getBaseUrl()}/files${suffix}`;
+        return `${this.getBaseApiUrl()}/files${suffix}`;
     }
 
     /**
@@ -58,7 +58,7 @@ class File extends Item {
                     fields: FIELD_DOWNLOAD_URL
                 }
             })
-            .then((data: BoxItem) => {
+            .then(({ data }: { data: BoxItem }) => {
                 successCallback(data[FIELD_DOWNLOAD_URL]);
             })
             .catch(errorCallback);
@@ -97,8 +97,8 @@ class File extends Item {
                 url: this.getUrl(id),
                 data: { description }
             })
-            .then((responseFileObject: BoxItem) => {
-                const updatedFile = this.merge(this.getCacheKey(id), 'description', responseFileObject.description);
+            .then(({ data }: { data: BoxItem }) => {
+                const updatedFile = this.merge(this.getCacheKey(id), 'description', data.description);
                 successCallback(updatedFile);
             })
             .catch((e) => {
@@ -154,9 +154,9 @@ class File extends Item {
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
-            .then((file: BoxItem) => {
-                cache.set(key, file);
-                successCallback(file);
+            .then(({ data }: { data: BoxItem }) => {
+                cache.set(key, data);
+                successCallback(data);
             })
             .catch(errorCallback);
     }

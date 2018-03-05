@@ -26,7 +26,7 @@ class WebLink extends Item {
      */
     getUrl(id: string): string {
         const suffix: string = id ? `/${id}` : '';
-        return `${this.getBaseUrl()}/web_links${suffix}`;
+        return `${this.getBaseApiUrl()}/web_links${suffix}`;
     }
 }
 

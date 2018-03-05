@@ -108,7 +108,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Function} [options.successCallback]
      * @return {void}
      */
-    upload = ({
+    upload({
         file,
         folderId,
         errorCallback,
@@ -124,7 +124,7 @@ class MultiputUpload extends BaseMultiput {
         successCallback?: Function,
         overwrite?: boolean,
         fileId: ?string
-    }): void => {
+    }): void {
         this.file = file;
         this.fileName = this.file.name;
         // These values are used as part of our (best effort) attempt to abort uploads if we detect
@@ -143,7 +143,7 @@ class MultiputUpload extends BaseMultiput {
         this.fileId = fileId;
 
         this.createSession();
-    };
+    }
 
     /**
      * Creates upload session. If a file ID is supplied, use the Chunked Upload File Version
@@ -157,8 +157,7 @@ class MultiputUpload extends BaseMultiput {
             return;
         }
 
-        await this.updateReachableUploadHost();
-        let createSessionUrl = `${this.uploadHost}/api/2.0/files/upload_sessions`;
+        let createSessionUrl = `${this.getBaseUploadUrl()}/files/upload_sessions`;
 
         // Set up post body
         const postData: StringAnyMap = {
@@ -173,32 +172,33 @@ class MultiputUpload extends BaseMultiput {
         }
 
         try {
-            const data = await this.xhr.post({ url: createSessionUrl, data: postData });
-            this.createSessionSuccessHandler(data);
+            const response = await this.xhr.post({ url: createSessionUrl, data: postData });
+            this.createSessionSuccessHandler(response.data);
         } catch (error) {
-            const response = await this.getErrorResponse(error);
+            const errorData = this.getErrorResponse(error);
 
-            if (response && response.status >= 500 && response.status < 600) {
+            if (errorData && errorData.status >= 500 && errorData.status < 600) {
                 this.createSessionErrorHandler(error);
+                return;
             }
 
             // Recover from 409 session_conflict.  The server will return the session information
             // in context_info, so treat it as a success.
-            if (response && response.status === 409 && response.code === 'session_conflict') {
-                this.createSessionSuccessHandler(response.context_info.session);
+            if (errorData && errorData.status === 409 && errorData.code === 'session_conflict') {
+                this.createSessionSuccessHandler(errorData.context_info.session);
                 return;
             }
 
             if (
-                (response && (response.status === 403 && response.code === 'storage_limit_exceeded')) ||
-                (response.status === 403 && response.code === 'access_denied_insufficient_permissions')
+                (errorData && (errorData.status === 403 && errorData.code === 'storage_limit_exceeded')) ||
+                (errorData.status === 403 && errorData.code === 'access_denied_insufficient_permissions')
             ) {
-                this.errorCallback(response);
+                this.errorCallback(errorData);
                 return;
             }
 
-            if (response && response.status === 409) {
-                this.resolveConflict(response);
+            if (errorData && errorData.status === 409) {
+                this.resolveConflict(errorData);
                 this.createSessionRetry();
                 return;
             }
@@ -216,7 +216,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Error} error
      * @return {void}
      */
-    createSessionErrorHandler = (error: Error): void => {
+    createSessionErrorHandler(error: Error): void {
         if (this.isDestroyed()) {
             return;
         }
@@ -228,7 +228,7 @@ class MultiputUpload extends BaseMultiput {
 
         this.consoleLog('Too many create session failures, failing upload');
         this.sessionErrorHandler(error, LOG_EVENT_TYPE_CREATE_SESSION_RETRIES_EXCEEDED, JSON.stringify(error));
-    };
+    }
 
     /**
      * Schedule a retry for create session request upon failure
@@ -236,7 +236,7 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    createSessionRetry = (): void => {
+    createSessionRetry(): void {
         const retryDelayMs = getBoundedExpBackoffRetryDelay(
             this.config.initialRetryDelayMs,
             this.config.maxRetryDelayMs,
@@ -245,7 +245,7 @@ class MultiputUpload extends BaseMultiput {
         this.createSessionNumRetriesPerformed += 1;
         this.consoleLog(`Retrying create session in ${retryDelayMs} ms`);
         this.createSessionTimeout = setTimeout(this.createSession, retryDelayMs);
-    };
+    }
 
     /**
      * Handles a upload session success response
@@ -254,7 +254,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Object} data - Upload session creation success data
      * @return {void}
      */
-    createSessionSuccessHandler = (data: any): void => {
+    createSessionSuccessHandler(data: any): void {
         if (this.isDestroyed()) {
             return;
         }
@@ -274,7 +274,7 @@ class MultiputUpload extends BaseMultiput {
 
         this.populateParts();
         this.processNextParts();
-    };
+    }
 
     /**
      * Session error handler.
@@ -286,10 +286,10 @@ class MultiputUpload extends BaseMultiput {
      * @param {string} [logMessage]
      * @return {Promise}
      */
-    sessionErrorHandler = async (error: ?Error, logEventType: string, logMessage?: string): Promise<any> => {
+    async sessionErrorHandler(error: ?Error, logEventType: string, logMessage?: string): Promise<any> {
         this.destroy();
-        const errorResponse = await this.getErrorResponse(error);
-        this.errorCallback(errorResponse);
+        const errorData = this.getErrorResponse(error);
+        this.errorCallback(errorData);
 
         try {
             if (!this.sessionEndpoints.logEvent) {
@@ -310,7 +310,7 @@ class MultiputUpload extends BaseMultiput {
         } catch (err) {
             this.abortSession();
         }
-    };
+    }
 
     /**
      * Aborts the upload session
@@ -318,7 +318,7 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    abortSession = (): void => {
+    abortSession(): void {
         if (this.sha1Worker) {
             this.sha1Worker.terminate();
         }
@@ -328,7 +328,7 @@ class MultiputUpload extends BaseMultiput {
                 url: this.sessionEndpoints.abort
             });
         }
-    };
+    }
 
     /**
      * Part upload success handler
@@ -411,11 +411,14 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {boolean} true if there is work to do, false otherwise.
      */
-    shouldComputeDigestForNextPart = (): boolean =>
-        !this.isDestroyed() &&
-        this.numPartsDigestComputing === 0 &&
-        this.numPartsNotStarted > 0 &&
-        this.numPartsDigestReady < this.config.digestReadahead;
+    shouldComputeDigestForNextPart(): boolean {
+        return (
+            !this.isDestroyed() &&
+            this.numPartsDigestComputing === 0 &&
+            this.numPartsNotStarted > 0 &&
+            this.numPartsDigestReady < this.config.digestReadahead
+        );
+    }
 
     /**
      * Find first part in parts array that doesn't have a digest, and compute its digest.
@@ -423,7 +426,7 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    computeDigestForNextPart = (): void => {
+    computeDigestForNextPart(): void {
         for (let i = this.firstUnuploadedPartIndex; i < this.parts.length; i += 1) {
             const part = this.parts[i];
             if (part.state === PART_STATE_NOT_STARTED) {
@@ -435,7 +438,7 @@ class MultiputUpload extends BaseMultiput {
                 return;
             }
         }
-    };
+    }
 
     /**
      * Read a blob with FileReader
@@ -444,8 +447,8 @@ class MultiputUpload extends BaseMultiput {
      * @param {Blob} blob
      * @return {Promise}
      */
-    readFile = (reader: FileReader, blob: Blob): Promise<any> =>
-        new Promise((resolve, reject) => {
+    readFile(reader: FileReader, blob: Blob): Promise<any> {
+        return new Promise((resolve, reject) => {
             reader.readAsArrayBuffer(blob);
             reader.onload = () => {
                 resolve({
@@ -455,6 +458,7 @@ class MultiputUpload extends BaseMultiput {
             };
             reader.onerror = reject;
         });
+    }
 
     /**
      * Compute digest for this part
@@ -463,7 +467,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {MultiputPart} part
      * @return {Promise}
      */
-    computeDigestForPart = async (part: MultiputPart): Promise<any> => {
+    async computeDigestForPart(part: MultiputPart): Promise<any> {
         const blob = this.file.slice(part.offset, part.offset + this.partSize);
         const reader = new window.FileReader();
         const startTimestamp = Date.now();
@@ -500,7 +504,7 @@ class MultiputUpload extends BaseMultiput {
         } catch (error) {
             this.onPartDigestError(error, part);
         }
-    };
+    }
 
     /**
      * Deal with a message from the worker (either a part sha-1 ready, file sha-1 ready, or error).
@@ -598,9 +602,9 @@ class MultiputUpload extends BaseMultiput {
      * Send a request to commit the upload.
      *
      * @private
-     * @return {Promise}
+     * @return {void}
      */
-    commitSession = async (): Promise<any> => {
+    commitSession = (): void => {
         if (this.isDestroyed()) {
             return;
         }
@@ -612,7 +616,7 @@ class MultiputUpload extends BaseMultiput {
             totalPartUploadTime: 0
         };
 
-        const postData = {
+        const data = {
             parts: this.parts
                 .map((part) => {
                     stats.totalPartReadTime += part.timing.readTime;
@@ -627,7 +631,7 @@ class MultiputUpload extends BaseMultiput {
 
         const fileLastModified = getFileLastModifiedAsISONoMSIfPossible(this.file);
         if (fileLastModified) {
-            postData.attributes.content_modified_at = fileLastModified;
+            data.attributes.content_modified_at = fileLastModified;
         }
 
         const clientEventInfo = {
@@ -645,7 +649,7 @@ class MultiputUpload extends BaseMultiput {
         };
 
         this.xhr
-            .post({ url: this.sessionEndpoints.commit, data: postData, headers })
+            .post({ url: this.sessionEndpoints.commit, data, headers })
             .then(this.commitSessionSuccessHandler)
             .catch(this.commitSessionErrorHandler);
     };
@@ -662,12 +666,14 @@ class MultiputUpload extends BaseMultiput {
             return;
         }
 
-        const { status, entries } = response;
+        const { status, data } = response;
 
         if (status === 202) {
             this.commitSessionRetry(response);
             return;
         }
+
+        const { entries } = data;
 
         this.destroy();
 
@@ -685,9 +691,15 @@ class MultiputUpload extends BaseMultiput {
      * @return {void}
      */
     commitSessionErrorHandler = (error: Object): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
         const { response } = error;
 
-        if (this.isDestroyed()) {
+        if (!response) {
+            // Some random error happened
+            this.consoleError(error);
             return;
         }
 
@@ -708,12 +720,12 @@ class MultiputUpload extends BaseMultiput {
      * @param {Object} response
      * @return {void}
      */
-    commitSessionRetry = (response: Object): void => {
+    commitSessionRetry(response: Object): void {
         const { status, headers } = response;
         let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
 
         if (headers) {
-            const retryAfterSec = parseInt(headers.get('Retry-After'), 10);
+            const retryAfterSec = parseInt(headers['retry-after'], 10);
 
             if (!Number.isNaN(retryAfterSec)) {
                 retryAfterMs = retryAfterSec * 1000;
@@ -734,7 +746,7 @@ class MultiputUpload extends BaseMultiput {
         const retryDelayMs = retryAfterMs || defaultRetryDelayMs;
         this.consoleLog(`Retrying commit in ${retryDelayMs} ms`);
         this.commitSessionTimeout = setTimeout(this.commitSession, retryDelayMs);
-    };
+    }
 
     /**
      * Find first part in parts array that we can upload, and upload it.
@@ -742,7 +754,7 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    uploadNextPart = (): void => {
+    uploadNextPart(): void {
         for (let i = this.firstUnuploadedPartIndex; i < this.parts.length; i += 1) {
             const part = this.parts[i];
 
@@ -755,7 +767,7 @@ class MultiputUpload extends BaseMultiput {
                 break;
             }
         }
-    };
+    }
 
     /**
      * Checks if upload pipeline is full
@@ -763,8 +775,9 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {boolean}
      */
-    canStartMorePartUploads = (): boolean =>
-        !this.isDestroyed() && this.numPartsUploading < this.config.parallelism && this.numPartsDigestReady > 0;
+    canStartMorePartUploads(): boolean {
+        return !this.isDestroyed() && this.numPartsUploading < this.config.parallelism && this.numPartsDigestReady > 0;
+    }
 
     /**
      * Functions that walk the parts array get called a lot, so we cache which part we should
@@ -773,13 +786,13 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    updateFirstUnuploadedPartIndex = (): void => {
+    updateFirstUnuploadedPartIndex(): void {
         let part = this.parts[this.firstUnuploadedPartIndex];
         while (part && part.state === PART_STATE_UPLOADED) {
             this.firstUnuploadedPartIndex += 1;
             part = this.parts[this.firstUnuploadedPartIndex];
         }
-    };
+    }
 
     /**
      * Get number of parts being uploaded
@@ -795,7 +808,7 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    populateParts = (): void => {
+    populateParts(): void {
         this.numPartsNotStarted = Math.ceil(this.file.size / this.partSize);
 
         for (let i = 0; i < this.numPartsNotStarted; i += 1) {
@@ -817,7 +830,7 @@ class MultiputUpload extends BaseMultiput {
             );
             this.parts.push(part);
         }
-    };
+    }
 
     /**
      * Fails the session if the file's size or last modified has changed since the upload process
@@ -847,7 +860,7 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {boolean} True if the session was failed, false if no action was taken
      */
-    failSessionIfFileChangeDetected = (): boolean => {
+    failSessionIfFileChangeDetected(): boolean {
         const currentFileSize = this.file.size;
         const currentFileLastModified = getFileLastModifiedAsISONoMSIfPossible(this.file);
 
@@ -866,7 +879,7 @@ class MultiputUpload extends BaseMultiput {
         }
 
         return false;
-    };
+    }
 
     /**
      * Cancels an upload in progress by cancelling all upload parts.
@@ -875,7 +888,7 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    cancel = (): void => {
+    cancel(): void {
         if (this.isDestroyed()) {
             return;
         }
@@ -890,32 +903,32 @@ class MultiputUpload extends BaseMultiput {
         clearTimeout(this.commitSessionTimeout);
         this.abortSession();
         this.destroy();
-    };
+    }
 
     /**
      * Resolves upload conflict by overwriting or renaming
      *
-     * @param {Object} response
+     * @param {Object} response data
      * @return {Promise}
      */
-    resolveConflict = async (response: Object): Promise<any> => {
-        if (this.overwrite && response.context_info) {
-            this.fileId = response.context_info.conflicts.id;
+    async resolveConflict(data: Object): Promise<any> {
+        if (this.overwrite && data.context_info) {
+            this.fileId = data.context_info.conflicts.id;
             return;
         }
 
         const extension = this.fileName.substr(this.fileName.lastIndexOf('.')) || '';
         // foo.txt => foo-1513385827917.txt
         this.fileName = `${this.fileName.substr(0, this.fileName.lastIndexOf('.'))}-${Date.now()}${extension}`;
-    };
+    }
 
     /**
      * Returns detailed error response
      *
      * @param {Object} error
-     * @return {Promise<Object>}
+     * @return {Object}
      */
-    getErrorResponse = async (error: ?Object): Promise<Object> => {
+    getErrorResponse(error: ?Object): Object {
         if (!error) {
             return {};
         }
@@ -929,8 +942,8 @@ class MultiputUpload extends BaseMultiput {
             return response;
         }
 
-        return response.json();
-    };
+        return response.data;
+    }
 }
 
 export default MultiputUpload;
