@@ -96,7 +96,9 @@ describe('api/Item', () => {
             item.merge = jest.fn();
             item.successCallback = jest.fn();
             item.renameSuccessHandler({
-                name: 'name'
+                data: {
+                    name: 'name'
+                }
             });
             expect(unsetAllMock).toHaveBeenCalledWith('search_');
             expect(item.getCacheKey).toHaveBeenCalledWith('id');
@@ -111,7 +113,9 @@ describe('api/Item', () => {
             item.merge = jest.fn();
             item.successCallback = jest.fn();
             item.shareSuccessHandler({
-                shared_link: 'link'
+                data: {
+                    shared_link: 'link'
+                }
             });
             expect(item.getCacheKey).toHaveBeenCalledWith('id');
             expect(item.merge).toHaveBeenCalledWith('key', 'shared_link', 'link');

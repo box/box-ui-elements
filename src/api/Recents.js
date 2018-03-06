@@ -83,7 +83,7 @@ class Recents extends Base {
      * @return {string} base url for files
      */
     getUrl(): string {
-        return `${this.getBaseUrl()}/recent_items`;
+        return `${this.getBaseApiUrl()}/recent_items`;
     }
 
     /**
@@ -125,12 +125,12 @@ class Recents extends Base {
      * @param {Object} response
      * @return {void}
      */
-    recentsSuccessHandler = (response: RecentCollection): void => {
+    recentsSuccessHandler = ({ data }: { data: RecentCollection }): void => {
         if (this.isDestroyed()) {
             return;
         }
 
-        const { entries, order: { by, direction } }: RecentCollection = response;
+        const { entries, order: { by, direction } }: RecentCollection = data;
         const items: BoxItem[] = [];
 
         entries.forEach(({ item, interacted_at }: Recent) => {

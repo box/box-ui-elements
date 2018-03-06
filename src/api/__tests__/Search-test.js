@@ -243,10 +243,12 @@ describe('api/Search', () => {
                 }
             };
             response = {
-                limit: 200,
-                offset: 0,
-                total_count: 3,
-                entries: [item1, item2, item3]
+                data: {
+                    limit: 200,
+                    offset: 0,
+                    total_count: 3,
+                    entries: [item1, item2, item3]
+                }
             };
         });
 
@@ -287,7 +289,7 @@ describe('api/Search', () => {
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.itemCache = ['foo', 'bar'];
 
-            response.total_count = 5;
+            response.data.total_count = 5;
             search.searchSuccessHandler(response);
 
             expect(cache.get('key')).toEqual({
@@ -311,7 +313,7 @@ describe('api/Search', () => {
             search.finish = jest.fn();
             search.searchRequest = jest.fn();
             search.getCache = jest.fn().mockReturnValueOnce(cache);
-            response.total_count = 2000;
+            response.data.total_count = 2000;
             search.searchSuccessHandler(response);
             expect(cache.get('key')).toEqual({
                 item_collection: {
@@ -333,7 +335,7 @@ describe('api/Search', () => {
             search.searchRequest = jest.fn();
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.itemCache = ['foo', 'bar'];
-            response.total_count = 2000;
+            response.data.total_count = 2000;
             search.searchSuccessHandler(response);
             expect(cache.get('key')).toEqual({
                 item_collection: {

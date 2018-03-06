@@ -44,18 +44,33 @@ describe('api/Base', () => {
         });
     });
 
-    describe('getBaseUrl()', () => {
+    describe('getBaseApiUrl()', () => {
         test('should return correct api url', () => {
             base = new Base({
                 apiHost: 'apiHost'
             });
-            expect(base.getBaseUrl()).toBe('apiHost/2.0');
+            expect(base.getBaseApiUrl()).toBe('apiHost/2.0');
         });
         test('should return correct api url with trailing /', () => {
             base = new Base({
                 apiHost: 'apiHost/'
             });
-            expect(base.getBaseUrl()).toBe('apiHost/2.0');
+            expect(base.getBaseApiUrl()).toBe('apiHost/2.0');
+        });
+    });
+
+    describe('getBaseUploadUrl()', () => {
+        test('should return correct api upload url', () => {
+            base = new Base({
+                uploadHost: 'uploadHost'
+            });
+            expect(base.getBaseUploadUrl()).toBe('uploadHost/api/2.0');
+        });
+        test('should return correct api upload url with trailing /', () => {
+            base = new Base({
+                uploadHost: 'uploadHost/'
+            });
+            expect(base.getBaseUploadUrl()).toBe('uploadHost/api/2.0');
         });
     });
 

@@ -5,10 +5,12 @@
  */
 
 import noop from 'lodash/noop';
-import BaseUpload from './BaseUpload';
+import Base from './Base';
+import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
-class PlainUpload extends BaseUpload {
+const MAX_RETRY = 5;
+class PlainUpload extends Base {
     file: File;
     folderId: string;
     fileId: ?string;
@@ -16,23 +18,8 @@ class PlainUpload extends BaseUpload {
     successCallback: Function;
     errorCallback: Function;
     progressCallback: Function;
-
-    /**
-     * Handles a upload preflight success response
-     *
-     * @param {Object} data - Preflight success data
-     * @return {Promise<*>}
-     */
-    uploadPreflightSuccessHandler = async ({ upload_url }: { upload_url: string }): Promise<*> => {
-        if (this.isDestroyed()) {
-            return;
-        }
-
-        // Make an actual POST request to the fast upload URL returned by pre-flight
-        await this.makeRequest({
-            url: upload_url
-        });
-    };
+    retryCount: number = 0;
+    retryTimeout: TimeoutID;
 
     /**
      * Handles an upload success response
@@ -78,7 +65,76 @@ class PlainUpload extends BaseUpload {
             return;
         }
 
-        this.baseUploadErrorHandler(error, this.makePreflightRequest.bind(this));
+        const fileName = this.file ? this.file.name : '';
+
+        // TODO(tonyjin): Normalize error object and clean up error handling
+        let errorData = error;
+        const { response } = error;
+        if (response && response.data) {
+            errorData = response.data;
+        }
+
+        if (this.retryCount >= MAX_RETRY) {
+            this.errorCallback(errorData);
+            // Automatically handle name conflict errors
+        } else if (errorData && errorData.status === 409) {
+            if (this.overwrite) {
+                // Error response contains file ID to upload a new file version for
+                this.makePreflightRequest({
+                    fileId: errorData.context_info.conflicts.id,
+                    fileName
+                });
+            } else {
+                // Otherwise, reupload and append timestamp
+                // 'test.jpg' becomes 'test-TIMESTAMP.jpg'
+                const extension = fileName.substr(fileName.lastIndexOf('.')) || '';
+                this.makePreflightRequest({
+                    fileName: `${fileName.substr(0, fileName.lastIndexOf('.'))}-${Date.now()}${extension}`
+                });
+            }
+            this.retryCount += 1;
+            // When rate limited, retry after interval defined in header
+        } else if (errorData && (errorData.status === 429 || errorData.code === 'too_many_requests')) {
+            let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
+
+            if (errorData.headers) {
+                const retryAfterSec = parseInt(
+                    errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
+                    10
+                );
+
+                if (!Number.isNaN(retryAfterSec)) {
+                    retryAfterMs = retryAfterSec * MS_IN_S;
+                }
+            }
+
+            this.retryTimeout = setTimeout(
+                () =>
+                    this.makePreflightRequest({
+                        fileName
+                    }),
+                retryAfterMs
+            );
+            this.retryCount += 1;
+
+            // If another error status that isn't name conflict or rate limiting, fail upload
+        } else if (
+            errorData &&
+            (errorData.status || errorData.message === 'Failed to fetch') &&
+            typeof this.errorCallback === 'function'
+        ) {
+            this.errorCallback(errorData);
+            // Retry with exponential backoff for other failures since these are likely to be network errors
+        } else {
+            this.retryTimeout = setTimeout(
+                () =>
+                    this.makePreflightRequest({
+                        fileName
+                    }),
+                2 ** this.retryCount * MS_IN_S
+            );
+            this.retryCount += 1;
+        }
     };
 
     /**
@@ -89,7 +145,7 @@ class PlainUpload extends BaseUpload {
      * @param {fileName} fileName - New name for file
      * @return {void}
      */
-    makePreflightRequest({ fileId, fileName }: { fileId?: string, fileName?: string }) {
+    makePreflightRequest({ fileId, fileName }: { fileId?: string, fileName?: string }): void {
         if (this.isDestroyed()) {
             return;
         }
@@ -98,7 +154,7 @@ class PlainUpload extends BaseUpload {
             this.fileId = fileId;
         }
 
-        let url = `${this.getBaseUrl()}/files/content`;
+        let url = `${this.getBaseApiUrl()}/files/content`;
         if (fileId) {
             url = url.replace('content', `${fileId}/content`);
         }
@@ -113,7 +169,7 @@ class PlainUpload extends BaseUpload {
         this.xhr.options({
             url,
             data: attributes,
-            successHandler: this.uploadPreflightSuccessHandler,
+            successHandler: this.makeRequest,
             errorHandler: this.uploadErrorHandler
         });
     }
@@ -124,19 +180,17 @@ class PlainUpload extends BaseUpload {
      *
      * @param {Object} - Request options
      * @param {boolean} [options.url] - Upload URL to use
-     * @return {Promise<*>}
+     * @return {void}
      */
-    async makeRequest({ url }: { url?: string }): Promise<*> {
+    makeRequest = ({ data }: { data: { upload_url?: string } }): void => {
         if (this.isDestroyed()) {
             return;
         }
 
-        await this.updateReachableUploadHost();
-
         // Use provided upload URL if passed in, otherwise construct
-        let uploadUrl = url;
+        let uploadUrl = data.upload_url;
         if (!uploadUrl) {
-            uploadUrl = `${this.uploadHost}/api/2.0/files/content`;
+            uploadUrl = `${this.getBaseUploadUrl()}/files/content`;
 
             if (this.fileId) {
                 uploadUrl = uploadUrl.replace('content', `${this.fileId}/content`);
@@ -158,7 +212,7 @@ class PlainUpload extends BaseUpload {
             errorHandler: this.uploadErrorHandler,
             progressHandler: this.uploadProgressHandler
         });
-    }
+    };
 
     /**
      * Uploads a file. If there is a conflict and overwrite is true, replace the file.

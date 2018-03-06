@@ -178,24 +178,26 @@ describe('api/Recents', () => {
                 }
             };
             const response = {
-                order: {
-                    by: 'by',
-                    direction: 'direction'
-                },
-                entries: [
-                    {
-                        interacted_at: 'interacted_at1',
-                        item: item1
+                data: {
+                    order: {
+                        by: 'by',
+                        direction: 'direction'
                     },
-                    {
-                        interacted_at: 'interacted_at2',
-                        item: item2
-                    },
-                    {
-                        interacted_at: 'interacted_at3',
-                        item: item3
-                    }
-                ]
+                    entries: [
+                        {
+                            interacted_at: 'interacted_at1',
+                            item: item1
+                        },
+                        {
+                            interacted_at: 'interacted_at2',
+                            item: item2
+                        },
+                        {
+                            interacted_at: 'interacted_at3',
+                            item: item3
+                        }
+                    ]
+                }
             };
 
             recents.options = { cache };

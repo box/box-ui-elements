@@ -149,6 +149,10 @@ export type MetadataType = {
     global?: MetadataTemplate
 };
 
+export type BoxItemVersion = {
+    id?: string
+};
+
 export type BoxItem = {
     id?: string,
     name?: string,
@@ -173,7 +177,8 @@ export type BoxItem = {
     modified_by?: User,
     created_by?: User,
     selected?: boolean,
-    metadata?: MetadataType
+    metadata?: MetadataType,
+    file_version?: BoxItemVersion
 };
 
 export type BoxItemCollection = {
@@ -209,7 +214,8 @@ export type FlattenedBoxItem = {
     modified_by?: User,
     created_by?: User,
     selected?: boolean,
-    metadata?: MetadataType
+    metadata?: MetadataType,
+    file_version?: BoxItemVersion
 };
 
 export type FlattenedBoxItemCollection = {
