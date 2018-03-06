@@ -60,7 +60,6 @@ const BASE_FIELDS_TO_FETCH = [
 // Additional fields needed for the sidebar
 const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_CREATED_BY,
-    FIELD_MODIFIED_BY,
     FIELD_OWNED_BY,
     FIELD_DESCRIPTION,
     METADATA_SKILLS
