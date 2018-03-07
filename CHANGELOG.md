@@ -1,6 +1,14 @@
+<a name="4.0.1"></a>
+## <small>4.0.1 (2018-03-07)</small>
+
+* Fix: Remove copying of flow types (#207) ([2fbe716](https://github.com/box/box-ui-elements/commit/2fbe716)), closes [#207](https://github.com/box/box-ui-elements/issues/207)
+
+
+
 <a name="4.0.0"></a>
 ## 4.0.0 (2018-03-07)
 
+* Release: 4.0.0 ([6403da3](https://github.com/box/box-ui-elements/commit/6403da3))
 * Upgrade: Preview v1.32.2 (#205) ([f70c7c8](https://github.com/box/box-ui-elements/commit/f70c7c8)), closes [#205](https://github.com/box/box-ui-elements/issues/205)
 * Fix: Get rid of the uploads reachability (#201) ([5ce4b06](https://github.com/box/box-ui-elements/commit/5ce4b06)), closes [#201](https://github.com/box/box-ui-elements/issues/201)
 * Fix: Make components work with immutable item entires (#196) ([e1005fa](https://github.com/box/box-ui-elements/commit/e1005fa)), closes [#196](https://github.com/box/box-ui-elements/issues/196)
