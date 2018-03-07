@@ -1,4 +1,4 @@
-import { isToday, isYesterday, formatTime } from '../datetime';
+import { isToday, isYesterday, formatTime, addTime } from '../datetime';
 
 describe('util/datetime/isToday()', () => {
     test('should return true for today', () => {
@@ -45,5 +45,14 @@ describe('util/datetime/formatTime()', () => {
     test('should correctly format 0 seconds', () => {
         const result = formatTime(0);
         expect(result).toBe('0:00');
+    });
+});
+
+describe('util/datetime/addTime()', () => {
+    test('should correctly add time', () => {
+        const TEN_MIN_IN_MS = 600000;
+        const date = new Date('1995-12-17T03:24:00');
+        const result = addTime(date, TEN_MIN_IN_MS);
+        expect(result.getMinutes()).toBe(34);
     });
 });

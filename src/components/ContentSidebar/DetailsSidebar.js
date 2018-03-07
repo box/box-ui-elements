@@ -17,6 +17,9 @@ import SidebarSkills from './Skills/SidebarSkills';
 import type { BoxItem } from '../../flowTypes';
 import DateField from '../Date';
 import './DetailsSidebar.scss';
+import { addTime } from '../../util/datetime';
+
+const ONE_MINUTE_IN_MS = 60000;
 
 type Props = {
     file: BoxItem,
@@ -55,7 +58,11 @@ const DetailsSidebar = ({
     }
 
     const onDescriptionChangeEditable = getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined;
-    const sharedLinkExpiration = getProp(file, 'shared_link.unshared_at');
+    const sharedLinkExpiration = new Date(getProp(file, 'shared_link.unshared_at'));
+    // One minute is added to account for dates set via a date picker.
+    // These dates will actually be stored as 11:59PM the night before the item expires.
+    const normalizedSharedLinkExpiration = addTime(sharedLinkExpiration, ONE_MINUTE_IN_MS);
+    const normalizedSharedLinkExpirationString = normalizedSharedLinkExpiration.toISOString();
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
@@ -64,7 +71,7 @@ const DetailsSidebar = ({
                     <SharedLinkExpirationNotice
                         expiration={
                             <DateField
-                                date={sharedLinkExpiration}
+                                date={normalizedSharedLinkExpirationString}
                                 dateFormat={{
                                     month: 'short',
                                     day: 'numeric',
