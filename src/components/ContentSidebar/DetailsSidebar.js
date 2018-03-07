@@ -8,12 +8,14 @@ import React from 'react';
 import getProp from 'lodash/get';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
+import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
 import type { BoxItem } from '../../flowTypes';
+import DateField from '../Date';
 import './DetailsSidebar.scss';
 
 type Props = {
@@ -53,9 +55,30 @@ const DetailsSidebar = ({
     }
 
     const onDescriptionChangeEditable = getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined;
+    const sharedLinkExpiration = getProp(file, 'shared_link.unshared_at');
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
+            <SidebarSection>
+                {sharedLinkExpiration && (
+                    <SharedLinkExpirationNotice
+                        expiration={
+                            <DateField
+                                date={sharedLinkExpiration}
+                                dateFormat={{
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                }}
+                                includeCommas
+                                intl
+                                relative={false}
+                            />
+                        }
+                    />
+                )}
+            </SidebarSection>
+
             {hasSkills && (
                 <SidebarSkills
                     metadata={file.metadata}
