@@ -81,7 +81,7 @@ class SidebarSection extends PureComponent<Props, State> {
                         {title}
                     </PlainButton>
                 )}
-                {isOpen && <div className='bcs-section-content'>{children}</div>}
+                {(isOpen || !title) && <div className='bcs-section-content'>{children}</div>}
             </div>
         );
     }

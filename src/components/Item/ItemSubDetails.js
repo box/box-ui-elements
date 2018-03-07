@@ -23,7 +23,7 @@ const ItemSubDetails = ({ view, item }: Props) => {
     const isRecents: boolean = view === VIEW_RECENTS;
     const date: string = isRecents ? interacted_at || modified_at : modified_at;
     const { size }: BoxItem = item;
-    const DateValue = <Datefield date={date} />;
+    const DateValue = <Datefield date={date} omitCommas />;
 
     let message = messages.modifiedDateBy;
     if (isRecents) {

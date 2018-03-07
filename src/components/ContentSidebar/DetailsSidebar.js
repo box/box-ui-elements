@@ -70,8 +70,6 @@ const DetailsSidebar = ({
                                     day: 'numeric',
                                     year: 'numeric'
                                 }}
-                                includeCommas
-                                intl
                                 relative={false}
                             />
                         }

@@ -13,13 +13,22 @@ import './DateField.scss';
 type Props = {
     date: string,
     dateFormat?: Object,
-    includeCommas?: boolean,
+    omitCommas?: boolean,
     relative: boolean,
     capitalize: boolean,
     intl: any
 };
 
-const DateField = ({ date, dateFormat, includeCommas, intl, relative = true, capitalize = false }: Props) => {
+const DEFAULT_DATE_FORMAT = { weekday: 'short', month: 'short', year: 'numeric', day: 'numeric' };
+
+const DateField = ({ 
+    date, 
+    dateFormat = DEFAULT_DATE_FORMAT, 
+    omitCommas = false, 
+    intl, 
+    relative = true, 
+    capitalize = false 
+}: Props) => {
     const d = new Date(date);
     const isTodaysDate = isToday(d);
     const isYesterdaysDate = isYesterday(d);
@@ -36,13 +45,8 @@ const DateField = ({ date, dateFormat, includeCommas, intl, relative = true, cap
     }
 
     let formattedDate = intl.formatDate(d, dateFormat);
-    formattedDate = includeCommas ? formattedDate : formattedDate.replace(/,/g, '');
+    formattedDate = omitCommas ? formattedDate.replace(/,/g, '') : formattedDate;
     return <span>{formattedDate}</span>;
-};
-
-DateField.defaultProps = {
-    dateFormat: { weekday: 'short', month: 'short', year: 'numeric', day: 'numeric' },
-    includeCommas: false
 };
 
 export default injectIntl(DateField);
