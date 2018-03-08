@@ -1,6 +1,6 @@
 /* eslint-disable */
 const workerFarm = require('worker-farm');
-const locales = require('./locales');
+const locales = require('box-locales');
 const numCPUs = require('os').cpus().length;
 const execSync = require('child_process').execSync;
 const path = require('path');
