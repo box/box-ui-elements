@@ -373,6 +373,7 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!this.preview) {
             this.preview = new Preview();
             this.preview.addListener('load', this.onPreviewLoad);
+            this.preview.addListener('navigate', onNavigate);
         }
 
         if (this.preview.getCurrentViewer()) {
