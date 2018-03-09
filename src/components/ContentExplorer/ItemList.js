@@ -13,19 +13,19 @@ import 'react-virtualized/styles.css';
 import KeyBinder from '../KeyBinder';
 import headerCellRenderer from './headerCellRenderer';
 import sizeCellRenderer from './sizeCellRenderer';
-import dateCellRenderer from './dateCellRenderer';
 import nameCellRenderer from '../Item/nameCellRenderer';
+import modifiedCellRenderer from '../Item/modifiedCellRenderer';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { focus } from '../../util/dom';
 import messages from '../messages';
 import {
-    FIELD_NAME,
-    FIELD_ID,
-    FIELD_MODIFIED_AT,
-    FIELD_INTERACTED_AT,
-    FIELD_SIZE,
-    VIEW_RECENTS
+  FIELD_NAME,
+  FIELD_ID,
+  FIELD_MODIFIED_AT,
+  FIELD_INTERACTED_AT,
+  FIELD_SIZE,
+  VIEW_RECENTS,
 } from '../../constants';
 import type { View, Collection } from '../../flowTypes';
 import './ItemList.scss';
@@ -52,84 +52,86 @@ type Props = {
     onSortChange: Function,
     tableRef: Function,
     currentCollection: Collection,
-    intl: any
+    intl: any,
 };
 
 const ItemList = ({
-    view,
-    isSmall,
-    isTouch,
+  view,
+  isSmall,
+  isTouch,
+  rootId,
+  rootElement,
+  canShare,
+  canDownload,
+  canDelete,
+  canPreview,
+  canRename,
+  onItemClick,
+  onItemSelect,
+  onItemDelete,
+  onItemDownload,
+  onItemRename,
+  onItemShare,
+  onItemPreview,
+  onSortChange,
+  currentCollection,
+  tableRef,
+  focusedRow,
+  intl,
+}: Props) => {
+  const nameCell = nameCellRenderer(
     rootId,
+    view,
     rootElement,
+    onItemClick,
+    onItemSelect,
+    canPreview,
+    isSmall, // shows details if false
+    isTouch,
+  );
+  const modifiedCell = modifiedCellRenderer(rootId, view);
+  const iconCell = iconCellRenderer();
+  const sizeAccessCell = sizeCellRenderer();
+  const moreOptionsCell = moreOptionsCellRenderer(
+    canPreview,
     canShare,
     canDownload,
     canDelete,
-    canPreview,
     canRename,
-    onItemClick,
     onItemSelect,
     onItemDelete,
     onItemDownload,
     onItemRename,
     onItemShare,
     onItemPreview,
-    onSortChange,
-    currentCollection,
-    tableRef,
-    focusedRow,
-    intl
-}: Props) => {
-    const nameCell = nameCellRenderer(
-        rootId,
-        view,
-        rootElement,
-        onItemClick,
-        onItemSelect,
-        canPreview,
-        isSmall, // shows details if false
-        isTouch
-    );
-    const iconCell = iconCellRenderer();
-    const dateCell = dateCellRenderer();
-    const sizeAccessCell = sizeCellRenderer();
-    const moreOptionsCell = moreOptionsCellRenderer(
-        canPreview,
-        canShare,
-        canDownload,
-        canDelete,
-        canRename,
-        onItemSelect,
-        onItemDelete,
-        onItemDownload,
-        onItemRename,
-        onItemShare,
-        onItemPreview,
-        isSmall,
-        rootElement
-    );
-    const isRecents: boolean = view === VIEW_RECENTS;
-    const { id, items = [], sortBy, sortDirection }: Collection = currentCollection;
-    const rowCount: number = items.length;
-    const rowClassName = ({ index }) => {
-        if (index === -1) {
-            return 'bce-item-header-row';
-        }
-        const { selected } = items[index];
-        return classNames(`bce-item-row bce-item-row-${index}`, {
-            'bce-item-row-selected': selected
-        });
-    };
-    const sort = ({ sortBy: by, sortDirection: direction }) => {
-        onSortChange(by, direction);
-    };
+    isSmall,
+    rootElement,
+  );
+  const isRecents: boolean = view === VIEW_RECENTS;
+  const {
+    id, items = [], sortBy, sortDirection,
+  }: Collection = currentCollection;
+  const rowCount: number = items.length;
+  const rowClassName = ({ index }) => {
+    if (index === -1) {
+      return 'bce-item-header-row';
+    }
+    const { selected } = items[index];
+    return classNames(`bce-item-row bce-item-row-${index}`, {
+      'bce-item-row-selected': selected,
+    });
+  };
+  const sort = ({ sortBy: by, sortDirection: direction }) => {
+    onSortChange(by, direction);
+  };
 
-    return (
+  return (
         <KeyBinder
             id={id}
             items={items}
             columnCount={1}
             rowCount={rowCount}
-            className='bce-item-grid'
+            className="bce-item-grid"
             onRename={onItemRename}
             onShare={onItemShare}
             onDownload={onItemDownload}
@@ -180,22 +182,23 @@ const ItemList = ({
                             />
                             {isSmall ? null : (
                                 <Column
-                                    className='bce-item-coloumn'
+                                    className="bce-item-coloumn"
                                     label={
                                         isRecents
                                             ? intl.formatMessage(messages.interacted)
                                             : intl.formatMessage(messages.modified)
                                     }
                                     dataKey={isRecents ? FIELD_INTERACTED_AT : FIELD_MODIFIED_AT}
-                                    cellRenderer={dateCell}
+                                    cellRenderer={modifiedCell}
                                     headerRenderer={headerCellRenderer}
-                                    width={135}
+                                    width={300}
+                                    flexGrow={1}
                                     flexShrink={0}
                                 />
                             )}
                             {isSmall ? null : (
                                 <Column
-                                    className='bce-item-coloumn'
+                                    className="bce-item-coloumn"
                                     label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}
@@ -216,7 +219,7 @@ const ItemList = ({
                 </AutoSizer>
             )}
         </KeyBinder>
-    );
+  );
 };
 
 export default injectIntl(ItemList);
