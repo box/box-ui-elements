@@ -210,13 +210,13 @@ class Item extends Base {
     /**
      * Handles response for rename
      *
-     * @param {BoxItem} item - The updated item
+     * @param {BoxItem} data - The updated item
      * @return {void}
      */
-    renameSuccessHandler = (item: BoxItem): void => {
+    renameSuccessHandler = ({ data }: { data: BoxItem }): void => {
         // Get rid of all searches
         this.getCache().unsetAll(CACHE_PREFIX_SEARCH);
-        const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'name', item.name);
+        const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'name', data.name);
         this.successCallback(updatedObject);
     };
 
@@ -259,11 +259,11 @@ class Item extends Base {
     /**
      * Handles response for shared link
      *
-     * @param {BoxItem} item - The updated item
+     * @param {BoxItem} data - The updated item
      * @return {void}
      */
-    shareSuccessHandler = (item: BoxItem): void => {
-        const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', item.shared_link);
+    shareSuccessHandler = ({ data }: { data: BoxItem }): void => {
+        const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
         this.successCallback(updatedObject);
     };
 

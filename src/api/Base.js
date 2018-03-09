@@ -6,7 +6,6 @@
 
 import noop from 'lodash/noop';
 import Xhr from '../util/Xhr';
-import UploadsReachability from './uploads/UploadReachability';
 import Cache from '../util/Cache';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
 import type { Options } from '../flowTypes';
@@ -52,8 +51,6 @@ class Base {
      */
     consoleError: Function;
 
-    uploadsReachability: UploadsReachability;
-
     /**
      * [constructor]
      *
@@ -77,7 +74,6 @@ class Base {
         });
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
-        this.uploadsReachability = new UploadsReachability(options.token, this.apiHost);
         this.consoleLog = !!options.consoleLog && !!window.console ? window.console.log || noop : noop;
         this.consoleError = !!options.consoleError && !!window.console ? window.console.error || noop : noop;
     }
@@ -89,16 +85,6 @@ class Base {
      */
     destroy(): void {
         this.destroyed = true;
-    }
-
-    /**
-     * Update upload host with reachable url
-     *
-     * @return {Promise<*>}
-     */
-    async updateReachableUploadHost(): Promise<*> {
-        this.uploadHost = await this.uploadsReachability.getReachableUploadHost();
-        this.options.uploadHost = this.uploadHost;
     }
 
     /**
@@ -114,9 +100,19 @@ class Base {
      *
      * @return {string} base url
      */
-    getBaseUrl(): string {
+    getBaseApiUrl(): string {
         const suffix: string = this.apiHost.endsWith('/') ? '2.0' : '/2.0';
         return `${this.apiHost}${suffix}`;
+    }
+
+    /**
+     * Base URL for api uploads
+     *
+     * @return {string} base url
+     */
+    getBaseUploadUrl(): string {
+        const suffix: string = this.uploadHost.endsWith('/') ? 'api/2.0' : '/api/2.0';
+        return `${this.uploadHost}${suffix}`;
     }
 
     /**

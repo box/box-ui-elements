@@ -95,7 +95,7 @@ class Folder extends Item {
      */
     getUrl(id?: string): string {
         const suffix: string = id ? `/${id}` : '';
-        return `${this.getBaseUrl()}/folders${suffix}`;
+        return `${this.getBaseApiUrl()}/folders${suffix}`;
     }
 
     /**
@@ -162,12 +162,12 @@ class Folder extends Item {
      * @param {Object} response
      * @return {void}
      */
-    folderSuccessHandler = (response: BoxItem): void => {
+    folderSuccessHandler = ({ data }: { data: BoxItem }): void => {
         if (this.isDestroyed()) {
             return;
         }
 
-        const { item_collection }: BoxItem = response;
+        const { item_collection }: BoxItem = data;
         if (!item_collection) {
             throw getBadItemError();
         }
@@ -197,7 +197,7 @@ class Folder extends Item {
 
         this.getCache().set(
             this.key,
-            Object.assign({}, response, {
+            Object.assign({}, data, {
                 item_collection: Object.assign({}, item_collection, {
                     isLoaded,
                     entries: this.itemCache
@@ -299,8 +299,8 @@ class Folder extends Item {
      * @param {Function} errorCallback - error callback
      * @return {void}
      */
-    createSuccessHandler = (item: BoxItem): void => {
-        const { id: childId } = item;
+    createSuccessHandler = ({ data }: { data: BoxItem }): void => {
+        const { id: childId } = data;
         if (this.isDestroyed() || !childId) {
             return;
         }
@@ -318,10 +318,10 @@ class Folder extends Item {
             throw getBadItemError();
         }
 
-        cache.set(childKey, item);
+        cache.set(childKey, data);
         item_collection.entries = [childKey].concat(entries);
         item_collection.total_count = total_count + 1;
-        this.successCallback(item);
+        this.successCallback(data);
     };
 
     /**

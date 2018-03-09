@@ -1,6 +1,34 @@
+<a name="4.0.1"></a>
+## <small>4.0.1 (2018-03-07)</small>
+
+* Fix: Remove copying of flow types (#207) ([2fbe716](https://github.com/box/box-ui-elements/commit/2fbe716)), closes [#207](https://github.com/box/box-ui-elements/issues/207)
+
+
+
+<a name="4.0.0"></a>
+## 4.0.0 (2018-03-07)
+
+* Release: 4.0.0 ([6403da3](https://github.com/box/box-ui-elements/commit/6403da3))
+* Upgrade: Preview v1.32.2 (#205) ([f70c7c8](https://github.com/box/box-ui-elements/commit/f70c7c8)), closes [#205](https://github.com/box/box-ui-elements/issues/205)
+* Fix: Get rid of the uploads reachability (#201) ([5ce4b06](https://github.com/box/box-ui-elements/commit/5ce4b06)), closes [#201](https://github.com/box/box-ui-elements/issues/201)
+* Fix: Make components work with immutable item entires (#196) ([e1005fa](https://github.com/box/box-ui-elements/commit/e1005fa)), closes [#196](https://github.com/box/box-ui-elements/issues/196)
+* Fix: Remove hard coded fileId value from input (#186) ([433352d](https://github.com/box/box-ui-elements/commit/433352d)), closes [#186](https://github.com/box/box-ui-elements/issues/186)
+* New: Add ability to open a default folder for content picker (#181) ([504da6c](https://github.com/box/box-ui-elements/commit/504da6c)), closes [#181](https://github.com/box/box-ui-elements/issues/181)
+* New: Add editable file description (#190) ([484c4fe](https://github.com/box/box-ui-elements/commit/484c4fe)), closes [#190](https://github.com/box/box-ui-elements/issues/190)
+* New: Adding simple interaction events (#182) ([473ae76](https://github.com/box/box-ui-elements/commit/473ae76)), closes [#182](https://github.com/box/box-ui-elements/issues/182)
+* Chore: Cleaning up export syntax and fixing flow errors (#187) ([ad02704](https://github.com/box/box-ui-elements/commit/ad02704)), closes [#187](https://github.com/box/box-ui-elements/issues/187)
+* Chore: Refactor merge to return the merged item (#195) ([25208ab](https://github.com/box/box-ui-elements/commit/25208ab)), closes [#195](https://github.com/box/box-ui-elements/issues/195)
+* Breaking: Add request and response intercepting to the elements (#194) ([baf344e](https://github.com/box/box-ui-elements/commit/baf344e)), closes [#194](https://github.com/box/box-ui-elements/issues/194)
+* Breaking: Use axios instead of fetch (#188) ([701a2c0](https://github.com/box/box-ui-elements/commit/701a2c0)), closes [#188](https://github.com/box/box-ui-elements/issues/188)
+* Update: Preview sidebar api improvements (#185) ([e4f5621](https://github.com/box/box-ui-elements/commit/e4f5621)), closes [#185](https://github.com/box/box-ui-elements/issues/185)
+* Mojito: Update translations (#179) ([245b797](https://github.com/box/box-ui-elements/commit/245b797)), closes [#179](https://github.com/box/box-ui-elements/issues/179)
+
+
+
 <a name="3.6.1"></a>
 ## <small>3.6.1 (2018-02-09)</small>
 
+* Release: 3.6.1 ([7ee663b](https://github.com/box/box-ui-elements/commit/7ee663b))
 * Update: Simplifying loading of preview to prevent duplicate API calls (#177) ([66620b8](https://github.com/box/box-ui-elements/commit/66620b8)), closes [#177](https://github.com/box/box-ui-elements/issues/177)
 * Update: When skills are present show the details sidebar (#174) ([8df1428](https://github.com/box/box-ui-elements/commit/8df1428)), closes [#174](https://github.com/box/box-ui-elements/issues/174)
 * Chore: Adding fileId and token inputs to sidebar.html (#176) ([48f2278](https://github.com/box/box-ui-elements/commit/48f2278)), closes [#176](https://github.com/box/box-ui-elements/issues/176)
