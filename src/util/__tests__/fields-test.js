@@ -24,6 +24,7 @@ import {
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_FILE_VERSION,
+    FIELD_IS_DOWNLOAD_AVAILABLE,
     METADATA_SKILLS
 } from '../../constants';
 
@@ -72,7 +73,8 @@ describe('util/fields/getFieldsAsString()', () => {
                     FIELD_SHA1,
                     FIELD_WATERMARK_INFO,
                     FIELD_AUTHENTICATED_DOWNLOAD_URL,
-                    FIELD_FILE_VERSION
+                    FIELD_FILE_VERSION,
+                    FIELD_IS_DOWNLOAD_AVAILABLE
                 ].join(',')
             );
         });
@@ -103,7 +105,8 @@ describe('util/fields/getFieldsAsString()', () => {
                     FIELD_SHA1,
                     FIELD_WATERMARK_INFO,
                     FIELD_AUTHENTICATED_DOWNLOAD_URL,
-                    FIELD_FILE_VERSION
+                    FIELD_FILE_VERSION,
+                    FIELD_IS_DOWNLOAD_AVAILABLE
                 ].join(',')
             );
         });
@@ -112,7 +115,7 @@ describe('util/fields/getFieldsAsString()', () => {
         test('should return false for incomplete file object', () => {
             expect(isValidBoxFile()).toBeFalsy();
         });
-        test('should return true for incomplete file object', () => {
+        test('should return true for complete file object', () => {
             expect(
                 isValidBoxFile({
                     type: 'file',
@@ -138,7 +141,8 @@ describe('util/fields/getFieldsAsString()', () => {
                     sha1: '81a2233716220ed21707d9e158b69019739d1062',
                     watermark_info: {},
                     authenticated_download_url: '',
-                    file_version: {}
+                    file_version: {},
+                    is_download_available: true
                 })
             ).toBeTruthy();
         });

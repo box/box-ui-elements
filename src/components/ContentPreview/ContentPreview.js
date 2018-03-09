@@ -549,6 +549,30 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
+     * Downloads file.
+     *
+     * @public
+     * @return {void}
+     */
+    download = () => {
+        if (this.preview) {
+            this.preview.download();
+        }
+    };
+
+    /**
+     * Prints file.
+     *
+     * @public
+     * @return {void}
+     */
+    print = () => {
+        if (this.preview) {
+            this.preview.print();
+        }
+    };
+
+    /**
      * Mouse move handler thati s throttled and show
      * the navigation arrows if applicable.
      *
@@ -650,6 +674,8 @@ class ContentPreview extends PureComponent<Props, State> {
                             isSidebarVisible={isSidebarVisible}
                             onClose={onClose}
                             onSidebarToggle={onSidebarToggle}
+                            onPrint={this.print}
+                            onDownload={this.download}
                         />
                     )}
                     <div className='bcpr-body'>

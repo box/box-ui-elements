@@ -1581,9 +1581,9 @@ box-locales@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/box-locales/-/box-locales-0.0.1.tgz#1724959f293ae85f235b681b775d0f1a52a76b54"
 
-box-react-ui@^22.4.9:
-  version "22.4.9"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-22.4.9.tgz#7afcaf6ffc16593b17c68d1d9706956c01bcac89"
+box-react-ui@^22.5.0:
+  version "22.5.0"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-22.5.0.tgz#c27d5c7236e95c80ec6a3212890606cabfa5ee52"
   dependencies:
     yui "^3.18.1"
 

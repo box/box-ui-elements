@@ -81,6 +81,7 @@ export const FIELD_SHA1 = 'sha1';
 export const FIELD_WATERMARK_INFO = 'watermark_info';
 export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
 export const FIELD_FILE_VERSION = 'file_version';
+export const FIELD_IS_DOWNLOAD_AVAILABLE = 'is_download_available';
 export const METADATA_SKILLS = 'metadata.global.boxSkillsCards';
 
 /* ----------------------- Permissions --------------------------- */
