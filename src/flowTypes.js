@@ -179,7 +179,8 @@ export type BoxItem = {
     created_by?: User,
     selected?: boolean,
     metadata?: MetadataType,
-    file_version?: BoxItemVersion
+    file_version?: BoxItemVersion,
+    is_download_available: boolean
 };
 
 export type BoxItemCollection = {
