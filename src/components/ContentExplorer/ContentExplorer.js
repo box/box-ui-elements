@@ -85,6 +85,7 @@ type Props = {
     uploadHost: string,
     token: Token,
     isSmall: boolean,
+    isMedium: boolean,
     isLarge: boolean,
     isTouch: boolean,
     autoFocus: boolean,
@@ -1175,6 +1176,7 @@ class ContentExplorer extends Component<Props, State> {
             staticHost,
             uploadHost,
             isSmall,
+            isMedium,
             isTouch,
             className,
             measureRef,
@@ -1240,6 +1242,7 @@ class ContentExplorer extends Component<Props, State> {
                             view={view}
                             rootId={rootFolderId}
                             isSmall={isSmall}
+                            isMedium={isMedium}
                             isTouch={isTouch}
                             rootElement={this.rootElement}
                             focusedRow={focusedRow}

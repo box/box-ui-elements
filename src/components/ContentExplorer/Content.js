@@ -43,6 +43,7 @@ type Props = {
     onItemPreview: Function,
     onSortChange: Function,
     isSmall: boolean,
+    isMedium: boolean,
     isTouch: boolean,
     focusedRow: number,
     currentCollection: Collection
@@ -51,6 +52,7 @@ type Props = {
 const Content = ({
     view,
     isSmall,
+    isMedium,
     isTouch,
     rootId,
     rootElement,
@@ -81,6 +83,7 @@ const Content = ({
             <ItemList
                 view={view}
                 isSmall={isSmall}
+                isMedium={isMedium}
                 isTouch={isTouch}
                 rootId={rootId}
                 rootElement={rootElement}

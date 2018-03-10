@@ -5,32 +5,45 @@
  */
 
 import React from 'react';
-import { injectIntl } from 'react-intl';
-import messages from '../messages';
+import { FormattedMessage } from 'react-intl';
 import getSize from '../../util/size';
 import Datefield from '../Date';
+import messages from '../messages';
 import { VIEW_RECENTS } from '../../constants';
 import type { BoxItem, View } from '../../flowTypes';
 
 type Props = {
     item: BoxItem,
-    view: View,
-    intl: any
+    view: View
 };
 
-const ItemSubDetails = ({ view, item, intl }: Props) => {
-    const { size, modified_at = '', interacted_at = '' }: BoxItem = item;
+const ItemSubDetails = ({ view, item }: Props) => {
+    const { modified_at = '', interacted_at = '', modified_by }: BoxItem = item;
+    const modifiedBy: string = modified_by ? modified_by.name || '' : '';
     const isRecents: boolean = view === VIEW_RECENTS;
     const date: string = isRecents ? interacted_at || modified_at : modified_at;
-    const message = isRecents ? intl.formatMessage(messages.interacted) : intl.formatMessage(messages.modified);
+    const { size }: BoxItem = item;
+    const DateValue = <Datefield date={date} />;
+
+    let message = messages.modifiedDateBy;
+    if (isRecents) {
+        message = messages.interactedDate;
+    } else if (!modifiedBy) {
+        message = messages.modifiedDate;
+    }
 
     return (
         <span>
-            <span>{message}&nbsp;</span>
-            <Datefield date={date} />
+            <FormattedMessage
+                {...message}
+                values={{
+                    date: DateValue,
+                    name: modifiedBy
+                }}
+            />
             <span>&nbsp;-&nbsp;{getSize(size)}</span>
         </span>
     );
 };
 
-export default injectIntl(ItemSubDetails);
+export default ItemSubDetails;
