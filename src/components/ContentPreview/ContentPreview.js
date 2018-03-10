@@ -363,7 +363,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     loadPreview = (): void => {
         const { Preview } = global.Box;
-        const { fileId, token, onLoad, onNavigate, collection, ...rest }: Props = this.props;
+        const { fileId, token, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !token) {
@@ -373,7 +373,6 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!this.preview) {
             this.preview = new Preview();
             this.preview.addListener('load', this.onPreviewLoad);
-            this.preview.addListener('navigate', onNavigate);
         }
 
         if (this.preview.getCurrentViewer()) {
@@ -509,15 +508,17 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     navigateToIndex(index) {
-        const { collection }: Props = this.props;
+        const { collection, onNavigate }: Props = this.props;
         const { length } = collection;
         if (length < 2 || index < 0 || index > length - 1) {
             return;
         }
 
         const fileOrId = collection[index];
+        const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
+        onNavigate(fileId);
         this.destroyPreview();
-        this.fetchFile(typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId);
+        this.fetchFile(fileId);
     }
 
     /**
