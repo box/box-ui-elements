@@ -1,6 +1,15 @@
+<a name="4.2.0"></a>
+## 4.2.0 (2018-03-10)
+
+* Fix: Preview navigation hook (#214) ([00096b7](https://github.com/box/box-ui-elements/commit/00096b7)), closes [#214](https://github.com/box/box-ui-elements/issues/214)
+* New: Add download and print functionality in Preview in Explorer (#213) ([c93c045](https://github.com/box/box-ui-elements/commit/c93c045)), closes [#213](https://github.com/box/box-ui-elements/issues/213)
+
+
+
 <a name="4.1.0"></a>
 ## 4.1.0 (2018-03-09)
 
+* Release: 4.1.0 ([6587cad](https://github.com/box/box-ui-elements/commit/6587cad))
 * Mojito: Update translations (#211) ([ca2e208](https://github.com/box/box-ui-elements/commit/ca2e208)), closes [#211](https://github.com/box/box-ui-elements/issues/211)
 * Fix: Hookup navigate event of preview (#210) ([16f72a1](https://github.com/box/box-ui-elements/commit/16f72a1)), closes [#210](https://github.com/box/box-ui-elements/issues/210)
 * New: Add user name if available to date coloumn (#209) ([bf74d5f](https://github.com/box/box-ui-elements/commit/bf74d5f)), closes [#209](https://github.com/box/box-ui-elements/issues/209)
