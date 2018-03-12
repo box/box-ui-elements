@@ -14,6 +14,7 @@ const noReactSuffix = '.no.react';
 const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'dev';
 const language = process.env.LANGUAGE;
+const react = process.env.REACT === 'true';
 const outputDir = process.env.OUTPUT;
 const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
@@ -139,4 +140,4 @@ function getConfig(isReactExternalized) {
     return config;
 }
 
-module.exports = [getConfig(true), getConfig(false)];
+module.exports = isDev ? [getConfig(true), getConfig(false)] : getConfig(!react);
