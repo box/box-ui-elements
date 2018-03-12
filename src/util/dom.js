@@ -16,7 +16,12 @@ export function isInputElement(element: HTMLElement | EventTarget | null): boole
         return false;
     }
     const tag = element.tagName.toLowerCase();
-    return tag === 'input' || tag === 'select' || tag === 'textarea';
+    return (
+        tag === 'input' ||
+        tag === 'select' ||
+        tag === 'textarea' ||
+        (tag === 'div' && !!element.getAttribute('contenteditable'))
+    );
 }
 
 /**
@@ -54,8 +59,12 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
  * @param {boolean|void} [focusRoot] - if root should be focused
  * @return {void}
  */
-export function focus(root: HTMLElement, selector: string, focusRoot: boolean = true): void {
-    if (!root || !selector) {
+export function focus(root: HTMLElement, selector?: string, focusRoot: boolean = true): void {
+    if (!root) {
+        return;
+    }
+    if (!selector) {
+        root.focus();
         return;
     }
     const element = root.querySelector(selector);

@@ -19,6 +19,7 @@ import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
 import { isValidBoxFile } from '../../util/fields';
 import TokenService from '../../util/TokenService';
+import { isInputElement, focus } from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -77,6 +78,7 @@ class ContentPreview extends PureComponent<Props, State> {
     api: API;
     previewContainer: ?HTMLDivElement;
     mouseMoveTimeoutID: TimeoutID;
+    rootElement: HTMLElement;
 
     static defaultProps = {
         className: '',
@@ -182,6 +184,8 @@ class ContentPreview extends PureComponent<Props, State> {
         this.loadStylesheet();
         this.loadScript();
         this.fetchFile(fileId);
+        this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
+        focus(this.rootElement);
     }
 
     /**
@@ -383,6 +387,7 @@ class ContentPreview extends PureComponent<Props, State> {
             container: `#${this.id} .bcpr-content`,
             header: 'none',
             skipServerUpdate: true,
+            useHotkeys: false,
             ...rest
         });
     };
@@ -580,7 +585,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    mouseMoveHandler = throttle(
+    onMouseMove = throttle(
         () => {
             const viewer = this.getPreviewer();
             const isPreviewing = !!viewer;
@@ -612,6 +617,50 @@ class ContentPreview extends PureComponent<Props, State> {
         1000,
         true
     );
+
+    /**
+     * Keyboard events
+     *
+     * @private
+     * @return {void}
+     */
+    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+        if (isInputElement(event.target)) {
+            return;
+        }
+
+        let consumed = false;
+        const key = event.key.toLowerCase();
+        const viewer = this.getPreviewer();
+
+        if (!key || !viewer) {
+            return;
+        }
+
+        if (typeof viewer.onKeydown === 'function') {
+            consumed = !!viewer.onKeydown(key);
+        }
+
+        if (!consumed) {
+            switch (key) {
+                case 'arrowleft':
+                    this.navigateLeft();
+                    consumed = true;
+                    break;
+                case 'arrowright':
+                    this.navigateRight();
+                    consumed = true;
+                    break;
+                default:
+                // no-op
+            }
+        }
+
+        if (consumed) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    };
 
     /**
      * Holds the reference the preview container
@@ -666,9 +715,17 @@ class ContentPreview extends PureComponent<Props, State> {
             onSidebarToggle = null;
         }
 
+        /* eslint-disable jsx-a11y/no-static-element-interactions */
+        /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={`be bcpr ${className}`} ref={measureRef}>
+                <div
+                    id={this.id}
+                    className={`be bcpr ${className}`}
+                    ref={measureRef}
+                    onKeyDown={this.onKeyDown}
+                    tabIndex={0}
+                >
                     {hasHeader && (
                         <Header
                             file={file}
@@ -681,7 +738,7 @@ class ContentPreview extends PureComponent<Props, State> {
                         />
                     )}
                     <div className='bcpr-body'>
-                        <div className='bcpr-container' onMouseMove={this.mouseMoveHandler} ref={this.containerRef}>
+                        <div className='bcpr-container' onMouseMove={this.onMouseMove} ref={this.containerRef}>
                             <Measure bounds onResize={this.onResize}>
                                 {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
                             </Measure>
@@ -732,6 +789,8 @@ class ContentPreview extends PureComponent<Props, State> {
                 </div>
             </Internationalize>
         );
+        /* eslint-enable jsx-a11y/no-static-element-interactions */
+        /* eslint-enable jsx-a11y/no-noninteractive-tabindex */
     }
 }
 

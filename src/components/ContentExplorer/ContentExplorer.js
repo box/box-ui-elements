@@ -1086,7 +1086,6 @@ class ContentExplorer extends Component<Props, State> {
      * Keyboard events
      *
      * @private
-     * @inheritdoc
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
