@@ -1,9 +1,12 @@
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file Component for Activity feed
+ */
+
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import LoadingIndicator from '../../../components/loading-indicator';
-import { SelectorItemsPropType, UserPropType } from '../../../common/box-proptypes';
+import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 
 import ApprovalCommentForm from '../approval-comment-form';
 import Comment from '../comment';
@@ -15,8 +18,14 @@ import Keywords from '../keywords';
 import messages from '../messages';
 
 import './ActivityFeed.scss';
+import { User } from '../../../../flowTypes';
 
-const EmptyState = ({ isLoading, showCommentMessage }) => (
+type EmptyStateType = {
+    isLoading?: boolean,
+    showCommentMessage?: boolean
+};
+
+const EmptyState = ({ isLoading, showCommentMessage }: EmptyStateType) => (
     <div className='box-ui-activity-feed-empty-state'>
         <IconActivityFeedEmptyState />
         {isLoading ? (
@@ -36,9 +45,69 @@ const EmptyState = ({ isLoading, showCommentMessage }) => (
     </div>
 );
 
-EmptyState.propTypes = {
-    isLoading: PropTypes.bool,
-    showCommentMessage: PropTypes.bool
+type Comments = {
+    create: Function,
+    delete: Function
+};
+
+type Tasks = {
+    create?: Function,
+    delete?: Function,
+    edit?: Function,
+    onTaskAssignmentUpdate?: Function
+};
+
+type Contacts = {
+    getApproverWithQuery: Function,
+    getMentionWithQuery: Function
+};
+
+type Versions = {
+    info: Function
+};
+
+type SelectorItem = {
+    id?: string | number,
+    name: string
+};
+
+type SelectorItems = Array<SelectorItem>;
+
+type InputState = {
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
+    currentUser: User,
+    isDisabled?: boolean
+};
+
+type Item = {
+    type?: 'comment' | 'task' | 'file_version' | 'keywords',
+    createdAt?: any,
+    createdBy: User,
+    id: string
+};
+
+type Translations = {
+    translationEnabled?: boolean,
+    onTranslate?: boolean
+};
+
+type ActiveStateParams = {
+    currentUser: User,
+    handlers: {
+        comments: Comments,
+        tasks: Tasks,
+        contacts: Contacts,
+        versions: Versions
+    },
+    inputState: InputState,
+    items: Array<Item>,
+    onCommentDelete?: Function,
+    onTaskAssignmentUpdate?: Function,
+    onTaskDelete?: Function,
+    onTaskEdit?: Function,
+    onVersionInfo?: Function,
+    translations: Translations
 };
 
 const ActiveState = ({
@@ -52,7 +121,7 @@ const ActiveState = ({
     translations,
     inputState,
     handlers
-}) => (
+}: ActiveStateParams) => (
     <ul className='box-ui-activity-feed-active-state'>
         {items.map((item) => {
             switch (item.type) {
@@ -118,51 +187,6 @@ const ActiveState = ({
     </ul>
 );
 
-ActiveState.propTypes = {
-    currentUser: UserPropType.isRequired,
-    handlers: PropTypes.shape({
-        comments: PropTypes.shape({
-            create: PropTypes.func,
-            delete: PropTypes.func
-        }),
-        tasks: PropTypes.shape({
-            create: PropTypes.func,
-            delete: PropTypes.func,
-            onTaskAssignmentUpdate: PropTypes.func
-        }),
-        contacts: PropTypes.shape({
-            getApproverWithQuery: PropTypes.func.isRequired,
-            getMentionWithQuery: PropTypes.func.isRequired
-        }),
-        versions: PropTypes.shape({
-            info: PropTypes.func
-        })
-    }),
-    inputState: PropTypes.shape({
-        approverSelectorContacts: SelectorItemsPropType,
-        mentionSelectorContacts: SelectorItemsPropType,
-        currentUser: UserPropType.isRequired,
-        isDisabled: PropTypes.bool
-    }),
-    items: PropTypes.arrayOf(
-        PropTypes.shape({
-            type: PropTypes.oneOf(['comment', 'task', 'file_version', 'keywords']),
-            createdAt: PropTypes.any,
-            createdBy: UserPropType,
-            id: PropTypes.string.isRequired
-        })
-    ),
-    onCommentDelete: PropTypes.func,
-    onTaskAssignmentUpdate: PropTypes.func,
-    onTaskDelete: PropTypes.func,
-    onTaskEdit: PropTypes.func,
-    onVersionInfo: PropTypes.func,
-    translations: PropTypes.shape({
-        translationEnabled: PropTypes.bool,
-        onTranslate: PropTypes.func
-    })
-};
-
 function collapseFeedState(feedState) {
     return feedState.reduce((collapsedFeedState, feedItem) => {
         const previousFeedItem = collapsedFeedState.pop();
@@ -212,59 +236,37 @@ function shouldShowEmptyState(feedState) {
     return feedState.length === 0 || (feedState.length === 1 && feedState[0].type === 'file_version');
 }
 
-class ActivityFeed extends Component {
-    static propTypes = {
-        isLoading: PropTypes.bool,
-        feedState: PropTypes.arrayOf(
-            PropTypes.shape({
-                type: PropTypes.oneOf(['comment', 'task', 'file_version', 'keywords']),
-                createdAt: PropTypes.any,
-                createdBy: UserPropType,
-                id: PropTypes.string.isRequired
-            })
-        ),
-        inputState: PropTypes.shape({
-            approverSelectorContacts: SelectorItemsPropType,
-            mentionSelectorContacts: SelectorItemsPropType,
-            currentUser: UserPropType.isRequired,
-            isDisabled: PropTypes.bool
-        }),
-        handlers: PropTypes.shape({
-            comments: PropTypes.shape({
-                create: PropTypes.func,
-                delete: PropTypes.func
-            }),
-            tasks: PropTypes.shape({
-                create: PropTypes.func,
-                delete: PropTypes.func,
-                edit: PropTypes.func,
-                onTaskAssignmentUpdate: PropTypes.func
-            }),
-            contacts: PropTypes.shape({
-                getApproverWithQuery: PropTypes.func.isRequired,
-                getMentionWithQuery: PropTypes.func.isRequired
-            }),
-            versions: PropTypes.shape({
-                info: PropTypes.func
-            })
-        }),
-        translations: PropTypes.shape({
-            translationEnabled: PropTypes.bool,
-            onTranslate: PropTypes.func
-        })
-    };
+type ActivityFeedProps = {
+    isLoading?: boolean,
+    feedState: Array<Item>,
+    inputState: {
+        approverSelectorContacts?: SelectorItems,
+        mentionSelectorContacts?: SelectorItems,
+        currentUser: User,
+        isDisabled?: boolean
+    },
+    handlers: {
+        comments: Comments,
+        tasks: Tasks,
+        contacts: Contacts,
+        versions: Versions
+    },
+    translations: Translations
+};
 
+type ActivityFeedState = {
+    isInputOpen: boolean
+};
+
+class ActivityFeed extends Component<ActivityFeedProps, ActivityFeedState> {
     static defaultProps = {
         isLoading: false,
         feedState: []
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isInputOpen: false
-        };
-    }
+    state = {
+        isInputOpen: false
+    };
 
     onKeyDown = (event) => {
         const { nativeEvent } = event;
