@@ -1,0 +1,115 @@
+@import '../../../styles/variables';
+
+.box-ui-task {
+    &.is-pending {
+        .box-ui-task-approvers-container {
+            opacity: .4;
+        }
+    }
+
+    .box-ui-task-approvers-container {
+        margin-left: 49px;
+
+        .box-ui-task-approvers-header {
+            border-bottom: 1px solid $off-white;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+            margin-top: 5px;
+            padding-bottom: 6px;
+
+            strong {
+                color: $seventy-sixers;
+            }
+        }
+
+        .box-ui-task-due-date {
+            color: $nines;
+            font-size: 11px;
+
+            span:first-child {
+                padding-right: 3px;
+            }
+        }
+
+        .box-ui-task-pending-assignment,
+        .box-ui-task-completed-assignment,
+        .box-ui-task-rejected-assignment {
+            align-items: center;
+            border-radius: 4px;
+            display: flex;
+            font-weight: 600;
+            height: 34px;
+            justify-content: space-between;
+            margin-top: 10px;
+            padding-left: 8px;
+
+            .box-ui-task-assignment-name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .box-ui-task-assignment-actions {
+                display: flex;
+                justify-content: flex-end;
+                margin-right: 8px;
+            }
+        }
+
+        .box-ui-task-x-icon,
+        .box-ui-task-check-icon {
+            height: 18px;
+            width: 18px;
+        }
+
+        .box-ui-task-completed-assignment {
+            border: 1px solid $shady-acres;
+            color: $shady-acres;
+
+            .box-ui-task-assignment-actions {
+                flex-basis: 20px;
+            }
+
+            .box-ui-task-check-icon .fill-color {
+                fill: $shady-acres;
+            }
+        }
+
+        .box-ui-task-rejected-assignment {
+            border: 1px solid $amaranth;
+            color: $amaranth;
+
+            .box-ui-task-assignment-actions {
+                flex-basis: 20px;
+            }
+
+            .box-ui-task-x-icon .fill-color {
+                fill: $amaranth;
+            }
+        }
+
+        .box-ui-task-pending-assignment {
+            background-color: fade-out($box-blue, .9);
+            color: $box-blue;
+
+            .box-ui-task-assignment-actions {
+                flex-basis: 40px;
+            }
+
+            .box-ui-task-check-btn {
+                margin-right: 3px;
+                position: relative;
+            }
+
+            .box-ui-task-x-btn {
+                position: relative;
+            }
+
+            .box-ui-task-x-icon .fill-color,
+            .box-ui-task-check-icon .fill-color {
+                fill: $box-blue;
+            }
+        }
+    }
+}

@@ -1,0 +1,137 @@
+@import '../../../styles/variables';
+
+.comment-input-container {
+    border-top: solid 1px $off-white;
+    display: flex;
+
+    div[contentEditable="true"] {
+        width: auto;
+    }
+
+    .public-DraftEditorPlaceholder-root {
+        margin: 8px 10px;
+    }
+
+    &.comment-input-is-open {
+        .comment-input {
+            .public-DraftEditor-content {
+                max-height: 140px;
+                min-height: 68px;
+                overflow: auto;
+            }
+
+            ~ .comment-add-approver {
+                display: block;
+            }
+
+            ~ .comment-input-controls {
+                display: block;
+                text-align: right;
+            }
+        }
+
+        .date-picker-wrapper {
+            width: 166px;
+        }
+    }
+
+    .avatar-container {
+        height: 40px;
+        margin-left: 20px;
+        margin-right: 18px;
+        margin-top: 20px;
+    }
+
+    .comment-input-form-container {
+        flex: 1;
+        margin-right: 20px;
+        min-width: 0;
+
+        aside {
+            color: $eights;
+            margin-top: -8px;
+        }
+
+        .box-ui-comment-add-approver-checkbox {
+            margin-left: 0;
+            white-space: nowrap;
+        }
+
+        .comment-add-approver-date-input {
+            margin-left: 0;
+            margin-right: 0;
+
+            .date-picker-open-btn {
+                bottom: 6px;
+            }
+        }
+
+        .pill-selector-wrapper {
+            margin-left: 0;
+            width: 100%;
+
+            .pill-selector-input-wrapper {
+                width: auto;
+            }
+        }
+
+        input {
+            &[type='text'] {
+                width: 100%;
+            }
+        }
+
+        .comment-add-approver-fields-container {
+            border-top: 1px solid $off-white;
+            display: flex;
+            flex-direction: column;
+            padding-top: 9px;
+
+            input.pill-selector-hidden-input {
+                width: 1px;
+            }
+        }
+    }
+
+    .comment-input {
+        box-shadow: none;
+        margin-bottom: 15px;
+        margin-top: 20px;
+        max-height: 140px;
+        width: auto;
+
+        .mention-selector-wrapper,
+        .content-editable-container,
+        .content-editable {
+            margin: 0;
+            width: 100%;
+        }
+
+        ~ .comment-input-controls {
+            display: none;
+
+            .btn {
+                margin-bottom: 10px;
+                margin-right: 0;
+                margin-top: 0;
+            }
+        }
+
+        ~ .comment-add-approver {
+            display: none;
+        }
+
+        &:hover {
+            box-shadow: none;
+        }
+
+        &:empty {
+            &:before {
+                color: $seesee;
+                content: attr(placeholder);
+                cursor: text;
+                display: block;
+            }
+        }
+    }
+}

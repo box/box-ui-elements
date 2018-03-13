@@ -1,0 +1,52 @@
+@import '../../../styles/variables';
+
+.box-ui-collapsed-keywords,
+.box-ui-keywords {
+    align-items: center;
+    background-color: #f5ebfd;
+    border-radius: 4px;
+    color: #a64dee;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 9px;
+    width: 100%;
+
+    .box-ui-keywords-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .box-ui-keywords-message {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .box-ui-keywords-info {
+        flex: none;
+        position: relative;
+        height: 16px;
+        width: 16px;
+
+        path {
+            fill: #a64dee;
+        }
+    }
+
+    .box-ui-keywords-range {
+        white-space: nowrap;
+    }
+}
+
+.box-ui-keywords-actions-tooltip {
+    max-width: 250px;
+
+    > span {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}

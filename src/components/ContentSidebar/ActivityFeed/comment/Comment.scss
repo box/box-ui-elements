@@ -1,0 +1,161 @@
+@import '../../../styles/variables';
+
+.box-ui-comment-container {
+    position: relative;
+    z-index: 1;
+}
+
+.box-ui-comment {
+    display: flex;
+    margin-top: 23px;
+    opacity: .9999;
+    width: 100%;
+
+    &:hover,
+    &.is-focused {
+        .box-ui-comment-delete-container {
+            opacity: 1;
+        }
+        .box-ui-comment-edit-container {
+            opacity: 1;
+        }
+    }
+
+    .box-ui-comment-delete-container {
+        z-index: 1;
+        margin-top: 3px;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        &.is-confirming {
+            opacity: 1;
+        }
+
+        .flyout-wrapper .overlay-wrapper .overlay {
+            min-width: 120px;
+
+            .overlay-title {
+                white-space: nowrap;
+            }
+        }
+        .flyout-wrapper .overlay-wrapper.left {
+            .overlay {
+                padding: 10px 15px;
+                transform: translateY(-20%);
+            }
+            .arrow {
+                top: 20%;
+            }
+        }
+
+        .box-ui-comment-delete {
+            vertical-align: top;
+        }
+
+        .box-ui-comment-delete-no,
+        .box-ui-comment-delete-yes {
+            margin: 0 3px;
+        }
+    }
+
+    .box-ui-comment-edit-container {
+        margin-top: 3px;
+        opacity: 0;
+        position: absolute;
+        right: 16px;
+        top: 0;
+
+        .flyout-wrapper .overlay-wrapper .overlay {
+            min-width: 120px;
+
+            .overlay-title {
+                white-space: nowrap;
+            }
+        }
+
+        .flyout-wrapper .overlay-wrapper.left {
+            .overlay {
+                padding: 10px 15px;
+                transform: translateY(-20%);
+            }
+
+            .arrow {
+                top: 20%;
+            }
+        }
+
+        .box-ui-comment-edit {
+            vertical-align: top;
+        }
+    }
+    &.is-pending {
+        opacity: .4;
+
+        .box-ui-comment-text {
+            margin-bottom: 25px;
+        }
+    }
+
+    .box-ui-comment-avatar {
+        flex-shrink: 0;
+        margin-right: 17px;
+        margin-top: 3px;
+    }
+
+    .box-ui-comment-content {
+        color: $fours;
+        flex: 1;
+        min-width: 0;
+
+        .box-ui-comment-user-name {
+            color: $twos;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .box-ui-comment-created-at {
+            color: $nines;
+            cursor: default;
+        }
+    }
+
+    .box-ui-comment-headline {
+        display: flex;
+        flex-flow: row wrap;
+        padding-right: 25px;
+        position: relative;
+    }
+
+    .box-ui-comment-text {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+
+        .link {
+            white-space: normal;
+        }
+        .box-ui-comment-translate {
+            color: $box-blue;
+            display: block;
+        }
+    }
+
+    .box-ui-comment-text-loading {
+        margin-top: 3px;
+    }
+}
+
+.box-ui-comment-container {
+    .box-ui-comment-error {
+        margin-top: -10px;
+        padding: 14px 15px;
+
+        .box-ui-comment-error-action {
+            color: $king-crimson;
+            display: block;
+            margin-top: 5px;
+            text-decoration: underline;
+        }
+    }
+}
