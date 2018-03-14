@@ -4,93 +4,17 @@
  */
 
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
-
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 
 import ApprovalCommentForm from '../approval-comment-form';
 import Comment from '../comment';
-import { IconActivityFeedEmptyState } from '../icons';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
 import Keywords from '../keywords';
-
-import messages from '../messages';
+import EmptyState from './EmptyState';
 
 import './ActivityFeed.scss';
-import { User } from '../../../../flowTypes';
-
-type EmptyStateType = {
-    isLoading?: boolean,
-    showCommentMessage?: boolean
-};
-
-const EmptyState = ({ isLoading, showCommentMessage }: EmptyStateType) => (
-    <div className='box-ui-activity-feed-empty-state'>
-        <IconActivityFeedEmptyState />
-        {isLoading ? (
-            <LoadingIndicator />
-        ) : (
-            <div className='empty-state-cta'>
-                <b>
-                    <FormattedMessage {...messages.noActivity} />
-                </b>
-                {showCommentMessage ? (
-                    <aside>
-                        <FormattedMessage {...messages.noActivityCommentPrompt} />
-                    </aside>
-                ) : null}
-            </div>
-        )}
-    </div>
-);
-
-type Comments = {
-    create: Function,
-    delete: Function
-};
-
-type Tasks = {
-    create?: Function,
-    delete?: Function,
-    edit?: Function,
-    onTaskAssignmentUpdate?: Function
-};
-
-type Contacts = {
-    getApproverWithQuery: Function,
-    getMentionWithQuery: Function
-};
-
-type Versions = {
-    info: Function
-};
-
-type SelectorItem = {
-    id?: string | number,
-    name: string
-};
-
-type SelectorItems = Array<SelectorItem>;
-
-type InputState = {
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
-    currentUser: User,
-    isDisabled?: boolean
-};
-
-type Item = {
-    type?: 'comment' | 'task' | 'file_version' | 'keywords',
-    createdAt?: any,
-    createdBy: User,
-    id: string
-};
-
-type Translations = {
-    translationEnabled?: boolean,
-    onTranslate?: boolean
-};
+import type { User } from '../../../../flowTypes';
+import { Comments, Tasks, Contacts, Versions, SelectorItems, Item, Translations } from '../activityFeedFlowTypes';
 
 type ActiveStateParams = {
     currentUser: User,
@@ -236,7 +160,7 @@ function shouldShowEmptyState(feedState) {
     return feedState.length === 0 || (feedState.length === 1 && feedState[0].type === 'file_version');
 }
 
-type ActivityFeedProps = {
+type Props = {
     isLoading?: boolean,
     feedState: Array<Item>,
     inputState: {
@@ -254,11 +178,11 @@ type ActivityFeedProps = {
     translations: Translations
 };
 
-type ActivityFeedState = {
+type State = {
     isInputOpen: boolean
 };
 
-class ActivityFeed extends Component<ActivityFeedProps, ActivityFeedState> {
+class ActivityFeed extends Component<Props, State> {
     static defaultProps = {
         isLoading: false,
         feedState: []
