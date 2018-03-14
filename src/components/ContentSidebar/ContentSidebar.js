@@ -33,6 +33,7 @@ type Props = {
     hasSkills: boolean,
     hasProperties: boolean,
     hasMetadata: boolean,
+    hasNotices: boolean,
     hasAccessStats: boolean,
     hasClassification: boolean,
     hasActivityFeed: boolean,
@@ -68,6 +69,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasSkills: false,
         hasProperties: false,
         hasMetadata: false,
+        hasNotices: false,
         hasAccessStats: false,
         hasClassification: false,
         hasActivityFeed: false,
@@ -309,6 +311,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasSkills,
             hasProperties,
             hasMetadata,
+            hasNotices,
             hasAccessStats,
             hasClassification,
             hasActivityFeed,
@@ -332,6 +335,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasSkills={hasSkills}
                                 hasProperties={hasProperties}
                                 hasMetadata={hasMetadata}
+                                hasNotices={hasNotices}
                                 hasAccessStats={hasAccessStats}
                                 hasClassification={hasClassification}
                                 hasActivityFeed={hasActivityFeed}

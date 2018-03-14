@@ -16,15 +16,13 @@ import SidebarSkills from './Skills/SidebarSkills';
 import SidebarNotices from './SidebarNotices';
 import type { BoxItem } from '../../flowTypes';
 import './DetailsSidebar.scss';
-import { addTime } from '../../util/datetime';
-
-const ONE_MINUTE_IN_MS = 60000;
 
 type Props = {
     file: BoxItem,
     getPreviewer: Function,
     hasTitle: boolean,
     hasSkills: boolean,
+    hasNotices: boolean,
     hasProperties: boolean,
     hasMetadata: boolean,
     hasAccessStats: boolean,
@@ -43,6 +41,7 @@ const DetailsSidebar = ({
     hasTitle,
     hasSkills,
     hasProperties,
+    hasNotices,
     hasMetadata,
     hasAccessStats,
     hasClassification,
@@ -52,30 +51,15 @@ const DetailsSidebar = ({
     onDescriptionChange,
     intl
 }: Props) => {
-    if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification) {
+    if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification && !hasNotices) {
         return null;
     }
 
     const onDescriptionChangeEditable = getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined;
-    let sharedLinkExpiration = new Date(getProp(file, 'shared_link.unshared_at'));
-
-    if (sharedLinkExpiration) {
-        // One minute is added to account for dates set via a date picker.
-        // These dates will actually be stored as 11:59PM the night before the item expires.
-        sharedLinkExpiration = addTime(sharedLinkExpiration, ONE_MINUTE_IN_MS);
-        sharedLinkExpiration = sharedLinkExpiration.toISOString();
-    }
-
-    const hasNotices = !!sharedLinkExpiration;
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {hasNotices && (
-                <SidebarSection>
-                    <SidebarNotices sharedLinkExpiration={sharedLinkExpiration} />
-                </SidebarSection>
-            )}
-
+            {hasNotices && <SidebarNotices file={file} />}
             {hasSkills && (
                 <SidebarSkills
                     metadata={file.metadata}
