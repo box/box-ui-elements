@@ -1,6 +1,17 @@
+<a name="4.2.1"></a>
+## <small>4.2.1 (2018-03-14)</small>
+
+* Fix: Build issues (#216) ([16cd7da](https://github.com/box/box-ui-elements/commit/16cd7da)), closes [#216](https://github.com/box/box-ui-elements/issues/216)
+* Fix: Navigation issues of preview (#218) ([0503174](https://github.com/box/box-ui-elements/commit/0503174)), closes [#218](https://github.com/box/box-ui-elements/issues/218)
+* Update: Add left/right navigation for preview (#217) ([1a0ff4c](https://github.com/box/box-ui-elements/commit/1a0ff4c)), closes [#217](https://github.com/box/box-ui-elements/issues/217)
+* Mojito: Update translations (#215) ([a628fb3](https://github.com/box/box-ui-elements/commit/a628fb3)), closes [#215](https://github.com/box/box-ui-elements/issues/215)
+
+
+
 <a name="4.2.0"></a>
 ## 4.2.0 (2018-03-10)
 
+* Release: 4.2.0 ([14e777b](https://github.com/box/box-ui-elements/commit/14e777b))
 * Fix: Preview navigation hook (#214) ([00096b7](https://github.com/box/box-ui-elements/commit/00096b7)), closes [#214](https://github.com/box/box-ui-elements/issues/214)
 * New: Add download and print functionality in Preview in Explorer (#213) ([c93c045](https://github.com/box/box-ui-elements/commit/c93c045)), closes [#213](https://github.com/box/box-ui-elements/issues/213)
 
