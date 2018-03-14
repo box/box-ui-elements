@@ -18,7 +18,6 @@ import Cache from '../../util/Cache';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
 import { isValidBoxFile } from '../../util/fields';
-import TokenService from '../../util/TokenService';
 import { isInputElement, focus } from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_API,
@@ -137,11 +136,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillUnmount(): void {
-        if (this.preview) {
-            this.preview.removeAllListeners();
-            this.destroyPreview();
-        }
-        this.preview = undefined;
+        this.destroyPreview();
     }
 
     /**
@@ -157,11 +152,11 @@ class ContentPreview extends PureComponent<Props, State> {
         const hasFileIdChanged = nextProps.fileId !== fileId;
         const hasSizeChanged = nextProps.isSmall !== isSmall;
 
-        const newState = {};
-
         if (hasTokenChanged || hasFileIdChanged) {
-            newState.file = undefined;
             this.destroyPreview();
+            this.setState({
+                file: undefined
+            });
             this.fetchFile(nextProps.fileId);
         }
 
@@ -273,7 +268,9 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     destroyPreview() {
         if (this.preview) {
+            this.preview.removeAllListeners();
             this.preview.destroy();
+            this.preview = undefined;
         }
     }
 
@@ -316,32 +313,10 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {Array<string|BoxItem>} files - files to prefetch
      * @return {void}
      */
-    async prefetch(files: Array<string | BoxItem>): Promise<void> {
-        const { token }: Props = this.props;
-        const fileAPI = this.api.getFileAPI();
-
-        // We try to get tokens in bulk
-        const typedIds = files.map((file) => fileAPI.getTypedFileId(this.getFileId(file)));
-        const tokens = await TokenService.getTokens(typedIds, token);
-
+    prefetch(files: Array<string | BoxItem>): void {
         files.forEach((file) => {
             const fileId = this.getFileId(file);
-            const typedId = fileAPI.getTypedFileId(fileId);
-            const fileToken = tokens[typedId];
-            const isValidFile = isValidBoxFile(file, true, true);
-
-            if (isValidFile) {
-                const boxFile: BoxItem = ((file: any): BoxItem);
-                this.updatePreviewCacheAndPrefetch(boxFile, fileToken);
-            } else {
-                this.fetchFile(
-                    fileId,
-                    (boxfile: BoxItem) => {
-                        this.updatePreviewCacheAndPrefetch(boxfile, fileToken);
-                    },
-                    noop
-                );
-            }
+            this.fetchFile(fileId, noop, noop);
         });
     }
 
@@ -367,23 +342,17 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     loadPreview = (): void => {
         const { Preview } = global.Box;
-        const { fileId, token, collection, ...rest }: Props = this.props;
+        const { token, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
-        if (!this.isPreviewLibraryLoaded() || !file || !token) {
+        if (!this.isPreviewLibraryLoaded() || !file || !token || this.preview) {
             return;
         }
 
-        if (!this.preview) {
-            this.preview = new Preview();
-            this.preview.addListener('load', this.onPreviewLoad);
-        }
-
-        if (this.preview.getCurrentViewer()) {
-            return;
-        }
-
-        this.preview.show(file, token, {
+        this.preview = new Preview();
+        this.preview.updateFileCache([file]);
+        this.preview.addListener('load', this.onPreviewLoad);
+        this.preview.show(file.id, token, {
             container: `#${this.id} .bcpr-content`,
             header: 'none',
             skipServerUpdate: true,
@@ -699,8 +668,10 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const { file, showSidebar: showSidebarState }: State = this.state;
         const { collection }: Props = this.props;
-        const hasLeftNavigation = collection.length > 1 && this.getFileIndex() > 0;
-        const hasRightNavigation = collection.length > 1 && this.getFileIndex() < collection.length - 1;
+
+        const fileIndex = this.getFileIndex();
+        const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
+        const hasRightNavigation = collection.length > 1 && fileIndex > -1 && fileIndex < collection.length - 1;
         const isValidFile = isValidBoxFile(file, true, true);
 
         let isSidebarVisible = isValidFile && hasSidebar && showSidebarState;
