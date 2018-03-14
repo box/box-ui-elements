@@ -7,7 +7,7 @@
 import noop from 'lodash/noop';
 import Base from './Base';
 import { getBadItemError } from '../util/error';
-import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
+import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER, TYPED_ID_FILE_PREFIX } from '../constants';
 import type Cache from '../util/Cache';
 import type { BoxItem, FlattenedBoxItem, FlattenedBoxItemCollection, BoxItemPermission } from '../flowTypes';
 
@@ -308,6 +308,17 @@ class Item extends Base {
             })
             .then(this.shareSuccessHandler)
             .catch(this.errorHandler);
+    }
+
+    /**
+     * Returns typed id for file. Useful for when
+     * making file based XHRs where auth token
+     * can be per file as used by Preview.
+     *
+     * @return {string} typed id for file
+     */
+    getTypedFileId(id: string): string {
+        return `${TYPED_ID_FILE_PREFIX}${id}`;
     }
 }
 

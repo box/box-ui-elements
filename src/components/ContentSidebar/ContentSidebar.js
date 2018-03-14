@@ -15,7 +15,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
-import type { Token, BoxItem, StringMap } from '../../flowTypes';
+import type { Token, BoxItem, StringMap, FileVersions } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -43,11 +43,13 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onInteraction: Function
+    onInteraction: Function,
+    onVersionHistoryClick?: Function
 };
 
 type State = {
-    file?: BoxItem
+    file?: BoxItem,
+    versions?: FileVersions
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -142,6 +144,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         if (fileId) {
             this.fetchFile(fileId);
+            this.fetchVersions(fileId);
         }
     }
 
@@ -280,6 +283,17 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * File versions fetch success callback
+     *
+     * @private
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchVersionsSuccessCallback = (versions: FileVersions): void => {
+        this.setState({ versions });
+    };
+
+    /**
      * Fetches a file
      *
      * @private
@@ -290,6 +304,19 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchFile(id: string, forceFetch: boolean = false): void {
         if (this.shouldFetchOrRender()) {
             this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch, true);
+        }
+    }
+
+    /**
+     * Fetches the versions for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchVersions(id: string): void {
+        if (this.shouldFetchOrRender()) {
+            this.api.getVersionsAPI().versions(id, this.fetchVersionsSuccessCallback, this.errorCallback);
         }
     }
 
@@ -312,9 +339,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasAccessStats,
             hasClassification,
             hasActivityFeed,
-            className
+            className,
+            onVersionHistoryClick
         }: Props = this.props;
-        const { file }: State = this.state;
+        const { file, versions }: State = this.state;
 
         if (!this.shouldFetchOrRender()) {
             return null;
@@ -324,9 +352,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={`be bcs ${className}`}>
                     <div className='be-app-element'>
-                        {file ? (
+                        {file && versions ? (
                             <Sidebar
                                 file={file}
+                                versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasTitle={hasTitle}
                                 hasSkills={hasSkills}
@@ -339,6 +368,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 rootElement={this.rootElement}
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
+                                onVersionHistoryClick={onVersionHistoryClick}
                             />
                         ) : (
                             <div className='bcs-loading'>

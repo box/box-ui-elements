@@ -12,7 +12,15 @@ import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import RecentsAPI from './Recents';
-import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
+import VersionsAPI from './Versions';
+import {
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_UPLOAD,
+    TYPE_FOLDER,
+    TYPE_FILE,
+    TYPE_WEBLINK,
+    TYPE_VERSIONS
+} from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
 class APIFactory {
@@ -55,6 +63,11 @@ class APIFactory {
      * @property {RecentsAPI}
      */
     recentsAPI: RecentsAPI;
+
+    /**
+     * @property {VersionsAPI}
+     */
+    versionsAPI: VersionsAPI;
 
     /**
      * [constructor]
@@ -111,6 +124,10 @@ class APIFactory {
             this.recentsAPI.destroy();
             delete this.recentsAPI;
         }
+        if (this.versionsAPI) {
+            this.versionsAPI.destroy();
+            delete this.versionsAPI;
+        }
         if (destroyCache) {
             this.options.cache = new Cache();
         }
@@ -144,6 +161,9 @@ class APIFactory {
                 break;
             case TYPE_WEBLINK:
                 api = this.getWebLinkAPI();
+                break;
+            case TYPE_VERSIONS:
+                api = this.getVersionsAPI();
                 break;
             default:
                 throw new Error('Unknown Type!');
@@ -227,6 +247,15 @@ class APIFactory {
         this.destroy();
         this.recentsAPI = new RecentsAPI(this.options);
         return this.recentsAPI;
+    }
+
+    /**
+     * API for
+     */
+    getVersionsAPI(): VersionsAPI {
+        this.destroy();
+        this.versionsAPI = new VersionsAPI(this.options);
+        return this.versionsAPI;
     }
 }
 

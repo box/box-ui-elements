@@ -73,7 +73,10 @@
                 const sidebar1 = new ContentSidebar();
                 sidebar1.show(fileId, token, {
                     container: '.sidebar1',
-                    hasProperties: true
+                    hasProperties: true,
+                    onVersionHistoryClick : function(){
+                        alert('hello, world!');
+                    }
                 });
 
                 const sidebar2 = new ContentSidebar();

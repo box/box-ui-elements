@@ -11,7 +11,7 @@ import Tab from 'box-react-ui/lib/components/tab-view/Tab';
 import DetailsSidebar from './DetailsSidebar';
 import hasSkillsData from './skillUtils';
 import messages from '../messages';
-import type { BoxItem } from '../../flowTypes';
+import type { BoxItem, FileVersions } from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
@@ -28,8 +28,10 @@ type Props = {
     appElement: HTMLElement,
     onInteraction: Function,
     onDescriptionChange: Function,
+    onVersionHistoryClick?: Function,
     descriptionTextareaProps: Object,
-    intl: any
+    intl: any,
+    versions: FileVersions
 };
 
 const Sidebar = ({
@@ -46,7 +48,9 @@ const Sidebar = ({
     appElement,
     onInteraction,
     onDescriptionChange,
-    intl
+    intl,
+    onVersionHistoryClick,
+    versions
 }: Props) => {
     const shouldShowSkills = hasSkills && hasSkillsData(file);
 
@@ -64,6 +68,8 @@ const Sidebar = ({
             rootElement={rootElement}
             onInteraction={onInteraction}
             onDescriptionChange={onDescriptionChange}
+            onVersionHistoryClick={onVersionHistoryClick}
+            versions={versions}
         />
     );
 

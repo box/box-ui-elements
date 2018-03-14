@@ -18,12 +18,6 @@ describe('api/File', () => {
         });
     });
 
-    describe('getTypedFileId()', () => {
-        test('should return correct typed id', () => {
-            expect(file.getTypedFileId('foo')).toBe('file_foo');
-        });
-    });
-
     describe('getUrl()', () => {
         test('should return correct file api url without id', () => {
             expect(file.getUrl()).toBe('https://api.box.com/2.0/files');

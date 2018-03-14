@@ -9,6 +9,7 @@ import FileAPI from '../File';
 import WebLinkAPI from '../WebLink';
 import SearchAPI from '../Search';
 import RecentsAPI from '../Recents';
+import VersionsAPI from '../Versions';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -33,6 +34,7 @@ describe('api/APIFactory', () => {
             factory.plainUploadAPI = { destroy: jest.fn() };
             factory.chunkedUploadAPI = { destroy: jest.fn() };
             factory.recentsAPI = { destroy: jest.fn() };
+            factory.versionsAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
             expect(factory.folderAPI).toBeUndefined();
@@ -41,6 +43,7 @@ describe('api/APIFactory', () => {
             expect(factory.plainUploadAPI).toBeUndefined();
             expect(factory.chunkedUploadAPI).toBeUndefined();
             expect(factory.recentsAPI).toBeUndefined();
+            expect(factory.versionsAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
             const { cache } = factory.options;
@@ -67,6 +70,9 @@ describe('api/APIFactory', () => {
         });
         test('should return web link api when type is web_link', () => {
             expect(factory.getAPI('web_link')).toBeInstanceOf(WebLinkAPI);
+        });
+        test('should return versions api when type is versions', () => {
+            expect(factory.getAPI('versions')).toBeInstanceOf(VersionsAPI);
         });
         test('should throw error when type is incorrect', () => {
             expect(factory.getAPI.bind(factory, 'foo')).toThrow(Error, /Unknown Type/);
@@ -154,6 +160,18 @@ describe('api/APIFactory', () => {
             expect(recentsAPI.options.cache).toBeInstanceOf(Cache);
             expect(recentsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(recentsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getVersionsAPI()', () => {
+        test('should call destroy and return versions API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const versionsAPI = factory.getVersionsAPI();
+            expect(spy).toBeCalled();
+            expect(versionsAPI).toBeInstanceOf(VersionsAPI);
+            expect(versionsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(versionsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(versionsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

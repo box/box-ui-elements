@@ -8,6 +8,7 @@
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
+import VersionsAPI from './api/Versions';
 import MultiputUploadAPI from './api/uploads/MultiputUpload';
 import PlainUploadAPI from './api/PlainUpload';
 import Cache from './util/Cache';
@@ -58,7 +59,7 @@ export type ClassComponent<P, S> = Class<React$Component<P, S>>;
 export type StringMap = { [string]: string };
 export type StringAnyMap = { [string]: any };
 export type StringBooleanMap = { [string]: boolean };
-export type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
+export type ItemAPI = FolderAPI | FileAPI | WebLinkAPI | VersionsAPI;
 export type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
 export type DefaultView = typeof DEFAULT_VIEW_RECENTS | typeof DEFAULT_VIEW_FILES;
 export type View =
@@ -337,4 +338,20 @@ export type MultiputPart = {
 
 export type MultiputData = {
     part?: MultiputPart
+};
+
+export type Version = {
+    type: string,
+    id: string,
+    sha1: string,
+    name: string,
+    size: number,
+    created_at: string,
+    modified_at: string,
+    modified_by: User
+};
+
+export type FileVersions = {
+    total_count: number,
+    entries?: Array<Version>
 };
