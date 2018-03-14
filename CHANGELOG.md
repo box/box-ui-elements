@@ -1,6 +1,16 @@
+<a name="4.3.0"></a>
+## 4.3.0 (2018-03-14)
+
+* Mojito: Update translations (#219) ([0211f28](https://github.com/box/box-ui-elements/commit/0211f28)), closes [#219](https://github.com/box/box-ui-elements/issues/219)
+* Mojito: Update translations (#223) ([c26168c](https://github.com/box/box-ui-elements/commit/c26168c)), closes [#223](https://github.com/box/box-ui-elements/issues/223)
+* Chore: Minor folder structure cleanup (#222) ([74bf4c2](https://github.com/box/box-ui-elements/commit/74bf4c2)), closes [#222](https://github.com/box/box-ui-elements/issues/222)
+
+
+
 <a name="4.2.1"></a>
 ## <small>4.2.1 (2018-03-14)</small>
 
+* Release: 4.2.1 ([571f7b2](https://github.com/box/box-ui-elements/commit/571f7b2))
 * Fix: Build issues (#216) ([16cd7da](https://github.com/box/box-ui-elements/commit/16cd7da)), closes [#216](https://github.com/box/box-ui-elements/issues/216)
 * Fix: Navigation issues of preview (#218) ([0503174](https://github.com/box/box-ui-elements/commit/0503174)), closes [#218](https://github.com/box/box-ui-elements/issues/218)
 * Update: Add left/right navigation for preview (#217) ([1a0ff4c](https://github.com/box/box-ui-elements/commit/1a0ff4c)), closes [#217](https://github.com/box/box-ui-elements/issues/217)
