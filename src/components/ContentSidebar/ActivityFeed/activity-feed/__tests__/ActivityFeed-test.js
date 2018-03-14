@@ -1,10 +1,7 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import sinon from 'sinon';
 
 import ActivityFeed from '../ActivityFeed';
-
-const sandbox = sinon.sandbox.create();
 
 const feedState = [
     {
@@ -27,22 +24,18 @@ const currentUser = { name: 'Kanye West', id: 10 };
 
 const allHandlers = {
     comments: {
-        create: sinon.stub()
+        create: jest.fn()
     },
     tasks: {
-        create: sinon.stub()
+        create: jest.fn()
     },
     contacts: {
-        getApproverWithQuery: sinon.stub(),
-        getMentionWithQuery: sinon.stub()
+        getApproverWithQuery: jest.fn(),
+        getMentionWithQuery: jest.fn()
     }
 };
 
 describe('features/activity-feed/activity-feed/ActivityFeed', () => {
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     test('should correctly render empty state', () => {
         const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
 
@@ -100,7 +93,7 @@ describe('features/activity-feed/activity-feed/ActivityFeed', () => {
     });
 
     test('should call create comment handler and close input on valid comment submit', () => {
-        const createCommentSpy = sinon.spy();
+        const createCommentSpy = jest.fn();
         allHandlers.comments.create = createCommentSpy;
         const wrapper = mount(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
 
@@ -112,11 +105,11 @@ describe('features/activity-feed/activity-feed/ActivityFeed', () => {
 
         approvalCommentForm.prop('createComment')();
         expect(wrapper.state('isInputOpen')).toBe(false);
-        expect(createCommentSpy.calledOnce).toBe(true);
+        expect(createCommentSpy.mock.calls).toEqual(1);
     });
 
     test('should call create task handler and close input on valid task submit', () => {
-        const createTaskSpy = sinon.spy();
+        const createTaskSpy = jest.fn();
         allHandlers.tasks.create = createTaskSpy;
         const wrapper = mount(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
 
@@ -128,17 +121,17 @@ describe('features/activity-feed/activity-feed/ActivityFeed', () => {
 
         approvalCommentForm.prop('createTask')();
         expect(wrapper.state('isInputOpen')).toBe(false);
-        expect(createTaskSpy.calledOnce).toBe(true);
+        expect(createTaskSpy.mock.calls).toEqual(1);
     });
 
     test('should stop event propagation onKeyDown', () => {
         const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
-        const stopPropagationSpy = sandbox.spy();
+        const stopPropagationSpy = jest.fn();
         wrapper.find('.box-ui-activity-feed').simulate('keydown', {
             nativeEvent: {
                 stopImmediatePropagation: stopPropagationSpy
             }
         });
-        expect(stopPropagationSpy.called).toBe(true);
+        expect(stopPropagationSpy).toHaveBeenCalled();
     });
 });
