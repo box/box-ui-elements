@@ -11,6 +11,8 @@ import throttle from 'lodash/throttle';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import IconNavigateLeft from 'box-react-ui/lib/icons/general/IconNavigateLeft';
+import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight';
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
@@ -715,28 +717,12 @@ class ContentPreview extends PureComponent<Props, State> {
                             </Measure>
                             {hasLeftNavigation && (
                                 <PlainButton type='button' className='bcpr-navigate-left' onClick={this.navigateLeft}>
-                                    <svg viewBox='0 0 48 48' focusable='false'>
-                                        <path
-                                            fill='#494949'
-                                            stroke='#DCDCDC'
-                                            strokeMiterlimit='10'
-                                            d='M30.8,33.2L21.7,24l9.2-9.2L28,12L16,24l12,12L30.8,33.2z'
-                                        />
-                                        <path display='none' fill='none' d='M0,0h48v48H0V0z' />
-                                    </svg>
+                                    <IconNavigateLeft />
                                 </PlainButton>
                             )}
                             {hasRightNavigation && (
                                 <PlainButton type='button' className='bcpr-navigate-right' onClick={this.navigateRight}>
-                                    <svg viewBox='0 0 48 48' focusable='false'>
-                                        <path
-                                            fill='#494949'
-                                            stroke='#DCDCDC'
-                                            strokeMiterlimit='10'
-                                            d='M17.2,14.8l9.2,9.2l-9.2,9.2L20,36l12-12L20,12L17.2,14.8z'
-                                        />
-                                        <path display='none' fill='none' d='M48,48H0L0,0l48,0V48z' />
-                                    </svg>
+                                    <IconNavigateRight />
                                 </PlainButton>
                             )}
                         </div>

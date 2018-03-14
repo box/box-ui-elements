@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import type { SkillCard, SkillCardEntry } from '../../flowTypes';
+import type { SkillCard, SkillCardEntry } from '../../../../flowTypes';
 import './Keyvalues.scss';
 
 type Props = {

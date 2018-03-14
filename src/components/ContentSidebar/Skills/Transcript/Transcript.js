@@ -10,8 +10,8 @@ import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import TranscriptData from './TranscriptData';
 import TranscriptDialog from './TranscriptDialog';
 import { isValidTimeSlice } from './timeSliceUtils';
-import { COLOR_DOWNTOWN_GREY } from '../../constants';
-import type { SkillCard } from '../../flowTypes';
+import { COLOR_DOWNTOWN_GREY } from '../../../../constants';
+import type { SkillCard } from '../../../../flowTypes';
 import './Transcript.scss';
 
 type Props = {
