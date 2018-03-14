@@ -5,111 +5,13 @@
 
 import React, { Component } from 'react';
 
+import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
-import Comment from '../comment';
-import Task from '../task';
-import Version, { CollapsedVersion, VersionError } from '../version';
-import Keywords from '../keywords';
 import EmptyState from './EmptyState';
+import type { User, SelectorItems } from '../../../../flowTypes';
+import type { Comments, Tasks, Contacts, Versions, Item, Translations } from '../activityFeedFlowTypes';
 
 import './ActivityFeed.scss';
-import type { User } from '../../../../flowTypes';
-import { Comments, Tasks, Contacts, Versions, SelectorItems, Item, Translations } from '../activityFeedFlowTypes';
-
-type ActiveStateParams = {
-    currentUser: User,
-    handlers: {
-        comments: Comments,
-        tasks: Tasks,
-        contacts: Contacts,
-        versions: Versions
-    },
-    inputState: InputState,
-    items: Array<Item>,
-    onCommentDelete?: Function,
-    onTaskAssignmentUpdate?: Function,
-    onTaskDelete?: Function,
-    onTaskEdit?: Function,
-    onVersionInfo?: Function,
-    translations: Translations
-};
-
-const ActiveState = ({
-    currentUser,
-    items,
-    onCommentDelete,
-    onTaskDelete,
-    onTaskEdit,
-    onTaskAssignmentUpdate,
-    onVersionInfo,
-    translations,
-    inputState,
-    handlers
-}: ActiveStateParams) => (
-    <ul className='box-ui-activity-feed-active-state'>
-        {items.map((item) => {
-            switch (item.type) {
-                case 'comment':
-                    return (
-                        <li className='box-ui-activity-feed-comment' key={item.type + item.id}>
-                            <Comment
-                                id={item.id}
-                                currentUser={currentUser}
-                                onDelete={onCommentDelete}
-                                {...item}
-                                translations={translations}
-                                inputState={inputState}
-                                handlers={handlers}
-                            />
-                        </li>
-                    );
-                case 'task':
-                    return (
-                        <li className='box-ui-activity-feed-task' key={item.type + item.id}>
-                            <Task
-                                currentUser={currentUser}
-                                {...item}
-                                onDelete={onTaskDelete}
-                                onEdit={onTaskEdit}
-                                onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                                translations={translations}
-                                inputState={inputState}
-                                handlers={handlers}
-                            />
-                        </li>
-                    );
-                case 'file_version':
-                    return (
-                        <li className='box-ui-version-item' key={item.type + item.id}>
-                            {item.versions ? (
-                                <CollapsedVersion {...item} onInfo={onVersionInfo} />
-                            ) : (
-                                <Version {...item} onInfo={onVersionInfo} />
-                            )}
-                        </li>
-                    );
-                case 'file_version_error':
-                    // we currently only display this if errorCode is tooManyVersions
-                    if (item.errorCode !== 'tooManyVersions') {
-                        return null;
-                    }
-                    return (
-                        <li className='box-ui-version-item' key={item.type + item.errorCode}>
-                            {<VersionError {...item} />}
-                        </li>
-                    );
-                case 'keywords':
-                    return (
-                        <li className='box-ui-keywords-item' key={item.type + item.id}>
-                            {<Keywords {...item} />}
-                        </li>
-                    );
-                default:
-                    return null;
-            }
-        })}
-    </ul>
-);
 
 function collapseFeedState(feedState) {
     return feedState.reduce((collapsedFeedState, feedItem) => {

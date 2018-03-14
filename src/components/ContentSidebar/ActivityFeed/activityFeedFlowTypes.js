@@ -25,13 +25,6 @@ export type Versions = {
     info: Function
 };
 
-export type SelectorItem = {
-    id?: string,
-    name: string
-};
-
-export type SelectorItems = Array<SelectorItem>;
-
 export type InputState = {
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,

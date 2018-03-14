@@ -1,192 +1,68 @@
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file Component for Approval comment form
+ */
+
 import React, { Component } from 'react';
 import cx from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import Avatar from '../../../components/avatar';
-import Button from '../../../components/button';
-import Checkbox from '../../../components/checkbox';
-import ContactDatalistItem from '../../../components/contact-datalist-item';
-import DatePicker from '../../../components/date-picker';
-import PrimaryButton from '../../../components/primary-button';
-
-import Form from '../../../components/form-elements/form';
+import Avatar from 'box-react-ui/lib/components/avatar/Avatar';
+import Form from 'box-react-ui/lib/components/form-elements/form/Form';
 import DraftJSMentionSelector, {
     DraftMentionDecorator
-} from '../../../components/form-elements/draft-js-mention-selector';
-import PillSelectorDropdown from '../../../components/pill-selector-dropdown';
+} from 'box-react-ui/lib/components/form-elements/draft-js-mention-selector/DraftJSMentionSelector';
+import commonMessages from 'box-react-ui/lib/common/messages';
 
-import { OptionsPropType, SelectorItemsPropType, UserPropType } from '../../../common/box-proptypes';
-import commonMessages from '../../../common/messages';
-
+import AddApproval from './AddApproval';
+import CommentInputControls from './CommentInputControls';
 import messages from '../messages';
+import { SelectorItems, User } from '../../../../flowTypes';
 
 import './ApprovalCommentForm.scss';
 
-const CommentInputControls = ({ onCancel }) => (
-    <div className='comment-input-controls'>
-        <Button className='comment-input-cancel-btn' onClick={onCancel} type='button'>
-            <FormattedMessage {...messages.commentCancel} />
-        </Button>
-        <PrimaryButton className='comment-input-submit-btn'>
-            <FormattedMessage {...messages.commentPost} />
-        </PrimaryButton>
-    </div>
-);
-
-CommentInputControls.propTypes = {
-    onCancel: PropTypes.func
+type Props = {
+    approverSelectorContacts: SelectorItems,
+    className: string,
+    createComment: Function,
+    createTask: Function,
+    updateTask: Function,
+    getApproverContactsWithQuery: Function,
+    getMentionContactsWithQuery: Function,
+    intl: intlShape.isRequired,
+    isDisabled: boolean,
+    isOpen: boolean,
+    mentionSelectorContacts: SelectorItems,
+    onCancel: Function,
+    onFocus: Function,
+    onSubmit: Function,
+    user: User,
+    isEditing: boolean,
+    entityId: string,
+    taggedMessage: string
 };
 
-const AddApprovalFields = ({
-    approvalDate,
-    approvers,
-    approverSelectorContacts = [],
-    approverSelectorError,
-    formatMessage,
-    onApprovalDateChange,
-    onApproverSelectorInput,
-    onApproverSelectorRemove,
-    onApproverSelectorSelect
-}) => {
-    const approverOptions = approverSelectorContacts
-        // filter selected approvers
-        .filter(({ id }) => !approvers.find(({ value }) => value === id))
-        // map to datalist item format
-        .map(({ id, item }) => ({
-            email: item.email,
-            text: item.name,
-            value: id
-        }));
-
-    return (
-        <div className='comment-add-approver-fields-container'>
-            <PillSelectorDropdown
-                error={approverSelectorError}
-                label={<FormattedMessage {...messages.approvalAssignees} />}
-                onInput={onApproverSelectorInput}
-                onRemove={onApproverSelectorRemove}
-                onSelect={onApproverSelectorSelect}
-                placeholder={formatMessage(messages.approvalAddAssignee)}
-                selectedOptions={approvers}
-                selectorOptions={approverOptions}
-            >
-                {approverOptions.map(({ email, text, value }) => (
-                    <ContactDatalistItem key={value} name={text} subtitle={email} />
-                ))}
-            </PillSelectorDropdown>
-            <DatePicker
-                className='comment-add-approver-date-input'
-                label={<FormattedMessage {...messages.approvalDueDate} />}
-                minDate={new Date()}
-                name='approverDateInput'
-                placeholder={formatMessage(messages.approvalSelectDate)}
-                onChange={onApprovalDateChange}
-                value={approvalDate}
-            />
-        </div>
-    );
+type State = {
+    approvalDate: Date,
+    approvers: Array<User>,
+    approverSelectorError: string,
+    commentEditorState: any,
+    isAddApprovalVisible: boolean
 };
 
-AddApprovalFields.propTypes = {
-    approvalDate: PropTypes.instanceOf(Date),
-    approvers: OptionsPropType,
-    approverSelectorContacts: SelectorItemsPropType,
-    approverSelectorError: PropTypes.string,
-    formatMessage: PropTypes.func.isRequired,
-    onApprovalDateChange: PropTypes.func,
-    onApproverSelectorInput: PropTypes.func.isRequired,
-    onApproverSelectorRemove: PropTypes.func.isRequired,
-    onApproverSelectorSelect: PropTypes.func.isRequired
-};
-
-const AddApproval = ({
-    approvalDate,
-    approvers,
-    approverSelectorContacts,
-    approverSelectorError,
-    formatMessage,
-    isAddApprovalVisible,
-    onApprovalDateChange,
-    onApproverSelectorInput,
-    onApproverSelectorRemove,
-    onApproverSelectorSelect
-}) => (
-    <div className='comment-add-approver'>
-        <Checkbox
-            className='box-ui-comment-add-approver-checkbox'
-            label={formatMessage(messages.approvalAddTask)}
-            name='addApproval'
-            isChecked={isAddApprovalVisible}
-            tooltip={formatMessage(messages.approvalAddTaskTooltip)}
-        />
-        {isAddApprovalVisible ? (
-            <AddApprovalFields
-                approvalDate={approvalDate}
-                approvers={approvers}
-                approverSelectorContacts={approverSelectorContacts}
-                approverSelectorError={approverSelectorError}
-                formatMessage={formatMessage}
-                onApproverSelectorInput={onApproverSelectorInput}
-                onApproverSelectorRemove={onApproverSelectorRemove}
-                onApproverSelectorSelect={onApproverSelectorSelect}
-                onApprovalDateChange={onApprovalDateChange}
-            />
-        ) : null}
-    </div>
-);
-
-AddApproval.propTypes = {
-    approvalDate: PropTypes.instanceOf(Date),
-    approvers: OptionsPropType,
-    approverSelectorContacts: SelectorItemsPropType,
-    approverSelectorError: PropTypes.string,
-    formatMessage: PropTypes.func,
-    isAddApprovalVisible: PropTypes.bool,
-    onApprovalDateChange: PropTypes.func,
-    onApproverSelectorInput: PropTypes.func,
-    onApproverSelectorRemove: PropTypes.func,
-    onApproverSelectorSelect: PropTypes.func
-};
-
-class ApprovalCommentForm extends Component {
-    static propTypes = {
-        approverSelectorContacts: SelectorItemsPropType,
-        className: PropTypes.string,
-        createComment: PropTypes.func,
-        createTask: PropTypes.func,
-        updateTask: PropTypes.func,
-        getApproverContactsWithQuery: PropTypes.func,
-        getMentionContactsWithQuery: PropTypes.func,
-        intl: intlShape.isRequired,
-        isDisabled: PropTypes.bool,
-        isOpen: PropTypes.bool,
-        mentionSelectorContacts: SelectorItemsPropType,
-        onCancel: PropTypes.func,
-        onFocus: PropTypes.func,
-        onSubmit: PropTypes.func,
-        user: UserPropType.isRequired,
-        isEditing: PropTypes.bool,
-        entityId: PropTypes.string,
-        taggedMessage: PropTypes.string
-    };
-
+class ApprovalCommentForm extends Component<Props, State> {
     static defaultProps = {
         isOpen: false
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            approvalDate: null,
-            approvers: [],
-            approverSelectorError: '',
-            commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
-            isAddApprovalVisible: false
-        };
-    }
+    state = {
+        approvalDate: null,
+        approvers: [],
+        approverSelectorError: '',
+        commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
+        isAddApprovalVisible: false
+    };
 
     componentWillReceiveProps(nextProps) {
         const { isOpen } = nextProps;
