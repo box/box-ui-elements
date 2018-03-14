@@ -7,7 +7,7 @@
 import React, { PureComponent } from 'react';
 import FileKeyword from './Keyword';
 import { Timeline } from '../Timeline';
-import type { SkillCard, SkillCardEntry } from '../../flowTypes';
+import type { SkillCard, SkillCardEntry } from '../../../../flowTypes';
 
 type Props = {
     skill: SkillCard,

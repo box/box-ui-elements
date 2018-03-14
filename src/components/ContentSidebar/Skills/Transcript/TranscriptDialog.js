@@ -10,12 +10,17 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconMoveCopy from 'box-react-ui/lib/icons/general/IconMoveCopy';
 import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
-import { formatTime } from '../../util/datetime';
-import { copy } from '../../util/download';
-import messages from '../messages';
+import { formatTime } from '../../../../util/datetime';
+import { copy } from '../../../../util/download';
+import messages from '../../../messages';
 import { isValidTimeSlice } from './timeSliceUtils';
-import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL, COLOR_DOWNTOWN_GREY } from '../../constants';
-import type { SkillCardEntry } from '../../flowTypes';
+import {
+    CLASS_MODAL_CONTENT_FULL_BLEED,
+    CLASS_MODAL_OVERLAY,
+    CLASS_MODAL,
+    COLOR_DOWNTOWN_GREY
+} from '../../../../constants';
+import type { SkillCardEntry } from '../../../../flowTypes';
 import './TranscriptDialog.scss';
 
 type Props = {

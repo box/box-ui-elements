@@ -5,7 +5,7 @@
  */
 
 import getProp from 'lodash/get';
-import type { BoxItem } from '../../flowTypes';
+import type { BoxItem } from '../../../flowTypes';
 
 /**
  * Returns true if there are valid skills to show.

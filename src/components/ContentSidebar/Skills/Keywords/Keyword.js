@@ -7,7 +7,7 @@
 import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 // import IconCross from '../icons/IconCross';
-import type { SkillCardEntry } from '../../flowTypes';
+import type { SkillCardEntry } from '../../../../flowTypes';
 import './Keyword.scss';
 
 type Props = {

@@ -7,13 +7,13 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import cloneDeep from 'lodash/cloneDeep';
-import messages from '../messages';
-import SidebarSection from './SidebarSection';
-import Keywords from '../Keywords';
-import Transcript from '../Transcript';
-import Timelines from '../Timeline';
-import Keyvalues from '../Keyvalues';
-import type { SkillCards, SkillCard, MetadataType } from '../../flowTypes';
+import messages from '../../messages';
+import SidebarSection from '../SidebarSection';
+import Keywords from './Keywords';
+import Transcript from './Transcript';
+import Timelines from './Timeline';
+import Keyvalues from './Keyvalues';
+import type { SkillCards, SkillCard, MetadataType } from '../../../flowTypes';
 import './SidebarSkills.scss';
 
 type Props = {

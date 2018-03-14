@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import type { SkillCardEntryTimeSlice } from '../../flowTypes';
+import type { SkillCardEntryTimeSlice } from '../../../../flowTypes';
 
 /**
  * Returns true if there is a valid start time
