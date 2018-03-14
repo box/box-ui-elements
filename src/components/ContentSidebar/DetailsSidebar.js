@@ -8,14 +8,13 @@ import React from 'react';
 import getProp from 'lodash/get';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
-import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
+import SidebarNotices from './SidebarNotices';
 import type { BoxItem } from '../../flowTypes';
-import DateField from '../Date';
 import './DetailsSidebar.scss';
 import { addTime } from '../../util/datetime';
 
@@ -58,31 +57,24 @@ const DetailsSidebar = ({
     }
 
     const onDescriptionChangeEditable = getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined;
-    const sharedLinkExpiration = new Date(getProp(file, 'shared_link.unshared_at'));
-    // One minute is added to account for dates set via a date picker.
-    // These dates will actually be stored as 11:59PM the night before the item expires.
-    const normalizedSharedLinkExpiration = addTime(sharedLinkExpiration, ONE_MINUTE_IN_MS);
-    const normalizedSharedLinkExpirationString = normalizedSharedLinkExpiration.toISOString();
+    let sharedLinkExpiration = new Date(getProp(file, 'shared_link.unshared_at'));
+
+    if (sharedLinkExpiration) {
+        // One minute is added to account for dates set via a date picker.
+        // These dates will actually be stored as 11:59PM the night before the item expires.
+        sharedLinkExpiration = addTime(sharedLinkExpiration, ONE_MINUTE_IN_MS);
+        sharedLinkExpiration = sharedLinkExpiration.toISOString();
+    }
+
+    const hasNotices = !!sharedLinkExpiration;
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            <SidebarSection>
-                {sharedLinkExpiration && (
-                    <SharedLinkExpirationNotice
-                        expiration={
-                            <DateField
-                                date={normalizedSharedLinkExpirationString}
-                                dateFormat={{
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric'
-                                }}
-                                relative={false}
-                            />
-                        }
-                    />
-                )}
-            </SidebarSection>
+            {hasNotices && (
+                <SidebarSection>
+                    <SidebarNotices sharedLinkExpiration={sharedLinkExpiration} />
+                </SidebarSection>
+            )}
 
             {hasSkills && (
                 <SidebarSkills

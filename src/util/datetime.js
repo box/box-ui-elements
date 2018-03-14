@@ -52,7 +52,7 @@ function formatTime(seconds: number): string {
  *
  * @param {Date} date - date to add time to
  * @param {number} timeToAdd - amount of time to add in ms
- * @return {Date} The modified d\ate
+ * @return {Date} The modified date
  */
 function addTime(date: Date, timeToAdd: number): Date {
     return new Date(date.getTime() + timeToAdd);

@@ -21,13 +21,13 @@ type Props = {
 
 const DEFAULT_DATE_FORMAT = { weekday: 'short', month: 'short', year: 'numeric', day: 'numeric' };
 
-const DateField = ({ 
-    date, 
-    dateFormat = DEFAULT_DATE_FORMAT, 
-    omitCommas = false, 
-    intl, 
-    relative = true, 
-    capitalize = false 
+const DateField = ({
+    date,
+    dateFormat = DEFAULT_DATE_FORMAT,
+    omitCommas = false,
+    intl,
+    relative = true,
+    capitalize = false
 }: Props) => {
     const d = new Date(date);
     const isTodaysDate = isToday(d);
@@ -46,7 +46,7 @@ const DateField = ({
 
     let formattedDate = intl.formatDate(d, dateFormat);
     formattedDate = omitCommas ? formattedDate.replace(/,/g, '') : formattedDate;
-    return <span>{formattedDate}</span>;
+    return formattedDate;
 };
 
 export default injectIntl(DateField);
