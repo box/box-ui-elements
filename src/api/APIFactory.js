@@ -250,7 +250,7 @@ class APIFactory {
     }
 
     /**
-     * API for
+     * API for versions
      */
     getVersionsAPI(): VersionsAPI {
         this.destroy();

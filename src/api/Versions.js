@@ -9,9 +9,9 @@ import type { FileVersions } from '../flowTypes';
 
 class Versions extends Item {
     /**
-     * API URL for files
+     * API URL for versions
      *
-     * @param {string} [id] - Optional file id
+     * @param {string} [id] - a box file id
      * @return {string} base url for files
      */
     getUrl(id: string): string {
@@ -24,7 +24,7 @@ class Versions extends Item {
     /**
      * Gets the versions for a box file
      *
-     * @param {string} id - File id
+     * @param {string} id - a box file id
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
      * @return {Promise}
