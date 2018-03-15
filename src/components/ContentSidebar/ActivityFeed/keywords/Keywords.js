@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file Keywords components
+ */
+
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconInfoInverted from '../../../icons/general/IconInfoInverted';
-import Tooltip from '../../../components/tooltip';
-
+import Info from './Info';
 import messages from '../messages';
 
 import './Keywords.scss';
@@ -18,27 +20,12 @@ function getMessageForAction(action) {
     }
 }
 
-const Info = ({ words }) => (
-    <span className='box-ui-keywords-actions'>
-        <Tooltip
-            className='box-ui-keywords-actions-tooltip'
-            position='bottom-left'
-            text={<FormattedMessage {...messages.keywordsList} values={{ words }} />}
-        >
-            <div className='box-ui-keywords-info'>
-                <IconInfoInverted height={16} width={16} />
-            </div>
-        </Tooltip>
-    </span>
-);
-
-Info.displayName = 'Info';
-
-Info.propTypes = {
-    words: PropTypes.string
+type Props = {
+    action: 'applied',
+    words: string
 };
 
-const Keywords = ({ action, words }) => (
+const Keywords = ({ action, words }: Props) => (
     <div className='box-ui-keywords'>
         <span className='box-ui-keywords-message'>{getMessageForAction(action)}</span>
         {words ? <Info words={words} /> : null}
@@ -46,10 +33,5 @@ const Keywords = ({ action, words }) => (
 );
 
 Keywords.displayName = 'Keywords';
-
-Keywords.propTypes = {
-    action: PropTypes.oneOf(['applied']).isRequired,
-    words: PropTypes.string.isRequired
-};
 
 export default Keywords;
