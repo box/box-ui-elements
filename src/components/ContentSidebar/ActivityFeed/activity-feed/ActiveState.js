@@ -8,8 +8,8 @@ import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
 import Keywords from '../keywords';
-import { User } from '../../../../flowTypes';
-import { Tasks, Comments, Contacts, Versions, InputState, Item } from '../activityFeedFlowTypes';
+import type { User } from '../../../../flowTypes';
+import type { Tasks, Comments, Contacts, Versions, InputState, Item } from '../activityFeedFlowTypes';
 
 type Props = {
     currentUser: User,

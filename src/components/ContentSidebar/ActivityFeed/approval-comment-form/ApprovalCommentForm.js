@@ -18,7 +18,7 @@ import commonMessages from 'box-react-ui/lib/common/messages';
 import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';
 import messages from '../messages';
-import { SelectorItems, User } from '../../../../flowTypes';
+import type { SelectorItems, User } from '../../../../flowTypes';
 
 import './ApprovalCommentForm.scss';
 

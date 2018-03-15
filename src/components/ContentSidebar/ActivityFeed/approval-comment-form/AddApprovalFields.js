@@ -10,7 +10,7 @@ import ContactDatalistItem from 'box-react-ui/lib/components/contact-datalist-it
 import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
 import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelectorDropdown';
 
-import { OptionItems, SelectorItems } from '../../../../flowTypes';
+import type { OptionItems, SelectorItems } from '../../../../flowTypes';
 import messages from '../messages';
 
 type Props = {
