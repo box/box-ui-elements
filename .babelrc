@@ -36,6 +36,13 @@
                     "babel-plugin-transform-require-ignore", {
                         "extensions": [".scss", ".css"]
                     }
+                ],
+                [
+                    "react-intl",
+                    {
+                        "enforceDescriptions": false,
+                        "messagesDir": "./i18n/json"
+                    }
                 ]
             ]
         }

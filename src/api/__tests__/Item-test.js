@@ -523,10 +523,4 @@ describe('api/Item', () => {
             expect(item.getParentCacheKey).toHaveBeenCalledWith('parentId');
         });
     });
-
-    describe('getTypedFileId()', () => {
-        test('should return correct typed id', () => {
-            expect(item.getTypedFileId('foo')).toBe('file_foo');
-        });
-    });
 });

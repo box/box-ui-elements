@@ -7,13 +7,13 @@
 import React from 'react';
 import getProp from 'lodash/get';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './SidebarSkills';
+import SidebarVersions from './SidebarVersions';
 import type { BoxItem, FileVersions } from '../../flowTypes';
 import './DetailsSidebar.scss';
 
@@ -26,6 +26,7 @@ type Props = {
     hasMetadata: boolean,
     hasAccessStats: boolean,
     hasClassification: boolean,
+    hasVersions: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onInteraction: Function,
@@ -45,6 +46,7 @@ const DetailsSidebar = ({
     hasMetadata,
     hasAccessStats,
     hasClassification,
+    hasVersions,
     rootElement,
     appElement,
     onInteraction,
@@ -61,12 +63,7 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {versions &&
-                versions.total_count > 1 && (
-                    <section className='bcs-section'>
-                        <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={versions.total_count} />
-                    </section>
-                )}
+            {hasVersions && <SidebarVersions onClick={onVersionHistoryClick} versions={versions} />}
             {hasSkills && (
                 <SidebarSkills
                     metadata={file.metadata}

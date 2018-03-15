@@ -13,14 +13,7 @@ import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
-import {
-    DEFAULT_HOSTNAME_API,
-    DEFAULT_HOSTNAME_UPLOAD,
-    TYPE_FOLDER,
-    TYPE_FILE,
-    TYPE_WEBLINK,
-    TYPE_VERSIONS
-} from '../constants';
+import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
 class APIFactory {
@@ -161,9 +154,6 @@ class APIFactory {
                 break;
             case TYPE_WEBLINK:
                 api = this.getWebLinkAPI();
-                break;
-            case TYPE_VERSIONS:
-                api = this.getVersionsAPI();
                 break;
             default:
                 throw new Error('Unknown Type!');

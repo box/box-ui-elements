@@ -25,7 +25,6 @@ export const VIEW_UPLOAD_SUCCESS: 'upload-success' = 'upload-success';
 export const TYPE_FOLDER: 'folder' = 'folder';
 export const TYPE_FILE: 'file' = 'file';
 export const TYPE_WEBLINK: 'web_link' = 'web_link';
-export const TYPE_VERSIONS: 'versions' = 'versions';
 
 /* -------------------- Typed Prefix-------------------------- */
 export const TYPED_ID_FOLDER_PREFIX = 'folder_';

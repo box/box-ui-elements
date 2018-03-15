@@ -71,9 +71,6 @@ describe('api/APIFactory', () => {
         test('should return web link api when type is web_link', () => {
             expect(factory.getAPI('web_link')).toBeInstanceOf(WebLinkAPI);
         });
-        test('should return versions api when type is versions', () => {
-            expect(factory.getAPI('versions')).toBeInstanceOf(VersionsAPI);
-        });
         test('should throw error when type is incorrect', () => {
             expect(factory.getAPI.bind(factory, 'foo')).toThrow(Error, /Unknown Type/);
         });

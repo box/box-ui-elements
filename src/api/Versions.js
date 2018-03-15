@@ -4,10 +4,11 @@
  * @author Box
  */
 
-import Item from './Item';
+import Base from './Base';
+import File from './File';
 import type { FileVersions } from '../flowTypes';
 
-class Versions extends Item {
+class Versions extends Base {
     /**
      * API URL for versions
      *
@@ -38,7 +39,7 @@ class Versions extends Item {
         // We only need the total_count for now
         return this.xhr
             .get({
-                id: this.getTypedFileId(id),
+                id: File.getTypedFileId(id),
                 url: this.getUrl(id)
             })
             .then(({ data }: { data: FileVersions }) => {

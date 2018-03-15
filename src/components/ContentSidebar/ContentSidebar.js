@@ -36,6 +36,7 @@ type Props = {
     hasAccessStats: boolean,
     hasClassification: boolean,
     hasActivityFeed: boolean,
+    hasVersions: boolean,
     language?: string,
     messages?: StringMap,
     cache?: Cache,
@@ -73,6 +74,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasAccessStats: false,
         hasClassification: false,
         hasActivityFeed: false,
+        hasVersions: false,
         onInteraction: noop
     };
 
@@ -138,13 +140,15 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { fileId }: Props = this.props;
+        const { fileId, hasVersions }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (fileId) {
             this.fetchFile(fileId);
-            this.fetchVersions(fileId);
+            if (hasVersions) {
+                this.fetchVersions(fileId);
+            }
         }
     }
 
@@ -185,10 +189,19 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasMetadata,
             hasAccessStats,
             hasClassification,
-            hasActivityFeed
+            hasActivityFeed,
+            hasVersions
         }: Props = this.props;
 
-        return hasSkills || hasProperties || hasMetadata || hasAccessStats || hasClassification || hasActivityFeed;
+        return (
+            hasSkills ||
+            hasProperties ||
+            hasMetadata ||
+            hasAccessStats ||
+            hasClassification ||
+            hasActivityFeed ||
+            hasVersions
+        );
     }
 
     /**
@@ -339,6 +352,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasAccessStats,
             hasClassification,
             hasActivityFeed,
+            hasVersions,
             className,
             onVersionHistoryClick
         }: Props = this.props;
@@ -352,7 +366,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={`be bcs ${className}`}>
                     <div className='be-app-element'>
-                        {file && versions ? (
+                        {file ? (
                             <Sidebar
                                 file={file}
                                 versions={versions}
@@ -369,6 +383,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
                                 onVersionHistoryClick={onVersionHistoryClick}
+                                hasVersions={hasVersions}
                             />
                         ) : (
                             <div className='bcs-loading'>

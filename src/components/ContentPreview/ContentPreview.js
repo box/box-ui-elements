@@ -14,6 +14,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
+import File from '../../api/File';
 import Cache from '../../util/Cache';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
@@ -318,15 +319,14 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     async prefetch(files: Array<string | BoxItem>): Promise<void> {
         const { token }: Props = this.props;
-        const fileAPI = this.api.getFileAPI();
 
         // We try to get tokens in bulk
-        const typedIds = files.map((file) => fileAPI.getTypedFileId(this.getFileId(file)));
+        const typedIds = files.map((file) => File.getTypedFileId(this.getFileId(file)));
         const tokens = await TokenService.getTokens(typedIds, token);
 
         files.forEach((file) => {
             const fileId = this.getFileId(file);
-            const typedId = fileAPI.getTypedFileId(fileId);
+            const typedId = File.getTypedFileId(fileId);
             const fileToken = tokens[typedId];
             const isValidFile = isValidBoxFile(file, true, true);
 

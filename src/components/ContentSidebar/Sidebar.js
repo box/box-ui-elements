@@ -24,6 +24,7 @@ type Props = {
     hasAccessStats: boolean,
     hasClassification: boolean,
     hasActivityFeed: boolean,
+    hasVersions: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onInteraction: Function,
@@ -44,6 +45,7 @@ const Sidebar = ({
     hasAccessStats,
     hasClassification,
     hasActivityFeed,
+    hasVersions,
     rootElement,
     appElement,
     onInteraction,
@@ -64,6 +66,7 @@ const Sidebar = ({
             hasMetadata={hasMetadata}
             hasAccessStats={hasAccessStats}
             hasClassification={hasClassification}
+            hasVersions={hasVersions}
             appElement={appElement}
             rootElement={rootElement}
             onInteraction={onInteraction}
