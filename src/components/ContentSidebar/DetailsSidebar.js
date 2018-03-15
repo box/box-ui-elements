@@ -13,6 +13,7 @@ import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
+import SidebarNotices from './SidebarNotices';
 import type { BoxItem } from '../../flowTypes';
 import './DetailsSidebar.scss';
 
@@ -21,6 +22,7 @@ type Props = {
     getPreviewer: Function,
     hasTitle: boolean,
     hasSkills: boolean,
+    hasNotices: boolean,
     hasProperties: boolean,
     hasMetadata: boolean,
     hasAccessStats: boolean,
@@ -39,6 +41,7 @@ const DetailsSidebar = ({
     hasTitle,
     hasSkills,
     hasProperties,
+    hasNotices,
     hasMetadata,
     hasAccessStats,
     hasClassification,
@@ -48,7 +51,7 @@ const DetailsSidebar = ({
     onDescriptionChange,
     intl
 }: Props) => {
-    if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification) {
+    if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification && !hasNotices) {
         return null;
     }
 
@@ -56,6 +59,7 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
+            {hasNotices && <SidebarNotices file={file} />}
             {hasSkills && (
                 <SidebarSkills
                     metadata={file.metadata}
