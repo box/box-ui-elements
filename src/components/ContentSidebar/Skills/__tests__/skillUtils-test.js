@@ -1,4 +1,4 @@
-import hasSkills from '../skillUtils';
+import { hasSkills, isValidSkillsCard } from '../skillUtils';
 
 describe('components/ContentSidebar/skillUtils/hasSkills', () => {
     test('should return false when no file', () => {
@@ -18,10 +18,12 @@ describe('components/ContentSidebar/skillUtils/hasSkills', () => {
     });
 
     test('should return false when no box skills cards', () => {
+        expect(isValidSkillsCard({})).toBeFalsy();
         expect(hasSkills({ metadata: { global: { boxSkillsCards: {} } } })).toBeFalsy();
     });
 
     test('should return false when box skills cards empty', () => {
+        expect(isValidSkillsCard({ entries: [] })).toBeFalsy();
         expect(hasSkills({ metadata: { global: { boxSkillsCards: { cards: [] } } } })).toBeFalsy();
     });
 
@@ -70,6 +72,48 @@ describe('components/ContentSidebar/skillUtils/hasSkills', () => {
                             cards: [
                                 {
                                     entries: [{}]
+                                }
+                            ]
+                        }
+                    }
+                }
+            })
+        ).toBeTruthy();
+    });
+
+    test('should return true when even one box skills cards entries have data', () => {
+        expect(
+            hasSkills({
+                metadata: {
+                    global: {
+                        boxSkillsCards: {
+                            cards: [
+                                {
+                                    entries: []
+                                },
+                                {
+                                    entries: [{}]
+                                }
+                            ]
+                        }
+                    }
+                }
+            })
+        ).toBeTruthy();
+    });
+
+    test('should return true when even one box skills cards entries has error', () => {
+        expect(
+            hasSkills({
+                metadata: {
+                    global: {
+                        boxSkillsCards: {
+                            cards: [
+                                {
+                                    entries: []
+                                },
+                                {
+                                    error: {}
                                 }
                             ]
                         }

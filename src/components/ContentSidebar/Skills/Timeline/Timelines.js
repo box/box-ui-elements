@@ -7,7 +7,7 @@
 import React from 'react';
 import randomcolor from 'randomcolor';
 import Timeline from './Timeline';
-import type { SkillCard, SkillCardEntry } from '../../flowTypes';
+import type { SkillCard, SkillCardEntry } from '../../../../flowTypes';
 
 type Props = {
     skill: SkillCard,

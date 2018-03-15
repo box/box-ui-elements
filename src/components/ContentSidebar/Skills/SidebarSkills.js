@@ -7,13 +7,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import cloneDeep from 'lodash/cloneDeep';
-import messages from '../messages';
-import SidebarSection from './SidebarSection';
-import Keywords from '../Keywords';
-import Transcript from '../Transcript';
-import Timelines from '../Timeline';
-import Keyvalues from '../Keyvalues';
-import type { SkillCards, SkillCard, MetadataType } from '../../flowTypes';
+import messages from '../../messages';
+import SidebarSection from '../SidebarSection';
+import Keywords from './Keywords';
+import Transcript from './Transcript';
+import Timelines from './Timeline';
+import Keyvalues from './Keyvalues';
+import { isValidSkillsCard } from './skillUtils';
+import type { SkillCards, SkillCard, MetadataType } from '../../../flowTypes';
 import './SidebarSkills.scss';
 
 type Props = {
@@ -72,8 +73,9 @@ function getCard(
 const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement, onInteraction }: Props) => {
     // $FlowFixMe
     const { cards }: SkillCards = metadata.global.boxSkillsCards;
+    const validCards: Array<SkillCard> = cards.filter((card: SkillCard) => isValidSkillsCard(card));
 
-    return cards.map((card: SkillCard, index) => (
+    return validCards.map((card: SkillCard, index) => (
         /* eslint-disable react/no-array-index-key */
         <SidebarSection
             key={index}

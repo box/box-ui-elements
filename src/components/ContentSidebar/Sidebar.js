@@ -9,7 +9,7 @@ import { injectIntl } from 'react-intl';
 import TabView from 'box-react-ui/lib/components/tab-view/TabView';
 import Tab from 'box-react-ui/lib/components/tab-view/Tab';
 import DetailsSidebar from './DetailsSidebar';
-import hasSkillsData from './skillUtils';
+import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import messages from '../messages';
 import type { BoxItem, FileVersions } from '../../flowTypes';
 import './Sidebar.scss';

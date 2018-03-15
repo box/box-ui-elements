@@ -8,7 +8,7 @@ import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import Line from './Line';
 import { isValidStartTime } from '../Transcript/timeSliceUtils';
-import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../flowTypes';
+import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../../../flowTypes';
 import './Timeline.scss';
 
 type Props = {

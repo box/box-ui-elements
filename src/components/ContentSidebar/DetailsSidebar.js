@@ -12,7 +12,7 @@ import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
-import SidebarSkills from './SidebarSkills';
+import SidebarSkills from './Skills/SidebarSkills';
 import SidebarVersions from './SidebarVersions';
 import type { BoxItem, FileVersions } from '../../flowTypes';
 import './DetailsSidebar.scss';
