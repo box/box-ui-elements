@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from '../../../components/link';
+import { Link } from 'box-react-ui/lib/components/link';
 import Mention from '../comment/Mention';
 
 /**
