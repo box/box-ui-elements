@@ -15,7 +15,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
-import type { Token, BoxItem, StringMap } from '../../flowTypes';
+import type { AccessStats, Token, BoxItem, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -44,11 +44,13 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onInteraction: Function
+    onInteraction: Function,
+    onAccessStatsClick?: Function
 };
 
 type State = {
-    file?: BoxItem
+    file?: BoxItem,
+    accessStats?: AccessStats
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -324,9 +326,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasAccessStats,
             hasClassification,
             hasActivityFeed,
-            className
+            className,
+            onAccessStatsClick
         }: Props = this.props;
-        const { file }: State = this.state;
+        const { file, accessStats }: State = this.state;
 
         if (!this.shouldFetchOrRender()) {
             return null;
@@ -352,6 +355,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 rootElement={this.rootElement}
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
+                                accessStats={accessStats}
+                                onAccessStatsClick={onAccessStatsClick}
                             />
                         ) : (
                             <div className='bcs-loading'>

@@ -10,14 +10,16 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import messages from '../messages';
+import SidebarAccessStats from './SidebarAccessStats';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
 import SidebarNotices from './SidebarNotices';
-import type { BoxItem } from '../../flowTypes';
+import type { BoxItem, AccessStats } from '../../flowTypes';
 import './DetailsSidebar.scss';
 
 type Props = {
+    accessStats: AccessStats,
     file: BoxItem,
     getPreviewer: Function,
     hasTitle: boolean,
@@ -29,6 +31,7 @@ type Props = {
     hasClassification: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
+    onAccessStatsClick?: Function,
     onInteraction: Function,
     onDescriptionChange: Function,
     intl: any
@@ -36,6 +39,7 @@ type Props = {
 
 /* eslint-disable jsx-a11y/label-has-for */
 const DetailsSidebar = ({
+    accessStats,
     file,
     getPreviewer,
     hasTitle,
@@ -47,6 +51,7 @@ const DetailsSidebar = ({
     hasClassification,
     rootElement,
     appElement,
+    onAccessStatsClick,
     onInteraction,
     onDescriptionChange,
     intl
@@ -83,6 +88,7 @@ const DetailsSidebar = ({
                     />
                 </SidebarSection>
             )}
+            {hasAccessStats && <SidebarAccessStats accessStats={accessStats} onAccessStatsClick={onAccessStatsClick} />}
         </SidebarContent>
     );
 };

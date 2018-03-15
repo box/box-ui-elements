@@ -27,6 +27,7 @@ type Props = {
     hasActivityFeed: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
+    onAccessStatsClick?: Function,
     onInteraction: Function,
     onDescriptionChange: Function,
     descriptionTextareaProps: Object,
@@ -46,6 +47,7 @@ const Sidebar = ({
     hasActivityFeed,
     rootElement,
     appElement,
+    onAccessStatsClick,
     onInteraction,
     onDescriptionChange,
     intl
@@ -65,6 +67,7 @@ const Sidebar = ({
             hasClassification={hasClassification}
             appElement={appElement}
             rootElement={rootElement}
+            onAccessStatsClick={onAccessStatsClick}
             onInteraction={onInteraction}
             onDescriptionChange={onDescriptionChange}
         />

@@ -338,3 +338,10 @@ export type MultiputPart = {
 export type MultiputData = {
     part?: MultiputPart
 };
+
+export type AccessStats = {
+    preview_count: number,
+    download_count: number,
+    comment_count: number,
+    edit_count: number
+};
