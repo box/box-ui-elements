@@ -126,7 +126,7 @@ export type SkillCardEntry = {
     text?: string,
     label?: string,
     image_url?: string,
-    appears?: SkillCardEntryTimeSlice[]
+    appears?: Array<SkillCardEntryTimeSlice>
 };
 
 export type SkillCard = {
@@ -139,7 +139,7 @@ export type SkillCard = {
 };
 
 export type SkillCards = {
-    cards: SkillCard[]
+    cards: Array<SkillCard>
 };
 
 export type MetadataTemplate = {

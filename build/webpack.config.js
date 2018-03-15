@@ -24,7 +24,6 @@ const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', ve
 function getConfig(isReactExternalized) {
     const config = {
         bail: true,
-        devtool: 'source-map',
         entry: {
             picker: path.resolve('src/wrappers/ContentPickers.js'),
             uploader: path.resolve('src/wrappers/ContentUploader.js'),
@@ -109,6 +108,7 @@ function getConfig(isReactExternalized) {
     };
 
     if (isDev) {
+        config.devtool = 'source-map';
         config.plugins.push(new TranslationsPlugin());
         config.plugins.push(
             new CircularDependencyPlugin({

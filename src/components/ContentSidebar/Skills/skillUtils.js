@@ -5,7 +5,16 @@
  */
 
 import getProp from 'lodash/get';
-import type { BoxItem } from '../../../flowTypes';
+import type { BoxItem, SkillCard } from '../../../flowTypes';
+
+/**
+ * Returns true if its a valid skills card.
+ *
+ * @param {SkillCard} card - box skill card
+ * @return {boolean} if its valid skills card
+ */
+const isValidSkillsCard = (card: SkillCard): boolean =>
+    !!card.error || (Array.isArray(card.entries) && card.entries.length > 0);
 
 /**
  * Returns true if there are valid skills to show.
@@ -15,11 +24,7 @@ import type { BoxItem } from '../../../flowTypes';
  */
 const hasSkills = (file: BoxItem): boolean => {
     const cards = getProp(file, 'metadata.global.boxSkillsCards.cards', []);
-    return (
-        Array.isArray(cards) &&
-        cards.length > 0 &&
-        cards.every((card) => !!card.error || (Array.isArray(card.entries) && card.entries.length > 0))
-    );
+    return Array.isArray(cards) && cards.length > 0 && cards.some((card) => isValidSkillsCard(card));
 };
 
-export default hasSkills;
+export { hasSkills, isValidSkillsCard };
