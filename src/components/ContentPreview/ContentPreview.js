@@ -16,7 +16,6 @@ import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight'
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
-import File from '../../api/File';
 import Cache from '../../util/Cache';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';

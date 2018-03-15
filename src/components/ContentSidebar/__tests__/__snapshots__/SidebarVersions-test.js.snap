@@ -56,6 +56,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <VersionHistoryLink
+        className=""
         onClick={undefined}
         versionCount={2}
       />,
@@ -67,6 +68,7 @@ ShallowWrapper {
       "key": undefined,
       "nodeType": "function",
       "props": Object {
+        "className": "",
         "onClick": undefined,
         "versionCount": 2,
       },
@@ -83,6 +85,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <VersionHistoryLink
+          className=""
           onClick={undefined}
           versionCount={2}
         />,
@@ -94,6 +97,7 @@ ShallowWrapper {
         "key": undefined,
         "nodeType": "function",
         "props": Object {
+          "className": "",
           "onClick": undefined,
           "versionCount": 2,
         },
