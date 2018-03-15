@@ -182,12 +182,21 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasSkills,
             hasProperties,
             hasMetadata,
+            hasNotices,
             hasAccessStats,
             hasClassification,
             hasActivityFeed
         }: Props = this.props;
 
-        return hasSkills || hasProperties || hasMetadata || hasAccessStats || hasClassification || hasActivityFeed;
+        return (
+            hasSkills ||
+            hasProperties ||
+            hasMetadata ||
+            hasAccessStats ||
+            hasClassification ||
+            hasActivityFeed ||
+            hasNotices
+        );
     }
 
     /**
