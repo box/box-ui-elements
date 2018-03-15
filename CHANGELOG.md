@@ -1,6 +1,14 @@
+<a name="4.3.1"></a>
+## <small>4.3.1 (2018-03-15)</small>
+
+* Fix: Flow error with latest webpack-cli (#224) ([a430cad](https://github.com/box/box-ui-elements/commit/a430cad)), closes [#224](https://github.com/box/box-ui-elements/issues/224)
+
+
+
 <a name="4.3.0"></a>
 ## 4.3.0 (2018-03-14)
 
+* Release: 4.3.0 ([1456442](https://github.com/box/box-ui-elements/commit/1456442))
 * Mojito: Update translations (#219) ([0211f28](https://github.com/box/box-ui-elements/commit/0211f28)), closes [#219](https://github.com/box/box-ui-elements/issues/219)
 * Mojito: Update translations (#223) ([c26168c](https://github.com/box/box-ui-elements/commit/c26168c)), closes [#223](https://github.com/box/box-ui-elements/issues/223)
 * Chore: Minor folder structure cleanup (#222) ([74bf4c2](https://github.com/box/box-ui-elements/commit/74bf4c2)), closes [#222](https://github.com/box/box-ui-elements/issues/222)
