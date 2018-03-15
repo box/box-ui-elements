@@ -13,6 +13,7 @@ import Keywords from './Keywords';
 import Transcript from './Transcript';
 import Timelines from './Timeline';
 import Keyvalues from './Keyvalues';
+import { isValidSkillsCard } from './skillUtils';
 import type { SkillCards, SkillCard, MetadataType } from '../../../flowTypes';
 import './SidebarSkills.scss';
 
@@ -72,8 +73,9 @@ function getCard(
 const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement, onInteraction }: Props) => {
     // $FlowFixMe
     const { cards }: SkillCards = metadata.global.boxSkillsCards;
+    const validCards: Array<SkillCard> = cards.filter((card: SkillCard) => isValidSkillsCard(card));
 
-    return cards.map((card: SkillCard, index) => (
+    return validCards.map((card: SkillCard, index) => (
         /* eslint-disable react/no-array-index-key */
         <SidebarSection
             key={index}
