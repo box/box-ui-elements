@@ -1,56 +1,34 @@
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file Comment Text component used by Comment component
+ */
+
 import React, { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
 
-import LoadingIndicator from '../../../components/loading-indicator';
+import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator';
 
-import PlainButton from '../../../components/plain-button';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
+import ShowOriginalButton from './ShowOriginalButton';
+import TranslateButton from './TranslateButton';
 
-import messages from '../messages';
-
-const TranslateButton = ({ handleTranslate }) => (
-    <PlainButton className='box-ui-comment-translate' onClick={handleTranslate}>
-        <FormattedMessage {...messages.commentTranslate} />
-    </PlainButton>
-);
-
-TranslateButton.propTypes = {
-    handleTranslate: PropTypes.func
+type Props = {
+    id: string,
+    taggedMessage: string,
+    translatedTaggedMessage: string,
+    translationEnabled: boolean,
+    onTranslate: Function,
+    translationFailed: boolean
 };
 
-const ShowOriginalButton = ({ handleShowOriginal }) => (
-    <PlainButton className='box-ui-comment-translate' onClick={handleShowOriginal}>
-        <FormattedMessage {...messages.commentShowOriginal} />
-    </PlainButton>
-);
-
-ShowOriginalButton.propTypes = {
-    handleShowOriginal: PropTypes.func
-};
-
-class CommentText extends Component {
-    static propTypes = {
-        id: PropTypes.string.isRequired,
-        taggedMessage: PropTypes.string.isRequired,
-        translatedTaggedMessage: PropTypes.string,
-        translationEnabled: PropTypes.bool,
-        onTranslate: PropTypes.func,
-        translationFailed: PropTypes.bool
-    };
-
+class CommentText extends Component<Props> {
     static defaultProps = {
         translationEnabled: false
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            isLoading: false,
-            isTranslation: false
-        };
-    }
+    state = {
+        isLoading: false,
+        isTranslation: false
+    };
 
     componentWillReceiveProps(nextProps) {
         const { translatedTaggedMessage, translationFailed } = nextProps;

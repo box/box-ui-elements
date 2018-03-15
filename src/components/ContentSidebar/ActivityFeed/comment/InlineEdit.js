@@ -1,25 +1,30 @@
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file Inline Edit component
+ */
+
 import React, { Component } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 
-import PlainButton from '../../../components/plain-button';
-import IconPencil from '../../../icons/general/IconPencil';
+import PlainButton from 'box-react-ui/lib/components/plain-button';
+import IconPencil from 'box-react-ui/lib/icons/general/IconPencil';
+
 import messages from '../messages';
 
-class InlineEdit extends Component {
-    static propTypes = {
-        toEdit: PropTypes.func.isRequired,
-        id: PropTypes.string.isRequired,
-        intl: intlShape.isRequired
-    };
+type Props = {
+    toEdit: Function,
+    id: Function,
+    intl: intlShape.isRequired
+};
 
+class InlineEdit extends Component<Props> {
     onEdit = () => {
         const { id, toEdit } = this.props;
         toEdit({ id });
     };
 
     render() {
-        const onEdit = this.onEdit;
+        const { onEdit } = this;
         return (
             <div className='box-ui-comment-edit-container'>
                 <PlainButton

@@ -1,7 +1,16 @@
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file Mention component
+ */
+
 import React from 'react';
 
-const Mention = ({ children, id, ...rest }) => {
+type Props = {
+    children: PropTypes.node.isRequired,
+    id: PropTypes.number.isRequired
+};
+
+const Mention = ({ children, id, ...rest }: Props) => {
     delete rest.mentionTrigger;
     return (
         <a {...rest} style={{ display: 'inline-block' }} href={`/profile/${id}`}>
@@ -11,10 +20,5 @@ const Mention = ({ children, id, ...rest }) => {
 };
 
 Mention.displayName = 'Mention';
-
-Mention.propTypes = {
-    children: PropTypes.node.isRequired,
-    id: PropTypes.number.isRequired
-};
 
 export default Mention;

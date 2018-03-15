@@ -1,18 +1,21 @@
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file Comment component
+ */
+
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
-import Avatar from '../../../components/avatar';
-import InlineError from '../../../components/inline-error';
-import { Link } from '../../../components/link';
-import PlainButton from '../../../components/plain-button';
-import { ReadableTime } from '../../../components/time';
-import Tooltip from '../../../components/tooltip';
-import { ActionItemErrorPropType, UserPropType, SelectorItemsPropType } from '../../../common/box-proptypes';
+import Avatar from 'box-react-ui/lib/components/avatar';
+import { Link } from 'box-react-ui/lib/components/link';
+import { ReadableTime } from 'box-react-ui/lib/components/time';
+import Tooltip from 'box-react-ui/lib/components/tooltip';
 
+import { ActionItemError, SelectorItems, User } from '../../../../flowTypes';
 import InlineDelete from './InlineDelete';
 import InlineEdit from './InlineEdit';
+import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
@@ -22,75 +25,52 @@ import './Comment.scss';
 
 const oneHourInMs = 3600000; // 60 * 60 * 1000
 
-const CommentInlineError = ({ action, message, title }) => (
-    <InlineError className='box-ui-comment-error' title={title}>
-        <div>{message}</div>
-        {action ? (
-            <PlainButton className='lnk box-ui-comment-error-action' onClick={action.onAction} type='button'>
-                {action.text}
-            </PlainButton>
-        ) : null}
-    </InlineError>
-);
-
-CommentInlineError.propTypes = {
-    action: PropTypes.shape({
-        onAction: PropTypes.func,
-        text: PropTypes.node
-    }),
-    message: PropTypes.node,
-    title: PropTypes.node
+type Props = {
+    createdBy: User,
+    createdAt: any,
+    permissions: {
+        comment_delete: boolean,
+        comment_edit: boolean
+    },
+    id: string,
+    isPending: boolean,
+    error: ActionItemError,
+    onDelete: Function,
+    onEdit: Function,
+    taggedMessage: string,
+    translatedTaggedMessage: string,
+    translations: {
+        translationEnabled: boolean,
+        onTranslate: Function
+    },
+    handlers: {
+        tasks: {
+            update: Function
+        },
+        contacts: {
+            getApproverWithQuery: Function,
+            getMentionWithQuery: Function
+        },
+        versions: {
+            info: Function
+        }
+    },
+    inputState: {
+        approverSelectorContacts: SelectorItems,
+        mentionSelectorContacts: SelectorItems,
+        currentUser: User,
+        isDisabled: boolean
+    }
 };
 
-class Comment extends Component {
+class Comment extends Component<Props> {
     static displayName = 'Comment';
 
-    static propTypes = {
-        createdBy: UserPropType.isRequired,
-        createdAt: PropTypes.any,
-        permissions: PropTypes.shape({
-            comment_delete: PropTypes.bool,
-            comment_edit: PropTypes.bool
-        }),
-        id: PropTypes.string.isRequired,
-        isPending: PropTypes.bool,
-        error: ActionItemErrorPropType,
-        onDelete: PropTypes.func,
-        onEdit: PropTypes.func,
-        taggedMessage: PropTypes.string.isRequired,
-        translatedTaggedMessage: PropTypes.string,
-        translations: PropTypes.shape({
-            translationEnabled: PropTypes.bool,
-            onTranslate: PropTypes.func
-        }),
-        handlers: PropTypes.shape({
-            tasks: PropTypes.shape({
-                update: PropTypes.func
-            }),
-            contacts: PropTypes.shape({
-                getApproverWithQuery: PropTypes.func.isRequired,
-                getMentionWithQuery: PropTypes.func.isRequired
-            }),
-            versions: PropTypes.shape({
-                info: PropTypes.func
-            })
-        }),
-        inputState: PropTypes.shape({
-            approverSelectorContacts: SelectorItemsPropType,
-            mentionSelectorContacts: SelectorItemsPropType,
-            currentUser: UserPropType.isRequired,
-            isDisabled: PropTypes.bool
-        })
+    static state = {
+        isEditing: false,
+        isFocused: false,
+        isInputOpen: false
     };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            isEditing: false,
-            isFocused: false,
-            isInputOpen: false
-        };
-    }
 
     onKeyDown = (event) => {
         const { nativeEvent } = event;
@@ -133,7 +113,7 @@ class Comment extends Component {
             inputState
         } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
-        const toEdit = this.toEdit;
+        const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(createdAt).getTime();
         return (
