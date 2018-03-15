@@ -163,8 +163,18 @@ describe('api/APIFactory', () => {
     describe('getVersionsAPI()', () => {
         test('should call destroy and return versions API', () => {
             const spy = jest.spyOn(factory, 'destroy');
-            const versionsAPI = factory.getVersionsAPI();
+            const versionsAPI = factory.getVersionsAPI(true);
             expect(spy).toBeCalled();
+            expect(versionsAPI).toBeInstanceOf(VersionsAPI);
+            expect(versionsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(versionsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(versionsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return versions API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const versionsAPI = factory.getVersionsAPI();
+            expect(spy).not.toHaveBeenCalled();
             expect(versionsAPI).toBeInstanceOf(VersionsAPI);
             expect(versionsAPI.options.cache).toBeInstanceOf(Cache);
             expect(versionsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);

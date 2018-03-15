@@ -66,7 +66,7 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {hasVersions && <SidebarVersions onClick={onVersionHistoryClick} versions={versions} />}
+            {hasVersions && <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} />}
             {hasNotices && <SidebarNotices file={file} />}
             {hasSkills && (
                 <SidebarSkills

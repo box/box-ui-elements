@@ -241,9 +241,14 @@ class APIFactory {
 
     /**
      * API for versions
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {VersionsAPI} VersionsAPI instance
      */
-    getVersionsAPI(): VersionsAPI {
-        this.destroy();
+    getVersionsAPI(shouldDestroy: boolean): VersionsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
         this.versionsAPI = new VersionsAPI(this.options);
         return this.versionsAPI;
     }

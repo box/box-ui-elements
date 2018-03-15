@@ -53,14 +53,15 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "host",
+    "nodeType": "class",
     "props": Object {
       "children": <VersionHistoryLink
         className=""
         onClick={undefined}
         versionCount={2}
       />,
-      "className": "bcs-section",
+      "className": "",
+      "isOpen": true,
     },
     "ref": null,
     "rendered": Object {
@@ -76,20 +77,21 @@ ShallowWrapper {
       "rendered": null,
       "type": [Function],
     },
-    "type": "section",
+    "type": [Function],
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "host",
+      "nodeType": "class",
       "props": Object {
         "children": <VersionHistoryLink
           className=""
           onClick={undefined}
           versionCount={2}
         />,
-        "className": "bcs-section",
+        "className": "",
+        "isOpen": true,
       },
       "ref": null,
       "rendered": Object {
@@ -105,7 +107,7 @@ ShallowWrapper {
         "rendered": null,
         "type": [Function],
       },
-      "type": "section",
+      "type": [Function],
     },
   ],
   Symbol(enzyme.__options__): Object {

@@ -162,16 +162,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     componentWillReceiveProps(nextProps: Props): void {
         const { fileId, token }: Props = this.props;
-        const { fileId: newFileId }: Props = nextProps;
+        const { fileId: newFileId, token: newToken, hasVersions }: Props = nextProps;
 
-        const hasTokenChanged = nextProps.token !== token;
+        const hasTokenChanged = newToken !== token;
         const hasFileIdChanged = newFileId !== fileId;
+        const currentFileId = newFileId || fileId;
 
-        if (hasTokenChanged || hasFileIdChanged) {
-            if (newFileId) {
-                this.fetchFile(newFileId);
-            } else if (fileId) {
-                this.fetchFile(fileId);
+        if (currentFileId && (hasTokenChanged || hasFileIdChanged)) {
+            this.fetchFile(currentFileId);
+            if (hasVersions) {
+                this.fetchVersions(currentFileId);
             }
         }
     }
@@ -331,9 +331,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} id - File id
      * @return {void}
      */
-    fetchVersions(id: string): void {
+    fetchVersions(id: string, shouldDestroy?: boolean = false): void {
         if (this.shouldFetchOrRender()) {
-            this.api.getVersionsAPI().versions(id, this.fetchVersionsSuccessCallback, this.errorCallback);
+            this.api.getVersionsAPI(shouldDestroy).versions(id, this.fetchVersionsSuccessCallback, this.errorCallback);
         }
     }
 
