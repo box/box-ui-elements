@@ -1,9 +1,19 @@
-import PropTypes from 'prop-types';
+/**
+ * @flow
+ * @file IconActivityFeedEmptyState icon component
+ */
+
 import React from 'react';
 
-import AccessibleSVG from '../../../icons/accessible-svg';
+import AccessibleSVG from 'box-react-ui/lib/icons/accessible-svg';
 
-const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }) => (
+type Props = {
+    className: string,
+    width: number,
+    height: number
+};
+
+const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }: Props) => (
     <AccessibleSVG
         className={`box-ui-activity-feed-empty-state-illustration ${className}`}
         width={width}
@@ -126,11 +136,5 @@ const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 })
 );
 
 IconActivityFeedEmptyState.displayName = 'IconActivityFeedEmptyState';
-
-IconActivityFeedEmptyState.propTypes = {
-    className: PropTypes.string,
-    height: PropTypes.number,
-    width: PropTypes.number
-};
 
 export default IconActivityFeedEmptyState;
