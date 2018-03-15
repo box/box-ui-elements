@@ -2,7 +2,7 @@
  * @flow
  * @file CommentInlineError component used by Comment component.
  */
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import InlineError from 'box-react-ui/lib/components/inline-error';
 import PlainButton from 'box-react-ui/lib/components/plain-button';
@@ -10,10 +10,10 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 type Props = {
     action: {
         onAction: Function,
-        text: React.Node
+        text: ReactNode
     },
-    message: React.Node,
-    title: React.Node
+    message: ReactNode,
+    title: ReactNode
 };
 
 const CommentInlineError = ({ action, message, title }: Props) => (

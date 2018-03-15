@@ -72,7 +72,7 @@ class Comment extends Component<Props> {
         isInputOpen: false
     };
 
-    onKeyDown = (event) => {
+    onKeyDown = (event: React.SyntheticEvent) => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
     };
@@ -80,7 +80,7 @@ class Comment extends Component<Props> {
     approvalCommentFormFocusHandler = () => this.setState({ isInputOpen: true });
     approvalCommentFormCancelHandler = () => this.setState({ isInputOpen: false, isEditing: false });
     approvalCommentFormSubmitHandler = () => this.setState({ isInputOpen: false, isEditing: false });
-    updateTaskHandler = (args) => {
+    updateTaskHandler = (args: any) => {
         const { onEdit } = this.props;
         onEdit(args);
         this.approvalCommentFormSubmitHandler();

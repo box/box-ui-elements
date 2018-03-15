@@ -3,7 +3,7 @@
  * @file Keywords components
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Info from './Info';
@@ -11,7 +11,7 @@ import messages from '../messages';
 
 import './Keywords.scss';
 
-function getMessageForAction(action) {
+function getMessageForAction(action: string): ReactNode | null {
     switch (action) {
         case 'applied':
             return <FormattedMessage {...messages.keywordsApplied} />;

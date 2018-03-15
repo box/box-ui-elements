@@ -3,7 +3,7 @@
  * @file Comment Text component used by Comment component
  */
 
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator';
 
@@ -30,14 +30,14 @@ class CommentText extends Component<Props> {
         isTranslation: false
     };
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: any): void {
         const { translatedTaggedMessage, translationFailed } = nextProps;
         if (translatedTaggedMessage || translationFailed) {
             this.setState({ isLoading: false });
         }
     }
 
-    getButton(isTranslation) {
+    getButton(isTranslation: boolean): ReactNode {
         let button = null;
         if (isTranslation) {
             button = <ShowOriginalButton handleShowOriginal={this.handleShowOriginal} />;
@@ -47,7 +47,7 @@ class CommentText extends Component<Props> {
         return button;
     }
 
-    handleTranslate = (event) => {
+    handleTranslate = (event: React.SyntheticEvent) => {
         const { id, taggedMessage, onTranslate, translatedTaggedMessage } = this.props;
         if (!translatedTaggedMessage) {
             this.setState({ isLoading: true });
@@ -57,7 +57,7 @@ class CommentText extends Component<Props> {
         event.preventDefault();
     };
 
-    handleShowOriginal = (event) => {
+    handleShowOriginal = (event: React.SyntheticEvent) => {
         this.setState({ isTranslation: false });
         event.preventDefault();
     };

@@ -1,3 +1,8 @@
+/**
+ * @flow
+ * @file Util for formatting tagged messages
+ */
+
 import React from 'react';
 import { Link } from 'box-react-ui/lib/components/link';
 import Mention from '../comment/Mention';
@@ -12,14 +17,14 @@ import Mention from '../comment/Mention';
  * @param {Boolean} shouldReturnString The boolean value whether it should return string
  * @returns {Array|String}
  */
-const formatTaggedMessage = (taggedMessage, itemID, shouldReturnString) => {
+const formatTaggedMessage = (taggedMessage: string, itemID: string, shouldReturnString: boolean): Array | string => {
     // this regex matches one of the following regular expressions:
     // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
     // urls: (?:\b)((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(:\d+)?(\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)
     // NOTE: There are useless escapes in the regex below, should probably remove them when safe
     // eslint-disable-next-line no-useless-escape
     const splitRegex = /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
-    const contentItems = taggedMessage.split(splitRegex).map((text, contentIndex) => {
+    const contentItems = taggedMessage.split(splitRegex).map((text: string, contentIndex: number) => {
         // attempt mention match
         const mentionMatch = text.match(/([@＠﹫])\[([0-9]+):([^\]]+)]/i);
         if (mentionMatch) {
