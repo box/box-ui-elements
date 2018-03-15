@@ -12,7 +12,7 @@ import './SidebarSection.scss';
 type Props = {
     children?: any,
     className: string,
-    title: string | React$Element<any>,
+    title?: string | React$Element<any>,
     isOpen: boolean
 };
 
@@ -76,10 +76,12 @@ class SidebarSection extends PureComponent<Props, State> {
 
         return (
             <div className={sectionClassName}>
-                <PlainButton type='button' onClick={this.toggleVisibility} className='bcs-section-title'>
-                    {title}
-                </PlainButton>
-                {isOpen && <div className='bcs-section-content'>{children}</div>}
+                {title && (
+                    <PlainButton type='button' onClick={this.toggleVisibility} className='bcs-section-title'>
+                        {title}
+                    </PlainButton>
+                )}
+                {(isOpen || !title) && <div className='bcs-section-content'>{children}</div>}
             </div>
         );
     }

@@ -21,6 +21,7 @@ type Props = {
     hasSkills: boolean,
     hasProperties: boolean,
     hasMetadata: boolean,
+    hasNotices: boolean,
     hasAccessStats: boolean,
     hasClassification: boolean,
     hasActivityFeed: boolean,
@@ -42,6 +43,7 @@ const Sidebar = ({
     hasSkills,
     hasProperties,
     hasMetadata,
+    hasNotices,
     hasAccessStats,
     hasClassification,
     hasActivityFeed,
@@ -64,6 +66,7 @@ const Sidebar = ({
             hasSkills={shouldShowSkills}
             hasProperties={hasProperties}
             hasMetadata={hasMetadata}
+            hasNotices={hasNotices}
             hasAccessStats={hasAccessStats}
             hasClassification={hasClassification}
             hasVersions={hasVersions}
