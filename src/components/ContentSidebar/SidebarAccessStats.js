@@ -25,7 +25,7 @@ const SidebarVersions = ({
 }: Props) => {
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
-    if (!preview_count && !comment_count && !download_count) {
+    if (!preview_count && !comment_count && !download_count && !edit_count) {
         return null;
     }
 
