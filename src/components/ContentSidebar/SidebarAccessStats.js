@@ -14,6 +14,10 @@ type Props = {
     accessStats: AccessStats
 };
 
+// The AccessStats component requires a maximum number of events
+// TODO (@ddemicco): Revisit this during API integration
+const MAX_EVENTS = Number.MAX_SAFE_INTEGER;
+
 const SidebarVersions = ({
     onAccessStatsClick,
     accessStats = {
@@ -37,6 +41,7 @@ const SidebarVersions = ({
                 previewCount={preview_count}
                 editCount={edit_count}
                 openAccessStatsModal={onAccessStatsClick}
+                maxEvents={MAX_EVENTS}
             />
         </SidebarSection>
     );
