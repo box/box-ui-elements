@@ -1,16 +1,20 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+/**
+ * @flow
+ * @file Version component
+ */
+
+import React, { ReactNode } from 'react';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import PlainButton from '../../../components/plain-button';
-import IconInfoInverted from '../../../icons/general/IconInfoInverted';
-import { UserPropType } from '../../../common/box-proptypes';
+import PlainButton from 'box-react-ui/lib/components/plain-button';
+import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
 import messages from '../messages';
+import { User } from '../../../../flowTypes';
 
 import './Version.scss';
 
-function getMessageForAction(name, action, versionNumber) {
+function getMessageForAction(name: ReactNode, action: string, versionNumber: string): ReactNode | null {
     switch (action) {
         case 'upload':
             return (
@@ -47,7 +51,16 @@ function getMessageForAction(name, action, versionNumber) {
     }
 }
 
-const Version = ({ action, createdBy, id, intl, onInfo, versionNumber }) => (
+type Props = {
+    action: 'delete' | 'restore' | 'upload',
+    createdBy: User,
+    id: string,
+    intl: intlShape.isRequired,
+    onInfo: Function,
+    versionNumber: number
+};
+
+const Version = ({ action, createdBy, id, intl, onInfo, versionNumber }: Props): ReactNode => (
     <div className='box-ui-version'>
         <span className='box-ui-version-message'>{getMessageForAction(createdBy.name, action, versionNumber)}</span>
         {onInfo ? (
@@ -68,15 +81,6 @@ const Version = ({ action, createdBy, id, intl, onInfo, versionNumber }) => (
 );
 
 Version.displayName = 'Version';
-
-Version.propTypes = {
-    action: PropTypes.oneOf(['delete', 'restore', 'upload']).isRequired,
-    createdBy: UserPropType.isRequired,
-    id: PropTypes.string.isRequired,
-    intl: intlShape.isRequired,
-    onInfo: PropTypes.func,
-    versionNumber: PropTypes.number
-};
 
 export { Version as VersionBase };
 export default injectIntl(Version);

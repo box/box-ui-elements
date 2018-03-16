@@ -1,16 +1,26 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+/**
+ * @flow
+ * @file Collapsed Version component
+ */
+
+import React, { ReactNode } from 'react';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
-import PlainButton from '../../../components/plain-button';
-import IconInfoInverted from '../../../icons/general/IconInfoInverted';
-import { UserPropType } from '../../../common/box-proptypes';
+import PlainButton from 'box-react-ui/lib/components/plain-button';
+import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
+
+import { User } from '../../../../flowTypes';
 
 import messages from '../messages';
 
 import './Version.scss';
 
-function getMessageForAction(action, collaborators, versionStart, versionEnd) {
+function getMessageForAction(
+    action: string,
+    collaborators: { [collaborator_id: string]: User },
+    versionStart: number,
+    versionEnd: number
+): ReactNode | null {
     // We only support collapsing for multiple upload versions
     if (action !== 'upload') {
         return null;
@@ -50,7 +60,25 @@ function getMessageForAction(action, collaborators, versionStart, versionEnd) {
     );
 }
 
-const CollapsedVersion = ({ action, collaborators, intl, onInfo, versions, versionStart, versionEnd }) => (
+type Props = {
+    action: 'upload',
+    collaborators: { [collaborator_id: string]: User },
+    intl: intlShape.isRequired,
+    onInfo: Function,
+    versions: Array,
+    versionStart: number,
+    versionEnd: number
+};
+
+const CollapsedVersion = ({
+    action,
+    collaborators,
+    intl,
+    onInfo,
+    versions,
+    versionStart,
+    versionEnd
+}: Props): ReactNode => (
     <div className='box-ui-collapsed-version'>
         <span className='box-ui-version-message'>
             {getMessageForAction(action, collaborators, versionStart, versionEnd)}
@@ -73,16 +101,6 @@ const CollapsedVersion = ({ action, collaborators, intl, onInfo, versions, versi
 );
 
 CollapsedVersion.displayName = 'CollapsedVersion';
-
-CollapsedVersion.propTypes = {
-    action: PropTypes.oneOf(['upload']).isRequired,
-    collaborators: PropTypes.objectOf(UserPropType).isRequired,
-    intl: intlShape.isRequired,
-    onInfo: PropTypes.func,
-    versions: PropTypes.array,
-    versionStart: PropTypes.number.isRequired,
-    versionEnd: PropTypes.number.isRequired
-};
 
 export { CollapsedVersion as CollapsedVersionBase };
 export default injectIntl(CollapsedVersion);
