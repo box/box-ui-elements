@@ -3,7 +3,7 @@
  * @file Util for formatting tagged messages
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Link } from 'box-react-ui/lib/components/link';
 import Mention from '../comment/Mention';
 
@@ -15,9 +15,13 @@ import Mention from '../comment/Mention';
  * @param {String} taggedMessage The message string to format
  * @param {String} itemID The id of the tagged message
  * @param {Boolean} shouldReturnString The boolean value whether it should return string
- * @returns {Array|String}
+ * @returns {String|ReactNode}
  */
-const formatTaggedMessage = (taggedMessage: string, itemID: string, shouldReturnString: boolean): Array | string => {
+const formatTaggedMessage = (
+    taggedMessage: string,
+    itemID: string,
+    shouldReturnString: boolean
+): ReactNode | string => {
     // this regex matches one of the following regular expressions:
     // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
     // urls: (?:\b)((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(:\d+)?(\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)
