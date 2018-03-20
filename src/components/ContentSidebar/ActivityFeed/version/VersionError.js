@@ -10,7 +10,7 @@ import messages from '../messages';
 
 import './Version.scss';
 
-function getErrorMessage(errorCode: string): ReactNode | null {
+function getErrorMessage(errorCode: string): ReactNode {
     switch (errorCode) {
         case 'tooManyVersions':
             return <FormattedMessage {...messages.versionTooManyVersions} />;

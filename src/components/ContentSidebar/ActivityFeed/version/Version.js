@@ -14,7 +14,7 @@ import { User } from '../../../../flowTypes';
 
 import './Version.scss';
 
-function getMessageForAction(name: ReactNode, action: string, versionNumber: string): ReactNode | null {
+function getMessageForAction(name: ReactNode, action: string, versionNumber: string): ReactNode {
     switch (action) {
         case 'upload':
             return (

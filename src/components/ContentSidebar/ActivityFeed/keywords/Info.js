@@ -3,7 +3,7 @@
  * @file Info component used by Keywords component
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
@@ -15,7 +15,7 @@ type Props = {
     words: PropTypes.string
 };
 
-const Info = ({ words }: Props) => (
+const Info = ({ words }: Props): ReactNode => (
     <span className='box-ui-keywords-actions'>
         <Tooltip
             className='box-ui-keywords-actions-tooltip'

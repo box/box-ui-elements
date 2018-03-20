@@ -20,7 +20,7 @@ function getMessageForAction(
     collaborators: { [collaborator_id: string]: User },
     versionStart: number,
     versionEnd: number
-): ReactNode | null {
+): ReactNode {
     // We only support collapsing for multiple upload versions
     if (action !== 'upload') {
         return null;

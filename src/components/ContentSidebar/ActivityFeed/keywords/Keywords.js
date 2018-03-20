@@ -11,7 +11,7 @@ import messages from '../messages';
 
 import './Keywords.scss';
 
-function getMessageForAction(action: string): ReactNode | null {
+function getMessageForAction(action: string): ReactNode {
     switch (action) {
         case 'applied':
             return <FormattedMessage {...messages.keywordsApplied} />;
@@ -25,7 +25,7 @@ type Props = {
     words: string
 };
 
-const Keywords = ({ action, words }: Props) => (
+const Keywords = ({ action, words }: Props): ReactNode => (
     <div className='box-ui-keywords'>
         <span className='box-ui-keywords-message'>{getMessageForAction(action)}</span>
         {words ? <Info words={words} /> : null}
