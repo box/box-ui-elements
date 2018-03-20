@@ -3,7 +3,7 @@
  * @file Component for Approval comment form
  */
 
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import cx from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
@@ -64,7 +64,7 @@ class ApprovalCommentForm extends Component<Props, State> {
         isAddApprovalVisible: false
     };
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: Props): void {
         const { isOpen } = nextProps;
 
         if (isOpen !== this.props.isOpen && !isOpen) {
@@ -75,9 +75,10 @@ class ApprovalCommentForm extends Component<Props, State> {
         }
     }
 
-    onFormChangeHandler = (formData) => this.setState({ isAddApprovalVisible: formData.addApproval === 'on' });
+    onFormChangeHandler = (formData: any): void =>
+        this.setState({ isAddApprovalVisible: formData.addApproval === 'on' });
 
-    onFormValidSubmitHandler = (formData) => {
+    onFormValidSubmitHandler = (formData: any): void => {
         const { createComment, createTask, intl, updateTask, onSubmit, entityId } = this.props;
 
         const commentText = this.getFormattedCommentText();
@@ -116,16 +117,17 @@ class ApprovalCommentForm extends Component<Props, State> {
         });
     };
 
-    onMentionSelectorChangeHandler = (nextEditorState) => this.setState({ commentEditorState: nextEditorState });
+    onMentionSelectorChangeHandler = (nextEditorState: any): void =>
+        this.setState({ commentEditorState: nextEditorState });
 
-    onApprovalDateChangeHandler = (date) => this.setState({ approvalDate: date });
+    onApprovalDateChangeHandler = (date: Date): void => this.setState({ approvalDate: date });
 
     /**
      * Formats the comment editor's text such that it will be accepted by the server.
      *
      * @returns {string}
      */
-    getFormattedCommentText = () => {
+    getFormattedCommentText = (): string => {
         const { commentEditorState } = this.state;
 
         const contentState = commentEditorState.getCurrentContent();
@@ -162,22 +164,22 @@ class ApprovalCommentForm extends Component<Props, State> {
         return resultStringArr.join('\n');
     };
 
-    handleApproverSelectorInput = (value) => {
+    handleApproverSelectorInput = (value: any): void => {
         this.props.getApproverContactsWithQuery(value);
         this.setState({ approverSelectorError: '' });
     };
 
-    handleApproverSelectorSelect = (pills) => {
+    handleApproverSelectorSelect = (pills: any): void => {
         this.setState({ approvers: this.state.approvers.concat(pills) });
     };
 
-    handleApproverSelectorRemove = (option, index) => {
+    handleApproverSelectorRemove = (option: any, index: number): void => {
         const approvers = this.state.approvers.slice();
         approvers.splice(index, 1);
         this.setState({ approvers });
     };
 
-    render() {
+    render(): ReactNode {
         const {
             approverSelectorContacts,
             className,

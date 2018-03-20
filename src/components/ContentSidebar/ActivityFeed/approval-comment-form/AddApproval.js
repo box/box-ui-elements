@@ -3,7 +3,7 @@
  * @file AddApproval component for ApprovalCommentForm component
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import Checkbox from 'box-react-ui/lib/components/checkbox/Checkbox';
 
@@ -35,7 +35,7 @@ const AddApproval = ({
     onApproverSelectorInput,
     onApproverSelectorRemove,
     onApproverSelectorSelect
-}: Props) => (
+}: Props): ReactNode => (
     <div className='comment-add-approver'>
         <Checkbox
             className='box-ui-comment-add-approver-checkbox'

@@ -16,14 +16,15 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
         sandbox.verifyAndRestore();
     });
 
-    const render = (props) => mount(
-        <ApprovalCommentForm
-            getMentionContactsWithQuery={() => {}}
-            user={{ id: 123, name: 'foo bar' }}
-            intl={intlFake}
-            {...props}
-        />
-    );
+    const render = (props) =>
+        mount(
+            <ApprovalCommentForm
+                getMentionContactsWithQuery={() => {}}
+                user={{ id: 123, name: 'foo bar' }}
+                intl={intlFake}
+                {...props}
+            />
+        );
 
     test('should correctly render initial state', () => {
         const wrapper = render();

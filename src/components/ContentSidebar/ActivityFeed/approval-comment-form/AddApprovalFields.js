@@ -3,7 +3,7 @@
  * @file Add Approval Fields component for ApprovalComment component
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ContactDatalistItem from 'box-react-ui/lib/components/contact-datalist-item/ContactDatalistItem';
@@ -35,7 +35,7 @@ const AddApprovalFields = ({
     onApproverSelectorInput,
     onApproverSelectorRemove,
     onApproverSelectorSelect
-}: Props) => {
+}: Props): ReactNode => {
     const approverOptions = approverSelectorContacts
         // filter selected approvers
         .filter(({ id }) => !approvers.find(({ value }) => value === id))
