@@ -2,7 +2,7 @@
  * @flow
  * @file Active state component for Activity Feed
  */
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import Comment from '../comment';
 import Task from '../task';
@@ -40,7 +40,7 @@ const ActiveState = ({
     translations,
     inputState,
     handlers
-}: Props) => (
+}: Props): ReactNode => (
     <ul className='box-ui-activity-feed-active-state'>
         {items.map((item) => {
             switch (item.type) {

@@ -3,7 +3,7 @@
  * @file Component for Activity feed empty state
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
@@ -16,7 +16,7 @@ type Props = {
     showCommentMessage?: boolean
 };
 
-const EmptyState = ({ isLoading, showCommentMessage }: Props) => (
+const EmptyState = ({ isLoading, showCommentMessage }: Props): ReactNode => (
     <div className='box-ui-activity-feed-empty-state'>
         <IconActivityFeedEmptyState />
         {isLoading ? (

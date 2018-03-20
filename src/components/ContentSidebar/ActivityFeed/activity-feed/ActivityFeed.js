@@ -3,7 +3,7 @@
  * @file Component for Activity feed
  */
 
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
@@ -13,7 +13,7 @@ import type { Comments, Tasks, Contacts, Versions, Item, Translations } from '..
 
 import './ActivityFeed.scss';
 
-function collapseFeedState(feedState) {
+function collapseFeedState(feedState: Array<Item>): Array<Item> {
     return feedState.reduce((collapsedFeedState, feedItem) => {
         const previousFeedItem = collapsedFeedState.pop();
 
@@ -58,7 +58,7 @@ function collapseFeedState(feedState) {
     }, []);
 }
 
-function shouldShowEmptyState(feedState) {
+function shouldShowEmptyState(feedState: Array<Item>): boolean {
     return feedState.length === 0 || (feedState.length === 1 && feedState[0].type === 'file_version');
 }
 
@@ -94,26 +94,26 @@ class ActivityFeed extends Component<Props, State> {
         isInputOpen: false
     };
 
-    onKeyDown = (event) => {
+    onKeyDown = (event: React.SyntheticEvent): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
     };
 
-    approvalCommentFormFocusHandler = () => this.setState({ isInputOpen: true });
-    approvalCommentFormCancelHandler = () => this.setState({ isInputOpen: false });
-    approvalCommentFormSubmitHandler = () => this.setState({ isInputOpen: false });
-    createCommentHandler = (args) => {
+    approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
+    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
+    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
+    createCommentHandler = (args): void => {
         const { handlers } = this.props;
         handlers.comments.create(args);
         this.approvalCommentFormSubmitHandler();
     };
-    createTaskHandler = (args) => {
+    createTaskHandler = (args): void => {
         const { handlers } = this.props;
         handlers.tasks.create(args);
         this.approvalCommentFormSubmitHandler();
     };
 
-    render() {
+    render(): ReactNode {
         const { feedState, handlers, inputState, isLoading, translations } = this.props;
         const { isInputOpen } = this.state;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
