@@ -3,7 +3,7 @@
  * @file Tasks component
  */
 
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import Comment from '../comment';
@@ -55,7 +55,7 @@ type Props = {
 
 // eslint-disable-next-line
 class Task extends Component<Props> {
-    render() {
+    render(): ReactNode {
         const {
             assignees,
             createdAt,

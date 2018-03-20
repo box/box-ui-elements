@@ -3,7 +3,7 @@
  * @file PendingAssignment component
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
@@ -20,7 +20,7 @@ type Props = {
     shouldShowActions: boolean
 };
 
-const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActions }: Props) => (
+const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActions }: Props): ReactNode => (
     <div className='box-ui-task-pending-assignment'>
         <div className='box-ui-task-assignment-name'>{name}</div>
         {shouldShowActions ? (

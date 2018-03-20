@@ -3,7 +3,7 @@
  * @file CompletedAssignment component
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
@@ -14,7 +14,7 @@ type Props = {
     name: string
 };
 
-const CompletedAssignment = ({ name }: Props) => (
+const CompletedAssignment = ({ name }: Props): ReactNode => (
     <div className='box-ui-task-completed-assignment'>
         <div className='box-ui-task-assignment-name'>{name}</div>
         <div className='box-ui-task-assignment-actions'>

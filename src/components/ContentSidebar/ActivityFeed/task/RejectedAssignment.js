@@ -3,7 +3,7 @@
  * @file RejectedAssignment component
  */
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import IconClose from 'box-react-ui/lib/icons/general/IconClose';
@@ -14,7 +14,7 @@ type Props = {
     name: string
 };
 
-const RejectedAssignment = ({ name }: Props) => (
+const RejectedAssignment = ({ name }: Props): ReactNode => (
     <div className='box-ui-task-rejected-assignment'>
         <div className='box-ui-task-assignment-name'>{name}</div>
         <div className='box-ui-task-assignment-actions'>
