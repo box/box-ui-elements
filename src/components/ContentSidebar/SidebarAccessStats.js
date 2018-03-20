@@ -6,8 +6,10 @@
 
 import React from 'react';
 import AccessStatsComponent from 'box-react-ui/lib/features/access-stats/AccessStats';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import type { AccessStats } from '../../flowTypes';
+import messages from '../messages';
 
 type Props = {
     onAccessStatsClick?: Function,
@@ -34,7 +36,7 @@ const SidebarVersions = ({
     }
 
     return (
-        <SidebarSection title='Access Stats'>
+        <SidebarSection title={<FormattedMessage {...messages.sidebarAccessStats} />}>
             <AccessStatsComponent
                 commentCount={comment_count}
                 downloadCount={download_count}
@@ -47,4 +49,4 @@ const SidebarVersions = ({
     );
 };
 
-export default SidebarVersions;
+export default injectIntl(SidebarVersions);

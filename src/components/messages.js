@@ -293,6 +293,11 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         description: 'Shown as a placeholder in the search box.',
         defaultMessage: 'Search files and folders'
     },
+    sidebarAccessStats: {
+        id: 'be.sidebarAccessStats',
+        description: 'Title for the sidebar access stats.',
+        defaultMessage: 'Access Stats'
+    },
     sidebarShow: {
         id: 'be.sidebarShow',
         description: 'Label for the show sidebar button.',
