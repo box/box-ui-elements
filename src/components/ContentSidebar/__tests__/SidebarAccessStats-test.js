@@ -17,7 +17,7 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
         };
         const wrapper = getWrapper(props);
 
-        expect(wrapper.find(AccessStats)).toHaveLength(0);
+        expect(wrapper.dive().find(AccessStats)).toHaveLength(0);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -32,7 +32,7 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
         };
         const wrapper = getWrapper(props);
 
-        expect(wrapper.find(AccessStats)).toHaveLength(1);
+        expect(wrapper.dive().find(AccessStats)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 });
