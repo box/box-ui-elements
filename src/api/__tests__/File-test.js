@@ -18,12 +18,6 @@ describe('api/File', () => {
         });
     });
 
-    describe('getTypedFileId()', () => {
-        test('should return correct typed id', () => {
-            expect(file.getTypedFileId('foo')).toBe('file_foo');
-        });
-    });
-
     describe('getUrl()', () => {
         test('should return correct file api url without id', () => {
             expect(file.getUrl()).toBe('https://api.box.com/2.0/files');
@@ -94,7 +88,7 @@ describe('api/File', () => {
         });
 
         test('should make an xhr', () => {
-            file.getTypedFileId = jest.fn().mockReturnValue('id');
+            File.getTypedFileId = jest.fn().mockReturnValue('id');
             file.getUrl = jest.fn().mockReturnValue('url');
             file.merge = jest.fn();
 
@@ -123,6 +117,8 @@ describe('api/File', () => {
         test('should merge the new file description in and execute the success callback', () => {
             file.getCacheKey = jest.fn().mockReturnValue('key');
             file.merge = jest.fn();
+            File.getTypedFileId = jest.fn().mockReturnValue('file_id');
+
             const mockFile = {
                 id: '1',
                 permissions: {
