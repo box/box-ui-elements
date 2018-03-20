@@ -15,7 +15,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
-import type { Token, BoxItem, StringMap } from '../../flowTypes';
+import type { Token, BoxItem, StringMap, FileVersions } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -37,6 +37,7 @@ type Props = {
     hasAccessStats: boolean,
     hasClassification: boolean,
     hasActivityFeed: boolean,
+    hasVersions: boolean,
     language?: string,
     messages?: StringMap,
     cache?: Cache,
@@ -44,11 +45,13 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onInteraction: Function
+    onInteraction: Function,
+    onVersionHistoryClick?: Function
 };
 
 type State = {
-    file?: BoxItem
+    file?: BoxItem,
+    versions?: FileVersions
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -73,6 +76,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasAccessStats: false,
         hasClassification: false,
         hasActivityFeed: false,
+        hasVersions: false,
         onInteraction: noop
     };
 
@@ -138,12 +142,15 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { fileId }: Props = this.props;
+        const { fileId, hasVersions }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (fileId) {
             this.fetchFile(fileId);
+            if (hasVersions) {
+                this.fetchVersions(fileId);
+            }
         }
     }
 
@@ -155,16 +162,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     componentWillReceiveProps(nextProps: Props): void {
         const { fileId, token }: Props = this.props;
-        const { fileId: newFileId }: Props = nextProps;
+        const { fileId: newFileId, token: newToken, hasVersions }: Props = nextProps;
 
-        const hasTokenChanged = nextProps.token !== token;
+        const hasTokenChanged = newToken !== token;
         const hasFileIdChanged = newFileId !== fileId;
+        const currentFileId = newFileId || fileId;
 
-        if (hasTokenChanged || hasFileIdChanged) {
-            if (newFileId) {
-                this.fetchFile(newFileId);
-            } else if (fileId) {
-                this.fetchFile(fileId);
+        if (currentFileId && (hasTokenChanged || hasFileIdChanged)) {
+            this.fetchFile(currentFileId);
+            if (hasVersions) {
+                this.fetchVersions(currentFileId);
             }
         }
     }
@@ -185,16 +192,18 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasNotices,
             hasAccessStats,
             hasClassification,
-            hasActivityFeed
+            hasActivityFeed,
+            hasVersions
         }: Props = this.props;
 
         return (
             hasSkills ||
-            hasProperties ||
-            hasMetadata ||
-            hasAccessStats ||
-            hasClassification ||
-            hasActivityFeed ||
+                hasProperties ||
+                hasMetadata ||
+                hasAccessStats ||
+                hasClassification ||
+                hasActivityFeed ||
+                hasVersions,
             hasNotices
         );
     }
@@ -291,6 +300,17 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * File versions fetch success callback
+     *
+     * @private
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchVersionsSuccessCallback = (versions: FileVersions): void => {
+        this.setState({ versions });
+    };
+
+    /**
      * Fetches a file
      *
      * @private
@@ -301,6 +321,19 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchFile(id: string, forceFetch: boolean = false): void {
         if (this.shouldFetchOrRender()) {
             this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch, true);
+        }
+    }
+
+    /**
+     * Fetches the versions for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchVersions(id: string, shouldDestroy?: boolean = false): void {
+        if (this.shouldFetchOrRender()) {
+            this.api.getVersionsAPI(shouldDestroy).versions(id, this.fetchVersionsSuccessCallback, this.errorCallback);
         }
     }
 
@@ -324,9 +357,11 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasAccessStats,
             hasClassification,
             hasActivityFeed,
-            className
+            hasVersions,
+            className,
+            onVersionHistoryClick
         }: Props = this.props;
-        const { file }: State = this.state;
+        const { file, versions }: State = this.state;
 
         if (!this.shouldFetchOrRender()) {
             return null;
@@ -339,6 +374,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                         {file ? (
                             <Sidebar
                                 file={file}
+                                versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasTitle={hasTitle}
                                 hasSkills={hasSkills}
@@ -352,6 +388,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 rootElement={this.rootElement}
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
+                                onVersionHistoryClick={onVersionHistoryClick}
+                                hasVersions={hasVersions}
                             />
                         ) : (
                             <div className='bcs-loading'>

@@ -151,7 +151,14 @@ export type MetadataType = {
 };
 
 export type BoxItemVersion = {
-    id?: string
+    id: string,
+    type: string,
+    sha1: string,
+    name?: string,
+    size?: number,
+    created_at?: string,
+    modified_at?: string,
+    modified_by?: User
 };
 
 export type BoxItem = {
@@ -337,4 +344,9 @@ export type MultiputPart = {
 
 export type MultiputData = {
     part?: MultiputPart
+};
+
+export type FileVersions = {
+    total_count: number,
+    entries?: Array<BoxItemVersion>
 };

@@ -29,7 +29,7 @@ class File extends Item {
      *
      * @return {string} typed id for file
      */
-    getTypedFileId(id: string): string {
+    static getTypedFileId(id: string): string {
         return `${TYPED_ID_FILE_PREFIX}${id}`;
     }
 
@@ -93,7 +93,7 @@ class File extends Item {
 
         return this.xhr
             .put({
-                id: this.getTypedFileId(id),
+                id: File.getTypedFileId(id),
                 url: this.getUrl(id),
                 data: { description }
             })
@@ -147,7 +147,7 @@ class File extends Item {
         // as thats what needed by preview.
         return this.xhr
             .get({
-                id: this.getTypedFileId(id),
+                id: File.getTypedFileId(id),
                 url: this.getUrl(id),
                 params: {
                     fields: getFieldsAsString(true, includePreviewSidebarFields)

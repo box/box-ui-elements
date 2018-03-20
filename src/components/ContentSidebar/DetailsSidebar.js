@@ -13,8 +13,9 @@ import messages from '../messages';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
+import SidebarVersions from './SidebarVersions';
 import SidebarNotices from './SidebarNotices';
-import type { BoxItem } from '../../flowTypes';
+import type { BoxItem, FileVersions } from '../../flowTypes';
 import './DetailsSidebar.scss';
 
 type Props = {
@@ -27,11 +28,14 @@ type Props = {
     hasMetadata: boolean,
     hasAccessStats: boolean,
     hasClassification: boolean,
+    hasVersions: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onInteraction: Function,
     onDescriptionChange: Function,
-    intl: any
+    intl: any,
+    onVersionHistoryClick?: Function,
+    versions: FileVersions
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -45,10 +49,13 @@ const DetailsSidebar = ({
     hasMetadata,
     hasAccessStats,
     hasClassification,
+    hasVersions,
     rootElement,
     appElement,
     onInteraction,
     onDescriptionChange,
+    onVersionHistoryClick,
+    versions,
     intl
 }: Props) => {
     if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification && !hasNotices) {
@@ -59,6 +66,7 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
+            {hasVersions && <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} />}
             {hasNotices && <SidebarNotices file={file} />}
             {hasSkills && (
                 <SidebarSkills
