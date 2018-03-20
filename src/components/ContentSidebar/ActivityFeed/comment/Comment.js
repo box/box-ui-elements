@@ -3,7 +3,7 @@
  * @file Comment component
  */
 
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
@@ -72,31 +72,31 @@ class Comment extends Component<Props> {
         isInputOpen: false
     };
 
-    onKeyDown = (event: React.SyntheticEvent) => {
+    onKeyDown = (event: React.SyntheticEvent): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
     };
 
-    approvalCommentFormFocusHandler = () => this.setState({ isInputOpen: true });
-    approvalCommentFormCancelHandler = () => this.setState({ isInputOpen: false, isEditing: false });
-    approvalCommentFormSubmitHandler = () => this.setState({ isInputOpen: false, isEditing: false });
-    updateTaskHandler = (args: any) => {
+    approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
+    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    updateTaskHandler = (args: any): void => {
         const { onEdit } = this.props;
         onEdit(args);
         this.approvalCommentFormSubmitHandler();
     };
 
-    toEdit = () => this.setState({ isEditing: true, isInputOpen: true });
+    toEdit = (): void => this.setState({ isEditing: true, isInputOpen: true });
 
-    handleCommentFocus = () => {
+    handleCommentFocus = (): void => {
         this.setState({ isFocused: true });
     };
 
-    handleCommentBlur = () => {
+    handleCommentBlur = (): void => {
         this.setState({ isFocused: false });
     };
 
-    render() {
+    render(): ReactNode {
         const {
             createdBy,
             createdAt,

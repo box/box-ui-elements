@@ -2,7 +2,7 @@
  * @flow
  * @file Translate button component used by Comment Text component
  */
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
@@ -13,7 +13,7 @@ type Props = {
     handleTranslate: Function
 };
 
-const TranslateButton = ({ handleTranslate }: Props) => (
+const TranslateButton = ({ handleTranslate }: Props): ReactNode => (
     <PlainButton className='box-ui-comment-translate' onClick={handleTranslate}>
         <FormattedMessage {...messages.commentTranslate} />
     </PlainButton>

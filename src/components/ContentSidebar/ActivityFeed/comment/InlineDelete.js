@@ -25,20 +25,20 @@ class InlineDelete extends Component<Props> {
         isConfirming: false
     };
 
-    onDeleteConfirmedHandler = () => {
+    onDeleteConfirmedHandler = (): void => {
         const { id, onDelete } = this.props;
         onDelete({ id });
     };
 
-    handleFlyoutOpen = () => {
+    handleFlyoutOpen = (): void => {
         this.setState({ isConfirming: true });
     };
 
-    handleFlyoutClose = () => {
+    handleFlyoutClose = (): void => {
         this.setState({ isConfirming: false });
     };
 
-    render() {
+    render(): ReactNode {
         const { intl, message } = this.props;
         return (
             <div

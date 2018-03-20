@@ -30,7 +30,7 @@ class CommentText extends Component<Props> {
         isTranslation: false
     };
 
-    componentWillReceiveProps(nextProps: any): void {
+    componentWillReceiveProps(nextProps: Props): void {
         const { translatedTaggedMessage, translationFailed } = nextProps;
         if (translatedTaggedMessage || translationFailed) {
             this.setState({ isLoading: false });
@@ -47,7 +47,7 @@ class CommentText extends Component<Props> {
         return button;
     }
 
-    handleTranslate = (event: React.SyntheticEvent) => {
+    handleTranslate = (event: React.SyntheticEvent): void => {
         const { id, taggedMessage, onTranslate, translatedTaggedMessage } = this.props;
         if (!translatedTaggedMessage) {
             this.setState({ isLoading: true });
@@ -57,12 +57,12 @@ class CommentText extends Component<Props> {
         event.preventDefault();
     };
 
-    handleShowOriginal = (event: React.SyntheticEvent) => {
+    handleShowOriginal = (event: React.SyntheticEvent): void => {
         this.setState({ isTranslation: false });
         event.preventDefault();
     };
 
-    render() {
+    render(): ReactNode {
         const { id, taggedMessage, translatedTaggedMessage, translationEnabled } = this.props;
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =

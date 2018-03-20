@@ -3,7 +3,7 @@
  * @file Inline Edit component
  */
 
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
@@ -18,12 +18,12 @@ type Props = {
 };
 
 class InlineEdit extends Component<Props> {
-    onEdit = () => {
+    onEdit = (): void => {
         const { id, toEdit } = this.props;
         toEdit({ id });
     };
 
-    render() {
+    render(): ReactNode {
         const { onEdit } = this;
         return (
             <div className='box-ui-comment-edit-container'>

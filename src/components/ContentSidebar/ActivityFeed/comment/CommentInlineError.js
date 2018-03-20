@@ -16,7 +16,7 @@ type Props = {
     title: ReactNode
 };
 
-const CommentInlineError = ({ action, message, title }: Props) => (
+const CommentInlineError = ({ action, message, title }: Props): ReactNode => (
     <InlineError className='box-ui-comment-error' title={title}>
         <div>{message}</div>
         {action ? (
