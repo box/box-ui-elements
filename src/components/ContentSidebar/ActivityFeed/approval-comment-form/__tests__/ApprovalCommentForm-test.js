@@ -2,20 +2,14 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { EditorState, convertFromRaw } from 'draft-js';
 import { withData } from 'leche';
-import sinon from 'sinon';
 
 import { ApprovalCommentFormUnwrapped as ApprovalCommentForm } from '../ApprovalCommentForm';
 
-const sandbox = sinon.sandbox.create();
 const intlFake = {
     formatMessage: (message) => message.id
 };
 
 describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () => {
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     const render = (props) =>
         mount(
             <ApprovalCommentForm
@@ -36,23 +30,23 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
     });
 
     test('should call onFocus handler when input is focused', () => {
-        const onFocusSpy = sinon.spy();
+        const onFocusSpy = jest.fn();
 
         const wrapper = render({ onFocus: onFocusSpy });
 
         const mentionSelector = wrapper.find('[contentEditable]');
         mentionSelector.simulate('focus');
-        expect(onFocusSpy.calledOnce).toBe(true);
+        expect(onFocusSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should call oncancel handler when input is canceled', () => {
-        const onCancelSpy = sinon.spy();
+        const onCancelSpy = jest.fn();
 
         const wrapper = render({ onCancel: onCancelSpy });
 
         const cancelButton = wrapper.find('Button.comment-input-cancel-btn');
         cancelButton.simulate('click');
-        expect(onCancelSpy.calledOnce).toBe(true);
+        expect(onCancelSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should render open comment input and hidden tip when isOpen is true', () => {
@@ -85,13 +79,13 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
     });
 
     test('should render add approval ui when createTask handler is defined', () => {
-        const wrapper = render({ createTask: sinon.stub() });
+        const wrapper = render({ createTask: jest.fn() });
 
         expect(wrapper.find('.comment-add-approver').length).toEqual(1);
     });
 
     test('should render add approval fields when add approver is checked', () => {
-        const wrapper = render({ createTask: sinon.stub() });
+        const wrapper = render({ createTask: jest.fn() });
 
         wrapper.instance().onFormChangeHandler({ addApproval: 'on' });
         wrapper.update();
@@ -106,34 +100,33 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
         },
         (commentText, expectedCallCount) => {
             test(`should call createComment ${expectedCallCount} times`, () => {
-                const createCommentSpy = sinon.spy();
+                const createCommentSpy = jest.fn();
 
                 const wrapper = render({ createComment: createCommentSpy });
                 const instance = wrapper.instance();
 
-                sandbox.stub(instance, 'getFormattedCommentText').returns(commentText);
+                instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
 
                 const submitBtn = wrapper.find('PrimaryButton.comment-input-submit-btn');
                 const formEl = wrapper.find('form').getDOMNode();
                 formEl.checkValidity = () => !!expectedCallCount;
                 submitBtn.simulate('submit', { target: formEl });
 
-                expect(createCommentSpy.callCount).toEqual(expectedCallCount);
+                expect(createCommentSpy).toHaveBeenCalledTimes(expectedCallCount);
             });
         }
     );
 
     test('should call createTask handler when approver has been added', () => {
-        const createTaskSpy = sinon.spy();
-        const createCommentSpy = sinon.spy();
+        const createTaskSpy = jest.fn();
+        const createCommentSpy = jest.fn();
         const wrapper = render({
             createComment: createCommentSpy,
             createTask: createTaskSpy
         });
 
         const instance = wrapper.instance();
-
-        sandbox.stub(instance, 'getFormattedCommentText').returns('hey');
+        instance.getFormattedCommentText = jest.fn().mockReturnValue('hey');
 
         wrapper.setState({
             approvers: [{ text: '123', value: '123' }],
@@ -142,13 +135,13 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
 
         instance.onFormValidSubmitHandler({ addApproval: 'on' });
 
-        expect(createTaskSpy.calledOnce).toBe(true);
-        expect(createCommentSpy.notCalled).toBe(true);
+        expect(createTaskSpy).toHaveBeenCalledTimes(1);
+        expect(createCommentSpy).not.toHaveBeenCalled();
     });
 
     test('should call createTask with correct args on task submit', () => {
-        const createTaskSpy = sinon.spy();
-        const createCommentStub = sinon.stub();
+        const createTaskSpy = jest.fn();
+        const createCommentStub = jest.fn();
         const commentText = 'a comment';
         const addApproval = 'on';
         const approverDateInput = '2014-04-12';
@@ -159,10 +152,7 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
         });
 
         const instance = wrapper.instance();
-        sandbox
-            .mock(instance)
-            .expects('getFormattedCommentText')
-            .returns(commentText);
+        instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
 
         wrapper.setState({
             approvers: [{ text: '123', value: 123 }, { text: '124', value: 124 }]
@@ -173,23 +163,20 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
             approverDateInput
         });
 
-        expect(
-            createTaskSpy.calledWith({
-                text: commentText,
-                approvers: [123, 124],
-                dueDate: approverDateInput
-            })
-        ).toBe(true);
+        expect(createTaskSpy).toHaveBeenCalledWith({
+            text: commentText,
+            approvers: [123, 124],
+            dueDate: approverDateInput
+        });
+        expect(instance.getFormattedCommentText).toHaveBeenCalledTimes(1);
     });
 
     test('should set error and not call createTask() when no approvers have been selected', () => {
-        const wrapper = render({ createTask: sandbox.mock().never() });
+        const createTaskSpy = jest.fn();
+        const wrapper = render({ createTask: createTaskSpy });
 
         const instance = wrapper.instance();
-        sandbox
-            .mock(instance)
-            .expects('getFormattedCommentText')
-            .returns('a comment');
+        instance.getFormattedCommentText = jest.fn().mockReturnValue('a comment');
 
         wrapper.find('Form').prop('onValidSubmit')({
             addApproval: 'on',
@@ -197,6 +184,8 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
         });
 
         expect(wrapper.state('approverSelectorError')).toBeTruthy();
+        expect(createTaskSpy).not.toHaveBeenCalled();
+        expect(instance.getFormattedCommentText).toHaveBeenCalled();
     });
 
     test('should filter approver selector options correctly', () => {
@@ -205,7 +194,7 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
                 { id: 123, item: { name: 'name' }, name: 'name' },
                 { id: 234, item: { name: 'test' }, name: 'test' }
             ],
-            createTask: sandbox.stub()
+            createTask: jest.fn()
         });
         wrapper.setState({
             approvers: [{ text: 'name', value: 123 }],
@@ -219,11 +208,11 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
         const addApproval = 'on';
         const approverDateInput = '2014-04-12';
         const wrapper = render({
-            createComment: sandbox.stub(),
-            createTask: sandbox.stub()
+            createComment: jest.fn(),
+            createTask: jest.fn()
         });
         const instance = wrapper.instance();
-        sandbox.stub(instance, 'getFormattedCommentText').returns(commentText);
+        instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
 
         wrapper.setState({
             approvers: [{ text: '123', value: 123 }, { text: '124', value: 124 }]
@@ -351,15 +340,16 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
     describe('handleApproverSelectorInput()', () => {
         test('should call getApproverContactsWithQuery() when called', () => {
             const value = 'test';
-            const wrapper = render({
-                getApproverContactsWithQuery: sandbox.mock().withExactArgs(value)
-            });
+            const getApproverContactsWithQuery = jest.fn();
+            const wrapper = render({ getApproverContactsWithQuery });
             wrapper.instance().handleApproverSelectorInput(value);
+
+            expect(getApproverContactsWithQuery).toHaveBeenCalledWith(value);
         });
 
         test('should clear approver selector error when called', () => {
             const wrapper = render({
-                getApproverContactsWithQuery: sandbox.stub()
+                getApproverContactsWithQuery: jest.fn()
             });
             wrapper.setState({ approverSelectorError: 'test' });
             wrapper.instance().handleApproverSelectorInput('hi');

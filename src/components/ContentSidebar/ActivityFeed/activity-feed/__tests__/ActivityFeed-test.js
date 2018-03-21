@@ -105,7 +105,7 @@ describe('features/activity-feed/activity-feed/ActivityFeed', () => {
 
         approvalCommentForm.prop('createComment')();
         expect(wrapper.state('isInputOpen')).toBe(false);
-        expect(createCommentSpy.mock.calls).toEqual(1);
+        expect(createCommentSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should call create task handler and close input on valid task submit', () => {
@@ -121,7 +121,7 @@ describe('features/activity-feed/activity-feed/ActivityFeed', () => {
 
         approvalCommentForm.prop('createTask')();
         expect(wrapper.state('isInputOpen')).toBe(false);
-        expect(createTaskSpy.mock.calls).toEqual(1);
+        expect(createTaskSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should stop event propagation onKeyDown', () => {
