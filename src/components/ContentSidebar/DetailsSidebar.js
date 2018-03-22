@@ -71,8 +71,12 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {hasVersions && <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} />}
-            {hasNotices && <SidebarNotices file={file} />}
+            {(hasVersions || hasNotices) && (
+                <SidebarSection>
+                    <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} />
+                    <SidebarNotices file={file} />
+                </SidebarSection>
+            )}
             {hasSkills && (
                 <SidebarSkills
                     metadata={file.metadata}

@@ -6,7 +6,6 @@
 
 import React from 'react';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
-import SidebarSection from './SidebarSection';
 import type { FileVersions } from '../../flowTypes';
 
 type Props = {
@@ -27,9 +26,9 @@ const SidebarVersions = ({
     }
 
     return (
-        <SidebarSection>
+        <div>
             <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={total_count + 1} />
-        </SidebarSection>
+        </div>
     );
 };
 
