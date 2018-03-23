@@ -1,10 +1,9 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import sinon from 'sinon';
 
 import Task from '../';
 
-const sandbox = sinon.sandbox.create();
+jest.mock('../../comment/Comment', () => 'mock-comment');
 
 const inputState = {
     currentUser: { name: 'Kanye West', id: 10 }
@@ -12,19 +11,15 @@ const inputState = {
 
 const allHandlers = {
     tasks: {
-        edit: sinon.stub()
+        edit: jest.fn()
     },
     contacts: {
-        getApproverWithQuery: sinon.stub(),
-        getMentionWithQuery: sinon.stub()
+        getApproverWithQuery: jest.fn(),
+        getMentionWithQuery: jest.fn()
     }
 };
 
 describe('features/activity-feed/task/Task', () => {
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     const task = {
         createdAt: Date.now(),
         dueDate: Date.now(),
@@ -50,7 +45,7 @@ describe('features/activity-feed/task/Task', () => {
         const wrapper = shallow(<Task currentUser={currentUser} {...task} />);
 
         expect(wrapper.hasClass('box-ui-task')).toBe(true);
-        expect(wrapper.find('Comment').length).toEqual(1);
+        expect(wrapper.find('mock-comment').length).toEqual(1);
         expect(
             wrapper
                 .find('.box-ui-task-assignees')
@@ -87,7 +82,7 @@ describe('features/activity-feed/task/Task', () => {
     });
 
     test('should show actions for current user and if onTaskAssignmentUpdate is defined', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} {...task} onTaskAssignmentUpdate={sandbox.stub()} />);
+        const wrapper = shallow(<Task currentUser={currentUser} {...task} onTaskAssignmentUpdate={jest.fn()} />);
 
         expect(
             wrapper
@@ -104,7 +99,7 @@ describe('features/activity-feed/task/Task', () => {
     });
 
     test('should show tooltips when actions are shown', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} {...task} onTaskAssignmentUpdate={sandbox.stub()} />);
+        const wrapper = shallow(<Task currentUser={currentUser} {...task} onTaskAssignmentUpdate={jest.fn()} />);
         const assignment = shallow(
             wrapper
                 .find('.box-ui-task-assignees')
@@ -127,7 +122,7 @@ describe('features/activity-feed/task/Task', () => {
     });
 
     test('should call onTaskAssignmentUpdate with approved status when check is clicked', () => {
-        const onTaskAssignmentUpdateSpy = sandbox.spy();
+        const onTaskAssignmentUpdateSpy = jest.fn();
         const wrapper = mount(
             <Task
                 currentUser={currentUser}
@@ -140,11 +135,11 @@ describe('features/activity-feed/task/Task', () => {
         const checkButton = wrapper.find('.box-ui-task-check-btn').hostNodes();
         checkButton.simulate('click');
 
-        expect(onTaskAssignmentUpdateSpy.calledWith('123125', 0, 'approved')).toBe(true);
+        expect(onTaskAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'approved');
     });
 
     test('should call onTaskAssignmentUpdate with rejected status when check is clicked', () => {
-        const onTaskAssignmentUpdateSpy = sandbox.spy();
+        const onTaskAssignmentUpdateSpy = jest.fn();
         const wrapper = mount(
             <Task
                 currentUser={currentUser}
@@ -157,7 +152,7 @@ describe('features/activity-feed/task/Task', () => {
         const checkButton = wrapper.find('.box-ui-task-x-btn').hostNodes();
         checkButton.simulate('click');
 
-        expect(onTaskAssignmentUpdateSpy.calledWith('123125', 0, 'rejected')).toBe(true);
+        expect(onTaskAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'rejected');
     });
 
     test('should not allow user to delete if they lack delete permissions on the comment', () => {
@@ -188,7 +183,7 @@ describe('features/activity-feed/task/Task', () => {
                 currentUser={currentUser}
                 inputState={inputState}
                 handlers={allHandlers}
-                onDelete={sandbox.stub()}
+                onDelete={jest.fn()}
             />
         );
 
@@ -223,7 +218,7 @@ describe('features/activity-feed/task/Task', () => {
                 currentUser={currentUser}
                 inputState={inputState}
                 handlers={allHandlers}
-                onEdit={sandbox.stub()}
+                onEdit={jest.fn()}
             />
         );
 

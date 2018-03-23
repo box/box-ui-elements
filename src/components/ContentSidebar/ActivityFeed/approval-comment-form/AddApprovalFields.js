@@ -14,7 +14,7 @@ import type { OptionItems, SelectorItems } from '../../../../flowTypes';
 import messages from '../messages';
 
 type Props = {
-    approvalDate: Date,
+    approvalDate: number,
     approvers: OptionItems,
     approverSelectorContacts: SelectorItems,
     approverSelectorError: string,

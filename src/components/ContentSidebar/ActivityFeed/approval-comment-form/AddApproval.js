@@ -12,7 +12,7 @@ import messages from '../messages';
 import type { Options, SelectorItems } from '../../../../flowTypes';
 
 type Props = {
-    approvalDate: Date,
+    approvalDate: number,
     approvers: Options,
     approverSelectorContacts: SelectorItems,
     approverSelectorError: string,

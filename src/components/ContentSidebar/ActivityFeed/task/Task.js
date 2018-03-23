@@ -27,7 +27,7 @@ type Props = {
         user: User,
         status: string
     }>,
-    createdAt: any,
+    createdAt: number | string,
     createdBy: User,
     currentUser: User,
     dueDate: any,

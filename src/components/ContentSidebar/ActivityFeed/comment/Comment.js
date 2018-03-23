@@ -23,11 +23,11 @@ import messages from '../messages';
 
 import './Comment.scss';
 
-const oneHourInMs = 3600000; // 60 * 60 * 1000
+const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
 type Props = {
     createdBy: User,
-    createdAt: any,
+    createdAt: string | number,
     permissions: {
         comment_delete: boolean,
         comment_edit: boolean
@@ -141,7 +141,7 @@ class Comment extends Component<Props> {
                                 }
                             >
                                 <small className='box-ui-comment-created-at'>
-                                    <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={oneHourInMs} />
+                                    <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
                             {onEdit && permissions && permissions.task_edit ? (

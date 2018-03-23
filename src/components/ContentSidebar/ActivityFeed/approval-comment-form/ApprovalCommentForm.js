@@ -44,7 +44,7 @@ type Props = {
 };
 
 type State = {
-    approvalDate: Date,
+    approvalDate: number,
     approvers: Array<User>,
     approverSelectorError: string,
     commentEditorState: any,
@@ -120,7 +120,7 @@ class ApprovalCommentForm extends Component<Props, State> {
     onMentionSelectorChangeHandler = (nextEditorState: any): void =>
         this.setState({ commentEditorState: nextEditorState });
 
-    onApprovalDateChangeHandler = (date: Date): void => this.setState({ approvalDate: date });
+    onApprovalDateChangeHandler = (date: number): void => this.setState({ approvalDate: date });
 
     /**
      * Formats the comment editor's text such that it will be accepted by the server.
