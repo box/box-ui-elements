@@ -343,13 +343,14 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = (): void => {
-        const { Preview } = global.Box;
         const { token, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !token || this.preview) {
             return;
         }
+
+        const { Preview } = global.Box;
 
         this.preview = new Preview();
         this.preview.updateFileCache([file]);
