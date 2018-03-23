@@ -1,10 +1,10 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import sinon from 'sinon';
 
 import Comment from '../Comment';
+import ApprovalCommentForm from '../../approval-comment-form/ApprovalCommentForm';
+import InlineEdit from '../InlineEdit';
 
-const sandbox = sinon.sandbox.create();
 const currentUser = {
     name: 'testuser',
     id: 11
@@ -15,17 +15,19 @@ const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
 
 const allHandlers = {
     tasks: {
-        edit: sinon.stub()
+        edit: jest.fn()
     },
     contacts: {
-        getApproverWithQuery: sinon.stub(),
-        getMentionWithQuery: sinon.stub()
+        getApproverWithQuery: jest.fn(),
+        getMentionWithQuery: jest.fn()
     }
 };
 
 describe('features/activity-feed/comment/Comment', () => {
-    const InlineEditMock = () => <div />;
-    const ApprovalCommentFormMock = () => <div />;
+    beforeEach(() => {
+        ApprovalCommentForm.default = jest.fn().mockReturnValue(<div />);
+        InlineEdit.default = jest.fn().mockReturnValue(<div />);
+    });
 
     const render = (props = {}) =>
         shallow(
@@ -43,18 +45,6 @@ describe('features/activity-feed/comment/Comment', () => {
                 {...props}
             />
         );
-
-    beforeEach(() => {
-        Comment.__Rewire__('InlineEdit', InlineEditMock);
-        Comment.__Rewire__('ApprovalCommentForm', ApprovalCommentFormMock);
-    });
-
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-
-        Comment.__ResetDependency__('InlineEdit');
-        Comment.__ResetDependency__('ApprovalCommentForm');
-    });
 
     test('should correctly render comment', () => {
         const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
@@ -106,7 +96,7 @@ describe('features/activity-feed/comment/Comment', () => {
     test('should correctly render comment when translation is enabled', () => {
         const translations = {
             translationEnabled: true,
-            onTranslate: sandbox.stub()
+            onTranslate: jest.fn()
         };
         const comment = {
             createdAt: TIME_STRING_SEPT_27_2017,
@@ -184,7 +174,7 @@ describe('features/activity-feed/comment/Comment', () => {
                     mentionSelectorContacts
                 }}
                 handlers={allHandlers}
-                onDelete={sandbox.stub()}
+                onDelete={jest.fn()}
             />
         );
 
@@ -210,7 +200,7 @@ describe('features/activity-feed/comment/Comment', () => {
                     mentionSelectorContacts
                 }}
                 handlers={allHandlers}
-                onDelete={sandbox.stub()}
+                onDelete={jest.fn()}
             />
         );
 
@@ -235,13 +225,13 @@ describe('features/activity-feed/comment/Comment', () => {
                     mentionSelectorContacts
                 }}
                 handlers={allHandlers}
-                onEdit={sandbox.stub()}
+                onEdit={jest.fn()}
             />
         );
 
         const instance = wrapper.instance();
 
-        expect(wrapper.find(InlineEditMock).length).toEqual(1);
+        expect(wrapper.find('InlineEdit').length).toEqual(2);
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
@@ -279,7 +269,7 @@ describe('features/activity-feed/comment/Comment', () => {
                     mentionSelectorContacts
                 }}
                 handlers={allHandlers}
-                onDelete={sandbox.stub()}
+                onDelete={jest.fn()}
             />
         );
 
@@ -305,7 +295,7 @@ describe('features/activity-feed/comment/Comment', () => {
                     mentionSelectorContacts
                 }}
                 handlers={allHandlers}
-                onEdit={sandbox.stub()}
+                onEdit={jest.fn()}
             />
         );
 
@@ -377,7 +367,7 @@ describe('features/activity-feed/comment/Comment', () => {
                     mentionSelectorContacts
                 }}
                 handlers={allHandlers}
-                onDelete={sandbox.stub()}
+                onDelete={jest.fn()}
                 error={{
                     title: 'error',
                     message: 'errorrrrr'
@@ -397,7 +387,7 @@ describe('features/activity-feed/comment/Comment', () => {
             taggedMessage: 'test',
             createdBy: { name: '50 Cent', id: 10 }
         };
-        const onActionSpy = sandbox.spy();
+        const onActionSpy = jest.fn();
 
         const wrapper = mount(
             <Comment
@@ -410,7 +400,7 @@ describe('features/activity-feed/comment/Comment', () => {
                     mentionSelectorContacts
                 }}
                 handlers={allHandlers}
-                onDelete={sandbox.stub()}
+                onDelete={jest.fn()}
                 error={{
                     title: 'error',
                     message: 'errorrrrr',
@@ -426,7 +416,7 @@ describe('features/activity-feed/comment/Comment', () => {
 
         inlineErrorActionLink.simulate('click');
 
-        expect(onActionSpy.calledOnce).toBe(true);
+        expect(onActionSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should not have Mention object when shouldReturnString is true', () => {
@@ -447,11 +437,11 @@ describe('features/activity-feed/comment/Comment', () => {
                     mentionSelectorContacts
                 }}
                 handlers={allHandlers}
-                onEdit={sandbox.stub()}
+                onEdit={jest.fn()}
             />
         );
 
-        expect(wrapper.find(InlineEditMock).length).toEqual(1);
+        expect(wrapper.find('InlineEdit').length).toEqual(2);
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
@@ -461,7 +451,7 @@ describe('features/activity-feed/comment/Comment', () => {
         wrapper.instance().toEdit();
         wrapper.update();
         expect(wrapper.state('isEditing')).toBe(true);
-        expect(wrapper.find(ApprovalCommentFormMock).length).toEqual(1);
+        expect(wrapper.find('InlineEdit').length).toEqual(2);
         expect(wrapper.find('Mention').length).toEqual(0);
     });
 });

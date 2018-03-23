@@ -66,7 +66,7 @@ type Props = {
 class Comment extends Component<Props> {
     static displayName = 'Comment';
 
-    static state = {
+    state = {
         isEditing: false,
         isFocused: false,
         isInputOpen: false
