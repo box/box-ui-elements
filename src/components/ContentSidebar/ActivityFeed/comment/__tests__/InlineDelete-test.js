@@ -1,10 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import sinon from 'sinon';
 
 import { InlineDeleteBase as InlineDelete } from '../InlineDelete';
-
-const sandbox = sinon.sandbox.create();
 
 const intl = { formatMessage: () => {} };
 const translationProps = {
@@ -14,10 +11,6 @@ const translationProps = {
 describe('features/activity-feed/comment/InlineDelete', () => {
     const render = (props = {}) =>
         shallow(<InlineDelete {...translationProps} id='123' message='test' onDelete={() => {}} {...props} />);
-
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
 
     test('should correctly render comment', () => {
         const wrapper = render();
@@ -41,12 +34,12 @@ describe('features/activity-feed/comment/InlineDelete', () => {
     });
 
     test('should call onDelete handler when comment deletion is confirmed', () => {
-        const onDeleteSpy = sandbox.spy();
+        const onDeleteSpy = jest.fn();
         const wrapper = render({ onDelete: onDeleteSpy });
 
         const yesBtn = wrapper.find('.box-ui-comment-delete-yes');
         yesBtn.simulate('click');
 
-        expect(onDeleteSpy.calledWith({ id: '123' })).toBe(true);
+        expect(onDeleteSpy).toHaveBeenCalledWith({ id: '123' });
     });
 });

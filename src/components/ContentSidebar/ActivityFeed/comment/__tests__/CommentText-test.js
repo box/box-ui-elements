@@ -1,16 +1,9 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import sinon from 'sinon';
 
 import CommentText from '../CommentText';
 
-const sandbox = sinon.sandbox.create();
-
 describe('features/activity-feed/comment/CommentText', () => {
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     test('should properly format tagged comment', () => {
         const commentText = {
             taggedMessage: 'How u doing @[2030326577:Young Jeezy]?'
@@ -83,7 +76,7 @@ describe('features/activity-feed/comment/CommentText', () => {
     });
 
     test('should call onTranslate when translate button is clicked', () => {
-        const onTranslateSpy = sandbox.spy();
+        const onTranslateSpy = jest.fn();
         const translations = {
             translationEnabled: true,
             onTranslate: onTranslateSpy
@@ -95,14 +88,14 @@ describe('features/activity-feed/comment/CommentText', () => {
         const translateBtn = wrapper.find('PlainButton.box-ui-comment-translate');
         translateBtn.simulate('click');
 
-        expect(onTranslateSpy.calledOnce).toBe(true);
+        expect(onTranslateSpy).toHaveBeenCalledTimes(1);
         expect(wrapper.find('.box-ui-comment-text-loading').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(true);
         expect(wrapper.state('isLoading')).toBe(true);
     });
 
     test('should not call onTranslate when translate button is clicked and translated comment exists', () => {
-        const onTranslateSpy = sandbox.spy();
+        const onTranslateSpy = jest.fn();
         const translations = {
             translationEnabled: true,
             onTranslate: onTranslateSpy
@@ -118,14 +111,14 @@ describe('features/activity-feed/comment/CommentText', () => {
         const translateBtn = wrapper.find('PlainButton.box-ui-comment-translate');
         translateBtn.simulate('click');
 
-        expect(onTranslateSpy.callCount).toEqual(0);
+        expect(onTranslateSpy).not.toHaveBeenCalled();
         expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(true);
         expect(wrapper.state('isLoading')).toBe(false);
     });
 
     test('should show comment when show original button is clicked', () => {
-        const onTranslateSpy = sandbox.spy();
+        const onTranslateSpy = jest.fn();
         const translations = {
             translationEnabled: true,
             onTranslate: onTranslateSpy
@@ -141,7 +134,7 @@ describe('features/activity-feed/comment/CommentText', () => {
         const showOriginalBtn = wrapper.find('PlainButton.box-ui-comment-translate');
         showOriginalBtn.simulate('click');
 
-        expect(onTranslateSpy.callCount).toEqual(0);
+        expect(onTranslateSpy).not.toHaveBeenCalled();
         expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false);
