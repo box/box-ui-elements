@@ -41,6 +41,7 @@ type Props = {
     isSmall: boolean,
     showSidebar?: boolean,
     hasSidebar: boolean,
+    canDownload: boolean,
     hasHeader: boolean,
     apiHost: string,
     appHost: string,
@@ -90,6 +91,7 @@ class ContentPreview extends PureComponent<Props, State> {
         language: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
+        canDownload: false,
         hasHeader: false,
         onLoad: noop,
         onNavigate: noop,
@@ -343,7 +345,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = (): void => {
-        const { token, collection, ...rest }: Props = this.props;
+        const { token, collection, canDownload, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !token || this.preview) {
@@ -360,6 +362,7 @@ class ContentPreview extends PureComponent<Props, State> {
             header: 'none',
             skipServerUpdate: true,
             useHotkeys: false,
+            showDownload: canDownload,
             ...rest
         });
     };
