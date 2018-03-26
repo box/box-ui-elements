@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
+import omit from 'lodash/omit';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
@@ -41,7 +42,8 @@ type Props = {
     isSmall: boolean,
     showSidebar?: boolean,
     hasSidebar: boolean,
-    canDownload: boolean,
+    canDownload?: boolean,
+    showDownload?: boolean,
     hasHeader: boolean,
     apiHost: string,
     appHost: string,
@@ -92,6 +94,7 @@ class ContentPreview extends PureComponent<Props, State> {
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
         canDownload: false,
+        showDownload: false,
         hasHeader: false,
         onLoad: noop,
         onNavigate: noop,
@@ -339,6 +342,12 @@ class ContentPreview extends PureComponent<Props, State> {
         }
     };
 
+    canDownload() {
+        // showDownload is a prop that preview library uses and can be passed by the user
+        const { showDownload, canDownload }: Props = this.props;
+        return canDownload || showDownload;
+    }
+
     /**
      * Loads the preview
      *
@@ -354,16 +363,20 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const { Preview } = global.Box;
 
+        const previewOptions = {
+            showDownload: this.canDownload(),
+            skipServerUpdate: true,
+            header: 'none',
+            container: `#${this.id} .bcpr-content`,
+            useHotKeys: false
+        };
+
         this.preview = new Preview();
         this.preview.updateFileCache([file]);
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.show(file.id, token, {
-            container: `#${this.id} .bcpr-content`,
-            header: 'none',
-            skipServerUpdate: true,
-            useHotkeys: false,
-            showDownload: canDownload,
-            ...rest
+            ...previewOptions,
+            ...omit(rest, Object.keys(previewOptions))
         });
     };
 
@@ -711,6 +724,7 @@ class ContentPreview extends PureComponent<Props, State> {
                             onClose={onClose}
                             onSidebarToggle={onSidebarToggle}
                             onPrint={this.print}
+                            canDownload={this.canDownload()}
                             onDownload={this.download}
                         />
                     )}
