@@ -9,7 +9,7 @@ describe('features/activity-feed/comment/InlineEdit', () => {
     test('should correctly render comment', () => {
         const wrapper = shallow(<InlineEdit id='123' intl={intl} toEdit={() => {}} />);
 
-        expect(wrapper.hasClass('box-ui-comment-edit-container')).toBe(true);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should call toEdit handler when comment deletion is confirmed', () => {

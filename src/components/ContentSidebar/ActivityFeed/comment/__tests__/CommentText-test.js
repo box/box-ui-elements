@@ -11,8 +11,7 @@ describe('features/activity-feed/comment/CommentText', () => {
 
         const wrapper = shallow(<CommentText id='123' {...commentText} />);
 
-        expect(wrapper.find('.box-ui-comment-text').prop('dangerouslySetInnerHTML')).toBeFalsy();
-        expect(wrapper.find('.box-ui-comment-text').find('Mention').length).toEqual(1);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should properly handle unicode variants of @ in tagged comments', () => {
@@ -22,15 +21,13 @@ describe('features/activity-feed/comment/CommentText', () => {
 
         const wrapper = shallow(<CommentText id='123' {...commentText} />);
 
-        expect(wrapper.find('.box-ui-comment-text').prop('dangerouslySetInnerHTML')).toBeFalsy();
-        expect(wrapper.find('.box-ui-comment-text').find('Mention').length).toEqual(3);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should not show translate button by default, translation should be disabled', () => {
         const commentText = { taggedMessage: 'test' };
 
         const wrapper = mount(<CommentText id='123' {...commentText} />);
-
         expect(wrapper.find('.box-ui-comment-text').text()).toEqual(commentText.taggedMessage);
         expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(0);
         expect(wrapper.prop('translationEnabled')).toBe(false);
@@ -42,7 +39,7 @@ describe('features/activity-feed/comment/CommentText', () => {
         const commentText = { taggedMessage: 'test' };
 
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
-
+        
         expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false);
@@ -137,6 +134,6 @@ describe('features/activity-feed/comment/CommentText', () => {
         expect(onTranslateSpy).not.toHaveBeenCalled();
         expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
-        expect(wrapper.state('isLoading')).toBe(false);
+        expect(wrapper.state('isLoading')).toBe(false); 
     });
 });

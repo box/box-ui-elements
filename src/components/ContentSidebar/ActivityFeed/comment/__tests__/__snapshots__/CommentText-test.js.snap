@@ -1,0 +1,289 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/activity-feed/comment/CommentText should properly format tagged comment 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <CommentText
+    id="123"
+    taggedMessage="How u doing @[2030326577:Young Jeezy]?"
+    translationEnabled={false}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        Array [
+          "How u doing ",
+          <Mention
+            id={2030326577}
+          >
+            @Young Jeezy
+          </Mention>,
+          "?",
+        ],
+        null,
+      ],
+      "className": "box-ui-comment-text",
+    },
+    "ref": null,
+    "rendered": Array [
+      "How u doing ",
+      Object {
+        "instance": null,
+        "key": "1-123",
+        "nodeType": "function",
+        "props": Object {
+          "children": "@Young Jeezy",
+          "id": 2030326577,
+        },
+        "ref": null,
+        "rendered": "@Young Jeezy",
+        "type": [Function],
+      },
+      "?",
+      null,
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          Array [
+            "How u doing ",
+            <Mention
+              id={2030326577}
+            >
+              @Young Jeezy
+            </Mention>,
+            "?",
+          ],
+          null,
+        ],
+        "className": "box-ui-comment-text",
+      },
+      "ref": null,
+      "rendered": Array [
+        "How u doing ",
+        Object {
+          "instance": null,
+          "key": "1-123",
+          "nodeType": "function",
+          "props": Object {
+            "children": "@Young Jeezy",
+            "id": 2030326577,
+          },
+          "ref": null,
+          "rendered": "@Young Jeezy",
+          "type": [Function],
+        },
+        "?",
+        null,
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`features/activity-feed/comment/CommentText should properly handle unicode variants of @ in tagged comments 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <CommentText
+    id="123"
+    taggedMessage="Hi ﹫[123:Half] ＠[222:Full] @[432:Latin]"
+    translationEnabled={false}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        Array [
+          "Hi ",
+          <Mention
+            id={123}
+          >
+            ﹫Half
+          </Mention>,
+          " ",
+          <Mention
+            id={222}
+          >
+            ＠Full
+          </Mention>,
+          " ",
+          <Mention
+            id={432}
+          >
+            @Latin
+          </Mention>,
+          "",
+        ],
+        null,
+      ],
+      "className": "box-ui-comment-text",
+    },
+    "ref": null,
+    "rendered": Array [
+      "Hi ",
+      Object {
+        "instance": null,
+        "key": "1-123",
+        "nodeType": "function",
+        "props": Object {
+          "children": "﹫Half",
+          "id": 123,
+        },
+        "ref": null,
+        "rendered": "﹫Half",
+        "type": [Function],
+      },
+      " ",
+      Object {
+        "instance": null,
+        "key": "3-123",
+        "nodeType": "function",
+        "props": Object {
+          "children": "＠Full",
+          "id": 222,
+        },
+        "ref": null,
+        "rendered": "＠Full",
+        "type": [Function],
+      },
+      " ",
+      Object {
+        "instance": null,
+        "key": "5-123",
+        "nodeType": "function",
+        "props": Object {
+          "children": "@Latin",
+          "id": 432,
+        },
+        "ref": null,
+        "rendered": "@Latin",
+        "type": [Function],
+      },
+      "",
+      null,
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          Array [
+            "Hi ",
+            <Mention
+              id={123}
+            >
+              ﹫Half
+            </Mention>,
+            " ",
+            <Mention
+              id={222}
+            >
+              ＠Full
+            </Mention>,
+            " ",
+            <Mention
+              id={432}
+            >
+              @Latin
+            </Mention>,
+            "",
+          ],
+          null,
+        ],
+        "className": "box-ui-comment-text",
+      },
+      "ref": null,
+      "rendered": Array [
+        "Hi ",
+        Object {
+          "instance": null,
+          "key": "1-123",
+          "nodeType": "function",
+          "props": Object {
+            "children": "﹫Half",
+            "id": 123,
+          },
+          "ref": null,
+          "rendered": "﹫Half",
+          "type": [Function],
+        },
+        " ",
+        Object {
+          "instance": null,
+          "key": "3-123",
+          "nodeType": "function",
+          "props": Object {
+            "children": "＠Full",
+            "id": 222,
+          },
+          "ref": null,
+          "rendered": "＠Full",
+          "type": [Function],
+        },
+        " ",
+        Object {
+          "instance": null,
+          "key": "5-123",
+          "nodeType": "function",
+          "props": Object {
+            "children": "@Latin",
+            "id": 432,
+          },
+          "ref": null,
+          "rendered": "@Latin",
+          "type": [Function],
+        },
+        "",
+        null,
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

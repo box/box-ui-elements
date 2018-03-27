@@ -7,14 +7,14 @@ const feedState = [
     {
         type: 'comment',
         id: '123',
-        createdAt: Date.now(),
+        createdAt: 1234567890,
         taggedMessage: 'test @[123:Jeezy] @[10:Kanye West]',
         createdBy: { name: 'Akon', id: 11 }
     },
     {
         type: 'task',
         id: '1234',
-        createdAt: Date.now(),
+        createdAt: 1234567891,
         taggedMessage: 'test',
         createdBy: { name: 'JayZ', id: 10 },
         assignees: []
@@ -38,28 +38,22 @@ const allHandlers = {
 describe('features/activity-feed/activity-feed/ActivityFeed', () => {
     test('should correctly render empty state', () => {
         const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
-
-        expect(wrapper.find('EmptyState').length).toEqual(1);
-        expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render empty state with loading indicator', () => {
         const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} isLoading />);
-
-        expect(wrapper.find('EmptyState').length).toEqual(1);
-        expect(wrapper.find('LoadingIndicator').length).toEqual(0);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render approval comment form if comment submit handler is passed', () => {
         const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
-
-        expect(wrapper.find('ApprovalCommentForm').length).toEqual(1);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render activity state', () => {
         const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} feedState={feedState} />);
-
-        expect(wrapper.find('ActiveState').length).toEqual(1);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should not expose add approval ui if task submit handler is not passed', () => {

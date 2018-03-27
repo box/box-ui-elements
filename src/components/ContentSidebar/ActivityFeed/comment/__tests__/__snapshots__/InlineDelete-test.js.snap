@@ -1,0 +1,572 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/activity-feed/comment/InlineDelete should correctly render comment 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <InlineDelete
+    id="123"
+    intl={
+      Object {
+        "formatMessage": [Function],
+      }
+    }
+    message="test"
+    onDelete={[Function]}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": <Flyout
+        className=""
+        closeOnClick={true}
+        closeOnClickOutside={true}
+        constrainToScrollParent={true}
+        constrainToWindow={false}
+        isVisibleByDefault={false}
+        onClose={[Function]}
+        onOpen={[Function]}
+        position="middle-left"
+      >
+        <PlainButton
+          aria-label={undefined}
+          className="box-ui-comment-delete"
+        >
+          <IconTrash />
+        </PlainButton>
+        <Overlay>
+          <b>
+            test
+          </b>
+          <div>
+            <PlainButton
+              className="lnk box-ui-comment-delete-yes"
+              onClick={[Function]}
+              type="button"
+            >
+              <FormattedMessage
+                defaultMessage="Yes"
+                id="boxui.activityFeed.commentDeleteConfirm"
+              />
+            </PlainButton>
+             / 
+            <PlainButton
+              className="lnk box-ui-comment-delete-no"
+              type="button"
+            >
+              <FormattedMessage
+                defaultMessage="No"
+                id="boxui.activityFeed.commentDeleteCancel"
+              />
+            </PlainButton>
+          </div>
+        </Overlay>
+      </Flyout>,
+      "className": "box-ui-comment-delete-container",
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "class",
+      "props": Object {
+        "children": Array [
+          <PlainButton
+            aria-label={undefined}
+            className="box-ui-comment-delete"
+          >
+            <IconTrash />
+          </PlainButton>,
+          <Overlay>
+            <b>
+              test
+            </b>
+            <div>
+              <PlainButton
+                className="lnk box-ui-comment-delete-yes"
+                onClick={[Function]}
+                type="button"
+              >
+                <FormattedMessage
+                  defaultMessage="Yes"
+                  id="boxui.activityFeed.commentDeleteConfirm"
+                />
+              </PlainButton>
+               / 
+              <PlainButton
+                className="lnk box-ui-comment-delete-no"
+                type="button"
+              >
+                <FormattedMessage
+                  defaultMessage="No"
+                  id="boxui.activityFeed.commentDeleteCancel"
+                />
+              </PlainButton>
+            </div>
+          </Overlay>,
+        ],
+        "className": "",
+        "closeOnClick": true,
+        "closeOnClickOutside": true,
+        "constrainToScrollParent": true,
+        "constrainToWindow": false,
+        "isVisibleByDefault": false,
+        "onClose": [Function],
+        "onOpen": [Function],
+        "position": "middle-left",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "function",
+          "props": Object {
+            "aria-label": undefined,
+            "children": <IconTrash />,
+            "className": "box-ui-comment-delete",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {},
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": [Function],
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "children": Array [
+              <b>
+                test
+              </b>,
+              <div>
+                <PlainButton
+                  className="lnk box-ui-comment-delete-yes"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  <FormattedMessage
+                    defaultMessage="Yes"
+                    id="boxui.activityFeed.commentDeleteConfirm"
+                  />
+                </PlainButton>
+                 / 
+                <PlainButton
+                  className="lnk box-ui-comment-delete-no"
+                  type="button"
+                >
+                  <FormattedMessage
+                    defaultMessage="No"
+                    id="boxui.activityFeed.commentDeleteCancel"
+                  />
+                </PlainButton>
+              </div>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": "test",
+              },
+              "ref": null,
+              "rendered": "test",
+              "type": "b",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <PlainButton
+                    className="lnk box-ui-comment-delete-yes"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    <FormattedMessage
+                      defaultMessage="Yes"
+                      id="boxui.activityFeed.commentDeleteConfirm"
+                    />
+                  </PlainButton>,
+                  " / ",
+                  <PlainButton
+                    className="lnk box-ui-comment-delete-no"
+                    type="button"
+                  >
+                    <FormattedMessage
+                      defaultMessage="No"
+                      id="boxui.activityFeed.commentDeleteCancel"
+                    />
+                  </PlainButton>,
+                ],
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Yes"
+                      id="boxui.activityFeed.commentDeleteConfirm"
+                    />,
+                    "className": "lnk box-ui-comment-delete-yes",
+                    "onClick": [Function],
+                    "type": "button",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "defaultMessage": "Yes",
+                      "id": "boxui.activityFeed.commentDeleteConfirm",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+                " / ",
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="No"
+                      id="boxui.activityFeed.commentDeleteCancel"
+                    />,
+                    "className": "lnk box-ui-comment-delete-no",
+                    "type": "button",
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "defaultMessage": "No",
+                      "id": "boxui.activityFeed.commentDeleteCancel",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": [Function],
+                },
+              ],
+              "type": "div",
+            },
+          ],
+          "type": [Function],
+        },
+      ],
+      "type": [Function],
+    },
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": <Flyout
+          className=""
+          closeOnClick={true}
+          closeOnClickOutside={true}
+          constrainToScrollParent={true}
+          constrainToWindow={false}
+          isVisibleByDefault={false}
+          onClose={[Function]}
+          onOpen={[Function]}
+          position="middle-left"
+        >
+          <PlainButton
+            aria-label={undefined}
+            className="box-ui-comment-delete"
+          >
+            <IconTrash />
+          </PlainButton>
+          <Overlay>
+            <b>
+              test
+            </b>
+            <div>
+              <PlainButton
+                className="lnk box-ui-comment-delete-yes"
+                onClick={[Function]}
+                type="button"
+              >
+                <FormattedMessage
+                  defaultMessage="Yes"
+                  id="boxui.activityFeed.commentDeleteConfirm"
+                />
+              </PlainButton>
+               / 
+              <PlainButton
+                className="lnk box-ui-comment-delete-no"
+                type="button"
+              >
+                <FormattedMessage
+                  defaultMessage="No"
+                  id="boxui.activityFeed.commentDeleteCancel"
+                />
+              </PlainButton>
+            </div>
+          </Overlay>
+        </Flyout>,
+        "className": "box-ui-comment-delete-container",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "class",
+        "props": Object {
+          "children": Array [
+            <PlainButton
+              aria-label={undefined}
+              className="box-ui-comment-delete"
+            >
+              <IconTrash />
+            </PlainButton>,
+            <Overlay>
+              <b>
+                test
+              </b>
+              <div>
+                <PlainButton
+                  className="lnk box-ui-comment-delete-yes"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  <FormattedMessage
+                    defaultMessage="Yes"
+                    id="boxui.activityFeed.commentDeleteConfirm"
+                  />
+                </PlainButton>
+                 / 
+                <PlainButton
+                  className="lnk box-ui-comment-delete-no"
+                  type="button"
+                >
+                  <FormattedMessage
+                    defaultMessage="No"
+                    id="boxui.activityFeed.commentDeleteCancel"
+                  />
+                </PlainButton>
+              </div>
+            </Overlay>,
+          ],
+          "className": "",
+          "closeOnClick": true,
+          "closeOnClickOutside": true,
+          "constrainToScrollParent": true,
+          "constrainToWindow": false,
+          "isVisibleByDefault": false,
+          "onClose": [Function],
+          "onOpen": [Function],
+          "position": "middle-left",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "function",
+            "props": Object {
+              "aria-label": undefined,
+              "children": <IconTrash />,
+              "className": "box-ui-comment-delete",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {},
+              "ref": null,
+              "rendered": null,
+              "type": [Function],
+            },
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": Array [
+                <b>
+                  test
+                </b>,
+                <div>
+                  <PlainButton
+                    className="lnk box-ui-comment-delete-yes"
+                    onClick={[Function]}
+                    type="button"
+                  >
+                    <FormattedMessage
+                      defaultMessage="Yes"
+                      id="boxui.activityFeed.commentDeleteConfirm"
+                    />
+                  </PlainButton>
+                   / 
+                  <PlainButton
+                    className="lnk box-ui-comment-delete-no"
+                    type="button"
+                  >
+                    <FormattedMessage
+                      defaultMessage="No"
+                      id="boxui.activityFeed.commentDeleteCancel"
+                    />
+                  </PlainButton>
+                </div>,
+              ],
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": "test",
+                },
+                "ref": null,
+                "rendered": "test",
+                "type": "b",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <PlainButton
+                      className="lnk box-ui-comment-delete-yes"
+                      onClick={[Function]}
+                      type="button"
+                    >
+                      <FormattedMessage
+                        defaultMessage="Yes"
+                        id="boxui.activityFeed.commentDeleteConfirm"
+                      />
+                    </PlainButton>,
+                    " / ",
+                    <PlainButton
+                      className="lnk box-ui-comment-delete-no"
+                      type="button"
+                    >
+                      <FormattedMessage
+                        defaultMessage="No"
+                        id="boxui.activityFeed.commentDeleteCancel"
+                      />
+                    </PlainButton>,
+                  ],
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="Yes"
+                        id="boxui.activityFeed.commentDeleteConfirm"
+                      />,
+                      "className": "lnk box-ui-comment-delete-yes",
+                      "onClick": [Function],
+                      "type": "button",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "defaultMessage": "Yes",
+                        "id": "boxui.activityFeed.commentDeleteConfirm",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                  " / ",
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "children": <FormattedMessage
+                        defaultMessage="No"
+                        id="boxui.activityFeed.commentDeleteCancel"
+                      />,
+                      "className": "lnk box-ui-comment-delete-no",
+                      "type": "button",
+                    },
+                    "ref": null,
+                    "rendered": Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "defaultMessage": "No",
+                        "id": "boxui.activityFeed.commentDeleteCancel",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    "type": [Function],
+                  },
+                ],
+                "type": "div",
+              },
+            ],
+            "type": [Function],
+          },
+        ],
+        "type": [Function],
+      },
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

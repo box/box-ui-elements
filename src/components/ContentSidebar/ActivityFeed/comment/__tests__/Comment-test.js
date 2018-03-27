@@ -68,18 +68,10 @@ describe('features/activity-feed/comment/Comment', () => {
             />
         );
 
-        expect(wrapper.hasClass('box-ui-comment-container')).toBe(true);
-        expect(wrapper.find('Avatar').length).toEqual(1);
-        expect(wrapper.find('.box-ui-comment-user-name').length).toEqual(1);
-        expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.find('CommentText').prop('taggedMessage')).toEqual(comment.taggedMessage);
-        expect(wrapper.find('CommentText').prop('translationEnabled')).toBe(false);
-        expect(wrapper.find('CommentText').prop('translationFailed')).toBeNull();
-
         // validating that the Tooltip and the comment posted time are properly set
-        expect(wrapper.find('Tooltip').length).toEqual(1);
-        expect(wrapper.find('ReadableTime').length).toEqual(1);
         expect(wrapper.find('ReadableTime').prop('timestamp')).toEqual(unixTime);
+
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly add is-focused class when comment is focused', () => {
@@ -119,13 +111,7 @@ describe('features/activity-feed/comment/Comment', () => {
             />
         );
 
-        expect(wrapper.hasClass('box-ui-comment-container')).toBe(true);
-        expect(wrapper.find('Avatar').length).toEqual(1);
-        expect(wrapper.find('.box-ui-comment-user-name').length).toEqual(1);
-        expect(wrapper.find('CommentText').length).toEqual(1);
-        expect(wrapper.find('CommentText').prop('taggedMessage')).toEqual(comment.taggedMessage);
-        expect(wrapper.find('CommentText').prop('translationEnabled')).toBe(true);
-        expect(wrapper.find('CommentText').prop('translationFailed')).toBeNull();
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render commenter as a link', () => {
@@ -149,10 +135,7 @@ describe('features/activity-feed/comment/Comment', () => {
             />
         );
 
-        expect(wrapper.find('.box-ui-comment-user-name').length).toEqual(1);
-        expect(wrapper.find('.box-ui-comment-user-name').name()).toEqual('Link');
-        expect(wrapper.find('.box-ui-comment-user-name').prop('href')).toEqual(`/profile/${comment.createdBy.id}`);
-        expect(wrapper.find('.box-ui-comment-user-name').prop('children')).toEqual(comment.createdBy.name);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should allow user to delete if they have delete permissions on the comment and delete handler is defined', () => {
@@ -356,7 +339,7 @@ describe('features/activity-feed/comment/Comment', () => {
             createdBy: { name: '50 Cent', id: 10 }
         };
 
-        const wrapper = mount(
+        const wrapper = shallow(
             <Comment
                 id='123'
                 {...comment}
@@ -375,10 +358,7 @@ describe('features/activity-feed/comment/Comment', () => {
             />
         );
 
-        const inlineError = wrapper.find('InlineError');
-        expect(inlineError.length).toEqual(1);
-        expect(inlineError.find('.lnk').length).toEqual(0);
-        expect(wrapper.find('CommentText').prop('translationFailed')).toBe(true);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render an error cta when an action is defined', () => {
@@ -446,8 +426,8 @@ describe('features/activity-feed/comment/Comment', () => {
         expect(wrapper.find('CommentText').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.find('Mention').length).toEqual(1);
-
         expect(wrapper.state('isEditing')).toBe(false);
+
         wrapper.instance().toEdit();
         wrapper.update();
         expect(wrapper.state('isEditing')).toBe(true);

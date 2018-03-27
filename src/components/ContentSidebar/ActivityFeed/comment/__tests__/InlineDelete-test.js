@@ -14,11 +14,7 @@ describe('features/activity-feed/comment/InlineDelete', () => {
 
     test('should correctly render comment', () => {
         const wrapper = render();
-
-        expect(wrapper.hasClass('box-ui-comment-delete-container')).toBe(true);
-        expect(wrapper.find('Flyout').length).toEqual(1);
-        expect(wrapper.find('.box-ui-comment-delete').length).toEqual(1);
-        expect(wrapper.find('b').contains('test')).toBe(true);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should set is-confirming class when confirm flyout is open', () => {

@@ -7,8 +7,7 @@ describe('features/activity-feed/icons/IconActivityFeedEmptyState', () => {
     test('should correctly add class if passed', () => {
         const wrapper = shallow(<IconActivityFeedEmptyState className='test' />);
 
-        expect(wrapper.hasClass('box-ui-activity-feed-empty-state-illustration')).toEqual(true);
-        expect(wrapper.hasClass('test')).toEqual(true);
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render icon with specified width and height', () => {
@@ -16,7 +15,6 @@ describe('features/activity-feed/icons/IconActivityFeedEmptyState', () => {
         const height = 17;
         const wrapper = shallow(<IconActivityFeedEmptyState width={width} height={height} />);
 
-        expect(wrapper.find('AccessibleSVG').prop('width')).toEqual(width);
-        expect(wrapper.find('AccessibleSVG').prop('height')).toEqual(height);
+        expect(wrapper).toMatchSnapshot();
     });
 });
