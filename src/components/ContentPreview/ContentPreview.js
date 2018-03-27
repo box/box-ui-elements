@@ -9,6 +9,7 @@ import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
 import omit from 'lodash/omit';
+import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
@@ -93,8 +94,8 @@ class ContentPreview extends PureComponent<Props, State> {
         language: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
-        canDownload: false,
-        showDownload: false,
+        canDownload: true,
+        showDownload: true,
         hasHeader: false,
         onLoad: noop,
         onNavigate: noop,
@@ -345,7 +346,10 @@ class ContentPreview extends PureComponent<Props, State> {
     canDownload() {
         // showDownload is a prop that preview library uses and can be passed by the user
         const { showDownload, canDownload }: Props = this.props;
-        return canDownload || showDownload;
+        const { file }: State = this.state;
+        const isFileDownloadable =
+            getProp(file, 'permissions.can_download', false) && getProp(file, 'is_download_available', false);
+        return isFileDownloadable && canDownload && showDownload;
     }
 
     /**
@@ -354,7 +358,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = (): void => {
-        const { token, collection, canDownload, ...rest }: Props = this.props;
+        const { token, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !token || this.preview) {

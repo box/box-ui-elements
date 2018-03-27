@@ -73,7 +73,6 @@ type Props = {
     sortDirection: SortDirection,
     canPreview: boolean,
     canDownload: boolean,
-    showDownload: boolean,
     canDelete: boolean,
     canUpload: boolean,
     canRename: boolean,
@@ -147,7 +146,6 @@ class ContentExplorer extends Component<Props, State> {
         sortBy: FIELD_NAME,
         sortDirection: SORT_ASC,
         canDownload: true,
-        showDownload: false,
         canDelete: true,
         canUpload: true,
         canRename: true,
@@ -1167,7 +1165,6 @@ class ContentExplorer extends Component<Props, State> {
             canDelete,
             canRename,
             canDownload,
-            showDownload,
             canPreview,
             canShare,
             token,
@@ -1254,7 +1251,6 @@ class ContentExplorer extends Component<Props, State> {
                             canDelete={canDelete}
                             canRename={canRename}
                             canDownload={canDownload}
-                            showDownload={showDownload}
                             currentCollection={currentCollection}
                             tableRef={this.tableRef}
                             onItemSelect={this.select}
@@ -1343,7 +1339,6 @@ class ContentExplorer extends Component<Props, State> {
                             onPreview={onPreview}
                             hasPreviewSidebar={hasPreviewSidebar}
                             canDownload={canDownload}
-                            showDownload={showDownload}
                             cache={this.api.getCache()}
                             apiHost={apiHost}
                             appHost={appHost}

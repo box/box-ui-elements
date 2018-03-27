@@ -47,8 +47,6 @@ const Header = ({
         : intl.formatMessage(messages.sidebarShow);
     const printMsg = intl.formatMessage(messages.print);
     const downloadMsg = intl.formatMessage(messages.download);
-    const shouldShowButtons =
-        canDownload && file && file.permissions ? file.permissions.can_download && file.is_download_available : false;
 
     return (
         <div className='bcpr-header'>
@@ -68,7 +66,7 @@ const Header = ({
                         <IconSidebar color={isSidebarVisible ? COLOR_BOX_BLUE : COLOR_777} width={16} height={16} />
                     </PlainButton>
                 )}
-                {shouldShowButtons && (
+                {canDownload && (
                     <PlainButton
                         type='button'
                         className='bcpr-btn'
@@ -79,7 +77,7 @@ const Header = ({
                         <IconPrint color={COLOR_777} width={22} height={22} />
                     </PlainButton>
                 )}
-                {shouldShowButtons && (
+                {canDownload && (
                     <PlainButton
                         type='button'
                         className='bcpr-btn'
