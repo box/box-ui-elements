@@ -1338,6 +1338,7 @@ class ContentExplorer extends Component<Props, State> {
                             appElement={this.appElement}
                             onPreview={onPreview}
                             hasPreviewSidebar={hasPreviewSidebar}
+                            canDownload={canDownload}
                             cache={this.api.getCache()}
                             apiHost={apiHost}
                             appHost={appHost}
