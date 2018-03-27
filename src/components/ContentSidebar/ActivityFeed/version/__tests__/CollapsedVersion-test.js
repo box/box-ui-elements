@@ -22,15 +22,10 @@ describe('features/activity-feed/version/CollapsedVersion', () => {
 
         const wrapper = render(item);
         const formattedMessage = wrapper.find('FormattedMessage');
-
-        expect(wrapper.hasClass('box-ui-collapsed-version')).toBe(true);
-        expect(formattedMessage.length).toBe(1);
-        expect(formattedMessage.prop('values').name).toBeTruthy();
-        expect(formattedMessage.prop('values').versions).toBeTruthy();
+        expect(wrapper).toMatchSnapshot();
 
         const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
-        expect(renderedVersionsMessage.hasClass('box-ui-version-range')).toBe(true);
-        expect(renderedVersionsMessage.text()).toEqual(`${versionStart} - ${versionEnd}`);
+        expect(renderedVersionsMessage).toMatchSnapshot();
     });
 
     test('should correctly render for multiple collaborators', () => {
@@ -50,13 +45,10 @@ describe('features/activity-feed/version/CollapsedVersion', () => {
         const formattedMessage = wrapper.find('FormattedMessage');
 
         expect(wrapper.hasClass('box-ui-collapsed-version')).toBe(true);
-        expect(formattedMessage.length).toBe(1);
-        expect(formattedMessage.prop('values').numberOfCollaborators).toEqual(2);
-        expect(formattedMessage.prop('values').versions).toBeTruthy();
+        expect(wrapper).toMatchSnapshot();
 
         const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
-        expect(renderedVersionsMessage.hasClass('box-ui-version-range')).toBe(true);
-        expect(renderedVersionsMessage.text()).toEqual(`${versionStart} - ${versionEnd}`);
+        expect(renderedVersionsMessage).toMatchSnapshot();
     });
 
     test('should correctly render info icon if onInfo is passed', () => {

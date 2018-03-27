@@ -21,8 +21,8 @@ const allHandlers = {
 
 describe('features/activity-feed/task/Task', () => {
     const task = {
-        createdAt: Date.now(),
-        dueDate: Date.now(),
+        createdAt: 12345678,
+        dueDate: 87654321,
         id: '123125',
         taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
         createdBy: { name: 'Tarrence van As', id: 10 },
@@ -53,6 +53,8 @@ describe('features/activity-feed/task/Task', () => {
                 .getElements().length
         ).toEqual(2);
         expect(wrapper.find('.box-ui-task-due-date').length).toEqual(1);
+
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render task', () => {
@@ -96,6 +98,8 @@ describe('features/activity-feed/task/Task', () => {
                 .children()
                 .getElements()[1].props.shouldShowActions
         ).toBe(false);
+
+        expect(wrapper).toMatchSnapshot();
     });
 
     test('should show tooltips when actions are shown', () => {
@@ -107,7 +111,7 @@ describe('features/activity-feed/task/Task', () => {
                 .getElements()[0]
         );
 
-        expect(assignment.find('Tooltip').length).toBe(2);
+        expect(assignment).toMatchSnapshot();
     });
 
     test('should not show actions for current user if onTaskAssignmentUpdate is not defined', () => {
@@ -288,8 +292,7 @@ describe('features/activity-feed/task/Task', () => {
         };
 
         const wrapper = shallow(<Task currentUser={currentUser} {...taskWithNoDueDate} />);
-
-        expect(wrapper.hasClass('box-ui-task')).toBe(true);
-        expect(wrapper.find('.box-ui-task-due-date').length).toEqual(0);
+        
+        expect(wrapper).toMatchSnapshot();
     });
 });

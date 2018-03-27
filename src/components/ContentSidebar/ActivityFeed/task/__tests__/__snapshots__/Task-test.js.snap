@@ -1,0 +1,2503 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/activity-feed/task/Task should correctly render task 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Task
+    assignees={
+      Array [
+        Object {
+          "id": 0,
+          "status": "incomplete",
+          "user": Object {
+            "id": 1,
+            "name": "Jake Thomas",
+          },
+        },
+        Object {
+          "id": 1,
+          "status": "completed",
+          "user": Object {
+            "id": 2,
+            "name": "Peter Pan",
+          },
+        },
+      ]
+    }
+    createdAt={12345678}
+    createdBy={
+      Object {
+        "id": 10,
+        "name": "Tarrence van As",
+      }
+    }
+    currentUser={
+      Object {
+        "id": 1,
+        "name": "Jake Thomas",
+      }
+    }
+    dueDate={87654321}
+    id="123125"
+    taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <mock-comment
+          createdAt={12345678}
+          createdBy={
+            Object {
+              "id": 10,
+              "name": "Tarrence van As",
+            }
+          }
+          currentUser={
+            Object {
+              "id": 1,
+              "name": "Jake Thomas",
+            }
+          }
+          error={undefined}
+          handlers={undefined}
+          id="123125"
+          inputState={undefined}
+          isPending={undefined}
+          onDelete={undefined}
+          onEdit={undefined}
+          permissions={undefined}
+          taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+          translatedTaggedMessage={undefined}
+          translations={undefined}
+        />,
+        <div
+          className="box-ui-task-approvers-container"
+        >
+          <div
+            className="box-ui-task-approvers-header"
+          >
+            <strong>
+              <FormattedMessage
+                defaultMessage="Tasks"
+                id="boxui.activityFeed.tasksForApproval"
+              />
+            </strong>
+            <span
+              className="box-ui-task-due-date"
+            >
+              <FormattedMessage
+                defaultMessage="Due"
+                id="boxui.activityFeed.taskDueDate"
+              />
+              <FormattedDate
+                day="numeric"
+                month="long"
+                value={87654321}
+                year="numeric"
+              />
+            </span>
+          </div>
+          <div
+            className="box-ui-task-assignees"
+          >
+            <PendingAssignment
+              id={1}
+              name="Jake Thomas"
+              onTaskApproval={[Function]}
+              onTaskReject={[Function]}
+              shouldShowActions={undefined}
+            />
+            <CompletedAssignment
+              id={2}
+              name="Peter Pan"
+            />
+          </div>
+        </div>,
+      ],
+      "className": "box-ui-task ",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "createdAt": 12345678,
+          "createdBy": Object {
+            "id": 10,
+            "name": "Tarrence van As",
+          },
+          "currentUser": Object {
+            "id": 1,
+            "name": "Jake Thomas",
+          },
+          "error": undefined,
+          "handlers": undefined,
+          "id": "123125",
+          "inputState": undefined,
+          "isPending": undefined,
+          "onDelete": undefined,
+          "onEdit": undefined,
+          "permissions": undefined,
+          "taggedMessage": "Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .",
+          "translatedTaggedMessage": undefined,
+          "translations": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": "mock-comment",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="box-ui-task-approvers-header"
+            >
+              <strong>
+                <FormattedMessage
+                  defaultMessage="Tasks"
+                  id="boxui.activityFeed.tasksForApproval"
+                />
+              </strong>
+              <span
+                className="box-ui-task-due-date"
+              >
+                <FormattedMessage
+                  defaultMessage="Due"
+                  id="boxui.activityFeed.taskDueDate"
+                />
+                <FormattedDate
+                  day="numeric"
+                  month="long"
+                  value={87654321}
+                  year="numeric"
+                />
+              </span>
+            </div>,
+            <div
+              className="box-ui-task-assignees"
+            >
+              <PendingAssignment
+                id={1}
+                name="Jake Thomas"
+                onTaskApproval={[Function]}
+                onTaskReject={[Function]}
+                shouldShowActions={undefined}
+              />
+              <CompletedAssignment
+                id={2}
+                name="Peter Pan"
+              />
+            </div>,
+          ],
+          "className": "box-ui-task-approvers-container",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <strong>
+                  <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />
+                </strong>,
+                <span
+                  className="box-ui-task-due-date"
+                >
+                  <FormattedMessage
+                    defaultMessage="Due"
+                    id="boxui.activityFeed.taskDueDate"
+                  />
+                  <FormattedDate
+                    day="numeric"
+                    month="long"
+                    value={87654321}
+                    year="numeric"
+                  />
+                </span>,
+              ],
+              "className": "box-ui-task-approvers-header",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />,
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "defaultMessage": "Tasks",
+                    "id": "boxui.activityFeed.tasksForApproval",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "strong",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <FormattedMessage
+                      defaultMessage="Due"
+                      id="boxui.activityFeed.taskDueDate"
+                    />,
+                    <FormattedDate
+                      day="numeric"
+                      month="long"
+                      value={87654321}
+                      year="numeric"
+                    />,
+                  ],
+                  "className": "box-ui-task-due-date",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "defaultMessage": "Due",
+                      "id": "boxui.activityFeed.taskDueDate",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "day": "numeric",
+                      "month": "long",
+                      "value": 87654321,
+                      "year": "numeric",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "span",
+              },
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <PendingAssignment
+                  id={1}
+                  name="Jake Thomas"
+                  onTaskApproval={[Function]}
+                  onTaskReject={[Function]}
+                  shouldShowActions={undefined}
+                />,
+                <CompletedAssignment
+                  id={2}
+                  name="Peter Pan"
+                />,
+              ],
+              "className": "box-ui-task-assignees",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": "1",
+                "nodeType": "function",
+                "props": Object {
+                  "id": 1,
+                  "name": "Jake Thomas",
+                  "onTaskApproval": [Function],
+                  "onTaskReject": [Function],
+                  "shouldShowActions": undefined,
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": "2",
+                "nodeType": "function",
+                "props": Object {
+                  "id": 2,
+                  "name": "Peter Pan",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": "div",
+          },
+        ],
+        "type": "div",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <mock-comment
+            createdAt={12345678}
+            createdBy={
+              Object {
+                "id": 10,
+                "name": "Tarrence van As",
+              }
+            }
+            currentUser={
+              Object {
+                "id": 1,
+                "name": "Jake Thomas",
+              }
+            }
+            error={undefined}
+            handlers={undefined}
+            id="123125"
+            inputState={undefined}
+            isPending={undefined}
+            onDelete={undefined}
+            onEdit={undefined}
+            permissions={undefined}
+            taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+            translatedTaggedMessage={undefined}
+            translations={undefined}
+          />,
+          <div
+            className="box-ui-task-approvers-container"
+          >
+            <div
+              className="box-ui-task-approvers-header"
+            >
+              <strong>
+                <FormattedMessage
+                  defaultMessage="Tasks"
+                  id="boxui.activityFeed.tasksForApproval"
+                />
+              </strong>
+              <span
+                className="box-ui-task-due-date"
+              >
+                <FormattedMessage
+                  defaultMessage="Due"
+                  id="boxui.activityFeed.taskDueDate"
+                />
+                <FormattedDate
+                  day="numeric"
+                  month="long"
+                  value={87654321}
+                  year="numeric"
+                />
+              </span>
+            </div>
+            <div
+              className="box-ui-task-assignees"
+            >
+              <PendingAssignment
+                id={1}
+                name="Jake Thomas"
+                onTaskApproval={[Function]}
+                onTaskReject={[Function]}
+                shouldShowActions={undefined}
+              />
+              <CompletedAssignment
+                id={2}
+                name="Peter Pan"
+              />
+            </div>
+          </div>,
+        ],
+        "className": "box-ui-task ",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "createdAt": 12345678,
+            "createdBy": Object {
+              "id": 10,
+              "name": "Tarrence van As",
+            },
+            "currentUser": Object {
+              "id": 1,
+              "name": "Jake Thomas",
+            },
+            "error": undefined,
+            "handlers": undefined,
+            "id": "123125",
+            "inputState": undefined,
+            "isPending": undefined,
+            "onDelete": undefined,
+            "onEdit": undefined,
+            "permissions": undefined,
+            "taggedMessage": "Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .",
+            "translatedTaggedMessage": undefined,
+            "translations": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": "mock-comment",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="box-ui-task-approvers-header"
+              >
+                <strong>
+                  <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />
+                </strong>
+                <span
+                  className="box-ui-task-due-date"
+                >
+                  <FormattedMessage
+                    defaultMessage="Due"
+                    id="boxui.activityFeed.taskDueDate"
+                  />
+                  <FormattedDate
+                    day="numeric"
+                    month="long"
+                    value={87654321}
+                    year="numeric"
+                  />
+                </span>
+              </div>,
+              <div
+                className="box-ui-task-assignees"
+              >
+                <PendingAssignment
+                  id={1}
+                  name="Jake Thomas"
+                  onTaskApproval={[Function]}
+                  onTaskReject={[Function]}
+                  shouldShowActions={undefined}
+                />
+                <CompletedAssignment
+                  id={2}
+                  name="Peter Pan"
+                />
+              </div>,
+            ],
+            "className": "box-ui-task-approvers-container",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <strong>
+                    <FormattedMessage
+                      defaultMessage="Tasks"
+                      id="boxui.activityFeed.tasksForApproval"
+                    />
+                  </strong>,
+                  <span
+                    className="box-ui-task-due-date"
+                  >
+                    <FormattedMessage
+                      defaultMessage="Due"
+                      id="boxui.activityFeed.taskDueDate"
+                    />
+                    <FormattedDate
+                      day="numeric"
+                      month="long"
+                      value={87654321}
+                      year="numeric"
+                    />
+                  </span>,
+                ],
+                "className": "box-ui-task-approvers-header",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Tasks"
+                      id="boxui.activityFeed.tasksForApproval"
+                    />,
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "defaultMessage": "Tasks",
+                      "id": "boxui.activityFeed.tasksForApproval",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "strong",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <FormattedMessage
+                        defaultMessage="Due"
+                        id="boxui.activityFeed.taskDueDate"
+                      />,
+                      <FormattedDate
+                        day="numeric"
+                        month="long"
+                        value={87654321}
+                        year="numeric"
+                      />,
+                    ],
+                    "className": "box-ui-task-due-date",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "defaultMessage": "Due",
+                        "id": "boxui.activityFeed.taskDueDate",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "day": "numeric",
+                        "month": "long",
+                        "value": 87654321,
+                        "year": "numeric",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                  ],
+                  "type": "span",
+                },
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <PendingAssignment
+                    id={1}
+                    name="Jake Thomas"
+                    onTaskApproval={[Function]}
+                    onTaskReject={[Function]}
+                    shouldShowActions={undefined}
+                  />,
+                  <CompletedAssignment
+                    id={2}
+                    name="Peter Pan"
+                  />,
+                ],
+                "className": "box-ui-task-assignees",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": "1",
+                  "nodeType": "function",
+                  "props": Object {
+                    "id": 1,
+                    "name": "Jake Thomas",
+                    "onTaskApproval": [Function],
+                    "onTaskReject": [Function],
+                    "shouldShowActions": undefined,
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": "2",
+                  "nodeType": "function",
+                  "props": Object {
+                    "id": 2,
+                    "name": "Peter Pan",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`features/activity-feed/task/Task should not render due date when not passed in 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Task
+    assignees={
+      Array [
+        Object {
+          "id": 0,
+          "status": "incomplete",
+          "user": Object {
+            "id": 1,
+            "name": "Jake Thomas",
+          },
+        },
+        Object {
+          "id": 1,
+          "status": "completed",
+          "user": Object {
+            "id": 2,
+            "name": "Peter Pan",
+          },
+        },
+      ]
+    }
+    createdAt={12345678}
+    createdBy={
+      Object {
+        "id": 10,
+        "name": "Tarrence van As",
+      }
+    }
+    currentUser={
+      Object {
+        "id": 1,
+        "name": "Jake Thomas",
+      }
+    }
+    dueDate={null}
+    id="123125"
+    taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <mock-comment
+          createdAt={12345678}
+          createdBy={
+            Object {
+              "id": 10,
+              "name": "Tarrence van As",
+            }
+          }
+          currentUser={
+            Object {
+              "id": 1,
+              "name": "Jake Thomas",
+            }
+          }
+          error={undefined}
+          handlers={undefined}
+          id="123125"
+          inputState={undefined}
+          isPending={undefined}
+          onDelete={undefined}
+          onEdit={undefined}
+          permissions={undefined}
+          taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+          translatedTaggedMessage={undefined}
+          translations={undefined}
+        />,
+        <div
+          className="box-ui-task-approvers-container"
+        >
+          <div
+            className="box-ui-task-approvers-header"
+          >
+            <strong>
+              <FormattedMessage
+                defaultMessage="Tasks"
+                id="boxui.activityFeed.tasksForApproval"
+              />
+            </strong>
+          </div>
+          <div
+            className="box-ui-task-assignees"
+          >
+            <PendingAssignment
+              id={1}
+              name="Jake Thomas"
+              onTaskApproval={[Function]}
+              onTaskReject={[Function]}
+              shouldShowActions={undefined}
+            />
+            <CompletedAssignment
+              id={2}
+              name="Peter Pan"
+            />
+          </div>
+        </div>,
+      ],
+      "className": "box-ui-task ",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "createdAt": 12345678,
+          "createdBy": Object {
+            "id": 10,
+            "name": "Tarrence van As",
+          },
+          "currentUser": Object {
+            "id": 1,
+            "name": "Jake Thomas",
+          },
+          "error": undefined,
+          "handlers": undefined,
+          "id": "123125",
+          "inputState": undefined,
+          "isPending": undefined,
+          "onDelete": undefined,
+          "onEdit": undefined,
+          "permissions": undefined,
+          "taggedMessage": "Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .",
+          "translatedTaggedMessage": undefined,
+          "translations": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": "mock-comment",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="box-ui-task-approvers-header"
+            >
+              <strong>
+                <FormattedMessage
+                  defaultMessage="Tasks"
+                  id="boxui.activityFeed.tasksForApproval"
+                />
+              </strong>
+            </div>,
+            <div
+              className="box-ui-task-assignees"
+            >
+              <PendingAssignment
+                id={1}
+                name="Jake Thomas"
+                onTaskApproval={[Function]}
+                onTaskReject={[Function]}
+                shouldShowActions={undefined}
+              />
+              <CompletedAssignment
+                id={2}
+                name="Peter Pan"
+              />
+            </div>,
+          ],
+          "className": "box-ui-task-approvers-container",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <strong>
+                  <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />
+                </strong>,
+                null,
+              ],
+              "className": "box-ui-task-approvers-header",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />,
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "defaultMessage": "Tasks",
+                    "id": "boxui.activityFeed.tasksForApproval",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "strong",
+              },
+              null,
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <PendingAssignment
+                  id={1}
+                  name="Jake Thomas"
+                  onTaskApproval={[Function]}
+                  onTaskReject={[Function]}
+                  shouldShowActions={undefined}
+                />,
+                <CompletedAssignment
+                  id={2}
+                  name="Peter Pan"
+                />,
+              ],
+              "className": "box-ui-task-assignees",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": "1",
+                "nodeType": "function",
+                "props": Object {
+                  "id": 1,
+                  "name": "Jake Thomas",
+                  "onTaskApproval": [Function],
+                  "onTaskReject": [Function],
+                  "shouldShowActions": undefined,
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": "2",
+                "nodeType": "function",
+                "props": Object {
+                  "id": 2,
+                  "name": "Peter Pan",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": "div",
+          },
+        ],
+        "type": "div",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <mock-comment
+            createdAt={12345678}
+            createdBy={
+              Object {
+                "id": 10,
+                "name": "Tarrence van As",
+              }
+            }
+            currentUser={
+              Object {
+                "id": 1,
+                "name": "Jake Thomas",
+              }
+            }
+            error={undefined}
+            handlers={undefined}
+            id="123125"
+            inputState={undefined}
+            isPending={undefined}
+            onDelete={undefined}
+            onEdit={undefined}
+            permissions={undefined}
+            taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+            translatedTaggedMessage={undefined}
+            translations={undefined}
+          />,
+          <div
+            className="box-ui-task-approvers-container"
+          >
+            <div
+              className="box-ui-task-approvers-header"
+            >
+              <strong>
+                <FormattedMessage
+                  defaultMessage="Tasks"
+                  id="boxui.activityFeed.tasksForApproval"
+                />
+              </strong>
+            </div>
+            <div
+              className="box-ui-task-assignees"
+            >
+              <PendingAssignment
+                id={1}
+                name="Jake Thomas"
+                onTaskApproval={[Function]}
+                onTaskReject={[Function]}
+                shouldShowActions={undefined}
+              />
+              <CompletedAssignment
+                id={2}
+                name="Peter Pan"
+              />
+            </div>
+          </div>,
+        ],
+        "className": "box-ui-task ",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "createdAt": 12345678,
+            "createdBy": Object {
+              "id": 10,
+              "name": "Tarrence van As",
+            },
+            "currentUser": Object {
+              "id": 1,
+              "name": "Jake Thomas",
+            },
+            "error": undefined,
+            "handlers": undefined,
+            "id": "123125",
+            "inputState": undefined,
+            "isPending": undefined,
+            "onDelete": undefined,
+            "onEdit": undefined,
+            "permissions": undefined,
+            "taggedMessage": "Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .",
+            "translatedTaggedMessage": undefined,
+            "translations": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": "mock-comment",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="box-ui-task-approvers-header"
+              >
+                <strong>
+                  <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />
+                </strong>
+              </div>,
+              <div
+                className="box-ui-task-assignees"
+              >
+                <PendingAssignment
+                  id={1}
+                  name="Jake Thomas"
+                  onTaskApproval={[Function]}
+                  onTaskReject={[Function]}
+                  shouldShowActions={undefined}
+                />
+                <CompletedAssignment
+                  id={2}
+                  name="Peter Pan"
+                />
+              </div>,
+            ],
+            "className": "box-ui-task-approvers-container",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <strong>
+                    <FormattedMessage
+                      defaultMessage="Tasks"
+                      id="boxui.activityFeed.tasksForApproval"
+                    />
+                  </strong>,
+                  null,
+                ],
+                "className": "box-ui-task-approvers-header",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Tasks"
+                      id="boxui.activityFeed.tasksForApproval"
+                    />,
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "defaultMessage": "Tasks",
+                      "id": "boxui.activityFeed.tasksForApproval",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "strong",
+                },
+                null,
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <PendingAssignment
+                    id={1}
+                    name="Jake Thomas"
+                    onTaskApproval={[Function]}
+                    onTaskReject={[Function]}
+                    shouldShowActions={undefined}
+                  />,
+                  <CompletedAssignment
+                    id={2}
+                    name="Peter Pan"
+                  />,
+                ],
+                "className": "box-ui-task-assignees",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": "1",
+                  "nodeType": "function",
+                  "props": Object {
+                    "id": 1,
+                    "name": "Jake Thomas",
+                    "onTaskApproval": [Function],
+                    "onTaskReject": [Function],
+                    "shouldShowActions": undefined,
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": "2",
+                  "nodeType": "function",
+                  "props": Object {
+                    "id": 2,
+                    "name": "Peter Pan",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`features/activity-feed/task/Task should show actions for current user and if onTaskAssignmentUpdate is defined 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <Task
+    assignees={
+      Array [
+        Object {
+          "id": 0,
+          "status": "incomplete",
+          "user": Object {
+            "id": 1,
+            "name": "Jake Thomas",
+          },
+        },
+        Object {
+          "id": 1,
+          "status": "completed",
+          "user": Object {
+            "id": 2,
+            "name": "Peter Pan",
+          },
+        },
+      ]
+    }
+    createdAt={12345678}
+    createdBy={
+      Object {
+        "id": 10,
+        "name": "Tarrence van As",
+      }
+    }
+    currentUser={
+      Object {
+        "id": 1,
+        "name": "Jake Thomas",
+      }
+    }
+    dueDate={87654321}
+    id="123125"
+    onTaskAssignmentUpdate={[MockFunction]}
+    taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <mock-comment
+          createdAt={12345678}
+          createdBy={
+            Object {
+              "id": 10,
+              "name": "Tarrence van As",
+            }
+          }
+          currentUser={
+            Object {
+              "id": 1,
+              "name": "Jake Thomas",
+            }
+          }
+          error={undefined}
+          handlers={undefined}
+          id="123125"
+          inputState={undefined}
+          isPending={undefined}
+          onDelete={undefined}
+          onEdit={undefined}
+          permissions={undefined}
+          taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+          translatedTaggedMessage={undefined}
+          translations={undefined}
+        />,
+        <div
+          className="box-ui-task-approvers-container"
+        >
+          <div
+            className="box-ui-task-approvers-header"
+          >
+            <strong>
+              <FormattedMessage
+                defaultMessage="Tasks"
+                id="boxui.activityFeed.tasksForApproval"
+              />
+            </strong>
+            <span
+              className="box-ui-task-due-date"
+            >
+              <FormattedMessage
+                defaultMessage="Due"
+                id="boxui.activityFeed.taskDueDate"
+              />
+              <FormattedDate
+                day="numeric"
+                month="long"
+                value={87654321}
+                year="numeric"
+              />
+            </span>
+          </div>
+          <div
+            className="box-ui-task-assignees"
+          >
+            <PendingAssignment
+              id={1}
+              name="Jake Thomas"
+              onTaskApproval={[Function]}
+              onTaskReject={[Function]}
+              shouldShowActions={true}
+            />
+            <CompletedAssignment
+              id={2}
+              name="Peter Pan"
+            />
+          </div>
+        </div>,
+      ],
+      "className": "box-ui-task ",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "createdAt": 12345678,
+          "createdBy": Object {
+            "id": 10,
+            "name": "Tarrence van As",
+          },
+          "currentUser": Object {
+            "id": 1,
+            "name": "Jake Thomas",
+          },
+          "error": undefined,
+          "handlers": undefined,
+          "id": "123125",
+          "inputState": undefined,
+          "isPending": undefined,
+          "onDelete": undefined,
+          "onEdit": undefined,
+          "permissions": undefined,
+          "taggedMessage": "Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .",
+          "translatedTaggedMessage": undefined,
+          "translations": undefined,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": "mock-comment",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="box-ui-task-approvers-header"
+            >
+              <strong>
+                <FormattedMessage
+                  defaultMessage="Tasks"
+                  id="boxui.activityFeed.tasksForApproval"
+                />
+              </strong>
+              <span
+                className="box-ui-task-due-date"
+              >
+                <FormattedMessage
+                  defaultMessage="Due"
+                  id="boxui.activityFeed.taskDueDate"
+                />
+                <FormattedDate
+                  day="numeric"
+                  month="long"
+                  value={87654321}
+                  year="numeric"
+                />
+              </span>
+            </div>,
+            <div
+              className="box-ui-task-assignees"
+            >
+              <PendingAssignment
+                id={1}
+                name="Jake Thomas"
+                onTaskApproval={[Function]}
+                onTaskReject={[Function]}
+                shouldShowActions={true}
+              />
+              <CompletedAssignment
+                id={2}
+                name="Peter Pan"
+              />
+            </div>,
+          ],
+          "className": "box-ui-task-approvers-container",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <strong>
+                  <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />
+                </strong>,
+                <span
+                  className="box-ui-task-due-date"
+                >
+                  <FormattedMessage
+                    defaultMessage="Due"
+                    id="boxui.activityFeed.taskDueDate"
+                  />
+                  <FormattedDate
+                    day="numeric"
+                    month="long"
+                    value={87654321}
+                    year="numeric"
+                  />
+                </span>,
+              ],
+              "className": "box-ui-task-approvers-header",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />,
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "defaultMessage": "Tasks",
+                    "id": "boxui.activityFeed.tasksForApproval",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": "strong",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <FormattedMessage
+                      defaultMessage="Due"
+                      id="boxui.activityFeed.taskDueDate"
+                    />,
+                    <FormattedDate
+                      day="numeric"
+                      month="long"
+                      value={87654321}
+                      year="numeric"
+                    />,
+                  ],
+                  "className": "box-ui-task-due-date",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "defaultMessage": "Due",
+                      "id": "boxui.activityFeed.taskDueDate",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "day": "numeric",
+                      "month": "long",
+                      "value": 87654321,
+                      "year": "numeric",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "span",
+              },
+            ],
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": Array [
+                <PendingAssignment
+                  id={1}
+                  name="Jake Thomas"
+                  onTaskApproval={[Function]}
+                  onTaskReject={[Function]}
+                  shouldShowActions={true}
+                />,
+                <CompletedAssignment
+                  id={2}
+                  name="Peter Pan"
+                />,
+              ],
+              "className": "box-ui-task-assignees",
+            },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": "1",
+                "nodeType": "function",
+                "props": Object {
+                  "id": 1,
+                  "name": "Jake Thomas",
+                  "onTaskApproval": [Function],
+                  "onTaskReject": [Function],
+                  "shouldShowActions": true,
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              Object {
+                "instance": null,
+                "key": "2",
+                "nodeType": "function",
+                "props": Object {
+                  "id": 2,
+                  "name": "Peter Pan",
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+            ],
+            "type": "div",
+          },
+        ],
+        "type": "div",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <mock-comment
+            createdAt={12345678}
+            createdBy={
+              Object {
+                "id": 10,
+                "name": "Tarrence van As",
+              }
+            }
+            currentUser={
+              Object {
+                "id": 1,
+                "name": "Jake Thomas",
+              }
+            }
+            error={undefined}
+            handlers={undefined}
+            id="123125"
+            inputState={undefined}
+            isPending={undefined}
+            onDelete={undefined}
+            onEdit={undefined}
+            permissions={undefined}
+            taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+            translatedTaggedMessage={undefined}
+            translations={undefined}
+          />,
+          <div
+            className="box-ui-task-approvers-container"
+          >
+            <div
+              className="box-ui-task-approvers-header"
+            >
+              <strong>
+                <FormattedMessage
+                  defaultMessage="Tasks"
+                  id="boxui.activityFeed.tasksForApproval"
+                />
+              </strong>
+              <span
+                className="box-ui-task-due-date"
+              >
+                <FormattedMessage
+                  defaultMessage="Due"
+                  id="boxui.activityFeed.taskDueDate"
+                />
+                <FormattedDate
+                  day="numeric"
+                  month="long"
+                  value={87654321}
+                  year="numeric"
+                />
+              </span>
+            </div>
+            <div
+              className="box-ui-task-assignees"
+            >
+              <PendingAssignment
+                id={1}
+                name="Jake Thomas"
+                onTaskApproval={[Function]}
+                onTaskReject={[Function]}
+                shouldShowActions={true}
+              />
+              <CompletedAssignment
+                id={2}
+                name="Peter Pan"
+              />
+            </div>
+          </div>,
+        ],
+        "className": "box-ui-task ",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "createdAt": 12345678,
+            "createdBy": Object {
+              "id": 10,
+              "name": "Tarrence van As",
+            },
+            "currentUser": Object {
+              "id": 1,
+              "name": "Jake Thomas",
+            },
+            "error": undefined,
+            "handlers": undefined,
+            "id": "123125",
+            "inputState": undefined,
+            "isPending": undefined,
+            "onDelete": undefined,
+            "onEdit": undefined,
+            "permissions": undefined,
+            "taggedMessage": "Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .",
+            "translatedTaggedMessage": undefined,
+            "translations": undefined,
+          },
+          "ref": null,
+          "rendered": null,
+          "type": "mock-comment",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="box-ui-task-approvers-header"
+              >
+                <strong>
+                  <FormattedMessage
+                    defaultMessage="Tasks"
+                    id="boxui.activityFeed.tasksForApproval"
+                  />
+                </strong>
+                <span
+                  className="box-ui-task-due-date"
+                >
+                  <FormattedMessage
+                    defaultMessage="Due"
+                    id="boxui.activityFeed.taskDueDate"
+                  />
+                  <FormattedDate
+                    day="numeric"
+                    month="long"
+                    value={87654321}
+                    year="numeric"
+                  />
+                </span>
+              </div>,
+              <div
+                className="box-ui-task-assignees"
+              >
+                <PendingAssignment
+                  id={1}
+                  name="Jake Thomas"
+                  onTaskApproval={[Function]}
+                  onTaskReject={[Function]}
+                  shouldShowActions={true}
+                />
+                <CompletedAssignment
+                  id={2}
+                  name="Peter Pan"
+                />
+              </div>,
+            ],
+            "className": "box-ui-task-approvers-container",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <strong>
+                    <FormattedMessage
+                      defaultMessage="Tasks"
+                      id="boxui.activityFeed.tasksForApproval"
+                    />
+                  </strong>,
+                  <span
+                    className="box-ui-task-due-date"
+                  >
+                    <FormattedMessage
+                      defaultMessage="Due"
+                      id="boxui.activityFeed.taskDueDate"
+                    />
+                    <FormattedDate
+                      day="numeric"
+                      month="long"
+                      value={87654321}
+                      year="numeric"
+                    />
+                  </span>,
+                ],
+                "className": "box-ui-task-approvers-header",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": <FormattedMessage
+                      defaultMessage="Tasks"
+                      id="boxui.activityFeed.tasksForApproval"
+                    />,
+                  },
+                  "ref": null,
+                  "rendered": Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "function",
+                    "props": Object {
+                      "defaultMessage": "Tasks",
+                      "id": "boxui.activityFeed.tasksForApproval",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  "type": "strong",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <FormattedMessage
+                        defaultMessage="Due"
+                        id="boxui.activityFeed.taskDueDate"
+                      />,
+                      <FormattedDate
+                        day="numeric"
+                        month="long"
+                        value={87654321}
+                        year="numeric"
+                      />,
+                    ],
+                    "className": "box-ui-task-due-date",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "defaultMessage": "Due",
+                        "id": "boxui.activityFeed.taskDueDate",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    Object {
+                      "instance": null,
+                      "key": undefined,
+                      "nodeType": "function",
+                      "props": Object {
+                        "day": "numeric",
+                        "month": "long",
+                        "value": 87654321,
+                        "year": "numeric",
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                  ],
+                  "type": "span",
+                },
+              ],
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <PendingAssignment
+                    id={1}
+                    name="Jake Thomas"
+                    onTaskApproval={[Function]}
+                    onTaskReject={[Function]}
+                    shouldShowActions={true}
+                  />,
+                  <CompletedAssignment
+                    id={2}
+                    name="Peter Pan"
+                  />,
+                ],
+                "className": "box-ui-task-assignees",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": "1",
+                  "nodeType": "function",
+                  "props": Object {
+                    "id": 1,
+                    "name": "Jake Thomas",
+                    "onTaskApproval": [Function],
+                    "onTaskReject": [Function],
+                    "shouldShowActions": true,
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": "2",
+                  "nodeType": "function",
+                  "props": Object {
+                    "id": 2,
+                    "name": "Peter Pan",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "div",
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`features/activity-feed/task/Task should show tooltips when actions are shown 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <PendingAssignment
+    id={1}
+    name="Jake Thomas"
+    onTaskApproval={[Function]}
+    onTaskReject={[Function]}
+    shouldShowActions={true}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
+        <div
+          className="box-ui-task-assignment-name"
+        >
+          Jake Thomas
+        </div>,
+        <div
+          className="box-ui-task-assignment-actions"
+        >
+          <Tooltip
+            constrainToScrollParent={false}
+            constrainToWindow={true}
+            position="bottom-center"
+            text={
+              <FormattedMessage
+                defaultMessage="Complete"
+                id="boxui.activityFeed.taskApprove"
+              />
+            }
+            theme="default"
+          >
+            <PlainButton
+              className="box-ui-task-check-btn"
+              onClick={[Function]}
+            >
+              <IconCheck
+                className="box-ui-task-check-icon"
+                height={18}
+                width={18}
+              />
+            </PlainButton>
+          </Tooltip>
+          <Tooltip
+            constrainToScrollParent={false}
+            constrainToWindow={true}
+            position="bottom-center"
+            text={
+              <FormattedMessage
+                defaultMessage="Decline"
+                id="boxui.activityFeed.taskReject"
+              />
+            }
+            theme="default"
+          >
+            <PlainButton
+              className="box-ui-task-x-btn"
+              onClick={[Function]}
+            >
+              <IconClose
+                className="box-ui-task-x-icon"
+                height={18}
+                width={18}
+              />
+            </PlainButton>
+          </Tooltip>
+        </div>,
+      ],
+      "className": "box-ui-task-pending-assignment",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "Jake Thomas",
+          "className": "box-ui-task-assignment-name",
+        },
+        "ref": null,
+        "rendered": "Jake Thomas",
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <Tooltip
+              constrainToScrollParent={false}
+              constrainToWindow={true}
+              position="bottom-center"
+              text={
+                <FormattedMessage
+                  defaultMessage="Complete"
+                  id="boxui.activityFeed.taskApprove"
+                />
+              }
+              theme="default"
+            >
+              <PlainButton
+                className="box-ui-task-check-btn"
+                onClick={[Function]}
+              >
+                <IconCheck
+                  className="box-ui-task-check-icon"
+                  height={18}
+                  width={18}
+                />
+              </PlainButton>
+            </Tooltip>,
+            <Tooltip
+              constrainToScrollParent={false}
+              constrainToWindow={true}
+              position="bottom-center"
+              text={
+                <FormattedMessage
+                  defaultMessage="Decline"
+                  id="boxui.activityFeed.taskReject"
+                />
+              }
+              theme="default"
+            >
+              <PlainButton
+                className="box-ui-task-x-btn"
+                onClick={[Function]}
+              >
+                <IconClose
+                  className="box-ui-task-x-icon"
+                  height={18}
+                  width={18}
+                />
+              </PlainButton>
+            </Tooltip>,
+          ],
+          "className": "box-ui-task-assignment-actions",
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": <PlainButton
+                className="box-ui-task-check-btn"
+                onClick={[Function]}
+              >
+                <IconCheck
+                  className="box-ui-task-check-icon"
+                  height={18}
+                  width={18}
+                />
+              </PlainButton>,
+              "constrainToScrollParent": false,
+              "constrainToWindow": true,
+              "position": "bottom-center",
+              "text": <FormattedMessage
+                defaultMessage="Complete"
+                id="boxui.activityFeed.taskApprove"
+              />,
+              "theme": "default",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": <IconCheck
+                  className="box-ui-task-check-icon"
+                  height={18}
+                  width={18}
+                />,
+                "className": "box-ui-task-check-btn",
+                "onClick": [Function],
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "className": "box-ui-task-check-icon",
+                  "height": 18,
+                  "width": 18,
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            "type": [Function],
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "children": <PlainButton
+                className="box-ui-task-x-btn"
+                onClick={[Function]}
+              >
+                <IconClose
+                  className="box-ui-task-x-icon"
+                  height={18}
+                  width={18}
+                />
+              </PlainButton>,
+              "constrainToScrollParent": false,
+              "constrainToWindow": true,
+              "position": "bottom-center",
+              "text": <FormattedMessage
+                defaultMessage="Decline"
+                id="boxui.activityFeed.taskReject"
+              />,
+              "theme": "default",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "function",
+              "props": Object {
+                "children": <IconClose
+                  className="box-ui-task-x-icon"
+                  height={18}
+                  width={18}
+                />,
+                "className": "box-ui-task-x-btn",
+                "onClick": [Function],
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "className": "box-ui-task-x-icon",
+                  "height": 18,
+                  "width": 18,
+                },
+                "ref": null,
+                "rendered": null,
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            "type": [Function],
+          },
+        ],
+        "type": "div",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="box-ui-task-assignment-name"
+          >
+            Jake Thomas
+          </div>,
+          <div
+            className="box-ui-task-assignment-actions"
+          >
+            <Tooltip
+              constrainToScrollParent={false}
+              constrainToWindow={true}
+              position="bottom-center"
+              text={
+                <FormattedMessage
+                  defaultMessage="Complete"
+                  id="boxui.activityFeed.taskApprove"
+                />
+              }
+              theme="default"
+            >
+              <PlainButton
+                className="box-ui-task-check-btn"
+                onClick={[Function]}
+              >
+                <IconCheck
+                  className="box-ui-task-check-icon"
+                  height={18}
+                  width={18}
+                />
+              </PlainButton>
+            </Tooltip>
+            <Tooltip
+              constrainToScrollParent={false}
+              constrainToWindow={true}
+              position="bottom-center"
+              text={
+                <FormattedMessage
+                  defaultMessage="Decline"
+                  id="boxui.activityFeed.taskReject"
+                />
+              }
+              theme="default"
+            >
+              <PlainButton
+                className="box-ui-task-x-btn"
+                onClick={[Function]}
+              >
+                <IconClose
+                  className="box-ui-task-x-icon"
+                  height={18}
+                  width={18}
+                />
+              </PlainButton>
+            </Tooltip>
+          </div>,
+        ],
+        "className": "box-ui-task-pending-assignment",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "Jake Thomas",
+            "className": "box-ui-task-assignment-name",
+          },
+          "ref": null,
+          "rendered": "Jake Thomas",
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <Tooltip
+                constrainToScrollParent={false}
+                constrainToWindow={true}
+                position="bottom-center"
+                text={
+                  <FormattedMessage
+                    defaultMessage="Complete"
+                    id="boxui.activityFeed.taskApprove"
+                  />
+                }
+                theme="default"
+              >
+                <PlainButton
+                  className="box-ui-task-check-btn"
+                  onClick={[Function]}
+                >
+                  <IconCheck
+                    className="box-ui-task-check-icon"
+                    height={18}
+                    width={18}
+                  />
+                </PlainButton>
+              </Tooltip>,
+              <Tooltip
+                constrainToScrollParent={false}
+                constrainToWindow={true}
+                position="bottom-center"
+                text={
+                  <FormattedMessage
+                    defaultMessage="Decline"
+                    id="boxui.activityFeed.taskReject"
+                  />
+                }
+                theme="default"
+              >
+                <PlainButton
+                  className="box-ui-task-x-btn"
+                  onClick={[Function]}
+                >
+                  <IconClose
+                    className="box-ui-task-x-icon"
+                    height={18}
+                    width={18}
+                  />
+                </PlainButton>
+              </Tooltip>,
+            ],
+            "className": "box-ui-task-assignment-actions",
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <PlainButton
+                  className="box-ui-task-check-btn"
+                  onClick={[Function]}
+                >
+                  <IconCheck
+                    className="box-ui-task-check-icon"
+                    height={18}
+                    width={18}
+                  />
+                </PlainButton>,
+                "constrainToScrollParent": false,
+                "constrainToWindow": true,
+                "position": "bottom-center",
+                "text": <FormattedMessage
+                  defaultMessage="Complete"
+                  id="boxui.activityFeed.taskApprove"
+                />,
+                "theme": "default",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "children": <IconCheck
+                    className="box-ui-task-check-icon"
+                    height={18}
+                    width={18}
+                  />,
+                  "className": "box-ui-task-check-btn",
+                  "onClick": [Function],
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "className": "box-ui-task-check-icon",
+                    "height": 18,
+                    "width": 18,
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "class",
+              "props": Object {
+                "children": <PlainButton
+                  className="box-ui-task-x-btn"
+                  onClick={[Function]}
+                >
+                  <IconClose
+                    className="box-ui-task-x-icon"
+                    height={18}
+                    width={18}
+                  />
+                </PlainButton>,
+                "constrainToScrollParent": false,
+                "constrainToWindow": true,
+                "position": "bottom-center",
+                "text": <FormattedMessage
+                  defaultMessage="Decline"
+                  id="boxui.activityFeed.taskReject"
+                />,
+                "theme": "default",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "function",
+                "props": Object {
+                  "children": <IconClose
+                    className="box-ui-task-x-icon"
+                    height={18}
+                    width={18}
+                  />,
+                  "className": "box-ui-task-x-btn",
+                  "onClick": [Function],
+                },
+                "ref": null,
+                "rendered": Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "function",
+                  "props": Object {
+                    "className": "box-ui-task-x-icon",
+                    "height": 18,
+                    "width": 18,
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                "type": [Function],
+              },
+              "type": [Function],
+            },
+          ],
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
