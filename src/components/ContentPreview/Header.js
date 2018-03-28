@@ -22,6 +22,7 @@ type Props = {
     hasSidebarButton: boolean,
     isSidebarVisible: boolean,
     onPrint: Function,
+    canDownload: boolean,
     onDownload: Function,
     onClose?: Function,
     onSidebarToggle?: Function,
@@ -35,6 +36,7 @@ const Header = ({
     hasSidebarButton,
     onSidebarToggle,
     onPrint,
+    canDownload,
     onDownload,
     intl
 }: Props) => {
@@ -45,7 +47,6 @@ const Header = ({
         : intl.formatMessage(messages.sidebarShow);
     const printMsg = intl.formatMessage(messages.print);
     const downloadMsg = intl.formatMessage(messages.download);
-    const canDownload = file && file.permissions ? file.permissions.can_download && file.is_download_available : false;
 
     return (
         <div className='bcpr-header'>
