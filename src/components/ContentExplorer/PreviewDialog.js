@@ -25,6 +25,7 @@ type Props = {
     isTouch: boolean,
     onPreview: Function,
     hasPreviewSidebar: boolean,
+    canDownload: boolean,
     cache: Cache,
     apiHost: string,
     appHost: string,
@@ -46,6 +47,7 @@ const PreviewDialog = ({
     cache,
     currentCollection,
     hasPreviewSidebar,
+    canDownload,
     onCancel,
     onPreview,
     apiHost,
@@ -91,6 +93,7 @@ const PreviewDialog = ({
                 onLoad={onLoad}
                 onClose={onCancel}
                 hasSidebar={hasPreviewSidebar}
+                canDownload={canDownload}
                 sharedLink={sharedLink}
                 sharedLinkPassword={sharedLinkPassword}
                 onInteraction={onInteraction}
