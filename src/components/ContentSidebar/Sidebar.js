@@ -28,6 +28,7 @@ type Props = {
     hasVersions: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
+    onAccessStatsClick?: Function,
     onInteraction: Function,
     onDescriptionChange: Function,
     onVersionHistoryClick?: Function,
@@ -50,6 +51,7 @@ const Sidebar = ({
     hasVersions,
     rootElement,
     appElement,
+    onAccessStatsClick,
     onInteraction,
     onDescriptionChange,
     intl,
@@ -72,6 +74,7 @@ const Sidebar = ({
             hasVersions={hasVersions}
             appElement={appElement}
             rootElement={rootElement}
+            onAccessStatsClick={onAccessStatsClick}
             onInteraction={onInteraction}
             onDescriptionChange={onDescriptionChange}
             onVersionHistoryClick={onVersionHistoryClick}

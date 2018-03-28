@@ -74,10 +74,15 @@
                 sidebar1.show(fileId, token, {
                     container: '.sidebar1',
                     hasProperties: true,
+                    hasNotices: true,
+                    hasAccessStats: true,
                     hasVersions: true,
                     hasNotices: true,
                     onVersionHistoryClick : function(){
                         alert('hello, world!');
+                    },
+                    onAccessStatsClick: () => {
+                        alert('Hello, world!');
                     }
                 });
 
@@ -87,8 +92,9 @@
                     hasProperties: true,
                     hasSkills: true,
                     hasTitle: true,
+                    hasNotices: true,
                     hasVersions: true,
-                    hasNotices: true
+                    hasAccessStats: true
                 });
 
                 const sidebar3 = new ContentSidebar();

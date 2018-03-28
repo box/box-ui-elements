@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/SidebarAccessStats should not render the component when there are no access stats 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <SidebarVersions
+    accessStats={
+      Object {
+        "comment_count": 0,
+        "download_count": 0,
+        "edit_count": 0,
+        "preview_count": 0,
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "accessStats": Object {
+        "comment_count": 0,
+        "download_count": 0,
+        "edit_count": 0,
+        "preview_count": 0,
+      },
+      "intl": Object {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "accessStats": Object {
+          "comment_count": 0,
+          "download_count": 0,
+          "edit_count": 0,
+          "preview_count": 0,
+        },
+        "intl": Object {
+          "formatDate": [Function],
+          "formatMessage": [Function],
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
+exports[`components/ContentSidebar/SidebarAccessStats should render the component when there is at least one type of access stat 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <SidebarVersions
+    accessStats={
+      Object {
+        "comment_count": 0,
+        "download_count": 0,
+        "edit_count": 0,
+        "preview_count": 1,
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "accessStats": Object {
+        "comment_count": 0,
+        "download_count": 0,
+        "edit_count": 0,
+        "preview_count": 1,
+      },
+      "intl": Object {
+        "formatDate": [Function],
+        "formatMessage": [Function],
+      },
+    },
+    "ref": null,
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "accessStats": Object {
+          "comment_count": 0,
+          "download_count": 0,
+          "edit_count": 0,
+          "preview_count": 1,
+        },
+        "intl": Object {
+          "formatDate": [Function],
+          "formatMessage": [Function],
+        },
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

@@ -350,3 +350,10 @@ export type FileVersions = {
     total_count: number,
     entries?: Array<BoxItemVersion>
 };
+
+export type AccessStats = {
+    preview_count: number,
+    download_count: number,
+    comment_count: number,
+    edit_count: number
+};
