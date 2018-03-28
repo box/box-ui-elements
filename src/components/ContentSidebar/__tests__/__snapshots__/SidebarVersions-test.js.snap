@@ -32,6 +32,100 @@ ShallowWrapper {
 }
 `;
 
+exports[`components/ContentSidebar/SidebarVersions should render an error 1`] = `
+ReactWrapper {
+  "length": 1,
+  Symbol(enzyme.__unrendered__): <Unknown
+    maskError={
+      Object {
+        "errorHeader": Object {
+          "defaultMessage": "foo",
+        },
+      }
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "function",
+    "props": Object {
+      "maskError": Object {
+        "errorHeader": Object {
+          "defaultMessage": "foo",
+        },
+      },
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": <error-mask-mock
+        errorheader="[object Object]"
+      />,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "errorHeader": Object {
+          "defaultMessage": "foo",
+        },
+      },
+      "ref": null,
+      "rendered": Array [
+        undefined,
+      ],
+      "type": "error-mask-mock",
+    },
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "maskError": Object {
+          "errorHeader": Object {
+            "defaultMessage": "foo",
+          },
+        },
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": <error-mask-mock
+          errorheader="[object Object]"
+        />,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "errorHeader": Object {
+            "defaultMessage": "foo",
+          },
+        },
+        "ref": null,
+        "rendered": Array [
+          undefined,
+        ],
+        "type": "error-mask-mock",
+      },
+      "type": [Function],
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;
+
 exports[`components/ContentSidebar/SidebarVersions should render the versions when total_count > 0 1`] = `
 ShallowWrapper {
   "length": 1,
@@ -53,18 +147,18 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "class",
+    "nodeType": "function",
     "props": Object {
-      "children": <VersionHistoryLink
-        className=""
-        onClick={undefined}
-        versionCount={2}
-      />,
       "className": "",
-      "isOpen": true,
+      "onClick": undefined,
+      "versionCount": 2,
     },
     "ref": null,
-    "rendered": Object {
+    "rendered": null,
+    "type": [Function],
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
       "instance": null,
       "key": undefined,
       "nodeType": "function",
@@ -75,38 +169,6 @@ ShallowWrapper {
       },
       "ref": null,
       "rendered": null,
-      "type": [Function],
-    },
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "class",
-      "props": Object {
-        "children": <VersionHistoryLink
-          className=""
-          onClick={undefined}
-          versionCount={2}
-        />,
-        "className": "",
-        "isOpen": true,
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "function",
-        "props": Object {
-          "className": "",
-          "onClick": undefined,
-          "versionCount": 2,
-        },
-        "ref": null,
-        "rendered": null,
-        "type": [Function],
-      },
       "type": [Function],
     },
   ],

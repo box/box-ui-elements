@@ -6,14 +6,14 @@
 
 import React from 'react';
 import AccessStatsComponent from 'box-react-ui/lib/features/access-stats/AccessStats';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import type { AccessStats } from '../../flowTypes';
 import messages from '../messages';
 
 type Props = {
     onAccessStatsClick?: Function,
-    accessStats: AccessStats
+    accessStats?: AccessStats
 };
 
 // The AccessStats component requires a maximum number of events
@@ -49,4 +49,4 @@ const SidebarVersions = ({
     );
 };
 
-export default injectIntl(SidebarVersions);
+export default SidebarVersions;

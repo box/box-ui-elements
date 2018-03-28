@@ -21,47 +21,9 @@ ShallowWrapper {
     "simulateEvent": [Function],
     "unmount": [Function],
   },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "accessStats": Object {
-        "comment_count": 0,
-        "download_count": 0,
-        "edit_count": 0,
-        "preview_count": 0,
-      },
-      "intl": Object {
-        "formatDate": [Function],
-        "formatMessage": [Function],
-      },
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
+  Symbol(enzyme.__node__): null,
   Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "accessStats": Object {
-          "comment_count": 0,
-          "download_count": 0,
-          "edit_count": 0,
-          "preview_count": 0,
-        },
-        "intl": Object {
-          "formatDate": [Function],
-          "formatMessage": [Function],
-        },
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
+    null,
   ],
   Symbol(enzyme.__options__): Object {
     "adapter": ReactSixteenAdapter {
@@ -97,42 +59,80 @@ ShallowWrapper {
   Symbol(enzyme.__node__): Object {
     "instance": null,
     "key": undefined,
-    "nodeType": "function",
+    "nodeType": "class",
     "props": Object {
-      "accessStats": Object {
-        "comment_count": 0,
-        "download_count": 0,
-        "edit_count": 0,
-        "preview_count": 1,
-      },
-      "intl": Object {
-        "formatDate": [Function],
-        "formatMessage": [Function],
-      },
+      "children": <AccessStats
+        commentCount={0}
+        downloadCount={0}
+        editCount={0}
+        maxEvents={9007199254740991}
+        openAccessStatsModal={undefined}
+        previewCount={1}
+      />,
+      "className": "",
+      "isOpen": true,
+      "title": <FormattedMessage
+        defaultMessage="Access Stats"
+        id="be.sidebarAccessStats"
+      />,
     },
     "ref": null,
-    "rendered": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "function",
+      "props": Object {
+        "commentCount": 0,
+        "downloadCount": 0,
+        "editCount": 0,
+        "maxEvents": 9007199254740991,
+        "openAccessStatsModal": undefined,
+        "previewCount": 1,
+      },
+      "ref": null,
+      "rendered": null,
+      "type": [Function],
+    },
     "type": [Function],
   },
   Symbol(enzyme.__nodes__): Array [
     Object {
       "instance": null,
       "key": undefined,
-      "nodeType": "function",
+      "nodeType": "class",
       "props": Object {
-        "accessStats": Object {
-          "comment_count": 0,
-          "download_count": 0,
-          "edit_count": 0,
-          "preview_count": 1,
-        },
-        "intl": Object {
-          "formatDate": [Function],
-          "formatMessage": [Function],
-        },
+        "children": <AccessStats
+          commentCount={0}
+          downloadCount={0}
+          editCount={0}
+          maxEvents={9007199254740991}
+          openAccessStatsModal={undefined}
+          previewCount={1}
+        />,
+        "className": "",
+        "isOpen": true,
+        "title": <FormattedMessage
+          defaultMessage="Access Stats"
+          id="be.sidebarAccessStats"
+        />,
       },
       "ref": null,
-      "rendered": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "function",
+        "props": Object {
+          "commentCount": 0,
+          "downloadCount": 0,
+          "editCount": 0,
+          "maxEvents": 9007199254740991,
+          "openAccessStatsModal": undefined,
+          "previewCount": 1,
+        },
+        "ref": null,
+        "rendered": null,
+        "type": [Function],
+      },
       "type": [Function],
     },
   ],

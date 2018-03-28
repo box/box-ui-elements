@@ -83,7 +83,7 @@
       "\\.(css|less)$": "<rootDir>/build/styleMock.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(box-react-ui)/)"
+      "node_modules/(?!(box-react-ui|react-virtualized)/)"
     ],
     "collectCoverage": false,
     "coverageDirectory": "<rootDir>/reports",

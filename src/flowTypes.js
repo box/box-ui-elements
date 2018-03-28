@@ -4,7 +4,7 @@
  * @author Box
  */
 /* eslint-disable no-use-before-define */
-
+import * as React from 'react';
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
@@ -187,7 +187,8 @@ export type BoxItem = {
     selected?: boolean,
     metadata?: MetadataType,
     file_version?: BoxItemVersion,
-    is_download_available: boolean
+    is_download_available: boolean,
+    inlineError?: InlineError
 };
 
 export type BoxItemCollection = {
@@ -347,8 +348,24 @@ export type MultiputData = {
 };
 
 export type FileVersions = {
-    total_count: number,
-    entries?: Array<BoxItemVersion>
+    total_count?: number,
+    entries?: Array<BoxItemVersion>,
+    maskError?: MaskError
+};
+
+export type MaskError = {
+    errorHeader: React.Node,
+    errorSubHeader?: React.Node
+};
+
+export type InlineError = {
+    title: React.Node,
+    content?: React.Node
+};
+
+export type Errors = {
+    maskError?: MaskError,
+    inlineError?: InlineError
 };
 
 export type AccessStats = {

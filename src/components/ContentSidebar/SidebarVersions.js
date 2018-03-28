@@ -6,31 +6,22 @@
 
 import React from 'react';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
-import SidebarSection from './SidebarSection';
+import withErrorHandling from './withErrorHandling';
 import type { FileVersions } from '../../flowTypes';
 
 type Props = {
     onVersionHistoryClick?: Function,
-    versions: FileVersions
+    versions?: FileVersions
 };
 
-const SidebarVersions = ({
-    onVersionHistoryClick,
-    versions = {
-        total_count: 0
-    }
-}: Props) => {
+export const SidebarVersions = ({ onVersionHistoryClick, versions = {} }: Props) => {
     const { total_count } = versions;
 
     if (!total_count) {
         return null;
     }
 
-    return (
-        <SidebarSection>
-            <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={total_count + 1} />
-        </SidebarSection>
-    );
+    return <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={total_count + 1} />;
 };
 
-export default SidebarVersions;
+export default withErrorHandling(SidebarVersions);
