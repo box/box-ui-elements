@@ -12,6 +12,7 @@ import omit from 'lodash/omit';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
+import { decode } from 'box-react-ui/lib/utils/keys';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconNavigateLeft from 'box-react-ui/lib/icons/general/IconNavigateLeft';
 import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight';
@@ -617,15 +618,13 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        if (isInputElement(event.target)) {
-            return;
-        }
-
         let consumed = false;
-        const key = event.key.toLowerCase();
+        const key = decode(event);
         const viewer = this.getPreviewer();
 
-        if (!key || !viewer) {
+        // If focus was on an input or if the viewer doesn't exist
+        // then don't bother doing anything further
+        if (!key || !viewer || isInputElement(event.target)) {
             return;
         }
 
@@ -635,11 +634,11 @@ class ContentPreview extends PureComponent<Props, State> {
 
         if (!consumed) {
             switch (key) {
-                case 'arrowleft':
+                case 'ArrowLeft':
                     this.navigateLeft();
                     consumed = true;
                     break;
-                case 'arrowright':
+                case 'ArrowRight':
                     this.navigateRight();
                     consumed = true;
                     break;

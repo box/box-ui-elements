@@ -200,12 +200,12 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         return (
             hasSkills ||
-                hasProperties ||
-                hasMetadata ||
-                hasAccessStats ||
-                hasClassification ||
-                hasActivityFeed ||
-                hasVersions,
+            hasProperties ||
+            hasMetadata ||
+            hasAccessStats ||
+            hasClassification ||
+            hasActivityFeed ||
+            hasVersions ||
             hasNotices
         );
     }
@@ -365,16 +365,13 @@ class ContentSidebar extends PureComponent<Props, State> {
             onAccessStatsClick
         }: Props = this.props;
         const { file, accessStats, versions }: State = this.state;
-
-        if (!this.shouldFetchOrRender()) {
-            return null;
-        }
+        const shouldRender = this.shouldFetchOrRender() && !!file;
 
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={`be bcs ${className}`}>
                     <div className='be-app-element'>
-                        {file ? (
+                        {shouldRender ? (
                             <Sidebar
                                 file={file}
                                 versions={versions}
