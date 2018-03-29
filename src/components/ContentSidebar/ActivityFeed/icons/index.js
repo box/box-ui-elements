@@ -1,1 +1,2 @@
-export IconActivityFeedEmptyState from './IconActivityFeedEmptyState';
+// @flow
+export { default } from './IconActivityFeedEmptyState';

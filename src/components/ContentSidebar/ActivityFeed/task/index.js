@@ -1,1 +1,2 @@
-export default from './Task';
+// @flow
+export { default } from './Task';

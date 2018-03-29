@@ -1,1 +1,2 @@
-export default from './activity-feed';
+// @flow
+export { default } from './activity-feed';

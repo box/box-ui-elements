@@ -1,1 +1,2 @@
-export default from './Comment';
+// @flow
+export { default } from './Comment';

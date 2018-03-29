@@ -1,1 +1,2 @@
-export default from './ApprovalCommentForm';
+// @flow
+export { default } from './ApprovalCommentForm';
