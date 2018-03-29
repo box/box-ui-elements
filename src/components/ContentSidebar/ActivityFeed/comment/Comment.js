@@ -117,19 +117,19 @@ class Comment extends Component<Props> {
         const { isEditing, isFocused, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(createdAt).getTime();
         return (
-            <div className='box-ui-comment-container'>
+            <div className='bcs-comment-container'>
                 <div
-                    className={classNames('box-ui-comment', {
+                    className={classNames('bcs-comment', {
                         'is-pending': isPending || error,
                         'is-focused': isFocused
                     })}
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar className='box-ui-comment-avatar' {...createdBy} />
-                    <div className='box-ui-comment-content'>
-                        <div className='box-ui-comment-headline'>
-                            <Link className='box-ui-comment-user-name' href={`/profile/${createdBy.id}`}>
+                    <Avatar className='bcs-comment-avatar' {...createdBy} />
+                    <div className='bcs-comment-content'>
+                        <div className='bcs-comment-headline'>
+                            <Link className='bcs-comment-user-name' href={`/profile/${createdBy.id}`}>
                                 {createdBy.name}
                             </Link>
                             <Tooltip
@@ -140,7 +140,7 @@ class Comment extends Component<Props> {
                                     />
                                 }
                             >
-                                <small className='box-ui-comment-created-at'>
+                                <small className='bcs-comment-created-at'>
                                     <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
@@ -167,7 +167,7 @@ class Comment extends Component<Props> {
                                 isDisabled={inputState.isDisabled}
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
-                                className={`box-ui-activity-feed-comment-input ${
+                                className={`bcs-activity-feed-comment-input ${
                                     inputState.isDisabled ? 'is-disabled' : ''
                                 }`}
                                 createComment={this.createCommentHandler}

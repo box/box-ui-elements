@@ -20,7 +20,7 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <Tooltip
-        className="box-ui-keywords-actions-tooltip"
+        className="bcs-keywords-actions-tooltip"
         constrainToScrollParent={false}
         constrainToWindow={true}
         position="bottom-left"
@@ -38,7 +38,7 @@ ShallowWrapper {
         theme="default"
       >
         <div
-          className="box-ui-keywords-info"
+          className="bcs-keywords-info"
         >
           <IconInfoInverted
             height={16}
@@ -46,7 +46,7 @@ ShallowWrapper {
           />
         </div>
       </Tooltip>,
-      "className": "box-ui-keywords-actions",
+      "className": "bcs-keywords-actions",
     },
     "ref": null,
     "rendered": Object {
@@ -55,14 +55,14 @@ ShallowWrapper {
       "nodeType": "class",
       "props": Object {
         "children": <div
-          className="box-ui-keywords-info"
+          className="bcs-keywords-info"
         >
           <IconInfoInverted
             height={16}
             width={16}
           />
         </div>,
-        "className": "box-ui-keywords-actions-tooltip",
+        "className": "bcs-keywords-actions-tooltip",
         "constrainToScrollParent": false,
         "constrainToWindow": true,
         "position": "bottom-left",
@@ -87,7 +87,7 @@ ShallowWrapper {
             height={16}
             width={16}
           />,
-          "className": "box-ui-keywords-info",
+          "className": "bcs-keywords-info",
         },
         "ref": null,
         "rendered": Object {
@@ -115,7 +115,7 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <Tooltip
-          className="box-ui-keywords-actions-tooltip"
+          className="bcs-keywords-actions-tooltip"
           constrainToScrollParent={false}
           constrainToWindow={true}
           position="bottom-left"
@@ -133,7 +133,7 @@ ShallowWrapper {
           theme="default"
         >
           <div
-            className="box-ui-keywords-info"
+            className="bcs-keywords-info"
           >
             <IconInfoInverted
               height={16}
@@ -141,7 +141,7 @@ ShallowWrapper {
             />
           </div>
         </Tooltip>,
-        "className": "box-ui-keywords-actions",
+        "className": "bcs-keywords-actions",
       },
       "ref": null,
       "rendered": Object {
@@ -150,14 +150,14 @@ ShallowWrapper {
         "nodeType": "class",
         "props": Object {
           "children": <div
-            className="box-ui-keywords-info"
+            className="bcs-keywords-info"
           >
             <IconInfoInverted
               height={16}
               width={16}
             />
           </div>,
-          "className": "box-ui-keywords-actions-tooltip",
+          "className": "bcs-keywords-actions-tooltip",
           "constrainToScrollParent": false,
           "constrainToWindow": true,
           "position": "bottom-left",
@@ -182,7 +182,7 @@ ShallowWrapper {
               height={16}
               width={16}
             />,
-            "className": "box-ui-keywords-info",
+            "className": "bcs-keywords-info",
           },
           "ref": null,
           "rendered": Object {
@@ -236,7 +236,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <span
-          className="box-ui-keywords-message"
+          className="bcs-keywords-message"
         >
           <FormattedMessage
             defaultMessage="Keywords were applied"
@@ -247,7 +247,7 @@ ShallowWrapper {
           words="cartoon font logo brand clip art illustration line artwork"
         />,
       ],
-      "className": "box-ui-keywords",
+      "className": "bcs-keywords",
     },
     "ref": null,
     "rendered": Array [
@@ -260,7 +260,7 @@ ShallowWrapper {
             defaultMessage="Keywords were applied"
             id="boxui.activityFeed.keywordsAppliedList"
           />,
-          "className": "box-ui-keywords-message",
+          "className": "bcs-keywords-message",
         },
         "ref": null,
         "rendered": Object {
@@ -299,7 +299,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <span
-            className="box-ui-keywords-message"
+            className="bcs-keywords-message"
           >
             <FormattedMessage
               defaultMessage="Keywords were applied"
@@ -310,7 +310,7 @@ ShallowWrapper {
             words="cartoon font logo brand clip art illustration line artwork"
           />,
         ],
-        "className": "box-ui-keywords",
+        "className": "bcs-keywords",
       },
       "ref": null,
       "rendered": Array [
@@ -323,7 +323,7 @@ ShallowWrapper {
               defaultMessage="Keywords were applied"
               id="boxui.activityFeed.keywordsAppliedList"
             />,
-            "className": "box-ui-keywords-message",
+            "className": "bcs-keywords-message",
           },
           "ref": null,
           "rendered": Object {
@@ -387,7 +387,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <span
-          className="box-ui-keywords-message"
+          className="bcs-keywords-message"
         >
           <FormattedMessage
             defaultMessage="Keywords were applied"
@@ -396,7 +396,7 @@ ShallowWrapper {
         </span>,
         null,
       ],
-      "className": "box-ui-keywords",
+      "className": "bcs-keywords",
     },
     "ref": null,
     "rendered": Array [
@@ -409,7 +409,7 @@ ShallowWrapper {
             defaultMessage="Keywords were applied"
             id="boxui.activityFeed.keywordsAppliedList"
           />,
-          "className": "box-ui-keywords-message",
+          "className": "bcs-keywords-message",
         },
         "ref": null,
         "rendered": Object {
@@ -438,7 +438,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <span
-            className="box-ui-keywords-message"
+            className="bcs-keywords-message"
           >
             <FormattedMessage
               defaultMessage="Keywords were applied"
@@ -447,7 +447,7 @@ ShallowWrapper {
           </span>,
           null,
         ],
-        "className": "box-ui-keywords",
+        "className": "bcs-keywords",
       },
       "ref": null,
       "rendered": Array [
@@ -460,7 +460,7 @@ ShallowWrapper {
               defaultMessage="Keywords were applied"
               id="boxui.activityFeed.keywordsAppliedList"
             />,
-            "className": "box-ui-keywords-message",
+            "className": "bcs-keywords-message",
           },
           "ref": null,
           "rendered": Object {

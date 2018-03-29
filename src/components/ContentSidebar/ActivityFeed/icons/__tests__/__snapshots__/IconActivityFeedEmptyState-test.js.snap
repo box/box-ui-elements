@@ -143,7 +143,7 @@ ShallowWrapper {
           />
         </g>
       </g>,
-      "className": "box-ui-activity-feed-empty-state-illustration test",
+      "className": "bcs-activity-feed-empty-state-illustration test",
       "height": 90,
       "viewBox": "0 0 90 90",
       "width": 90,
@@ -770,7 +770,7 @@ ShallowWrapper {
             />
           </g>
         </g>,
-        "className": "box-ui-activity-feed-empty-state-illustration test",
+        "className": "bcs-activity-feed-empty-state-illustration test",
         "height": 90,
         "viewBox": "0 0 90 90",
         "width": 90,
@@ -1422,7 +1422,7 @@ ShallowWrapper {
           />
         </g>
       </g>,
-      "className": "box-ui-activity-feed-empty-state-illustration ",
+      "className": "bcs-activity-feed-empty-state-illustration ",
       "height": 17,
       "viewBox": "0 0 90 90",
       "width": 16,
@@ -2049,7 +2049,7 @@ ShallowWrapper {
             />
           </g>
         </g>,
-        "className": "box-ui-activity-feed-empty-state-illustration ",
+        "className": "bcs-activity-feed-empty-state-illustration ",
         "height": 17,
         "viewBox": "0 0 90 90",
         "width": 16,

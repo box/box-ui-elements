@@ -61,13 +61,13 @@ type Props = {
 };
 
 const Version = ({ action, createdBy, id, intl, onInfo, versionNumber }: Props): ReactNode => (
-    <div className='box-ui-version'>
-        <span className='box-ui-version-message'>{getMessageForAction(createdBy.name, action, versionNumber)}</span>
+    <div className='bcs-version'>
+        <span className='bcs-version-message'>{getMessageForAction(createdBy.name, action, versionNumber)}</span>
         {onInfo ? (
-            <span className='box-ui-version-actions'>
+            <span className='bcs-version-actions'>
                 <PlainButton
                     aria-label={intl.formatMessage(messages.getVersionInfo)}
-                    className='box-ui-version-info'
+                    className='bcs-version-info'
                     onClick={() => {
                         onInfo({ id, versionNumber });
                     }}

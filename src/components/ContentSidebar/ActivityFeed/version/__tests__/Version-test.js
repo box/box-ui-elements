@@ -19,7 +19,7 @@ describe('features/activity-feed/version/Version', () => {
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
 
-        expect(wrapper.hasClass('box-ui-version')).toBe(true);
+        expect(wrapper.hasClass('bcs-version')).toBe(true);
     });
 
     test('should correctly render info icon if onInfo is passed', () => {
@@ -34,7 +34,7 @@ describe('features/activity-feed/version/Version', () => {
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
 
-        expect(wrapper.hasClass('box-ui-version')).toBe(true);
+        expect(wrapper.hasClass('bcs-version')).toBe(true);
         expect(wrapper.find('IconInfoInverted').length).toBe(1);
     });
 

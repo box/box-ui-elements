@@ -15,11 +15,11 @@ type Props = {
 };
 
 const RejectedAssignment = ({ name }: Props): ReactNode => (
-    <div className='box-ui-task-rejected-assignment'>
-        <div className='box-ui-task-assignment-name'>{name}</div>
-        <div className='box-ui-task-assignment-actions'>
+    <div className='bcs-task-rejected-assignment'>
+        <div className='bcs-task-assignment-name'>{name}</div>
+        <div className='bcs-task-assignment-actions'>
             <IconClose
-                className='box-ui-task-x-icon'
+                className='bcs-task-x-icon'
                 height={18}
                 title={<FormattedMessage {...messages.rejectedAssignment} />}
                 width={18}

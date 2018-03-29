@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
-.box-ui-collapsed-version,
-.box-ui-version {
+.bcs-collapsed-version,
+.bcs-version {
     align-items: center;
     background-color: fade-out($thats-mint, .9);
     border-radius: 4px;
@@ -12,18 +12,18 @@
     padding: 9px;
     width: 100%;
 
-    .box-ui-version-actions {
+    .bcs-version-actions {
         display: flex;
         justify-content: flex-end;
     }
 
-    .box-ui-version-message {
+    .bcs-version-message {
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
-    .box-ui-version-info {
+    .bcs-version-info {
         flex: none;
         height: 16px;
         width: 16px;
@@ -33,7 +33,7 @@
         }
     }
 
-    .box-ui-version-range {
+    .bcs-version-range {
         white-space: nowrap;
     }
 }

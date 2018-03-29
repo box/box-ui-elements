@@ -33,7 +33,7 @@ describe('features/activity-feed/comment/InlineDelete', () => {
         const onDeleteSpy = jest.fn();
         const wrapper = render({ onDelete: onDeleteSpy });
 
-        const yesBtn = wrapper.find('.box-ui-comment-delete-yes');
+        const yesBtn = wrapper.find('.bcs-comment-delete-yes');
         yesBtn.simulate('click');
 
         expect(onDeleteSpy).toHaveBeenCalledWith({ id: '123' });

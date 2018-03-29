@@ -125,12 +125,12 @@ class ActivityFeed extends Component<Props, State> {
         const versionInfoHandler = handlers && handlers.versions && handlers.versions.info;
 
         return (
-            <div className='box-ui-activity-feed' onKeyDown={this.onKeyDown}>
+            <div className='bcs-activity-feed' onKeyDown={this.onKeyDown}>
                 <div
                     ref={(ref) => {
                         this.feedContainer = ref;
                     }}
-                    className='box-ui-activity-feed-items-container'
+                    className='bcs-activity-feed-items-container'
                 >
                     {shouldShowEmptyState(feedState) ? (
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
@@ -157,7 +157,7 @@ class ActivityFeed extends Component<Props, State> {
                         isDisabled={inputState.isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        className={`box-ui-activity-feed-comment-input ${inputState.isDisabled ? 'is-disabled' : ''}`}
+                        className={`bcs-activity-feed-comment-input ${inputState.isDisabled ? 'is-disabled' : ''}`}
                         createComment={this.createCommentHandler}
                         createTask={handlers && handlers.tasks ? this.createTaskHandler : null}
                         getApproverContactsWithQuery={

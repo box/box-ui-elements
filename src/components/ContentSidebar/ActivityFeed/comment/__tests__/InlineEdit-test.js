@@ -17,7 +17,7 @@ describe('features/activity-feed/comment/InlineEdit', () => {
 
         const wrapper = mount(<InlineEdit id='123' intl={intl} toEdit={toEditSpy} />);
 
-        const editBtn = wrapper.find('.box-ui-comment-edit').hostNodes();
+        const editBtn = wrapper.find('.bcs-comment-edit').hostNodes();
         editBtn.simulate('click');
 
         expect(toEditSpy).toHaveBeenCalledWith({ id: '123' });

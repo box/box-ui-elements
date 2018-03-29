@@ -15,11 +15,11 @@ type Props = {
 };
 
 const CompletedAssignment = ({ name }: Props): ReactNode => (
-    <div className='box-ui-task-completed-assignment'>
-        <div className='box-ui-task-assignment-name'>{name}</div>
-        <div className='box-ui-task-assignment-actions'>
+    <div className='bcs-task-completed-assignment'>
+        <div className='bcs-task-assignment-name'>{name}</div>
+        <div className='bcs-task-assignment-actions'>
             <IconCheck
-                className='box-ui-task-check-icon'
+                className='bcs-task-check-icon'
                 height={18}
                 title={<FormattedMessage {...messages.completedAssignment} />}
                 width={18}

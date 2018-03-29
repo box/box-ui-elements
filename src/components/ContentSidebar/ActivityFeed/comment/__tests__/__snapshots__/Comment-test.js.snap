@@ -56,23 +56,23 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-comment"
+          className="bcs-comment"
           onBlur={[Function]}
           onFocus={[Function]}
         >
           <Avatar
-            className="box-ui-comment-avatar"
+            className="bcs-comment-avatar"
             id={10}
             name="50 Cent"
           />
           <div
-            className="box-ui-comment-content"
+            className="bcs-comment-content"
           >
             <div
-              className="box-ui-comment-headline"
+              className="bcs-comment-headline"
             >
               <Link
-                className="box-ui-comment-user-name"
+                className="bcs-comment-user-name"
                 href="/profile/10"
               >
                 50 Cent
@@ -95,7 +95,7 @@ ShallowWrapper {
                 theme="default"
               >
                 <small
-                  className="box-ui-comment-created-at"
+                  className="bcs-comment-created-at"
                 >
                   <ReadableTime
                     relativeThreshold={3600000}
@@ -115,7 +115,7 @@ ShallowWrapper {
         </div>,
         null,
       ],
-      "className": "box-ui-comment-container",
+      "className": "bcs-comment-container",
     },
     "ref": null,
     "rendered": Array [
@@ -126,18 +126,18 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <Avatar
-              className="box-ui-comment-avatar"
+              className="bcs-comment-avatar"
               id={10}
               name="50 Cent"
             />,
             <div
-              className="box-ui-comment-content"
+              className="bcs-comment-content"
             >
               <div
-                className="box-ui-comment-headline"
+                className="bcs-comment-headline"
               >
                 <Link
-                  className="box-ui-comment-user-name"
+                  className="bcs-comment-user-name"
                   href="/profile/10"
                 >
                   50 Cent
@@ -160,7 +160,7 @@ ShallowWrapper {
                   theme="default"
                 >
                   <small
-                    className="box-ui-comment-created-at"
+                    className="bcs-comment-created-at"
                   >
                     <ReadableTime
                       relativeThreshold={3600000}
@@ -178,7 +178,7 @@ ShallowWrapper {
               />
             </div>,
           ],
-          "className": "box-ui-comment",
+          "className": "bcs-comment",
           "onBlur": [Function],
           "onFocus": [Function],
         },
@@ -189,7 +189,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "className": "box-ui-comment-avatar",
+              "className": "bcs-comment-avatar",
               "id": 10,
               "name": "50 Cent",
             },
@@ -204,10 +204,10 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="box-ui-comment-headline"
+                  className="bcs-comment-headline"
                 >
                   <Link
-                    className="box-ui-comment-user-name"
+                    className="bcs-comment-user-name"
                     href="/profile/10"
                   >
                     50 Cent
@@ -230,7 +230,7 @@ ShallowWrapper {
                     theme="default"
                   >
                     <small
-                      className="box-ui-comment-created-at"
+                      className="bcs-comment-created-at"
                     >
                       <ReadableTime
                         relativeThreshold={3600000}
@@ -248,7 +248,7 @@ ShallowWrapper {
                   translationFailed={null}
                 />,
               ],
-              "className": "box-ui-comment-content",
+              "className": "bcs-comment-content",
             },
             "ref": null,
             "rendered": Array [
@@ -259,7 +259,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <Link
-                      className="box-ui-comment-user-name"
+                      className="bcs-comment-user-name"
                       href="/profile/10"
                     >
                       50 Cent
@@ -282,7 +282,7 @@ ShallowWrapper {
                       theme="default"
                     >
                       <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -293,7 +293,7 @@ ShallowWrapper {
                     null,
                     null,
                   ],
-                  "className": "box-ui-comment-headline",
+                  "className": "bcs-comment-headline",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -303,7 +303,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "children": "50 Cent",
-                      "className": "box-ui-comment-user-name",
+                      "className": "bcs-comment-user-name",
                       "href": "/profile/10",
                     },
                     "ref": null,
@@ -316,7 +316,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "children": <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -347,7 +347,7 @@ ShallowWrapper {
                           relativeThreshold={3600000}
                           timestamp={1506534041000}
                         />,
-                        "className": "box-ui-comment-created-at",
+                        "className": "bcs-comment-created-at",
                       },
                       "ref": null,
                       "rendered": Object {
@@ -405,23 +405,23 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-comment"
+            className="bcs-comment"
             onBlur={[Function]}
             onFocus={[Function]}
           >
             <Avatar
-              className="box-ui-comment-avatar"
+              className="bcs-comment-avatar"
               id={10}
               name="50 Cent"
             />
             <div
-              className="box-ui-comment-content"
+              className="bcs-comment-content"
             >
               <div
-                className="box-ui-comment-headline"
+                className="bcs-comment-headline"
               >
                 <Link
-                  className="box-ui-comment-user-name"
+                  className="bcs-comment-user-name"
                   href="/profile/10"
                 >
                   50 Cent
@@ -444,7 +444,7 @@ ShallowWrapper {
                   theme="default"
                 >
                   <small
-                    className="box-ui-comment-created-at"
+                    className="bcs-comment-created-at"
                   >
                     <ReadableTime
                       relativeThreshold={3600000}
@@ -464,7 +464,7 @@ ShallowWrapper {
           </div>,
           null,
         ],
-        "className": "box-ui-comment-container",
+        "className": "bcs-comment-container",
       },
       "ref": null,
       "rendered": Array [
@@ -475,18 +475,18 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <Avatar
-                className="box-ui-comment-avatar"
+                className="bcs-comment-avatar"
                 id={10}
                 name="50 Cent"
               />,
               <div
-                className="box-ui-comment-content"
+                className="bcs-comment-content"
               >
                 <div
-                  className="box-ui-comment-headline"
+                  className="bcs-comment-headline"
                 >
                   <Link
-                    className="box-ui-comment-user-name"
+                    className="bcs-comment-user-name"
                     href="/profile/10"
                   >
                     50 Cent
@@ -509,7 +509,7 @@ ShallowWrapper {
                     theme="default"
                   >
                     <small
-                      className="box-ui-comment-created-at"
+                      className="bcs-comment-created-at"
                     >
                       <ReadableTime
                         relativeThreshold={3600000}
@@ -527,7 +527,7 @@ ShallowWrapper {
                 />
               </div>,
             ],
-            "className": "box-ui-comment",
+            "className": "bcs-comment",
             "onBlur": [Function],
             "onFocus": [Function],
           },
@@ -538,7 +538,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "function",
               "props": Object {
-                "className": "box-ui-comment-avatar",
+                "className": "bcs-comment-avatar",
                 "id": 10,
                 "name": "50 Cent",
               },
@@ -553,10 +553,10 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="box-ui-comment-headline"
+                    className="bcs-comment-headline"
                   >
                     <Link
-                      className="box-ui-comment-user-name"
+                      className="bcs-comment-user-name"
                       href="/profile/10"
                     >
                       50 Cent
@@ -579,7 +579,7 @@ ShallowWrapper {
                       theme="default"
                     >
                       <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -597,7 +597,7 @@ ShallowWrapper {
                     translationFailed={null}
                   />,
                 ],
-                "className": "box-ui-comment-content",
+                "className": "bcs-comment-content",
               },
               "ref": null,
               "rendered": Array [
@@ -608,7 +608,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": Array [
                       <Link
-                        className="box-ui-comment-user-name"
+                        className="bcs-comment-user-name"
                         href="/profile/10"
                       >
                         50 Cent
@@ -631,7 +631,7 @@ ShallowWrapper {
                         theme="default"
                       >
                         <small
-                          className="box-ui-comment-created-at"
+                          className="bcs-comment-created-at"
                         >
                           <ReadableTime
                             relativeThreshold={3600000}
@@ -642,7 +642,7 @@ ShallowWrapper {
                       null,
                       null,
                     ],
-                    "className": "box-ui-comment-headline",
+                    "className": "bcs-comment-headline",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -652,7 +652,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "children": "50 Cent",
-                        "className": "box-ui-comment-user-name",
+                        "className": "bcs-comment-user-name",
                         "href": "/profile/10",
                       },
                       "ref": null,
@@ -665,7 +665,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "children": <small
-                          className="box-ui-comment-created-at"
+                          className="bcs-comment-created-at"
                         >
                           <ReadableTime
                             relativeThreshold={3600000}
@@ -696,7 +696,7 @@ ShallowWrapper {
                             relativeThreshold={3600000}
                             timestamp={1506534041000}
                           />,
-                          "className": "box-ui-comment-created-at",
+                          "className": "bcs-comment-created-at",
                         },
                         "ref": null,
                         "rendered": Object {
@@ -819,23 +819,23 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-comment"
+          className="bcs-comment"
           onBlur={[Function]}
           onFocus={[Function]}
         >
           <Avatar
-            className="box-ui-comment-avatar"
+            className="bcs-comment-avatar"
             id={10}
             name="50 Cent"
           />
           <div
-            className="box-ui-comment-content"
+            className="bcs-comment-content"
           >
             <div
-              className="box-ui-comment-headline"
+              className="bcs-comment-headline"
             >
               <Link
-                className="box-ui-comment-user-name"
+                className="bcs-comment-user-name"
                 href="/profile/10"
               >
                 50 Cent
@@ -858,7 +858,7 @@ ShallowWrapper {
                 theme="default"
               >
                 <small
-                  className="box-ui-comment-created-at"
+                  className="bcs-comment-created-at"
                 >
                   <ReadableTime
                     relativeThreshold={3600000}
@@ -879,7 +879,7 @@ ShallowWrapper {
         </div>,
         null,
       ],
-      "className": "box-ui-comment-container",
+      "className": "bcs-comment-container",
     },
     "ref": null,
     "rendered": Array [
@@ -890,18 +890,18 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <Avatar
-              className="box-ui-comment-avatar"
+              className="bcs-comment-avatar"
               id={10}
               name="50 Cent"
             />,
             <div
-              className="box-ui-comment-content"
+              className="bcs-comment-content"
             >
               <div
-                className="box-ui-comment-headline"
+                className="bcs-comment-headline"
               >
                 <Link
-                  className="box-ui-comment-user-name"
+                  className="bcs-comment-user-name"
                   href="/profile/10"
                 >
                   50 Cent
@@ -924,7 +924,7 @@ ShallowWrapper {
                   theme="default"
                 >
                   <small
-                    className="box-ui-comment-created-at"
+                    className="bcs-comment-created-at"
                   >
                     <ReadableTime
                       relativeThreshold={3600000}
@@ -943,7 +943,7 @@ ShallowWrapper {
               />
             </div>,
           ],
-          "className": "box-ui-comment",
+          "className": "bcs-comment",
           "onBlur": [Function],
           "onFocus": [Function],
         },
@@ -954,7 +954,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "className": "box-ui-comment-avatar",
+              "className": "bcs-comment-avatar",
               "id": 10,
               "name": "50 Cent",
             },
@@ -969,10 +969,10 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="box-ui-comment-headline"
+                  className="bcs-comment-headline"
                 >
                   <Link
-                    className="box-ui-comment-user-name"
+                    className="bcs-comment-user-name"
                     href="/profile/10"
                   >
                     50 Cent
@@ -995,7 +995,7 @@ ShallowWrapper {
                     theme="default"
                   >
                     <small
-                      className="box-ui-comment-created-at"
+                      className="bcs-comment-created-at"
                     >
                       <ReadableTime
                         relativeThreshold={3600000}
@@ -1014,7 +1014,7 @@ ShallowWrapper {
                   translationFailed={null}
                 />,
               ],
-              "className": "box-ui-comment-content",
+              "className": "bcs-comment-content",
             },
             "ref": null,
             "rendered": Array [
@@ -1025,7 +1025,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <Link
-                      className="box-ui-comment-user-name"
+                      className="bcs-comment-user-name"
                       href="/profile/10"
                     >
                       50 Cent
@@ -1048,7 +1048,7 @@ ShallowWrapper {
                       theme="default"
                     >
                       <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -1059,7 +1059,7 @@ ShallowWrapper {
                     null,
                     null,
                   ],
-                  "className": "box-ui-comment-headline",
+                  "className": "bcs-comment-headline",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -1069,7 +1069,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "children": "50 Cent",
-                      "className": "box-ui-comment-user-name",
+                      "className": "bcs-comment-user-name",
                       "href": "/profile/10",
                     },
                     "ref": null,
@@ -1082,7 +1082,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "children": <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -1113,7 +1113,7 @@ ShallowWrapper {
                           relativeThreshold={3600000}
                           timestamp={1506534041000}
                         />,
-                        "className": "box-ui-comment-created-at",
+                        "className": "bcs-comment-created-at",
                       },
                       "ref": null,
                       "rendered": Object {
@@ -1172,23 +1172,23 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-comment"
+            className="bcs-comment"
             onBlur={[Function]}
             onFocus={[Function]}
           >
             <Avatar
-              className="box-ui-comment-avatar"
+              className="bcs-comment-avatar"
               id={10}
               name="50 Cent"
             />
             <div
-              className="box-ui-comment-content"
+              className="bcs-comment-content"
             >
               <div
-                className="box-ui-comment-headline"
+                className="bcs-comment-headline"
               >
                 <Link
-                  className="box-ui-comment-user-name"
+                  className="bcs-comment-user-name"
                   href="/profile/10"
                 >
                   50 Cent
@@ -1211,7 +1211,7 @@ ShallowWrapper {
                   theme="default"
                 >
                   <small
-                    className="box-ui-comment-created-at"
+                    className="bcs-comment-created-at"
                   >
                     <ReadableTime
                       relativeThreshold={3600000}
@@ -1232,7 +1232,7 @@ ShallowWrapper {
           </div>,
           null,
         ],
-        "className": "box-ui-comment-container",
+        "className": "bcs-comment-container",
       },
       "ref": null,
       "rendered": Array [
@@ -1243,18 +1243,18 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <Avatar
-                className="box-ui-comment-avatar"
+                className="bcs-comment-avatar"
                 id={10}
                 name="50 Cent"
               />,
               <div
-                className="box-ui-comment-content"
+                className="bcs-comment-content"
               >
                 <div
-                  className="box-ui-comment-headline"
+                  className="bcs-comment-headline"
                 >
                   <Link
-                    className="box-ui-comment-user-name"
+                    className="bcs-comment-user-name"
                     href="/profile/10"
                   >
                     50 Cent
@@ -1277,7 +1277,7 @@ ShallowWrapper {
                     theme="default"
                   >
                     <small
-                      className="box-ui-comment-created-at"
+                      className="bcs-comment-created-at"
                     >
                       <ReadableTime
                         relativeThreshold={3600000}
@@ -1296,7 +1296,7 @@ ShallowWrapper {
                 />
               </div>,
             ],
-            "className": "box-ui-comment",
+            "className": "bcs-comment",
             "onBlur": [Function],
             "onFocus": [Function],
           },
@@ -1307,7 +1307,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "function",
               "props": Object {
-                "className": "box-ui-comment-avatar",
+                "className": "bcs-comment-avatar",
                 "id": 10,
                 "name": "50 Cent",
               },
@@ -1322,10 +1322,10 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="box-ui-comment-headline"
+                    className="bcs-comment-headline"
                   >
                     <Link
-                      className="box-ui-comment-user-name"
+                      className="bcs-comment-user-name"
                       href="/profile/10"
                     >
                       50 Cent
@@ -1348,7 +1348,7 @@ ShallowWrapper {
                       theme="default"
                     >
                       <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -1367,7 +1367,7 @@ ShallowWrapper {
                     translationFailed={null}
                   />,
                 ],
-                "className": "box-ui-comment-content",
+                "className": "bcs-comment-content",
               },
               "ref": null,
               "rendered": Array [
@@ -1378,7 +1378,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": Array [
                       <Link
-                        className="box-ui-comment-user-name"
+                        className="bcs-comment-user-name"
                         href="/profile/10"
                       >
                         50 Cent
@@ -1401,7 +1401,7 @@ ShallowWrapper {
                         theme="default"
                       >
                         <small
-                          className="box-ui-comment-created-at"
+                          className="bcs-comment-created-at"
                         >
                           <ReadableTime
                             relativeThreshold={3600000}
@@ -1412,7 +1412,7 @@ ShallowWrapper {
                       null,
                       null,
                     ],
-                    "className": "box-ui-comment-headline",
+                    "className": "bcs-comment-headline",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -1422,7 +1422,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "children": "50 Cent",
-                        "className": "box-ui-comment-user-name",
+                        "className": "bcs-comment-user-name",
                         "href": "/profile/10",
                       },
                       "ref": null,
@@ -1435,7 +1435,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "children": <small
-                          className="box-ui-comment-created-at"
+                          className="bcs-comment-created-at"
                         >
                           <ReadableTime
                             relativeThreshold={3600000}
@@ -1466,7 +1466,7 @@ ShallowWrapper {
                             relativeThreshold={3600000}
                             timestamp={1506534041000}
                           />,
-                          "className": "box-ui-comment-created-at",
+                          "className": "bcs-comment-created-at",
                         },
                         "ref": null,
                         "rendered": Object {
@@ -1591,23 +1591,23 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-comment is-pending"
+          className="bcs-comment is-pending"
           onBlur={[Function]}
           onFocus={[Function]}
         >
           <Avatar
-            className="box-ui-comment-avatar"
+            className="bcs-comment-avatar"
             id={10}
             name="50 Cent"
           />
           <div
-            className="box-ui-comment-content"
+            className="bcs-comment-content"
           >
             <div
-              className="box-ui-comment-headline"
+              className="bcs-comment-headline"
             >
               <Link
-                className="box-ui-comment-user-name"
+                className="bcs-comment-user-name"
                 href="/profile/10"
               >
                 50 Cent
@@ -1630,7 +1630,7 @@ ShallowWrapper {
                 theme="default"
               >
                 <small
-                  className="box-ui-comment-created-at"
+                  className="bcs-comment-created-at"
                 >
                   <ReadableTime
                     relativeThreshold={3600000}
@@ -1653,7 +1653,7 @@ ShallowWrapper {
           title="error"
         />,
       ],
-      "className": "box-ui-comment-container",
+      "className": "bcs-comment-container",
     },
     "ref": null,
     "rendered": Array [
@@ -1664,18 +1664,18 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <Avatar
-              className="box-ui-comment-avatar"
+              className="bcs-comment-avatar"
               id={10}
               name="50 Cent"
             />,
             <div
-              className="box-ui-comment-content"
+              className="bcs-comment-content"
             >
               <div
-                className="box-ui-comment-headline"
+                className="bcs-comment-headline"
               >
                 <Link
-                  className="box-ui-comment-user-name"
+                  className="bcs-comment-user-name"
                   href="/profile/10"
                 >
                   50 Cent
@@ -1698,7 +1698,7 @@ ShallowWrapper {
                   theme="default"
                 >
                   <small
-                    className="box-ui-comment-created-at"
+                    className="bcs-comment-created-at"
                   >
                     <ReadableTime
                       relativeThreshold={3600000}
@@ -1716,7 +1716,7 @@ ShallowWrapper {
               />
             </div>,
           ],
-          "className": "box-ui-comment is-pending",
+          "className": "bcs-comment is-pending",
           "onBlur": [Function],
           "onFocus": [Function],
         },
@@ -1727,7 +1727,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "className": "box-ui-comment-avatar",
+              "className": "bcs-comment-avatar",
               "id": 10,
               "name": "50 Cent",
             },
@@ -1742,10 +1742,10 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="box-ui-comment-headline"
+                  className="bcs-comment-headline"
                 >
                   <Link
-                    className="box-ui-comment-user-name"
+                    className="bcs-comment-user-name"
                     href="/profile/10"
                   >
                     50 Cent
@@ -1768,7 +1768,7 @@ ShallowWrapper {
                     theme="default"
                   >
                     <small
-                      className="box-ui-comment-created-at"
+                      className="bcs-comment-created-at"
                     >
                       <ReadableTime
                         relativeThreshold={3600000}
@@ -1786,7 +1786,7 @@ ShallowWrapper {
                   translationFailed={true}
                 />,
               ],
-              "className": "box-ui-comment-content",
+              "className": "bcs-comment-content",
             },
             "ref": null,
             "rendered": Array [
@@ -1797,7 +1797,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <Link
-                      className="box-ui-comment-user-name"
+                      className="bcs-comment-user-name"
                       href="/profile/10"
                     >
                       50 Cent
@@ -1820,7 +1820,7 @@ ShallowWrapper {
                       theme="default"
                     >
                       <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -1831,7 +1831,7 @@ ShallowWrapper {
                     null,
                     null,
                   ],
-                  "className": "box-ui-comment-headline",
+                  "className": "bcs-comment-headline",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -1841,7 +1841,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "children": "50 Cent",
-                      "className": "box-ui-comment-user-name",
+                      "className": "bcs-comment-user-name",
                       "href": "/profile/10",
                     },
                     "ref": null,
@@ -1854,7 +1854,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "children": <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -1885,7 +1885,7 @@ ShallowWrapper {
                           relativeThreshold={3600000}
                           timestamp={1506534041000}
                         />,
-                        "className": "box-ui-comment-created-at",
+                        "className": "bcs-comment-created-at",
                       },
                       "ref": null,
                       "rendered": Object {
@@ -1954,23 +1954,23 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-comment is-pending"
+            className="bcs-comment is-pending"
             onBlur={[Function]}
             onFocus={[Function]}
           >
             <Avatar
-              className="box-ui-comment-avatar"
+              className="bcs-comment-avatar"
               id={10}
               name="50 Cent"
             />
             <div
-              className="box-ui-comment-content"
+              className="bcs-comment-content"
             >
               <div
-                className="box-ui-comment-headline"
+                className="bcs-comment-headline"
               >
                 <Link
-                  className="box-ui-comment-user-name"
+                  className="bcs-comment-user-name"
                   href="/profile/10"
                 >
                   50 Cent
@@ -1993,7 +1993,7 @@ ShallowWrapper {
                   theme="default"
                 >
                   <small
-                    className="box-ui-comment-created-at"
+                    className="bcs-comment-created-at"
                   >
                     <ReadableTime
                       relativeThreshold={3600000}
@@ -2016,7 +2016,7 @@ ShallowWrapper {
             title="error"
           />,
         ],
-        "className": "box-ui-comment-container",
+        "className": "bcs-comment-container",
       },
       "ref": null,
       "rendered": Array [
@@ -2027,18 +2027,18 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <Avatar
-                className="box-ui-comment-avatar"
+                className="bcs-comment-avatar"
                 id={10}
                 name="50 Cent"
               />,
               <div
-                className="box-ui-comment-content"
+                className="bcs-comment-content"
               >
                 <div
-                  className="box-ui-comment-headline"
+                  className="bcs-comment-headline"
                 >
                   <Link
-                    className="box-ui-comment-user-name"
+                    className="bcs-comment-user-name"
                     href="/profile/10"
                   >
                     50 Cent
@@ -2061,7 +2061,7 @@ ShallowWrapper {
                     theme="default"
                   >
                     <small
-                      className="box-ui-comment-created-at"
+                      className="bcs-comment-created-at"
                     >
                       <ReadableTime
                         relativeThreshold={3600000}
@@ -2079,7 +2079,7 @@ ShallowWrapper {
                 />
               </div>,
             ],
-            "className": "box-ui-comment is-pending",
+            "className": "bcs-comment is-pending",
             "onBlur": [Function],
             "onFocus": [Function],
           },
@@ -2090,7 +2090,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "function",
               "props": Object {
-                "className": "box-ui-comment-avatar",
+                "className": "bcs-comment-avatar",
                 "id": 10,
                 "name": "50 Cent",
               },
@@ -2105,10 +2105,10 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="box-ui-comment-headline"
+                    className="bcs-comment-headline"
                   >
                     <Link
-                      className="box-ui-comment-user-name"
+                      className="bcs-comment-user-name"
                       href="/profile/10"
                     >
                       50 Cent
@@ -2131,7 +2131,7 @@ ShallowWrapper {
                       theme="default"
                     >
                       <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -2149,7 +2149,7 @@ ShallowWrapper {
                     translationFailed={true}
                   />,
                 ],
-                "className": "box-ui-comment-content",
+                "className": "bcs-comment-content",
               },
               "ref": null,
               "rendered": Array [
@@ -2160,7 +2160,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": Array [
                       <Link
-                        className="box-ui-comment-user-name"
+                        className="bcs-comment-user-name"
                         href="/profile/10"
                       >
                         50 Cent
@@ -2183,7 +2183,7 @@ ShallowWrapper {
                         theme="default"
                       >
                         <small
-                          className="box-ui-comment-created-at"
+                          className="bcs-comment-created-at"
                         >
                           <ReadableTime
                             relativeThreshold={3600000}
@@ -2194,7 +2194,7 @@ ShallowWrapper {
                       null,
                       null,
                     ],
-                    "className": "box-ui-comment-headline",
+                    "className": "bcs-comment-headline",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -2204,7 +2204,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "children": "50 Cent",
-                        "className": "box-ui-comment-user-name",
+                        "className": "bcs-comment-user-name",
                         "href": "/profile/10",
                       },
                       "ref": null,
@@ -2217,7 +2217,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "children": <small
-                          className="box-ui-comment-created-at"
+                          className="bcs-comment-created-at"
                         >
                           <ReadableTime
                             relativeThreshold={3600000}
@@ -2248,7 +2248,7 @@ ShallowWrapper {
                             relativeThreshold={3600000}
                             timestamp={1506534041000}
                           />,
-                          "className": "box-ui-comment-created-at",
+                          "className": "bcs-comment-created-at",
                         },
                         "ref": null,
                         "rendered": Object {
@@ -2376,23 +2376,23 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-comment"
+          className="bcs-comment"
           onBlur={[Function]}
           onFocus={[Function]}
         >
           <Avatar
-            className="box-ui-comment-avatar"
+            className="bcs-comment-avatar"
             id={10}
             name="50 Cent"
           />
           <div
-            className="box-ui-comment-content"
+            className="bcs-comment-content"
           >
             <div
-              className="box-ui-comment-headline"
+              className="bcs-comment-headline"
             >
               <Link
-                className="box-ui-comment-user-name"
+                className="bcs-comment-user-name"
                 href="/profile/10"
               >
                 50 Cent
@@ -2415,7 +2415,7 @@ ShallowWrapper {
                 theme="default"
               >
                 <small
-                  className="box-ui-comment-created-at"
+                  className="bcs-comment-created-at"
                 >
                   <ReadableTime
                     relativeThreshold={3600000}
@@ -2435,7 +2435,7 @@ ShallowWrapper {
         </div>,
         null,
       ],
-      "className": "box-ui-comment-container",
+      "className": "bcs-comment-container",
     },
     "ref": null,
     "rendered": Array [
@@ -2446,18 +2446,18 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <Avatar
-              className="box-ui-comment-avatar"
+              className="bcs-comment-avatar"
               id={10}
               name="50 Cent"
             />,
             <div
-              className="box-ui-comment-content"
+              className="bcs-comment-content"
             >
               <div
-                className="box-ui-comment-headline"
+                className="bcs-comment-headline"
               >
                 <Link
-                  className="box-ui-comment-user-name"
+                  className="bcs-comment-user-name"
                   href="/profile/10"
                 >
                   50 Cent
@@ -2480,7 +2480,7 @@ ShallowWrapper {
                   theme="default"
                 >
                   <small
-                    className="box-ui-comment-created-at"
+                    className="bcs-comment-created-at"
                   >
                     <ReadableTime
                       relativeThreshold={3600000}
@@ -2498,7 +2498,7 @@ ShallowWrapper {
               />
             </div>,
           ],
-          "className": "box-ui-comment",
+          "className": "bcs-comment",
           "onBlur": [Function],
           "onFocus": [Function],
         },
@@ -2509,7 +2509,7 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "function",
             "props": Object {
-              "className": "box-ui-comment-avatar",
+              "className": "bcs-comment-avatar",
               "id": 10,
               "name": "50 Cent",
             },
@@ -2524,10 +2524,10 @@ ShallowWrapper {
             "props": Object {
               "children": Array [
                 <div
-                  className="box-ui-comment-headline"
+                  className="bcs-comment-headline"
                 >
                   <Link
-                    className="box-ui-comment-user-name"
+                    className="bcs-comment-user-name"
                     href="/profile/10"
                   >
                     50 Cent
@@ -2550,7 +2550,7 @@ ShallowWrapper {
                     theme="default"
                   >
                     <small
-                      className="box-ui-comment-created-at"
+                      className="bcs-comment-created-at"
                     >
                       <ReadableTime
                         relativeThreshold={3600000}
@@ -2568,7 +2568,7 @@ ShallowWrapper {
                   translationFailed={null}
                 />,
               ],
-              "className": "box-ui-comment-content",
+              "className": "bcs-comment-content",
             },
             "ref": null,
             "rendered": Array [
@@ -2579,7 +2579,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <Link
-                      className="box-ui-comment-user-name"
+                      className="bcs-comment-user-name"
                       href="/profile/10"
                     >
                       50 Cent
@@ -2602,7 +2602,7 @@ ShallowWrapper {
                       theme="default"
                     >
                       <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -2613,7 +2613,7 @@ ShallowWrapper {
                     null,
                     null,
                   ],
-                  "className": "box-ui-comment-headline",
+                  "className": "bcs-comment-headline",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -2623,7 +2623,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "children": "50 Cent",
-                      "className": "box-ui-comment-user-name",
+                      "className": "bcs-comment-user-name",
                       "href": "/profile/10",
                     },
                     "ref": null,
@@ -2636,7 +2636,7 @@ ShallowWrapper {
                     "nodeType": "class",
                     "props": Object {
                       "children": <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -2667,7 +2667,7 @@ ShallowWrapper {
                           relativeThreshold={3600000}
                           timestamp={1506534041000}
                         />,
-                        "className": "box-ui-comment-created-at",
+                        "className": "bcs-comment-created-at",
                       },
                       "ref": null,
                       "rendered": Object {
@@ -2725,23 +2725,23 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-comment"
+            className="bcs-comment"
             onBlur={[Function]}
             onFocus={[Function]}
           >
             <Avatar
-              className="box-ui-comment-avatar"
+              className="bcs-comment-avatar"
               id={10}
               name="50 Cent"
             />
             <div
-              className="box-ui-comment-content"
+              className="bcs-comment-content"
             >
               <div
-                className="box-ui-comment-headline"
+                className="bcs-comment-headline"
               >
                 <Link
-                  className="box-ui-comment-user-name"
+                  className="bcs-comment-user-name"
                   href="/profile/10"
                 >
                   50 Cent
@@ -2764,7 +2764,7 @@ ShallowWrapper {
                   theme="default"
                 >
                   <small
-                    className="box-ui-comment-created-at"
+                    className="bcs-comment-created-at"
                   >
                     <ReadableTime
                       relativeThreshold={3600000}
@@ -2784,7 +2784,7 @@ ShallowWrapper {
           </div>,
           null,
         ],
-        "className": "box-ui-comment-container",
+        "className": "bcs-comment-container",
       },
       "ref": null,
       "rendered": Array [
@@ -2795,18 +2795,18 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <Avatar
-                className="box-ui-comment-avatar"
+                className="bcs-comment-avatar"
                 id={10}
                 name="50 Cent"
               />,
               <div
-                className="box-ui-comment-content"
+                className="bcs-comment-content"
               >
                 <div
-                  className="box-ui-comment-headline"
+                  className="bcs-comment-headline"
                 >
                   <Link
-                    className="box-ui-comment-user-name"
+                    className="bcs-comment-user-name"
                     href="/profile/10"
                   >
                     50 Cent
@@ -2829,7 +2829,7 @@ ShallowWrapper {
                     theme="default"
                   >
                     <small
-                      className="box-ui-comment-created-at"
+                      className="bcs-comment-created-at"
                     >
                       <ReadableTime
                         relativeThreshold={3600000}
@@ -2847,7 +2847,7 @@ ShallowWrapper {
                 />
               </div>,
             ],
-            "className": "box-ui-comment",
+            "className": "bcs-comment",
             "onBlur": [Function],
             "onFocus": [Function],
           },
@@ -2858,7 +2858,7 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "function",
               "props": Object {
-                "className": "box-ui-comment-avatar",
+                "className": "bcs-comment-avatar",
                 "id": 10,
                 "name": "50 Cent",
               },
@@ -2873,10 +2873,10 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <div
-                    className="box-ui-comment-headline"
+                    className="bcs-comment-headline"
                   >
                     <Link
-                      className="box-ui-comment-user-name"
+                      className="bcs-comment-user-name"
                       href="/profile/10"
                     >
                       50 Cent
@@ -2899,7 +2899,7 @@ ShallowWrapper {
                       theme="default"
                     >
                       <small
-                        className="box-ui-comment-created-at"
+                        className="bcs-comment-created-at"
                       >
                         <ReadableTime
                           relativeThreshold={3600000}
@@ -2917,7 +2917,7 @@ ShallowWrapper {
                     translationFailed={null}
                   />,
                 ],
-                "className": "box-ui-comment-content",
+                "className": "bcs-comment-content",
               },
               "ref": null,
               "rendered": Array [
@@ -2928,7 +2928,7 @@ ShallowWrapper {
                   "props": Object {
                     "children": Array [
                       <Link
-                        className="box-ui-comment-user-name"
+                        className="bcs-comment-user-name"
                         href="/profile/10"
                       >
                         50 Cent
@@ -2951,7 +2951,7 @@ ShallowWrapper {
                         theme="default"
                       >
                         <small
-                          className="box-ui-comment-created-at"
+                          className="bcs-comment-created-at"
                         >
                           <ReadableTime
                             relativeThreshold={3600000}
@@ -2962,7 +2962,7 @@ ShallowWrapper {
                       null,
                       null,
                     ],
-                    "className": "box-ui-comment-headline",
+                    "className": "bcs-comment-headline",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -2972,7 +2972,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "children": "50 Cent",
-                        "className": "box-ui-comment-user-name",
+                        "className": "bcs-comment-user-name",
                         "href": "/profile/10",
                       },
                       "ref": null,
@@ -2985,7 +2985,7 @@ ShallowWrapper {
                       "nodeType": "class",
                       "props": Object {
                         "children": <small
-                          className="box-ui-comment-created-at"
+                          className="bcs-comment-created-at"
                         >
                           <ReadableTime
                             relativeThreshold={3600000}
@@ -3016,7 +3016,7 @@ ShallowWrapper {
                             relativeThreshold={3600000}
                             timestamp={1506534041000}
                           />,
-                          "className": "box-ui-comment-created-at",
+                          "className": "bcs-comment-created-at",
                         },
                         "ref": null,
                         "rendered": Object {

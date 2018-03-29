@@ -1,12 +1,12 @@
 @import '../../../styles/variables';
 
-.box-ui-activity-feed {
+.bcs-activity-feed {
     display: flex;
     flex-direction: column;
     height: 100%;
     position: relative;
 
-    .box-ui-activity-feed-items-container {
+    .bcs-activity-feed-items-container {
         align-items: center;
         display: flex;
         flex: 1 1;
@@ -15,28 +15,28 @@
         overflow-x: hidden;
         position: relative;
 
-        .box-ui-version-item {
-            &:first-child .box-ui-version {
+        .bcs-version-item {
+            &:first-child .bcs-version {
                 margin-top: 0;
             }
         }
 
-        .box-ui-activity-feed-task,
-        .box-ui-activity-feed-comment {
+        .bcs-activity-feed-task,
+        .bcs-activity-feed-comment {
             border-bottom: 1px solid $ffive;
             padding-bottom: 8px;
 
-            &:first-child .box-ui-comment {
+            &:first-child .bcs-comment {
                 margin-top: 0;
             }
         }
 
-        .box-ui-activity-feed-task {
+        .bcs-activity-feed-task {
             padding-bottom: 28px;
         }
     }
 
-    .box-ui-activity-feed-active-state {
+    .bcs-activity-feed-active-state {
         bottom: 0;
         left: 0;
         margin: 9px 20px;
@@ -49,7 +49,7 @@
         }
     }
 
-    .box-ui-activity-feed-empty-state {
+    .bcs-activity-feed-empty-state {
         align-items: center;
         display: flex;
         flex-direction: column;
@@ -66,13 +66,13 @@
             }
         }
 
-        .box-ui-activity-feed-empty-state-illustration {
+        .bcs-activity-feed-empty-state-illustration {
             margin-bottom: 15px;
             margin-top: 60px;
         }
     }
 
-    .box-ui-activity-feed-comment-input {
+    .bcs-activity-feed-comment-input {
         background-color: $white;
         margin-bottom: 4px;
         max-height: 500px;

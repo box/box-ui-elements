@@ -24,8 +24,8 @@ type Props = {
 };
 
 const VersionError = ({ errorCode }: Props): ReactNode => (
-    <div className='box-ui-version error'>
-        <span className='box-ui-version-message'>{getErrorMessage(errorCode)}</span>
+    <div className='bcs-version error'>
+        <span className='bcs-version-message'>{getErrorMessage(errorCode)}</span>
     </div>
 );
 

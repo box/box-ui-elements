@@ -1,11 +1,11 @@
 @import '../../../styles/variables';
 
-.box-ui-comment-container {
+.bcs-comment-container {
     position: relative;
     z-index: 1;
 }
 
-.box-ui-comment {
+.bcs-comment {
     display: flex;
     margin-top: 23px;
     opacity: .9999;
@@ -13,15 +13,15 @@
 
     &:hover,
     &.is-focused {
-        .box-ui-comment-delete-container {
+        .bcs-comment-delete-container {
             opacity: 1;
         }
-        .box-ui-comment-edit-container {
+        .bcs-comment-edit-container {
             opacity: 1;
         }
     }
 
-    .box-ui-comment-delete-container {
+    .bcs-comment-delete-container {
         z-index: 1;
         margin-top: 3px;
         opacity: 0;
@@ -50,17 +50,17 @@
             }
         }
 
-        .box-ui-comment-delete {
+        .bcs-comment-delete {
             vertical-align: top;
         }
 
-        .box-ui-comment-delete-no,
-        .box-ui-comment-delete-yes {
+        .bcs-comment-delete-no,
+        .bcs-comment-delete-yes {
             margin: 0 3px;
         }
     }
 
-    .box-ui-comment-edit-container {
+    .bcs-comment-edit-container {
         margin-top: 3px;
         opacity: 0;
         position: absolute;
@@ -86,72 +86,72 @@
             }
         }
 
-        .box-ui-comment-edit {
+        .bcs-comment-edit {
             vertical-align: top;
         }
     }
     &.is-pending {
         opacity: .4;
 
-        .box-ui-comment-text {
+        .bcs-comment-text {
             margin-bottom: 25px;
         }
     }
 
-    .box-ui-comment-avatar {
+    .bcs-comment-avatar {
         flex-shrink: 0;
         margin-right: 17px;
         margin-top: 3px;
     }
 
-    .box-ui-comment-content {
+    .bcs-comment-content {
         color: $fours;
         flex: 1;
         min-width: 0;
 
-        .box-ui-comment-user-name {
+        .bcs-comment-user-name {
             color: $twos;
             font-weight: bold;
             margin-right: 5px;
         }
 
-        .box-ui-comment-created-at {
+        .bcs-comment-created-at {
             color: $nines;
             cursor: default;
         }
     }
 
-    .box-ui-comment-headline {
+    .bcs-comment-headline {
         display: flex;
         flex-flow: row wrap;
         padding-right: 25px;
         position: relative;
     }
 
-    .box-ui-comment-text {
+    .bcs-comment-text {
         white-space: pre-wrap;
         word-wrap: break-word;
 
         .link {
             white-space: normal;
         }
-        .box-ui-comment-translate {
+        .bcs-comment-translate {
             color: $box-blue;
             display: block;
         }
     }
 
-    .box-ui-comment-text-loading {
+    .bcs-comment-text-loading {
         margin-top: 3px;
     }
 }
 
-.box-ui-comment-container {
-    .box-ui-comment-error {
+.bcs-comment-container {
+    .bcs-comment-error {
         margin-top: -10px;
         padding: 14px 15px;
 
-        .box-ui-comment-error-action {
+        .bcs-comment-error-action {
             color: $king-crimson;
             display: block;
             margin-top: 5px;

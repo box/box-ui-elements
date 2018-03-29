@@ -17,10 +17,10 @@ type Props = {
 };
 
 const CommentInlineError = ({ action, message, title }: Props): ReactNode => (
-    <InlineError className='box-ui-comment-error' title={title}>
+    <InlineError className='bcs-comment-error' title={title}>
         <div>{message}</div>
         {action ? (
-            <PlainButton className='lnk box-ui-comment-error-action' onClick={action.onAction} type='button'>
+            <PlainButton className='lnk bcs-comment-error-action' onClick={action.onAction} type='button'>
                 {action.text}
             </PlainButton>
         ) : null}

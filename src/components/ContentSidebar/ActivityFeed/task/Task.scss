@@ -1,16 +1,16 @@
 @import '../../../styles/variables';
 
-.box-ui-task {
+.bcs-task {
     &.is-pending {
-        .box-ui-task-approvers-container {
+        .bcs-task-approvers-container {
             opacity: .4;
         }
     }
 
-    .box-ui-task-approvers-container {
+    .bcs-task-approvers-container {
         margin-left: 49px;
 
-        .box-ui-task-approvers-header {
+        .bcs-task-approvers-header {
             border-bottom: 1px solid $off-white;
             display: flex;
             justify-content: space-between;
@@ -23,7 +23,7 @@
             }
         }
 
-        .box-ui-task-due-date {
+        .bcs-task-due-date {
             color: $nines;
             font-size: 11px;
 
@@ -32,9 +32,9 @@
             }
         }
 
-        .box-ui-task-pending-assignment,
-        .box-ui-task-completed-assignment,
-        .box-ui-task-rejected-assignment {
+        .bcs-task-pending-assignment,
+        .bcs-task-completed-assignment,
+        .bcs-task-rejected-assignment {
             align-items: center;
             border-radius: 4px;
             display: flex;
@@ -44,70 +44,70 @@
             margin-top: 10px;
             padding-left: 8px;
 
-            .box-ui-task-assignment-name {
+            .bcs-task-assignment-name {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
 
-            .box-ui-task-assignment-actions {
+            .bcs-task-assignment-actions {
                 display: flex;
                 justify-content: flex-end;
                 margin-right: 8px;
             }
         }
 
-        .box-ui-task-x-icon,
-        .box-ui-task-check-icon {
+        .bcs-task-x-icon,
+        .bcs-task-check-icon {
             height: 18px;
             width: 18px;
         }
 
-        .box-ui-task-completed-assignment {
+        .bcs-task-completed-assignment {
             border: 1px solid $shady-acres;
             color: $shady-acres;
 
-            .box-ui-task-assignment-actions {
+            .bcs-task-assignment-actions {
                 flex-basis: 20px;
             }
 
-            .box-ui-task-check-icon .fill-color {
+            .bcs-task-check-icon .fill-color {
                 fill: $shady-acres;
             }
         }
 
-        .box-ui-task-rejected-assignment {
+        .bcs-task-rejected-assignment {
             border: 1px solid $amaranth;
             color: $amaranth;
 
-            .box-ui-task-assignment-actions {
+            .bcs-task-assignment-actions {
                 flex-basis: 20px;
             }
 
-            .box-ui-task-x-icon .fill-color {
+            .bcs-task-x-icon .fill-color {
                 fill: $amaranth;
             }
         }
 
-        .box-ui-task-pending-assignment {
+        .bcs-task-pending-assignment {
             background-color: fade-out($box-blue, .9);
             color: $box-blue;
 
-            .box-ui-task-assignment-actions {
+            .bcs-task-assignment-actions {
                 flex-basis: 40px;
             }
 
-            .box-ui-task-check-btn {
+            .bcs-task-check-btn {
                 margin-right: 3px;
                 position: relative;
             }
 
-            .box-ui-task-x-btn {
+            .bcs-task-x-btn {
                 position: relative;
             }
 
-            .box-ui-task-x-icon .fill-color,
-            .box-ui-task-check-icon .fill-color {
+            .bcs-task-x-icon .fill-color,
+            .bcs-task-check-icon .fill-color {
                 fill: $box-blue;
             }
         }

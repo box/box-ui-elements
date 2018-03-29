@@ -76,7 +76,7 @@ class Task extends Component<Props> {
             translations
         } = this.props;
         return (
-            <div className={`box-ui-task ${isPending || error ? 'is-pending' : ''}`}>
+            <div className={`bcs-task ${isPending || error ? 'is-pending' : ''}`}>
                 <Comment
                     createdAt={createdAt}
                     createdBy={createdBy}
@@ -93,19 +93,19 @@ class Task extends Component<Props> {
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
                 />
-                <div className='box-ui-task-approvers-container'>
-                    <div className='box-ui-task-approvers-header'>
+                <div className='bcs-task-approvers-container'>
+                    <div className='bcs-task-approvers-header'>
                         <strong>
                             <FormattedMessage {...messages.tasksForApproval} />
                         </strong>
                         {dueDate ? (
-                            <span className='box-ui-task-due-date'>
+                            <span className='bcs-task-due-date'>
                                 <FormattedMessage {...messages.taskDueDate} />
                                 <FormattedDate value={dueDate} day='numeric' month='long' year='numeric' />
                             </span>
                         ) : null}
                     </div>
-                    <div className='box-ui-task-assignees'>
+                    <div className='bcs-task-assignees'>
                         {assignees.map(({ id: taskAssignmentId, user: assigneeUser, status }) => {
                             switch (status) {
                                 case TASK_INCOMPLETE:

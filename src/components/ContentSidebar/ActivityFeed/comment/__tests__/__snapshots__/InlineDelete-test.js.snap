@@ -39,7 +39,7 @@ ShallowWrapper {
       >
         <PlainButton
           aria-label={undefined}
-          className="box-ui-comment-delete"
+          className="bcs-comment-delete"
         >
           <IconTrash />
         </PlainButton>
@@ -49,7 +49,7 @@ ShallowWrapper {
           </b>
           <div>
             <PlainButton
-              className="lnk box-ui-comment-delete-yes"
+              className="lnk bcs-comment-delete-yes"
               onClick={[Function]}
               type="button"
             >
@@ -60,7 +60,7 @@ ShallowWrapper {
             </PlainButton>
              / 
             <PlainButton
-              className="lnk box-ui-comment-delete-no"
+              className="lnk bcs-comment-delete-no"
               type="button"
             >
               <FormattedMessage
@@ -71,7 +71,7 @@ ShallowWrapper {
           </div>
         </Overlay>
       </Flyout>,
-      "className": "box-ui-comment-delete-container",
+      "className": "bcs-comment-delete-container",
     },
     "ref": null,
     "rendered": Object {
@@ -82,7 +82,7 @@ ShallowWrapper {
         "children": Array [
           <PlainButton
             aria-label={undefined}
-            className="box-ui-comment-delete"
+            className="bcs-comment-delete"
           >
             <IconTrash />
           </PlainButton>,
@@ -92,7 +92,7 @@ ShallowWrapper {
             </b>
             <div>
               <PlainButton
-                className="lnk box-ui-comment-delete-yes"
+                className="lnk bcs-comment-delete-yes"
                 onClick={[Function]}
                 type="button"
               >
@@ -103,7 +103,7 @@ ShallowWrapper {
               </PlainButton>
                / 
               <PlainButton
-                className="lnk box-ui-comment-delete-no"
+                className="lnk bcs-comment-delete-no"
                 type="button"
               >
                 <FormattedMessage
@@ -133,7 +133,7 @@ ShallowWrapper {
           "props": Object {
             "aria-label": undefined,
             "children": <IconTrash />,
-            "className": "box-ui-comment-delete",
+            "className": "bcs-comment-delete",
           },
           "ref": null,
           "rendered": Object {
@@ -158,7 +158,7 @@ ShallowWrapper {
               </b>,
               <div>
                 <PlainButton
-                  className="lnk box-ui-comment-delete-yes"
+                  className="lnk bcs-comment-delete-yes"
                   onClick={[Function]}
                   type="button"
                 >
@@ -169,7 +169,7 @@ ShallowWrapper {
                 </PlainButton>
                  / 
                 <PlainButton
-                  className="lnk box-ui-comment-delete-no"
+                  className="lnk bcs-comment-delete-no"
                   type="button"
                 >
                   <FormattedMessage
@@ -200,7 +200,7 @@ ShallowWrapper {
               "props": Object {
                 "children": Array [
                   <PlainButton
-                    className="lnk box-ui-comment-delete-yes"
+                    className="lnk bcs-comment-delete-yes"
                     onClick={[Function]}
                     type="button"
                   >
@@ -211,7 +211,7 @@ ShallowWrapper {
                   </PlainButton>,
                   " / ",
                   <PlainButton
-                    className="lnk box-ui-comment-delete-no"
+                    className="lnk bcs-comment-delete-no"
                     type="button"
                   >
                     <FormattedMessage
@@ -232,7 +232,7 @@ ShallowWrapper {
                       defaultMessage="Yes"
                       id="boxui.activityFeed.commentDeleteConfirm"
                     />,
-                    "className": "lnk box-ui-comment-delete-yes",
+                    "className": "lnk bcs-comment-delete-yes",
                     "onClick": [Function],
                     "type": "button",
                   },
@@ -261,7 +261,7 @@ ShallowWrapper {
                       defaultMessage="No"
                       id="boxui.activityFeed.commentDeleteCancel"
                     />,
-                    "className": "lnk box-ui-comment-delete-no",
+                    "className": "lnk bcs-comment-delete-no",
                     "type": "button",
                   },
                   "ref": null,
@@ -309,7 +309,7 @@ ShallowWrapper {
         >
           <PlainButton
             aria-label={undefined}
-            className="box-ui-comment-delete"
+            className="bcs-comment-delete"
           >
             <IconTrash />
           </PlainButton>
@@ -319,7 +319,7 @@ ShallowWrapper {
             </b>
             <div>
               <PlainButton
-                className="lnk box-ui-comment-delete-yes"
+                className="lnk bcs-comment-delete-yes"
                 onClick={[Function]}
                 type="button"
               >
@@ -330,7 +330,7 @@ ShallowWrapper {
               </PlainButton>
                / 
               <PlainButton
-                className="lnk box-ui-comment-delete-no"
+                className="lnk bcs-comment-delete-no"
                 type="button"
               >
                 <FormattedMessage
@@ -341,7 +341,7 @@ ShallowWrapper {
             </div>
           </Overlay>
         </Flyout>,
-        "className": "box-ui-comment-delete-container",
+        "className": "bcs-comment-delete-container",
       },
       "ref": null,
       "rendered": Object {
@@ -352,7 +352,7 @@ ShallowWrapper {
           "children": Array [
             <PlainButton
               aria-label={undefined}
-              className="box-ui-comment-delete"
+              className="bcs-comment-delete"
             >
               <IconTrash />
             </PlainButton>,
@@ -362,7 +362,7 @@ ShallowWrapper {
               </b>
               <div>
                 <PlainButton
-                  className="lnk box-ui-comment-delete-yes"
+                  className="lnk bcs-comment-delete-yes"
                   onClick={[Function]}
                   type="button"
                 >
@@ -373,7 +373,7 @@ ShallowWrapper {
                 </PlainButton>
                  / 
                 <PlainButton
-                  className="lnk box-ui-comment-delete-no"
+                  className="lnk bcs-comment-delete-no"
                   type="button"
                 >
                   <FormattedMessage
@@ -403,7 +403,7 @@ ShallowWrapper {
             "props": Object {
               "aria-label": undefined,
               "children": <IconTrash />,
-              "className": "box-ui-comment-delete",
+              "className": "bcs-comment-delete",
             },
             "ref": null,
             "rendered": Object {
@@ -428,7 +428,7 @@ ShallowWrapper {
                 </b>,
                 <div>
                   <PlainButton
-                    className="lnk box-ui-comment-delete-yes"
+                    className="lnk bcs-comment-delete-yes"
                     onClick={[Function]}
                     type="button"
                   >
@@ -439,7 +439,7 @@ ShallowWrapper {
                   </PlainButton>
                    / 
                   <PlainButton
-                    className="lnk box-ui-comment-delete-no"
+                    className="lnk bcs-comment-delete-no"
                     type="button"
                   >
                     <FormattedMessage
@@ -470,7 +470,7 @@ ShallowWrapper {
                 "props": Object {
                   "children": Array [
                     <PlainButton
-                      className="lnk box-ui-comment-delete-yes"
+                      className="lnk bcs-comment-delete-yes"
                       onClick={[Function]}
                       type="button"
                     >
@@ -481,7 +481,7 @@ ShallowWrapper {
                     </PlainButton>,
                     " / ",
                     <PlainButton
-                      className="lnk box-ui-comment-delete-no"
+                      className="lnk bcs-comment-delete-no"
                       type="button"
                     >
                       <FormattedMessage
@@ -502,7 +502,7 @@ ShallowWrapper {
                         defaultMessage="Yes"
                         id="boxui.activityFeed.commentDeleteConfirm"
                       />,
-                      "className": "lnk box-ui-comment-delete-yes",
+                      "className": "lnk bcs-comment-delete-yes",
                       "onClick": [Function],
                       "type": "button",
                     },
@@ -531,7 +531,7 @@ ShallowWrapper {
                         defaultMessage="No"
                         id="boxui.activityFeed.commentDeleteCancel"
                       />,
-                      "className": "lnk box-ui-comment-delete-no",
+                      "className": "lnk bcs-comment-delete-no",
                       "type": "button",
                     },
                     "ref": null,

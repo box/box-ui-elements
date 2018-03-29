@@ -44,15 +44,15 @@ describe('features/activity-feed/task/Task', () => {
     test('should correctly render task', () => {
         const wrapper = shallow(<Task currentUser={currentUser} {...task} />);
 
-        expect(wrapper.hasClass('box-ui-task')).toBe(true);
+        expect(wrapper.hasClass('bcs-task')).toBe(true);
         expect(wrapper.find('mock-comment').length).toEqual(1);
         expect(
             wrapper
-                .find('.box-ui-task-assignees')
+                .find('.bcs-task-assignees')
                 .children()
                 .getElements().length
         ).toEqual(2);
-        expect(wrapper.find('.box-ui-task-due-date').length).toEqual(1);
+        expect(wrapper.find('.bcs-task-due-date').length).toEqual(1);
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -88,13 +88,13 @@ describe('features/activity-feed/task/Task', () => {
 
         expect(
             wrapper
-                .find('.box-ui-task-assignees')
+                .find('.bcs-task-assignees')
                 .children()
                 .getElements()[0].props.shouldShowActions
         ).toBe(true);
         expect(
             !!wrapper
-                .find('.box-ui-task-assignees')
+                .find('.bcs-task-assignees')
                 .children()
                 .getElements()[1].props.shouldShowActions
         ).toBe(false);
@@ -106,7 +106,7 @@ describe('features/activity-feed/task/Task', () => {
         const wrapper = shallow(<Task currentUser={currentUser} {...task} onTaskAssignmentUpdate={jest.fn()} />);
         const assignment = shallow(
             wrapper
-                .find('.box-ui-task-assignees')
+                .find('.bcs-task-assignees')
                 .children()
                 .getElements()[0]
         );
@@ -119,7 +119,7 @@ describe('features/activity-feed/task/Task', () => {
 
         expect(
             !!wrapper
-                .find('.box-ui-task-assignees')
+                .find('.bcs-task-assignees')
                 .children()
                 .getElements()[0].props.shouldShowActions
         ).toBe(false);
@@ -136,7 +136,7 @@ describe('features/activity-feed/task/Task', () => {
             />
         );
 
-        const checkButton = wrapper.find('.box-ui-task-check-btn').hostNodes();
+        const checkButton = wrapper.find('.bcs-task-check-btn').hostNodes();
         checkButton.simulate('click');
 
         expect(onTaskAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'approved');
@@ -153,7 +153,7 @@ describe('features/activity-feed/task/Task', () => {
             />
         );
 
-        const checkButton = wrapper.find('.box-ui-task-x-btn').hostNodes();
+        const checkButton = wrapper.find('.bcs-task-x-btn').hostNodes();
         checkButton.simulate('click');
 
         expect(onTaskAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'rejected');

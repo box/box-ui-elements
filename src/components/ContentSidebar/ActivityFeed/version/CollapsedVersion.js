@@ -36,7 +36,7 @@ function getMessageForAction(
                 values={{
                     name: <strong>{collaborator.name}</strong>,
                     versions: (
-                        <span className='box-ui-version-range'>
+                        <span className='bcs-version-range'>
                             {versionStart} - {versionEnd}
                         </span>
                     )
@@ -51,7 +51,7 @@ function getMessageForAction(
             values={{
                 numberOfCollaborators,
                 versions: (
-                    <span className='box-ui-version-range'>
+                    <span className='bcs-version-range'>
                         {versionStart} - {versionEnd}
                     </span>
                 )
@@ -79,15 +79,15 @@ const CollapsedVersion = ({
     versionStart,
     versionEnd
 }: Props): ReactNode => (
-    <div className='box-ui-collapsed-version'>
-        <span className='box-ui-version-message'>
+    <div className='bcs-collapsed-version'>
+        <span className='bcs-version-message'>
             {getMessageForAction(action, collaborators, versionStart, versionEnd)}
         </span>
         {onInfo ? (
-            <span className='box-ui-version-actions'>
+            <span className='bcs-version-actions'>
                 <PlainButton
                     aria-label={intl.formatMessage(messages.getVersionInfo)}
-                    className='box-ui-version-info'
+                    className='bcs-version-info'
                     onClick={() => {
                         onInfo({ versions });
                     }}

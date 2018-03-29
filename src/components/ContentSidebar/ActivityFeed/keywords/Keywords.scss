@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
-.box-ui-collapsed-keywords,
-.box-ui-keywords {
+.bcs-collapsed-keywords,
+.bcs-keywords {
     align-items: center;
     background-color: #f5ebfd;
     border-radius: 4px;
@@ -12,18 +12,18 @@
     padding: 9px;
     width: 100%;
 
-    .box-ui-keywords-actions {
+    .bcs-keywords-actions {
         display: flex;
         justify-content: flex-end;
     }
 
-    .box-ui-keywords-message {
+    .bcs-keywords-message {
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
-    .box-ui-keywords-info {
+    .bcs-keywords-info {
         flex: none;
         position: relative;
         height: 16px;
@@ -34,12 +34,12 @@
         }
     }
 
-    .box-ui-keywords-range {
+    .bcs-keywords-range {
         white-space: nowrap;
     }
 }
 
-.box-ui-keywords-actions-tooltip {
+.bcs-keywords-actions-tooltip {
     max-width: 250px;
 
     > span {

@@ -41,12 +41,12 @@ const ActiveState = ({
     inputState,
     handlers
 }: Props): ReactNode => (
-    <ul className='box-ui-activity-feed-active-state'>
+    <ul className='bcs-activity-feed-active-state'>
         {items.map((item) => {
             switch (item.type) {
                 case 'comment':
                     return (
-                        <li className='box-ui-activity-feed-comment' key={item.type + item.id}>
+                        <li className='bcs-activity-feed-comment' key={item.type + item.id}>
                             <Comment
                                 id={item.id}
                                 currentUser={currentUser}
@@ -60,7 +60,7 @@ const ActiveState = ({
                     );
                 case 'task':
                     return (
-                        <li className='box-ui-activity-feed-task' key={item.type + item.id}>
+                        <li className='bcs-activity-feed-task' key={item.type + item.id}>
                             <Task
                                 currentUser={currentUser}
                                 {...item}
@@ -75,7 +75,7 @@ const ActiveState = ({
                     );
                 case 'file_version':
                     return (
-                        <li className='box-ui-version-item' key={item.type + item.id}>
+                        <li className='bcs-version-item' key={item.type + item.id}>
                             {item.versions ? (
                                 <CollapsedVersion {...item} onInfo={onVersionInfo} />
                             ) : (
@@ -89,13 +89,13 @@ const ActiveState = ({
                         return null;
                     }
                     return (
-                        <li className='box-ui-version-item' key={item.type + item.errorCode}>
+                        <li className='bcs-version-item' key={item.type + item.errorCode}>
                             {<VersionError {...item} />}
                         </li>
                     );
                 case 'keywords':
                     return (
-                        <li className='box-ui-keywords-item' key={item.type + item.id}>
+                        <li className='bcs-keywords-item' key={item.type + item.id}>
                             {<Keywords {...item} />}
                         </li>
                     );

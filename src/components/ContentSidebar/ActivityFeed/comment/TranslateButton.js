@@ -14,7 +14,7 @@ type Props = {
 };
 
 const TranslateButton = ({ handleTranslate }: Props): ReactNode => (
-    <PlainButton className='box-ui-comment-translate' onClick={handleTranslate}>
+    <PlainButton className='bcs-comment-translate' onClick={handleTranslate}>
         <FormattedMessage {...messages.commentTranslate} />
     </PlainButton>
 );

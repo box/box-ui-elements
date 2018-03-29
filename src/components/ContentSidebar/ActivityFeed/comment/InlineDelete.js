@@ -42,14 +42,14 @@ class InlineDelete extends Component<Props> {
         const { intl, message } = this.props;
         return (
             <div
-                className={classNames('box-ui-comment-delete-container', {
+                className={classNames('bcs-comment-delete-container', {
                     'is-confirming': this.state.isConfirming
                 })}
             >
                 <Flyout onClose={this.handleFlyoutClose} onOpen={this.handleFlyoutOpen} position='middle-left'>
                     <PlainButton
                         aria-label={intl.formatMessage(messages.deleteLabel)}
-                        className='box-ui-comment-delete'
+                        className='bcs-comment-delete'
                     >
                         <IconTrash />
                     </PlainButton>
@@ -57,14 +57,14 @@ class InlineDelete extends Component<Props> {
                         <b>{message}</b>
                         <div>
                             <PlainButton
-                                className='lnk box-ui-comment-delete-yes'
+                                className='lnk bcs-comment-delete-yes'
                                 onClick={this.onDeleteConfirmedHandler}
                                 type='button'
                             >
                                 <FormattedMessage {...messages.commentDeleteConfirm} />
                             </PlainButton>
                             {' / '}
-                            <PlainButton className='lnk box-ui-comment-delete-no' type='button'>
+                            <PlainButton className='lnk bcs-comment-delete-no' type='button'>
                                 <FormattedMessage {...messages.commentDeleteCancel} />
                             </PlainButton>
                         </div>

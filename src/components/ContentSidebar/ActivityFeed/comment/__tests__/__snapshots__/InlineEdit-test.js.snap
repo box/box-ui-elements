@@ -27,13 +27,13 @@ ShallowWrapper {
     "props": Object {
       "children": <PlainButton
         aria-label={undefined}
-        className="box-ui-comment-edit"
+        className="bcs-comment-edit"
         onClick={[Function]}
         type="button"
       >
         <IconPencil />
       </PlainButton>,
-      "className": "box-ui-comment-edit-container",
+      "className": "bcs-comment-edit-container",
     },
     "ref": null,
     "rendered": Object {
@@ -43,7 +43,7 @@ ShallowWrapper {
       "props": Object {
         "aria-label": undefined,
         "children": <IconPencil />,
-        "className": "box-ui-comment-edit",
+        "className": "bcs-comment-edit",
         "onClick": [Function],
         "type": "button",
       },
@@ -69,13 +69,13 @@ ShallowWrapper {
       "props": Object {
         "children": <PlainButton
           aria-label={undefined}
-          className="box-ui-comment-edit"
+          className="bcs-comment-edit"
           onClick={[Function]}
           type="button"
         >
           <IconPencil />
         </PlainButton>,
-        "className": "box-ui-comment-edit-container",
+        "className": "bcs-comment-edit-container",
       },
       "ref": null,
       "rendered": Object {
@@ -85,7 +85,7 @@ ShallowWrapper {
         "props": Object {
           "aria-label": undefined,
           "children": <IconPencil />,
-          "className": "box-ui-comment-edit",
+          "className": "bcs-comment-edit",
           "onClick": [Function],
           "type": "button",
         },

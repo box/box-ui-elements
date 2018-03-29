@@ -82,10 +82,10 @@ ShallowWrapper {
           translations={undefined}
         />,
         <div
-          className="box-ui-task-approvers-container"
+          className="bcs-task-approvers-container"
         >
           <div
-            className="box-ui-task-approvers-header"
+            className="bcs-task-approvers-header"
           >
             <strong>
               <FormattedMessage
@@ -94,7 +94,7 @@ ShallowWrapper {
               />
             </strong>
             <span
-              className="box-ui-task-due-date"
+              className="bcs-task-due-date"
             >
               <FormattedMessage
                 defaultMessage="Due"
@@ -109,7 +109,7 @@ ShallowWrapper {
             </span>
           </div>
           <div
-            className="box-ui-task-assignees"
+            className="bcs-task-assignees"
           >
             <PendingAssignment
               id={1}
@@ -125,7 +125,7 @@ ShallowWrapper {
           </div>
         </div>,
       ],
-      "className": "box-ui-task ",
+      "className": "bcs-task ",
     },
     "ref": null,
     "rendered": Array [
@@ -166,7 +166,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <div
-              className="box-ui-task-approvers-header"
+              className="bcs-task-approvers-header"
             >
               <strong>
                 <FormattedMessage
@@ -175,7 +175,7 @@ ShallowWrapper {
                 />
               </strong>
               <span
-                className="box-ui-task-due-date"
+                className="bcs-task-due-date"
               >
                 <FormattedMessage
                   defaultMessage="Due"
@@ -190,7 +190,7 @@ ShallowWrapper {
               </span>
             </div>,
             <div
-              className="box-ui-task-assignees"
+              className="bcs-task-assignees"
             >
               <PendingAssignment
                 id={1}
@@ -205,7 +205,7 @@ ShallowWrapper {
               />
             </div>,
           ],
-          "className": "box-ui-task-approvers-container",
+          "className": "bcs-task-approvers-container",
         },
         "ref": null,
         "rendered": Array [
@@ -222,7 +222,7 @@ ShallowWrapper {
                   />
                 </strong>,
                 <span
-                  className="box-ui-task-due-date"
+                  className="bcs-task-due-date"
                 >
                   <FormattedMessage
                     defaultMessage="Due"
@@ -236,7 +236,7 @@ ShallowWrapper {
                   />
                 </span>,
               ],
-              "className": "box-ui-task-approvers-header",
+              "className": "bcs-task-approvers-header",
             },
             "ref": null,
             "rendered": Array [
@@ -282,7 +282,7 @@ ShallowWrapper {
                       year="numeric"
                     />,
                   ],
-                  "className": "box-ui-task-due-date",
+                  "className": "bcs-task-due-date",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -336,7 +336,7 @@ ShallowWrapper {
                   name="Peter Pan"
                 />,
               ],
-              "className": "box-ui-task-assignees",
+              "className": "bcs-task-assignees",
             },
             "ref": null,
             "rendered": Array [
@@ -410,10 +410,10 @@ ShallowWrapper {
             translations={undefined}
           />,
           <div
-            className="box-ui-task-approvers-container"
+            className="bcs-task-approvers-container"
           >
             <div
-              className="box-ui-task-approvers-header"
+              className="bcs-task-approvers-header"
             >
               <strong>
                 <FormattedMessage
@@ -422,7 +422,7 @@ ShallowWrapper {
                 />
               </strong>
               <span
-                className="box-ui-task-due-date"
+                className="bcs-task-due-date"
               >
                 <FormattedMessage
                   defaultMessage="Due"
@@ -437,7 +437,7 @@ ShallowWrapper {
               </span>
             </div>
             <div
-              className="box-ui-task-assignees"
+              className="bcs-task-assignees"
             >
               <PendingAssignment
                 id={1}
@@ -453,7 +453,7 @@ ShallowWrapper {
             </div>
           </div>,
         ],
-        "className": "box-ui-task ",
+        "className": "bcs-task ",
       },
       "ref": null,
       "rendered": Array [
@@ -494,7 +494,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <div
-                className="box-ui-task-approvers-header"
+                className="bcs-task-approvers-header"
               >
                 <strong>
                   <FormattedMessage
@@ -503,7 +503,7 @@ ShallowWrapper {
                   />
                 </strong>
                 <span
-                  className="box-ui-task-due-date"
+                  className="bcs-task-due-date"
                 >
                   <FormattedMessage
                     defaultMessage="Due"
@@ -518,7 +518,7 @@ ShallowWrapper {
                 </span>
               </div>,
               <div
-                className="box-ui-task-assignees"
+                className="bcs-task-assignees"
               >
                 <PendingAssignment
                   id={1}
@@ -533,7 +533,7 @@ ShallowWrapper {
                 />
               </div>,
             ],
-            "className": "box-ui-task-approvers-container",
+            "className": "bcs-task-approvers-container",
           },
           "ref": null,
           "rendered": Array [
@@ -550,7 +550,7 @@ ShallowWrapper {
                     />
                   </strong>,
                   <span
-                    className="box-ui-task-due-date"
+                    className="bcs-task-due-date"
                   >
                     <FormattedMessage
                       defaultMessage="Due"
@@ -564,7 +564,7 @@ ShallowWrapper {
                     />
                   </span>,
                 ],
-                "className": "box-ui-task-approvers-header",
+                "className": "bcs-task-approvers-header",
               },
               "ref": null,
               "rendered": Array [
@@ -610,7 +610,7 @@ ShallowWrapper {
                         year="numeric"
                       />,
                     ],
-                    "className": "box-ui-task-due-date",
+                    "className": "bcs-task-due-date",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -664,7 +664,7 @@ ShallowWrapper {
                     name="Peter Pan"
                   />,
                 ],
-                "className": "box-ui-task-assignees",
+                "className": "bcs-task-assignees",
               },
               "ref": null,
               "rendered": Array [
@@ -797,10 +797,10 @@ ShallowWrapper {
           translations={undefined}
         />,
         <div
-          className="box-ui-task-approvers-container"
+          className="bcs-task-approvers-container"
         >
           <div
-            className="box-ui-task-approvers-header"
+            className="bcs-task-approvers-header"
           >
             <strong>
               <FormattedMessage
@@ -810,7 +810,7 @@ ShallowWrapper {
             </strong>
           </div>
           <div
-            className="box-ui-task-assignees"
+            className="bcs-task-assignees"
           >
             <PendingAssignment
               id={1}
@@ -826,7 +826,7 @@ ShallowWrapper {
           </div>
         </div>,
       ],
-      "className": "box-ui-task ",
+      "className": "bcs-task ",
     },
     "ref": null,
     "rendered": Array [
@@ -867,7 +867,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <div
-              className="box-ui-task-approvers-header"
+              className="bcs-task-approvers-header"
             >
               <strong>
                 <FormattedMessage
@@ -877,7 +877,7 @@ ShallowWrapper {
               </strong>
             </div>,
             <div
-              className="box-ui-task-assignees"
+              className="bcs-task-assignees"
             >
               <PendingAssignment
                 id={1}
@@ -892,7 +892,7 @@ ShallowWrapper {
               />
             </div>,
           ],
-          "className": "box-ui-task-approvers-container",
+          "className": "bcs-task-approvers-container",
         },
         "ref": null,
         "rendered": Array [
@@ -910,7 +910,7 @@ ShallowWrapper {
                 </strong>,
                 null,
               ],
-              "className": "box-ui-task-approvers-header",
+              "className": "bcs-task-approvers-header",
             },
             "ref": null,
             "rendered": Array [
@@ -961,7 +961,7 @@ ShallowWrapper {
                   name="Peter Pan"
                 />,
               ],
-              "className": "box-ui-task-assignees",
+              "className": "bcs-task-assignees",
             },
             "ref": null,
             "rendered": Array [
@@ -1035,10 +1035,10 @@ ShallowWrapper {
             translations={undefined}
           />,
           <div
-            className="box-ui-task-approvers-container"
+            className="bcs-task-approvers-container"
           >
             <div
-              className="box-ui-task-approvers-header"
+              className="bcs-task-approvers-header"
             >
               <strong>
                 <FormattedMessage
@@ -1048,7 +1048,7 @@ ShallowWrapper {
               </strong>
             </div>
             <div
-              className="box-ui-task-assignees"
+              className="bcs-task-assignees"
             >
               <PendingAssignment
                 id={1}
@@ -1064,7 +1064,7 @@ ShallowWrapper {
             </div>
           </div>,
         ],
-        "className": "box-ui-task ",
+        "className": "bcs-task ",
       },
       "ref": null,
       "rendered": Array [
@@ -1105,7 +1105,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <div
-                className="box-ui-task-approvers-header"
+                className="bcs-task-approvers-header"
               >
                 <strong>
                   <FormattedMessage
@@ -1115,7 +1115,7 @@ ShallowWrapper {
                 </strong>
               </div>,
               <div
-                className="box-ui-task-assignees"
+                className="bcs-task-assignees"
               >
                 <PendingAssignment
                   id={1}
@@ -1130,7 +1130,7 @@ ShallowWrapper {
                 />
               </div>,
             ],
-            "className": "box-ui-task-approvers-container",
+            "className": "bcs-task-approvers-container",
           },
           "ref": null,
           "rendered": Array [
@@ -1148,7 +1148,7 @@ ShallowWrapper {
                   </strong>,
                   null,
                 ],
-                "className": "box-ui-task-approvers-header",
+                "className": "bcs-task-approvers-header",
               },
               "ref": null,
               "rendered": Array [
@@ -1199,7 +1199,7 @@ ShallowWrapper {
                     name="Peter Pan"
                   />,
                 ],
-                "className": "box-ui-task-assignees",
+                "className": "bcs-task-assignees",
               },
               "ref": null,
               "rendered": Array [
@@ -1333,10 +1333,10 @@ ShallowWrapper {
           translations={undefined}
         />,
         <div
-          className="box-ui-task-approvers-container"
+          className="bcs-task-approvers-container"
         >
           <div
-            className="box-ui-task-approvers-header"
+            className="bcs-task-approvers-header"
           >
             <strong>
               <FormattedMessage
@@ -1345,7 +1345,7 @@ ShallowWrapper {
               />
             </strong>
             <span
-              className="box-ui-task-due-date"
+              className="bcs-task-due-date"
             >
               <FormattedMessage
                 defaultMessage="Due"
@@ -1360,7 +1360,7 @@ ShallowWrapper {
             </span>
           </div>
           <div
-            className="box-ui-task-assignees"
+            className="bcs-task-assignees"
           >
             <PendingAssignment
               id={1}
@@ -1376,7 +1376,7 @@ ShallowWrapper {
           </div>
         </div>,
       ],
-      "className": "box-ui-task ",
+      "className": "bcs-task ",
     },
     "ref": null,
     "rendered": Array [
@@ -1417,7 +1417,7 @@ ShallowWrapper {
         "props": Object {
           "children": Array [
             <div
-              className="box-ui-task-approvers-header"
+              className="bcs-task-approvers-header"
             >
               <strong>
                 <FormattedMessage
@@ -1426,7 +1426,7 @@ ShallowWrapper {
                 />
               </strong>
               <span
-                className="box-ui-task-due-date"
+                className="bcs-task-due-date"
               >
                 <FormattedMessage
                   defaultMessage="Due"
@@ -1441,7 +1441,7 @@ ShallowWrapper {
               </span>
             </div>,
             <div
-              className="box-ui-task-assignees"
+              className="bcs-task-assignees"
             >
               <PendingAssignment
                 id={1}
@@ -1456,7 +1456,7 @@ ShallowWrapper {
               />
             </div>,
           ],
-          "className": "box-ui-task-approvers-container",
+          "className": "bcs-task-approvers-container",
         },
         "ref": null,
         "rendered": Array [
@@ -1473,7 +1473,7 @@ ShallowWrapper {
                   />
                 </strong>,
                 <span
-                  className="box-ui-task-due-date"
+                  className="bcs-task-due-date"
                 >
                   <FormattedMessage
                     defaultMessage="Due"
@@ -1487,7 +1487,7 @@ ShallowWrapper {
                   />
                 </span>,
               ],
-              "className": "box-ui-task-approvers-header",
+              "className": "bcs-task-approvers-header",
             },
             "ref": null,
             "rendered": Array [
@@ -1533,7 +1533,7 @@ ShallowWrapper {
                       year="numeric"
                     />,
                   ],
-                  "className": "box-ui-task-due-date",
+                  "className": "bcs-task-due-date",
                 },
                 "ref": null,
                 "rendered": Array [
@@ -1587,7 +1587,7 @@ ShallowWrapper {
                   name="Peter Pan"
                 />,
               ],
-              "className": "box-ui-task-assignees",
+              "className": "bcs-task-assignees",
             },
             "ref": null,
             "rendered": Array [
@@ -1661,10 +1661,10 @@ ShallowWrapper {
             translations={undefined}
           />,
           <div
-            className="box-ui-task-approvers-container"
+            className="bcs-task-approvers-container"
           >
             <div
-              className="box-ui-task-approvers-header"
+              className="bcs-task-approvers-header"
             >
               <strong>
                 <FormattedMessage
@@ -1673,7 +1673,7 @@ ShallowWrapper {
                 />
               </strong>
               <span
-                className="box-ui-task-due-date"
+                className="bcs-task-due-date"
               >
                 <FormattedMessage
                   defaultMessage="Due"
@@ -1688,7 +1688,7 @@ ShallowWrapper {
               </span>
             </div>
             <div
-              className="box-ui-task-assignees"
+              className="bcs-task-assignees"
             >
               <PendingAssignment
                 id={1}
@@ -1704,7 +1704,7 @@ ShallowWrapper {
             </div>
           </div>,
         ],
-        "className": "box-ui-task ",
+        "className": "bcs-task ",
       },
       "ref": null,
       "rendered": Array [
@@ -1745,7 +1745,7 @@ ShallowWrapper {
           "props": Object {
             "children": Array [
               <div
-                className="box-ui-task-approvers-header"
+                className="bcs-task-approvers-header"
               >
                 <strong>
                   <FormattedMessage
@@ -1754,7 +1754,7 @@ ShallowWrapper {
                   />
                 </strong>
                 <span
-                  className="box-ui-task-due-date"
+                  className="bcs-task-due-date"
                 >
                   <FormattedMessage
                     defaultMessage="Due"
@@ -1769,7 +1769,7 @@ ShallowWrapper {
                 </span>
               </div>,
               <div
-                className="box-ui-task-assignees"
+                className="bcs-task-assignees"
               >
                 <PendingAssignment
                   id={1}
@@ -1784,7 +1784,7 @@ ShallowWrapper {
                 />
               </div>,
             ],
-            "className": "box-ui-task-approvers-container",
+            "className": "bcs-task-approvers-container",
           },
           "ref": null,
           "rendered": Array [
@@ -1801,7 +1801,7 @@ ShallowWrapper {
                     />
                   </strong>,
                   <span
-                    className="box-ui-task-due-date"
+                    className="bcs-task-due-date"
                   >
                     <FormattedMessage
                       defaultMessage="Due"
@@ -1815,7 +1815,7 @@ ShallowWrapper {
                     />
                   </span>,
                 ],
-                "className": "box-ui-task-approvers-header",
+                "className": "bcs-task-approvers-header",
               },
               "ref": null,
               "rendered": Array [
@@ -1861,7 +1861,7 @@ ShallowWrapper {
                         year="numeric"
                       />,
                     ],
-                    "className": "box-ui-task-due-date",
+                    "className": "bcs-task-due-date",
                   },
                   "ref": null,
                   "rendered": Array [
@@ -1915,7 +1915,7 @@ ShallowWrapper {
                     name="Peter Pan"
                   />,
                 ],
-                "className": "box-ui-task-assignees",
+                "className": "bcs-task-assignees",
               },
               "ref": null,
               "rendered": Array [
@@ -1991,12 +1991,12 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-task-assignment-name"
+          className="bcs-task-assignment-name"
         >
           Jake Thomas
         </div>,
         <div
-          className="box-ui-task-assignment-actions"
+          className="bcs-task-assignment-actions"
         >
           <Tooltip
             constrainToScrollParent={false}
@@ -2011,11 +2011,11 @@ ShallowWrapper {
             theme="default"
           >
             <PlainButton
-              className="box-ui-task-check-btn"
+              className="bcs-task-check-btn"
               onClick={[Function]}
             >
               <IconCheck
-                className="box-ui-task-check-icon"
+                className="bcs-task-check-icon"
                 height={18}
                 width={18}
               />
@@ -2034,11 +2034,11 @@ ShallowWrapper {
             theme="default"
           >
             <PlainButton
-              className="box-ui-task-x-btn"
+              className="bcs-task-x-btn"
               onClick={[Function]}
             >
               <IconClose
-                className="box-ui-task-x-icon"
+                className="bcs-task-x-icon"
                 height={18}
                 width={18}
               />
@@ -2046,7 +2046,7 @@ ShallowWrapper {
           </Tooltip>
         </div>,
       ],
-      "className": "box-ui-task-pending-assignment",
+      "className": "bcs-task-pending-assignment",
     },
     "ref": null,
     "rendered": Array [
@@ -2056,7 +2056,7 @@ ShallowWrapper {
         "nodeType": "host",
         "props": Object {
           "children": "Jake Thomas",
-          "className": "box-ui-task-assignment-name",
+          "className": "bcs-task-assignment-name",
         },
         "ref": null,
         "rendered": "Jake Thomas",
@@ -2081,11 +2081,11 @@ ShallowWrapper {
               theme="default"
             >
               <PlainButton
-                className="box-ui-task-check-btn"
+                className="bcs-task-check-btn"
                 onClick={[Function]}
               >
                 <IconCheck
-                  className="box-ui-task-check-icon"
+                  className="bcs-task-check-icon"
                   height={18}
                   width={18}
                 />
@@ -2104,18 +2104,18 @@ ShallowWrapper {
               theme="default"
             >
               <PlainButton
-                className="box-ui-task-x-btn"
+                className="bcs-task-x-btn"
                 onClick={[Function]}
               >
                 <IconClose
-                  className="box-ui-task-x-icon"
+                  className="bcs-task-x-icon"
                   height={18}
                   width={18}
                 />
               </PlainButton>
             </Tooltip>,
           ],
-          "className": "box-ui-task-assignment-actions",
+          "className": "bcs-task-assignment-actions",
         },
         "ref": null,
         "rendered": Array [
@@ -2125,11 +2125,11 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <PlainButton
-                className="box-ui-task-check-btn"
+                className="bcs-task-check-btn"
                 onClick={[Function]}
               >
                 <IconCheck
-                  className="box-ui-task-check-icon"
+                  className="bcs-task-check-icon"
                   height={18}
                   width={18}
                 />
@@ -2150,11 +2150,11 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "children": <IconCheck
-                  className="box-ui-task-check-icon"
+                  className="bcs-task-check-icon"
                   height={18}
                   width={18}
                 />,
-                "className": "box-ui-task-check-btn",
+                "className": "bcs-task-check-btn",
                 "onClick": [Function],
               },
               "ref": null,
@@ -2163,7 +2163,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "function",
                 "props": Object {
-                  "className": "box-ui-task-check-icon",
+                  "className": "bcs-task-check-icon",
                   "height": 18,
                   "width": 18,
                 },
@@ -2181,11 +2181,11 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <PlainButton
-                className="box-ui-task-x-btn"
+                className="bcs-task-x-btn"
                 onClick={[Function]}
               >
                 <IconClose
-                  className="box-ui-task-x-icon"
+                  className="bcs-task-x-icon"
                   height={18}
                   width={18}
                 />
@@ -2206,11 +2206,11 @@ ShallowWrapper {
               "nodeType": "function",
               "props": Object {
                 "children": <IconClose
-                  className="box-ui-task-x-icon"
+                  className="bcs-task-x-icon"
                   height={18}
                   width={18}
                 />,
-                "className": "box-ui-task-x-btn",
+                "className": "bcs-task-x-btn",
                 "onClick": [Function],
               },
               "ref": null,
@@ -2219,7 +2219,7 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "function",
                 "props": Object {
-                  "className": "box-ui-task-x-icon",
+                  "className": "bcs-task-x-icon",
                   "height": 18,
                   "width": 18,
                 },
@@ -2245,12 +2245,12 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-task-assignment-name"
+            className="bcs-task-assignment-name"
           >
             Jake Thomas
           </div>,
           <div
-            className="box-ui-task-assignment-actions"
+            className="bcs-task-assignment-actions"
           >
             <Tooltip
               constrainToScrollParent={false}
@@ -2265,11 +2265,11 @@ ShallowWrapper {
               theme="default"
             >
               <PlainButton
-                className="box-ui-task-check-btn"
+                className="bcs-task-check-btn"
                 onClick={[Function]}
               >
                 <IconCheck
-                  className="box-ui-task-check-icon"
+                  className="bcs-task-check-icon"
                   height={18}
                   width={18}
                 />
@@ -2288,11 +2288,11 @@ ShallowWrapper {
               theme="default"
             >
               <PlainButton
-                className="box-ui-task-x-btn"
+                className="bcs-task-x-btn"
                 onClick={[Function]}
               >
                 <IconClose
-                  className="box-ui-task-x-icon"
+                  className="bcs-task-x-icon"
                   height={18}
                   width={18}
                 />
@@ -2300,7 +2300,7 @@ ShallowWrapper {
             </Tooltip>
           </div>,
         ],
-        "className": "box-ui-task-pending-assignment",
+        "className": "bcs-task-pending-assignment",
       },
       "ref": null,
       "rendered": Array [
@@ -2310,7 +2310,7 @@ ShallowWrapper {
           "nodeType": "host",
           "props": Object {
             "children": "Jake Thomas",
-            "className": "box-ui-task-assignment-name",
+            "className": "bcs-task-assignment-name",
           },
           "ref": null,
           "rendered": "Jake Thomas",
@@ -2335,11 +2335,11 @@ ShallowWrapper {
                 theme="default"
               >
                 <PlainButton
-                  className="box-ui-task-check-btn"
+                  className="bcs-task-check-btn"
                   onClick={[Function]}
                 >
                   <IconCheck
-                    className="box-ui-task-check-icon"
+                    className="bcs-task-check-icon"
                     height={18}
                     width={18}
                   />
@@ -2358,18 +2358,18 @@ ShallowWrapper {
                 theme="default"
               >
                 <PlainButton
-                  className="box-ui-task-x-btn"
+                  className="bcs-task-x-btn"
                   onClick={[Function]}
                 >
                   <IconClose
-                    className="box-ui-task-x-icon"
+                    className="bcs-task-x-icon"
                     height={18}
                     width={18}
                   />
                 </PlainButton>
               </Tooltip>,
             ],
-            "className": "box-ui-task-assignment-actions",
+            "className": "bcs-task-assignment-actions",
           },
           "ref": null,
           "rendered": Array [
@@ -2379,11 +2379,11 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <PlainButton
-                  className="box-ui-task-check-btn"
+                  className="bcs-task-check-btn"
                   onClick={[Function]}
                 >
                   <IconCheck
-                    className="box-ui-task-check-icon"
+                    className="bcs-task-check-icon"
                     height={18}
                     width={18}
                   />
@@ -2404,11 +2404,11 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "children": <IconCheck
-                    className="box-ui-task-check-icon"
+                    className="bcs-task-check-icon"
                     height={18}
                     width={18}
                   />,
-                  "className": "box-ui-task-check-btn",
+                  "className": "bcs-task-check-btn",
                   "onClick": [Function],
                 },
                 "ref": null,
@@ -2417,7 +2417,7 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "function",
                   "props": Object {
-                    "className": "box-ui-task-check-icon",
+                    "className": "bcs-task-check-icon",
                     "height": 18,
                     "width": 18,
                   },
@@ -2435,11 +2435,11 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <PlainButton
-                  className="box-ui-task-x-btn"
+                  className="bcs-task-x-btn"
                   onClick={[Function]}
                 >
                   <IconClose
-                    className="box-ui-task-x-icon"
+                    className="bcs-task-x-icon"
                     height={18}
                     width={18}
                   />
@@ -2460,11 +2460,11 @@ ShallowWrapper {
                 "nodeType": "function",
                 "props": Object {
                   "children": <IconClose
-                    className="box-ui-task-x-icon"
+                    className="bcs-task-x-icon"
                     height={18}
                     width={18}
                   />,
-                  "className": "box-ui-task-x-btn",
+                  "className": "bcs-task-x-btn",
                   "onClick": [Function],
                 },
                 "ref": null,
@@ -2473,7 +2473,7 @@ ShallowWrapper {
                   "key": undefined,
                   "nodeType": "function",
                   "props": Object {
-                    "className": "box-ui-task-x-icon",
+                    "className": "bcs-task-x-icon",
                     "height": 18,
                     "width": 18,
                   },

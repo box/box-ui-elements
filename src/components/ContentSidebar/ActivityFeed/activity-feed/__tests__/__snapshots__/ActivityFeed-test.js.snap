@@ -54,7 +54,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-activity-feed-items-container"
+          className="bcs-activity-feed-items-container"
         >
           <ActiveState
             currentUser={
@@ -107,7 +107,7 @@ ShallowWrapper {
         </div>,
         null,
       ],
-      "className": "box-ui-activity-feed",
+      "className": "bcs-activity-feed",
       "onKeyDown": [Function],
     },
     "ref": null,
@@ -165,7 +165,7 @@ ShallowWrapper {
             onVersionInfo={undefined}
             translations={undefined}
           />,
-          "className": "box-ui-activity-feed-items-container",
+          "className": "bcs-activity-feed-items-container",
         },
         "ref": [Function],
         "rendered": Object {
@@ -232,7 +232,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-activity-feed-items-container"
+            className="bcs-activity-feed-items-container"
           >
             <ActiveState
               currentUser={
@@ -285,7 +285,7 @@ ShallowWrapper {
           </div>,
           null,
         ],
-        "className": "box-ui-activity-feed",
+        "className": "bcs-activity-feed",
         "onKeyDown": [Function],
       },
       "ref": null,
@@ -343,7 +343,7 @@ ShallowWrapper {
               onVersionInfo={undefined}
               translations={undefined}
             />,
-            "className": "box-ui-activity-feed-items-container",
+            "className": "bcs-activity-feed-items-container",
           },
           "ref": [Function],
           "rendered": Object {
@@ -443,7 +443,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-activity-feed-items-container"
+          className="bcs-activity-feed-items-container"
         >
           <EmptyState
             isLoading={false}
@@ -452,7 +452,7 @@ ShallowWrapper {
         </div>,
         null,
       ],
-      "className": "box-ui-activity-feed",
+      "className": "bcs-activity-feed",
       "onKeyDown": [Function],
     },
     "ref": null,
@@ -466,7 +466,7 @@ ShallowWrapper {
             isLoading={false}
             showCommentMessage={false}
           />,
-          "className": "box-ui-activity-feed-items-container",
+          "className": "bcs-activity-feed-items-container",
         },
         "ref": [Function],
         "rendered": Object {
@@ -495,7 +495,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-activity-feed-items-container"
+            className="bcs-activity-feed-items-container"
           >
             <EmptyState
               isLoading={false}
@@ -504,7 +504,7 @@ ShallowWrapper {
           </div>,
           null,
         ],
-        "className": "box-ui-activity-feed",
+        "className": "bcs-activity-feed",
         "onKeyDown": [Function],
       },
       "ref": null,
@@ -518,7 +518,7 @@ ShallowWrapper {
               isLoading={false}
               showCommentMessage={false}
             />,
-            "className": "box-ui-activity-feed-items-container",
+            "className": "bcs-activity-feed-items-container",
           },
           "ref": [Function],
           "rendered": Object {
@@ -580,7 +580,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-activity-feed-items-container"
+          className="bcs-activity-feed-items-container"
         >
           <EmptyState
             isLoading={true}
@@ -589,7 +589,7 @@ ShallowWrapper {
         </div>,
         null,
       ],
-      "className": "box-ui-activity-feed",
+      "className": "bcs-activity-feed",
       "onKeyDown": [Function],
     },
     "ref": null,
@@ -603,7 +603,7 @@ ShallowWrapper {
             isLoading={true}
             showCommentMessage={false}
           />,
-          "className": "box-ui-activity-feed-items-container",
+          "className": "bcs-activity-feed-items-container",
         },
         "ref": [Function],
         "rendered": Object {
@@ -632,7 +632,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-activity-feed-items-container"
+            className="bcs-activity-feed-items-container"
           >
             <EmptyState
               isLoading={true}
@@ -641,7 +641,7 @@ ShallowWrapper {
           </div>,
           null,
         ],
-        "className": "box-ui-activity-feed",
+        "className": "bcs-activity-feed",
         "onKeyDown": [Function],
       },
       "ref": null,
@@ -655,7 +655,7 @@ ShallowWrapper {
               isLoading={true}
               showCommentMessage={false}
             />,
-            "className": "box-ui-activity-feed-items-container",
+            "className": "bcs-activity-feed-items-container",
           },
           "ref": [Function],
           "rendered": Object {
@@ -731,7 +731,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="box-ui-activity-feed-items-container"
+          className="bcs-activity-feed-items-container"
         >
           <EmptyState
             isLoading={false}
@@ -740,7 +740,7 @@ ShallowWrapper {
         </div>,
         <ApprovalCommentForm
           approverSelectorContacts={undefined}
-          className="box-ui-activity-feed-comment-input "
+          className="bcs-activity-feed-comment-input "
           createComment={[Function]}
           createTask={[Function]}
           getApproverContactsWithQuery={[MockFunction]}
@@ -759,7 +759,7 @@ ShallowWrapper {
           }
         />,
       ],
-      "className": "box-ui-activity-feed",
+      "className": "bcs-activity-feed",
       "onKeyDown": [Function],
     },
     "ref": null,
@@ -773,7 +773,7 @@ ShallowWrapper {
             isLoading={false}
             showCommentMessage={true}
           />,
-          "className": "box-ui-activity-feed-items-container",
+          "className": "bcs-activity-feed-items-container",
         },
         "ref": [Function],
         "rendered": Object {
@@ -796,7 +796,7 @@ ShallowWrapper {
         "nodeType": "function",
         "props": Object {
           "approverSelectorContacts": undefined,
-          "className": "box-ui-activity-feed-comment-input ",
+          "className": "bcs-activity-feed-comment-input ",
           "createComment": [Function],
           "createTask": [Function],
           "getApproverContactsWithQuery": [MockFunction],
@@ -827,7 +827,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="box-ui-activity-feed-items-container"
+            className="bcs-activity-feed-items-container"
           >
             <EmptyState
               isLoading={false}
@@ -836,7 +836,7 @@ ShallowWrapper {
           </div>,
           <ApprovalCommentForm
             approverSelectorContacts={undefined}
-            className="box-ui-activity-feed-comment-input "
+            className="bcs-activity-feed-comment-input "
             createComment={[Function]}
             createTask={[Function]}
             getApproverContactsWithQuery={[MockFunction]}
@@ -855,7 +855,7 @@ ShallowWrapper {
             }
           />,
         ],
-        "className": "box-ui-activity-feed",
+        "className": "bcs-activity-feed",
         "onKeyDown": [Function],
       },
       "ref": null,
@@ -869,7 +869,7 @@ ShallowWrapper {
               isLoading={false}
               showCommentMessage={true}
             />,
-            "className": "box-ui-activity-feed-items-container",
+            "className": "bcs-activity-feed-items-container",
           },
           "ref": [Function],
           "rendered": Object {
@@ -892,7 +892,7 @@ ShallowWrapper {
           "nodeType": "function",
           "props": Object {
             "approverSelectorContacts": undefined,
-            "className": "box-ui-activity-feed-comment-input ",
+            "className": "bcs-activity-feed-comment-input ",
             "createComment": [Function],
             "createTask": [Function],
             "getApproverContactsWithQuery": [MockFunction],

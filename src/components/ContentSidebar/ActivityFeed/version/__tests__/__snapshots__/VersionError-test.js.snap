@@ -20,14 +20,14 @@ ShallowWrapper {
     "nodeType": "host",
     "props": Object {
       "children": <span
-        className="box-ui-version-message"
+        className="bcs-version-message"
       >
         <FormattedMessage
           defaultMessage="Multiple versions of this file"
           id="boxui.activityFeed.versionTooManyVersions"
         />
       </span>,
-      "className": "box-ui-version error",
+      "className": "bcs-version error",
     },
     "ref": null,
     "rendered": Object {
@@ -39,7 +39,7 @@ ShallowWrapper {
           defaultMessage="Multiple versions of this file"
           id="boxui.activityFeed.versionTooManyVersions"
         />,
-        "className": "box-ui-version-message",
+        "className": "bcs-version-message",
       },
       "ref": null,
       "rendered": Object {
@@ -65,14 +65,14 @@ ShallowWrapper {
       "nodeType": "host",
       "props": Object {
         "children": <span
-          className="box-ui-version-message"
+          className="bcs-version-message"
         >
           <FormattedMessage
             defaultMessage="Multiple versions of this file"
             id="boxui.activityFeed.versionTooManyVersions"
           />
         </span>,
-        "className": "box-ui-version error",
+        "className": "bcs-version error",
       },
       "ref": null,
       "rendered": Object {
@@ -84,7 +84,7 @@ ShallowWrapper {
             defaultMessage="Multiple versions of this file"
             id="boxui.activityFeed.versionTooManyVersions"
           />,
-          "className": "box-ui-version-message",
+          "className": "bcs-version-message",
         },
         "ref": null,
         "rendered": Object {

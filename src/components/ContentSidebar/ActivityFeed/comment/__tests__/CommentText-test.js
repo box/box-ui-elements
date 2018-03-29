@@ -28,8 +28,8 @@ describe('features/activity-feed/comment/CommentText', () => {
         const commentText = { taggedMessage: 'test' };
 
         const wrapper = mount(<CommentText id='123' {...commentText} />);
-        expect(wrapper.find('.box-ui-comment-text').text()).toEqual(commentText.taggedMessage);
-        expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(0);
+        expect(wrapper.find('.bcs-comment-text').text()).toEqual(commentText.taggedMessage);
+        expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(0);
         expect(wrapper.prop('translationEnabled')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false);
     });
@@ -40,7 +40,7 @@ describe('features/activity-feed/comment/CommentText', () => {
 
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
         
-        expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(1);
+        expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false);
     });
@@ -55,7 +55,7 @@ describe('features/activity-feed/comment/CommentText', () => {
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
         wrapper.setState({ isTranslation: true });
 
-        expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(1);
+        expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(1);
         expect(wrapper.state('isLoading')).toBe(false);
     });
 
@@ -82,11 +82,11 @@ describe('features/activity-feed/comment/CommentText', () => {
 
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
 
-        const translateBtn = wrapper.find('PlainButton.box-ui-comment-translate');
+        const translateBtn = wrapper.find('PlainButton.bcs-comment-translate');
         translateBtn.simulate('click');
 
         expect(onTranslateSpy).toHaveBeenCalledTimes(1);
-        expect(wrapper.find('.box-ui-comment-text-loading').length).toEqual(1);
+        expect(wrapper.find('.bcs-comment-text-loading').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(true);
         expect(wrapper.state('isLoading')).toBe(true);
     });
@@ -105,11 +105,11 @@ describe('features/activity-feed/comment/CommentText', () => {
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
         wrapper.setState({ isTranslation: false });
 
-        const translateBtn = wrapper.find('PlainButton.box-ui-comment-translate');
+        const translateBtn = wrapper.find('PlainButton.bcs-comment-translate');
         translateBtn.simulate('click');
 
         expect(onTranslateSpy).not.toHaveBeenCalled();
-        expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(1);
+        expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(true);
         expect(wrapper.state('isLoading')).toBe(false);
     });
@@ -128,11 +128,11 @@ describe('features/activity-feed/comment/CommentText', () => {
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
         wrapper.setState({ isTranslation: true });
 
-        const showOriginalBtn = wrapper.find('PlainButton.box-ui-comment-translate');
+        const showOriginalBtn = wrapper.find('PlainButton.bcs-comment-translate');
         showOriginalBtn.simulate('click');
 
         expect(onTranslateSpy).not.toHaveBeenCalled();
-        expect(wrapper.find('PlainButton.box-ui-comment-translate').length).toEqual(1);
+        expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false); 
     });

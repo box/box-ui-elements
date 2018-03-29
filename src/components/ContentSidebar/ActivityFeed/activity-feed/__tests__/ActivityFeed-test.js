@@ -121,7 +121,7 @@ describe('features/activity-feed/activity-feed/ActivityFeed', () => {
     test('should stop event propagation onKeyDown', () => {
         const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
         const stopPropagationSpy = jest.fn();
-        wrapper.find('.box-ui-activity-feed').simulate('keydown', {
+        wrapper.find('.bcs-activity-feed').simulate('keydown', {
             nativeEvent: {
                 stopImmediatePropagation: stopPropagationSpy
             }

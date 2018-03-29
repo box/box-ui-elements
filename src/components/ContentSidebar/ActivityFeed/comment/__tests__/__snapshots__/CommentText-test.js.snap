@@ -33,7 +33,7 @@ ShallowWrapper {
         ],
         null,
       ],
-      "className": "box-ui-comment-text",
+      "className": "bcs-comment-text",
     },
     "ref": null,
     "rendered": Array [
@@ -73,7 +73,7 @@ ShallowWrapper {
           ],
           null,
         ],
-        "className": "box-ui-comment-text",
+        "className": "bcs-comment-text",
       },
       "ref": null,
       "rendered": Array [
@@ -151,7 +151,7 @@ ShallowWrapper {
         ],
         null,
       ],
-      "className": "box-ui-comment-text",
+      "className": "bcs-comment-text",
     },
     "ref": null,
     "rendered": Array [
@@ -229,7 +229,7 @@ ShallowWrapper {
           ],
           null,
         ],
-        "className": "box-ui-comment-text",
+        "className": "bcs-comment-text",
       },
       "ref": null,
       "rendered": Array [

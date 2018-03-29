@@ -17,7 +17,7 @@ type Props = {
 };
 
 const EmptyState = ({ isLoading, showCommentMessage }: Props): ReactNode => (
-    <div className='box-ui-activity-feed-empty-state'>
+    <div className='bcs-activity-feed-empty-state'>
         <IconActivityFeedEmptyState />
         {isLoading ? (
             <LoadingIndicator />

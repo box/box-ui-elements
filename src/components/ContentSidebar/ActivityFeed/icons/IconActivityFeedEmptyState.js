@@ -15,7 +15,7 @@ type Props = {
 
 const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }: Props): ReactNode => (
     <AccessibleSVG
-        className={`box-ui-activity-feed-empty-state-illustration ${className}`}
+        className={`bcs-activity-feed-empty-state-illustration ${className}`}
         width={width}
         height={height}
         viewBox='0 0 90 90'

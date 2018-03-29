@@ -38,7 +38,7 @@ const AddApproval = ({
 }: Props): ReactNode => (
     <div className='comment-add-approver'>
         <Checkbox
-            className='box-ui-comment-add-approver-checkbox'
+            className='bcs-comment-add-approver-checkbox'
             label={formatMessage(messages.approvalAddTask)}
             name='addApproval'
             isChecked={isAddApprovalVisible}

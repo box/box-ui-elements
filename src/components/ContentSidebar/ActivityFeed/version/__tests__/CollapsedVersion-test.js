@@ -44,7 +44,7 @@ describe('features/activity-feed/version/CollapsedVersion', () => {
         const wrapper = render(item);
         const formattedMessage = wrapper.find('FormattedMessage');
 
-        expect(wrapper.hasClass('box-ui-collapsed-version')).toBe(true);
+        expect(wrapper.hasClass('bcs-collapsed-version')).toBe(true);
         expect(wrapper).toMatchSnapshot();
 
         const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
@@ -79,7 +79,7 @@ describe('features/activity-feed/version/CollapsedVersion', () => {
         const wrapper = render(item);
         const formattedMessage = wrapper.find('FormattedMessage');
 
-        expect(wrapper.hasClass('box-ui-collapsed-version')).toBe(true);
+        expect(wrapper.hasClass('bcs-collapsed-version')).toBe(true);
         expect(formattedMessage.length).toBe(0);
     });
 });

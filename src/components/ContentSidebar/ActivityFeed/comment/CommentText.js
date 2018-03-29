@@ -68,11 +68,11 @@ class CommentText extends Component<Props> {
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : taggedMessage;
         return isLoading ? (
-            <div className='box-ui-comment-text-loading'>
+            <div className='bcs-comment-text-loading'>
                 <LoadingIndicator size='small' />
             </div>
         ) : (
-            <div className='box-ui-comment-text'>
+            <div className='bcs-comment-text'>
                 {formatTaggedMessage(commentToDisplay, id, false)}
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>

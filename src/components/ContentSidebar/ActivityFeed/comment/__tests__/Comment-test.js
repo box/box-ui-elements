@@ -76,13 +76,13 @@ describe('features/activity-feed/comment/Comment', () => {
 
     test('should correctly add is-focused class when comment is focused', () => {
         const wrapper = render();
-        const comment = wrapper.find('.box-ui-comment');
+        const comment = wrapper.find('.bcs-comment');
 
         expect(comment.hasClass('is-focused')).toBe(false);
         comment.simulate('focus');
-        expect(wrapper.find('.box-ui-comment').hasClass('is-focused')).toBe(true);
+        expect(wrapper.find('.bcs-comment').hasClass('is-focused')).toBe(true);
         comment.simulate('blur');
-        expect(wrapper.find('.box-ui-comment').hasClass('is-focused')).toBe(false);
+        expect(wrapper.find('.bcs-comment').hasClass('is-focused')).toBe(false);
     });
 
     test('should correctly render comment when translation is enabled', () => {

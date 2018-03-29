@@ -40,7 +40,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <span
-          className="box-ui-version-message"
+          className="bcs-version-message"
         >
           <FormattedMessage
             defaultMessage="{numberOfCollaborators} collaborators uploaded versions {versions}"
@@ -49,7 +49,7 @@ ShallowWrapper {
               Object {
                 "numberOfCollaborators": 2,
                 "versions": <span
-                  className="box-ui-version-range"
+                  className="bcs-version-range"
                 >
                   1
                    - 
@@ -61,7 +61,7 @@ ShallowWrapper {
         </span>,
         null,
       ],
-      "className": "box-ui-collapsed-version",
+      "className": "bcs-collapsed-version",
     },
     "ref": null,
     "rendered": Array [
@@ -77,7 +77,7 @@ ShallowWrapper {
               Object {
                 "numberOfCollaborators": 2,
                 "versions": <span
-                  className="box-ui-version-range"
+                  className="bcs-version-range"
                 >
                   1
                    - 
@@ -86,7 +86,7 @@ ShallowWrapper {
               }
             }
           />,
-          "className": "box-ui-version-message",
+          "className": "bcs-version-message",
         },
         "ref": null,
         "rendered": Object {
@@ -99,7 +99,7 @@ ShallowWrapper {
             "values": Object {
               "numberOfCollaborators": 2,
               "versions": <span
-                className="box-ui-version-range"
+                className="bcs-version-range"
               >
                 1
                  - 
@@ -125,7 +125,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <span
-            className="box-ui-version-message"
+            className="bcs-version-message"
           >
             <FormattedMessage
               defaultMessage="{numberOfCollaborators} collaborators uploaded versions {versions}"
@@ -134,7 +134,7 @@ ShallowWrapper {
                 Object {
                   "numberOfCollaborators": 2,
                   "versions": <span
-                    className="box-ui-version-range"
+                    className="bcs-version-range"
                   >
                     1
                      - 
@@ -146,7 +146,7 @@ ShallowWrapper {
           </span>,
           null,
         ],
-        "className": "box-ui-collapsed-version",
+        "className": "bcs-collapsed-version",
       },
       "ref": null,
       "rendered": Array [
@@ -162,7 +162,7 @@ ShallowWrapper {
                 Object {
                   "numberOfCollaborators": 2,
                   "versions": <span
-                    className="box-ui-version-range"
+                    className="bcs-version-range"
                   >
                     1
                      - 
@@ -171,7 +171,7 @@ ShallowWrapper {
                 }
               }
             />,
-            "className": "box-ui-version-message",
+            "className": "bcs-version-message",
           },
           "ref": null,
           "rendered": Object {
@@ -184,7 +184,7 @@ ShallowWrapper {
               "values": Object {
                 "numberOfCollaborators": 2,
                 "versions": <span
-                  className="box-ui-version-range"
+                  className="bcs-version-range"
                 >
                   1
                    - 
@@ -218,7 +218,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <span
-    className="box-ui-version-range"
+    className="bcs-version-range"
   >
     1
      - 
@@ -241,7 +241,7 @@ ShallowWrapper {
         " - ",
         10,
       ],
-      "className": "box-ui-version-range",
+      "className": "bcs-version-range",
     },
     "ref": null,
     "rendered": Array [
@@ -262,7 +262,7 @@ ShallowWrapper {
           " - ",
           10,
         ],
-        "className": "box-ui-version-range",
+        "className": "bcs-version-range",
       },
       "ref": null,
       "rendered": Array [
@@ -319,7 +319,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <span
-          className="box-ui-version-message"
+          className="bcs-version-message"
         >
           <FormattedMessage
             defaultMessage="{name} uploaded versions {versions}"
@@ -330,7 +330,7 @@ ShallowWrapper {
                   Person one
                 </strong>,
                 "versions": <span
-                  className="box-ui-version-range"
+                  className="bcs-version-range"
                 >
                   1
                    - 
@@ -342,7 +342,7 @@ ShallowWrapper {
         </span>,
         null,
       ],
-      "className": "box-ui-collapsed-version",
+      "className": "bcs-collapsed-version",
     },
     "ref": null,
     "rendered": Array [
@@ -360,7 +360,7 @@ ShallowWrapper {
                   Person one
                 </strong>,
                 "versions": <span
-                  className="box-ui-version-range"
+                  className="bcs-version-range"
                 >
                   1
                    - 
@@ -369,7 +369,7 @@ ShallowWrapper {
               }
             }
           />,
-          "className": "box-ui-version-message",
+          "className": "bcs-version-message",
         },
         "ref": null,
         "rendered": Object {
@@ -384,7 +384,7 @@ ShallowWrapper {
                 Person one
               </strong>,
               "versions": <span
-                className="box-ui-version-range"
+                className="bcs-version-range"
               >
                 1
                  - 
@@ -410,7 +410,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <span
-            className="box-ui-version-message"
+            className="bcs-version-message"
           >
             <FormattedMessage
               defaultMessage="{name} uploaded versions {versions}"
@@ -421,7 +421,7 @@ ShallowWrapper {
                     Person one
                   </strong>,
                   "versions": <span
-                    className="box-ui-version-range"
+                    className="bcs-version-range"
                   >
                     1
                      - 
@@ -433,7 +433,7 @@ ShallowWrapper {
           </span>,
           null,
         ],
-        "className": "box-ui-collapsed-version",
+        "className": "bcs-collapsed-version",
       },
       "ref": null,
       "rendered": Array [
@@ -451,7 +451,7 @@ ShallowWrapper {
                     Person one
                   </strong>,
                   "versions": <span
-                    className="box-ui-version-range"
+                    className="bcs-version-range"
                   >
                     1
                      - 
@@ -460,7 +460,7 @@ ShallowWrapper {
                 }
               }
             />,
-            "className": "box-ui-version-message",
+            "className": "bcs-version-message",
           },
           "ref": null,
           "rendered": Object {
@@ -475,7 +475,7 @@ ShallowWrapper {
                   Person one
                 </strong>,
                 "versions": <span
-                  className="box-ui-version-range"
+                  className="bcs-version-range"
                 >
                   1
                    - 
@@ -509,7 +509,7 @@ ShallowWrapper {
   "length": 1,
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <span
-    className="box-ui-version-range"
+    className="bcs-version-range"
   >
     1
      - 
@@ -532,7 +532,7 @@ ShallowWrapper {
         " - ",
         10,
       ],
-      "className": "box-ui-version-range",
+      "className": "bcs-version-range",
     },
     "ref": null,
     "rendered": Array [
@@ -553,7 +553,7 @@ ShallowWrapper {
           " - ",
           10,
         ],
-        "className": "box-ui-version-range",
+        "className": "bcs-version-range",
       },
       "ref": null,
       "rendered": Array [

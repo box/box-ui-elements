@@ -26,10 +26,10 @@ class InlineEdit extends Component<Props> {
     render(): ReactNode {
         const { onEdit } = this;
         return (
-            <div className='box-ui-comment-edit-container'>
+            <div className='bcs-comment-edit-container'>
                 <PlainButton
                     aria-label={this.props.intl.formatMessage(messages.editLabel)}
-                    className='box-ui-comment-edit'
+                    className='bcs-comment-edit'
                     onClick={onEdit}
                     type='button'
                 >
