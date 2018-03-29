@@ -76,7 +76,7 @@ class Task extends Component<Props> {
             translations
         } = this.props;
         return (
-            <div className={`bcs-task ${isPending || error ? 'is-pending' : ''}`}>
+            <div className={`bcs-task ${isPending || error ? 'bcs-is-pending' : ''}`}>
                 <Comment
                     createdAt={createdAt}
                     createdBy={createdBy}

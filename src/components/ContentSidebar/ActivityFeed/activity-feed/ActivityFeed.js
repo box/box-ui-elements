@@ -157,7 +157,7 @@ class ActivityFeed extends Component<Props, State> {
                         isDisabled={inputState.isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        className={`bcs-activity-feed-comment-input ${inputState.isDisabled ? 'is-disabled' : ''}`}
+                        className={`bcs-activity-feed-comment-input ${inputState.isDisabled ? 'bcs-is-disabled' : ''}`}
                         createComment={this.createCommentHandler}
                         createTask={handlers && handlers.tasks ? this.createTaskHandler : null}
                         getApproverContactsWithQuery={

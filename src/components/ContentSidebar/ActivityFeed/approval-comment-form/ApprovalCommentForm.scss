@@ -1,6 +1,6 @@
 @import '../../../styles/variables';
 
-.comment-input-container {
+.bcs-comment-input-container {
     border-top: solid 1px $off-white;
     display: flex;
 
@@ -12,19 +12,19 @@
         margin: 8px 10px;
     }
 
-    &.comment-input-is-open {
-        .comment-input {
+    &.bcs-comment-input-is-open {
+        .bcs-comment-input {
             .public-DraftEditor-content {
                 max-height: 140px;
                 min-height: 68px;
                 overflow: auto;
             }
 
-            ~ .comment-add-approver {
+            ~ .bcs-comment-add-approver {
                 display: block;
             }
 
-            ~ .comment-input-controls {
+            ~ .bcs-comment-input-controls {
                 display: block;
                 text-align: right;
             }
@@ -35,14 +35,14 @@
         }
     }
 
-    .avatar-container {
+    .bcs-avatar-container {
         height: 40px;
         margin-left: 20px;
         margin-right: 18px;
         margin-top: 20px;
     }
 
-    .comment-input-form-container {
+    .bcs-comment-input-form-container {
         flex: 1;
         margin-right: 20px;
         min-width: 0;
@@ -57,7 +57,7 @@
             white-space: nowrap;
         }
 
-        .comment-add-approver-date-input {
+        .bcs-comment-add-approver-date-input {
             margin-left: 0;
             margin-right: 0;
 
@@ -81,7 +81,7 @@
             }
         }
 
-        .comment-add-approver-fields-container {
+        .bcs-comment-add-approver-fields-container {
             border-top: 1px solid $off-white;
             display: flex;
             flex-direction: column;
@@ -93,7 +93,7 @@
         }
     }
 
-    .comment-input {
+    .bcs-comment-input {
         box-shadow: none;
         margin-bottom: 15px;
         margin-top: 20px;
@@ -107,7 +107,7 @@
             width: 100%;
         }
 
-        ~ .comment-input-controls {
+        ~ .bcs-comment-input-controls {
             display: none;
 
             .btn {
@@ -117,7 +117,7 @@
             }
         }
 
-        ~ .comment-add-approver {
+        ~ .bcs-comment-add-approver {
             display: none;
         }
 

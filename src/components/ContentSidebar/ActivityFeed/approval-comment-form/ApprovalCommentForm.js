@@ -197,21 +197,21 @@ class ApprovalCommentForm extends Component<Props, State> {
         } = this.props;
         const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
         const { avatarUrl, id, name } = user;
-        const classNames = cx('comment-input-container', className, {
-            'comment-input-is-open': isOpen
+        const classNames = cx('bcs-comment-input-container', className, {
+            'bcs-comment-input-is-open': isOpen
         });
 
         return (
             <div className={classNames}>
                 {!isEditing && (
-                    <div className='avatar-container'>
+                    <div className='bcs-avatar-container'>
                         <Avatar id={id} avatarUrl={avatarUrl} name={name} />
                     </div>
                 )}
-                <div className='comment-input-form-container'>
+                <div className='bcs-comment-input-form-container'>
                     <Form onChange={this.onFormChangeHandler} onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
-                            className='comment-input'
+                            className='bcs-comment-input'
                             contacts={isOpen ? mentionSelectorContacts : []}
                             editorState={commentEditorState}
                             hideLabel
@@ -226,8 +226,8 @@ class ApprovalCommentForm extends Component<Props, State> {
                             validateOnBlur={false}
                         />
                         <aside
-                            className={cx('at-mention-tip', {
-                                'accessibility-hidden': isOpen
+                            className={cx('bcs-at-mention-tip', {
+                                'bcs-accessibility-hidden': isOpen
                             })}
                         >
                             <FormattedMessage {...messages.atMentionTip} />

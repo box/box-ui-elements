@@ -43,7 +43,7 @@ class InlineDelete extends Component<Props> {
         return (
             <div
                 className={classNames('bcs-comment-delete-container', {
-                    'is-confirming': this.state.isConfirming
+                    'bcs-is-confirming': this.state.isConfirming
                 })}
             >
                 <Flyout onClose={this.handleFlyoutClose} onOpen={this.handleFlyoutOpen} position='middle-left'>

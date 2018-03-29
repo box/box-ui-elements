@@ -22,7 +22,7 @@ const EmptyState = ({ isLoading, showCommentMessage }: Props): ReactNode => (
         {isLoading ? (
             <LoadingIndicator />
         ) : (
-            <div className='empty-state-cta'>
+            <div className='bcs-empty-state-cta'>
                 <FormattedMessage {...messages.noActivity} />
                 {showCommentMessage ?
                     <FormattedMessage {...messages.noActivityCommentPrompt} />

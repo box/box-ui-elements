@@ -36,7 +36,7 @@ const AddApproval = ({
     onApproverSelectorRemove,
     onApproverSelectorSelect
 }: Props): ReactNode => (
-    <div className='comment-add-approver'>
+    <div className='bcs-comment-add-approver'>
         <Checkbox
             className='bcs-comment-add-approver-checkbox'
             label={formatMessage(messages.approvalAddTask)}

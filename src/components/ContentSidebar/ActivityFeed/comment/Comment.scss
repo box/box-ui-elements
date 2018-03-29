@@ -12,7 +12,7 @@
     width: 100%;
 
     &:hover,
-    &.is-focused {
+    &.bcs-is-focused {
         .bcs-comment-delete-container {
             opacity: 1;
         }
@@ -29,7 +29,7 @@
         right: 0;
         top: 0;
 
-        &.is-confirming {
+        &.bcs-is-confirming {
             opacity: 1;
         }
 
@@ -90,7 +90,7 @@
             vertical-align: top;
         }
     }
-    &.is-pending {
+    &.bcs-is-pending {
         opacity: .4;
 
         .bcs-comment-text {

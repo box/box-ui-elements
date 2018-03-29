@@ -1,7 +1,7 @@
 @import '../../../styles/variables';
 
 .bcs-task {
-    &.is-pending {
+    &.bcs-is-pending {
         .bcs-task-approvers-container {
             opacity: .4;
         }

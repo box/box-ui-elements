@@ -24,9 +24,9 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
         const wrapper = render();
 
         expect(wrapper.find('[contentEditable]').length).toEqual(1);
-        expect(wrapper.find('.comment-input-controls').length).toEqual(1);
-        expect(wrapper.find('.comment-input-controls').find('button').length).toEqual(2);
-        expect(wrapper.find('.at-mention-tip').hasClass('accessibility-hidden')).toBe(false);
+        expect(wrapper.find('.bcs-comment-input-controls').length).toEqual(1);
+        expect(wrapper.find('.bcs-comment-input-controls').find('button').length).toEqual(2);
+        expect(wrapper.find('.bcs-at-mention-tip').hasClass('bcs-accessibility-hidden')).toBe(false);
     });
 
     test('should call onFocus handler when input is focused', () => {
@@ -44,7 +44,7 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
 
         const wrapper = render({ onCancel: onCancelSpy });
 
-        const cancelButton = wrapper.find('Button.comment-input-cancel-btn');
+        const cancelButton = wrapper.find('Button.bcs-comment-input-cancel-btn');
         cancelButton.simulate('click');
         expect(onCancelSpy).toHaveBeenCalledTimes(1);
     });
@@ -52,8 +52,8 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
     test('should render open comment input and hidden tip when isOpen is true', () => {
         const wrapper = render({ isOpen: true });
 
-        expect(wrapper.find('.comment-input-is-open').length).toEqual(1);
-        expect(wrapper.find('.at-mention-tip').hasClass('accessibility-hidden')).toBe(true);
+        expect(wrapper.find('.bcs-comment-input-is-open').length).toEqual(1);
+        expect(wrapper.find('.bcs-at-mention-tip').hasClass('bcs-accessibility-hidden')).toBe(true);
     });
 
     test('should set required to false on comment input when not open', () => {
@@ -81,7 +81,7 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
     test('should render add approval ui when createTask handler is defined', () => {
         const wrapper = render({ createTask: jest.fn() });
 
-        expect(wrapper.find('.comment-add-approver').length).toEqual(1);
+        expect(wrapper.find('.bcs-comment-add-approver').length).toEqual(1);
     });
 
     test('should render add approval fields when add approver is checked', () => {
@@ -90,7 +90,7 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
         wrapper.instance().onFormChangeHandler({ addApproval: 'on' });
         wrapper.update();
 
-        expect(wrapper.find('.comment-add-approver-fields-container').length).toEqual(1);
+        expect(wrapper.find('.bcs-comment-add-approver-fields-container').length).toEqual(1);
     });
 
     withData(
@@ -107,7 +107,7 @@ describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () 
 
                 instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
 
-                const submitBtn = wrapper.find('PrimaryButton.comment-input-submit-btn');
+                const submitBtn = wrapper.find('PrimaryButton.bcs-comment-input-submit-btn');
                 const formEl = wrapper.find('form').getDOMNode();
                 formEl.checkValidity = () => !!expectedCallCount;
                 submitBtn.simulate('submit', { target: formEl });

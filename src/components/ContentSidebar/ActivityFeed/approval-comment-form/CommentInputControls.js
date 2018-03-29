@@ -16,11 +16,11 @@ type Props = {
 };
 
 const CommentInputControls = ({ onCancel }: Props): ReactNode => (
-    <div className='comment-input-controls'>
-        <Button className='comment-input-cancel-btn' onClick={onCancel} type='button'>
+    <div className='bcs-comment-input-controls'>
+        <Button className='bcs-comment-input-cancel-btn' onClick={onCancel} type='button'>
             <FormattedMessage {...messages.commentCancel} />
         </Button>
-        <PrimaryButton className='comment-input-submit-btn'>
+        <PrimaryButton className='bcs-comment-input-submit-btn'>
             <FormattedMessage {...messages.commentPost} />
         </PrimaryButton>
     </div>

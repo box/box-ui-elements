@@ -17,16 +17,16 @@ describe('features/activity-feed/comment/InlineDelete', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should set is-confirming class when confirm flyout is open', () => {
+    test('should set bcs-is-confirming class when confirm flyout is open', () => {
         const wrapper = render();
         const flyout = wrapper.find('Flyout');
-        expect(wrapper.hasClass('is-confirming')).toBe(false);
+        expect(wrapper.hasClass('bcs-is-confirming')).toBe(false);
         flyout.prop('onOpen')();
         wrapper.update();
-        expect(wrapper.hasClass('is-confirming')).toBe(true);
+        expect(wrapper.hasClass('bcs-is-confirming')).toBe(true);
         flyout.prop('onClose')();
         wrapper.update();
-        expect(wrapper.hasClass('is-confirming')).toBe(false);
+        expect(wrapper.hasClass('bcs-is-confirming')).toBe(false);
     });
 
     test('should call onDelete handler when comment deletion is confirmed', () => {

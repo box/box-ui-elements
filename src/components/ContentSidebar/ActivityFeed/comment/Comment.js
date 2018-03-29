@@ -120,8 +120,8 @@ class Comment extends Component<Props> {
             <div className='bcs-comment-container'>
                 <div
                     className={classNames('bcs-comment', {
-                        'is-pending': isPending || error,
-                        'is-focused': isFocused
+                        'bcs-is-pending': isPending || error,
+                        'bcs-is-focused': isFocused
                     })}
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
@@ -168,7 +168,7 @@ class Comment extends Component<Props> {
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 className={`bcs-activity-feed-comment-input ${
-                                    inputState.isDisabled ? 'is-disabled' : ''
+                                    inputState.isDisabled ? 'bcs-is-disabled' : ''
                                 }`}
                                 createComment={this.createCommentHandler}
                                 updateTask={this.updateTaskHandler}

@@ -80,7 +80,7 @@ describe('features/activity-feed/task/Task', () => {
         };
         const wrapper = shallow(<Task currentUser={currentUser} {...myTask} />);
 
-        expect(wrapper.hasClass('is-pending')).toBe(true);
+        expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
     test('should show actions for current user and if onTaskAssignmentUpdate is defined', () => {

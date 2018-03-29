@@ -47,7 +47,7 @@ const AddApprovalFields = ({
         }));
 
     return (
-        <div className='comment-add-approver-fields-container'>
+        <div className='bcs-comment-add-approver-fields-container'>
             <PillSelectorDropdown
                 error={approverSelectorError}
                 label={<FormattedMessage {...messages.approvalAssignees} />}
@@ -63,7 +63,7 @@ const AddApprovalFields = ({
                 ))}
             </PillSelectorDropdown>
             <DatePicker
-                className='comment-add-approver-date-input'
+                className='bcs-comment-add-approver-date-input'
                 label={<FormattedMessage {...messages.approvalDueDate} />}
                 minDate={new Date()}
                 name='approverDateInput'
