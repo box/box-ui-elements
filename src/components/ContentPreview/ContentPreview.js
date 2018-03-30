@@ -42,6 +42,7 @@ type Props = {
     fileId: string,
     version: string,
     isSmall: boolean,
+    autoFocus: boolean,
     showSidebar?: boolean,
     hasSidebar: boolean,
     canDownload?: boolean,
@@ -98,6 +99,7 @@ class ContentPreview extends PureComponent<Props, State> {
         canDownload: true,
         showDownload: true,
         hasHeader: false,
+        autoFocus: false,
         onLoad: noop,
         onNavigate: noop,
         onInteraction: noop,
@@ -189,7 +191,7 @@ class ContentPreview extends PureComponent<Props, State> {
         this.loadScript();
         this.fetchFile(fileId);
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        focus(this.rootElement);
+        this.focusPreview();
     }
 
     /**
@@ -271,6 +273,21 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Focuses the preview on load.
+     * We should respect auto focus when component 1st mounts.
+     *
+     * @param {boolean} ignoreAutoFocus - ignores auto focus prop
+     * @return {void}
+     */
+    focusPreview(ignoreAutoFocus = false) {
+        const { autoFocus }: Props = this.props;
+        const shouldAutoFocus = ignoreAutoFocus ? true : autoFocus;
+        if (shouldAutoFocus && !isInputElement(document.activeElement)) {
+            focus(this.rootElement);
+        }
+    }
+
+    /**
      * Calls destroy of preview
      *
      * @return {void}
@@ -339,6 +356,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const currentIndex = this.getFileIndex();
         const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
         onLoad(data);
+        this.focusPreview(true);
         if (this.preview && filesToPrefetch.length > 1) {
             this.prefetch(filesToPrefetch);
         }
@@ -373,7 +391,7 @@ class ContentPreview extends PureComponent<Props, State> {
             skipServerUpdate: true,
             header: 'none',
             container: `#${this.id} .bcpr-content`,
-            useHotKeys: false
+            useHotkeys: false
         };
 
         this.preview = new Preview();
@@ -629,7 +647,7 @@ class ContentPreview extends PureComponent<Props, State> {
         }
 
         if (typeof viewer.onKeydown === 'function') {
-            consumed = !!viewer.onKeydown(key);
+            consumed = !!viewer.onKeydown(key, event.nativeEvent);
         }
 
         if (!consumed) {
