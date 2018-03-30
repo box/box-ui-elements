@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import getProp from 'lodash/get';
 import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
 import { addTime } from 'box-react-ui/lib/utils/datetime';
@@ -56,7 +56,7 @@ const SidebarNotices = ({ file }: Props) => {
     }
 
     return (
-        <div>
+        <Fragment>
             {!!itemExpiration && (
                 <ItemExpirationNotice
                     expiration={<DateField date={itemExpiration} dateFormat={NOTICE_DATE_FORMAT} relative={false} />}
@@ -70,7 +70,7 @@ const SidebarNotices = ({ file }: Props) => {
                     }
                 />
             )}
-        </div>
+        </Fragment>
     );
 };
 

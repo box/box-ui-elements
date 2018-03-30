@@ -25,11 +25,7 @@ const SidebarVersions = ({
         return null;
     }
 
-    return (
-        <div>
-            <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={total_count + 1} />
-        </div>
-    );
+    return <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={total_count + 1} />;
 };
 
 export default SidebarVersions;
