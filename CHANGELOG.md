@@ -1,6 +1,16 @@
+<a name="4.4.1"></a>
+## <small>4.4.1 (2018-03-30)</small>
+
+* Fix: IE11 issue with left navigation icon in preview (#248) ([27e0477](https://github.com/box/box-ui-elements/commit/27e0477)), closes [#248](https://github.com/box/box-ui-elements/issues/248)
+* Chore: Respect autoFocus and useHotkeys properties (#246) ([6423292](https://github.com/box/box-ui-elements/commit/6423292)), closes [#246](https://github.com/box/box-ui-elements/issues/246)
+* Docs: Add issue report template (#247) ([ed3f097](https://github.com/box/box-ui-elements/commit/ed3f097)), closes [#247](https://github.com/box/box-ui-elements/issues/247)
+
+
+
 <a name="4.4.0"></a>
 ## 4.4.0 (2018-03-30)
 
+* Release: 4.4.0 ([342356d](https://github.com/box/box-ui-elements/commit/342356d))
 * Fix: Do not lower case event.key (#239) ([b182ba1](https://github.com/box/box-ui-elements/commit/b182ba1)), closes [#239](https://github.com/box/box-ui-elements/issues/239)
 * Fix: Don't reference preview before its loaded (#232) ([f64d448](https://github.com/box/box-ui-elements/commit/f64d448)), closes [#232](https://github.com/box/box-ui-elements/issues/232) [#229](https://github.com/box/box-ui-elements/issues/229)
 * Fix: Only focus preview when auto focus is allowed (#244) ([e9f1884](https://github.com/box/box-ui-elements/commit/e9f1884)), closes [#244](https://github.com/box/box-ui-elements/issues/244)
