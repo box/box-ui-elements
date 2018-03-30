@@ -21,14 +21,12 @@ type Props = {
     canUpload: boolean,
     canCreateNewFolder: boolean,
     view: View,
-    rootElement: HTMLElement,
     isSmall: boolean
 };
 
 const SubHeader = ({
     rootId,
     rootName,
-    rootElement,
     onItemClick,
     onSortChange,
     currentCollection,
@@ -43,7 +41,6 @@ const SubHeader = ({
         <SubHeaderLeft
             rootId={rootId}
             rootName={rootName}
-            rootElement={rootElement}
             onItemClick={onItemClick}
             currentCollection={currentCollection}
             view={view}
@@ -51,7 +48,6 @@ const SubHeader = ({
         />
         <SubHeaderRight
             view={view}
-            rootElement={rootElement}
             currentCollection={currentCollection}
             canUpload={canUpload}
             canCreateNewFolder={canCreateNewFolder}

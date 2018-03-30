@@ -21,11 +21,10 @@ const ICON_CHECK_COLOR = '#26C281';
 type Props = {
     status: UploadStatus,
     onClick: Function,
-    intl: any,
-    rootElement: HTMLElement
+    intl: any
 };
 
-const ItemAction = ({ status, onClick, intl, rootElement }: Props) => {
+const ItemAction = ({ status, onClick, intl }: Props) => {
     let icon = <IconClose />;
     let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
 
@@ -48,7 +47,7 @@ const ItemAction = ({ status, onClick, intl, rootElement }: Props) => {
 
     return (
         <div className='bcu-item-action'>
-            <Tooltip text={tooltip} position='top-left' bodyElement={rootElement}>
+            <Tooltip text={tooltip} position='top-left'>
                 <PlainButton type='button' onClick={onClick}>
                     {icon}
                 </PlainButton>
