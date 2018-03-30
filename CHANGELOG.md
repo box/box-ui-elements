@@ -1,6 +1,25 @@
+<a name="4.4.0"></a>
+## 4.4.0 (2018-03-30)
+
+* Fix: Do not lower case event.key (#239) ([b182ba1](https://github.com/box/box-ui-elements/commit/b182ba1)), closes [#239](https://github.com/box/box-ui-elements/issues/239)
+* Fix: Don't reference preview before its loaded (#232) ([f64d448](https://github.com/box/box-ui-elements/commit/f64d448)), closes [#232](https://github.com/box/box-ui-elements/issues/232) [#229](https://github.com/box/box-ui-elements/issues/229)
+* Fix: Only focus preview when auto focus is allowed (#244) ([e9f1884](https://github.com/box/box-ui-elements/commit/e9f1884)), closes [#244](https://github.com/box/box-ui-elements/issues/244)
+* Fix: Pass in correct options to preview to allow dl/print (#235) ([4c4f4c6](https://github.com/box/box-ui-elements/commit/4c4f4c6)), closes [#235](https://github.com/box/box-ui-elements/issues/235)
+* Breaking: Render dropdowns and tooltips popups into body (#243) ([cee8b20](https://github.com/box/box-ui-elements/commit/cee8b20)), closes [#243](https://github.com/box/box-ui-elements/issues/243)
+* Mojito: Update translations (#231) ([51cd101](https://github.com/box/box-ui-elements/commit/51cd101)), closes [#231](https://github.com/box/box-ui-elements/issues/231)
+* Mojito: Update translations (#240) ([3748e2a](https://github.com/box/box-ui-elements/commit/3748e2a)), closes [#240](https://github.com/box/box-ui-elements/issues/240)
+* New: Access stats component (#227) ([c10262a](https://github.com/box/box-ui-elements/commit/c10262a)), closes [#227](https://github.com/box/box-ui-elements/issues/227)
+* New: Add shared link expiration to details tab (#206) ([d4256d3](https://github.com/box/box-ui-elements/commit/d4256d3)), closes [#206](https://github.com/box/box-ui-elements/issues/206)
+* New: version history in details tab (#220) ([935f617](https://github.com/box/box-ui-elements/commit/935f617)), closes [#220](https://github.com/box/box-ui-elements/issues/220)
+* Chore: Add nsp package and hook to build pipeline (#236) ([2b0886b](https://github.com/box/box-ui-elements/commit/2b0886b)), closes [#236](https://github.com/box/box-ui-elements/issues/236)
+* Chore: update preview version (#234) ([29c05b6](https://github.com/box/box-ui-elements/commit/29c05b6)), closes [#234](https://github.com/box/box-ui-elements/issues/234)
+
+
+
 <a name="4.3.2"></a>
 ## <small>4.3.2 (2018-03-15)</small>
 
+* Release: 4.3.2 ([468ea1f](https://github.com/box/box-ui-elements/commit/468ea1f))
 * Fix: Show skills even if one card is valid (#225) ([eacea35](https://github.com/box/box-ui-elements/commit/eacea35)), closes [#225](https://github.com/box/box-ui-elements/issues/225)
 
 
