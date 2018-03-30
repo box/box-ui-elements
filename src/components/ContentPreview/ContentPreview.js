@@ -43,6 +43,7 @@ type Props = {
     version: string,
     isSmall: boolean,
     autoFocus: boolean,
+    useHotkeys: boolean,
     showSidebar?: boolean,
     hasSidebar: boolean,
     canDownload?: boolean,
@@ -100,6 +101,7 @@ class ContentPreview extends PureComponent<Props, State> {
         showDownload: true,
         hasHeader: false,
         autoFocus: false,
+        useHotkeys: true,
         onLoad: noop,
         onNavigate: noop,
         onInteraction: noop,
@@ -274,15 +276,12 @@ class ContentPreview extends PureComponent<Props, State> {
 
     /**
      * Focuses the preview on load.
-     * We should respect auto focus when component 1st mounts.
      *
-     * @param {boolean} ignoreAutoFocus - ignores auto focus prop
      * @return {void}
      */
-    focusPreview(ignoreAutoFocus = false) {
+    focusPreview() {
         const { autoFocus }: Props = this.props;
-        const shouldAutoFocus = ignoreAutoFocus ? true : autoFocus;
-        if (shouldAutoFocus && !isInputElement(document.activeElement)) {
+        if (autoFocus && !isInputElement(document.activeElement)) {
             focus(this.rootElement);
         }
     }
@@ -356,7 +355,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const currentIndex = this.getFileIndex();
         const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
         onLoad(data);
-        this.focusPreview(true);
+        this.focusPreview();
         if (this.preview && filesToPrefetch.length > 1) {
             this.prefetch(filesToPrefetch);
         }
@@ -636,6 +635,11 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+        const { useHotkeys }: Props = this.props;
+        if (!useHotkeys) {
+            return;
+        }
+
         let consumed = false;
         const key = decode(event);
         const viewer = this.getPreviewer();
