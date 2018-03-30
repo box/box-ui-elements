@@ -84,7 +84,6 @@ const ItemList = ({
     const nameCell = nameCellRenderer(
         rootId,
         view,
-        rootElement,
         onItemClick,
         onItemSelect,
         canPreview,
@@ -106,8 +105,7 @@ const ItemList = ({
         onItemRename,
         onItemShare,
         onItemPreview,
-        isSmall,
-        rootElement
+        isSmall
     );
     const isRecents: boolean = view === VIEW_RECENTS;
     const { id, items = [], sortBy, sortDirection }: Collection = currentCollection;

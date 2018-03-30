@@ -16,11 +16,10 @@ type Props = {
     items: UploadItem[],
     onItemActionClick: Function,
     toggleUploadsManager: Function,
-    view: View,
-    rootElement: HTMLElement
+    view: View
 };
 
-const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, isExpanded, rootElement }: Props) => {
+const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, isExpanded }: Props) => {
     const isVisible = items.length > 0;
 
     /**
@@ -66,7 +65,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
                 view={view}
             />
             <div className='bcu-uploads-manager-item-list'>
-                <ItemList items={items} view={view} onClick={onItemActionClick} rootElement={rootElement} />
+                <ItemList items={items} view={view} onClick={onItemActionClick} />
             </div>
         </div>
     );

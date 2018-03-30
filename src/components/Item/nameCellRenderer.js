@@ -14,7 +14,6 @@ import './NameCell.scss';
 export default (
     rootId: string,
     view: View,
-    rootElement: HTMLElement,
     onItemClick: Function,
     onItemSelect?: Function,
     canPreview: boolean = false,
@@ -30,13 +29,7 @@ export default (
             onFocus={onItemSelect}
         />
         {view === VIEW_SEARCH || showDetails ? (
-            <ItemDetails
-                item={rowData}
-                view={view}
-                rootId={rootId}
-                onItemClick={onItemClick}
-                rootElement={rootElement}
-            />
+            <ItemDetails item={rowData} view={view} rootId={rootId} onItemClick={onItemClick} />
         ) : null}
     </div>
 );
