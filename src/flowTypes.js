@@ -187,8 +187,7 @@ export type BoxItem = {
     selected?: boolean,
     metadata?: MetadataType,
     file_version?: BoxItemVersion,
-    is_download_available: boolean,
-    inlineError?: InlineError
+    is_download_available: boolean
 };
 
 export type BoxItemCollection = {
