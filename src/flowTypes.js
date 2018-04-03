@@ -347,9 +347,8 @@ export type MultiputData = {
 };
 
 export type FileVersions = {
-    total_count?: number,
-    entries?: Array<BoxItemVersion>,
-    maskError?: MaskError
+    total_count: number,
+    entries: Array<BoxItemVersion>
 };
 
 export type MaskError = {

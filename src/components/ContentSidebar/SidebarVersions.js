@@ -14,7 +14,13 @@ type Props = {
     versions?: FileVersions
 };
 
-export const SidebarVersions = ({ onVersionHistoryClick, versions = {} }: Props) => {
+export const SidebarVersions = ({
+    onVersionHistoryClick,
+    versions = {
+        total_count: 0,
+        entries: []
+    }
+}: Props) => {
     const { total_count } = versions;
 
     if (!total_count) {
