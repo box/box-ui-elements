@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/withErrorHandling should render a MaskError 1`] = `
+<ErrorMask
+  errorHeader="foo"
+/>
+`;
+
+exports[`components/withErrorHandling should render an InlineError, along with the wrapped component 1`] = `
+<React.Fragment>
+  <InlineError
+    title="foo"
+  >
+    bar
+  </InlineError>
+  <WrappedComponent />
+</React.Fragment>
+`;
+
+exports[`components/withErrorHandling should render the wrapped component 1`] = `<WrappedComponent />`;

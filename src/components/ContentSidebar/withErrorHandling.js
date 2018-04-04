@@ -22,17 +22,16 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
 }: Props) => {
     const getWrappedComponent = () => <WrappedComponent {...rest} />;
 
-    if (inlineError) {
+    if (maskError) {
+        return <ErrorMask {...maskError} />;
+    } else if (inlineError) {
         return (
             <React.Fragment>
                 <InlineError title={inlineError.title}>{inlineError.content}</InlineError>
                 {getWrappedComponent()}
             </React.Fragment>
         );
-    } else if (maskError) {
-        return <ErrorMask {...maskError} />;
     }
-
     return getWrappedComponent();
 };
 

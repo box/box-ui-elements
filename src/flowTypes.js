@@ -358,7 +358,7 @@ export type MaskError = {
 
 export type InlineError = {
     title: React.Node,
-    content?: React.Node
+    content: React.Node
 };
 
 export type Errors = {
