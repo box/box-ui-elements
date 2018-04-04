@@ -38,7 +38,8 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
     test('should render an error', () => {
         const props = {
             inlineError: {
-                title: 'foo'
+                title: 'foo',
+                content: 'bar'
             }
         };
         const wrapper = shallow(<SidebarFileProperties {...props} />).dive();

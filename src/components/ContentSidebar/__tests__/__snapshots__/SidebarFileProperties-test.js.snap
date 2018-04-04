@@ -4,7 +4,9 @@ exports[`components/ContentSidebar/SidebarFileProperties should render an error 
 <React.Fragment>
   <InlineError
     title="foo"
-  />
+  >
+    bar
+  </InlineError>
   <SidebarFileProperties
     intl={
       Object {

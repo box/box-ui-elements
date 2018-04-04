@@ -34,9 +34,7 @@ describe('components/ContentSidebar/SidebarVersions', () => {
     test('should render an error', () => {
         const props = {
             maskError: {
-                errorHeader: {
-                    defaultMessage: 'foo'
-                }
+                errorHeader: 'foo'
             }
         };
         const wrapper = shallow(<SidebarVersions {...props} />);

@@ -4,18 +4,12 @@ exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render an err
 <Component
   maskError={
     Object {
-      "errorHeader": Object {
-        "defaultMessage": "foo",
-      },
+      "errorHeader": "foo",
     }
   }
 >
   <error-mask-mock
-    errorHeader={
-      Object {
-        "defaultMessage": "foo",
-      }
-    }
+    errorHeader="foo"
   />
 </Component>
 `;

@@ -67,9 +67,7 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
     test('should render an error', () => {
         const props = {
             maskError: {
-                errorHeader: {
-                    defaultMessage: 'foo'
-                }
+                errorHeader: 'foo'
             }
         };
         const wrapper = mount(<SidebarSkillsCard {...props} />);
