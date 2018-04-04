@@ -20,7 +20,7 @@ type Props = {
 // TODO (@ddemicco): Revisit this during API integration
 const MAX_EVENTS = Number.MAX_SAFE_INTEGER;
 
-const SidebarVersions = ({
+const SidebarAccessStats = ({
     onAccessStatsClick,
     accessStats = {
         preview_count: 0,
@@ -49,4 +49,4 @@ const SidebarVersions = ({
     );
 };
 
-export default SidebarVersions;
+export default SidebarAccessStats;
