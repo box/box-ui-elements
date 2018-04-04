@@ -21,7 +21,7 @@ type Props = {
     skill: SkillCard
 };
 
-export const SidebarSkillsCard = ({ skill, onInteraction, getPreviewer, rootElement, appElement }: Props) => {
+const SidebarSkillsCard = ({ skill, onInteraction, getPreviewer, rootElement, appElement }: Props) => {
     const onSkillInteraction = (data: any) => {
         onInteraction({
             skill: cloneDeep(skill),
@@ -53,4 +53,5 @@ export const SidebarSkillsCard = ({ skill, onInteraction, getPreviewer, rootElem
     }
 };
 
+export { SidebarSkillsCard as SidebarSkillsCardComponent };
 export default withErrorHandling(SidebarSkillsCard);

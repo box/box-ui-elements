@@ -14,7 +14,7 @@ type Props = {
     versions?: FileVersions
 };
 
-export const SidebarVersions = ({
+const SidebarVersions = ({
     onVersionHistoryClick,
     versions = {
         total_count: 0,
@@ -30,4 +30,5 @@ export const SidebarVersions = ({
     return <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={total_count + 1} />;
 };
 
+export { SidebarVersions as SidebarVersionsComponent };
 export default withErrorHandling(SidebarVersions);

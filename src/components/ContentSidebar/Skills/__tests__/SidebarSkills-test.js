@@ -1,8 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import SidebarSection from '../../SidebarSection';
 import SidebarSkills from '../SidebarSkills';
+import SidebarSkillsCard from '../SidebarSkillsCard';
 import * as skillUtils from '../skillUtils';
+
+jest.mock('../../SidebarSection', () => 'sidebar-section');
+jest.mock('../SidebarSkillsCard', () => 'sidebar-skills-card');
 
 describe('components/ContentSidebar/Skills/SidebarSkills', () => {
     const getWrapper = (props) => mount(<SidebarSkills {...props} />);
@@ -31,8 +34,7 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
             onInteraction: jest.fn()
         };
         const wrapper = getWrapper(props);
-
-        expect(wrapper.find(SidebarSection)).toHaveLength(2);
+        expect(wrapper.find(SidebarSkillsCard)).toHaveLength(2);
         expect(wrapper).toMatchSnapshot();
     });
 });

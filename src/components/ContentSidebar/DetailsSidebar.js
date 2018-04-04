@@ -11,11 +11,11 @@ import SidebarAccessStats from './SidebarAccessStats';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
-import SidebarVersionsComponent from './SidebarVersions';
+import SidebarVersions from './SidebarVersions';
 import SidebarNotices from './SidebarNotices';
 import type { AccessStats, BoxItem, FileVersions, Errors } from '../../flowTypes';
 import './DetailsSidebar.scss';
-import SidebarFilePropertiesComponent from './SidebarFileProperties';
+import SidebarFileProperties from './SidebarFileProperties';
 
 type Props = {
     accessStats?: AccessStats,
@@ -70,7 +70,7 @@ const DetailsSidebar = ({
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
             {hasVersions && (
                 <SidebarSection>
-                    <SidebarVersionsComponent
+                    <SidebarVersions
                         onVersionHistoryClick={onVersionHistoryClick}
                         versions={versions}
                         {...versionError}
@@ -89,11 +89,7 @@ const DetailsSidebar = ({
             )}
             {hasProperties && (
                 <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
-                    <SidebarFilePropertiesComponent
-                        onDescriptionChange={onDescriptionChange}
-                        file={file}
-                        {...fileError}
-                    />
+                    <SidebarFileProperties onDescriptionChange={onDescriptionChange} file={file} {...fileError} />
                 </SidebarSection>
             )}
             {hasAccessStats && <SidebarAccessStats accessStats={accessStats} onAccessStatsClick={onAccessStatsClick} />}

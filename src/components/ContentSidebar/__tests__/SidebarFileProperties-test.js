@@ -1,13 +1,11 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
+import { shallow } from 'enzyme';
+import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
-import SidebarFilePropertiesComponent, { SidebarFileProperties as WrappedComponent } from '../SidebarFileProperties';
-
-jest.mock('box-react-ui/lib/components/error-mask/ErrorMask', () => 'error-mask-mock');
+import SidebarFileProperties, { SidebarFilePropertiesComponent } from '../SidebarFileProperties';
 
 describe('components/ContentSidebar/SidebarFileProperties', () => {
-    const getWrapper = (props) => shallow(<WrappedComponent {...props} />);
+    const getWrapper = (props) => shallow(<SidebarFilePropertiesComponent {...props} />);
 
     test('should render the versions when total_count > 0', () => {
         const props = {
@@ -39,15 +37,13 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
 
     test('should render an error', () => {
         const props = {
-            maskError: {
-                errorHeader: {
-                    defaultMessage: 'foo'
-                }
+            inlineError: {
+                title: 'foo'
             }
         };
-        const wrapper = mount(<SidebarFilePropertiesComponent {...props} />);
+        const wrapper = shallow(<SidebarFileProperties {...props} />).dive();
 
-        expect(wrapper.find(ErrorMask)).toHaveLength(1);
+        expect(wrapper.find(InlineError)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 });

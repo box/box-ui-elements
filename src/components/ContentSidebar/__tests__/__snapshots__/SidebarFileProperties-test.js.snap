@@ -1,219 +1,34 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/ContentSidebar/SidebarFileProperties should render an error 1`] = `
-ReactWrapper {
-  "length": 1,
-  Symbol(enzyme.__unrendered__): <Component
-    maskError={
+<React.Fragment>
+  <InlineError
+    title="foo"
+  />
+  <SidebarFileProperties
+    intl={
       Object {
-        "errorHeader": Object {
-          "defaultMessage": "foo",
-        },
+        "formatDate": [Function],
+        "formatMessage": [Function],
       }
     }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "maskError": Object {
-        "errorHeader": Object {
-          "defaultMessage": "foo",
-        },
-      },
-    },
-    "ref": null,
-    "rendered": Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "intl": Object {
-          "formatDate": [Function],
-          "formatMessage": [Function],
-        },
-        "maskError": Object {
-          "errorHeader": Object {
-            "defaultMessage": "foo",
-          },
-        },
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": <error-mask-mock
-          errorheader="[object Object]"
-        />,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "errorHeader": Object {
-            "defaultMessage": "foo",
-          },
-        },
-        "ref": null,
-        "rendered": Array [
-          undefined,
-        ],
-        "type": "error-mask-mock",
-      },
-      "type": [Function],
-    },
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "maskError": Object {
-          "errorHeader": Object {
-            "defaultMessage": "foo",
-          },
-        },
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": null,
-        "key": undefined,
-        "nodeType": "function",
-        "props": Object {
-          "intl": Object {
-            "formatDate": [Function],
-            "formatMessage": [Function],
-          },
-          "maskError": Object {
-            "errorHeader": Object {
-              "defaultMessage": "foo",
-            },
-          },
-        },
-        "ref": null,
-        "rendered": Object {
-          "instance": <error-mask-mock
-            errorheader="[object Object]"
-          />,
-          "key": undefined,
-          "nodeType": "host",
-          "props": Object {
-            "errorHeader": Object {
-              "defaultMessage": "foo",
-            },
-          },
-          "ref": null,
-          "rendered": Array [
-            undefined,
-          ],
-          "type": "error-mask-mock",
-        },
-        "type": [Function],
-      },
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
+  />
+</React.Fragment>
 `;
 
 exports[`components/ContentSidebar/SidebarFileProperties should render the versions when total_count > 0 1`] = `
-ShallowWrapper {
-  "length": 1,
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <SidebarFileProperties
-    file={
-      Object {
-        "created_at": "foo",
-        "created_by": Object {
-          "name": "foo",
-        },
-        "description": "foo",
-        "modified_at": "foo",
-        "owned_by": Object {
-          "name": "foo",
-        },
-        "permissions": Object {
-          "can_rename": true,
-        },
-        "size": "1",
-      }
-    }
-    intl={
-      Object {
-        "locale": "en",
-      }
-    }
-    onDescriptionChange={[MockFunction]}
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "createdAt": "foo",
-      "description": "foo",
-      "descriptionTextareaProps": Object {
-        "maxLength": "255",
-      },
-      "modifiedAt": "foo",
-      "onDescriptionChange": [MockFunction],
-      "owner": "foo",
-      "size": "1 B",
-      "uploader": "foo",
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
+<ItemProperties
+  createdAt="foo"
+  description="foo"
+  descriptionTextareaProps={
     Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "createdAt": "foo",
-        "description": "foo",
-        "descriptionTextareaProps": Object {
-          "maxLength": "255",
-        },
-        "modifiedAt": "foo",
-        "onDescriptionChange": [MockFunction],
-        "owner": "foo",
-        "size": "1 B",
-        "uploader": "foo",
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
+      "maxLength": "255",
+    }
+  }
+  modifiedAt="foo"
+  onDescriptionChange={[MockFunction]}
+  owner="foo"
+  size="1 B"
+  uploader="foo"
+/>
 `;

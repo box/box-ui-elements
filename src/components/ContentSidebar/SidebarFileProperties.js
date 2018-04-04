@@ -20,7 +20,7 @@ type Props = {
     intl: any
 };
 
-export const SidebarFileProperties = ({ file, onDescriptionChange, intl }: Props) => (
+const SidebarFileProperties = ({ file, onDescriptionChange, intl }: Props) => (
     <ItemProperties
         createdAt={file.created_at}
         description={file.description}
@@ -33,4 +33,5 @@ export const SidebarFileProperties = ({ file, onDescriptionChange, intl }: Props
     />
 );
 
+export { SidebarFileProperties as SidebarFilePropertiesComponent };
 export default injectIntl(withErrorHandling(SidebarFileProperties));

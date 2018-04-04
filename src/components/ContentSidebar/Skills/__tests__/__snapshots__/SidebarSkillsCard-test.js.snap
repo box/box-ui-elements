@@ -1,387 +1,71 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render an error 1`] = `
-ReactWrapper {
-  "length": 1,
-  Symbol(enzyme.__unrendered__): <Unknown
-    maskError={
+<Component
+  maskError={
+    Object {
+      "errorHeader": Object {
+        "defaultMessage": "foo",
+      },
+    }
+  }
+>
+  <error-mask-mock
+    errorHeader={
       Object {
-        "errorHeader": Object {
-          "defaultMessage": "foo",
-        },
+        "defaultMessage": "foo",
       }
     }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "maskError": Object {
-        "errorHeader": Object {
-          "defaultMessage": "foo",
-        },
-      },
-    },
-    "ref": null,
-    "rendered": Object {
-      "instance": <error-mask-mock
-        errorheader="[object Object]"
-      />,
-      "key": undefined,
-      "nodeType": "host",
-      "props": Object {
-        "errorHeader": Object {
-          "defaultMessage": "foo",
-        },
-      },
-      "ref": null,
-      "rendered": Array [
-        undefined,
-      ],
-      "type": "error-mask-mock",
-    },
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
-    Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "maskError": Object {
-          "errorHeader": Object {
-            "defaultMessage": "foo",
-          },
-        },
-      },
-      "ref": null,
-      "rendered": Object {
-        "instance": <error-mask-mock
-          errorheader="[object Object]"
-        />,
-        "key": undefined,
-        "nodeType": "host",
-        "props": Object {
-          "errorHeader": Object {
-            "defaultMessage": "foo",
-          },
-        },
-        "ref": null,
-        "rendered": Array [
-          undefined,
-        ],
-        "type": "error-mask-mock",
-      },
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
+  />
+</Component>
 `;
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keyvalues component 1`] = `
-ShallowWrapper {
-  "length": 1,
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <SidebarSkillsCard
-    appElement={[MockFunction]}
-    getPreviewer={[MockFunction]}
-    onInteraction={[MockFunction]}
-    rootElement={[MockFunction]}
-    skill={
-      Object {
-        "skill_card_type": "keyvalue",
-      }
-    }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "skill": Object {
-        "skill_card_type": "keyvalue",
-      },
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
+<Keyvalues
+  skill={
     Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "skill": Object {
-          "skill_card_type": "keyvalue",
-        },
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
+      "skill_card_type": "keyvalue",
+    }
+  }
+/>
 `;
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keywords component 1`] = `
-ShallowWrapper {
-  "length": 1,
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <SidebarSkillsCard
-    appElement={[MockFunction]}
-    getPreviewer={[MockFunction]}
-    onInteraction={[MockFunction]}
-    rootElement={[MockFunction]}
-    skill={
-      Object {
-        "skill_card_type": "keyword",
-      }
-    }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "class",
-    "props": Object {
-      "getPreviewer": [MockFunction],
-      "onInteraction": [Function],
-      "skill": Object {
-        "skill_card_type": "keyword",
-      },
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
+<Keywords
+  getPreviewer={[MockFunction]}
+  onInteraction={[Function]}
+  skill={
     Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "class",
-      "props": Object {
-        "getPreviewer": [MockFunction],
-        "onInteraction": [Function],
-        "skill": Object {
-          "skill_card_type": "keyword",
-        },
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
+      "skill_card_type": "keyword",
+    }
+  }
+/>
 `;
 
-exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render nothing if invalid type 1`] = `
-ShallowWrapper {
-  "length": 1,
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <SidebarSkillsCard
-    appElement={[MockFunction]}
-    getPreviewer={[MockFunction]}
-    onInteraction={[MockFunction]}
-    rootElement={[MockFunction]}
-    skill={
-      Object {
-        "skill_card_type": "foo",
-      }
-    }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): null,
-  Symbol(enzyme.__nodes__): Array [
-    null,
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
-`;
+exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render nothing if invalid type 1`] = `""`;
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render timelines component 1`] = `
-ShallowWrapper {
-  "length": 1,
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <SidebarSkillsCard
-    appElement={[MockFunction]}
-    getPreviewer={[MockFunction]}
-    onInteraction={[MockFunction]}
-    rootElement={[MockFunction]}
-    skill={
-      Object {
-        "skill_card_type": "timeline",
-      }
-    }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "function",
-    "props": Object {
-      "getPreviewer": [MockFunction],
-      "onInteraction": [Function],
-      "skill": Object {
-        "skill_card_type": "timeline",
-      },
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
+<Timelines
+  getPreviewer={[MockFunction]}
+  onInteraction={[Function]}
+  skill={
     Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "function",
-      "props": Object {
-        "getPreviewer": [MockFunction],
-        "onInteraction": [Function],
-        "skill": Object {
-          "skill_card_type": "timeline",
-        },
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
+      "skill_card_type": "timeline",
+    }
+  }
+/>
 `;
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render transcript component 1`] = `
-ShallowWrapper {
-  "length": 1,
-  Symbol(enzyme.__root__): [Circular],
-  Symbol(enzyme.__unrendered__): <SidebarSkillsCard
-    appElement={[MockFunction]}
-    getPreviewer={[MockFunction]}
-    onInteraction={[MockFunction]}
-    rootElement={[MockFunction]}
-    skill={
-      Object {
-        "skill_card_type": "transcript",
-      }
-    }
-  />,
-  Symbol(enzyme.__renderer__): Object {
-    "batchedUpdates": [Function],
-    "getNode": [Function],
-    "render": [Function],
-    "simulateEvent": [Function],
-    "unmount": [Function],
-  },
-  Symbol(enzyme.__node__): Object {
-    "instance": null,
-    "key": undefined,
-    "nodeType": "class",
-    "props": Object {
-      "appElement": [MockFunction],
-      "getPreviewer": [MockFunction],
-      "onInteraction": [Function],
-      "rootElement": [MockFunction],
-      "skill": Object {
-        "skill_card_type": "transcript",
-      },
-    },
-    "ref": null,
-    "rendered": null,
-    "type": [Function],
-  },
-  Symbol(enzyme.__nodes__): Array [
+<Transcript
+  appElement={[MockFunction]}
+  getPreviewer={[MockFunction]}
+  onInteraction={[Function]}
+  rootElement={[MockFunction]}
+  skill={
     Object {
-      "instance": null,
-      "key": undefined,
-      "nodeType": "class",
-      "props": Object {
-        "appElement": [MockFunction],
-        "getPreviewer": [MockFunction],
-        "onInteraction": [Function],
-        "rootElement": [MockFunction],
-        "skill": Object {
-          "skill_card_type": "transcript",
-        },
-      },
-      "ref": null,
-      "rendered": null,
-      "type": [Function],
-    },
-  ],
-  Symbol(enzyme.__options__): Object {
-    "adapter": ReactSixteenAdapter {
-      "options": Object {
-        "enableComponentDidUpdateOnSetState": true,
-      },
-    },
-  },
-}
+      "skill_card_type": "transcript",
+    }
+  }
+/>
 `;

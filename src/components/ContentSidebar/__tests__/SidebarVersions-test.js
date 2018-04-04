@@ -1,13 +1,11 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
-import SidebarVersionsComponent, { SidebarVersions as WrappedComponent } from '../SidebarVersions';
-
-jest.mock('box-react-ui/lib/components/error-mask/ErrorMask', () => 'error-mask-mock');
+import SidebarVersions, { SidebarVersionsComponent } from '../SidebarVersions';
 
 describe('components/ContentSidebar/SidebarVersions', () => {
-    const getWrapper = (props) => shallow(<WrappedComponent {...props} />);
+    const getWrapper = (props) => shallow(<SidebarVersionsComponent {...props} />);
 
     test('should render the versions when total_count > 0', () => {
         const props = {
@@ -41,7 +39,7 @@ describe('components/ContentSidebar/SidebarVersions', () => {
                 }
             }
         };
-        const wrapper = mount(<SidebarVersionsComponent {...props} />);
+        const wrapper = shallow(<SidebarVersions {...props} />);
 
         expect(wrapper.find(ErrorMask)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();

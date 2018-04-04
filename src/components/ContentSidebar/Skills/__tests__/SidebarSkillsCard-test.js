@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
-import SidebarSkillsCardComponent, { SidebarSkillsCard as WrappedComponent } from '../SidebarSkillsCard';
+import SidebarSkillsCard, { SidebarSkillsCardComponent } from '../SidebarSkillsCard';
 import Transcript from '../Transcript';
 import Keywords from '../Keywords';
 import Keyvalues from '../Keyvalues';
@@ -10,7 +10,7 @@ import Timelines from '../Timeline';
 jest.mock('box-react-ui/lib/components/error-mask/ErrorMask', () => 'error-mask-mock');
 
 describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
-    const getWrapper = (props) => shallow(<WrappedComponent {...props} />);
+    const getWrapper = (props) => shallow(<SidebarSkillsCardComponent {...props} />);
 
     let cardProps;
 
@@ -72,7 +72,7 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
                 }
             }
         };
-        const wrapper = mount(<SidebarSkillsCardComponent {...props} />);
+        const wrapper = mount(<SidebarSkillsCard {...props} />);
 
         expect(wrapper.find(ErrorMask)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();

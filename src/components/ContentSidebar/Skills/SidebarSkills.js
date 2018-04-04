@@ -10,7 +10,7 @@ import messages from '../../messages';
 import SidebarSection from '../SidebarSection';
 import { isValidSkillsCard } from './skillUtils';
 import type { SkillCards, SkillCard, MetadataType } from '../../../flowTypes';
-import SidebarSkillsCardComponent from './SidebarSkillsCard';
+import SidebarSkillsCard from './SidebarSkillsCard';
 
 type Props = {
     metadata?: MetadataType,
@@ -46,7 +46,7 @@ const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement, onInte
             key={index}
             title={card.title || <FormattedMessage {...messages[`${card.skill_card_type}Skill`]} />}
         >
-            <SidebarSkillsCardComponent
+            <SidebarSkillsCard
                 maskError={getError(card.error)}
                 skill={card}
                 getPreviewer={getPreviewer}
