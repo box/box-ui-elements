@@ -11,6 +11,8 @@ Box UI Elements are pre-built UI components that allow developers to add feature
 # Usage
 The instructions below describe how to use the UI Elements in a [React](https://facebook.github.io/react) application. If instead you would like to include the framework-agnostic libraries as scripts, refer to our [developer documentation](https://developer.box.com/docs/box-ui-elements). Continue reading below for how to import the UI Elements as React components. You can also reference https://github.com/box/box-ui-elements-demo or https://github.com/box/box-content-preview-demo for minimal React applications using the Explorer UI Element and Preview UI Element respectively.
 
+**IMPORTANT: The Preview UI Element listed below is a simple React *wrapper* for the [preview library](https://github.com/box/box-content-preview). The react component dynamically adds the preview library to the DOM via a `<script>` tag. The preview library assets will come from Box's CDN and currently there is no pure NPM version for it.**
+
 ## Installation
 `yarn add box-ui-elements` or `npm install box-ui-elements`
 

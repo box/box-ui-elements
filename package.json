@@ -92,7 +92,10 @@
       "!**/node_modules/**",
       "!**/__tests__/**"
     ],
-    "setupTestFrameworkScriptFile": "<rootDir>/build/enzyme-adapter.js"
+    "setupTestFrameworkScriptFile": "<rootDir>/build/enzyme-adapter.js",
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   },
   "devEngines": {
     "node": ">=8.x",
@@ -138,6 +141,7 @@
     "deepmerge": "^2.1.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.3",
     "eslint": "^4.18.2",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
