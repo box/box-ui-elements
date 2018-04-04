@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/withErrorHandling should render a MaskError 1`] = `
+exports[`components/withErrorHandling should render a ErrorMask 1`] = `
 <ErrorMask
   errorHeader="foo"
 />

@@ -10,7 +10,7 @@ describe('components/withErrorHandling', () => {
 
     const getWrapper = (props) => shallow(<WithErrorHandlingComponent {...props} />);
 
-    test('should render a MaskError', () => {
+    test('should render a ErrorMask', () => {
         const props = {
             maskError: {
                 errorHeader: 'foo'
@@ -24,7 +24,7 @@ describe('components/withErrorHandling', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render a MaskError if both maskError and inlineError props passed', () => {
+    test('should render a ErrorMask if both maskError and inlineError props passed', () => {
         const props = {
             maskError: {
                 errorHeader: 'foo'
@@ -49,6 +49,8 @@ describe('components/withErrorHandling', () => {
             }
         };
         const wrapper = getWrapper(props);
+
+        expect(wrapper.find(ErrorMask).exists()).toBe(false);
         expect(wrapper.find(InlineError)).toHaveLength(1);
         expect(wrapper.find(WrappedComponent)).toHaveLength(1);
 
@@ -59,6 +61,8 @@ describe('components/withErrorHandling', () => {
         const props = {};
         const wrapper = getWrapper(props);
 
+        expect(wrapper.find(ErrorMask).exists()).toBe(false);
+        expect(wrapper.find(InlineError).exists()).toBe(false);
         expect(wrapper.find(WrappedComponent)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
