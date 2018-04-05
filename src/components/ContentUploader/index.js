@@ -1,2 +1,3 @@
-export default from './ContentUploader';
-export ContentUploaderPopup from './ContentUploaderPopup';
+// @flow
+export { default } from './ContentUploader';
+export { default as ContentUploaderPopup } from './ContentUploaderPopup';

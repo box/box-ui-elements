@@ -4,8 +4,8 @@
  */
 
 import React from 'react';
+import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
 import ItemName from './ItemName';
-import FileIcon from '../icons/file';
 import './IconName.scss';
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
     extension: string
 };
 
-const IconName = ({ name, extension }: Props) =>
+const IconName = ({ name, extension }: Props) => (
     <div className='bcu-item-icon-name'>
         <div className='bcu-item-icon'>
             <FileIcon extension={extension} />
@@ -21,6 +21,7 @@ const IconName = ({ name, extension }: Props) =>
         <div className='bcu-item-name'>
             <ItemName name={name} />
         </div>
-    </div>;
+    </div>
+);
 
 export default IconName;

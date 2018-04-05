@@ -5,10 +5,13 @@
  */
 
 import React from 'react';
-import DropdownMenu from '../DropdownMenu';
-import { Menu, MenuItem } from '../Menu';
-import { Button } from '../Button';
-import { isMobile } from '../../util/browser';
+import { FormattedMessage } from 'react-intl';
+import Button from 'box-react-ui/lib/components/button/Button';
+import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
+import Menu from 'box-react-ui/lib/components/menu/Menu';
+import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
+import Browser from '../../util/Browser';
+import messages from '../messages';
 import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_RENAME,
@@ -22,7 +25,6 @@ import type { BoxItem } from '../../flowTypes';
 import './MoreOptionsCell.scss';
 
 export default (
-    getLocalizedMessage: Function,
     canPreview: boolean,
     canShare: boolean,
     canDownload: boolean,
@@ -54,7 +56,8 @@ export default (
     const allowDelete = canDelete && permissions[PERMISSION_CAN_DELETE];
     const allowShare = canShare && permissions[PERMISSION_CAN_SHARE];
     const allowRename = canRename && permissions[PERMISSION_CAN_RENAME];
-    const allowDownload = canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE && !isMobile();
+    const allowDownload =
+        canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE && !Browser.isMobile();
     const allowed = allowDelete || allowRename || allowDownload || allowPreview || allowShare || allowOpen;
 
     if (!allowed) {
@@ -64,47 +67,47 @@ export default (
     return (
         <div className='bce-more-options'>
             <DropdownMenu isRightAligned constrainToScrollParent>
-                <Button onFocus={onFocus} className='bce-btn-more-options'>
+                <Button type='button' onFocus={onFocus} className='bce-btn-more-options'>
                     ···
                 </Button>
                 <Menu>
-                    {allowPreview
-                        ? <MenuItem onClick={onPreview}>
-                            {getLocalizedMessage('buik.more.options.preview')}
+                    {allowPreview ? (
+                        <MenuItem onClick={onPreview}>
+                            <FormattedMessage {...messages.preview} />
                         </MenuItem>
-                        : null}
-                    {allowOpen
-                        ? <MenuItem onClick={onPreview}>
-                            {getLocalizedMessage('buik.more.options.open')}
+                    ) : null}
+                    {allowOpen ? (
+                        <MenuItem onClick={onPreview}>
+                            <FormattedMessage {...messages.open} />
                         </MenuItem>
-                        : null}
-                    {allowDelete
-                        ? <MenuItem onClick={onDelete}>
-                            {getLocalizedMessage('buik.more.options.delete')}
+                    ) : null}
+                    {allowDelete ? (
+                        <MenuItem onClick={onDelete}>
+                            <FormattedMessage {...messages.delete} />
                         </MenuItem>
-                        : null}
-                    {allowDownload
-                        ? <MenuItem onClick={onDownload}>
-                            {getLocalizedMessage('buik.more.options.download')}
+                    ) : null}
+                    {allowDownload ? (
+                        <MenuItem onClick={onDownload}>
+                            <FormattedMessage {...messages.download} />
                         </MenuItem>
-                        : null}
-                    {allowRename
-                        ? <MenuItem onClick={onRename}>
-                            {getLocalizedMessage('buik.more.options.rename')}
+                    ) : null}
+                    {allowRename ? (
+                        <MenuItem onClick={onRename}>
+                            <FormattedMessage {...messages.rename} />
                         </MenuItem>
-                        : null}
-                    {allowShare
-                        ? <MenuItem onClick={onShare}>
-                            {getLocalizedMessage('buik.item.button.share')}
+                    ) : null}
+                    {allowShare ? (
+                        <MenuItem onClick={onShare}>
+                            <FormattedMessage {...messages.share} />
                         </MenuItem>
-                        : null}
+                    ) : null}
                 </Menu>
             </DropdownMenu>
-            {allowShare && !isSmall
-                ? <Button onFocus={onFocus} onClick={onShare}>
-                    {getLocalizedMessage('buik.item.button.share')}
+            {allowShare && !isSmall ? (
+                <Button type='button' onFocus={onFocus} onClick={onShare}>
+                    <FormattedMessage {...messages.share} />
                 </Button>
-                : null}
+            ) : null}
         </div>
     );
 };

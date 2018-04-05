@@ -21,12 +21,9 @@
         "beforeEach": false,
         "describe": false,
         "expect": false,
-        "it": false,
-        "sinon": false,
-        "assert": false,
-        "fixture": false,
-        "__I18N__": false,
-        "Box": false
+        "test": false,
+        "Box": false,
+        "jest": false
     },
     "rules": {
         "camelcase": [0],
@@ -36,6 +33,7 @@
         "react/jsx-indent-props": [2, 4],
         "react/jsx-filename-extension": [0],
         "react/no-unused-prop-types": [0],
+        "react/default-props-match-prop-types": [2, { "allowRequiredDefaults": true }],
         "react/sort-comp": [0],
         "jsx-quotes": [2, "prefer-single"],
         "max-len": ["error", 120],

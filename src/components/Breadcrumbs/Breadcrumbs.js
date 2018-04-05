@@ -46,11 +46,11 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (
-            <span className='buik-breadcrumb-more'>
+            <span className='be-breadcrumb-more'>
                 <BreadcrumbDropdown
                     onCrumbClick={onCrumbClick}
                     crumbs={crumbs}
-                    className={condensed ? 'buik-breadcrumbs-condensed' : ''}
+                    className={condensed ? 'be-breadcrumbs-condensed' : ''}
                 />
                 <BreadcrumbDelimiter delimiter={condensed ? DELIMITER_SLASH : DELIMITER_CARET} />
             </span>
@@ -68,7 +68,7 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
 
     // The crumbs given may have ancestors higher than the root. We need to filter them out.
     const filteredCrumbs = filterCrumbs(rootId, crumbs);
-    const length = filteredCrumbs.length;
+    const { length } = filteredCrumbs;
 
     // Always show the last/leaf breadcrumb.
     const crumb = filteredCrumbs[length - 1];
@@ -87,7 +87,7 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
     const firstBreadcrumb = length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter) : null;
 
     return (
-        <div className='buik-breadcrumbs'>
+        <div className='be-breadcrumbs'>
             {isSmall ? null : firstBreadcrumb}
             {isSmall ? null : moreBreadcrumbs}
             {secondLastBreadcrumb}

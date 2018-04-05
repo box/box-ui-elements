@@ -1,0 +1,23 @@
+@import '../variables';
+
+.bcs-section-content {
+    padding: 15px 0 5px;
+}
+
+.bcs-section {
+    margin: 0 20px 20px 30px;
+}
+
+.be .btn-plain.bcs-section-title {
+    border-bottom: 1px solid $off-white;
+    padding: 5px 0 10px;
+    text-align: left;
+    width: 100%;
+
+    &:hover,
+    &:active,
+    &:focus {
+        border-bottom-color: $blue;
+        text-decoration: none;
+    }
+}

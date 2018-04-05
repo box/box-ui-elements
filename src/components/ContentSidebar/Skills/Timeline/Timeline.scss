@@ -1,0 +1,69 @@
+@import '../../../variables';
+
+.be-timeline {
+    display: flex;
+    padding: 0 0 20px;
+
+    &:last-child {
+        padding-bottom: 5px;
+    }
+}
+
+.be-timeline-wrapper {
+    flex: 1;
+    height: 6px;
+    position: relative;
+}
+
+.be-timeline-line {
+    background-color: $blue;
+    border-radius: 6px;
+    height: 6px;
+    opacity: .25;
+    position: absolute;
+}
+
+.be-timeline-image {
+    align-items: center;
+
+    .be-timeline-image-container {
+        border-radius: 100%;
+        overflow: hidden;
+        width: 45px;
+    }
+
+    .be-timeline-label img {
+        filter: brightness(1.5);
+        height: 45px;
+        transition: transform .3s;
+        vertical-align: middle;
+        width: 45px;
+
+        &:hover {
+            transform: scale(1.3);
+        }
+    }
+
+    .be-timeline-wrapper {
+        margin-left: 10px;
+    }
+
+    .be-timeline-line {
+        width: 215px;
+    }
+}
+
+.be-timeline-text {
+    color: $sevens;
+    flex-direction: column;
+    font-size: 12px;
+    height: 50px;
+
+    .be-timeline-label {
+        padding-bottom: 6px;
+    }
+
+    .be-timeline-line {
+        width: 270px;
+    }
+}

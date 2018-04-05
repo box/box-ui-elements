@@ -33,7 +33,6 @@ type Props = {
     onShareAccessChange: Function,
     onFocusChange: Function,
     extensionsWhitelist: string[],
-    getLocalizedMessage: Function,
     currentCollection: Collection,
     isSmall: boolean,
     view: View
@@ -54,19 +53,17 @@ const ItemList = ({
     onShareAccessChange,
     onFocusChange,
     currentCollection,
-    tableRef,
-    getLocalizedMessage
+    tableRef
 }: Props) => {
     const iconCell = iconCellRenderer();
-    const nameCell = nameCellRenderer(rootId, getLocalizedMessage, view, onItemClick);
+    const nameCell = nameCellRenderer(rootId, view, onItemClick);
     const checkboxCell = checkboxCellRenderer(onItemSelect, selectableType, extensionsWhitelist, hasHitSelectionLimit);
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
         canSetShareAccess,
         selectableType,
         extensionsWhitelist,
-        hasHitSelectionLimit,
-        getLocalizedMessage
+        hasHitSelectionLimit
     );
     const { id, items = [] }: Collection = currentCollection;
     const rowCount: number = items.length;
@@ -115,9 +112,9 @@ const ItemList = ({
             scrollToRow={focusedRow}
             onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bcp-item-row-${scrollToRow}`)}
         >
-            {({ onSectionRendered, scrollToRow, focusOnRender }) =>
+            {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
-                    {({ width, height }) =>
+                    {({ width, height }) => (
                         <Table
                             width={width}
                             height={height}
@@ -144,22 +141,24 @@ const ItemList = ({
                                 flexShrink={0}
                             />
                             <Column dataKey={FIELD_NAME} cellRenderer={nameCell} width={300} flexGrow={1} />
-                            {isSmall
-                                ? null
-                                : <Column
+                            {isSmall ? null : (
+                                <Column
                                     dataKey={FIELD_SHARED_LINK}
                                     cellRenderer={shareAccessCell}
                                     width={220}
                                     flexShrink={0}
-                                  />}
+                                />
+                            )}
                             <Column
                                 dataKey={FIELD_ID}
                                 cellRenderer={checkboxCell}
                                 width={isSmall ? 20 : 30}
                                 flexShrink={0}
                             />
-                        </Table>}
-                </AutoSizer>}
+                        </Table>
+                    )}
+                </AutoSizer>
+            )}
         </KeyBinder>
     );
 };

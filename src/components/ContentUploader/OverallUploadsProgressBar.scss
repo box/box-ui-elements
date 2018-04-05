@@ -1,0 +1,33 @@
+@import '../variables';
+
+.bcu-overall-progress-bar {
+    align-items: center;
+    background: $blue;
+    color: $white;
+    cursor: pointer;
+    display: flex;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 30px;
+    padding-right: 65px;
+    position: relative;
+    width: 100%;
+
+    &:hover {
+        background: lighten($blue, .8);
+    }
+
+    .bcu-progress {
+        background: white;
+    }
+
+    .bcu-progress-container {
+        background: transparent;
+    }
+
+    .bcu-upload-status {
+        flex: none;
+        font-size: 16px;
+        margin-right: 20px;
+    }
+}

@@ -1,32 +1,30 @@
 @import './variables';
+@import '~box-react-ui/lib/styles/common/buttons';
+@import '~box-react-ui/lib/styles/modifiers/_accessibility';
 
-.buik {
+.be {
+    @include reset;
+
     background: $white;
     border: 0 none;
     /* stylelint-disable declaration-no-important */
     box-sizing: border-box !important;
     /* stylelint-enable declaration-no-important */
     color: $twos;
-    font-family: $font;
-    font-size: 13px;
     height: 100%;
     letter-spacing: .13px;
     margin: 0;
     outline: none;
     overflow: hidden;
     padding: 0;
-    position: relative;
-    text-rendering: optimizeLegibility;
     user-select: none;
     width: 100%;
 
-    @mixin placeholder {
-        font-family: $font;
-        font-weight: 200;
-        opacity: .6;
+    .ReactModal__Body--open & {
+        position: relative;
     }
 
-    /* stylelint-disable selector-no-vendor-prefix */
+    /* stylelint-disable */
     ::-webkit-input-placeholder {
         @include placeholder;
     }
@@ -50,13 +48,12 @@
     }
 
     ::-webkit-scrollbar-thumb {
-        /* stylelint-disable selector-pseudo-class-no-unknown */
         &:vertical {
             background-color: $lighter-black;
             border-radius: 6px;
 
             &:hover {
-                background: $darker-black;
+                background-color: $darker-black;
             }
         }
 
@@ -65,33 +62,15 @@
             border-radius: 6px;
 
             &:hover {
-                background: $darker-black;
+                background-color: $darker-black;
             }
         }
-        /* stylelint-enable selector-pseudo-class-no-unknown */
     }
 
     ::-webkit-file-upload-button {
         cursor: pointer;
     }
-    /* stylelint-enable selector-no-vendor-prefix */
-
-    * {
-        /* stylelint-disable declaration-no-important */
-        box-sizing: border-box !important;
-        /* stylelint-enable declaration-no-important */
-        font-family: $font;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-
-        &::after,
-        &::before {
-            box-sizing: inherit;
-            color: inherit;
-            font-family: inherit;
-            text-rendering: inherit;
-        }
-    }
+    /* stylelint-enable */
 
     select {
         appearance: none;
@@ -124,7 +103,7 @@
             color: $off-white;
         }
 
-        /* stylelint-disable declaration-no-important */
+        /* stylelint-disable */
         &:-moz-focusring,
         &::-moz-focus-inner {
             color: transparent !important;
@@ -134,7 +113,7 @@
         &::-ms-expand {
             display: none !important;
         }
-        /* stylelint-enable declaration-no-important */
+        /* stylelint-enable */
     }
 
     input[type="text"],
@@ -167,10 +146,6 @@
             border: 1px solid $red;
         }
 
-        &:invalid:focus {
-            border: 1px solid $see-see;
-        }
-
         &:disabled {
             background-color: $haze;
             border-color: $efive;
@@ -185,6 +160,10 @@
                 color: $see-see;
             }
         }
+
+        &:invalid:focus {
+            border: 1px solid $see-see;
+        }
     }
 
     label {
@@ -193,29 +172,42 @@
         }
     }
 
-    dl {
+    .btn-plain {
+        background: none;
+        border: 0 none;
+        cursor: pointer;
+        font-size: 13px;
+        line-height: 16px;
+        margin: 0;
+        max-width: 100%;
+        outline: none;
+        overflow: hidden;
+        padding: 0;
+        text-align: center;
+        text-decoration: none;
+        text-overflow: ellipsis;
+        text-shadow: none;
+        white-space: nowrap;
+        zoom: 1;
+
+        &::-moz-focus-inner {
+            border: 0 none;
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+
+    ul {
         margin: 0;
         padding: 0;
-
-        dt {
-            color: $sevens;
-            font-size: 13px;
-            line-height: 16px;
-            padding-bottom: 3px;
-        }
-
-        dd {
-            line-height: 16px;
-            margin: 0;
-
-            &:not(:last-child) {
-                margin: 0 0 20px;
-            }
-        }
     }
 }
 
-.buik-app-element {
+.be-app-element {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -223,7 +215,7 @@
 }
 
 // Input element styled like a link
-.buik-input-link {
+.be-input-link {
     color: $blue;
     cursor: pointer;
     display: block;
@@ -240,7 +232,7 @@
 }
 
 // Input styled like a button
-.buik-input-btn {
+.be-input-btn {
     cursor: pointer;
     display: block;
 
@@ -249,130 +241,6 @@
     }
 }
 
-.buik-checkbox {
-    cursor: pointer;
-    display: block;
-    position: relative;
-
-    > input {
-        &[type='checkbox'] {
-            flex: none;
-            height: 14px;
-            margin: 3px 0 0;
-            opacity: 0;
-            width: 14px;
-
-            + span {
-                &::before {
-                    background: $white;
-                    border: 1px solid $see-see;
-                    border-radius: 2px;
-                    content: '';
-                    height: 14px;
-                    left: 0;
-                    position: absolute;
-                    top: 3px;
-                    width: 14px;
-                }
-
-                &::after {
-                    backface-visibility: hidden;
-                    border-bottom: 2px solid $blue;
-                    border-right: 2px solid $blue;
-                    content: '';
-                    height: 7px;
-                    left: 5px;
-                    position: absolute;
-                    top: 6px;
-                    transform: rotate(45deg) scale(0);
-                    width: 4px;
-                }
-            }
-
-            &:checked {
-                + span {
-                    &::after {
-                        transform: rotate(45deg) scale(1);
-                    }
-                }
-            }
-
-            &:focus {
-                + span {
-                    &::before {
-                        border-color: $blue;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.buik-hidden {
+.be-hidden {
     display: none;
-}
-
-.buik-modal {
-    .buik-modal-btns {
-        display: flex;
-        justify-content: center;
-        padding: 15px 0 0;
-
-        .buik-btn {
-            margin-left: 8px;
-        }
-    }
-
-    .buik-modal-error {
-        color: $red;
-    }
-}
-
-.buik-modal-wrapper-content,
-.buik-modal-dialog-content-full-bleed {
-    background-color: $white;
-    border: 0 none;
-    border-radius: 0;
-    bottom: 0;
-    left: 0;
-    margin: 0;
-    outline: none;
-    padding: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-.buik-modal-wrapper-overlay {
-    background-color: $darker-black;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-}
-
-.buik-modal-dialog-content {
-    @extend .buik-modal-wrapper-content;
-
-    border-radius: 4px;
-    bottom: auto;
-    left: 50%;
-    margin-right: -50%;
-    padding: 25px;
-    position: absolute;
-    right: auto;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-
-    .buik-is-small & {
-        width: 340px;
-    }
-}
-
-.buik-modal-dialog-overlay {
-    @extend .buik-modal-wrapper-overlay;
-
-    position: absolute;
 }

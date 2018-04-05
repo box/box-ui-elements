@@ -4,15 +4,15 @@
  * @author Box
  */
 
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import Item from './Item';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
-import getFields from '../util/fields';
+import { getFieldsAsString } from '../util/fields';
 import { CACHE_PREFIX_FOLDER, X_REP_HINTS } from '../constants';
-import getBadItemError from '../util/error';
+import { getBadItemError } from '../util/error';
 import type Cache from '../util/Cache';
 import type {
     BoxItem,
@@ -95,7 +95,7 @@ class Folder extends Item {
      */
     getUrl(id?: string): string {
         const suffix: string = id ? `/${id}` : '';
-        return `${this.getBaseUrl()}/folders${suffix}`;
+        return `${this.getBaseApiUrl()}/folders${suffix}`;
     }
 
     /**
@@ -162,12 +162,12 @@ class Folder extends Item {
      * @param {Object} response
      * @return {void}
      */
-    folderSuccessHandler = (response: BoxItem): void => {
+    folderSuccessHandler = ({ data }: { data: BoxItem }): void => {
         if (this.isDestroyed()) {
             return;
         }
 
-        const { item_collection }: BoxItem = response;
+        const { item_collection }: BoxItem = data;
         if (!item_collection) {
             throw getBadItemError();
         }
@@ -197,7 +197,7 @@ class Folder extends Item {
 
         this.getCache().set(
             this.key,
-            Object.assign({}, response, {
+            Object.assign({}, data, {
                 item_collection: Object.assign({}, item_collection, {
                     isLoaded,
                     entries: this.itemCache
@@ -211,19 +211,6 @@ class Folder extends Item {
         }
 
         this.finish();
-    };
-
-    /**
-     * Handles the folder fetch error
-     *
-     * @param {Error} error fetch error
-     * @return {void}
-     */
-    folderErrorHandler = (error: any): void => {
-        if (this.isDestroyed()) {
-            return;
-        }
-        this.errorCallback(error);
     };
 
     /**
@@ -242,12 +229,12 @@ class Folder extends Item {
                 params: {
                     offset: this.offset,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: getFields(this.includePreviewFields, this.includePreviewSidebarFields)
+                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
             .then(this.folderSuccessHandler)
-            .catch(this.folderErrorHandler);
+            .catch(this.errorHandler);
     }
 
     /**
@@ -312,8 +299,8 @@ class Folder extends Item {
      * @param {Function} errorCallback - error callback
      * @return {void}
      */
-    createSuccessHandler = (item: BoxItem): void => {
-        const { id: childId } = item;
+    createSuccessHandler = ({ data }: { data: BoxItem }): void => {
+        const { id: childId } = data;
         if (this.isDestroyed() || !childId) {
             return;
         }
@@ -331,10 +318,10 @@ class Folder extends Item {
             throw getBadItemError();
         }
 
-        cache.set(childKey, item);
+        cache.set(childKey, data);
         item_collection.entries = [childKey].concat(entries);
         item_collection.total_count = total_count + 1;
-        this.successCallback(item);
+        this.successCallback(data);
     };
 
     /**
@@ -347,7 +334,7 @@ class Folder extends Item {
             return Promise.reject();
         }
 
-        const url = `${this.getUrl()}?fields=${getFields()}`;
+        const url = `${this.getUrl()}?fields=${getFieldsAsString()}`;
         return this.xhr
             .post({
                 url,
@@ -359,7 +346,7 @@ class Folder extends Item {
                 }
             })
             .then(this.createSuccessHandler)
-            .catch(this.folderErrorHandler);
+            .catch(this.errorHandler);
     }
 
     /**

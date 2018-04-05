@@ -15,7 +15,6 @@ type Props = {
     rootName?: string,
     onItemClick: Function,
     onSortChange: Function,
-    getLocalizedMessage: Function,
     currentCollection: Collection,
     onUpload: Function,
     onCreate: Function,
@@ -30,7 +29,6 @@ const SubHeader = ({
     rootName,
     onItemClick,
     onSortChange,
-    getLocalizedMessage,
     currentCollection,
     onUpload,
     onCreate,
@@ -38,13 +36,12 @@ const SubHeader = ({
     canCreateNewFolder,
     view,
     isSmall
-}: Props) =>
-    <div className='buik-sub-header'>
+}: Props) => (
+    <div className='be-sub-header'>
         <SubHeaderLeft
             rootId={rootId}
             rootName={rootName}
             onItemClick={onItemClick}
-            getLocalizedMessage={getLocalizedMessage}
             currentCollection={currentCollection}
             view={view}
             isSmall={isSmall}
@@ -57,8 +54,8 @@ const SubHeader = ({
             onUpload={onUpload}
             onCreate={onCreate}
             onSortChange={onSortChange}
-            getLocalizedMessage={getLocalizedMessage}
         />
-    </div>;
+    </div>
+);
 
 export default SubHeader;

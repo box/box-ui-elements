@@ -1,0 +1,22 @@
+@import '../variables';
+@import '~box-react-ui/lib/styles/common/_inline-notifications';
+
+.bcs {
+    .tab-view {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .tabs {
+        margin: 0 30px;
+    }
+
+    .tab-panels {
+        padding-top: 0;
+
+        .tab-panel.is-selected {
+            display: flex;
+        }
+    }
+}

@@ -57,15 +57,16 @@ class ContentPicker extends ES6Wrapper {
         const PickerComponent = modal ? ContentPickerPopup : ContentPickerComponent;
         render(
             <PickerComponent
+                language={this.language}
+                messages={this.messages}
                 clientName={this.getClientName()}
-                getLocalizedMessage={this.getLocalizedMessage}
                 componentRef={this.setComponent}
-                rootFolderId={this.root}
+                rootFolderId={this.id}
                 token={this.token}
                 type={this.getType()}
                 onCancel={this.onCancel}
                 onChoose={this.onChoose}
-                modal={modal}
+                modal={((modal: any): ModalOptions)}
                 {...rest}
             />,
             this.container

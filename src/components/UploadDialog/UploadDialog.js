@@ -6,58 +6,69 @@
 
 import React from 'react';
 import Modal from 'react-modal';
+import { injectIntl } from 'react-intl';
 import ContentUploader from '../ContentUploader';
+import messages from '../messages';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import type { Token } from '../../flowTypes';
 
 type Props = {
     isOpen: boolean,
-    rootFolderId: string,
+    currentFolderId: string,
     token: Token,
     sharedLink?: string,
     sharedLinkPassword?: string,
     apiHost: string,
     uploadHost: string,
     onClose: Function,
-    getLocalizedMessage: Function,
     parentElement: HTMLElement,
-    onUpload: Function
+    appElement: HTMLElement,
+    onUpload: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
+    intl: any
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
 const UploadDialog = ({
     isOpen,
-    rootFolderId,
+    currentFolderId,
     token,
     sharedLink,
     sharedLinkPassword,
     apiHost,
     uploadHost,
     onClose,
-    getLocalizedMessage,
     parentElement,
-    onUpload
-}: Props) =>
+    appElement,
+    onUpload,
+    requestInterceptor,
+    responseInterceptor,
+    intl
+}: Props) => (
     <Modal
         isOpen={isOpen}
         parentSelector={() => parentElement}
-        portalClassName={`${CLASS_MODAL} buik-modal-upload`}
+        portalClassName={`${CLASS_MODAL} be-modal-upload`}
         className={CLASS_MODAL_CONTENT_FULL_BLEED}
         overlayClassName={CLASS_MODAL_OVERLAY}
         onRequestClose={onClose}
-        contentLabel={getLocalizedMessage('buik.modal.upload.dialog.label')}
+        contentLabel={intl.formatMessage(messages.upload)}
+        appElement={appElement}
     >
         <ContentUploader
-            rootFolderId={rootFolderId}
+            rootFolderId={currentFolderId}
             token={token}
             sharedLink={sharedLink}
             sharedLinkPassword={sharedLinkPassword}
             apiHost={apiHost}
             uploadHost={uploadHost}
             onClose={onClose}
-            getLocalizedMessage={getLocalizedMessage}
             onComplete={onUpload}
+            requestInterceptor={requestInterceptor}
+            responseInterceptor={responseInterceptor}
         />
-    </Modal>;
+    </Modal>
+);
 
-export default UploadDialog;
+export default injectIntl(UploadDialog);

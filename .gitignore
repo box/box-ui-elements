@@ -10,7 +10,8 @@ npm-error.log
 yarn-error.log
 reports
 dist
-src/i18n/json
+i18n/json
+i18n/*.js
 test/dev.html
 lib
 *~~bak

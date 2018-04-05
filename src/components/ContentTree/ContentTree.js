@@ -4,15 +4,17 @@
  * @author Box
  */
 
+import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import Content from './Content';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import { isFocusableElement } from '../../util/dom';
+import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_ROOT,
@@ -26,7 +28,7 @@ import {
     SORT_ASC,
     TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
-import type { BoxItem, Collection, View, Token } from '../../flowTypes';
+import type { BoxItem, Collection, View, Token, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 
@@ -35,7 +37,6 @@ type Props = {
     rootFolderId: string,
     onClick: Function,
     apiHost: string,
-    getLocalizedMessage: Function,
     clientName: string,
     token: Token,
     isSmall: boolean,
@@ -44,9 +45,12 @@ type Props = {
     autoFocus: boolean,
     className: string,
     measureRef: Function,
+    language?: string,
+    messages?: StringMap,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function
+    requestInterceptor?: Function,
+    responseInterceptor?: Function
 };
 
 type State = {
@@ -54,24 +58,14 @@ type State = {
     view: View
 };
 
-type DefaultProps = {|
-    type: string,
-    rootFolderId: string,
-    onClick: Function,
-    apiHost: string,
-    clientName: string,
-    autoFocus: boolean,
-    className: string
-|};
-
-class ContentTree extends Component<DefaultProps, Props, State> {
+class ContentTree extends Component<Props, State> {
     id: string;
     api: API;
     state: State;
     props: Props;
     table: any;
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         type: `${TYPE_FILE},${TYPE_WEBLINK},${TYPE_FOLDER}`,
         rootFolderId: DEFAULT_ROOT,
         onClick: noop,
@@ -90,7 +84,16 @@ class ContentTree extends Component<DefaultProps, Props, State> {
     constructor(props: Props) {
         super(props);
 
-        const { rootFolderId, token, sharedLink, sharedLinkPassword, apiHost, clientName, responseFilter } = props;
+        const {
+            rootFolderId,
+            token,
+            sharedLink,
+            sharedLinkPassword,
+            apiHost,
+            clientName,
+            requestInterceptor,
+            responseInterceptor
+        } = props;
 
         this.api = new API({
             token,
@@ -98,7 +101,8 @@ class ContentTree extends Component<DefaultProps, Props, State> {
             sharedLinkPassword,
             apiHost,
             clientName,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
 
@@ -237,7 +241,7 @@ class ContentTree extends Component<DefaultProps, Props, State> {
         ) {
             return;
         }
-        const grid: any = findDOMNode(this.table.Grid);
+        const grid: any = findDOMNode(this.table.Grid); // eslint-disable-line react/no-find-dom-node
         grid.focus();
     }
 
@@ -318,24 +322,34 @@ class ContentTree extends Component<DefaultProps, Props, State> {
      * @return {Element}
      */
     render() {
-        const { rootFolderId, type, getLocalizedMessage, isSmall, className, measureRef }: Props = this.props;
+        const {
+            language,
+            messages,
+
+            rootFolderId,
+            type,
+            isSmall,
+            className,
+            measureRef
+        }: Props = this.props;
         const { view, currentCollection }: State = this.state;
-        const styleClassName = classNames('buik bct buik-app-element', className);
+        const styleClassName = classNames('be bct be-app-element', className);
 
         return (
-            <div id={this.id} className={styleClassName} ref={measureRef}>
-                <Content
-                    view={view}
-                    isSmall={isSmall}
-                    rootId={rootFolderId}
-                    selectableType={type}
-                    currentCollection={currentCollection}
-                    tableRef={this.tableRef}
-                    onItemClick={this.onItemClick}
-                    onExpanderClick={this.onExpanderClick}
-                    getLocalizedMessage={getLocalizedMessage}
-                />
-            </div>
+            <Internationalize language={language} messages={messages}>
+                <div id={this.id} className={styleClassName} ref={measureRef}>
+                    <Content
+                        view={view}
+                        isSmall={isSmall}
+                        rootId={rootFolderId}
+                        selectableType={type}
+                        currentCollection={currentCollection}
+                        tableRef={this.tableRef}
+                        onItemClick={this.onItemClick}
+                        onExpanderClick={this.onExpanderClick}
+                    />
+                </div>
+            </Internationalize>
         );
     }
 }

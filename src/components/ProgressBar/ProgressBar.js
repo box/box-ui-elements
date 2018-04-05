@@ -11,18 +11,15 @@ type Props = {
     percent: number
 };
 
-type DefaultProps = {|
-    percent: number
-|};
-
 type State = {
     percent: number
 };
 
-class ProgressBar extends PureComponent<DefaultProps, Props, State> {
+class ProgressBar extends PureComponent<Props, State> {
     props: Props;
     state: State;
-    timeout: number;
+    timeout: TimeoutID;
+    interval: IntervalID;
 
     static defaultProps = { percent: 0 };
 
@@ -38,13 +35,22 @@ class ProgressBar extends PureComponent<DefaultProps, Props, State> {
     }
 
     /**
+     * Clears any timeouts and intervals
+     *
+     * @return {void}
+     */
+    clearTimeoutAndInterval() {
+        clearInterval(this.interval);
+        clearTimeout(this.timeout);
+    }
+
+    /**
      * Updates state from new props
      *
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props) {
-        clearInterval(this.timeout);
-        clearTimeout(this.timeout);
+        this.clearTimeoutAndInterval();
         const { percent }: Props = nextProps;
         this.setState({ percent }, this.startProgress);
     }
@@ -55,8 +61,7 @@ class ProgressBar extends PureComponent<DefaultProps, Props, State> {
      * @return {void}
      */
     componentWillUnmount() {
-        clearInterval(this.timeout);
-        clearTimeout(this.timeout);
+        this.clearTimeoutAndInterval();
     }
 
     /**
@@ -68,7 +73,7 @@ class ProgressBar extends PureComponent<DefaultProps, Props, State> {
     startProgress = () => {
         const { percent }: State = this.state;
         if (percent === 0) {
-            this.timeout = setInterval(this.incrementProgress, 100);
+            this.interval = setInterval(this.incrementProgress, 100);
         } else if (percent === 100) {
             // Timeout helps transition of hiding the bar to finish
             this.timeout = setTimeout(this.resetProgress, 600);
@@ -108,8 +113,8 @@ class ProgressBar extends PureComponent<DefaultProps, Props, State> {
             transitionDelay: percent > 0 && percent < 100 ? '0' : '0.4s'
         };
         return (
-            <div className='buik-progress-container' style={containerStyle}>
-                <div className='buik-progress' style={{ width: `${percent}%` }} />
+            <div className='be-progress-container' style={containerStyle}>
+                <div className='be-progress' style={{ width: `${percent}%` }} />
             </div>
         );
     }

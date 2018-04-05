@@ -8,7 +8,7 @@
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
-import ChunkedUploadAPI from './api/ChunkedUpload';
+import MultiputUploadAPI from './api/uploads/MultiputUpload';
 import PlainUploadAPI from './api/PlainUpload';
 import Cache from './util/Cache';
 import {
@@ -44,14 +44,20 @@ import {
     FIELD_INTERACTED_AT,
     FIELD_SIZE,
     DEFAULT_VIEW_RECENTS,
-    DEFAULT_VIEW_FILES
+    DEFAULT_VIEW_FILES,
+    SKILL_KEYWORD,
+    SKILL_TIMELINE,
+    SKILL_TRANSCRIPT,
+    SKILL_KEYVALUE,
+    SIZE_MEDIUM
 } from './constants';
 
 export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
-export type Token = string | Function;
-export type ClassComponent<D, P, S> = Class<React$Component<D, P, S>>;
+export type Token = null | typeof undefined | string | Function;
+export type ClassComponent<P, S> = Class<React$Component<P, S>>;
 export type StringMap = { [string]: string };
 export type StringAnyMap = { [string]: any };
+export type StringBooleanMap = { [string]: boolean };
 export type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 export type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
 export type DefaultView = typeof DEFAULT_VIEW_RECENTS | typeof DEFAULT_VIEW_FILES;
@@ -74,7 +80,7 @@ export type UploadStatus =
     | typeof STATUS_COMPLETE
     | typeof STATUS_ERROR;
 export type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
-export type Size = typeof SIZE_SMALL | typeof SIZE_LARGE;
+export type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 
 export type SharedLink = {
     url: string,
@@ -103,14 +109,56 @@ export type User = {
     type: 'user'
 };
 
+export type SkillCardType =
+    | typeof SKILL_KEYWORD
+    | typeof SKILL_TIMELINE
+    | typeof SKILL_TRANSCRIPT
+    | typeof SKILL_KEYVALUE;
+export type SkillCardEntryType = 'text' | 'image';
+
+export type SkillCardEntryTimeSlice = {
+    start: number,
+    end?: number
+};
+
+export type SkillCardEntry = {
+    type?: SkillCardEntryType,
+    text?: string,
+    label?: string,
+    image_url?: string,
+    appears?: Array<SkillCardEntryTimeSlice>
+};
+
+export type SkillCard = {
+    type: 'skill_card',
+    skill_card_type: SkillCardType,
+    title?: string,
+    duration?: number,
+    entries: SkillCardEntry[],
+    error?: string
+};
+
+export type SkillCards = {
+    cards: Array<SkillCard>
+};
+
 export type MetadataTemplate = {
-    'box-skills-keywords-demo'?: { keywords: string },
-    'box-skills-timelines-demo'?: { timelines: string },
-    'box-skills-transcripts-demo'?: { transcripts: string }
+    boxSkillsCards?: SkillCards
 };
 
 export type MetadataType = {
     global?: MetadataTemplate
+};
+
+export type BoxItemVersion = {
+    id: string,
+    type: string,
+    sha1: string,
+    name?: string,
+    size?: number,
+    created_at?: string,
+    modified_at?: string,
+    modified_by?: User
 };
 
 export type BoxItem = {
@@ -137,7 +185,9 @@ export type BoxItem = {
     modified_by?: User,
     created_by?: User,
     selected?: boolean,
-    metadata?: MetadataType
+    metadata?: MetadataType,
+    file_version?: BoxItemVersion,
+    is_download_available: boolean
 };
 
 export type BoxItemCollection = {
@@ -173,7 +223,8 @@ export type FlattenedBoxItem = {
     modified_by?: User,
     created_by?: User,
     selected?: boolean,
-    metadata?: MetadataType
+    metadata?: MetadataType,
+    file_version?: BoxItemVersion
 };
 
 export type FlattenedBoxItemCollection = {
@@ -203,14 +254,30 @@ export type Collection = {
 };
 
 export type UploadItem = {
-    api: PlainUploadAPI | ChunkedUploadAPI,
+    api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
+    error?: Object,
     extension: string,
     file: File,
     name: string,
     progress: number,
     size: number,
-    status: UploadStatus
+    status: UploadStatus,
+    options?: UploadItemAPIOptions
+};
+
+export type UploadItemAPIOptions = {
+    apiHost?: string,
+    fileId?: string,
+    folderId?: string,
+    token?: Token,
+    uploadHost?: string,
+    uploadInitTimestamp?: number
+};
+
+export type UploadFileWithAPIOptions = {
+    file: File,
+    options?: UploadItemAPIOptions
 };
 
 export type ModalOptions = {
@@ -235,7 +302,7 @@ export type Crumb = {
 
 export type Options = {
     id?: string,
-    token?: Token,
+    token: Token,
     clientName?: string,
     version?: string,
     sharedLink?: string,
@@ -243,7 +310,10 @@ export type Options = {
     cache?: Cache,
     apiHost?: string,
     uploadHost?: string,
-    responseFilter?: Function
+    responseInterceptor?: Function,
+    requestInterceptor?: Function,
+    consoleLog?: boolean,
+    consoleError?: boolean
 };
 
 export type Recent = {
@@ -256,26 +326,34 @@ export type RecentCollection = {
     entries: Recent[]
 };
 
-export type SkillDataType = 'keyword' | 'transcript' | 'timeline';
-export type SkillDataEntryType = 'text' | 'image';
-
-export type TimeSlice = {
-    start: number,
-    end?: number
+export type MultiputConfig = {
+    digestReadahead: number,
+    initialRetryDelayMs: number,
+    maxRetryDelayMs: number,
+    parallelism: number,
+    requestTimeoutMs: number,
+    retries: number
 };
 
-export type SkillDataEntry = {
-    type?: SkillDataEntryType,
-    text?: string,
-    label?: string,
-    url?: string,
-    appears?: TimeSlice[]
+export type MultiputPart = {
+    offset: number,
+    part_id: string,
+    sha1: string,
+    size: number
 };
 
-export type SkillData = {
-    type: 'skills_data',
-    skills_data_type: SkillDataType,
-    title?: string,
-    duration?: number,
-    entries: SkillDataEntry[]
+export type MultiputData = {
+    part?: MultiputPart
+};
+
+export type FileVersions = {
+    total_count: number,
+    entries?: Array<BoxItemVersion>
+};
+
+export type AccessStats = {
+    preview_count: number,
+    download_count: number,
+    comment_count: number,
+    edit_count: number
 };

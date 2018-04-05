@@ -2,7 +2,7 @@
                           SOFTWARE LICENSE AGREEMENT
                                 (v.20170516)
 
-                              BOX UI ELEMENTS
+                                  BOX SDK
 
 This "Agreement" forms a legally binding agreement between Box (as defined in
 Section 14) and you ("Developer") that governs Developer's right to access and
@@ -114,7 +114,7 @@ services for their respective governing terms.
        and
     b. For each Contribution, Developer shall agree to the Box "Contributor
        License Agreement" (or "CLA") located here:
-       https://developer.box.com/docs/box-ui-elements-cla.
+       https://developer.box.com/docs/box-sdk-cla.
 
 5. Feedback. Developer may, from time to time, provide feedback to Box
    concerning the functionality and performance of the SDK or Box Service
@@ -345,7 +345,7 @@ services for their respective governing terms.
 
 
                                    Exhibit A
-                       BOX UI ELEMENT ACCEPTABLE USE POLICY
+                        BOX SDK ACCEPTABLE USE POLICY
 
 Acceptable Use Policy.  Developer shall not, and shall not use the SDKs to:
     a) Do anything illegal, or facilitate, promote or encourage any illegal

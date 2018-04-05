@@ -4,14 +4,26 @@
  * @author Box
  */
 
+import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import uniqueid from 'lodash/uniqueId';
+import throttle from 'lodash/throttle';
+import omit from 'lodash/omit';
+import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import Measure from 'react-measure';
-import Sidebar from './Sidebar';
+import { decode } from 'box-react-ui/lib/utils/keys';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import IconNavigateLeft from 'box-react-ui/lib/icons/general/IconNavigateLeft';
+import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight';
+import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
 import Cache from '../../util/Cache';
+import makeResponsive from '../makeResponsive';
+import Internationalize from '../Internationalize';
+import { isValidBoxFile } from '../../util/fields';
+import { isInputElement, focus } from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -21,31 +33,21 @@ import {
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW
 } from '../../constants';
-import type { Token, BoxItem } from '../../flowTypes';
+import type { Token, BoxItem, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
 
-type DefaultProps = {|
-    apiHost: string,
-    appHost: string,
-    staticHost: string,
-    staticPath: string,
-    locale: string,
-    version: string,
-    hasSidebar: boolean,
-    hasHeader: boolean,
-    className: string,
-    onLoad: Function,
-    onNavigate: Function
-|};
-
 type Props = {
-    file?: BoxItem,
-    fileId?: string,
-    locale: string,
+    fileId: string,
     version: string,
+    isSmall: boolean,
+    autoFocus: boolean,
+    useHotkeys: boolean,
+    showSidebar?: boolean,
     hasSidebar: boolean,
+    canDownload?: boolean,
+    showDownload?: boolean,
     hasHeader: boolean,
     apiHost: string,
     appHost: string,
@@ -53,41 +55,57 @@ type Props = {
     staticPath: string,
     token: Token,
     className: string,
-    getLocalizedMessage: Function,
+    measureRef: Function,
     onLoad: Function,
     onNavigate: Function,
     onClose?: Function,
-    skipServerUpdate?: boolean,
+    language: string,
+    messages?: StringMap,
     cache?: Cache,
-    collection?: string[],
+    collection: Array<string | BoxItem>,
     logoUrl?: string,
     sharedLink?: string,
-    sharedLinkPassword?: string
+    sharedLinkPassword?: string,
+    onInteraction: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function
 };
 
 type State = {
-    file?: BoxItem
+    file?: BoxItem,
+    showSidebar: boolean
 };
 
-class ContentPreview extends PureComponent<DefaultProps, Props, State> {
+const InvalidIdError = new Error('Invalid id for Preview!');
+
+class ContentPreview extends PureComponent<Props, State> {
     id: string;
     props: Props;
     state: State;
     preview: any;
     api: API;
+    previewContainer: ?HTMLDivElement;
+    mouseMoveTimeoutID: TimeoutID;
+    rootElement: HTMLElement;
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         className: '',
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
-        locale: DEFAULT_PREVIEW_LOCALE,
+        language: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
+        canDownload: true,
+        showDownload: true,
         hasHeader: false,
+        autoFocus: false,
+        useHotkeys: true,
         onLoad: noop,
-        onNavigate: noop
+        onNavigate: noop,
+        onInteraction: noop,
+        collection: []
     };
 
     /**
@@ -98,9 +116,19 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        const { file, cache, token, sharedLink, sharedLinkPassword, apiHost } = props;
+        const {
+            hasSidebar,
+            cache,
+            token,
+            sharedLink,
+            sharedLinkPassword,
+            apiHost,
+            isSmall,
+            requestInterceptor,
+            responseInterceptor
+        } = props;
 
-        this.state = { file };
+        this.state = { showSidebar: hasSidebar && !isSmall };
         this.id = uniqueid('bcpr_');
         this.api = new API({
             cache,
@@ -108,7 +136,9 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
             sharedLink,
             sharedLinkPassword,
             apiHost,
-            clientName: CLIENT_NAME_CONTENT_PREVIEW
+            clientName: CLIENT_NAME_CONTENT_PREVIEW,
+            requestInterceptor,
+            responseInterceptor
         });
     }
 
@@ -119,77 +149,60 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {void}
      */
     componentWillUnmount(): void {
-        if (this.preview) {
-            this.preview.removeAllListeners();
-            this.preview.destroy();
-        }
-        this.preview = undefined;
+        this.destroyPreview();
     }
 
     /**
-     * Called after shell mounts
+     * Called after receiving new props
      *
      * @private
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { file, fileId, token }: Props = this.props;
+        const { fileId, token, isSmall, hasSidebar }: Props = this.props;
 
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
-        const hasFileChanged = nextProps.file !== file;
+        const hasSizeChanged = nextProps.isSmall !== isSmall;
 
-        const newState = {};
-
-        if (hasTokenChanged || hasFileChanged || hasFileIdChanged) {
-            if (hasFileChanged) {
-                newState.file = nextProps.file;
-            } else {
-                newState.file = undefined;
-            }
-            if (this.preview) {
-                this.preview.destroy();
-                this.preview = undefined;
-            }
+        if (hasTokenChanged || hasFileIdChanged) {
+            this.destroyPreview();
+            this.setState({
+                file: undefined
+            });
+            this.fetchFile(nextProps.fileId);
         }
 
-        // Only update the state if there is something to update
-        if (Object.keys(newState).length) {
-            this.setState(newState);
+        if (hasSizeChanged) {
+            this.setState({
+                showSidebar: hasSidebar && !nextProps.isSmall
+            });
         }
     }
 
     /**
-     * Called after shell mounts
+     * Called after shell mounts.
+     * Once the component mounts fetch the file.
      *
      * @private
      * @return {void}
      */
     componentDidMount(): void {
-        this.loadAssetsAndPreview();
+        const { fileId }: Props = this.props;
+        this.loadStylesheet();
+        this.loadScript();
+        this.fetchFile(fileId);
+        this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
+        this.focusPreview();
     }
 
     /**
-     * Called after shell updates
+     * Called after shell re-mounts
      *
      * @private
      * @return {void}
      */
     componentDidUpdate(): void {
-        this.loadAssetsAndPreview();
-    }
-
-    /**
-     * Loads assets and preview
-     *
-     * @private
-     * @return {void}
-     */
-    loadAssetsAndPreview(): void {
-        if (!this.isPreviewLibraryLoaded()) {
-            this.loadStylesheet();
-            this.loadScript();
-        }
         this.loadPreview();
     }
 
@@ -200,8 +213,8 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {string} base url
      */
     getBasePath(asset: string): string {
-        const { staticHost, staticPath, locale, version }: Props = this.props;
-        const path: string = `${staticPath}/${version}/${locale}/${asset}`;
+        const { staticHost, staticPath, language, version }: Props = this.props;
+        const path: string = `${staticPath}/${version}/${language}/${asset}`;
         const suffix: string = staticHost.endsWith('/') ? path : `/${path}`;
         return `${staticHost}${suffix}`;
     }
@@ -245,7 +258,13 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
         const { head } = document;
         const url: string = this.getBasePath('preview.js');
 
-        if (!head || head.querySelector(`script[src="${url}"]`)) {
+        if (!head || this.isPreviewLibraryLoaded()) {
+            return;
+        }
+
+        const previewScript = head.querySelector(`script[src="${url}"]`);
+        if (previewScript) {
+            previewScript.addEventListener('load', this.loadPreview);
             return;
         }
 
@@ -256,51 +275,132 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
     }
 
     /**
+     * Focuses the preview on load.
+     *
+     * @return {void}
+     */
+    focusPreview() {
+        const { autoFocus }: Props = this.props;
+        if (autoFocus && !isInputElement(document.activeElement)) {
+            focus(this.rootElement);
+        }
+    }
+
+    /**
+     * Calls destroy of preview
+     *
+     * @return {void}
+     */
+    destroyPreview() {
+        if (this.preview) {
+            this.preview.removeAllListeners();
+            this.preview.destroy();
+            this.preview = undefined;
+        }
+    }
+
+    /**
+     * Updates preview cache and prefetches a file
+     *
+     * @param {BoxItem>} file - file to prefetch
+     * @return {void}
+     */
+    updatePreviewCacheAndPrefetch(file: BoxItem, token: Token): void {
+        if (!this.preview || !file || !file.id) {
+            return;
+        }
+
+        this.preview.updateFileCache([file]);
+        this.preview.prefetch({ fileId: file.id, token });
+    }
+
+    /**
+     * Gets the file id
+     *
+     * @param {string|BoxItem} file - box file or file id
+     * @return {string} file id
+     */
+    getFileId(file?: string | BoxItem): string {
+        if (typeof file === 'string') {
+            return file;
+        }
+
+        if (typeof file === 'object' && !!file.id) {
+            return file.id;
+        }
+
+        throw InvalidIdError;
+    }
+
+    /**
+     * Prefetches the next few preview files if any
+     *
+     * @param {Array<string|BoxItem>} files - files to prefetch
+     * @return {void}
+     */
+    prefetch(files: Array<string | BoxItem>): void {
+        files.forEach((file) => {
+            const fileId = this.getFileId(file);
+            this.fetchFile(fileId, noop, noop);
+        });
+    }
+
+    /**
+     * onLoad function for preview
+     *
+     * @return {void}
+     */
+    onPreviewLoad = (data) => {
+        const { onLoad, collection }: Props = this.props;
+        const currentIndex = this.getFileIndex();
+        const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
+        onLoad(data);
+        this.focusPreview();
+        if (this.preview && filesToPrefetch.length > 1) {
+            this.prefetch(filesToPrefetch);
+        }
+    };
+
+    canDownload() {
+        // showDownload is a prop that preview library uses and can be passed by the user
+        const { showDownload, canDownload }: Props = this.props;
+        const { file }: State = this.state;
+        const isFileDownloadable =
+            getProp(file, 'permissions.can_download', false) && getProp(file, 'is_download_available', false);
+        return isFileDownloadable && canDownload && showDownload;
+    }
+
+    /**
      * Loads the preview
      *
      * @return {void}
      */
     loadPreview = (): void => {
-        if (!this.isPreviewLibraryLoaded() || this.preview) {
+        const { token, collection, ...rest }: Props = this.props;
+        const { file }: State = this.state;
+
+        if (!this.isPreviewLibraryLoaded() || !file || !token || this.preview) {
             return;
         }
 
         const { Preview } = global.Box;
-        const { fileId, token, onLoad, onNavigate, ...rest }: Props = this.props;
-        const { file }: State = this.state;
-        const fileOrFileId = file ? Object.assign({}, file) : fileId;
 
-        if ((!file && !fileId) || !token) {
-            throw new Error('Missing file or fileId and/or token for Preview!');
-        }
+        const previewOptions = {
+            showDownload: this.canDownload(),
+            skipServerUpdate: true,
+            header: 'none',
+            container: `#${this.id} .bcpr-content`,
+            useHotkeys: false
+        };
 
         this.preview = new Preview();
-        this.preview.addListener('navigate', (id: string) => {
-            this.updateHeaderAndSidebar(id);
-            onNavigate(id);
+        this.preview.updateFileCache([file]);
+        this.preview.addListener('load', this.onPreviewLoad);
+        this.preview.show(file.id, token, {
+            ...previewOptions,
+            ...omit(rest, Object.keys(previewOptions))
         });
-        this.preview.addListener('load', onLoad);
-        this.preview.show(fileOrFileId, token, {
-            container: `#${this.id} .bcpr-content`,
-            header: 'none',
-            ...rest
-        });
-        this.updateHeaderAndSidebar(file ? file.id : fileId);
     };
-
-    /**
-     * Updates header and sidebar
-     *
-     * @private
-     * @param {String} id - file id
-     * @return {void}
-     */
-    updateHeaderAndSidebar(id?: string): void {
-        if (!id) {
-            throw new Error('Invalid id for Preview!');
-        }
-        this.fetchFile(id);
-    }
 
     /**
      * Tells the preview to resize
@@ -308,7 +408,7 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {void}
      */
     onResize = (): void => {
-        if (this.preview) {
+        if (this.preview && this.preview.getCurrentViewer()) {
             this.preview.resize();
         }
     };
@@ -342,12 +442,24 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      *
      * @private
      * @param {string} id file id
-     * @param {Boolean|void} [forceFetch] To void cache
+     * @param {Function|void} [successCallback] - Callback after file is fetched
+     * @param {Function|void} [errorCallback] - Callback after error
      * @return {void}
      */
-    fetchFile(id: string, forceFetch: boolean = false): void {
+    fetchFile(id: string, successCallback: ?Function, errorCallback: ?Function): void {
+        if (!id) {
+            throw InvalidIdError;
+        }
         const { hasSidebar }: Props = this.props;
-        this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch, hasSidebar);
+        this.api
+            .getFileAPI()
+            .file(
+                id,
+                successCallback || this.fetchFileSuccessCallback,
+                errorCallback || this.errorCallback,
+                false,
+                hasSidebar
+            );
     }
 
     /**
@@ -371,6 +483,208 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
     };
 
     /**
+     * Handles showing or hiding of the sidebar.
+     * Only used when showSidebar isnt passed in as prop.
+     *
+     * @private
+     * @return {void}
+     */
+    toggleSidebar = (show: ?boolean): void => {
+        const { hasSidebar }: Props = this.props;
+        this.setState((prevState) => ({
+            showSidebar: typeof show === 'boolean' ? hasSidebar && show : hasSidebar && !prevState.showSidebar
+        }));
+    };
+
+    /**
+     * Finds the index of current file inside the collection
+     *
+     * @return {number} -1 if not indexed
+     */
+    getFileIndex() {
+        const { file }: State = this.state;
+        const { collection }: Props = this.props;
+        if (!file || collection.length < 2) {
+            return -1;
+        }
+
+        const index = collection.indexOf(file);
+        if (index < 0) {
+            return collection.indexOf(file.id);
+        }
+        return index;
+    }
+
+    /**
+     * Shows a preview of a file at the specified index in the current collection.
+     *
+     * @public
+     * @param {number} index - Index of file to preview
+     * @return {void}
+     */
+    navigateToIndex(index) {
+        const { collection, onNavigate }: Props = this.props;
+        const { length } = collection;
+        if (length < 2 || index < 0 || index > length - 1) {
+            return;
+        }
+
+        const fileOrId = collection[index];
+        const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
+        onNavigate(fileId);
+        this.destroyPreview();
+        this.fetchFile(fileId);
+    }
+
+    /**
+     * Shows a preview of the previous file.
+     *
+     * @public
+     * @return {void}
+     */
+    navigateLeft = () => {
+        const currentIndex = this.getFileIndex();
+        const newIndex = currentIndex === 0 ? 0 : currentIndex - 1;
+        if (newIndex !== currentIndex) {
+            this.navigateToIndex(newIndex);
+        }
+    };
+
+    /**
+     * Shows a preview of the next file.
+     *
+     * @public
+     * @return {void}
+     */
+    navigateRight = () => {
+        const { collection }: Props = this.props;
+        const currentIndex = this.getFileIndex();
+        const newIndex = currentIndex === collection.length - 1 ? collection.length - 1 : currentIndex + 1;
+        if (newIndex !== currentIndex) {
+            this.navigateToIndex(newIndex);
+        }
+    };
+
+    /**
+     * Downloads file.
+     *
+     * @public
+     * @return {void}
+     */
+    download = () => {
+        if (this.preview) {
+            this.preview.download();
+        }
+    };
+
+    /**
+     * Prints file.
+     *
+     * @public
+     * @return {void}
+     */
+    print = () => {
+        if (this.preview) {
+            this.preview.print();
+        }
+    };
+
+    /**
+     * Mouse move handler thati s throttled and show
+     * the navigation arrows if applicable.
+     *
+     * @return {void}
+     */
+    onMouseMove = throttle(
+        () => {
+            const viewer = this.getPreviewer();
+            const isPreviewing = !!viewer;
+            const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
+
+            clearTimeout(this.mouseMoveTimeoutID);
+
+            if (!this.previewContainer) {
+                return;
+            }
+
+            // Always assume that navigation arrows will be hidden
+            this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+
+            // Only show it if either we aren't previewing or if we are then the viewer
+            // is not blocking the show. If we are previewing then the viewer may choose
+            // to not allow navigation arrows. This is mostly useful for videos since the
+            // navigation arrows may interfere with the settings menu inside video player.
+            if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
+                this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
+            }
+
+            this.mouseMoveTimeoutID = setTimeout(() => {
+                if (this.previewContainer) {
+                    this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
+                }
+            }, 1500);
+        },
+        1000,
+        true
+    );
+
+    /**
+     * Keyboard events
+     *
+     * @private
+     * @return {void}
+     */
+    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+        const { useHotkeys }: Props = this.props;
+        if (!useHotkeys) {
+            return;
+        }
+
+        let consumed = false;
+        const key = decode(event);
+        const viewer = this.getPreviewer();
+
+        // If focus was on an input or if the viewer doesn't exist
+        // then don't bother doing anything further
+        if (!key || !viewer || isInputElement(event.target)) {
+            return;
+        }
+
+        if (typeof viewer.onKeydown === 'function') {
+            consumed = !!viewer.onKeydown(key, event.nativeEvent);
+        }
+
+        if (!consumed) {
+            switch (key) {
+                case 'ArrowLeft':
+                    this.navigateLeft();
+                    consumed = true;
+                    break;
+                case 'ArrowRight':
+                    this.navigateRight();
+                    consumed = true;
+                    break;
+                default:
+                // no-op
+            }
+        }
+
+        if (consumed) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    };
+
+    /**
+     * Holds the reference the preview container
+     *
+     * @return {void}
+     */
+    containerRef = (container) => {
+        this.previewContainer = container;
+    };
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -378,31 +692,106 @@ class ContentPreview extends PureComponent<DefaultProps, Props, State> {
      * @return {Element}
      */
     render() {
-        const { className, hasSidebar, hasHeader, onClose, getLocalizedMessage }: Props = this.props;
-        const { file }: State = this.state;
+        const {
+            isSmall,
+            token,
+            language,
+            messages,
+            className,
+            showSidebar,
+            hasSidebar,
+            hasHeader,
+            onClose,
+            measureRef,
+            sharedLink,
+            sharedLinkPassword,
+            onInteraction,
+            requestInterceptor,
+            responseInterceptor
+        }: Props = this.props;
+
+        const { file, showSidebar: showSidebarState }: State = this.state;
+        const { collection }: Props = this.props;
+
+        const fileIndex = this.getFileIndex();
+        const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
+        const hasRightNavigation = collection.length > 1 && fileIndex > -1 && fileIndex < collection.length - 1;
+        const isValidFile = isValidBoxFile(file, true, true);
+
+        let isSidebarVisible = isValidFile && hasSidebar && showSidebarState;
+        let hasSidebarButton = hasSidebar;
+        let onSidebarToggle = this.toggleSidebar;
+
+        if (typeof showSidebar === 'boolean') {
+            // The parent component passed in the showSidebar property.
+            // Sidebar should be controlled by the parent and not by local state.
+            isSidebarVisible = isValidFile && hasSidebar && showSidebar;
+            hasSidebarButton = false;
+            onSidebarToggle = null;
+        }
+
+        /* eslint-disable jsx-a11y/no-static-element-interactions */
+        /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <div id={this.id} className={`buik bcpr ${className}`}>
-                {hasHeader &&
-                    <Header
-                        file={file}
-                        showSidebarButton={hasSidebar}
-                        onClose={onClose}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />}
-                <div className='bcpr-body'>
-                    {hasSidebar &&
-                        <Sidebar
+            <Internationalize language={language} messages={messages}>
+                <div
+                    id={this.id}
+                    className={`be bcpr ${className}`}
+                    ref={measureRef}
+                    onKeyDown={this.onKeyDown}
+                    tabIndex={0}
+                >
+                    {hasHeader && (
+                        <Header
                             file={file}
-                            getPreviewer={this.getPreviewer}
-                            getLocalizedMessage={getLocalizedMessage}
-                        />}
-                    <Measure bounds onResize={this.onResize}>
-                        {({ measureRef }) => <div ref={measureRef} className='bcpr-content' />}
-                    </Measure>
+                            hasSidebarButton={hasSidebarButton}
+                            isSidebarVisible={isSidebarVisible}
+                            onClose={onClose}
+                            onSidebarToggle={onSidebarToggle}
+                            onPrint={this.print}
+                            canDownload={this.canDownload()}
+                            onDownload={this.download}
+                        />
+                    )}
+                    <div className='bcpr-body'>
+                        <div className='bcpr-container' onMouseMove={this.onMouseMove} ref={this.containerRef}>
+                            <Measure bounds onResize={this.onResize}>
+                                {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
+                            </Measure>
+                            {hasLeftNavigation && (
+                                <PlainButton type='button' className='bcpr-navigate-left' onClick={this.navigateLeft}>
+                                    <IconNavigateLeft />
+                                </PlainButton>
+                            )}
+                            {hasRightNavigation && (
+                                <PlainButton type='button' className='bcpr-navigate-right' onClick={this.navigateRight}>
+                                    <IconNavigateRight />
+                                </PlainButton>
+                            )}
+                        </div>
+                        {isSidebarVisible && (
+                            <ContentSidebar
+                                isSmall={isSmall}
+                                hasProperties
+                                hasSkills
+                                cache={this.api.getCache()}
+                                token={token}
+                                fileId={this.getFileId(file)}
+                                getPreviewer={this.getPreviewer}
+                                sharedLink={sharedLink}
+                                sharedLinkPassword={sharedLinkPassword}
+                                onInteraction={onInteraction}
+                                requestInterceptor={requestInterceptor}
+                                responseInterceptor={responseInterceptor}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            </Internationalize>
         );
+        /* eslint-enable jsx-a11y/no-static-element-interactions */
+        /* eslint-enable jsx-a11y/no-noninteractive-tabindex */
     }
 }
 
-export default ContentPreview;
+export default makeResponsive(ContentPreview);

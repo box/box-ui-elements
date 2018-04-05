@@ -13,15 +13,14 @@ import './NameCell.scss';
 
 export default (
     rootId: string,
-    getLocalizedMessage: Function,
     view: View,
     onItemClick: Function,
     onItemSelect?: Function,
     canPreview: boolean = false,
     showDetails: boolean = true,
     isTouch: boolean = false
-) => ({ rowData }: { rowData: BoxItem }) =>
-    <div className='buik-item-name'>
+) => ({ rowData }: { rowData: BoxItem }) => (
+    <div className='be-item-name'>
         <ItemName
             isTouch={isTouch}
             item={rowData}
@@ -29,13 +28,8 @@ export default (
             onClick={onItemClick}
             onFocus={onItemSelect}
         />
-        {view === VIEW_SEARCH || showDetails
-            ? <ItemDetails
-                item={rowData}
-                view={view}
-                rootId={rootId}
-                onItemClick={onItemClick}
-                getLocalizedMessage={getLocalizedMessage}
-              />
-            : null}
-    </div>;
+        {view === VIEW_SEARCH || showDetails ? (
+            <ItemDetails item={rowData} view={view} rootId={rootId} onItemClick={onItemClick} />
+        ) : null}
+    </div>
+);

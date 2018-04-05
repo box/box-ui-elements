@@ -47,6 +47,10 @@
                     <input class="folder" type="text" placeholder="Enter root folder id" value="0" />
                 </label>
                 <label>
+                    <div>Current Folder Id</div>
+                    <input class="currentFolder" type="text" placeholder="Enter root folder id" value="42732985861" />
+                </label>
+                <label>
                     <div>Auth Token</div>
                     <input class="token" type="text" placeholder="Enter auth token" />
                 </label>
@@ -69,14 +73,15 @@
             <h1>Folder Picker (max 3 items / token generator / cannot upload)</h1>
             <div class="folderPicker2"></div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.2.0/umd/react.development.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.2.0/umd/react-dom.development.js"></script>
         <script src="../dev/en-US/picker.no.react.js"></script>
         <script>
             function load() {
                 const { FilePicker, FolderPicker } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
+                const currentFolderId = document.querySelector('.currentFolder').value || localStorage.getItem('currentFolder');
 
                 localStorage.setItem('token', token);
                 localStorage.setItem('folder', folderId);
@@ -108,6 +113,7 @@
                     document.querySelector('.filePicker1').innerHTML = '';
                 });
                 filePicker1.show(folderId, token, {
+                    currentFolderId: currentFolderId,
                     container: '.filePicker1',
                     autoFocus: true,
                     sortBy: 'modified_at',

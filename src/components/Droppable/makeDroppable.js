@@ -13,10 +13,6 @@ type Props = {
     className: string
 };
 
-type DefaultProps = {
-    className: string
-};
-
 type State = {
     canDrop: boolean,
     isDragging: boolean,
@@ -25,16 +21,15 @@ type State = {
 
 /* eslint-disable no-plusplus */
 const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, onDrop?: Function }) => (
-    Wrapped: ClassComponent<any, any, any>
-): ClassComponent<any, any, any> =>
-    class DroppableComponent extends PureComponent<DefaultProps, Props, State> {
+    Wrapped: Function
+): ClassComponent<any, any> =>
+    class DroppableComponent extends PureComponent<Props, State> {
         props: Props;
         state: State;
         enterLeaveCounter: number;
         droppableEl: Element;
-        wrappedRef: Element;
 
-        static defaultProps: DefaultProps = {
+        static defaultProps = {
             className: ''
         };
 
@@ -59,7 +54,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
          * @inheritdoc
          */
         componentDidMount() {
-            const droppableEl = findDOMNode(this);
+            const droppableEl = findDOMNode(this); // eslint-disable-line react/no-find-dom-node
             if (!droppableEl || !(droppableEl instanceof Element)) {
                 throw new Error('Bad mount in makeDroppable');
             }
@@ -83,18 +78,6 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             this.droppableEl.removeEventListener('dragleave', this.handleDragLeave);
             this.droppableEl.removeEventListener('drop', this.handleDrop);
         }
-
-        /**
-         * Sets a ref to the instance of BaseComponent
-         * Note: This will return null if BaseComponent is a stateless, functional component
-         * because stateless, functional components have no instances
-         *
-         * @param {Component} ref - Ref to the component instance of BaseComponent
-         * @return {void}
-         */
-        setWrappedRef = (ref: Element) => {
-            this.wrappedRef = ref;
-        };
 
         /**
          * Function that gets called when an item is dragged into the drop zone
@@ -216,7 +199,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
                 className: classes
             };
 
-            return <Wrapped {...mergedProps} ref={this.setWrappedRef} />;
+            return <Wrapped {...mergedProps} />;
         }
     };
 

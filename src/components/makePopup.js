@@ -6,8 +6,8 @@
 
 import React, { PureComponent } from 'react';
 import Modal from 'react-modal';
-import noop from 'lodash.noop';
-import omit from 'lodash.omit';
+import noop from 'lodash/noop';
+import omit from 'lodash/omit';
 import type { ModalOptions } from '../flowTypes';
 import { CLIENT_NAME_CONTENT_PICKER, CLIENT_NAME_CONTENT_UPLOADER, CLIENT_NAME_CONTENT_TREE } from '../constants';
 
@@ -24,7 +24,7 @@ type State = {
 };
 
 const makePopup = (kit: string) => (Wrapped: any) =>
-    class Wrapper extends PureComponent<void, Props, State> {
+    class Wrapper extends PureComponent<Props, State> {
         props: Props;
         state: State;
 
@@ -115,9 +115,9 @@ const makePopup = (kit: string) => (Wrapped: any) =>
             const wrappedProps = omit(rest, ['onCancel', 'onChoose', 'onClose', 'modal']);
             const {
                 buttonLabel = 'Missing modal.buttonLabel in options',
-                buttonClassName = 'buik-btn buik-btn-primary',
-                modalClassName = 'buik-modal-wrapper-content',
-                overlayClassName = 'buik-modal-wrapper-overlay'
+                buttonClassName = 'btn btn-primary',
+                modalClassName = 'be-modal-wrapper-content',
+                overlayClassName = 'be-modal-wrapper-overlay'
             }: ModalOptions = modal;
 
             switch (kit) {

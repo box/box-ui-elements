@@ -4,8 +4,6 @@
  * @author Box
  */
 
-import { CLASS_CHECKBOX_SPAN, CLASS_BUTTON_CONTENT_SPAN } from '../constants';
-
 /**
  * Checks if an html element is some type of input-able
  * element or text area type where characters can be typed.
@@ -13,12 +11,17 @@ import { CLASS_CHECKBOX_SPAN, CLASS_BUTTON_CONTENT_SPAN } from '../constants';
  * @param {HTMLElement|null} element - the dom element to check
  * @return {boolean} true if its one of the above elements
  */
-export function isInputElement(element: HTMLElement | null): boolean {
+export function isInputElement(element: HTMLElement | EventTarget | null): boolean {
     if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
     const tag = element.tagName.toLowerCase();
-    return tag === 'input' || tag === 'select' || tag === 'textarea';
+    return (
+        tag === 'input' ||
+        tag === 'select' ||
+        tag === 'textarea' ||
+        (tag === 'div' && !!element.getAttribute('contenteditable'))
+    );
 }
 
 /**
@@ -28,19 +31,24 @@ export function isInputElement(element: HTMLElement | null): boolean {
  * @param {HTMLElement|null} element - the dom element to check
  * @return {boolean} true if its one of the above elements
  */
-export function isFocusableElement(element: HTMLElement | null): boolean {
+export function isFocusableElement(element: HTMLElement | EventTarget | null): boolean {
     if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
     const tag = element.tagName.toLowerCase();
-    return (
-        isInputElement(element) ||
-        tag === 'button' ||
-        tag === 'a' ||
-        tag === 'option' ||
-        element.classList.contains(CLASS_CHECKBOX_SPAN) ||
-        element.classList.contains(CLASS_BUTTON_CONTENT_SPAN)
-    );
+
+    // Box React UI sensitive checks
+    const isCheckbox =
+        element.classList.contains('checkbox-pointer-target') ||
+        (element.parentElement instanceof HTMLElement
+            ? element.parentElement.classList.contains('checkbox-label')
+            : false);
+
+    const isButton =
+        element.classList.contains('btn-content') ||
+        (element.parentElement instanceof HTMLElement ? element.parentElement.classList.contains('btn') : false);
+
+    return isInputElement(element) || tag === 'button' || tag === 'a' || tag === 'option' || isCheckbox || isButton;
 }
 
 /**
@@ -51,8 +59,12 @@ export function isFocusableElement(element: HTMLElement | null): boolean {
  * @param {boolean|void} [focusRoot] - if root should be focused
  * @return {void}
  */
-export function focus(root: HTMLElement, selector: string, focusRoot: boolean = true): void {
-    if (!root || !selector) {
+export function focus(root: HTMLElement, selector?: string, focusRoot: boolean = true): void {
+    if (!root) {
+        return;
+    }
+    if (!selector) {
+        root.focus();
         return;
     }
     const element = root.querySelector(selector);

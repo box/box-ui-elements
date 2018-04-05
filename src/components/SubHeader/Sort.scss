@@ -1,15 +1,16 @@
-.buik-sort-selected {
-    flex: 0 0 20px;
-}
-
-.buik-menu-sort.buik-aria-menu [role=menuitem] {
+.be-sort-selected {
     display: flex;
+    flex: 0 0 26px;
 }
 
-.buik-btn.buik-sort-btn {
+.be-menu-sort.aria-menu .menu-item {
+    padding-right: 45px;
+}
+
+.btn.be-btn-sort {
     padding: 7px 6px;
 
-    .bce:not(.buik-is-small) & {
+    .bce:not(.be-is-small) & {
         display: none;
     }
 

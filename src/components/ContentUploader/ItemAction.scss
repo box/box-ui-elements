@@ -1,10 +1,38 @@
 .bcu-item-action {
+    .crawler {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+    }
+
     button {
         display: flex;
 
         // Vertically center icon
         svg {
             display: block;
+        }
+
+        .be-icon-in-progress {
+            height: 24px;
+            width: 24px;
+
+            // Hide cross icon without hover
+            svg {
+                display: none;
+            }
+        }
+
+        // Display cross icon on hover and hide loading indicator
+        &:hover .be-icon-in-progress {
+            svg {
+                display: block;
+            }
+
+            .crawler {
+                display: none;
+            }
         }
     }
 }

@@ -5,42 +5,27 @@
  */
 
 /**
- * Gets the date in simple format
+ * Checks whether the given date is today.
  *
- * @param {Object} date object
- * @param {string|void} [todayString] today
- * @param {string|void} [yesterdayString] yesterday
- * @return {string} date in words
+ * @param {Date} dateValue - date to check
+ * @return {boolean}
  */
-export function getDate(date: string, todayString?: string, yesterdayString?: string): string {
-    const today: Date = new Date();
-    const yesterday: Date = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    const then: Date = new Date(date);
-    const isToday: boolean = today.toDateString() === then.toDateString();
-    const isYesterday: boolean = yesterday.toDateString() === then.toDateString();
-
-    if (isToday && !!todayString) {
-        return todayString;
-    } else if (isYesterday && !!yesterdayString) {
-        return yesterdayString;
-    }
-    return then.toDateString();
+function isToday(dateValue: Date) {
+    const currentDate = new Date();
+    const date = new Date(dateValue);
+    return currentDate.toDateString() === date.toDateString();
 }
 
 /**
- * Gets the date time in simple format
+ * Checks whether the given date is yesterday.
  *
- * @param {Object} date object
- * @param {string|void} [todayString] today
- * @param {string|void} [yesterdayString] yesterday
- * @return {string} date in words
+ * @param {Date} dateValue - date to check
+ * @return {boolean}
  */
-export function getDateTime(date: string, todayString?: string, yesterdayString?: string): string {
-    const dateString: string = getDate(date, todayString, yesterdayString);
-    const d: Date = new Date(date);
-    return `${dateString}, ${d.toLocaleTimeString()}`;
+function isYesterday(dateValue: Date) {
+    const yesterday: Date = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return yesterday.toDateString() === dateValue.toDateString();
 }
 
 /**
@@ -49,10 +34,10 @@ export function getDateTime(date: string, todayString?: string, yesterdayString?
  * @param {number} seconds - seconds
  * @return {string} A string formatted like 3:57:35
  */
-export function formatTime(seconds: number): string {
+function formatTime(seconds: number): string {
     const h = Math.floor(seconds / 3600);
-    const m = Math.floor(seconds % 3600 / 60);
-    const s = Math.floor(seconds % 3600 % 60);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor((seconds % 3600) % 60);
     const hour = h > 0 ? `${h.toString()}:` : '';
     const sec = s < 10 ? `0${s.toString()}` : s.toString();
     let min = m.toString();
@@ -61,3 +46,16 @@ export function formatTime(seconds: number): string {
     }
     return `${hour}${min}:${sec}`;
 }
+
+/**
+ * Adds time to a given date
+ *
+ * @param {Date} date - date to add time to
+ * @param {number} timeToAdd - amount of time to add in ms
+ * @return {Date} The modified date
+ */
+function addTime(date: Date, timeToAdd: number): Date {
+    return new Date(date.getTime() + timeToAdd);
+}
+
+export { isToday, isYesterday, formatTime, addTime };

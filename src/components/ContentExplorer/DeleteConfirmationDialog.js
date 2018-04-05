@@ -6,18 +6,22 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import type { BoxItem } from '../../flowTypes';
-import { Button, PrimaryButton } from '../Button';
+import { injectIntl, FormattedMessage } from 'react-intl';
+import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
+import Button from 'box-react-ui/lib/components/button/Button';
+import messages from '../messages';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL, TYPE_FOLDER } from '../../constants';
+import type { BoxItem } from '../../flowTypes';
 
 type Props = {
     isOpen: boolean,
     onDelete: Function,
     onCancel: Function,
     item: BoxItem,
-    getLocalizedMessage: Function,
     isLoading: boolean,
-    parentElement: HTMLElement
+    parentElement: HTMLElement,
+    appElement: HTMLElement,
+    intl: any
 };
 
 const DeleteConfirmationDialog = ({
@@ -25,32 +29,34 @@ const DeleteConfirmationDialog = ({
     onDelete,
     onCancel,
     item,
-    getLocalizedMessage,
     isLoading,
-    parentElement
-}: Props) =>
-    <Modal
-        isOpen={isOpen}
-        parentSelector={() => parentElement}
-        portalClassName={CLASS_MODAL}
-        className={CLASS_MODAL_CONTENT}
-        overlayClassName={CLASS_MODAL_OVERLAY}
-        onRequestClose={onCancel}
-        contentLabel={getLocalizedMessage('buik.modal.delete.confirmation.label')}
-    >
-        <div>
-            {getLocalizedMessage(`buik.modal.delete.confirmation.text${item.type === TYPE_FOLDER ? '.folder' : ''}`, {
-                name: item.name
-            })}
-        </div>
-        <div className='buik-modal-btns'>
-            <PrimaryButton onClick={onDelete} isLoading={isLoading}>
-                {getLocalizedMessage('buik.more.options.delete')}
-            </PrimaryButton>
-            <Button onClick={onCancel} isDisabled={isLoading} autoFocus>
-                {getLocalizedMessage('buik.footer.button.cancel')}
-            </Button>
-        </div>
-    </Modal>;
+    parentElement,
+    appElement,
+    intl
+}: Props) => {
+    const message = item.type === TYPE_FOLDER ? messages.deleteDialogFolderText : messages.deleteDialogFileText;
+    return (
+        <Modal
+            isOpen={isOpen}
+            parentSelector={() => parentElement}
+            portalClassName={CLASS_MODAL}
+            className={CLASS_MODAL_CONTENT}
+            overlayClassName={CLASS_MODAL_OVERLAY}
+            onRequestClose={onCancel}
+            contentLabel={intl.formatMessage(messages.deleteDialogLabel)}
+            appElement={appElement}
+        >
+            <FormattedMessage {...message} values={{ name: item.name }} />
+            <div className='be-modal-btns'>
+                <PrimaryButton type='button' onClick={onDelete} isLoading={isLoading}>
+                    <FormattedMessage {...messages.delete} />
+                </PrimaryButton>
+                <Button type='button' onClick={onCancel} isDisabled={isLoading} autoFocus>
+                    <FormattedMessage {...messages.cancel} />
+                </Button>
+            </div>
+        </Modal>
+    );
+};
 
-export default DeleteConfirmationDialog;
+export default injectIntl(DeleteConfirmationDialog);

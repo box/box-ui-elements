@@ -1,12 +1,12 @@
 /**
  * @flow
- * @file Helper for the box item api
+ * @file Helper for the box item API
  * @author Box
  */
 
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
 import Base from './Base';
-import getBadItemError from '../util/error';
+import { getBadItemError } from '../util/error';
 import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
 import type Cache from '../util/Cache';
 import type { BoxItem, FlattenedBoxItem, FlattenedBoxItemCollection, BoxItemPermission } from '../flowTypes';
@@ -36,8 +36,8 @@ class Item extends Base {
      * Creates a key for the item's parent
      * This is always a folder
      *
-     * @param {string} id folder id
-     * @return {string} key
+     * @param {string} Id - folder id
+     * @return {string} Key
      */
     getParentCacheKey(id: string): string {
         return `${CACHE_PREFIX_FOLDER}${id}`;
@@ -46,27 +46,29 @@ class Item extends Base {
     /**
      * Handles error responses
      *
-     * @param {Response} error.response - error response
+     * @param {Response} error.response - Error response
      * @return {Function} Function that handles response
      */
     errorHandler = (error: any): void => {
         if (this.isDestroyed()) {
             return;
         }
+
         const { response } = error;
+
         if (response) {
-            response.json().then(this.errorCallback);
-        } else if (error instanceof Error) {
-            this.errorCallback();
-            throw error;
+            this.errorCallback(response.data);
+            return;
         }
+
+        this.errorCallback();
     };
 
     /**
      * Creates a key for the cache
      *
-     * @param {string} id folder id
-     * @return {string} key
+     * @param {string} Id - Folder id
+     * @return {string} Key
      */
     getCacheKey(id: string): string {
         return `getCacheKey(${id}) should be overriden`;
@@ -75,9 +77,9 @@ class Item extends Base {
     /**
      * API URL for items
      *
-     * @param {string} id - item id
+     * @param {string} id - Item id
      * @protected
-     * @return {string} base url for files
+     * @return {string} Base url for files
      */
     getUrl(id: string): string {
         return `getUrl(${id}) should be overriden`;
@@ -86,20 +88,17 @@ class Item extends Base {
     /**
      * Merges new data with old data and returns new data
      *
-     * @param {String} cacheKey - the cache key of item to merge
-     * @param {String} key - the attribute to merge
-     * @param {Object} value - the value to merge
-     * @return {void}
+     * @param {String} cacheKey - The cache key of item to merge
+     * @param {String} key - The attribute to merge
+     * @param {Object} value - The value to merge
+     * @return {BoxItem} The newly updated object from the cache
      */
-    merge(cacheKey: string, key: string, value: any): void {
-        if (this.isDestroyed()) {
-            return;
-        }
+    merge(cacheKey: string, key: string, value: any): BoxItem {
         const cache: Cache = this.getCache();
         cache.merge(cacheKey, {
             [key]: value
         });
-        this.successCallback(cache.get(cacheKey));
+        return cache.get(cacheKey);
     }
 
     /**
@@ -156,7 +155,7 @@ class Item extends Base {
         const newEntries: string[] = entries.filter((entry: string) => entry !== childKey);
         const newCount: number = newEntries.length;
 
-        this.merge(
+        const updatedObject: BoxItem = this.merge(
             parentKey,
             'item_collection',
             Object.assign(item_collection, {
@@ -164,16 +163,18 @@ class Item extends Base {
                 total_count: total_count - (oldCount - newCount)
             })
         );
+
+        this.successCallback(updatedObject);
         this.postDeleteCleanup();
     };
 
     /**
      * API to delete an Item
      *
-     * @param {Object} item - item to delete
-     * @param {Function} successCallback - success callback
-     * @param {Function} errorCallback - error callback
-     * @param {Boolean} recursive - true for folders
+     * @param {Object} item - Item to delete
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {Boolean} recursive - True for folders
      * @return {void}
      */
     delete(item: BoxItem, successCallback: Function, errorCallback: Function = noop): Promise<void> {
@@ -200,28 +201,32 @@ class Item extends Base {
         this.errorCallback = errorCallback;
 
         const url = `${this.getUrl(id)}${type === TYPE_FOLDER ? '?recursive=true' : ''}`;
-        return this.xhr.delete({ url }).then(this.deleteSuccessHandler).catch(this.errorHandler);
+        return this.xhr
+            .delete({ url })
+            .then(this.deleteSuccessHandler)
+            .catch(this.errorHandler);
     }
 
     /**
      * Handles response for rename
      *
-     * @param {BoxItem} item - the updated item
+     * @param {BoxItem} data - The updated item
      * @return {void}
      */
-    renameSuccessHandler = (item: BoxItem): void => {
+    renameSuccessHandler = ({ data }: { data: BoxItem }): void => {
         // Get rid of all searches
         this.getCache().unsetAll(CACHE_PREFIX_SEARCH);
-        this.merge(this.getCacheKey(this.id), 'name', item.name);
+        const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'name', data.name);
+        this.successCallback(updatedObject);
     };
 
     /**
      * API to rename an Item
      *
-     * @param {Object} item - item to rename
-     * @param {string} name - item new name
-     * @param {Function} successCallback - success callback
-     * @param {Function} errorCallback - error callback
+     * @param {Object} item - Item to rename
+     * @param {string} name - Item new name
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
      * @return {void}
      */
     rename(item: BoxItem, name: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
@@ -254,20 +259,21 @@ class Item extends Base {
     /**
      * Handles response for shared link
      *
-     * @param {BoxItem} item - the updated item
+     * @param {BoxItem} data - The updated item
      * @return {void}
      */
-    shareSuccessHandler = (item: BoxItem): void => {
-        this.merge(this.getCacheKey(this.id), 'shared_link', item.shared_link);
+    shareSuccessHandler = ({ data }: { data: BoxItem }): void => {
+        const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
+        this.successCallback(updatedObject);
     };
 
     /**
-     * Api to create or remove a shared link
+     * API to create or remove a shared link
      *
-     * @param {Object} item - item to share
-     * @param {string} access - shared access level
-     * @param {Function} successCallback - success callback
-     * @param {Function|void} errorCallback - error callback
+     * @param {Object} item - Item to share
+     * @param {string} access - Shared access level
+     * @param {Function} successCallback - Success callback
+     * @param {Function|void} errorCallback - Error callback
      * @return {void}
      */
     share(item: BoxItem, access: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {

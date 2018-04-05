@@ -4,6 +4,10 @@
  * @author Box
  */
 
-export default function getBadItemError(): Error {
+export function getBadItemError(): Error {
     return new Error('Bad box item!');
+}
+
+export function getBadPermissionsError(): Error {
+    return new Error('Insufficient Permissions!');
 }

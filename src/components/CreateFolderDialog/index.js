@@ -1,1 +1,2 @@
-export default from './CreateFolderDialog';
+// @flow
+export { default } from './CreateFolderDialog';

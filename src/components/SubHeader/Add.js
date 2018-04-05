@@ -5,10 +5,13 @@
  */
 
 import React from 'react';
-import DropdownMenu from '../DropdownMenu';
-import { Menu, MenuItem } from '../Menu';
-import { Button } from '../Button';
-import IconPlus from '../icons/IconPlus';
+import { FormattedMessage } from 'react-intl';
+import Button from 'box-react-ui/lib/components/button/Button';
+import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
+import Menu from 'box-react-ui/lib/components/menu/Menu';
+import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
+import IconAddThin from 'box-react-ui/lib/icons/general/IconAddThin';
+import messages from '../messages';
 import './Add.scss';
 
 type Props = {
@@ -16,25 +19,27 @@ type Props = {
     showCreate: boolean,
     onUpload: Function,
     onCreate: Function,
-    isLoaded: boolean,
-    getLocalizedMessage: Function
+    isLoaded: boolean
 };
 
-const Add = ({ onUpload, onCreate, isLoaded, getLocalizedMessage, showUpload = true, showCreate = true }: Props) =>
-    <DropdownMenu isRightAligned constrainToScrollParent className='buik-dropdown-add'>
-        <Button className='buik-btn-add' isDisabled={!isLoaded}>
-            <IconPlus />
+const Add = ({ onUpload, onCreate, isLoaded, showUpload = true, showCreate = true }: Props) => (
+    <DropdownMenu isRightAligned constrainToScrollParent>
+        <Button type='button' className='be-btn-add' isDisabled={!isLoaded}>
+            <IconAddThin />
         </Button>
-        <Menu className='buik-menu-add'>
-            {showUpload &&
+        <Menu>
+            {showUpload && (
                 <MenuItem onClick={onUpload}>
-                    {getLocalizedMessage('buik.header.button.upload')}
-                </MenuItem>}
-            {showCreate &&
+                    <FormattedMessage {...messages.upload} />
+                </MenuItem>
+            )}
+            {showCreate && (
                 <MenuItem onClick={onCreate}>
-                    {getLocalizedMessage('buik.header.button.create')}
-                </MenuItem>}
+                    <FormattedMessage {...messages.newFolder} />
+                </MenuItem>
+            )}
         </Menu>
-    </DropdownMenu>;
+    </DropdownMenu>
+);
 
 export default Add;

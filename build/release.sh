@@ -24,6 +24,20 @@ install_dependencies() {
         echo "----------------------------------------------------"
         exit 1;
     fi
+
+    echo "----------------------------------------------"
+    echo "Check for known vulnerabilities"
+    echo "----------------------------------------------"
+    if yarn run nsp; then
+        echo "----------------------------------------------------"
+        echo "No known vulnerabilities found"
+        echo "----------------------------------------------------"
+    else
+        echo "----------------------------------------------------"
+        echo "Vulnerabilities found!"
+        echo "----------------------------------------------------"
+        exit 1;
+    fi
 }
 
 lint_and_test() {
@@ -49,12 +63,10 @@ lint_and_test() {
         echo "----------------------------------------------------"
         echo "Done testing for version" $VERSION
         echo "----------------------------------------------------"
-        move_reports
     else
         echo "----------------------------------------------------"
         echo "Failed testing!"
         echo "----------------------------------------------------"
-        move_reports
         exit 1;
     fi
 }
@@ -138,14 +150,6 @@ tag_release_on_github() {
     fi
 }
 
-move_reports() {
-    echo "--------------------------------------------------------------------------"
-    echo "Moving test reports to ./reports/cobertura.xml and ./reports/junit.xml"
-    echo "--------------------------------------------------------------------------"
-    mv ./reports/coverage/cobertura/*/cobertura-coverage.xml ./reports/cobertura.xml;
-    mv ./reports/coverage/junit/*/junit.xml ./reports/junit.xml;
-}
-
 add_remote() {
     # Add the release remote if it is not present
     if git remote get-url release; then
@@ -168,7 +172,7 @@ push_new_release() {
     git reset --hard release/master || exit 1
     # Remove old local tags in case a build failed
     git fetch --prune release '+refs/tags/*:refs/tags/*' || exit 1
-    git clean -fdX || exit 1
+    git clean -fd || exit 1
 
     # Install node modules
     if ! install_dependencies; then

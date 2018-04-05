@@ -1,0 +1,48 @@
+@import '../../../variables';
+
+.be-transcript {
+    color: $sevens;
+    font-family: monospace;
+    font-size: 11px;
+
+    // sass-lint:disable class-name-format
+    .ReactVirtualized__Table__Grid {
+        cursor: pointer;
+        outline: none;
+
+        .ReactVirtualized__Table__row {
+            align-items: flex-start;
+
+            .ReactVirtualized__Table__rowColumn:first-of-type {
+                margin: 0;
+            }
+
+            .be-transcript-column {
+                padding: 10px 0;
+                width: 200px;
+            }
+
+            .be-transcript-time-column {
+                padding: 10px 0 0 5px;
+            }
+        }
+
+        .ReactVirtualized__Table__row:focus,
+        .ReactVirtualized__Table__row:active {
+            background-color: $lighter-light-blue;
+            outline: none;
+        }
+    }
+}
+
+.be .btn-plain.be-transcript-expand {
+    height: 35px;
+    position: absolute;
+    right: -5px;
+    top: -48px;
+    width: 30px;
+
+    &:hover svg path {
+        fill: $sevens;
+    }
+}

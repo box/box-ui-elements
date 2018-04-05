@@ -1,14 +1,33 @@
 @import '../variables';
 
-.buik-logo {
+.be-logo {
     padding-left: 20px;
 
-    .buik-logo-custom {
+    .be-logo-custom {
         max-height: 32px;
         max-width: 80px;
 
-        .buik-is-small & {
+        .be-is-small & {
             max-width: 75px;
+        }
+    }
+
+    .be-logo-placeholder {
+        align-items: center;
+        background-color: $off-white;
+        border: 1px dashed;
+        display: flex;
+        height: 32px;
+        justify-content: center;
+        width: 75px;
+
+        .be-is-small & {
+            width: 60px;
+        }
+
+        span {
+            font-size: 10px;
+            text-transform: uppercase;
         }
     }
 

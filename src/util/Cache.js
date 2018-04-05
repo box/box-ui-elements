@@ -33,7 +33,7 @@ class Cache {
     }
 
     /**
-     * Merges cached values or sets it.
+     * Merges cached values for objects.
      *
      * @param {string} key The cache key
      * @param {*} value The cache value
@@ -41,7 +41,7 @@ class Cache {
      */
     merge(key: string, value: any): void {
         if (this.has(key)) {
-            Object.assign(this.get(key), value);
+            this.set(key, Object.assign({}, this.get(key), value));
         } else {
             throw new Error(`Key ${key} not in cache!`);
         }

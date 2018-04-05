@@ -1,5 +1,8 @@
 Development Setup
 -----------------
+
+Our development setup assumes a LINUX/BSD environemnt. Windows users may have to use cygwin.
+
 1. Install Node v6.10.0 or higher.
 2. Install yarn package manager `https://yarnpkg.com/en/docs/install` v1.0.1 or higher. Alternatively, you can replace most `yarn` commands with `npm` commands.
 2. Fork the upstream repo `https://github.com/box/box-ui-elements`.
@@ -24,16 +27,16 @@ Install the following plugins in your preferred editor
 
 ### Yarn commands
 
-* `yarn run build` to generate resource bundles and JS webpack bundles.
-* `yarn run watch` to only generate JS webpack bundles on file changes.
+* `yarn run build` to run webpack and generate JS/CSS.
+* `yarn run watch` to run webpack and generate JS/CSS on file changes.
 * `yarn run deploy` launches a local webpack dev server for testing. Also watches file changes.
 * `yarn run prettier` to format JS code with prettier.
-* `yarn run test` launches karma tests with PhantomJS.
-* `yarn run test --src=PATH/TO/SRC/FILENAME` launches test only for `src/PATH/TO/SRC/__tests__/FILENAME-test.js` instead of all tests. For example, `yarn run debug -- --src=components/Button/Button` launches tests for `components/Button/__tests__/Button-test.js`. This also works for directories, e.g. `yarn run test -- --src=components/`.
-* `yarn run debug` launches karma tests with PhantomJS for debugging. Open the URL mentioned in the console.
-* `yarn run debug --src=path/to/src/FILENAME` launches debugging for `src/path/to/src/__tests__/FILENAME-test.js` instead of all tests. Open the URL mentioned in the console.
+* `yarn run test` launches tests with jest.
+* `yarn run test --coverage` launches tests with jest with coverage.
 
 For more script commands see `package.json`. Test coverage reports are available under reports/coverage.
+
+For test debugging follow instructions provided in the [jest documentation](https://facebook.github.io/jest/docs/en/troubleshooting.html).
 
 ### Config files
 

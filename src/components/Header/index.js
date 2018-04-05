@@ -1,1 +1,2 @@
-export default from './Header';
+// @flow
+export { default } from './Header';

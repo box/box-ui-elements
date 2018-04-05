@@ -5,13 +5,14 @@
  */
 
 import Cache from '../util/Cache';
-import ChunkedUploadAPI from './ChunkedUpload';
+import ChunkedUploadAPI from './uploads/MultiputUpload';
 import PlainUploadAPI from './PlainUpload';
 import FolderAPI from './Folder';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import RecentsAPI from './Recents';
+import VersionsAPI from './Versions';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
@@ -57,6 +58,11 @@ class APIFactory {
     recentsAPI: RecentsAPI;
 
     /**
+     * @property {VersionsAPI}
+     */
+    versionsAPI: VersionsAPI;
+
+    /**
      * [constructor]
      *
      * @param {Object} options
@@ -68,7 +74,7 @@ class APIFactory {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {API} Api instance
      */
-    constructor(options: Options = {}) {
+    constructor(options: Options) {
         this.options = Object.assign({}, options, {
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
@@ -111,6 +117,10 @@ class APIFactory {
             this.recentsAPI.destroy();
             delete this.recentsAPI;
         }
+        if (this.versionsAPI) {
+            this.versionsAPI.destroy();
+            delete this.versionsAPI;
+        }
         if (destroyCache) {
             this.options.cache = new Cache();
         }
@@ -121,8 +131,8 @@ class APIFactory {
      *
      * @return {Cache} cache instance
      */
-    getCache(): ?Cache {
-        return this.options.cache;
+    getCache(): Cache {
+        return ((this.options.cache: any): Cache);
     }
 
     /**
@@ -227,6 +237,20 @@ class APIFactory {
         this.destroy();
         this.recentsAPI = new RecentsAPI(this.options);
         return this.recentsAPI;
+    }
+
+    /**
+     * API for versions
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {VersionsAPI} VersionsAPI instance
+     */
+    getVersionsAPI(shouldDestroy: boolean): VersionsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.versionsAPI = new VersionsAPI(this.options);
+        return this.versionsAPI;
     }
 }
 

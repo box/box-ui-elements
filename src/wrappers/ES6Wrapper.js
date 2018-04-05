@@ -4,19 +4,14 @@
  * @author Box
  */
 
-/* eslint-disable */
-import localeData from 'i18n-locale-data'; // this is a webpack alias
 import EventEmitter from 'events';
-import { IntlProvider, addLocaleData } from 'react-intl';
-import { unmountComponentAtNode } from 'react-dom';
-/* eslint-enable */
+import ReactDOM from 'react-dom';
+import { addLocaleData } from 'react-intl';
 import { DEFAULT_CONTAINER } from '../constants';
-import messages from '../messages';
+import i18n from '../i18n';
 import type { StringMap, Token } from '../flowTypes';
 
-declare var __LOCALE__: string;
 declare var __VERSION__: string;
-declare var __TRANSLATIONS__: StringMap;
 
 class ES6Wrapper extends EventEmitter {
     /**
@@ -27,12 +22,12 @@ class ES6Wrapper extends EventEmitter {
     /**
      * @property {HTMLElement}
      */
-    container: ?HTMLElement;
+    container: HTMLElement;
 
     /**
      * @property {string}
      */
-    root: string;
+    id: string;
 
     /**
      * @property {string}
@@ -47,17 +42,17 @@ class ES6Wrapper extends EventEmitter {
     /**
      * @property {string}
      */
-    locale: string = __LOCALE__;
-
-    /**
-     * @property {string}
-     */
-    translations: StringMap = __TRANSLATIONS__;
+    language: string = i18n.language;
 
     /**
      * @property {Object}
      */
-    intl: any;
+    localeData: any = i18n.localeData;
+
+    /**
+     * @property {Object}
+     */
+    messages: StringMap = i18n.messages;
 
     /**
      * @property {Element}
@@ -72,48 +67,27 @@ class ES6Wrapper extends EventEmitter {
      */
     constructor() {
         super();
-        addLocaleData(localeData);
-        this.intl = new IntlProvider({ locale: this.locale, messages: this.translations }, {}).getChildContext().intl;
+        addLocaleData(this.localeData);
     }
-
-    /**
-     * Uses react intl to format messages
-     *
-     * @public
-     * @param {string} id - The message id.
-     * @param {Object|undefined} [replacements] - Optional replacements.
-     * @return {string}
-     */
-    getLocalizedMessage = (id: string, replacements: ?StringMap = {}): string => {
-        if (!messages[id]) {
-            unmountComponentAtNode(this.container);
-            throw new Error(`Cannot get localized message for ${id}`);
-        }
-        const message: string = this.intl.formatMessage(messages[id], replacements);
-        if (!message) {
-            unmountComponentAtNode(this.container);
-            throw new Error(`Cannot get localized message for ${id}`);
-        }
-        return message;
-    };
 
     /**
      * Shows the content picker.
      *
      * @public
-     * @param {string} root The root folder id.
-     * @param {string} token The API access token.
+     * @param {string} id - The folder or file id.
+     * @param {string} token - The API access token.
      * @param {Object|void} [options] Optional options.
      * @return {void}
      */
-    show(root: string, token: Token, options: { [key: string]: any } = {}): void {
-        this.root = root;
+    show(id: string, token: Token, options: { [key: string]: any } = {}): void {
+        this.id = id;
         this.token = token;
         this.options = options;
         this.options.version = __VERSION__;
         this.emit = this.emit.bind(this);
         const container = options.container || DEFAULT_CONTAINER;
-        this.container = container instanceof HTMLElement ? container : document.querySelector(container);
+        this.container =
+            container instanceof HTMLElement ? container : ((document.querySelector(container): any): HTMLElement);
         this.render();
     }
 
@@ -127,6 +101,7 @@ class ES6Wrapper extends EventEmitter {
      */
     hide(): void {
         this.removeAllListeners();
+        ReactDOM.unmountComponentAtNode(this.container);
         if (this.container) {
             this.container.innerHTML = '';
         }
@@ -175,6 +150,15 @@ class ES6Wrapper extends EventEmitter {
             component.clearCache();
         }
     }
+
+    /**
+     * Callback for interaction events
+     *
+     * @return {void}
+     */
+    onInteraction = (data: any): void => {
+        this.emit('interaction', data);
+    };
 
     /**
      * Wrapper for emit to prevent JS exceptions

@@ -4,25 +4,27 @@
  * @author Box
  */
 
-import 'whatwg-fetch';
-import { stringify } from 'querystring';
+import axios from 'axios';
+import TokenService from './TokenService';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
 const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 const CONTENT_TYPE_HEADER = 'Content-Type';
-const SUCCESS_RESPONSE_FILTER = ({ response }) => response;
-const error = new Error('Bad id or auth token!');
+const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 
 class Xhr {
     id: ?string;
+    axios: axios;
     clientName: ?string;
-    token: ?Token;
+    token: Token;
     version: ?string;
     sharedLink: ?string;
     sharedLinkPassword: ?string;
     xhr: XMLHttpRequest;
-    responseFilter: Function;
+    responseInterceptor: Function;
+    requestInterceptor: Function;
+    tokenService: TokenService;
 
     /**
      * [constructor]
@@ -33,136 +35,56 @@ class Xhr {
      * @param {string|function} options.token - Auth token
      * @param {string} [options.sharedLink] - Shared link
      * @param {string} [options.sharedLinkPassword] - Shared link password
+     * @param {string} [options.requestInterceptor] - Request interceptor
+     * @param {string} [options.responseInterceptor] - Response interceptor
      * @return {Xhr} Cache instance
      */
-    constructor({ id, clientName, token, version, sharedLink, sharedLinkPassword, responseFilter }: Options = {}) {
+    constructor({
+        id,
+        clientName,
+        token,
+        version,
+        sharedLink,
+        sharedLinkPassword,
+        responseInterceptor,
+        requestInterceptor
+    }: Options = {}) {
         this.id = id;
         this.token = token;
         this.clientName = clientName;
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
-        this.responseFilter = typeof responseFilter === 'function' ? responseFilter : SUCCESS_RESPONSE_FILTER;
+        this.axios = axios.create();
 
-        // Tokens should either be null or undefuned or string or functions
-        // Anything else is not supported and throw error
-        if (token !== null && token !== undefined && typeof token !== 'string' && typeof token !== 'function') {
-            throw error;
+        if (typeof responseInterceptor === 'function') {
+            this.axios.interceptors.response.use(responseInterceptor);
+        }
+
+        if (typeof requestInterceptor === 'function') {
+            this.axios.interceptors.request.use(requestInterceptor);
         }
     }
 
     /**
-     * Helper function to convert HTTP status codes into throwable errors
+     * Utility to parse a URL.
      *
-     * @param {Response} response - fetch's Response object
-     * @throws {Error} - Throws when the HTTP status is not 2XX
-     * @return {Response} - Pass-thru the response if ther are no errors
+     * @param {string} url - url to parse
+     * @return {Object} parsed url
      */
-    static checkStatus(response: Response): Response {
-        if (response.status >= 200 && response.status < 300) {
-            return response;
-        }
-
-        const err: any = new Error(response.statusText);
-        err.response = response;
-        throw err;
-    }
-
-    /**
-     * Gets the JSON from a response if the response is not 204
-     *
-     * @param {Response} response - fetch's Response object
-     * @return {Object} JS Object representation of the JSON response or the response
-     */
-    static parseJSON(response: Response): Response | Promise<any> {
-        // Return plain response if it is 202 or 204 since they don't have a body
-        if (response.status === 202 || response.status === 204) {
-            return response;
-        }
-        return response.json();
-    }
-
-    /**
-     * Helper function to convert HTTP status codes into throwable errors
-     *
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @return {string} - Stringifyed data
-     */
-    static stringifyData(data: StringAnyMap): string {
-        return JSON.stringify(data).replace(/"\s+|\s+"/g, '"');
-    }
-
-    /**
-     * Function that applies filtering
-     *
-     * @param {Object} data - JS Object representation of JSON data to send
-     * @return {string} - Stringifyed data
-     */
-    applyResponseFiltering(url: string, method: Method, body?: StringAnyMap): Function {
+    getParsedUrl(url: string) {
         const a = document.createElement('a');
         a.href = url;
-
-        return (response: StringAnyMap): Promise<StringAnyMap> => {
-            const filteredResponse = this.responseFilter({
-                request: {
-                    method,
-                    url,
-                    body,
-                    api: url.replace(`${a.origin}/2.0`, ''),
-                    host: a.host,
-                    hostname: a.hostname,
-                    pathname: a.pathname,
-                    origin: a.origin,
-                    protocol: a.protocol,
-                    search: a.search,
-                    hash: a.hash,
-                    port: a.port
-                },
-                response
-            });
-            return filteredResponse instanceof Promise ? filteredResponse : Promise.resolve(filteredResponse);
+        return {
+            api: url.replace(`${a.origin}/2.0`, ''),
+            host: a.host,
+            hostname: a.hostname,
+            pathname: a.pathname,
+            origin: a.origin,
+            protocol: a.protocol,
+            hash: a.hash,
+            port: a.port
         };
-    }
-
-    /**
-     * The token can either be a simple string or a function that returns
-     * a promise which resolves to a key value map where key is the file
-     * id and value is the token. The function accepts either a simple id
-     * or an array of file ids
-     *
-     * @private
-     * @param {string} [id] - Optional box item id
-     * @return {Promise} that resolves to a token
-     */
-    getToken(id?: string): Promise<?string> {
-        const itemId = id || this.id || '';
-
-        // Make sure we are getting typed ids
-        if (!itemId.includes('_')) {
-            return Promise.reject(error);
-        }
-
-        if (!this.token || typeof this.token === 'string') {
-            // Token is a simple string or null or undefined
-            return Promise.resolve(this.token);
-        }
-
-        // Token is a function which returns a promise
-        // that on resolution returns an id to token map.
-        return new Promise((resolve: Function, reject: Function) => {
-            // $FlowFixMe Nulls and strings already checked above
-            this.token(itemId)
-                .then((token) => {
-                    if (typeof token === 'string') {
-                        resolve(token);
-                    } else if (typeof token === 'object' && !!token[itemId]) {
-                        resolve(token[itemId]);
-                    } else {
-                        reject(error);
-                    }
-                })
-                .catch(reject);
-        });
     }
 
     /**
@@ -172,7 +94,7 @@ class Xhr {
      * @param {Object} [args] - Optional existing headers
      * @return {Object} Headers
      */
-    getHeaders(id?: string, args: StringMap = {}) {
+    async getHeaders(id?: string, args: StringMap = {}) {
         const headers: StringMap = Object.assign(
             {
                 Accept: 'application/json',
@@ -195,17 +117,15 @@ class Xhr {
             headers[HEADER_CLIENT_VERSION] = this.version;
         }
 
-        return this.getToken(id)
-            .then((token) => {
-                if (token) {
-                    // Only add a token when there was one found
-                    headers.Authorization = `Bearer ${token}`;
-                }
-                return headers;
-            })
-            .catch(() => {
-                throw error;
-            });
+        // If id is passed in, use that, otherwise default to this.id
+        const itemId = id || this.id || '';
+        const token = await TokenService.getToken(itemId, this.token);
+        if (token) {
+            // Only add a token when there was one found
+            headers.Authorization = `Bearer ${token}`;
+        }
+
+        return headers;
     }
 
     /**
@@ -228,14 +148,8 @@ class Xhr {
         params?: StringAnyMap,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        const querystring = stringify(params);
-        const fullUrl = querystring.length > 0 ? `${url}?${querystring}` : url;
-
         return this.getHeaders(id, headers).then((hdrs) =>
-            fetch(fullUrl, { headers: hdrs, mode: 'cors' })
-                .then(Xhr.checkStatus)
-                .then(Xhr.parseJSON)
-                .then(this.applyResponseFiltering(fullUrl, 'GET'))
+            this.axios.get(url, { params, headers: hdrs, parsedUrl: this.getParsedUrl(url) })
         );
     }
 
@@ -263,14 +177,13 @@ class Xhr {
         method?: Method
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then((hdrs) =>
-            fetch(url, {
+            this.axios({
+                url,
+                data,
                 method,
-                headers: hdrs,
-                body: Xhr.stringifyData(data)
+                parsedUrl: this.getParsedUrl(url),
+                headers: hdrs
             })
-                .then(Xhr.checkStatus)
-                .then(Xhr.parseJSON)
-                .then(this.applyResponseFiltering(url, method, data))
         );
     }
 
@@ -329,7 +242,7 @@ class Xhr {
      * @param {Object} [headers] - Key-value map of headers
      * @param {Function} successHandler - Load success handler
      * @param {Function} errorHandler - Error handler
-     * @returns {void}
+     * @return {void}
      */
     options({
         id,
@@ -347,22 +260,18 @@ class Xhr {
         errorHandler: Function,
         progressHandler?: Function
     }): Promise<StringAnyMap> {
-        return this.getHeaders(id, headers).then((hdrs) =>
-            fetch(url, {
-                method: 'OPTIONS',
-                headers: hdrs,
-                body: Xhr.stringifyData(data)
-            })
-                .then(Xhr.parseJSON)
-                .then((response: StringAnyMap) => {
-                    if (response.type === 'error') {
-                        errorHandler(response);
-                    } else {
-                        successHandler(response);
-                    }
+        return this.getHeaders(id, headers)
+            .then((hdrs) =>
+                this.axios({
+                    url,
+                    data,
+                    method: 'options',
+                    headers: hdrs
                 })
-                .catch(errorHandler)
-        );
+                    .then(successHandler)
+                    .catch(errorHandler)
+            )
+            .catch(errorHandler);
     }
 
     /**
@@ -376,6 +285,9 @@ class Xhr {
      * @param {Function} successHandler - Load success handler
      * @param {Function} errorHandler - Error handler
      * @param {Function} progressHandler - Progress handler
+     * @param {boolean} [withIdleTimeout] - enable idle timeout
+     * @param {number} [idleTimeoutDuration] - idle timeout duration
+     * @param {Function} [idleTimeoutHandler]
      * @return {void}
      */
     uploadFile({
@@ -386,7 +298,10 @@ class Xhr {
         method = 'POST',
         successHandler,
         errorHandler,
-        progressHandler
+        progressHandler,
+        withIdleTimeout = false,
+        idleTimeoutDuration = DEFAULT_UPLOAD_TIMEOUT_MS,
+        idleTimeoutHandler
     }: {
         url: string,
         id?: string,
@@ -395,13 +310,15 @@ class Xhr {
         method?: Method,
         successHandler: Function,
         errorHandler: Function,
-        progressHandler: Function
+        progressHandler: Function,
+        withIdleTimeout?: boolean,
+        idleTimeoutDuration?: number,
+        idleTimeoutHandler?: Function
     }): Promise<any> {
         let formData;
         if (data && !(data instanceof Blob) && data.attributes) {
             formData = new FormData();
             Object.keys(data).forEach((key) => {
-                // $FlowFixMe Already checked above
                 formData.append(key, data[key]);
             });
         }
@@ -441,10 +358,11 @@ class Xhr {
                     this.xhr.upload.addEventListener('progress', progressHandler);
                 }
 
-                if (formData) {
-                    this.xhr.send(formData);
+                const dataSent = formData || data;
+                if (withIdleTimeout) {
+                    this.xhrSendWithIdleTimeout(dataSent, idleTimeoutDuration, idleTimeoutHandler);
                 } else {
-                    this.xhr.send(data);
+                    this.xhr.send(dataSent);
                 }
             })
             .catch(errorHandler);
@@ -466,6 +384,74 @@ class Xhr {
         if (readyState !== XMLHttpRequest.UNSENT && readyState !== XMLHttpRequest.DONE) {
             this.xhr.abort();
         }
+    }
+
+    /**
+     * Returns a handler for setInterval used in xhrSendWithIdleTimeout()
+     *
+     * @private
+     * @param {number} lastProgress
+     * @param {number} timeoutMs
+     * @param {function} clear
+     * @param {?function} onTimeout
+     * @return {function}
+     */
+    getXhrIdleIntervalHandler(
+        lastProgress: number,
+        timeoutMs: number,
+        clear: Function,
+        onTimeout?: Function
+    ): Function {
+        return () => {
+            if (Date.now() - lastProgress <= timeoutMs) {
+                return;
+            }
+
+            this.xhr.abort();
+            clear();
+
+            if (onTimeout) {
+                onTimeout();
+            }
+        };
+    }
+
+    /**
+     * Executes an upload via XMLHTTPRequest and aborts it if there is no progress event for at least timeoutMs.
+     *
+     * @private
+     * @param {Object} data - Will be passed to xhr.send()
+     * @param {number} [timeoutMs] - idle timeout, in milliseconds.
+     * @param {function} [onTimeout] - callback invoked when request has timed out
+     * @return {void}
+     */
+    xhrSendWithIdleTimeout(data: Object, timeoutMs?: number = DEFAULT_UPLOAD_TIMEOUT_MS, onTimeout?: Function): void {
+        let interval;
+        let lastLoaded = 0;
+        let lastProgress = Date.now();
+
+        this.xhr.upload.addEventListener('progress', (event: ProgressEvent) => {
+            if (event.loaded > lastLoaded) {
+                lastLoaded = event.loaded;
+                lastProgress = Date.now();
+            }
+        });
+
+        function clear(): void {
+            if (!interval) {
+                return;
+            }
+
+            clearInterval(interval);
+            interval = null;
+        }
+
+        this.xhr.addEventListener('abort', clear);
+        this.xhr.addEventListener('load', clear);
+        this.xhr.addEventListener('error', clear);
+
+        interval = setInterval(this.getXhrIdleIntervalHandler(lastProgress, timeoutMs, clear, onTimeout), 1000);
+        this.xhr.send(data);
     }
 }
 

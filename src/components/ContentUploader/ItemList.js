@@ -15,17 +15,15 @@ import './ItemList.scss';
 
 type Props = {
     items: UploadItem[],
-    tableRef: Function,
-    onClick: Function,
-    getLocalizedMessage: Function
+    onClick: Function
 };
 
-const ItemList = ({ items, tableRef, onClick, getLocalizedMessage }: Props) =>
+const ItemList = ({ items, onClick }: Props) => (
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer();
             const progressCell = progressCellRenderer();
-            const actionCell = actionCellRenderer(onClick, getLocalizedMessage);
+            const actionCell = actionCellRenderer(onClick);
 
             return (
                 <Table
@@ -33,7 +31,6 @@ const ItemList = ({ items, tableRef, onClick, getLocalizedMessage }: Props) =>
                     disableHeader
                     headerHeight={0}
                     height={height}
-                    ref={tableRef}
                     rowClassName='bcu-item-row'
                     rowCount={items.length}
                     rowGetter={({ index }) => items[index]}
@@ -41,11 +38,25 @@ const ItemList = ({ items, tableRef, onClick, getLocalizedMessage }: Props) =>
                     width={width}
                 >
                     <Column cellRenderer={nameCell} dataKey='name' flexGrow={1} flexShrink={1} width={300} />
-                    <Column cellRenderer={progressCell} dataKey='progress' flexGrow={1} flexShrink={1} width={300} />
-                    <Column cellRenderer={actionCell} dataKey='status' flexShrink={0} width={25} />
+                    <Column
+                        cellRenderer={progressCell}
+                        dataKey='progress'
+                        flexGrow={1}
+                        flexShrink={1}
+                        width={300}
+                        style={{ textAlign: 'right' }}
+                    />
+                    <Column
+                        cellRenderer={actionCell}
+                        dataKey='status'
+                        flexShrink={0}
+                        width={25}
+                        style={{ marginRight: 18 }}
+                    />
                 </Table>
             );
         }}
-    </AutoSizer>;
+    </AutoSizer>
+);
 
 export default ItemList;

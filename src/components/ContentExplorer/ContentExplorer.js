@@ -4,13 +4,13 @@
  * @author Box
  */
 
+import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import Modal from 'react-modal';
-import debounce from 'lodash.debounce';
-import noop from 'lodash.noop';
-import uniqueid from 'lodash.uniqueid';
-import cloneDeep from 'lodash.clonedeep';
+import debounce from 'lodash/debounce';
+import noop from 'lodash/noop';
+import uniqueid from 'lodash/uniqueId';
+import cloneDeep from 'lodash/cloneDeep';
 import Content from './Content';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import RenameDialog from './RenameDialog';
@@ -24,6 +24,7 @@ import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import openUrlInsideIframe from '../../util/iframe';
 import { isFocusableElement, isInputElement, focus } from '../../util/dom';
+import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -47,7 +48,6 @@ import {
     DEFAULT_VIEW_RECENTS,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
-    ERROR_CODE_ITEM_NAME_IN_USE,
     TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
 import type {
@@ -59,10 +59,12 @@ import type {
     Access,
     BoxItemPermission,
     Token,
-    DefaultView
+    DefaultView,
+    StringMap
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
+import '../modal.scss';
 
 type Props = {
     rootFolderId: string,
@@ -81,9 +83,9 @@ type Props = {
     appHost: string,
     staticHost: string,
     uploadHost: string,
-    getLocalizedMessage: Function,
     token: Token,
     isSmall: boolean,
+    isMedium: boolean,
     isLarge: boolean,
     isTouch: boolean,
     autoFocus: boolean,
@@ -99,10 +101,14 @@ type Props = {
     onNavigate: Function,
     defaultView: DefaultView,
     hasPreviewSidebar: boolean,
+    language?: string,
+    messages?: StringMap,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
+    onInteraction: Function
 };
 
 type State = {
@@ -124,37 +130,7 @@ type State = {
     focusedRow: number
 };
 
-type DefaultProps = {|
-    rootFolderId: string,
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-    canDownload: boolean,
-    canDelete: boolean,
-    canUpload: boolean,
-    canRename: boolean,
-    canPreview: boolean,
-    canShare: boolean,
-    canSetShareAccess: boolean,
-    canCreateNewFolder: boolean,
-    autoFocus: boolean,
-    apiHost: string,
-    appHost: string,
-    staticHost: string,
-    uploadHost: string,
-    className: string,
-    onDelete: Function,
-    onDownload: Function,
-    onPreview: Function,
-    onRename: Function,
-    onCreate: Function,
-    onSelect: Function,
-    onUpload: Function,
-    onNavigate: Function,
-    defaultView: DefaultView,
-    hasPreviewSidebar: boolean
-|};
-
-class ContentExplorer extends Component<DefaultProps, Props, State> {
+class ContentExplorer extends Component<Props, State> {
     id: string;
     api: API;
     state: State;
@@ -165,7 +141,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
     globalModifier: boolean;
     firstLoad: boolean = true; // Keeps track of very 1st load
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
         sortBy: FIELD_NAME,
         sortDirection: SORT_ASC,
@@ -192,7 +168,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         onUpload: noop,
         onNavigate: noop,
         defaultView: DEFAULT_VIEW_FILES,
-        hasPreviewSidebar: false
+        hasPreviewSidebar: false,
+        onInteraction: noop
     };
 
     /**
@@ -212,7 +189,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             uploadHost,
             sortBy,
             sortDirection,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             rootFolderId
         }: Props = props;
 
@@ -222,7 +200,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             sharedLinkPassword,
             apiHost,
             uploadHost,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             clientName: CLIENT_NAME_CONTENT_EXPLORER,
             id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
@@ -279,29 +258,13 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
     componentDidMount() {
         const { defaultView, currentFolderId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        // $FlowFixMe: child will exist
-        this.appElement = this.rootElement.firstElementChild;
+        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (defaultView === DEFAULT_VIEW_RECENTS) {
-            this.showRecents(true);
+            this.showRecents();
         } else {
             this.fetchFolder(currentFolderId);
         }
-    }
-
-    /**
-     * react-modal expects the Modals app element
-     * to be set so that it can add proper aria tags.
-     * We need to keep setting it, since there might be
-     * multiple widgets on the same page with their own
-     * app elements.
-     *
-     * @private
-     * @param {Object} collection item collection object
-     * @return {void}
-     */
-    setModalAppElement() {
-        Modal.setAppElement(this.appElement);
     }
 
     /**
@@ -313,10 +276,11 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props) {
-        const { currentFolderId }: Props = this.props;
-        const { currentFolderId: newFolderId }: Props = nextProps;
-        if (currentFolderId !== newFolderId) {
-            this.fetchFolder(newFolderId);
+        const { currentFolderId }: Props = nextProps;
+        const { currentCollection: { id } }: State = this.state;
+
+        if (typeof currentFolderId === 'string' && id !== currentFolderId) {
+            this.fetchFolder(currentFolderId);
         }
     }
 
@@ -377,14 +341,35 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
     }
 
     /**
+     * Refreshing the item collection depending
+     * upon the view. Collection is gotten from cache.
+     * Navigation event is prevented.
+     *
+     * @private
+     * @return {void}
+     */
+    refreshCollection = () => {
+        const { currentCollection: { id }, view, searchQuery }: State = this.state;
+        if (view === VIEW_FOLDER && id) {
+            this.fetchFolder(id, false);
+        } else if (view === VIEW_RECENTS) {
+            this.showRecents(false, false);
+        } else if (view === VIEW_SEARCH && searchQuery) {
+            this.search(searchQuery);
+        } else {
+            throw new Error('Cannot sort incompatible view!');
+        }
+    };
+
+    /**
      * Folder fetch success callback
      *
      * @private
-     * @param {Boolean|void} [triggerEvent] To trigger navigate event
-     * @param {Object} collection item collection object
+     * @param {Object} collection - item collection object
+     * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    fetchFolderSuccessCallback(collection: Collection, triggerEvent: boolean = true) {
+    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
 
@@ -401,13 +386,15 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         // Close any open modals
         this.closeModals();
 
-        // Fire folder navigation event
-        if (triggerEvent && !!boxItem) {
-            onNavigate(cloneDeep(boxItem));
+        if (triggerNavigationEvent) {
+            // Fire folder navigation event
+            this.setState(newState, this.finishNavigation);
+            if (boxItem) {
+                onNavigate(cloneDeep(boxItem));
+            }
+        } else {
+            this.setState(newState);
         }
-
-        // Set the new state and focus the grid for tabbing
-        this.setState(newState, this.finishNavigation);
     }
 
     /**
@@ -415,11 +402,11 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      *
      * @private
      * @param {string|void} [id] folder id
-     * @param {Boolean|void} [triggerEvent] To trigger navigate event
+     * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @param {Boolean|void} [forceFetch] To void the cache
      * @return {void}
      */
-    fetchFolder = (id?: string, triggerEvent: boolean = true, forceFetch: boolean = false) => {
+    fetchFolder = (id?: string, triggerNavigationEvent: boolean = true, forceFetch: boolean = false) => {
         const { rootFolderId, canPreview, hasPreviewSidebar }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
@@ -445,7 +432,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             sortBy,
             sortDirection,
             (collection: Collection) => {
-                this.fetchFolderSuccessCallback(collection, triggerEvent);
+                this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
             forceFetch,
@@ -577,29 +564,32 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      *
      * @private
      * @param {Object} collection item collection object
+     * @param {Boolean} triggerNavigationEvent - To trigger navigate event
      * @return {void}
      */
-    recentsSuccessCallback = (collection: Collection) => {
+    recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean) {
         // Unselect any rows that were selected
         this.unselect();
 
         // Set the new state and focus the grid for tabbing
-        this.setState(
-            {
-                currentCollection: collection
-            },
-            this.finishNavigation
-        );
-    };
+        const newState = { currentCollection: collection };
+        if (triggerNavigationEvent) {
+            this.setState(newState, this.finishNavigation);
+        } else {
+            this.setState(newState);
+        }
+    }
 
     /**
-     * Shows recents
+     * Shows recents.
+     * We always try to force fetch recents.
      *
      * @private
+     * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    showRecents = (forceFetch: boolean = false) => {
+    showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
         const { rootFolderId, canPreview, hasPreviewSidebar }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
@@ -614,19 +604,19 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         });
 
         // Fetch the folder using folder API
-        this.api
-            .getRecentsAPI()
-            .recents(
-                rootFolderId,
-                by,
-                sortDirection,
-                this.recentsSuccessCallback,
-                this.errorCallback,
-                forceFetch,
-                canPreview,
-                hasPreviewSidebar
-            );
-    };
+        this.api.getRecentsAPI().recents(
+            rootFolderId,
+            by,
+            sortDirection,
+            (collection: Collection) => {
+                this.recentsSuccessCallback(collection, triggerNavigationEvent);
+            },
+            this.errorCallback,
+            forceFetch,
+            canPreview,
+            hasPreviewSidebar
+        );
+    }
 
     /**
      * Uploads
@@ -647,7 +637,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        this.setModalAppElement();
         this.setState({
             isUploadModalOpen: true
         });
@@ -692,8 +681,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
 
         this.setState({ isLoading: true });
         this.api.getAPI(type).share(selected, access, (updatedItem: BoxItem) => {
-            updatedItem.selected = true;
-            this.setState({ selected: updatedItem, isLoading: false });
+            this.setState({ isLoading: false });
+            this.select(updatedItem);
         });
     };
 
@@ -706,22 +695,10 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
-        const { currentCollection: { id }, view, searchQuery }: State = this.state;
-        if (!id) {
-            return;
+        const { currentCollection: { id } }: State = this.state;
+        if (id) {
+            this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
-
-        this.setState({ sortBy, sortDirection }, () => {
-            if (view === VIEW_FOLDER) {
-                this.fetchFolder(id, false);
-            } else if (view === VIEW_RECENTS) {
-                this.showRecents();
-            } else if (view === VIEW_SEARCH) {
-                this.search(searchQuery);
-            } else {
-                throw new Error('Cannot sort incompatible view!');
-            }
-        });
     };
 
     /**
@@ -873,7 +850,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     deleteCallback = (): void => {
-        const { selected, isDeleteModalOpen, view, searchQuery }: State = this.state;
+        const { selected, isDeleteModalOpen }: State = this.state;
         const { canDelete, onDelete }: Props = this.props;
         if (!selected || !canDelete) {
             return;
@@ -891,7 +868,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         }
 
         if (!isDeleteModalOpen) {
-            this.setModalAppElement();
             this.setState({ isDeleteModalOpen: true });
             return;
         }
@@ -899,15 +875,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         this.setState({ isLoading: true });
         this.api.getAPI(type).delete(selected, () => {
             onDelete(cloneDeep([selected]));
-            if (view === VIEW_FOLDER) {
-                this.fetchFolder(parentId, false);
-            } else if (view === VIEW_RECENTS) {
-                this.showRecents();
-            } else if (view === VIEW_SEARCH) {
-                this.search(searchQuery);
-            } else {
-                throw new Error('Cannot sort incompatible view!');
-            }
+            this.refreshCollection();
         });
     };
 
@@ -947,7 +915,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         }
 
         if (!isRenameModalOpen || !nameWithoutExt) {
-            this.setModalAppElement();
             this.setState({ isRenameModalOpen: true, errorCode: '' });
             return;
         }
@@ -963,13 +930,10 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             selected,
             name,
             (updatedItem: BoxItem) => {
+                this.setState({ isRenameModalOpen: false });
+                this.refreshCollection();
+                this.select(updatedItem);
                 onRename(cloneDeep(selected));
-                updatedItem.selected = true;
-                this.setState({
-                    selected: updatedItem,
-                    isLoading: false,
-                    isRenameModalOpen: false
-                });
             },
             ({ code }) => {
                 this.setState({ errorCode: code, isLoading: false });
@@ -1012,7 +976,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
         }
 
         if (!isCreateFolderModalOpen || !name) {
-            this.setModalAppElement();
             this.setState({ isCreateFolderModalOpen: true, errorCode: '' });
             return;
         }
@@ -1032,13 +995,13 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             id,
             name,
             (item: BoxItem) => {
-                onCreate(cloneDeep(item));
-                this.fetchFolder(id, false);
+                this.refreshCollection();
                 this.select(item);
+                onCreate(cloneDeep(item));
             },
-            ({ response: { status } }) => {
+            ({ code }) => {
                 this.setState({
-                    errorCode: status === 409 ? ERROR_CODE_ITEM_NAME_IN_USE : ERROR_CODE_ITEM_NAME_INVALID,
+                    errorCode: code,
                     isLoading: false
                 });
             }
@@ -1080,7 +1043,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        this.setModalAppElement();
         this.setState({ isShareModalOpen: true });
     };
 
@@ -1124,10 +1086,9 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      * Keyboard events
      *
      * @private
-     * @inheritdoc
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent & { target: HTMLElement }) => {
+    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
         if (isInputElement(event.target)) {
             return;
         }
@@ -1137,7 +1098,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
 
         switch (key) {
             case '/':
-                focus(this.rootElement, '.buik-search input[type="search"]', false);
+                focus(this.rootElement, '.be-search input[type="search"]', false);
                 event.preventDefault();
                 break;
             case 'arrowdown':
@@ -1149,7 +1110,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                 break;
             case 'b':
                 if (this.globalModifier) {
-                    focus(this.rootElement, '.buik-breadcrumb button', false);
+                    focus(this.rootElement, '.be-breadcrumb button', false);
                     event.preventDefault();
                 }
                 break;
@@ -1167,7 +1128,7 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
                 break;
             case 'r':
                 if (this.globalModifier) {
-                    this.showRecents(true);
+                    this.showRecents();
                     event.preventDefault();
                 }
                 break;
@@ -1194,6 +1155,8 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
      */
     render() {
         const {
+            language,
+            messages,
             rootFolderId,
             logoUrl,
             canUpload,
@@ -1204,7 +1167,6 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             canDownload,
             canPreview,
             canShare,
-            getLocalizedMessage,
             token,
             sharedLink,
             sharedLinkPassword,
@@ -1213,13 +1175,18 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             staticHost,
             uploadHost,
             isSmall,
+            isMedium,
             isTouch,
             className,
             measureRef,
             onPreview,
             onUpload,
-            hasPreviewSidebar
+            hasPreviewSidebar,
+            onInteraction,
+            requestInterceptor,
+            responseInterceptor
         }: Props = this.props;
+
         const {
             view,
             rootName,
@@ -1236,145 +1203,154 @@ class ContentExplorer extends Component<DefaultProps, Props, State> {
             errorCode,
             focusedRow
         }: State = this.state;
+
         const { id, permissions }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
-        const styleClassName = classNames('buik bce', className);
+        const styleClassName = classNames('be bce', className);
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <div id={this.id} className={styleClassName} ref={measureRef}>
-                <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
-                    <Header
-                        view={view}
-                        isSmall={isSmall}
-                        searchQuery={searchQuery}
-                        logoUrl={logoUrl}
-                        onSearch={this.search}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <SubHeader
-                        view={view}
-                        rootId={rootFolderId}
-                        isSmall={isSmall}
-                        rootName={rootName}
-                        currentCollection={currentCollection}
-                        canUpload={allowUpload}
-                        canCreateNewFolder={allowCreate}
-                        onUpload={this.upload}
-                        onCreate={this.createFolder}
-                        onItemClick={this.fetchFolder}
-                        onSortChange={this.sort}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <Content
-                        view={view}
-                        rootId={rootFolderId}
-                        isSmall={isSmall}
-                        isTouch={isTouch}
-                        rootElement={this.rootElement}
-                        focusedRow={focusedRow}
-                        canSetShareAccess={canSetShareAccess}
-                        canShare={canShare}
-                        canPreview={canPreview}
-                        canDelete={canDelete}
-                        canRename={canRename}
-                        canDownload={canDownload}
-                        currentCollection={currentCollection}
-                        tableRef={this.tableRef}
-                        onItemSelect={this.select}
-                        onItemClick={this.onItemClick}
-                        onItemDelete={this.delete}
-                        onItemDownload={this.download}
-                        onItemRename={this.rename}
-                        onItemShare={this.share}
-                        onItemPreview={this.preview}
-                        onSortChange={this.sort}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
+            <Internationalize language={language} messages={messages}>
+                <div id={this.id} className={styleClassName} ref={measureRef}>
+                    <div className='be-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                        <Header
+                            view={view}
+                            isSmall={isSmall}
+                            searchQuery={searchQuery}
+                            logoUrl={logoUrl}
+                            onSearch={this.search}
+                        />
+                        <SubHeader
+                            view={view}
+                            rootId={rootFolderId}
+                            isSmall={isSmall}
+                            rootName={rootName}
+                            currentCollection={currentCollection}
+                            canUpload={allowUpload}
+                            canCreateNewFolder={allowCreate}
+                            onUpload={this.upload}
+                            onCreate={this.createFolder}
+                            onItemClick={this.fetchFolder}
+                            onSortChange={this.sort}
+                        />
+                        <Content
+                            view={view}
+                            rootId={rootFolderId}
+                            isSmall={isSmall}
+                            isMedium={isMedium}
+                            isTouch={isTouch}
+                            rootElement={this.rootElement}
+                            focusedRow={focusedRow}
+                            canSetShareAccess={canSetShareAccess}
+                            canShare={canShare}
+                            canPreview={canPreview}
+                            canDelete={canDelete}
+                            canRename={canRename}
+                            canDownload={canDownload}
+                            currentCollection={currentCollection}
+                            tableRef={this.tableRef}
+                            onItemSelect={this.select}
+                            onItemClick={this.onItemClick}
+                            onItemDelete={this.delete}
+                            onItemDownload={this.download}
+                            onItemRename={this.rename}
+                            onItemShare={this.share}
+                            onItemPreview={this.preview}
+                            onSortChange={this.sort}
+                        />
+                    </div>
+                    {allowUpload && !!this.appElement ? (
+                        <UploadDialog
+                            isOpen={isUploadModalOpen}
+                            currentFolderId={id}
+                            token={token}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
+                            apiHost={apiHost}
+                            uploadHost={uploadHost}
+                            onClose={this.uploadSuccessHandler}
+                            parentElement={this.rootElement}
+                            appElement={this.appElement}
+                            onUpload={onUpload}
+                            requestInterceptor={requestInterceptor}
+                            responseInterceptor={responseInterceptor}
+                        />
+                    ) : null}
+                    {allowCreate && !!this.appElement ? (
+                        <CreateFolderDialog
+                            isOpen={isCreateFolderModalOpen}
+                            onCreate={this.createFolderCallback}
+                            onCancel={this.closeModals}
+                            isLoading={isLoading}
+                            errorCode={errorCode}
+                            parentElement={this.rootElement}
+                            appElement={this.appElement}
+                        />
+                    ) : null}
+                    {canDelete && selected && !!this.appElement ? (
+                        <DeleteConfirmationDialog
+                            isOpen={isDeleteModalOpen}
+                            onDelete={this.deleteCallback}
+                            onCancel={this.closeModals}
+                            item={selected}
+                            isLoading={isLoading}
+                            parentElement={this.rootElement}
+                            appElement={this.appElement}
+                        />
+                    ) : null}
+                    {canRename && selected && !!this.appElement ? (
+                        <RenameDialog
+                            isOpen={isRenameModalOpen}
+                            onRename={this.renameCallback}
+                            onCancel={this.closeModals}
+                            item={selected}
+                            isLoading={isLoading}
+                            errorCode={errorCode}
+                            parentElement={this.rootElement}
+                            appElement={this.appElement}
+                        />
+                    ) : null}
+                    {canShare && selected && !!this.appElement ? (
+                        <ShareDialog
+                            isOpen={isShareModalOpen}
+                            canSetShareAccess={canSetShareAccess}
+                            onShareAccessChange={this.changeShareAccess}
+                            onCancel={this.refreshCollection}
+                            item={selected}
+                            isLoading={isLoading}
+                            parentElement={this.rootElement}
+                            appElement={this.appElement}
+                        />
+                    ) : null}
+                    {canPreview && selected && !!this.appElement ? (
+                        <PreviewDialog
+                            isOpen={isPreviewModalOpen}
+                            isTouch={isTouch}
+                            onCancel={this.closeModals}
+                            item={selected}
+                            currentCollection={currentCollection}
+                            token={token}
+                            parentElement={this.rootElement}
+                            appElement={this.appElement}
+                            onPreview={onPreview}
+                            hasPreviewSidebar={hasPreviewSidebar}
+                            canDownload={canDownload}
+                            cache={this.api.getCache()}
+                            apiHost={apiHost}
+                            appHost={appHost}
+                            staticHost={staticHost}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
+                            onInteraction={onInteraction}
+                            requestInterceptor={requestInterceptor}
+                            responseInterceptor={responseInterceptor}
+                        />
+                    ) : null}
                 </div>
-                {allowUpload && !!this.appElement
-                    ? <UploadDialog
-                        isOpen={isUploadModalOpen}
-                        rootFolderId={id}
-                        token={token}
-                        sharedLink={sharedLink}
-                        sharedLinkPassword={sharedLinkPassword}
-                        apiHost={apiHost}
-                        uploadHost={uploadHost}
-                        onClose={this.uploadSuccessHandler}
-                        getLocalizedMessage={getLocalizedMessage}
-                        parentElement={this.rootElement}
-                        onUpload={onUpload}
-                      />
-                    : null}
-                {allowCreate && !!this.appElement
-                    ? <CreateFolderDialog
-                        isOpen={isCreateFolderModalOpen}
-                        onCreate={this.createFolderCallback}
-                        onCancel={this.closeModals}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        errorCode={errorCode}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {canDelete && selected && !!this.appElement
-                    ? <DeleteConfirmationDialog
-                        isOpen={isDeleteModalOpen}
-                        onDelete={this.deleteCallback}
-                        onCancel={this.closeModals}
-                        item={selected}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {canRename && selected && !!this.appElement
-                    ? <RenameDialog
-                        isOpen={isRenameModalOpen}
-                        onRename={this.renameCallback}
-                        onCancel={this.closeModals}
-                        item={selected}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        errorCode={errorCode}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {canShare && selected && !!this.appElement
-                    ? <ShareDialog
-                        isOpen={isShareModalOpen}
-                        canSetShareAccess={canSetShareAccess}
-                        onShareAccessChange={this.changeShareAccess}
-                        onCancel={this.closeModals}
-                        item={selected}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {canPreview && selected && !!this.appElement
-                    ? <PreviewDialog
-                        isOpen={isPreviewModalOpen}
-                        isTouch={isTouch}
-                        onCancel={this.closeModals}
-                        item={selected}
-                        currentCollection={currentCollection}
-                        token={token}
-                        getLocalizedMessage={getLocalizedMessage}
-                        parentElement={this.rootElement}
-                        onPreview={onPreview}
-                        hasPreviewSidebar={hasPreviewSidebar}
-                        cache={this.api.getCache()}
-                        apiHost={apiHost}
-                        appHost={appHost}
-                        staticHost={staticHost}
-                      />
-                    : null}
-            </div>
+            </Internationalize>
         );
         /* eslint-enable jsx-a11y/no-static-element-interactions */
         /* eslint-enable jsx-a11y/no-noninteractive-tabindex */

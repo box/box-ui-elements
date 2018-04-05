@@ -4,11 +4,12 @@
  * @author Box
  */
 
-import { canPlayDash } from './util/browser';
+import Browser from './util/Browser';
 
 /* ----------------------- Size ---------------------------- */
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_LARGE: 'large' = 'large';
+export const SIZE_MEDIUM: 'medium' = 'medium';
 
 /* ----------------------- Views ---------------------------- */
 export const VIEW_FOLDER: 'folder' = 'folder';
@@ -81,9 +82,8 @@ export const FIELD_SHA1 = 'sha1';
 export const FIELD_WATERMARK_INFO = 'watermark_info';
 export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
 export const FIELD_FILE_VERSION = 'file_version';
-export const METADATA_KEYWORDS = 'metadata.global.box-skills-keywords-demo';
-export const METADATA_TIMELINES = 'metadata.global.box-skills-timelines-demo';
-export const METADATA_TRANSCRIPTS = 'metadata.global.box-skills-transcripts-demo';
+export const FIELD_IS_DOWNLOAD_AVAILABLE = 'is_download_available';
+export const METADATA_SKILLS = 'metadata.global.boxSkillsCards';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -112,9 +112,6 @@ export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
-export const BOX_BLUE = '#0061d5';
-export const BOX_BLUE_LIGHT = '#dbe8f8';
-export const COLOR_RED = '#c82341';
 export const CLIENT_NAME_CONTENT_TREE = 'ContentTree';
 export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
 export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
@@ -122,6 +119,7 @@ export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
 export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
 export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
 export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
+export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
 
 /* ---------------------- Statuses  -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
@@ -130,19 +128,19 @@ export const STATUS_COMPLETE: 'complete' = 'complete';
 export const STATUS_ERROR: 'error' = 'error';
 
 /* ------------------- Styles ------------------------ */
-export const CLASS_MODAL_CONTENT = 'buik-modal-dialog-content';
-export const CLASS_MODAL_CONTENT_FULL_BLEED = 'buik-modal-dialog-content-full-bleed';
-export const CLASS_MODAL_OVERLAY = 'buik-modal-dialog-overlay';
-export const CLASS_IS_COMPACT = 'buik-is-small';
-export const CLASS_IS_TOUCH = 'buik-is-touch';
-export const CLASS_MODAL = 'buik-modal';
-export const CLASS_BUTTON_CONTENT_SPAN = 'buik-btn-content';
-export const CLASS_CHECKBOX_SPAN = 'buik-checkbox-span';
+export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
+export const CLASS_MODAL_CONTENT_FULL_BLEED = 'be-modal-dialog-content-full-bleed';
+export const CLASS_MODAL_OVERLAY = 'be-modal-dialog-overlay';
+export const CLASS_IS_SMALL = 'be-is-small';
+export const CLASS_IS_MEDIUM = 'be-is-medium';
+export const CLASS_IS_TOUCH = 'be-is-touch';
+export const CLASS_MODAL = 'be-modal';
 
 /* ------------------ Error Codes  ---------------------- */
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
+export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
 
 /* ------------- Representation Hints  ------------------- */
 const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';
@@ -150,5 +148,22 @@ const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';
 const X_REP_HINT_IMAGE = '[jpg?dimensions=2048x2048,png?dimensions=2048x2048]';
 const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
 const X_REP_HINT_VIDEO_MP4 = '[mp4]';
-const videoHint = canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
+const videoHint = Browser.canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
 export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;
+
+/* ------------------ Uploader  ---------------------- */
+export const DEFAULT_RETRY_DELAY_MS = 3000;
+export const MS_IN_S = 1000;
+
+/* ------------------ Colors  ---------------------- */
+export const COLOR_BOX_BLUE = '#0061d5';
+export const COLOR_BOX_BLUE_LIGHT = '#dbe8f8';
+export const COLOR_RED = '#c82341';
+export const COLOR_777 = '#777777';
+export const COLOR_DOWNTOWN_GREY = '#999ea4';
+
+/* ------------------ Skills  ---------------------- */
+export const SKILL_TRANSCRIPT: 'transcript' = 'transcript';
+export const SKILL_KEYWORD: 'keyword' = 'keyword';
+export const SKILL_TIMELINE: 'timeline' = 'timeline';
+export const SKILL_KEYVALUE: 'keyvalue' = 'keyvalue';

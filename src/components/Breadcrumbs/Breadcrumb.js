@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
+import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
-import { PlainButton } from '../Button';
 import type { Delimiter } from '../../flowTypes';
 import './Breadcrumb.scss';
 
@@ -18,15 +18,15 @@ type Props = {
 };
 
 const Breadcrumb = ({ name = '', onClick, isLast, delimiter }: Props) => {
-    const title = onClick
-        ? <PlainButton onClick={onClick}>
+    const title = onClick ? (
+        <PlainButton type='button' onClick={onClick}>
             {name}
         </PlainButton>
-        : <span>
-            {name}
-        </span>;
+    ) : (
+        <span>{name}</span>
+    );
     return (
-        <span className='buik-breadcrumb'>
+        <span className='be-breadcrumb'>
             {title}
             {isLast ? null : <BreadcrumbDelimiter delimiter={delimiter} />}
         </span>

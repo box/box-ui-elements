@@ -6,9 +6,12 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import noop from 'lodash.noop';
+import noop from 'lodash/noop';
+import { injectIntl, FormattedMessage } from 'react-intl';
+import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
+import Button from 'box-react-ui/lib/components/button/Button';
+import messages from '../messages';
 import ShareAccessSelect from '../ShareAccessSelect';
-import { Button, PrimaryButton } from '../Button';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './ShareDialog.scss';
@@ -19,9 +22,10 @@ type Props = {
     onShareAccessChange: Function,
     onCancel: Function,
     item: BoxItem,
-    getLocalizedMessage: Function,
     isLoading: boolean,
-    parentElement: HTMLElement
+    parentElement: HTMLElement,
+    appElement: HTMLElement,
+    intl: any
 };
 
 const ShareDialog = ({
@@ -30,9 +34,10 @@ const ShareDialog = ({
     onShareAccessChange,
     onCancel,
     item,
-    getLocalizedMessage,
     isLoading,
-    parentElement
+    parentElement,
+    appElement,
+    intl
 }: Props) => {
     let textInput = null;
 
@@ -45,7 +50,7 @@ const ShareDialog = ({
 
     const { shared_link: sharedLink }: BoxItem = item;
     const { url } = sharedLink || {
-        url: getLocalizedMessage('buik.modal.share.dialog.text.none')
+        url: intl.formatMessage(messages.shareDialogNone)
     };
 
     /* eslint-disable jsx-a11y/label-has-for */
@@ -53,17 +58,16 @@ const ShareDialog = ({
         <Modal
             isOpen={isOpen}
             parentSelector={() => parentElement}
-            portalClassName={`${CLASS_MODAL} buik-modal-share`}
+            portalClassName={`${CLASS_MODAL} be-modal-share`}
             className={CLASS_MODAL_CONTENT}
             overlayClassName={CLASS_MODAL_OVERLAY}
             onRequestClose={onCancel}
-            contentLabel={getLocalizedMessage('buik.modal.share.dialog.label')}
+            contentLabel={intl.formatMessage(messages.shareDialogLabel)}
+            appElement={appElement}
         >
-            <div className='buik-modal-content'>
+            <div className='be-modal-content'>
                 <label>
-                    <div>
-                        {getLocalizedMessage('buik.modal.share.dialog.text')}
-                    </div>
+                    <FormattedMessage tagName='div' {...messages.shareDialogText} />
                     <span>
                         <input
                             type='text'
@@ -73,26 +77,25 @@ const ShareDialog = ({
                             }}
                             value={url}
                         />
-                        <PrimaryButton className='buik-modal-button-copy' onClick={copy} autoFocus>
-                            {getLocalizedMessage('buik.modal.dialog.share.button.copy')}
+                        <PrimaryButton type='button' className='be-modal-button-copy' onClick={copy} autoFocus>
+                            <FormattedMessage {...messages.copy} />
                         </PrimaryButton>
                     </span>
                 </label>
             </div>
-            <div className='buik-modal-btns'>
+            <div className='be-modal-btns'>
                 <ShareAccessSelect
                     className='bce-shared-access-select'
                     canSetShareAccess={canSetShareAccess}
                     onChange={onShareAccessChange}
                     item={item}
-                    getLocalizedMessage={getLocalizedMessage}
                 />
-                <Button onClick={onCancel} isLoading={isLoading}>
-                    {getLocalizedMessage('buik.modal.dialog.share.button.close')}
+                <Button type='button' onClick={onCancel} isLoading={isLoading}>
+                    <FormattedMessage {...messages.close} />
                 </Button>
             </div>
         </Modal>
     );
 };
 
-export default ShareDialog;
+export default injectIntl(ShareDialog);

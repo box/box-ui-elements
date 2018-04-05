@@ -13,7 +13,6 @@ import './SubHeaderRight.scss';
 
 type Props = {
     onSortChange: Function,
-    getLocalizedMessage: Function,
     currentCollection: Collection,
     onUpload: Function,
     onCreate: Function,
@@ -29,8 +28,7 @@ const SubHeaderRight = ({
     canUpload,
     canCreateNewFolder,
     currentCollection,
-    onSortChange,
-    getLocalizedMessage
+    onSortChange
 }: Props) => {
     const { sortBy, sortDirection, percentLoaded, items = [] }: Collection = currentCollection;
     const isRecents: boolean = view === VIEW_RECENTS;
@@ -41,19 +39,19 @@ const SubHeaderRight = ({
     const isLoaded: boolean = percentLoaded === 100;
 
     return (
-        <div className='buik-sub-header-right'>
+        <div className='be-sub-header-right'>
             {showSort &&
                 !!sortBy &&
-                !!sortDirection &&
-                <Sort
-                    isRecents={isRecents}
-                    isLoaded={isLoaded}
-                    sortBy={sortBy}
-                    sortDirection={sortDirection}
-                    onSortChange={onSortChange}
-                    getLocalizedMessage={getLocalizedMessage}
-                />}
-            {showAdd &&
+                !!sortDirection && (
+                    <Sort
+                        isRecents={isRecents}
+                        isLoaded={isLoaded}
+                        sortBy={sortBy}
+                        sortDirection={sortDirection}
+                        onSortChange={onSortChange}
+                    />
+                )}
+            {showAdd && (
                 <Add
                     showUpload={canUpload}
                     showCreate={canCreateNewFolder}
@@ -61,8 +59,8 @@ const SubHeaderRight = ({
                     onCreate={onCreate}
                     isDisabled={!isFolder}
                     isLoaded={isLoaded}
-                    getLocalizedMessage={getLocalizedMessage}
-                />}
+                />
+            )}
         </div>
     );
 };

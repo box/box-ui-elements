@@ -10,8 +10,8 @@ import FolderAPI from './Folder';
 import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
-import getBadItemError from '../util/error';
-import getFields from '../util/fields';
+import { getBadItemError } from '../util/error';
+import { getFieldsAsString } from '../util/fields';
 import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, SORT_DESC, FIELD_INTERACTED_AT, X_REP_HINTS } from '../constants';
 import type Cache from '../util/Cache';
 import type {
@@ -83,7 +83,7 @@ class Recents extends Base {
      * @return {string} base url for files
      */
     getUrl(): string {
-        return `${this.getBaseUrl()}/recent_items`;
+        return `${this.getBaseApiUrl()}/recent_items`;
     }
 
     /**
@@ -125,12 +125,12 @@ class Recents extends Base {
      * @param {Object} response
      * @return {void}
      */
-    recentsSuccessHandler = (response: RecentCollection): void => {
+    recentsSuccessHandler = ({ data }: { data: RecentCollection }): void => {
         if (this.isDestroyed()) {
             return;
         }
 
-        const { entries, order: { by, direction } }: RecentCollection = response;
+        const { entries, order: { by, direction } }: RecentCollection = data;
         const items: BoxItem[] = [];
 
         entries.forEach(({ item, interacted_at }: Recent) => {
@@ -191,7 +191,7 @@ class Recents extends Base {
             .get({
                 url: this.getUrl(),
                 params: {
-                    fields: getFields(this.includePreviewFields, this.includePreviewSidebarFields)
+                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })

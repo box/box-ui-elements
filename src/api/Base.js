@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import noop from 'lodash/noop';
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
@@ -41,6 +42,16 @@ class Base {
     options: Options;
 
     /**
+     * @property {Function}
+     */
+    consoleLog: Function;
+
+    /**
+     * @property {Function}
+     */
+    consoleError: Function;
+
+    /**
      * [constructor]
      *
      * @param {Object} [options]
@@ -51,10 +62,11 @@ class Base {
      * @param {string} [options.uploadHost] - Upload host name
      * @return {Base} Base instance
      */
-    constructor(options: Options = {}) {
+    constructor(options: Options) {
         this.cache = options.cache || new Cache();
         this.apiHost = options.apiHost || DEFAULT_HOSTNAME_API;
         this.uploadHost = options.uploadHost || DEFAULT_HOSTNAME_UPLOAD;
+        // @TODO: avoid keeping another copy of data in this.options
         this.options = Object.assign({}, options, {
             apiHost: this.apiHost,
             uploadHost: this.uploadHost,
@@ -62,6 +74,8 @@ class Base {
         });
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
+        this.consoleLog = !!options.consoleLog && !!window.console ? window.console.log || noop : noop;
+        this.consoleError = !!options.consoleError && !!window.console ? window.console.error || noop : noop;
     }
 
     /**
@@ -86,9 +100,19 @@ class Base {
      *
      * @return {string} base url
      */
-    getBaseUrl(): string {
+    getBaseApiUrl(): string {
         const suffix: string = this.apiHost.endsWith('/') ? '2.0' : '/2.0';
         return `${this.apiHost}${suffix}`;
+    }
+
+    /**
+     * Base URL for api uploads
+     *
+     * @return {string} base url
+     */
+    getBaseUploadUrl(): string {
+        const suffix: string = this.uploadHost.endsWith('/') ? 'api/2.0' : '/api/2.0';
+        return `${this.uploadHost}${suffix}`;
     }
 
     /**

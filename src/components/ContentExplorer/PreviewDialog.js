@@ -6,8 +6,10 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import cloneDeep from 'lodash.clonedeep';
+import { injectIntl } from 'react-intl';
+import cloneDeep from 'lodash/cloneDeep';
 import ContentPreview from '../ContentPreview';
+import messages from '../messages';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import Cache from '../../util/Cache';
 import type { BoxItem, Collection, Token } from '../../flowTypes';
@@ -18,38 +20,52 @@ type Props = {
     onCancel: Function,
     item: BoxItem,
     token: Token,
-    getLocalizedMessage: Function,
     parentElement: HTMLElement,
+    appElement: HTMLElement,
     isTouch: boolean,
     onPreview: Function,
     hasPreviewSidebar: boolean,
+    canDownload: boolean,
     cache: Cache,
     apiHost: string,
     appHost: string,
-    staticHost: string
+    staticHost: string,
+    sharedLink?: string,
+    sharedLinkPassword?: string,
+    onInteraction: Function,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
+    intl: any
 };
 
 const PreviewDialog = ({
     item,
     isOpen,
-    getLocalizedMessage,
     parentElement,
+    appElement,
     token,
     cache,
     currentCollection,
     hasPreviewSidebar,
+    canDownload,
     onCancel,
     onPreview,
     apiHost,
     appHost,
-    staticHost
+    staticHost,
+    sharedLink,
+    sharedLinkPassword,
+    onInteraction,
+    requestInterceptor,
+    responseInterceptor,
+    intl
 }: Props) => {
     const { items }: Collection = currentCollection;
     const onLoad = (data: any): void => {
         onPreview(cloneDeep(data));
     };
 
-    if (!item || !items || !isOpen) {
+    if (!item || !items) {
         return null;
     }
 
@@ -58,29 +74,35 @@ const PreviewDialog = ({
         <Modal
             isOpen={isOpen}
             parentSelector={() => parentElement}
-            portalClassName={`${CLASS_MODAL} buik-modal-preview`}
+            portalClassName={`${CLASS_MODAL} be-modal-preview`}
             className={CLASS_MODAL_CONTENT_FULL_BLEED}
             overlayClassName={CLASS_MODAL_OVERLAY}
-            contentLabel={getLocalizedMessage('buik.modal.preview.dialog.label')}
+            contentLabel={intl.formatMessage(messages.preview)}
             onRequestClose={onCancel}
+            appElement={appElement}
         >
             <ContentPreview
-                skipServerUpdate
+                fileId={item.id}
                 apiHost={apiHost}
                 appHost={appHost}
                 staticHost={staticHost}
                 cache={cache}
-                file={item}
                 token={token}
                 hasHeader
+                autoFocus
                 collection={files}
                 onLoad={onLoad}
                 onClose={onCancel}
                 hasSidebar={hasPreviewSidebar}
-                getLocalizedMessage={getLocalizedMessage}
+                canDownload={canDownload}
+                sharedLink={sharedLink}
+                sharedLinkPassword={sharedLinkPassword}
+                onInteraction={onInteraction}
+                requestInterceptor={requestInterceptor}
+                responseInterceptor={responseInterceptor}
             />
         </Modal>
     );
 };
 
-export default PreviewDialog;
+export default injectIntl(PreviewDialog);

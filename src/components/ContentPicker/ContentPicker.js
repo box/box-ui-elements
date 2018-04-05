@@ -4,12 +4,12 @@
  * @author Box
  */
 
+import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import Modal from 'react-modal';
-import debounce from 'lodash.debounce';
-import uniqueid from 'lodash.uniqueid';
-import noop from 'lodash.noop';
+import debounce from 'lodash/debounce';
+import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import Footer from './Footer';
 import Content from './Content';
 import Header from '../Header';
@@ -19,6 +19,7 @@ import CreateFolderDialog from '../CreateFolderDialog';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import { isFocusableElement, isInputElement, focus } from '../../util/dom';
+import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -53,16 +54,17 @@ import type {
     Access,
     BoxItemPermission,
     Token,
-    DefaultView
+    DefaultView,
+    StringMap
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
-
-type BoxItemMap = { [string]: BoxItem };
+import '../modal.scss';
 
 type Props = {
     type: string,
     rootFolderId: string,
+    currentFolderId?: string,
     onChoose: Function,
     onCancel: Function,
     sortBy: SortBy,
@@ -75,7 +77,6 @@ type Props = {
     autoFocus: boolean,
     apiHost: string,
     uploadHost: string,
-    getLocalizedMessage: Function,
     clientName: string,
     token: Token,
     isSmall: boolean,
@@ -86,10 +87,13 @@ type Props = {
     defaultView: DefaultView,
     chooseButtonLabel?: string,
     cancelButtonLabel?: string,
+    language?: string,
+    messages?: StringMap,
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    responseFilter?: Function
+    requestInterceptor?: Function,
+    responseInterceptor?: Function
 };
 
 type State = {
@@ -98,7 +102,7 @@ type State = {
     rootName: string,
     errorCode: string,
     currentCollection: Collection,
-    selected: BoxItemMap,
+    selected: { [string]: BoxItem },
     searchQuery: string,
     isLoading: boolean,
     view: View,
@@ -107,29 +111,9 @@ type State = {
     focusedRow: number
 };
 
-type DefaultProps = {|
-    type: string,
-    rootFolderId: string,
-    onChoose: Function,
-    onCancel: Function,
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-    extensions: string[],
-    maxSelectable: number,
-    canUpload: boolean,
-    canSetShareAccess: boolean,
-    canCreateNewFolder: boolean,
-    autoFocus: boolean,
-    apiHost: string,
-    uploadHost: string,
-    clientName: string,
-    className: string,
-    defaultView: DefaultView
-|};
-
 const defaultType = `${TYPE_FILE},${TYPE_WEBLINK}`;
 
-class ContentPicker extends Component<DefaultProps, Props, State> {
+class ContentPicker extends Component<Props, State> {
     id: string;
     api: API;
     state: State;
@@ -140,7 +124,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     globalModifier: boolean;
     firstLoad: boolean = true; // Keeps track of very 1st load
 
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         type: defaultType,
         rootFolderId: DEFAULT_ROOT,
         onChoose: noop,
@@ -178,7 +162,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             sortBy,
             sortDirection,
             clientName,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             rootFolderId
         } = props;
 
@@ -189,7 +174,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             apiHost,
             uploadHost,
             clientName,
-            responseFilter,
+            requestInterceptor,
+            responseInterceptor,
             id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
         });
 
@@ -222,21 +208,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     }
 
     /**
-     * react-modal expects the Modals app element
-     * to be set so that it can add proper aria tags.
-     * We need to keep setting it, since there might be
-     * multiple widgets on the same page with their own
-     * app elements.
-     *
-     * @private
-     * @param {Object} collection item collection object
-     * @return {void}
-     */
-    setModalAppElement() {
-        Modal.setAppElement(this.appElement);
-    }
-
-    /**
      * Cleanup
      *
      * @private
@@ -255,15 +226,31 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     componentDidMount() {
+        const { defaultView, currentFolderId }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        // $FlowFixMe: child will exist
-        this.appElement = this.rootElement.firstElementChild;
+        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
-        const { defaultView }: Props = this.props;
         if (defaultView === DEFAULT_VIEW_RECENTS) {
-            this.showRecents(true);
+            this.showRecents();
         } else {
-            this.fetchFolder();
+            this.fetchFolder(currentFolderId);
+        }
+    }
+
+    /**
+     * Fetches the current folder if different
+     * from what was already fetched before.
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    componentWillReceiveProps(nextProps: Props) {
+        const { currentFolderId }: Props = nextProps;
+        const { currentCollection: { id } }: State = this.state;
+
+        if (typeof currentFolderId === 'string' && id !== currentFolderId) {
+            this.fetchFolder(currentFolderId);
         }
     }
 
@@ -323,17 +310,25 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
     }
 
     /**
-     * Helper function to refresh the grid.
-     * This is useful when mutating the underlying data
-     * structure and hence the state.
+     * Refreshing the item collection depending
+     * upon the view. Collection is gotten from cache.
+     * Navigation event is prevented.
      *
      * @private
-     * @fires cancel
      * @return {void}
      */
-    refreshGrid = () => {
-        if (this.table) {
-            this.table.forceUpdateGrid();
+    refreshCollection = (): void => {
+        const { currentCollection: { id }, view, searchQuery }: State = this.state;
+        if (view === VIEW_FOLDER && id) {
+            this.fetchFolder(id, false);
+        } else if (view === VIEW_RECENTS) {
+            this.showRecents(false, false);
+        } else if (view === VIEW_SEARCH && searchQuery) {
+            this.search(searchQuery);
+        } else if (view === VIEW_SELECTED) {
+            this.showSelected();
+        } else {
+            throw new Error('Cannot refresh incompatible view!');
         }
     };
 
@@ -345,9 +340,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     errorCallback = (error: Error): void => {
-        this.setState({
-            view: VIEW_ERROR
-        });
+        this.setState({ view: VIEW_ERROR });
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
@@ -360,7 +353,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @param {Object|string} item - the clicked box item
      * @return {void}
      */
-    onItemClick = (item: BoxItem | string) => {
+    onItemClick = (item: BoxItem | string): void => {
         // If the id was passed in, just use that
         if (typeof item === 'string') {
             this.fetchFolder(item);
@@ -380,7 +373,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @private
      * @return {void}
      */
-    finishNavigation() {
+    finishNavigation(): void {
         const { autoFocus }: Props = this.props;
         const { currentCollection: { percentLoaded } }: State = this.state;
 
@@ -404,9 +397,10 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      *
      * @private
      * @param {Object} collection item collection object
+     * @param {Boolean|void} triggerNavigationEvent - To focus the grid
      * @return {void}
      */
-    fetchFolderSuccessCallback = (collection: Collection): void => {
+    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { rootFolderId }: Props = this.props;
         const { id, name }: Collection = collection;
 
@@ -419,19 +413,24 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         // Close any open modals
         this.closeModals();
 
-        // Set the new state and focus the grid for tabbing
-        this.setState(newState, this.finishNavigation);
-    };
+        if (triggerNavigationEvent) {
+            // Fire folder navigation event
+            this.setState(newState, this.finishNavigation);
+        } else {
+            this.setState(newState);
+        }
+    }
 
     /**
      * Fetches a folder, defaults to fetching root folder
      *
      * @private
      * @param {string|void} [id] folder id
+     * @param {Boolean|void} [triggerNavigationEvent] - To focus the grid
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    fetchFolder = (id?: string, forceFetch: boolean = false): void => {
+    fetchFolder = (id?: string, triggerNavigationEvent: boolean = true, forceFetch: boolean = false): void => {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
@@ -452,9 +451,16 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         });
 
         // Fetch the folder using folder API
-        this.api
-            .getFolderAPI()
-            .folder(folderId, sortBy, sortDirection, this.fetchFolderSuccessCallback, this.errorCallback, forceFetch);
+        this.api.getFolderAPI().folder(
+            folderId,
+            sortBy,
+            sortDirection,
+            (collection: Collection) => {
+                this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
+            },
+            this.errorCallback,
+            forceFetch
+        );
     };
 
     /**
@@ -462,26 +468,28 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      *
      * @private
      * @param {Object} collection item collection object
+     * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @return {void}
      */
-    recentsSuccessCallback = (collection: Collection) => {
-        // Set the new state and focus the grid for tabbing
-        this.setState(
-            {
-                currentCollection: collection
-            },
-            this.finishNavigation
-        );
-    };
+    recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
+        const newState = { currentCollection: collection };
+        if (triggerNavigationEvent) {
+            this.setState(newState, this.finishNavigation);
+        } else {
+            this.setState(newState);
+        }
+    }
 
     /**
-     * Shows recents
+     * Shows recents.
+     * We always try to force fetch recents.
      *
      * @private
+     * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    showRecents = (forceFetch: boolean = false) => {
+    showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
@@ -496,10 +504,17 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         });
 
         // Fetch the folder using folder API
-        this.api
-            .getRecentsAPI()
-            .recents(rootFolderId, by, sortDirection, this.recentsSuccessCallback, this.errorCallback, forceFetch);
-    };
+        this.api.getRecentsAPI().recents(
+            rootFolderId,
+            by,
+            sortDirection,
+            (collection: Collection) => {
+                this.recentsSuccessCallback(collection, triggerNavigationEvent);
+            },
+            this.errorCallback,
+            forceFetch
+        );
+    }
 
     /**
      * Shows the selected items
@@ -517,7 +532,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                     sortBy,
                     sortDirection,
                     percentLoaded: 100,
-                    items: Object.keys(selected).map((key) => selected[key])
+                    items: Object.keys(selected).map((key) => this.api.getCache().get(key))
                 }
             },
             this.finishNavigation
@@ -612,10 +627,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        this.setModalAppElement();
-        this.setState({
-            isUploadModalOpen: true
-        });
+        this.setState({ isUploadModalOpen: true });
     };
 
     /**
@@ -627,7 +639,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     uploadSuccessHandler = (): void => {
         const { currentCollection: { id } }: State = this.state;
-        this.fetchFolder(id, true);
+        this.fetchFolder(id, false, true);
     };
 
     /**
@@ -665,7 +677,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         }
 
         if (!isCreateFolderModalOpen || !name) {
-            this.setModalAppElement();
             this.setState({ isCreateFolderModalOpen: true, errorCode: '' });
             return;
         }
@@ -712,17 +723,21 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        const selectedCount: number = Object.keys(selected).length;
+        const selectedKeys: Array<string> = Object.keys(selected);
+        const selectedCount: number = selectedKeys.length;
         const hasHitSelectionLimit: boolean = selectedCount === maxSelectable;
         const isSingleFileSelection: boolean = maxSelectable === 1;
-        const typedId: string = `${type}_${id}`;
-        const existing: BoxItem = selected[typedId];
+        const cacheKey: string = this.api.getAPI(type).getCacheKey(id);
+        const existing: BoxItem = selected[cacheKey];
+        const existingFromCache: BoxItem = this.api.getCache().get(cacheKey);
 
-        if (existing) {
+        // Existing object could have mutated and we just need to update the
+        // reference in the selected map. In that case treat it like a new selection.
+        if (existing && existing === existingFromCache) {
             // We are selecting the same item that was already
             // selected. Unselect it in this case. Toggle case.
-            existing.selected = false;
-            delete selected[typedId];
+            delete existing.selected;
+            delete selected[cacheKey];
         } else {
             // We are selecting a new item that was never
             // selected before. However if we are in a single
@@ -735,17 +750,16 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                 return;
             }
 
-            const keys: Array<string> = Object.keys(selected);
-            if (keys.length > 0 && isSingleFileSelection) {
-                const key: string = keys[0]; // Only 1 in the map
-                const prior: BoxItem = selected[key];
-                prior.selected = false;
-                delete selected[key];
+            // Clear out the prior item for single file selection mode
+            if (selectedCount > 0 && isSingleFileSelection) {
+                const prior = selectedKeys[0]; // only one item
+                delete selected[prior].selected;
+                delete selected[prior];
             }
 
             // Select the new item
             item.selected = true;
-            selected[typedId] = item;
+            selected[cacheKey] = item;
         }
 
         const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
@@ -781,7 +795,12 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             return;
         }
 
-        this.api.getAPI(type).share(item, access, this.refreshGrid);
+        this.api.getAPI(type).share(item, access, (updatedItem: BoxItem) => {
+            this.refreshCollection();
+            if (item.selected) {
+                this.select(updatedItem);
+            }
+        });
     };
 
     /**
@@ -793,22 +812,10 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @return {void}
      */
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
-        const { currentCollection: { id }, view, searchQuery }: State = this.state;
-        if (!id) {
-            return;
+        const { currentCollection: { id } }: State = this.state;
+        if (id) {
+            this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
-
-        this.setState({ sortBy, sortDirection }, () => {
-            if (view === VIEW_FOLDER) {
-                this.fetchFolder(id);
-            } else if (view === VIEW_SEARCH) {
-                this.search(searchQuery);
-            } else if (view === VIEW_RECENTS) {
-                this.showRecents();
-            } else {
-                throw new Error('Cannot sort incompatible view!');
-            }
-        });
     };
 
     /**
@@ -850,7 +857,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent & { target: HTMLElement }) => {
+    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
         if (isInputElement(event.target)) {
             return;
         }
@@ -860,7 +867,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
 
         switch (key) {
             case '/':
-                focus(this.rootElement, '.buik-search input[type="search"]', false);
+                focus(this.rootElement, '.be-search input[type="search"]', false);
                 event.preventDefault();
                 break;
             case 'arrowdown':
@@ -872,7 +879,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                 break;
             case 'b':
                 if (this.globalModifier) {
-                    focus(this.rootElement, '.buik-breadcrumb button', false);
+                    focus(this.rootElement, '.be-breadcrumb button', false);
                     event.preventDefault();
                 }
                 break;
@@ -908,7 +915,7 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
                 break;
             case 'r':
                 if (this.globalModifier) {
-                    this.showRecents(true);
+                    this.showRecents();
                     event.preventDefault();
                 }
                 break;
@@ -946,6 +953,8 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
      */
     render() {
         const {
+            language,
+            messages,
             rootFolderId,
             logoUrl,
             canUpload,
@@ -954,7 +963,6 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             extensions,
             maxSelectable,
             type,
-            getLocalizedMessage,
             token,
             sharedLink,
             sharedLinkPassword,
@@ -964,7 +972,9 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
             className,
             measureRef,
             chooseButtonLabel,
-            cancelButtonLabel
+            cancelButtonLabel,
+            requestInterceptor,
+            responseInterceptor
         }: Props = this.props;
         const {
             view,
@@ -984,90 +994,90 @@ class ContentPicker extends Component<DefaultProps, Props, State> {
         const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && maxSelectable !== 1;
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
-        const styleClassName = classNames('buik bcp', className);
+        const styleClassName = classNames('be bcp', className);
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
-            <div id={this.id} className={styleClassName} ref={measureRef}>
-                <div className='buik-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
-                    <Header
-                        view={view}
-                        isSmall={isSmall}
-                        searchQuery={searchQuery}
-                        logoUrl={logoUrl}
-                        onSearch={this.search}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <SubHeader
-                        view={view}
-                        rootId={rootFolderId}
-                        isSmall={isSmall}
-                        rootName={rootName}
-                        currentCollection={currentCollection}
-                        canUpload={allowUpload}
-                        canCreateNewFolder={allowCreate}
-                        onUpload={this.upload}
-                        onCreate={this.createFolder}
-                        onItemClick={this.fetchFolder}
-                        onSortChange={this.sort}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <Content
-                        view={view}
-                        isSmall={isSmall}
-                        rootId={rootFolderId}
-                        rootElement={this.rootElement}
-                        focusedRow={focusedRow}
-                        selectableType={type}
-                        canSetShareAccess={canSetShareAccess}
-                        extensionsWhitelist={extensions}
-                        hasHitSelectionLimit={hasHitSelectionLimit}
-                        currentCollection={currentCollection}
-                        tableRef={this.tableRef}
-                        onItemSelect={this.select}
-                        onItemClick={this.onItemClick}
-                        onFocusChange={this.onFocusChange}
-                        onShareAccessChange={this.changeShareAccess}
-                        getLocalizedMessage={getLocalizedMessage}
-                    />
-                    <Footer
-                        selectedCount={selectedCount}
-                        hasHitSelectionLimit={hasHitSelectionLimit}
-                        onSelectedClick={this.showSelected}
-                        onChoose={this.choose}
-                        onCancel={this.cancel}
-                        getLocalizedMessage={getLocalizedMessage}
-                        chooseButtonLabel={chooseButtonLabel}
-                        cancelButtonLabel={cancelButtonLabel}
-                    />
+            <Internationalize language={language} messages={messages}>
+                <div id={this.id} className={styleClassName} ref={measureRef}>
+                    <div className='be-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                        <Header
+                            view={view}
+                            isSmall={isSmall}
+                            searchQuery={searchQuery}
+                            logoUrl={logoUrl}
+                            onSearch={this.search}
+                        />
+                        <SubHeader
+                            view={view}
+                            rootId={rootFolderId}
+                            isSmall={isSmall}
+                            rootName={rootName}
+                            currentCollection={currentCollection}
+                            canUpload={allowUpload}
+                            canCreateNewFolder={allowCreate}
+                            onUpload={this.upload}
+                            onCreate={this.createFolder}
+                            onItemClick={this.fetchFolder}
+                            onSortChange={this.sort}
+                        />
+                        <Content
+                            view={view}
+                            isSmall={isSmall}
+                            rootId={rootFolderId}
+                            rootElement={this.rootElement}
+                            focusedRow={focusedRow}
+                            selectableType={type}
+                            canSetShareAccess={canSetShareAccess}
+                            extensionsWhitelist={extensions}
+                            hasHitSelectionLimit={hasHitSelectionLimit}
+                            currentCollection={currentCollection}
+                            tableRef={this.tableRef}
+                            onItemSelect={this.select}
+                            onItemClick={this.onItemClick}
+                            onFocusChange={this.onFocusChange}
+                            onShareAccessChange={this.changeShareAccess}
+                        />
+                        <Footer
+                            selectedCount={selectedCount}
+                            hasHitSelectionLimit={hasHitSelectionLimit}
+                            onSelectedClick={this.showSelected}
+                            onChoose={this.choose}
+                            onCancel={this.cancel}
+                            chooseButtonLabel={chooseButtonLabel}
+                            cancelButtonLabel={cancelButtonLabel}
+                        />
+                    </div>
+                    {allowUpload && !!this.appElement ? (
+                        <UploadDialog
+                            isOpen={isUploadModalOpen}
+                            currentFolderId={id}
+                            token={token}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
+                            apiHost={apiHost}
+                            uploadHost={uploadHost}
+                            onClose={this.uploadSuccessHandler}
+                            parentElement={this.rootElement}
+                            appElement={this.appElement}
+                            requestInterceptor={requestInterceptor}
+                            responseInterceptor={responseInterceptor}
+                        />
+                    ) : null}
+                    {allowCreate && !!this.appElement ? (
+                        <CreateFolderDialog
+                            isOpen={isCreateFolderModalOpen}
+                            onCreate={this.createFolderCallback}
+                            onCancel={this.closeModals}
+                            isLoading={isLoading}
+                            errorCode={errorCode}
+                            parentElement={this.rootElement}
+                            appElement={this.appElement}
+                        />
+                    ) : null}
                 </div>
-                {allowUpload && !!this.appElement
-                    ? <UploadDialog
-                        isOpen={isUploadModalOpen}
-                        rootFolderId={id}
-                        token={token}
-                        sharedLink={sharedLink}
-                        sharedLinkPassword={sharedLinkPassword}
-                        apiHost={apiHost}
-                        uploadHost={uploadHost}
-                        onClose={this.uploadSuccessHandler}
-                        getLocalizedMessage={getLocalizedMessage}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-                {allowCreate && !!this.appElement
-                    ? <CreateFolderDialog
-                        isOpen={isCreateFolderModalOpen}
-                        onCreate={this.createFolderCallback}
-                        onCancel={this.closeModals}
-                        getLocalizedMessage={getLocalizedMessage}
-                        isLoading={isLoading}
-                        errorCode={errorCode}
-                        parentElement={this.rootElement}
-                      />
-                    : null}
-            </div>
+            </Internationalize>
         );
         /* eslint-enable jsx-a11y/no-static-element-interactions */
         /* eslint-enable jsx-a11y/no-noninteractive-tabindex */

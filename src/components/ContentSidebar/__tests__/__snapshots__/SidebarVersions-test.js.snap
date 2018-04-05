@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/SidebarVersions should not render the versions when total_count is falsy 1`] = `""`;
+
+exports[`components/ContentSidebar/SidebarVersions should render the versions when total_count > 0 1`] = `
+<SidebarSection
+  className=""
+  isOpen={true}
+>
+  <VersionHistoryLink
+    className=""
+    versionCount={2}
+  />
+</SidebarSection>
+`;

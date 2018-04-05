@@ -1,3 +1,5 @@
+@import '~box-react-ui/lib/styles/variables';
+
 $blue: #0061d5 !default;
 $light-blue: #e4f4ff !default;
 $grey-blue: #bed4de !default;
@@ -26,3 +28,42 @@ $lighter-grey-blue: rgba($grey-blue, .4) !default;
 $lighter-light-blue: rgba($light-blue, .4) !default;
 
 $font: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+@mixin rendering {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+@mixin reset {
+    @include rendering;
+
+    /* stylelint-disable declaration-no-important */
+    box-sizing: border-box !important;
+    /* stylelint-enable declaration-no-important */
+    font-family: $font;
+    font-size: 13px;
+
+    * {
+        @include rendering;
+
+        /* stylelint-disable declaration-no-important */
+        box-sizing: border-box !important;
+        /* stylelint-enable declaration-no-important */
+        font-family: inherit;
+
+        &::after,
+        &::before {
+            box-sizing: inherit;
+            color: inherit;
+            font-family: inherit;
+            text-rendering: inherit;
+        }
+    }
+}
+
+@mixin placeholder {
+    font-family: $font;
+    font-weight: 200;
+    opacity: .6;
+}

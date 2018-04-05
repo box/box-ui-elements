@@ -102,10 +102,11 @@ class ContentExplorer extends ES6Wrapper {
     render() {
         render(
             <ContentExplorerComponent
-                rootFolderId={this.root}
+                language={this.language}
+                messages={this.messages}
+                rootFolderId={this.id}
                 token={this.token}
                 componentRef={this.setComponent}
-                getLocalizedMessage={this.getLocalizedMessage}
                 onDelete={this.onDelete}
                 onDownload={this.onDownload}
                 onPreview={this.onPreview}
@@ -114,6 +115,7 @@ class ContentExplorer extends ES6Wrapper {
                 onUpload={this.onUpload}
                 onCreate={this.onCreate}
                 onNavigate={this.onNavigate}
+                onInteraction={this.onInteraction}
                 {...this.options}
             />,
             this.container

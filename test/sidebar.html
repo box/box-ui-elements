@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sidebar Test Page</title>
+        <style>
+            body,
+            html,
+            .sidebar {
+                background: #ccc;
+                border: 0 none;
+                box-sizing: border-box !important;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+
+            .sidebar {
+                display: flex;
+            }
+
+            .inputs {
+                padding: 15px;
+            }
+
+            .inputs input {
+                margin-bottom: 10px;
+            }
+        </style>
+        <div class="sidebar">
+            <div class="sidebar1"></div>
+            <div class="gap">&nbsp;&nbsp;</div>
+            <div class="sidebar2"></div>
+            <div class="gap">&nbsp;&nbsp;</div>
+            <div class="sidebar3"></div>
+            <div class="inputs">
+                <div>
+                    <label>
+                        <div>File Id</div>
+                        <input class="file" type="text" placeholder="Enter file id" />
+                    </label>
+                    <label>
+                        <div>Auth Token</div>
+                        <input class="token" type="text" placeholder="Enter auth token" />
+                    </label>
+                </div>
+                <button type="button" onclick="load()">Submit</button>
+            </div>
+            </div>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
+        <script src="../dev/en-US/sidebar.js"></script>
+    </head>
+    <body>
+        <div class="preivew sidebar1"></div>
+        <script>
+            function load() {
+                const { ContentSidebar } = Box;
+                const token = document.querySelector('.token').value || localStorage.getItem('token');
+                const fileId = document.querySelector('.file').value || localStorage.getItem('file');
+
+                if (!token || !fileId) {
+                    return;
+                }
+
+                localStorage.setItem('token', token);
+                document.querySelector('.token').value = token;
+
+                localStorage.setItem('file', fileId);
+                document.querySelector('.file').value = fileId;
+
+                const sidebar1 = new ContentSidebar();
+                sidebar1.show(fileId, token, {
+                    container: '.sidebar1',
+                    hasProperties: true,
+                    hasNotices: true,
+                    hasAccessStats: true,
+                    hasVersions: true,
+                    hasNotices: true,
+                    onVersionHistoryClick : function(){
+                        alert('hello, world!');
+                    },
+                    onAccessStatsClick: () => {
+                        alert('Hello, world!');
+                    }
+                });
+
+                const sidebar2 = new ContentSidebar();
+                sidebar2.show(fileId, token, {
+                    container: '.sidebar2',
+                    hasProperties: true,
+                    hasSkills: true,
+                    hasTitle: true,
+                    hasNotices: true,
+                    hasVersions: true,
+                    hasAccessStats: true
+                });
+
+                const sidebar3 = new ContentSidebar();
+                sidebar3.addListener('interaction', function(data) {
+                    switch (data.interaction.target) {
+                        case 'face':
+                            console.log('%c==========face===========', 'background: orange; color: #000');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: orange; color: #000');
+                            console.log('%c==========face===========', 'background: orange; color: #000');
+                            break;
+                        case 'time-slice':
+                            console.log('%c==========timeline===========', 'background: green; color: #fff');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: green; color: #fff');
+                            console.log('%c==========timeline===========', 'background: green; color: #fff');
+                            break;
+                        case 'topic':
+                            console.log('%c==========keyword===========', 'background: blue; color: #fff');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: blue; color: #fff');
+                            console.log('%c==========keyword===========', 'background: blue; color: #fff');
+                            break;
+                        case 'transcript':
+                            console.log('%c==========transcript===========', 'background: black; color: #fff');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: black; color: #fff');
+                            console.log('%c==========transcript===========', 'background: black; color: #fff');
+                            break;
+                        case 'transcript-copy':
+                            console.log('%c==========transcript-copy===========', 'background: red; color: #fff');
+                            console.log('%c' + JSON.stringify(data, null, 2), 'background: red; color: #fff');
+                            console.log('%c==========transcript-copy===========', 'background: red; color: #fff');
+                            break;
+                    }
+                });
+                sidebar3.show(fileId, token, {
+                    container: '.sidebar3',
+                    hasProperties: true,
+                    hasActivityFeed: true,
+                    hasSkills: true,
+                    hasNotices: true
+                });
+            }
+            load();
+        </script>
+    </body>
+</html>

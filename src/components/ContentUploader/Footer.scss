@@ -14,11 +14,7 @@
         text-align: center;
     }
 
-    .bcu-footer-right {
-        flex-shrink: 0;
-
-        .buik-btn {
-            margin-left: 8px;
-        }
+    .bcu-footer-right .btn {
+        margin-left: 8px;
     }
 }

@@ -1,7 +1,13 @@
-import getBadItemError from '../error';
+import { getBadItemError, getBadPermissionsError } from '../error';
 
 describe('util/error/getBadItemError()', () => {
-    it('should set and get correctly', () => {
-        expect(getBadItemError().message).to.equal('Bad box item!');
+    test('should set and get correctly', () => {
+        expect(getBadItemError().message).toBe('Bad box item!');
+    });
+});
+
+describe('util/error/getBadPermissionsError()', () => {
+    test('should set and get correctly', () => {
+        expect(getBadPermissionsError().message).toBe('Insufficient Permissions!');
     });
 });

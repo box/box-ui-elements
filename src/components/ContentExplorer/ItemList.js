@@ -6,6 +6,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import { injectIntl } from 'react-intl';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import 'react-virtualized/styles.css';
@@ -17,6 +18,7 @@ import nameCellRenderer from '../Item/nameCellRenderer';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { focus } from '../../util/dom';
+import messages from '../messages';
 import {
     FIELD_NAME,
     FIELD_ID,
@@ -32,6 +34,7 @@ type Props = {
     view: View,
     rootElement: HTMLElement,
     isSmall: boolean,
+    isMedium: boolean,
     isTouch: boolean,
     rootId: string,
     focusedRow: number,
@@ -49,13 +52,14 @@ type Props = {
     onItemPreview: Function,
     onSortChange: Function,
     tableRef: Function,
-    getLocalizedMessage: Function,
-    currentCollection: Collection
+    currentCollection: Collection,
+    intl: any
 };
 
 const ItemList = ({
     view,
     isSmall,
+    isMedium,
     isTouch,
     rootId,
     rootElement,
@@ -75,11 +79,10 @@ const ItemList = ({
     currentCollection,
     tableRef,
     focusedRow,
-    getLocalizedMessage
+    intl
 }: Props) => {
     const nameCell = nameCellRenderer(
         rootId,
-        getLocalizedMessage,
         view,
         onItemClick,
         onItemSelect,
@@ -88,10 +91,9 @@ const ItemList = ({
         isTouch
     );
     const iconCell = iconCellRenderer();
-    const dateCell = dateCellRenderer(getLocalizedMessage);
+    const dateCell = dateCellRenderer();
     const sizeAccessCell = sizeCellRenderer();
     const moreOptionsCell = moreOptionsCellRenderer(
-        getLocalizedMessage,
         canPreview,
         canShare,
         canDownload,
@@ -137,9 +139,9 @@ const ItemList = ({
             scrollToRow={focusedRow}
             onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bce-item-row-${scrollToRow}`)}
         >
-            {({ onSectionRendered, scrollToRow, focusOnRender }) =>
+            {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
-                    {({ width, height }) =>
+                    {({ width, height }) => (
                         <Table
                             width={width}
                             height={height}
@@ -169,39 +171,39 @@ const ItemList = ({
                                 flexShrink={0}
                             />
                             <Column
-                                label={getLocalizedMessage('buik.item.name')}
+                                label={intl.formatMessage(messages.name)}
                                 dataKey={FIELD_NAME}
                                 cellRenderer={nameCell}
                                 headerRenderer={headerCellRenderer}
                                 width={300}
                                 flexGrow={1}
                             />
-                            {isSmall
-                                ? null
-                                : <Column
+                            {isSmall ? null : (
+                                <Column
                                     className='bce-item-coloumn'
                                     label={
-                                          isRecents
-                                              ? getLocalizedMessage('buik.item.interacted')
-                                              : getLocalizedMessage('buik.item.modified')
-                                      }
+                                        isRecents
+                                            ? intl.formatMessage(messages.interacted)
+                                            : intl.formatMessage(messages.modified)
+                                    }
                                     dataKey={isRecents ? FIELD_INTERACTED_AT : FIELD_MODIFIED_AT}
                                     cellRenderer={dateCell}
                                     headerRenderer={headerCellRenderer}
-                                    width={120}
-                                    flexShrink={0}
-                                  />}
-                            {isSmall
-                                ? null
-                                : <Column
+                                    width={isRecents ? 120 : 300}
+                                    flexGrow={1}
+                                />
+                            )}
+                            {isSmall || isMedium ? null : (
+                                <Column
                                     className='bce-item-coloumn'
-                                    label={getLocalizedMessage('buik.item.size')}
+                                    label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}
                                     headerRenderer={headerCellRenderer}
                                     width={80}
                                     flexShrink={0}
-                                  />}
+                                />
+                            )}
                             <Column
                                 disableSort
                                 dataKey={FIELD_ID}
@@ -209,10 +211,12 @@ const ItemList = ({
                                 width={isSmall || !canShare ? 58 : 140}
                                 flexShrink={0}
                             />
-                        </Table>}
-                </AutoSizer>}
+                        </Table>
+                    )}
+                </AutoSizer>
+            )}
         </KeyBinder>
     );
 };
 
-export default ItemList;
+export default injectIntl(ItemList);

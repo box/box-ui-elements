@@ -1,0 +1,15 @@
+@import '../../../variables';
+
+.be .btn-plain.be-timeline-time {
+    border-radius: 6px;
+    cursor: pointer;
+    height: 6px;
+    opacity: .6;
+    position: absolute;
+
+    &:focus,
+    &:active,
+    &:hover {
+        opacity: 1;
+    }
+}

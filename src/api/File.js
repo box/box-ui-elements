@@ -1,20 +1,21 @@
 /**
  * @flow
- * @file Helper for the box file api
+ * @file Helper for the box file API
  * @author Box
  */
 
 import Item from './Item';
-import getFields from '../util/fields';
+import { getFieldsAsString } from '../util/fields';
 import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS, TYPED_ID_FILE_PREFIX } from '../constants';
 import type Cache from '../util/Cache';
+import { getBadItemError, getBadPermissionsError } from '../util/error';
 import type { BoxItem } from '../flowTypes';
 
 class File extends Item {
     /**
      * Creates a key for the cache
      *
-     * @param {string} id folder id
+     * @param {string} id - Folder id
      * @return {string} key
      */
     getCacheKey(id: string): string {
@@ -28,25 +29,25 @@ class File extends Item {
      *
      * @return {string} typed id for file
      */
-    getTypedFileId(id: string): string {
+    static getTypedFileId(id: string): string {
         return `${TYPED_ID_FILE_PREFIX}${id}`;
     }
 
     /**
      * API URL for files
      *
-     * @param {string} [id] optional file id
+     * @param {string} [id] - Optional file id
      * @return {string} base url for files
      */
     getUrl(id: string): string {
         const suffix: string = id ? `/${id}` : '';
-        return `${this.getBaseUrl()}/files${suffix}`;
+        return `${this.getBaseApiUrl()}/files${suffix}`;
     }
 
     /**
      * API for getting download URL for files
      *
-     * @param {string} id - file id
+     * @param {string} id - File id
      * @return {void}
      */
     getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
@@ -57,10 +58,53 @@ class File extends Item {
                     fields: FIELD_DOWNLOAD_URL
                 }
             })
-            .then((data: BoxItem) => {
+            .then(({ data }: { data: BoxItem }) => {
                 successCallback(data[FIELD_DOWNLOAD_URL]);
             })
             .catch(errorCallback);
+    }
+
+    /**
+     * API for setting the description of a file
+     *
+     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {string} description - New file description
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @return {Promise}
+     */
+    setFileDescription(
+        file: BoxItem,
+        description: string,
+        successCallback: Function,
+        errorCallback: Function
+    ): Promise<void> {
+        const { id, permissions } = file;
+
+        if (!id || !permissions) {
+            errorCallback(getBadItemError());
+            return Promise.reject();
+        }
+
+        if (!permissions.can_rename) {
+            errorCallback(getBadPermissionsError());
+            return Promise.reject();
+        }
+
+        return this.xhr
+            .put({
+                id: File.getTypedFileId(id),
+                url: this.getUrl(id),
+                data: { description }
+            })
+            .then(({ data }: { data: BoxItem }) => {
+                const updatedFile = this.merge(this.getCacheKey(id), 'description', data.description);
+                successCallback(updatedFile);
+            })
+            .catch((e) => {
+                const originalFile = this.merge(this.getCacheKey(id), 'description', file.description);
+                errorCallback(e, originalFile);
+            });
     }
 
     /**
@@ -103,16 +147,16 @@ class File extends Item {
         // as thats what needed by preview.
         return this.xhr
             .get({
-                id: this.getTypedFileId(id),
+                id: File.getTypedFileId(id),
                 url: this.getUrl(id),
                 params: {
-                    fields: getFields(true, includePreviewSidebarFields)
+                    fields: getFieldsAsString(true, includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
-            .then((file: BoxItem) => {
-                cache.set(key, file);
-                successCallback(file);
+            .then(({ data }: { data: BoxItem }) => {
+                cache.set(key, data);
+                successCallback(data);
             })
             .catch(errorCallback);
     }

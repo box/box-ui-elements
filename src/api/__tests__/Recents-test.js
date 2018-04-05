@@ -1,87 +1,87 @@
-/* eslint-disable no-underscore-dangle */
-
 import Recents from '../Recents';
 import Cache from '../../util/Cache';
-import getFields from '../../util/fields';
+import { getFieldsAsString } from '../../util/fields';
 import { X_REP_HINTS } from '../../constants';
+import * as sort from '../../util/sorter';
 
 let recents;
 let cache;
-const sandbox = sinon.sandbox.create();
 
 describe('api/Recents', () => {
     beforeEach(() => {
-        recents = new Recents();
+        recents = new Recents({});
         cache = new Cache();
     });
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
-
     describe('getCacheKey()', () => {
-        it('should return correct key', () => {
-            expect(recents.getCacheKey('foo')).to.equal('recents_foo');
+        test('should return correct key', () => {
+            expect(recents.getCacheKey('foo')).toBe('recents_foo');
         });
     });
 
     describe('getUrl()', () => {
-        it('should return correct recents api url', () => {
-            expect(recents.getUrl()).to.equal('https://api.box.com/2.0/recent_items');
+        test('should return correct recents api url', () => {
+            expect(recents.getUrl()).toBe('https://api.box.com/2.0/recent_items');
         });
     });
 
     describe('recents()', () => {
-        it('should not do anything if destroyed', () => {
-            recents.isDestroyed = sandbox.mock().returns(true);
-            recents.recentsRequest = sandbox.mock().never();
-            recents.getCache = sandbox.mock().never();
-            recents.getCacheKey = sandbox.mock().never();
+        test('should not do anything if destroyed', () => {
+            recents.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            recents.recentsRequest = jest.fn();
+            recents.getCache = jest.fn();
+            recents.getCacheKey = jest.fn();
             recents.recents('id', 'by', 'direction', 'success', 'fail');
+            expect(recents.recentsRequest).not.toHaveBeenCalled();
+            expect(recents.getCache).not.toHaveBeenCalled();
+            expect(recents.getCacheKey).not.toHaveBeenCalled();
         });
-        it('should save args and make recents request when not cached', () => {
-            recents.recentsRequest = sandbox.mock();
-            recents.getCache = sandbox.mock().returns(cache);
-            recents.getCacheKey = sandbox.mock().withArgs('id').returns('key');
+        test('should save args and make recents request when not cached', () => {
+            recents.recentsRequest = jest.fn();
+            recents.getCache = jest.fn().mockReturnValueOnce(cache);
+            recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
             recents.recents('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
-            expect(recents.id).to.equal('id');
-            expect(recents.successCallback).to.equal('success');
-            expect(recents.errorCallback).to.equal('fail');
-            expect(recents.sortBy).to.equal('interacted_at');
-            expect(recents.sortDirection).to.equal('DESC');
-            expect(recents.key).to.equal('key');
-            expect(recents.includePreviewFields).to.equal('preview');
-            expect(recents.includePreviewSidebarFields).to.equal('sidebar');
+            expect(recents.getCacheKey).toHaveBeenCalledWith('id');
+            expect(recents.id).toBe('id');
+            expect(recents.successCallback).toBe('success');
+            expect(recents.errorCallback).toBe('fail');
+            expect(recents.sortBy).toBe('interacted_at');
+            expect(recents.sortDirection).toBe('DESC');
+            expect(recents.key).toBe('key');
+            expect(recents.includePreviewFields).toBe('preview');
+            expect(recents.includePreviewSidebarFields).toBe('sidebar');
         });
-        it('should save args and not make recents request when cached', () => {
+        test('should save args and not make recents request when cached', () => {
             cache.set('key', 'value');
-            recents.finish = sandbox.mock();
-            recents.getCache = sandbox.mock().returns(cache);
-            recents.getCacheKey = sandbox.mock().withArgs('id').returns('key');
+            recents.finish = jest.fn();
+            recents.getCache = jest.fn().mockReturnValueOnce(cache);
+            recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
             recents.recents('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
-            expect(recents.id).to.equal('id');
-            expect(recents.successCallback).to.equal('success');
-            expect(recents.errorCallback).to.equal('fail');
-            expect(recents.sortBy).to.equal('by');
-            expect(recents.sortDirection).to.equal('direction');
-            expect(recents.key).to.equal('key');
-            expect(recents.includePreviewFields).to.equal('preview');
-            expect(recents.includePreviewSidebarFields).to.equal('sidebar');
+            expect(recents.getCacheKey).toHaveBeenCalledWith('id');
+            expect(recents.id).toBe('id');
+            expect(recents.successCallback).toBe('success');
+            expect(recents.errorCallback).toBe('fail');
+            expect(recents.sortBy).toBe('by');
+            expect(recents.sortDirection).toBe('direction');
+            expect(recents.key).toBe('key');
+            expect(recents.includePreviewFields).toBe('preview');
+            expect(recents.includePreviewSidebarFields).toBe('sidebar');
         });
-        it('should save args and make recents request when cached but forced to fetch', () => {
+        test('should save args and make recents request when cached but forced to fetch', () => {
             cache.set('key', 'value');
-            recents.recentsRequest = sandbox.mock();
-            recents.getCache = sandbox.mock().returns(cache);
-            recents.getCacheKey = sandbox.mock().withArgs('id').returns('key');
+            recents.recentsRequest = jest.fn();
+            recents.getCache = jest.fn().mockReturnValueOnce(cache);
+            recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
             recents.recents('id', 'by', 'direction', 'success', 'fail', true, 'preview', 'sidebar');
-            expect(recents.id).to.equal('id');
-            expect(recents.successCallback).to.equal('success');
-            expect(recents.errorCallback).to.equal('fail');
-            expect(recents.sortBy).to.equal('interacted_at');
-            expect(recents.sortDirection).to.equal('DESC');
-            expect(recents.key).to.equal('key');
-            expect(recents.includePreviewFields).to.equal('preview');
-            expect(recents.includePreviewSidebarFields).to.equal('sidebar');
+            expect(recents.getCacheKey).toHaveBeenCalledWith('id');
+            expect(recents.id).toBe('id');
+            expect(recents.successCallback).toBe('success');
+            expect(recents.errorCallback).toBe('fail');
+            expect(recents.sortBy).toBe('interacted_at');
+            expect(recents.sortDirection).toBe('DESC');
+            expect(recents.key).toBe('key');
+            expect(recents.includePreviewFields).toBe('preview');
+            expect(recents.includePreviewSidebarFields).toBe('sidebar');
         });
     });
 
@@ -90,65 +90,72 @@ describe('api/Recents', () => {
             recents.id = 'id';
         });
 
-        it('should not do anything if destroyed', () => {
-            recents.isDestroyed = sandbox.mock().returns(true);
+        test('should not do anything if destroyed', () => {
+            recents.isDestroyed = jest.fn().mockReturnValueOnce(true);
             recents.xhr = null;
-            return recents.recentsRequest().should.be.rejected;
+            return expect(recents.recentsRequest()).rejects.toBeUndefined();
         });
-        it('should make xhr get recents and call success callback', () => {
-            recents.recentsSuccessHandler = sandbox.mock().withArgs('success');
-            recents.recentsErrorHandler = sandbox.mock().never();
+        test('should make xhr get recents and call success callback', () => {
+            recents.recentsSuccessHandler = jest.fn();
+            recents.recentsErrorHandler = jest.fn();
             recents.includePreviewFields = true;
             recents.xhr = {
-                get: sandbox
-                    .mock()
-                    .withArgs({
-                        url: 'https://api.box.com/2.0/recent_items',
-                        params: { fields: getFields(true) },
-                        headers: { 'X-Rep-Hints': X_REP_HINTS }
-                    })
-                    .returns(Promise.resolve('success'))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
-            return recents.recentsRequest();
+            return recents.recentsRequest().then(() => {
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith('success');
+                expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
+                expect(recents.xhr.get).toHaveBeenCalledWith({
+                    url: 'https://api.box.com/2.0/recent_items',
+                    params: { fields: getFieldsAsString(true) },
+                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                });
+            });
         });
-        it('should make xhr to get recents and call error callback', () => {
-            recents.recentsSuccessHandler = sandbox.mock().never();
-            recents.recentsErrorHandler = sandbox.mock().withArgs('error');
+        test('should make xhr to get recents and call error callback', () => {
+            const error = new Error('error');
+            recents.recentsSuccessHandler = jest.fn();
+            recents.recentsErrorHandler = jest.fn();
             recents.includePreviewFields = true;
             recents.includePreviewSidebarFields = true;
             recents.xhr = {
-                get: sandbox
-                    .mock()
-                    .withArgs({
-                        url: 'https://api.box.com/2.0/recent_items',
-                        params: { fields: getFields(true, true) },
-                        headers: { 'X-Rep-Hints': X_REP_HINTS }
-                    })
-                    .returns(Promise.reject('error'))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve(error))
             };
-            return recents.recentsRequest();
+
+            return recents.recentsRequest().then(() => {
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(error);
+                expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
+                expect(recents.xhr.get).toHaveBeenCalledWith({
+                    url: 'https://api.box.com/2.0/recent_items',
+                    params: { fields: getFieldsAsString(true, true) },
+                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                });
+            });
         });
     });
 
     describe('recentsErrorHandler()', () => {
-        it('should not do anything if destroyed', () => {
-            recents.isDestroyed = sandbox.mock().returns(true);
-            recents.errorCallback = sandbox.mock().never();
+        test('should not do anything if destroyed', () => {
+            recents.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            recents.errorCallback = jest.fn();
             recents.recentsErrorHandler('foo');
+            expect(recents.errorCallback).not.toHaveBeenCalled();
         });
-        it('should call error callback', () => {
-            recents.errorCallback = sandbox.mock().withArgs('foo');
+        test('should call error callback', () => {
+            recents.errorCallback = jest.fn();
             recents.recentsErrorHandler('foo');
+            expect(recents.errorCallback).toHaveBeenCalledWith('foo');
         });
     });
 
     describe('recentsSuccessHandler()', () => {
-        it('should not do anything if destroyed', () => {
-            recents.isDestroyed = sandbox.mock().returns(true);
-            recents.finish = sandbox.mock().never();
+        test('should not do anything if destroyed', () => {
+            recents.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            recents.finish = jest.fn();
             recents.recentsSuccessHandler('foo');
+            expect(recents.finish).not.toHaveBeenCalled();
         });
-        it('should parse the response, flatten the collection and call finish', () => {
+        test('should parse the response, flatten the collection and call finish', () => {
             const item1 = {
                 id: 'item1',
                 type: 'file',
@@ -171,34 +178,36 @@ describe('api/Recents', () => {
                 }
             };
             const response = {
-                order: {
-                    by: 'by',
-                    direction: 'direction'
-                },
-                entries: [
-                    {
-                        interacted_at: 'interacted_at1',
-                        item: item1
+                data: {
+                    order: {
+                        by: 'by',
+                        direction: 'direction'
                     },
-                    {
-                        interacted_at: 'interacted_at2',
-                        item: item2
-                    },
-                    {
-                        interacted_at: 'interacted_at3',
-                        item: item3
-                    }
-                ]
+                    entries: [
+                        {
+                            interacted_at: 'interacted_at1',
+                            item: item1
+                        },
+                        {
+                            interacted_at: 'interacted_at2',
+                            item: item2
+                        },
+                        {
+                            interacted_at: 'interacted_at3',
+                            item: item3
+                        }
+                    ]
+                }
             };
 
             recents.options = { cache };
             recents.id = 'id2'; // root folder
             recents.key = 'key';
-            recents.finish = sandbox.mock();
-            recents.getCache = sandbox.mock().returns(cache);
+            recents.finish = jest.fn();
+            recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.recentsSuccessHandler(response);
 
-            expect(cache.get('key')).to.deep.equal({
+            expect(cache.get('key')).toEqual({
                 item_collection: {
                     isLoaded: true,
                     entries: ['file_item1', 'file_item3'],
@@ -210,13 +219,9 @@ describe('api/Recents', () => {
                     ]
                 }
             });
-            expect(cache.get('file_item1')).to.deep.equal(
-                Object.assign({}, item1, { interacted_at: 'interacted_at1' })
-            );
-            expect(cache.get('file_item3')).to.deep.equal(
-                Object.assign({}, item3, { interacted_at: 'interacted_at3' })
-            );
-            expect(cache.get('file_item2')).to.be.equal(undefined);
+            expect(cache.get('file_item1')).toEqual(Object.assign({}, item1, { interacted_at: 'interacted_at1' }));
+            expect(cache.get('file_item3')).toEqual(Object.assign({}, item3, { interacted_at: 'interacted_at3' }));
+            expect(cache.get('file_item2')).toBeUndefined();
         });
     });
 
@@ -265,52 +270,54 @@ describe('api/Recents', () => {
             cache.set('key', recent);
         });
 
-        it('should not do anything if destroyed', () => {
-            recents.isDestroyed = sandbox.mock().returns(true);
+        test('should not do anything if destroyed', () => {
+            recents.successCallback = jest.fn();
+            recents.isDestroyed = jest.fn().mockReturnValueOnce(true);
             recents.finish();
+            expect(recents.successCallback).not.toHaveBeenCalled();
         });
 
-        it('should call success callback with proper collection', () => {
+        test('should call success callback with proper collection', () => {
             recents.id = 'id';
             recents.key = 'key';
             recents.sortBy = 'name';
             recents.sortDirection = 'DESC';
-            recents.getCache = sandbox.mock().returns(cache);
-            recents.successCallback = sandbox.mock().withArgs({
+            recents.getCache = jest.fn().mockReturnValueOnce(cache);
+            recents.successCallback = jest.fn();
+            recents.finish();
+            expect(recents.successCallback).toHaveBeenCalledWith({
                 percentLoaded: 100,
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
                 items: [item3, item2, item1]
             });
-            recents.finish();
         });
 
-        it('should throw bad item error when item collection is missing', () => {
-            Recents.__Rewire__('sort', sandbox.mock().withArgs(recent, 'name', 'DESC', cache).returns({}));
+        test('should throw bad item error when item collection is missing', () => {
+            sort.default = jest.fn().mockReturnValueOnce({});
             recents.id = 'id';
             recents.key = 'key';
             recents.sortBy = 'name';
             recents.sortDirection = 'DESC';
-            recents.getCache = sandbox.mock().returns(cache);
-            recents.successCallback = sandbox.mock().never();
-            expect(recents.finish.bind(recents)).to.throw(Error, /Bad box item/);
-            Recents.__ResetDependency__('sort');
+            recents.getCache = jest.fn().mockReturnValueOnce(cache);
+            recents.successCallback = jest.fn();
+            expect(recents.finish.bind(recents)).toThrow(Error, /Bad box item/);
+            expect(sort.default).toHaveBeenCalledWith(recent, 'name', 'DESC', cache);
+            expect(recents.successCallback).not.toHaveBeenCalled();
         });
 
-        it('should throw bad item error when item collection is missing entries', () => {
-            Recents.__Rewire__(
-                'sort',
-                sandbox.mock().withArgs(recent, 'name', 'DESC', cache).returns({ item_collection: {} })
-            );
+        test('should throw bad item error when item collection is missing entries', () => {
+            sort.default = jest.fn().mockReturnValueOnce({ item_collection: {} });
             recents.id = 'id';
             recents.key = 'key';
             recents.sortBy = 'name';
             recents.sortDirection = 'DESC';
-            recents.getCache = sandbox.mock().returns(cache);
-            recents.successCallback = sandbox.mock().never();
-            expect(recents.finish.bind(recents)).to.throw(Error, /Bad box item/);
-            Recents.__ResetDependency__('sort');
+            recents.getCache = jest.fn().mockReturnValueOnce(cache);
+            recents.successCallback = jest.fn();
+            expect(recents.finish.bind(recents)).toThrow(Error, /Bad box item/);
+            expect(sort.default).toHaveBeenCalledWith(recent, 'name', 'DESC', cache);
+            expect(recents.successCallback).not.toHaveBeenCalled();
         });
     });
 });
