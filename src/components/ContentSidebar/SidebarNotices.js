@@ -31,7 +31,7 @@ type Props = {
  * @param {string} expiration - an item or shared link expiration
  * @return {string} an ISO formatted date string
  */
-function addMinuteToExpiration(expiration: string) {
+export function addMinuteToExpiration(expiration: string) {
     let expirationDate = new Date(expiration);
     // One minute is added to account for dates set via a date picker.
     // These dates will actually be stored as 11:59PM the night before the item expires.

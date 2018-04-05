@@ -1,11 +1,56 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import SidebarNotices from '../SidebarAccessStats';
+import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
+import ItemExpirationNotice from 'box-react-ui/lib/features/item-details/ItemExpirationNotice';
+import SidebarNotices, { addMinuteToExpiration } from '../SidebarNotices';
 
 describe('components/ContentSidebar/SidebarNotices', () => {
-    const getWrapper = (props) => shallow(<SidebarNotices {...props} />);
+    describe('render()', () => {
+        const getWrapper = (props) => shallow(<SidebarNotices {...props} />);
 
-    test('', () => {});
+        test('should render an item expiration if present', () => {
+            const props = {
+                file: {
+                    expires_at: '2018-04-25T23:59:00-07:00',
+                    shared_link: {
+                        url: 'https://www.foo.com'
+                    }
+                }
+            };
 
-    test('', () => {});
+            const wrapper = getWrapper(props);
+
+            expect(wrapper.find(ItemExpirationNotice)).toHaveLength(1);
+            expect(wrapper.find(SharedLinkExpirationNotice)).toHaveLength(0);
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render a shared link expiration if present', () => {
+            const props = {
+                file: {
+                    shared_link: {
+                        unshared_at: '2018-04-25T23:59:00-07:00'
+                    }
+                }
+            };
+            const wrapper = getWrapper(props);
+
+            expect(wrapper.find(SharedLinkExpirationNotice)).toHaveLength(1);
+            expect(wrapper.find(ItemExpirationNotice)).toHaveLength(0);
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should correctly render the empty state', () => {
+            const wrapper = getWrapper({});
+            expect(wrapper).toMatchSnapshot();
+        });
+    });
+
+    describe('addMinuteToExpiration()', () => {
+        test('should return a string one minute later', () => {
+            const expiration = '2018-04-25T23:59:00-07:00';
+            const result = addMinuteToExpiration(expiration);
+            expect(result).toEqual('2018-04-26T07:00:00.000Z');
+        });
+    });
 });
