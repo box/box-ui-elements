@@ -1591,7 +1591,7 @@ ShallowWrapper {
     "props": Object {
       "children": Array [
         <div
-          className="bcs-comment is-pending"
+          className="bcs-comment bcs-is-pending"
           onBlur={[Function]}
           onFocus={[Function]}
         >
@@ -1716,7 +1716,7 @@ ShallowWrapper {
               />
             </div>,
           ],
-          "className": "bcs-comment is-pending",
+          "className": "bcs-comment bcs-is-pending",
           "onBlur": [Function],
           "onFocus": [Function],
         },
@@ -1954,7 +1954,7 @@ ShallowWrapper {
       "props": Object {
         "children": Array [
           <div
-            className="bcs-comment is-pending"
+            className="bcs-comment bcs-is-pending"
             onBlur={[Function]}
             onFocus={[Function]}
           >
@@ -2079,7 +2079,7 @@ ShallowWrapper {
                 />
               </div>,
             ],
-            "className": "bcs-comment is-pending",
+            "className": "bcs-comment bcs-is-pending",
             "onBlur": [Function],
             "onFocus": [Function],
           },
