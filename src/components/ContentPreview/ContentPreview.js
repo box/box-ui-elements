@@ -66,7 +66,9 @@ type Props = {
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
+    onError: Function,
     onInteraction: Function,
+    onMetric: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function
 };
@@ -87,6 +89,8 @@ class ContentPreview extends PureComponent<Props, State> {
     previewContainer: ?HTMLDivElement;
     mouseMoveTimeoutID: TimeoutID;
     rootElement: HTMLElement;
+    onError: Function;
+    onMetric: Function;
 
     static defaultProps = {
         className: '',
@@ -102,9 +106,11 @@ class ContentPreview extends PureComponent<Props, State> {
         hasHeader: false,
         autoFocus: false,
         useHotkeys: true,
-        onLoad: noop,
-        onNavigate: noop,
+        onError: noop,
         onInteraction: noop,
+        onLoad: noop,
+        onMetric: noop,
+        onNavigate: noop,
         collection: []
     };
 
@@ -125,7 +131,9 @@ class ContentPreview extends PureComponent<Props, State> {
             apiHost,
             isSmall,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
+            onError,
+            onMetric
         } = props;
 
         this.state = { showSidebar: hasSidebar && !isSmall };
@@ -140,6 +148,8 @@ class ContentPreview extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor
         });
+        this.onError = onError;
+        this.onMetric = onMetric;
     }
 
     /**
@@ -396,6 +406,8 @@ class ContentPreview extends PureComponent<Props, State> {
         this.preview = new Preview();
         this.preview.updateFileCache([file]);
         this.preview.addListener('load', this.onPreviewLoad);
+        this.preview.addListener('preview_error', this.onError);
+        this.preview.addListener('preview_metric', this.onMetric);
         this.preview.show(file.id, token, {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions))
