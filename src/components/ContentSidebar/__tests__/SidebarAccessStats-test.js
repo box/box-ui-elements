@@ -13,6 +13,9 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
                 comment_count: 0,
                 download_count: 0,
                 edit_count: 0
+            },
+            file: {
+                extension: 'foo'
             }
         };
         const wrapper = getWrapper(props);
@@ -28,6 +31,9 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
                 comment_count: 0,
                 download_count: 0,
                 edit_count: 0
+            },
+            file: {
+                extension: 'foo'
             }
         };
         const wrapper = getWrapper(props);

@@ -13,6 +13,7 @@ import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
+import FileAccessStatsAPI from './FileAccessStats';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
@@ -61,6 +62,11 @@ class APIFactory {
      * @property {VersionsAPI}
      */
     versionsAPI: VersionsAPI;
+
+    /**
+     * @property {FileAccessStatsAPI}
+     */
+    fileAccessStatsAPI: FileAccessStatsAPI;
 
     /**
      * [constructor]
@@ -251,6 +257,20 @@ class APIFactory {
         }
         this.versionsAPI = new VersionsAPI(this.options);
         return this.versionsAPI;
+    }
+
+    /**
+     * API for access stats
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {AccessStatsAPI} AccessStatsAPI instance
+     */
+    getFileAccessStatsAPI(shouldDestroy: boolean): FileAccessStatsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.fileAccessStatsAPI = new FileAccessStatsAPI(this.options);
+        return this.fileAccessStatsAPI;
     }
 }
 

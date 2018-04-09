@@ -5,15 +5,17 @@
  */
 
 import React from 'react';
-import AccessStatsComponent from 'box-react-ui/lib/features/access-stats/AccessStats';
+import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import SidebarSection from './SidebarSection';
-import type { AccessStats } from '../../flowTypes';
+import type { FileAccessStats, BoxItem } from '../../flowTypes';
 import messages from '../messages';
+import { BOX_NOTE_EXTENSION } from '../../constants';
 
 type Props = {
     onAccessStatsClick?: Function,
-    accessStats: AccessStats
+    accessStats?: FileAccessStats,
+    file: BoxItem
 };
 
 // The AccessStats component requires a maximum number of events
@@ -26,8 +28,10 @@ const SidebarVersions = ({
         preview_count: 0,
         comment_count: 0,
         download_count: 0,
-        edit_count: 0
-    }
+        edit_count: 0,
+        has_count_overflowed: false
+    },
+    file
 }: Props) => {
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
@@ -37,13 +41,14 @@ const SidebarVersions = ({
 
     return (
         <SidebarSection title={<FormattedMessage {...messages.sidebarAccessStats} />}>
-            <AccessStatsComponent
+            <AccessStats
                 commentCount={comment_count}
                 downloadCount={download_count}
                 previewCount={preview_count}
                 editCount={edit_count}
                 openAccessStatsModal={onAccessStatsClick}
                 maxEvents={MAX_EVENTS}
+                isBoxNote={file.extension === BOX_NOTE_EXTENSION}
             />
         </SidebarSection>
     );

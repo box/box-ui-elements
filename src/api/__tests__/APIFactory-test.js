@@ -10,6 +10,7 @@ import WebLinkAPI from '../WebLink';
 import SearchAPI from '../Search';
 import RecentsAPI from '../Recents';
 import VersionsAPI from '../Versions';
+import FileAccessStatsAPI from '../FileAccessStats';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -179,6 +180,28 @@ describe('api/APIFactory', () => {
             expect(versionsAPI.options.cache).toBeInstanceOf(Cache);
             expect(versionsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(versionsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getFileAccessStatsAPI()', () => {
+        test('should call destroy and return versions API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const fileAccessStatsAPI = factory.getFileAccessStatsAPI(true);
+            expect(spy).toBeCalled();
+            expect(fileAccessStatsAPI).toBeInstanceOf(FileAccessStatsAPI);
+            expect(fileAccessStatsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileAccessStatsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileAccessStatsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return versions API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const fileAccessStatsAPI = factory.getFileAccessStatsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(fileAccessStatsAPI).toBeInstanceOf(FileAccessStatsAPI);
+            expect(fileAccessStatsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileAccessStatsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileAccessStatsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

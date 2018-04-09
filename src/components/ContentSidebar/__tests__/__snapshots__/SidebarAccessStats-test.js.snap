@@ -10,6 +10,11 @@ exports[`components/ContentSidebar/SidebarAccessStats should not render the comp
       "preview_count": 0,
     }
   }
+  file={
+    Object {
+      "extension": "foo",
+    }
+  }
   intl={
     Object {
       "formatDate": [Function],
@@ -27,6 +32,11 @@ exports[`components/ContentSidebar/SidebarAccessStats should render the componen
       "download_count": 0,
       "edit_count": 0,
       "preview_count": 1,
+    }
+  }
+  file={
+    Object {
+      "extension": "foo",
     }
   }
   intl={

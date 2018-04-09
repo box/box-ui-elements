@@ -120,6 +120,7 @@ export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
 export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
 export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
 export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
+export const BOX_NOTE_EXTENSION = 'boxnote';
 
 /* ---------------------- Statuses  -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';

@@ -16,11 +16,11 @@ import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
 import SidebarVersions from './SidebarVersions';
 import SidebarNotices from './SidebarNotices';
-import type { AccessStats, BoxItem, FileVersions } from '../../flowTypes';
+import type { FileAccessStats, BoxItem, FileVersions } from '../../flowTypes';
 import './DetailsSidebar.scss';
 
 type Props = {
-    accessStats: AccessStats,
+    accessStats?: FileAccessStats,
     file: BoxItem,
     getPreviewer: Function,
     hasTitle: boolean,
@@ -38,7 +38,7 @@ type Props = {
     onDescriptionChange: Function,
     intl: any,
     onVersionHistoryClick?: Function,
-    versions: FileVersions
+    versions?: FileVersions
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -71,7 +71,9 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {hasVersions && <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} />}
+            {hasVersions && (
+                <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} file={file} />
+            )}
             {hasNotices && <SidebarNotices file={file} />}
             {hasSkills && (
                 <SidebarSkills
@@ -96,7 +98,9 @@ const DetailsSidebar = ({
                     />
                 </SidebarSection>
             )}
-            {hasAccessStats && <SidebarAccessStats accessStats={accessStats} onAccessStatsClick={onAccessStatsClick} />}
+            {hasAccessStats && (
+                <SidebarAccessStats accessStats={accessStats} onAccessStatsClick={onAccessStatsClick} file={file} />
+            )}
         </SidebarContent>
     );
 };

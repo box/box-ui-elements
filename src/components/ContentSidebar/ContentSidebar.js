@@ -15,7 +15,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
-import type { AccessStats, Token, BoxItem, StringMap, FileVersions } from '../../flowTypes';
+import type { FileAccessStats, Token, BoxItem, StringMap, FileVersions } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -38,6 +38,7 @@ type Props = {
     hasClassification: boolean,
     hasActivityFeed: boolean,
     hasVersions: boolean,
+    hasAccessStats: boolean,
     language?: string,
     messages?: StringMap,
     cache?: Cache,
@@ -52,7 +53,7 @@ type Props = {
 
 type State = {
     file?: BoxItem,
-    accessStats?: AccessStats,
+    accessStats?: FileAccessStats,
     versions?: FileVersions
 };
 
@@ -144,7 +145,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { fileId, hasVersions }: Props = this.props;
+        const { fileId, hasVersions, hasAccessStats }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
@@ -152,6 +153,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.fetchFile(fileId);
             if (hasVersions) {
                 this.fetchVersions(fileId);
+            }
+            if (hasAccessStats) {
+                this.fetchFileAccessStats(fileId);
             }
         }
     }
@@ -313,6 +317,17 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * File versions fetch success callback
+     *
+     * @private
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchFileAccessStatsSuccessCallback = (accessStats: FileAccessStats): void => {
+        this.setState({ accessStats });
+    };
+
+    /**
      * Fetches a file
      *
      * @private
@@ -336,6 +351,21 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchVersions(id: string, shouldDestroy?: boolean = false): void {
         if (this.shouldFetchOrRender()) {
             this.api.getVersionsAPI(shouldDestroy).versions(id, this.fetchVersionsSuccessCallback, this.errorCallback);
+        }
+    }
+
+    /**
+     * Fetches the access stats for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchFileAccessStats(id: string, shouldDestroy?: boolean = false): void {
+        if (this.shouldFetchOrRender()) {
+            this.api
+                .getFileAccessStatsAPI(shouldDestroy)
+                .accessStats(id, this.fetchFileAccessStatsSuccessCallback, this.errorCallback);
         }
     }
 
