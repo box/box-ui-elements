@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
 import ItemExpirationNotice from 'box-react-ui/lib/features/item-details/ItemExpirationNotice';
-import SidebarNotices, { addMinuteToExpiration } from '../SidebarNotices';
+import SidebarNotices from '../SidebarNotices';
 
 describe('components/ContentSidebar/SidebarNotices', () => {
     describe('render()', () => {
@@ -43,14 +43,6 @@ describe('components/ContentSidebar/SidebarNotices', () => {
         test('should correctly render the empty state', () => {
             const wrapper = getWrapper({});
             expect(wrapper).toMatchSnapshot();
-        });
-    });
-
-    describe('addMinuteToExpiration()', () => {
-        test('should return a string one minute later', () => {
-            const expiration = '2018-04-25T23:59:00-07:00';
-            const result = addMinuteToExpiration(expiration);
-            expect(result).toEqual('2018-04-26T07:00:00.000Z');
         });
     });
 });

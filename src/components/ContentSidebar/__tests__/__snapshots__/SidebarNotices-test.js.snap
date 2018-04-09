@@ -7,7 +7,7 @@ exports[`components/ContentSidebar/SidebarNotices render() should render a share
   <SharedLinkExpirationNotice
     expiration={
       <DateField
-        date="2018-04-26T07:00:00.000Z"
+        date={2018-04-26T07:00:00.000Z}
         dateFormat={
           Object {
             "day": "numeric",
@@ -27,7 +27,7 @@ exports[`components/ContentSidebar/SidebarNotices render() should render an item
   <ItemExpirationNotice
     expiration={
       <DateField
-        date="2018-04-26T07:00:00.000Z"
+        date={2018-04-26T07:00:00.000Z}
         dateFormat={
           Object {
             "day": "numeric",
