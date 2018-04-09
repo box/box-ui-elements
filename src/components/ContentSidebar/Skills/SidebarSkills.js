@@ -20,17 +20,15 @@ type Props = {
     onInteraction: Function
 };
 
-const skillError = {
-    errorHeader: <FormattedMessage {...messages.skillUnknownError} />
-};
-
 /**
  * Parses a skil error into a MaskError
  * @param {*} error
  */
 const getError = (error?: any) => {
     if (error) {
-        return skillError;
+        return {
+            errorHeader: <FormattedMessage {...messages.skillUnknownError} />
+        };
     }
     return undefined;
 };
