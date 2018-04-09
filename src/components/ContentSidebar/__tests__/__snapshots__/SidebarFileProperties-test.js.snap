@@ -28,8 +28,27 @@ exports[`components/ContentSidebar/SidebarFileProperties should render an error 
 </React.Fragment>
 `;
 
+exports[`components/ContentSidebar/SidebarFileProperties should render classification information 1`] = `
+<ItemProperties
+  classificationProps={
+    Object {
+      "openModal": [MockFunction],
+      "value": "Public",
+    }
+  }
+  createdAt="foo"
+  description="foo"
+  modifiedAt="foo"
+  onDescriptionChange={[MockFunction]}
+  owner="foo"
+  size="1 B"
+  uploader="foo"
+/>
+`;
+
 exports[`components/ContentSidebar/SidebarFileProperties should render the versions when total_count > 0 1`] = `
 <ItemProperties
+  classificationProps={Object {}}
   createdAt="foo"
   description="foo"
   modifiedAt="foo"
