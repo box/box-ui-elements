@@ -8,7 +8,7 @@ import React, { ReactNode } from 'react';
 import Checkbox from 'box-react-ui/lib/components/checkbox/Checkbox';
 
 import AddApprovalFields from './AddApprovalFields';
-import messages from '../messages';
+import messages from '../../../messages';
 import type { Options, SelectorItems } from '../../../../flowTypes';
 
 type Props = {

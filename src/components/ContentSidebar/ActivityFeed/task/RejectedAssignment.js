@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 
 import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 type Props = {
     name: string

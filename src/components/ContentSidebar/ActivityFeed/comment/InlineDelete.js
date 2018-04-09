@@ -11,7 +11,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 import { Flyout, Overlay } from 'box-react-ui/lib/components/flyout';
 import IconTrash from 'box-react-ui/lib/icons/general/IconTrash';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 type Props = {
     onDelete: Function,
@@ -47,10 +47,7 @@ class InlineDelete extends Component<Props> {
                 })}
             >
                 <Flyout onClose={this.handleFlyoutClose} onOpen={this.handleFlyoutOpen} position='middle-left'>
-                    <PlainButton
-                        aria-label={intl.formatMessage(messages.deleteLabel)}
-                        className='bcs-comment-delete'
-                    >
+                    <PlainButton aria-label={intl.formatMessage(messages.deleteLabel)} className='bcs-comment-delete'>
                         <IconTrash />
                     </PlainButton>
                     <Overlay>

@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import Button from 'box-react-ui/lib/components/button/Button';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 type Props = {
     onCancel: Function

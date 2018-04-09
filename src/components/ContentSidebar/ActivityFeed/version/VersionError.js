@@ -6,7 +6,7 @@
 import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 import './Version.scss';
 

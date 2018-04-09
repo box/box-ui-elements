@@ -11,7 +11,7 @@ import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
 import { User } from '../../../../flowTypes';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 import './Version.scss';
 

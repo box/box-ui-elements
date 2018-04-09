@@ -8,7 +8,7 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import Comment from '../comment';
 import CompletedAssignment from './CompletedAssignment';
-import messages from '../messages';
+import messages from '../../../messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
 import { ActionItemError, User } from '../../../../flowTypes';

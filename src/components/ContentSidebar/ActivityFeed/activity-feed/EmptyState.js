@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import { IconActivityFeedEmptyState } from '../icons';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 type Props = {
     isLoading?: boolean,

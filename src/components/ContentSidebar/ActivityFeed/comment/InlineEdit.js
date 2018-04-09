@@ -9,7 +9,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconPencil from 'box-react-ui/lib/icons/general/IconPencil';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 type Props = {
     toEdit: Function,

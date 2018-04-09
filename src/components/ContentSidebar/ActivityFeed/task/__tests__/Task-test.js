@@ -292,7 +292,7 @@ describe('features/activity-feed/task/Task', () => {
         };
 
         const wrapper = shallow(<Task currentUser={currentUser} {...taskWithNoDueDate} />);
-        
+
         expect(wrapper).toMatchSnapshot();
     });
 });

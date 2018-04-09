@@ -11,7 +11,7 @@ import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
 import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelectorDropdown';
 
 import type { OptionItems, SelectorItems } from '../../../../flowTypes';
-import messages from '../messages';
+import messages from '../../../messages';
 
 type Props = {
     approvalDate: number,

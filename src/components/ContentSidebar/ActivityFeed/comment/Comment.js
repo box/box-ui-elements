@@ -19,7 +19,7 @@ import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
-import messages from '../messages';
+import messages from '../../../messages';
 
 import './Comment.scss';
 

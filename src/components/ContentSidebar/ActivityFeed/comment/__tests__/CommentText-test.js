@@ -39,7 +39,7 @@ describe('features/activity-feed/comment/CommentText', () => {
         const commentText = { taggedMessage: 'test' };
 
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
-        
+
         expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false);
@@ -134,6 +134,6 @@ describe('features/activity-feed/comment/CommentText', () => {
         expect(onTranslateSpy).not.toHaveBeenCalled();
         expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
-        expect(wrapper.state('isLoading')).toBe(false); 
+        expect(wrapper.state('isLoading')).toBe(false);
     });
 });

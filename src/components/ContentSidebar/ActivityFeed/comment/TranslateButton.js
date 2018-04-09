@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 type Props = {
     handleTranslate: Function

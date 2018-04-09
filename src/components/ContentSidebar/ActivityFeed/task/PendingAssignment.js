@@ -11,7 +11,7 @@ import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
-import messages from '../messages';
+import messages from '../../../messages';
 
 type Props = {
     name: string,

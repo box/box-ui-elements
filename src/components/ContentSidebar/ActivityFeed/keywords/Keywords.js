@@ -7,7 +7,7 @@ import React, { ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Info from './Info';
-import messages from '../messages';
+import messages from '../../../messages';
 
 import './Keywords.scss';
 

@@ -517,6 +517,192 @@ const messages: { [string]: IntlDESCriptor } = defineMessages({
         id: 'be.uploadsDefaultErrorMessage',
         description: 'Default error message shown when upload fails',
         defaultMessage: 'Something went wrong with the upload. Please try again.'
+    },
+    approvalAddAssignee: {
+        defaultMessage: 'Add an assignee',
+        description: 'Placeholder for approvers input',
+        id: 'be.activityFeed.approvalAddAssignee'
+    },
+    approvalAddTask: {
+        defaultMessage: 'Add Task',
+        description: 'Label for checkbox to add approvers to a comment',
+        id: 'be.activityFeed.approvalAddTask'
+    },
+    approvalAddTaskTooltip: {
+        defaultMessage:
+            'Assigning a task to someone will send them a notification with the message in the comment box and allow them to approve or deny.',
+        description: 'Tooltip text for checkbox to add approvers to a comment',
+        id: 'be.activityFeed.approvalAddTaskTooltip'
+    },
+    approvalAssignees: {
+        defaultMessage: 'Assignees',
+        description: 'Title for assignees input',
+        id: 'be.activityFeed.approvalAssignees'
+    },
+    approvalDueDate: {
+        defaultMessage: 'Due Date',
+        description: 'Title for approvers due date input',
+        id: 'be.activityFeed.approvalDueDate'
+    },
+    approvalSelectDate: {
+        defaultMessage: 'Select a date',
+        description: 'Placeholder for due date input',
+        id: 'be.activityFeed.approvalSelectDate'
+    },
+    atMentionTip: {
+        defaultMessage: '@mention users to notify them.',
+        description: 'Mentioning call to action displayed below the comment input',
+        id: 'be.activityFeed.atMentionTip'
+    },
+    commentCancel: {
+        defaultMessage: 'Cancel',
+        description: 'Text for cancel button',
+        id: 'be.activityFeed.commentCancel'
+    },
+    commentDeleteCancel: {
+        defaultMessage: 'No',
+        description: 'Button text to cancel comment deletion',
+        id: 'be.activityFeed.commentDeleteCancel'
+    },
+    taskDeletePrompt: {
+        defaultMessage: 'Delete task?',
+        description: 'Confirmation prompt text to delete task',
+        id: 'be.activityFeed.taskDeletePrompt'
+    },
+    commentDeleteConfirm: {
+        defaultMessage: 'Yes',
+        description: 'Button text to confirm comment deletion',
+        id: 'be.activityFeed.commentDeleteConfirm'
+    },
+    commentDeletePrompt: {
+        defaultMessage: 'Delete comment?',
+        description: 'Confirmation prompt text to delete comment',
+        id: 'be.activityFeed.commentDeletePrompt'
+    },
+    commentPost: {
+        defaultMessage: 'Post',
+        description: 'Text for post button',
+        id: 'be.activityFeed.commentPost'
+    },
+    commentShowOriginal: {
+        defaultMessage: 'Show Original',
+        description: 'Show original button for showing original comment',
+        id: 'be.activityFeed.commentShowOriginal'
+    },
+    commentTranslate: {
+        defaultMessage: 'Translate',
+        description: 'Translate button for translating comment',
+        id: 'be.activityFeed.commentTranslate'
+    },
+    commentWrite: {
+        defaultMessage: 'Write a comment',
+        description: 'Placeholder for comment input',
+        id: 'be.activityFeed.commentWrite'
+    },
+    commentPostedFullDateTime: {
+        defaultMessage: '{time, date, full} at {time, time, short}',
+        description: 'Comment posted full date time for title',
+        id: 'be.activityFeed.commentPostedFullDateTime'
+    },
+    completedAssignment: {
+        defaultMessage: 'Completed',
+        description: 'Title for checkmark icon indicating someone completed a task',
+        id: 'be.activityFeed.completedAssignment'
+    },
+    deleteLabel: {
+        defaultMessage: 'Delete',
+        description: 'Aria label for button to delete a comment or task',
+        id: 'be.activityFeed.deleteLabel'
+    },
+    editLabel: {
+        defaultMessage: 'Edit',
+        description: 'Aria label for button to edit a comment or task',
+        id: 'be.activityFeed.editLabel'
+    },
+    getVersionInfo: {
+        defaultMessage: 'Get version information',
+        description: 'Aria label for button to get information about a file\'s versions',
+        id: 'be.activityFeed.getVersionInfo'
+    },
+    keywordsApplied: {
+        defaultMessage: 'Keywords were applied',
+        description: 'Message displayed in the activity feed for when image keyword search applies keywords',
+        id: 'be.activityFeed.keywordsAppliedList'
+    },
+    keywordsList: {
+        defaultMessage: 'Keywords: { words }',
+        description: 'Label for a list of keywords. {words} are the list of keywords.',
+        id: 'be.activityFeed.keywordsList'
+    },
+    noActivity: {
+        defaultMessage: 'No Activity Yet',
+        description: 'Message displayed in an empty activity feed',
+        id: 'be.activityFeed.noActivity'
+    },
+    noActivityCommentPrompt: {
+        defaultMessage: 'Comment and @mention people to notify them.',
+        description: 'Message shown in ',
+        id: 'be.activityFeed.noActivityCommentPrompt'
+    },
+    rejectedAssignment: {
+        defaultMessage: 'Rejected',
+        description: 'Title for x icon indicating someone rejected a task',
+        id: 'be.activityFeed.rejectedAssignment'
+    },
+    taskApprove: {
+        defaultMessage: 'Complete',
+        description: 'Approve option for a task',
+        id: 'be.activityFeed.taskApprove'
+    },
+    taskDueDate: {
+        defaultMessage: 'Due',
+        description: 'Due date for a task',
+        id: 'be.activityFeed.taskDueDate'
+    },
+    tasksForApproval: {
+        defaultMessage: 'Tasks',
+        description: 'Tasks for approval',
+        id: 'be.activityFeed.tasksForApproval'
+    },
+    taskReject: {
+        defaultMessage: 'Decline',
+        description: 'Reject option for a task',
+        id: 'be.activityFeed.taskReject'
+    },
+    versionDeleted: {
+        defaultMessage: '{ name } deleted version { versionNumber }',
+        description:
+            'Message displayed in the activity feed for a deleted version. {name} is the user who performed the action. { versionNumber } is the file version string.',
+        id: 'be.activityFeed.versionDeleted'
+    },
+    versionRestored: {
+        defaultMessage: '{ name } restored version { versionNumber }',
+        description:
+            'Message displayed in the activity feed for a restored version. {name} is the user who performed the action. { versionNumber } is the file version string.',
+        id: 'be.activityFeed.versionRestored'
+    },
+    versionMultipleUsersUploaded: {
+        defaultMessage: '{ numberOfCollaborators } collaborators uploaded versions { versions }',
+        description:
+            'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. { numberOfCollaborators } is a number and { versions } is a range of versions.',
+        id: 'be.activityFeed.versionMultipleUsersUploaded'
+    },
+    versionTooManyVersions: {
+        defaultMessage: 'Multiple versions of this file',
+        description: 'Message displayed in the activity feed when we have too many versions to display',
+        id: 'be.activityFeed.versionTooManyVersions'
+    },
+    versionUploadCollapsed: {
+        defaultMessage: '{ name } uploaded versions { versions }',
+        description:
+            'Message displayed in the activity feed to represent the range of versions uploaded by a single user. { name } is the user who uploaded. { versions } is a range of versions.',
+        id: 'be.activityFeed.versionUploadCollapsed'
+    },
+    versionUploaded: {
+        defaultMessage: '{ name } uploaded version { versionNumber }',
+        description:
+            'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. { versionNumber } is the file version string.',
+        id: 'be.activityFeed.versionUploaded'
     }
 });
 
