@@ -1011,7 +1011,6 @@ class ContentPicker extends Component<Props, State> {
                         />
                         <SubHeader
                             view={view}
-                            rootElement={this.rootElement}
                             rootId={rootFolderId}
                             isSmall={isSmall}
                             rootName={rootName}

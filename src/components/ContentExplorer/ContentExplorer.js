@@ -1228,7 +1228,6 @@ class ContentExplorer extends Component<Props, State> {
                             rootId={rootFolderId}
                             isSmall={isSmall}
                             rootName={rootName}
-                            rootElement={this.rootElement}
                             currentCollection={currentCollection}
                             canUpload={allowUpload}
                             canCreateNewFolder={allowCreate}
@@ -1338,6 +1337,7 @@ class ContentExplorer extends Component<Props, State> {
                             appElement={this.appElement}
                             onPreview={onPreview}
                             hasPreviewSidebar={hasPreviewSidebar}
+                            canDownload={canDownload}
                             cache={this.api.getCache()}
                             apiHost={apiHost}
                             appHost={appHost}

@@ -32,8 +32,7 @@ type Props = {
     isLoaded: boolean,
     sortBy: SortBy,
     sortDirection: SortDirection,
-    isRecents: boolean,
-    rootElement: HTMLElement
+    isRecents: boolean
 };
 
 function getMenuItem(
@@ -53,8 +52,8 @@ function getMenuItem(
     );
 }
 
-const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange, rootElement }: Props) => (
-    <DropdownMenu isRightAligned constrainToScrollParent bodyElement={rootElement}>
+const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
+    <DropdownMenu isRightAligned constrainToScrollParent>
         <Button type='button' isDisabled={!isLoaded} className='be-btn-sort'>
             <IconSort />
         </Button>

@@ -15,7 +15,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
-import type { Token, BoxItem, StringMap, FileVersions } from '../../flowTypes';
+import type { AccessStats, Token, BoxItem, StringMap, FileVersions } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -46,11 +46,13 @@ type Props = {
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onInteraction: Function,
+    onAccessStatsClick?: Function,
     onVersionHistoryClick?: Function
 };
 
 type State = {
     file?: BoxItem,
+    accessStats?: AccessStats,
     versions?: FileVersions
 };
 
@@ -198,12 +200,12 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         return (
             hasSkills ||
-                hasProperties ||
-                hasMetadata ||
-                hasAccessStats ||
-                hasClassification ||
-                hasActivityFeed ||
-                hasVersions,
+            hasProperties ||
+            hasMetadata ||
+            hasAccessStats ||
+            hasClassification ||
+            hasActivityFeed ||
+            hasVersions ||
             hasNotices
         );
     }
@@ -359,19 +361,17 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             hasVersions,
             className,
-            onVersionHistoryClick
+            onVersionHistoryClick,
+            onAccessStatsClick
         }: Props = this.props;
-        const { file, versions }: State = this.state;
-
-        if (!this.shouldFetchOrRender()) {
-            return null;
-        }
+        const { file, accessStats, versions }: State = this.state;
+        const shouldRender = this.shouldFetchOrRender() && !!file;
 
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={`be bcs ${className}`}>
                     <div className='be-app-element'>
-                        {file ? (
+                        {shouldRender ? (
                             <Sidebar
                                 file={file}
                                 versions={versions}
@@ -388,6 +388,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 rootElement={this.rootElement}
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
+                                accessStats={accessStats}
+                                onAccessStatsClick={onAccessStatsClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
                                 hasVersions={hasVersions}
                             />

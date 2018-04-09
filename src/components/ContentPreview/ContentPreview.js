@@ -8,8 +8,11 @@ import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
+import omit from 'lodash/omit';
+import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
+import { decode } from 'box-react-ui/lib/utils/keys';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconNavigateLeft from 'box-react-ui/lib/icons/general/IconNavigateLeft';
 import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight';
@@ -39,8 +42,12 @@ type Props = {
     fileId: string,
     version: string,
     isSmall: boolean,
+    autoFocus: boolean,
+    useHotkeys: boolean,
     showSidebar?: boolean,
     hasSidebar: boolean,
+    canDownload?: boolean,
+    showDownload?: boolean,
     hasHeader: boolean,
     apiHost: string,
     appHost: string,
@@ -90,7 +97,11 @@ class ContentPreview extends PureComponent<Props, State> {
         language: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
+        canDownload: true,
+        showDownload: true,
         hasHeader: false,
+        autoFocus: false,
+        useHotkeys: true,
         onLoad: noop,
         onNavigate: noop,
         onInteraction: noop,
@@ -182,7 +193,7 @@ class ContentPreview extends PureComponent<Props, State> {
         this.loadScript();
         this.fetchFile(fileId);
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        focus(this.rootElement);
+        this.focusPreview();
     }
 
     /**
@@ -264,6 +275,18 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Focuses the preview on load.
+     *
+     * @return {void}
+     */
+    focusPreview() {
+        const { autoFocus }: Props = this.props;
+        if (autoFocus && !isInputElement(document.activeElement)) {
+            focus(this.rootElement);
+        }
+    }
+
+    /**
      * Calls destroy of preview
      *
      * @return {void}
@@ -332,10 +355,20 @@ class ContentPreview extends PureComponent<Props, State> {
         const currentIndex = this.getFileIndex();
         const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
         onLoad(data);
+        this.focusPreview();
         if (this.preview && filesToPrefetch.length > 1) {
             this.prefetch(filesToPrefetch);
         }
     };
+
+    canDownload() {
+        // showDownload is a prop that preview library uses and can be passed by the user
+        const { showDownload, canDownload }: Props = this.props;
+        const { file }: State = this.state;
+        const isFileDownloadable =
+            getProp(file, 'permissions.can_download', false) && getProp(file, 'is_download_available', false);
+        return isFileDownloadable && canDownload && showDownload;
+    }
 
     /**
      * Loads the preview
@@ -352,15 +385,20 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const { Preview } = global.Box;
 
+        const previewOptions = {
+            showDownload: this.canDownload(),
+            skipServerUpdate: true,
+            header: 'none',
+            container: `#${this.id} .bcpr-content`,
+            useHotkeys: false
+        };
+
         this.preview = new Preview();
         this.preview.updateFileCache([file]);
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.show(file.id, token, {
-            container: `#${this.id} .bcpr-content`,
-            header: 'none',
-            skipServerUpdate: true,
-            useHotkeys: false,
-            ...rest
+            ...previewOptions,
+            ...omit(rest, Object.keys(previewOptions))
         });
     };
 
@@ -597,29 +635,32 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
-        if (isInputElement(event.target)) {
+        const { useHotkeys }: Props = this.props;
+        if (!useHotkeys) {
             return;
         }
 
         let consumed = false;
-        const key = event.key.toLowerCase();
+        const key = decode(event);
         const viewer = this.getPreviewer();
 
-        if (!key || !viewer) {
+        // If focus was on an input or if the viewer doesn't exist
+        // then don't bother doing anything further
+        if (!key || !viewer || isInputElement(event.target)) {
             return;
         }
 
         if (typeof viewer.onKeydown === 'function') {
-            consumed = !!viewer.onKeydown(key);
+            consumed = !!viewer.onKeydown(key, event.nativeEvent);
         }
 
         if (!consumed) {
             switch (key) {
-                case 'arrowleft':
+                case 'ArrowLeft':
                     this.navigateLeft();
                     consumed = true;
                     break;
-                case 'arrowright':
+                case 'ArrowRight':
                     this.navigateRight();
                     consumed = true;
                     break;
@@ -708,6 +749,7 @@ class ContentPreview extends PureComponent<Props, State> {
                             onClose={onClose}
                             onSidebarToggle={onSidebarToggle}
                             onPrint={this.print}
+                            canDownload={this.canDownload()}
                             onDownload={this.download}
                         />
                     )}

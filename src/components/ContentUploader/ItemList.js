@@ -15,16 +15,15 @@ import './ItemList.scss';
 
 type Props = {
     items: UploadItem[],
-    onClick: Function,
-    rootElement: HTMLElement
+    onClick: Function
 };
 
-const ItemList = ({ items, onClick, rootElement }: Props) => (
+const ItemList = ({ items, onClick }: Props) => (
     <AutoSizer>
         {({ width, height }) => {
             const nameCell = nameCellRenderer();
             const progressCell = progressCellRenderer();
-            const actionCell = actionCellRenderer(onClick, rootElement);
+            const actionCell = actionCellRenderer(onClick);
 
             return (
                 <Table

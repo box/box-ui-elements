@@ -17,8 +17,7 @@ type Props = {
     onCrumbClick: Function,
     crumbs: Crumb[],
     delimiter: Delimiter,
-    isSmall?: boolean,
-    rootElement: HTMLElement
+    isSmall?: boolean
 };
 
 /**
@@ -43,19 +42,12 @@ function filterCrumbs(rootId: string, crumbs: Crumb[]): Crumb[] {
  * @param {boolean} isLast is this the last crumb
  * @return {Element}
  */
-function getBreadcrumb(
-    crumbs: Crumb | Crumb[],
-    isLast: boolean,
-    onCrumbClick: Function,
-    delimiter: Delimiter,
-    rootElement: HTMLElement
-) {
+function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: Function, delimiter: Delimiter) {
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (
             <span className='be-breadcrumb-more'>
                 <BreadcrumbDropdown
-                    rootElement={rootElement}
                     onCrumbClick={onCrumbClick}
                     crumbs={crumbs}
                     className={condensed ? 'be-breadcrumbs-condensed' : ''}
@@ -69,7 +61,7 @@ function getBreadcrumb(
     return <Breadcrumb name={name} onClick={() => onCrumbClick(id)} isLast={isLast} delimiter={delimiter} />;
 }
 
-const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false, rootElement }: Props) => {
+const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false }: Props) => {
     if (!rootId || crumbs.length === 0) {
         return <span />;
     }
@@ -85,17 +77,14 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false,
 
     // Always show the second last/parent breadcrumb when there are at least 2 crumbs.
     const secondLastBreadcrumb =
-        length > 1 ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter, rootElement) : null;
+        length > 1 ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter) : null;
 
     // Only show the more dropdown when there were at least 4 crumbs.
     const moreBreadcrumbs =
-        length > 3
-            ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter, rootElement)
-            : null;
+        length > 3 ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter) : null;
 
     // Only show the root breadcrumb when there are at least 3 crumbs.
-    const firstBreadcrumb =
-        length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter, rootElement) : null;
+    const firstBreadcrumb = length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter) : null;
 
     return (
         <div className='be-breadcrumbs'>

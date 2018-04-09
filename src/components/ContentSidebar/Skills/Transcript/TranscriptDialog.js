@@ -10,7 +10,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconMoveCopy from 'box-react-ui/lib/icons/general/IconMoveCopy';
 import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
-import { formatTime } from '../../../../util/datetime';
+import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import { copy } from '../../../../util/download';
 import messages from '../../../messages';
 import { isValidTimeSlice } from './timeSliceUtils';

@@ -765,7 +765,6 @@ class ContentUploader extends Component<Props, State> {
                             onItemActionClick={this.onClick}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
-                            rootElement={this.rootElement}
                         />
                     </div>
                 ) : (
@@ -777,7 +776,6 @@ class ContentUploader extends Component<Props, State> {
                             isTouch={isTouch}
                             view={view}
                             onClick={this.onClick}
-                            rootElement={this.rootElement}
                         />
                         <Footer
                             hasFiles={hasFiles}

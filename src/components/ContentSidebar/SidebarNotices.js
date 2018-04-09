@@ -7,8 +7,8 @@
 import React from 'react';
 import getProp from 'lodash/get';
 import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
+import { addTime } from 'box-react-ui/lib/utils/datetime';
 import SidebarSection from './SidebarSection';
-import { addTime } from '../../util/datetime';
 import type { BoxItem } from '../../flowTypes';
 import DateField from '../Date';
 
