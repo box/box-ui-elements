@@ -32,6 +32,8 @@ exports[`features/activity-feed/comment/Comment should correctly render comment 
           position="top-center"
           text={
             <FormattedMessage
+              defaultMessage="{time, date, full} at {time, time, short}"
+              id="be.activityFeed.commentPostedFullDateTime"
               values={
                 Object {
                   "time": 1506534041000,
@@ -94,6 +96,8 @@ exports[`features/activity-feed/comment/Comment should correctly render comment 
           position="top-center"
           text={
             <FormattedMessage
+              defaultMessage="{time, date, full} at {time, time, short}"
+              id="be.activityFeed.commentPostedFullDateTime"
               values={
                 Object {
                   "time": 1506534041000,
@@ -157,6 +161,8 @@ exports[`features/activity-feed/comment/Comment should render an error when one 
           position="top-center"
           text={
             <FormattedMessage
+              defaultMessage="{time, date, full} at {time, time, short}"
+              id="be.activityFeed.commentPostedFullDateTime"
               values={
                 Object {
                   "time": 1506534041000,
@@ -223,6 +229,8 @@ exports[`features/activity-feed/comment/Comment should render commenter as a lin
           position="top-center"
           text={
             <FormattedMessage
+              defaultMessage="{time, date, full} at {time, time, short}"
+              id="be.activityFeed.commentPostedFullDateTime"
               values={
                 Object {
                   "time": 1506534041000,

@@ -11,6 +11,8 @@ exports[`features/activity-feed/keywords/Keywords should correctly render info i
     position="bottom-left"
     text={
       <FormattedMessage
+        defaultMessage="Keywords: {words}"
+        id="be.activityFeed.keywordsList"
         values={
           Object {
             "words": "cartoon font logo",
@@ -39,7 +41,10 @@ exports[`features/activity-feed/keywords/Keywords should correctly render keywor
   <span
     className="bcs-keywords-message"
   >
-    <FormattedMessage />
+    <FormattedMessage
+      defaultMessage="Keywords were applied"
+      id="be.activityFeed.keywordsAppliedList"
+    />
   </span>
   <Info
     words="cartoon font logo brand clip art illustration line artwork"
@@ -54,7 +59,10 @@ exports[`features/activity-feed/keywords/Keywords should not render info icon if
   <span
     className="bcs-keywords-message"
   >
-    <FormattedMessage />
+    <FormattedMessage
+      defaultMessage="Keywords were applied"
+      id="be.activityFeed.keywordsAppliedList"
+    />
   </span>
 </div>
 `;

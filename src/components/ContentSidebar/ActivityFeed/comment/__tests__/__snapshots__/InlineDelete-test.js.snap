@@ -30,14 +30,20 @@ exports[`features/activity-feed/comment/InlineDelete should correctly render com
           onClick={[Function]}
           type="button"
         >
-          <FormattedMessage />
+          <FormattedMessage
+            defaultMessage="Yes"
+            id="be.activityFeed.commentDeleteConfirm"
+          />
         </PlainButton>
          / 
         <PlainButton
           className="lnk bcs-comment-delete-no"
           type="button"
         >
-          <FormattedMessage />
+          <FormattedMessage
+            defaultMessage="No"
+            id="be.activityFeed.commentDeleteCancel"
+          />
         </PlainButton>
       </div>
     </Overlay>

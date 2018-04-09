@@ -8,6 +8,8 @@ exports[`features/activity-feed/version/CollapsedVersion should correctly render
     className="bcs-version-message"
   >
     <FormattedMessage
+      defaultMessage="{numberOfCollaborators} collaborators uploaded versions {versions}"
+      id="be.activityFeed.versionMultipleUsersUploaded"
       values={
         Object {
           "numberOfCollaborators": 2,
@@ -43,6 +45,8 @@ exports[`features/activity-feed/version/CollapsedVersion should correctly render
     className="bcs-version-message"
   >
     <FormattedMessage
+      defaultMessage="{name} uploaded versions {versions}"
+      id="be.activityFeed.versionUploadCollapsed"
       values={
         Object {
           "name": <strong>

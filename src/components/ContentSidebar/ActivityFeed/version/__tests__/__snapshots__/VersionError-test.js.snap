@@ -7,7 +7,10 @@ exports[`features/activity-feed/version/VersionError should correctly render err
   <span
     className="bcs-version-message"
   >
-    <FormattedMessage />
+    <FormattedMessage
+      defaultMessage="Multiple versions of this file"
+      id="be.activityFeed.versionTooManyVersions"
+    />
   </span>
 </div>
 `;
