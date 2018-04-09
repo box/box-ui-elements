@@ -7,6 +7,7 @@
 import * as React from 'react';
 import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import { FormattedMessage } from 'react-intl';
 
 import type { MaskError, InlineError as InlineErrorType } from '../../flowTypes';
 
@@ -20,19 +21,17 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
     inlineError,
     ...rest
 }: Props) => {
-    const getWrappedComponent = () => <WrappedComponent {...rest} />;
-
     if (maskError) {
         return <ErrorMask {...maskError} />;
     } else if (inlineError) {
         return (
             <React.Fragment>
                 <InlineError title={inlineError.title}>{inlineError.content}</InlineError>
-                {getWrappedComponent()}
+                <WrappedComponent {...rest} />
             </React.Fragment>
         );
     }
-    return getWrappedComponent();
+    return <WrappedComponent {...rest} />;
 };
 
 export default withErrorHandling;
