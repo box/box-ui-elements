@@ -10,7 +10,7 @@ import type { FileAccessStats as FileAccessStatsType } from '../flowTypes';
 
 class FileAccessStats extends Base {
     /**
-     * API URL for versions
+     * API URL for access stats
      *
      * @param {string} [id] - a box file id
      * @return {string} base url for files
@@ -23,7 +23,7 @@ class FileAccessStats extends Base {
     }
 
     /**
-     * Gets the versions for a box file
+     * Gets the access stats for a box file
      *
      * @param {string} id - a box file id
      * @param {Function} successCallback - Function to call with results
