@@ -6,9 +6,9 @@
 
 import { defineMessages } from 'react-intl';
 
-import type { $npm$ReactIntl$MessageDescriptor } from 'react-intl';
+import type { MessageDescriptor } from 'react-intl';
 
-const messages: { [string]: $npm$ReactIntl$MessageDescriptor } = defineMessages({
+const messages: { [string]: MessageDescriptor } = defineMessages({
     today: {
         id: 'be.today',
         description: 'Shown instead of todays date.',

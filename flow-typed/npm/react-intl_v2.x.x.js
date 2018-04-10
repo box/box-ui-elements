@@ -135,7 +135,6 @@ declare module "react-intl" {
   declare type ComponentWithDefaultProps<DefaultProps: {}, Props: {}> =
     | React$ComponentType<Props>
     | React$StatelessFunctionalComponent<Props>
-    | ChildrenArray<void | null | boolean | string | number | Element<any>>;
 
   declare type InjectIntlOtions = {
     intlPropName?: string,
