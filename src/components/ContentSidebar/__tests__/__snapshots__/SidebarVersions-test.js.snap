@@ -4,7 +4,13 @@ exports[`components/ContentSidebar/SidebarVersions should not render the version
 
 exports[`components/ContentSidebar/SidebarVersions should render an error 1`] = `
 <ErrorMask
-  errorHeader="foo"
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="baz"
+      description="bar"
+      id="foo"
+    />
+  }
 />
 `;
 

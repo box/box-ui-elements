@@ -36,10 +36,16 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
     });
 
     test('should render an error', () => {
+        const fakeError = {
+            id: 'foo',
+            description: 'bar',
+            defaultMessage: 'baz'
+        };
+
         const props = {
             inlineError: {
-                title: 'foo',
-                content: 'bar'
+                title: fakeError,
+                content: fakeError
             }
         };
         const wrapper = shallow(<SidebarFileProperties {...props} />).dive();

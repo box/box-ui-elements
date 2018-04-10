@@ -3,9 +3,19 @@
 exports[`components/ContentSidebar/SidebarFileProperties should render an error 1`] = `
 <React.Fragment>
   <InlineError
-    title="foo"
+    title={
+      <FormattedMessage
+        defaultMessage="baz"
+        description="bar"
+        id="foo"
+      />
+    }
   >
-    bar
+    <FormattedMessage
+      defaultMessage="baz"
+      description="bar"
+      id="foo"
+    />
   </InlineError>
   <SidebarFileProperties
     intl={

@@ -4,7 +4,7 @@
  * @author Box
  */
 /* eslint-disable no-use-before-define */
-import * as React from 'react';
+import type { MessageDescriptor } from 'react-intl';
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
@@ -352,13 +352,13 @@ export type FileVersions = {
 };
 
 export type MaskError = {
-    errorHeader: React.Node,
-    errorSubHeader?: React.Node
+    errorHeader: MessageDescriptor,
+    errorSubHeader?: MessageDescriptor
 };
 
 export type InlineError = {
-    title: React.Node,
-    content: React.Node
+    title: MessageDescriptor,
+    content: MessageDescriptor
 };
 
 export type Errors = {

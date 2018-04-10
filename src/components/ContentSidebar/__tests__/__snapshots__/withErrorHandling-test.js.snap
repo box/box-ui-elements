@@ -2,16 +2,51 @@
 
 exports[`components/withErrorHandling should render a ErrorMask 1`] = `
 <ErrorMask
-  errorHeader="foo"
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="baz"
+      description="bar"
+      id="foo"
+    />
+  }
+/>
+`;
+
+exports[`components/withErrorHandling should render a ErrorMask with sub header 1`] = `
+<ErrorMask
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="baz"
+      description="bar"
+      id="foo"
+    />
+  }
+  errorSubHeader={
+    <FormattedMessage
+      defaultMessage="baz"
+      description="bar"
+      id="foo"
+    />
+  }
 />
 `;
 
 exports[`components/withErrorHandling should render an InlineError, along with the wrapped component 1`] = `
 <React.Fragment>
   <InlineError
-    title="foo"
+    title={
+      <FormattedMessage
+        defaultMessage="baz"
+        description="bar"
+        id="foo"
+      />
+    }
   >
-    bar
+    <FormattedMessage
+      defaultMessage="baz"
+      description="bar"
+      id="foo"
+    />
   </InlineError>
   <WrappedComponent />
 </React.Fragment>

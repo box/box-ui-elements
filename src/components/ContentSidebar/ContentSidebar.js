@@ -6,7 +6,6 @@
 
 import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
-import { FormattedMessage } from 'react-intl';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
@@ -16,7 +15,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
-import intlMessages from '../messages';
+import messages from '../messages';
 import type { AccessStats, Token, BoxItem, StringMap, FileVersions, Errors } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -281,8 +280,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             file,
             fileError: {
                 inlineError: {
-                    title: <FormattedMessage {...intlMessages.fileDescriptionInlineErrorTitleMessage} />,
-                    content: <FormattedMessage {...intlMessages.descriptionInlineErrorMessage} />
+                    title: messages.fileDescriptionInlineErrorTitleMessage,
+                    content: messages.descriptionInlineErrorMessage
                 }
             }
         });
@@ -301,8 +300,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             versions: undefined,
             versionError: {
                 maskError: {
-                    errorHeader: <FormattedMessage {...intlMessages.versionHistoryErrorHeaderMessage} />,
-                    errorSubHeader: <FormattedMessage {...intlMessages.defaultErrorMaskSubHeaderMessage} />
+                    errorHeader: messages.versionHistoryErrorHeaderMessage,
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
             }
         });
@@ -383,7 +382,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     render() {
         const {
             language,
-            messages,
+            messages: intlMessages,
             getPreviewer,
             hasTitle,
             hasSkills,
@@ -403,7 +402,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         const shouldRender = this.shouldFetchOrRender() && !!file;
 
         return (
-            <Internationalize language={language} messages={messages}>
+            <Internationalize language={language} messages={intlMessages}>
                 <div id={this.id} className={`be bcs ${className}`}>
                     <div className='be-app-element'>
                         {shouldRender ? (
