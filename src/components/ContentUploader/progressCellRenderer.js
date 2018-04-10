@@ -6,7 +6,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import ItemProgress from './ItemProgress';
-import { STATUS_PENDING, STATUS_ERROR, STATUS_IN_PROGRESS } from '../../constants';
+import { STATUS_ERROR, STATUS_IN_PROGRESS } from '../../constants';
 import type { UploadItem } from '../../flowTypes';
 import messages from '../messages';
 
@@ -39,7 +39,6 @@ export default () => ({ rowData }: Props) => {
 
     switch (status) {
         case STATUS_IN_PROGRESS:
-        case STATUS_PENDING:
             return <ItemProgress {...rowData} />;
         case STATUS_ERROR:
             return getErrorMessage(code);

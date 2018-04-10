@@ -9,7 +9,7 @@ import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import { CellMeasurer, CellMeasurerCache } from 'react-virtualized/dist/es/CellMeasurer';
 import 'react-virtualized/styles.css';
-import { formatTime } from '../../../../util/datetime';
+import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import { isValidTimeSlice } from './timeSliceUtils';
 import type { SkillCardEntry } from '../../../../flowTypes';
 import './Transcript.scss';
