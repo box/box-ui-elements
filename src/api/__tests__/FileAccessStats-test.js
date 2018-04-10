@@ -15,7 +15,7 @@ describe('api/Versions', () => {
     });
 
     describe('getUrl()', () => {
-        test('should throw when version api url without id', () => {
+        test('should throw when access stats api url without id', () => {
             expect(() => {
                 accessStats.getUrl();
             }).toThrow();
@@ -25,7 +25,7 @@ describe('api/Versions', () => {
         });
     });
 
-    describe('file()', () => {
+    describe('accessStats()', () => {
         test('should not do anything if destroyed', () => {
             accessStats.isDestroyed = jest.fn().mockReturnValueOnce(true);
             accessStats.xhr = null;

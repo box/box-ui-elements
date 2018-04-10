@@ -260,10 +260,10 @@ class APIFactory {
     }
 
     /**
-     * API for access stats
+     * API for fille access stats
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {AccessStatsAPI} AccessStatsAPI instance
+     * @return {FileAccessStatsAPI} FileAccessStatsAPI instance
      */
     getFileAccessStatsAPI(shouldDestroy: boolean): FileAccessStatsAPI {
         if (shouldDestroy) {
