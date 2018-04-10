@@ -138,6 +138,7 @@ describe('features/activity-feed/comment/Comment', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    // eslint-disable-next-line
     test('should allow user to delete if they have delete permissions on the comment and delete handler is defined', () => {
         const comment = {
             createdAt: TIME_STRING_SEPT_27_2017,
@@ -164,6 +165,7 @@ describe('features/activity-feed/comment/Comment', () => {
         expect(wrapper.find('InlineDelete').length).toEqual(1);
     });
 
+    // eslint-disable-next-line
     test('should allow user to delete if they have delete permissions on the task and delete handler is defined', () => {
         const task = {
             createdAt: TIME_STRING_SEPT_27_2017,

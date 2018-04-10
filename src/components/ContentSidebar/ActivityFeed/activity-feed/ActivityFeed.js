@@ -125,7 +125,8 @@ class ActivityFeed extends Component<Props, State> {
         const versionInfoHandler = handlers && handlers.versions && handlers.versions.info;
 
         return (
-            <div className='bcs-activity-feed' onKeyDown={this.onKeyDown}>
+            // eslint-disable-next-line
+            <div className="bcs-activity-feed" onKeyDown={this.onKeyDown}>
                 <div
                     ref={(ref) => {
                         this.feedContainer = ref;

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * @flow
  * @file i18n messages

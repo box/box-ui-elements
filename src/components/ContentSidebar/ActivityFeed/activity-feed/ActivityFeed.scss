@@ -11,8 +11,8 @@
         display: flex;
         flex: 1 1;
         flex-direction: column;
-        overflow-y: auto;
         overflow-x: hidden;
+        overflow-y: auto;
         position: relative;
 
         .bcs-version-item {

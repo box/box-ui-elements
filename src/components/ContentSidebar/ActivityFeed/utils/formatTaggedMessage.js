@@ -7,6 +7,13 @@ import React, { ReactNode } from 'react';
 import { Link } from 'box-react-ui/lib/components/link';
 import Mention from '../comment/Mention';
 
+// this regex matches one of the following regular expressions:
+// mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
+// urls: (?:\b)((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(:\d+)?(\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)
+// NOTE: There are useless escapes in the regex below, should probably remove them when safe
+// eslint-disable-next-line
+const splitRegex = /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
+
 /**
  * Formats a message a string and replaces the following:
  * - all occurrence of mention patterns with a Mention component
@@ -22,13 +29,8 @@ const formatTaggedMessage = (
     itemID: string,
     shouldReturnString: boolean
 ): ReactNode | string => {
-    // this regex matches one of the following regular expressions:
-    // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
-    // urls: (?:\b)((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(:\d+)?(\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)
-    // NOTE: There are useless escapes in the regex below, should probably remove them when safe
-    // eslint-disable-next-line no-useless-escape
-    const splitRegex = /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?))/gim;
     const contentItems = taggedMessage.split(splitRegex).map((text: string, contentIndex: number) => {
+        const contentKey = `${contentIndex}-${itemID}`;
         // attempt mention match
         const mentionMatch = text.match(/([@＠﹫])\[([0-9]+):([^\]]+)]/i);
         if (mentionMatch) {
@@ -36,7 +38,7 @@ const formatTaggedMessage = (
             if (shouldReturnString) {
                 return `${trigger}${name}`;
             }
-            return <Mention id={Number(id)} key={`${contentIndex}-${itemID}`}>{`${trigger}${name}`}</Mention>;
+            return <Mention id={Number(id)} key={contentKey}>{`${trigger}${name}`}</Mention>;
         }
 
         if (!shouldReturnString) {
@@ -49,7 +51,7 @@ const formatTaggedMessage = (
             if (urlMatch) {
                 const [, url] = urlMatch;
                 return (
-                    <Link key={`${contentIndex}-${itemID}`} href={url}>
+                    <Link key={contentKey} href={url}>
                         {url}
                     </Link>
                 );
