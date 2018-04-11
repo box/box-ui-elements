@@ -96,7 +96,6 @@ const DetailsSidebar = ({
                         size={getFileSize(file.size, intl.locale)}
                         uploader={getProp(file, 'created_by.name')}
                         onDescriptionChange={onDescriptionChangeEditable}
-                        descriptionTextareaProps={{ maxLength: '255' }}
                     />
                 </SidebarSection>
             )}
