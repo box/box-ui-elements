@@ -71,10 +71,18 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {hasVersions && (
-                <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} file={file} />
+            {(hasVersions || hasNotices) && (
+                <div className='bcs-details-content'>
+                    {hasVersions && (
+                        <SidebarVersions
+                            onVersionHistoryClick={onVersionHistoryClick}
+                            versions={versions}
+                            file={file}
+                        />
+                    )}
+                    {hasNotices && <SidebarNotices file={file} />}
+                </div>
             )}
-            {hasNotices && <SidebarNotices file={file} />}
             {hasSkills && (
                 <SidebarSkills
                     metadata={file.metadata}

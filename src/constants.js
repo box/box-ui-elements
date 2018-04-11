@@ -58,6 +58,7 @@ export const FIELD_TYPE = 'type';
 export const FIELD_SIZE: 'size' = 'size';
 export const FIELD_PARENT = 'parent';
 export const FIELD_EXTENSION = 'extension';
+export const FIELD_ITEM_EXPIRATION = 'expires_at';
 export const FIELD_PERMISSIONS = 'permissions';
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
