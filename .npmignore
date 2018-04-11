@@ -34,3 +34,4 @@ flow
 browserslist
 .conventional-changelog-lintrc
 *~~bak
+flow-typed

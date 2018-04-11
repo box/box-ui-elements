@@ -1,3 +1,4 @@
 flow/**
 lib/**
 dist/**
+flow-typed
