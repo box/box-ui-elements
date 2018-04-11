@@ -4,10 +4,7 @@
 .*/reports/.*
 .*/node_modules/babel-plugin-flow-react-proptypes.*
 .*/node_modules/conventional-changelog*
-.*/node_modules/draft-js*
 .*/node_modules/eslint*
-.*/node_modules/fbjs*
-.*/node_modules/immutable*
 .*/node_modules/jest*
 .*/node_modules/npm-shrinkwrap.*
 .*/node_modules/stylelint.*
