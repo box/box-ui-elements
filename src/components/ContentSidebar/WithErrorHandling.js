@@ -17,7 +17,7 @@ import {
     SKILLS_INTERNAL_SERVER_ERROR,
     SKILLS_UNKNOWN_ERROR
 } from '../../constants';
-import type { MaskError, Errors } from '../../flowTypes';
+import type { Errors } from '../../flowTypes';
 
 type Props = {
     errorCode?: string
@@ -28,7 +28,7 @@ type Props = {
  * @param {string} error the API error code
  * @returns {Object} a MaskError-like type which contains FormattedMessages
  */
-const getMaskErrorFromErrorCode = (errorCode?: string): MaskError => {
+const getMaskErrorFromErrorCode = (errorCode?: string) => {
     switch (errorCode) {
         case SKILLS_UNAUTHORIZED_REQUEST_ERROR:
             return {
