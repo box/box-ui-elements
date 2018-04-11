@@ -3,7 +3,8 @@
  * @file Component for Approval comment form
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { Node } from 'react';
 import cx from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
@@ -44,7 +45,7 @@ type Props = {
 };
 
 type State = {
-    approvalDate: number,
+    approvalDate: ?number,
     approvers: Array<User>,
     approverSelectorError: string,
     commentEditorState: any,
@@ -179,7 +180,7 @@ class ApprovalCommentForm extends Component<Props, State> {
         this.setState({ approvers });
     };
 
-    render(): ReactNode {
+    render(): Node {
         const {
             approverSelectorContacts,
             className,

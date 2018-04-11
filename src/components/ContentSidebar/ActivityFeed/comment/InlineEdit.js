@@ -3,7 +3,8 @@
  * @file Inline Edit component
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { Node } from 'react';
 import { injectIntl, intlShape } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
@@ -23,7 +24,7 @@ class InlineEdit extends Component<Props> {
         toEdit({ id });
     };
 
-    render(): ReactNode {
+    render(): Node {
         const { onEdit } = this;
         return (
             <div className='bcs-comment-edit-container'>

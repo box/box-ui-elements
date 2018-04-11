@@ -3,7 +3,8 @@
  * @file Inline Delete component
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { Node } from 'react';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import classNames from 'classnames';
 
@@ -17,7 +18,7 @@ type Props = {
     onDelete: Function,
     id: string,
     intl: intlShape.isRequired,
-    message: ReactNode
+    message: Node
 };
 
 class InlineDelete extends Component<Props> {
@@ -38,7 +39,7 @@ class InlineDelete extends Component<Props> {
         this.setState({ isConfirming: false });
     };
 
-    render(): ReactNode {
+    render(): Node {
         const { intl, message } = this.props;
         return (
             <div

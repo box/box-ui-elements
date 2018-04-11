@@ -3,7 +3,8 @@
  * @file Util for formatting tagged messages
  */
 
-import React, { ReactNode } from 'react';
+import React from 'react';
+import type { Node } from 'react';
 import { Link } from 'box-react-ui/lib/components/link';
 import Mention from '../comment/Mention';
 
@@ -22,13 +23,9 @@ const splitRegex = /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w
  * @param {String} taggedMessage The message string to format
  * @param {String} itemID The id of the tagged message
  * @param {Boolean} shouldReturnString The boolean value whether it should return string
- * @returns {String|ReactNode}
+ * @returns {String|Node}
  */
-const formatTaggedMessage = (
-    taggedMessage: string,
-    itemID: string,
-    shouldReturnString: boolean
-): ReactNode | string => {
+const formatTaggedMessage = (taggedMessage: string, itemID: string, shouldReturnString: boolean): Node | string => {
     const contentItems = taggedMessage.split(splitRegex).map((text: string, contentIndex: number) => {
         const contentKey = `${contentIndex}-${itemID}`;
         // attempt mention match

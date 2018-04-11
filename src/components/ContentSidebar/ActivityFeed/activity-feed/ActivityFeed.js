@@ -3,7 +3,8 @@
  * @file Component for Activity feed
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { Node } from 'react';
 
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
@@ -94,7 +95,7 @@ class ActivityFeed extends Component<Props, State> {
         isInputOpen: false
     };
 
-    onKeyDown = (event: React.SyntheticEvent): void => {
+    onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
     };
@@ -113,7 +114,7 @@ class ActivityFeed extends Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    render(): ReactNode {
+    render(): Node {
         const { feedState, handlers, inputState, isLoading, translations } = this.props;
         const { isInputOpen } = this.state;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;

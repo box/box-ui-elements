@@ -3,7 +3,8 @@
  * @file Collapsed Version component
  */
 
-import React, { ReactNode } from 'react';
+import React from 'react';
+import type { Node } from 'react';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
@@ -20,7 +21,7 @@ function getMessageForAction(
     collaborators: { [collaborator_id: string]: User },
     versionStart: number,
     versionEnd: number
-): ReactNode {
+): Node {
     // We only support collapsing for multiple upload versions
     if (action !== 'upload') {
         return null;
@@ -70,15 +71,7 @@ type Props = {
     versionEnd: number
 };
 
-const CollapsedVersion = ({
-    action,
-    collaborators,
-    intl,
-    onInfo,
-    versions,
-    versionStart,
-    versionEnd
-}: Props): ReactNode => (
+const CollapsedVersion = ({ action, collaborators, intl, onInfo, versions, versionStart, versionEnd }: Props): Node => (
     <div className='bcs-collapsed-version'>
         <span className='bcs-version-message'>
             {getMessageForAction(action, collaborators, versionStart, versionEnd)}

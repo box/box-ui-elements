@@ -3,7 +3,8 @@
  * @file Comment component
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component } from 'react';
+import type { Node } from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
@@ -63,7 +64,13 @@ type Props = {
     }
 };
 
-class Comment extends Component<Props> {
+type State = {
+    isEditing?: boolean,
+    isFocused?: boolean,
+    isInputOpen?: boolean
+};
+
+class Comment extends Component<Props, State> {
     static displayName = 'Comment';
 
     state = {
@@ -72,7 +79,7 @@ class Comment extends Component<Props> {
         isInputOpen: false
     };
 
-    onKeyDown = (event: React.SyntheticEvent): void => {
+    onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
     };
@@ -96,7 +103,7 @@ class Comment extends Component<Props> {
         this.setState({ isFocused: false });
     };
 
-    render(): ReactNode {
+    render(): Node {
         const {
             createdBy,
             createdAt,

@@ -2,14 +2,15 @@
  * @flow
  * @file Active state component for Activity Feed
  */
-import React, { ReactNode } from 'react';
+import React from 'react';
+import type { Node } from 'react';
 
 import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
 import Keywords from '../keywords';
 import type { User } from '../../../../flowTypes';
-import type { Tasks, Comments, Contacts, Versions, InputState, Item } from '../activityFeedFlowTypes';
+import type { Tasks, Comments, Contacts, Versions, InputState, Item, Translations } from '../activityFeedFlowTypes';
 
 type Props = {
     currentUser: User,
@@ -40,7 +41,7 @@ const ActiveState = ({
     translations,
     inputState,
     handlers
-}: Props): ReactNode => (
+}: Props): Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item) => {
             switch (item.type) {

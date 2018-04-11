@@ -3,19 +3,20 @@
  * @file Add Approval Fields component for ApprovalComment component
  */
 
-import React, { ReactNode } from 'react';
+import React from 'react';
+import type { Node } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ContactDatalistItem from 'box-react-ui/lib/components/contact-datalist-item/ContactDatalistItem';
 import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
 import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelectorDropdown';
 
-import type { OptionItems, SelectorItems } from '../../../../flowTypes';
+import type { User, SelectorItems } from '../../../../flowTypes';
 import messages from '../../../messages';
 
 type Props = {
     approvalDate: number,
-    approvers: OptionItems,
+    approvers: Array<User>,
     approverSelectorContacts: SelectorItems,
     approverSelectorError: string,
     formatMessage: Function,
@@ -35,7 +36,7 @@ const AddApprovalFields = ({
     onApproverSelectorInput,
     onApproverSelectorRemove,
     onApproverSelectorSelect
-}: Props): ReactNode => {
+}: Props): Node => {
     const approverOptions = approverSelectorContacts
         // filter selected approvers
         .filter(({ id }) => !approvers.find(({ value }) => value === id))

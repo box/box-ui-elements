@@ -9,6 +9,7 @@
 .*/node_modules/npm-shrinkwrap.*
 .*/node_modules/stylelint.*
 .*/node_modules/webpack*
+.*/node_modules/draft-js*
 
 [include]
 ./src

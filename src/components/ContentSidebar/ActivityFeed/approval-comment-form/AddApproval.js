@@ -3,17 +3,18 @@
  * @file AddApproval component for ApprovalCommentForm component
  */
 
-import React, { ReactNode } from 'react';
+import React from 'react';
+import type { Node } from 'react';
 
 import Checkbox from 'box-react-ui/lib/components/checkbox/Checkbox';
 
 import AddApprovalFields from './AddApprovalFields';
 import messages from '../../../messages';
-import type { Options, SelectorItems } from '../../../../flowTypes';
+import type { User, SelectorItems } from '../../../../flowTypes';
 
 type Props = {
-    approvalDate: number,
-    approvers: Options,
+    approvalDate: ?number,
+    approvers: Array<User>,
     approverSelectorContacts: SelectorItems,
     approverSelectorError: string,
     formatMessage: Function,
@@ -35,7 +36,7 @@ const AddApproval = ({
     onApproverSelectorInput,
     onApproverSelectorRemove,
     onApproverSelectorSelect
-}: Props): ReactNode => (
+}: Props): Node => (
     <div className='bcs-comment-add-approver'>
         <Checkbox
             className='bcs-comment-add-approver-checkbox'

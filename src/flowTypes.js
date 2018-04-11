@@ -104,6 +104,7 @@ export type BoxItemPermission = {
 
 export type User = {
     avatarUrl: string,
+    email: string,
     id: string,
     login: string,
     name: string,
@@ -112,7 +113,8 @@ export type User = {
 
 export type SelectorItem = {
     id?: string | number,
-    name: string
+    name: string,
+    item: Object
 };
 
 export type SelectorItems = Array<SelectorItem>;
