@@ -10,7 +10,7 @@ import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
-import { User } from '../../../../flowTypes';
+import type { User, FileVersions } from '../../../../flowTypes';
 
 import messages from '../../../messages';
 
@@ -66,7 +66,7 @@ type Props = {
     collaborators: { [collaborator_id: string]: User },
     intl: intlShape.isRequired,
     onInfo: Function,
-    versions: Array,
+    versions: FileVersions,
     versionStart: number,
     versionEnd: number
 };

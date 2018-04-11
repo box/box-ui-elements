@@ -13,7 +13,7 @@ import { Link } from 'box-react-ui/lib/components/link';
 import { ReadableTime } from 'box-react-ui/lib/components/time';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
-import type { ActionItemError, SelectorItems, User } from '../../../../flowTypes';
+import type { ActionItemError, User } from '../../../../flowTypes';
 import InlineDelete from './InlineDelete';
 import InlineEdit from './InlineEdit';
 import CommentInlineError from './CommentInlineError';
@@ -23,45 +23,31 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import messages from '../../../messages';
 
 import './Comment.scss';
+import type { Versions, Contacts, Tasks, InputState, Translations } from '../activityFeedFlowTypes';
 
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
 type Props = {
     createdBy: User,
     createdAt: string | number,
-    permissions: {
+    permissions?: {
         comment_delete: boolean,
         comment_edit: boolean
     },
     id: string,
-    isPending: boolean,
-    error: ActionItemError,
-    onDelete: Function,
+    isPending?: boolean,
+    error?: ActionItemError,
+    onDelete?: Function,
     onEdit: Function,
     taggedMessage: string,
-    translatedTaggedMessage: string,
-    translations: {
-        translationEnabled: boolean,
-        onTranslate: Function
-    },
+    translatedTaggedMessage?: string,
+    translations: Translations,
     handlers: {
-        tasks: {
-            update: Function
-        },
-        contacts: {
-            getApproverWithQuery: Function,
-            getMentionWithQuery: Function
-        },
-        versions: {
-            info: Function
-        }
+        tasks?: Tasks,
+        contacts?: Contacts,
+        versions?: Versions
     },
-    inputState: {
-        approverSelectorContacts: SelectorItems,
-        mentionSelectorContacts: SelectorItems,
-        currentUser: User,
-        isDisabled: boolean
-    }
+    inputState: InputState
 };
 
 type State = {
@@ -177,7 +163,7 @@ class Comment extends Component<Props, State> {
                                 className={`bcs-activity-feed-comment-input ${
                                     inputState.isDisabled ? 'bcs-is-disabled' : ''
                                 }`}
-                                createComment={this.createCommentHandler}
+                                // createComment={this.createCommentHandler}
                                 updateTask={this.updateTaskHandler}
                                 getApproverContactsWithQuery={
                                     handlers && handlers.contacts ? handlers.contacts.getApproverWithQuery : null

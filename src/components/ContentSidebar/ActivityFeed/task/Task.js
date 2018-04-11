@@ -12,8 +12,8 @@ import CompletedAssignment from './CompletedAssignment';
 import messages from '../../../messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
-import { ActionItemError, User } from '../../../../flowTypes';
-import { Comments, Contacts, InputState, Tasks, Translations, Versions } from '../activityFeedFlowTypes';
+import type { ActionItemError, User } from '../../../../flowTypes';
+import type { Comments, Contacts, InputState, Tasks, Translations, Versions } from '../activityFeedFlowTypes';
 
 import './Task.scss';
 
@@ -34,10 +34,10 @@ type Props = {
     dueDate: any,
     error: ActionItemError,
     handlers: {
-        comments: Comments,
-        tasks: Tasks,
-        contacts: Contacts,
-        versions: Versions
+        comments?: Comments,
+        tasks?: Tasks,
+        contacts?: Contacts,
+        versions?: Versions
     },
     id: string,
     inputState: InputState,

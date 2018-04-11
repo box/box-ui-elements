@@ -46,7 +46,7 @@ type Props = {
 
 type State = {
     approvalDate: ?number,
-    approvers: Array<User>,
+    approvers: SelectorItems,
     approverSelectorError: string,
     commentEditorState: any,
     isAddApprovalVisible: boolean

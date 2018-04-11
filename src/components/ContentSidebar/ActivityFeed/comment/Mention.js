@@ -7,8 +7,9 @@ import React from 'react';
 import type { Node } from 'react';
 
 type Props = {
-    children: PropTypes.node.isRequired,
-    id: PropTypes.number.isRequired
+    children?: Node,
+    id: number,
+    mentionTrigger?: any
 };
 
 const Mention = ({ children, id, ...rest }: Props): Node => {

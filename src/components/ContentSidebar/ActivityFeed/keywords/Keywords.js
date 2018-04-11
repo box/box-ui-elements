@@ -22,7 +22,7 @@ function getMessageForAction(action: string): Node {
 }
 
 type Props = {
-    action: 'applied',
+    action: string | 'applied',
     words: string
 };
 

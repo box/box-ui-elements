@@ -4,13 +4,15 @@
  * @author Box
  */
 
+import type { SelectorItems, User } from '../../../flowTypes';
+
 export type Comments = {
     create: Function,
     delete: Function
 };
 
 export type Tasks = {
-    create?: Function,
+    create: Function,
     delete?: Function,
     edit?: Function,
     onTaskAssignmentUpdate?: Function
@@ -33,13 +35,19 @@ export type InputState = {
 };
 
 export type Item = {
+    action: string,
     type?: 'comment' | 'task' | 'file_version' | 'keywords',
+    collaborators: Object,
     createdAt?: any,
     createdBy: User,
-    id: string
+    id: string,
+    versions: Array<any>,
+    versionNumber: number,
+    versionStart: number,
+    versionEnd: number
 };
 
 export type Translations = {
     translationEnabled?: boolean,
-    onTranslate?: boolean
+    onTranslate?: Function
 };

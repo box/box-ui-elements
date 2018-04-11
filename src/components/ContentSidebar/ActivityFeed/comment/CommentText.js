@@ -15,13 +15,18 @@ import TranslateButton from './TranslateButton';
 type Props = {
     id: string,
     taggedMessage: string,
-    translatedTaggedMessage: string,
-    translationEnabled: boolean,
+    translatedTaggedMessage?: string,
+    translationEnabled?: boolean,
     onTranslate: Function,
-    translationFailed: boolean
+    translationFailed?: ?boolean
 };
 
-class CommentText extends Component<Props> {
+type State = {
+    isLoading?: boolean,
+    isTranslation?: boolean
+};
+
+class CommentText extends Component<Props, State> {
     static defaultProps = {
         translationEnabled: false
     };
@@ -38,7 +43,7 @@ class CommentText extends Component<Props> {
         }
     }
 
-    getButton(isTranslation: boolean): Node {
+    getButton(isTranslation?: boolean): Node {
         let button = null;
         if (isTranslation) {
             button = <ShowOriginalButton handleShowOriginal={this.handleShowOriginal} />;

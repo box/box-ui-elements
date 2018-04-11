@@ -11,10 +11,10 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 type Props = {
     action: {
         onAction: Function,
-        text: Node
+        text: string
     },
-    message: Node,
-    title: Node
+    message: string,
+    title: string
 };
 
 const CommentInlineError = ({ action, message, title }: Props): Node => (

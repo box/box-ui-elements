@@ -21,7 +21,11 @@ type Props = {
     message: Node
 };
 
-class InlineDelete extends Component<Props> {
+type State = {
+    isConfirming?: boolean
+};
+
+class InlineDelete extends Component<Props, State> {
     state = {
         isConfirming: false
     };

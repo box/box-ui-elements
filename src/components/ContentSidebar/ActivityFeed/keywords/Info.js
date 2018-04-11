@@ -13,7 +13,7 @@ import Tooltip from 'box-react-ui/lib/components/tooltip';
 import messages from '../../../messages';
 
 type Props = {
-    words: PropTypes.string
+    words: string
 };
 
 const Info = ({ words }: Props): Node => (

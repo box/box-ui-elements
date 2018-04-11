@@ -11,11 +11,11 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
 import messages from '../../../messages';
-import { User } from '../../../../flowTypes';
+import type { User } from '../../../../flowTypes';
 
 import './Version.scss';
 
-function getMessageForAction(name: Node, action: string, versionNumber: string): Node {
+function getMessageForAction(name: Node, action: string, versionNumber: number): Node {
     switch (action) {
         case 'upload':
             return (

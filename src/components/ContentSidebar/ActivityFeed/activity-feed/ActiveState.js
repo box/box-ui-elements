@@ -43,7 +43,7 @@ const ActiveState = ({
     handlers
 }: Props): Node => (
     <ul className='bcs-activity-feed-active-state'>
-        {items.map((item) => {
+        {items.map((item: any) => {
             switch (item.type) {
                 case 'comment':
                     return (

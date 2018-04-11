@@ -46,8 +46,10 @@ function collapseFeedState(feedState: Array<Item>): Array<Item> {
                 {
                     action,
                     collaborators,
+                    createdBy,
                     id,
                     type: 'file_version',
+                    versionNumber,
                     versions: versions.concat([feedItem]),
                     versionStart: Math.min(versionStart, versionNumber),
                     versionEnd: Math.max(versionEnd, versionNumber)
@@ -95,6 +97,8 @@ class ActivityFeed extends Component<Props, State> {
         isInputOpen: false
     };
 
+    feedContainer: null | HTMLElement;
+
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
@@ -103,12 +107,12 @@ class ActivityFeed extends Component<Props, State> {
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
-    createCommentHandler = (args): void => {
+    createCommentHandler = (args: any): void => {
         const { handlers } = this.props;
         handlers.comments.create(args);
         this.approvalCommentFormSubmitHandler();
     };
-    createTaskHandler = (args): void => {
+    createTaskHandler = (args: any): void => {
         const { handlers } = this.props;
         handlers.tasks.create(args);
         this.approvalCommentFormSubmitHandler();
@@ -154,7 +158,9 @@ class ActivityFeed extends Component<Props, State> {
                 {showApprovalCommentForm ? (
                     <ApprovalCommentForm
                         onSubmit={() => {
-                            this.feedContainer.scrollTop = 0;
+                            if (this.feedContainer) {
+                                this.feedContainer.scrollTop = 0;
+                            }
                         }}
                         isDisabled={inputState.isDisabled}
                         approverSelectorContacts={approverSelectorContacts}

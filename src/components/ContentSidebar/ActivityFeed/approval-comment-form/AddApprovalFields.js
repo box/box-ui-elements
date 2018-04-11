@@ -11,12 +11,12 @@ import ContactDatalistItem from 'box-react-ui/lib/components/contact-datalist-it
 import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
 import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelectorDropdown';
 
-import type { User, SelectorItems } from '../../../../flowTypes';
+import type { SelectorItems } from '../../../../flowTypes';
 import messages from '../../../messages';
 
 type Props = {
-    approvalDate: number,
-    approvers: Array<User>,
+    approvalDate: ?number,
+    approvers: SelectorItems,
     approverSelectorContacts: SelectorItems,
     approverSelectorError: string,
     formatMessage: Function,

@@ -114,7 +114,8 @@ export type User = {
 export type SelectorItem = {
     id?: string | number,
     name: string,
-    item: Object
+    item: Object,
+    value: any
 };
 
 export type SelectorItems = Array<SelectorItem>;
