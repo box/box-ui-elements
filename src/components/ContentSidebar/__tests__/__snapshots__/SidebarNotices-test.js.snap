@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/SidebarNotices render() should correctly render the empty state 1`] = `""`;
+
+exports[`components/ContentSidebar/SidebarNotices render() should render a shared link expiration if present 1`] = `
+<React.Fragment>
+  <SharedLinkExpirationNotice
+    expiration={
+      <DateField
+        date={2018-04-26T07:00:00.000Z}
+        dateFormat={
+          Object {
+            "day": "numeric",
+            "month": "short",
+            "year": "numeric",
+          }
+        }
+        relative={false}
+      />
+    }
+  />
+</React.Fragment>
+`;
+
+exports[`components/ContentSidebar/SidebarNotices render() should render an item expiration if present 1`] = `
+<React.Fragment>
+  <ItemExpirationNotice
+    expiration={
+      <DateField
+        date={2018-04-26T07:00:00.000Z}
+        dateFormat={
+          Object {
+            "day": "numeric",
+            "month": "short",
+            "year": "numeric",
+          }
+        }
+        relative={false}
+      />
+    }
+    itemType="file"
+  />
+</React.Fragment>
+`;
