@@ -25,7 +25,8 @@ import {
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_FILE_VERSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
-    METADATA_SKILLS
+    METADATA_SKILLS,
+    FIELD_ITEM_EXPIRATION
 } from '../../constants';
 
 describe('util/fields/getFieldsAsString()', () => {
@@ -103,6 +104,7 @@ describe('util/fields/getFieldsAsString()', () => {
                     FIELD_OWNED_BY,
                     FIELD_DESCRIPTION,
                     METADATA_SKILLS,
+                    FIELD_ITEM_EXPIRATION,
                     FIELD_REPRESENTATIONS,
                     FIELD_SHA1,
                     FIELD_WATERMARK_INFO,
