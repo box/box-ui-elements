@@ -4,49 +4,60 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import getProp from 'lodash/get';
 import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
-import SidebarSection from './SidebarSection';
-import { addTime } from '../../util/datetime';
+import { addTime } from 'box-react-ui/lib/utils/datetime';
+import ItemExpirationNotice from 'box-react-ui/lib/features/item-details/ItemExpirationNotice';
 import type { BoxItem } from '../../flowTypes';
 import DateField from '../Date';
 
 const ONE_MINUTE_IN_MS = 60000;
+
+const NOTICE_DATE_FORMAT = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+};
 
 type Props = {
     file: BoxItem
 };
 
 const SidebarNotices = ({ file }: Props) => {
-    let sharedLinkExpiration = getProp(file, 'shared_link.unshared_at');
+    const itemExpiration = getProp(file, 'expires_at');
+    const sharedLinkExpiration = getProp(file, 'shared_link.unshared_at');
 
-    if (sharedLinkExpiration) {
-        sharedLinkExpiration = new Date(sharedLinkExpiration);
-        // One minute is added to account for dates set via a date picker.
-        // These dates will actually be stored as 11:59PM the night before the item expires.
-        sharedLinkExpiration = addTime(sharedLinkExpiration, ONE_MINUTE_IN_MS);
-        sharedLinkExpiration = sharedLinkExpiration.toISOString();
+    if (!itemExpiration && !sharedLinkExpiration) {
+        return null;
     }
 
     return (
-        !!sharedLinkExpiration && (
-            <SidebarSection>
+        <React.Fragment>
+            {!!itemExpiration && (
+                <ItemExpirationNotice
+                    expiration={
+                        <DateField
+                            date={addTime(new Date(itemExpiration), ONE_MINUTE_IN_MS)}
+                            dateFormat={NOTICE_DATE_FORMAT}
+                            relative={false}
+                        />
+                    }
+                    itemType='file'
+                />
+            )}
+            {!!sharedLinkExpiration && (
                 <SharedLinkExpirationNotice
                     expiration={
                         <DateField
-                            date={sharedLinkExpiration}
-                            dateFormat={{
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric'
-                            }}
+                            date={addTime(new Date(sharedLinkExpiration), ONE_MINUTE_IN_MS)}
+                            dateFormat={NOTICE_DATE_FORMAT}
                             relative={false}
                         />
                     }
                 />
-            </SidebarSection>
-        )
+            )}
+        </React.Fragment>
     );
 };
 

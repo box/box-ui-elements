@@ -58,6 +58,7 @@ export const FIELD_TYPE = 'type';
 export const FIELD_SIZE: 'size' = 'size';
 export const FIELD_PARENT = 'parent';
 export const FIELD_EXTENSION = 'extension';
+export const FIELD_ITEM_EXPIRATION = 'expires_at';
 export const FIELD_PERMISSIONS = 'permissions';
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
@@ -99,7 +100,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.35.1';
+export const DEFAULT_PREVIEW_VERSION = '1.37.1';
 export const DEFAULT_PREVIEW_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
