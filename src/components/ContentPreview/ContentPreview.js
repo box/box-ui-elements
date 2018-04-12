@@ -66,9 +66,9 @@ type Props = {
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    onError: Function,
+    onError?: Function,
     onInteraction: Function,
-    onMetric: Function,
+    onMetric?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function
 };
