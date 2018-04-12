@@ -344,6 +344,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Default error message when skills fail to run',
         defaultMessage: 'Something went wrong while running this skill or fetching its data.'
     },
+    skillUnauthorizedError: {
+        id: 'be.skillUnauthorizedError',
+        description: 'Error message when skills unauthorized',
+        defaultMessage: 'You are unauthorized to see this skill.'
+    },
+    skillForbiddenError: {
+        id: 'be.skillForbiddenError',
+        description: 'Error message when skills forbidden',
+        defaultMessage: 'You are forbidden to see this skill.'
+    },
     uploadErrorTooManyFiles: {
         id: 'be.uploadErrorTooManyFiles',
         description: 'Message shown when too many files are uploaded at once',

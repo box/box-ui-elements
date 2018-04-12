@@ -18,7 +18,8 @@ type Props = {
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onInteraction: Function,
-    skill: SkillCard
+    skill: SkillCard,
+    errorCode: ?string
 };
 
 const SidebarSkillsCard = ({ skill, onInteraction, getPreviewer, rootElement, appElement }: Props) => {

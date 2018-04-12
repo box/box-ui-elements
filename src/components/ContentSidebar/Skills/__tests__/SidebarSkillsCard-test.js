@@ -64,15 +64,9 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render an error', () => {
+    test('should render an error from the error code', () => {
         const props = {
-            maskError: {
-                errorHeader: {
-                    id: 'foo',
-                    description: 'bar',
-                    defaultMessage: 'baz'
-                }
-            }
+            errorCode: 'foo'
         };
         const wrapper = mount(<SidebarSkillsCard {...props} />);
 

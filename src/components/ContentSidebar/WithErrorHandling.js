@@ -32,12 +32,12 @@ const getMaskErrorFromErrorCode = (errorCode?: string) => {
     switch (errorCode) {
         case SKILLS_UNAUTHORIZED_REQUEST_ERROR:
             return {
-                errorHeader: <FormattedMessage {...messages.skillDefaultError} />,
+                errorHeader: <FormattedMessage {...messages.skillUnknownError} />,
                 errorSubHeader: <FormattedMessage {...messages.skillUnuthorizedError} />
             };
         case SKILLS_FORBIDDEN_REQUEST_ERROR:
             return {
-                errorHeader: <FormattedMessage {...messages.skillDefaultError} />,
+                errorHeader: <FormattedMessage {...messages.skillUnknownError} />,
                 errorSubHeader: <FormattedMessage {...messages.skillForbiddenError} />
             };
         case SKILLS_INVALID_REQUEST_ERROR:
@@ -46,7 +46,7 @@ const getMaskErrorFromErrorCode = (errorCode?: string) => {
         case SKILLS_UNKNOWN_ERROR:
         default:
             return {
-                errorHeader: <FormattedMessage {...messages.skillDefaultError} />
+                errorHeader: <FormattedMessage {...messages.skillUnknownError} />
             };
     }
 };

@@ -69,7 +69,7 @@ describe('components/withErrorHandling', () => {
         expect(wrapper.find(WrappedComponent).exists()).toBe(false);
     });
 
-    test('should render a ErrorMask if a valid error code is passed', () => {
+    test('should render an ErrorMask if an error code is passed', () => {
         const errorCodes = [
             SKILLS_UNAUTHORIZED_REQUEST_ERROR,
             SKILLS_FORBIDDEN_REQUEST_ERROR,
@@ -87,6 +87,7 @@ describe('components/withErrorHandling', () => {
             expect(wrapper.find(ErrorMask)).toHaveLength(1);
             expect(wrapper.find(InlineError).exists()).toBe(false);
             expect(wrapper.find(WrappedComponent).exists()).toBe(false);
+            expect(wrapper).toMatchSnapshot();
         });
     });
 
