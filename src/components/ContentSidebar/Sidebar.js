@@ -36,6 +36,7 @@ type Props = {
     intl: any,
     versions?: FileVersions,
     accessStats?: FileAccessStats,
+    accessStatsError?: Errors,
     fileError?: Errors,
     versionError?: Errors
 };
@@ -61,6 +62,7 @@ const Sidebar = ({
     onVersionHistoryClick,
     versions,
     accessStats,
+    accessStatsError,
     fileError,
     versionError
 }: Props) => {
@@ -86,6 +88,7 @@ const Sidebar = ({
             onVersionHistoryClick={onVersionHistoryClick}
             versions={versions}
             accessStats={accessStats}
+            accessStatsError={accessStatsError}
             fileError={fileError}
             versionError={versionError}
         />

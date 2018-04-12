@@ -36,6 +36,7 @@ type Props = {
     onDescriptionChange: Function,
     onVersionHistoryClick?: Function,
     versions?: FileVersions,
+    accessStatsError?: Errors,
     fileError?: Errors,
     versionError?: Errors
 };
@@ -59,6 +60,7 @@ const DetailsSidebar = ({
     onDescriptionChange,
     onVersionHistoryClick,
     versions,
+    accessStatsError,
     fileError,
     versionError
 }: Props) => {
@@ -96,7 +98,12 @@ const DetailsSidebar = ({
                 </SidebarSection>
             )}
             {hasAccessStats && (
-                <SidebarAccessStats accessStats={accessStats} onAccessStatsClick={onAccessStatsClick} file={file} />
+                <SidebarAccessStats
+                    accessStats={accessStats}
+                    onAccessStatsClick={onAccessStatsClick}
+                    file={file}
+                    {...accessStatsError}
+                />
             )}
         </SidebarContent>
     );

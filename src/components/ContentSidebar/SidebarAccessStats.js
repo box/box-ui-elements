@@ -11,6 +11,7 @@ import SidebarSection from './SidebarSection';
 import type { FileAccessStats, BoxItem } from '../../flowTypes';
 import messages from '../messages';
 import { BOX_NOTE_EXTENSION } from '../../constants';
+import withErrorHandling from './withErrorHandling';
 
 type Props = {
     onAccessStatsClick?: Function,
@@ -49,4 +50,5 @@ const SidebarAccessStats = ({
     );
 };
 
-export default SidebarAccessStats;
+export { SidebarAccessStats as SidebarAccessStatsComponent };
+export default withErrorHandling(SidebarAccessStats);
