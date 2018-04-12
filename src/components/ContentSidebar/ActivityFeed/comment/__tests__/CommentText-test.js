@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 
 import CommentText from '../CommentText';
 
-describe('features/activity-feed/comment/CommentText', () => {
+describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
     test('should properly format tagged comment', () => {
         const commentText = {
             taggedMessage: 'How u doing @[2030326577:Young Jeezy]?'

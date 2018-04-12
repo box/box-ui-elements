@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import Keywords from '../Keywords';
 
-describe('features/activity-feed/keywords/Keywords', () => {
+describe('components/ContentSidebar/ActivityFeed/keywords/Keywords', () => {
     test('should correctly render keywords', () => {
         const props = {
             action: 'applied',

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import IconActivityFeedEmptyState from '../IconActivityFeedEmptyState';
 
-describe('features/activity-feed/icons/IconActivityFeedEmptyState', () => {
+describe('components/ContentSidebar/ActivityFeed/icons/IconActivityFeedEmptyState', () => {
     test('should correctly add class if passed', () => {
         const wrapper = shallow(<IconActivityFeedEmptyState className='test' />);
 

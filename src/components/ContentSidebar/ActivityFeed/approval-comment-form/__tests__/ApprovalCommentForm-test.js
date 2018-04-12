@@ -9,7 +9,7 @@ const intlFake = {
     formatMessage: (message) => message.id
 };
 
-describe('features/activity-feed/approval-comment-form/ApprovalCommentForm', () => {
+describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalCommentForm', () => {
     const render = (props) =>
         mount(
             <ApprovalCommentForm

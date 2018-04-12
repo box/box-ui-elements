@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 
 import VersionError from '../VersionError';
 
-describe('features/activity-feed/version/VersionError', () => {
+describe('components/ContentSidebar/ActivityFeed/version/VersionError', () => {
     test('should correctly render error message', () => {
         const error = { errorCode: 'tooManyVersions' };
 

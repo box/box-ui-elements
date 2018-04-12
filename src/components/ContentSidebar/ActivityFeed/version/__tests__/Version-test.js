@@ -7,7 +7,7 @@ const translationProps = {
     intl: { formatMessage: () => {} }
 };
 
-describe('features/activity-feed/version/Version', () => {
+describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
     test('should correctly render version', () => {
         const version = {
             createdAt: Date.now(),

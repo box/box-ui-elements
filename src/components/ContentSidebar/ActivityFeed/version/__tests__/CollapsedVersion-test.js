@@ -7,7 +7,7 @@ const translationProps = {
     intl: { formatMessage: () => {} }
 };
 
-describe('features/activity-feed/version/CollapsedVersion', () => {
+describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () => {
     const render = (item) => shallow(<CollapsedVersion {...translationProps} {...item} />);
 
     test('should correctly render for single collaborator', () => {

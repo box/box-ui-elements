@@ -35,7 +35,7 @@ const allHandlers = {
     }
 };
 
-describe('features/activity-feed/activity-feed/ActivityFeed', () => {
+describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render empty state', () => {
         const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
         expect(wrapper).toMatchSnapshot();

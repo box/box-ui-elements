@@ -8,7 +8,7 @@ const translationProps = {
     intl
 };
 
-describe('features/activity-feed/comment/InlineDelete', () => {
+describe('components/ContentSidebar/ActivityFeed/comment/InlineDelete', () => {
     const render = (props = {}) =>
         shallow(<InlineDelete {...translationProps} id='123' message='test' onDelete={() => {}} {...props} />);
 

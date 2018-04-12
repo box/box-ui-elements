@@ -19,7 +19,7 @@ const allHandlers = {
     }
 };
 
-describe('features/activity-feed/task/Task', () => {
+describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     const task = {
         createdAt: 12345678,
         dueDate: 87654321,

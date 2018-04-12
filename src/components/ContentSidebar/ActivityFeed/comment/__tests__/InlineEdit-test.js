@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 
 import { InlineEditBase as InlineEdit } from '../InlineEdit';
 
-describe('features/activity-feed/comment/InlineEdit', () => {
+describe('components/ContentSidebar/ActivityFeed/comment/InlineEdit', () => {
     const intl = { formatMessage: () => {} };
 
     test('should correctly render comment', () => {

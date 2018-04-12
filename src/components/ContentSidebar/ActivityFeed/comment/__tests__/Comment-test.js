@@ -23,7 +23,7 @@ const allHandlers = {
     }
 };
 
-describe('features/activity-feed/comment/Comment', () => {
+describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
     beforeEach(() => {
         ApprovalCommentForm.default = jest.fn().mockReturnValue(<div />);
         InlineEdit.default = jest.fn().mockReturnValue(<div />);
