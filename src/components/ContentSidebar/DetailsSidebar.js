@@ -71,8 +71,12 @@ const DetailsSidebar = ({
 
     return (
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-            {hasVersions && <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} />}
-            {hasNotices && <SidebarNotices file={file} />}
+            {(hasVersions || hasNotices) && (
+                <div className='bcs-details-content'>
+                    <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} />
+                    <SidebarNotices file={file} />
+                </div>
+            )}
             {hasSkills && (
                 <SidebarSkills
                     metadata={file.metadata}
@@ -92,7 +96,6 @@ const DetailsSidebar = ({
                         size={getFileSize(file.size, intl.locale)}
                         uploader={getProp(file, 'created_by.name')}
                         onDescriptionChange={onDescriptionChangeEditable}
-                        descriptionTextareaProps={{ maxLength: '255' }}
                     />
                 </SidebarSection>
             )}
