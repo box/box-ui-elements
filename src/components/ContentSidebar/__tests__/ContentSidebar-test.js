@@ -26,10 +26,15 @@ describe('components/ContentSidebar/ContentSidebar', () => {
     });
 
     describe('setFileDescriptionErrorCallback()', () => {
-        test('should set an inlineError if there is an error in updating the file description', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
             const props = {};
-            const wrapper = getWrapper(props);
-            const instance = wrapper.instance();
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+        test('should set an inlineError if there is an error in updating the file description', () => {
             instance.setFileDescriptionErrorCallback();
             const inlineErrorState = wrapper.state().fileError.inlineError;
             expect(typeof fileDescriptionInlineErrorTitleMessage).toBe('object');
@@ -40,10 +45,15 @@ describe('components/ContentSidebar/ContentSidebar', () => {
     });
 
     describe('fetchVersionsErrorCallback()', () => {
-        test('should set a maskError if there is an error in fetching version history', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
             const props = {};
-            const wrapper = getWrapper(props);
-            const instance = wrapper.instance();
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+        test('should set a maskError if there is an error in fetching version history', () => {
             instance.fetchVersionsErrorCallback();
             const inlineErrorState = wrapper.state().versionError.maskError;
             expect(typeof versionHistoryErrorHeaderMessage).toBe('object');
