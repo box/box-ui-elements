@@ -6,7 +6,7 @@
 
 import React from 'react';
 import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import type { FileAccessStats, BoxItem } from '../../flowTypes';
 import messages from '../messages';
@@ -18,7 +18,7 @@ type Props = {
     file: BoxItem
 };
 
-const SidebarVersions = ({
+const SidebarAccessStats = ({
     onAccessStatsClick,
     accessStats = {
         preview_count: 0,
@@ -49,4 +49,4 @@ const SidebarVersions = ({
     );
 };
 
-export default injectIntl(SidebarVersions);
+export default SidebarAccessStats;
