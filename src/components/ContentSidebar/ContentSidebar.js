@@ -281,7 +281,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             fileError: {
                 inlineError: {
                     title: messages.fileDescriptionInlineErrorTitleMessage,
-                    content: messages.descriptionInlineErrorMessage
+                    content: messages.defaultInlineErrorContentMessage
                 }
             }
         });
@@ -403,7 +403,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={intlMessages}>
-                <div id={this.id} className={`be bcs ${className}`}>
+                <aside id={this.id} className={`be bcs ${className}`}>
                     <div className='be-app-element'>
                         {shouldRender ? (
                             <Sidebar
@@ -435,7 +435,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                             </div>
                         )}
                     </div>
-                </div>
+                </aside>
             </Internationalize>
         );
     }

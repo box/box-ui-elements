@@ -32,11 +32,6 @@ exports[`components/ContentSidebar/SidebarFileProperties should render the versi
 <ItemProperties
   createdAt="foo"
   description="foo"
-  descriptionTextareaProps={
-    Object {
-      "maxLength": "255",
-    }
-  }
   modifiedAt="foo"
   onDescriptionChange={[MockFunction]}
   owner="foo"

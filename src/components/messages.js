@@ -523,6 +523,26 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.uploadsDefaultErrorMessage',
         description: 'Default error message shown when upload fails',
         defaultMessage: 'Something went wrong with the upload. Please try again.'
+    },
+    defaultInlineErrorContentMessage: {
+        id: 'be.defaultInlineErrorContentMessage',
+        description: 'Default bottom inline error message',
+        defaultMessage: 'Please try again later.'
+    },
+    fileDescriptionInlineErrorTitleMessage: {
+        id: 'be.fileDescriptionInlineErrorTitleMessage',
+        description: 'Inline error title message for file description',
+        defaultMessage: 'Something went wrong when saving the description.'
+    },
+    defaultErrorMaskSubHeaderMessage: {
+        id: 'be.defaultErrorMaskSubHeaderMessage',
+        description: 'Default error mask bottom message',
+        defaultMessage: 'Please refresh the page or try again later.'
+    },
+    versionHistoryErrorHeaderMessage: {
+        id: 'be.versionHistoryErrorHeaderMessage',
+        description: 'Version history error message',
+        defaultMessage: 'Something went wrong when fetching the version history.'
     }
 });
 
