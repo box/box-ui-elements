@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/activity-feed/task/Task should correctly render task 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly render task 1`] = `
 <div
   className="bcs-task "
 >
@@ -68,7 +68,7 @@ exports[`features/activity-feed/task/Task should correctly render task 1`] = `
 </div>
 `;
 
-exports[`features/activity-feed/task/Task should not render due date when not passed in 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due date when not passed in 1`] = `
 <div
   className="bcs-task "
 >
@@ -122,7 +122,7 @@ exports[`features/activity-feed/task/Task should not render due date when not pa
 </div>
 `;
 
-exports[`features/activity-feed/task/Task should show actions for current user and if onTaskAssignmentUpdate is defined 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions for current user and if onTaskAssignmentUpdate is defined 1`] = `
 <div
   className="bcs-task "
 >
@@ -191,7 +191,7 @@ exports[`features/activity-feed/task/Task should show actions for current user a
 </div>
 `;
 
-exports[`features/activity-feed/task/Task should show tooltips when actions are shown 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/task/Task should show tooltips when actions are shown 1`] = `
 <div
   className="bcs-task-pending-assignment"
 >

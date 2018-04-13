@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/activity-feed/keywords/Keywords should correctly render info icon 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/keywords/Keywords should correctly render info icon 1`] = `
 <span
   className="bcs-keywords-actions"
 >
@@ -34,7 +34,7 @@ exports[`features/activity-feed/keywords/Keywords should correctly render info i
 </span>
 `;
 
-exports[`features/activity-feed/keywords/Keywords should correctly render keywords 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/keywords/Keywords should correctly render keywords 1`] = `
 <div
   className="bcs-keywords"
 >
@@ -52,7 +52,7 @@ exports[`features/activity-feed/keywords/Keywords should correctly render keywor
 </div>
 `;
 
-exports[`features/activity-feed/keywords/Keywords should not render info icon if words are not passed 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/keywords/Keywords should not render info icon if words are not passed 1`] = `
 <div
   className="bcs-keywords"
 >

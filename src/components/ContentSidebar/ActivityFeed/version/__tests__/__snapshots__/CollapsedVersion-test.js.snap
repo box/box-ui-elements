@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/activity-feed/version/CollapsedVersion should correctly render for multiple collaborators 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/version/CollapsedVersion should correctly render for multiple collaborators 1`] = `
 <div
   className="bcs-collapsed-version"
 >
@@ -27,7 +27,7 @@ exports[`features/activity-feed/version/CollapsedVersion should correctly render
 </div>
 `;
 
-exports[`features/activity-feed/version/CollapsedVersion should correctly render for multiple collaborators 2`] = `
+exports[`components/ContentSidebar/ActivityFeed/version/CollapsedVersion should correctly render for multiple collaborators 2`] = `
 <span
   className="bcs-version-range"
 >
@@ -37,7 +37,7 @@ exports[`features/activity-feed/version/CollapsedVersion should correctly render
 </span>
 `;
 
-exports[`features/activity-feed/version/CollapsedVersion should correctly render for single collaborator 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/version/CollapsedVersion should correctly render for single collaborator 1`] = `
 <div
   className="bcs-collapsed-version"
 >
@@ -66,7 +66,7 @@ exports[`features/activity-feed/version/CollapsedVersion should correctly render
 </div>
 `;
 
-exports[`features/activity-feed/version/CollapsedVersion should correctly render for single collaborator 2`] = `
+exports[`components/ContentSidebar/ActivityFeed/version/CollapsedVersion should correctly render for single collaborator 2`] = `
 <span
   className="bcs-version-range"
 >

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/activity-feed/comment/InlineDelete should correctly render comment 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/comment/InlineDelete should correctly render comment 1`] = `
 <div
   className="bcs-comment-delete-container"
 >

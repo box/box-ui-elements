@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/activity-feed/version/VersionError should correctly render error message 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/version/VersionError should correctly render error message 1`] = `
 <div
   className="bcs-version error"
 >

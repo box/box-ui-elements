@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/activity-feed/comment/Comment should correctly render comment 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly render comment 1`] = `
 <div
   className="bcs-comment-container"
 >
@@ -64,7 +64,7 @@ exports[`features/activity-feed/comment/Comment should correctly render comment 
 </div>
 `;
 
-exports[`features/activity-feed/comment/Comment should correctly render comment when translation is enabled 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly render comment when translation is enabled 1`] = `
 <div
   className="bcs-comment-container"
 >
@@ -129,7 +129,7 @@ exports[`features/activity-feed/comment/Comment should correctly render comment 
 </div>
 `;
 
-exports[`features/activity-feed/comment/Comment should render an error when one is defined 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render an error when one is defined 1`] = `
 <div
   className="bcs-comment-container"
 >
@@ -197,7 +197,7 @@ exports[`features/activity-feed/comment/Comment should render an error when one 
 </div>
 `;
 
-exports[`features/activity-feed/comment/Comment should render commenter as a link 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render commenter as a link 1`] = `
 <div
   className="bcs-comment-container"
 >
