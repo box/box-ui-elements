@@ -806,4 +806,5 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 }
 
+export { ContentPreview as ContentPreviewComponent };
 export default makeResponsive(ContentPreview);
