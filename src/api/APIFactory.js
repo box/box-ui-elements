@@ -127,6 +127,10 @@ class APIFactory {
             this.versionsAPI.destroy();
             delete this.versionsAPI;
         }
+        if (this.fileAccessStatsAPI) {
+            this.fileAccessStatsAPI.destroy();
+            delete this.fileAccessStatsAPI;
+        }
         if (destroyCache) {
             this.options.cache = new Cache();
         }

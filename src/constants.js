@@ -121,7 +121,6 @@ export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
 export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
 export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
 export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
-export const BOX_NOTE_EXTENSION = 'boxnote';
 
 /* ---------------------- Statuses  -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
@@ -175,3 +174,6 @@ export const SKILLS_INVALID_REQUEST_ERROR = 'skills_invalid_request_error';
 export const SKILLS_NOT_FOUND_ERROR = 'skills_not_found_error';
 export const SKILLS_INTERNAL_SERVER_ERROR = 'skills_internal_server_error';
 export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
+
+/* ------------------ File Extensions  ---------------------- */
+export const FILE_EXTENSION_BOX_NOTE = 'boxnote';

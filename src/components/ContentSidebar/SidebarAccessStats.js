@@ -10,7 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import type { FileAccessStats, BoxItem } from '../../flowTypes';
 import messages from '../messages';
-import { BOX_NOTE_EXTENSION } from '../../constants';
+import { isBoxNote } from '../../util/file';
 import withErrorHandling from './withErrorHandling';
 
 type Props = {
@@ -44,7 +44,7 @@ const SidebarAccessStats = ({
                 previewCount={preview_count}
                 editCount={edit_count}
                 openAccessStatsModal={onAccessStatsClick}
-                isBoxNote={file.extension === BOX_NOTE_EXTENSION}
+                isBoxNote={isBoxNote(file)}
             />
         </SidebarSection>
     );

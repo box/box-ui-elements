@@ -8,7 +8,7 @@ import React from 'react';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
 import withErrorHandling from './withErrorHandling';
 import type { BoxItem, FileVersions } from '../../flowTypes';
-import { BOX_NOTE_EXTENSION } from '../../constants';
+import { isBoxNote } from '../../util/file';
 
 type Props = {
     onVersionHistoryClick?: Function,
@@ -26,7 +26,7 @@ const SidebarVersions = ({
 }: Props) => {
     const { total_count } = versions;
 
-    if (!total_count || file.extension === BOX_NOTE_EXTENSION) {
+    if (!total_count || isBoxNote(file)) {
         return null;
     }
 
