@@ -2,6 +2,18 @@
 
 exports[`components/ContentSidebar/SidebarVersions should not render the versions when total_count is falsy 1`] = `""`;
 
+exports[`components/ContentSidebar/SidebarVersions should render an error 1`] = `
+<ErrorMask
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="baz"
+      description="bar"
+      id="foo"
+    />
+  }
+/>
+`;
+
 exports[`components/ContentSidebar/SidebarVersions should render the versions when total_count > 0 1`] = `
 <VersionHistoryLink
   className=""

@@ -345,6 +345,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Default error message when skills fail to run',
         defaultMessage: 'Something went wrong while running this skill or fetching its data.'
     },
+    skillUnauthorizedError: {
+        id: 'be.skillUnauthorizedError',
+        description: 'Error message when skills unauthorized',
+        defaultMessage: 'You are unauthorized to see this skill.'
+    },
+    skillForbiddenError: {
+        id: 'be.skillForbiddenError',
+        description: 'Error message when skills forbidden',
+        defaultMessage: 'You are forbidden to see this skill.'
+    },
     uploadErrorTooManyFiles: {
         id: 'be.uploadErrorTooManyFiles',
         description: 'Message shown when too many files are uploaded at once',
@@ -700,6 +710,26 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description:
             'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. { versionNumber } is the file version string.',
         id: 'be.activityFeed.versionUploaded'
+    },
+    defaultInlineErrorContentMessage: {
+        id: 'be.defaultInlineErrorContentMessage',
+        description: 'Default bottom inline error message',
+        defaultMessage: 'Please try again later.'
+    },
+    fileDescriptionInlineErrorTitleMessage: {
+        id: 'be.fileDescriptionInlineErrorTitleMessage',
+        description: 'Inline error title message for file description',
+        defaultMessage: 'Something went wrong when saving the description.'
+    },
+    defaultErrorMaskSubHeaderMessage: {
+        id: 'be.defaultErrorMaskSubHeaderMessage',
+        description: 'Default error mask bottom message',
+        defaultMessage: 'Please refresh the page or try again later.'
+    },
+    versionHistoryErrorHeaderMessage: {
+        id: 'be.versionHistoryErrorHeaderMessage',
+        description: 'Version history error message',
+        defaultMessage: 'Something went wrong when fetching the version history.'
     }
 });
 

@@ -100,7 +100,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.37.1';
+export const DEFAULT_PREVIEW_VERSION = '1.39.2';
 export const DEFAULT_PREVIEW_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -168,3 +168,9 @@ export const SKILL_TRANSCRIPT: 'transcript' = 'transcript';
 export const SKILL_KEYWORD: 'keyword' = 'keyword';
 export const SKILL_TIMELINE: 'timeline' = 'timeline';
 export const SKILL_KEYVALUE: 'keyvalue' = 'keyvalue';
+export const SKILLS_UNAUTHORIZED_REQUEST_ERROR = 'skills_unauthorized_request_error';
+export const SKILLS_FORBIDDEN_REQUEST_ERROR = 'skills_forbidden_request_error';
+export const SKILLS_INVALID_REQUEST_ERROR = 'skills_invalid_request_error';
+export const SKILLS_NOT_FOUND_ERROR = 'skills_not_found_error';
+export const SKILLS_INTERNAL_SERVER_ERROR = 'skills_internal_server_error';
+export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';

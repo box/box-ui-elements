@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render an error from the error code 1`] = `
+<Component
+  errorCode="foo"
+>
+  <error-mask-mock
+    errorHeader={
+      <FormattedMessage
+        defaultMessage="Something went wrong while running this skill or fetching its data."
+        id="be.skillUnknownError"
+      />
+    }
+  />
+</Component>
+`;
+
+exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keyvalues component 1`] = `
+<Keyvalues
+  skill={
+    Object {
+      "skill_card_type": "keyvalue",
+    }
+  }
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keywords component 1`] = `
+<Keywords
+  getPreviewer={[MockFunction]}
+  onInteraction={[Function]}
+  skill={
+    Object {
+      "skill_card_type": "keyword",
+    }
+  }
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render nothing if invalid type 1`] = `""`;
+
+exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render timelines component 1`] = `
+<Timelines
+  getPreviewer={[MockFunction]}
+  onInteraction={[Function]}
+  skill={
+    Object {
+      "skill_card_type": "timeline",
+    }
+  }
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render transcript component 1`] = `
+<Transcript
+  appElement={[MockFunction]}
+  getPreviewer={[MockFunction]}
+  onInteraction={[Function]}
+  rootElement={[MockFunction]}
+  skill={
+    Object {
+      "skill_card_type": "transcript",
+    }
+  }
+/>
+`;
