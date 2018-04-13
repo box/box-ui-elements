@@ -89,8 +89,8 @@ class ContentPreview extends PureComponent<Props, State> {
     previewContainer: ?HTMLDivElement;
     mouseMoveTimeoutID: TimeoutID;
     rootElement: HTMLElement;
-    onError: Function;
-    onMetric: Function;
+    onError: ?Function;
+    onMetric: ?Function;
 
     static defaultProps = {
         className: '',
@@ -360,7 +360,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    onPreviewLoad = (data) => {
+    onPreviewLoad = (data: Object) => {
         const { onLoad, collection }: Props = this.props;
         const currentIndex = this.getFileIndex();
         const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
@@ -534,7 +534,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {number} index - Index of file to preview
      * @return {void}
      */
-    navigateToIndex(index) {
+    navigateToIndex(index: number) {
         const { collection, onNavigate }: Props = this.props;
         const { length } = collection;
         if (length < 2 || index < 0 || index > length - 1) {
@@ -692,7 +692,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    containerRef = (container) => {
+    containerRef = (container: ?HTMLDivElement) => {
         this.previewContainer = container;
     };
 

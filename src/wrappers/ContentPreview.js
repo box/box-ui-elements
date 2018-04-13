@@ -7,7 +7,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
-import { ContentPreview as ContentPreviewResponsive } from '../components/ContentPreview/ContentPreview';
+import ContentPreviewResponsive from '../components/ContentPreview/ContentPreview';
 
 class ContentPreview extends ES6Wrapper {
     /** @inheritdoc */
