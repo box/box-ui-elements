@@ -131,9 +131,7 @@ class ContentPreview extends PureComponent<Props, State> {
             apiHost,
             isSmall,
             requestInterceptor,
-            responseInterceptor,
-            onError,
-            onMetric
+            responseInterceptor
         } = props;
 
         this.state = { showSidebar: hasSidebar && !isSmall };
@@ -148,8 +146,6 @@ class ContentPreview extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor
         });
-        this.onError = onError;
-        this.onMetric = onMetric;
     }
 
     /**
@@ -386,7 +382,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = (): void => {
-        const { token, collection, ...rest }: Props = this.props;
+        const { token, collection, onError, onMetric, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !token || this.preview) {
@@ -406,8 +402,8 @@ class ContentPreview extends PureComponent<Props, State> {
         this.preview = new Preview();
         this.preview.updateFileCache([file]);
         this.preview.addListener('load', this.onPreviewLoad);
-        this.preview.addListener('preview_error', this.onError);
-        this.preview.addListener('preview_metric', this.onMetric);
+        this.preview.addListener('preview_error', onError);
+        this.preview.addListener('preview_metric', onMetric);
         this.preview.show(file.id, token, {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions))
