@@ -4,7 +4,7 @@
  * @author Box
  */
 /* eslint-disable no-use-before-define */
-
+import type { MessageDescriptor } from 'react-intl';
 import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
@@ -348,7 +348,22 @@ export type MultiputData = {
 
 export type FileVersions = {
     total_count: number,
-    entries?: Array<BoxItemVersion>
+    entries: Array<BoxItemVersion>
+};
+
+export type MaskError = {
+    errorHeader: MessageDescriptor,
+    errorSubHeader?: MessageDescriptor
+};
+
+export type InlineError = {
+    title: MessageDescriptor,
+    content: MessageDescriptor
+};
+
+export type Errors = {
+    maskError?: MaskError,
+    inlineError?: InlineError
 };
 
 export type AccessStats = {

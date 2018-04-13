@@ -10,6 +10,8 @@ import { injectIntl } from 'react-intl';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import 'react-virtualized/styles.css';
+import type { InjectIntlProvidedProps } from 'react-intl';
+
 import KeyBinder from '../KeyBinder';
 import headerCellRenderer from './headerCellRenderer';
 import sizeCellRenderer from './sizeCellRenderer';
@@ -52,9 +54,8 @@ type Props = {
     onItemPreview: Function,
     onSortChange: Function,
     tableRef: Function,
-    currentCollection: Collection,
-    intl: any
-};
+    currentCollection: Collection
+} & InjectIntlProvidedProps;
 
 const ItemList = ({
     view,

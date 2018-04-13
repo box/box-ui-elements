@@ -15,7 +15,8 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
-import type { AccessStats, Token, BoxItem, StringMap, FileVersions } from '../../flowTypes';
+import messages from '../messages';
+import type { AccessStats, Token, BoxItem, StringMap, FileVersions, Errors } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -53,7 +54,9 @@ type Props = {
 type State = {
     file?: BoxItem,
     accessStats?: AccessStats,
-    versions?: FileVersions
+    versions?: FileVersions,
+    fileError?: Errors,
+    versionError?: Errors
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -247,7 +250,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 file,
                 newDescription,
                 this.setFileDescriptionSuccessCallback,
-                this.setFileDescriptionFailCallback
+                this.setFileDescriptionErrorCallback
             );
     };
 
@@ -260,7 +263,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     setFileDescriptionSuccessCallback = (file: BoxItem): void => {
         this.onInteraction({ target: 'description-change' });
-        this.setState({ file });
+        this.setState({ file, fileError: undefined });
     };
 
     /**
@@ -271,9 +274,37 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {BoxItem} file - Original file description
      * @return {void}
      */
-    setFileDescriptionFailCallback = (e: Error, file: BoxItem): void => {
+    setFileDescriptionErrorCallback = (e: Error, file: BoxItem): void => {
         // Reset the state back to the original description since the API call failed
-        this.setState({ file });
+        this.setState({
+            file,
+            fileError: {
+                inlineError: {
+                    title: messages.fileDescriptionInlineErrorTitleMessage,
+                    content: messages.defaultInlineErrorContentMessage
+                }
+            }
+        });
+        this.errorCallback(e);
+    };
+
+    /**
+     * Handles a failed file version fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchVersionsErrorCallback = (e: Error) => {
+        this.setState({
+            versions: undefined,
+            versionError: {
+                maskError: {
+                    errorHeader: messages.versionHistoryErrorHeaderMessage,
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
+                }
+            }
+        });
         this.errorCallback(e);
     };
 
@@ -309,7 +340,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchVersionsSuccessCallback = (versions: FileVersions): void => {
-        this.setState({ versions });
+        this.setState({ versions, versionError: undefined });
     };
 
     /**
@@ -335,7 +366,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchVersions(id: string, shouldDestroy?: boolean = false): void {
         if (this.shouldFetchOrRender()) {
-            this.api.getVersionsAPI(shouldDestroy).versions(id, this.fetchVersionsSuccessCallback, this.errorCallback);
+            this.api
+                .getVersionsAPI(shouldDestroy)
+                .versions(id, this.fetchVersionsSuccessCallback, this.fetchVersionsErrorCallback);
         }
     }
 
@@ -349,7 +382,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     render() {
         const {
             language,
-            messages,
+            messages: intlMessages,
             getPreviewer,
             hasTitle,
             hasSkills,
@@ -364,12 +397,13 @@ class ContentSidebar extends PureComponent<Props, State> {
             onVersionHistoryClick,
             onAccessStatsClick
         }: Props = this.props;
-        const { file, accessStats, versions }: State = this.state;
+        const { file, accessStats, versions, fileError, versionError }: State = this.state;
+
         const shouldRender = this.shouldFetchOrRender() && !!file;
 
         return (
-            <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={`be bcs ${className}`}>
+            <Internationalize language={language} messages={intlMessages}>
+                <aside id={this.id} className={`be bcs ${className}`}>
                     <div className='be-app-element'>
                         {shouldRender ? (
                             <Sidebar
@@ -392,6 +426,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onAccessStatsClick={onAccessStatsClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
                                 hasVersions={hasVersions}
+                                fileError={fileError}
+                                versionError={versionError}
                             />
                         ) : (
                             <div className='bcs-loading'>
@@ -399,7 +435,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                             </div>
                         )}
                     </div>
-                </div>
+                </aside>
             </Internationalize>
         );
     }
