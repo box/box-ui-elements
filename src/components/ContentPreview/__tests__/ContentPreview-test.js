@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 
 jest.mock('../../Internationalize', () => 'mock-internationalize');
