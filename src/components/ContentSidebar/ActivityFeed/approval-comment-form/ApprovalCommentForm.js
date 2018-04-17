@@ -13,7 +13,7 @@ import Avatar from 'box-react-ui/lib/components/avatar/Avatar';
 import Form from 'box-react-ui/lib/components/form-elements/form/Form';
 import DraftJSMentionSelector, {
     DraftMentionDecorator
-} from 'box-react-ui/lib/components/form-elements/draft-js-mention-selector/DraftJSMentionSelector';
+} from 'box-react-ui/lib/components/form-elements/draft-js-mention-selector';
 import commonMessages from 'box-react-ui/lib/common/messages';
 
 import AddApproval from './AddApproval';
