@@ -1,12 +1,14 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
+import ClassificationProperty from 'box-react-ui/lib/features/classification/ClassificationProperty';
 import SidebarFileProperties, { SidebarFilePropertiesComponent } from '../SidebarFileProperties';
 import { KEY_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../../constants';
 
 describe('components/ContentSidebar/SidebarFileProperties', () => {
     const getWrapper = (props) => shallow(<SidebarFilePropertiesComponent {...props} />);
+    const getMountWrapper = (props) => mount(<SidebarFilePropertiesComponent {...props} />);
     const props = {
         file: {
             created_at: 'foo',
@@ -28,7 +30,10 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
             locale: 'en'
         }
     };
-    test('should render the versions when total_count > 0', () => {
+
+    jest.mock('box-react-ui/lib/features/classification/ClassificationProperty', () => 'classification-property');
+
+    test('should render ItemProperties', () => {
         const wrapper = getWrapper(props);
 
         expect(wrapper.find(ItemProperties)).toHaveLength(1);
@@ -65,7 +70,7 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
             }
         };
 
-        const wrapper = getWrapper(props);
-        expect(wrapper).toMatchSnapshot();
+        const wrapper = getMountWrapper(props);
+        expect(wrapper.find(ClassificationProperty)).toHaveLength(1);
     });
 });
