@@ -3,8 +3,7 @@
  * @file PendingAssignment component
  */
 
-import React from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
@@ -21,7 +20,7 @@ type Props = {
     shouldShowActions: boolean
 };
 
-const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActions }: Props): Node => (
+const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActions }: Props): React.Node => (
     <div className='bcs-task-pending-assignment'>
         <div className='bcs-task-assignment-name'>{name}</div>
         {shouldShowActions ? (

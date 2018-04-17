@@ -3,8 +3,7 @@
  * @file Comment component
  */
 
-import React, { Component } from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
@@ -56,7 +55,7 @@ type State = {
     isInputOpen?: boolean
 };
 
-class Comment extends Component<Props, State> {
+class Comment extends React.Component<Props, State> {
     static displayName = 'Comment';
 
     state = {
@@ -89,7 +88,7 @@ class Comment extends Component<Props, State> {
         this.setState({ isFocused: false });
     };
 
-    render(): Node {
+    render(): React.Node {
         const {
             createdBy,
             createdAt,

@@ -3,8 +3,7 @@
  * @file Version component
  */
 
-import React from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
@@ -15,7 +14,7 @@ import type { User } from '../../../../flowTypes';
 
 import './Version.scss';
 
-function getMessageForAction(name: Node, action: string, versionNumber: number): Node {
+function getMessageForAction(name: React.Node, action: string, versionNumber: number): React.Node {
     switch (action) {
         case 'upload':
             return (
@@ -61,7 +60,7 @@ type Props = {
     versionNumber: number
 };
 
-const Version = ({ action, createdBy, id, intl, onInfo, versionNumber }: Props): Node => (
+const Version = ({ action, createdBy, id, intl, onInfo, versionNumber }: Props): React.Node => (
     <div className='bcs-version'>
         <span className='bcs-version-message'>{getMessageForAction(createdBy.name, action, versionNumber)}</span>
         {onInfo ? (

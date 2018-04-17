@@ -3,8 +3,8 @@
  * @file Component for Activity feed
  */
 
-import React, { Component } from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
+import getProp from 'lodash/get';
 
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
@@ -87,7 +87,7 @@ type State = {
     isInputOpen: boolean
 };
 
-class ActivityFeed extends Component<Props, State> {
+class ActivityFeed extends React.Component<Props, State> {
     static defaultProps = {
         isLoading: false,
         feedState: []
@@ -118,16 +118,16 @@ class ActivityFeed extends Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    render(): Node {
+    render(): React.Node {
         const { feedState, handlers, inputState, isLoading, translations } = this.props;
         const { isInputOpen } = this.state;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
-        const showApprovalCommentForm = !!(handlers && handlers.comments && handlers.comments.create);
-        const onTaskAssignmentUpdate = handlers && handlers.tasks && handlers.tasks.onTaskAssignmentUpdate;
-        const commentDeleteHandler = handlers && handlers.comments && handlers.comments.delete;
-        const taskDeleteHandler = handlers && handlers.tasks && handlers.tasks.delete;
-        const taskEditHandler = handlers && handlers.tasks && handlers.tasks.edit;
-        const versionInfoHandler = handlers && handlers.versions && handlers.versions.info;
+        const showApprovalCommentForm = !!getProp(handlers, 'comments.create', false);
+        const onTaskAssignmentUpdate = getProp(handlers, 'tasks.onTaskAssignmentUpdate');
+        const commentDeleteHandler = getProp(handlers, 'comments.delete');
+        const taskDeleteHandler = getProp(handlers, 'tasks.delete');
+        const taskEditHandler = getProp(handlers, 'tasks.edit');
+        const versionInfoHandler = getProp(handlers, 'versions.info');
 
         return (
             // eslint-disable-next-line

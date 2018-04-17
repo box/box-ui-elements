@@ -4,8 +4,7 @@
  * @file IconActivityFeedEmptyState icon component
  */
 
-import React from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 
 import AccessibleSVG from 'box-react-ui/lib/icons/accessible-svg';
 
@@ -15,7 +14,7 @@ type Props = {
     height?: number
 };
 
-const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }: Props): Node => (
+const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }: Props): React.Node => (
     <AccessibleSVG
         className={`bcs-activity-feed-empty-state-illustration ${className}`}
         width={width}

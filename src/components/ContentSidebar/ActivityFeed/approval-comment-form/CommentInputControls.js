@@ -3,8 +3,7 @@
  * @file Comment Input Controls components for ApprovalCommentForm
  */
 
-import React from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from 'box-react-ui/lib/components/button/Button';
@@ -16,7 +15,7 @@ type Props = {
     onCancel: Function
 };
 
-const CommentInputControls = ({ onCancel }: Props): Node => (
+const CommentInputControls = ({ onCancel }: Props): React.Node => (
     <div className='bcs-comment-input-controls'>
         <Button className='bcs-comment-input-cancel-btn' onClick={onCancel} type='button'>
             <FormattedMessage {...messages.commentCancel} />

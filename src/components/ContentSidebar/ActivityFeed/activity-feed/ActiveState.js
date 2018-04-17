@@ -2,7 +2,7 @@
  * @flow
  * @file Active state component for Activity Feed
  */
-import React from 'react';
+import * as React from 'react';
 import type { Node } from 'react';
 
 import Comment from '../comment';
@@ -44,12 +44,14 @@ const ActiveState = ({
 }: Props): Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
-            switch (item.type) {
+            const { type, id, errorCode, versions } = item;
+
+            switch (type) {
                 case 'comment':
                     return (
-                        <li className='bcs-activity-feed-comment' key={item.type + item.id}>
+                        <li className='bcs-activity-feed-comment' key={type + id}>
                             <Comment
-                                id={item.id}
+                                id={id}
                                 currentUser={currentUser}
                                 onDelete={onCommentDelete}
                                 {...item}
@@ -61,7 +63,7 @@ const ActiveState = ({
                     );
                 case 'task':
                     return (
-                        <li className='bcs-activity-feed-task' key={item.type + item.id}>
+                        <li className='bcs-activity-feed-task' key={type + id}>
                             <Task
                                 currentUser={currentUser}
                                 {...item}
@@ -76,8 +78,8 @@ const ActiveState = ({
                     );
                 case 'file_version':
                     return (
-                        <li className='bcs-version-item' key={item.type + item.id}>
-                            {item.versions ? (
+                        <li className='bcs-version-item' key={type + id}>
+                            {versions ? (
                                 <CollapsedVersion {...item} onInfo={onVersionInfo} />
                             ) : (
                                 <Version {...item} onInfo={onVersionInfo} />
@@ -86,18 +88,18 @@ const ActiveState = ({
                     );
                 case 'file_version_error':
                     // we currently only display this if errorCode is tooManyVersions
-                    if (item.errorCode !== 'tooManyVersions') {
+                    if (errorCode !== 'tooManyVersions') {
                         return null;
                     }
                     return (
-                        <li className='bcs-version-item' key={item.type + item.errorCode}>
-                            {<VersionError {...item} />}
+                        <li className='bcs-version-item' key={type + errorCode}>
+                            <VersionError {...item} />
                         </li>
                     );
                 case 'keywords':
                     return (
-                        <li className='bcs-keywords-item' key={item.type + item.id}>
-                            {<Keywords {...item} />}
+                        <li className='bcs-keywords-item' key={type + id}>
+                            <Keywords {...item} />
                         </li>
                     );
                 default:

@@ -3,8 +3,7 @@
  * @file Inline Delete component
  */
 
-import React, { Component } from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 import classNames from 'classnames';
 
@@ -18,14 +17,14 @@ type Props = {
     onDelete: Function,
     id: string,
     intl: intlShape.isRequired,
-    message: Node
+    message: React.Node
 };
 
 type State = {
     isConfirming?: boolean
 };
 
-class InlineDelete extends Component<Props, State> {
+class InlineDelete extends React.Component<Props, State> {
     state = {
         isConfirming: false
     };
@@ -43,7 +42,7 @@ class InlineDelete extends Component<Props, State> {
         this.setState({ isConfirming: false });
     };
 
-    render(): Node {
+    render(): React.Node {
         const { intl, message } = this.props;
         return (
             <div

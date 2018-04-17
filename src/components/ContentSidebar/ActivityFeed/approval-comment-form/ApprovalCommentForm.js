@@ -3,8 +3,7 @@
  * @file Component for Approval comment form
  */
 
-import React, { Component } from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 import cx from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
@@ -52,7 +51,7 @@ type State = {
     isAddApprovalVisible: boolean
 };
 
-class ApprovalCommentForm extends Component<Props, State> {
+class ApprovalCommentForm extends React.Component<Props, State> {
     static defaultProps = {
         isOpen: false
     };
@@ -180,7 +179,7 @@ class ApprovalCommentForm extends Component<Props, State> {
         this.setState({ approvers });
     };
 
-    render(): Node {
+    render(): React.Node {
         const {
             approverSelectorContacts,
             className,

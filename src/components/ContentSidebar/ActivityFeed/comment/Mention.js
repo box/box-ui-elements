@@ -3,16 +3,15 @@
  * @file Mention component
  */
 
-import React from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 
 type Props = {
-    children?: Node,
+    children?: React.Node,
     id: number,
     mentionTrigger?: any
 };
 
-const Mention = ({ children, id, ...rest }: Props): Node => {
+const Mention = ({ children, id, ...rest }: Props): React.Node => {
     delete rest.mentionTrigger;
     return (
         <a {...rest} style={{ display: 'inline-block' }} href={`/profile/${id}`}>

@@ -3,8 +3,7 @@
  * @file Show Original button component used by Comment Text component
  */
 
-import React from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
@@ -15,7 +14,7 @@ type Props = {
     handleShowOriginal: Function
 };
 
-const ShowOriginalButton = ({ handleShowOriginal }: Props): Node => (
+const ShowOriginalButton = ({ handleShowOriginal }: Props): React.Node => (
     <PlainButton className='bcs-comment-translate' onClick={handleShowOriginal}>
         <FormattedMessage {...messages.commentShowOriginal} />
     </PlainButton>
