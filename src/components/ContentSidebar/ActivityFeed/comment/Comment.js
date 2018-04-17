@@ -56,8 +56,6 @@ type State = {
 };
 
 class Comment extends React.Component<Props, State> {
-    static displayName = 'Comment';
-
     state = {
         isEditing: false,
         isFocused: false,

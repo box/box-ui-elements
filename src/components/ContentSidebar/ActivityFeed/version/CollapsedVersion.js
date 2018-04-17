@@ -100,7 +100,5 @@ const CollapsedVersion = ({
     </div>
 );
 
-CollapsedVersion.displayName = 'CollapsedVersion';
-
 export { CollapsedVersion as CollapsedVersionBase };
 export default injectIntl(CollapsedVersion);

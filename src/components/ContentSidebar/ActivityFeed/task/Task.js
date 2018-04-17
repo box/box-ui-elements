@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
 
 import Comment from '../comment';
 import CompletedAssignment from './CompletedAssignment';
@@ -76,7 +77,7 @@ class Task extends React.Component<Props> {
             translations
         } = this.props;
         return (
-            <div className={`bcs-task ${isPending || error ? 'bcs-is-pending' : ''}`}>
+            <div className={classNames('bcs-task', { 'bcs-is-pending': isPending || error })}>
                 <Comment
                     createdAt={createdAt}
                     createdBy={createdBy}

@@ -40,6 +40,4 @@ const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActio
     </div>
 );
 
-PendingAssignment.displayName = 'PendingAssignment';
-
 export default PendingAssignment;

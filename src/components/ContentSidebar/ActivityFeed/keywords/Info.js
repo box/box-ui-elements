@@ -29,6 +29,4 @@ const Info = ({ words }: Props): React.Node => (
     </span>
 );
 
-Info.displayName = 'Info';
-
 export default Info;

@@ -80,7 +80,5 @@ const Version = ({ action, createdBy, id, intl, onInfo, versionNumber }: Props):
     </div>
 );
 
-Version.displayName = 'Version';
-
 export { Version as VersionBase };
 export default injectIntl(Version);

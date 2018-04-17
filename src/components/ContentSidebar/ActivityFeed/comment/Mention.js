@@ -20,6 +20,4 @@ const Mention = ({ children, id, ...rest }: Props): React.Node => {
     );
 };
 
-Mention.displayName = 'Mention';
-
 export default Mention;

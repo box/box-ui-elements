@@ -29,6 +29,4 @@ const VersionError = ({ errorCode }: Props): React.Node => (
     </div>
 );
 
-VersionError.displayName = 'VersionError';
-
 export default VersionError;

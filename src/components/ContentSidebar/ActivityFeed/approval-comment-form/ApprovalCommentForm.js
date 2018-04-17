@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import cx from 'classnames';
+import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
 
@@ -197,12 +197,12 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         } = this.props;
         const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
         const { avatarUrl, id, name } = user;
-        const classNames = cx('bcs-comment-input-container', className, {
+        const inputContainerClassNames = classNames('bcs-comment-input-container', className, {
             'bcs-comment-input-is-open': isOpen
         });
 
         return (
-            <div className={classNames}>
+            <div className={inputContainerClassNames}>
                 {!isEditing && (
                     <div className='bcs-avatar-container'>
                         <Avatar id={id} avatarUrl={avatarUrl} name={name} />
@@ -226,7 +226,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             validateOnBlur={false}
                         />
                         <aside
-                            className={cx('bcs-at-mention-tip', {
+                            className={classNames('bcs-at-mention-tip', {
                                 'bcs-accessibility-hidden': isOpen
                             })}
                         >

@@ -136,6 +136,4 @@ const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }:
     </AccessibleSVG>
 );
 
-IconActivityFeedEmptyState.displayName = 'IconActivityFeedEmptyState';
-
 export default IconActivityFeedEmptyState;

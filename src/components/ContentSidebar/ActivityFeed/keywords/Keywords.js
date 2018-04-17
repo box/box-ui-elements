@@ -32,6 +32,4 @@ const Keywords = ({ action, words }: Props): React.Node => (
     </div>
 );
 
-Keywords.displayName = 'Keywords';
-
 export default Keywords;
