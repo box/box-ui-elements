@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
@@ -16,7 +16,7 @@ import messages from '../../../messages';
 type Props = {
     onDelete: Function,
     id: string,
-    intl: intlShape.isRequired,
+    intl: any,
     message: React.Node
 };
 

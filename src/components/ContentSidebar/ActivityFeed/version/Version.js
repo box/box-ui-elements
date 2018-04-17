@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
@@ -55,7 +55,7 @@ type Props = {
     action: 'delete' | 'restore' | 'upload',
     createdBy: User,
     id: string,
-    intl: intlShape.isRequired,
+    intl: any,
     onInfo: Function,
     versionNumber: number
 };

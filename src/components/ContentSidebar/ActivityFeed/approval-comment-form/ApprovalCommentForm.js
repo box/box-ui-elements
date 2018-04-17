@@ -6,7 +6,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Avatar from 'box-react-ui/lib/components/avatar/Avatar';
 import Form from 'box-react-ui/lib/components/form-elements/form/Form';
@@ -30,7 +30,7 @@ type Props = {
     updateTask: Function,
     getApproverContactsWithQuery: Function,
     getMentionContactsWithQuery: Function,
-    intl: intlShape.isRequired,
+    intl: any,
     isDisabled: boolean,
     isOpen: boolean,
     mentionSelectorContacts: SelectorItems,

@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
@@ -63,7 +63,7 @@ function getMessageForAction(
 type Props = {
     action: 'upload',
     collaborators: { [collaborator_id: string]: User },
-    intl: intlShape.isRequired,
+    intl: any,
     onInfo: Function,
     versions: FileVersions,
     versionStart: number,

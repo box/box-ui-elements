@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconPencil from 'box-react-ui/lib/icons/general/IconPencil';
@@ -14,7 +14,7 @@ import messages from '../../../messages';
 type Props = {
     toEdit: Function,
     id: Function,
-    intl: intlShape.isRequired
+    intl: any
 };
 
 class InlineEdit extends React.Component<Props> {
