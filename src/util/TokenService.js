@@ -5,52 +5,27 @@
  */
 
 import { TYPED_ID_FOLDER_PREFIX, TYPED_ID_FILE_PREFIX } from '../constants';
-import type { Token } from '../flowTypes';
-
-type TokenMap = { [string]: Token };
+import type { Token, TokenLiteral } from '../flowTypes';
 
 const error = new Error(
     'Bad id or auth token. ID should be typed id like file_123 or folder_123! Token should be a string or function.'
 );
 
-/**
- * Helper function to create token map used below.
- * Maps one or more tokens to multiple files.
- *
- * @private
- * @param {Array} ids - Box file IDs
- * @param {string} [tokenOrTokens] - Single token or map
- * @return {Object} ID to token map
- */
-function createIdTokenMap(ids, tokenOrTokens) {
-    const tokenMap = {};
-    ids.forEach((id) => {
-        if (!tokenOrTokens || typeof tokenOrTokens === 'string') {
-            // All files use the same string or null or undefined token
-            tokenMap[id] = tokenOrTokens;
-        } else if (typeof tokenOrTokens === 'object') {
-            // Map ids and tokens to ids and tokens
-            tokenMap[id] = tokenOrTokens[id];
-        }
-    });
-    return tokenMap;
-}
 class TokenService {
     /**
-     * Gets one token.
-     * The token can either be a simple string or a function that returns
-     * a promise which resolves to a key value map where key is the file
-     * id and value is the token. The function accepts either a simple id
-     * or an array of file ids. The token can also be null or undefined.
+     * Function to fetch a single token. The user supplied token can either
+     * itself be a simple token or instead be a function that returns a promise.
+     * This promise then resolves to either a string/null/undefined token or
+     * a read/write token pair.
      *
      * @private
      * @param {string} id - box item typed id
      * @param {string} tokenOrTokenFunction - Optional token or token function
      * @return {Promise} that resolves to a token
      */
-    static getToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
+    static async getToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
         // Make sure we are getting typed ids
-        // Tokens should either be null or undefuned or string or functions
+        // Tokens should either be null or undefined or string or functions
         // Anything else is not supported and throw error
         if (
             (tokenOrTokenFunction !== null &&
@@ -59,44 +34,74 @@ class TokenService {
                 typeof tokenOrTokenFunction !== 'function') ||
             (!id.startsWith(TYPED_ID_FOLDER_PREFIX) && !id.startsWith(TYPED_ID_FILE_PREFIX))
         ) {
-            return Promise.reject(error);
+            throw error;
         }
 
         // Token is a simple string or null or undefined
         if (!tokenOrTokenFunction || typeof tokenOrTokenFunction === 'string') {
-            return Promise.resolve(tokenOrTokenFunction);
+            return tokenOrTokenFunction;
         }
 
-        // Token is a function which returns a promise
-        // that on resolution returns an id to token map.
-        return new Promise(async (resolve: Function, reject: Function) => {
-            // $FlowFixMe Already checked null above
-            const token = await tokenOrTokenFunction(id);
-            if (!token || typeof token === 'string') {
-                resolve(token);
-            } else if (typeof token === 'object') {
-                resolve(token[id]);
-            } else {
-                reject(error);
-            }
-        });
+        // Token is a function which returns a promise.
+        // Promise on resolution returns a string/null/undefined token or token pair.
+        const token = await tokenOrTokenFunction(id);
+        if (!token || typeof token === 'string' || (typeof token === 'object' && (token.read || token.write))) {
+            return token;
+        }
+
+        throw error;
     }
 
     /**
-     * Gets multiple tokens.
-     * The token can either be a simple string or a function that returns
-     * a promise which resolves to a key value map where key is the file
-     * id and value is the token. The function accepts either a simple id
-     * or an array of file ids. The token can also be null or undefined.
+     * Gets a string read token.
+     * Defaults to a simple token string.
      *
-     * @private
+     * @public
+     * @param {string} id - box item typed id
+     * @param {string} tokenOrTokenFunction - Optional token or token function
+     * @return {Promise} that resolves to a token
+     */
+    static async getReadToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
+        const token: TokenLiteral = await TokenService.getToken(id, tokenOrTokenFunction);
+        if (token && typeof token === 'object') {
+            return token.read;
+        }
+        return token;
+    }
+
+    /**
+     * Gets a string write token.
+     * Defaults to either the read token or a simple token string.
+     *
+     * @public
+     * @param {string} id - box item typed id
+     * @param {string} tokenOrTokenFunction - Optional token or token function
+     * @return {Promise} that resolves to a token
+     */
+    static async getWriteToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
+        const token: TokenLiteral = await TokenService.getToken(id, tokenOrTokenFunction);
+        if (token && typeof token === 'object') {
+            return token.write || token.read;
+        }
+        return token;
+    }
+
+    /**
+     * Function to fetch and cache multiple tokens. The user supplied token can either
+     * itself be a simple token or instead be a function that returns a promise.
+     * This promise then resolves signifying requested tokens were cached.
+     *
+     * This function however does not return tokens as it is expected to only be used
+     * by the token generator to cache all tokens that may be needed in the future.
+     *
+     * @public
      * @param {Array<string>} idd - box item typed ids
      * @param {string} tokenOrTokenFunction - Optional token or token function
      * @return {Promise<TokenMap>} that resolves to a token map
      */
-    static getTokens(ids: Array<string>, tokenOrTokenFunction: Token): Promise<TokenMap> {
+    static async cacheTokens(ids: Array<string>, tokenOrTokenFunction: Token): Promise<void> {
         // Make sure we are getting typed ids
-        // Tokens should either be null or undefuned or string or functions
+        // Tokens should either be null or undefined or string or functions
         // Anything else is not supported and throw error
         if (
             (tokenOrTokenFunction !== null &&
@@ -105,25 +110,16 @@ class TokenService {
                 typeof tokenOrTokenFunction !== 'function') ||
             !ids.every((itemId) => itemId.startsWith(TYPED_ID_FOLDER_PREFIX) || itemId.startsWith(TYPED_ID_FILE_PREFIX))
         ) {
-            return Promise.reject(error);
+            throw error;
         }
 
-        // Token is a simple string or null or undefined
-        if (!tokenOrTokenFunction || typeof tokenOrTokenFunction === 'string') {
-            return Promise.resolve(createIdTokenMap(ids, tokenOrTokenFunction));
+        // Only need to fetch and cache multiple tokens when the user supplied token was a
+        // token function. This function should internally cache the tokens for future use.
+        if (typeof tokenOrTokenFunction === 'function') {
+            await tokenOrTokenFunction(ids);
         }
 
-        // Token is a function which returns a promise
-        // that on resolution returns an id to token map.
-        return new Promise(async (resolve: Function, reject: Function) => {
-            // $FlowFixMe Already checked null above
-            const token = await tokenOrTokenFunction(ids);
-            if (!token || typeof token === 'object' || typeof token === 'string') {
-                resolve(createIdTokenMap(ids, token));
-            } else {
-                reject(error);
-            }
-        });
+        return Promise.resolve();
     }
 }
 

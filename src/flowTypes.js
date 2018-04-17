@@ -54,6 +54,8 @@ import {
 
 export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
 export type Token = null | typeof undefined | string | Function;
+export type TokenReadWrite = { read: string, write?: string };
+export type TokenLiteral = null | typeof undefined | string | TokenReadWrite;
 export type ClassComponent<P, S> = Class<React$Component<P, S>>;
 export type StringMap = { [string]: string };
 export type StringAnyMap = { [string]: any };
