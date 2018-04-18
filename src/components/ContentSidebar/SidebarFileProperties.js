@@ -11,14 +11,23 @@ import ItemProperties from 'box-react-ui/lib/features/item-details/ItemPropertie
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
 import type { BoxItem } from '../../flowTypes';
+import { KEY_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
 
 type Props = {
     file: BoxItem,
     onDescriptionChange: Function,
+    hasClassification: Boolean,
+    onClassificationClick: ?Function,
     intl: any
 };
 
-const SidebarFileProperties = ({ file, onDescriptionChange, intl }: Props) => (
+const SidebarFileProperties = ({
+    file,
+    onDescriptionChange,
+    hasClassification,
+    onClassificationClick,
+    intl
+}: Props) => (
     <ItemProperties
         createdAt={file.created_at}
         description={file.description}
@@ -27,6 +36,14 @@ const SidebarFileProperties = ({ file, onDescriptionChange, intl }: Props) => (
         size={getFileSize(file.size, intl.locale)}
         uploader={getProp(file, 'created_by.name')}
         onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
+        classificationProps={
+            hasClassification
+                ? {
+                    openModal: onClassificationClick,
+                    value: getProp(file, `metadata.enterprise.${KEY_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`)
+                }
+                : {}
+        }
     />
 );
 

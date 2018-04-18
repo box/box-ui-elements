@@ -85,6 +85,7 @@ export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
 export const FIELD_FILE_VERSION = 'file_version';
 export const FIELD_IS_DOWNLOAD_AVAILABLE = 'is_download_available';
 export const METADATA_SKILLS = 'metadata.global.boxSkillsCards';
+export const METADATA_CLASSIFICATION = 'metadata.enterprise.securityClassification-6VMVochwUWo';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -174,3 +175,7 @@ export const SKILLS_INVALID_REQUEST_ERROR = 'skills_invalid_request_error';
 export const SKILLS_NOT_FOUND_ERROR = 'skills_not_found_error';
 export const SKILLS_INTERNAL_SERVER_ERROR = 'skills_internal_server_error';
 export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
+
+/* ------------------ Metadata  ---------------------- */
+export const KEY_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
+export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';

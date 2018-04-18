@@ -78,11 +78,15 @@
                     hasAccessStats: true,
                     hasVersions: true,
                     hasNotices: true,
+                    hasClassification: true,
                     onVersionHistoryClick : function(){
                         alert('hello, world!');
                     },
                     onAccessStatsClick: () => {
                         alert('Hello, world!');
+                    },
+                    onClassificationClick: () => {
+                        alert('classification popup should open');
                     }
                 });
 
@@ -95,7 +99,8 @@
                     hasNotices: true,
                     hasVersions: true,
                     hasAccessStats: true,
-                    hasNotices: true
+                    hasNotices: true,
+                    hasClassification: true
                 });
 
                 const sidebar3 = new ContentSidebar();
@@ -134,7 +139,7 @@
                     hasActivityFeed: true,
                     hasSkills: true,
                     hasNotices: true,
-                    hasVersions: true
+                    hasVersions: true,
                 });
             }
             load();
