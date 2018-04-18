@@ -12,7 +12,7 @@ exports[`components/ContentSidebar/ActivityFeed/keywords/Keywords should correct
     text={
       <FormattedMessage
         defaultMessage="Keywords: {words}"
-        id="be.activityFeed.keywordsList"
+        id="be.keywordsList"
         values={
           Object {
             "words": "cartoon font logo",
@@ -43,7 +43,7 @@ exports[`components/ContentSidebar/ActivityFeed/keywords/Keywords should correct
   >
     <FormattedMessage
       defaultMessage="Keywords were applied"
-      id="be.activityFeed.keywordsAppliedList"
+      id="be.keywordsAppliedList"
     />
   </span>
   <Info
@@ -61,7 +61,7 @@ exports[`components/ContentSidebar/ActivityFeed/keywords/Keywords should not ren
   >
     <FormattedMessage
       defaultMessage="Keywords were applied"
-      id="be.activityFeed.keywordsAppliedList"
+      id="be.keywordsAppliedList"
     />
   </span>
 </div>

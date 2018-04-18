@@ -32,7 +32,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/InlineDelete should corr
         >
           <FormattedMessage
             defaultMessage="Yes"
-            id="be.activityFeed.commentDeleteConfirm"
+            id="be.commentDeleteConfirm"
           />
         </PlainButton>
          / 
@@ -42,7 +42,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/InlineDelete should corr
         >
           <FormattedMessage
             defaultMessage="No"
-            id="be.activityFeed.commentDeleteCancel"
+            id="be.commentDeleteCancel"
           />
         </PlainButton>
       </div>

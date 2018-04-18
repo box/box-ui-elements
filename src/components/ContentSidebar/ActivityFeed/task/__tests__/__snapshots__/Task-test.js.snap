@@ -2,7 +2,7 @@
 
 exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly render task 1`] = `
 <div
-  className="bcs-task "
+  className="bcs-task"
 >
   <mock-comment
     createdAt={12345678}
@@ -30,7 +30,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly rende
       <strong>
         <FormattedMessage
           defaultMessage="Tasks"
-          id="be.activityFeed.tasksForApproval"
+          id="be.tasksForApproval"
         />
       </strong>
       <span
@@ -38,7 +38,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly rende
       >
         <FormattedMessage
           defaultMessage="Due"
-          id="be.activityFeed.taskDueDate"
+          id="be.taskDueDate"
         />
         <FormattedDate
           day="numeric"
@@ -70,7 +70,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly rende
 
 exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due date when not passed in 1`] = `
 <div
-  className="bcs-task "
+  className="bcs-task"
 >
   <mock-comment
     createdAt={12345678}
@@ -98,7 +98,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
       <strong>
         <FormattedMessage
           defaultMessage="Tasks"
-          id="be.activityFeed.tasksForApproval"
+          id="be.tasksForApproval"
         />
       </strong>
     </div>
@@ -124,7 +124,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
 
 exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions for current user and if onTaskAssignmentUpdate is defined 1`] = `
 <div
-  className="bcs-task "
+  className="bcs-task"
 >
   <mock-comment
     createdAt={12345678}
@@ -152,7 +152,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions fo
       <strong>
         <FormattedMessage
           defaultMessage="Tasks"
-          id="be.activityFeed.tasksForApproval"
+          id="be.tasksForApproval"
         />
       </strong>
       <span
@@ -160,7 +160,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions fo
       >
         <FormattedMessage
           defaultMessage="Due"
-          id="be.activityFeed.taskDueDate"
+          id="be.taskDueDate"
         />
         <FormattedDate
           day="numeric"
@@ -210,7 +210,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show tooltips w
       text={
         <FormattedMessage
           defaultMessage="Complete"
-          id="be.activityFeed.taskApprove"
+          id="be.taskApprove"
         />
       }
       theme="default"
@@ -233,7 +233,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show tooltips w
       text={
         <FormattedMessage
           defaultMessage="Decline"
-          id="be.activityFeed.taskReject"
+          id="be.taskReject"
         />
       }
       theme="default"

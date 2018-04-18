@@ -9,7 +9,7 @@ exports[`components/ContentSidebar/ActivityFeed/version/CollapsedVersion should 
   >
     <FormattedMessage
       defaultMessage="{numberOfCollaborators} collaborators uploaded versions {versions}"
-      id="be.activityFeed.versionMultipleUsersUploaded"
+      id="be.versionMultipleUsersUploaded"
       values={
         Object {
           "numberOfCollaborators": 2,
@@ -46,7 +46,7 @@ exports[`components/ContentSidebar/ActivityFeed/version/CollapsedVersion should 
   >
     <FormattedMessage
       defaultMessage="{name} uploaded versions {versions}"
-      id="be.activityFeed.versionUploadCollapsed"
+      id="be.versionUploadCollapsed"
       values={
         Object {
           "name": <strong>

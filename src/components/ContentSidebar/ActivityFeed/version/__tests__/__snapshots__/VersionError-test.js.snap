@@ -9,7 +9,7 @@ exports[`components/ContentSidebar/ActivityFeed/version/VersionError should corr
   >
     <FormattedMessage
       defaultMessage="Multiple versions of this file"
-      id="be.activityFeed.versionTooManyVersions"
+      id="be.versionTooManyVersions"
     />
   </span>
 </div>
