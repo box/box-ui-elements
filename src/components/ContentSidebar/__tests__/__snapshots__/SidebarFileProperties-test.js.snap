@@ -1,11 +1,177 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/ContentSidebar/SidebarFileProperties should not render classification information if no props are included 1`] = `
+<SidebarFileProperties
+  file={
+    Object {
+      "created_at": "2018-04-18T16:56:05.352Z",
+      "created_by": Object {
+        "name": "foo",
+      },
+      "description": "foo",
+      "modified_at": "2018-04-18T16:56:05.352Z",
+      "owned_by": Object {
+        "name": "foo",
+      },
+      "permissions": Object {
+        "can_rename": true,
+      },
+      "size": "1",
+    }
+  }
+  hasClassification={false}
+  intl={
+    Object {
+      "locale": "en",
+    }
+  }
+  onDescriptionChange={[MockFunction]}
+>
+  <ItemProperties
+    classificationProps={Object {}}
+    createdAt="2018-04-18T16:56:05.352Z"
+    description="foo"
+    modifiedAt="2018-04-18T16:56:05.352Z"
+    onDescriptionChange={[MockFunction]}
+    owner="foo"
+    size="1 B"
+    uploader="foo"
+  >
+    <dl
+      className="item-properties"
+    >
+      <FormattedMessage
+        defaultMessage="Description"
+        id="boxui.itemDetails.description"
+        tagName="dt"
+      >
+        <div />
+      </FormattedMessage>
+      <dd>
+        <EditableDescription
+          onDescriptionChange={[MockFunction]}
+          textAreaProps={Object {}}
+          value="foo"
+        >
+          <EditableDescription
+            intl={
+              Object {
+                "formatDate": [Function],
+                "formatMessage": [Function],
+              }
+            }
+            onDescriptionChange={[MockFunction]}
+            textAreaProps={Object {}}
+            value="foo"
+          >
+            <TextareaAutosize
+              className="description-textarea"
+              maxLength="255"
+              maxRows={6}
+              onBlur={[Function]}
+              onChange={[Function]}
+              onHeightChange={[Function]}
+              placeholder="Enter a description"
+              useCacheForDOMMeasurements={false}
+              value="foo"
+            >
+              <textarea
+                className="description-textarea"
+                maxLength="255"
+                onBlur={[Function]}
+                onChange={[Function]}
+                placeholder="Enter a description"
+                style={
+                  Object {
+                    "height": -24,
+                  }
+                }
+                value="foo"
+              />
+            </TextareaAutosize>
+          </EditableDescription>
+        </EditableDescription>
+      </dd>
+      <FormattedMessage
+        defaultMessage="Owner"
+        id="boxui.itemDetails.owner"
+        tagName="dt"
+      >
+        <div />
+      </FormattedMessage>
+      <dd>
+        foo
+      </dd>
+      <FormattedMessage
+        defaultMessage="Uploader"
+        id="boxui.itemDetails.uploader"
+        tagName="dt"
+      >
+        <div />
+      </FormattedMessage>
+      <dd>
+        foo
+      </dd>
+      <FormattedMessage
+        defaultMessage="Created"
+        id="boxui.itemDetails.created"
+        tagName="dt"
+      >
+        <div />
+      </FormattedMessage>
+      <dd>
+        <FormattedDate
+          day="numeric"
+          hour="numeric"
+          minute="numeric"
+          month="short"
+          value={2018-04-18T16:56:05.352Z}
+          year="numeric"
+        >
+          <div />
+        </FormattedDate>
+      </dd>
+      <FormattedMessage
+        defaultMessage="Modified"
+        id="boxui.itemDetails.modified"
+        tagName="dt"
+      >
+        <div />
+      </FormattedMessage>
+      <dd>
+        <FormattedDate
+          day="numeric"
+          hour="numeric"
+          minute="numeric"
+          month="short"
+          value={2018-04-18T16:56:05.352Z}
+          year="numeric"
+        >
+          <div />
+        </FormattedDate>
+      </dd>
+      <FormattedMessage
+        defaultMessage="Size"
+        id="boxui.itemDetails.size"
+        tagName="dt"
+      >
+        <div />
+      </FormattedMessage>
+      <dd>
+        1 B
+      </dd>
+      <ClassificationProperty />
+    </dl>
+  </ItemProperties>
+</SidebarFileProperties>
+`;
+
 exports[`components/ContentSidebar/SidebarFileProperties should render ItemProperties 1`] = `
 <ItemProperties
   classificationProps={Object {}}
-  createdAt="foo"
+  createdAt="2018-04-18T16:56:05.352Z"
   description="foo"
-  modifiedAt="foo"
+  modifiedAt="2018-04-18T16:56:05.352Z"
   onDescriptionChange={[MockFunction]}
   owner="foo"
   size="1 B"
@@ -39,4 +205,176 @@ exports[`components/ContentSidebar/SidebarFileProperties should render an error 
     }
   />
 </React.Fragment>
+`;
+
+exports[`components/ContentSidebar/SidebarFileProperties should render classification information when given proper metadata and callback 1`] = `
+<SidebarFileProperties
+  file={
+    Object {
+      "metadata": Object {
+        "enterprise": Object {
+          "securityClassification-6VMVochwUWo": Object {
+            "Box__Security__Classification__Key": "Public",
+          },
+        },
+      },
+      "size": "1",
+    }
+  }
+  hasClassification={true}
+  intl={
+    Object {
+      "locale": "en",
+    }
+  }
+  onClassificationClick={[MockFunction]}
+>
+  <ItemProperties
+    classificationProps={
+      Object {
+        "openModal": [MockFunction],
+        "value": "Public",
+      }
+    }
+    size="1 B"
+  >
+    <dl
+      className="item-properties"
+    >
+      <FormattedMessage
+        defaultMessage="Size"
+        id="boxui.itemDetails.size"
+        tagName="dt"
+      >
+        <div />
+      </FormattedMessage>
+      <dd>
+        1 B
+      </dd>
+      <ClassificationProperty
+        openModal={[MockFunction]}
+        value="Public"
+      >
+        <FormattedMessage
+          defaultMessage="Classification"
+          id="boxui.classification.classification"
+          tagName="dt"
+        >
+          <div />
+        </FormattedMessage>
+        <dd>
+          <div
+            className="mbs"
+          >
+            <ClassificationBadge
+              tooltipPosition="middle-left"
+              value="Public"
+            >
+              <Badge
+                className="classification-badge"
+                type="warning"
+              >
+                <span
+                  className="badge badge-warning classification-badge"
+                >
+                  Public
+                </span>
+              </Badge>
+            </ClassificationBadge>
+          </div>
+          <PlainButton
+            className="lnk"
+            onClick={[MockFunction]}
+          >
+            <button
+              className="btn-plain lnk"
+              onClick={[MockFunction]}
+              type="submit"
+            >
+              <FormattedMessage
+                defaultMessage="Edit"
+                id="boxui.classification.edit"
+              >
+                <div />
+              </FormattedMessage>
+            </button>
+          </PlainButton>
+        </dd>
+      </ClassificationProperty>
+    </dl>
+  </ItemProperties>
+</SidebarFileProperties>
+`;
+
+exports[`components/ContentSidebar/SidebarFileProperties should render classification link when given correct callback 1`] = `
+<SidebarFileProperties
+  file={
+    Object {
+      "metadata": null,
+      "size": "1",
+    }
+  }
+  hasClassification={true}
+  intl={
+    Object {
+      "locale": "en",
+    }
+  }
+  onClassificationClick={[MockFunction]}
+>
+  <ItemProperties
+    classificationProps={
+      Object {
+        "openModal": [MockFunction],
+        "value": undefined,
+      }
+    }
+    size="1 B"
+  >
+    <dl
+      className="item-properties"
+    >
+      <FormattedMessage
+        defaultMessage="Size"
+        id="boxui.itemDetails.size"
+        tagName="dt"
+      >
+        <div />
+      </FormattedMessage>
+      <dd>
+        1 B
+      </dd>
+      <ClassificationProperty
+        openModal={[MockFunction]}
+      >
+        <FormattedMessage
+          defaultMessage="Classification"
+          id="boxui.classification.classification"
+          tagName="dt"
+        >
+          <div />
+        </FormattedMessage>
+        <dd>
+          <PlainButton
+            className="lnk"
+            onClick={[MockFunction]}
+          >
+            <button
+              className="btn-plain lnk"
+              onClick={[MockFunction]}
+              type="submit"
+            >
+              <FormattedMessage
+                defaultMessage="Add Classification"
+                id="boxui.classification.addClassification"
+              >
+                <div />
+              </FormattedMessage>
+            </button>
+          </PlainButton>
+        </dd>
+      </ClassificationProperty>
+    </dl>
+  </ItemProperties>
+</SidebarFileProperties>
 `;
