@@ -7,12 +7,12 @@
 import type { SelectorItems, User } from '../../../flowTypes';
 
 export type Comments = {
-    create: Function,
-    delete: Function
+    create?: Function,
+    delete?: Function
 };
 
 export type Tasks = {
-    create: Function,
+    create?: Function,
     delete?: Function,
     edit?: Function,
     onTaskAssignmentUpdate?: Function
@@ -24,7 +24,7 @@ export type Contacts = {
 };
 
 export type Versions = {
-    info: Function
+    info?: Function
 };
 
 export type InputState = {

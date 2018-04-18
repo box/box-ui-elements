@@ -5,6 +5,8 @@
 
 import * as React from 'react';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
+import classNames from 'classnames';
 
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
@@ -25,10 +27,10 @@ type Props = {
         isDisabled?: boolean
     },
     handlers: {
-        comments: Comments,
-        tasks: Tasks,
-        contacts: Contacts,
-        versions: Versions
+        comments?: Comments,
+        tasks?: Tasks,
+        contacts?: Contacts,
+        versions?: Versions
     },
     translations: Translations
 };
@@ -58,13 +60,13 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
     createCommentHandler = (args: any): void => {
-        const { handlers } = this.props;
-        handlers.comments.create(args);
+        const create = getProp(this.props, 'handlers.comments.create', noop);
+        create(args);
         this.approvalCommentFormSubmitHandler();
     };
     createTaskHandler = (args: any): void => {
-        const { handlers } = this.props;
-        handlers.tasks.create(args);
+        const create = getProp(this.props, 'handlers.tasks.create', noop);
+        create(args);
         this.approvalCommentFormSubmitHandler();
     };
 
@@ -115,15 +117,13 @@ class ActivityFeed extends React.Component<Props, State> {
                         isDisabled={inputState.isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        className={`bcs-activity-feed-comment-input ${inputState.isDisabled ? 'bcs-is-disabled' : ''}`}
+                        className={classNames('bcs-activity-feed-comment-input', {
+                            'bcs-is-disabled': inputState.isDisabled
+                        })}
                         createComment={this.createCommentHandler}
                         createTask={handlers && handlers.tasks ? this.createTaskHandler : null}
-                        getApproverContactsWithQuery={
-                            handlers && handlers.contacts ? handlers.contacts.getApproverWithQuery : null
-                        }
-                        getMentionContactsWithQuery={
-                            handlers && handlers.contacts ? handlers.contacts.getMentionWithQuery : null
-                        }
+                        getApproverContactsWithQuery={getProp(handlers, 'contacts.getApproverWithQuery', null)}
+                        getMentionContactsWithQuery={getProp(handlers, 'contacts.getMentionWithQuery', null)}
                         isOpen={isInputOpen}
                         user={currentUser}
                         onCancel={this.approvalCommentFormCancelHandler}

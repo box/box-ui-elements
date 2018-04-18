@@ -4,6 +4,11 @@
  */
 import type { Item } from '../activityFeedFlowTypes';
 
+const ItemTypes = {
+    fileVersion: 'file_version',
+    upload: 'upload'
+};
+
 export function collapseFeedState(feedState: Array<Item>): Array<Item> {
     return feedState.reduce((collapsedFeedState, feedItem) => {
         const previousFeedItem = collapsedFeedState.pop();
@@ -13,10 +18,10 @@ export function collapseFeedState(feedState: Array<Item>): Array<Item> {
         }
 
         if (
-            feedItem.type === 'file_version' &&
-            previousFeedItem.type === 'file_version' &&
-            feedItem.action === 'upload' &&
-            previousFeedItem.action === 'upload'
+            feedItem.type === ItemTypes.fileVersion &&
+            previousFeedItem.type === ItemTypes.fileVersion &&
+            feedItem.action === ItemTypes.upload &&
+            previousFeedItem.action === ItemTypes.upload
         ) {
             const {
                 createdBy: prevCreatedBy,
@@ -38,7 +43,7 @@ export function collapseFeedState(feedState: Array<Item>): Array<Item> {
                     collaborators,
                     createdBy,
                     id,
-                    type: 'file_version',
+                    type: ItemTypes.fileVersion,
                     versionNumber,
                     versions: versions.concat([feedItem]),
                     versionStart: Math.min(versionStart, versionNumber),
@@ -52,5 +57,5 @@ export function collapseFeedState(feedState: Array<Item>): Array<Item> {
 }
 
 export function shouldShowEmptyState(feedState: Array<Item>): boolean {
-    return feedState.length === 0 || (feedState.length === 1 && feedState[0].type === 'file_version');
+    return feedState.length === 0 || (feedState.length === 1 && feedState[0].type === ItemTypes.fileVersion);
 }

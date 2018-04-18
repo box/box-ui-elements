@@ -15,10 +15,10 @@ import type { Tasks, Comments, Contacts, Versions, InputState, Item, Translation
 type Props = {
     currentUser: User,
     handlers: {
-        comments: Comments,
-        tasks: Tasks,
-        contacts: Contacts,
-        versions: Versions
+        comments?: Comments,
+        tasks?: Tasks,
+        contacts?: Contacts,
+        versions?: Versions
     },
     inputState: InputState,
     items: Array<Item>,
