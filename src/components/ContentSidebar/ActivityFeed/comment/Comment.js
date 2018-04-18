@@ -157,9 +157,9 @@ class Comment extends React.Component<Props, State> {
                                 isDisabled={inputState.isDisabled}
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
-                                className={`bcs-activity-feed-comment-input ${
-                                    inputState.isDisabled ? 'bcs-is-disabled' : ''
-                                }`}
+                                className={classNames('bcs-activity-feed-comment-input', {
+                                    'bcs-is-disabled': inputState.isDisabled
+                                })}
                                 // createComment={this.createCommentHandler}
                                 updateTask={this.updateTaskHandler}
                                 getApproverContactsWithQuery={

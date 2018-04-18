@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import { injectIntl } from 'react-intl';
 
 import Checkbox from 'box-react-ui/lib/components/checkbox/Checkbox';
 
@@ -16,12 +17,12 @@ type Props = {
     approvers: SelectorItems,
     approverSelectorContacts: SelectorItems,
     approverSelectorError: string,
-    formatMessage: Function,
     isAddApprovalVisible: boolean,
     onApprovalDateChange: Function,
     onApproverSelectorInput: Function,
     onApproverSelectorRemove: Function,
-    onApproverSelectorSelect: Function
+    onApproverSelectorSelect: Function,
+    intl: any
 };
 
 const AddApproval = ({
@@ -29,20 +30,20 @@ const AddApproval = ({
     approvers,
     approverSelectorContacts,
     approverSelectorError,
-    formatMessage,
     isAddApprovalVisible,
     onApprovalDateChange,
     onApproverSelectorInput,
     onApproverSelectorRemove,
-    onApproverSelectorSelect
+    onApproverSelectorSelect,
+    intl
 }: Props): React.Node => (
     <div className='bcs-comment-add-approver'>
         <Checkbox
             className='bcs-comment-add-approver-checkbox'
-            label={formatMessage(messages.approvalAddTask)}
+            label={intl.formatMessage(messages.approvalAddTask)}
             name='addApproval'
             isChecked={isAddApprovalVisible}
-            tooltip={formatMessage(messages.approvalAddTaskTooltip)}
+            tooltip={intl.formatMessage(messages.approvalAddTaskTooltip)}
         />
         {isAddApprovalVisible ? (
             <AddApprovalFields
@@ -50,7 +51,6 @@ const AddApproval = ({
                 approvers={approvers}
                 approverSelectorContacts={approverSelectorContacts}
                 approverSelectorError={approverSelectorError}
-                formatMessage={formatMessage}
                 onApproverSelectorInput={onApproverSelectorInput}
                 onApproverSelectorRemove={onApproverSelectorRemove}
                 onApproverSelectorSelect={onApproverSelectorSelect}
@@ -60,4 +60,4 @@ const AddApproval = ({
     </div>
 );
 
-export default AddApproval;
+export default injectIntl(AddApproval);

@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import ContactDatalistItem from 'box-react-ui/lib/components/contact-datalist-item/ContactDatalistItem';
 import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
@@ -22,7 +22,8 @@ type Props = {
     onApprovalDateChange: Function,
     onApproverSelectorInput: Function,
     onApproverSelectorRemove: Function,
-    onApproverSelectorSelect: Function
+    onApproverSelectorSelect: Function,
+    intl: any
 };
 
 const AddApprovalFields = ({
@@ -30,11 +31,11 @@ const AddApprovalFields = ({
     approvers,
     approverSelectorContacts = [],
     approverSelectorError,
-    formatMessage,
     onApprovalDateChange,
     onApproverSelectorInput,
     onApproverSelectorRemove,
-    onApproverSelectorSelect
+    onApproverSelectorSelect,
+    intl
 }: Props): React.Node => {
     const approverOptions = approverSelectorContacts
         // filter selected approvers
@@ -54,7 +55,7 @@ const AddApprovalFields = ({
                 onInput={onApproverSelectorInput}
                 onRemove={onApproverSelectorRemove}
                 onSelect={onApproverSelectorSelect}
-                placeholder={formatMessage(messages.approvalAddAssignee)}
+                placeholder={intl.formatMessage(messages.approvalAddAssignee)}
                 selectedOptions={approvers}
                 selectorOptions={approverOptions}
             >
@@ -67,7 +68,7 @@ const AddApprovalFields = ({
                 label={<FormattedMessage {...messages.approvalDueDate} />}
                 minDate={new Date()}
                 name='approverDateInput'
-                placeholder={formatMessage(messages.approvalSelectDate)}
+                placeholder={intl.formatMessage(messages.approvalSelectDate)}
                 onChange={onApprovalDateChange}
                 value={approvalDate}
             />
@@ -75,4 +76,4 @@ const AddApprovalFields = ({
     );
 };
 
-export default AddApprovalFields;
+export default injectIntl(AddApprovalFields);

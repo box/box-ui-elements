@@ -99,7 +99,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     />
   </div>
   <ApprovalCommentForm
-    className="bcs-activity-feed-comment-input "
+    className="bcs-activity-feed-comment-input"
     createComment={[Function]}
     createTask={[Function]}
     getApproverContactsWithQuery={[MockFunction]}
