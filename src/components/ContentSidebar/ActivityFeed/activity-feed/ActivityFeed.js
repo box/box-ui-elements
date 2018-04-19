@@ -32,8 +32,7 @@ type Props = {
         contacts?: Contacts,
         versions?: Versions
     },
-    translations: Translations,
-    showApprovalCommentForm?: boolean
+    translations: Translations
 };
 
 type State = {
@@ -43,7 +42,6 @@ type State = {
 class ActivityFeed extends React.Component<Props, State> {
     static defaultProps = {
         isLoading: false,
-        showApprovalCommentForm: false,
         feedState: []
     };
 
@@ -148,9 +146,10 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { feedState, handlers, inputState, isLoading, translations, showApprovalCommentForm } = this.props;
+        const { feedState, handlers, inputState, isLoading, translations } = this.props;
         const { isInputOpen } = this.state;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
+        const showApprovalCommentForm = getProp(handlers, 'comments.create', false);
 
         return (
             // eslint-disable-next-line
