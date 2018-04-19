@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Sidebar Test Page</title>
+        <style>
+            body,
+            html,
+            .sidebar {
+                background: #ccc;
+                border: 0 none;
+                box-sizing: border-box !important;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
+
+            .sidebar {
+                display: flex;
+            }
+
+            .inputs {
+                padding: 15px;
+            }
+
+            .inputs input {
+                margin-bottom: 10px;
+            }
+        </style>
+        <div class="sidebar">
+            <div class="sidebar1"></div>
+            <div class="gap">&nbsp;&nbsp;</div>
+            <div class="sidebar2"></div>
+            <div class="gap">&nbsp;&nbsp;</div>
+            <div class="sidebar3"></div>
+            <div class="inputs">
+                <div>
+                    <label>
+                        <div>File Id</div>
+                        <input class="file" type="text" placeholder="Enter file id" />
+                    </label>
+                    <label>
+                        <div>Auth Token</div>
+                        <input class="token" type="text" placeholder="Enter auth token" />
+                    </label>
+                </div>
+                <button type="button" onclick="load()">Submit</button>
+            </div>
+            </div>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
+        <script src="../dev/en-US/sidebar.js"></script>
+    </head>
+    <body>
+        <div class="preivew sidebar1"></div>
+        <script>
+            function load() {
+                const { ContentSidebar } = Box;
+                const token = document.querySelector('.token').value || localStorage.getItem('token');
+                const fileId = document.querySelector('.file').value || localStorage.getItem('file');
+
+                if (!token || !fileId) {
+                    return;
+                }
+
+                localStorage.setItem('token', token);
+                document.querySelector('.token').value = token;
+
+                localStorage.setItem('file', fileId);
+                document.querySelector('.file').value = fileId;
+
+                const sidebar1 = new ContentSidebar();
+                sidebar1.show(fileId, token, {
+                    container: '.sidebar1',
+                    hasActivityFeed: true
+                });
+            }
+            load();
+        </script>
+    </body>
+</html>

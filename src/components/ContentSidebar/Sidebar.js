@@ -35,6 +35,7 @@ type Props = {
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
     descriptionTextareaProps: Object,
+    activityFeedState?: Array<any>,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
@@ -338,6 +339,7 @@ const Sidebar = ({
     onInteraction,
     onDescriptionChange,
     intl,
+    activityFeedState,
     onClassificationClick,
     onVersionHistoryClick,
     onCommentCreate,
@@ -411,13 +413,13 @@ const Sidebar = ({
     };
 
     const ActivityFeedSidebar = (
-        <ActivityFeed feedState={feedState} inputState={inputState} handlers={handlers} translations={translations} />
+        <ActivityFeed feedState={activityFeedState} inputState={inputState} handlers={handlers} />
     );
 
     return (
         <TabView defaultSelectedIndex={shouldShowSkills ? 0 : 1}>
             <Tab title={intl.formatMessage(messages.sidebarDetailsTitle)}>{Details}</Tab>
-            <Tab title='Activity'>{ActivityFeedSidebar}</Tab>
+            <Tab title={intl.formatMessage(messages.activityFeedTitle)}>{ActivityFeedSidebar}</Tab>
         </TabView>
     );
 };
