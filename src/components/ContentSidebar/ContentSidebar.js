@@ -431,13 +431,17 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasVersions={hasVersions}
                                 fileError={fileError}
                                 versionError={versionError}
-                                onCommentCreate={() => console.log('comment CREATE')}
-                                onCommentDelete={() => console.log('comment DELETE')}
-                                onTaskCreate={() => console.log('task CREATE')}
-                                onTaskDelete={() => console.log('task DELETE')}
-                                onTaskUpdate={() => console.log('task UPDATE')}
-                                onTaskAssignmentUpdate={() => console.log('task assignment UPDATE')}
-                                getCollaboratorWithQuery={(mentionString) => console.log(`collaborators starting with ${mentionString}`)}
+                                onCommentCreate={({ text }) => console.log(`comment create: ${text}`)}
+                                onCommentDelete={({ id }) => console.log(`delete comment: ${id}`)}
+                                onTaskCreate={() => console.log('task create')}
+                                onTaskDelete={({ id }) => console.log(`delete task: ${id}`)}
+                                onTaskUpdate={({ id, text }) => console.log(`edit task: ${id} with comment ${text}`)}
+                                onTaskAssignmentUpdate={(taskId, taskAssignmentId, status) =>
+                                    console.log(`task assignment update: ${status}`)
+                                }
+                                getCollaboratorWithQuery={(mentionString) =>
+                                    console.log(`contacts get mentions with query: ${mentionString}`)
+                                }
                             />
                         ) : (
                             <div className='bcs-loading'>

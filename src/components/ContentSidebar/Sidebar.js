@@ -392,23 +392,21 @@ const Sidebar = ({
 
     const handlers = {
         comments: {
-            create: ({ text }) => console.log(`comment create: ${text}`),
-            delete: ({ id }) => console.log(`delete comment: ${id}`)
+            create: onCommentCreate,
+            delete: onCommentDelete
         },
         tasks: {
-            create: () => console.log('task create'),
-            delete: ({ id }) => console.log(`delete task: ${id}`),
-            edit: ({ id, text }) => console.log(`edit task: ${id} with comment ${text}`),
-            onTaskAssignmentUpdate: (taskId, taskAssignmentId, status) =>
-                console.log(`task assignment update: ${status}`)
+            create: onTaskCreate,
+            delete: onTaskDelete,
+            edit: onTaskUpdate,
+            onTaskAssignmentUpdate
         },
         contacts: {
-            getApproverWithQuery: (approverString) =>
-                console.log(`contacts get mentions with query: ${approverString}`),
-            getMentionWithQuery: (mentionString) => console.log(`contacts get mentions with query: ${mentionString}`)
+            getApproverWithQuery: getCollaboratorWithQuery,
+            getMentionWithQuery: getCollaboratorWithQuery
         },
         versions: {
-            info: (version) => console.log('version info for version: ', version)
+            info: onVersionHistoryClick
         }
     };
 
