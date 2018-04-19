@@ -431,6 +431,13 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasVersions={hasVersions}
                                 fileError={fileError}
                                 versionError={versionError}
+                                onCommentCreate={() => console.log('comment CREATE')}
+                                onCommentDelete={() => console.log('comment DELETE')}
+                                onTaskCreate={() => console.log('task CREATE')}
+                                onTaskDelete={() => console.log('task DELETE')}
+                                onTaskUpdate={() => console.log('task UPDATE')}
+                                onTaskAssignmentUpdate={() => console.log('task assignment UPDATE')}
+                                getCollaboratorWithQuery={(mentionString) => console.log(`collaborators starting with ${mentionString}`)}
                             />
                         ) : (
                             <div className='bcs-loading'>

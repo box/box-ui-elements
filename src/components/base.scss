@@ -4,6 +4,7 @@
 
 .be {
     @include reset;
+    @import '~box-react-ui/lib/styles/reset';
 
     background: $white;
     border: 0 none;
