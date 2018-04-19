@@ -46,7 +46,7 @@ type Props = {
     versions?: FileVersions,
     accessStats?: AccessStats,
     fileError?: Errors,
-    versionError?: Errors,
+    versionError?: Errors
 };
 
 const currentUser = { name: 'Aubrey Graham', id: '7' };
@@ -79,12 +79,11 @@ const feedState = [
         isPending: true,
         error: {
             title: 'An error occured',
-            message:
-                'Stuff got fudged up, who knows what happened. Probably your fault tho...',
+            message: 'Stuff got fudged up, who knows what happened. Probably your fault tho...',
             action: {
                 text: 'Fix it',
                 onAction: () => console.log('confirm')
-            },
+            }
         },
         createdBy: { name: 'Kanye West', id: 10 },
         type: 'comment'
@@ -125,18 +124,16 @@ const feedState = [
         createdAt: new Date(Date.now() - 1500 * 1000).toISOString(),
         dueDate: Date.now(),
         id: '123125312',
-        taggedMessage:
-            'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-        createdBy: { name: 'Aubrey Graham', id: 8 },
+        taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+        createdBy: { name: 'Aubrey Graham', id: 7 },
         isPending: true,
         error: {
             title: 'An error occured',
-            message:
-                'Stuff got fudged up, who knows what happened. Probably your fault tho...',
+            message: 'Stuff got fudged up, who knows what happened. Probably your fault tho...',
             action: {
                 text: 'Fix it',
                 onAction: () => console.log('confirm')
-            },
+            }
         },
         assignees: [
             {
@@ -158,7 +155,7 @@ const feedState = [
                 id: 3,
                 user: { name: 'Beyonce', id: 4 },
                 status: 'rejected'
-            },
+            }
         ],
         type: 'task'
     },
@@ -166,9 +163,8 @@ const feedState = [
         createdAt: Date.now(),
         dueDate: null,
         id: '123125',
-        taggedMessage:
-            'Click this link http://www.google.com Also, <b>This text should not show up bold</b>',
-        createdBy: { name: 'Aubrey Graham', id: 1 },
+        taggedMessage: 'Click this link http://www.google.com Also, <b>This text should not show up bold</b>',
+        createdBy: { name: 'Aubrey Graham', id: 8 },
         assignees: [
             {
                 id: 0,
@@ -189,7 +185,7 @@ const feedState = [
                 id: 3,
                 user: { name: 'Beyonce', id: 4 },
                 status: 'rejected'
-            },
+            }
         ],
         type: 'task'
     },
@@ -213,9 +209,8 @@ const feedState = [
         createdAt: TIME_STRING_SEPT_27_2017,
         dueDate: Date.now(),
         id: '12312445',
-        taggedMessage:
-            'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-        createdBy: { name: 'Aubrey Graham', id: 1 },
+        taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+        createdBy: { name: 'Aubrey Graham', id: 8 },
         assignees: [
             {
                 id: 0,
@@ -231,7 +226,7 @@ const feedState = [
                 id: 2,
                 user: { name: 'Shawn Carter', id: 2 },
                 status: 'completed'
-            },
+            }
         ],
         type: 'task',
         isPending: true
@@ -258,7 +253,7 @@ const feedState = [
     {
         createdAt: Date.now(),
         id: '14895357',
-        versionNumber: 8,
+        versionNumber: 7,
         createdBy: { name: 'Abel Tesfaye', id: 13 },
         action: 'upload',
         type: 'file_version'
@@ -296,6 +291,34 @@ const feedState = [
         type: 'file_version'
     }
 ];
+
+const approverSelectorContacts = [
+    {
+        id: '213',
+        name: 'Kylo Ren',
+        item: { id: '213', email: 'kren@box.com', name: 'Kylo Ren' }
+    },
+    {
+        id: '214',
+        name: 'Han Solo',
+        item: { id: '213', email: 'hsolo@box.com', name: 'Han Solo' }
+    }
+];
+
+const mentionSelectorContacts = [
+    { id: 1, name: 'Ken', item: { email: 'ken@box.com', id: 1, name: 'Ken' } },
+    { id: 2, name: 'Ryu', item: { email: 'ryu@box.com', id: 2, name: 'Ryu' } },
+    {
+        id: 3,
+        name: 'Guile',
+        item: { email: 'guile@box.com', id: 3, name: 'Guile' }
+    }
+];
+
+const translations = {
+    translationEnabled: true,
+    onTranslate: ({ id, taggedMessage }) => console.log(`AJAX translation: ${id} - ${taggedMessage}`)
+};
 
 const Sidebar = ({
     file,
@@ -363,40 +386,34 @@ const Sidebar = ({
 
     const inputState = {
         currentUser,
-        approverSelectorContacts: [],
-        mentionSelectorContacts: []
+        approverSelectorContacts,
+        mentionSelectorContacts
     };
 
     const handlers = {
         comments: {
-            create: file.permissions.can_comment ? onCommentCreate : null,
-            delete: file.permissions.can_comment ? onCommentDelete : null
+            create: ({ text }) => console.log(`comment create: ${text}`),
+            delete: ({ id }) => console.log(`delete comment: ${id}`)
         },
         tasks: {
-            // Figure out what permissions are needed for task actions
-            create: file.permissions.can_comment ? onTaskCreate : null,
-            delete: file.permissions.can_comment ? onTaskDelete : null,
-            edit: file.permissions.can_comment ? onTaskUpdate : null,
-            onTaskAssignmentUpdate
+            create: () => console.log('task create'),
+            delete: ({ id }) => console.log(`delete task: ${id}`),
+            edit: ({ id, text }) => console.log(`edit task: ${id} with comment ${text}`),
+            onTaskAssignmentUpdate: (taskId, taskAssignmentId, status) =>
+                console.log(`task assignment update: ${status}`)
         },
         contacts: {
-            // Figure out what permissions are needed for @mentions
-            getApproverWithQuery: file.permissions.can_comment ? getCollaboratorWithQuery : null,
-            getMentionWithQuery: file.permissions.can_comment ? getCollaboratorWithQuery : null
+            getApproverWithQuery: (approverString) =>
+                console.log(`contacts get mentions with query: ${approverString}`),
+            getMentionWithQuery: (mentionString) => console.log(`contacts get mentions with query: ${mentionString}`)
         },
         versions: {
-            // Unsure if this is supposed to trigger the version history popup
-            // or a different version popup
-            info: onVersionHistoryClick
+            info: (version) => console.log('version info for version: ', version)
         }
     };
 
     const ActivityFeedSidebar = (
-        <ActivityFeed
-            feedState={feedState}
-            inputState={inputState}
-            handlers={handlers}
-        />
+        <ActivityFeed feedState={feedState} inputState={inputState} handlers={handlers} translations={translations} />
     );
 
     return (
