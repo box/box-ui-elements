@@ -7,6 +7,7 @@
         <style>
             body,
             html,
+            .container,
             .sidebar {
                 background: #ccc;
                 border: 0 none;
@@ -17,7 +18,18 @@
                 width: 100%;
             }
 
-            .sidebar {
+            .sidebar1,
+            .sidebar2,
+            .sidebar3 {
+                height: 90%;
+            }
+
+            h4 {
+                font-family: Lato,Helvetica Neue,Helvetica,Arial,sans-serif;
+                text-align: center;
+            }
+
+            .container {
                 display: flex;
             }
 
@@ -29,12 +41,21 @@
                 margin-bottom: 10px;
             }
         </style>
-        <div class="sidebar">
-            <div class="sidebar1"></div>
+        <div class="container">
+            <div class="sidebar">
+                <span><h4>Active State with API Data</h4></span>
+                <div class="sidebar1"></div>
+            </div>
             <div class="gap">&nbsp;&nbsp;</div>
-            <div class="sidebar2"></div>
+            <div class="sidebar">
+                <span><h4>Active State with Dummy Data</h4></span>
+                <div class="sidebar2"></div>
+            </div>
             <div class="gap">&nbsp;&nbsp;</div>
-            <div class="sidebar3"></div>
+            <div class="sidebar">
+                <span><h4>Empty State</h4></span>
+                <div class="sidebar3"></div>
+            </div>
             <div class="inputs">
                 <div>
                     <label>
@@ -53,7 +74,6 @@
         <script src="../dev/en-US/sidebar.js"></script>
     </head>
     <body>
-        <div class="preivew sidebar1"></div>
         <script>
             function load() {
                 const { ContentSidebar } = Box;
@@ -183,7 +203,7 @@
                         dueDate: null,
                         id: '123125',
                         taggedMessage: 'Click this link http://www.google.com Also, <b>This text should not show up bold</b>',
-                        createdBy: { name: 'Aubrey Graham', id: 8 },
+                        createdBy: { name: 'Aubrey Graham', id: 7 },
                         assignees: [
                             {
                                 id: 0,
@@ -229,7 +249,7 @@
                         dueDate: Date.now(),
                         id: '12312445',
                         taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-                        createdBy: { name: 'Aubrey Graham', id: 8 },
+                        createdBy: { name: 'Aubrey Graham', id: 7 },
                         assignees: [
                             {
                                 id: 0,
@@ -336,12 +356,69 @@
                     }
                 ];
 
+                const handlers = {
+                    comments: {
+                        create: ({ text }) => console.log(`comment create: ${text}`),
+                        delete: ({ id }) => console.log(`delete comment: ${id}`),
+                    },
+                    tasks: {
+                        create: () => console.log('task create'),
+                        delete: ({ id }) => console.log(`delete task: ${id}`),
+                        edit: ({ id, text }) =>
+                            console.log(`edit task: ${id} with comment ${text}`),
+                        onTaskAssignmentUpdate: (taskId, taskAssignmentId, status) =>
+                            console.log(`task assignment update: ${status}`),
+                    },
+                    contacts: {
+                        getApproverWithQuery: () =>
+                            console.log('contacts get approver with query'),
+                        getMentionWithQuery: mentionString =>
+                            console.log(`contacts get mentions with query: ${mentionString}`),
+                    },
+                    versions: {
+                        info: version => console.log('version info for version: ', version),
+                    },
+                };
+
+                // Populated w/ API data
                 const sidebar1 = new ContentSidebar();
                 sidebar1.show(fileId, token, {
                     container: '.sidebar1',
+                    hasActivityFeed: true
+                });
+
+                // Populated w/ dummy data
+                const sidebar2 = new ContentSidebar();
+                sidebar2.show(fileId, token, {
+                    container: '.sidebar2',
                     getPreviewer: () => { return currentUser; },
                     hasActivityFeed: true,
-                    activityFeedState: feedState
+                    activityFeedState: feedState,
+                    onCommentCreate: handlers.comments.create,
+                    onCommentDelete: handlers.comments.delete,
+                    onTaskCreate: handlers.tasks.create,
+                    onTaskDelete: handlers.tasks.delete,
+                    onTaskUpdate: handlers.tasks.edit,
+                    onTaskAssignmentUpdate: handlers.tasks.onTaskAssignmentUpdate,
+                    getApproverWithQuery: handlers.contacts.getApproverWithQuery,
+                    getMentionWithQuery: handlers.contacts.getMentionWithQuery
+                });
+
+                // Empty state
+                const sidebar3 = new ContentSidebar();
+                sidebar3.show(fileId, token, {
+                    container: '.sidebar3',
+                    getPreviewer: () => { return currentUser; },
+                    hasActivityFeed: true,
+                    activityFeedState: [],
+                    onCommentCreate: handlers.comments.create,
+                    onCommentDelete: handlers.comments.delete,
+                    onTaskCreate: handlers.tasks.create,
+                    onTaskDelete: handlers.tasks.delete,
+                    onTaskUpdate: handlers.tasks.edit,
+                    onTaskAssignmentUpdate: handlers.tasks.onTaskAssignmentUpdate,
+                    getApproverWithQuery: handlers.contacts.getApproverWithQuery,
+                    getMentionWithQuery: handlers.contacts.getMentionWithQuery
                 });
             }
             load();

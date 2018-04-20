@@ -42,7 +42,8 @@ type Props = {
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
-    getCollaboratorWithQuery?: Function,
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function,
     intl: any,
     versions?: FileVersions,
     accessStats?: AccessStats,
@@ -77,7 +78,8 @@ const Sidebar = ({
     onTaskDelete,
     onTaskUpdate,
     onTaskAssignmentUpdate,
-    getCollaboratorWithQuery,
+    getApproverWithQuery,
+    getMentionWithQuery,
     versions,
     accessStats,
     fileError,
@@ -133,8 +135,8 @@ const Sidebar = ({
             onTaskAssignmentUpdate
         },
         contacts: {
-            getApproverWithQuery: getCollaboratorWithQuery,
-            getMentionWithQuery: getCollaboratorWithQuery
+            getApproverWithQuery,
+            getMentionWithQuery
         },
         versions: {
             info: onVersionHistoryClick

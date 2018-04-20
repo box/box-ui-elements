@@ -129,7 +129,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
     getApproverSelectorContacts = (searchStr: string): void => {
         // using v2 api, search for approver on file with searchStr
-        // contactsProvider.searchWithItem('f_' + fileId)(searchStr)
+        // use collaborators endpoint /files/ID/collaborators
         // update contacts state 'approverSelectorContacts'
         // call user passed in handlers.contacts.getApproverWithQuery, if it exists
         const getApproverWithQuery = getProp(this.props, 'handlers.contacts.getApproverWithQuery', noop);
@@ -138,9 +138,9 @@ class ActivityFeed extends React.Component<Props, State> {
 
     getMentionSelectorContacts = (searchStr: string): void => {
         // using v2 api, search for mention on file with searchStr
-        // contactsProvider.searchWithItem('f_' + fileId)(searchStr)
+        // use collaborators endpoint /files/ID/collaborators
         // update contacts state 'mentionSelectorContacts'
-        // call user passed in handlers.contancts.getMentionWithQuery, if it exists
+        // call user passed in handlers.contacts.getMentionWithQuery, if it exists
         const getMentionWithQuery = getProp(this.props, 'handlers.contacts.getMentionWithQuery', noop);
         getMentionWithQuery(searchStr);
     };
@@ -149,7 +149,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const { feedState, handlers, inputState, isLoading, translations } = this.props;
         const { isInputOpen } = this.state;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
-        const showApprovalCommentForm = getProp(handlers, 'comments.create', false);
+        const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
 
         return (
             // eslint-disable-next-line

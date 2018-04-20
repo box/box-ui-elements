@@ -50,7 +50,15 @@ type Props = {
     onInteraction: Function,
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
+    onCommentCreate?: Function,
+    onCommentDelete?: Function,
+    onTaskCreate?: Function,
+    onTaskDelete?: Function,
+    onTaskUpdate?: Function,
+    onTaskAssignmentUpdate?: Function,
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function
 };
 
 type State = {
@@ -399,7 +407,15 @@ class ContentSidebar extends PureComponent<Props, State> {
             activityFeedState,
             onVersionHistoryClick,
             onAccessStatsClick,
-            onClassificationClick
+            onClassificationClick,
+            onCommentCreate,
+            onCommentDelete,
+            onTaskCreate,
+            onTaskDelete,
+            onTaskUpdate,
+            onTaskAssignmentUpdate,
+            getApproverWithQuery,
+            getMentionWithQuery
         }: Props = this.props;
         const { file, accessStats, versions, fileError, versionError }: State = this.state;
 
@@ -434,17 +450,14 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasVersions={hasVersions}
                                 fileError={fileError}
                                 versionError={versionError}
-                                onCommentCreate={({ text }) => console.log(`comment create: ${text}`)}
-                                onCommentDelete={({ id }) => console.log(`delete comment: ${id}`)}
-                                onTaskCreate={() => console.log('task create')}
-                                onTaskDelete={({ id }) => console.log(`delete task: ${id}`)}
-                                onTaskUpdate={({ id, text }) => console.log(`edit task: ${id} with comment ${text}`)}
-                                onTaskAssignmentUpdate={(taskId, taskAssignmentId, status) =>
-                                    console.log(`task assignment update: ${status}`)
-                                }
-                                getCollaboratorWithQuery={(mentionString) =>
-                                    console.log(`contacts get mentions with query: ${mentionString}`)
-                                }
+                                onCommentCreate={onCommentCreate}
+                                onCommentDelete={onCommentDelete}
+                                onTaskCreate={onTaskCreate}
+                                onTaskDelete={onTaskDelete}
+                                onTaskUpdate={onTaskUpdate}
+                                onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                getApproverWithQuery={getApproverWithQuery}
+                                getMentionWithQuery={getMentionWithQuery}
                             />
                         ) : (
                             <div className='bcs-loading'>
