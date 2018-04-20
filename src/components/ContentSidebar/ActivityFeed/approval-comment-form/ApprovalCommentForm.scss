@@ -1,6 +1,8 @@
 @import '../../../variables';
 
 .be .bcs-comment-input-container {
+    @import '~box-react-ui/lib/styles/common/overlay';
+
     border-top: solid 1px $off-white;
     display: flex;
 
@@ -18,6 +20,10 @@
         margin-top: 20px;
         max-height: 140px;
         width: auto;
+
+        .datalist-item {
+            padding: 5px 35px 5px 15px;
+        }
 
         .mention-selector-wrapper,
         .content-editable-container,
@@ -60,6 +66,7 @@
                 max-height: 140px;
                 min-height: 68px;
                 overflow: auto;
+                width: auto;
             }
 
             ~ .bcs-comment-add-approver {

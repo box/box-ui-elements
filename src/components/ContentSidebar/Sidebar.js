@@ -8,6 +8,7 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import TabView from 'box-react-ui/lib/components/tab-view/TabView';
 import Tab from 'box-react-ui/lib/components/tab-view/Tab';
+import API from '../../api';
 import DetailsSidebar from './DetailsSidebar';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
@@ -18,6 +19,7 @@ import './Sidebar.scss';
 
 type Props = {
     file: BoxItem,
+    api: API,
     getPreviewer: Function,
     hasTitle: boolean,
     hasSkills: boolean,
@@ -58,6 +60,7 @@ type Props = {
 
 const Sidebar = ({
     file,
+    api,
     getPreviewer,
     hasTitle,
     hasSkills,
@@ -149,7 +152,7 @@ const Sidebar = ({
     };
 
     const ActivityFeedSidebar = (
-        <ActivityFeed feedState={activityFeedState} inputState={inputState} handlers={handlers} />
+        <ActivityFeed file={file} api={api} feedState={activityFeedState} inputState={inputState} handlers={handlers} />
     );
 
     return (

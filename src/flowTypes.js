@@ -105,12 +105,23 @@ export type BoxItemPermission = {
 };
 
 export type User = {
-    avatarUrl: string,
-    email: string,
+    avatarUrl: ?string,
+    email: ?string,
     id: string,
     login: string,
     name: string,
     type: 'user'
+};
+
+export type UserCollection = {
+    total_count?: number,
+    entries?: User[],
+    order?: Order[],
+    isLoaded?: boolean,
+    limit?: number,
+    offset?: number,
+    previous_marker?: string,
+    next_marker?: string
 };
 
 export type SelectorItem = {
@@ -227,7 +238,9 @@ export type BoxItemCollection = {
     order?: Order[],
     isLoaded?: boolean,
     limit?: number,
-    offset?: number
+    offset?: number,
+    previous_marker?: string,
+    next_marker?: string
 };
 
 export type FlattenedBoxItem = {
@@ -264,7 +277,9 @@ export type FlattenedBoxItemCollection = {
     order?: Order[],
     isLoaded?: boolean,
     limit?: number,
-    offset?: number
+    offset?: number,
+    previous_marker?: string,
+    next_marker?: string
 };
 
 export type BoxPathCollection = {

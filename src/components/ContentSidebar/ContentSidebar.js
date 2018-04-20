@@ -676,6 +676,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                         {shouldRender ? (
                             <Sidebar
                                 file={file}
+                                api={this.api}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasTitle={hasTitle}

@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios';
-import type { Axios } from 'axios';
+import type { Axios, CancelTokenSource } from 'axios';
 import TokenService from './TokenService';
 import { HEADER_CLIENT_NAME, HEADER_CLIENT_VERSION, HEADER_CONTENT_TYPE } from '../constants';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
@@ -17,6 +17,7 @@ const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 class Xhr {
     id: ?string;
     axios: Axios;
+    axiosSource: CancelTokenSource;
     clientName: ?string;
     token: Token;
     version: ?string;
@@ -57,6 +58,7 @@ class Xhr {
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
         this.axios = axios.create();
+        this.axiosSource = axios.CancelToken.source();
 
         if (typeof responseInterceptor === 'function') {
             this.axios.interceptors.response.use(responseInterceptor);
@@ -150,7 +152,12 @@ class Xhr {
         headers?: StringMap
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then((hdrs) =>
-            this.axios.get(url, { params, headers: hdrs, parsedUrl: this.getParsedUrl(url) })
+            this.axios.get(url, {
+                cancelToken: this.axiosSource.token,
+                params,
+                headers: hdrs,
+                parsedUrl: this.getParsedUrl(url)
+            })
         );
     }
 
@@ -376,6 +383,10 @@ class Xhr {
      * @return {void}
      */
     abort(): void {
+        if (this.axios && this.axiosSource) {
+            this.axiosSource.cancel('Operation canceled due to new request.');
+        }
+
         if (!this.xhr) {
             return;
         }
