@@ -46,7 +46,9 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     state = {
-        isInputOpen: false
+        isInputOpen: false,
+        approverSelectorContacts: [],
+        mentionSelectorContacts: []
     };
 
     feedContainer: null | HTMLElement;
@@ -133,7 +135,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // update contacts state 'approverSelectorContacts'
         // call user passed in handlers.contacts.getApproverWithQuery, if it exists
         const getApproverWithQuery = getProp(this.props, 'handlers.contacts.getApproverWithQuery', noop);
-        getApproverWithQuery(searchStr);
+        this.setState({ approverSelectorContacts: getApproverWithQuery(searchStr) });
     };
 
     getMentionSelectorContacts = (searchStr: string): void => {
@@ -142,13 +144,13 @@ class ActivityFeed extends React.Component<Props, State> {
         // update contacts state 'mentionSelectorContacts'
         // call user passed in handlers.contacts.getMentionWithQuery, if it exists
         const getMentionWithQuery = getProp(this.props, 'handlers.contacts.getMentionWithQuery', noop);
-        getMentionWithQuery(searchStr);
+        this.setState({ mentionSelectorContacts: getMentionWithQuery(searchStr) });
     };
 
     render(): React.Node {
         const { feedState, handlers, inputState, isLoading, translations } = this.props;
-        const { isInputOpen } = this.state;
-        const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
+        const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
+        const { currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
 
         return (
