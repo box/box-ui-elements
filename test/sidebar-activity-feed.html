@@ -51,11 +51,6 @@
                 <span><h4>Active State with Dummy Data</h4></span>
                 <div class="sidebar2"></div>
             </div>
-            <div class="gap">&nbsp;&nbsp;</div>
-            <div class="sidebar">
-                <span><h4>Empty State</h4></span>
-                <div class="sidebar3"></div>
-            </div>
             <div class="inputs">
                 <div>
                     <label>
@@ -394,23 +389,6 @@
                     getPreviewer: () => { return currentUser; },
                     hasActivityFeed: true,
                     activityFeedState: feedState,
-                    onCommentCreate: handlers.comments.create,
-                    onCommentDelete: handlers.comments.delete,
-                    onTaskCreate: handlers.tasks.create,
-                    onTaskDelete: handlers.tasks.delete,
-                    onTaskUpdate: handlers.tasks.edit,
-                    onTaskAssignmentUpdate: handlers.tasks.onTaskAssignmentUpdate,
-                    getApproverWithQuery: handlers.contacts.getApproverWithQuery,
-                    getMentionWithQuery: handlers.contacts.getMentionWithQuery
-                });
-
-                // Empty state
-                const sidebar3 = new ContentSidebar();
-                sidebar3.show(fileId, token, {
-                    container: '.sidebar3',
-                    getPreviewer: () => { return currentUser; },
-                    hasActivityFeed: true,
-                    activityFeedState: [],
                     onCommentCreate: handlers.comments.create,
                     onCommentDelete: handlers.comments.delete,
                     onTaskCreate: handlers.tasks.create,
