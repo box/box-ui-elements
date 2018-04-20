@@ -1,0 +1,137 @@
+@import '../../../variables';
+
+.bcs-comment-input-container {
+    border-top: solid 1px $off-white;
+    display: flex;
+
+    div[contentEditable="true"] {
+        width: auto;
+    }
+
+    .public-DraftEditorPlaceholder-root {
+        margin: 8px 10px;
+    }
+
+    .bcs-comment-input {
+        box-shadow: none;
+        margin-bottom: 15px;
+        margin-top: 20px;
+        max-height: 140px;
+        width: auto;
+
+        .mention-selector-wrapper,
+        .content-editable-container,
+        .content-editable {
+            margin: 0;
+            width: 100%;
+        }
+
+        ~ .bcs-comment-input-controls {
+            display: none;
+
+            .btn {
+                margin-bottom: 10px;
+                margin-right: 0;
+                margin-top: 0;
+            }
+        }
+
+        ~ .bcs-comment-add-approver {
+            display: none;
+        }
+
+        &:hover {
+            box-shadow: none;
+        }
+
+        &:empty {
+            &::before {
+                color: $seesee;
+                content: attr(placeholder);
+                cursor: text;
+                display: block;
+            }
+        }
+    }
+
+    &.bcs-comment-input-is-open {
+        .bcs-comment-input {
+            .public-DraftEditor-content {
+                max-height: 140px;
+                min-height: 68px;
+                overflow: auto;
+            }
+
+            ~ .bcs-comment-add-approver {
+                display: block;
+            }
+
+            ~ .bcs-comment-input-controls {
+                display: block;
+                text-align: right;
+            }
+        }
+
+        .date-picker-wrapper {
+            width: 166px;
+        }
+    }
+
+    .bcs-avatar-container {
+        height: 40px;
+        margin-left: 20px;
+        margin-right: 18px;
+        margin-top: 20px;
+    }
+
+    .bcs-comment-input-form-container {
+        flex: 1;
+        margin-right: 20px;
+        min-width: 0;
+
+        aside {
+            color: $eights;
+            margin-top: -8px;
+        }
+
+        .bcs-comment-add-approver-checkbox {
+            margin-left: 0;
+            white-space: nowrap;
+        }
+
+        .bcs-comment-add-approver-date-input {
+            margin-left: 0;
+            margin-right: 0;
+
+            .date-picker-open-btn {
+                bottom: 6px;
+            }
+        }
+
+        .pill-selector-wrapper {
+            margin-left: 0;
+            width: 100%;
+
+            .pill-selector-input-wrapper {
+                width: auto;
+            }
+        }
+
+        input {
+            &[type='text'] {
+                width: 100%;
+            }
+        }
+
+        .bcs-comment-add-approver-fields-container {
+            border-top: 1px solid $off-white;
+            display: flex;
+            flex-direction: column;
+            padding-top: 9px;
+
+            input.pill-selector-hidden-input {
+                width: 1px;
+            }
+        }
+    }
+}

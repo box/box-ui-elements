@@ -2,14 +2,14 @@
 .*/build/.*
 .*/dist/.*
 .*/reports/.*
-.*/node_modules/npm-shrinkwrap.*
-.*/node_modules/fbjs.*
 .*/node_modules/babel-plugin-flow-react-proptypes.*
-.*/node_modules/stylelint.*
+.*/node_modules/conventional-changelog*
 .*/node_modules/eslint*
 .*/node_modules/jest*
-.*/node_modules/conventional-changelog*
+.*/node_modules/npm-shrinkwrap.*
+.*/node_modules/stylelint.*
 .*/node_modules/webpack*
+.*/node_modules/draft-js*
 
 [include]
 ./src

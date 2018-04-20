@@ -103,11 +103,38 @@ export type BoxItemPermission = {
 };
 
 export type User = {
+    avatarUrl: string,
+    email: string,
     id: string,
     login: string,
     name: string,
     type: 'user'
 };
+
+export type SelectorItem = {
+    id?: string | number,
+    name: string,
+    item: Object,
+    value: any
+};
+
+export type SelectorItems = Array<SelectorItem>;
+
+export type ActionItemError = {
+    title: string,
+    message: string,
+    action: {
+        text: string,
+        onAction: Function
+    }
+};
+
+export type OptionItem = {
+    text: string,
+    value: number | string
+};
+
+export type OptionItems = Array<OptionItem>;
 
 export type SkillCardType =
     | typeof SKILL_KEYWORD
