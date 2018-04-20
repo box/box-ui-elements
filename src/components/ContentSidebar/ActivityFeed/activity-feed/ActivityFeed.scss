@@ -1,0 +1,90 @@
+@import '../../../variables';
+
+.bcs-activity-feed {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+
+    .bcs-activity-feed-items-container {
+        align-items: center;
+        display: flex;
+        flex: 1 1;
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        position: relative;
+
+        .bcs-version-item {
+            &:first-child .bcs-version {
+                margin-top: 0;
+            }
+        }
+
+        .bcs-activity-feed-task,
+        .bcs-activity-feed-comment {
+            border-bottom: 1px solid $ffive;
+            padding-bottom: 8px;
+
+            &:first-child .bcs-comment {
+                margin-top: 0;
+            }
+        }
+
+        .bcs-activity-feed-task {
+            padding-bottom: 28px;
+        }
+    }
+
+    .bcs-activity-feed-active-state {
+        bottom: 0;
+        left: 0;
+        margin: 9px 20px;
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        > li:last-child {
+            margin-bottom: 10px;
+        }
+    }
+
+    .bcs-activity-feed-empty-state {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+
+        .bcs-empty-state-cta {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+
+            aside {
+                margin-top: 6px;
+                text-align: center;
+                width: 200px;
+            }
+        }
+
+        .bcs-activity-feed-empty-state-illustration {
+            margin-bottom: 15px;
+            margin-top: 60px;
+        }
+    }
+
+    .bcs-activity-feed-comment-input {
+        background-color: $white;
+        margin-bottom: 4px;
+        max-height: 500px;
+        min-height: 93px;
+
+        &.bcs-is-disabled {
+            opacity: .4;
+            pointer-events: none;
+        }
+
+        .selector-dropdown-wrapper {
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/ActivityFeed/version/VersionError should correctly render error message 1`] = `
+<div
+  className="bcs-version error"
+>
+  <span
+    className="bcs-version-message"
+  >
+    <FormattedMessage
+      defaultMessage="Multiple versions of this file"
+      id="be.versionTooManyVersions"
+    />
+  </span>
+</div>
+`;

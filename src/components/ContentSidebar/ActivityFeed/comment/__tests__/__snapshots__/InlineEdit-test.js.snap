@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/ActivityFeed/comment/InlineEdit should correctly render comment 1`] = `
+<div
+  className="bcs-comment-edit-container"
+>
+  <PlainButton
+    className="bcs-comment-edit"
+    onClick={[Function]}
+    type="button"
+  >
+    <IconPencil />
+  </PlainButton>
+</div>
+`;
