@@ -370,7 +370,7 @@
                     const matches = [];
                     contacts.forEach(function(contact) {
                         const { name, email } = contact.item;
-                        if (name.startsWith(str) || email.startsWith(str)) {
+                        if (name.toLowerCase().startsWith(str) || email.toLowerCase().startsWith(str)) {
                             matches.push(contact);
                         }
                     });
