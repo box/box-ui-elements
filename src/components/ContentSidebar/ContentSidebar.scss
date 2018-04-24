@@ -6,6 +6,15 @@
     background-color: $haze;
     display: flex;
     width: 340px;
+
+    /**************************************
+    * Accessibility
+    **************************************/
+    .bcs-accessibility-hidden {
+        left: -9999px;
+        top: auto; /* Some browsers ignore left without a top */
+        position: absolute;
+    }
 }
 
 .be .bcs-loading {
