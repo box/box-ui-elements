@@ -21,9 +21,9 @@ type Props = {
     isLoading?: boolean,
     feedState: Array<Item>,
     inputState: {
+        currentUser: User,
         approverSelectorContacts?: SelectorItems,
         mentionSelectorContacts?: SelectorItems,
-        currentUser: User,
         isDisabled?: boolean
     },
     handlers: {
@@ -32,11 +32,13 @@ type Props = {
         contacts?: Contacts,
         versions?: Versions
     },
-    translations: Translations
+    translations?: Translations
 };
 
 type State = {
-    isInputOpen: boolean
+    isInputOpen: boolean,
+    approverSelectorContacts: Array<User>,
+    mentionSelectorContacts: Array<User>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
@@ -46,7 +48,9 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     state = {
-        isInputOpen: false
+        isInputOpen: false,
+        approverSelectorContacts: [],
+        mentionSelectorContacts: []
     };
 
     feedContainer: null | HTMLElement;
@@ -59,27 +63,97 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
-    createCommentHandler = (args: any): void => {
-        const create = getProp(this.props, 'handlers.comments.create', noop);
-        create(args);
+
+    createComment = (args: any): void => {
+        // create a placeholder pending comment
+        // create actual comment and send to Box V2 api
+        // call user passed in handlers.comments.create, if it exists
+        const createComment = getProp(this.props, 'handlers.comments.create', noop);
+        createComment(args);
+
         this.approvalCommentFormSubmitHandler();
     };
-    createTaskHandler = (args: any): void => {
-        const create = getProp(this.props, 'handlers.tasks.create', noop);
-        create(args);
+
+    deleteComment = (args: any): void => {
+        // remove comment from list of comments
+        // removeItemByTypeAndId('comment', args.id);
+        // delete the comment via V2 API
+        // call user passed in handlers.comments.delete, if it exists
+        const deleteComment = getProp(this.props, 'handlers.comments.delete', noop);
+        deleteComment(args);
+    };
+
+    createTask = (args: any): void => {
+        // create a placeholder pending task
+        // create actual task and send to Box V2 api
+        // call user passed in handlers.tasks.create, if it exists
+        const createTask = getProp(this.props, 'handlers.tasks.create', noop);
+        createTask(args);
+
         this.approvalCommentFormSubmitHandler();
+    };
+
+    updateTask = (args: any): void => {
+        // get previous task assignment state
+        // update the task via v2 api
+        // update task state OR
+        // if it fails, revert to previous task state
+        // call user passed in handlers.tasks.edit, if it exists
+        const updateTask = getProp(this.props, 'handlers.tasks.edit', noop);
+        updateTask(args);
+    };
+
+    deleteTask = (args: any): void => {
+        // remove task from task list
+        // removeItemByTypeAndId('task', args.id);
+        // delete the task via v2 api
+        // call user passed in handlers.tasks.delete, if it exists
+        const deleteTask = getProp(this.props, 'handlers.tasks.delete', noop);
+        deleteTask(args);
+    };
+
+    updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string): void => {
+        // Determine fixedStatus from status. 'approved' === 'complete', 'rejected' === 'done'
+        // get previous task state
+        // add task to state
+        // update assignment via V2 API
+        // failure? revert to previous task state
+        // call user passed in handlers.tasks.onTaskAssignmentUpdate, if it exists
+        const updateTaskAssignment = getProp(this.props, 'handlers.tasks.onTaskAssignmentUpdate', noop);
+        updateTaskAssignment(taskId, taskAssignmentId, status);
+    };
+
+    openVersionHistoryPopup = (data: any): void => {
+        // get version number from data
+        // open the pop for version history
+        // call user passed in handlers.versions.info, if it exists
+        const versionInfoHandler = getProp(this.props, 'handlers.versions.info', noop);
+        versionInfoHandler(data);
+    };
+
+    getApproverSelectorContacts = (searchStr: string): void => {
+        // using v2 api, search for approver on file with searchStr
+        // use collaborators endpoint /files/ID/collaborators
+        // update contacts state 'approverSelectorContacts'
+        // call user passed in handlers.contacts.getApproverWithQuery, if it exists
+        const getApproverWithQuery = getProp(this.props, 'handlers.contacts.getApproverWithQuery', noop);
+        this.setState({ approverSelectorContacts: getApproverWithQuery(searchStr) });
+    };
+
+    getMentionSelectorContacts = (searchStr: string): void => {
+        // using v2 api, search for mention on file with searchStr
+        // use collaborators endpoint /files/ID/collaborators
+        // update contacts state 'mentionSelectorContacts'
+        // call user passed in handlers.contacts.getMentionWithQuery, if it exists
+        const getMentionWithQuery = getProp(this.props, 'handlers.contacts.getMentionWithQuery', noop);
+        this.setState({ mentionSelectorContacts: getMentionWithQuery(searchStr) });
     };
 
     render(): React.Node {
         const { feedState, handlers, inputState, isLoading, translations } = this.props;
-        const { isInputOpen } = this.state;
-        const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
-        const showApprovalCommentForm = !!getProp(handlers, 'comments.create', false);
-        const onTaskAssignmentUpdate = getProp(handlers, 'tasks.onTaskAssignmentUpdate');
-        const commentDeleteHandler = getProp(handlers, 'comments.delete');
-        const taskDeleteHandler = getProp(handlers, 'tasks.delete');
-        const taskEditHandler = getProp(handlers, 'tasks.edit');
-        const versionInfoHandler = getProp(handlers, 'versions.info');
+        const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
+        const { currentUser } = inputState;
+        const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
 
         return (
             // eslint-disable-next-line
@@ -97,11 +171,11 @@ class ActivityFeed extends React.Component<Props, State> {
                             handlers={handlers}
                             items={collapseFeedState(feedState)}
                             currentUser={currentUser}
-                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                            onCommentDelete={commentDeleteHandler}
-                            onTaskDelete={taskDeleteHandler}
-                            onTaskEdit={taskEditHandler}
-                            onVersionInfo={versionInfoHandler}
+                            onTaskAssignmentUpdate={this.updateTaskAssignment}
+                            onCommentDelete={this.deleteComment}
+                            onTaskDelete={this.deleteTask}
+                            onTaskEdit={this.updateTask}
+                            onVersionInfo={this.openVersionHistoryPopup}
                             translations={translations}
                             inputState={inputState}
                         />
@@ -120,10 +194,10 @@ class ActivityFeed extends React.Component<Props, State> {
                         className={classNames('bcs-activity-feed-comment-input', {
                             'bcs-is-disabled': inputState.isDisabled
                         })}
-                        createComment={this.createCommentHandler}
-                        createTask={handlers && handlers.tasks ? this.createTaskHandler : null}
-                        getApproverContactsWithQuery={getProp(handlers, 'contacts.getApproverWithQuery', null)}
-                        getMentionContactsWithQuery={getProp(handlers, 'contacts.getMentionWithQuery', null)}
+                        createComment={this.createComment}
+                        createTask={this.createTask}
+                        getApproverContactsWithQuery={this.getApproverSelectorContacts}
+                        getMentionContactsWithQuery={this.getMentionSelectorContacts}
                         isOpen={isInputOpen}
                         user={currentUser}
                         onCancel={this.approvalCommentFormCancelHandler}

@@ -1,13 +1,20 @@
 @import '../variables';
+@import '../_accessibility';
 
 .be.bcs {
+    @import '~box-react-ui/lib/styles/common/forms';
+
     background-color: $haze;
     display: flex;
     width: 340px;
 }
 
-.bcs-loading {
+.be .bcs-loading {
     align-items: center;
     display: flex;
     flex: 1;
+    font-size: 0;
+    margin: 0 auto;
+    white-space: nowrap;
+    width: 10px;
 }

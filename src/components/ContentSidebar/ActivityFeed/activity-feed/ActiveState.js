@@ -27,7 +27,7 @@ type Props = {
     onTaskDelete?: Function,
     onTaskEdit?: Function,
     onVersionInfo?: Function,
-    translations: Translations
+    translations?: Translations
 };
 
 const ActiveState = ({

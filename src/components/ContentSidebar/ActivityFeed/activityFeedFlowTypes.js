@@ -19,8 +19,8 @@ export type Tasks = {
 };
 
 export type Contacts = {
-    getApproverWithQuery: Function,
-    getMentionWithQuery: Function
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function
 };
 
 export type Versions = {
