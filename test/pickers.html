@@ -92,9 +92,6 @@
                 const tokenGenerator1 = (id) => {
                     return Promise.resolve(token);
                 };
-                const tokenGenerator2 = (id) => {
-                    return Promise.resolve({ [id]: token });
-                };
 
                 const filePicker1 = new FilePicker();
                 document.querySelector('.filePicker1').innerHTML = '';
@@ -163,7 +160,7 @@
                     alert('Cancel pressed on Folder Picker');
                     document.querySelector('.folderPicker2').innerHTML = '';
                 });
-                folderPicker2.show(folderId, tokenGenerator2, {
+                folderPicker2.show(folderId, tokenGenerator1, {
                     container: '.folderPicker2',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     maxSelectable: 3,
@@ -182,7 +179,7 @@
                 contentPicker1.addListener('cancel', () => {
                     alert('Cancel pressed on Content Picker, will close popup');
                 });
-                contentPicker1.show(folderId, tokenGenerator2, {
+                contentPicker1.show(folderId, tokenGenerator1, {
                     currentFolderId: '4125389473',
                     container: '.contentPicker1',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png'
@@ -200,7 +197,7 @@
                 contentPicker2.addListener('cancel', () => {
                     alert('Cancel pressed on Content Picker, will close popup');
                 });
-                contentPicker2.show(folderId, tokenGenerator2, {
+                contentPicker2.show(folderId, tokenGenerator1, {
                     container: '.contentPicker2',
                     logoUrl: 'box',
                     maxSelectable: 1

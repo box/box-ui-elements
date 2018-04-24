@@ -19,9 +19,11 @@ import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight'
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
+import File from '../../api/File';
 import Cache from '../../util/Cache';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
+import TokenService from '../../util/TokenService';
 import { isValidBoxFile } from '../../util/fields';
 import { isInputElement, focus } from '../../util/dom';
 import {
@@ -33,7 +35,7 @@ import {
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW
 } from '../../constants';
-import type { Token, BoxItem, StringMap } from '../../flowTypes';
+import type { Token, TokenLiteral, BoxItem, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
@@ -344,7 +346,10 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {Array<string|BoxItem>} files - files to prefetch
      * @return {void}
      */
-    prefetch(files: Array<string | BoxItem>): void {
+    async prefetch(files: Array<string | BoxItem>): Promise<void> {
+        const { token }: Props = this.props;
+        const typedIds: string[] = files.map((file) => File.getTypedFileId(this.getFileId(file)));
+        await TokenService.cacheTokens(typedIds, token);
         files.forEach((file) => {
             const fileId = this.getFileId(file);
             this.fetchFile(fileId, noop, noop);
@@ -381,15 +386,17 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    loadPreview = (): void => {
-        const { token, collection, onError, onMetric, ...rest }: Props = this.props;
+    loadPreview = async (): Promise<void> => {
+        const { token: tokenOrTokenFunction, onError, onMetric, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
-        if (!this.isPreviewLibraryLoaded() || !file || !token || this.preview) {
+        if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction || this.preview) {
             return;
         }
 
         const { Preview } = global.Box;
+        const typedId: string = File.getTypedFileId(this.getFileId(file));
+        const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
 
         const previewOptions = {
             showDownload: this.canDownload(),
