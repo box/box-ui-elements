@@ -227,7 +227,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                         />
                         <aside
                             className={classNames('bcs-at-mention-tip', {
-                                'accessibility-hidden': isOpen
+                                'bcs-accessibility-hidden': isOpen
                             })}
                         >
                             <FormattedMessage {...messages.atMentionTip} />
