@@ -118,7 +118,7 @@ const Sidebar = ({
     }
 
     const inputState = {
-        currentUser: getPreviewer ? getPreviewer() : null,
+        currentUser: getPreviewer(),
         approverSelectorContacts: [],
         mentionSelectorContacts: []
     };

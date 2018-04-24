@@ -26,7 +26,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         expect(wrapper.find('[contentEditable]').length).toEqual(1);
         expect(wrapper.find('.bcs-comment-input-controls').length).toEqual(1);
         expect(wrapper.find('.bcs-comment-input-controls').find('button').length).toEqual(2);
-        expect(wrapper.find('.bcs-at-mention-tip').hasClass('bcs-accessibility-hidden')).toBe(false);
+        expect(wrapper.find('.bcs-at-mention-tip').hasClass('accessibility-hidden')).toBe(false);
     });
 
     test('should call onFocus handler when input is focused', () => {
@@ -53,7 +53,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const wrapper = render({ isOpen: true });
 
         expect(wrapper.find('.bcs-comment-input-is-open').length).toEqual(1);
-        expect(wrapper.find('.bcs-at-mention-tip').hasClass('bcs-accessibility-hidden')).toBe(true);
+        expect(wrapper.find('.bcs-at-mention-tip').hasClass('accessibility-hidden')).toBe(true);
     });
 
     test('should set required to false on comment input when not open', () => {

@@ -21,9 +21,9 @@ type Props = {
     isLoading?: boolean,
     feedState: Array<Item>,
     inputState: {
+        currentUser: User,
         approverSelectorContacts?: SelectorItems,
         mentionSelectorContacts?: SelectorItems,
-        currentUser: User,
         isDisabled?: boolean
     },
     handlers: {
@@ -32,11 +32,13 @@ type Props = {
         contacts?: Contacts,
         versions?: Versions
     },
-    translations: Translations
+    translations?: Translations
 };
 
 type State = {
-    isInputOpen: boolean
+    isInputOpen: boolean,
+    approverSelectorContacts: Array<User>,
+    mentionSelectorContacts: Array<User>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
