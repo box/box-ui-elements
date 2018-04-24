@@ -53,7 +53,7 @@
         <script src="../dev/en-US/sidebar.js"></script>
     </head>
     <body>
-        <div class="preivew sidebar1"></div>
+        <div class="preview sidebar1"></div>
         <script>
             function load() {
                 const { ContentSidebar } = Box;
@@ -78,15 +78,11 @@
                     hasAccessStats: true,
                     hasVersions: true,
                     hasNotices: true,
-                    hasClassification: true,
                     onVersionHistoryClick : function(){
                         alert('hello, world!');
                     },
                     onAccessStatsClick: () => {
                         alert('Hello, world!');
-                    },
-                    onClassificationClick: () => {
-                        alert('classification popup should open');
                     }
                 });
 
@@ -99,8 +95,7 @@
                     hasNotices: true,
                     hasVersions: true,
                     hasAccessStats: true,
-                    hasNotices: true,
-                    hasClassification: true
+                    hasNotices: true
                 });
 
                 const sidebar3 = new ContentSidebar();
@@ -136,7 +131,6 @@
                 sidebar3.show(fileId, token, {
                     container: '.sidebar3',
                     hasProperties: true,
-                    hasActivityFeed: true,
                     hasSkills: true,
                     hasNotices: true,
                     hasVersions: true,
