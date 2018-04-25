@@ -4,13 +4,13 @@
  * @author Box
  */
 
-import OffsetBasedAPI from './OffsetBasedAPI';
+import Base from './Base';
 import File from './File';
-import type { FileVersions } from '../flowTypes';
+import type { Tasks as TasksType } from '../flowTypes';
 
-class Versions extends OffsetBasedAPI {
+class Tasks extends Base {
     /**
-     * API URL for versions
+     * API URL for tasks
      *
      * @param {string} [id] - a box file id
      * @return {string} base url for files
@@ -19,36 +19,30 @@ class Versions extends OffsetBasedAPI {
         if (!id) {
             throw new Error('Missing file id!');
         }
-        return `${this.getBaseApiUrl()}/files/${id}/versions`;
+        return `${this.getBaseApiUrl()}/files/${id}/tasks`;
     }
 
     /**
-     * Gets the versions for a box file
+     * Gets the versions for a box task
      *
      * @param {string} id - a box file id
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
      * @return {Promise}
      */
-    async versions(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
-        if (this.isDestroyed() || !this.hasMoreItems()) {
+    async tasks(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
+        if (this.isDestroyed()) {
             return Promise.reject();
         }
 
-        const params = this.getQueryParameters();
-
-        this.offset += this.limit;
-
         // Make the XHR request
         try {
-            const { data }: { data: FileVersions } = await this.xhr.get({
+            const { data }: { data: TasksType } = await this.xhr.get({
                 id: File.getTypedFileId(id),
-                url: this.getUrl(id),
-                params
+                url: this.getUrl(id)
             });
 
             if (!this.isDestroyed()) {
-                this.totalCount = data.total_count;
                 successCallback(data);
             }
         } catch (error) {
@@ -61,4 +55,4 @@ class Versions extends OffsetBasedAPI {
     }
 }
 
-export default Versions;
+export default Tasks;

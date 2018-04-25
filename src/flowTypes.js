@@ -187,7 +187,8 @@ export type BoxItemVersion = {
     size?: number,
     created_at?: string,
     modified_at?: string,
-    modified_by?: User
+    modified_by?: User,
+    trashed_at: ?string
 };
 
 export type BoxItem = {
@@ -400,4 +401,42 @@ export type AccessStats = {
     download_count: number,
     comment_count: number,
     edit_count: number
+};
+
+export type Task = {
+    type: string,
+    id: string,
+    item: {
+        type: string,
+        id: string,
+        sequence_id: string,
+        etag: string,
+        sha1: string,
+        name: string
+    },
+    due_at: ?string
+};
+
+export type Tasks = {
+    total_count: number,
+    entries: Array<Task>
+};
+
+export type Comment = {
+    type: string,
+    id: string,
+    is_reply_comment: boolean,
+    message: string,
+    created_by: User,
+    created_at: string,
+    item: {
+        id: string,
+        type: string
+    },
+    modified_at: string
+};
+
+export type Comments = {
+    total_count: number,
+    entries: Array<Comment>
 };

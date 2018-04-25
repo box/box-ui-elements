@@ -1,16 +1,16 @@
 /**
  * @flow
- * @file Helper for the box versions API
+ * @file Helper for the box comments API
  * @author Box
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
 import File from './File';
-import type { FileVersions } from '../flowTypes';
+import type { Comments as CommentsType } from '../flowTypes';
 
-class Versions extends OffsetBasedAPI {
+class Comments extends OffsetBasedAPI {
     /**
-     * API URL for versions
+     * API URL for comments
      *
      * @param {string} [id] - a box file id
      * @return {string} base url for files
@@ -19,18 +19,18 @@ class Versions extends OffsetBasedAPI {
         if (!id) {
             throw new Error('Missing file id!');
         }
-        return `${this.getBaseApiUrl()}/files/${id}/versions`;
+        return `${this.getBaseApiUrl()}/files/${id}/comments`;
     }
 
     /**
-     * Gets the versions for a box file
+     * Gets the versions for a box comment
      *
      * @param {string} id - a box file id
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
      * @return {Promise}
      */
-    async versions(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
+    async comments(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
         if (this.isDestroyed() || !this.hasMoreItems()) {
             return Promise.reject();
         }
@@ -39,9 +39,8 @@ class Versions extends OffsetBasedAPI {
 
         this.offset += this.limit;
 
-        // Make the XHR request
         try {
-            const { data }: { data: FileVersions } = await this.xhr.get({
+            const { data }: { data: CommentsType } = await this.xhr.get({
                 id: File.getTypedFileId(id),
                 url: this.getUrl(id),
                 params
@@ -61,4 +60,4 @@ class Versions extends OffsetBasedAPI {
     }
 }
 
-export default Versions;
+export default Comments;

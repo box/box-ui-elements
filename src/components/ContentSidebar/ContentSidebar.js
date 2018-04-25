@@ -16,7 +16,7 @@ import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
 import messages from '../messages';
-import type { AccessStats, Token, BoxItem, StringMap, FileVersions, Errors } from '../../flowTypes';
+import type { AccessStats, Token, BoxItem, StringMap, FileVersions, Errors, Comments, Tasks } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -56,8 +56,12 @@ type State = {
     file?: BoxItem,
     accessStats?: AccessStats,
     versions?: FileVersions,
+    comments?: Comments,
+    tasks?: Tasks,
     fileError?: Errors,
-    versionError?: Errors
+    versionError?: Errors,
+    commentsError?: Errors,
+    tasksError?: Errors
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -148,14 +152,18 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { fileId, hasVersions }: Props = this.props;
+        const { fileId, hasVersions, hasActivityFeed }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (fileId) {
             this.fetchFile(fileId);
-            if (hasVersions) {
+            if (hasVersions || hasActivityFeed) {
                 this.fetchVersions(fileId);
+            }
+            if (hasActivityFeed) {
+                this.fetchComments(fileId);
+                this.fetchTasks(fileId);
             }
         }
     }
@@ -310,6 +318,36 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Handles a failed file comment fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchCommentsErrorCallback = (e: Error) => {
+        this.setState({
+            comments: undefined,
+            commentsError: e
+        });
+        this.errorCallback(e);
+    };
+
+    /**
+     * Handles a failed file task fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchTasksErrorCallback = (e: Error) => {
+        this.setState({
+            tasks: undefined,
+            tasksError: e
+        });
+        this.errorCallback(e);
+    };
+
+    /**
      * Network error callback
      *
      * @private
@@ -345,6 +383,28 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * File comments fetch success callback
+     *
+     * @private
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchCommentsSuccessCallback = (comments: Comments): void => {
+        this.setState({ comments, commentsError: undefined });
+    };
+
+    /**
+     * File tasks fetch success callback
+     *
+     * @private
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchTasksSuccessCallback = (tasks: Tasks): void => {
+        this.setState({ tasks, tasksError: undefined });
+    };
+
+    /**
      * Fetches a file
      *
      * @private
@@ -374,6 +434,34 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Fetches the comments for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchComments(id: string, shouldDestroy?: boolean = false): void {
+        if (this.shouldFetchOrRender()) {
+            this.api
+                .getCommentsAPI(shouldDestroy)
+                .comments(id, this.fetchCommentsSuccessCallback, this.fetchCommentsErrorCallback);
+        }
+    }
+
+    /**
+     * Fetches the tasks for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchTasks(id: string, shouldDestroy?: boolean = false): void {
+        if (this.shouldFetchOrRender()) {
+            this.api.getTasksAPI(shouldDestroy).tasks(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback);
+        }
+    }
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -399,7 +487,17 @@ class ContentSidebar extends PureComponent<Props, State> {
             onAccessStatsClick,
             onClassificationClick
         }: Props = this.props;
-        const { file, accessStats, versions, fileError, versionError }: State = this.state;
+        const {
+            file,
+            accessStats,
+            versions,
+            comments,
+            tasks,
+            fileError,
+            versionError,
+            commentsError,
+            tasksError
+        }: State = this.state;
 
         const shouldRender = this.shouldFetchOrRender() && !!file;
 
@@ -431,6 +529,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasVersions={hasVersions}
                                 fileError={fileError}
                                 versionError={versionError}
+                                tasks={tasks}
+                                tasksError={tasksError}
+                                comments={comments}
+                                commentsError={commentsError}
                             />
                         ) : (
                             <div className='bcs-loading'>

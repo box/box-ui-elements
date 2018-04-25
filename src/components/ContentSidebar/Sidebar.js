@@ -11,7 +11,7 @@ import Tab from 'box-react-ui/lib/components/tab-view/Tab';
 import DetailsSidebar from './DetailsSidebar';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import messages from '../messages';
-import type { AccessStats, BoxItem, FileVersions, Errors } from '../../flowTypes';
+import type { AccessStats, BoxItem, FileVersions, Errors, Comments, Tasks } from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
@@ -37,8 +37,12 @@ type Props = {
     intl: any,
     versions?: FileVersions,
     accessStats?: AccessStats,
+    comments?: Comments,
+    tasks?: Tasks,
     fileError?: Errors,
-    versionError?: Errors
+    versionError?: Errors,
+    commentsError?: Errors,
+    tasksError?: Errors
 };
 
 const Sidebar = ({

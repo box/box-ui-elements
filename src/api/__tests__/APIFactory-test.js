@@ -10,6 +10,8 @@ import WebLinkAPI from '../WebLink';
 import SearchAPI from '../Search';
 import RecentsAPI from '../Recents';
 import VersionsAPI from '../Versions';
+import CommentsAPI from '../Comments';
+import TasksAPI from '../Tasks';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -179,6 +181,50 @@ describe('api/APIFactory', () => {
             expect(versionsAPI.options.cache).toBeInstanceOf(Cache);
             expect(versionsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(versionsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getCommentsAPI()', () => {
+        test('should call destroy and return comments API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const commentsAPI = factory.getCommentsAPI(true);
+            expect(spy).toBeCalled();
+            expect(commentsAPI).toBeInstanceOf(CommentsAPI);
+            expect(commentsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(commentsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(commentsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return comments API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const commentsAPI = factory.getCommentsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(commentsAPI).toBeInstanceOf(CommentsAPI);
+            expect(commentsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(commentsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(commentsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getTasksAPI()', () => {
+        test('should call destroy and return tasks API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const tasksAPI = factory.getTasksAPI(true);
+            expect(spy).toBeCalled();
+            expect(tasksAPI).toBeInstanceOf(TasksAPI);
+            expect(tasksAPI.options.cache).toBeInstanceOf(Cache);
+            expect(tasksAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(tasksAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return tasks API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const tasksAPI = factory.getTasksAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(tasksAPI).toBeInstanceOf(TasksAPI);
+            expect(tasksAPI.options.cache).toBeInstanceOf(Cache);
+            expect(tasksAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(tasksAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

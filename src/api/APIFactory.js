@@ -13,9 +13,12 @@ import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
+import CommentsAPI from './Comments';
+import TasksAPI from './Tasks';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
+const VERSION_LIMIT = 1000;
 class APIFactory {
     /**
      * @property {*}
@@ -61,6 +64,16 @@ class APIFactory {
      * @property {VersionsAPI}
      */
     versionsAPI: VersionsAPI;
+
+    /**
+     * @property {CommentsAPI}
+     */
+    commentsAPI: CommentsAPI;
+
+    /**
+     * @property {TasksAPI}
+     */
+    tasksAPI: TasksAPI;
 
     /**
      * [constructor]
@@ -249,8 +262,36 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
-        this.versionsAPI = new VersionsAPI(this.options);
+        this.versionsAPI = new VersionsAPI(this.options, ['trashed_at'], 0, VERSION_LIMIT);
         return this.versionsAPI;
+    }
+
+    /**
+     * API for comments
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {CommentsAPI} CommentsAPI instance
+     */
+    getCommentsAPI(shouldDestroy: boolean): CommentsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.commentsAPI = new CommentsAPI(this.options);
+        return this.commentsAPI;
+    }
+
+    /**
+     * API for tasks
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {TasksAPI} TasksAPI instance
+     */
+    getTasksAPI(shouldDestroy: boolean): TasksAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.tasksAPI = new TasksAPI(this.options);
+        return this.tasksAPI;
     }
 }
 
