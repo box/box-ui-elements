@@ -23,7 +23,13 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import messages from '../../../messages';
 
 import './Comment.scss';
-import type { Versions, Contacts, Tasks, InputState, Translations } from '../activityFeedFlowTypes';
+import type {
+    VersionHandlers,
+    ContactHandlers,
+    TaskHandlers,
+    InputState,
+    Translations
+} from '../activityFeedFlowTypes';
 
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
@@ -45,9 +51,9 @@ type Props = {
     translatedTaggedMessage?: string,
     translations: Translations,
     handlers: {
-        tasks?: Tasks,
-        contacts?: Contacts,
-        versions?: Versions
+        tasks?: TaskHandlers,
+        contacts?: ContactHandlers,
+        versions?: VersionHandlers
     },
     inputState: InputState
 };

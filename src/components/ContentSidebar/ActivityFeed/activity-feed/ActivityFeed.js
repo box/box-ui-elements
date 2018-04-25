@@ -13,7 +13,14 @@ import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import type { User, SelectorItems } from '../../../../flowTypes';
-import type { Comments, Tasks, Contacts, Versions, Item, Translations } from '../activityFeedFlowTypes';
+import type {
+    CommentHandlers,
+    TaskHandlers,
+    ContactHandlers,
+    VersionHandlers,
+    Item,
+    Translations
+} from '../activityFeedFlowTypes';
 
 import './ActivityFeed.scss';
 
@@ -27,10 +34,10 @@ type Props = {
         isDisabled?: boolean
     },
     handlers: {
-        comments?: Comments,
-        tasks?: Tasks,
-        contacts?: Contacts,
-        versions?: Versions
+        comments?: CommentHandlers,
+        tasks?: TaskHandlers,
+        contacts?: ContactHandlers,
+        versions?: VersionHandlers
     },
     translations?: Translations,
     permissions?: {

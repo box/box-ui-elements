@@ -6,24 +6,24 @@
 
 import type { SelectorItems, User } from '../../../flowTypes';
 
-export type Comments = {
+export type CommentHandlers = {
     create?: Function,
     delete?: Function
 };
 
-export type Tasks = {
+export type TaskHandlers = {
     create?: Function,
     delete?: Function,
     edit?: Function,
     onTaskAssignmentUpdate?: Function
 };
 
-export type Contacts = {
+export type ContactHandlers = {
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function
 };
 
-export type Versions = {
+export type VersionHandlers = {
     info?: Function
 };
 
