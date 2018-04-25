@@ -32,7 +32,11 @@ type Props = {
         contacts?: Contacts,
         versions?: Versions
     },
-    translations?: Translations
+    translations?: Translations,
+    permissions?: {
+        comments?: boolean,
+        tasks?: boolean
+    }
 };
 
 type State = {
@@ -150,10 +154,12 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { feedState, handlers, inputState, isLoading, translations } = this.props;
+        const { feedState, handlers, inputState, isLoading, permissions, translations } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
         const { currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
+        const hasCommentPermission = getProp(permissions, 'comments', false);
+        const hasTaskPermission = getProp(permissions, 'tasks', false);
 
         return (
             // eslint-disable-next-line
@@ -172,9 +178,9 @@ class ActivityFeed extends React.Component<Props, State> {
                             items={collapseFeedState(feedState)}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
-                            onCommentDelete={this.deleteComment}
-                            onTaskDelete={this.deleteTask}
-                            onTaskEdit={this.updateTask}
+                            onCommentDelete={hasCommentPermission ? this.deleteComment : noop}
+                            onTaskDelete={hasTaskPermission ? this.deleteTask : noop}
+                            onTaskEdit={hasTaskPermission ? this.updateTask : noop}
                             onVersionInfo={this.openVersionHistoryPopup}
                             translations={translations}
                             inputState={inputState}
@@ -194,8 +200,8 @@ class ActivityFeed extends React.Component<Props, State> {
                         className={classNames('bcs-activity-feed-comment-input', {
                             'bcs-is-disabled': inputState.isDisabled
                         })}
-                        createComment={this.createComment}
-                        createTask={this.createTask}
+                        createComment={hasCommentPermission ? this.createComment : noop}
+                        createTask={hasTaskPermission ? this.createTask : noop}
                         getApproverContactsWithQuery={this.getApproverSelectorContacts}
                         getMentionContactsWithQuery={this.getMentionSelectorContacts}
                         isOpen={isInputOpen}
