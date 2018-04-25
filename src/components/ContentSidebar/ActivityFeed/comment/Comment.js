@@ -6,6 +6,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
+import getProp from 'lodash/get';
 
 import Avatar from 'box-react-ui/lib/components/avatar';
 import { Link } from 'box-react-ui/lib/components/link';
@@ -30,8 +31,10 @@ type Props = {
     createdBy: User,
     createdAt: string | number,
     permissions?: {
-        comment_delete: boolean,
-        comment_edit: boolean
+        comment_delete?: boolean,
+        comment_edit?: boolean,
+        task_edit?: boolean,
+        task_delete?: boolean
     },
     id: string,
     isPending?: boolean,
@@ -134,22 +137,23 @@ class Comment extends React.Component<Props, State> {
                                     <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
-                            {onEdit && permissions && permissions.task_edit ? (
+                            {onEdit && (getProp(permissions, 'task_edit') || getProp(permissions, 'comment_edit')) ? (
                                 <InlineEdit id={id} toEdit={toEdit} />
                             ) : null}
-                            {onDelete && permissions && (permissions.comment_delete || permissions.task_delete) ? (
-                                <InlineDelete
-                                    id={id}
-                                    message={
-                                        permissions.task_delete || false ? (
-                                            <FormattedMessage {...messages.taskDeletePrompt} />
-                                        ) : (
-                                            <FormattedMessage {...messages.commentDeletePrompt} />
-                                        )
-                                    }
-                                    onDelete={onDelete}
-                                />
-                            ) : null}
+                            {onDelete &&
+                            (getProp(permissions, 'task_delete') || getProp(permissions, 'comment_delete')) ? (
+                                    <InlineDelete
+                                        id={id}
+                                        message={
+                                            getProp(permissions, 'task_delete', false) ? (
+                                                <FormattedMessage {...messages.taskDeletePrompt} />
+                                            ) : (
+                                                <FormattedMessage {...messages.commentDeletePrompt} />
+                                            )
+                                        }
+                                        onDelete={onDelete}
+                                    />
+                                ) : null}
                         </div>
                         {isEditing ? (
                             <ApprovalCommentForm

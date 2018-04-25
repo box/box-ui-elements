@@ -45,9 +45,11 @@ type Props = {
     onDelete: Function,
     onEdit: Function,
     onTaskAssignmentUpdate: Function,
-    permissions: {
-        comment_delete: boolean,
-        comment_edit: boolean
+    permissions?: {
+        comment_delete?: boolean,
+        comment_edit?: boolean,
+        task_edit?: boolean,
+        task_delete?: boolean
     },
     translatedTaggedMessage: string,
     translations: Translations,
