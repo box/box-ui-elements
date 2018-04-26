@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+// $FlowFixMe
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
