@@ -13,7 +13,14 @@ import messages from '../../../messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
 import type { ActionItemError, User } from '../../../../flowTypes';
-import type { Comments, Contacts, InputState, Tasks, Translations, Versions } from '../activityFeedFlowTypes';
+import type {
+    CommentHandlers,
+    ContactHandlers,
+    InputState,
+    TaskHandlers,
+    Translations,
+    VersionHandlers
+} from '../activityFeedFlowTypes';
 
 import './Task.scss';
 
@@ -34,10 +41,10 @@ type Props = {
     dueDate: any,
     error: ActionItemError,
     handlers: {
-        comments?: Comments,
-        tasks?: Tasks,
-        contacts?: Contacts,
-        versions?: Versions
+        comments?: CommentHandlers,
+        tasks?: TaskHandlers,
+        contacts?: ContactHandlers,
+        versions?: VersionHandlers
     },
     id: string,
     inputState: InputState,
@@ -45,9 +52,11 @@ type Props = {
     onDelete: Function,
     onEdit: Function,
     onTaskAssignmentUpdate: Function,
-    permissions: {
-        comment_delete: boolean,
-        comment_edit: boolean
+    permissions?: {
+        comment_delete?: boolean,
+        comment_edit?: boolean,
+        task_edit?: boolean,
+        task_delete?: boolean
     },
     translatedTaggedMessage: string,
     translations: Translations,
