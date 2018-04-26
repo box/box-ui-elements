@@ -735,6 +735,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.fileAccessStatsErrorHeaderMessage',
         description: 'File access stats error message',
         defaultMessage: 'Something went wrong when fetching the access stats.'
+    },
+    activityFeedTitle: {
+        id: 'be.activityFeedTitle',
+        description: 'Title for the Activity Feed tab',
+        defaultMessage: 'Activity'
     }
 });
 

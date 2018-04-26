@@ -89,7 +89,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     test('should call create comment handler and close input on valid comment submit', () => {
         const createCommentSpy = jest.fn();
         allHandlers.comments.create = createCommentSpy;
-        const wrapper = mount(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
+        const permissions = {
+            comments: true
+        };
+        const wrapper = mount(
+            <ActivityFeed permissions={permissions} inputState={{ currentUser }} handlers={allHandlers} />
+        );
 
         const instance = wrapper.instance();
         const approvalCommentForm = wrapper.find('ApprovalCommentForm').at(0);
@@ -105,7 +110,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     test('should call create task handler and close input on valid task submit', () => {
         const createTaskSpy = jest.fn();
         allHandlers.tasks.create = createTaskSpy;
-        const wrapper = mount(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
+        const permissions = {
+            tasks: true
+        };
+        const wrapper = mount(
+            <ActivityFeed permissions={permissions} inputState={{ currentUser }} handlers={allHandlers} />
+        );
 
         const instance = wrapper.instance();
         const approvalCommentForm = wrapper.find('ApprovalCommentForm').at(0);

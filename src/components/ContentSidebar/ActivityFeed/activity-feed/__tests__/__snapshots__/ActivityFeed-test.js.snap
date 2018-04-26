@@ -48,6 +48,11 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
           },
         ]
       }
+      onCommentDelete={[Function]}
+      onTaskAssignmentUpdate={[Function]}
+      onTaskDelete={[Function]}
+      onTaskEdit={[Function]}
+      onVersionInfo={[Function]}
     />
   </div>
 </div>
@@ -99,12 +104,14 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     />
   </div>
   <ApprovalCommentForm
+    approverSelectorContacts={Array []}
     className="bcs-activity-feed-comment-input"
     createComment={[Function]}
     createTask={[Function]}
-    getApproverContactsWithQuery={[MockFunction]}
-    getMentionContactsWithQuery={[MockFunction]}
+    getApproverContactsWithQuery={[Function]}
+    getMentionContactsWithQuery={[Function]}
     isOpen={false}
+    mentionSelectorContacts={Array []}
     onCancel={[Function]}
     onFocus={[Function]}
     onSubmit={[Function]}

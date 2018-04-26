@@ -10,15 +10,23 @@ import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
 import Keywords from '../keywords';
 import type { User } from '../../../../flowTypes';
-import type { Tasks, Comments, Contacts, Versions, InputState, Item, Translations } from '../activityFeedFlowTypes';
+import type {
+    TaskHandlers,
+    CommentHandlers,
+    ContactHandlers,
+    VersionHandlers,
+    InputState,
+    Item,
+    Translations
+} from '../activityFeedFlowTypes';
 
 type Props = {
     currentUser: User,
     handlers: {
-        comments?: Comments,
-        tasks?: Tasks,
-        contacts?: Contacts,
-        versions?: Versions
+        comments?: CommentHandlers,
+        tasks?: TaskHandlers,
+        contacts?: ContactHandlers,
+        versions?: VersionHandlers
     },
     inputState: InputState,
     items: Array<Item>,
@@ -27,7 +35,7 @@ type Props = {
     onTaskDelete?: Function,
     onTaskEdit?: Function,
     onVersionInfo?: Function,
-    translations: Translations
+    translations?: Translations
 };
 
 const ActiveState = ({

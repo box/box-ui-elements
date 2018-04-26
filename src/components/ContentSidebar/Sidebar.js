@@ -9,6 +9,7 @@ import { injectIntl } from 'react-intl';
 import TabView from 'box-react-ui/lib/components/tab-view/TabView';
 import Tab from 'box-react-ui/lib/components/tab-view/Tab';
 import DetailsSidebar from './DetailsSidebar';
+import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import messages from '../messages';
 import type { BoxItem, FileVersions, Errors, FileAccessStats } from '../../flowTypes';
@@ -34,6 +35,15 @@ type Props = {
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
     descriptionTextareaProps: Object,
+    activityFeedState?: Array<any>,
+    onCommentCreate?: Function,
+    onCommentDelete?: Function,
+    onTaskCreate?: Function,
+    onTaskDelete?: Function,
+    onTaskUpdate?: Function,
+    onTaskAssignmentUpdate?: Function,
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function,
     intl: any,
     versions?: FileVersions,
     accessStats?: FileAccessStats,
@@ -60,8 +70,17 @@ const Sidebar = ({
     onInteraction,
     onDescriptionChange,
     intl,
+    activityFeedState,
     onClassificationClick,
     onVersionHistoryClick,
+    onCommentCreate,
+    onCommentDelete,
+    onTaskCreate,
+    onTaskDelete,
+    onTaskUpdate,
+    onTaskAssignmentUpdate,
+    getApproverWithQuery,
+    getMentionWithQuery,
     versions,
     accessStats,
     accessStatsError,
@@ -101,10 +120,40 @@ const Sidebar = ({
         return Details;
     }
 
+    const inputState = {
+        currentUser: getPreviewer(),
+        approverSelectorContacts: [],
+        mentionSelectorContacts: []
+    };
+
+    const handlers = {
+        comments: {
+            create: onCommentCreate,
+            delete: onCommentDelete
+        },
+        tasks: {
+            create: onTaskCreate,
+            delete: onTaskDelete,
+            edit: onTaskUpdate,
+            onTaskAssignmentUpdate
+        },
+        contacts: {
+            getApproverWithQuery,
+            getMentionWithQuery
+        },
+        versions: {
+            info: onVersionHistoryClick
+        }
+    };
+
+    const ActivityFeedSidebar = (
+        <ActivityFeed feedState={activityFeedState} inputState={inputState} handlers={handlers} />
+    );
+
     return (
         <TabView defaultSelectedIndex={shouldShowSkills ? 0 : 1}>
             <Tab title={intl.formatMessage(messages.sidebarDetailsTitle)}>{Details}</Tab>
-            <Tab title='Activity' />
+            <Tab title={intl.formatMessage(messages.activityFeedTitle)}>{ActivityFeedSidebar}</Tab>
         </TabView>
     );
 };
