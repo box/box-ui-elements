@@ -30,21 +30,27 @@ class FileAccessStats extends Base {
      * @param {Function} errorCallback - Function to call with errors
      * @return {Promise}
      */
-    accessStats(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
+    async accessStats(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
 
         // Make the XHR request
-        return this.xhr
-            .get({
+        try {
+            const { data }: { data: FileAccessStatsType } = await this.xhr.get({
                 id: File.getTypedFileId(id),
                 url: this.getUrl(id)
-            })
-            .then(({ data }: { data: FileAccessStatsType }) => {
+            });
+
+            if (!this.isDestroyed()) {
                 successCallback(data);
-            })
-            .catch(errorCallback);
+            }
+        } catch (error) {
+            if (!this.isDestroyed()) {
+                errorCallback(error);
+            }
+        }
+        return Promise.resolve();
     }
 }
 
