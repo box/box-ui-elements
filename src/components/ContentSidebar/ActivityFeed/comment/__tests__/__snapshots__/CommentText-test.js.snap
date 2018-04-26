@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should properly format tagged comment 1`] = `
+<div
+  className="bcs-comment-text"
+>
+  How u doing 
+  <Mention
+    id={2030326577}
+    key="1-123"
+  >
+    @Young Jeezy
+  </Mention>
+  ?
+</div>
+`;
+
+exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should properly handle unicode variants of @ in tagged comments 1`] = `
+<div
+  className="bcs-comment-text"
+>
+  Hi 
+  <Mention
+    id={123}
+    key="1-123"
+  >
+    ﹫Half
+  </Mention>
+   
+  <Mention
+    id={222}
+    key="3-123"
+  >
+    ＠Full
+  </Mention>
+   
+  <Mention
+    id={432}
+    key="5-123"
+  >
+    @Latin
+  </Mention>
+</div>
+`;

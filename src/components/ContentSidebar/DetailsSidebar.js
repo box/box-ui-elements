@@ -34,6 +34,7 @@ type Props = {
     onAccessStatsClick?: Function,
     onInteraction: Function,
     onDescriptionChange: Function,
+    onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
     versions?: FileVersions,
     accessStatsError?: Errors,
@@ -58,6 +59,7 @@ const DetailsSidebar = ({
     onAccessStatsClick,
     onInteraction,
     onDescriptionChange,
+    onClassificationClick,
     onVersionHistoryClick,
     versions,
     accessStatsError,
@@ -94,7 +96,13 @@ const DetailsSidebar = ({
             )}
             {hasProperties && (
                 <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
-                    <SidebarFileProperties onDescriptionChange={onDescriptionChange} file={file} {...fileError} />
+                    <SidebarFileProperties
+                        onDescriptionChange={onDescriptionChange}
+                        file={file}
+                        {...fileError}
+                        hasClassification={hasClassification}
+                        onClassificationClick={onClassificationClick}
+                    />
                 </SidebarSection>
             )}
             {hasAccessStats && (

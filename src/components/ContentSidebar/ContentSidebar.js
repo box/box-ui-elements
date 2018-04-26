@@ -49,6 +49,7 @@ type Props = {
     responseInterceptor?: Function,
     onInteraction: Function,
     onAccessStatsClick?: Function,
+    onClassificationClick?: Function,
     onVersionHistoryClick?: Function
 };
 
@@ -446,7 +447,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasVersions,
             className,
             onVersionHistoryClick,
-            onAccessStatsClick
+            onAccessStatsClick,
+            onClassificationClick
         }: Props = this.props;
         const { file, accessStats, versions, accessStatsError, fileError, versionError }: State = this.state;
 
@@ -475,6 +477,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
                                 onAccessStatsClick={onAccessStatsClick}
+                                onClassificationClick={onClassificationClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
                                 hasVersions={hasVersions}
                                 accessStatsError={accessStatsError}

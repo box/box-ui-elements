@@ -119,7 +119,7 @@ class Xhr {
 
         // If id is passed in, use that, otherwise default to this.id
         const itemId = id || this.id || '';
-        const token = await TokenService.getToken(itemId, this.token);
+        const token = await TokenService.getWriteToken(itemId, this.token);
         if (token) {
             // Only add a token when there was one found
             headers.Authorization = `Bearer ${token}`;

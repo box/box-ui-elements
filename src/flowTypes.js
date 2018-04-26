@@ -54,6 +54,8 @@ import {
 
 export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
 export type Token = null | typeof undefined | string | Function;
+export type TokenReadWrite = { read: string, write?: string };
+export type TokenLiteral = null | typeof undefined | string | TokenReadWrite;
 export type ClassComponent<P, S> = Class<React$Component<P, S>>;
 export type StringMap = { [string]: string };
 export type StringAnyMap = { [string]: any };
@@ -103,11 +105,38 @@ export type BoxItemPermission = {
 };
 
 export type User = {
+    avatarUrl: string,
+    email: string,
     id: string,
     login: string,
     name: string,
     type: 'user'
 };
+
+export type SelectorItem = {
+    id?: string | number,
+    name: string,
+    item: Object,
+    value: any
+};
+
+export type SelectorItems = Array<SelectorItem>;
+
+export type ActionItemError = {
+    title: string,
+    message: string,
+    action: {
+        text: string,
+        onAction: Function
+    }
+};
+
+export type OptionItem = {
+    text: string,
+    value: number | string
+};
+
+export type OptionItems = Array<OptionItem>;
 
 export type SkillCardType =
     | typeof SKILL_KEYWORD

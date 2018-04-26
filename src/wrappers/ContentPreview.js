@@ -7,13 +7,13 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
-import ContentPreviewComponent from '../components/ContentPreview/ContentPreview';
+import ContentPreviewResponsive from '../components/ContentPreview/ContentPreview';
 
 class ContentPreview extends ES6Wrapper {
     /** @inheritdoc */
     render() {
         render(
-            <ContentPreviewComponent
+            <ContentPreviewResponsive
                 language={this.language}
                 messages={this.messages}
                 fileId={this.id}

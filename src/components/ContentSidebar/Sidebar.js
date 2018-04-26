@@ -31,6 +31,7 @@ type Props = {
     onAccessStatsClick?: Function,
     onInteraction: Function,
     onDescriptionChange: Function,
+    onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
     descriptionTextareaProps: Object,
     intl: any,
@@ -59,6 +60,7 @@ const Sidebar = ({
     onInteraction,
     onDescriptionChange,
     intl,
+    onClassificationClick,
     onVersionHistoryClick,
     versions,
     accessStats,
@@ -84,6 +86,7 @@ const Sidebar = ({
             rootElement={rootElement}
             onAccessStatsClick={onAccessStatsClick}
             onInteraction={onInteraction}
+            onClassificationClick={onClassificationClick}
             onDescriptionChange={onDescriptionChange}
             onVersionHistoryClick={onVersionHistoryClick}
             versions={versions}

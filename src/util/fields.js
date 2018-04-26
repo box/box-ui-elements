@@ -32,7 +32,8 @@ import {
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_FILE_VERSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
-    METADATA_SKILLS
+    METADATA_SKILLS,
+    METADATA_CLASSIFICATION
 } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
@@ -65,7 +66,8 @@ const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_OWNED_BY,
     FIELD_DESCRIPTION,
     METADATA_SKILLS,
-    FIELD_ITEM_EXPIRATION
+    FIELD_ITEM_EXPIRATION,
+    METADATA_CLASSIFICATION
 ];
 
 // Additional fields needed for preview

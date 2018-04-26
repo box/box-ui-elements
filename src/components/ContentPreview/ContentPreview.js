@@ -19,9 +19,11 @@ import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight'
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
+import File from '../../api/File';
 import Cache from '../../util/Cache';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
+import TokenService from '../../util/TokenService';
 import { isValidBoxFile } from '../../util/fields';
 import { isInputElement, focus } from '../../util/dom';
 import {
@@ -33,7 +35,7 @@ import {
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW
 } from '../../constants';
-import type { Token, BoxItem, StringMap } from '../../flowTypes';
+import type { Token, TokenLiteral, BoxItem, StringMap } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
@@ -66,7 +68,9 @@ type Props = {
     logoUrl?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
+    onError?: Function,
     onInteraction: Function,
+    onMetric?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function
 };
@@ -87,6 +91,8 @@ class ContentPreview extends PureComponent<Props, State> {
     previewContainer: ?HTMLDivElement;
     mouseMoveTimeoutID: TimeoutID;
     rootElement: HTMLElement;
+    onError: ?Function;
+    onMetric: ?Function;
 
     static defaultProps = {
         className: '',
@@ -102,9 +108,11 @@ class ContentPreview extends PureComponent<Props, State> {
         hasHeader: false,
         autoFocus: false,
         useHotkeys: true,
-        onLoad: noop,
-        onNavigate: noop,
+        onError: noop,
         onInteraction: noop,
+        onLoad: noop,
+        onMetric: noop,
+        onNavigate: noop,
         collection: []
     };
 
@@ -338,7 +346,10 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {Array<string|BoxItem>} files - files to prefetch
      * @return {void}
      */
-    prefetch(files: Array<string | BoxItem>): void {
+    async prefetch(files: Array<string | BoxItem>): Promise<void> {
+        const { token }: Props = this.props;
+        const typedIds: string[] = files.map((file) => File.getTypedFileId(this.getFileId(file)));
+        await TokenService.cacheTokens(typedIds, token);
         files.forEach((file) => {
             const fileId = this.getFileId(file);
             this.fetchFile(fileId, noop, noop);
@@ -350,7 +361,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    onPreviewLoad = (data) => {
+    onPreviewLoad = (data: Object) => {
         const { onLoad, collection }: Props = this.props;
         const currentIndex = this.getFileIndex();
         const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
@@ -375,15 +386,17 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    loadPreview = (): void => {
-        const { token, collection, ...rest }: Props = this.props;
+    loadPreview = async (): Promise<void> => {
+        const { token: tokenOrTokenFunction, onError, onMetric, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
-        if (!this.isPreviewLibraryLoaded() || !file || !token || this.preview) {
+        if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction || this.preview) {
             return;
         }
 
         const { Preview } = global.Box;
+        const typedId: string = File.getTypedFileId(this.getFileId(file));
+        const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
 
         const previewOptions = {
             showDownload: this.canDownload(),
@@ -396,6 +409,8 @@ class ContentPreview extends PureComponent<Props, State> {
         this.preview = new Preview();
         this.preview.updateFileCache([file]);
         this.preview.addListener('load', this.onPreviewLoad);
+        this.preview.addListener('preview_error', onError);
+        this.preview.addListener('preview_metric', onMetric);
         this.preview.show(file.id, token, {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions))
@@ -522,7 +537,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {number} index - Index of file to preview
      * @return {void}
      */
-    navigateToIndex(index) {
+    navigateToIndex(index: number) {
         const { collection, onNavigate }: Props = this.props;
         const { length } = collection;
         if (length < 2 || index < 0 || index > length - 1) {
@@ -680,7 +695,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    containerRef = (container) => {
+    containerRef = (container: ?HTMLDivElement) => {
         this.previewContainer = container;
     };
 
@@ -794,4 +809,5 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 }
 
+export { ContentPreview as ContentPreviewComponent };
 export default makeResponsive(ContentPreview);
