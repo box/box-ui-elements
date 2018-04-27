@@ -561,7 +561,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTasks(id: string, shouldDestroy?: boolean = false): void {
         if (this.shouldFetchOrRender()) {
-            this.api.getTasksAPI(shouldDestroy).tasks(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback);
+            this.api.getTasksAPI(shouldDestroy).get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback);
         }
     }
 

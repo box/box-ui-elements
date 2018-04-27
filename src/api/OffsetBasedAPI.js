@@ -1,4 +1,8 @@
-// @flow
+/**
+ * @flow
+ * @file class for Box offset based API's to inherit common functionality from
+ * @author Box
+ */
 import Base from './Base';
 
 type Params = {

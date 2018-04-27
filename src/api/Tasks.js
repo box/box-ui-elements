@@ -1,12 +1,10 @@
 /**
  * @flow
- * @file Helper for the box versions API
+ * @file Helper for the box Tasks API
  * @author Box
  */
 
 import Base from './Base';
-import { getTypedFileId } from '../util/file';
-import type { Tasks as TasksType } from '../flowTypes';
 
 class Tasks extends Base {
     /**
@@ -20,38 +18,6 @@ class Tasks extends Base {
             throw new Error('Missing file id!');
         }
         return `${this.getBaseApiUrl()}/files/${id}/tasks`;
-    }
-
-    /**
-     * Gets the versions for a box task
-     *
-     * @param {string} id - a box file id
-     * @param {Function} successCallback - Function to call with results
-     * @param {Function} errorCallback - Function to call with errors
-     * @return {Promise}
-     */
-    async tasks(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
-        if (this.isDestroyed()) {
-            return Promise.reject();
-        }
-
-        // Make the XHR request
-        try {
-            const { data }: { data: TasksType } = await this.xhr.get({
-                id: getTypedFileId(id),
-                url: this.getUrl(id)
-            });
-
-            if (!this.isDestroyed()) {
-                successCallback(data);
-            }
-        } catch (error) {
-            if (!this.isDestroyed()) {
-                errorCallback(error);
-            }
-        }
-
-        return Promise.resolve();
     }
 }
 
