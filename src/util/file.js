@@ -1,5 +1,11 @@
-// @flow
-import { TYPED_ID_FILE_PREFIX } from '../constants';
+/**
+ * @flow
+ * @file Helper for throwing errors
+ * @author Box
+ */
+
+import { TYPED_ID_FILE_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
+import type { BoxItem } from '../flowTypes';
 
 /* eslint-disable import/prefer-default-export */
 /**
@@ -11,4 +17,8 @@ import { TYPED_ID_FILE_PREFIX } from '../constants';
  */
 export function getTypedFileId(id: string): string {
     return `${TYPED_ID_FILE_PREFIX}${id}`;
+}
+
+export function isBoxNote(file: BoxItem): boolean {
+    return file.extension === FILE_EXTENSION_BOX_NOTE;
 }

@@ -396,11 +396,12 @@ export type Errors = {
     inlineError?: InlineError
 };
 
-export type AccessStats = {
+export type FileAccessStats = {
     preview_count: number,
     download_count: number,
     comment_count: number,
-    edit_count: number
+    edit_count: number,
+    has_count_overflowed: boolean
 };
 
 export type Task = {

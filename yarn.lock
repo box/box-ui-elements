@@ -1572,8 +1572,8 @@ box-locales@^0.0.1:
   resolved "https://registry.yarnpkg.com/box-locales/-/box-locales-0.0.1.tgz#1724959f293ae85f235b681b775d0f1a52a76b54"
 
 box-react-ui@^22.9.0:
-  version "22.9.0"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-22.9.0.tgz#8e625d8c52e958b0f01c3057037f61b116660a66"
+  version "22.13.6"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-22.13.6.tgz#3bf5194a4d347d2b5478d7acdd594dc47925a787"
 
 brace-expansion@^1.1.7:
   version "1.1.8"

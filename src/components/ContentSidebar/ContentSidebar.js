@@ -16,7 +16,16 @@ import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
 import messages from '../messages';
-import type { AccessStats, Token, BoxItem, StringMap, FileVersions, Errors, Comments, Tasks } from '../../flowTypes';
+import type {
+    FileAccessStats,
+    Token,
+    BoxItem,
+    StringMap,
+    FileVersions,
+    Errors,
+    Comments,
+    Tasks
+} from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -39,6 +48,7 @@ type Props = {
     hasClassification: boolean,
     hasActivityFeed: boolean,
     hasVersions: boolean,
+    hasAccessStats: boolean,
     language?: string,
     messages?: StringMap,
     cache?: Cache,
@@ -63,14 +73,15 @@ type Props = {
 
 type State = {
     file?: BoxItem,
-    accessStats?: AccessStats,
+    accessStats?: FileAccessStats,
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
     fileError?: Errors,
     versionError?: Errors,
     commentsError?: Errors,
-    tasksError?: Errors
+    tasksError?: Errors,
+    accessStatsError?: Errors
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -192,13 +203,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasVersions, hasActivityFeed }: Props, hasFileIdChanged?: boolean) {
+    fetchData({ fileId, hasVersions, hasActivityFeed, hasAccessStats }: Props, hasFileIdChanged?: boolean) {
         if (hasFileIdChanged) {
             this.setState({});
         }
 
         if (fileId) {
             this.fetchFile(fileId);
+            if (hasAccessStats) {
+                this.fetchFileAccessStats(fileId);
+            }
             if (hasActivityFeed) {
                 this.fetchComments(fileId, false);
                 this.fetchTasks(fileId);
@@ -364,6 +378,25 @@ class ContentSidebar extends PureComponent<Props, State> {
             tasks: undefined,
             tasksError: e
         });
+    };
+
+    /**
+     * Handles a failed file access stats fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchFileAccessStatsErrorCallback = (e: Error) => {
+        this.setState({
+            accessStats: undefined,
+            accessStatsError: {
+                maskError: {
+                    errorHeader: messages.fileAccessStatsErrorHeaderMessage,
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
+                }
+            }
+        });
         this.errorCallback(e);
     };
 
@@ -395,7 +428,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File versions fetch success callback
      *
      * @private
-     * @param {Object} file - Box file
+     * @param {Object} versions - Box file versions
      * @return {void}
      */
     fetchVersionsSuccessCallback = (versions: FileVersions): void => {
@@ -403,7 +436,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * File comments fetch success callback
+     * File versions fetch success callback
      *
      * @private
      * @param {Object} file - Box file
@@ -417,11 +450,22 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File tasks fetch success callback
      *
      * @private
-     * @param {Object} file - Box file
+     * @param {Object} tasks - Box task
      * @return {void}
      */
     fetchTasksSuccessCallback = (tasks: Tasks): void => {
         this.setState({ tasks, tasksError: undefined });
+    };
+
+    /**
+     * File access stats fetch success callback
+     *
+     * @private
+     * @param {Object} accessStats - access stats for a file
+     * @return {void}
+     */
+    fetchFileAccessStatsSuccessCallback = (accessStats: FileAccessStats): void => {
+        this.setState({ accessStats, accessStatsError: undefined });
     };
 
     /**
@@ -522,6 +566,21 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Fetches the access stats for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchFileAccessStats(id: string, shouldDestroy?: boolean = false): void {
+        if (this.shouldFetchOrRender()) {
+            this.api
+                .getFileAccessStatsAPI(shouldDestroy)
+                .get(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
+        }
+    }
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -562,6 +621,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             versions,
             comments,
             tasks,
+            accessStatsError,
             fileError,
             versionError,
             commentsError,
@@ -597,6 +657,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onClassificationClick={onClassificationClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
                                 hasVersions={hasVersions}
+                                accessStatsError={accessStatsError}
                                 fileError={fileError}
                                 versionError={versionError}
                                 tasks={tasks}

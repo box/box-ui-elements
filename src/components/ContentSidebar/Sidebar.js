@@ -12,7 +12,7 @@ import DetailsSidebar from './DetailsSidebar';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import messages from '../messages';
-import type { AccessStats, BoxItem, FileVersions, Errors, Comments, Tasks } from '../../flowTypes';
+import type { FileAccessStats, BoxItem, FileVersions, Errors, Comments, Tasks } from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
@@ -46,9 +46,10 @@ type Props = {
     getMentionWithQuery?: Function,
     intl: any,
     versions?: FileVersions,
-    accessStats?: AccessStats,
     comments?: Comments,
     tasks?: Tasks,
+    accessStats?: FileAccessStats,
+    accessStatsError?: Errors,
     fileError?: Errors,
     versionError?: Errors,
     commentsError?: Errors,
@@ -86,6 +87,7 @@ const Sidebar = ({
     getMentionWithQuery,
     versions,
     accessStats,
+    accessStatsError,
     fileError,
     versionError
 }: Props) => {
@@ -112,6 +114,7 @@ const Sidebar = ({
             onVersionHistoryClick={onVersionHistoryClick}
             versions={versions}
             accessStats={accessStats}
+            accessStatsError={accessStatsError}
             fileError={fileError}
             versionError={versionError}
         />
