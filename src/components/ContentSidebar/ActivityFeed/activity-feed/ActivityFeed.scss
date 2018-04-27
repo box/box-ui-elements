@@ -1,10 +1,11 @@
 @import '../../../variables';
 
-.bcs-activity-feed {
+.be .bcs-activity-feed {
     display: flex;
     flex-direction: column;
     height: 100%;
     position: relative;
+    width: 100%;
 
     .bcs-activity-feed-items-container {
         align-items: center;
@@ -85,6 +86,14 @@
 
         .selector-dropdown-wrapper {
             width: 100%;
+        }
+    }
+
+    .draft-js-editor label div {
+        padding: 0;
+
+        [contentEditable=true] {
+            padding: 10px;
         }
     }
 }

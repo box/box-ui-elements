@@ -6,6 +6,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
+import getProp from 'lodash/get';
 
 import Avatar from 'box-react-ui/lib/components/avatar';
 import { Link } from 'box-react-ui/lib/components/link';
@@ -22,7 +23,13 @@ import formatTaggedMessage from '../utils/formatTaggedMessage';
 import messages from '../../../messages';
 
 import './Comment.scss';
-import type { Versions, Contacts, Tasks, InputState, Translations } from '../activityFeedFlowTypes';
+import type {
+    VersionHandlers,
+    ContactHandlers,
+    TaskHandlers,
+    InputState,
+    Translations
+} from '../activityFeedFlowTypes';
 
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
@@ -30,8 +37,10 @@ type Props = {
     createdBy: User,
     createdAt: string | number,
     permissions?: {
-        comment_delete: boolean,
-        comment_edit: boolean
+        comment_delete?: boolean,
+        comment_edit?: boolean,
+        task_edit?: boolean,
+        task_delete?: boolean
     },
     id: string,
     isPending?: boolean,
@@ -42,9 +51,9 @@ type Props = {
     translatedTaggedMessage?: string,
     translations: Translations,
     handlers: {
-        tasks?: Tasks,
-        contacts?: Contacts,
-        versions?: Versions
+        tasks?: TaskHandlers,
+        contacts?: ContactHandlers,
+        versions?: VersionHandlers
     },
     inputState: InputState
 };
@@ -106,6 +115,10 @@ class Comment extends React.Component<Props, State> {
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(createdAt).getTime();
+        const canDeleteTasks = getProp(permissions, 'task_delete', false);
+        const canDeleteTasksOrComments = canDeleteTasks || getProp(permissions, 'comment_delete');
+        const canEditTasksOrComments = getProp(permissions, 'task_edit') || getProp(permissions, 'comment_edit');
+
         return (
             <div className='bcs-comment-container'>
                 <div
@@ -134,14 +147,12 @@ class Comment extends React.Component<Props, State> {
                                     <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
-                            {onEdit && permissions && permissions.task_edit ? (
-                                <InlineEdit id={id} toEdit={toEdit} />
-                            ) : null}
-                            {onDelete && permissions && (permissions.comment_delete || permissions.task_delete) ? (
+                            {onEdit && canEditTasksOrComments ? <InlineEdit id={id} toEdit={toEdit} /> : null}
+                            {onDelete && canDeleteTasksOrComments ? (
                                 <InlineDelete
                                     id={id}
                                     message={
-                                        permissions.task_delete || false ? (
+                                        canDeleteTasks ? (
                                             <FormattedMessage {...messages.taskDeletePrompt} />
                                         ) : (
                                             <FormattedMessage {...messages.commentDeletePrompt} />

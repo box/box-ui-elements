@@ -44,12 +44,21 @@ type Props = {
     cache?: Cache,
     sharedLink?: string,
     sharedLinkPassword?: string,
+    activityFeedState?: Array<any>,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onInteraction: Function,
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
+    onCommentCreate?: Function,
+    onCommentDelete?: Function,
+    onTaskCreate?: Function,
+    onTaskDelete?: Function,
+    onTaskUpdate?: Function,
+    onTaskAssignmentUpdate?: Function,
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function
 };
 
 type State = {
@@ -483,9 +492,18 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             hasVersions,
             className,
+            activityFeedState,
             onVersionHistoryClick,
             onAccessStatsClick,
-            onClassificationClick
+            onClassificationClick,
+            onCommentCreate,
+            onCommentDelete,
+            onTaskCreate,
+            onTaskDelete,
+            onTaskUpdate,
+            onTaskAssignmentUpdate,
+            getApproverWithQuery,
+            getMentionWithQuery
         }: Props = this.props;
         const {
             file,
@@ -523,6 +541,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
+                                activityFeedState={activityFeedState}
                                 onAccessStatsClick={onAccessStatsClick}
                                 onClassificationClick={onClassificationClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
@@ -533,6 +552,14 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 tasksError={tasksError}
                                 comments={comments}
                                 commentsError={commentsError}
+                                onCommentCreate={onCommentCreate}
+                                onCommentDelete={onCommentDelete}
+                                onTaskCreate={onTaskCreate}
+                                onTaskDelete={onTaskDelete}
+                                onTaskUpdate={onTaskUpdate}
+                                onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                getApproverWithQuery={getApproverWithQuery}
+                                getMentionWithQuery={getMentionWithQuery}
                             />
                         ) : (
                             <div className='bcs-loading'>

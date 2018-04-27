@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+// $FlowFixMe
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
@@ -227,7 +228,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                         />
                         <aside
                             className={classNames('bcs-at-mention-tip', {
-                                'bcs-accessibility-hidden': isOpen
+                                'accessibility-hidden': isOpen
                             })}
                         >
                             <FormattedMessage {...messages.atMentionTip} />

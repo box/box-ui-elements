@@ -730,6 +730,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.versionHistoryErrorHeaderMessage',
         description: 'Version history error message',
         defaultMessage: 'Something went wrong when fetching the version history.'
+    },
+    activityFeedTitle: {
+        id: 'be.activityFeedTitle',
+        description: 'Title for the Activity Feed tab',
+        defaultMessage: 'Activity'
     }
 });
 
