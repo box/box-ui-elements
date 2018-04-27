@@ -179,3 +179,6 @@ export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
 /* ------------------ Metadata  ---------------------- */
 export const KEY_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
+
+/* ------------------ File Extensions  ---------------------- */
+export const FILE_EXTENSION_BOX_NOTE = 'boxnote';

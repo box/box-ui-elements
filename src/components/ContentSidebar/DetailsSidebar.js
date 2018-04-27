@@ -13,12 +13,12 @@ import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
 import SidebarVersions from './SidebarVersions';
 import SidebarNotices from './SidebarNotices';
-import type { AccessStats, BoxItem, FileVersions, Errors } from '../../flowTypes';
+import type { FileAccessStats, BoxItem, FileVersions, Errors } from '../../flowTypes';
 import './DetailsSidebar.scss';
 import SidebarFileProperties from './SidebarFileProperties';
 
 type Props = {
-    accessStats?: AccessStats,
+    accessStats?: FileAccessStats,
     file: BoxItem,
     getPreviewer: Function,
     hasTitle: boolean,
@@ -37,6 +37,7 @@ type Props = {
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
     versions?: FileVersions,
+    accessStatsError?: Errors,
     fileError?: Errors,
     versionError?: Errors
 };
@@ -61,6 +62,7 @@ const DetailsSidebar = ({
     onClassificationClick,
     onVersionHistoryClick,
     versions,
+    accessStatsError,
     fileError,
     versionError
 }: Props) => {
@@ -72,12 +74,15 @@ const DetailsSidebar = ({
         <SidebarContent hasTitle={hasTitle} title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
             {(hasVersions || hasNotices) && (
                 <div className='bcs-details-content'>
-                    <SidebarVersions
-                        onVersionHistoryClick={onVersionHistoryClick}
-                        versions={versions}
-                        {...versionError}
-                    />
-                    <SidebarNotices file={file} />
+                    {hasVersions && (
+                        <SidebarVersions
+                            onVersionHistoryClick={onVersionHistoryClick}
+                            versions={versions}
+                            file={file}
+                            {...versionError}
+                        />
+                    )}
+                    {hasNotices && <SidebarNotices file={file} />}
                 </div>
             )}
             {hasSkills && (
@@ -100,7 +105,14 @@ const DetailsSidebar = ({
                     />
                 </SidebarSection>
             )}
-            {hasAccessStats && <SidebarAccessStats accessStats={accessStats} onAccessStatsClick={onAccessStatsClick} />}
+            {hasAccessStats && (
+                <SidebarAccessStats
+                    accessStats={accessStats}
+                    onAccessStatsClick={onAccessStatsClick}
+                    file={file}
+                    {...accessStatsError}
+                />
+            )}
         </SidebarContent>
     );
 };

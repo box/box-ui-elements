@@ -16,7 +16,7 @@ import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
 import messages from '../messages';
-import type { AccessStats, Token, BoxItem, StringMap, FileVersions, Errors } from '../../flowTypes';
+import type { FileAccessStats, Token, BoxItem, StringMap, FileVersions, Errors } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -39,6 +39,7 @@ type Props = {
     hasClassification: boolean,
     hasActivityFeed: boolean,
     hasVersions: boolean,
+    hasAccessStats: boolean,
     language?: string,
     messages?: StringMap,
     cache?: Cache,
@@ -63,10 +64,11 @@ type Props = {
 
 type State = {
     file?: BoxItem,
-    accessStats?: AccessStats,
+    accessStats?: FileAccessStats,
     versions?: FileVersions,
     fileError?: Errors,
-    versionError?: Errors
+    versionError?: Errors,
+    accessStatsError?: Errors
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -157,7 +159,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { fileId, hasVersions }: Props = this.props;
+        const { fileId, hasVersions, hasAccessStats }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
@@ -165,6 +167,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.fetchFile(fileId);
             if (hasVersions) {
                 this.fetchVersions(fileId);
+            }
+            if (hasAccessStats) {
+                this.fetchFileAccessStats(fileId);
             }
         }
     }
@@ -319,6 +324,26 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Handles a failed file access stats fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchFileAccessStatsErrorCallback = (e: Error) => {
+        this.setState({
+            accessStats: undefined,
+            accessStatsError: {
+                maskError: {
+                    errorHeader: messages.fileAccessStatsErrorHeaderMessage,
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
+                }
+            }
+        });
+        this.errorCallback(e);
+    };
+
+    /**
      * Network error callback
      *
      * @private
@@ -354,6 +379,17 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * File versions fetch success callback
+     *
+     * @private
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchFileAccessStatsSuccessCallback = (accessStats: FileAccessStats): void => {
+        this.setState({ accessStats, accessStatsError: undefined });
+    };
+
+    /**
      * Fetches a file
      *
      * @private
@@ -379,6 +415,21 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.api
                 .getVersionsAPI(shouldDestroy)
                 .versions(id, this.fetchVersionsSuccessCallback, this.fetchVersionsErrorCallback);
+        }
+    }
+
+    /**
+     * Fetches the access stats for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchFileAccessStats(id: string, shouldDestroy?: boolean = false): void {
+        if (this.shouldFetchOrRender()) {
+            this.api
+                .getFileAccessStatsAPI(shouldDestroy)
+                .accessStats(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
         }
     }
 
@@ -417,7 +468,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             getApproverWithQuery,
             getMentionWithQuery
         }: Props = this.props;
-        const { file, accessStats, versions, fileError, versionError }: State = this.state;
+        const { file, accessStats, versions, accessStatsError, fileError, versionError }: State = this.state;
 
         const shouldRender = this.shouldFetchOrRender() && !!file;
 
@@ -448,6 +499,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onClassificationClick={onClassificationClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
                                 hasVersions={hasVersions}
+                                accessStatsError={accessStatsError}
                                 fileError={fileError}
                                 versionError={versionError}
                                 onCommentCreate={onCommentCreate}
