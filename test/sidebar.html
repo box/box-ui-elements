@@ -70,33 +70,6 @@
                 localStorage.setItem('file', fileId);
                 document.querySelector('.file').value = fileId;
 
-                const sidebar1 = new ContentSidebar();
-                sidebar1.show(fileId, token, {
-                    container: '.sidebar1',
-                    hasProperties: true,
-                    hasNotices: true,
-                    hasAccessStats: true,
-                    hasVersions: true,
-                    hasNotices: true,
-                    onVersionHistoryClick : function(){
-                        alert('hello, world!');
-                    },
-                    onAccessStatsClick: () => {
-                        alert('Hello, world!');
-                    }
-                });
-
-                const sidebar2 = new ContentSidebar();
-                sidebar2.show(fileId, token, {
-                    container: '.sidebar2',
-                    hasProperties: true,
-                    hasSkills: true,
-                    hasTitle: true,
-                    hasNotices: true,
-                    hasVersions: true,
-                    hasAccessStats: true,
-                    hasNotices: true
-                });
 
                 const sidebar3 = new ContentSidebar();
                 sidebar3.addListener('interaction', function(data) {
@@ -134,6 +107,7 @@
                     hasSkills: true,
                     hasNotices: true,
                     hasVersions: true,
+                    hasActivityFeed: true
                 });
             }
             load();

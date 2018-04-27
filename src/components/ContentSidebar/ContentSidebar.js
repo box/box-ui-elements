@@ -161,20 +161,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { fileId, hasVersions, hasActivityFeed }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
-        if (fileId) {
-            this.fetchFile(fileId);
-            if (hasVersions || hasActivityFeed) {
-                this.fetchVersions(fileId);
-            }
-            if (hasActivityFeed) {
-                this.fetchComments(fileId);
-                this.fetchTasks(fileId);
-            }
-        }
+        this.fetchData(this.props);
     }
 
     /**
@@ -185,16 +175,37 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     componentWillReceiveProps(nextProps: Props): void {
         const { fileId, token }: Props = this.props;
-        const { fileId: newFileId, token: newToken, hasVersions }: Props = nextProps;
+        const { fileId: newFileId, token: newToken }: Props = nextProps;
 
         const hasTokenChanged = newToken !== token;
         const hasFileIdChanged = newFileId !== fileId;
         const currentFileId = newFileId || fileId;
 
         if (currentFileId && (hasTokenChanged || hasFileIdChanged)) {
-            this.fetchFile(currentFileId);
-            if (hasVersions) {
-                this.fetchVersions(currentFileId);
+            this.fetchData(nextProps, hasFileIdChanged);
+        }
+    }
+
+    /**
+     * Fetches the data for the sidebar
+     *
+     * @param {Object} Props the component props
+     * @param {boolean} hasFileIdChanged true if the file id has changed
+     */
+    fetchData({ fileId, hasVersions, hasActivityFeed }: Props, hasFileIdChanged?: boolean) {
+        if (hasFileIdChanged) {
+            this.setState({});
+        }
+
+        if (fileId) {
+            this.fetchFile(fileId);
+            if (hasActivityFeed) {
+                this.fetchComments(fileId, false, true);
+                this.fetchTasks(fileId);
+                this.fetchVersions(fileId, false, true);
+            } else if (hasVersions) {
+                // we dont need to fetch all the versions (for now), since all we care about is the total count
+                this.fetchVersions(fileId);
             }
         }
     }
@@ -434,11 +445,11 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} id - File id
      * @return {void}
      */
-    fetchVersions(id: string, shouldDestroy?: boolean = false): void {
+    fetchVersions(id: string, shouldDestroy?: boolean = false, shouldFetchAll?: boolean): void {
         if (this.shouldFetchOrRender()) {
             this.api
                 .getVersionsAPI(shouldDestroy)
-                .versions(id, this.fetchVersionsSuccessCallback, this.fetchVersionsErrorCallback);
+                .get(id, this.fetchVersionsSuccessCallback, this.fetchVersionsErrorCallback, [], shouldFetchAll);
         }
     }
 
@@ -449,11 +460,11 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} id - File id
      * @return {void}
      */
-    fetchComments(id: string, shouldDestroy?: boolean = false): void {
+    fetchComments(id: string, shouldDestroy?: boolean = false, shouldFetchAll?: boolean): void {
         if (this.shouldFetchOrRender()) {
             this.api
                 .getCommentsAPI(shouldDestroy)
-                .comments(id, this.fetchCommentsSuccessCallback, this.fetchCommentsErrorCallback);
+                .get(id, this.fetchCommentsSuccessCallback, this.fetchCommentsErrorCallback, [], shouldFetchAll);
         }
     }
 

@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import File from './File';
+import { getTypedFileId } from '../util/file';
 import type { Tasks as TasksType } from '../flowTypes';
 
 class Tasks extends Base {
@@ -38,7 +38,7 @@ class Tasks extends Base {
         // Make the XHR request
         try {
             const { data }: { data: TasksType } = await this.xhr.get({
-                id: File.getTypedFileId(id),
+                id: getTypedFileId(id),
                 url: this.getUrl(id)
             });
 

@@ -7,6 +7,7 @@
 import noop from 'lodash/noop';
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
+import { getTypedFileId } from '../util/file';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
 import type { Options } from '../flowTypes';
 
@@ -50,6 +51,11 @@ class Base {
      * @property {Function}
      */
     consoleError: Function;
+
+    /**
+     * @property {Object}
+     */
+    params: Object;
 
     /**
      * [constructor]
@@ -122,6 +128,75 @@ class Base {
      */
     getCache(): Cache {
         return this.cache;
+    }
+
+    /**
+     * Generic success handler
+     *
+     * @param {Object} data the response data
+     * @param {Function} successCallback the success callback
+     */
+    successHandler(data: Object, successCallback: Function) {
+        if (!this.isDestroyed()) {
+            successCallback(data);
+        }
+    }
+
+    /**
+     * Generic error handler
+     *
+     * @param {Object} data the response data
+     * @param {Function} errorCallback the error callback
+     */
+    errorHandler(error: Object, errorCallback: Function) {
+        if (!this.isDestroyed()) {
+            errorCallback(error);
+        }
+    }
+
+    /**
+     * Generic GET request
+     *
+     * @param {string} id the file id
+     * @param {Object} params the query params
+     */
+    getData(id: string, params?: Object): Promise<Object> {
+        return this.xhr.get({
+            id: getTypedFileId(id),
+            url: this.getUrl(id),
+            params
+        });
+    }
+
+    /**
+     * Gets the URL for the API, meant to be overridden
+     * @param {string} id the file id
+     */
+    /* eslint-disable no-unused-vars */
+    getUrl(id: string) {
+        /* eslint-enable no-unused-vars */
+        throw new Error('Implement me!');
+    }
+
+    /**
+     * Generic API get
+     *
+     * @param {string} id the file id
+     * @param {Function} successCallback the success callback
+     * @param {Function} errorCallback the error callback
+     */
+    async get(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        // Make the XHR request
+        try {
+            const { data } = await this.getData(id);
+            this.successHandler(data, successCallback);
+        } catch (error) {
+            this.errorHandler(error, errorCallback);
+        }
     }
 }
 

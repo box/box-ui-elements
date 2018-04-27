@@ -5,6 +5,8 @@ import Cache from '../../util/Cache';
 let base;
 
 describe('api/Base', () => {
+    const baseResponse = { total_count: 0, entries: [] };
+
     beforeEach(() => {
         base = new Base({});
     });
@@ -78,6 +80,94 @@ describe('api/Base', () => {
         test('should return correct cache', () => {
             base.cache = 'foo';
             expect(base.getCache()).toBe('foo');
+        });
+    });
+
+    describe('get()', () => {
+        const url = 'https://foo.bar';
+        beforeEach(() => {
+            base.successHandler = jest.fn((data, cb) => {
+                cb(data);
+            });
+            base.errorHandler = jest.fn((error, cb) => {
+                cb(error);
+            });
+            base.getUrl = jest.fn(() => url);
+        });
+
+        test('should not do anything if destroyed', () => {
+            base.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            base.xhr = null;
+
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            return base.get('id', successCb, errorCb).catch(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).not.toHaveBeenCalled();
+            });
+        });
+
+        test('should make xhr to get base and call success callback', () => {
+            base.xhr = {
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse }))
+            };
+
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            return base.get('id', successCb, errorCb).then(() => {
+                expect(successCb).toHaveBeenCalledWith(baseResponse);
+                expect(base.xhr.get).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url
+                });
+            });
+        });
+
+        test('should immediately reject if offset >= total_count', () => {
+            const pagedCommentsResponse = {
+                total_count: 50,
+                entries: []
+            };
+            base.xhr = {
+                get: jest.fn().mockReturnValue(
+                    Promise.resolve({
+                        data: pagedCommentsResponse
+                    })
+                )
+            };
+
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            base.totalCount = 50;
+            base.offset = 50;
+
+            return base.get('id', successCb, errorCb).catch(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).not.toHaveBeenCalled();
+                expect(base.xhr.get).not.toHaveBeenCalled();
+            });
+        });
+
+        test('should call error callback when xhr fails', () => {
+            const error = new Error('error');
+            base.xhr = {
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
+            };
+
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            return base.get('id', successCb, errorCb).then(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).toHaveBeenCalledWith(error);
+                expect(base.xhr.get).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url
+                });
+            });
         });
     });
 });

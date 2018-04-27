@@ -18,7 +18,6 @@ import TasksAPI from './Tasks';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
-const VERSION_LIMIT = 1000;
 class APIFactory {
     /**
      * @property {*}
@@ -262,7 +261,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
-        this.versionsAPI = new VersionsAPI(this.options, ['trashed_at'], 0, VERSION_LIMIT);
+        this.versionsAPI = new VersionsAPI(this.options);
         return this.versionsAPI;
     }
 
