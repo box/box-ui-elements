@@ -53,11 +53,6 @@ class Base {
     consoleError: Function;
 
     /**
-     * @property {Object}
-     */
-    params: Object;
-
-    /**
      * [constructor]
      *
      * @param {Object} [options]
