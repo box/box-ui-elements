@@ -200,9 +200,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (fileId) {
             this.fetchFile(fileId);
             if (hasActivityFeed) {
-                this.fetchComments(fileId, false, true);
+                this.fetchComments(fileId, false);
                 this.fetchTasks(fileId);
-                this.fetchVersions(fileId, false, true);
+                this.fetchVersions(fileId, false);
             } else if (hasVersions) {
                 // we dont need to fetch all the versions (for now), since all we care about is the total count
                 this.fetchVersions(fileId);
@@ -443,13 +443,33 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} id - File id
+     * @param {boolean} shouldDestroy true if the apiFactory should be destroyed
+     * @param {number} offset the offset from the start to start fetching at
+     * @param {number} limit the number of items to fetch
+     * @param {array} fields the fields to fetch
+     * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      * @return {void}
      */
-    fetchVersions(id: string, shouldDestroy?: boolean = false, shouldFetchAll?: boolean): void {
+    fetchVersions(
+        id: string,
+        shouldDestroy?: boolean = false,
+        offset: number = 0,
+        limit: number = 1000,
+        fields?: Array<string>,
+        shouldFetchAll?: boolean = true
+    ): void {
         if (this.shouldFetchOrRender()) {
             this.api
                 .getVersionsAPI(shouldDestroy)
-                .get(id, this.fetchVersionsSuccessCallback, this.fetchVersionsErrorCallback, [], shouldFetchAll);
+                .get(
+                    id,
+                    this.fetchVersionsSuccessCallback,
+                    this.fetchVersionsErrorCallback,
+                    offset,
+                    limit,
+                    fields,
+                    shouldFetchAll
+                );
         }
     }
 
@@ -458,13 +478,33 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} id - File id
+     * @param {boolean} shouldDestroy true if the apiFactory should be destroyed
+     * @param {number} offset the offset from the start to start fetching at
+     * @param {number} limit the number of items to fetch
+     * @param {array} fields the fields to fetch
+     * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      * @return {void}
      */
-    fetchComments(id: string, shouldDestroy?: boolean = false, shouldFetchAll?: boolean): void {
+    fetchComments(
+        id: string,
+        shouldDestroy?: boolean = false,
+        offset: number = 0,
+        limit: number = 1000,
+        fields?: Array<string>,
+        shouldFetchAll: boolean = true
+    ): void {
         if (this.shouldFetchOrRender()) {
             this.api
                 .getCommentsAPI(shouldDestroy)
-                .get(id, this.fetchCommentsSuccessCallback, this.fetchCommentsErrorCallback, [], shouldFetchAll);
+                .get(
+                    id,
+                    this.fetchCommentsSuccessCallback,
+                    this.fetchCommentsErrorCallback,
+                    offset,
+                    limit,
+                    fields,
+                    shouldFetchAll
+                );
         }
     }
 

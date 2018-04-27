@@ -12,7 +12,7 @@ describe('api/OffsetBasedAPI', () => {
 
     describe('getQueryParameters()', () => {
         test('should return query parameters with no fields', () => {
-            expect(offsetBasedAPI.getQueryParameters()).toEqual({
+            expect(offsetBasedAPI.getQueryParameters(0, LIMIT)).toEqual({
                 offset: 0,
                 limit: LIMIT
             });
@@ -20,7 +20,7 @@ describe('api/OffsetBasedAPI', () => {
 
         test('should return query parameters with fields', () => {
             const fields = ['foo', 'bar'];
-            expect(offsetBasedAPI.getQueryParameters(fields)).toEqual({
+            expect(offsetBasedAPI.getQueryParameters(0, LIMIT, fields)).toEqual({
                 offset: 0,
                 limit: LIMIT,
                 fields: 'foo,bar'
@@ -30,17 +30,11 @@ describe('api/OffsetBasedAPI', () => {
 
     describe('hasMoreItems()', () => {
         test('should be more items', () => {
-            offsetBasedAPI.totalCount = LIMIT + 1;
-            offsetBasedAPI.offset = LIMIT;
-
-            expect(offsetBasedAPI.hasMoreItems()).toBe(true);
+            expect(offsetBasedAPI.hasMoreItems(LIMIT, LIMIT + 1)).toBe(true);
         });
 
         test('should not be more items', () => {
-            offsetBasedAPI.totalCount = 101;
-            offsetBasedAPI.offset = 101;
-
-            expect(offsetBasedAPI.hasMoreItems()).toBe(false);
+            expect(offsetBasedAPI.hasMoreItems(LIMIT, LIMIT)).toBe(false);
         });
     });
 
@@ -87,37 +81,6 @@ describe('api/OffsetBasedAPI', () => {
                         limit: LIMIT
                     }
                 });
-            });
-        });
-
-        test('should increment offset by limit on each call', () => {
-            const pagedVersionsResponse = {
-                total_count: 200,
-                entries: []
-            };
-            offsetBasedAPI.xhr = {
-                get: jest.fn().mockReturnValue(
-                    Promise.resolve({
-                        data: pagedVersionsResponse
-                    })
-                )
-            };
-
-            const successCb = jest.fn();
-
-            offsetBasedAPI.get('id');
-
-            return offsetBasedAPI.get('id', successCb).then(() => {
-                expect(successCb).toHaveBeenCalledWith(pagedVersionsResponse);
-                expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
-                    id: 'file_id',
-                    url,
-                    params: {
-                        limit: LIMIT,
-                        offset: LIMIT
-                    }
-                });
-                expect(offsetBasedAPI.offset).toBe(LIMIT * 2);
             });
         });
 
