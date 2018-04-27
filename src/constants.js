@@ -179,3 +179,11 @@ export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
 /* ------------------ Metadata  ---------------------- */
 export const KEY_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
+
+export const INTERACTION_TARGETS = {
+    SKILLS: {
+        FACE: 'skills-face',
+        TIME_SLICE: 'skills-timeslice',
+        TOPIC: 'skills-topic'
+    }
+};

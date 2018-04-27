@@ -13,14 +13,16 @@ import './Keyword.scss';
 type Props = {
     keyword: SkillCardEntry,
     isSelected: boolean,
-    onClick: Function
+    onClick: Function,
+    interactionTarget: string
 };
 
-const Keyword = ({ keyword, onClick, isSelected }: Props) => (
+const Keyword = ({ keyword, onClick, isSelected, interactionTarget }: Props) => (
     <span className='be-file-keyword'>
         <PlainButton
             className={`be-file-keyword-word ${isSelected ? 'be-file-keyword-selected' : ''}`}
             onClick={onClick}
+            data-interaction-target={interactionTarget}
         >
             {keyword.text}
         </PlainButton>

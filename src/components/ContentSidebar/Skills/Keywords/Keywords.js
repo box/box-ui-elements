@@ -8,6 +8,7 @@ import React, { PureComponent } from 'react';
 import FileKeyword from './Keyword';
 import { Timeline } from '../Timeline';
 import type { SkillCard, SkillCardEntry } from '../../../../flowTypes';
+import { INTERACTION_TARGETS } from '../../../../constants';
 
 type Props = {
     skill: SkillCard,
@@ -40,6 +41,7 @@ class Keywords extends PureComponent<Props, State> {
                                 onInteraction({ target: 'topic' });
                                 this.setState({ keyword: entry });
                             }}
+                            interactionTarget={INTERACTION_TARGETS.SKILLS.TOPIC}
                         />
                     )
                     /* eslint-enable react/no-array-index-key */
