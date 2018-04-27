@@ -1,13 +1,6 @@
 import FileAccessStats from '../FileAccessStats';
 
 let accessStats;
-const accessStatsResponse = {
-    preview_count: 0,
-    comment_count: 0,
-    download_count: 0,
-    edit_count: 0,
-    has_count_overflowed: false
-};
 
 describe('api/Versions', () => {
     beforeEach(() => {
