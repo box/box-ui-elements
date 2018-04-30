@@ -53,6 +53,11 @@ class Base {
     consoleError: Function;
 
     /**
+     * @property {Function}
+     */
+    errorCallback: (error: Object) => void;
+
+    /**
      * [constructor]
      *
      * @param {Object} [options]
@@ -143,9 +148,9 @@ class Base {
      * @param {Object} data the response data
      * @param {Function} errorCallback the error callback
      */
-    errorHandler(error: Object, errorCallback: Function) {
-        if (!this.isDestroyed()) {
-            errorCallback(error);
+    errorHandler(error: Object): void {
+        if (!this.isDestroyed() && this.errorCallback) {
+            this.errorCallback(error);
         }
     }
 
@@ -185,12 +190,14 @@ class Base {
             return;
         }
 
+        this.errorCallback = errorCallback;
+
         // Make the XHR request
         try {
             const { data } = await this.getData(id);
             this.successHandler(data, successCallback);
         } catch (error) {
-            this.errorHandler(error, errorCallback);
+            this.errorHandler(error);
         }
     }
 }

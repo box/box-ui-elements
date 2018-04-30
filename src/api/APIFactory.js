@@ -143,6 +143,14 @@ class APIFactory {
             this.fileAccessStatsAPI.destroy();
             delete this.fileAccessStatsAPI;
         }
+        if (this.tasksAPI) {
+            this.tasksAPI.destroy();
+            delete this.tasksAPI;
+        }
+        if (this.commentsAPI) {
+            this.commentsAPI.destroy();
+            delete this.commentsAPI;
+        }
         if (destroyCache) {
             this.options.cache = new Cache();
         }

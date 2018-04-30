@@ -89,9 +89,7 @@ describe('api/Base', () => {
             base.successHandler = jest.fn((data, cb) => {
                 cb(data);
             });
-            base.errorHandler = jest.fn((error, cb) => {
-                cb(error);
-            });
+
             base.getUrl = jest.fn(() => url);
         });
 

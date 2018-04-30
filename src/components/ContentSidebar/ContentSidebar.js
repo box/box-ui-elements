@@ -185,15 +185,14 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { fileId, token }: Props = this.props;
-        const { fileId: newFileId, token: newToken }: Props = nextProps;
+        const { fileId }: Props = this.props;
+        const { fileId: newFileId }: Props = nextProps;
 
-        const hasTokenChanged = newToken !== token;
         const hasFileIdChanged = newFileId !== fileId;
-        const currentFileId = newFileId || fileId;
 
-        if (currentFileId && (hasTokenChanged || hasFileIdChanged)) {
-            this.fetchData(nextProps, hasFileIdChanged);
+        if (hasFileIdChanged) {
+            this.setState({});
+            this.fetchData(nextProps);
         }
     }
 
@@ -203,11 +202,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasVersions, hasActivityFeed, hasAccessStats }: Props, hasFileIdChanged?: boolean) {
-        if (hasFileIdChanged) {
-            this.setState({});
-        }
-
+    fetchData({ fileId, hasVersions, hasActivityFeed, hasAccessStats }: Props) {
         if (fileId) {
             this.fetchFile(fileId);
             if (hasAccessStats) {

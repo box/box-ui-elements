@@ -44,9 +44,6 @@ describe('api/OffsetBasedAPI', () => {
             offsetBasedAPI.successHandler = jest.fn((data, cb) => {
                 cb(data);
             });
-            offsetBasedAPI.errorHandler = jest.fn((error, cb) => {
-                cb(error);
-            });
             offsetBasedAPI.getUrl = jest.fn(() => url);
         });
 

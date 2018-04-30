@@ -47,8 +47,9 @@ describe('api/Item', () => {
 
         test('should call error callback with response data', () => {
             item.errorCallback = jest.fn();
-            item.errorHandler({ response: { data: 'foo' } });
-            expect(item.errorCallback).toHaveBeenCalledWith('foo');
+            const response = { response: { data: 'foo' } };
+            item.errorHandler(response);
+            expect(item.errorCallback).toHaveBeenCalledWith(response);
         });
     });
 

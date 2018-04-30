@@ -44,27 +44,6 @@ class Item extends Base {
     }
 
     /**
-     * Handles error responses
-     *
-     * @param {Response} error.response - Error response
-     * @return {Function} Function that handles response
-     */
-    errorHandler = (error: any): void => {
-        if (this.isDestroyed()) {
-            return;
-        }
-
-        const { response } = error;
-
-        if (response) {
-            this.errorCallback(response.data);
-            return;
-        }
-
-        this.errorCallback();
-    };
-
-    /**
      * Creates a key for the cache
      *
      * @param {string} Id - Folder id
