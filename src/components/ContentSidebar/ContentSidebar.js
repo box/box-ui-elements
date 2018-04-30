@@ -476,7 +476,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             <Internationalize language={language} messages={intlMessages}>
                 <aside
                     id={this.id}
-                    data-interaction-component={CLIENT_NAME_CONTENT_SIDEBAR.toLowerCase()}
+                    data-resin-component={CLIENT_NAME_CONTENT_SIDEBAR.toLowerCase()}
                     className={`be bcs ${className}`}
                 >
                     <div className='be-app-element'>
