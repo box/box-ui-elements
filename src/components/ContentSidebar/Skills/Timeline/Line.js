@@ -6,7 +6,8 @@
 
 import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import { COLOR_BOX_BLUE, INTERACTION_TARGETS } from '../../../../constants';
+import { COLOR_BOX_BLUE } from '../../../../constants';
+import INTERACTION_TARGETS from '../../../../interactionTargets';
 import type { SkillCardEntryType } from '../../../../flowTypes';
 import './Line.scss';
 
@@ -48,7 +49,7 @@ const Line = ({ type, start, end = 0, duration, color = COLOR_BOX_BLUE, getPrevi
             className='be-timeline-time'
             style={styles}
             onClick={onClick}
-            data-interaction-target={INTERACTION_TARGETS.SKILLS.TIME_SLICE}
+            data-resin-target={INTERACTION_TARGETS.SKILLS.TIME_SLICE}
         />
     );
 };
