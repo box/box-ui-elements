@@ -202,18 +202,15 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasVersions, hasActivityFeed, hasAccessStats }: Props) {
+    fetchData({ fileId, hasActivityFeed, hasAccessStats }: Props) {
         if (fileId) {
             this.fetchFile(fileId);
             if (hasAccessStats) {
                 this.fetchFileAccessStats(fileId);
             }
             if (hasActivityFeed) {
-                this.fetchComments(fileId, false);
+                this.fetchComments(fileId);
                 this.fetchTasks(fileId);
-                this.fetchVersions(fileId, false);
-            } else if (hasVersions) {
-                // we dont need to fetch all the versions (for now), since all we care about is the total count
                 this.fetchVersions(fileId);
             }
         }

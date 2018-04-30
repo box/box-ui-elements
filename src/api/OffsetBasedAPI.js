@@ -46,8 +46,8 @@ class OffsetBasedApi extends Base {
      * @param {number} totalCount the total number of items
      * @return {boolean} true if there are more items
      */
-    hasMoreItems(offset: number, totalCount: number) {
-        return totalCount == null || offset < totalCount;
+    hasMoreItems(offset: number, totalCount?: number): boolean {
+        return totalCount === undefined || offset < totalCount;
     }
 
     /**

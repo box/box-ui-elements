@@ -33,6 +33,10 @@ describe('api/OffsetBasedAPI', () => {
             expect(offsetBasedAPI.hasMoreItems(LIMIT, LIMIT + 1)).toBe(true);
         });
 
+        test('should be more items with no totalCount', () => {
+            expect(offsetBasedAPI.hasMoreItems(LIMIT)).toBe(true);
+        });
+
         test('should not be more items', () => {
             expect(offsetBasedAPI.hasMoreItems(LIMIT, LIMIT)).toBe(false);
         });
