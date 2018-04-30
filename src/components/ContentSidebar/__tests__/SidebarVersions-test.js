@@ -11,6 +11,9 @@ describe('components/ContentSidebar/SidebarVersions', () => {
         const props = {
             versions: {
                 total_count: 1
+            },
+            file: {
+                extension: 'foo'
             }
         };
         const wrapper = getWrapper(props);
@@ -23,11 +26,29 @@ describe('components/ContentSidebar/SidebarVersions', () => {
         const props = {
             versions: {
                 total_count: 0
+            },
+            file: {
+                extension: 'foo'
             }
         };
         const wrapper = getWrapper(props);
 
-        expect(wrapper.find(VersionHistoryLink)).toHaveLength(0);
+        expect(wrapper.find(VersionHistoryLink).exists()).toBe(false);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not render the versions when file is a box note', () => {
+        const props = {
+            versions: {
+                total_count: 0
+            },
+            file: {
+                extension: 'boxnote'
+            }
+        };
+        const wrapper = getWrapper(props);
+
+        expect(wrapper.find(VersionHistoryLink).exists()).toBe(false);
         expect(wrapper).toMatchSnapshot();
     });
 

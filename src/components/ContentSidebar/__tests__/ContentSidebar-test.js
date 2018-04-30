@@ -3,14 +3,15 @@ import { mount } from 'enzyme';
 import ContentSidebar from '../ContentSidebar';
 import messages from '../../messages';
 
-jest.mock('../Sidebar', () => 'sidebar');
-
 const {
     fileDescriptionInlineErrorTitleMessage,
     defaultInlineErrorContentMessage,
     versionHistoryErrorHeaderMessage,
-    defaultErrorMaskSubHeaderMessage
+    defaultErrorMaskSubHeaderMessage,
+    fileAccessStatsErrorHeaderMessage
 } = messages;
+
+jest.mock('../Sidebar', () => 'sidebar');
 
 describe('components/ContentSidebar/ContentSidebar', () => {
     let rootElement;
@@ -59,6 +60,25 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(typeof versionHistoryErrorHeaderMessage).toBe('object');
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
             expect(inlineErrorState.errorHeader).toEqual(versionHistoryErrorHeaderMessage);
+            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+        });
+    });
+
+    describe('fetchFileAccessStatsErrorCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            const props = {};
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+        test('should set a maskError if there is an error in fetching the access stats', () => {
+            instance.fetchFileAccessStatsErrorCallback();
+            const inlineErrorState = wrapper.state().accessStatsError.maskError;
+            expect(typeof fileAccessStatsErrorHeaderMessage).toBe('object');
+            expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
+            expect(inlineErrorState.errorHeader).toEqual(fileAccessStatsErrorHeaderMessage);
             expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
         });
     });

@@ -7,11 +7,13 @@
 import React from 'react';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
 import withErrorHandling from './withErrorHandling';
-import type { FileVersions } from '../../flowTypes';
+import type { BoxItem, FileVersions } from '../../flowTypes';
+import { isBoxNote } from '../../util/file';
 
 type Props = {
     onVersionHistoryClick?: Function,
-    versions?: FileVersions
+    versions?: FileVersions,
+    file: BoxItem
 };
 
 const SidebarVersions = ({
@@ -19,11 +21,12 @@ const SidebarVersions = ({
     versions = {
         total_count: 0,
         entries: []
-    }
+    },
+    file
 }: Props) => {
     const { total_count } = versions;
 
-    if (!total_count) {
+    if (!total_count || isBoxNote(file)) {
         return null;
     }
 
