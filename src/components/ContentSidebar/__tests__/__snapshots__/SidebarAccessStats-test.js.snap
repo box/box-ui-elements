@@ -17,6 +17,7 @@ exports[`components/ContentSidebar/SidebarAccessStats should render an error 1`]
 exports[`components/ContentSidebar/SidebarAccessStats should render the component when there is at least one type of access stat 1`] = `
 <SidebarSection
   className=""
+  interactionTarget="details-section-accessstats"
   isOpen={true}
   title={
     <FormattedMessage

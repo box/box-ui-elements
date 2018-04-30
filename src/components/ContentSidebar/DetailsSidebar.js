@@ -7,6 +7,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
+import INTERACTION_TARGETS from '../../interactionTargets';
 import SidebarAccessStats from './SidebarAccessStats';
 import SidebarSection from './SidebarSection';
 import SidebarContent from './SidebarContent';
@@ -95,7 +96,10 @@ const DetailsSidebar = ({
                 />
             )}
             {hasProperties && (
-                <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
+                <SidebarSection
+                    interactionTarget={INTERACTION_TARGETS.SECTION.FILE_PROPERTIES}
+                    title={<FormattedMessage {...messages.sidebarProperties} />}
+                >
                     <SidebarFileProperties
                         onDescriptionChange={onDescriptionChange}
                         file={file}

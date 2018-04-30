@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import { INTERACTION_TARGETS } from '../../../../interactionTargets';
+import INTERACTION_TARGETS from '../../../../interactionTargets';
 import Line from './Line';
 import { isValidStartTime } from '../Transcript/timeSliceUtils';
 import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../../../flowTypes';

@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import type { FileAccessStats, BoxItem } from '../../flowTypes';
 import messages from '../messages';
+import INTERACTION_TARGETS from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 import withErrorHandling from './withErrorHandling';
 
@@ -37,7 +38,10 @@ const SidebarAccessStats = ({
     }
 
     return (
-        <SidebarSection title={<FormattedMessage {...messages.sidebarAccessStats} />}>
+        <SidebarSection
+            interactionTarget={INTERACTION_TARGETS.SECTION.ACCESS_STATS}
+            title={<FormattedMessage {...messages.sidebarAccessStats} />}
+        >
             <AccessStats
                 commentCount={comment_count}
                 downloadCount={download_count}
