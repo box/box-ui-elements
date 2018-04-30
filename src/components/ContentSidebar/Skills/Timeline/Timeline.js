@@ -6,6 +6,7 @@
 
 import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import { INTERACTION_TARGETS } from '../../../../interactionTargets';
 import Line from './Line';
 import { isValidStartTime } from '../Transcript/timeSliceUtils';
 import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../../../flowTypes';
@@ -52,7 +53,11 @@ const Timeline = ({
             {(text || url) && (
                 <div className='be-timeline-label'>
                     {type === 'image' ? (
-                        <PlainButton type='button' onClick={startNextSegment}>
+                        <PlainButton
+                            type='button'
+                            onClick={startNextSegment}
+                            data-resin-target={INTERACTION_TARGETS.SKILLS.FACE}
+                        >
                             <div className='be-timeline-image-container'>
                                 <img alt={text} title={text} src={url} />
                             </div>
