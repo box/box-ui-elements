@@ -5,6 +5,7 @@
  */
 
 import noop from 'lodash/noop';
+import setProp from 'lodash/set';
 import Base from './Base';
 import { getBadItemError } from '../util/error';
 import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
@@ -74,9 +75,7 @@ class Item extends Base {
      */
     merge(cacheKey: string, key: string, value: any): BoxItem {
         const cache: Cache = this.getCache();
-        cache.merge(cacheKey, {
-            [key]: value
-        });
+        cache.merge(cacheKey, setProp({}, key, value));
         return cache.get(cacheKey);
     }
 
@@ -193,10 +192,12 @@ class Item extends Base {
      * @return {void}
      */
     renameSuccessHandler = ({ data }: { data: BoxItem }): void => {
-        // Get rid of all searches
-        this.getCache().unsetAll(CACHE_PREFIX_SEARCH);
-        const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'name', data.name);
-        this.successCallback(updatedObject);
+        if (!this.isDestroyed()) {
+            // Get rid of all searches
+            this.getCache().unsetAll(CACHE_PREFIX_SEARCH);
+            const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'name', data.name);
+            this.successCallback(updatedObject);
+        }
     };
 
     /**
@@ -242,8 +243,10 @@ class Item extends Base {
      * @return {void}
      */
     shareSuccessHandler = ({ data }: { data: BoxItem }): void => {
-        const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
-        this.successCallback(updatedObject);
+        if (!this.isDestroyed()) {
+            const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
+            this.successCallback(updatedObject);
+        }
     };
 
     /**

@@ -86,6 +86,25 @@ describe('api/Item', () => {
     });
 
     describe('renameSuccessHandler()', () => {
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            const unsetAllMock = jest.fn();
+            item.id = 'id';
+            item.getCache = () => ({
+                unsetAll: unsetAllMock
+            });
+            item.getCacheKey = jest.fn();
+            item.merge = jest.fn();
+            item.successCallback = jest.fn();
+            item.renameSuccessHandler({
+                data: {
+                    name: 'name'
+                }
+            });
+            expect(unsetAllMock).not.toHaveBeenCalled();
+            expect(item.getCacheKey).not.toHaveBeenCalled();
+            expect(item.merge).not.toHaveBeenCalled();
+        });
         test('should unset cache and call merge', () => {
             const unsetAllMock = jest.fn();
             item.id = 'id';
@@ -107,6 +126,20 @@ describe('api/Item', () => {
     });
 
     describe('shareSuccessHandler()', () => {
+        test('should not do anything if destroyed', () => {
+            item.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            item.id = 'id';
+            item.getCacheKey = jest.fn();
+            item.merge = jest.fn();
+            item.successCallback = jest.fn();
+            item.shareSuccessHandler({
+                data: {
+                    shared_link: 'link'
+                }
+            });
+            expect(item.getCacheKey).not.toHaveBeenCalled();
+            expect(item.merge).not.toHaveBeenCalled();
+        });
         test('should call merge', () => {
             item.id = 'id';
             item.getCacheKey = jest.fn().mockReturnValueOnce('key');

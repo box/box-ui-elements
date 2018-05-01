@@ -17,7 +17,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render an err
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keyvalues component 1`] = `
 <Keyvalues
-  skill={
+  card={
     Object {
       "skill_card_type": "keyvalue",
     }
@@ -27,40 +27,37 @@ exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keyval
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keywords component 1`] = `
 <Keywords
-  getPreviewer={[MockFunction]}
-  onInteraction={[Function]}
-  skill={
+  card={
     Object {
       "skill_card_type": "keyword",
     }
   }
+  getPreviewer={[MockFunction]}
 />
 `;
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render nothing if invalid type 1`] = `""`;
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render timelines component 1`] = `
-<Timelines
-  getPreviewer={[MockFunction]}
-  onInteraction={[Function]}
-  skill={
+<Faces
+  card={
     Object {
       "skill_card_type": "timeline",
     }
   }
+  getPreviewer={[MockFunction]}
 />
 `;
 
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render transcript component 1`] = `
 <Transcript
   appElement={[MockFunction]}
-  getPreviewer={[MockFunction]}
-  onInteraction={[Function]}
-  rootElement={[MockFunction]}
-  skill={
+  card={
     Object {
       "skill_card_type": "transcript",
     }
   }
+  getPreviewer={[MockFunction]}
+  rootElement={[MockFunction]}
 />
 `;

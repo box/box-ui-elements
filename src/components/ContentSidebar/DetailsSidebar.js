@@ -14,9 +14,10 @@ import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
 import SidebarVersions from './SidebarVersions';
 import SidebarNotices from './SidebarNotices';
+import SidebarFileProperties from './SidebarFileProperties';
+import { shouldRenderDetailsSidebar } from './sidebarUtil';
 import type { FileAccessStats, BoxItem, FileVersions, Errors } from '../../flowTypes';
 import './DetailsSidebar.scss';
-import SidebarFileProperties from './SidebarFileProperties';
 
 type Props = {
     accessStats?: FileAccessStats,
@@ -37,6 +38,7 @@ type Props = {
     onDescriptionChange: Function,
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
+    onSkillChange: Function,
     versions?: FileVersions,
     accessStatsError?: Errors,
     fileError?: Errors,
@@ -62,12 +64,23 @@ const DetailsSidebar = ({
     onDescriptionChange,
     onClassificationClick,
     onVersionHistoryClick,
+    onSkillChange,
     versions,
     accessStatsError,
     fileError,
     versionError
 }: Props) => {
-    if (!hasSkills && !hasProperties && !hasMetadata && !hasAccessStats && !hasClassification && !hasNotices) {
+    if (
+        !shouldRenderDetailsSidebar({
+            hasSkills,
+            hasProperties,
+            hasMetadata,
+            hasAccessStats,
+            hasClassification,
+            hasNotices,
+            hasVersions
+        })
+    ) {
         return null;
     }
 
@@ -88,11 +101,12 @@ const DetailsSidebar = ({
             )}
             {hasSkills && (
                 <SidebarSkills
-                    metadata={file.metadata}
+                    file={file}
                     getPreviewer={getPreviewer}
                     rootElement={rootElement}
                     appElement={appElement}
                     onInteraction={onInteraction}
+                    onSkillChange={onSkillChange}
                 />
             )}
             {hasProperties && (

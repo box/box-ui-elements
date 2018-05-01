@@ -14,24 +14,28 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
         skillUtils.isValidSkillsCard = jest.fn(() => true);
 
         const props = {
-            metadata: {
-                global: {
-                    boxSkillsCards: {
-                        cards: [
-                            {
-                                entries: [{ title: 'foo' }]
-                            },
-                            {
-                                entries: [{ title: 'bar' }]
-                            }
-                        ]
+            file: {
+                permissions: {
+                    can_upload: true
+                },
+                metadata: {
+                    global: {
+                        boxSkillsCards: {
+                            cards: [
+                                {
+                                    entries: [{ title: 'foo' }]
+                                },
+                                {
+                                    entries: [{ title: 'bar' }]
+                                }
+                            ]
+                        }
                     }
                 }
             },
             getPreviewer: jest.fn(),
             rootElement: jest.fn(),
-            appElement: jest.fn(),
-            onInteraction: jest.fn()
+            appElement: jest.fn()
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(SidebarSkillsCard)).toHaveLength(2);

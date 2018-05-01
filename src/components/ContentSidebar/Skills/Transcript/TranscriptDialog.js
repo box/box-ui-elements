@@ -30,7 +30,6 @@ type Props = {
     rootElement: HTMLElement,
     appElement: HTMLElement,
     title?: string,
-    onInteraction: Function,
     intl: any
 };
 
@@ -44,7 +43,7 @@ const transcriptMapper = ({ appears, text }: SkillCardEntry, index) => {
     return <p key={index}>{`${start}: ${text || ''}`}</p>;
 };
 
-const TranscriptDialog = ({ isOpen, onCancel, data, rootElement, appElement, title, onInteraction, intl }: Props) => (
+const TranscriptDialog = ({ isOpen, onCancel, data, rootElement, appElement, title, intl }: Props) => (
     <Modal
         isOpen={isOpen}
         portalClassName={`${CLASS_MODAL} be-modal-transcript`}
@@ -62,7 +61,6 @@ const TranscriptDialog = ({ isOpen, onCancel, data, rootElement, appElement, tit
                     type='button'
                     className='be-transcript-copy'
                     onClick={() => {
-                        onInteraction({ target: 'transcript-copy' });
                         copy(data.reduce(transcriptReducer, ''));
                     }}
                 >

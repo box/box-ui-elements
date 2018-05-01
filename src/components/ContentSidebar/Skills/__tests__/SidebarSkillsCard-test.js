@@ -5,7 +5,7 @@ import SidebarSkillsCard, { SidebarSkillsCardComponent } from '../SidebarSkillsC
 import Transcript from '../Transcript';
 import Keywords from '../Keywords';
 import Keyvalues from '../Keyvalues';
-import Timelines from '../Timeline';
+import Faces from '../Faces';
 
 jest.mock('box-react-ui/lib/components/error-mask/ErrorMask', () => 'error-mask-mock');
 
@@ -16,8 +16,7 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
 
     beforeEach(() => {
         cardProps = {
-            skill: {},
-            onInteraction: jest.fn(),
+            card: {},
             getPreviewer: jest.fn(),
             rootElement: jest.fn(),
             appElement: jest.fn()
@@ -25,7 +24,7 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
     });
 
     test('should render keywords component', () => {
-        cardProps.skill.skill_card_type = 'keyword';
+        cardProps.card.skill_card_type = 'keyword';
         const wrapper = getWrapper(cardProps);
 
         expect(wrapper.find(Keywords)).toHaveLength(1);
@@ -33,7 +32,7 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
     });
 
     test('should render keyvalues component', () => {
-        cardProps.skill.skill_card_type = 'keyvalue';
+        cardProps.card.skill_card_type = 'keyvalue';
         const wrapper = getWrapper(cardProps);
 
         expect(wrapper.find(Keyvalues)).toHaveLength(1);
@@ -41,15 +40,15 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
     });
 
     test('should render timelines component', () => {
-        cardProps.skill.skill_card_type = 'timeline';
+        cardProps.card.skill_card_type = 'timeline';
         const wrapper = getWrapper(cardProps);
 
-        expect(wrapper.find(Timelines)).toHaveLength(1);
+        expect(wrapper.find(Faces)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should render transcript component', () => {
-        cardProps.skill.skill_card_type = 'transcript';
+        cardProps.card.skill_card_type = 'transcript';
         const wrapper = getWrapper(cardProps);
 
         expect(wrapper.find(Transcript)).toHaveLength(1);
@@ -57,7 +56,7 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
     });
 
     test('should render nothing if invalid type', () => {
-        cardProps.skill.skill_card_type = 'foo';
+        cardProps.card.skill_card_type = 'foo';
         const wrapper = getWrapper(cardProps);
 
         expect(wrapper.children()).toHaveLength(0);

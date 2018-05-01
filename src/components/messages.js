@@ -75,6 +75,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for download action.',
         defaultMessage: 'Download'
     },
+    save: {
+        id: 'be.save',
+        description: 'Label for save action.',
+        defaultMessage: 'Save'
+    },
     cancel: {
         id: 'be.cancel',
         description: 'Label for cancel action.',
@@ -740,6 +745,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.activityFeedTitle',
         description: 'Title for the Activity Feed tab',
         defaultMessage: 'Activity'
+    },
+    previousSegment: {
+        id: 'be.previousSegment',
+        description: 'Title for previous segment on skill timeline',
+        defaultMessage: 'Previous Segment'
+    },
+    nextSegment: {
+        id: 'be.nextSegment',
+        description: 'Title for next segment on skill timeline',
+        defaultMessage: 'Next Segment'
     }
 });
 

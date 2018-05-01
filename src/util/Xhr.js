@@ -7,11 +7,11 @@
 import axios from 'axios';
 import type { Axios } from 'axios';
 import TokenService from './TokenService';
+import { HEADER_CLIENT_NAME, HEADER_CLIENT_VERSION, HEADER_CONTENT_TYPE } from '../constants';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
-const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
-const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
-const CONTENT_TYPE_HEADER = 'Content-Type';
+type PayloadType = StringAnyMap | Array<StringAnyMap>;
+
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 
 class Xhr {
@@ -99,7 +99,7 @@ class Xhr {
         const headers: StringMap = Object.assign(
             {
                 Accept: 'application/json',
-                [CONTENT_TYPE_HEADER]: 'application/json'
+                [HEADER_CONTENT_TYPE]: 'application/json'
             },
             args
         );
@@ -167,13 +167,13 @@ class Xhr {
     post({
         url,
         id,
-        data = {},
+        data,
         headers = {},
         method = 'POST'
     }: {
         url: string,
         id?: string,
-        data?: StringAnyMap,
+        data: PayloadType,
         headers?: StringMap,
         method?: Method
     }): Promise<StringAnyMap> {
@@ -200,12 +200,12 @@ class Xhr {
     put({
         url,
         id,
-        data = {},
+        data,
         headers = {}
     }: {
         url: string,
         id?: string,
-        data?: StringAnyMap,
+        data: PayloadType,
         headers?: StringMap
     }): Promise<StringAnyMap> {
         return this.post({ id, url, data, headers, method: 'PUT' });
@@ -328,10 +328,10 @@ class Xhr {
             .then((hdrs) => {
                 // Remove Accept/Content-Type added by getHeaders()
                 delete hdrs.Accept;
-                delete hdrs[CONTENT_TYPE_HEADER];
+                delete hdrs[HEADER_CONTENT_TYPE];
 
-                if (headers[CONTENT_TYPE_HEADER]) {
-                    hdrs[CONTENT_TYPE_HEADER] = headers[CONTENT_TYPE_HEADER];
+                if (headers[HEADER_CONTENT_TYPE]) {
+                    hdrs[HEADER_CONTENT_TYPE] = headers[HEADER_CONTENT_TYPE];
                 }
 
                 this.xhr = new XMLHttpRequest();
@@ -342,8 +342,8 @@ class Xhr {
                 });
 
                 this.xhr.addEventListener('load', () => {
-                    const { readyState, status, responseText } = this.xhr;
-                    if (readyState === XMLHttpRequest.DONE) {
+                    const { readyState, status, responseText, DONE } = this.xhr;
+                    if (readyState === DONE) {
                         const response = status === 204 ? responseText : JSON.parse(responseText);
                         if (status >= 200 && status < 300) {
                             successHandler(response);
@@ -381,8 +381,8 @@ class Xhr {
         }
 
         // readyState is set to UNSENT if request has already been aborted
-        const { readyState } = this.xhr;
-        if (readyState !== XMLHttpRequest.UNSENT && readyState !== XMLHttpRequest.DONE) {
+        const { readyState, UNSENT, DONE } = this.xhr;
+        if (readyState !== UNSENT && readyState !== DONE) {
             this.xhr.abort();
         }
     }

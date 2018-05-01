@@ -142,7 +142,7 @@ class Base {
      * @param {Object} data the response data
      * @param {Function} successCallback the success callback
      */
-    successHandler = (data: Object): void => {
+    successHandler = (data: any): void => {
         if (!this.isDestroyed() && typeof this.successCallback === 'function') {
             this.successCallback(data);
         }

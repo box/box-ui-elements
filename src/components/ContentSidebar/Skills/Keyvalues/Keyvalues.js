@@ -9,10 +9,10 @@ import type { SkillCard, SkillCardEntry } from '../../../../flowTypes';
 import './Keyvalues.scss';
 
 type Props = {
-    skill: SkillCard
+    card: SkillCard
 };
 
-const Keyvalues = ({ skill: { entries } }: Props) => (
+const Keyvalues = ({ card: { entries } }: Props) => (
     <div className='be-keyvalues'>
         {Array.isArray(entries) &&
             entries.map(

@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render edit button when editable 1`] = `
+<div
+  className="be-keywords"
+>
+  <PlainButton
+    className="be-keyword-edit"
+    data-resin-target="skill-keywordedit"
+    onClick={[Function]}
+    type="button"
+  >
+    <IconEdit />
+  </PlainButton>
+  <ReadOnlyselecteds
+    duration={100}
+    keywords={
+      Array [
+        Object {
+          "text": "foo",
+        },
+        Object {
+          "text": "bar",
+        },
+      ]
+    }
+  />
+</div>
+`;
+
+exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render editable keywords when editable and editmode 1`] = `
+<div
+  className="be-keywords"
+>
+  <PlainButton
+    className="be-keyword-edit be-keyword-is-editing"
+    data-resin-target="skill-keywordedit"
+    onClick={[Function]}
+    type="button"
+  >
+    <IconEdit />
+  </PlainButton>
+  <EditableKeywords
+    keywords={
+      Array [
+        Object {
+          "text": "foo",
+        },
+        Object {
+          "text": "bar",
+        },
+      ]
+    }
+    onAdd={[Function]}
+    onCancel={[Function]}
+    onDelete={[Function]}
+    onSave={[Function]}
+  />
+</div>
+`;
+
+exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render keywords which are added but not the ones removed 1`] = `
+<div
+  className="be-keywords"
+>
+  <ReadOnlyselecteds
+    duration={100}
+    keywords={
+      Array [
+        Object {
+          "text": "bar",
+        },
+        Object {
+          "text": "baz",
+        },
+      ]
+    }
+  />
+</div>
+`;
+
+exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render read only keywords when not editable 1`] = `
+<div
+  className="be-keywords"
+>
+  <ReadOnlyselecteds
+    duration={100}
+    keywords={
+      Array [
+        Object {
+          "text": "foo",
+        },
+        Object {
+          "text": "bar",
+        },
+      ]
+    }
+  />
+</div>
+`;
