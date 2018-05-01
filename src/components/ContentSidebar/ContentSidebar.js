@@ -40,6 +40,7 @@ type Props = {
     hasActivityFeed: boolean,
     hasVersions: boolean,
     hasAccessStats: boolean,
+    hasCustomBranding?: boolean,
     language?: string,
     messages?: StringMap,
     cache?: Cache,
@@ -94,6 +95,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasClassification: false,
         hasActivityFeed: false,
         hasVersions: false,
+        hasCustomBranding: false,
         onInteraction: noop
     };
 
@@ -454,6 +456,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasClassification,
             hasActivityFeed,
             hasVersions,
+            hasCustomBranding,
             className,
             activityFeedState,
             onVersionHistoryClick,
@@ -510,6 +513,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                 getApproverWithQuery={getApproverWithQuery}
                                 getMentionWithQuery={getMentionWithQuery}
+                                hasCustomBranding={hasCustomBranding}
                             />
                         ) : (
                             <div className='bcs-loading'>

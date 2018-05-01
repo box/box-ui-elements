@@ -17,10 +17,18 @@ type Props = {
     getPreviewer: Function,
     rootElement: HTMLElement,
     appElement: HTMLElement,
-    onInteraction: Function
+    onInteraction: Function,
+    hasCustomBranding: boolean
 };
 
-const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement, onInteraction }: Props) => {
+const SidebarSkills = ({
+    metadata,
+    getPreviewer,
+    rootElement,
+    appElement,
+    onInteraction,
+    hasCustomBranding
+}: Props) => {
     // $FlowFixMe
     const { cards }: SkillCards = metadata.global.boxSkillsCards;
     const validCards: Array<SkillCard> = cards.filter((card: SkillCard) => isValidSkillsCard(card));
@@ -29,6 +37,7 @@ const SidebarSkills = ({ metadata, getPreviewer, rootElement, appElement, onInte
         /* eslint-disable react/no-array-index-key */
         <SidebarSection
             key={index}
+            hasCustomBranding={hasCustomBranding}
             title={card.title || <FormattedMessage {...messages[`${card.skill_card_type}Skill`]} />}
         >
             <SidebarSkillsCard

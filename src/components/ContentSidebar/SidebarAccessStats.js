@@ -16,7 +16,8 @@ import withErrorHandling from './withErrorHandling';
 type Props = {
     onAccessStatsClick?: Function,
     accessStats?: FileAccessStats,
-    file: BoxItem
+    file: BoxItem,
+    hasCustomBranding: boolean
 };
 
 const SidebarAccessStats = ({
@@ -28,7 +29,8 @@ const SidebarAccessStats = ({
         edit_count: 0,
         has_count_overflowed: false
     },
-    file
+    file,
+    hasCustomBranding
 }: Props) => {
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
@@ -37,7 +39,10 @@ const SidebarAccessStats = ({
     }
 
     return (
-        <SidebarSection title={<FormattedMessage {...messages.sidebarAccessStats} />}>
+        <SidebarSection
+            hasCustomBranding={hasCustomBranding}
+            title={<FormattedMessage {...messages.sidebarAccessStats} />}
+        >
             <AccessStats
                 commentCount={comment_count}
                 downloadCount={download_count}

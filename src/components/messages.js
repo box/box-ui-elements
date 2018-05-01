@@ -740,6 +740,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.activityFeedTitle',
         description: 'Title for the Activity Feed tab',
         defaultMessage: 'Activity'
+    },
+    caretClosed: {
+        id: 'be.caretClosed',
+        description: 'Title for the caret icon when closed',
+        defaultMessage: 'Caret closed'
+    },
+    caretOpen: {
+        id: 'be.caretOpen',
+        description: 'Title for the caret icon when open',
+        defaultMessage: 'Caret opened'
     }
 });
 

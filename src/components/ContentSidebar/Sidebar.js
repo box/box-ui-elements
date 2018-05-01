@@ -27,6 +27,7 @@ type Props = {
     hasClassification: boolean,
     hasActivityFeed: boolean,
     hasVersions: boolean,
+    hasCustomBranding: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onAccessStatsClick?: Function,
@@ -64,6 +65,7 @@ const Sidebar = ({
     hasClassification,
     hasActivityFeed,
     hasVersions,
+    hasCustomBranding,
     rootElement,
     appElement,
     onAccessStatsClick,
@@ -101,6 +103,7 @@ const Sidebar = ({
             hasAccessStats={hasAccessStats}
             hasClassification={hasClassification}
             hasVersions={hasVersions}
+            hasCustomBranding={hasCustomBranding}
             appElement={appElement}
             rootElement={rootElement}
             onAccessStatsClick={onAccessStatsClick}
@@ -147,7 +150,12 @@ const Sidebar = ({
     };
 
     const ActivityFeedSidebar = (
-        <ActivityFeed feedState={activityFeedState} inputState={inputState} handlers={handlers} />
+        <ActivityFeed
+            feedState={activityFeedState}
+            inputState={inputState}
+            handlers={handlers}
+            hasCustomBranding={hasCustomBranding}
+        />
     );
 
     return (
