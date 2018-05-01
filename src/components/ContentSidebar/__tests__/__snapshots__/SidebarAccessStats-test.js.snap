@@ -28,10 +28,35 @@ exports[`components/ContentSidebar/SidebarAccessStats should render the componen
 >
   <AccessStats
     commentCount={0}
+    commentStatButtonProps={
+      Object {
+        "data-resin-target": "details-accessstats-comments",
+      }
+    }
     downloadCount={0}
+    downloadStatButtonProps={
+      Object {
+        "data-resin-target": "details-accessstats-downloads",
+      }
+    }
     editCount={0}
+    editStatButtonProps={
+      Object {
+        "data-resin-target": "details-accessstats-edits",
+      }
+    }
     isBoxNote={false}
     previewCount={1}
+    previewStatButtonProps={
+      Object {
+        "data-resin-target": "details-accessstats-previews",
+      }
+    }
+    viewStatButtonProps={
+      Object {
+        "data-resin-target": "details-accessstats-viewdetails",
+      }
+    }
   />
 </SidebarSection>
 `;
