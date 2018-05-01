@@ -7,6 +7,8 @@
 import OffsetBasedAPI from './OffsetBasedAPI';
 
 class Comments extends OffsetBasedAPI {
+    fields = 'created_by,created_at,tagged_message';
+
     /**
      * API URL for comments
      *
@@ -17,7 +19,7 @@ class Comments extends OffsetBasedAPI {
         if (!id) {
             throw new Error('Missing file id!');
         }
-        return `${this.getBaseApiUrl()}/files/${id}/comments`;
+        return `${this.getBaseApiUrl()}/files/${id}/comments?fields=${this.fields}`;
     }
 }
 

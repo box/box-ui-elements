@@ -12,7 +12,9 @@ import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import { shouldRenderDetailsSidebar } from './sidebarUtil';
 import SidebarNav from './SidebarNav';
 import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
-import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, SidebarView } from '../../flowTypes';
+import messages from '../messages';
+import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, FileVersions, SidebarView } from '../../flowTypes';
+import { TAB_TARGETS } from '../../interactionTargets';
 import './Sidebar.scss';
 
 type Props = {
@@ -43,6 +45,8 @@ type Props = {
     onTaskAssignmentUpdate?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
+    intl: any,
+    versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
     accessStats?: FileAccessStats,
