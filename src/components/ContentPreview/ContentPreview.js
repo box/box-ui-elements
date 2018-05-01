@@ -48,6 +48,7 @@ type Props = {
     useHotkeys: boolean,
     showSidebar?: boolean,
     hasSidebar: boolean,
+    hasCustomBranding?: boolean,
     canDownload?: boolean,
     showDownload?: boolean,
     hasHeader: boolean,
@@ -103,6 +104,7 @@ class ContentPreview extends PureComponent<Props, State> {
         language: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
         hasSidebar: false,
+        hasCustomBranding: false,
         canDownload: true,
         showDownload: true,
         hasHeader: false,
@@ -715,6 +717,7 @@ class ContentPreview extends PureComponent<Props, State> {
             className,
             showSidebar,
             hasSidebar,
+            hasCustomBranding,
             hasHeader,
             onClose,
             measureRef,
@@ -798,6 +801,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 onInteraction={onInteraction}
                                 requestInterceptor={requestInterceptor}
                                 responseInterceptor={responseInterceptor}
+                                hasCustomBranding={hasCustomBranding}
                             />
                         )}
                     </div>

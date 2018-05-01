@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/SidebarSection should only render content when there is not a title 1`] = `
+<section
+  className="bcs-section bcs-section-open"
+>
+  <div
+    className="bcs-section-content"
+  >
+    <div
+      className="foo"
+    >
+      foo
+    </div>
+  </div>
+</section>
+`;
+
+exports[`components/ContentSidebar/SidebarSection should render a title and content when there is a title 1`] = `
+<section
+  className="bcs-section bcs-section-open"
+>
+  <div
+    aria-expanded={true}
+    aria-label="foo"
+    className="bcs-section-title"
+    onClick={[Function]}
+    onKeyPress={[Function]}
+    role="button"
+    tabIndex={0}
+  >
+    <PlainButton
+      type="button"
+    >
+      foo
+    </PlainButton>
+    <IconCaretDown
+      className="bcs-section-caret"
+      color="5D5D5D"
+      height={5}
+      title={
+        <FormattedMessage
+          defaultMessage="Caret opened"
+          id="be.caretOpen"
+        />
+      }
+    />
+  </div>
+  <div
+    className="bcs-section-content"
+  >
+    <div
+      className="foo"
+    >
+      foo
+    </div>
+  </div>
+</section>
+`;
+
+exports[`components/ContentSidebar/SidebarSection should render the content when no title and not open 1`] = `
+<section
+  className="bcs-section"
+>
+  <div
+    className="bcs-section-content"
+  >
+    <div
+      className="foo"
+    >
+      foo
+    </div>
+  </div>
+</section>
+`;

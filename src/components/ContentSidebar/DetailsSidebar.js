@@ -28,6 +28,7 @@ type Props = {
     hasMetadata: boolean,
     hasAccessStats: boolean,
     hasClassification: boolean,
+    hasCustomBranding: boolean,
     hasVersions: boolean,
     rootElement: HTMLElement,
     appElement: HTMLElement,
@@ -54,6 +55,7 @@ const DetailsSidebar = ({
     hasAccessStats,
     hasClassification,
     hasVersions,
+    hasCustomBranding,
     rootElement,
     appElement,
     onAccessStatsClick,
@@ -92,10 +94,14 @@ const DetailsSidebar = ({
                     rootElement={rootElement}
                     appElement={appElement}
                     onInteraction={onInteraction}
+                    hasCustomBranding={hasCustomBranding}
                 />
             )}
             {hasProperties && (
-                <SidebarSection title={<FormattedMessage {...messages.sidebarProperties} />}>
+                <SidebarSection
+                    hasCustomBranding={hasCustomBranding}
+                    title={<FormattedMessage {...messages.sidebarProperties} />}
+                >
                     <SidebarFileProperties
                         onDescriptionChange={onDescriptionChange}
                         file={file}
@@ -110,6 +116,7 @@ const DetailsSidebar = ({
                     accessStats={accessStats}
                     onAccessStatsClick={onAccessStatsClick}
                     file={file}
+                    hasCustomBranding={hasCustomBranding}
                     {...accessStatsError}
                 />
             )}
