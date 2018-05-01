@@ -55,6 +55,11 @@ class Base {
     /**
      * @property {Function}
      */
+    successCallback: (data: Object) => void;
+
+    /**
+     * @property {Function}
+     */
     errorCallback: (error: Object) => void;
 
     /**
@@ -136,9 +141,9 @@ class Base {
      * @param {Object} data the response data
      * @param {Function} successCallback the success callback
      */
-    successHandler(data: Object, successCallback: Function) {
-        if (!this.isDestroyed()) {
-            successCallback(data);
+    successHandler(data: Object): void {
+        if (!this.isDestroyed() && this.successCallback && typeof this.successCallback === 'function') {
+            this.successCallback(data);
         }
     }
 
@@ -149,7 +154,7 @@ class Base {
      * @param {Function} errorCallback the error callback
      */
     errorHandler(error: Object): void {
-        if (!this.isDestroyed() && this.errorCallback) {
+        if (!this.isDestroyed() && this.errorCallback && typeof this.errorCallback === 'function') {
             this.errorCallback(error);
         }
     }
@@ -190,12 +195,13 @@ class Base {
             return;
         }
 
+        this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
         // Make the XHR request
         try {
             const { data } = await this.getData(id);
-            this.successHandler(data, successCallback);
+            this.successHandler(data);
         } catch (error) {
             this.errorHandler(error);
         }

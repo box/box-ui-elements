@@ -86,10 +86,6 @@ describe('api/Base', () => {
     describe('get()', () => {
         const url = 'https://foo.bar';
         beforeEach(() => {
-            base.successHandler = jest.fn((data, cb) => {
-                cb(data);
-            });
-
             base.getUrl = jest.fn(() => url);
         });
 

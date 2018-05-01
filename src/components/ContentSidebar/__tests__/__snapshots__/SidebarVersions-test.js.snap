@@ -2,13 +2,15 @@
 
 exports[`components/ContentSidebar/SidebarVersions should not render the versions when file is a box note 1`] = `""`;
 
+exports[`components/ContentSidebar/SidebarVersions should not render the versions when version_number <= 1 1`] = `""`;
+
 exports[`components/ContentSidebar/SidebarVersions should not render the versions when version_number is falsy 1`] = `""`;
 
 exports[`components/ContentSidebar/SidebarVersions should not render the versions when version_number is undefined 1`] = `""`;
 
-exports[`components/ContentSidebar/SidebarVersions should render the versions when version_number > 0 1`] = `
+exports[`components/ContentSidebar/SidebarVersions should render the versions when version_number > 1 1`] = `
 <VersionHistoryLink
   className=""
-  versionCount={1}
+  versionCount={2}
 />
 `;

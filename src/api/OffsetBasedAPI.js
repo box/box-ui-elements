@@ -75,6 +75,7 @@ class OffsetBasedApi extends Base {
             return;
         }
 
+        this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
         // Make the XHR request
@@ -82,7 +83,7 @@ class OffsetBasedApi extends Base {
             const params = this.getQueryParameters(offset, limit, fields);
             const newOffset = offset + limit;
 
-            const { data } = await this.getData(id, params);
+            const { data }: { data: Data } = await this.getData(id, params);
 
             const entries = this.data ? this.data.entries : [];
             this.data = {
@@ -95,7 +96,7 @@ class OffsetBasedApi extends Base {
                 this.get(id, successCallback, errorCallback, newOffset, limit, fields, shouldFetchAll);
             }
 
-            this.successHandler(this.data, successCallback);
+            this.successHandler(this.data);
         } catch (error) {
             this.errorHandler(error);
         }

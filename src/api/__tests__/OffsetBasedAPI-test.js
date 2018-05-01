@@ -45,9 +45,6 @@ describe('api/OffsetBasedAPI', () => {
     describe('get()', () => {
         const url = 'https://foo.bar';
         beforeEach(() => {
-            offsetBasedAPI.successHandler = jest.fn((data, cb) => {
-                cb(data);
-            });
             offsetBasedAPI.getUrl = jest.fn(() => url);
         });
 

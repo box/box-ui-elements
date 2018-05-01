@@ -17,11 +17,13 @@ type Props = {
 const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {
     const { version_number } = file;
 
-    if (isBoxNote(file) || !version_number) {
+    const versionNumber = parseInt(version_number, 10);
+
+    if (isBoxNote(file) || !versionNumber || versionNumber <= 1) {
         return null;
     }
 
-    return <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={parseInt(version_number, 10)} />;
+    return <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={parseInt(versionNumber, 10)} />;
 };
 
 export default SidebarVersions;
