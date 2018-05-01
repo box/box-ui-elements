@@ -17,7 +17,7 @@ exports[`components/ContentSidebar/SidebarAccessStats should render an error 1`]
 exports[`components/ContentSidebar/SidebarAccessStats should render the component when there is at least one type of access stat 1`] = `
 <SidebarSection
   className=""
-  interactionTarget="details-section-accessstats"
+  interactionTarget="accessstats"
   isOpen={true}
   title={
     <FormattedMessage
@@ -30,31 +30,31 @@ exports[`components/ContentSidebar/SidebarAccessStats should render the componen
     commentCount={0}
     commentStatButtonProps={
       Object {
-        "data-resin-target": "details-accessstats-comments",
+        "data-resin-target": "accessstats-comments",
       }
     }
     downloadCount={0}
     downloadStatButtonProps={
       Object {
-        "data-resin-target": "details-accessstats-downloads",
+        "data-resin-target": "accessstats-downloads",
       }
     }
     editCount={0}
     editStatButtonProps={
       Object {
-        "data-resin-target": "details-accessstats-edits",
+        "data-resin-target": "accessstats-edits",
       }
     }
     isBoxNote={false}
     previewCount={1}
     previewStatButtonProps={
       Object {
-        "data-resin-target": "details-accessstats-previews",
+        "data-resin-target": "accessstats-previews",
       }
     }
     viewStatButtonProps={
       Object {
-        "data-resin-target": "details-accessstats-viewdetails",
+        "data-resin-target": "accessstats-viewdetails",
       }
     }
   />

@@ -76,9 +76,14 @@ class SidebarSection extends PureComponent<Props, State> {
         );
 
         return (
-            <div data-resin-target={interactionTarget} className={sectionClassName}>
+            <div className={sectionClassName}>
                 {title && (
-                    <PlainButton type='button' onClick={this.toggleVisibility} className='bcs-section-title'>
+                    <PlainButton
+                        type='button'
+                        onClick={this.toggleVisibility}
+                        className='bcs-section-title'
+                        data-resin-target={interactionTarget}
+                    >
                         {title}
                     </PlainButton>
                 )}

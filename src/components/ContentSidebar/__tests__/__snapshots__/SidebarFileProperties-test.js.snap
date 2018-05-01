@@ -33,7 +33,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
     description="foo"
     descriptionTextareaProps={
       Object {
-        "data-resin-target": "details-description",
+        "data-resin-target": "description",
       }
     }
     modifiedAt="2018-04-18T16:56:05.352Z"
@@ -57,7 +57,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
           onDescriptionChange={[MockFunction]}
           textAreaProps={
             Object {
-              "data-resin-target": "details-description",
+              "data-resin-target": "description",
             }
           }
           value="foo"
@@ -72,14 +72,14 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
             onDescriptionChange={[MockFunction]}
             textAreaProps={
               Object {
-                "data-resin-target": "details-description",
+                "data-resin-target": "description",
               }
             }
             value="foo"
           >
             <TextareaAutosize
               className="description-textarea"
-              data-resin-target="details-description"
+              data-resin-target="description"
               maxLength="255"
               maxRows={6}
               onBlur={[Function]}
@@ -91,7 +91,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
             >
               <textarea
                 className="description-textarea"
-                data-resin-target="details-description"
+                data-resin-target="description"
                 maxLength="255"
                 onBlur={[Function]}
                 onChange={[Function]}
@@ -188,7 +188,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render ItemPrope
   description="foo"
   descriptionTextareaProps={
     Object {
-      "data-resin-target": "details-description",
+      "data-resin-target": "description",
     }
   }
   modifiedAt="2018-04-18T16:56:05.352Z"
@@ -252,14 +252,14 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
   <ItemProperties
     classificationProps={
       Object {
-        "data-resin-target": "details-editclassification",
+        "data-resin-target": "editclassification",
         "openModal": [MockFunction],
         "value": "Public",
       }
     }
     descriptionTextareaProps={
       Object {
-        "data-resin-target": "details-description",
+        "data-resin-target": "description",
       }
     }
     size="1 B"
@@ -278,7 +278,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
         1 B
       </dd>
       <ClassificationProperty
-        data-resin-target="details-editclassification"
+        data-resin-target="editclassification"
         openModal={[MockFunction]}
         value="Public"
       >
@@ -352,14 +352,14 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
   <ItemProperties
     classificationProps={
       Object {
-        "data-resin-target": "details-addclassification",
+        "data-resin-target": "addclassification",
         "openModal": [MockFunction],
         "value": undefined,
       }
     }
     descriptionTextareaProps={
       Object {
-        "data-resin-target": "details-description",
+        "data-resin-target": "description",
       }
     }
     size="1 B"
@@ -378,7 +378,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
         1 B
       </dd>
       <ClassificationProperty
-        data-resin-target="details-addclassification"
+        data-resin-target="addclassification"
         openModal={[MockFunction]}
       >
         <FormattedMessage
