@@ -6,7 +6,6 @@
 
 import React from 'react';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
-import withErrorHandling from './withErrorHandling';
 import type { BoxItem } from '../../flowTypes';
 import { isBoxNote } from '../../util/file';
 
@@ -25,5 +24,4 @@ const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {
     return <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={parseInt(version_number, 10)} />;
 };
 
-export { SidebarVersions as SidebarVersionsComponent };
-export default withErrorHandling(SidebarVersions);
+export default SidebarVersions;
