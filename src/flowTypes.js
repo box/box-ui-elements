@@ -217,7 +217,8 @@ export type BoxItem = {
     selected?: boolean,
     metadata?: MetadataType,
     file_version?: BoxItemVersion,
-    is_download_available: boolean
+    is_download_available: boolean,
+    version_number?: string
 };
 
 export type BoxItemCollection = {
