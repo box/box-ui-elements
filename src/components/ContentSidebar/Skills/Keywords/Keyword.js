@@ -8,7 +8,6 @@ import React from 'react';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 // import IconCross from '../icons/IconCross';
 import type { SkillCardEntry } from '../../../../flowTypes';
-import INTERACTION_TARGETS from '../../../../interactionTargets';
 import './Keyword.scss';
 
 type Props = {
@@ -22,7 +21,6 @@ const Keyword = ({ keyword, onClick, isSelected }: Props) => (
         <PlainButton
             className={`be-file-keyword-word ${isSelected ? 'be-file-keyword-selected' : ''}`}
             onClick={onClick}
-            data-resin-target={INTERACTION_TARGETS.SKILLS.TOPIC}
         >
             {keyword.text}
         </PlainButton>
