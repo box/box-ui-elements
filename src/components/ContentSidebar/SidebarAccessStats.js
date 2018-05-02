@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import type { FileAccessStats, BoxItem } from '../../flowTypes';
 import messages from '../messages';
+import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 import withErrorHandling from './withErrorHandling';
 
@@ -37,14 +38,22 @@ const SidebarAccessStats = ({
     }
 
     return (
-        <SidebarSection title={<FormattedMessage {...messages.sidebarAccessStats} />}>
+        <SidebarSection
+            interactionTarget={SECTION_TARGETS.ACCESS_STATS}
+            title={<FormattedMessage {...messages.sidebarAccessStats} />}
+        >
             <AccessStats
                 commentCount={comment_count}
+                commentStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.COMMENTS }}
                 downloadCount={download_count}
+                downloadStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS }}
                 previewCount={preview_count}
+                previewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.PREVIEWS }}
                 editCount={edit_count}
+                editStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.EDITS }}
                 openAccessStatsModal={onAccessStatsClick}
                 isBoxNote={isBoxNote(file)}
+                viewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS }}
             />
         </SidebarSection>
     );

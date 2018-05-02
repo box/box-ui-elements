@@ -19,6 +19,7 @@ exports[`components/ContentSidebar/SidebarVersions should render an error 1`] = 
 exports[`components/ContentSidebar/SidebarVersions should render the versions when total_count > 0 1`] = `
 <VersionHistoryLink
   className=""
+  data-resin-target="versionhistory"
   versionCount={2}
 />
 `;

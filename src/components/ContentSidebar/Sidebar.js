@@ -13,6 +13,7 @@ import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import messages from '../messages';
 import type { BoxItem, FileVersions, Errors, FileAccessStats } from '../../flowTypes';
+import { TAB_TARGETS } from '../../interactionTargets';
 import './Sidebar.scss';
 
 type Props = {
@@ -152,8 +153,15 @@ const Sidebar = ({
 
     return (
         <TabView defaultSelectedIndex={shouldShowSkills ? 0 : 1}>
-            <Tab title={intl.formatMessage(messages.sidebarDetailsTitle)}>{Details}</Tab>
-            <Tab title={intl.formatMessage(messages.activityFeedTitle)}>{ActivityFeedSidebar}</Tab>
+            <Tab
+                title={intl.formatMessage(messages.sidebarDetailsTitle)}
+                data-resin-target={TAB_TARGETS.SELECT_DETAILS}
+            >
+                {Details}
+            </Tab>
+            <Tab title={intl.formatMessage(messages.activityFeedTitle)} data-resin-target={TAB_TARGETS.SELECT_ACTIVITY}>
+                {ActivityFeedSidebar}
+            </Tab>
         </TabView>
     );
 };

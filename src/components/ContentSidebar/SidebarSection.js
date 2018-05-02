@@ -13,7 +13,8 @@ type Props = {
     children?: any,
     className: string,
     title?: string | React$Element<any>,
-    isOpen: boolean
+    isOpen: boolean,
+    interactionTarget?: string
 };
 
 type State = {
@@ -64,7 +65,7 @@ class SidebarSection extends PureComponent<Props, State> {
      */
     render() {
         const { isOpen }: State = this.state;
-        const { children, className, title }: Props = this.props;
+        const { children, className, title, interactionTarget }: Props = this.props;
 
         const sectionClassName = classNames(
             'bcs-section',
@@ -77,7 +78,12 @@ class SidebarSection extends PureComponent<Props, State> {
         return (
             <div className={sectionClassName}>
                 {title && (
-                    <PlainButton type='button' onClick={this.toggleVisibility} className='bcs-section-title'>
+                    <PlainButton
+                        type='button'
+                        onClick={this.toggleVisibility}
+                        className='bcs-section-title'
+                        data-resin-target={interactionTarget}
+                    >
                         {title}
                     </PlainButton>
                 )}
