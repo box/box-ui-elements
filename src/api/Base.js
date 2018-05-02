@@ -142,7 +142,7 @@ class Base {
      * @param {Function} successCallback the success callback
      */
     successHandler(data: Object): void {
-        if (!this.isDestroyed() && this.successCallback && typeof this.successCallback === 'function') {
+        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
             this.successCallback(data);
         }
     }
@@ -154,7 +154,7 @@ class Base {
      * @param {Function} errorCallback the error callback
      */
     errorHandler(error: Object): void {
-        if (!this.isDestroyed() && this.errorCallback && typeof this.errorCallback === 'function') {
+        if (!this.isDestroyed() && typeof this.errorCallback === 'function') {
             this.errorCallback(error);
         }
     }
