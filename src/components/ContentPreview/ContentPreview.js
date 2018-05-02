@@ -46,7 +46,9 @@ type Props = {
     isSmall: boolean,
     autoFocus: boolean,
     useHotkeys: boolean,
-    showSidebar?: boolean,
+    contentSidebarProps: {
+        showSidebar?: boolean
+    },
     hasSidebar: boolean,
     canDownload?: boolean,
     showDownload?: boolean,
@@ -113,7 +115,10 @@ class ContentPreview extends PureComponent<Props, State> {
         onLoad: noop,
         onMetric: noop,
         onNavigate: noop,
-        collection: []
+        collection: [],
+        contentSidebarProps: {
+            showSidebar: false
+        }
     };
 
     /**
@@ -713,7 +718,8 @@ class ContentPreview extends PureComponent<Props, State> {
             language,
             messages,
             className,
-            showSidebar,
+            contentSidebarProps,
+            contentSidebarProps: { showSidebar },
             hasSidebar,
             hasHeader,
             onClose,
@@ -744,6 +750,8 @@ class ContentPreview extends PureComponent<Props, State> {
             hasSidebarButton = false;
             onSidebarToggle = null;
         }
+
+        const sidebarProps = omit(contentSidebarProps, ['showSidebar']);
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -798,6 +806,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 onInteraction={onInteraction}
                                 requestInterceptor={requestInterceptor}
                                 responseInterceptor={responseInterceptor}
+                                {...sidebarProps}
                             />
                         )}
                     </div>
