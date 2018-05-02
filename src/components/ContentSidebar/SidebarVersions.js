@@ -7,6 +7,7 @@
 import React from 'react';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
 import type { BoxItem } from '../../flowTypes';
+import { DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 
 type Props = {
@@ -23,7 +24,13 @@ const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {
         return null;
     }
 
-    return <VersionHistoryLink onClick={onVersionHistoryClick} versionCount={parseInt(versionNumber, 10)} />;
+    return (
+        <VersionHistoryLink
+            data-resin-target={DETAILS_TARGETS.VERSION_HISTORY}
+            onClick={onVersionHistoryClick}
+            versionCount={versionNumber}
+        />
+    );
 };
 
 export default SidebarVersions;
