@@ -5,6 +5,7 @@ const LIMIT = 1000;
 describe('api/OffsetBasedAPI', () => {
     let offsetBasedAPI;
     const offsetBasedAPIResponse = { total_count: 0, entries: [] };
+    const url = 'https://foo.bar';
 
     beforeEach(() => {
         offsetBasedAPI = new OffsetBasedAPI({});
@@ -43,7 +44,6 @@ describe('api/OffsetBasedAPI', () => {
     });
 
     describe('offsetGet()', () => {
-        const url = 'https://foo.bar';
         beforeEach(() => {
             offsetBasedAPI.getUrl = jest.fn(() => url);
         });
@@ -71,6 +71,7 @@ describe('api/OffsetBasedAPI', () => {
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
                 expect(successCb).toHaveBeenCalledWith(offsetBasedAPIResponse);
+                expect(successCb).toHaveBeenCalledTimes(1);
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
                     url,
@@ -128,6 +129,52 @@ describe('api/OffsetBasedAPI', () => {
                         limit: LIMIT
                     }
                 });
+            });
+        });
+    });
+
+    describe('offsetGet()', () => {
+        beforeEach(() => {
+            offsetBasedAPI.getUrl = jest.fn(() => url);
+            offsetBasedAPI.offset = 0;
+            offsetBasedAPI.limit = 1000;
+            offsetBasedAPI.successHandler = jest.fn();
+            offsetBasedAPI.errorHandler = jest.fn();
+            offsetBasedAPI.shouldFetchAll = true;
+        });
+
+        test('should do two xhr calls and call successHandler once', () => {
+            offsetBasedAPI.xhr = {
+                get: jest.fn().mockReturnValue(
+                    Promise.resolve({
+                        data: {
+                            ...offsetBasedAPIResponse,
+                            total_count: 1500
+                        }
+                    })
+                )
+            };
+
+            return offsetBasedAPI.offsetGetRequest().then(() => {
+                expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
+                expect(offsetBasedAPI.successHandler).toHaveBeenCalledTimes(1);
+                expect(offsetBasedAPI.errorHandler).not.toHaveBeenCalled();
+            });
+        });
+
+        test('should do one xhr call and call successHandler once', () => {
+            offsetBasedAPI.xhr = {
+                get: jest.fn().mockReturnValue(
+                    Promise.resolve({
+                        data: offsetBasedAPIResponse
+                    })
+                )
+            };
+
+            return offsetBasedAPI.offsetGetRequest().then(() => {
+                expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
+                expect(offsetBasedAPI.successHandler).toHaveBeenCalledTimes(1);
+                expect(offsetBasedAPI.errorHandler).not.toHaveBeenCalled();
             });
         });
     });
