@@ -5,6 +5,7 @@
  */
 
 import noop from 'lodash/noop';
+import type { $AxiosError } from 'axios';
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
 import { getTypedFileId } from '../util/file';
@@ -141,11 +142,11 @@ class Base {
      * @param {Object} data the response data
      * @param {Function} successCallback the success callback
      */
-    successHandler(data: Object): void {
+    successHandler = (data: Object): void => {
         if (!this.isDestroyed() && typeof this.successCallback === 'function') {
             this.successCallback(data);
         }
-    }
+    };
 
     /**
      * Generic error handler
@@ -153,11 +154,17 @@ class Base {
      * @param {Object} data the response data
      * @param {Function} errorCallback the error callback
      */
-    errorHandler(error: Object): void {
+    errorHandler = (error: $AxiosError<any>): void => {
         if (!this.isDestroyed() && typeof this.errorCallback === 'function') {
-            this.errorCallback(error);
+            const { response } = error;
+
+            if (response) {
+                this.errorCallback(response.data);
+            } else {
+                this.errorCallback(error);
+            }
         }
-    }
+    };
 
     /**
      * Generic GET request
