@@ -497,7 +497,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (this.shouldFetchOrRender()) {
             this.api
                 .getVersionsAPI(shouldDestroy)
-                .get(
+                .offsetGet(
                     id,
                     this.fetchVersionsSuccessCallback,
                     this.fetchVersionsErrorCallback,
@@ -532,7 +532,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (this.shouldFetchOrRender()) {
             this.api
                 .getCommentsAPI(shouldDestroy)
-                .get(
+                .offsetGet(
                     id,
                     this.fetchCommentsSuccessCallback,
                     this.fetchCommentsErrorCallback,

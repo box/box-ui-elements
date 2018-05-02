@@ -23,6 +23,31 @@ class OffsetBasedApi extends Base {
     data: Data;
 
     /**
+     * @property {number}
+     */
+    offset: number;
+
+    /**
+     * @property {number}
+     */
+    limit: number;
+
+    /**
+     * @property {Array<string>}
+     */
+    fields: ?Array<string>;
+
+    /**
+     * @property {string}
+     */
+    id: string;
+
+    /**
+     * @property {boolean}
+     */
+    shouldFetchAll: boolean;
+
+    /**
      * Gets query params for the API
      *
      * @return the query params object
@@ -51,9 +76,41 @@ class OffsetBasedApi extends Base {
     }
 
     /**
+     * Helper for get
+     *
+     * @private
+     */
+    async offsetGetRequest(): Promise<void> {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        // Make the XHR request
+        try {
+            const params = this.getQueryParameters(this.offset, this.limit, this.fields);
+
+            const { data }: { data: Data } = await this.getData(this.id, params);
+
+            const entries = this.data ? this.data.entries : [];
+            this.data = {
+                ...data,
+                entries: entries.concat(data.entries)
+            };
+            const totalCount = data.total_count;
+            this.offset += this.limit;
+            if (this.shouldFetchAll && this.hasMoreItems(this.offset, totalCount)) {
+                this.offsetGetRequest();
+            }
+
+            this.successHandler(this.data);
+        } catch (error) {
+            this.errorHandler(error);
+        }
+    }
+
+    /**
      * Offset based API get
      *
-     * @override
      * @param {string} id the file id
      * @param {Function} successCallback the success callback
      * @param {Function} errorCallback the error callback
@@ -62,44 +119,24 @@ class OffsetBasedApi extends Base {
      * @param {array} fields the fields to fetch
      * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      */
-    async get(
+    async offsetGet(
         id: string,
         successCallback: Function,
         errorCallback: Function,
         offset: number = 0,
         limit: number = 1000,
         fields?: Array<string>,
-        shouldFetchAll?: boolean
+        shouldFetchAll: boolean
     ): Promise<void> {
-        if (this.isDestroyed()) {
-            return;
-        }
-
+        this.id = id;
+        this.offset = offset;
+        this.limit = limit;
+        this.fields = fields;
+        this.shouldFetchAll = shouldFetchAll;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        // Make the XHR request
-        try {
-            const params = this.getQueryParameters(offset, limit, fields);
-            const newOffset = offset + limit;
-
-            const { data }: { data: Data } = await this.getData(id, params);
-
-            const entries = this.data ? this.data.entries : [];
-            this.data = {
-                ...data,
-                entries: entries.concat(data.entries)
-            };
-            const totalCount = data.total_count;
-
-            if (shouldFetchAll && this.hasMoreItems(newOffset, totalCount)) {
-                this.get(id, successCallback, errorCallback, newOffset, limit, fields, shouldFetchAll);
-            }
-
-            this.successHandler(this.data);
-        } catch (error) {
-            this.errorHandler(error);
-        }
+        return this.offsetGetRequest();
     }
 }
 

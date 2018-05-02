@@ -42,7 +42,7 @@ describe('api/OffsetBasedAPI', () => {
         });
     });
 
-    describe('get()', () => {
+    describe('offsetGet()', () => {
         const url = 'https://foo.bar';
         beforeEach(() => {
             offsetBasedAPI.getUrl = jest.fn(() => url);
@@ -55,7 +55,7 @@ describe('api/OffsetBasedAPI', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return offsetBasedAPI.get('id', successCb, errorCb).catch(() => {
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb).catch(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).not.toHaveBeenCalled();
             });
@@ -69,7 +69,7 @@ describe('api/OffsetBasedAPI', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return offsetBasedAPI.get('id', successCb, errorCb).then(() => {
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
                 expect(successCb).toHaveBeenCalledWith(offsetBasedAPIResponse);
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
@@ -101,7 +101,7 @@ describe('api/OffsetBasedAPI', () => {
             offsetBasedAPI.totalCount = 50;
             offsetBasedAPI.offset = 50;
 
-            return offsetBasedAPI.get('id', successCb, errorCb).catch(() => {
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb).catch(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).not.toHaveBeenCalled();
                 expect(offsetBasedAPI.xhr.get).not.toHaveBeenCalled();
@@ -117,7 +117,7 @@ describe('api/OffsetBasedAPI', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return offsetBasedAPI.get('id', successCb, errorCb).then(() => {
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).toHaveBeenCalledWith(error);
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
