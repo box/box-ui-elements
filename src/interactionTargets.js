@@ -21,3 +21,5 @@ export const DETAILS_TARGETS = {
     DESCRIPTION: 'description',
     VERSION_HISTORY: 'versionhistory'
 };
+
+export const INTERACTION_TARGET = 'data-resin-target';

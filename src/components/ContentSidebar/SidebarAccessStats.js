@@ -10,7 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import type { FileAccessStats, BoxItem } from '../../flowTypes';
 import messages from '../messages';
-import { SECTION_TARGETS, DETAILS_TARGETS } from '../../interactionTargets';
+import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 import withErrorHandling from './withErrorHandling';
 
@@ -44,16 +44,16 @@ const SidebarAccessStats = ({
         >
             <AccessStats
                 commentCount={comment_count}
-                commentStatButtonProps={{ 'data-resin-target': DETAILS_TARGETS.ACCESS_STATS.COMMENTS }}
+                commentStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.COMMENTS }}
                 downloadCount={download_count}
-                downloadStatButtonProps={{ 'data-resin-target': DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS }}
+                downloadStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS }}
                 previewCount={preview_count}
-                previewStatButtonProps={{ 'data-resin-target': DETAILS_TARGETS.ACCESS_STATS.PREVIEWS }}
+                previewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.PREVIEWS }}
                 editCount={edit_count}
-                editStatButtonProps={{ 'data-resin-target': DETAILS_TARGETS.ACCESS_STATS.EDITS }}
+                editStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.EDITS }}
                 openAccessStatsModal={onAccessStatsClick}
                 isBoxNote={isBoxNote(file)}
-                viewStatButtonProps={{ 'data-resin-target': DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS }}
+                viewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS }}
             />
         </SidebarSection>
     );

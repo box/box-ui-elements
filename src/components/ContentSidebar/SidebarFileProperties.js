@@ -12,7 +12,7 @@ import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
 import type { BoxItem } from '../../flowTypes';
 import { KEY_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
-import { DETAILS_TARGETS } from '../../interactionTargets';
+import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
 type Props = {
     file: BoxItem,
@@ -40,13 +40,13 @@ const SidebarFileProperties = ({
             size={getFileSize(file.size, intl.locale)}
             uploader={getProp(file, 'created_by.name')}
             onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
-            descriptionTextareaProps={{ 'data-resin-target': DETAILS_TARGETS.DESCRIPTION }}
+            descriptionTextareaProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.DESCRIPTION }}
             classificationProps={
                 hasClassification
                     ? {
                         openModal: onClassificationClick,
                         value,
-                        'data-resin-target': value
+                        [INTERACTION_TARGET]: value
                             ? DETAILS_TARGETS.CLASSIFICATION_EDIT
                             : DETAILS_TARGETS.CLASSIFICATION_ADD
                     }
