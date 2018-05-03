@@ -1,14 +1,14 @@
 /**
  * @flow
- * @file Helper for the box versions API
+ * @file Helper for the box Tasks API
  * @author Box
  */
 
-import OffsetBasedAPI from './OffsetBasedAPI';
+import Base from './Base';
 
-class Versions extends OffsetBasedAPI {
+class Tasks extends Base {
     /**
-     * API URL for versions
+     * API URL for tasks
      *
      * @param {string} [id] - a box file id
      * @return {string} base url for files
@@ -17,8 +17,8 @@ class Versions extends OffsetBasedAPI {
         if (!id) {
             throw new Error('Missing file id!');
         }
-        return `${this.getBaseApiUrl()}/files/${id}/versions`;
+        return `${this.getBaseApiUrl()}/files/${id}/tasks`;
     }
 }
 
-export default Versions;
+export default Tasks;

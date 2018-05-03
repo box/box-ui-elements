@@ -1,20 +1,20 @@
-import Versions from '../Versions';
+import Comments from '../Comments';
 
-let versions;
+let comments;
 
-describe('api/Versions', () => {
+describe('api/Comments', () => {
     beforeEach(() => {
-        versions = new Versions({});
+        comments = new Comments({});
     });
 
     describe('getUrl()', () => {
         test('should throw when version api url without id', () => {
             expect(() => {
-                versions.getUrl();
+                comments.getUrl();
             }).toThrow();
         });
         test('should return correct version api url with id', () => {
-            expect(versions.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/versions');
+            expect(comments.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/comments');
         });
     });
 });

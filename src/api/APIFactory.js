@@ -13,6 +13,8 @@ import WebLinkAPI from './WebLink';
 import SearchAPI from './Search';
 import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
+import CommentsAPI from './Comments';
+import TasksAPI from './Tasks';
 import FileAccessStatsAPI from './FileAccessStats';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
@@ -64,6 +66,16 @@ class APIFactory {
     versionsAPI: VersionsAPI;
 
     /**
+     * @property {CommentsAPI}
+     */
+    commentsAPI: CommentsAPI;
+
+    /**
+     * @property {TasksAPI}
+     */
+    tasksAPI: TasksAPI;
+
+    /*
      * @property {FileAccessStatsAPI}
      */
     fileAccessStatsAPI: FileAccessStatsAPI;
@@ -130,6 +142,14 @@ class APIFactory {
         if (this.fileAccessStatsAPI) {
             this.fileAccessStatsAPI.destroy();
             delete this.fileAccessStatsAPI;
+        }
+        if (this.tasksAPI) {
+            this.tasksAPI.destroy();
+            delete this.tasksAPI;
+        }
+        if (this.commentsAPI) {
+            this.commentsAPI.destroy();
+            delete this.commentsAPI;
         }
         if (destroyCache) {
             this.options.cache = new Cache();
@@ -264,6 +284,34 @@ class APIFactory {
     }
 
     /**
+     * API for comments
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {CommentsAPI} CommentsAPI instance
+     */
+    getCommentsAPI(shouldDestroy: boolean): CommentsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.commentsAPI = new CommentsAPI(this.options);
+        return this.commentsAPI;
+    }
+
+    /**
+     * API for tasks
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {TasksAPI} TasksAPI instance
+     */
+    getTasksAPI(shouldDestroy: boolean): TasksAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.tasksAPI = new TasksAPI(this.options);
+        return this.tasksAPI;
+    }
+
+    /*
      * API for fille access stats
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call

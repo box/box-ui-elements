@@ -6,7 +6,8 @@
 
 import Item from './Item';
 import { getFieldsAsString } from '../util/fields';
-import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS, TYPED_ID_FILE_PREFIX } from '../constants';
+import { getTypedFileId } from '../util/file';
+import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS } from '../constants';
 import type Cache from '../util/Cache';
 import { getBadItemError, getBadPermissionsError } from '../util/error';
 import type { BoxItem } from '../flowTypes';
@@ -20,17 +21,6 @@ class File extends Item {
      */
     getCacheKey(id: string): string {
         return `${CACHE_PREFIX_FILE}${id}`;
-    }
-
-    /**
-     * Returns typed id for file. Useful for when
-     * making file based XHRs where auth token
-     * can be per file as used by Preview.
-     *
-     * @return {string} typed id for file
-     */
-    static getTypedFileId(id: string): string {
-        return `${TYPED_ID_FILE_PREFIX}${id}`;
     }
 
     /**
@@ -93,7 +83,7 @@ class File extends Item {
 
         return this.xhr
             .put({
-                id: File.getTypedFileId(id),
+                id: getTypedFileId(id),
                 url: this.getUrl(id),
                 data: { description }
             })
@@ -147,7 +137,7 @@ class File extends Item {
         // as thats what needed by preview.
         return this.xhr
             .get({
-                id: File.getTypedFileId(id),
+                id: getTypedFileId(id),
                 url: this.getUrl(id),
                 params: {
                     fields: getFieldsAsString(true, includePreviewSidebarFields)

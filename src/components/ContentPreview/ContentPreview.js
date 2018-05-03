@@ -19,13 +19,13 @@ import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight'
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
-import File from '../../api/File';
 import Cache from '../../util/Cache';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
 import TokenService from '../../util/TokenService';
 import { isValidBoxFile } from '../../util/fields';
 import { isInputElement, focus } from '../../util/dom';
+import { getTypedFileId } from '../../util/file';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -353,7 +353,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     async prefetch(files: Array<string | BoxItem>): Promise<void> {
         const { token }: Props = this.props;
-        const typedIds: string[] = files.map((file) => File.getTypedFileId(this.getFileId(file)));
+        const typedIds: string[] = files.map((file) => getTypedFileId(this.getFileId(file)));
         await TokenService.cacheTokens(typedIds, token);
         files.forEach((file) => {
             const fileId = this.getFileId(file);
@@ -400,7 +400,7 @@ class ContentPreview extends PureComponent<Props, State> {
         }
 
         const { Preview } = global.Box;
-        const typedId: string = File.getTypedFileId(this.getFileId(file));
+        const typedId: string = getTypedFileId(this.getFileId(file));
         const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
 
         const previewOptions = {
