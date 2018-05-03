@@ -46,7 +46,7 @@ We have designed the Box UI Elements in an authentication-type agnostic way. Whe
 The Box UI Elements require their corresponding CSS stylesheets to render properly. You will need to set up Webpack's style-loader and css-loader in order to properly include the CSS like in the examples below. Alternatively, you can include the appropriate CSS files in your application's HTML without importing it in React. Links to hosted versions of these CSS files on the Box CDN can be found in the documentation links below.
 
 # Components
-You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview` or `ContentTree`. Similarly, you can also import the `ContentPickerPopup`, `ContentUploaderPopup` or `ContentTreePopup` which are popup versions for the Content Picker, Content Uploader and Content Tree, respectively.
+You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview`. Similarly, you can also import the `ContentPickerPopup` and `ContentUploaderPopup` which are popup versions for the Content Picker and Content Uploader, respectively.
 
 ## Content Explorer ([Documentation](https://developer.box.com/docs/box-content-explorer))
 
@@ -209,49 +209,6 @@ render(
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
-
-
-## Content Tree ([Documentation](https://developer.box.com/docs/box-content-tree))
-
-<img src="https://user-images.githubusercontent.com/1075325/27887155-092e7362-6194-11e7-877d-157726789bef.png" width="75%"/>
-
-```js
-import React from 'react';
-import { render } from 'react-dom';
-import { addLocaleData } from 'react-intl';
-import enLocaleData from 'react-intl/locale-data/en';
-import { ContentTree } from 'box-ui-elements';
-import messages from 'box-ui-elements/i18n/en-US';
-import 'box-ui-elements/dist/tree.css';
-
-addLocaleData(enLocaleData);
-
-render(
-    <ContentTree
-        token='ACCESS_TOKEN'
-        language='en-US'
-        messages={messages}
-    />,
-    document.querySelector('.container')
-);
-```
-
-### Props
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| language | string |  | *See the [Internationalization](#internationalization) section* |
-| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
-| rootFolderId | string | `0` | The root folder for the content tree. |
-| type | string | `file, web_link, folder` | Indicates which type of items show up in the tree. Should be a comma separated combination of `file`, `folder` or `web_link`. |
-| onClick | function([Folder](https://developer.box.com/reference#folder-object)&#124;[File](https://developer.box.com/reference#file-object)&#124;[Web Link](https://developer.box.com/reference#web-link-object)) |  | Callback function for when an item is clicked. |
-| isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| autoFocus | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 
 
 ## Content Preview ([Documentation](https://developer.box.com/docs/box-content-preview))
