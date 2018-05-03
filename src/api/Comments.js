@@ -1,14 +1,14 @@
 /**
  * @flow
- * @file Helper for the box versions API
+ * @file Helper for the box comments API
  * @author Box
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
 
-class Versions extends OffsetBasedAPI {
+class Comments extends OffsetBasedAPI {
     /**
-     * API URL for versions
+     * API URL for comments
      *
      * @param {string} [id] - a box file id
      * @return {string} base url for files
@@ -17,8 +17,8 @@ class Versions extends OffsetBasedAPI {
         if (!id) {
             throw new Error('Missing file id!');
         }
-        return `${this.getBaseApiUrl()}/files/${id}/versions`;
+        return `${this.getBaseApiUrl()}/files/${id}/comments`;
     }
 }
 
-export default Versions;
+export default Comments;

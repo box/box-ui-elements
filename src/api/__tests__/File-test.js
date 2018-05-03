@@ -3,6 +3,10 @@ import Cache from '../../util/Cache';
 import { getFieldsAsString } from '../../util/fields';
 import { X_REP_HINTS } from '../../constants';
 
+jest.mock('../../util/file', () => ({
+    getTypedFileId: jest.fn().mockReturnValue('file_id')
+}));
+
 let file;
 let cache;
 
@@ -88,7 +92,6 @@ describe('api/File', () => {
         });
 
         test('should make an xhr', () => {
-            File.getTypedFileId = jest.fn().mockReturnValue('id');
             file.getUrl = jest.fn().mockReturnValue('url');
             file.merge = jest.fn();
 
@@ -105,7 +108,7 @@ describe('api/File', () => {
 
             return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
                 expect(file.xhr.put).toHaveBeenCalledWith({
-                    id: 'id',
+                    id: 'file_id',
                     url: 'url',
                     data: {
                         description: 'foo'
@@ -117,7 +120,6 @@ describe('api/File', () => {
         test('should merge the new file description in and execute the success callback', () => {
             file.getCacheKey = jest.fn().mockReturnValue('key');
             file.merge = jest.fn();
-            File.getTypedFileId = jest.fn().mockReturnValue('file_id');
 
             const mockFile = {
                 id: '1',

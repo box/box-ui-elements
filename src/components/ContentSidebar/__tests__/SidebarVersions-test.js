@@ -1,19 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
-import SidebarVersions, { SidebarVersionsComponent } from '../SidebarVersions';
+import SidebarVersions from '../SidebarVersions';
 
 describe('components/ContentSidebar/SidebarVersions', () => {
-    const getWrapper = (props) => shallow(<SidebarVersionsComponent {...props} />);
+    const getWrapper = (props) => shallow(<SidebarVersions {...props} />);
 
-    test('should render the versions when total_count > 0', () => {
+    test('should render the versions when version_number > 1', () => {
         const props = {
-            versions: {
-                total_count: 1
-            },
             file: {
-                extension: 'foo'
+                extension: 'foo',
+                version_number: 2
             }
         };
         const wrapper = getWrapper(props);
@@ -22,11 +19,34 @@ describe('components/ContentSidebar/SidebarVersions', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should not render the versions when total_count is falsy', () => {
+    test('should not render the versions when version_number <= 1', () => {
         const props = {
-            versions: {
-                total_count: 0
-            },
+            file: {
+                extension: 'foo',
+                version_number: 1
+            }
+        };
+        const wrapper = getWrapper(props);
+
+        expect(wrapper.find(VersionHistoryLink).exists()).toBe(false);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not render the versions when version_number is falsy', () => {
+        const props = {
+            file: {
+                extension: 'foo',
+                version: null
+            }
+        };
+        const wrapper = getWrapper(props);
+
+        expect(wrapper.find(VersionHistoryLink).exists()).toBe(false);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not render the versions when version_number is undefined', () => {
+        const props = {
             file: {
                 extension: 'foo'
             }
@@ -39,32 +59,14 @@ describe('components/ContentSidebar/SidebarVersions', () => {
 
     test('should not render the versions when file is a box note', () => {
         const props = {
-            versions: {
-                total_count: 0
-            },
             file: {
+                version_number: 1,
                 extension: 'boxnote'
             }
         };
         const wrapper = getWrapper(props);
 
         expect(wrapper.find(VersionHistoryLink).exists()).toBe(false);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render an error', () => {
-        const props = {
-            maskError: {
-                errorHeader: {
-                    id: 'foo',
-                    description: 'bar',
-                    defaultMessage: 'baz'
-                }
-            }
-        };
-        const wrapper = shallow(<SidebarVersions {...props} />);
-
-        expect(wrapper.find(ErrorMask)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 });

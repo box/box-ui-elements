@@ -16,7 +16,16 @@ import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
 import messages from '../messages';
-import type { FileAccessStats, Token, BoxItem, StringMap, FileVersions, Errors } from '../../flowTypes';
+import type {
+    FileAccessStats,
+    Token,
+    BoxItem,
+    StringMap,
+    FileVersions,
+    Errors,
+    Comments,
+    Tasks
+} from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -66,8 +75,12 @@ type State = {
     file?: BoxItem,
     accessStats?: FileAccessStats,
     versions?: FileVersions,
+    comments?: Comments,
+    tasks?: Tasks,
     fileError?: Errors,
     versionError?: Errors,
+    commentsError?: Errors,
+    tasksError?: Errors,
     accessStatsError?: Errors
 };
 
@@ -159,19 +172,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { fileId, hasVersions, hasAccessStats }: Props = this.props;
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
-        if (fileId) {
-            this.fetchFile(fileId);
-            if (hasVersions) {
-                this.fetchVersions(fileId);
-            }
-            if (hasAccessStats) {
-                this.fetchFileAccessStats(fileId);
-            }
-        }
+        this.fetchData(this.props);
     }
 
     /**
@@ -181,17 +185,33 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { fileId, token }: Props = this.props;
-        const { fileId: newFileId, token: newToken, hasVersions }: Props = nextProps;
+        const { fileId }: Props = this.props;
+        const { fileId: newFileId }: Props = nextProps;
 
-        const hasTokenChanged = newToken !== token;
         const hasFileIdChanged = newFileId !== fileId;
-        const currentFileId = newFileId || fileId;
 
-        if (currentFileId && (hasTokenChanged || hasFileIdChanged)) {
-            this.fetchFile(currentFileId);
-            if (hasVersions) {
-                this.fetchVersions(currentFileId);
+        if (hasFileIdChanged) {
+            this.setState({});
+            this.fetchData(nextProps);
+        }
+    }
+
+    /**
+     * Fetches the data for the sidebar
+     *
+     * @param {Object} Props the component props
+     * @param {boolean} hasFileIdChanged true if the file id has changed
+     */
+    fetchData({ fileId, hasActivityFeed, hasAccessStats }: Props) {
+        if (fileId) {
+            this.fetchFile(fileId);
+            if (hasAccessStats) {
+                this.fetchFileAccessStats(fileId);
+            }
+            if (hasActivityFeed) {
+                this.fetchComments(fileId);
+                this.fetchTasks(fileId);
+                this.fetchVersions(fileId);
             }
         }
     }
@@ -324,6 +344,35 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Handles a failed file comment fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchCommentsErrorCallback = (e: Error) => {
+        this.setState({
+            comments: undefined,
+            commentsError: e
+        });
+        this.errorCallback(e);
+    };
+
+    /**
+     * Handles a failed file task fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchTasksErrorCallback = (e: Error) => {
+        this.setState({
+            tasks: undefined,
+            tasksError: e
+        });
+    };
+
+    /**
      * Handles a failed file access stats fetch
      *
      * @private
@@ -371,7 +420,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File versions fetch success callback
      *
      * @private
-     * @param {Object} file - Box file
+     * @param {Object} versions - Box file versions
      * @return {void}
      */
     fetchVersionsSuccessCallback = (versions: FileVersions): void => {
@@ -383,6 +432,28 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchCommentsSuccessCallback = (comments: Comments): void => {
+        this.setState({ comments, commentsError: undefined });
+    };
+
+    /**
+     * File tasks fetch success callback
+     *
+     * @private
+     * @param {Object} tasks - Box task
+     * @return {void}
+     */
+    fetchTasksSuccessCallback = (tasks: Tasks): void => {
+        this.setState({ tasks, tasksError: undefined });
+    };
+
+    /**
+     * File access stats fetch success callback
+     *
+     * @private
+     * @param {Object} accessStats - access stats for a file
      * @return {void}
      */
     fetchFileAccessStatsSuccessCallback = (accessStats: FileAccessStats): void => {
@@ -408,13 +479,81 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} id - File id
+     * @param {boolean} shouldDestroy true if the apiFactory should be destroyed
+     * @param {number} offset the offset from the start to start fetching at
+     * @param {number} limit the number of items to fetch
+     * @param {array} fields the fields to fetch
+     * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      * @return {void}
      */
-    fetchVersions(id: string, shouldDestroy?: boolean = false): void {
+    fetchVersions(
+        id: string,
+        shouldDestroy?: boolean = false,
+        offset: number = 0,
+        limit: number = 1000,
+        fields?: Array<string>,
+        shouldFetchAll?: boolean = true
+    ): void {
         if (this.shouldFetchOrRender()) {
             this.api
                 .getVersionsAPI(shouldDestroy)
-                .versions(id, this.fetchVersionsSuccessCallback, this.fetchVersionsErrorCallback);
+                .offsetGet(
+                    id,
+                    this.fetchVersionsSuccessCallback,
+                    this.fetchVersionsErrorCallback,
+                    offset,
+                    limit,
+                    fields,
+                    shouldFetchAll
+                );
+        }
+    }
+
+    /**
+     * Fetches the comments for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @param {boolean} shouldDestroy true if the apiFactory should be destroyed
+     * @param {number} offset the offset from the start to start fetching at
+     * @param {number} limit the number of items to fetch
+     * @param {array} fields the fields to fetch
+     * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
+     * @return {void}
+     */
+    fetchComments(
+        id: string,
+        shouldDestroy?: boolean = false,
+        offset: number = 0,
+        limit: number = 1000,
+        fields?: Array<string>,
+        shouldFetchAll: boolean = true
+    ): void {
+        if (this.shouldFetchOrRender()) {
+            this.api
+                .getCommentsAPI(shouldDestroy)
+                .offsetGet(
+                    id,
+                    this.fetchCommentsSuccessCallback,
+                    this.fetchCommentsErrorCallback,
+                    offset,
+                    limit,
+                    fields,
+                    shouldFetchAll
+                );
+        }
+    }
+
+    /**
+     * Fetches the tasks for a file
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchTasks(id: string, shouldDestroy?: boolean = false): void {
+        if (this.shouldFetchOrRender()) {
+            this.api.getTasksAPI(shouldDestroy).get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback);
         }
     }
 
@@ -429,7 +568,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (this.shouldFetchOrRender()) {
             this.api
                 .getFileAccessStatsAPI(shouldDestroy)
-                .accessStats(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
+                .get(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
         }
     }
 
@@ -468,7 +607,18 @@ class ContentSidebar extends PureComponent<Props, State> {
             getApproverWithQuery,
             getMentionWithQuery
         }: Props = this.props;
-        const { file, accessStats, versions, accessStatsError, fileError, versionError }: State = this.state;
+        const {
+            file,
+            accessStats,
+            versions,
+            comments,
+            tasks,
+            accessStatsError,
+            fileError,
+            versionError,
+            commentsError,
+            tasksError
+        }: State = this.state;
 
         const shouldRender = this.shouldFetchOrRender() && !!file;
 
@@ -502,6 +652,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
                                 versionError={versionError}
+                                tasks={tasks}
+                                tasksError={tasksError}
+                                comments={comments}
+                                commentsError={commentsError}
                                 onCommentCreate={onCommentCreate}
                                 onCommentDelete={onCommentDelete}
                                 onTaskCreate={onTaskCreate}

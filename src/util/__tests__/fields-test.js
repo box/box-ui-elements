@@ -25,6 +25,7 @@ import {
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_FILE_VERSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
+    FIELD_VERSION_NUMBER,
     METADATA_SKILLS,
     FIELD_ITEM_EXPIRATION,
     METADATA_CLASSIFICATION
@@ -107,6 +108,7 @@ describe('util/fields/getFieldsAsString()', () => {
                     METADATA_SKILLS,
                     FIELD_ITEM_EXPIRATION,
                     METADATA_CLASSIFICATION,
+                    FIELD_VERSION_NUMBER,
                     FIELD_REPRESENTATIONS,
                     FIELD_SHA1,
                     FIELD_WATERMARK_INFO,

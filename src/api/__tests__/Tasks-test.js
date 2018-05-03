@@ -1,20 +1,20 @@
-import Versions from '../Versions';
+import Tasks from '../Tasks';
 
-let versions;
+let tasks;
 
-describe('api/Versions', () => {
+describe('api/Tasks', () => {
     beforeEach(() => {
-        versions = new Versions({});
+        tasks = new Tasks({});
     });
 
     describe('getUrl()', () => {
         test('should throw when version api url without id', () => {
             expect(() => {
-                versions.getUrl();
+                tasks.getUrl();
             }).toThrow();
         });
         test('should return correct version api url with id', () => {
-            expect(versions.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/versions');
+            expect(tasks.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/tasks');
         });
     });
 });

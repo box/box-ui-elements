@@ -12,7 +12,7 @@ import DetailsSidebar from './DetailsSidebar';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import messages from '../messages';
-import type { BoxItem, FileVersions, Errors, FileAccessStats } from '../../flowTypes';
+import type { FileAccessStats, BoxItem, Errors, Comments, Tasks } from '../../flowTypes';
 import { TAB_TARGETS } from '../../interactionTargets';
 import './Sidebar.scss';
 
@@ -46,11 +46,13 @@ type Props = {
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
     intl: any,
-    versions?: FileVersions,
+    comments?: Comments,
+    tasks?: Tasks,
     accessStats?: FileAccessStats,
     accessStatsError?: Errors,
     fileError?: Errors,
-    versionError?: Errors
+    commentsError?: Errors,
+    tasksError?: Errors
 };
 
 const Sidebar = ({
@@ -82,11 +84,9 @@ const Sidebar = ({
     onTaskAssignmentUpdate,
     getApproverWithQuery,
     getMentionWithQuery,
-    versions,
     accessStats,
     accessStatsError,
-    fileError,
-    versionError
+    fileError
 }: Props) => {
     const shouldShowSkills = hasSkills && hasSkillsData(file);
 
@@ -109,11 +109,9 @@ const Sidebar = ({
             onClassificationClick={onClassificationClick}
             onDescriptionChange={onDescriptionChange}
             onVersionHistoryClick={onVersionHistoryClick}
-            versions={versions}
             accessStats={accessStats}
             accessStatsError={accessStatsError}
             fileError={fileError}
-            versionError={versionError}
         />
     );
 

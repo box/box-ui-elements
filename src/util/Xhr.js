@@ -5,6 +5,7 @@
  */
 
 import axios from 'axios';
+import type { Axios } from 'axios';
 import TokenService from './TokenService';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
@@ -15,7 +16,7 @@ const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 
 class Xhr {
     id: ?string;
-    axios: axios;
+    axios: Axios;
     clientName: ?string;
     token: Token;
     version: ?string;
