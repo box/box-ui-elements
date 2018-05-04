@@ -34,7 +34,11 @@ import {
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_VERSION_NUMBER,
     FIELD_METADATA_SKILLS,
-    FIELD_METADATA_CLASSIFICATION
+    FIELD_METADATA_CLASSIFICATION,
+    FIELD_TASK_ASSIGNMENT_COLLECTION,
+    FIELD_IS_COMPLETED,
+    FIELD_TAGGED_MESSAGE,
+    FIELD_DUE_AT
 } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
@@ -81,6 +85,18 @@ const PREVIEW_FIELDS_TO_FETCH = [
     FIELD_FILE_VERSION,
     FIELD_IS_DOWNLOAD_AVAILABLE
 ];
+
+// Fields needed to get tasks data
+const TASKS_FIELDS_TO_FETCH = [
+    FIELD_TASK_ASSIGNMENT_COLLECTION,
+    FIELD_IS_COMPLETED,
+    FIELD_CREATED_AT,
+    FIELD_CREATED_BY,
+    FIELD_DUE_AT
+];
+
+// Fields needed to get tasks data
+const COMMENTS_FIELDS_TO_FETCH = [FIELD_TAGGED_MESSAGE, FIELD_CREATED_AT, FIELD_CREATED_BY];
 
 /**
  * Returns all the fields that can be fetched
@@ -129,6 +145,22 @@ function getFields(includePreview?: boolean = false, includePreviewSidebar?: boo
 export function getFieldsAsString(includePreview?: boolean = false, includePreviewSidebar?: boolean = false): string {
     const fields = getFields(includePreview, includePreviewSidebar);
     return fields.join(',');
+}
+
+/**
+ * Returns fields needed for fetching tasks
+ * @return {string} comma seperated list of fields
+ */
+export function getTasksFields() {
+    return TASKS_FIELDS_TO_FETCH.join(',');
+}
+
+/**
+ * Returns fields needed for fetching comments
+ * @return {string} comma seperated list of fields
+ */
+export function getCommentsFields() {
+    return COMMENTS_FIELDS_TO_FETCH.join(',');
 }
 
 /**

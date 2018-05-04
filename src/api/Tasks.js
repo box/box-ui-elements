@@ -4,11 +4,10 @@
  * @author Box
  */
 
+import { getTasksFields } from '../util/fields';
 import Base from './Base';
 
 class Tasks extends Base {
-    fields = 'task_assignment_collection,is_completed,created_by,created_at';
-
     /**
      * API URL for tasks
      *
@@ -19,7 +18,7 @@ class Tasks extends Base {
         if (!id) {
             throw new Error('Missing file id!');
         }
-        return `${this.getBaseApiUrl()}/files/${id}/tasks?fields=${this.fields}`;
+        return `${this.getBaseApiUrl()}/files/${id}/tasks?fields=${getTasksFields()}`;
     }
 }
 
