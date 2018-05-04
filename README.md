@@ -24,7 +24,7 @@ To prevent library duplication, the UI Elements require certain peer dependencie
 * Mobile Chrome and Safari
 
 ## Internationalization
-The UI Elements use [react-intl](https://github.com/yahoo/react-intl) to do internationalization. In order for the UI Elements to render properly, they need to be wrapped in an [IntlProvider](https://github.com/yahoo/react-intl/wiki/Components#intlprovider) context and given a locale and translated messages to use. Each of the UI Element components below optionally take in a `language` property and a `messages` property which is then delegated to our internal [IntlProvider](src/components/Internationalize.js). If either of these properties are not passed in, we do not use our internal `IntlProvider` and it is assumed that the parent react app (the react app that is importing in the UI Elements) has its own `IntlProvider`.
+The UI Elements use [react-intl](https://github.com/yahoo/react-intl) for internationalization. In order for the UI Elements to render properly, they need to be wrapped in an [IntlProvider](https://github.com/yahoo/react-intl/wiki/Components#intlprovider) context and given a locale and translated messages to use. Each of the UI Element components below optionally take in a `language` property and a `messages` property which is then delegated to our internal [IntlProvider](src/components/Internationalize.js). If either of these properties are not passed in, we do not use our internal `IntlProvider` and it is assumed that the parent react app (the react app that is importing in the UI Elements) has its own `IntlProvider`.
 
 The `language` property is a string that can be one of `en-AU`, `en-CA`, `en-GB`, `en-US`, `bn-IN`, `da-DK`, `de-DE`, `es-419`, `es-ES`, `fi-FI`, `fr-CA`, `fr-FR`, `hi-IN`, `it-IT`, `ja-JP`, `ko-KR`, `nb-NO`, `nl-NL`, `pl-PL`, `pt-BR`, `ru-RU`, `sv-SE`, `tr-TR`, `zh-CN`, `zh-TW`.
 
@@ -40,13 +40,13 @@ addLocaleData(frLocaleData);
 The messages that are needed for the components can be imported from `box-ui-elements/i18n/[LANGUAGE]` package under `node_modules`. The code examples for each of the UI Elements below assume `en-US` and show how the US english messages are imported in.
 
 ## Authentication
-We have designed the Box UI Elements in an authentication-type agnostic way. Whether you are using them for users who have Box accounts (Managed Users) or non-Box accounts (App Users), they should just work out of the box. They only expect an **access token** to be passed in for authentication. The [developer documentation](https://developer.box.com/docs/box-ui-elements) contains more information on how to generate and use these access tokens.
+The Box UI Elements are designed to be agnostic of authentication type. They can be used for users with Box accounts (Managed Users) or those without (App Users), and only expect an access token to be passed in for authentication. The [developer documentation](https://developer.box.com/docs/box-ui-elements) contains more information on how to generate and use these access tokens.
 
 ## CSS
 The Box UI Elements require their corresponding CSS stylesheets to render properly. You will need to set up Webpack's style-loader and css-loader in order to properly include the CSS like in the examples below. Alternatively, you can include the appropriate CSS files in your application's HTML without importing it in React. Links to hosted versions of these CSS files on the Box CDN can be found in the documentation links below.
 
 # Components
-You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview` or `ContentTree`. Similarly, you can also import the `ContentPickerPopup`, `ContentUploaderPopup` or `ContentTreePopup` which are popup versions for the Content Picker, Content Uploader and Content Tree, respectively.
+You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, or `ContentPreview`. Similarly, you can also import the `ContentPickerPopup` and `ContentUploaderPopup` which are popup versions for the Content Picker and Content Uploader, respectively.
 
 ## Content Explorer ([Documentation](https://developer.box.com/docs/box-content-explorer))
 
@@ -209,49 +209,6 @@ render(
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
-
-
-## Content Tree ([Documentation](https://developer.box.com/docs/box-content-tree))
-
-<img src="https://user-images.githubusercontent.com/1075325/27887155-092e7362-6194-11e7-877d-157726789bef.png" width="75%"/>
-
-```js
-import React from 'react';
-import { render } from 'react-dom';
-import { addLocaleData } from 'react-intl';
-import enLocaleData from 'react-intl/locale-data/en';
-import { ContentTree } from 'box-ui-elements';
-import messages from 'box-ui-elements/i18n/en-US';
-import 'box-ui-elements/dist/tree.css';
-
-addLocaleData(enLocaleData);
-
-render(
-    <ContentTree
-        token='ACCESS_TOKEN'
-        language='en-US'
-        messages={messages}
-    />,
-    document.querySelector('.container')
-);
-```
-
-### Props
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| language | string |  | *See the [Internationalization](#internationalization) section* |
-| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
-| rootFolderId | string | `0` | The root folder for the content tree. |
-| type | string | `file, web_link, folder` | Indicates which type of items show up in the tree. Should be a comma separated combination of `file`, `folder` or `web_link`. |
-| onClick | function([Folder](https://developer.box.com/reference#folder-object)&#124;[File](https://developer.box.com/reference#file-object)&#124;[Web Link](https://developer.box.com/reference#web-link-object)) |  | Callback function for when an item is clicked. |
-| isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| autoFocus | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
-| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-tree#section-options).* |
 
 
 ## Content Preview ([Documentation](https://developer.box.com/docs/box-content-preview))
