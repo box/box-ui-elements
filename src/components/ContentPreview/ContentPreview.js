@@ -46,7 +46,9 @@ type Props = {
     isSmall: boolean,
     autoFocus: boolean,
     useHotkeys: boolean,
-    showSidebar?: boolean,
+    contentSidebarProps: {
+        isVisible?: boolean
+    },
     hasSidebar: boolean,
     canDownload?: boolean,
     showDownload?: boolean,
@@ -113,7 +115,10 @@ class ContentPreview extends PureComponent<Props, State> {
         onLoad: noop,
         onMetric: noop,
         onNavigate: noop,
-        collection: []
+        collection: [],
+        contentSidebarProps: {
+            isVisible: false
+        }
     };
 
     /**
@@ -713,7 +718,7 @@ class ContentPreview extends PureComponent<Props, State> {
             language,
             messages,
             className,
-            showSidebar,
+            contentSidebarProps,
             hasSidebar,
             hasHeader,
             onClose,
@@ -727,6 +732,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const { file, showSidebar: showSidebarState }: State = this.state;
         const { collection }: Props = this.props;
+        const { isVisible } = contentSidebarProps;
 
         const fileIndex = this.getFileIndex();
         const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
@@ -737,13 +743,15 @@ class ContentPreview extends PureComponent<Props, State> {
         let hasSidebarButton = hasSidebar;
         let onSidebarToggle = this.toggleSidebar;
 
-        if (typeof showSidebar === 'boolean') {
-            // The parent component passed in the showSidebar property.
+        if (typeof isVisible === 'boolean') {
+            // The parent component passed in the isVisible sidebar property.
             // Sidebar should be controlled by the parent and not by local state.
-            isSidebarVisible = isValidFile && hasSidebar && showSidebar;
+            isSidebarVisible = isValidFile && hasSidebar && isVisible;
             hasSidebarButton = false;
             onSidebarToggle = null;
         }
+
+        const sidebarProps = omit(contentSidebarProps, ['showSidebar']);
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -798,6 +806,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 onInteraction={onInteraction}
                                 requestInterceptor={requestInterceptor}
                                 responseInterceptor={responseInterceptor}
+                                {...sidebarProps}
                             />
                         )}
                     </div>
