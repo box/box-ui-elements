@@ -4,7 +4,6 @@
  * @author Box
  */
 
-import { getTasksFields } from '../util/fields';
 import Base from './Base';
 
 class Tasks extends Base {
@@ -18,7 +17,7 @@ class Tasks extends Base {
         if (!id) {
             throw new Error('Missing file id!');
         }
-        return `${this.getBaseApiUrl()}/files/${id}/tasks?fields=${getTasksFields()}`;
+        return `${this.getBaseApiUrl()}/files/${id}/tasks`;
     }
 }
 

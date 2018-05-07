@@ -1,5 +1,4 @@
 import Tasks from '../Tasks';
-import { getTasksFields } from '../../util/fields';
 
 let tasks;
 
@@ -15,7 +14,7 @@ describe('api/Tasks', () => {
             }).toThrow();
         });
         test('should return correct version api url with id', () => {
-            expect(tasks.getUrl('foo')).toBe(`https://api.box.com/2.0/files/foo/tasks?fields=${getTasksFields()}`);
+            expect(tasks.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/tasks');
         });
     });
 });

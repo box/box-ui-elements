@@ -384,7 +384,7 @@ export type MultiputData = {
 
 export type FileVersions = {
     total_count: number,
-    entries?: Array<BoxItemVersion>
+    entries: Array<BoxItemVersion>
 };
 
 export type MaskError = {
@@ -426,7 +426,7 @@ export type Task = {
 
 export type Tasks = {
     total_count: number,
-    entries?: Array<Task>
+    entries: Array<Task>
 };
 
 export type Comment = {
@@ -445,7 +445,7 @@ export type Comment = {
 
 export type Comments = {
     total_count: number,
-    entries?: Array<Comment>
+    entries: Array<Comment>
 };
 
 export type JsonPatch = {
