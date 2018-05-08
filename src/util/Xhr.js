@@ -59,7 +59,11 @@ class Xhr {
         this.axios = axios.create();
 
         if (typeof responseInterceptor === 'function') {
-            this.axios.interceptors.response.use(responseInterceptor);
+            const successInterceptor = responseInterceptor;
+            // Called on any non 2xx response
+            const errorInterceptor: Function = (error: { response: Object }) =>
+                Promise.reject(responseInterceptor(error.response.data, error));
+            this.axios.interceptors.response.use(successInterceptor, errorInterceptor);
         }
 
         if (typeof requestInterceptor === 'function') {
