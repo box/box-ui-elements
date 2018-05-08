@@ -33,8 +33,6 @@ type Props = {
     feedState: Array<Item>,
     inputState: {
         currentUser: User,
-        approverSelectorContacts?: SelectorItems,
-        mentionSelectorContacts?: SelectorItems,
         isDisabled?: boolean
     },
     handlers: {

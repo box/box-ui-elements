@@ -46,8 +46,6 @@ type Props = {
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
-    getApproverWithQuery?: Function,
-    getMentionWithQuery?: Function,
     intl: any,
     comments?: Comments,
     tasks?: Tasks,
@@ -87,8 +85,6 @@ const Sidebar = ({
     onTaskDelete,
     onTaskUpdate,
     onTaskAssignmentUpdate,
-    getApproverWithQuery,
-    getMentionWithQuery,
     accessStats,
     accessStatsError,
     fileError
@@ -126,9 +122,7 @@ const Sidebar = ({
     }
 
     const inputState = {
-        currentUser: getPreviewer(),
-        approverSelectorContacts: [],
-        mentionSelectorContacts: []
+        currentUser: getPreviewer()
     };
 
     const handlers = {
@@ -141,10 +135,6 @@ const Sidebar = ({
             delete: onTaskDelete,
             edit: onTaskUpdate,
             onTaskAssignmentUpdate
-        },
-        contacts: {
-            getApproverWithQuery,
-            getMentionWithQuery
         },
         versions: {
             info: onVersionHistoryClick

@@ -390,16 +390,6 @@
                         onTaskAssignmentUpdate: (taskId, taskAssignmentId, status) =>
                             console.log(`task assignment update: ${status}`),
                     },
-                    contacts: {
-                        getApproverWithQuery: (mentionString) => {
-                            console.log(`contacts get approver with query: ${mentionString}`);
-                            return getMatchingContacts(mentionString, contacts);
-                        },
-                        getMentionWithQuery: (mentionString) => {
-                            console.log(`contacts get mentions with query: ${mentionString}`);
-                            return getMatchingContacts(mentionString, contacts);
-                        },
-                    },
                     versions: {
                         info: version => console.log('version info for version: ', version),
                     },
@@ -424,9 +414,7 @@
                     onTaskCreate: handlers.tasks.create,
                     onTaskDelete: handlers.tasks.delete,
                     onTaskUpdate: handlers.tasks.edit,
-                    onTaskAssignmentUpdate: handlers.tasks.onTaskAssignmentUpdate,
-                    getApproverWithQuery: handlers.contacts.getApproverWithQuery,
-                    getMentionWithQuery: handlers.contacts.getMentionWithQuery
+                    onTaskAssignmentUpdate: handlers.tasks.onTaskAssignmentUpdate
                 });
             }
             load();
