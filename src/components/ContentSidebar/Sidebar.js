@@ -12,11 +12,12 @@ import DetailsSidebar from './DetailsSidebar';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import messages from '../messages';
-import type { FileAccessStats, BoxItem, Errors, Comments, Tasks } from '../../flowTypes';
+import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, User } from '../../flowTypes';
 import { TAB_TARGETS } from '../../interactionTargets';
 import './Sidebar.scss';
 
 type Props = {
+    currentUser?: User,
     file: BoxItem,
     getPreviewer: Function,
     hasTitle: boolean,
@@ -52,10 +53,12 @@ type Props = {
     accessStatsError?: Errors,
     fileError?: Errors,
     commentsError?: Errors,
-    tasksError?: Errors
+    tasksError?: Errors,
+    currentUserError?: Errors
 };
 
 const Sidebar = ({
+    currentUser,
     file,
     getPreviewer,
     hasTitle,
@@ -115,12 +118,12 @@ const Sidebar = ({
         />
     );
 
-    if (!hasActivityFeed) {
+    if (!hasActivityFeed || !currentUser) {
         return Details;
     }
 
     const inputState = {
-        currentUser: getPreviewer(),
+        currentUser,
         approverSelectorContacts: [],
         mentionSelectorContacts: []
     };
