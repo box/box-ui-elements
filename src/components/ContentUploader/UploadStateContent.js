@@ -17,16 +17,16 @@ const UploadStateContent = ({ message, inputLabel, useButton = false, onChange }
     const messageContent = message ? <div className='bcu-upload-state-message'>{message}</div> : null;
     const inputLabelClass = useButton ? 'btn btn-primary be-input-btn' : 'be-input-link';
 
-    const handleChange = (event: Event) => {
+    const handleChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
         if (!onChange) {
             return;
         }
 
         onChange(event);
 
-        const eventTarget: Object = event.target;
+        const currentTarget = (event.currentTarget: HTMLInputElement);
         // resets the file input selection
-        eventTarget.value = '';
+        currentTarget.value = '';
     };
 
     const inputContent = (
