@@ -38,6 +38,7 @@ function toISOStringNoMS(date: Date): string {
  */
 function getFileLastModifiedAsISONoMSIfPossible(file: File): ?string {
     if (
+        // $FlowFixMe https://github.com/facebook/flow/issues/6131
         file.lastModified &&
         (typeof file.lastModified === 'string' ||
             typeof file.lastModified === 'number' ||

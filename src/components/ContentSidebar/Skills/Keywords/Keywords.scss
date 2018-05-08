@@ -1,0 +1,25 @@
+@import '../../../variables';
+@import '~box-react-ui/lib/styles/common/pills';
+@import '~box-react-ui/lib/components/pill-selector-dropdown/PillSelector';
+
+.be-keywords {
+    position: relative;
+
+    .be-keyword-edit {
+        border-radius: 3px;
+        height: 24px;
+        padding-top: 1px;
+        position: absolute;
+        right: 15px;
+        top: -46px;
+        width: 24px;
+
+        &:hover svg path {
+            fill: $sevens;
+        }
+
+        &.be-keyword-is-editing {
+            background-color: $off-white;
+        }
+    }
+}

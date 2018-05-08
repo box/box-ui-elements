@@ -5,9 +5,13 @@
  */
 
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import Line from './Line';
+import IconTrackNext from 'box-react-ui/lib/icons/general/IconTrackNext';
+import IconTrackPrevious from 'box-react-ui/lib/icons/general/IconTrackPrevious';
+import Timeslice from './Timeslice';
 import { isValidStartTime } from '../Transcript/timeSliceUtils';
+import messages from '../../../messages';
 import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../../../flowTypes';
 import './Timeline.scss';
 
@@ -19,67 +23,53 @@ type Props = {
     timeslices?: SkillCardEntryTimeSlice[],
     duration?: number,
     getPreviewer?: Function,
-    onInteraction: Function
+    interactionTarget: string
 };
 
-const Timeline = ({
-    type = 'text',
-    color,
-    text = '',
-    url = '',
-    duration = 0,
-    timeslices = [],
-    getPreviewer,
-    onInteraction
-}: Props) => {
-    let nextSkillCardEntryTimeSliceIndex = 0;
-    const startNextSegment = () => {
+const Timeline = ({ color, text = '', duration = 0, timeslices = [], getPreviewer, interactionTarget }: Props) => {
+    let timeSliceIndex = -1;
+
+    const playSegment = (index: number, incr: number = 0) => {
+        const newIndex = incr > 0 ? Math.min(timeslices.length - 1, index + incr) : Math.max(0, index + incr);
         const viewer = getPreviewer ? getPreviewer() : null;
-        const timeslice = timeslices[nextSkillCardEntryTimeSliceIndex];
+        const timeslice = timeslices[newIndex];
         const validTime = isValidStartTime(timeslice);
 
-        if (validTime) {
-            onInteraction({ target: 'face' });
-            if (viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
-                viewer.play(timeslice.start);
-                nextSkillCardEntryTimeSliceIndex = (nextSkillCardEntryTimeSliceIndex + 1) % timeslices.length;
-            }
+        if (validTime && viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
+            viewer.play(timeslice.start);
+            timeSliceIndex = newIndex;
         }
     };
 
     return (
-        <div className={`be-timeline be-timeline-${type}`}>
-            {(text || url) && (
-                <div className='be-timeline-label'>
-                    {type === 'image' ? (
-                        <PlainButton type='button' onClick={startNextSegment}>
-                            <div className='be-timeline-image-container'>
-                                <img alt={text} title={text} src={url} />
-                            </div>
-                        </PlainButton>
-                    ) : (
-                        <span>{text}</span>
-                    )}
-                </div>
-            )}
-            <div className='be-timeline-wrapper'>
+        <div className='be-timeline'>
+            {text && <div className='be-timeline-label'>{text}</div>}
+            <div className='be-timeline-line-wrapper'>
                 <div className='be-timeline-line' style={{ backgroundColor: color }} />
                 {timeslices.map(
                     ({ start, end }: SkillCardEntryTimeSlice, index) => (
                         /* eslint-disable react/no-array-index-key */
-                        <Line
+                        <Timeslice
                             key={index}
+                            index={index}
                             color={color}
-                            type={type}
                             start={start}
                             end={end}
                             duration={duration}
-                            getPreviewer={getPreviewer}
-                            onInteraction={onInteraction}
+                            onClick={playSegment}
+                            interactionTarget={interactionTarget}
                         />
                     )
                     /* eslint-enable react/no-array-index-key */
                 )}
+            </div>
+            <div className='be-timeline-btns'>
+                <PlainButton type='button' onClick={() => playSegment(timeSliceIndex, -1)}>
+                    <IconTrackPrevious title={<FormattedMessage {...messages.previousSegment} />} />
+                </PlainButton>
+                <PlainButton type='button' onClick={() => playSegment(timeSliceIndex, 1)}>
+                    <IconTrackNext title={<FormattedMessage {...messages.nextSegment} />} />
+                </PlainButton>
             </div>
         </div>
     );

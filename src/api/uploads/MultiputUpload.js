@@ -59,6 +59,7 @@ class MultiputUpload extends BaseMultiput {
     fileName: string;
     fileId: ?string;
     overwrite: boolean;
+    partsUploaded: number;
 
     /**
      * [constructor]

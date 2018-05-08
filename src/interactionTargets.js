@@ -22,4 +22,30 @@ export const DETAILS_TARGETS = {
     VERSION_HISTORY: 'versionhistory'
 };
 
+export const SKILLS_TARGETS = {
+    FACES: {
+        CARD: 'skill-facecard',
+        FACE: 'skill-face',
+        DELETE: 'skill-facedelete',
+        EDIT: 'skill-faceedit',
+        EDIT_SAVE: 'skill-faceeditsave',
+        EDIT_CANCEL: 'skill-faceeditcancel',
+        TIMELINE: 'skill-facetimeslice'
+    },
+    KEYWORDS: {
+        CARD: 'skill-keywordcard',
+        EDIT: 'skill-keywordedit',
+        EDIT_SAVE: 'skill-keywordeditsave',
+        EDIT_CANCEL: 'skill-keywordeditcancel',
+        TIMELINE: 'skill-keywordtimeslice'
+    },
+    TRANSCRIPTS: {
+        CARD: 'skill-transcriptcard',
+        EDIT: 'skill-transcriptedit',
+        EDIT_SAVE: 'skill-transcripteditsave',
+        EDIT_CANCEL: 'skill-transcripteditcancel',
+        TIMELINE: 'skill-keywordtimeslice'
+    }
+};
+
 export const INTERACTION_TARGET = 'data-resin-target';

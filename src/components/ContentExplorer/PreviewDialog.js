@@ -93,13 +93,18 @@ const PreviewDialog = ({
                 collection={files}
                 onLoad={onLoad}
                 onClose={onCancel}
-                hasSidebar={hasPreviewSidebar}
                 canDownload={canDownload}
                 sharedLink={sharedLink}
                 sharedLinkPassword={sharedLinkPassword}
                 onInteraction={onInteraction}
                 requestInterceptor={requestInterceptor}
                 responseInterceptor={responseInterceptor}
+                hasSidebar={hasPreviewSidebar}
+                contentSidebarProps={{
+                    hasSkills: true,
+                    hasProperties: true
+                    // TODO: add more here as they are ready
+                }}
             />
         </Modal>
     );

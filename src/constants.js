@@ -51,6 +51,15 @@ export const ACCESS_OPEN: 'open' = 'open';
 export const ACCESS_COLLAB: 'collaborators' = 'collaborators';
 export const ACCESS_COMPANY: 'company' = 'company';
 
+/* ----------------------- Headers -------------------------- */
+export const HEADER_CONTENT_TYPE = 'Content-Type';
+export const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
+export const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
+
+/* ------------------ Metadata  ---------------------- */
+export const KEY_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
+export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
+
 /* ----------------------- Fields --------------------------- */
 export const FIELD_ID = 'id';
 export const FIELD_NAME: 'name' = 'name';
@@ -85,8 +94,8 @@ export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
 export const FIELD_FILE_VERSION = 'file_version';
 export const FIELD_IS_DOWNLOAD_AVAILABLE = 'is_download_available';
 export const FIELD_VERSION_NUMBER = 'version_number';
-export const METADATA_SKILLS = 'metadata.global.boxSkillsCards';
-export const METADATA_CLASSIFICATION = 'metadata.enterprise.securityClassification-6VMVochwUWo';
+export const FIELD_METADATA_SKILLS = 'metadata.global.boxSkillsCards';
+export const FIELD_METADATA_CLASSIFICATION = `metadata.enterprise.${KEY_CLASSIFICATION}`;
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -162,8 +171,9 @@ export const MS_IN_S = 1000;
 export const COLOR_BOX_BLUE = '#0061d5';
 export const COLOR_BOX_BLUE_LIGHT = '#dbe8f8';
 export const COLOR_RED = '#c82341';
-export const COLOR_777 = '#777777';
+export const COLOR_777 = '#777';
 export const COLOR_DOWNTOWN_GREY = '#999ea4';
+export const COLOR_WHITE = '#fff';
 
 /* ------------------ Skills  ---------------------- */
 export const SKILL_TRANSCRIPT: 'transcript' = 'transcript';
@@ -176,10 +186,6 @@ export const SKILLS_INVALID_REQUEST_ERROR = 'skills_invalid_request_error';
 export const SKILLS_NOT_FOUND_ERROR = 'skills_not_found_error';
 export const SKILLS_INTERNAL_SERVER_ERROR = 'skills_internal_server_error';
 export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
-
-/* ------------------ Metadata  ---------------------- */
-export const KEY_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
-export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
 
 /* ------------------ File Extensions  ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
