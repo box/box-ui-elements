@@ -41,6 +41,8 @@ class File extends Item {
      * @return {void}
      */
     getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
         return this.xhr
             .get({
                 url: this.getUrl(id),
@@ -49,9 +51,9 @@ class File extends Item {
                 }
             })
             .then(({ data }: { data: BoxItem }) => {
-                successCallback(data[FIELD_DOWNLOAD_URL]);
+                this.successHandler(data[FIELD_DOWNLOAD_URL]);
             })
-            .catch(errorCallback);
+            .catch(this.errorHandler);
     }
 
     /**
@@ -88,12 +90,16 @@ class File extends Item {
                 data: { description }
             })
             .then(({ data }: { data: BoxItem }) => {
-                const updatedFile = this.merge(this.getCacheKey(id), 'description', data.description);
-                successCallback(updatedFile);
+                if (!this.isDestroyed()) {
+                    const updatedFile = this.merge(this.getCacheKey(id), 'description', data.description);
+                    successCallback(updatedFile);
+                }
             })
             .catch((e) => {
-                const originalFile = this.merge(this.getCacheKey(id), 'description', file.description);
-                errorCallback(e, originalFile);
+                if (!this.isDestroyed()) {
+                    const originalFile = this.merge(this.getCacheKey(id), 'description', file.description);
+                    errorCallback(e, originalFile);
+                }
             });
     }
 
@@ -145,8 +151,10 @@ class File extends Item {
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })
             .then(({ data }: { data: BoxItem }) => {
-                cache.set(key, data);
-                successCallback(data);
+                if (!this.isDestroyed()) {
+                    cache.set(key, data);
+                    successCallback(data);
+                }
             })
             .catch(errorCallback);
     }

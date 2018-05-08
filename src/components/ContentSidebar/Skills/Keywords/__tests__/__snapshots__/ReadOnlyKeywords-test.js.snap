@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should correctly render timeline with keyword selected 1`] = `
+<React.Fragment>
+  <PillCloud
+    onSelect={[Function]}
+    options={
+      Array [
+        Object {
+          "text": "foo",
+          "value": 0,
+        },
+        Object {
+          "text": "bar",
+          "value": 1,
+        },
+      ]
+    }
+    selectedOptions={
+      Array [
+        Object {
+          "appears": Array [
+            Object {
+              "start": 5,
+            },
+          ],
+          "text": "bar",
+        },
+      ]
+    }
+  />
+  <Timeline
+    interactionTarget="skill-keywordtimeslice"
+    text="bar"
+    timeslices={
+      Array [
+        Object {
+          "start": 5,
+        },
+      ]
+    }
+  />
+</React.Fragment>
+`;
+
+exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should correctly render with no keyword selected 1`] = `
+<React.Fragment>
+  <PillCloud
+    onSelect={[Function]}
+    options={
+      Array [
+        Object {
+          "text": "foo",
+          "value": 0,
+        },
+        Object {
+          "text": "bar",
+          "value": 1,
+        },
+      ]
+    }
+    selectedOptions={
+      Array [
+        undefined,
+      ]
+    }
+  />
+</React.Fragment>
+`;

@@ -45,6 +45,20 @@ describe('api/File', () => {
             });
         });
 
+        test('should make xhr to get download url and not call success callback if destroyed', () => {
+            file.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            const success = jest.fn();
+            const get = jest.fn().mockReturnValueOnce(Promise.resolve({ data: { download_url: 'bar' } }));
+            file.xhr = { get };
+            return file.getDownloadUrl('foo', success).then(() => {
+                expect(success).not.toHaveBeenCalled();
+                expect(get).toHaveBeenCalledWith({
+                    url: 'https://api.box.com/2.0/files/foo',
+                    params: { fields: 'download_url' }
+                });
+            });
+        });
+
         test('should make xhr to get download url and call error callback', () => {
             const error = new Error('error');
             const successCb = jest.fn();
@@ -54,6 +68,23 @@ describe('api/File', () => {
             return file.getDownloadUrl('foo', successCb, errorCb).then(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).toHaveBeenCalledWith(error);
+                expect(get).toHaveBeenCalledWith({
+                    url: 'https://api.box.com/2.0/files/foo',
+                    params: { fields: 'download_url' }
+                });
+            });
+        });
+
+        test('should make xhr to get download url and not call error callback when destroyed', () => {
+            file.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            const error = new Error('error');
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+            const get = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            file.xhr = { get };
+            return file.getDownloadUrl('foo', successCb, errorCb).then(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).not.toHaveBeenCalled();
                 expect(get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/files/foo',
                     params: { fields: 'download_url' }
@@ -143,7 +174,35 @@ describe('api/File', () => {
             });
         });
 
-        test('should call the error callback on failure', () => {
+        test('should not merge the new file description in and not execute the success callback when destroyed', () => {
+            file.getCacheKey = jest.fn().mockReturnValue('key');
+            file.merge = jest.fn();
+
+            const mockFile = {
+                id: '1',
+                permissions: {
+                    can_rename: true
+                },
+                description: 'foo'
+            };
+
+            const mockFileResponse = mockFile;
+            mockFileResponse.description = 'fo';
+            file.isDestroyed = jest.fn().mockReturnValueOnce(true);
+
+            file.xhr = {
+                put: jest.fn().mockReturnValueOnce(Promise.resolve({ data: mockFileResponse }))
+            };
+
+            return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
+                expect(file.xhr.put).toHaveBeenCalled();
+                expect(file.merge).not.toHaveBeenCalled();
+                expect(error).not.toHaveBeenCalled();
+            });
+        });
+
+        test('should not call the error callback on failure when destroyed', () => {
+            file.isDestroyed = jest.fn().mockReturnValueOnce(true);
             file.merge = jest.fn();
             const mockFile = {
                 id: '1',
@@ -158,10 +217,32 @@ describe('api/File', () => {
                 put: jest.fn().mockReturnValueOnce(Promise.reject(mockError))
             };
 
-            return file.setFileDescription(mockFile, 'foo', success, error).catch(() => {
+            return file.setFileDescription(mockFile, 'bar', success, error).then(() => {
                 expect(file.xhr.put).toHaveBeenCalled();
-                expect(file.merge).not.toHaveBeenCalled(mockFile);
-                expect(error).toHaveBeenCalled(error, mockFile);
+                expect(file.merge).not.toHaveBeenCalled();
+                expect(error).not.toHaveBeenCalled();
+            });
+        });
+
+        test('should call the error callback on failure', () => {
+            file.merge = jest.fn().mockReturnValueOnce('orig');
+            const mockFile = {
+                id: '1',
+                permissions: {
+                    can_rename: true
+                },
+                description: 'foo'
+            };
+            const mockError = new Error();
+
+            file.xhr = {
+                put: jest.fn().mockReturnValueOnce(Promise.reject(mockError))
+            };
+
+            return file.setFileDescription(mockFile, 'bar', success, error).then(() => {
+                expect(file.xhr.put).toHaveBeenCalled();
+                expect(file.merge).toHaveBeenCalledWith('file_1', 'description', 'foo');
+                expect(error).toHaveBeenCalledWith(mockError, 'orig');
             });
         });
     });
@@ -204,6 +285,32 @@ describe('api/File', () => {
 
             return file.file('id', success).then(() => {
                 expect(success).toHaveBeenCalledWith({ file: 'new file' });
+                expect(file.xhr.get).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url: 'https://api.box.com/2.0/files/id',
+                    params: {
+                        fields: getFieldsAsString(true)
+                    },
+                    headers: {
+                        'X-Rep-Hints': X_REP_HINTS
+                    }
+                });
+            });
+        });
+
+        test('should make xhr to get file and not call success callback when destroyed', () => {
+            file.isDestroyed = jest
+                .fn()
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(true);
+            file.xhr = {
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } }))
+            };
+
+            const success = jest.fn();
+
+            return file.file('id', success).then(() => {
+                expect(success).not.toHaveBeenCalled();
                 expect(file.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',

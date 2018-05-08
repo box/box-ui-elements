@@ -26,9 +26,9 @@ import {
     FIELD_FILE_VERSION,
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_VERSION_NUMBER,
-    METADATA_SKILLS,
+    FIELD_METADATA_SKILLS,
     FIELD_ITEM_EXPIRATION,
-    METADATA_CLASSIFICATION
+    FIELD_METADATA_CLASSIFICATION
 } from '../../constants';
 
 describe('util/fields/getFieldsAsString()', () => {
@@ -105,9 +105,9 @@ describe('util/fields/getFieldsAsString()', () => {
                     FIELD_CREATED_BY,
                     FIELD_OWNED_BY,
                     FIELD_DESCRIPTION,
-                    METADATA_SKILLS,
+                    FIELD_METADATA_SKILLS,
                     FIELD_ITEM_EXPIRATION,
-                    METADATA_CLASSIFICATION,
+                    FIELD_METADATA_CLASSIFICATION,
                     FIELD_VERSION_NUMBER,
                     FIELD_REPRESENTATIONS,
                     FIELD_SHA1,

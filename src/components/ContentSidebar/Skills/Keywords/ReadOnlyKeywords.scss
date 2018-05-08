@@ -1,0 +1,23 @@
+@import '../../../variables';
+
+.be-keywords {
+    .pill-cloud-container {
+        border: 0 none;
+        overflow: hidden;
+        padding: 0;
+
+        .pill.pill-cloud-button {
+            border: 1px solid $see-see;
+            color: $sevens;
+            margin: 0 5px 5px 0;
+
+            &:focus,
+            &:active,
+            &:hover {
+                background-color: $blue;
+                border-color: $blue;
+                color: $white;
+            }
+        }
+    }
+}

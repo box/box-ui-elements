@@ -442,3 +442,11 @@ export type Comments = {
     total_count: number,
     entries: Array<Comment>
 };
+
+export type JsonPatch = {
+    op: 'add' | 'remove' | 'replace' | 'test',
+    path: string,
+    value?: Object
+};
+
+export type JsonPatchData = Array<JsonPatch>;

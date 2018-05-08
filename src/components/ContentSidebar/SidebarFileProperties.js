@@ -11,7 +11,7 @@ import ItemProperties from 'box-react-ui/lib/features/item-details/ItemPropertie
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
 import type { BoxItem } from '../../flowTypes';
-import { KEY_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
+import { FIELD_METADATA_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
 type Props = {
@@ -29,7 +29,7 @@ const SidebarFileProperties = ({
     onClassificationClick,
     intl
 }: Props) => {
-    const value = getProp(file, `metadata.enterprise.${KEY_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
+    const value = getProp(file, `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
 
     return (
         <ItemProperties

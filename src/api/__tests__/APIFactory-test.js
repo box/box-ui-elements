@@ -13,6 +13,7 @@ import VersionsAPI from '../Versions';
 import CommentsAPI from '../Comments';
 import TasksAPI from '../Tasks';
 import FileAccessStatsAPI from '../FileAccessStats';
+import MetadataAPI from '../Metadata';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -38,6 +39,7 @@ describe('api/APIFactory', () => {
             factory.chunkedUploadAPI = { destroy: jest.fn() };
             factory.recentsAPI = { destroy: jest.fn() };
             factory.versionsAPI = { destroy: jest.fn() };
+            factory.metadataAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
             expect(factory.folderAPI).toBeUndefined();
@@ -47,6 +49,7 @@ describe('api/APIFactory', () => {
             expect(factory.chunkedUploadAPI).toBeUndefined();
             expect(factory.recentsAPI).toBeUndefined();
             expect(factory.versionsAPI).toBeUndefined();
+            expect(factory.metadataAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
             const { cache } = factory.options;
@@ -248,6 +251,28 @@ describe('api/APIFactory', () => {
             expect(fileAccessStatsAPI.options.cache).toBeInstanceOf(Cache);
             expect(fileAccessStatsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(fileAccessStatsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getMetadataAPI()', () => {
+        test('should call destroy and return metadata API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const metadataAPI = factory.getMetadataAPI(true);
+            expect(spy).toBeCalled();
+            expect(metadataAPI).toBeInstanceOf(MetadataAPI);
+            expect(metadataAPI.options.cache).toBeInstanceOf(Cache);
+            expect(metadataAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(metadataAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return metadata API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const metadataAPI = factory.getMetadataAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(metadataAPI).toBeInstanceOf(MetadataAPI);
+            expect(metadataAPI.options.cache).toBeInstanceOf(Cache);
+            expect(metadataAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(metadataAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

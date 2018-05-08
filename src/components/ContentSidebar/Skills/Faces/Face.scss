@@ -1,0 +1,63 @@
+@import '../../../variables';
+
+.be-faces {
+    .be-face-wrapper {
+        display: inline-block;
+        margin: 0 10px 10px 0;
+        position: relative; // For delete and minus icons
+    }
+
+    .be-face {
+        border-radius: 100%;
+        overflow: hidden;
+
+        img {
+            filter: brightness(1.5);
+            height: 45px;
+            transition: transform .3s;
+            vertical-align: middle;
+            width: 45px;
+        }
+
+        .icon-minus {
+            display: none;
+            left: 16px;
+            position: absolute;
+            top: 16px;
+        }
+
+        &:hover {
+            img {
+                transform: scale(1.3);
+            }
+
+            .icon-minus {
+                display: initial;
+            }
+        }
+    }
+
+    .be-face-unselected .be-face img {
+        filter: none;
+        opacity: .4;
+    }
+
+    .be-face-delete {
+        background-color: white;
+        border: 1px solid $downtown-grey;
+        border-radius: 100%;
+        box-shadow: 0 0 2px 0 $darker-black;
+        height: 18px;
+        padding: 0;
+        position: absolute;
+        right: -5px;
+        top: -3px;
+    }
+
+    &.be-faces-is-editing {
+        .be-face:hover img {
+            cursor: default;
+            transform: none;
+        }
+    }
+}
