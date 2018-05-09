@@ -12,6 +12,7 @@ type Params = {
 };
 
 type Data = {
+    next_marker: string,
     entries: Array<any>
 };
 
@@ -69,17 +70,17 @@ class MarkerBasedApi extends Base {
             const queryParams: Params = {
                 marker: this.marker,
                 limit: this.limit,
-                params: this.params
+                ...this.params
             };
 
             const { data }: { data: Data } = await this.getData(this.id, queryParams);
 
-            const entries = this.data.entries || [];
+            const entries = this.data ? this.data.entries : [];
             this.data = {
                 ...data,
                 entries: entries.concat(data.entries)
             };
-            this.marker = this.data.next_marker || '';
+            this.marker = data.next_marker;
             const hasMoreItems = this.hasMoreItems();
             if (this.shouldFetchAll && hasMoreItems) {
                 return this.markerGetRequest();

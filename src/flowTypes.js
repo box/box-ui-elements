@@ -113,12 +113,6 @@ export type User = {
     type: 'user'
 };
 
-export type Collaborator = {
-    id: string,
-    name: string,
-    item: User
-};
-
 export type UserCollection = {
     total_count?: number,
     entries?: Array<User>,
@@ -134,7 +128,7 @@ export type SelectorItem = {
     id?: string | number,
     name: string,
     item: Object,
-    value: any
+    value?: any
 };
 
 export type SelectorItems = Array<SelectorItem>;

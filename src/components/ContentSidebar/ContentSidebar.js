@@ -10,12 +10,18 @@ import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, FIELD_METADATA_SKILLS } from '../../constants';
+import {
+    DEFAULT_HOSTNAME_API,
+    CLIENT_NAME_CONTENT_SIDEBAR,
+    FIELD_METADATA_SKILLS,
+    DEFAULT_COLLAB_DEBOUNCE
+} from '../../constants';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
 import type {
@@ -29,7 +35,10 @@ import type {
     Tasks,
     SkillCard,
     SkillCardEntry,
-    JsonPatchData
+    JsonPatchData,
+    User,
+    UserCollection,
+    SelectorItems
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -84,7 +93,9 @@ type State = {
     versionError?: Errors,
     commentsError?: Errors,
     tasksError?: Errors,
-    accessStatsError?: Errors
+    accessStatsError?: Errors,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -618,6 +629,95 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Re-formats file collaborators response
+     *
+     * @private
+     * @param {Array<User>} contacts - Collection of collaborated users
+     * @return {SelectorItems}
+     */
+    parseContacts = (contacts: Array<User>): SelectorItems =>
+        contacts.map((collab: User) => {
+            const { id, name, login } = collab;
+            return {
+                id,
+                name,
+                item: { ...collab, email: login }
+            };
+        });
+
+    /**
+     * File approver contacts fetch success callback
+     *
+     * @private
+     * @param {BoxItemCollection} data - Collaborators response data
+     * @return {void}
+     */
+    getApproverContactsSuccessCallback = (data: UserCollection): void => {
+        const contacts = data.entries || [];
+        this.setState({ approverSelectorContacts: this.parseContacts(contacts) });
+    };
+
+    /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
+     * @param {BoxItemCollection} data - Collaborators response data
+     * @return {void}
+     */
+    getMentionContactsSuccessCallback = (data: UserCollection): void => {
+        const contacts = data.entries || [];
+        this.setState({ mentionSelectorContacts: this.parseContacts(contacts) });
+    };
+
+    /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
+     * @param {API} api - Box API instance
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @param {Function} successCallback - Fetch success callback
+     * @return {void}
+     */
+    getApproverSelectorContacts = debounce((searchStr: string): void => {
+        // Do not fetch without filter
+        if (!searchStr || searchStr.trim() === '') {
+            return;
+        }
+
+        this.api.getFileCollaboratorsAPI(true).markerGet({
+            id: getProp(this.props, 'fileId', null),
+            params: {
+                filter_term: searchStr
+            },
+            successCallback: this.getApproverContactsSuccessCallback,
+            errorCallback: this.errorCallback
+        });
+    }, DEFAULT_COLLAB_DEBOUNCE);
+
+    /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @return {void}
+     */
+    getMentionSelectorContacts = debounce((searchStr: string): void => {
+        // Do not fetch without filter
+        if (!searchStr || searchStr.trim() === '') {
+            return;
+        }
+
+        this.api.getFileCollaboratorsAPI(true).markerGet({
+            id: getProp(this.props, 'fileId', null),
+            params: {
+                filter_term: searchStr
+            },
+            successCallback: this.getMentionContactsSuccessCallback,
+            errorCallback: this.errorCallback
+        });
+    }, DEFAULT_COLLAB_DEBOUNCE);
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -660,7 +760,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             fileError,
             versionError,
             commentsError,
-            tasksError
+            tasksError,
+            approverSelectorContacts,
+            mentionSelectorContacts
         }: State = this.state;
 
         const shouldRender = shouldRenderSidebar(this.props) && !!file;
@@ -672,7 +774,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                         {shouldRender ? (
                             <Sidebar
                                 file={file}
-                                api={this.api}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasTitle={hasTitle}
@@ -707,6 +808,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskDelete={onTaskDelete}
                                 onTaskUpdate={onTaskUpdate}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                getApproverSelectorContacts={this.getApproverSelectorContacts}
+                                getMentionSelectorContacts={this.getMentionSelectorContacts}
+                                approverSelectorContacts={approverSelectorContacts}
+                                mentionSelectorContacts={mentionSelectorContacts}
                             />
                         ) : (
                             <div className='bcs-loading'>

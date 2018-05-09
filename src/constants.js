@@ -122,6 +122,7 @@ export const DEFAULT_HOSTNAME_APP = 'https://app.box.com';
 export const DEFAULT_CONTAINER = 'body';
 export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
+export const DEFAULT_COLLAB_DEBOUNCE = 500;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
 export const CLIENT_NAME_CONTENT_TREE = 'ContentTree';

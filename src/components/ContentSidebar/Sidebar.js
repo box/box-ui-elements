@@ -8,18 +8,16 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import TabView from 'box-react-ui/lib/components/tab-view/TabView';
 import Tab from 'box-react-ui/lib/components/tab-view/Tab';
-import API from '../../api';
 import DetailsSidebar from './DetailsSidebar';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import messages from '../messages';
-import type { FileAccessStats, BoxItem, Errors, Comments, Tasks } from '../../flowTypes';
+import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, SelectorItems } from '../../flowTypes';
 import { TAB_TARGETS } from '../../interactionTargets';
 import './Sidebar.scss';
 
 type Props = {
     file: BoxItem,
-    api: API,
     getPreviewer: Function,
     hasTitle: boolean,
     hasSkills: boolean,
@@ -53,12 +51,15 @@ type Props = {
     accessStatsError?: Errors,
     fileError?: Errors,
     commentsError?: Errors,
-    tasksError?: Errors
+    tasksError?: Errors,
+    getApproverSelectorContacts: Function,
+    getMentionSelectorContacts: Function,
+    approverSelectorContacts: SelectorItems,
+    mentionSelectorContacts: SelectorItems
 };
 
 const Sidebar = ({
     file,
-    api,
     getPreviewer,
     hasTitle,
     hasSkills,
@@ -87,7 +88,11 @@ const Sidebar = ({
     onTaskAssignmentUpdate,
     accessStats,
     accessStatsError,
-    fileError
+    fileError,
+    getApproverSelectorContacts,
+    getMentionSelectorContacts,
+    approverSelectorContacts,
+    mentionSelectorContacts
 }: Props) => {
     const shouldShowSkills = hasSkills && hasSkillsData(file);
 
@@ -122,7 +127,9 @@ const Sidebar = ({
     }
 
     const inputState = {
-        currentUser: getPreviewer()
+        currentUser: getPreviewer(),
+        approverSelectorContacts,
+        mentionSelectorContacts
     };
 
     const handlers = {
@@ -136,13 +143,17 @@ const Sidebar = ({
             edit: onTaskUpdate,
             onTaskAssignmentUpdate
         },
+        contacts: {
+            approver: getApproverSelectorContacts,
+            mention: getMentionSelectorContacts
+        },
         versions: {
             info: onVersionHistoryClick
         }
     };
 
     const ActivityFeedSidebar = (
-        <ActivityFeed file={file} api={api} feedState={activityFeedState} inputState={inputState} handlers={handlers} />
+        <ActivityFeed file={file} feedState={activityFeedState} inputState={inputState} handlers={handlers} />
     );
 
     return (

@@ -196,7 +196,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             taggedMessage
         } = this.props;
         const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
-        const { avatarUrl, id, name } = user;
+        const { avatar_url: avatarUrl, id, name } = user;
         const inputContainerClassNames = classNames('bcs-comment-input-container', className, {
             'bcs-comment-input-is-open': isOpen
         });

@@ -90,7 +90,7 @@ class OffsetBasedApi extends Base {
 
             const { data }: { data: Data } = await this.getData(this.id, params);
 
-            const entries = this.data.entries || [];
+            const entries = this.data ? this.data.entries : [];
             this.data = {
                 ...data,
                 entries: entries.concat(data.entries)
