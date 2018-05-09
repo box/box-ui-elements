@@ -47,20 +47,6 @@ class MarkerBasedApi extends Base {
     shouldFetchAll: boolean;
 
     /**
-     * Gets query params for the API
-     *
-     * @return the query params object
-     */
-    getQueryParameters(): Object {
-        const queryParams: Params = {
-            marker: this.marker,
-            limit: this.limit
-        };
-
-        return Object.assign(queryParams, this.params);
-    }
-
-    /**
      * Determines if the API has more items to fetch
      * @return {boolean} true if there are more items
      */
@@ -80,9 +66,13 @@ class MarkerBasedApi extends Base {
 
         // Make the XHR request
         try {
-            const params = this.getQueryParameters();
+            const queryParams: Params = {
+                marker: this.marker,
+                limit: this.limit,
+                params: this.params
+            };
 
-            const { data }: { data: Data } = await this.getData(this.id, params);
+            const { data }: { data: Data } = await this.getData(this.id, queryParams);
 
             const entries = this.data.entries || [];
             this.data = {

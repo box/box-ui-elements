@@ -14,7 +14,7 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { User, UserCollection, Collaborator, SelectorItems, BoxItem } from '../../../../flowTypes';
+import type { User, UserCollection, Collaborator, BoxItem } from '../../../../flowTypes';
 import type {
     CommentHandlers,
     TaskHandlers,
