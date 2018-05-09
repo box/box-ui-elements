@@ -73,7 +73,8 @@ type Props = {
     onError?: Function,
     onMetric?: Function,
     requestInterceptor?: Function,
-    responseInterceptor?: Function
+    responseInterceptor?: Function,
+    previewInstance: any
 };
 
 type State = {
@@ -119,7 +120,6 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * [constructor]
      *
-     * @private
      * @return {ContentPreview}
      */
     constructor(props: Props) {
@@ -150,17 +150,19 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Cleanup
      *
-     * @private
      * @return {void}
      */
     componentWillUnmount(): void {
-        this.destroyPreview();
+        if (this.preview) {
+            this.preview.removeAllListeners();
+            this.preview.destroy();
+            this.preview = undefined;
+        }
     }
 
     /**
-     * Called after receiving new props
+     * If new file ID or token is received, destroy preview and fetch file info for new file.
      *
-     * @private
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
@@ -169,44 +171,67 @@ class ContentPreview extends PureComponent<Props, State> {
         const hasFileIdChanged = nextProps.fileId !== fileId;
 
         if (hasTokenChanged || hasFileIdChanged) {
-            this.destroyPreview();
-            this.setState({
-                file: undefined
-            });
             this.fetchFile(nextProps.fileId);
         }
     }
 
     /**
-     * Called after shell mounts.
-     * Once the component mounts fetch the file.
+     * Once the component mounts, load Preview assets and fetch file info.
      *
-     * @private
      * @return {void}
      */
     componentDidMount(): void {
-        const { fileId }: Props = this.props;
-        this.loadStylesheet();
-        this.loadScript();
+        const { fileId, previewInstance }: Props = this.props;
+
+        if (previewInstance) {
+            this.setPreviewInstance(previewInstance);
+        } else {
+            this.loadStylesheet();
+            this.loadScript();
+        }
+
         this.fetchFile(fileId);
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.focusPreview();
     }
 
     /**
-     * Called after shell re-mounts
+     * After component updates, load Preview if appropriate.
      *
-     * @private
      * @return {void}
      */
-    componentDidUpdate(): void {
-        this.loadPreview();
+    componentDidUpdate(prevProps: Props, prevState: State): void {
+        if (this.shouldLoadPreview(prevProps, prevState)) {
+            this.loadPreview();
+        }
+    }
+
+    /**
+     * Returns whether or not preview should be loaded.
+     *
+     * @param {Props} prevProps - Previous props
+     * @param {State} prevState - Previous state
+     * @return {boolean}
+     */
+    shouldLoadPreview(prevProps: Props, prevState: State): boolean {
+        const { file }: State = this.state;
+        const { file: prevFile }: State = prevState;
+        let loadPreview = false;
+
+        // Load preview if file version ID has changed
+        if (file && file.file_version && prevFile && prevFile.file_version) {
+            loadPreview = file.file_version.id !== prevFile.file_version.id;
+        } else {
+            // Load preview if file object has newly been popuplated in state
+            loadPreview = !prevFile && !!file;
+        }
+
+        return loadPreview;
     }
 
     /**
      * Returns preview asset urls
      *
-     * @private
      * @return {string} base url
      */
     getBasePath(asset: string): string {
@@ -219,7 +244,6 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Determines if preview assets are loaded
      *
-     * @private
      * @return {boolean} true if preview is loaded
      */
     isPreviewLibraryLoaded(): boolean {
@@ -261,7 +285,6 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const previewScript = head.querySelector(`script[src="${url}"]`);
         if (previewScript) {
-            previewScript.addEventListener('load', this.loadPreview);
             return;
         }
 
@@ -280,19 +303,6 @@ class ContentPreview extends PureComponent<Props, State> {
         const { autoFocus }: Props = this.props;
         if (autoFocus && !isInputElement(document.activeElement)) {
             focus(this.rootElement);
-        }
-    }
-
-    /**
-     * Calls destroy of preview
-     *
-     * @return {void}
-     */
-    destroyPreview() {
-        if (this.preview) {
-            this.preview.removeAllListeners();
-            this.preview.destroy();
-            this.preview = undefined;
         }
     }
 
@@ -350,7 +360,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    onPreviewLoad = (data: Object) => {
+    onPreviewLoad = (data: Object): void => {
         const { onLoad, collection }: Props = this.props;
         const currentIndex = this.getFileIndex();
         const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
@@ -361,29 +371,61 @@ class ContentPreview extends PureComponent<Props, State> {
         }
     };
 
-    canDownload() {
+    /**
+     * Returns whether file can be downloaded based on file properties, permissions, and user-defined options.
+     *
+     * @return {boolean}
+     */
+    canDownload(): boolean {
         // showDownload is a prop that preview library uses and can be passed by the user
         const { showDownload, canDownload }: Props = this.props;
         const { file }: State = this.state;
         const isFileDownloadable =
             getProp(file, 'permissions.can_download', false) && getProp(file, 'is_download_available', false);
-        return isFileDownloadable && canDownload && showDownload;
+        return isFileDownloadable && !!canDownload && !!showDownload;
     }
 
     /**
-     * Loads the preview
+     * Sets a preview instance and adds event listeners.
+     *
+     * @param {Object} preview - Preview instance
+     * @return {void}
+     */
+    setPreviewInstance = (preview: any): void => {
+        this.preview = preview;
+        this.addPreviewListeners();
+    };
+
+    /**
+     * Adds preview event listeners.
+     *
+     * @return {void}
+     */
+    addPreviewListeners(): void {
+        if (!this.preview || typeof this.preview.addListener !== 'function') {
+            return;
+        }
+
+        const { onError, onMetric } = this.props;
+
+        this.preview.addListener('load', this.onPreviewLoad);
+        this.preview.addListener('preview_error', onError);
+        this.preview.addListener('preview_metric', onMetric);
+    }
+
+    /**
+     * Loads preview in the component using the preview library.
      *
      * @return {void}
      */
     loadPreview = async (): Promise<void> => {
-        const { token: tokenOrTokenFunction, onError, onMetric, collection, ...rest }: Props = this.props;
+        const { token: tokenOrTokenFunction, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
-        if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction || this.preview) {
+        if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
             return;
         }
 
-        const { Preview } = global.Box;
         const typedId: string = getTypedFileId(this.getFileId(file));
         const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
 
@@ -395,11 +437,12 @@ class ContentPreview extends PureComponent<Props, State> {
             useHotkeys: false
         };
 
-        this.preview = new Preview();
+        if (!this.preview) {
+            const { Preview } = global.Box;
+            this.setPreviewInstance(new Preview());
+        }
+
         this.preview.updateFileCache([file]);
-        this.preview.addListener('load', this.onPreviewLoad);
-        this.preview.addListener('preview_error', onError);
-        this.preview.addListener('preview_metric', onMetric);
         this.preview.show(file.id, token, {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions))
@@ -420,7 +463,6 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Network error callback
      *
-     * @private
      * @param {Error} error error object
      * @return {void}
      */
@@ -433,7 +475,6 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * File fetch success callback
      *
-     * @private
      * @param {Object} file - Box file
      * @return {void}
      */
@@ -444,7 +485,6 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Fetches a file
      *
-     * @private
      * @param {string} id file id
      * @param {Function|void} [successCallback] - Callback after file is fetched
      * @param {Function|void} [errorCallback] - Callback after error
@@ -470,7 +510,6 @@ class ContentPreview extends PureComponent<Props, State> {
      * Returns the viewer instance being used by preview.
      * This will let child components access the viewers.
      *
-     * @private
      * @return {Preview} current instance of preview
      */
     getPreviewer = (): any => {
@@ -521,8 +560,14 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const fileOrId = collection[index];
         const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
+
+        // Execute navigation callback
         onNavigate(fileId);
-        this.destroyPreview();
+
+        // Hide current preview immediately - we don't want to wait until the next file info returns
+        this.preview.hide();
+
+        // Fetch file info for next file
         this.fetchFile(fileId);
     }
 
@@ -621,7 +666,6 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Keyboard events
      *
-     * @private
      * @return {void}
      */
     onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
@@ -677,7 +721,6 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Renders the file preview
      *
-     * @private
      * @inheritdoc
      * @return {Element}
      */
