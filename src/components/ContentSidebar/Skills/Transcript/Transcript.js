@@ -15,11 +15,10 @@ import type { SkillCard } from '../../../../flowTypes';
 import './Transcript.scss';
 
 type Props = {
-    skill: SkillCard,
+    card: SkillCard,
     getPreviewer?: Function,
     rootElement: HTMLElement,
-    appElement: HTMLElement,
-    onInteraction: Function
+    appElement: HTMLElement
 };
 
 type State = {
@@ -43,7 +42,7 @@ class Transcript extends Component<Props, State> {
     };
 
     render() {
-        const { skill: { entries, title }, getPreviewer, rootElement, appElement, onInteraction }: Props = this.props;
+        const { card: { entries, title }, getPreviewer, rootElement, appElement }: Props = this.props;
         const { isModalOpen }: State = this.state;
 
         if (entries.length === 1 && !isValidTimeSlice(entries[0].appears)) {
@@ -57,7 +56,7 @@ class Transcript extends Component<Props, State> {
                 <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleModal}>
                     <IconExpand color={COLOR_DOWNTOWN_GREY} />
                 </PlainButton>
-                <TranscriptData data={entries} getPreviewer={getPreviewer} onInteraction={onInteraction} />
+                <TranscriptData data={entries} getPreviewer={getPreviewer} />
                 <TranscriptDialog
                     title={title}
                     isOpen={isModalOpen}
@@ -65,7 +64,6 @@ class Transcript extends Component<Props, State> {
                     data={entries}
                     rootElement={rootElement}
                     appElement={appElement}
-                    onInteraction={onInteraction}
                 />
             </div>
         );

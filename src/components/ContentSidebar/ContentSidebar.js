@@ -7,6 +7,7 @@
 import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
+import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
@@ -14,8 +15,9 @@ import Sidebar from './Sidebar';
 import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR } from '../../constants';
+import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, FIELD_METADATA_SKILLS } from '../../constants';
 import messages from '../messages';
+import { shouldRenderSidebar } from './sidebarUtil';
 import type {
     FileAccessStats,
     Token,
@@ -25,7 +27,10 @@ import type {
     Errors,
     Comments,
     Tasks,
-    User
+    User,
+    SkillCard,
+    SkillCardEntry,
+    JsonPatchData
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -41,6 +46,7 @@ type Props = {
     className: string,
     user?: string | User,
     getPreviewer: Function,
+    isVisible: boolean,
     hasTitle: boolean,
     hasSkills: boolean,
     hasProperties: boolean,
@@ -50,7 +56,6 @@ type Props = {
     hasClassification: boolean,
     hasActivityFeed: boolean,
     hasVersions: boolean,
-    hasAccessStats: boolean,
     language?: string,
     messages?: StringMap,
     cache?: Cache,
@@ -103,6 +108,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         apiHost: DEFAULT_HOSTNAME_API,
         getPreviewer: noop,
         user: '',
+        isVisible: true,
         hasTitle: false,
         hasSkills: false,
         hasProperties: false,
@@ -224,38 +230,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                 }
             }
         }
-    }
-
-    /**
-     * Determines if we should bother fetching or rendering
-     *
-     * @private
-     * @param {string} id - file id
-     * @param {Boolean|void} [forceFetch] - To void cache
-     * @return {Boolean} true if we should fetch or render
-     */
-    shouldFetchOrRender(): boolean {
-        const {
-            hasSkills,
-            hasProperties,
-            hasMetadata,
-            hasNotices,
-            hasAccessStats,
-            hasClassification,
-            hasActivityFeed,
-            hasVersions
-        }: Props = this.props;
-
-        return (
-            hasSkills ||
-            hasProperties ||
-            hasMetadata ||
-            hasAccessStats ||
-            hasClassification ||
-            hasActivityFeed ||
-            hasVersions ||
-            hasNotices
-        );
     }
 
     /**
@@ -510,7 +484,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFile(id: string, forceFetch: boolean = false): void {
-        if (this.shouldFetchOrRender()) {
+        if (shouldRenderSidebar(this.props)) {
             this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch, true);
         }
     }
@@ -535,7 +509,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         fields?: Array<string>,
         shouldFetchAll?: boolean = true
     ): void {
-        if (this.shouldFetchOrRender()) {
+        if (shouldRenderSidebar(this.props)) {
             this.api
                 .getVersionsAPI(shouldDestroy)
                 .offsetGet(
@@ -570,7 +544,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         fields?: Array<string>,
         shouldFetchAll: boolean = true
     ): void {
-        if (this.shouldFetchOrRender()) {
+        if (shouldRenderSidebar(this.props)) {
             this.api
                 .getCommentsAPI(shouldDestroy)
                 .offsetGet(
@@ -593,7 +567,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTasks(id: string, shouldDestroy?: boolean = false): void {
-        if (this.shouldFetchOrRender()) {
+        if (shouldRenderSidebar(this.props)) {
             this.api.getTasksAPI(shouldDestroy).get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback);
         }
     }
@@ -606,7 +580,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileAccessStats(id: string, shouldDestroy?: boolean = false): void {
-        if (this.shouldFetchOrRender()) {
+        if (shouldRenderSidebar(this.props)) {
             this.api
                 .getFileAccessStatsAPI(shouldDestroy)
                 .get(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
@@ -627,6 +601,79 @@ class ContentSidebar extends PureComponent<Props, State> {
                 .get(id, this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
         }
     }
+
+    /**
+     * Patches skill metadata
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    onSkillChange = (index: number, removes: Array<SkillCardEntry> = [], adds: Array<SkillCardEntry> = []): void => {
+        const { hasSkills }: Props = this.props;
+        const { file }: State = this.state;
+        if (!hasSkills || !file) {
+            return;
+        }
+
+        const { metadata, permissions }: BoxItem = file;
+        if (!metadata || !permissions || !permissions.can_upload) {
+            return;
+        }
+
+        const cards: Array<SkillCard> = getProp(file, 'metadata.global.boxSkillsCards.cards');
+        if (!cards || cards.length === 0 || !cards[index]) {
+            return;
+        }
+
+        const card = cards[index];
+        const path = `/cards/${index}`;
+        const ops: JsonPatchData = [];
+
+        if (Array.isArray(removes)) {
+            removes.forEach((removed) => {
+                const idx = card.entries.findIndex((entry) => entry === removed);
+                if (idx > -1) {
+                    ops.push({
+                        op: 'remove',
+                        path: `${path}/entries/${idx}`
+                    });
+                }
+            });
+        }
+
+        if (Array.isArray(adds)) {
+            adds.forEach((added) => {
+                ops.push({
+                    op: 'add',
+                    path: `${path}/entries/-`,
+                    value: added
+                });
+            });
+        }
+
+        // If no ops, don't proceed
+        if (ops.length === 0) {
+            return;
+        }
+
+        // Add test ops before any other ops
+        ops.splice(0, 0, {
+            op: 'test',
+            path,
+            value: card
+        });
+
+        this.api.getMetadataAPI(false).patch(
+            file,
+            FIELD_METADATA_SKILLS,
+            ops,
+            (updatedFile) => {
+                this.setState({ file: updatedFile });
+            },
+            this.errorCallback
+        );
+    };
 
     /**
      * Renders the file preview
@@ -678,7 +725,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             currentUserError
         }: State = this.state;
 
-        const shouldRender = this.shouldFetchOrRender() && !!file;
+        const shouldRender = shouldRenderSidebar(this.props) && !!file;
 
         return (
             <Internationalize language={language} messages={intlMessages}>
@@ -706,6 +753,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onAccessStatsClick={onAccessStatsClick}
                                 onClassificationClick={onClassificationClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
+                                onSkillChange={this.onSkillChange}
                                 hasVersions={hasVersions}
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
@@ -737,4 +785,5 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 }
 
+export type ContentSidebarProps = Props;
 export default ContentSidebar;

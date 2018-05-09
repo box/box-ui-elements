@@ -17,6 +17,7 @@ import CommentsAPI from './Comments';
 import TasksAPI from './Tasks';
 import FileAccessStatsAPI from './FileAccessStats';
 import UsersAPI from './Users';
+import MetadataAPI from './Metadata';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
@@ -85,6 +86,11 @@ class APIFactory {
      * @property {UsersAPI}
      */
     usersAPI: UsersAPI;
+
+    /*
+     * @property {MetadataAPI}
+     */
+    metadataAPI: MetadataAPI;
 
     /**
      * [constructor]
@@ -160,6 +166,10 @@ class APIFactory {
         if (this.usersAPI) {
             this.usersAPI.destroy();
             delete this.usersAPI;
+        }
+        if (this.metadataAPI) {
+            this.metadataAPI.destroy();
+            delete this.metadataAPI;
         }
         if (destroyCache) {
             this.options.cache = new Cache();
@@ -277,6 +287,20 @@ class APIFactory {
         this.destroy();
         this.recentsAPI = new RecentsAPI(this.options);
         return this.recentsAPI;
+    }
+
+    /**
+     * API for metadata
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {MetadataAPI} MetadataAPI instance
+     */
+    getMetadataAPI(shouldDestroy: boolean): MetadataAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.metadataAPI = new MetadataAPI(this.options);
+        return this.metadataAPI;
     }
 
     /**

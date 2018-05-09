@@ -16,7 +16,6 @@ import './Transcript.scss';
 
 type Props = {
     data: SkillCardEntry[],
-    onInteraction: Function,
     getPreviewer?: Function
 };
 
@@ -25,7 +24,7 @@ const cache = new CellMeasurerCache({
     fixedWidth: true
 });
 
-const TranscriptData = ({ data, getPreviewer, onInteraction }: Props) => (
+const TranscriptData = ({ data, getPreviewer }: Props) => (
     <AutoSizer>
         {({ width, height }) => (
             <Table
@@ -46,8 +45,6 @@ const TranscriptData = ({ data, getPreviewer, onInteraction }: Props) => (
                     if (validStartTime) {
                         // $FlowFixMe Already checked above in isValidTimeSlice
                         const entry = appears[0];
-                        onInteraction({ target: 'transcript' });
-
                         if (viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
                             const { start } = entry;
                             viewer.play(start);

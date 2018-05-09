@@ -1,0 +1,27 @@
+@import '../../../variables';
+@import '~box-react-ui/lib/styles/common/pills';
+@import '~box-react-ui/lib/components/pill-selector-dropdown/PillSelector';
+
+.be-keywords {
+    .be-keywords-buttons {
+        margin: 7px -5px 0 0;
+        text-align: right;
+    }
+
+    .pill-selector-wrapper {
+        margin: 0;
+
+        .pill-selector-input-wrapper {
+            margin: 0;
+            width: 100%;
+
+            .pill-selector-input {
+                border: 1px solid $almost-white;
+                box-shadow: none;
+                height: 24px;
+                margin: 2px 0 0 2px;
+                min-width: 100%;
+            }
+        }
+    }
+}

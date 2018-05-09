@@ -7,6 +7,8 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import IconCaretDown from 'box-react-ui/lib/icons/general/IconCaretDown';
+import { COLOR_DOWNTOWN_GREY } from '../../constants';
 import './SidebarSection.scss';
 
 type Props = {
@@ -85,6 +87,7 @@ class SidebarSection extends PureComponent<Props, State> {
                         data-resin-target={interactionTarget}
                     >
                         {title}
+                        <IconCaretDown color={COLOR_DOWNTOWN_GREY} width={8} />
                     </PlainButton>
                 )}
                 {(isOpen || !title) && <div className='bcs-section-content'>{children}</div>}
