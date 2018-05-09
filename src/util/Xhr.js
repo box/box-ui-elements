@@ -383,9 +383,7 @@ class Xhr {
      * @return {void}
      */
     abort(): void {
-        if (this.axios && this.axiosSource) {
-            this.axiosSource.cancel('Operation canceled due to new request.');
-        }
+        this.axiosSource.cancel();
 
         if (!this.xhr) {
             return;

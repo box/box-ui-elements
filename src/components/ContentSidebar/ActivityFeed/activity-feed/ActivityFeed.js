@@ -14,7 +14,7 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { User, UserCollection, SelectorItems, BoxItem } from '../../../../flowTypes';
+import type { User, UserCollection, Collaborator, SelectorItems, BoxItem } from '../../../../flowTypes';
 import type {
     CommentHandlers,
     TaskHandlers,
@@ -45,16 +45,6 @@ type Props = {
     permissions?: {
         comments?: boolean,
         tasks?: boolean
-    }
-};
-
-type Collaborator = {
-    id: string,
-    name: string,
-    item: {
-        email: string,
-        name: string,
-        id: string
     }
 };
 
