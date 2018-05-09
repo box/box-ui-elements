@@ -52,14 +52,14 @@ class OffsetBasedApi extends Base {
      *
      * @return the query params object
      */
-    getQueryParameters(offset: number, limit: number, fields: ?Array<string>): Object {
+    getQueryParameters(): Object {
         const queryParams: Params = {
-            offset,
-            limit
+            offset: this.offset,
+            limit: this.limit
         };
 
-        if (fields && fields.length > 0) {
-            queryParams.fields = fields.toString();
+        if (this.fields && this.fields.length > 0) {
+            queryParams.fields = this.fields.toString();
         }
 
         return queryParams;
@@ -67,12 +67,11 @@ class OffsetBasedApi extends Base {
 
     /**
      * Determines if the API has more items to fetch
-     * @param {number} offset the offset from the start to start fetching at
      * @param {number} totalCount the total number of items
      * @return {boolean} true if there are more items
      */
-    hasMoreItems(offset: number, totalCount?: number): boolean {
-        return totalCount === undefined || offset < totalCount;
+    hasMoreItems(totalCount?: number): boolean {
+        return totalCount === undefined || this.offset < totalCount;
     }
 
     /**
@@ -87,18 +86,18 @@ class OffsetBasedApi extends Base {
 
         // Make the XHR request
         try {
-            const params = this.getQueryParameters(this.offset, this.limit, this.fields);
+            const params = this.getQueryParameters();
 
             const { data }: { data: Data } = await this.getData(this.id, params);
 
-            const entries = this.data ? this.data.entries : [];
+            const entries = this.data.entries || [];
             this.data = {
                 ...data,
                 entries: entries.concat(data.entries)
             };
             const totalCount = data.total_count;
             this.offset += this.limit;
-            if (this.shouldFetchAll && this.hasMoreItems(this.offset, totalCount)) {
+            if (this.shouldFetchAll && this.hasMoreItems(totalCount)) {
                 return this.offsetGetRequest();
             }
 
