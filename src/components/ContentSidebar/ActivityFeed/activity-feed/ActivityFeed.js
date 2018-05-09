@@ -64,12 +64,6 @@ class ActivityFeed extends React.Component<Props, State> {
 
     feedContainer: null | HTMLElement;
 
-    approverCollabsAPI: FileCollaborators;
-    mentionCollabsAPI: FileCollaborators;
-
-    approverSelectorTimeout: null | TimeoutID;
-    mentionSelectorTimeout: null | TimeoutID;
-
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();

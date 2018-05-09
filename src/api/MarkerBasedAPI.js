@@ -7,8 +7,7 @@ import Base from './Base';
 
 type Params = {
     marker: string,
-    limit: number,
-    params?: string
+    limit: number
 };
 
 type Data = {

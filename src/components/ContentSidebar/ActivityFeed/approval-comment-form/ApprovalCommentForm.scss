@@ -2,6 +2,7 @@
 
 .be .bcs-comment-input-container {
     @import '~box-react-ui/lib/styles/common/overlay';
+    @import '~box-react-ui/lib/styles/common/forms';
 
     border-top: solid 1px $off-white;
     display: flex;
