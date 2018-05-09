@@ -595,7 +595,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCurrentUser(id?: string = '', shouldDestroy?: boolean = false): void {
-        if (this.shouldFetchOrRender()) {
+        if (shouldRenderSidebar(this.props)) {
             this.api
                 .getUsersAPI(shouldDestroy)
                 .get(id, this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
