@@ -28,7 +28,7 @@ type Props = {
     isLoading?: boolean,
     feedState: Array<Item>,
     inputState: {
-        currentUser: User,
+        currentUser?: User,
         approverSelectorContacts?: SelectorItems,
         mentionSelectorContacts?: SelectorItems,
         isDisabled?: boolean

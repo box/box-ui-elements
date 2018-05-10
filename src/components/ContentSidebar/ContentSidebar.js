@@ -44,7 +44,7 @@ type Props = {
     apiHost: string,
     token: Token,
     className: string,
-    user?: string | User,
+    user?: User,
     getPreviewer: Function,
     isVisible: boolean,
     hasTitle: boolean,
@@ -107,7 +107,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         apiHost: DEFAULT_HOSTNAME_API,
         getPreviewer: noop,
-        user: '',
+        user: undefined,
         isVisible: true,
         hasTitle: false,
         hasSkills: false,
@@ -223,11 +223,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 this.fetchComments(fileId);
                 this.fetchTasks(fileId);
                 this.fetchVersions(fileId);
-                if (typeof user === 'string' || typeof user === 'undefined') {
-                    this.fetchCurrentUser(user);
-                } else {
-                    this.setState({ currentUser: user, currentUserError: undefined });
-                }
+                this.fetchCurrentUser(user);
             }
         }
     }
@@ -594,11 +590,15 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} [id] - User id. If missing, gets user that the current token was generated for.
      * @return {void}
      */
-    fetchCurrentUser(id?: string = '', shouldDestroy?: boolean = false): void {
+    fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
         if (shouldRenderSidebar(this.props)) {
-            this.api
-                .getUsersAPI(shouldDestroy)
-                .get(id, this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
+            if (typeof user === 'undefined') {
+                this.api
+                    .getUsersAPI(shouldDestroy)
+                    .get('', this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
+            } else {
+                this.setState({ currentUser: user, currentUserError: undefined });
+            }
         }
     }
 

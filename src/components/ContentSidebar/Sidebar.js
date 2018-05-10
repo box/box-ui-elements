@@ -121,7 +121,7 @@ const Sidebar = ({
         />
     );
 
-    if (!hasActivityFeed || !currentUser) {
+    if (!hasActivityFeed) {
         return Details;
     }
 

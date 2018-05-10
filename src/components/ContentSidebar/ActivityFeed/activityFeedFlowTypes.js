@@ -30,7 +30,7 @@ export type VersionHandlers = {
 export type InputState = {
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    currentUser: User,
+    currentUser?: User,
     isDisabled?: boolean
 };
 
