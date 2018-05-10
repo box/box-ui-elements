@@ -12,7 +12,7 @@ import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import { shouldRenderDetailsSidebar } from './sidebarUtil';
 import SidebarNav from './SidebarNav';
 import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
-import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, SidebarView } from '../../flowTypes';
+import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, FileVersions, SidebarView } from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
@@ -34,7 +34,6 @@ type Props = {
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
     onSkillChange: Function,
-    activityFeedState?: Array<any>,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
@@ -43,6 +42,7 @@ type Props = {
     onTaskAssignmentUpdate?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
+    versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
     accessStats?: FileAccessStats,
@@ -126,7 +126,6 @@ class Sidebar extends React.Component<Props, State> {
             onAccessStatsClick,
             onInteraction,
             onDescriptionChange,
-            activityFeedState,
             onSkillChange,
             onClassificationClick,
             onVersionHistoryClick,
@@ -203,7 +202,7 @@ class Sidebar extends React.Component<Props, State> {
                 {view === SIDEBAR_VIEW_ACTIVITY &&
                     hasActivityFeed && (
                         <ActivitySidebar
-                            activityFeedState={activityFeedState}
+                            file={file}
                             tasks={tasks}
                             tasksError={tasksError}
                             comments={comments}

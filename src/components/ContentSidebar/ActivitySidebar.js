@@ -9,10 +9,10 @@ import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
-import type { Errors, Comments, Tasks } from '../../flowTypes';
+import type { Errors, Comments, Tasks, FileVersions, BoxItem } from '../../flowTypes';
 
 type Props = {
-    activityFeedState?: Array<any>,
+    file: BoxItem,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
@@ -24,12 +24,16 @@ type Props = {
     onVersionHistoryClick?: Function,
     comments?: Comments,
     tasks?: Tasks,
+    versions?: FileVersions,
     commentsError?: Errors,
     tasksError?: Errors
 };
 
 const ActivitySidebar = ({
-    activityFeedState,
+    file,
+    comments,
+    tasks,
+    versions,
     onCommentCreate,
     onCommentDelete,
     onTaskCreate,
@@ -42,7 +46,10 @@ const ActivitySidebar = ({
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed
-            feedState={activityFeedState}
+            file={file}
+            comments={comments}
+            tasks={tasks}
+            versions={versions}
             inputState={{
                 // $FlowFixMe
                 currentUser: {},

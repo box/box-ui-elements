@@ -196,8 +196,9 @@ class Base {
      * @param {string} id the file id
      * @param {Function} successCallback the success callback
      * @param {Function} errorCallback the error callback
+     * @param {Object} params request params
      */
-    async get(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
+    async get(id: string, successCallback: Function, errorCallback: Function, params?: Object): Promise<void> {
         if (this.isDestroyed()) {
             return;
         }
@@ -207,7 +208,7 @@ class Base {
 
         // Make the XHR request
         try {
-            const { data } = await this.getData(id);
+            const { data } = await this.getData(id, params);
             this.successHandler(data);
         } catch (error) {
             this.errorHandler(error);

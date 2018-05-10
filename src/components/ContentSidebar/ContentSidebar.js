@@ -16,6 +16,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, FIELD_METADATA_SKILLS } from '../../constants';
+import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
 import type {
@@ -57,7 +58,6 @@ type Props = {
     cache?: Cache,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    activityFeedState?: Array<any>,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onInteraction: Function,
@@ -211,7 +211,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                 this.fetchFileAccessStats(fileId);
             }
             if (hasActivityFeed) {
-                this.fetchComments(fileId);
+                this.fetchComments({
+                    id: fileId,
+                    fields: COMMENTS_FIELDS_TO_FETCH
+                });
                 this.fetchTasks(fileId);
                 this.fetchVersions(fileId);
             }
@@ -491,14 +494,21 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      * @return {void}
      */
-    fetchComments(
+    fetchComments({
+        id,
+        shouldDestroy = false,
+        offset = 0,
+        limit = 1000,
+        fields,
+        shouldFetchAll = true
+    }: {
         id: string,
-        shouldDestroy?: boolean = false,
-        offset: number = 0,
-        limit: number = 1000,
+        shouldDestroy?: boolean,
+        offset?: number,
+        limit?: number,
         fields?: Array<string>,
-        shouldFetchAll: boolean = true
-    ): void {
+        shouldFetchAll?: boolean
+    }): void {
         if (shouldRenderSidebar(this.props)) {
             this.api
                 .getCommentsAPI(shouldDestroy)
@@ -522,8 +532,14 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTasks(id: string, shouldDestroy?: boolean = false): void {
+        const params = {
+            fields: TASKS_FIELDS_TO_FETCH.toString()
+        };
+
         if (shouldRenderSidebar(this.props)) {
-            this.api.getTasksAPI(shouldDestroy).get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback);
+            this.api
+                .getTasksAPI(shouldDestroy)
+                .get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback, params);
         }
     }
 
@@ -636,7 +652,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             hasVersions,
             className,
-            activityFeedState,
             onVersionHistoryClick,
             onAccessStatsClick,
             onClassificationClick,
@@ -685,7 +700,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
-                                activityFeedState={activityFeedState}
                                 onAccessStatsClick={onAccessStatsClick}
                                 onClassificationClick={onClassificationClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
