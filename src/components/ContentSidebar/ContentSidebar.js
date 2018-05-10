@@ -45,7 +45,7 @@ type Props = {
     apiHost: string,
     token: Token,
     className: string,
-    user?: User,
+    currentUser?: User,
     getPreviewer: Function,
     hasSkills: boolean,
     hasProperties: boolean,
@@ -105,7 +105,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         apiHost: DEFAULT_HOSTNAME_API,
         getPreviewer: noop,
-        user: undefined,
+        currentUser: undefined,
         hasSkills: false,
         hasProperties: false,
         hasMetadata: false,
@@ -209,7 +209,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasActivityFeed, hasAccessStats, user }: Props) {
+    fetchData({ fileId, hasActivityFeed, hasAccessStats, currentUser }: Props) {
         if (fileId) {
             this.fetchFile(fileId);
             if (hasAccessStats) {
@@ -222,7 +222,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 });
                 this.fetchTasks(fileId);
                 this.fetchVersions(fileId);
-                this.fetchCurrentUser(user);
+                this.fetchCurrentUser(currentUser);
             }
         }
     }

@@ -761,11 +761,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Current user error message',
         defaultMessage: 'Something went wrong when fetching the current user.'
     },
-    activityFeedTitle: {
-        id: 'be.activityFeedTitle',
-        description: 'Title for the Activity Feed tab',
-        defaultMessage: 'Activity'
-    },
     previousSegment: {
         id: 'be.previousSegment',
         description: 'Title for previous segment on skill timeline',
