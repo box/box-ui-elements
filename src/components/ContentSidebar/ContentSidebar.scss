@@ -3,7 +3,9 @@
 .be.bcs {
     background-color: $haze;
     display: flex;
-    width: 340px;
+    max-width: 400px;
+    min-width: 60px;
+    width: auto;
 }
 
 .be .bcs-loading {

@@ -189,3 +189,9 @@ export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
 
 /* ------------------ File Extensions  ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
+
+/* ------------------ Sidebar View  ---------------------- */
+export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
+export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
+export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
+export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';

@@ -19,7 +19,7 @@ type Props = {
     interactionTarget: string
 };
 
-const LENGTH_TEXT_ITEMLINE = 270; // match with css
+const LENGTH_TEXT_ITEMLINE = 295; // match with css
 
 const Timeslice = ({ start, end, duration, color = COLOR_BOX_BLUE, onClick, index, interactionTarget }: Props) => {
     if (typeof start !== 'number' || !duration || start >= duration) {

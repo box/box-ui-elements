@@ -44,8 +44,6 @@ type Props = {
     token: Token,
     className: string,
     getPreviewer: Function,
-    isVisible: boolean,
-    hasTitle: boolean,
     hasSkills: boolean,
     hasProperties: boolean,
     hasMetadata: boolean,
@@ -103,8 +101,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         apiHost: DEFAULT_HOSTNAME_API,
         getPreviewer: noop,
-        isVisible: true,
-        hasTitle: false,
         hasSkills: false,
         hasProperties: false,
         hasMetadata: false,
@@ -631,7 +627,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             language,
             messages: intlMessages,
             getPreviewer,
-            hasTitle,
             hasSkills,
             hasProperties,
             hasMetadata,
@@ -675,10 +670,9 @@ class ContentSidebar extends PureComponent<Props, State> {
                     <div className='be-app-element'>
                         {shouldRender ? (
                             <Sidebar
-                                file={file}
+                                file={((file: any): BoxItem)}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
-                                hasTitle={hasTitle}
                                 hasSkills={hasSkills}
                                 hasProperties={hasProperties}
                                 hasMetadata={hasMetadata}

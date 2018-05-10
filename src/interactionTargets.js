@@ -1,6 +1,8 @@
-export const TAB_TARGETS = {
-    SELECT_ACTIVITY: 'selectactivity',
-    SELECT_DETAILS: 'selectdetails'
+export const SIDEBAR_NAV_TARGETS = {
+    ACTIVITY: 'sidebaractivity',
+    DETAILS: 'sidebardetails',
+    SKILLS: 'sidebarskills',
+    METADATA: 'sidebarmetadata'
 };
 
 export const SECTION_TARGETS = {

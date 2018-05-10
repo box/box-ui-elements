@@ -325,6 +325,21 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Title for the preview details sidebar.',
         defaultMessage: 'Details'
     },
+    sidebarSkillsTitle: {
+        id: 'be.sidebarSkillsTitle',
+        description: 'Title for the preview details skills.',
+        defaultMessage: 'Skills'
+    },
+    sidebarActivityTitle: {
+        id: 'be.sidebarActivityTitle',
+        description: 'Title for the preview activity feed.',
+        defaultMessage: 'Activity'
+    },
+    sidebarMetadataTitle: {
+        id: 'be.sidebarMetadataTitle',
+        description: 'Title for the preview metadata.',
+        defaultMessage: 'Metadata'
+    },
     sidebarProperties: {
         id: 'be.sidebarProperties',
         description: 'Label for file properties section in the preview sidebar',
@@ -740,11 +755,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.fileAccessStatsErrorHeaderMessage',
         description: 'File access stats error message',
         defaultMessage: 'Something went wrong when fetching the access stats.'
-    },
-    activityFeedTitle: {
-        id: 'be.activityFeedTitle',
-        description: 'Title for the Activity Feed tab',
-        defaultMessage: 'Activity'
     },
     previousSegment: {
         id: 'be.previousSegment',
