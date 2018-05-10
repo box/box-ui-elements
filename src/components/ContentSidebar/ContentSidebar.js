@@ -58,7 +58,6 @@ type Props = {
     cache?: Cache,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    activityFeedState?: Array<any>,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onInteraction: Function,
@@ -653,7 +652,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             hasVersions,
             className,
-            activityFeedState,
             onVersionHistoryClick,
             onAccessStatsClick,
             onClassificationClick,
@@ -702,7 +700,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
-                                activityFeedState={activityFeedState}
                                 onAccessStatsClick={onAccessStatsClick}
                                 onClassificationClick={onClassificationClick}
                                 onVersionHistoryClick={onVersionHistoryClick}

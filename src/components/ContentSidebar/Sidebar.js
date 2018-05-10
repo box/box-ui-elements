@@ -34,7 +34,6 @@ type Props = {
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
     onSkillChange: Function,
-    activityFeedState?: Array<any>,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
@@ -127,7 +126,6 @@ class Sidebar extends React.Component<Props, State> {
             onAccessStatsClick,
             onInteraction,
             onDescriptionChange,
-            activityFeedState,
             onSkillChange,
             onClassificationClick,
             onVersionHistoryClick,
@@ -204,7 +202,7 @@ class Sidebar extends React.Component<Props, State> {
                 {view === SIDEBAR_VIEW_ACTIVITY &&
                     hasActivityFeed && (
                         <ActivitySidebar
-                            activityFeedState={activityFeedState}
+                            file={file}
                             tasks={tasks}
                             tasksError={tasksError}
                             comments={comments}
