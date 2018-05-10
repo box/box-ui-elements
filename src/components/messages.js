@@ -325,6 +325,21 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Title for the preview details sidebar.',
         defaultMessage: 'Details'
     },
+    sidebarSkillsTitle: {
+        id: 'be.sidebarSkillsTitle',
+        description: 'Title for the preview details skills.',
+        defaultMessage: 'Skills'
+    },
+    sidebarActivityTitle: {
+        id: 'be.sidebarActivityTitle',
+        description: 'Title for the preview activity feed.',
+        defaultMessage: 'Activity'
+    },
+    sidebarMetadataTitle: {
+        id: 'be.sidebarMetadataTitle',
+        description: 'Title for the preview metadata.',
+        defaultMessage: 'Metadata'
+    },
     sidebarProperties: {
         id: 'be.sidebarProperties',
         description: 'Label for file properties section in the preview sidebar',

@@ -3,14 +3,17 @@ import { mount, shallow } from 'enzyme';
 
 import ActivityFeed from '../ActivityFeed';
 
-const feedState = [
+const comments = [
     {
         type: 'comment',
         id: '123',
         createdAt: 1234567890,
         taggedMessage: 'test @[123:Jeezy] @[10:Kanye West]',
         createdBy: { name: 'Akon', id: 11 }
-    },
+    }
+];
+
+const tasks = [
     {
         type: 'task',
         id: '1234',
@@ -52,7 +55,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should correctly render activity state', () => {
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} feedState={feedState} />);
+        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} comments={comments} tasks={tasks} />);
         expect(wrapper).toMatchSnapshot();
     });
 

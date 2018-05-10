@@ -49,7 +49,11 @@ import {
     SKILL_TIMELINE,
     SKILL_TRANSCRIPT,
     SKILL_KEYVALUE,
-    SIZE_MEDIUM
+    SIZE_MEDIUM,
+    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_METADATA
 } from './constants';
 
 export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
@@ -160,6 +164,7 @@ export type SkillCardEntry = {
 
 export type SkillCard = {
     type: 'skill_card',
+    id: string,
     skill_card_type: SkillCardType,
     title?: string,
     duration?: number,
@@ -450,3 +455,9 @@ export type JsonPatch = {
 };
 
 export type JsonPatchData = Array<JsonPatch>;
+
+export type SidebarView =
+    | typeof SIDEBAR_VIEW_SKILLS
+    | typeof SIDEBAR_VIEW_DETAILS
+    | typeof SIDEBAR_VIEW_METADATA
+    | typeof SIDEBAR_VIEW_ACTIVITY;

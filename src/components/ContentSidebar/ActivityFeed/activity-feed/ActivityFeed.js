@@ -12,21 +12,23 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { User, SelectorItems } from '../../../../flowTypes';
+import type { FileVersions, Comments, Tasks, User, SelectorItems, BoxItem } from '../../../../flowTypes';
 import type {
     CommentHandlers,
     TaskHandlers,
     ContactHandlers,
     VersionHandlers,
-    Item,
     Translations
 } from '../activityFeedFlowTypes';
 
 import './ActivityFeed.scss';
 
 type Props = {
+    file: BoxItem,
+    versions?: FileVersions,
+    comments?: Comments,
+    tasks?: Tasks,
     isLoading?: boolean,
-    feedState: Array<Item>,
     inputState: {
         currentUser?: User,
         approverSelectorContacts?: SelectorItems,
@@ -54,8 +56,7 @@ type State = {
 
 class ActivityFeed extends React.Component<Props, State> {
     static defaultProps = {
-        isLoading: false,
-        feedState: []
+        isLoading: false
     };
 
     state = {
@@ -161,12 +162,14 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { feedState, handlers, inputState, isLoading, permissions, translations } = this.props;
+        const { handlers, inputState, isLoading, permissions, translations } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
         const { currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
+
+        const feedState = [];
 
         return (
             // eslint-disable-next-line
