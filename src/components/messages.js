@@ -744,7 +744,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     currentUserErrorHeaderMessage: {
         id: 'be.currentUserErrorHeaderMessage',
         description: 'Current user error message',
-        defaultMessage: 'Something went wrong when fetching current user.'
+        defaultMessage: 'Something went wrong when fetching the current user.'
     },
     activityFeedTitle: {
         id: 'be.activityFeedTitle',

@@ -20,7 +20,7 @@ class Users extends Base {
      */
     getUrl(id?: string): string {
         const userId = id || 'me';
-        return `${this.getBaseApiUrl()}/users/${userId}?fields=login,avatar_url,name`;
+        return `${this.getBaseApiUrl()}/users/${userId}?fields=login,name`;
     }
 }
 
