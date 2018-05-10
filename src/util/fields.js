@@ -37,6 +37,7 @@ import {
     FIELD_METADATA_CLASSIFICATION,
     FIELD_TASK_ASSIGNMENT_COLLECTION,
     FIELD_IS_COMPLETED,
+    FIELD_MESSAGE,
     FIELD_TAGGED_MESSAGE,
     FIELD_DUE_AT
 } from '../constants';
@@ -92,7 +93,8 @@ export const TASKS_FIELDS_TO_FETCH = [
     FIELD_IS_COMPLETED,
     FIELD_CREATED_AT,
     FIELD_CREATED_BY,
-    FIELD_DUE_AT
+    FIELD_DUE_AT,
+    FIELD_MESSAGE
 ];
 
 // Fields needed to get tasks data
