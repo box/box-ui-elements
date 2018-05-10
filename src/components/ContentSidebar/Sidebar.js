@@ -12,7 +12,16 @@ import { hasSkills as hasSkillsData } from './Skills/skillUtils';
 import { shouldRenderDetailsSidebar } from './sidebarUtil';
 import SidebarNav from './SidebarNav';
 import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
-import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, FileVersions, SidebarView, SelectorItems } from '../../flowTypes';
+import type {
+    FileAccessStats,
+    BoxItem,
+    Errors,
+    Comments,
+    Tasks,
+    FileVersions,
+    SidebarView,
+    SelectorItems
+} from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
@@ -45,15 +54,15 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     accessStats?: FileAccessStats,
     accessStatsError?: Errors,
     fileError?: Errors,
     commentsError?: Errors,
     tasksError?: Errors,
-    getApproverSelectorContacts: Function,
-    getMentionSelectorContacts: Function,
-    approverSelectorContacts: SelectorItems,
-    mentionSelectorContacts: SelectorItems
+    getApproverWithQuery: Function,
+    getMentionWithQuery: Function
 };
 
 type State = {
@@ -147,7 +156,9 @@ class Sidebar extends React.Component<Props, State> {
             tasks,
             tasksError,
             comments,
-            commentsError
+            commentsError,
+            approverSelectorContacts,
+            mentionSelectorContacts
         }: Props = this.props;
 
         const { view } = this.state;
@@ -159,32 +170,6 @@ class Sidebar extends React.Component<Props, State> {
             hasNotices,
             hasVersions
         });
-      
-        const inputState = {
-            currentUser: getPreviewer(),
-            approverSelectorContacts,
-            mentionSelectorContacts
-        };
-
-        const handlers = {
-            comments: {
-                create: onCommentCreate,
-                delete: onCommentDelete
-            },
-            tasks: {
-                create: onTaskCreate,
-                delete: onTaskDelete,
-                edit: onTaskUpdate,
-                onTaskAssignmentUpdate
-            },
-            contacts: {
-                approver: getApproverSelectorContacts,
-                mention: getMentionSelectorContacts
-            },
-            versions: {
-                info: onVersionHistoryClick
-            }
-        };
 
         return (
             <React.Fragment>
@@ -233,11 +218,11 @@ class Sidebar extends React.Component<Props, State> {
                     hasActivityFeed && (
                         <ActivitySidebar
                             file={file}
-                            inputState={inputState}
-                            handlers={handlers}
                             tasks={tasks}
                             tasksError={tasksError}
                             comments={comments}
+                            approverSelectorContacts={approverSelectorContacts}
+                            mentionSelectorContacts={mentionSelectorContacts}
                             commentsError={commentsError}
                             onCommentCreate={onCommentCreate}
                             onCommentDelete={onCommentDelete}

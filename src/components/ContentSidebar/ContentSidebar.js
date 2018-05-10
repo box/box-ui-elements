@@ -20,7 +20,8 @@ import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
     FIELD_METADATA_SKILLS,
-    DEFAULT_COLLAB_DEBOUNCE
+    DEFAULT_COLLAB_DEBOUNCE,
+    DEFAULT_MAX_COLLABORATORS
 } from '../../constants';
 import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
@@ -690,16 +691,17 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Function} successCallback - Fetch success callback
      * @return {void}
      */
-    getApproverSelectorContacts = debounce((searchStr: string): void => {
+    getApproverWithQuery = debounce((searchStr: string): void => {
         // Do not fetch without filter
         if (!searchStr || searchStr.trim() === '') {
             return;
         }
 
         this.api.getFileCollaboratorsAPI(true).markerGet({
-            id: getProp(this.props, 'fileId', null),
+            id: this.props.fileId,
             params: {
-                filter_term: searchStr
+                filter_term: searchStr,
+                limit: DEFAULT_MAX_COLLABORATORS
             },
             successCallback: this.getApproverContactsSuccessCallback,
             errorCallback: this.errorCallback
@@ -713,16 +715,17 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} searchStr - Search string to filter file collaborators by
      * @return {void}
      */
-    getMentionSelectorContacts = debounce((searchStr: string): void => {
+    getMentionWithQuery = debounce((searchStr: string): void => {
         // Do not fetch without filter
         if (!searchStr || searchStr.trim() === '') {
             return;
         }
 
         this.api.getFileCollaboratorsAPI(true).markerGet({
-            id: getProp(this.props, 'fileId', null),
+            id: this.props.fileId,
             params: {
-                filter_term: searchStr
+                filter_term: searchStr,
+                limit: DEFAULT_MAX_COLLABORATORS
             },
             successCallback: this.getMentionContactsSuccessCallback,
             errorCallback: this.errorCallback
@@ -816,8 +819,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskDelete={onTaskDelete}
                                 onTaskUpdate={onTaskUpdate}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                                getApproverSelectorContacts={this.getApproverSelectorContacts}
-                                getMentionSelectorContacts={this.getMentionSelectorContacts}
+                                getApproverWithQuery={this.getApproverWithQuery}
+                                getMentionWithQuery={this.getMentionWithQuery}
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                             />

@@ -29,13 +29,11 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     isLoading?: boolean,
-    inputState: {
-        currentUser: User,
-        approverSelectorContacts?: SelectorItems,
-        mentionSelectorContacts?: SelectorItems,
-        isDisabled?: boolean
-    },
+    currentUser: User,
+    isDisabled?: boolean,
     handlers: {
         comments?: CommentHandlers,
         tasks?: TaskHandlers,
@@ -141,14 +139,22 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { handlers, inputState, isLoading, permissions, translations } = this.props;
+        const {
+            handlers,
+            isLoading,
+            permissions,
+            translations,
+            approverSelectorContacts,
+            mentionSelectorContacts,
+            currentUser,
+            isDisabled
+        } = this.props;
         const { isInputOpen } = this.state;
-        const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
-        const getApproverSelectorContacts = getProp(handlers, 'contacts.approver', false);
-        const getMentionSelectorContacts = getProp(handlers, 'contacts.mention', false);
+        const getApproverWithQuery = getProp(handlers, 'contacts.approver', false);
+        const getMentionWithQuery = getProp(handlers, 'contacts.mention', false);
 
         const feedState = [];
 
@@ -167,6 +173,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <ActiveState
                             handlers={handlers}
                             items={collapseFeedState(feedState)}
+                            isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
                             onCommentDelete={hasCommentPermission ? this.deleteComment : noop}
@@ -174,7 +181,6 @@ class ActivityFeed extends React.Component<Props, State> {
                             onTaskEdit={hasTaskPermission ? this.updateTask : noop}
                             onVersionInfo={this.openVersionHistoryPopup}
                             translations={translations}
-                            inputState={inputState}
                         />
                     )}
                 </div>
@@ -185,16 +191,16 @@ class ActivityFeed extends React.Component<Props, State> {
                                 this.feedContainer.scrollTop = 0;
                             }
                         }}
-                        isDisabled={inputState.isDisabled}
+                        isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
                         className={classNames('bcs-activity-feed-comment-input', {
-                            'bcs-is-disabled': inputState.isDisabled
+                            'bcs-is-disabled': isDisabled
                         })}
                         createComment={hasCommentPermission ? this.createComment : noop}
                         createTask={hasTaskPermission ? this.createTask : noop}
-                        getApproverContactsWithQuery={getApproverSelectorContacts}
-                        getMentionContactsWithQuery={getMentionSelectorContacts}
+                        getApproverContactsWithQuery={getApproverWithQuery}
+                        getMentionContactsWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
                         user={currentUser}
                         onCancel={this.approvalCommentFormCancelHandler}

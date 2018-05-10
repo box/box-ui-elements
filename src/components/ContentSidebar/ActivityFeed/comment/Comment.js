@@ -24,10 +24,10 @@ import messages from '../../../messages';
 
 import './Comment.scss';
 import type {
+    CommentHandlers,
     VersionHandlers,
     ContactHandlers,
     TaskHandlers,
-    InputState,
     Translations
 } from '../activityFeedFlowTypes';
 
@@ -51,11 +51,15 @@ type Props = {
     translatedTaggedMessage?: string,
     translations: Translations,
     handlers: {
+        comments?: CommentHandlers,
         tasks?: TaskHandlers,
         contacts?: ContactHandlers,
         versions?: VersionHandlers
     },
-    inputState: InputState
+    currentUser: User,
+    isDisabled?: boolean,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems
 };
 
 type State = {
@@ -109,9 +113,11 @@ class Comment extends React.Component<Props, State> {
             translatedTaggedMessage,
             translations,
             handlers,
-            inputState
+            currentUser,
+            isDisabled,
+            approverSelectorContacts,
+            mentionSelectorContacts
         } = this.props;
-        const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(createdAt).getTime();
@@ -165,11 +171,11 @@ class Comment extends React.Component<Props, State> {
                         {isEditing ? (
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
-                                isDisabled={inputState.isDisabled}
+                                isDisabled={isDisabled}
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 className={classNames('bcs-activity-feed-comment-input', {
-                                    'bcs-is-disabled': inputState.isDisabled
+                                    'bcs-is-disabled': isDisabled
                                 })}
                                 // createComment={this.createCommentHandler}
                                 updateTask={this.updateTaskHandler}

@@ -9,13 +9,12 @@ import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
 import Keywords from '../keywords';
-import type { User } from '../../../../flowTypes';
+import type { User, SelectorItems } from '../../../../flowTypes';
 import type {
     TaskHandlers,
     CommentHandlers,
     ContactHandlers,
     VersionHandlers,
-    InputState,
     Item,
     Translations
 } from '../activityFeedFlowTypes';
@@ -28,7 +27,8 @@ type Props = {
         contacts?: ContactHandlers,
         versions?: VersionHandlers
     },
-    inputState: InputState,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     items: Array<Item>,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
@@ -47,8 +47,9 @@ const ActiveState = ({
     onTaskAssignmentUpdate,
     onVersionInfo,
     translations,
-    inputState,
-    handlers
+    handlers,
+    approverSelectorContacts,
+    mentionSelectorContacts
 }: Props): Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
@@ -64,8 +65,9 @@ const ActiveState = ({
                                 onDelete={onCommentDelete}
                                 {...item}
                                 translations={translations}
-                                inputState={inputState}
                                 handlers={handlers}
+                                approverSelectorContacts={approverSelectorContacts}
+                                mentionSelectorContacts={mentionSelectorContacts}
                             />
                         </li>
                     );
@@ -79,8 +81,9 @@ const ActiveState = ({
                                 onEdit={onTaskEdit}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                 translations={translations}
-                                inputState={inputState}
                                 handlers={handlers}
+                                approverSelectorContacts={approverSelectorContacts}
+                                mentionSelectorContacts={mentionSelectorContacts}
                             />
                         </li>
                     );

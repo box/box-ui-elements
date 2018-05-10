@@ -25,6 +25,10 @@ type Props = {
     comments?: Comments,
     tasks?: Tasks,
     versions?: FileVersions,
+    currentUser?: User,
+    isDisabled?: boolean,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     commentsError?: Errors,
     tasksError?: Errors
 };
@@ -34,6 +38,10 @@ const ActivitySidebar = ({
     comments,
     tasks,
     versions,
+    currentUser = {},
+    isDisabled = false,
+    approverSelectorContacts,
+    mentionSelectorContacts,
     onCommentCreate,
     onCommentDelete,
     onTaskCreate,
@@ -50,12 +58,10 @@ const ActivitySidebar = ({
             comments={comments}
             tasks={tasks}
             versions={versions}
-            inputState={{
-                // $FlowFixMe
-                currentUser: {},
-                approverSelectorContacts: [],
-                mentionSelectorContacts: []
-            }}
+            approverSelectorContacts={approverSelectorContacts}
+            mentionSelectorContacts={mentionSelectorContacts}
+            currentUser={currentUser}
+            isDisabled={isDisabled}
             handlers={{
                 comments: {
                     create: onCommentCreate,
@@ -68,8 +74,8 @@ const ActivitySidebar = ({
                     onTaskAssignmentUpdate
                 },
                 contacts: {
-                    getApproverWithQuery,
-                    getMentionWithQuery
+                    approver: getApproverWithQuery,
+                    mention: getMentionWithQuery
                 },
                 versions: {
                     info: onVersionHistoryClick
