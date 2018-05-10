@@ -8,51 +8,9 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
   <div
     className="bcs-activity-feed-items-container"
   >
-    <ActiveState
-      currentUser={
-        Object {
-          "id": 10,
-          "name": "Kanye West",
-        }
-      }
-      inputState={
-        Object {
-          "currentUser": Object {
-            "id": 10,
-            "name": "Kanye West",
-          },
-        }
-      }
-      items={
-        Array [
-          Object {
-            "createdAt": 1234567890,
-            "createdBy": Object {
-              "id": 11,
-              "name": "Akon",
-            },
-            "id": "123",
-            "taggedMessage": "test @[123:Jeezy] @[10:Kanye West]",
-            "type": "comment",
-          },
-          Object {
-            "assignees": Array [],
-            "createdAt": 1234567891,
-            "createdBy": Object {
-              "id": 10,
-              "name": "JayZ",
-            },
-            "id": "1234",
-            "taggedMessage": "test",
-            "type": "task",
-          },
-        ]
-      }
-      onCommentDelete={[Function]}
-      onTaskAssignmentUpdate={[Function]}
-      onTaskDelete={[Function]}
-      onTaskEdit={[Function]}
-      onVersionInfo={[Function]}
+    <EmptyState
+      isLoading={false}
+      showCommentMessage={false}
     />
   </div>
 </div>

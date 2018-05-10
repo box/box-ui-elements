@@ -13,13 +13,12 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { User, SelectorItems, BoxItem } from '../../../../flowTypes';
+import type { FileVersions, Comments, Tasks, User, SelectorItems, BoxItem } from '../../../../flowTypes';
 import type {
     CommentHandlers,
     TaskHandlers,
     ContactHandlers,
     VersionHandlers,
-    Item,
     Translations
 } from '../activityFeedFlowTypes';
 
@@ -27,8 +26,10 @@ import './ActivityFeed.scss';
 
 type Props = {
     file: BoxItem,
+    versions?: FileVersions,
+    comments?: Comments,
+    tasks?: Tasks,
     isLoading?: boolean,
-    feedState: Array<Item>,
     inputState: {
         currentUser: User,
         approverSelectorContacts?: SelectorItems,
@@ -54,8 +55,7 @@ type State = {
 
 class ActivityFeed extends React.Component<Props, State> {
     static defaultProps = {
-        isLoading: false,
-        feedState: []
+        isLoading: false
     };
 
     state = {
@@ -141,7 +141,7 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { feedState, handlers, inputState, isLoading, permissions, translations } = this.props;
+        const { handlers, inputState, isLoading, permissions, translations } = this.props;
         const { isInputOpen } = this.state;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
@@ -149,6 +149,8 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasTaskPermission = getProp(permissions, 'tasks', false);
         const getApproverSelectorContacts = getProp(handlers, 'contacts.approver', false);
         const getMentionSelectorContacts = getProp(handlers, 'contacts.mention', false);
+
+        const feedState = [];
 
         return (
             // eslint-disable-next-line

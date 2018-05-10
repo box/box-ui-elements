@@ -41,28 +41,30 @@ const getCardInteractionTarget = ({ skill_card_type }: SkillCard): string => {
 const SidebarSkills = ({ file, getPreviewer, rootElement, appElement, onSkillChange }: Props) => {
     // $FlowFixMe
     const { cards }: SkillCards = file.metadata.global.boxSkillsCards;
-    const validCards: Array<SkillCard> = cards.filter((card: SkillCard) => isValidSkillsCard(card));
     const { permissions = {} }: BoxItem = file;
-    const isSkillEditable = permissions.can_upload;
+    const isSkillEditable = !!permissions.can_upload;
 
-    return validCards.map((card: SkillCard, index: number) => (
-        <SidebarSection
-            key={uniqueId('card_')}
-            interactionTarget={getCardInteractionTarget(card)}
-            title={card.title || <FormattedMessage {...messages[`${card.skill_card_type}Skill`]} />}
-        >
-            <SidebarSkillsCard
-                errorCode={card.error}
-                card={card}
-                cards={validCards}
-                isEditable={isSkillEditable}
-                getPreviewer={getPreviewer}
-                rootElement={rootElement}
-                appElement={appElement}
-                onSkillChange={(...args) => onSkillChange(index, ...args)}
-            />
-        </SidebarSection>
-    ));
+    return cards.map(
+        (card: SkillCard, index: number) =>
+            isValidSkillsCard(card) && (
+                <SidebarSection
+                    key={card.id || uniqueId('card_')}
+                    interactionTarget={getCardInteractionTarget(card)}
+                    title={card.title || <FormattedMessage {...messages[`${card.skill_card_type}Skill`]} />}
+                >
+                    <SidebarSkillsCard
+                        errorCode={card.error}
+                        card={card}
+                        cards={cards}
+                        isEditable={isSkillEditable}
+                        getPreviewer={getPreviewer}
+                        rootElement={rootElement}
+                        appElement={appElement}
+                        onSkillChange={(...args) => onSkillChange(index, ...args)}
+                    />
+                </SidebarSection>
+            )
+    );
 };
 
 export default SidebarSkills;

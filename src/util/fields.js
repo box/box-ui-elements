@@ -34,7 +34,12 @@ import {
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_VERSION_NUMBER,
     FIELD_METADATA_SKILLS,
-    FIELD_METADATA_CLASSIFICATION
+    FIELD_METADATA_CLASSIFICATION,
+    FIELD_TASK_ASSIGNMENT_COLLECTION,
+    FIELD_IS_COMPLETED,
+    FIELD_MESSAGE,
+    FIELD_TAGGED_MESSAGE,
+    FIELD_DUE_AT
 } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
@@ -81,6 +86,19 @@ const PREVIEW_FIELDS_TO_FETCH = [
     FIELD_FILE_VERSION,
     FIELD_IS_DOWNLOAD_AVAILABLE
 ];
+
+// Fields needed to get tasks data
+export const TASKS_FIELDS_TO_FETCH = [
+    FIELD_TASK_ASSIGNMENT_COLLECTION,
+    FIELD_IS_COMPLETED,
+    FIELD_CREATED_AT,
+    FIELD_CREATED_BY,
+    FIELD_DUE_AT,
+    FIELD_MESSAGE
+];
+
+// Fields needed to get tasks data
+export const COMMENTS_FIELDS_TO_FETCH = [FIELD_TAGGED_MESSAGE, FIELD_CREATED_AT, FIELD_CREATED_BY];
 
 /**
  * Returns all the fields that can be fetched

@@ -96,6 +96,13 @@ export const FIELD_IS_DOWNLOAD_AVAILABLE = 'is_download_available';
 export const FIELD_VERSION_NUMBER = 'version_number';
 export const FIELD_METADATA_SKILLS = 'metadata.global.boxSkillsCards';
 export const FIELD_METADATA_CLASSIFICATION = `metadata.enterprise.${KEY_CLASSIFICATION}`;
+export const FIELD_DUE_AT = 'due_at';
+export const FIELD_TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
+export const FIELD_IS_COMPLETED = 'is_completed';
+export const FIELD_MESSAGE = 'message';
+export const FIELD_TAGGED_MESSAGE = 'tagged_message';
+export const METADATA_SKILLS = 'metadata.global.boxSkillsCards';
+export const METADATA_CLASSIFICATION = 'metadata.enterprise.securityClassification-6VMVochwUWo';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -190,3 +197,9 @@ export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
 
 /* ------------------ File Extensions  ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
+
+/* ------------------ Sidebar View  ---------------------- */
+export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
+export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
+export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
+export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';

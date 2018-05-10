@@ -78,8 +78,7 @@ type Props = {
 };
 
 type State = {
-    file?: BoxItem,
-    isSidebarVisible: boolean
+    file?: BoxItem
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -87,7 +86,7 @@ const InvalidIdError = new Error('Invalid id for Preview!');
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
     props: Props;
-    state: State;
+    state: State = {};
     preview: any;
     api: API;
     previewContainer: ?HTMLDivElement;
@@ -128,18 +127,15 @@ class ContentPreview extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         const {
-            hasSidebar,
             cache,
             token,
             sharedLink,
             sharedLinkPassword,
             apiHost,
-            isSmall,
             requestInterceptor,
             responseInterceptor
         } = props;
 
-        this.state = { isSidebarVisible: hasSidebar && !isSmall };
         this.id = uniqueid('bcpr_');
         this.api = new API({
             cache,
@@ -170,11 +166,9 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { fileId, token, isSmall, hasSidebar }: Props = this.props;
-
+        const { fileId, token }: Props = this.props;
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
-        const hasSizeChanged = nextProps.isSmall !== isSmall;
 
         if (hasTokenChanged || hasFileIdChanged) {
             this.destroyPreview();
@@ -182,12 +176,6 @@ class ContentPreview extends PureComponent<Props, State> {
                 file: undefined
             });
             this.fetchFile(nextProps.fileId);
-        }
-
-        if (hasSizeChanged) {
-            this.setState({
-                isSidebarVisible: hasSidebar && !nextProps.isSmall
-            });
         }
     }
 
@@ -501,20 +489,6 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
-     * Handles showing or hiding of the sidebar.
-     * Only used when isSidebarVisible isnt passed in as prop.
-     *
-     * @private
-     * @return {void}
-     */
-    toggleSidebar = (show: ?boolean): void => {
-        const { hasSidebar }: Props = this.props;
-        this.setState((prevState) => ({
-            isSidebarVisible: typeof show === 'boolean' ? hasSidebar && show : hasSidebar && !prevState.isSidebarVisible
-        }));
-    };
-
-    /**
      * Finds the index of current file inside the collection
      *
      * @return {number} -1 if not indexed
@@ -728,28 +702,13 @@ class ContentPreview extends PureComponent<Props, State> {
             responseInterceptor
         }: Props = this.props;
 
-        const { file, isSidebarVisible: showSidebarState }: State = this.state;
+        const { file }: State = this.state;
         const { collection }: Props = this.props;
-        const { isVisible } = contentSidebarProps;
-
         const fileIndex = this.getFileIndex();
         const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
         const hasRightNavigation = collection.length > 1 && fileIndex > -1 && fileIndex < collection.length - 1;
         const isValidFile = isValidBoxFile(file, true, true);
-
-        // By default assume sidebar is controlled by preview and not by preview's parent
-        const doesSidebarHaveAnythingToRender = shouldRenderSidebar(contentSidebarProps);
-        let isSidebarVisible = isValidFile && hasSidebar && showSidebarState && doesSidebarHaveAnythingToRender;
-        let hasSidebarButton = hasSidebar && doesSidebarHaveAnythingToRender;
-        let onSidebarToggle = this.toggleSidebar;
-
-        if (typeof isVisible === 'boolean') {
-            // The parent component passed in the isVisible sidebar property.
-            // Sidebar should be controlled by the parent and not by local state.
-            isSidebarVisible = isValidFile && hasSidebar && doesSidebarHaveAnythingToRender;
-            hasSidebarButton = false;
-            onSidebarToggle = null;
-        }
+        const isSidebarVisible = isValidFile && hasSidebar && shouldRenderSidebar(contentSidebarProps);
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -765,10 +724,7 @@ class ContentPreview extends PureComponent<Props, State> {
                     {hasHeader && (
                         <Header
                             file={file}
-                            hasSidebarButton={hasSidebarButton}
-                            isSidebarVisible={isSidebarVisible}
                             onClose={onClose}
-                            onSidebarToggle={onSidebarToggle}
                             onPrint={this.print}
                             canDownload={this.canDownload()}
                             onDownload={this.download}
