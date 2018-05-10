@@ -466,8 +466,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} currentUser - User info object
      * @return {void}
      */
-    fetchCurrentUserSuccessCallback = (currentUser: User): void => {
-        this.setState({ currentUser, currentUserError: undefined });
+    fetchCurrentUserSuccessCallback = (/* user: User */): void => {
+        // massage user object before setting state. IE) email -> login change
+        // set state of currentUser to transformed user object
     };
 
     /**
