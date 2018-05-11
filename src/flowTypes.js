@@ -109,8 +109,6 @@ export type BoxItemPermission = {
 };
 
 export type User = {
-    avatarUrl: string,
-    email: string,
     id: string,
     login: string,
     name: string,

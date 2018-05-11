@@ -22,6 +22,19 @@ class Users extends Base {
         const userId = id || 'me';
         return `${this.getBaseApiUrl()}/users/${userId}`;
     }
+
+    /**
+     * API URL for Users avatar
+     *
+     * @param {string} [id] - A box user id.
+     * @return {string} base url for users
+     */
+    getAvatarUrl(id: string): string {
+        if (!id) {
+            throw new Error('Missing user id');
+        }
+        return `${this.getUrl(id)}/avatar`;
+    }
 }
 
 export default Users;

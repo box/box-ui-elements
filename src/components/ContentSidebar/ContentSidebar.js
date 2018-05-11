@@ -19,6 +19,8 @@ import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, FIELD_METADATA_SKILL
 import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
+import TokenService from '../../util/TokenService';
+import { getTypedFileId } from '../../util/file';
 import type {
     FileAccessStats,
     Token,
@@ -31,7 +33,8 @@ import type {
     User,
     SkillCard,
     SkillCardEntry,
-    JsonPatchData
+    JsonPatchData,
+    TokenLiteral
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -148,6 +151,27 @@ class ContentSidebar extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor
         });
+    }
+
+    /**
+     * Gets the user avatar URL
+     *
+     * @param {string} id the user id
+     * @return the user avatar URL string for a given user with access token attached
+     */
+    async getAvatarUrl(id: string): Promise<?string> {
+        const { token, fileId }: Props = this.props;
+
+        if (fileId) {
+            const accessToken: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), token);
+            if (typeof accessToken === 'string') {
+                const avatarUrl = this.api.getUsersAPI(false).getAvatarUrl(id);
+
+                return `${avatarUrl}?access_token=${accessToken}`;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -781,6 +805,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                 getApproverWithQuery={getApproverWithQuery}
                                 getMentionWithQuery={getMentionWithQuery}
+                                getAvatarUrl={this.getAvatarUrl}
                             />
                         ) : (
                             <div className='bcs-loading'>
