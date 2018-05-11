@@ -59,10 +59,7 @@ const ActiveState = ({
                     return (
                         <li className='bcs-activity-feed-comment' key={type + id}>
                             <Comment
-                                id={id}
-                                createdBy={item.created_by}
-                                createdAt={item.created_at}
-                                taggedMessage={item.tagged_message}
+                                {...item}
                                 currentUser={currentUser}
                                 onDelete={onCommentDelete}
                                 translations={translations}
@@ -75,12 +72,8 @@ const ActiveState = ({
                     return (
                         <li className='bcs-activity-feed-task' key={type + id}>
                             <Task
+                                {...item}
                                 currentUser={currentUser}
-                                createdBy={item.created_by}
-                                createdAt={item.created_at}
-                                dueAt={item.due_at}
-                                taggedMessage={item.message}
-                                assignees={item.task_assignment_collection.entries}
                                 onDelete={onTaskDelete}
                                 onEdit={onTaskEdit}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
@@ -94,9 +87,9 @@ const ActiveState = ({
                     return (
                         <li className='bcs-version-item' key={type + id}>
                             {versions ? (
-                                <CollapsedVersion {...item} modifiedBy={item.modified_by} onInfo={onVersionInfo} />
+                                <CollapsedVersion {...item} onInfo={onVersionInfo} />
                             ) : (
-                                <Version {...item} modifiedBy={item.modified_by} onInfo={onVersionInfo} />
+                                <Version {...item} onInfo={onVersionInfo} />
                             )}
                         </li>
                     );

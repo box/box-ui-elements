@@ -102,7 +102,7 @@ class OffsetBasedApi extends Base {
                 return this.offsetGetRequest();
             }
 
-            this.successHandler(this.data);
+            this.successHandler(this.formatResponse(this.data));
         } catch (error) {
             this.errorHandler(error);
         }

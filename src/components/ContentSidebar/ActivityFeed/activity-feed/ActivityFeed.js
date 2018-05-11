@@ -172,7 +172,10 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
 
-        const feedState = [].concat(comments, tasks, versions);
+        let feedState = [];
+        feedState = comments ? feedState.concat(comments) : feedState;
+        feedState = tasks ? feedState.concat(tasks) : feedState;
+        feedState = versions ? feedState.concat(versions) : feedState;
 
         return (
             // eslint-disable-next-line

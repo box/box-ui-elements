@@ -19,6 +19,26 @@ class Tasks extends Base {
         }
         return `${this.getBaseApiUrl()}/files/${id}/tasks`;
     }
+
+    /**
+     * Formats the tasks api response to usable data
+     * @param {Object} response the api response data
+     * @return {Object} the formatted api response data
+     */
+    formatResponse(response: Object): Object {
+        const formattedEntries = response.entries.map((task) => ({
+            createdAt: task.created_at,
+            dueAt: task.due_at,
+            taggedMessage: task.message, // TODO: Replace w/ tagged_message when available,
+            assignees: task.task_assignment_collection.entries,
+            ...task
+        }));
+
+        return {
+            ...response,
+            entries: formattedEntries
+        };
+    }
 }
 
 export default Tasks;

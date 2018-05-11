@@ -19,6 +19,34 @@ class Versions extends OffsetBasedAPI {
         }
         return `${this.getBaseApiUrl()}/files/${id}/versions`;
     }
+
+    /**
+     * Formats the versions api response to usable data
+     * @param {Object} response the api response data
+     * @return {Object} the formatted api response data
+     */
+    formatResponse(response: Object): Object {
+        const { entries } = response;
+
+        const formattedEntries = entries.reverse().map((version, index) => {
+            let action = 'upload';
+            if (version.trashed_at) {
+                action = 'delete';
+            }
+
+            return {
+                versionNumber: index + 1, // adjust for offset
+                action,
+                modifiedBy: version.modified_by,
+                ...version
+            };
+        });
+
+        return {
+            ...response,
+            entries: formattedEntries
+        };
+    }
 }
 
 export default Versions;

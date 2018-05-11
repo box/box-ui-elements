@@ -426,31 +426,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchVersionsSuccessCallback = (versions: FileVersions): void => {
-        const { entries } = versions;
-
-        const sortedVersions = entries.sort((a, b) => {
-            const aDate = new Date(a.created_at);
-            const bDate = new Date(b.created_at);
-            if (aDate < bDate) {
-                return -1;
-            }
-            return aDate > bDate ? 1 : 0;
-        });
-
-        const parsedVersions = sortedVersions.map((version, index) => {
-            let action = 'upload';
-            if (version.trashed_at) {
-                action = 'delete';
-            }
-
-            return {
-                versionNumber: index + 1, // adjust for offset
-                action,
-                createdBy: version.modified_by,
-                ...version
-            };
-        });
-        this.setState({ versions: parsedVersions, versionError: undefined });
+        this.setState({ versions: versions.entries, versionError: undefined });
     };
 
     /**
