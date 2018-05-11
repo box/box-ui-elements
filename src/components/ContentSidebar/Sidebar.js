@@ -9,13 +9,23 @@ import DetailsSidebar from './DetailsSidebar';
 import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
+import type {
+    FileAccessStats,
+    BoxItem,
+    Errors,
+    Comments,
+    Tasks,
+    User,
+    FileVersions,
+    SidebarView
+} from '../../flowTypes';
 import { shouldRenderDetailsSidebar } from './sidebarUtil';
 import SidebarNav from './SidebarNav';
 import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
-import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, FileVersions, SidebarView } from '../../flowTypes';
 import './Sidebar.scss';
 
 type Props = {
+    currentUser?: User,
     file: BoxItem,
     getPreviewer: Function,
     hasSkills: boolean,
@@ -49,7 +59,8 @@ type Props = {
     accessStatsError?: Errors,
     fileError?: Errors,
     commentsError?: Errors,
-    tasksError?: Errors
+    tasksError?: Errors,
+    currentUserError?: Errors
 };
 
 type State = {

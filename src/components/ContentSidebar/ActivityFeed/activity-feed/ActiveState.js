@@ -21,7 +21,7 @@ import type {
 } from '../activityFeedFlowTypes';
 
 type Props = {
-    currentUser: User,
+    currentUser?: User,
     handlers: {
         comments?: CommentHandlers,
         tasks?: TaskHandlers,
