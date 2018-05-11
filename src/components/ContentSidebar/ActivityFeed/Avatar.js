@@ -53,7 +53,7 @@ class Avatar extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { user, getAvatarUrl }: Props = this.props;
+        const { user }: Props = this.props;
         const { avatarUrl }: State = this.state;
 
         if (!avatarUrl) {
@@ -62,7 +62,7 @@ class Avatar extends React.PureComponent<Props, State> {
 
         const { id, name } = user;
 
-        return <AvatarComponent id={id} name={name} avatarUrl={getAvatarUrl(id)} />;
+        return <AvatarComponent id={id} name={name} avatarUrl={avatarUrl} />;
     }
 }
 
