@@ -30,7 +30,7 @@ type Props = {
     tasks?: Tasks,
     isLoading?: boolean,
     inputState: {
-        currentUser: User,
+        currentUser?: User,
         approverSelectorContacts?: SelectorItems,
         mentionSelectorContacts?: SelectorItems,
         isDisabled?: boolean
