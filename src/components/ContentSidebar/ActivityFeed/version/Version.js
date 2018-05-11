@@ -53,16 +53,16 @@ function getMessageForAction(name: React.Node, action: string, versionNumber: nu
 
 type Props = {
     action: 'delete' | 'restore' | 'upload',
-    createdBy: User,
+    modifiedBy: User,
     id: string,
     intl: any,
     onInfo: Function,
     versionNumber: number
 };
 
-const Version = ({ action, createdBy, id, intl, onInfo, versionNumber }: Props): React.Node => (
+const Version = ({ action, modifiedBy, id, intl, onInfo, versionNumber }: Props): React.Node => (
     <div className='bcs-version'>
-        <span className='bcs-version-message'>{getMessageForAction(createdBy.name, action, versionNumber)}</span>
+        <span className='bcs-version-message'>{getMessageForAction(modifiedBy.name, action, versionNumber)}</span>
         {onInfo ? (
             <span className='bcs-version-actions'>
                 <PlainButton

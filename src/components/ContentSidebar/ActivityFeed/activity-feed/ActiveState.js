@@ -60,9 +60,11 @@ const ActiveState = ({
                         <li className='bcs-activity-feed-comment' key={type + id}>
                             <Comment
                                 id={id}
+                                createdBy={item.created_by}
+                                createdAt={item.created_at}
+                                taggedMessage={item.tagged_message}
                                 currentUser={currentUser}
                                 onDelete={onCommentDelete}
-                                {...item}
                                 translations={translations}
                                 inputState={inputState}
                                 handlers={handlers}
@@ -74,7 +76,12 @@ const ActiveState = ({
                         <li className='bcs-activity-feed-task' key={type + id}>
                             <Task
                                 currentUser={currentUser}
-                                {...item}
+                                createdBy={item.created_by}
+                                createdAt={item.created_at}
+                                dueAt={item.due_at}
+                                // TODO: use taggedMessage once API returns appropriate field
+                                taggedMessage={item.message}
+                                assignees={item.task_assignment_collection.entries}
                                 onDelete={onTaskDelete}
                                 onEdit={onTaskEdit}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
@@ -88,9 +95,9 @@ const ActiveState = ({
                     return (
                         <li className='bcs-version-item' key={type + id}>
                             {versions ? (
-                                <CollapsedVersion {...item} onInfo={onVersionInfo} />
+                                <CollapsedVersion {...item} modifiedBy={item.modified_by} onInfo={onVersionInfo} />
                             ) : (
-                                <Version {...item} onInfo={onVersionInfo} />
+                                <Version {...item} modifiedBy={item.modified_by} onInfo={onVersionInfo} />
                             )}
                         </li>
                     );

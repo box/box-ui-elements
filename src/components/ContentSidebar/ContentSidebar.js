@@ -16,7 +16,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, FIELD_METADATA_SKILLS } from '../../constants';
-import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH } from '../../util/fields';
+import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
 import type {
@@ -216,7 +216,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                     fields: COMMENTS_FIELDS_TO_FETCH
                 });
                 this.fetchTasks(fileId);
-                this.fetchVersions(fileId);
+                this.fetchVersions({
+                    id: fileId,
+                    fields: VERSIONS_FIELDS_TO_FETCH
+                });
             }
         }
     }
@@ -397,7 +400,31 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchVersionsSuccessCallback = (versions: FileVersions): void => {
-        this.setState({ versions, versionError: undefined });
+        const { entries } = versions;
+
+        const sortedVersions = entries.sort((a, b) => {
+            const aDate = new Date(a.created_at);
+            const bDate = new Date(b.created_at);
+            if (aDate < bDate) {
+                return -1;
+            }
+            return aDate > bDate ? 1 : 0;
+        });
+
+        const parsedVersions = sortedVersions.map((version, index) => {
+            let action = 'upload';
+            if (version.trashed_at) {
+                action = 'delete';
+            }
+
+            return {
+                versionNumber: index + 1, // adjust for offset
+                action,
+                createdBy: version.modified_by,
+                ...version
+            };
+        });
+        this.setState({ versions: parsedVersions, versionError: undefined });
     };
 
     /**
@@ -408,7 +435,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCommentsSuccessCallback = (comments: Comments): void => {
-        this.setState({ comments, commentsError: undefined });
+        this.setState({ comments: comments.entries, commentsError: undefined });
     };
 
     /**
@@ -419,7 +446,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTasksSuccessCallback = (tasks: Tasks): void => {
-        this.setState({ tasks, tasksError: undefined });
+        this.setState({ tasks: tasks.entries, tasksError: undefined });
     };
 
     /**
@@ -459,14 +486,21 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      * @return {void}
      */
-    fetchVersions(
+    fetchVersions({
+        id,
+        shouldDestroy = false,
+        offset = 0,
+        limit = 1000,
+        fields,
+        shouldFetchAll = true
+    }: {
         id: string,
-        shouldDestroy?: boolean = false,
-        offset: number = 0,
-        limit: number = 1000,
+        shouldDestroy?: boolean,
+        offset?: number,
+        limit?: number,
         fields?: Array<string>,
-        shouldFetchAll?: boolean = true
-    ): void {
+        shouldFetchAll?: boolean
+    }): void {
         if (shouldRenderSidebar(this.props)) {
             this.api
                 .getVersionsAPI(shouldDestroy)
@@ -667,9 +701,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         const {
             file,
             accessStats,
-            versions,
-            comments,
-            tasks,
+            versions = [],
+            comments = [],
+            tasks = [],
             accessStatsError,
             fileError,
             versionError,

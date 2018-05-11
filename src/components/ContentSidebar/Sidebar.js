@@ -143,7 +143,8 @@ class Sidebar extends React.Component<Props, State> {
             tasks,
             tasksError,
             comments,
-            commentsError
+            commentsError,
+            versions
         }: Props = this.props;
 
         const { view } = this.state;
@@ -207,6 +208,7 @@ class Sidebar extends React.Component<Props, State> {
                             tasksError={tasksError}
                             comments={comments}
                             commentsError={commentsError}
+                            versions={versions}
                             onCommentCreate={onCommentCreate}
                             onCommentDelete={onCommentDelete}
                             onTaskCreate={onTaskCreate}

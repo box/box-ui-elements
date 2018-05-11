@@ -39,7 +39,8 @@ import {
     FIELD_IS_COMPLETED,
     FIELD_MESSAGE,
     FIELD_TAGGED_MESSAGE,
-    FIELD_DUE_AT
+    FIELD_DUE_AT,
+    FIELD_TRASHED_AT
 } from '../constants';
 import type { BoxItem } from '../flowTypes';
 
@@ -96,6 +97,9 @@ export const TASKS_FIELDS_TO_FETCH = [
     FIELD_DUE_AT,
     FIELD_MESSAGE
 ];
+
+// Fields needed to get tasks data
+export const VERSIONS_FIELDS_TO_FETCH = [FIELD_TRASHED_AT, FIELD_CREATED_AT, FIELD_MODIFIED_AT, FIELD_MODIFIED_BY];
 
 // Fields needed to get tasks data
 export const COMMENTS_FIELDS_TO_FETCH = [FIELD_TAGGED_MESSAGE, FIELD_CREATED_AT, FIELD_CREATED_BY];
