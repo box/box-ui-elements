@@ -79,7 +79,6 @@ const ActiveState = ({
                                 createdBy={item.created_by}
                                 createdAt={item.created_at}
                                 dueAt={item.due_at}
-                                // TODO: use taggedMessage once API returns appropriate field
                                 taggedMessage={item.message}
                                 assignees={item.task_assignment_collection.entries}
                                 onDelete={onTaskDelete}

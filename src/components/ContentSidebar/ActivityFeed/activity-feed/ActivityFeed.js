@@ -56,7 +56,10 @@ type State = {
 
 class ActivityFeed extends React.Component<Props, State> {
     static defaultProps = {
-        isLoading: false
+        isLoading: false,
+        comments: [],
+        tasks: [],
+        versions: []
     };
 
     state = {

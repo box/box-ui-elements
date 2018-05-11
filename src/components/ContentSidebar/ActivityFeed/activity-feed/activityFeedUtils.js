@@ -24,24 +24,24 @@ export function collapseFeedState(feedState: Array<Item>): Array<Item> {
             previousFeedItem.action === ItemTypes.upload
         ) {
             const {
-                createdBy: prevCreatedBy,
+                modifiedBy: prevModifiedBy,
                 versions = [previousFeedItem],
                 versionStart = previousFeedItem.versionNumber,
                 versionEnd = previousFeedItem.versionNumber
             } = previousFeedItem;
-            const { action, createdBy, id, versionNumber } = feedItem;
+            const { action, modifiedBy, id, versionNumber } = feedItem;
             const collaborators = previousFeedItem.collaborators || {
-                [prevCreatedBy.id]: { ...prevCreatedBy }
+                [prevModifiedBy.id]: { ...prevModifiedBy }
             };
 
             // add collaborators
-            collaborators[createdBy.id] = { ...createdBy };
+            collaborators[modifiedBy.id] = { ...modifiedBy };
 
             return collapsedFeedState.concat([
                 {
                     action,
                     collaborators,
-                    createdBy,
+                    modifiedBy,
                     id,
                     type: ItemTypes.fileVersion,
                     versionNumber,
