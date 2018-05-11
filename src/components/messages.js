@@ -756,6 +756,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'File access stats error message',
         defaultMessage: 'Something went wrong when fetching the access stats.'
     },
+    currentUserErrorHeaderMessage: {
+        id: 'be.currentUserErrorHeaderMessage',
+        description: 'Current user error message',
+        defaultMessage: 'Something went wrong when fetching the current user.'
+    },
     previousSegment: {
         id: 'be.previousSegment',
         description: 'Title for previous segment on skill timeline',

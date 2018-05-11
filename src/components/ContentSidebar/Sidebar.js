@@ -9,22 +9,24 @@ import DetailsSidebar from './DetailsSidebar';
 import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
-import { shouldRenderDetailsSidebar } from './sidebarUtil';
-import SidebarNav from './SidebarNav';
-import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
 import type {
     FileAccessStats,
     BoxItem,
     Errors,
     Comments,
     Tasks,
+    User,
     FileVersions,
     SidebarView,
     SelectorItems
 } from '../../flowTypes';
+import { shouldRenderDetailsSidebar } from './sidebarUtil';
+import SidebarNav from './SidebarNav';
+import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
 import './Sidebar.scss';
 
 type Props = {
+    currentUser?: User,
     file: BoxItem,
     getPreviewer: Function,
     hasSkills: boolean,
@@ -61,8 +63,7 @@ type Props = {
     fileError?: Errors,
     commentsError?: Errors,
     tasksError?: Errors,
-    getApproverWithQuery: Function,
-    getMentionWithQuery: Function
+    currentUserError?: Errors
 };
 
 type State = {

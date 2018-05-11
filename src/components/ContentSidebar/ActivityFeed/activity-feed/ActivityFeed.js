@@ -32,7 +32,7 @@ type Props = {
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     isLoading?: boolean,
-    currentUser: User,
+    currentUser?: User,
     isDisabled?: boolean,
     handlers: {
         comments?: CommentHandlers,
