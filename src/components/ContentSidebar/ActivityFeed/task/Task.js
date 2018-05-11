@@ -47,7 +47,6 @@ type Props = {
         versions?: VersionHandlers
     },
     id: string,
-    inputState: InputState,
     isPending: boolean,
     onDelete: Function,
     onEdit: Function,
@@ -79,7 +78,6 @@ class Task extends React.Component<Props> {
             error,
             handlers,
             id,
-            inputState,
             isPending,
             onDelete,
             onEdit,
@@ -100,7 +98,6 @@ class Task extends React.Component<Props> {
                     error={error}
                     handlers={handlers}
                     id={id}
-                    inputState={inputState}
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}
