@@ -32,16 +32,6 @@ class Avatar extends React.PureComponent<Props, State> {
         });
     }
 
-    componentWillReceiveProps(nextProps: Props) {
-        if (this.props.user !== nextProps.user) {
-            // if the user object changes, clear out the state and get the new avatar url
-            this.setState({
-                avatarUrl: null
-            });
-            this.getAvatarUrl();
-        }
-    }
-
     getAvatarUrl() {
         const { user, getAvatarUrl }: Props = this.props;
 
