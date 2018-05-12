@@ -14,6 +14,7 @@ import CommentsAPI from '../Comments';
 import TasksAPI from '../Tasks';
 import FileAccessStatsAPI from '../FileAccessStats';
 import MetadataAPI from '../Metadata';
+import FileCollaboratorsAPI from '../FileCollaborators';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -273,6 +274,28 @@ describe('api/APIFactory', () => {
             expect(metadataAPI.options.cache).toBeInstanceOf(Cache);
             expect(metadataAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(metadataAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getFileCollaboratorsAPI()', () => {
+        test('should call destroy and return file collaborators API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const fileCollaboratorsAPI = factory.getFileCollaboratorsAPI(true);
+            expect(spy).toBeCalled();
+            expect(fileCollaboratorsAPI).toBeInstanceOf(FileCollaboratorsAPI);
+            expect(fileCollaboratorsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileCollaboratorsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileCollaboratorsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return file collaborators API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const fileCollaboratorsAPI = factory.getFileCollaboratorsAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(fileCollaboratorsAPI).toBeInstanceOf(FileCollaboratorsAPI);
+            expect(fileCollaboratorsAPI.options.cache).toBeInstanceOf(Cache);
+            expect(fileCollaboratorsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(fileCollaboratorsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

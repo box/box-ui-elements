@@ -153,8 +153,8 @@ class ActivityFeed extends React.Component<Props, State> {
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
-        const getApproverWithQuery = getProp(handlers, 'contacts.approver', false);
-        const getMentionWithQuery = getProp(handlers, 'contacts.mention', false);
+        const getApproverWithQuery = getProp(handlers, 'contacts.approver', noop);
+        const getMentionWithQuery = getProp(handlers, 'contacts.mention', noop);
 
         const feedState = [];
 
