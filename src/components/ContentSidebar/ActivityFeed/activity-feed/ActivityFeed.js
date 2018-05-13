@@ -8,7 +8,6 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 
-import FileCollaborators from '../../../../api/FileCollaborators';
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';

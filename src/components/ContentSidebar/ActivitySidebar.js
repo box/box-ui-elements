@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
-import type { Errors, Comments, Tasks, FileVersions, BoxItem } from '../../flowTypes';
+import type { Errors, Comments, Tasks, FileVersions, BoxItem, User, SelectorItems } from '../../flowTypes';
 
 type Props = {
     file: BoxItem,
@@ -38,7 +38,7 @@ const ActivitySidebar = ({
     comments,
     tasks,
     versions,
-    currentUser = {},
+    currentUser,
     isDisabled = false,
     approverSelectorContacts,
     mentionSelectorContacts,

@@ -36,10 +36,10 @@ import type {
     Comments,
     Tasks,
     User,
+    Collaborators,
     SkillCard,
     SkillCardEntry,
     JsonPatchData,
-    UserCollection,
     SelectorItems
 } from '../../flowTypes';
 import '../fonts.scss';
@@ -90,13 +90,13 @@ type State = {
     comments?: Comments,
     tasks?: Tasks,
     currentUser?: User,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
     versionError?: Errors,
     commentsError?: Errors,
     tasksError?: Errors,
     accessStatsError?: Errors,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     currentUserError?: Errors
 };
 
@@ -481,6 +481,30 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * File approver contacts fetch success callback
+     *
+     * @private
+     * @param {BoxItemCollection} data - Collaborators response data
+     * @return {void}
+     */
+    getApproverContactsSuccessCallback = (collaborators: Collaborators): void => {
+        const { entries } = collaborators;
+        this.setState({ approverSelectorContacts: entries });
+    };
+
+    /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
+     * @param {BoxItemCollection} data - Collaborators response data
+     * @return {void}
+     */
+    getMentionContactsSuccessCallback = (collaborators: Collaborators): void => {
+        const { entries } = collaborators;
+        this.setState({ mentionSelectorContacts: entries });
+    };
+
+    /**
      * Fetches a file
      *
      * @private
@@ -698,28 +722,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * File approver contacts fetch success callback
-     *
-     * @private
-     * @param {BoxItemCollection} data - Collaborators response data
-     * @return {void}
-     */
-    getApproverContactsSuccessCallback = (collaborators: UserCollection): void => {
-        this.setState({ approverSelectorContacts: collaborators.entries });
-    };
-
-    /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
-     * @param {BoxItemCollection} data - Collaborators response data
-     * @return {void}
-     */
-    getMentionContactsSuccessCallback = (collaborators: UserCollection): void => {
-        this.setState({ mentionSelectorContacts: collaborators.entries });
-    };
-
-    /**
      * File @mention contacts fetch success callback
      *
      * @private
@@ -730,12 +732,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     getApproverWithQuery = debounce((searchStr: string): void => {
         // Do not fetch without filter
-        if (!searchStr || searchStr.trim() === '') {
+        const { fileId } = this.props;
+        if (!searchStr || searchStr.trim() === '' || !fileId) {
             return;
         }
 
         this.api.getFileCollaboratorsAPI(true).markerGet({
-            id: this.props.fileId,
+            id: fileId,
             params: {
                 filter_term: searchStr,
                 limit: DEFAULT_MAX_COLLABORATORS
@@ -754,12 +757,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     getMentionWithQuery = debounce((searchStr: string): void => {
         // Do not fetch without filter
-        if (!searchStr || searchStr.trim() === '') {
+        const { fileId } = this.props;
+        if (!searchStr || searchStr.trim() === '' || !fileId) {
             return;
         }
 
         this.api.getFileCollaboratorsAPI(true).markerGet({
-            id: this.props.fileId,
+            id: fileId,
             params: {
                 filter_term: searchStr,
                 limit: DEFAULT_MAX_COLLABORATORS

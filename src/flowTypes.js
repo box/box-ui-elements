@@ -463,6 +463,11 @@ export type Comments = {
     entries: Array<Comment>
 };
 
+export type Collaborators = {
+    next_marker: 'string' | null,
+    entries: Array<SelectorItem>
+};
+
 export type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',
     path: string,

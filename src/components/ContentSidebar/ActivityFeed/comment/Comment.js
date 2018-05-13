@@ -13,7 +13,7 @@ import { Link } from 'box-react-ui/lib/components/link';
 import { ReadableTime } from 'box-react-ui/lib/components/time';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
-import type { ActionItemError, User } from '../../../../flowTypes';
+import type { ActionItemError, User, SelectorItems } from '../../../../flowTypes';
 import InlineDelete from './InlineDelete';
 import InlineEdit from './InlineEdit';
 import CommentInlineError from './CommentInlineError';
