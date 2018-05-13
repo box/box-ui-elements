@@ -17,9 +17,9 @@ const tasks = [
     {
         type: 'task',
         id: '1234',
-        createdAt: 1234567891,
+        modifiedAt: 1234567891,
         taggedMessage: 'test',
-        createdBy: { name: 'JayZ', id: 10 },
+        modifiedBt: { name: 'JayZ', id: 10 },
         assignees: []
     }
 ];

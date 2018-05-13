@@ -38,6 +38,7 @@ class Versions extends OffsetBasedAPI {
                 versionNumber: index + 1, // adjust for offset
                 action,
                 modifiedBy: version.modified_by,
+                modifiedAt: version.modified_at,
                 ...version
             };
         });
