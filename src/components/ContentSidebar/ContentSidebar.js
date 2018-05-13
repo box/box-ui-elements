@@ -426,7 +426,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchVersionsSuccessCallback = (versions: FileVersions): void => {
-        this.setState({ versions: versions.entries, versionError: undefined });
+        this.setState({ versions, versionError: undefined });
     };
 
     /**
@@ -437,7 +437,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCommentsSuccessCallback = (comments: Comments): void => {
-        this.setState({ comments: comments.entries, commentsError: undefined });
+        this.setState({ comments, commentsError: undefined });
     };
 
     /**
@@ -448,7 +448,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTasksSuccessCallback = (tasks: Tasks): void => {
-        this.setState({ tasks: tasks.entries, tasksError: undefined });
+        this.setState({ tasks, tasksError: undefined });
     };
 
     /**
@@ -734,9 +734,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         const {
             file,
             accessStats,
-            versions = [],
-            comments = [],
-            tasks = [],
+            versions,
+            comments,
+            tasks,
             currentUser,
             accessStatsError,
             fileError,
