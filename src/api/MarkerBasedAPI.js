@@ -85,7 +85,7 @@ class MarkerBasedApi extends Base {
                 return this.markerGetRequest();
             }
 
-            this.successHandler(this.data);
+            this.successHandler(this.formatResponse(this.data));
         } catch (error) {
             this.errorHandler(error);
         }

@@ -698,32 +698,14 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Re-formats file collaborators response
-     *
-     * @private
-     * @param {Array<User>} contacts - Collection of collaborated users
-     * @return {SelectorItems}
-     */
-    parseContacts = (contacts: Array<User>): SelectorItems =>
-        contacts.map((collab: User) => {
-            const { id, name, login } = collab;
-            return {
-                id,
-                name,
-                item: { ...collab, email: login }
-            };
-        });
-
-    /**
      * File approver contacts fetch success callback
      *
      * @private
      * @param {BoxItemCollection} data - Collaborators response data
      * @return {void}
      */
-    getApproverContactsSuccessCallback = (data: UserCollection): void => {
-        const contacts = data.entries || [];
-        this.setState({ approverSelectorContacts: this.parseContacts(contacts) });
+    getApproverContactsSuccessCallback = (collaborators: UserCollection): void => {
+        this.setState({ approverSelectorContacts: collaborators.entries });
     };
 
     /**
@@ -733,9 +715,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {BoxItemCollection} data - Collaborators response data
      * @return {void}
      */
-    getMentionContactsSuccessCallback = (data: UserCollection): void => {
-        const contacts = data.entries || [];
-        this.setState({ mentionSelectorContacts: this.parseContacts(contacts) });
+    getMentionContactsSuccessCallback = (collaborators: UserCollection): void => {
+        this.setState({ mentionSelectorContacts: collaborators.entries });
     };
 
     /**

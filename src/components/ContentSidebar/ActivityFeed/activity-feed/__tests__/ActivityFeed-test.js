@@ -44,8 +44,8 @@ const allHandlers = {
         create: jest.fn()
     },
     contacts: {
-        getApproverWithQuery: jest.fn(),
-        getMentionWithQuery: jest.fn()
+        approver: jest.fn(),
+        mention: jest.fn()
     }
 };
 

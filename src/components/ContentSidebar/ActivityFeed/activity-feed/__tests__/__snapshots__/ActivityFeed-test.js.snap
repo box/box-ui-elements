@@ -65,8 +65,8 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-comment-input"
     createComment={[Function]}
     createTask={[Function]}
-    getApproverContactsWithQuery={[Function]}
-    getMentionContactsWithQuery={[Function]}
+    getApproverContactsWithQuery={[MockFunction]}
+    getMentionContactsWithQuery={[MockFunction]}
     isOpen={false}
     onCancel={[Function]}
     onFocus={[Function]}
