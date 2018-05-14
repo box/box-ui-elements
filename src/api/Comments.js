@@ -5,6 +5,7 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
+import type { Comment, BoxComment } from '../flowTypes';
 
 class Comments extends OffsetBasedAPI {
     /**
@@ -26,11 +27,14 @@ class Comments extends OffsetBasedAPI {
      * @return {Object} the formatted api response data
      */
     formatResponse(response: Object): Object {
-        const formattedEntries = response.entries.map((comment) => ({
+        const formattedEntries = response.entries.map((comment: BoxComment): Array<Comment> => ({
+            type: comment.type,
+            id: comment.id,
+            isReplyComment: comment.is_reply_comment,
+            taggedMessage: comment.tagged_message,
             createdAt: comment.created_at,
             createdBy: comment.created_by,
-            taggedMessage: comment.tagged_message,
-            ...comment
+            modifiedAt: comment.modified_at
         }));
 
         return {

@@ -5,6 +5,7 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
+import type { Version, BoxItemVersion } from '../flowTypes';
 
 const ACTION = {
     upload: 'upload',
@@ -34,19 +35,20 @@ class Versions extends OffsetBasedAPI {
     formatResponse(response: Object): Object {
         const { entries } = response;
 
-        const formattedEntries = entries.reverse().map((version, index) => {
+        const formattedEntries = entries.reverse().map((version: BoxItemVersion, index): Array<Version> => {
             let action = ACTION.upload;
             if (version.trashed_at) {
                 action = ACTION.delete;
             }
 
             return {
-                versionNumber: index + 1, // adjust for offset
+                id: version.id,
+                type: version.type,
                 action,
                 modifiedBy: version.modified_by,
                 modifiedAt: version.modified_at,
                 trashedAt: version.trashed_at,
-                ...version
+                versionNumber: index + 1 // adjust for offset
             };
         });
 

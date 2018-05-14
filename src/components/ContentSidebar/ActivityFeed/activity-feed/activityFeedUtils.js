@@ -3,6 +3,7 @@
  * @file Activity feed utility methods
  */
 import type { FeedItems } from '../activityFeedFlowTypes';
+import type { Version } from '../../../../flowTypes';
 
 const ItemTypes = {
     fileVersion: 'file_version',

@@ -196,7 +196,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             taggedMessage
         } = this.props;
         const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
-        const { avatar_url, id, name } = user;
+        const { avatarUrl, id, name } = user;
         const inputContainerClassNames = classNames('bcs-comment-input-container', className, {
             'bcs-comment-input-is-open': isOpen
         });
@@ -205,7 +205,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             <div className={inputContainerClassNames}>
                 {!isEditing && (
                     <div className='bcs-avatar-container'>
-                        <Avatar id={id} avatarUrl={avatar_url} name={name} />
+                        <Avatar id={id} avatarUrl={avatarUrl} name={name} />
                     </div>
                 )}
                 <div className='bcs-comment-input-form-container'>
