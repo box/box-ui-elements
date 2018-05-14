@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/SidebarNav should render activity tab 1`] = `
+<nav>
+  <SidebarNavButton
+    interactionTarget="sidebaractivity"
+    isSelected={false}
+    onClick={[Function]}
+    tooltip={
+      <FormattedMessage
+        defaultMessage="Activity"
+        id="be.sidebarActivityTitle"
+      />
+    }
+  >
+    <IconChatRound />
+  </SidebarNavButton>
+</nav>
+`;
+
+exports[`components/ContentSidebar/SidebarNav should render details tab 1`] = `
+<nav>
+  <SidebarNavButton
+    interactionTarget="sidebardetails"
+    isSelected={false}
+    onClick={[Function]}
+    tooltip={
+      <FormattedMessage
+        defaultMessage="Details"
+        id="be.sidebarDetailsTitle"
+      />
+    }
+  >
+    <IconDocInfo />
+  </SidebarNavButton>
+</nav>
+`;
+
+exports[`components/ContentSidebar/SidebarNav should render metadata tab 1`] = `
+<nav>
+  <SidebarNavButton
+    interactionTarget="sidebarmetadata"
+    isSelected={false}
+    onClick={[Function]}
+    tooltip={
+      <FormattedMessage
+        defaultMessage="Metadata"
+        id="be.sidebarMetadataTitle"
+      />
+    }
+  >
+    <IconMetadataThick />
+  </SidebarNavButton>
+</nav>
+`;
+
+exports[`components/ContentSidebar/SidebarNav should render skills tab 1`] = `
+<nav>
+  <SidebarNavButton
+    interactionTarget="sidebarskills"
+    isSelected={false}
+    onClick={[Function]}
+    tooltip={
+      <FormattedMessage
+        defaultMessage="Skills"
+        id="be.sidebarSkillsTitle"
+      />
+    }
+  >
+    <IconMagicWand />
+  </SidebarNavButton>
+</nav>
+`;
+
+exports[`components/ContentSidebar/SidebarNav should select activity tab 1`] = `
+<nav>
+  <SidebarNavButton
+    interactionTarget="sidebarskills"
+    isSelected={false}
+    onClick={[Function]}
+    tooltip={
+      <FormattedMessage
+        defaultMessage="Skills"
+        id="be.sidebarSkillsTitle"
+      />
+    }
+  >
+    <IconMagicWand />
+  </SidebarNavButton>
+  <SidebarNavButton
+    interactionTarget="sidebaractivity"
+    isSelected={true}
+    onClick={[Function]}
+    tooltip={
+      <FormattedMessage
+        defaultMessage="Activity"
+        id="be.sidebarActivityTitle"
+      />
+    }
+  >
+    <IconChatRound />
+  </SidebarNavButton>
+  <SidebarNavButton
+    interactionTarget="sidebarmetadata"
+    isSelected={false}
+    onClick={[Function]}
+    tooltip={
+      <FormattedMessage
+        defaultMessage="Metadata"
+        id="be.sidebarMetadataTitle"
+      />
+    }
+  >
+    <IconMetadataThick />
+  </SidebarNavButton>
+</nav>
+`;

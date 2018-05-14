@@ -41,7 +41,7 @@ exports[`components/ContentSidebar/Skills/Face/Face should correctly render a fa
     onClick={[Function]}
   >
     <IconClose
-      color="#999ea4"
+      color="#999"
       height={16}
       width={16}
     />

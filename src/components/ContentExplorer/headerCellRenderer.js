@@ -6,7 +6,7 @@
 
 import React from 'react';
 import IconChevron from 'box-react-ui/lib/icons/general/IconChevron';
-import { SORT_ASC, COLOR_777 } from '../../constants';
+import { SORT_ASC, COLOR_999 } from '../../constants';
 import type { SortBy, SortDirection } from '../../flowTypes';
 import './headerCellRenderer.scss';
 
@@ -24,7 +24,7 @@ export default ({ dataKey, label, sortBy, sortDirection }: Props) => {
         <div>
             {label}
             &nbsp;&nbsp;
-            {by === dataKey && <IconChevron size='6px' thickness='1px' color={COLOR_777} direction={direction} />}
+            {by === dataKey && <IconChevron size='6px' thickness='1px' color={COLOR_999} direction={direction} />}
         </div>
     );
 };

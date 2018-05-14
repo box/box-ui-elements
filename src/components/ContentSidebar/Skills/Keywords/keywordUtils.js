@@ -11,8 +11,8 @@ import type { Pill } from './flowTypes';
  * Converts skill card entries into pills
  *
  * @private
- * @param {Object} props - component props
- * @return {Array<Object>}
+ * @param {Array<Object>} props - keyword entries
+ * @return {Array<Object>} pills
  */
 const getPills = (keywords: Array<SkillCardEntry> = []): Array<Pill> =>
     keywords.map((keyword: SkillCardEntry, index: number): Pill => ({

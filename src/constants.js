@@ -179,8 +179,7 @@ export const MS_IN_S = 1000;
 export const COLOR_BOX_BLUE = '#0061d5';
 export const COLOR_BOX_BLUE_LIGHT = '#dbe8f8';
 export const COLOR_RED = '#c82341';
-export const COLOR_777 = '#777';
-export const COLOR_DOWNTOWN_GREY = '#999ea4';
+export const COLOR_999 = '#999';
 export const COLOR_WHITE = '#fff';
 
 /* ------------------ Skills  ---------------------- */
