@@ -16,29 +16,6 @@ exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should corre
         },
       ]
     }
-    selectedOptions={
-      Array [
-        Object {
-          "appears": Array [
-            Object {
-              "start": 5,
-            },
-          ],
-          "text": "bar",
-        },
-      ]
-    }
-  />
-  <Timeline
-    interactionTarget="skill-keywordtimeslice"
-    text="bar"
-    timeslices={
-      Array [
-        Object {
-          "start": 5,
-        },
-      ]
-    }
   />
 </React.Fragment>
 `;
@@ -57,11 +34,6 @@ exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should corre
           "text": "bar",
           "value": 1,
         },
-      ]
-    }
-    selectedOptions={
-      Array [
-        undefined,
       ]
     }
   />

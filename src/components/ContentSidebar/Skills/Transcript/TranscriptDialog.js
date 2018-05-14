@@ -14,12 +14,7 @@ import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import { copy } from '../../../../util/download';
 import messages from '../../../messages';
 import { isValidTimeSlice } from './timeSliceUtils';
-import {
-    CLASS_MODAL_CONTENT_FULL_BLEED,
-    CLASS_MODAL_OVERLAY,
-    CLASS_MODAL,
-    COLOR_DOWNTOWN_GREY
-} from '../../../../constants';
+import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL, COLOR_999 } from '../../../../constants';
 import type { SkillCardEntry } from '../../../../flowTypes';
 import './TranscriptDialog.scss';
 
@@ -64,10 +59,10 @@ const TranscriptDialog = ({ isOpen, onCancel, data, rootElement, appElement, tit
                         copy(data.reduce(transcriptReducer, ''));
                     }}
                 >
-                    <IconMoveCopy color={COLOR_DOWNTOWN_GREY} />
+                    <IconMoveCopy color={COLOR_999} />
                 </PlainButton>
                 <PlainButton type='button' className='be-transcript-collapse' onClick={onCancel}>
-                    <IconCollapse color={COLOR_DOWNTOWN_GREY} />
+                    <IconCollapse color={COLOR_999} />
                 </PlainButton>
             </div>
         </div>

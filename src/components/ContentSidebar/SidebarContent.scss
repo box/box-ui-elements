@@ -8,8 +8,8 @@
         border-bottom: 1px solid $off-white;
         font-size: 16px;
         font-weight: 200;
-        height: 50px; // Same as section top below
-        line-height: 50px;
+        height: 60px; // Same as section top below
+        line-height: 60px;
         margin: 0 25px 15px 20px;
         padding: 0;
     }
@@ -21,7 +21,7 @@
         padding-top: 10px;
         position: absolute; // Prevents non-sidebar parts from re-painting
         right: 0;
-        top: 50px; // Same as title above
+        top: 60px; // Same as title above
 
         .bcs-scroll-content {
             height: 100%;

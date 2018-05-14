@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import IconMinus from 'box-react-ui/lib/icons/general/IconMinus';
-import { COLOR_DOWNTOWN_GREY, COLOR_WHITE } from '../../../../constants';
+import { COLOR_999, COLOR_WHITE } from '../../../../constants';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 import type { SkillCardEntry } from '../../../../flowTypes';
 import './Face.scss';
@@ -47,7 +47,7 @@ const Face = ({ face, selected, isEditing, onDelete, onSelect }: Props) => {
                     data-resin-target={SKILLS_TARGETS.FACES.DELETE}
                     onClick={() => onDelete(face)}
                 >
-                    <IconClose color={COLOR_DOWNTOWN_GREY} width={16} height={16} />
+                    <IconClose color={COLOR_999} width={16} height={16} />
                 </PlainButton>
             )}
         </div>
