@@ -26,15 +26,15 @@ class Avatar extends React.PureComponent<Props, State> {
      *
      * @param {string} avatarUrl the user avatar url
      */
-    getAvatarUrlHandler(avatarUrl: ?string) {
+    getAvatarUrlHandler = (avatarUrl: ?string) => {
         this.setState({
             avatarUrl
         });
-    }
+    };
 
     getAvatarUrl() {
         const { user, getAvatarUrl }: Props = this.props;
-        getAvatarUrl(user.id).then(this.getAvatarUrlHandler);
+        return getAvatarUrl(user.id).then(this.getAvatarUrlHandler);
     }
 
     componentDidMount() {
