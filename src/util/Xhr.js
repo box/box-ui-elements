@@ -6,6 +6,7 @@
 
 import axios from 'axios';
 import type { Axios } from 'axios';
+import getProp from 'lodash/get';
 import TokenService from './TokenService';
 import { HEADER_CLIENT_NAME, HEADER_CLIENT_VERSION, HEADER_CONTENT_TYPE } from '../constants';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
@@ -23,8 +24,8 @@ class Xhr {
     sharedLink: ?string;
     sharedLinkPassword: ?string;
     xhr: XMLHttpRequest;
-    responseInterceptor: Function;
-    requestInterceptor: Function;
+    responseInterceptor: ?Function;
+    requestInterceptor: ?Function;
     tokenService: TokenService;
 
     /**
@@ -56,10 +57,12 @@ class Xhr {
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
+        this.responseInterceptor = responseInterceptor;
         this.axios = axios.create();
 
         if (typeof responseInterceptor === 'function') {
-            this.axios.interceptors.response.use(responseInterceptor);
+            // Called on any non 2xx response
+            this.axios.interceptors.response.use(responseInterceptor, this.errorInterceptor);
         }
 
         if (typeof requestInterceptor === 'function') {
@@ -68,9 +71,24 @@ class Xhr {
     }
 
     /**
+     * Error interceptor that wraps the passed in responseInterceptor
+     *
+     * @param {Object} error - Error object from axios
+     * @return {Promise} rejected promise with error info
+     */
+    errorInterceptor = (error: Object): Promise<any> => {
+        const errorObject = getProp(error, 'response.data', error);
+        if (typeof this.responseInterceptor === 'function') {
+            this.responseInterceptor(errorObject);
+        }
+
+        return Promise.reject(error);
+    };
+
+    /**
      * Utility to parse a URL.
      *
-     * @param {string} url - url to parse
+     * @param {string} url - Url to parse
      * @return {Object} parsed url
      */
     getParsedUrl(url: string) {
