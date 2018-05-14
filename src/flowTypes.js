@@ -411,7 +411,7 @@ export type FileAccessStats = {
 };
 
 export type Task = {
-    type: string,
+    type: 'task',
     id: string,
     item: {
         type: string,
@@ -421,7 +421,10 @@ export type Task = {
         sha1: string,
         name: string
     },
-    due_at: ?string
+    createdAt: string,
+    dueAt: string,
+    taggedMessage: string,
+    assignees: Array<User>
 };
 
 export type Tasks = {
@@ -430,22 +433,43 @@ export type Tasks = {
 };
 
 export type Comment = {
-    type: string,
+    type: 'comment',
     id: string,
-    is_reply_comment: boolean,
-    message: string,
-    created_by: User,
-    created_at: string,
+    isReplyComment: boolean,
+    taggedMessage: string,
+    createdBy: User,
+    createdAt: string,
     item: {
         id: string,
         type: string
     },
-    modified_at: string
+    modifiedAt: string
 };
 
 export type Comments = {
     total_count: number,
     entries: Array<Comment>
+};
+
+export type FileVersion = {
+    type: 'file_version',
+    id: string,
+    action: string,
+    modifiedBy: User,
+    modifiedAt?: string,
+    createdAt?: string,
+    trashedAt?: string,
+    purgedAt?: string,
+    versions?: Array<FileVersion>,
+    versionNumber: number,
+    versionStart?: number,
+    versionEnd?: number,
+    collaborators?: Object
+};
+
+export type Versions = {
+    total_count: number,
+    entries: Array<FileVersion>
 };
 
 export type JsonPatch = {

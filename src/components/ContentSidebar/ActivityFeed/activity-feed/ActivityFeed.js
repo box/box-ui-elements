@@ -12,7 +12,7 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { FileVersions, Comments, Tasks, Item, User, SelectorItems, BoxItem } from '../../../../flowTypes';
+import type { Versions, Comments, Tasks, User, SelectorItems, BoxItem } from '../../../../flowTypes';
 import type {
     CommentHandlers,
     TaskHandlers,
@@ -25,7 +25,7 @@ import './ActivityFeed.scss';
 
 type Props = {
     file: BoxItem,
-    versions?: FileVersions,
+    versions?: Versions,
     comments?: Comments,
     tasks?: Tasks,
     isLoading?: boolean,
@@ -56,10 +56,7 @@ type State = {
 
 class ActivityFeed extends React.Component<Props, State> {
     static defaultProps = {
-        isLoading: false,
-        comments: [],
-        tasks: [],
-        versions: []
+        isLoading: false
     };
 
     state = {
@@ -172,7 +169,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
 
-        let feedState: Array<Item> = [];
+        let feedState = [];
         feedState = comments ? feedState.concat(comments.entries) : feedState;
         feedState = tasks ? feedState.concat(tasks.entries) : feedState;
         feedState = versions ? feedState.concat(versions.entries) : feedState;

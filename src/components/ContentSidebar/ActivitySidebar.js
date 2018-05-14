@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
-import type { Errors, Comments, Tasks, FileVersions, BoxItem } from '../../flowTypes';
+import type { Errors, Comments, Tasks, Versions, BoxItem } from '../../flowTypes';
 
 type Props = {
     file: BoxItem,
@@ -24,7 +24,7 @@ type Props = {
     onVersionHistoryClick?: Function,
     comments?: Comments,
     tasks?: Tasks,
-    versions?: FileVersions,
+    versions?: Versions,
     commentsError?: Errors,
     tasksError?: Errors
 };

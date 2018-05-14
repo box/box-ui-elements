@@ -22,13 +22,13 @@ describe('api/Versions', () => {
         test('should return API response with properly formatted data', () => {
             const uploadVersion = {
                 id: 123,
-                trashed_at: false,
+                trashed_at: null,
                 modified_at: 1234567891,
                 modified_by: { name: 'JayZ', id: 10 }
             };
             const deleteVersion = {
                 id: 123,
-                trashed_at: true,
+                trashed_at: 1234567891,
                 modified_at: 1234567891,
                 modified_by: { name: 'Akon', id: 11 }
             };
@@ -45,14 +45,16 @@ describe('api/Versions', () => {
                         action: 'delete',
                         versionNumber: 1,
                         modifiedAt: 1234567891,
-                        modifiedBy: { name: 'Akon', id: 11 }
+                        modifiedBy: { name: 'Akon', id: 11 },
+                        trashedAt: 1234567891
                     },
                     {
                         ...uploadVersion,
                         action: 'upload',
                         versionNumber: 2,
                         modifiedAt: 1234567891,
-                        modifiedBy: { name: 'JayZ', id: 10 }
+                        modifiedBy: { name: 'JayZ', id: 10 },
+                        trashedAt: null
                     }
                 ]
             });

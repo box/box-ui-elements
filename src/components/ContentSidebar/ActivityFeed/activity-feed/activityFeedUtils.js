@@ -2,14 +2,14 @@
  * @flow
  * @file Activity feed utility methods
  */
-import type { Item } from '../activityFeedFlowTypes';
+import type { FeedItems } from '../activityFeedFlowTypes';
 
 const ItemTypes = {
     fileVersion: 'file_version',
     upload: 'upload'
 };
 
-export function collapseFeedState(feedState: Array<Item>): Array<Item> {
+export function collapseFeedState(feedState: FeedItems): FeedItems {
     return feedState.reduce((collapsedFeedState, feedItem) => {
         const previousFeedItem = collapsedFeedState.pop();
 
@@ -56,6 +56,6 @@ export function collapseFeedState(feedState: Array<Item>): Array<Item> {
     }, []);
 }
 
-export function shouldShowEmptyState(feedState: Array<Item>): boolean {
+export function shouldShowEmptyState(feedState: FeedItems): boolean {
     return feedState.length === 0 || (feedState.length === 1 && feedState[0].type === ItemTypes.fileVersion);
 }

@@ -24,7 +24,7 @@ import type {
     Token,
     BoxItem,
     StringMap,
-    FileVersions,
+    Versions,
     Errors,
     Comments,
     Tasks,
@@ -79,7 +79,7 @@ type Props = {
 type State = {
     file?: BoxItem,
     accessStats?: FileAccessStats,
-    versions?: FileVersions,
+    versions?: Versions,
     comments?: Comments,
     tasks?: Tasks,
     currentUser?: User,
@@ -425,7 +425,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} versions - Box file versions
      * @return {void}
      */
-    fetchVersionsSuccessCallback = (versions: FileVersions): void => {
+    fetchVersionsSuccessCallback = (versions: Versions): void => {
         this.setState({ versions, versionError: undefined });
     };
 

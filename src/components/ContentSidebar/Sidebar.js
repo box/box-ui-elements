@@ -9,16 +9,7 @@ import DetailsSidebar from './DetailsSidebar';
 import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
-import type {
-    FileAccessStats,
-    BoxItem,
-    Errors,
-    Comments,
-    Tasks,
-    User,
-    FileVersions,
-    SidebarView
-} from '../../flowTypes';
+import type { FileAccessStats, BoxItem, Errors, Comments, Tasks, User, Versions, SidebarView } from '../../flowTypes';
 import { shouldRenderDetailsSidebar } from './sidebarUtil';
 import SidebarNav from './SidebarNav';
 import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
@@ -52,7 +43,7 @@ type Props = {
     onTaskAssignmentUpdate?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
-    versions?: FileVersions,
+    versions?: Versions,
     comments?: Comments,
     tasks?: Tasks,
     accessStats?: FileAccessStats,

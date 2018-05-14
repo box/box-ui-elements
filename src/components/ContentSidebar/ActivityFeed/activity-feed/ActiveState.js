@@ -16,8 +16,8 @@ import type {
     ContactHandlers,
     VersionHandlers,
     InputState,
-    Item,
-    Translations
+    Translations,
+    FeedItems
 } from '../activityFeedFlowTypes';
 
 type Props = {
@@ -29,7 +29,7 @@ type Props = {
         versions?: VersionHandlers
     },
     inputState: InputState,
-    items: Array<Item>,
+    items: FeedItems,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import type { SelectorItems, User } from '../../../flowTypes';
+import type { SelectorItems, User, Comment, Task, FileVersion } from '../../../flowTypes';
 
 export type CommentHandlers = {
     create?: Function,
@@ -34,20 +34,7 @@ export type InputState = {
     isDisabled?: boolean
 };
 
-export type Item = {
-    action: string,
-    type?: 'comment' | 'task' | 'file_version' | 'keywords',
-    collaborators: Object,
-    createdAt?: any,
-    createdBy?: User,
-    modifiedAt?: any,
-    modifiedBy?: User,
-    id: string,
-    versions: Array<any>,
-    versionNumber: number,
-    versionStart: number,
-    versionEnd: number
-};
+export type FeedItems = Array<Comment | Task | FileVersion>;
 
 export type Translations = {
     translationEnabled?: boolean,

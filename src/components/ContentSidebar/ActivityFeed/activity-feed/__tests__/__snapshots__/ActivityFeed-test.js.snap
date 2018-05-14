@@ -37,6 +37,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
           },
           Object {
             "assignees": Array [],
+            "dueAt": 1234567891,
             "id": "1234",
             "modifiedAt": 1234567891,
             "modifiedBt": Object {
@@ -45,6 +46,16 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             },
             "taggedMessage": "test",
             "type": "task",
+          },
+          Object {
+            "id": 123,
+            "modified_at": 1234567891,
+            "modified_by": Object {
+              "id": 11,
+              "name": "Akon",
+            },
+            "trashed_at": 1234567891,
+            "type": "file_version",
           },
         ]
       }
