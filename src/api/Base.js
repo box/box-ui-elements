@@ -219,7 +219,7 @@ class Base {
         // Make the XHR request
         try {
             const { data } = await this.getData(id, params);
-            this.successHandler(data);
+            this.successHandler(this.formatResponse(data));
         } catch (error) {
             this.errorHandler(error);
         }

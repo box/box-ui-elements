@@ -28,6 +28,7 @@ class Tasks extends Base {
     formatResponse(response: Object): Object {
         const formattedEntries = response.entries.map((task) => ({
             createdAt: task.created_at,
+            createdBy: task.created_by,
             dueAt: task.due_at,
             taggedMessage: task.message, // TODO: Replace w/ tagged_message when available,
             assignees: task.task_assignment_collection.entries,
