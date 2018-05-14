@@ -13,6 +13,9 @@ describe('components/ContentSidebar/ActivityFeed/Avatar', () => {
     const getWrapper = (props) => shallow(<Avatar {...props} />);
 
     test('should render the avatar with an avatarUrl', () => {
-        expect(getWrapper({ user })).toMatchSnapshot();
+        const getAvatarUrl = jest.fn().mockReturnValue(Promise.resolve('foo'));
+
+        expect(getWrapper({ user, getAvatarUrl })).toMatchSnapshot();
+        expect(getAvatarUrl).toBeCalledWith(user.id);
     });
 });
