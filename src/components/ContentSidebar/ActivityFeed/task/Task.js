@@ -60,7 +60,7 @@ type Props = {
     },
     translatedTaggedMessage: string,
     translations: Translations,
-    taggedMessage: string
+    message: string
 };
 
 // eslint-disable-next-line
@@ -81,7 +81,7 @@ class Task extends React.Component<Props> {
             onEdit,
             onTaskAssignmentUpdate,
             permissions,
-            taggedMessage,
+            message,
             translatedTaggedMessage,
             translations
         } = this.props;
@@ -99,7 +99,7 @@ class Task extends React.Component<Props> {
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={permissions}
-                    taggedMessage={taggedMessage}
+                    taggedMessage={message}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
                 />

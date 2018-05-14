@@ -18,7 +18,7 @@ describe('api/Versions', () => {
         });
     });
 
-    describe('formatResponse()', () => {
+    describe('successHandler()', () => {
         test('should return API response with properly formatted data', () => {
             const uploadVersion = {
                 id: 123,
@@ -37,11 +37,13 @@ describe('api/Versions', () => {
                 entries: [uploadVersion, deleteVersion]
             };
 
-            expect(versions.formatResponse(response)).toEqual({
-                ...response,
+            versions.successCallback = jest.fn();
+
+            const formattedResponse = {
+                total_count: 2,
                 entries: [
                     {
-                        ...deleteVersion,
+                        id: 123,
                         action: 'delete',
                         versionNumber: 1,
                         modifiedAt: 1234567891,
@@ -49,7 +51,7 @@ describe('api/Versions', () => {
                         trashedAt: 1234567891
                     },
                     {
-                        ...uploadVersion,
+                        id: 123,
                         action: 'upload',
                         versionNumber: 2,
                         modifiedAt: 1234567891,
@@ -57,7 +59,10 @@ describe('api/Versions', () => {
                         trashedAt: null
                     }
                 ]
-            });
+            };
+
+            versions.successHandler(response);
+            expect(versions.successCallback).toBeCalledWith(formattedResponse);
         });
     });
 });

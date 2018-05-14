@@ -455,7 +455,10 @@ export type Task = {
     assignees: Array<BoxUser>
 };
 
-export type Tasks = Array<Task>;
+export type Tasks = {
+    total_count: number,
+    entries: Array<Task>
+};
 
 export type BoxComment = {
     type: 'comment',
@@ -486,7 +489,10 @@ export type Comment = {
     modifiedAt: string
 };
 
-export type Comments = Array<Comment>;
+export type Comments = {
+    total_count: number,
+    entries: Array<Comment>
+};
 
 export type Version = {
     type: string,
@@ -503,7 +509,10 @@ export type Version = {
     collaborators?: Object
 };
 
-export type Versions = Array<Version>;
+export type Versions = {
+    total_count: number,
+    entries: Array<Version>
+};
 
 export type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',

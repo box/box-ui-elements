@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import type { Task, BoxTask } from '../flowTypes';
+import type { BoxTask } from '../flowTypes';
 
 class Tasks extends Base {
     /**
@@ -23,25 +23,24 @@ class Tasks extends Base {
 
     /**
      * Formats the tasks api response to usable data
-     * @param {Object} response the api response data
-     * @return {Object} the formatted api response data
+     * @param {Object} data the api response data
      */
-    formatResponse(response: Object): Object {
-        const formattedEntries = response.entries.map((task: BoxTask): Array<Task> => ({
+    successHandler = (data: any): void => {
+        const tasks = data.entries.map((task: BoxTask) => ({
             id: task.id,
             type: task.type,
             createdAt: task.created_at,
             createdBy: task.created_by,
             dueAt: task.due_at,
             message: task.message,
-            assignees: task.task_assignment_collection.entries
+            assignees: task.task_assignment_collection.entries || []
         }));
 
-        return {
-            ...response,
-            entries: formattedEntries
-        };
-    }
+        this.successCallback({
+            ...data,
+            entries: tasks
+        });
+    };
 }
 
 export default Tasks;

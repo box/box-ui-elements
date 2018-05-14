@@ -18,7 +18,7 @@ describe('api/Tasks', () => {
         });
     });
 
-    describe('formatResponse()', () => {
+    describe('successHandler()', () => {
         test('should return API response with properly formatted data', () => {
             const task = {
                 type: 'task',
@@ -35,18 +35,24 @@ describe('api/Tasks', () => {
                 entries: [task]
             };
 
-            expect(tasks.formatResponse(response)).toEqual({
+            tasks.successCallback = jest.fn();
+
+            const formattedResponse = {
                 ...response,
                 entries: [
                     {
-                        ...task,
+                        type: 'task',
+                        id: '1234',
                         createdAt: { name: 'Jay-Z', id: 10 },
                         dueAt: 1234567891,
-                        taggedMessage: 'test',
+                        message: 'test',
                         assignees: []
                     }
                 ]
-            });
+            };
+
+            tasks.successHandler(response);
+            expect(tasks.successCallback).toBeCalledWith(formattedResponse);
         });
     });
 });

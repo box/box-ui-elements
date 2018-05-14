@@ -24,7 +24,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         createdAt: 12345678,
         dueDate: 87654321,
         id: '123125',
-        taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+        message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
         createdBy: { name: 'Tarrence van As', id: 10 },
         assignees: [
             {
@@ -62,7 +62,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             createdAt: Date.now(),
             dueDate: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             createdBy: { name: 'Tarrence van As', id: 10 },
             assignees: [
                 {
@@ -164,7 +164,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             createdAt: Date.now(),
             dueDate: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             createdBy: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             assignees: [
@@ -199,7 +199,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             createdAt: Date.now(),
             dueDate: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             createdBy: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             assignees: [
@@ -234,7 +234,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             createdAt: Date.now(),
             dueDate: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             createdBy: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             assignees: [
@@ -261,7 +261,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             createdAt: Date.now(),
             dueDate: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             createdBy: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             assignees: [

@@ -5,7 +5,7 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import type { Version, BoxItemVersion } from '../flowTypes';
+import type { BoxItemVersion } from '../flowTypes';
 
 const ACTION = {
     upload: 'upload',
@@ -29,34 +29,26 @@ class Versions extends OffsetBasedAPI {
 
     /**
      * Formats the versions api response to usable data
-     * @param {Object} response the api response data
-     * @return {Object} the formatted api response data
+     * @param {Object} data the api response data
      */
-    formatResponse(response: Object): Object {
-        const { entries } = response;
+    successHandler = (data: any): void => {
+        const { entries } = data;
 
-        const formattedEntries = entries.reverse().map((version: BoxItemVersion, index): Array<Version> => {
-            let action = ACTION.upload;
-            if (version.trashed_at) {
-                action = ACTION.delete;
-            }
+        const versions = entries.reverse().map((version: BoxItemVersion, index) => ({
+            id: version.id,
+            type: version.type,
+            action: version.trashed_at ? ACTION.delete : ACTION.upload,
+            modifiedBy: version.modified_by,
+            modifiedAt: version.modified_at,
+            trashedAt: version.trashed_at,
+            versionNumber: index + 1 // adjust for offset
+        }));
 
-            return {
-                id: version.id,
-                type: version.type,
-                action,
-                modifiedBy: version.modified_by,
-                modifiedAt: version.modified_at,
-                trashedAt: version.trashed_at,
-                versionNumber: index + 1 // adjust for offset
-            };
+        this.successCallback({
+            ...data,
+            entries: versions
         });
-
-        return {
-            ...response,
-            entries: formattedEntries
-        };
-    }
+    };
 }
 
 export default Versions;
