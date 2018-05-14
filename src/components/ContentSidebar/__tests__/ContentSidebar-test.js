@@ -8,7 +8,8 @@ const {
     defaultInlineErrorContentMessage,
     versionHistoryErrorHeaderMessage,
     defaultErrorMaskSubHeaderMessage,
-    fileAccessStatsErrorHeaderMessage
+    fileAccessStatsErrorHeaderMessage,
+    currentUserErrorHeaderMessage
 } = messages;
 
 jest.mock('../Sidebar', () => 'sidebar');
@@ -80,6 +81,47 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
             expect(inlineErrorState.errorHeader).toEqual(fileAccessStatsErrorHeaderMessage);
             expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+        });
+    });
+
+    describe('fetchCurrentUserErrorCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            const props = {};
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+
+        test('should set a maskError if there is an error in fetching the access stats', () => {
+            instance.fetchCurrentUserErrorCallback();
+            const inlineErrorState = wrapper.state().currentUserError.maskError;
+            expect(typeof currentUserErrorHeaderMessage).toBe('object');
+            expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
+            expect(inlineErrorState.errorHeader).toEqual(currentUserErrorHeaderMessage);
+            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+        });
+    });
+
+    describe('fetchCurrentUser()', () => {
+        let instance;
+        let wrapper;
+        test('should invoke setState() directly if user parameter is not missing', () => {
+            const currentUser = {
+                id: '1234',
+                login: 'wile@acmetesting.com'
+            };
+
+            const props = { hasProperties: true }; // to force render
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+
+            instance.setState = jest.fn();
+
+            instance.fetchCurrentUser(currentUser);
+            expect(instance.setState).toBeCalledWith({ currentUser, currentUserError: undefined });
         });
     });
 });
