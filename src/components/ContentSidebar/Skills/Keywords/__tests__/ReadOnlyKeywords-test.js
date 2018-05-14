@@ -5,7 +5,7 @@ import ReadOnlyKeywords from '../ReadOnlyKeywords';
 describe('components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords', () => {
     test('should correctly render with no keyword selected', () => {
         const props = {
-            keywords: [{ text: 'foo' }, { text: 'bar' }]
+            keywords: [{ text: 'foo', appears: [{ start: 1 }] }, { text: 'bar', appears: [{ start: 5 }] }]
         };
 
         const wrapper = shallow(<ReadOnlyKeywords {...props} />);
@@ -18,7 +18,7 @@ describe('components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords', () => {
         };
 
         const wrapper = shallow(<ReadOnlyKeywords {...props} />);
-        wrapper.setState({ selected: props.keywords[1] });
+        wrapper.setState({ selected: { text: 'foo', value: 1 } });
 
         expect(wrapper).toMatchSnapshot();
     });

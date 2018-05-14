@@ -20,12 +20,14 @@ type Props = {
 };
 
 type State = {
-    selected?: SkillCardEntry
+    selectedIndex: number
 };
 
 class ReadOnlyselecteds extends React.PureComponent<Props, State> {
     props: Props;
-    state: State = {};
+    state: State = {
+        selectedIndex: -1
+    };
 
     /**
      * Shows the time line by selecting the keyword
@@ -35,10 +37,9 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onSelect = (pill: Pill) => {
-        const { keywords }: Props = this.props;
-        const { selected }: State = this.state;
-        const selectedKeyword = keywords[pill.value];
-        this.setState({ selected: selected === selectedKeyword ? undefined : selectedKeyword });
+        const { selectedIndex }: State = this.state;
+        const newIndex = pill.value;
+        this.setState({ selectedIndex: selectedIndex === newIndex ? -1 : newIndex });
     };
 
     /**
@@ -49,12 +50,14 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
      */
     render() {
         const { keywords, getPreviewer, duration }: Props = this.props;
-        const { selected }: State = this.state;
+        const { selectedIndex }: State = this.state;
         const options: Pills = getPills(keywords);
+        const selected = keywords[selectedIndex];
+        const pillCloudProps = selected ? { selectedOptions: [options[selectedIndex]] } : {};
 
         return (
             <React.Fragment>
-                <PillCloud options={options} onSelect={this.onSelect} selectedOptions={[selected]} />
+                <PillCloud options={options} onSelect={this.onSelect} {...pillCloudProps} />
                 {!!selected &&
                     Array.isArray(selected.appears) &&
                     selected.appears.length > 0 && (

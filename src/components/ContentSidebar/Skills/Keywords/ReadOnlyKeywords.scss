@@ -11,9 +11,8 @@
             color: $sevens;
             margin: 0 5px 5px 0;
 
-            &:focus,
-            &:active,
-            &:hover {
+            &:hover,
+            &.is-selected {
                 background-color: $blue;
                 border-color: $blue;
                 color: $white;

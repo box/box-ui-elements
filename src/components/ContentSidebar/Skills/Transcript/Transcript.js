@@ -10,7 +10,7 @@ import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import TranscriptData from './TranscriptData';
 import TranscriptDialog from './TranscriptDialog';
 import { isValidTimeSlice } from './timeSliceUtils';
-import { COLOR_DOWNTOWN_GREY } from '../../../../constants';
+import { COLOR_999 } from '../../../../constants';
 import type { SkillCard } from '../../../../flowTypes';
 import './Transcript.scss';
 
@@ -54,7 +54,7 @@ class Transcript extends Component<Props, State> {
         return (
             <div style={{ height }}>
                 <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleModal}>
-                    <IconExpand color={COLOR_DOWNTOWN_GREY} />
+                    <IconExpand color={COLOR_999} />
                 </PlainButton>
                 <TranscriptData data={entries} getPreviewer={getPreviewer} />
                 <TranscriptDialog

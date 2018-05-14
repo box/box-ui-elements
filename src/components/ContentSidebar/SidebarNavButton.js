@@ -5,20 +5,29 @@
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
+import './SidebarNavButton.scss';
 
 type Props = {
     tooltip: React.Node,
-    className: string,
+    isSelected: boolean,
     onClick: Function,
     interactionTarget: string,
     children: React.Node
 };
 
-const SidebarNavButton = ({ tooltip, className, onClick, interactionTarget, children }: Props) => (
+const SidebarNavButton = ({ tooltip, isSelected, onClick, interactionTarget, children }: Props) => (
     <Tooltip text={tooltip} position='middle-left'>
-        <PlainButton type='button' className={className} onClick={onClick} data-resin-target={interactionTarget}>
+        <PlainButton
+            type='button'
+            className={classNames('bcs-nav-btn', {
+                'bcs-nav-btn-is-selected': isSelected
+            })}
+            onClick={onClick}
+            data-resin-target={interactionTarget}
+        >
             {children}
         </PlainButton>
     </Tooltip>
