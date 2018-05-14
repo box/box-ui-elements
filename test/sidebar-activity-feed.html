@@ -332,45 +332,45 @@
                     {
                         id: 1,
                         name: 'Ken',
-                        item: { id: 1, name: 'Ken', email: 'ken@box.com' }
+                        item: { id: 1, name: 'Ken', login: 'ken@box.com' }
                     },
                     {
                         id: 2,
                         name: 'Ryu',
-                        item: { id: 2, name: 'Ryu', email: 'ryu@box.com' }
+                        item: { id: 2, name: 'Ryu', login: 'ryu@box.com' }
                     },
                     {
                         id: 3,
                         name: 'Guile',
-                        item: { id: 3, name: 'Guile', email: 'guile@box.com' }
+                        item: { id: 3, name: 'Guile', login: 'guile@box.com' }
                     },
                     {
                         id: 4,
                         name: 'Kylo Ren',
-                        item: { id: 4, name: 'Kylo Ren', email: 'kren@box.com' }
+                        item: { id: 4, name: 'Kylo Ren', login: 'kren@box.com' }
                     },
                     {
                         id: 5,
                         name: 'Han Solo',
-                        item: { id: 5, name: 'Han Solo', email: 'hsolo@box.com' }
+                        item: { id: 5, name: 'Han Solo', login: 'hsolo@box.com' }
                     },
                     {
                         id: 6,
                         name: 'Luke',
-                        item: { id: 6, name: 'Luke', email: 'lskywalker@box.com' }
+                        item: { id: 6, name: 'Luke', login: 'lskywalker@box.com' }
                     },
                     {
                         id: 7,
                         name: 'Yoda',
-                        item: { id: 7, name: 'Yoda', email: 'yoda@box.com' }
+                        item: { id: 7, name: 'Yoda', login: 'yoda@box.com' }
                     },
                 ];
 
                 function getMatchingContacts(str, contacts) {
                     const matches = [];
                     contacts.forEach(function(contact) {
-                        const { name, email } = contact.item;
-                        if (name.toLowerCase().startsWith(str) || email.toLowerCase().startsWith(str)) {
+                        const { name, login } = contact.item;
+                        if (name.toLowerCase().startsWith(str) || login.toLowerCase().startsWith(str)) {
                             matches.push(contact);
                         }
                     });

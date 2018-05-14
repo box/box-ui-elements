@@ -16,6 +16,7 @@ import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, FIELD_METADATA_SKILLS } from '../../constants';
+import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
 import type {
@@ -27,6 +28,7 @@ import type {
     Errors,
     Comments,
     Tasks,
+    User,
     SkillCard,
     SkillCardEntry,
     JsonPatchData
@@ -43,9 +45,8 @@ type Props = {
     apiHost: string,
     token: Token,
     className: string,
+    currentUser?: User,
     getPreviewer: Function,
-    isVisible: boolean,
-    hasTitle: boolean,
     hasSkills: boolean,
     hasProperties: boolean,
     hasMetadata: boolean,
@@ -59,7 +60,6 @@ type Props = {
     cache?: Cache,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    activityFeedState?: Array<any>,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onInteraction: Function,
@@ -82,11 +82,13 @@ type State = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    currentUser?: User,
     fileError?: Errors,
     versionError?: Errors,
     commentsError?: Errors,
     tasksError?: Errors,
-    accessStatsError?: Errors
+    accessStatsError?: Errors,
+    currentUserError?: Errors
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -103,8 +105,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         apiHost: DEFAULT_HOSTNAME_API,
         getPreviewer: noop,
-        isVisible: true,
-        hasTitle: false,
+        currentUser: undefined,
         hasSkills: false,
         hasProperties: false,
         hasMetadata: false,
@@ -208,16 +209,20 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasActivityFeed, hasAccessStats }: Props) {
+    fetchData({ fileId, hasActivityFeed, hasAccessStats, currentUser }: Props) {
         if (fileId) {
             this.fetchFile(fileId);
             if (hasAccessStats) {
                 this.fetchFileAccessStats(fileId);
             }
             if (hasActivityFeed) {
-                this.fetchComments(fileId);
+                this.fetchComments({
+                    id: fileId,
+                    fields: COMMENTS_FIELDS_TO_FETCH
+                });
                 this.fetchTasks(fileId);
                 this.fetchVersions(fileId);
+                this.fetchCurrentUser(currentUser);
             }
         }
     }
@@ -367,6 +372,26 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Handles a failed file user info fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchCurrentUserErrorCallback = (e: Error) => {
+        this.setState({
+            currentUser: undefined,
+            currentUserError: {
+                maskError: {
+                    errorHeader: messages.currentUserErrorHeaderMessage,
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
+                }
+            }
+        });
+        this.errorCallback(e);
+    };
+
+    /**
      * Network error callback
      *
      * @private
@@ -435,6 +460,17 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * User fetch success callback
+     *
+     * @private
+     * @param {Object} currentUser - User info object
+     * @return {void}
+     */
+    fetchCurrentUserSuccessCallback = (user: User): void => {
+        this.setState({ currentUser: user, currentUserError: undefined });
+    };
+
+    /**
      * Fetches a file
      *
      * @private
@@ -495,14 +531,21 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      * @return {void}
      */
-    fetchComments(
+    fetchComments({
+        id,
+        shouldDestroy = false,
+        offset = 0,
+        limit = 1000,
+        fields,
+        shouldFetchAll = true
+    }: {
         id: string,
-        shouldDestroy?: boolean = false,
-        offset: number = 0,
-        limit: number = 1000,
+        shouldDestroy?: boolean,
+        offset?: number,
+        limit?: number,
         fields?: Array<string>,
-        shouldFetchAll: boolean = true
-    ): void {
+        shouldFetchAll?: boolean
+    }): void {
         if (shouldRenderSidebar(this.props)) {
             this.api
                 .getCommentsAPI(shouldDestroy)
@@ -526,8 +569,14 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTasks(id: string, shouldDestroy?: boolean = false): void {
+        const params = {
+            fields: TASKS_FIELDS_TO_FETCH.toString()
+        };
+
         if (shouldRenderSidebar(this.props)) {
-            this.api.getTasksAPI(shouldDestroy).get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback);
+            this.api
+                .getTasksAPI(shouldDestroy)
+                .get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback, params);
         }
     }
 
@@ -543,6 +592,25 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.api
                 .getFileAccessStatsAPI(shouldDestroy)
                 .get(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
+        }
+    }
+
+    /**
+     * Fetches a Users info
+     *
+     * @private
+     * @param {string} [id] - User id. If missing, gets user that the current token was generated for.
+     * @return {void}
+     */
+    fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
+        if (shouldRenderSidebar(this.props)) {
+            if (typeof user === 'undefined') {
+                this.api
+                    .getUsersAPI(shouldDestroy)
+                    .get('', this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
+            } else {
+                this.setState({ currentUser: user, currentUserError: undefined });
+            }
         }
     }
 
@@ -631,7 +699,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             language,
             messages: intlMessages,
             getPreviewer,
-            hasTitle,
             hasSkills,
             hasProperties,
             hasMetadata,
@@ -641,7 +708,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             hasVersions,
             className,
-            activityFeedState,
             onVersionHistoryClick,
             onAccessStatsClick,
             onClassificationClick,
@@ -660,11 +726,13 @@ class ContentSidebar extends PureComponent<Props, State> {
             versions,
             comments,
             tasks,
+            currentUser,
             accessStatsError,
             fileError,
             versionError,
             commentsError,
-            tasksError
+            tasksError,
+            currentUserError
         }: State = this.state;
 
         const shouldRender = shouldRenderSidebar(this.props) && !!file;
@@ -675,10 +743,9 @@ class ContentSidebar extends PureComponent<Props, State> {
                     <div className='be-app-element'>
                         {shouldRender ? (
                             <Sidebar
-                                file={file}
+                                file={((file: any): BoxItem)}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
-                                hasTitle={hasTitle}
                                 hasSkills={hasSkills}
                                 hasProperties={hasProperties}
                                 hasMetadata={hasMetadata}
@@ -691,7 +758,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
-                                activityFeedState={activityFeedState}
                                 onAccessStatsClick={onAccessStatsClick}
                                 onClassificationClick={onClassificationClick}
                                 onVersionHistoryClick={onVersionHistoryClick}
@@ -704,6 +770,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 tasksError={tasksError}
                                 comments={comments}
                                 commentsError={commentsError}
+                                currentUser={currentUser}
+                                currentUserError={currentUserError}
                                 onCommentCreate={onCommentCreate}
                                 onCommentDelete={onCommentDelete}
                                 onTaskCreate={onTaskCreate}
