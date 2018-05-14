@@ -6,6 +6,12 @@
 
 import OffsetBasedAPI from './OffsetBasedAPI';
 
+const ACTION = {
+    upload: 'upload',
+    delete: 'delete',
+    restore: 'restore'
+};
+
 class Versions extends OffsetBasedAPI {
     /**
      * API URL for versions
@@ -29,9 +35,9 @@ class Versions extends OffsetBasedAPI {
         const { entries } = response;
 
         const formattedEntries = entries.reverse().map((version, index) => {
-            let action = 'upload';
+            let action = ACTION.upload;
             if (version.trashed_at) {
-                action = 'delete';
+                action = ACTION.delete;
             }
 
             return {

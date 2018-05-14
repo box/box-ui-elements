@@ -42,7 +42,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             "modifiedAt": 1234567891,
             "modifiedBt": Object {
               "id": 10,
-              "name": "JayZ",
+              "name": "Jay-Z",
             },
             "taggedMessage": "test",
             "type": "task",

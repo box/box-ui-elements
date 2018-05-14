@@ -23,7 +23,7 @@ describe('api/Tasks', () => {
             const task = {
                 type: 'task',
                 id: '1234',
-                created_at: { name: 'JayZ', id: 10 },
+                created_at: { name: 'Jay-Z', id: 10 },
                 due_at: 1234567891,
                 message: 'test',
                 task_assignment_collection: {
@@ -40,7 +40,7 @@ describe('api/Tasks', () => {
                 entries: [
                     {
                         ...task,
-                        createdAt: { name: 'JayZ', id: 10 },
+                        createdAt: { name: 'Jay-Z', id: 10 },
                         dueAt: 1234567891,
                         taggedMessage: 'test',
                         assignees: []

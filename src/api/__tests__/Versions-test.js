@@ -24,7 +24,7 @@ describe('api/Versions', () => {
                 id: 123,
                 trashed_at: null,
                 modified_at: 1234567891,
-                modified_by: { name: 'JayZ', id: 10 }
+                modified_by: { name: 'Jay-Z', id: 10 }
             };
             const deleteVersion = {
                 id: 123,
@@ -53,7 +53,7 @@ describe('api/Versions', () => {
                         action: 'upload',
                         versionNumber: 2,
                         modifiedAt: 1234567891,
-                        modifiedBy: { name: 'JayZ', id: 10 },
+                        modifiedBy: { name: 'Jay-Z', id: 10 },
                         trashedAt: null
                     }
                 ]

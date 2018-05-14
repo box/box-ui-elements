@@ -22,7 +22,7 @@ const tasks = {
             id: '1234',
             modifiedAt: 1234567891,
             taggedMessage: 'test',
-            modifiedBt: { name: 'JayZ', id: 10 },
+            modifiedBt: { name: 'Jay-Z', id: 10 },
             dueAt: 1234567891,
             assignees: []
         }
