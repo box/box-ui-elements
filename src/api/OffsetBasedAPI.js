@@ -3,6 +3,7 @@
  * @file class for Box offset based API's to inherit common functionality from
  * @author Box
  */
+import { getTypedFileId } from '../util/file';
 import Base from './Base';
 
 type Params = {
@@ -88,8 +89,9 @@ class OffsetBasedApi extends Base {
         // Make the XHR request
         try {
             const params = this.getQueryParameters(this.offset, this.limit, this.fields);
+            const url = this.getUrl(this.id);
 
-            const { data }: { data: Data } = await this.getData(this.id, params);
+            const { data }: { data: Data } = await this.xhr.get({ url, id: getTypedFileId(this.id), params });
 
             const entries = this.data ? this.data.entries : [];
             this.data = {
