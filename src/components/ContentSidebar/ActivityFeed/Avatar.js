@@ -5,11 +5,12 @@
  */
 import * as React from 'react';
 import AvatarComponent from 'box-react-ui/lib/components/avatar';
-import type { User } from '../../../flowTypes';
+import type { User, BoxItem } from '../../../flowTypes';
 
 type Props = {
     user: User,
-    getAvatarUrl: (string) => Promise<?string>
+    file: BoxItem,
+    getAvatarUrl: (string, string) => Promise<?string>
 };
 
 type State = {
@@ -33,9 +34,10 @@ class Avatar extends React.PureComponent<Props, State> {
     }
 
     getAvatarUrl() {
-        const { user, getAvatarUrl }: Props = this.props;
-
-        getAvatarUrl(user.id).then(this.getAvatarUrlHandler);
+        const { user, file, getAvatarUrl }: Props = this.props;
+        if (typeof file === 'object' && file.id) {
+            getAvatarUrl(user.id, file.id).then(this.getAvatarUrlHandler);
+        }
     }
 
     componentDidMount() {

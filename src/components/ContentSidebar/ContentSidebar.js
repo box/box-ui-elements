@@ -19,8 +19,6 @@ import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, FIELD_METADATA_SKILL
 import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
-import TokenService from '../../util/TokenService';
-import { getTypedFileId } from '../../util/file';
 import type {
     FileAccessStats,
     Token,
@@ -33,8 +31,7 @@ import type {
     User,
     SkillCard,
     SkillCardEntry,
-    JsonPatchData,
-    TokenLiteral
+    JsonPatchData
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -156,22 +153,19 @@ class ContentSidebar extends PureComponent<Props, State> {
     /**
      * Gets the user avatar URL
      *
-     * @param {string} id the user id
+     * @param {string} userId the user id
+     * @param {string} fileId the file id
+     *
      * @return the user avatar URL string for a given user with access token attached
      */
-    async getAvatarUrl(id: string): Promise<?string> {
-        const { token, fileId }: Props = this.props;
+    async getAvatarUrl(userId: string): Promise<?string> {
+        const { fileId } = this.props;
 
-        if (fileId) {
-            const accessToken: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), token);
-            if (typeof accessToken === 'string') {
-                const avatarUrl = this.api.getUsersAPI(false).getAvatarUrl(id);
-
-                return `${avatarUrl}?access_token=${accessToken}`;
-            }
+        if (!fileId) {
+            return null;
         }
 
-        return null;
+        return this.api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
     }
 
     /**
