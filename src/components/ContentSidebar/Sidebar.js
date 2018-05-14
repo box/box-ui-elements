@@ -125,6 +125,7 @@ class Sidebar extends React.Component<Props, State> {
 
     render() {
         const {
+            currentUser,
             file,
             getPreviewer,
             hasSkills,
@@ -218,6 +219,7 @@ class Sidebar extends React.Component<Props, State> {
                 {view === SIDEBAR_VIEW_ACTIVITY &&
                     hasActivityFeed && (
                         <ActivitySidebar
+                            currentUser={currentUser}
                             file={file}
                             tasks={tasks}
                             tasksError={tasksError}

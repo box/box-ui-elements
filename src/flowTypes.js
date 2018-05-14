@@ -109,12 +109,12 @@ export type BoxItemPermission = {
 };
 
 export type User = {
-    avatar_url?: string,
-    email?: string,
+    type: 'user',
     id: string,
-    login: string,
     name: string,
-    type: 'user'
+    login: string,
+    email?: string,
+    avatar_url?: string
 };
 
 export type UserCollection = {
