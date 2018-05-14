@@ -62,7 +62,7 @@ class Xhr {
 
         if (typeof responseInterceptor === 'function') {
             // Called on any non 2xx response
-            this.axios.interceptors.response.use(responseInterceptor, this.errorInterceptor.bind(this));
+            this.axios.interceptors.response.use(responseInterceptor, this.errorInterceptor);
         }
 
         if (typeof requestInterceptor === 'function') {
@@ -76,14 +76,14 @@ class Xhr {
      * @param {Object} error - Error object from axios
      * @return {Promise} rejected promise with error info
      */
-    errorInterceptor(error: Object): Promise<any> {
+    errorInterceptor = (error: Object): Promise<any> => {
         const errorObject = getProp(error, 'response.data', error);
         if (typeof this.responseInterceptor === 'function') {
             this.responseInterceptor(errorObject);
         }
 
-        return Promise.reject(errorObject);
-    }
+        return Promise.reject(error);
+    };
 
     /**
      * Utility to parse a URL.
