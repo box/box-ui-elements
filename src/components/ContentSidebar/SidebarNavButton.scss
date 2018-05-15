@@ -1,0 +1,21 @@
+@import '../variables';
+
+.bcs .bcs-nav-btn {
+    border-left: 3px solid transparent;
+    display: block;
+    height: 60px;
+    margin-left: -1px; // takes on one of the borders
+    width: 59px; // takes on another border
+
+    &.bcs-nav-btn-is-selected {
+        border-left-color: $blue;
+
+        svg path {
+            fill: $blue;
+        }
+    }
+
+    &:hover svg path {
+        fill: $twos;
+    }
+}
