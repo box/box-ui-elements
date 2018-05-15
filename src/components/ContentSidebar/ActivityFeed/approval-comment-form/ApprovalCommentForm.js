@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import Avatar from 'box-react-ui/lib/components/avatar/Avatar';
 import Form from 'box-react-ui/lib/components/form-elements/form/Form';
 import DraftJSMentionSelector, {
     DraftMentionDecorator
@@ -17,6 +16,7 @@ import commonMessages from 'box-react-ui/lib/common/messages';
 
 import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';
+import Avatar from '../Avatar';
 import messages from '../../../messages';
 import type { SelectorItems, User } from '../../../../flowTypes';
 
@@ -40,7 +40,8 @@ type Props = {
     user: User,
     isEditing: boolean,
     entityId: string,
-    taggedMessage: string
+    taggedMessage: string,
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 type State = {
@@ -193,10 +194,11 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             onFocus,
             user,
             isEditing,
-            taggedMessage
+            taggedMessage,
+            getAvatarUrl
         } = this.props;
         const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
-        const { avatar_url, id, name } = user;
+
         const inputContainerClassNames = classNames('bcs-comment-input-container', className, {
             'bcs-comment-input-is-open': isOpen
         });
@@ -205,7 +207,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             <div className={inputContainerClassNames}>
                 {!isEditing && (
                     <div className='bcs-avatar-container'>
-                        <Avatar id={id} avatarUrl={avatar_url} name={name} />
+                        <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </div>
                 )}
                 <div className='bcs-comment-input-form-container'>
