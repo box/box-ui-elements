@@ -5,6 +5,8 @@ import { withData } from 'leche';
 
 import { ApprovalCommentFormUnwrapped as ApprovalCommentForm } from '../ApprovalCommentForm';
 
+jest.mock('../../Avatar', () => () => 'Avatar');
+
 const intlFake = {
     formatMessage: (message) => message.id
 };

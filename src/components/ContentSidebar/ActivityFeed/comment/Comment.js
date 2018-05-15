@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
 
-import Avatar from 'box-react-ui/lib/components/avatar';
 import { Link } from 'box-react-ui/lib/components/link';
 import { ReadableTime } from 'box-react-ui/lib/components/time';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
@@ -20,6 +19,7 @@ import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
+import Avatar from '../Avatar';
 import messages from '../../../messages';
 
 import './Comment.scss';
@@ -55,7 +55,8 @@ type Props = {
         contacts?: ContactHandlers,
         versions?: VersionHandlers
     },
-    inputState: InputState
+    inputState: InputState,
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 type State = {
@@ -109,7 +110,8 @@ class Comment extends React.Component<Props, State> {
             translatedTaggedMessage,
             translations,
             handlers,
-            inputState
+            inputState,
+            getAvatarUrl
         } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
         const { toEdit } = this;
@@ -129,7 +131,7 @@ class Comment extends React.Component<Props, State> {
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar className='bcs-comment-avatar' {...createdBy} />
+                    <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={createdBy} />
                     <div className='bcs-comment-content'>
                         <div className='bcs-comment-headline'>
                             <Link className='bcs-comment-user-name' href={`/profile/${createdBy.id}`}>

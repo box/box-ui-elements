@@ -26,7 +26,8 @@ type Props = {
     tasks?: Tasks,
     versions?: FileVersions,
     commentsError?: Errors,
-    tasksError?: Errors
+    tasksError?: Errors,
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 const ActivitySidebar = ({
@@ -42,7 +43,8 @@ const ActivitySidebar = ({
     onTaskAssignmentUpdate,
     getApproverWithQuery,
     getMentionWithQuery,
-    onVersionHistoryClick
+    onVersionHistoryClick,
+    getAvatarUrl
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed
@@ -75,6 +77,7 @@ const ActivitySidebar = ({
                     info: onVersionHistoryClick
                 }
             }}
+            getAvatarUrl={getAvatarUrl}
         />
     </SidebarContent>
 );
