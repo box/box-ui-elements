@@ -38,7 +38,8 @@ class Users extends Base {
      * Gets the user avatar URL
      *
      * @param {string} userId the user id
-     * @return the user avatar URL string for a given user with access token attached
+     * @param {string} fileId the file id
+     * @return {string} the user avatar URL string for a given user with access token attached
      */
     async getAvatarUrlWithAccessToken(userId: string, fileId: string): Promise<?string> {
         const accessToken: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);

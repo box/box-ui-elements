@@ -32,6 +32,11 @@ class Avatar extends React.PureComponent<Props, State> {
         });
     };
 
+    /**
+     * Gets the avatar URL for the user from the getAvatarUrl prop
+     *
+     * @return {Promise} a promise which resolves with the avatarUrl string
+     */
     getAvatarUrl() {
         const { user, getAvatarUrl }: Props = this.props;
         return getAvatarUrl(user.id).then(this.getAvatarUrlHandler);
