@@ -109,10 +109,11 @@ export type BoxItemPermission = {
 };
 
 export type User = {
+    type: 'user',
     id: string,
-    login: string,
     name: string,
-    type: 'user'
+    login: string,
+    avatar_url: string
 };
 
 export type SelectorItem = {

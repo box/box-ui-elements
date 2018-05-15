@@ -12,7 +12,7 @@ import IconPrint from 'box-react-ui/lib/icons/general/IconPrint';
 import IconDownload from 'box-react-ui/lib/icons/general/IconDownloadSolid';
 import messages from '../messages';
 import { getIcon } from '../Item/iconCellRenderer';
-import { COLOR_777 } from '../../constants';
+import { COLOR_999 } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 import './Header.scss';
 
@@ -46,7 +46,7 @@ const Header = ({ file, onClose, onPrint, canDownload, onDownload, intl }: Props
                         title={printMsg}
                         aria-label={printMsg}
                     >
-                        <IconPrint color={COLOR_777} width={22} height={22} />
+                        <IconPrint color={COLOR_999} width={22} height={22} />
                     </PlainButton>
                 )}
                 {canDownload && (
@@ -57,7 +57,7 @@ const Header = ({ file, onClose, onPrint, canDownload, onDownload, intl }: Props
                         title={downloadMsg}
                         aria-label={downloadMsg}
                     >
-                        <IconDownload color={COLOR_777} width={18} height={18} />
+                        <IconDownload color={COLOR_999} width={18} height={18} />
                     </PlainButton>
                 )}
                 {onClose && (
@@ -68,7 +68,7 @@ const Header = ({ file, onClose, onPrint, canDownload, onDownload, intl }: Props
                         title={closeMsg}
                         aria-label={closeMsg}
                     >
-                        <IconClose color={COLOR_777} width={24} height={24} />
+                        <IconClose color={COLOR_999} width={24} height={24} />
                     </PlainButton>
                 )}
             </div>
