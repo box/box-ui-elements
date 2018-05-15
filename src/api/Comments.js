@@ -36,10 +36,12 @@ class Comments extends OffsetBasedAPI {
             modifiedAt: comment.modified_at
         }));
 
-        this.successCallback({
-            ...data,
-            entries: comments
-        });
+        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
+            this.successCallback({
+                ...data,
+                entries: comments
+            });
+        }
     };
 }
 

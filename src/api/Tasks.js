@@ -36,10 +36,12 @@ class Tasks extends Base {
             assignees: task.task_assignment_collection.entries || []
         }));
 
-        this.successCallback({
-            ...data,
-            entries: tasks
-        });
+        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
+            this.successCallback({
+                ...data,
+                entries: tasks
+            });
+        }
     };
 }
 

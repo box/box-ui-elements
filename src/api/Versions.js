@@ -44,10 +44,12 @@ class Versions extends OffsetBasedAPI {
             versionNumber: index + 1 // adjust for offset
         }));
 
-        this.successCallback({
-            ...data,
-            entries: versions
-        });
+        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
+            this.successCallback({
+                ...data,
+                entries: versions
+            });
+        }
     };
 }
 
