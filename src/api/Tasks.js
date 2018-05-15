@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import type { BoxTask } from '../flowTypes';
+import type { Task } from '../flowTypes';
 
 class Tasks extends Base {
     /**
@@ -26,13 +26,8 @@ class Tasks extends Base {
      * @param {Object} data the api response data
      */
     successHandler = (data: any): void => {
-        const tasks = data.entries.map((task: BoxTask) => ({
-            id: task.id,
-            type: task.type,
-            createdAt: task.created_at,
-            createdBy: task.created_by,
-            dueAt: task.due_at,
-            message: task.message,
+        const tasks = data.entries.map((task: Task) => ({
+            ...task,
             assignees: task.task_assignment_collection.entries || []
         }));
 

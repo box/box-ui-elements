@@ -12,7 +12,7 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { Versions, Comments, Tasks, User, SelectorItems, BoxItem } from '../../../../flowTypes';
+import type { FileVersions, Comments, Tasks, User, SelectorItems, BoxItem } from '../../../../flowTypes';
 import type {
     CommentHandlers,
     TaskHandlers,
@@ -25,7 +25,7 @@ import './ActivityFeed.scss';
 
 type Props = {
     file: BoxItem,
-    versions?: Versions,
+    versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
     isLoading?: boolean,

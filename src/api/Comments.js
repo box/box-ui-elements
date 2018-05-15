@@ -5,7 +5,7 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import type { BoxComment } from '../flowTypes';
+import type { Comment } from '../flowTypes';
 
 class Comments extends OffsetBasedAPI {
     /**
@@ -20,29 +20,6 @@ class Comments extends OffsetBasedAPI {
         }
         return `${this.getBaseApiUrl()}/files/${id}/comments`;
     }
-
-    /**
-     * Formats the comments api response to usable data
-     * @param {Object} data the api response data
-     */
-    successHandler = (data: any): void => {
-        const comments = data.entries.map((comment: BoxComment) => ({
-            id: comment.id,
-            type: comment.type,
-            isReplyComment: comment.is_reply_comment,
-            taggedMessage: comment.tagged_message,
-            createdAt: comment.created_at,
-            createdBy: comment.created_by,
-            modifiedAt: comment.modified_at
-        }));
-
-        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
-            this.successCallback({
-                ...data,
-                entries: comments
-            });
-        }
-    };
 }
 
 export default Comments;

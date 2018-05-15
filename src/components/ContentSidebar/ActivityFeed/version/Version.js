@@ -53,23 +53,23 @@ function getMessageForAction(name: React.Node, action: string, versionNumber: nu
 
 type Props = {
     action: 'delete' | 'restore' | 'upload',
-    modifiedBy: User,
+    modified_by: User,
     id: string,
     intl: any,
     onInfo: Function,
-    versionNumber: number
+    version_number: number
 };
 
-const Version = ({ action, modifiedBy, id, intl, onInfo, versionNumber }: Props): React.Node => (
+const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Props): React.Node => (
     <div className='bcs-version'>
-        <span className='bcs-version-message'>{getMessageForAction(modifiedBy.name, action, versionNumber)}</span>
+        <span className='bcs-version-message'>{getMessageForAction(modified_by.name, action, version_number)}</span>
         {onInfo ? (
             <span className='bcs-version-actions'>
                 <PlainButton
                     aria-label={intl.formatMessage(messages.getVersionInfo)}
                     className='bcs-version-info'
                     onClick={() => {
-                        onInfo({ id, versionNumber });
+                        onInfo({ id, version_number });
                     }}
                     type='button'
                 >

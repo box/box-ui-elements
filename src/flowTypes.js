@@ -108,22 +108,13 @@ export type BoxItemPermission = {
     can_set_share_access?: boolean
 };
 
-export type BoxUser = {
-    type: 'user',
-    id: string,
-    name: string,
-    login: string,
-    email?: string,
-    avatar_url: string
-};
-
 export type User = {
     type: 'user',
     id: string,
     name: string,
     login: string,
     email?: string,
-    avatarUrl?: string
+    avatar_url: string
 };
 
 export type SelectorItem = {
@@ -196,13 +187,19 @@ export type MetadataType = {
 export type BoxItemVersion = {
     id: string,
     type: string,
-    sha1: string,
+    sha1?: string,
     name?: string,
     size?: number,
-    created_at?: string,
+    created_at: string,
     modified_at?: string,
-    modified_by?: BoxUser,
-    trashed_at?: ?string
+    modified_by: User,
+    trashed_at: ?string,
+    action: 'upload' | 'delete' | 'restore',
+    versions?: Array<BoxItemVersion>,
+    version_number: number,
+    version_start?: number,
+    version_end?: number,
+    collaborators?: Object
 };
 
 export type BoxItem = {
@@ -225,9 +222,9 @@ export type BoxItem = {
     is_externally_owned?: boolean,
     download_url?: string,
     url?: string,
-    owned_by?: BoxUser,
-    modified_by?: BoxUser,
-    created_by?: BoxUser,
+    owned_by?: User,
+    modified_by?: User,
+    created_by?: User,
     selected?: boolean,
     metadata?: MetadataType,
     file_version?: BoxItemVersion,
@@ -264,9 +261,9 @@ export type FlattenedBoxItem = {
     is_externally_owned?: boolean,
     download_url?: string,
     url?: string,
-    owned_by?: BoxUser,
-    modified_by?: BoxUser,
-    created_by?: BoxUser,
+    owned_by?: User,
+    modified_by?: User,
+    created_by?: User,
     selected?: boolean,
     metadata?: MetadataType,
     file_version?: BoxItemVersion
@@ -419,7 +416,7 @@ export type FileAccessStats = {
     has_count_overflowed: boolean
 };
 
-export type BoxTask = {
+export type Task = {
     type: 'task',
     id: string,
     item: {
@@ -431,28 +428,13 @@ export type BoxTask = {
         name: string
     },
     created_at: string,
-    created_by: BoxUser,
+    created_by: User,
     due_at: string,
     message: string,
     task_assignment_collection: {
         total_count: number,
-        entries: Array<BoxUser>
+        entries: Array<User>
     }
-};
-
-export type BoxTasks = {
-    total_count: number,
-    entries: Array<BoxTask>
-};
-
-export type Task = {
-    type: 'task',
-    id: string,
-    createdAt: string,
-    createdBy: BoxUser,
-    dueAt: string,
-    message: string,
-    assignees: Array<BoxUser>
 };
 
 export type Tasks = {
@@ -460,58 +442,23 @@ export type Tasks = {
     entries: Array<Task>
 };
 
-export type BoxComment = {
+export type Comment = {
     type: 'comment',
     id: string,
-    is_reply_comment: boolean,
+    is_reply_comment?: boolean,
     tagged_message: string,
-    created_by: BoxUser,
+    created_by: User,
     created_at: string,
-    item: {
+    item?: {
         id: string,
         type: string
     },
     modified_at: string
 };
 
-export type BoxComments = {
-    total_count: number,
-    entries: Array<BoxComment>
-};
-
-export type Comment = {
-    type: 'comment',
-    id: string,
-    isReplyComment: boolean,
-    taggedMessage: string,
-    createdBy: BoxUser,
-    createdAt: string,
-    modifiedAt: string
-};
-
 export type Comments = {
     total_count: number,
     entries: Array<Comment>
-};
-
-export type Version = {
-    type: string,
-    id: string,
-    action: 'upload' | 'delete' | 'restore',
-    modifiedBy: BoxUser,
-    modifiedAt?: string,
-    createdAt?: string,
-    trashedAt?: string,
-    versions?: Array<Version>,
-    versionNumber: number,
-    versionStart?: number,
-    versionEnd?: number,
-    collaborators?: Object
-};
-
-export type Versions = {
-    total_count: number,
-    entries: Array<Version>
 };
 
 export type JsonPatch = {

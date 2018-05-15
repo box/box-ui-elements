@@ -24,30 +24,32 @@ export function collapseFeedState(feedState: FeedItems): FeedItems {
             previousFeedItem.action === ItemTypes.upload
         ) {
             const {
-                modifiedBy: prevModifiedBy,
+                modified_by: prevModifiedBy,
                 versions = [previousFeedItem],
-                versionStart = previousFeedItem.versionNumber,
-                versionEnd = previousFeedItem.versionNumber
+                version_start = previousFeedItem.version_number,
+                version_end = previousFeedItem.version_number
             } = previousFeedItem;
-            const { action, modifiedBy, id, versionNumber } = feedItem;
+            const { action, modified_by, created_at, trashed_at, id, version_number } = feedItem;
             const collaborators = previousFeedItem.collaborators || {
                 [prevModifiedBy.id]: { ...prevModifiedBy }
             };
 
             // add collaborators
-            collaborators[modifiedBy.id] = { ...modifiedBy };
+            collaborators[modified_by.id] = { ...modified_by };
 
             return collapsedFeedState.concat([
                 {
                     action,
                     collaborators,
-                    modifiedBy,
+                    created_at,
+                    modified_by,
+                    trashed_at,
                     id,
                     type: ItemTypes.fileVersion,
-                    versionNumber,
+                    version_number,
                     versions: versions.concat([feedItem]),
-                    versionStart: Math.min(versionStart, versionNumber),
-                    versionEnd: Math.max(versionEnd, versionNumber)
+                    versionStart: Math.min(version_start, version_number),
+                    versionEnd: Math.max(version_end, version_number)
                 }
             ]);
         }
