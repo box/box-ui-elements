@@ -21,13 +21,13 @@ class FileCollaborators extends MarkerBasedAPI {
     }
 
     /**
-     * Formats the collaborators api response to usable data
-     * @param {Object} response the api response data
-     * @return {Object} the formatted api response data
+     * Generic success handler
+     *
+     * @param {Object} data the response data
      */
-    formatResponse(response: Object): Object {
-        const { entries } = response;
-        const formattedEntries = entries.map((collab) => {
+    successHandler = (data: any): void => {
+        const { entries } = data;
+        const collaborators = entries.map((collab) => {
             const { id, name, login } = collab;
             return {
                 id,
@@ -36,11 +36,13 @@ class FileCollaborators extends MarkerBasedAPI {
             };
         });
 
-        return {
-            ...response,
-            entries: formattedEntries
-        };
-    }
+        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
+            this.successCallback({
+                ...data,
+                entries: collaborators
+            });
+        }
+    };
 }
 
 export default FileCollaborators;

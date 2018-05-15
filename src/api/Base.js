@@ -182,16 +182,6 @@ class Base {
     }
 
     /**
-     * Formats the api response to usable data
-     * @param {Object} response the api response data
-     * @return {Object} the formatted api response data
-     */
-    formatResponse(response: Object): Object {
-        // Default returns unmodified response
-        return response;
-    }
-
-    /**
      * Gets the URL for the API, meant to be overridden
      * @param {string} id the file id
      */

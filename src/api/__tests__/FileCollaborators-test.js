@@ -18,7 +18,7 @@ describe('api/FileCollaborators', () => {
         });
     });
 
-    describe('formatResponse()', () => {
+    describe('successHandler()', () => {
         test('should return API response with properly formatted data', () => {
             const collaborator = {
                 id: 123,
@@ -30,7 +30,9 @@ describe('api/FileCollaborators', () => {
                 entries: [collaborator]
             };
 
-            expect(fileCollaborators.formatResponse(response)).toEqual({
+            fileCollaborators.successCallback = jest.fn();
+
+            const formattedResponse = {
                 ...response,
                 entries: [
                     {
@@ -42,7 +44,11 @@ describe('api/FileCollaborators', () => {
                         }
                     }
                 ]
-            });
+            };
+
+            fileCollaborators.successHandler(response);
+
+            expect(fileCollaborators.successCallback).toBeCalledWith(formattedResponse);
         });
     });
 });
