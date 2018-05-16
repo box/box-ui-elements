@@ -15,6 +15,7 @@ import TasksAPI from '../Tasks';
 import FileAccessStatsAPI from '../FileAccessStats';
 import MetadataAPI from '../Metadata';
 import FileCollaboratorsAPI from '../FileCollaborators';
+import UsersAPI from '../Users';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -41,6 +42,7 @@ describe('api/APIFactory', () => {
             factory.recentsAPI = { destroy: jest.fn() };
             factory.versionsAPI = { destroy: jest.fn() };
             factory.metadataAPI = { destroy: jest.fn() };
+            factory.usersAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
             expect(factory.folderAPI).toBeUndefined();
@@ -51,6 +53,7 @@ describe('api/APIFactory', () => {
             expect(factory.recentsAPI).toBeUndefined();
             expect(factory.versionsAPI).toBeUndefined();
             expect(factory.metadataAPI).toBeUndefined();
+            expect(factory.usersAPI).toBeUndefined();
         });
         test('should not destroy cache by default', () => {
             const { cache } = factory.options;
@@ -296,6 +299,28 @@ describe('api/APIFactory', () => {
             expect(fileCollaboratorsAPI.options.cache).toBeInstanceOf(Cache);
             expect(fileCollaboratorsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(fileCollaboratorsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getUsersAPI()', () => {
+        test('should call destroy and return users API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const usersAPI = factory.getUsersAPI(true);
+            expect(spy).toBeCalled();
+            expect(usersAPI).toBeInstanceOf(UsersAPI);
+            expect(usersAPI.options.cache).toBeInstanceOf(Cache);
+            expect(usersAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(usersAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+
+        test('should not call destroy and return users API', () => {
+            const spy = jest.spyOn(factory, 'destroy');
+            const usersAPI = factory.getUsersAPI();
+            expect(spy).not.toHaveBeenCalled();
+            expect(usersAPI).toBeInstanceOf(UsersAPI);
+            expect(usersAPI.options.cache).toBeInstanceOf(Cache);
+            expect(usersAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
+            expect(usersAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
         });
     });
 });

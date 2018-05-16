@@ -35,7 +35,8 @@ type Props = {
     onTaskDelete?: Function,
     onTaskEdit?: Function,
     onVersionInfo?: Function,
-    translations?: Translations
+    translations?: Translations,
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 const ActiveState = ({
@@ -49,7 +50,8 @@ const ActiveState = ({
     translations,
     handlers,
     approverSelectorContacts,
-    mentionSelectorContacts
+    mentionSelectorContacts,
+    getAvatarUrl
 }: Props): Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
@@ -84,6 +86,7 @@ const ActiveState = ({
                                 handlers={handlers}
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
+                                getAvatarUrl={getAvatarUrl}
                             />
                         </li>
                     );

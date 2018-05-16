@@ -62,7 +62,8 @@ type Props = {
     currentUser: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems
+    mentionSelectorContacts?: SelectorItems,
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 // eslint-disable-next-line
@@ -86,7 +87,8 @@ class Task extends React.Component<Props> {
             translatedTaggedMessage,
             translations,
             approverSelectorContacts,
-            mentionSelectorContacts
+            mentionSelectorContacts,
+            getAvatarUrl
         } = this.props;
         return (
             <div className={classNames('bcs-task', { 'bcs-is-pending': isPending || error })}>
@@ -106,6 +108,7 @@ class Task extends React.Component<Props> {
                     translations={translations}
                     approverSelectorContacts={approverSelectorContacts}
                     mentionSelectorContacts={mentionSelectorContacts}
+                    getAvatarUrl={getAvatarUrl}
                 />
                 <div className='bcs-task-approvers-container'>
                     <div className='bcs-task-approvers-header'>
