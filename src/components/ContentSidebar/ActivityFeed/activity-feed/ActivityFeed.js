@@ -12,7 +12,17 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { FileVersions, Comments, Tasks, User, SelectorItems, BoxItem } from '../../../../flowTypes';
+import type {
+    BoxItemVersion,
+    FileVersions,
+    Comment,
+    Comments,
+    Task,
+    Tasks,
+    User,
+    SelectorItems,
+    BoxItem
+} from '../../../../flowTypes';
 import type {
     CommentHandlers,
     TaskHandlers,
@@ -52,7 +62,9 @@ type Props = {
 type State = {
     isInputOpen: boolean,
     approverSelectorContacts: Array<User>,
-    mentionSelectorContacts: Array<User>
+    mentionSelectorContacts: Array<User>,
+    feedItems: Array<Comment | Task | BoxItemVersion>,
+    pendingItems: Array<Object>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
@@ -63,7 +75,31 @@ class ActivityFeed extends React.Component<Props, State> {
     state = {
         isInputOpen: false,
         approverSelectorContacts: [],
-        mentionSelectorContacts: []
+        mentionSelectorContacts: [],
+        feedItems: [],
+        pendingItems: [
+            // One example of a pending item for addition
+            {
+                isPending: 'true',
+                type: 'comment',
+                id: 'pending',
+                tagged_message: 'testing pending',
+                message: 'testing pending',
+                created_by: {
+                    type: 'user',
+                    id: '1234',
+                    name: 'JUSTIN_TEST',
+                    login: 'justin@test.com',
+                    avatar_url: 'http://foo.bar.baz.faz.yaz'
+                },
+                created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
+                item: {
+                    id: '12345',
+                    type: 'file'
+                },
+                modified_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)'
+            }
+        ]
     };
 
     feedContainer: null | HTMLElement;
@@ -162,28 +198,45 @@ class ActivityFeed extends React.Component<Props, State> {
         this.setState({ mentionSelectorContacts: getMentionWithQuery(searchStr) });
     };
 
+    componentWillReceiveProps(nextProps: any): void {
+        const { comments, tasks, versions } = nextProps;
+
+        if (comments || tasks || versions) {
+            this.sortFeedItems(comments, tasks, versions);
+        }
+    }
+
+    sortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions): void {
+        const items = [];
+        const { pendingItems } = this.state;
+
+        if (comments) {
+            items.push(...comments.entries);
+        }
+
+        if (tasks) {
+            items.push(...tasks.entries);
+        }
+
+        if (versions) {
+            items.push(...versions.entries);
+        }
+
+        items.push(...pendingItems);
+
+        items.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+
+        return this.setState({ feedItems: items });
+    }
+
     render(): React.Node {
-        const {
-            handlers,
-            inputState,
-            isLoading,
-            permissions,
-            translations,
-            getAvatarUrl,
-            comments,
-            tasks,
-            versions
-        } = this.props;
+        const { handlers, inputState, isLoading, permissions, translations, getAvatarUrl } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
         const { currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
-
-        let feedState = [];
-        feedState = comments ? feedState.concat(comments.entries) : feedState;
-        feedState = tasks ? feedState.concat(tasks.entries) : feedState;
-        feedState = versions ? feedState.concat(versions.entries) : feedState;
+        const { feedItems } = this.state;
 
         return (
             // eslint-disable-next-line
@@ -194,12 +247,12 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className='bcs-activity-feed-items-container'
                 >
-                    {shouldShowEmptyState(feedState) ? (
+                    {shouldShowEmptyState(feedItems) ? (
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
                             handlers={handlers}
-                            items={collapseFeedState(feedState)}
+                            items={collapseFeedState(feedItems)}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
                             onCommentDelete={hasCommentPermission ? this.deleteComment : noop}
