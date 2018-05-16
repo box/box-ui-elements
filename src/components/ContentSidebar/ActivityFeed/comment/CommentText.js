@@ -13,7 +13,7 @@ import TranslateButton from './TranslateButton';
 
 type Props = {
     id: string,
-    taggedMessage: string,
+    tagged_message: string,
     translatedTaggedMessage?: string,
     translationEnabled?: boolean,
     onTranslate: Function,
@@ -53,10 +53,10 @@ class CommentText extends React.Component<Props, State> {
     }
 
     handleTranslate = (event: SyntheticMouseEvent<>): void => {
-        const { id, taggedMessage, onTranslate, translatedTaggedMessage } = this.props;
+        const { id, tagged_message, onTranslate, translatedTaggedMessage } = this.props;
         if (!translatedTaggedMessage) {
             this.setState({ isLoading: true });
-            onTranslate({ id, taggedMessage });
+            onTranslate({ id, tagged_message });
         }
         this.setState({ isTranslation: true });
         event.preventDefault();
@@ -68,10 +68,10 @@ class CommentText extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { id, taggedMessage, translatedTaggedMessage, translationEnabled } = this.props;
+        const { id, tagged_message, translatedTaggedMessage, translationEnabled } = this.props;
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
-            translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : taggedMessage;
+            translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
         return isLoading ? (
             <div className='bcs-comment-text-loading'>
                 <LoadingIndicator size='small' />

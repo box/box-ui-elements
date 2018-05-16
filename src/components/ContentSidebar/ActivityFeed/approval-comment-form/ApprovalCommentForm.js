@@ -40,7 +40,7 @@ type Props = {
     user: User,
     isEditing: boolean,
     entityId: string,
-    taggedMessage: string,
+    tagged_message: string,
     getAvatarUrl: (string) => Promise<?string>
 };
 
@@ -194,7 +194,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             onFocus,
             user,
             isEditing,
-            taggedMessage,
+            tagged_message,
             getAvatarUrl
         } = this.props;
         const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
@@ -224,7 +224,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionContactsWithQuery}
-                            placeholder={taggedMessage || formatMessage(messages.commentWrite)}
+                            placeholder={tagged_message || formatMessage(messages.commentWrite)}
                             validateOnBlur={false}
                         />
                         <aside
