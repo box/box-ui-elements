@@ -143,8 +143,45 @@ class MultiputUpload extends BaseMultiput {
         this.overwrite = overwrite;
         this.fileId = fileId;
 
-        this.createSession();
+        this.makePreflightRequest();
     }
+
+    /**
+     * Sends an upload pre-flight request. If a file ID is supplied,
+     * send a pre-flight request to that file version.
+     *
+     * @private
+     * @param {fileId} fileId - ID of file to replace
+     * @param {fileName} fileName - New name for file
+     * @return {void}
+     */
+    makePreflightRequest = () => {
+        super.makePreflightRequest({
+            fileId: this.fileId,
+            file: this.file,
+            folderId: this.folderId,
+            fileName: this.fileName,
+            successHandler: this.createSession,
+            errorHandler: this.createSessionErrorHandler
+        });
+    };
+
+    /**
+     * Resolves preflight response to a upload host
+     *
+     * @private
+     * @param {Object} data
+     * @param {Object} [data.response]
+     * @return {string}
+     */
+    getUploadHostFromPreflightResponse = ({ response }: { response: { upload_url?: string } }) => {
+        if (!response || !response.upload_url) {
+            return this.getBaseUploadUrl();
+        }
+
+        const splitUrl = response.upload_url.split('/');
+        return `${splitUrl[0]}//${splitUrl[2]}`;
+    };
 
     /**
      * Creates upload session. If a file ID is supplied, use the Chunked Upload File Version
@@ -153,12 +190,13 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    createSession = async (): Promise<any> => {
+    createSession = async (preflightResponse: Object): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
 
-        let createSessionUrl = `${this.getBaseUploadUrl()}/files/upload_sessions`;
+        const uploadHost = this.getUploadHostFromPreflightResponse(preflightResponse);
+        let createSessionUrl = `${uploadHost}/files/upload_sessions`;
 
         // Set up post body
         const postData: StringAnyMap = {
@@ -217,7 +255,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Error} error
      * @return {void}
      */
-    createSessionErrorHandler(error: Error): void {
+    createSessionErrorHandler = (error: Error): void => {
         if (this.isDestroyed()) {
             return;
         }
@@ -229,7 +267,7 @@ class MultiputUpload extends BaseMultiput {
 
         this.consoleLog('Too many create session failures, failing upload');
         this.sessionErrorHandler(error, LOG_EVENT_TYPE_CREATE_SESSION_RETRIES_EXCEEDED, JSON.stringify(error));
-    }
+    };
 
     /**
      * Schedule a retry for create session request upon failure
@@ -245,7 +283,7 @@ class MultiputUpload extends BaseMultiput {
         );
         this.createSessionNumRetriesPerformed += 1;
         this.consoleLog(`Retrying create session in ${retryDelayMs} ms`);
-        this.createSessionTimeout = setTimeout(this.createSession, retryDelayMs);
+        this.createSessionTimeout = setTimeout(this.makePreflightRequest, retryDelayMs);
     }
 
     /**

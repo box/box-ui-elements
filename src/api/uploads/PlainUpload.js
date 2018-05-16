@@ -5,12 +5,12 @@
  */
 
 import noop from 'lodash/noop';
-import Base from './Base';
-import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../constants';
-import type { BoxItem } from '../flowTypes';
+import BaseUpload from './BaseUpload';
+import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../../constants';
+import type { BoxItem } from '../../flowTypes';
 
 const MAX_RETRY = 5;
-class PlainUpload extends Base {
+class PlainUpload extends BaseUpload {
     file: File;
     folderId: string;
     fileId: ?string;
@@ -146,29 +146,15 @@ class PlainUpload extends Base {
      * @return {void}
      */
     makePreflightRequest({ fileId, fileName }: { fileId?: string, fileName?: string }): void {
-        if (this.isDestroyed()) {
-            return;
-        }
-
         if (!this.fileId && !!fileId) {
             this.fileId = fileId;
         }
 
-        let url = `${this.getBaseApiUrl()}/files/content`;
-        if (fileId) {
-            url = url.replace('content', `${fileId}/content`);
-        }
-
-        const { size, name } = this.file;
-        const attributes = {
-            name: fileName || name,
-            parent: { id: this.folderId },
-            size
-        };
-
-        this.xhr.options({
-            url,
-            data: attributes,
+        super.makePreflightRequest({
+            fileId,
+            file: this.file,
+            folderId: this.folderId,
+            fileName,
             successHandler: this.makeRequest,
             errorHandler: this.uploadErrorHandler
         });

@@ -4,7 +4,7 @@ let upload;
 let clock;
 let file;
 
-describe('api/PlainUpload', () => {
+describe('api/uploads/PlainUpload', () => {
     beforeEach(() => {
         upload = new PlainUpload({
             token: '123'
