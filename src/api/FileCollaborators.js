@@ -26,22 +26,21 @@ class FileCollaborators extends MarkerBasedAPI {
      * @param {Object} data the response data
      */
     successHandler = (data: any): void => {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
+            return;
+        }
+
         const { entries } = data;
         const collaborators = entries.map((collab) => {
             const { id, name, login } = collab;
             return {
                 id,
                 name,
-                item: { ...collab, email: login }
+                item: { id, name, email: login }
             };
         });
 
-        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
-            this.successCallback({
-                ...data,
-                entries: collaborators
-            });
-        }
+        this.successCallback({ ...data, entries: collaborators });
     };
 }
 

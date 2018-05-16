@@ -39,7 +39,8 @@ describe('api/FileCollaborators', () => {
                         id: 123,
                         name: 'Kanye West',
                         item: {
-                            ...collaborator,
+                            id: 123,
+                            name: 'Kanye West',
                             email: 'kwest@box.com'
                         }
                     }
