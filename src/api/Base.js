@@ -140,7 +140,6 @@ class Base {
      * Generic success handler
      *
      * @param {Object} data the response data
-     * @param {Function} successCallback the success callback
      */
     successHandler = (data: any): void => {
         if (!this.isDestroyed() && typeof this.successCallback === 'function') {

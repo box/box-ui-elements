@@ -5,6 +5,13 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
+import type { BoxItemVersion } from '../flowTypes';
+
+const ACTION = {
+    upload: 'upload',
+    delete: 'delete',
+    restore: 'restore'
+};
 
 class Versions extends OffsetBasedAPI {
     /**
@@ -19,6 +26,25 @@ class Versions extends OffsetBasedAPI {
         }
         return `${this.getBaseApiUrl()}/files/${id}/versions`;
     }
+
+    /**
+     * Formats the versions api response to usable data
+     * @param {Object} data the api response data
+     */
+    successHandler = (data: any): void => {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
+            return;
+        }
+
+        const { entries } = data;
+        const versions = entries.reverse().map((version: BoxItemVersion, index) => ({
+            ...version,
+            action: version.trashed_at ? ACTION.delete : ACTION.upload,
+            version_number: index + 1 // adjust for offset
+        }));
+
+        this.successCallback({ ...data, entries: versions });
+    };
 }
 
 export default Versions;

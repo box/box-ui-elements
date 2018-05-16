@@ -4,27 +4,44 @@ import { mount, shallow } from 'enzyme';
 import ActivityFeed from '../ActivityFeed';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
+const comments = {
+    entries: [
+        {
+            type: 'comment',
+            id: '123',
+            created_at: 1234567890,
+            tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
+            created_by: { name: 'Akon', id: 11 }
+        }
+    ]
+};
 
-const comments = [
-    {
-        type: 'comment',
-        id: '123',
-        createdAt: 1234567890,
-        taggedMessage: 'test @[123:Jeezy] @[10:Kanye West]',
-        createdBy: { name: 'Akon', id: 11 }
-    }
-];
+const tasks = {
+    entries: [
+        {
+            type: 'task',
+            id: '1234',
+            modified_at: 1234567891,
+            tagged_message: 'test',
+            modified_by: { name: 'Jay-Z', id: 10 },
+            dueAt: 1234567891,
+            assignees: []
+        }
+    ]
+};
 
-const tasks = [
-    {
-        type: 'task',
-        id: '1234',
-        createdAt: 1234567891,
-        taggedMessage: 'test',
-        createdBy: { name: 'JayZ', id: 10 },
-        assignees: []
-    }
-];
+const versions = {
+    entries: [
+        {
+            type: 'file_version',
+            id: 123,
+            trashed_at: 1234567891,
+            modified_at: 1234567891,
+            modified_by: { name: 'Akon', id: 11 }
+        }
+    ]
+};
+
 const currentUser = { name: 'Kanye West', id: 10 };
 
 const allHandlers = {
@@ -57,7 +74,9 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should correctly render activity state', () => {
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} comments={comments} tasks={tasks} />);
+        const wrapper = shallow(
+            <ActivityFeed inputState={{ currentUser }} comments={comments} tasks={tasks} versions={versions} />
+        );
         expect(wrapper).toMatchSnapshot();
     });
 

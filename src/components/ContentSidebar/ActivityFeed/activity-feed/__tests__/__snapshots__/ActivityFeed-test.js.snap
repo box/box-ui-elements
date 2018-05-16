@@ -8,9 +8,62 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
   <div
     className="bcs-activity-feed-items-container"
   >
-    <EmptyState
-      isLoading={false}
-      showCommentMessage={false}
+    <ActiveState
+      currentUser={
+        Object {
+          "id": 10,
+          "name": "Kanye West",
+        }
+      }
+      inputState={
+        Object {
+          "currentUser": Object {
+            "id": 10,
+            "name": "Kanye West",
+          },
+        }
+      }
+      items={
+        Array [
+          Object {
+            "created_at": 1234567890,
+            "created_by": Object {
+              "id": 11,
+              "name": "Akon",
+            },
+            "id": "123",
+            "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+            "type": "comment",
+          },
+          Object {
+            "assignees": Array [],
+            "dueAt": 1234567891,
+            "id": "1234",
+            "modified_at": 1234567891,
+            "modified_by": Object {
+              "id": 10,
+              "name": "Jay-Z",
+            },
+            "tagged_message": "test",
+            "type": "task",
+          },
+          Object {
+            "id": 123,
+            "modified_at": 1234567891,
+            "modified_by": Object {
+              "id": 11,
+              "name": "Akon",
+            },
+            "trashed_at": 1234567891,
+            "type": "file_version",
+          },
+        ]
+      }
+      onCommentDelete={[Function]}
+      onTaskAssignmentUpdate={[Function]}
+      onTaskDelete={[Function]}
+      onTaskEdit={[Function]}
+      onVersionInfo={[Function]}
     />
   </div>
 </div>

@@ -19,17 +19,17 @@ const splitRegex = /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w
  * - all occurrence of mention patterns with a Mention component
  * - all occurrence of urls with a Link component
  * Ex mention format: @[123:Hello World]
- * @param {String} taggedMessage The message string to format
+ * @param {String} tagged_message The message string to format
  * @param {String} itemID The id of the tagged message
  * @param {Boolean} shouldReturnString The boolean value whether it should return string
  * @returns {String|React.Node}
  */
 const formatTaggedMessage = (
-    taggedMessage: string,
+    tagged_message: string,
     itemID: string,
     shouldReturnString: boolean
 ): React.Node | string => {
-    const contentItems = taggedMessage.split(splitRegex).map((text: string, contentIndex: number) => {
+    const contentItems = tagged_message.split(splitRegex).map((text: string, contentIndex: number) => {
         const contentKey = `${contentIndex}-${itemID}`;
         // attempt mention match
         const mentionMatch = text.match(/([@＠﹫])\[([0-9]+):([^\]]+)]/i);

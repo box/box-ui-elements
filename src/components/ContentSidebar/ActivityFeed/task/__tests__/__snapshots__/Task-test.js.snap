@@ -5,13 +5,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly rende
   className="bcs-task"
 >
   <mock-comment
-    createdAt={12345678}
-    createdBy={
-      Object {
-        "id": 10,
-        "name": "Tarrence van As",
-      }
-    }
+    created_at={12345678}
     currentUser={
       Object {
         "id": 1,
@@ -19,7 +13,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly rende
       }
     }
     id="123125"
-    taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+    tagged_message="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
   />
   <div
     className="bcs-task-approvers-container"
@@ -73,13 +67,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
   className="bcs-task"
 >
   <mock-comment
-    createdAt={12345678}
-    createdBy={
-      Object {
-        "id": 10,
-        "name": "Tarrence van As",
-      }
-    }
+    created_at={12345678}
     currentUser={
       Object {
         "id": 1,
@@ -87,7 +75,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
       }
     }
     id="123125"
-    taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+    tagged_message="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
   />
   <div
     className="bcs-task-approvers-container"
@@ -127,13 +115,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions fo
   className="bcs-task"
 >
   <mock-comment
-    createdAt={12345678}
-    createdBy={
-      Object {
-        "id": 10,
-        "name": "Tarrence van As",
-      }
-    }
+    created_at={12345678}
     currentUser={
       Object {
         "id": 1,
@@ -141,7 +123,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions fo
       }
     }
     id="123125"
-    taggedMessage="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+    tagged_message="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
   />
   <div
     className="bcs-task-approvers-container"

@@ -21,11 +21,11 @@ const allHandlers = {
 
 describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     const task = {
-        createdAt: 12345678,
-        dueDate: 87654321,
+        created_at: 12345678,
+        due_at: 87654321,
         id: '123125',
-        taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-        createdBy: { name: 'Tarrence van As', id: 10 },
+        message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+        modified_by: { name: 'Tarrence van As', id: 10 },
         assignees: [
             {
                 id: 0,
@@ -59,11 +59,11 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
 
     test('should correctly render task', () => {
         const myTask = {
-            createdAt: Date.now(),
-            dueDate: Date.now(),
+            created_at: Date.now(),
+            due_at: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            createdBy: { name: 'Tarrence van As', id: 10 },
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            modified_by: { name: 'Tarrence van As', id: 10 },
             assignees: [
                 {
                     id: 0,
@@ -161,11 +161,11 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
 
     test('should not allow user to delete if they lack delete permissions on the comment', () => {
         const myTask = {
-            createdAt: Date.now(),
-            dueDate: Date.now(),
+            created_at: Date.now(),
+            due_at: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            createdBy: { name: 'Tarrence van As', id: 10 },
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             assignees: [
                 {
@@ -196,11 +196,11 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
 
     test('should not allow user to edit if they lack edit permissions on the comment', () => {
         const myTask = {
-            createdAt: Date.now(),
-            dueDate: Date.now(),
+            created_at: Date.now(),
+            due_at: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            createdBy: { name: 'Tarrence van As', id: 10 },
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             assignees: [
                 {
@@ -231,11 +231,11 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
 
     test('should not allow task creator to delete if onDelete handler is undefined', () => {
         const myTask = {
-            createdAt: Date.now(),
-            dueDate: Date.now(),
+            created_at: Date.now(),
+            due_at: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            createdBy: { name: 'Tarrence van As', id: 10 },
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             assignees: [
                 {
@@ -258,11 +258,11 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
 
     test('should not allow task creator to edit if onEdit handler is undefined', () => {
         const myTask = {
-            createdAt: Date.now(),
-            dueDate: Date.now(),
+            created_at: Date.now(),
+            due_at: Date.now(),
             id: '123125',
-            taggedMessage: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            createdBy: { name: 'Tarrence van As', id: 10 },
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             assignees: [
                 {
@@ -288,7 +288,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     test('should not render due date when not passed in', () => {
         const taskWithNoDueDate = {
             ...task,
-            dueDate: null
+            due_at: null
         };
 
         const wrapper = shallow(<Task currentUser={currentUser} {...taskWithNoDueDate} />);

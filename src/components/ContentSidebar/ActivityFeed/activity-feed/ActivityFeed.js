@@ -163,14 +163,27 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { handlers, inputState, isLoading, permissions, translations, getAvatarUrl } = this.props;
+        const {
+            handlers,
+            inputState,
+            isLoading,
+            permissions,
+            translations,
+            getAvatarUrl,
+            comments,
+            tasks,
+            versions
+        } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
         const { currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
 
-        const feedState = [];
+        let feedState = [];
+        feedState = comments ? feedState.concat(comments.entries) : feedState;
+        feedState = tasks ? feedState.concat(tasks.entries) : feedState;
+        feedState = versions ? feedState.concat(versions.entries) : feedState;
 
         return (
             // eslint-disable-next-line

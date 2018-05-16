@@ -16,8 +16,8 @@ import type {
     ContactHandlers,
     VersionHandlers,
     InputState,
-    Item,
-    Translations
+    Translations,
+    FeedItems
 } from '../activityFeedFlowTypes';
 
 type Props = {
@@ -29,7 +29,7 @@ type Props = {
         versions?: VersionHandlers
     },
     inputState: InputState,
-    items: Array<Item>,
+    items: FeedItems,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
     onTaskDelete?: Function,
@@ -61,10 +61,9 @@ const ActiveState = ({
                     return (
                         <li className='bcs-activity-feed-comment' key={type + id}>
                             <Comment
-                                id={id}
+                                {...item}
                                 currentUser={currentUser}
                                 onDelete={onCommentDelete}
-                                {...item}
                                 translations={translations}
                                 inputState={inputState}
                                 handlers={handlers}
@@ -75,8 +74,8 @@ const ActiveState = ({
                     return (
                         <li className='bcs-activity-feed-task' key={type + id}>
                             <Task
-                                currentUser={currentUser}
                                 {...item}
+                                currentUser={currentUser}
                                 onDelete={onTaskDelete}
                                 onEdit={onTaskEdit}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}

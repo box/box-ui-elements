@@ -34,9 +34,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
     const render = (props = {}) =>
         shallow(
             <Comment
-                createdBy={{ name: '50 Cent', id: 10 }}
+                created_by={{ name: '50 Cent', id: 10 }}
                 id='123'
-                taggedMessage='test'
+                tagged_message='test'
                 handlers={allHandlers}
                 currentUser={currentUser}
                 inputState={{
@@ -51,9 +51,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
     test('should correctly render comment', () => {
         const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 }
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 }
         };
 
         const wrapper = shallow(
@@ -93,9 +93,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             onTranslate: jest.fn()
         };
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 }
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 }
         };
 
         const wrapper = shallow(
@@ -118,9 +118,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should render commenter as a link', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 }
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 }
         };
 
         const wrapper = shallow(
@@ -143,9 +143,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
     // eslint-disable-next-line
     test('should allow user to delete if they have delete permissions on the comment and delete handler is defined', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 },
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
             permissions: { comment_delete: true }
         };
 
@@ -170,9 +170,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
     // eslint-disable-next-line
     test('should allow user to delete if they have delete permissions on the task and delete handler is defined', () => {
         const task = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 },
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
             permissions: { task_delete: true }
         };
 
@@ -196,9 +196,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should allow user to edit if they have edit permissions on the task and edit handler is defined', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 },
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
             permissions: { task_edit: true }
         };
         const wrapper = mount(
@@ -239,9 +239,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should not allow user to delete if they lack delete permissions on the comment', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 },
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
             permissions: {}
         };
 
@@ -265,9 +265,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should not allow user to edit if they lack edit permissions on the comment', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 },
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
             permissions: {}
         };
 
@@ -291,9 +291,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should not allow comment creator to delete if onDelete handler is undefined', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 11 }
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 11 }
         };
 
         const wrapper = shallow(
@@ -314,9 +314,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should not allow task creator to edit if onEdit handler is undefined', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 11 }
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 11 }
         };
 
         const wrapper = shallow(
@@ -338,9 +338,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should render an error when one is defined', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 }
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 }
         };
 
         const wrapper = shallow(
@@ -367,9 +367,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should render an error cta when an action is defined', () => {
         const comment = {
-            createdAt: TIME_STRING_SEPT_27_2017,
-            taggedMessage: 'test',
-            createdBy: { name: '50 Cent', id: 10 }
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 }
         };
         const onActionSpy = jest.fn();
 
@@ -405,9 +405,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
     test('should not have Mention object when shouldReturnString is true', () => {
         const comment = {
-            createdAt: '2016-11-02T11:35:14-07:00',
-            taggedMessage: 'test @[3203255873:test user] ',
-            createdBy: { name: '50 Cent', id: 10 },
+            created_at: '2016-11-02T11:35:14-07:00',
+            tagged_message: 'test @[3203255873:test user] ',
+            created_by: { name: '50 Cent', id: 10 },
             permissions: { task_edit: true }
         };
         const wrapper = mount(

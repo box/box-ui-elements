@@ -157,6 +157,7 @@ class Sidebar extends React.Component<Props, State> {
             tasksError,
             comments,
             commentsError,
+            versions,
             getAvatarUrl
         }: Props = this.props;
 
@@ -222,6 +223,7 @@ class Sidebar extends React.Component<Props, State> {
                             tasksError={tasksError}
                             comments={comments}
                             commentsError={commentsError}
+                            versions={versions}
                             onCommentCreate={onCommentCreate}
                             onCommentDelete={onCommentDelete}
                             onTaskCreate={onTaskCreate}
