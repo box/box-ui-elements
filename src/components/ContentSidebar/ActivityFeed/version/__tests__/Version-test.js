@@ -10,10 +10,10 @@ const translationProps = {
 describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
     test('should correctly render version', () => {
         const version = {
-            modifiedAt: Date.now(),
+            modified_at: Date.now(),
             id: '148953',
-            versionNumber: 1,
-            modifiedBy: { name: '50 Cent', id: 10 },
+            version_number: 1,
+            modified_by: { name: '50 Cent', id: 10 },
             action: 'upload'
         };
 
@@ -24,11 +24,11 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
 
     test('should correctly render info icon if onInfo is passed', () => {
         const version = {
-            modifiedAt: Date.now(),
+            modified_at: Date.now(),
             id: '148953',
             onInfo: () => {},
-            versionNumber: 1,
-            modifiedBy: { name: '50 Cent', id: 10 },
+            version_number: 1,
+            modified_by: { name: '50 Cent', id: 10 },
             action: 'upload'
         };
 
@@ -40,10 +40,10 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
 
     test('should correctly render delete version', () => {
         const version = {
-            modifiedAt: Date.now(),
+            modified_at: Date.now(),
             id: '148953',
-            versionNumber: 1,
-            modifiedBy: { name: '50 Cent', id: 10 },
+            version_number: 1,
+            modified_by: { name: '50 Cent', id: 10 },
             action: 'delete'
         };
 
@@ -54,10 +54,10 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
 
     test('should correctly render restore version', () => {
         const version = {
-            modifiedAt: Date.now(),
+            modified_at: Date.now(),
             id: '148953',
-            versionNumber: 1,
-            modifiedBy: { name: '50 Cent', id: 10 },
+            version_number: 1,
+            modified_by: { name: '50 Cent', id: 10 },
             action: 'restore'
         };
 
@@ -68,10 +68,10 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
 
     test('should correctly render restore version', () => {
         const version = {
-            modifiedAt: Date.now(),
+            modified_at: Date.now(),
             id: '148953',
-            versionNumber: 1,
-            modifiedBy: { name: '50 Cent', id: 10 },
+            version_number: 1,
+            modified_by: { name: '50 Cent', id: 10 },
             action: 'restore'
         };
 

@@ -26,25 +26,25 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
       items={
         Array [
           Object {
-            "createdAt": 1234567890,
-            "createdBy": Object {
+            "created_at": 1234567890,
+            "created_by": Object {
               "id": 11,
               "name": "Akon",
             },
             "id": "123",
-            "taggedMessage": "test @[123:Jeezy] @[10:Kanye West]",
+            "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
             "type": "comment",
           },
           Object {
             "assignees": Array [],
             "dueAt": 1234567891,
             "id": "1234",
-            "modifiedAt": 1234567891,
-            "modifiedBt": Object {
+            "modified_at": 1234567891,
+            "modified_by": Object {
               "id": 10,
               "name": "Jay-Z",
             },
-            "taggedMessage": "test",
+            "tagged_message": "test",
             "type": "task",
           },
           Object {

@@ -59,7 +59,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
       </div>
       <CommentText
         id="123"
-        taggedMessage="test"
+        tagged_message="test"
         translationEnabled={false}
         translationFailed={null}
       />
@@ -128,7 +128,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
       <CommentText
         id="123"
         onTranslate={[MockFunction]}
-        taggedMessage="test"
+        tagged_message="test"
         translationEnabled={true}
         translationFailed={null}
       />
@@ -196,7 +196,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render an
       </div>
       <CommentText
         id="123"
-        taggedMessage="test"
+        tagged_message="test"
         translationEnabled={false}
         translationFailed={true}
       />
@@ -268,7 +268,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render co
       </div>
       <CommentText
         id="123"
-        taggedMessage="test"
+        tagged_message="test"
         translationEnabled={false}
         translationFailed={null}
       />

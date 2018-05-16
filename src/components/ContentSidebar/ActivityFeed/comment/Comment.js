@@ -108,7 +108,7 @@ class Comment extends React.Component<Props, State> {
             error,
             onDelete,
             onEdit,
-            tagged_message,
+            tagged_message = '',
             translatedTaggedMessage,
             translations,
             handlers,
@@ -195,7 +195,7 @@ class Comment extends React.Component<Props, State> {
                         {!isEditing ? (
                             <CommentText
                                 id={id}
-                                taggedMessage={tagged_message}
+                                tagged_message={tagged_message}
                                 translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}
                                 translationFailed={error ? true : null}

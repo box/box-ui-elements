@@ -41,11 +41,7 @@ describe('api/Tasks', () => {
                 ...response,
                 entries: [
                     {
-                        type: 'task',
-                        id: '1234',
-                        createdAt: { name: 'Jay-Z', id: 10 },
-                        dueAt: 1234567891,
-                        message: 'test',
+                        ...task,
                         assignees: []
                     }
                 ]

@@ -9,9 +9,9 @@ const comments = {
         {
             type: 'comment',
             id: '123',
-            createdAt: 1234567890,
-            taggedMessage: 'test @[123:Jeezy] @[10:Kanye West]',
-            createdBy: { name: 'Akon', id: 11 }
+            created_at: 1234567890,
+            tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
+            created_by: { name: 'Akon', id: 11 }
         }
     ]
 };
@@ -21,9 +21,9 @@ const tasks = {
         {
             type: 'task',
             id: '1234',
-            modifiedAt: 1234567891,
-            taggedMessage: 'test',
-            modifiedBt: { name: 'Jay-Z', id: 10 },
+            modified_at: 1234567891,
+            tagged_message: 'test',
+            modified_by: { name: 'Jay-Z', id: 10 },
             dueAt: 1234567891,
             assignees: []
         }

@@ -23,11 +23,11 @@ describe('api/Versions', () => {
             const uploadVersion = {
                 id: 123,
                 trashed_at: null,
-                modified_at: 1234567891,
+                modified_at: 1234567892,
                 modified_by: { name: 'Jay-Z', id: 10 }
             };
             const deleteVersion = {
-                id: 123,
+                id: 456,
                 trashed_at: 1234567891,
                 modified_at: 1234567891,
                 modified_by: { name: 'Akon', id: 11 }
@@ -43,20 +43,14 @@ describe('api/Versions', () => {
                 total_count: 2,
                 entries: [
                     {
-                        id: 123,
+                        ...deleteVersion,
                         action: 'delete',
-                        versionNumber: 1,
-                        modifiedAt: 1234567891,
-                        modifiedBy: { name: 'Akon', id: 11 },
-                        trashedAt: 1234567891
+                        version_number: 1
                     },
                     {
-                        id: 123,
+                        ...uploadVersion,
                         action: 'upload',
-                        versionNumber: 2,
-                        modifiedAt: 1234567891,
-                        modifiedBy: { name: 'Jay-Z', id: 10 },
-                        trashedAt: null
+                        version_number: 2
                     }
                 ]
             };

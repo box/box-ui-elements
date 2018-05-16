@@ -24,14 +24,26 @@ describe('api/Comments', () => {
                 type: 'comment',
                 id: '123',
                 created_at: 1234567890,
-                tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
+                message: 'NOT A TAGGED MESSAGE',
+                tagged_message: '',
                 created_by: { name: 'Akon', id: 11 },
                 modified_at: 1234567890,
                 is_reply_comment: false
             };
+
+            const taggedComment = {
+                type: 'comment',
+                id: '456',
+                created_at: 1234567890,
+                tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
+                created_by: { name: 'Akon', id: 11 },
+                modified_at: 1234567890,
+                is_reply_comment: true
+            };
+
             const response = {
                 total_count: 1,
-                entries: [comment]
+                entries: [comment, taggedComment]
             };
 
             comments.successCallback = jest.fn();
@@ -40,14 +52,10 @@ describe('api/Comments', () => {
                 ...response,
                 entries: [
                     {
-                        type: 'comment',
-                        id: '123',
-                        createdAt: 1234567890,
-                        taggedMessage: 'test @[123:Jeezy] @[10:Kanye West]',
-                        createdBy: { name: 'Akon', id: 11 },
-                        modifiedAt: 1234567890,
-                        isReplyComment: false
-                    }
+                        ...comment,
+                        tagged_message: comment.message
+                    },
+                    taggedComment
                 ]
             };
 

@@ -14,7 +14,7 @@ import type { User } from '../../../../flowTypes';
 
 import './Version.scss';
 
-function getMessageForAction(name: React.Node, action: string, versionNumber: number): React.Node {
+function getMessageForAction(name: React.Node, action: string, version_number: number): React.Node {
     switch (action) {
         case 'upload':
             return (
@@ -22,7 +22,7 @@ function getMessageForAction(name: React.Node, action: string, versionNumber: nu
                     {...messages.versionUploaded}
                     values={{
                         name: <strong>{name}</strong>,
-                        versionNumber
+                        version_number
                     }}
                 />
             );
@@ -32,7 +32,7 @@ function getMessageForAction(name: React.Node, action: string, versionNumber: nu
                     {...messages.versionDeleted}
                     values={{
                         name: <strong>{name}</strong>,
-                        versionNumber
+                        version_number
                     }}
                 />
             );
@@ -42,7 +42,7 @@ function getMessageForAction(name: React.Node, action: string, versionNumber: nu
                     {...messages.versionRestored}
                     values={{
                         name: <strong>{name}</strong>,
-                        versionNumber
+                        version_number
                     }}
                 />
             );
