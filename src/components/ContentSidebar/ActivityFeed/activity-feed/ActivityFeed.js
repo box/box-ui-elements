@@ -79,26 +79,26 @@ class ActivityFeed extends React.Component<Props, State> {
         feedItems: [],
         pendingItems: [
             // One example of a pending item for addition
-            {
-                isPending: 'true',
-                type: 'comment',
-                id: 'pending',
-                tagged_message: 'testing pending',
-                message: 'testing pending',
-                created_by: {
-                    type: 'user',
-                    id: '1234',
-                    name: 'JUSTIN_TEST',
-                    login: 'justin@test.com',
-                    avatar_url: 'http://foo.bar.baz.faz.yaz'
-                },
-                created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
-                item: {
-                    id: '12345',
-                    type: 'file'
-                },
-                modified_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)'
-            }
+            // {
+            //     isPending: 'true',
+            //     type: 'comment',
+            //     id: 'pending',
+            //     tagged_message: 'testing pending',
+            //     message: 'testing pending',
+            //     created_by: {
+            //         type: 'user',
+            //         id: '1234',
+            //         name: 'JUSTIN_TEST',
+            //         login: 'justin@test.com',
+            //         avatar_url: 'http://foo.bar.baz.faz.yaz'
+            //     },
+            //     created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
+            //     item: {
+            //         id: '12345',
+            //         type: 'file'
+            //     },
+            //     modified_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)'
+            // }
         ]
     };
 
@@ -197,6 +197,11 @@ class ActivityFeed extends React.Component<Props, State> {
         const getMentionWithQuery = getProp(this.props, 'handlers.contacts.getMentionWithQuery', noop);
         this.setState({ mentionSelectorContacts: getMentionWithQuery(searchStr) });
     };
+
+    componentDidMount(): void {
+        const { comments, tasks, versions } = this.props;
+        this.sortFeedItems(comments, tasks, versions);
+    }
 
     componentWillReceiveProps(nextProps: any): void {
         const { comments, tasks, versions } = nextProps;
