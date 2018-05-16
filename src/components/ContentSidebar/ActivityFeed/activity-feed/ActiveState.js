@@ -67,6 +67,7 @@ const ActiveState = ({
                                 translations={translations}
                                 inputState={inputState}
                                 handlers={handlers}
+                                getAvatarUrl={getAvatarUrl}
                             />
                         </li>
                     );
