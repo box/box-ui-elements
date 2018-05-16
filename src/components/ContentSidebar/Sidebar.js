@@ -60,7 +60,8 @@ type Props = {
     fileError?: Errors,
     commentsError?: Errors,
     tasksError?: Errors,
-    currentUserError?: Errors
+    currentUserError?: Errors,
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 type State = {
@@ -156,7 +157,8 @@ class Sidebar extends React.Component<Props, State> {
             tasksError,
             comments,
             commentsError,
-            versions
+            versions,
+            getAvatarUrl
         }: Props = this.props;
 
         const { view } = this.state;
@@ -230,6 +232,7 @@ class Sidebar extends React.Component<Props, State> {
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                             getApproverWithQuery={getApproverWithQuery}
                             getMentionWithQuery={getMentionWithQuery}
+                            getAvatarUrl={getAvatarUrl}
                         />
                     )}
             </React.Fragment>

@@ -3,6 +3,7 @@ import { mount, shallow } from 'enzyme';
 
 import ActivityFeed from '../ActivityFeed';
 
+jest.mock('../../Avatar', () => () => 'Avatar');
 const comments = {
     entries: [
         {

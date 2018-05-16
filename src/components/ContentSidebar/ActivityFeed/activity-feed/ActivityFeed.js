@@ -45,7 +45,8 @@ type Props = {
     permissions?: {
         comments?: boolean,
         tasks?: boolean
-    }
+    },
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 type State = {
@@ -162,7 +163,17 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { handlers, inputState, isLoading, permissions, translations, comments, tasks, versions } = this.props;
+        const {
+            handlers,
+            inputState,
+            isLoading,
+            permissions,
+            translations,
+            getAvatarUrl,
+            comments,
+            tasks,
+            versions
+        } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
         const { currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
@@ -197,6 +208,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onVersionInfo={this.openVersionHistoryPopup}
                             translations={translations}
                             inputState={inputState}
+                            getAvatarUrl={getAvatarUrl}
                         />
                     )}
                 </div>

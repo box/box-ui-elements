@@ -35,7 +35,8 @@ type Props = {
     onTaskDelete?: Function,
     onTaskEdit?: Function,
     onVersionInfo?: Function,
-    translations?: Translations
+    translations?: Translations,
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 const ActiveState = ({
@@ -48,7 +49,8 @@ const ActiveState = ({
     onVersionInfo,
     translations,
     inputState,
-    handlers
+    handlers,
+    getAvatarUrl
 }: Props): Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
@@ -80,6 +82,7 @@ const ActiveState = ({
                                 translations={translations}
                                 inputState={inputState}
                                 handlers={handlers}
+                                getAvatarUrl={getAvatarUrl}
                             />
                         </li>
                     );

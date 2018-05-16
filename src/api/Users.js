@@ -5,11 +5,9 @@
  */
 
 import Base from './Base';
-
-/**
- * Fields we want include:
- *  -
- */
+import TokenService from '../util/TokenService';
+import { getTypedFileId } from '../util/file';
+import type { TokenLiteral } from '../flowTypes';
 
 class Users extends Base {
     /**
@@ -21,6 +19,35 @@ class Users extends Base {
     getUrl(id?: string): string {
         const userId = id || 'me';
         return `${this.getBaseApiUrl()}/users/${userId}`;
+    }
+
+    /**
+     * API URL for Users avatar
+     *
+     * @param {string} [id] - A box user id.
+     * @return {string} base url for users
+     */
+    getAvatarUrl(id: string): string {
+        if (!id) {
+            throw new Error('Missing user id');
+        }
+        return `${this.getUrl(id)}/avatar`;
+    }
+
+    /**
+     * Gets the user avatar URL
+     *
+     * @param {string} userId the user id
+     * @param {string} fileId the file id
+     * @return {string} the user avatar URL string for a given user with access token attached
+     */
+    async getAvatarUrlWithAccessToken(userId: string, fileId: string): Promise<?string> {
+        const accessToken: TokenLiteral = await TokenService.getReadToken(getTypedFileId(fileId), this.options.token);
+        if (typeof accessToken === 'string') {
+            return `${this.getAvatarUrl(userId)}?access_token=${accessToken}`;
+        }
+
+        return null;
     }
 }
 

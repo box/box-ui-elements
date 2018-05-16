@@ -8,7 +8,6 @@ import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
 
-import Avatar from 'box-react-ui/lib/components/avatar';
 import { Link } from 'box-react-ui/lib/components/link';
 import { ReadableTime } from 'box-react-ui/lib/components/time';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
@@ -20,6 +19,7 @@ import CommentInlineError from './CommentInlineError';
 import CommentText from './CommentText';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
+import Avatar from '../Avatar';
 import messages from '../../../messages';
 
 import './Comment.scss';
@@ -57,7 +57,8 @@ type Props = {
         contacts?: ContactHandlers,
         versions?: VersionHandlers
     },
-    inputState: InputState
+    inputState: InputState,
+    getAvatarUrl: (string) => Promise<?string>
 };
 
 type State = {
@@ -111,12 +112,13 @@ class Comment extends React.Component<Props, State> {
             translatedTaggedMessage,
             translations,
             handlers,
-            inputState
+            inputState,
+            getAvatarUrl
         } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
-        const created_atTimestamp = new Date(created_at).getTime();
+        const createdAtTimestamp = new Date(created_at).getTime();
         const canDeleteTasks = getProp(permissions, 'task_delete', false);
         const canDeleteTasksOrComments = canDeleteTasks || getProp(permissions, 'comment_delete');
         const canEditTasksOrComments = getProp(permissions, 'task_edit') || getProp(permissions, 'comment_edit');
@@ -131,7 +133,7 @@ class Comment extends React.Component<Props, State> {
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar className='bcs-comment-avatar' {...created_by} />
+                    <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={created_by} />
                     <div className='bcs-comment-content'>
                         <div className='bcs-comment-headline'>
                             <Link className='bcs-comment-user-name' href={`/profile/${created_by.id}`}>
@@ -141,12 +143,12 @@ class Comment extends React.Component<Props, State> {
                                 text={
                                     <FormattedMessage
                                         {...messages.commentPostedFullDateTime}
-                                        values={{ time: created_atTimestamp }}
+                                        values={{ time: createdAtTimestamp }}
                                     />
                                 }
                             >
                                 <small className='bcs-comment-created-at'>
-                                    <ReadableTime timestamp={created_atTimestamp} relativeThreshold={ONE_HOUR_MS} />
+                                    <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
                             {onEdit && canEditTasksOrComments ? <InlineEdit id={id} toEdit={toEdit} /> : null}

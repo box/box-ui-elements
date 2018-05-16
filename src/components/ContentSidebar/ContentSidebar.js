@@ -151,6 +151,24 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Gets the user avatar URL
+     *
+     * @param {string} userId the user id
+     * @param {string} fileId the file id
+     *
+     * @return the user avatar URL string for a given user with access token attached
+     */
+    async getAvatarUrl(userId: string): Promise<?string> {
+        const { fileId } = this.props;
+
+        if (!fileId) {
+            return null;
+        }
+
+        return this.api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
+    }
+
+    /**
      * Destroys api instances
      *
      * @private
@@ -790,6 +808,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                 getApproverWithQuery={getApproverWithQuery}
                                 getMentionWithQuery={getMentionWithQuery}
+                                getAvatarUrl={this.getAvatarUrl}
                             />
                         ) : (
                             <div className='bcs-loading'>

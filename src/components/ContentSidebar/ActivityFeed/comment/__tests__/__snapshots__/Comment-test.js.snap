@@ -9,10 +9,14 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
     onBlur={[Function]}
     onFocus={[Function]}
   >
-    <Avatar
+    <Component
       className="bcs-comment-avatar"
-      id={10}
-      name="50 Cent"
+      user={
+        Object {
+          "id": 10,
+          "name": "50 Cent",
+        }
+      }
     />
     <div
       className="bcs-comment-content"
@@ -73,10 +77,14 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
     onBlur={[Function]}
     onFocus={[Function]}
   >
-    <Avatar
+    <Component
       className="bcs-comment-avatar"
-      id={10}
-      name="50 Cent"
+      user={
+        Object {
+          "id": 10,
+          "name": "50 Cent",
+        }
+      }
     />
     <div
       className="bcs-comment-content"
@@ -138,10 +146,14 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render an
     onBlur={[Function]}
     onFocus={[Function]}
   >
-    <Avatar
+    <Component
       className="bcs-comment-avatar"
-      id={10}
-      name="50 Cent"
+      user={
+        Object {
+          "id": 10,
+          "name": "50 Cent",
+        }
+      }
     />
     <div
       className="bcs-comment-content"
@@ -206,10 +218,14 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render co
     onBlur={[Function]}
     onFocus={[Function]}
   >
-    <Avatar
+    <Component
       className="bcs-comment-avatar"
-      id={10}
-      name="50 Cent"
+      user={
+        Object {
+          "id": 10,
+          "name": "50 Cent",
+        }
+      }
     />
     <div
       className="bcs-comment-content"
