@@ -26,7 +26,7 @@ class Tasks extends Base {
      * @param {Object} data the api response data
      */
     successHandler = (data: any): void => {
-        if (this.isDestroyed()) {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }
 
@@ -35,12 +35,7 @@ class Tasks extends Base {
             assignees: task.task_assignment_collection.entries || []
         }));
 
-        if (typeof this.successCallback === 'function') {
-            this.successCallback({
-                ...data,
-                entries: tasks
-            });
-        }
+        this.successCallback({ ...data, entries: tasks });
     };
 }
 

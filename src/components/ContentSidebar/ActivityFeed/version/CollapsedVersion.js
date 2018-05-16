@@ -28,6 +28,12 @@ function getMessageForAction(
     const collaboratorIDs = Object.keys(collaborators);
     const numberOfCollaborators = collaboratorIDs.length;
 
+    const versionRange: React.Node = (
+        <span className='bcs-version-range'>
+            {version_start} - {version_end}
+        </span>
+    );
+
     if (numberOfCollaborators === 1) {
         const collaborator = collaborators[collaboratorIDs[0]];
         return (
@@ -35,11 +41,7 @@ function getMessageForAction(
                 {...messages.versionUploadCollapsed}
                 values={{
                     name: <strong>{collaborator.name}</strong>,
-                    versions: (
-                        <span className='bcs-version-range'>
-                            {version_start} - {version_end}
-                        </span>
-                    )
+                    versions: versionRange
                 }}
             />
         );
@@ -50,11 +52,7 @@ function getMessageForAction(
             {...messages.versionMultipleUsersUploaded}
             values={{
                 numberOfCollaborators,
-                versions: (
-                    <span className='bcs-version-range'>
-                        {version_start} - {version_end}
-                    </span>
-                )
+                versions: versionRange
             }}
         />
     );

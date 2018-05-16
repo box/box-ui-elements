@@ -32,7 +32,7 @@ class Versions extends OffsetBasedAPI {
      * @param {Object} data the api response data
      */
     successHandler = (data: any): void => {
-        if (this.isDestroyed()) {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }
 
@@ -43,12 +43,7 @@ class Versions extends OffsetBasedAPI {
             version_number: index + 1 // adjust for offset
         }));
 
-        if (typeof this.successCallback === 'function') {
-            this.successCallback({
-                ...data,
-                entries: versions
-            });
-        }
+        this.successCallback({ ...data, entries: versions });
     };
 }
 

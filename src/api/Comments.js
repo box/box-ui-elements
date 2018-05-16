@@ -26,7 +26,7 @@ class Comments extends OffsetBasedAPI {
      * @param {Object} data the api response data
      */
     successHandler = (data: any): void => {
-        if (this.isDestroyed()) {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }
 
@@ -38,12 +38,7 @@ class Comments extends OffsetBasedAPI {
             };
         });
 
-        if (typeof this.successCallback === 'function') {
-            this.successCallback({
-                ...data,
-                entries: comments
-            });
-        }
+        this.successCallback({ ...data, entries: comments });
     };
 }
 
