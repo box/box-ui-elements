@@ -158,7 +158,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @return the user avatar URL string for a given user with access token attached
      */
-    async getAvatarUrl(userId: string): Promise<?string> {
+    getAvatarUrl = async (userId: string): Promise<?string> => {
         const { fileId } = this.props;
 
         if (!fileId) {
@@ -166,7 +166,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         }
 
         return this.api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
-    }
+    };
 
     /**
      * Destroys api instances
