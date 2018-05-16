@@ -115,7 +115,15 @@
                 document.querySelector('.explorer1').innerHTML = '';
                 explorer1.show(folderId, token, {
                     container: '.explorer1',
-                    autoFocus: true
+                    autoFocus: true,
+                    contentPreviewProps: {
+                        hasSidebar: true,
+                        contentSidebarProps: {
+                            hasActivityFeed: true,
+                            hasProperties: true,
+                            hasSkills: true
+                        }
+                    }
                 });
 
 

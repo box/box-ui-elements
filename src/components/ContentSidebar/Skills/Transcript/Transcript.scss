@@ -1,48 +1,42 @@
 @import '../../../variables';
 
 .be-transcript {
-    color: $sevens;
-    font-family: monospace;
-    font-size: 11px;
+    position: relative;
 
-    // sass-lint:disable class-name-format
-    .ReactVirtualized__Table__Grid {
-        cursor: pointer;
-        outline: none;
+    .be-transcript-edit,
+    .be-transcript-copy {
+        border-radius: 3px;
+        height: 24px;
+        padding-top: 1px;
+        position: absolute;
+        right: 15px;
+        top: -46px;
+        width: 24px;
 
-        .ReactVirtualized__Table__row {
-            align-items: flex-start;
-
-            .ReactVirtualized__Table__rowColumn:first-of-type {
-                margin: 0;
-            }
-
-            .be-transcript-column {
-                padding: 10px 0;
-                width: 200px;
-            }
-
-            .be-transcript-time-column {
-                padding: 10px 0 0 5px;
-            }
+        &:hover svg path {
+            fill: $twos;
         }
 
-        .ReactVirtualized__Table__row:focus,
-        .ReactVirtualized__Table__row:active {
-            background-color: $lighter-light-blue;
-            outline: none;
+        &.be-transcript-is-editing {
+            background-color: $off-white;
         }
     }
-}
 
-.be .btn-plain.be-transcript-expand {
-    height: 24px;
-    position: absolute;
-    right: 15px;
-    top: -44px;
-    width: 24px;
+    .be-transcript-copy {
+        right: 45px;
 
-    &:hover svg path {
-        fill: $sevens;
+        &.be-transcript-copied {
+            background-color: $off-white;
+            transition: background-color 1s;
+
+            svg path {
+                fill: $thats-mint;
+            }
+        }
+    }
+
+    .be-transcript-edit-message {
+        color: $sevens;
+        margin-bottom: 15px;
     }
 }

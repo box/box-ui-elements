@@ -770,6 +770,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.nextSegment',
         description: 'Title for next segment on skill timeline',
         defaultMessage: 'Next Segment'
+    },
+    transcriptEdit: {
+        id: 'be.transcriptEdit',
+        description: 'Message to the user for editing the transcript in the sidebar',
+        defaultMessage: 'Click any section to edit.'
     }
 });
 

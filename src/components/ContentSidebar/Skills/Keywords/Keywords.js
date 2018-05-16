@@ -77,7 +77,7 @@ class Keywords extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    toggleisEditing = (): void => {
+    toggleIsEditing = (): void => {
         this.setState((prevState) => ({
             isEditing: !prevState.isEditing
         }));
@@ -141,7 +141,7 @@ class Keywords extends PureComponent<Props, State> {
         const { onSkillChange }: Props = this.props;
         const { removes, adds }: State = this.state;
         onSkillChange(removes, adds);
-        this.toggleisEditing();
+        this.toggleIsEditing();
     };
 
     /**
@@ -175,7 +175,7 @@ class Keywords extends PureComponent<Props, State> {
                     <PlainButton
                         type='button'
                         className={editClassName}
-                        onClick={this.toggleisEditing}
+                        onClick={this.toggleIsEditing}
                         data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
                     >
                         <IconEdit />

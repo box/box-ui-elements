@@ -71,7 +71,6 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     onError?: Function,
-    onInteraction: Function,
     onMetric?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function
@@ -110,7 +109,6 @@ class ContentPreview extends PureComponent<Props, State> {
         autoFocus: false,
         useHotkeys: true,
         onError: noop,
-        onInteraction: noop,
         onLoad: noop,
         onMetric: noop,
         onNavigate: noop,
@@ -697,7 +695,6 @@ class ContentPreview extends PureComponent<Props, State> {
             measureRef,
             sharedLink,
             sharedLinkPassword,
-            onInteraction,
             requestInterceptor,
             responseInterceptor
         }: Props = this.props;
@@ -756,7 +753,6 @@ class ContentPreview extends PureComponent<Props, State> {
                                 getPreviewer={this.getPreviewer}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
-                                onInteraction={onInteraction}
                                 requestInterceptor={requestInterceptor}
                                 responseInterceptor={responseInterceptor}
                             />
@@ -770,5 +766,6 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 }
 
+export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
 export default makeResponsive(ContentPreview);
