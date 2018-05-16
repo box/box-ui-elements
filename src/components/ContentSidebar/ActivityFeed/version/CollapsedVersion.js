@@ -18,8 +18,8 @@ import './Version.scss';
 function getMessageForAction(
     action: string,
     collaborators: { [collaborator_id: string]: User },
-    versionStart: number,
-    versionEnd: number
+    version_start: number,
+    version_end: number
 ): React.Node {
     // We only support collapsing for multiple upload versions
     if (action !== 'upload') {
@@ -37,7 +37,7 @@ function getMessageForAction(
                     name: <strong>{collaborator.name}</strong>,
                     versions: (
                         <span className='bcs-version-range'>
-                            {versionStart} - {versionEnd}
+                            {version_start} - {version_end}
                         </span>
                     )
                 }}
@@ -52,7 +52,7 @@ function getMessageForAction(
                 numberOfCollaborators,
                 versions: (
                     <span className='bcs-version-range'>
-                        {versionStart} - {versionEnd}
+                        {version_start} - {version_end}
                     </span>
                 )
             }}
@@ -66,8 +66,8 @@ type Props = {
     intl: any,
     onInfo: Function,
     versions: FileVersions,
-    versionStart: number,
-    versionEnd: number
+    version_start: number,
+    version_end: number
 };
 
 const CollapsedVersion = ({
@@ -76,12 +76,12 @@ const CollapsedVersion = ({
     intl,
     onInfo,
     versions,
-    versionStart,
-    versionEnd
+    version_start,
+    version_end
 }: Props): React.Node => (
     <div className='bcs-collapsed-version'>
         <span className='bcs-version-message'>
-            {getMessageForAction(action, collaborators, versionStart, versionEnd)}
+            {getMessageForAction(action, collaborators, version_start, version_end)}
         </span>
         {onInfo ? (
             <span className='bcs-version-actions'>

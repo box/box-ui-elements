@@ -32,15 +32,18 @@ class Versions extends OffsetBasedAPI {
      * @param {Object} data the api response data
      */
     successHandler = (data: any): void => {
-        const { entries } = data;
+        if (this.isDestroyed()) {
+            return;
+        }
 
+        const { entries } = data;
         const versions = entries.reverse().map((version: BoxItemVersion, index) => ({
             ...version,
             action: version.trashed_at ? ACTION.delete : ACTION.upload,
             version_number: index + 1 // adjust for offset
         }));
 
-        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
+        if (typeof this.successCallback === 'function') {
             this.successCallback({
                 ...data,
                 entries: versions

@@ -20,6 +20,31 @@ class Comments extends OffsetBasedAPI {
         }
         return `${this.getBaseApiUrl()}/files/${id}/comments`;
     }
+
+    /**
+     * Formats the comments api response to usable data
+     * @param {Object} data the api response data
+     */
+    successHandler = (data: any): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        const comments = data.entries.map((comment: Comment) => {
+            const { tagged_message, message } = comment;
+            return {
+                ...comment,
+                tagged_message: tagged_message !== '' ? tagged_message : message
+            };
+        });
+
+        if (typeof this.successCallback === 'function') {
+            this.successCallback({
+                ...data,
+                entries: comments
+            });
+        }
+    };
 }
 
 export default Comments;

@@ -447,6 +447,7 @@ export type Comment = {
     id: string,
     is_reply_comment?: boolean,
     tagged_message: string,
+    message?: string,
     created_by: User,
     created_at: string,
     item?: {

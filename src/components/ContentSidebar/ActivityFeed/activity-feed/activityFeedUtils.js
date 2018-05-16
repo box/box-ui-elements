@@ -48,8 +48,8 @@ export function collapseFeedState(feedState: FeedItems): FeedItems {
                     type: ItemTypes.fileVersion,
                     version_number,
                     versions: versions.concat([feedItem]),
-                    versionStart: Math.min(version_start, version_number),
-                    versionEnd: Math.max(version_end, version_number)
+                    version_start: Math.min(version_start, version_number),
+                    version_end: Math.max(version_end, version_number)
                 }
             ]);
         }

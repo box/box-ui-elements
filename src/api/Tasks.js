@@ -26,12 +26,16 @@ class Tasks extends Base {
      * @param {Object} data the api response data
      */
     successHandler = (data: any): void => {
+        if (this.isDestroyed()) {
+            return;
+        }
+
         const tasks = data.entries.map((task: Task) => ({
             ...task,
             assignees: task.task_assignment_collection.entries || []
         }));
 
-        if (!this.isDestroyed() && typeof this.successCallback === 'function') {
+        if (typeof this.successCallback === 'function') {
             this.successCallback({
                 ...data,
                 entries: tasks
