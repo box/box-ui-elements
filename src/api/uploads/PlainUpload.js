@@ -6,20 +6,11 @@
 
 import noop from 'lodash/noop';
 import BaseUpload from './BaseUpload';
-import { DEFAULT_RETRY_DELAY_MS, MS_IN_S } from '../../constants';
 import type { BoxItem } from '../../flowTypes';
 
-const MAX_RETRY = 5;
 class PlainUpload extends BaseUpload {
-    file: File;
-    folderId: string;
-    fileId: ?string;
-    overwrite: boolean;
     successCallback: Function;
-    errorCallback: Function;
     progressCallback: Function;
-    retryCount: number = 0;
-    retryTimeout: TimeoutID;
 
     /**
      * Handles an upload success response
@@ -55,112 +46,6 @@ class PlainUpload extends BaseUpload {
     };
 
     /**
-     * Handles an upload error
-     *
-     * @param {Object} error - Upload error
-     * @return {void}
-     */
-    uploadErrorHandler = (error: any): void => {
-        if (this.isDestroyed()) {
-            return;
-        }
-
-        const fileName = this.file ? this.file.name : '';
-
-        // TODO(tonyjin): Normalize error object and clean up error handling
-        let errorData = error;
-        const { response } = error;
-        if (response && response.data) {
-            errorData = response.data;
-        }
-
-        if (this.retryCount >= MAX_RETRY) {
-            this.errorCallback(errorData);
-            // Automatically handle name conflict errors
-        } else if (errorData && errorData.status === 409) {
-            if (this.overwrite) {
-                // Error response contains file ID to upload a new file version for
-                this.makePreflightRequest({
-                    fileId: errorData.context_info.conflicts.id,
-                    fileName
-                });
-            } else {
-                // Otherwise, reupload and append timestamp
-                // 'test.jpg' becomes 'test-TIMESTAMP.jpg'
-                const extension = fileName.substr(fileName.lastIndexOf('.')) || '';
-                this.makePreflightRequest({
-                    fileName: `${fileName.substr(0, fileName.lastIndexOf('.'))}-${Date.now()}${extension}`
-                });
-            }
-            this.retryCount += 1;
-            // When rate limited, retry after interval defined in header
-        } else if (errorData && (errorData.status === 429 || errorData.code === 'too_many_requests')) {
-            let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
-
-            if (errorData.headers) {
-                const retryAfterSec = parseInt(
-                    errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
-                    10
-                );
-
-                if (!Number.isNaN(retryAfterSec)) {
-                    retryAfterMs = retryAfterSec * MS_IN_S;
-                }
-            }
-
-            this.retryTimeout = setTimeout(
-                () =>
-                    this.makePreflightRequest({
-                        fileName
-                    }),
-                retryAfterMs
-            );
-            this.retryCount += 1;
-
-            // If another error status that isn't name conflict or rate limiting, fail upload
-        } else if (
-            errorData &&
-            (errorData.status || errorData.message === 'Failed to fetch') &&
-            typeof this.errorCallback === 'function'
-        ) {
-            this.errorCallback(errorData);
-            // Retry with exponential backoff for other failures since these are likely to be network errors
-        } else {
-            this.retryTimeout = setTimeout(
-                () =>
-                    this.makePreflightRequest({
-                        fileName
-                    }),
-                2 ** this.retryCount * MS_IN_S
-            );
-            this.retryCount += 1;
-        }
-    };
-
-    /**
-     * Sends an upload pre-flight request. If a file ID is supplied,
-     * send a pre-flight request to that file version.
-     *
-     * @param {fileId} fileId - ID of file to replace
-     * @param {fileName} fileName - New name for file
-     * @return {void}
-     */
-    makePreflightRequest({ fileId, fileName }: { fileId?: string, fileName?: string }): void {
-        if (!this.fileId && !!fileId) {
-            this.fileId = fileId;
-        }
-
-        super.makePreflightRequest({
-            fileId,
-            file: this.file,
-            folderId: this.folderId,
-            fileName,
-            successHandler: this.makeRequest,
-            errorHandler: this.uploadErrorHandler
-        });
-    }
-
-    /**
      * Uploads a file. If a file ID is supplied, use the Upload File
      * Version API to replace the file.
      *
@@ -168,7 +53,7 @@ class PlainUpload extends BaseUpload {
      * @param {boolean} [options.url] - Upload URL to use
      * @return {void}
      */
-    makeRequest = ({ data }: { data: { upload_url?: string } }): void => {
+    preflightSuccessHandler = ({ data }: { data: { upload_url?: string } }): void => {
         if (this.isDestroyed()) {
             return;
         }
@@ -195,7 +80,7 @@ class PlainUpload extends BaseUpload {
                 file: this.file
             },
             successHandler: this.uploadSuccessHandler,
-            errorHandler: this.uploadErrorHandler,
+            errorHandler: this.preflightErrorHandler,
             progressHandler: this.uploadProgressHandler
         });
     };
@@ -244,7 +129,7 @@ class PlainUpload extends BaseUpload {
         this.progressCallback = progressCallback;
         this.overwrite = overwrite;
 
-        this.makePreflightRequest(fileId ? { fileId } : {});
+        this.makePreflightRequest();
     }
 
     /**

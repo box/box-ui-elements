@@ -34,13 +34,11 @@ class MultiputUpload extends BaseMultiput {
     createSessionNumRetriesPerformed: number;
     destinationFileId: ?string;
     folderId: string;
-    file: File;
     fileSha1: ?string;
     firstUnuploadedPartIndex: number;
     initialFileLastModified: ?string;
     initialFileSize: number;
     successCallback: Function;
-    errorCallback: Function;
     progressCallback: Function;
     options: Options;
     partSize: number;
@@ -56,9 +54,6 @@ class MultiputUpload extends BaseMultiput {
     sha1Worker: Worker;
     createSessionTimeout: TimeoutID;
     commitSessionTimeout: TimeoutID;
-    fileName: string;
-    fileId: ?string;
-    overwrite: boolean;
     partsUploaded: number;
 
     /**
@@ -147,39 +142,19 @@ class MultiputUpload extends BaseMultiput {
     }
 
     /**
-     * Sends an upload pre-flight request. If a file ID is supplied,
-     * send a pre-flight request to that file version.
-     *
-     * @private
-     * @param {fileId} fileId - ID of file to replace
-     * @param {fileName} fileName - New name for file
-     * @return {void}
-     */
-    makePreflightRequest = () => {
-        super.makePreflightRequest({
-            fileId: this.fileId,
-            file: this.file,
-            folderId: this.folderId,
-            fileName: this.fileName,
-            successHandler: this.createSession,
-            errorHandler: this.createSessionErrorHandler
-        });
-    };
-
-    /**
      * Resolves preflight response to a upload host
      *
      * @private
-     * @param {Object} data
-     * @param {Object} [data.response]
+     * @param {Object} response
+     * @param {Object} [response.data]
      * @return {string}
      */
-    getUploadHostFromPreflightResponse = ({ response }: { response: { upload_url?: string } }) => {
-        if (!response || !response.upload_url) {
+    getUploadHostFromPreflightResponse = ({ data }: { data: { upload_url?: string } }) => {
+        if (!data || !data.upload_url) {
             return this.getBaseUploadUrl();
         }
 
-        const splitUrl = response.upload_url.split('/');
+        const splitUrl = data.upload_url.split('/');
         return `${splitUrl[0]}//${splitUrl[2]}`;
     };
 
@@ -190,13 +165,13 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    createSession = async (preflightResponse: Object): Promise<any> => {
+    preflightSuccessHandler = async (preflightResponse: Object): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
 
         const uploadHost = this.getUploadHostFromPreflightResponse(preflightResponse);
-        let createSessionUrl = `${uploadHost}/files/upload_sessions`;
+        let createSessionUrl = `${uploadHost}/api/2.0/files/upload_sessions`;
 
         // Set up post body
         const postData: StringAnyMap = {

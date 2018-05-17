@@ -18,7 +18,7 @@ let file;
 const createSessionUrl = 'https://test.box.com/createSession';
 const partSize = 9;
 
-describe.only('api/MultiputUpload', () => {
+describe('api/uploads/MultiputUpload', () => {
     let multiputUploadTest;
     beforeEach(() => {
         file = {
@@ -53,7 +53,7 @@ describe.only('api/MultiputUpload', () => {
             multiputUploadTest.getBaseUploadUrl = jest.fn();
 
             // Execute
-            const res = multiputUploadTest.getUploadHostFromPreflightResponse({ response: { upload_url } });
+            const res = multiputUploadTest.getUploadHostFromPreflightResponse({ data: { upload_url } });
 
             // Verify
             expect(multiputUploadTest.getBaseUploadUrl).not.toHaveBeenCalled();
@@ -286,7 +286,7 @@ describe.only('api/MultiputUpload', () => {
         });
     });
 
-    describe('createSession()', () => {
+    describe('preflightSuccessHandler()', () => {
         const preflightResponse = { data: 1 };
         const uploadHost = 'upload.xyz.box.com';
 
@@ -294,7 +294,7 @@ describe.only('api/MultiputUpload', () => {
             multiputUploadTest.xhr.post = jest.fn();
             multiputUploadTest.destroyed = true;
 
-            await multiputUploadTest.createSession();
+            await multiputUploadTest.preflightSuccessHandler();
             expect(multiputUploadTest.xhr.post).not.toHaveBeenCalled();
         });
 
@@ -306,7 +306,7 @@ describe.only('api/MultiputUpload', () => {
             multiputUploadTest.createSessionSuccessHandler = jest.fn();
             multiputUploadTest.getUploadHostFromPreflightResponse = jest.fn().mockReturnValueOnce(uploadHost);
 
-            await multiputUploadTest.createSession(preflightResponse);
+            await multiputUploadTest.preflightSuccessHandler(preflightResponse);
             expect(multiputUploadTest.createSessionSuccessHandler).toHaveBeenCalledWith(data);
         });
 
@@ -325,7 +325,7 @@ describe.only('api/MultiputUpload', () => {
             multiputUploadTest.createSessionErrorHandler = jest.fn();
             multiputUploadTest.getUploadHostFromPreflightResponse = jest.fn().mockReturnValueOnce(uploadHost);
 
-            await multiputUploadTest.createSession(preflightResponse);
+            await multiputUploadTest.preflightSuccessHandler(preflightResponse);
             expect(multiputUploadTest.createSessionErrorHandler).toHaveBeenCalledWith(error);
         });
 
@@ -349,7 +349,7 @@ describe.only('api/MultiputUpload', () => {
                     multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
                     multiputUploadTest.getUploadHostFromPreflightResponse = jest.fn().mockReturnValueOnce(uploadHost);
 
-                    await multiputUploadTest.createSession(preflightResponse);
+                    await multiputUploadTest.preflightSuccessHandler(preflightResponse);
                     expect(multiputUploadTest.createSessionErrorHandler).not.toHaveBeenCalledWith();
                     expect(multiputUploadTest.errorCallback).toHaveBeenCalledWith(data);
                 });
@@ -375,7 +375,7 @@ describe.only('api/MultiputUpload', () => {
                     multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
                     multiputUploadTest.getUploadHostFromPreflightResponse = jest.fn().mockReturnValueOnce(uploadHost);
 
-                    await multiputUploadTest.createSession(preflightResponse);
+                    await multiputUploadTest.preflightSuccessHandler(preflightResponse);
 
                     expect(multiputUploadTest.sessionErrorHandler).toHaveBeenCalledWith(
                         error,
