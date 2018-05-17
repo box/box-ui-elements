@@ -62,6 +62,7 @@ import type {
     DefaultView,
     StringMap
 } from '../../flowTypes';
+import type { ContentPreviewProps } from '../ContentPreview';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -100,7 +101,6 @@ type Props = {
     onUpload: Function,
     onNavigate: Function,
     defaultView: DefaultView,
-    hasPreviewSidebar: boolean,
     language?: string,
     messages?: StringMap,
     logoUrl?: string,
@@ -108,7 +108,7 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onInteraction: Function
+    contentPreviewProps: ContentPreviewProps
 };
 
 type State = {
@@ -168,8 +168,7 @@ class ContentExplorer extends Component<Props, State> {
         onUpload: noop,
         onNavigate: noop,
         defaultView: DEFAULT_VIEW_FILES,
-        hasPreviewSidebar: false,
-        onInteraction: noop
+        contentPreviewProps: {}
     };
 
     /**
@@ -407,8 +406,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     fetchFolder = (id?: string, triggerNavigationEvent: boolean = true, forceFetch: boolean = false) => {
-        const { rootFolderId, canPreview, hasPreviewSidebar }: Props = this.props;
+        const { rootFolderId, canPreview, contentPreviewProps }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
+        const { hasSidebar }: ContentPreviewProps = contentPreviewProps;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
 
         // If we are navigating around, aka not first load
@@ -437,7 +437,7 @@ class ContentExplorer extends Component<Props, State> {
             this.errorCallback,
             forceFetch,
             canPreview,
-            hasPreviewSidebar
+            hasSidebar
         );
     };
 
@@ -502,8 +502,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     debouncedSearch = debounce((id: string, query: string, forceFetch?: boolean) => {
-        const { canPreview, hasPreviewSidebar }: Props = this.props;
+        const { canPreview, contentPreviewProps }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
+        const { hasSidebar }: ContentPreviewProps = contentPreviewProps;
         this.api
             .getSearchAPI()
             .search(
@@ -515,7 +516,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.errorCallback,
                 forceFetch,
                 canPreview,
-                hasPreviewSidebar
+                hasSidebar
             );
     }, DEFAULT_SEARCH_DEBOUNCE);
 
@@ -590,8 +591,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
-        const { rootFolderId, canPreview, hasPreviewSidebar }: Props = this.props;
+        const { rootFolderId, canPreview, contentPreviewProps }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
+        const { hasSidebar }: ContentPreviewProps = contentPreviewProps;
 
         // Recents are sorted by a different date field than the rest
         const by = sortBy === FIELD_MODIFIED_AT ? FIELD_INTERACTED_AT : sortBy;
@@ -614,7 +616,7 @@ class ContentExplorer extends Component<Props, State> {
             this.errorCallback,
             forceFetch,
             canPreview,
-            hasPreviewSidebar
+            hasSidebar
         );
     }
 
@@ -1181,10 +1183,9 @@ class ContentExplorer extends Component<Props, State> {
             measureRef,
             onPreview,
             onUpload,
-            hasPreviewSidebar,
-            onInteraction,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
+            contentPreviewProps
         }: Props = this.props;
 
         const {
@@ -1336,7 +1337,6 @@ class ContentExplorer extends Component<Props, State> {
                             parentElement={this.rootElement}
                             appElement={this.appElement}
                             onPreview={onPreview}
-                            hasPreviewSidebar={hasPreviewSidebar}
                             canDownload={canDownload}
                             cache={this.api.getCache()}
                             apiHost={apiHost}
@@ -1344,7 +1344,7 @@ class ContentExplorer extends Component<Props, State> {
                             staticHost={staticHost}
                             sharedLink={sharedLink}
                             sharedLinkPassword={sharedLinkPassword}
-                            onInteraction={onInteraction}
+                            contentPreviewProps={contentPreviewProps}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
                         />

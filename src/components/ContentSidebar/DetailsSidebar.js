@@ -26,7 +26,6 @@ type Props = {
     hasClassification: boolean,
     hasVersions: boolean,
     onAccessStatsClick?: Function,
-    onInteraction: Function,
     onDescriptionChange: Function,
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PillSelector from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelector';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
@@ -29,7 +29,7 @@ type State = {
     pills: Pills
 };
 
-class EditableKeywords extends PureComponent<Props, State> {
+class EditableKeywords extends React.PureComponent<Props, State> {
     props: Props;
     state: State;
 

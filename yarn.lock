@@ -1571,9 +1571,9 @@ box-locales@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/box-locales/-/box-locales-0.0.1.tgz#1724959f293ae85f235b681b775d0f1a52a76b54"
 
-box-react-ui@^22.20.0:
-  version "22.20.0"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-22.20.0.tgz#9bc5baeaf783dac1afa5a5d2d3878226595fef02"
+box-react-ui@^22.23.0:
+  version "22.23.0"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-22.23.0.tgz#0172e5ea150135e9eca52662d10f074c7fb557a0"
 
 brace-expansion@^1.1.7:
   version "1.1.8"
@@ -8806,9 +8806,9 @@ react-tether@^0.6.1:
     prop-types "^15.5.8"
     tether "^1.4.3"
 
-react-textarea-autosize@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-6.0.0.tgz#31e44dc7f40aef4fb140dcc8b8c4e1b9cd15c8e3"
+react-textarea-autosize@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-6.1.0.tgz#df91387f8a8f22020b77e3833c09829d706a09a5"
   dependencies:
     prop-types "^15.6.0"
 
