@@ -10,6 +10,63 @@ let props;
 let file;
 
 describe('components/ContentPreview/ContentPreview', () => {
+    describe('componentDidUpdate()', () => {
+        test('should not reload preview if component updates but we should not load preview', async () => {
+            global.Box = {};
+            global.Box.Preview = function Preview() {
+                this.updateFileCache = jest.fn();
+                this.show = jest.fn();
+            };
+            file = { id: '123' };
+
+            props = {
+                hasSidebar: true,
+                token: 'token',
+                fileId: file.id
+            };
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(false);
+            instance.loadPreview = jest.fn();
+
+            wrapper.setProps({
+                hasSidebar: false
+            });
+
+            expect(instance.loadPreview).toHaveBeenCalledTimes(0);
+        });
+    });
+
+    describe('shouldLoadPreview()', () => {
+        test('should return true if file version ID has changed', () => {
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+
+            const oldFile = { id: '123', file_version: { id: '1234' } };
+            const newFile = { id: '123', file_version: { id: '2345' } };
+            wrapper.setState({ file: newFile });
+            expect(instance.shouldLoadPreview({}, { file: oldFile })).toBeTruthy();
+        });
+
+        test('should return true if file object has newly been populated', () => {
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+
+            wrapper.setState({ file: { id: '123' } });
+            expect(instance.shouldLoadPreview({}, { file: undefined })).toBeTruthy();
+        });
+
+        test('should return false if file has not changed', () => {
+            file = { id: '123' };
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+
+            expect(instance.shouldLoadPreview({}, { file })).toBeFalsy();
+        });
+    });
+
     describe('loadPreview()', () => {
         beforeEach(() => {
             // Fresh global preview object
@@ -98,6 +155,39 @@ describe('components/ContentPreview/ContentPreview', () => {
                     container: expect.stringContaining('.bcpr-content')
                 })
             );
+        });
+
+        test('should use existing preview instance if set in props', async () => {
+            const preview = new global.Box.Preview();
+            props = {
+                token: 'token',
+                fileId: file.id,
+                previewInstance: preview
+            };
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+
+            await instance.loadPreview();
+
+            expect(instance.preview).toBe(preview);
+        });
+
+        test('should not add preview listeners again if previewInstance prop is passed in', async () => {
+            const preview = new global.Box.Preview();
+            props = {
+                token: 'token',
+                fileId: file.id,
+                previewInstance: preview
+            };
+            const wrapper = getWrapper(props);
+            wrapper.setState({ file });
+            const instance = wrapper.instance();
+            instance.addPreviewListeners = jest.fn();
+
+            await instance.loadPreview();
+
+            expect(instance.addPreviewListeners).toHaveBeenCalledTimes(0);
         });
     });
 });
