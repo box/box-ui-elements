@@ -194,11 +194,11 @@ class ActivityFeed extends React.Component<Props, State> {
         tasks?: Array<Task> = [],
         versions?: Array<BoxItemVersion> = []
     ): void {
-        const items = [...comments, ...tasks, ...versions];
+        const feedItems = [...comments, ...tasks, ...versions];
 
-        items.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+        feedItems.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
 
-        return this.setState({ feedItems: items });
+        return this.setState({ feedItems });
     }
 
     render(): React.Node {
