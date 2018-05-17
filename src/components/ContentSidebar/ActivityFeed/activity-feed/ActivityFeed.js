@@ -63,8 +63,7 @@ type State = {
     isInputOpen: boolean,
     approverSelectorContacts: Array<User>,
     mentionSelectorContacts: Array<User>,
-    feedItems: Array<Comment | Task | BoxItemVersion>,
-    pendingItems: Array<Object>
+    feedItems: Array<Comment | Task | BoxItemVersion>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
@@ -76,30 +75,7 @@ class ActivityFeed extends React.Component<Props, State> {
         isInputOpen: false,
         approverSelectorContacts: [],
         mentionSelectorContacts: [],
-        feedItems: [],
-        pendingItems: [
-            // One example of a pending item for addition
-            // {
-            //     isPending: 'true',
-            //     type: 'comment',
-            //     id: 'pending',
-            //     tagged_message: 'testing pending',
-            //     message: 'testing pending',
-            //     created_by: {
-            //         type: 'user',
-            //         id: '1234',
-            //         name: 'JUSTIN_TEST',
-            //         login: 'justin@test.com',
-            //         avatar_url: 'http://foo.bar.baz.faz.yaz'
-            //     },
-            //     created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
-            //     item: {
-            //         id: '12345',
-            //         type: 'file'
-            //     },
-            //     modified_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)'
-            // }
-        ]
+        feedItems: []
     };
 
     feedContainer: null | HTMLElement;
@@ -199,35 +175,26 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     componentDidMount(): void {
-        const { comments, tasks, versions } = this.props;
-        this.sortFeedItems(comments, tasks, versions);
+        this.attemptFeedSort(this.props);
     }
 
     componentWillReceiveProps(nextProps: any): void {
-        const { comments, tasks, versions } = nextProps;
+        this.attemptFeedSort(nextProps);
+    }
 
-        if (comments || tasks || versions) {
-            this.sortFeedItems(comments, tasks, versions);
+    attemptFeedSort(props: any): void {
+        const { comments, tasks, versions } = props;
+        if (comments && tasks && versions) {
+            this.sortFeedItems(comments.entries, tasks.entries, versions.entries);
         }
     }
 
-    sortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions): void {
-        const items = [];
-        const { pendingItems } = this.state;
-
-        if (comments) {
-            items.push(...comments.entries);
-        }
-
-        if (tasks) {
-            items.push(...tasks.entries);
-        }
-
-        if (versions) {
-            items.push(...versions.entries);
-        }
-
-        items.push(...pendingItems);
+    sortFeedItems(
+        comments?: Array<Comment> = [],
+        tasks?: Array<Task> = [],
+        versions?: Array<BoxItemVersion> = []
+    ): void {
+        const items = [...comments, ...tasks, ...versions];
 
         items.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
 
