@@ -169,7 +169,7 @@ class PlainUpload extends Base {
         this.xhr.options({
             url,
             data: attributes,
-            successHandler: this.makeRequest,
+            successHandler: this.makeUploadRequest,
             errorHandler: this.uploadErrorHandler
         });
     }
@@ -182,7 +182,7 @@ class PlainUpload extends Base {
      * @param {boolean} [options.url] - Upload URL to use
      * @return {void}
      */
-    makeRequest = ({ data }: { data: { upload_url?: string } }): void => {
+    makeUploadRequest = ({ data }: { data: { upload_url?: string } }): void => {
         if (this.isDestroyed()) {
             return;
         }

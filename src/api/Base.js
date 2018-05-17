@@ -5,12 +5,11 @@
  */
 
 import noop from 'lodash/noop';
-import getProp from 'lodash/get';
 import type { $AxiosError } from 'axios';
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
-import { getBadItemError, getBadPermissionsError } from '../util/error';
 import { getTypedFileId } from '../util/file';
+import { getBadItemError, getBadPermissionsError } from '../util/error';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
 import type { Options } from '../flowTypes';
 
@@ -111,25 +110,19 @@ class Base {
     }
 
     /**
-     * Checks that our item has an id and permissions set
+     * Checks that our desired API call has sufficient permissions and an item ID
      *
-     * @param {string} - Id
-     * @param {Object} - Permissions
+     * @param {string} permissionToCheck - Permission to check
+     * @param {Object} permissions - Permissions object
+     * @param {string} id - Item id
+     * @return {void}
      */
-    checkItem(id?: string, permissions?: Object): void {
+    checkApiCallValidity(permissionToCheck: string, permissions?: Object, id?: string): void {
         if (!id || !permissions) {
             throw getBadItemError();
         }
-    }
 
-    /**
-     * Checks that our desired API call has sufficient permissions
-     *
-     * @param {Object} permissions - Permissions object
-     * @param {string} permissionToCheck - Permission to check
-     */
-    checkPermission(permissions?: Object, permissionToCheck: string): void {
-        const permission = getProp(permissions, permissionToCheck);
+        const permission = permissions[permissionToCheck];
         if (!permission) {
             throw getBadPermissionsError();
         }
@@ -195,7 +188,7 @@ class Base {
 
     /**
      * Gets the URL for the API, meant to be overridden
-     * @param {string} id - The file id
+     * @param {string} id - The item id
      */
     /* eslint-disable no-unused-vars */
     getUrl(id: string) {
@@ -204,51 +197,20 @@ class Base {
     }
 
     /**
-     * Attaches success and error callbacks for a given API call
-     * @param {Function} successCallback - Success function
-     * @param {Function} errorCallback - Error function
-     */
-    attachCallbacks(successCallback: Function, errorCallback: Function) {
-        if (typeof successCallback === 'function') {
-            this.successCallback = successCallback;
-        }
-
-        if (typeof errorCallback === 'function') {
-            this.errorCallback = errorCallback;
-        }
-    }
-
-    /**
-     * Generic API get
+     * Generic API GET
      *
      * @param {string} id - The file id
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      * @param {Object} params request params
      */
-    async get(id: string, successCallback: Function, errorCallback: Function, params?: Object): Promise<void> {
-        if (this.isDestroyed()) {
-            return;
-        }
-
-        this.attachCallbacks(successCallback, errorCallback);
-
-        // Make the XHR request
-        try {
-            const { data } = await this.xhr.get({
-                id: getTypedFileId(id),
-                url: this.getUrl(id),
-                params
-            });
-
-            this.successHandler(data);
-        } catch (error) {
-            this.errorHandler(error);
-        }
+    get(id: string, successCallback: Function, errorCallback: Function, params?: Object): void {
+        const url = this.getUrl(id);
+        this.makeRequest('GET', id, url, successCallback, errorCallback, params);
     }
 
     /**
-     * Generic API post
+     * Generic API POST
      *
      * @param {string} id - The file id
      * @param {string} url - The url to post to
@@ -256,85 +218,83 @@ class Base {
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      */
-    async post(
-        id: string,
-        url: string,
-        data: Object,
-        successCallback: Function,
-        errorCallback: Function
-    ): Promise<void> {
-        if (this.isDestroyed()) {
-            return;
-        }
-
-        this.attachCallbacks(successCallback, errorCallback);
-
-        // Make the XHR request
-        try {
-            const { responseData } = await this.xhr.post({ id, url, data });
-            this.successHandler(responseData);
-        } catch (error) {
-            this.errorHandler(error);
-        }
+    post(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): void {
+        this.makeRequest('POST', id, url, successCallback, errorCallback, data);
     }
 
     /**
-     * Generic API put
+     * Generic API PUT
      *
      * @param {string} id - The file id
-     * @param {string} url - The url to post to
-     * @param {Object} data - The data to post
+     * @param {string} url - The url to put to
+     * @param {Object} data - The data to put
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      */
-    async put(
-        id: string,
-        url: string,
-        data: Object,
-        successCallback: Function,
-        errorCallback: Function
-    ): Promise<void> {
-        if (this.isDestroyed()) {
-            return;
-        }
-
-        this.attachCallbacks(successCallback, errorCallback);
-
-        // Make the XHR request
-        try {
-            const { responseData } = await this.xhr.put({ id, url, data });
-            this.successHandler(responseData);
-        } catch (error) {
-            this.errorHandler(error);
-        }
+    put(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): void {
+        this.makeRequest('PUT', id, url, successCallback, errorCallback, data);
     }
 
     /**
-     * Generic API post
+     * Generic API DELETE
      *
      * @param {string} id - The file id
-     * @param {string} url - The url to post to
+     * @param {string} url - The url of the item to delete
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      * @param {Object} data optional data to delete
      */
-    async delete(
+    delete(id: string, url: string, successCallback: Function, errorCallback: Function, data: Object = {}): void {
+        this.makeRequest('DELETE', id, url, successCallback, errorCallback, data);
+    }
+
+    /**
+     * Generic API CRUD operations
+     *
+     * @param {string} method - which REST method to execute (GET, POST, PUT, DELETE)
+     * @param {string} id - The file id
+     * @param {string} url - The url of the item to operate on
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     * @param {Object} requestData - Optional info to be added to the API call such as params or request body data
+     */
+    async makeRequest(
+        method: string,
         id: string,
         url: string,
         successCallback: Function,
         errorCallback: Function,
-        data?: Object = {}
+        requestData: Object = {}
     ): Promise<void> {
         if (this.isDestroyed()) {
             return;
         }
 
-        this.attachCallbacks(successCallback, errorCallback);
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
 
-        // Make the XHR request
+        let xhrMethod: Function = noop;
+        switch (method) {
+            case 'GET':
+                xhrMethod = this.xhr.get;
+                break;
+            case 'POST':
+                xhrMethod = this.xhr.post;
+                break;
+            case 'PUT':
+                xhrMethod = this.xhr.put;
+                break;
+            case 'DELETE':
+                xhrMethod = this.xhr.delete;
+                break;
+            default:
+            // no-op
+        }
+
+        xhrMethod = xhrMethod.bind(this.xhr);
         try {
-            const { responseData } = await this.xhr.delete({ id, url, data });
-            this.successHandler(responseData);
+            const { data } = await xhrMethod({ id: getTypedFileId(id), url, ...requestData });
+            this.successHandler(data);
         } catch (error) {
             this.errorHandler(error);
         }
