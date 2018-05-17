@@ -19,10 +19,13 @@
         <link rel="stylesheet" type="text/css" href="../dev/en-US/explorer.css" />
         <script src="../dev/en-US/explorer.js"></script>
         <script>
+            var ACCESS_TOKEN = '';
+            var FOLDER_ID = '0';
+
             window.onload = function() {
                 const { ContentExplorer } = Box;
                 const explorer = new ContentExplorer();
-                explorer.show('0', '', {
+                explorer.show(FOLDER_ID, ACCESS_TOKEN, {
                     currentFolderId: '38141286234',
                     sharedLink: 'https://app.box.com/s/sdfsdf',
                     contentPreviewProps: {
