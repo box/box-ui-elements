@@ -142,20 +142,21 @@ class MultiputUpload extends BaseMultiput {
     }
 
     /**
-     * Resolves preflight response to a upload host
+     * Update uploadHost with preflight response and return the base uploadUrl
      *
      * @private
      * @param {Object} response
      * @param {Object} [response.data]
      * @return {string}
      */
-    getUploadHostFromPreflightResponse = ({ data }: { data: { upload_url?: string } }) => {
+    getBaseUploadUrlFromPreflightResponse = ({ data }: { data: { upload_url?: string } }) => {
         if (!data || !data.upload_url) {
             return this.getBaseUploadUrl();
         }
 
         const splitUrl = data.upload_url.split('/');
-        return `${splitUrl[0]}//${splitUrl[2]}`;
+        this.uploadHost = `${splitUrl[0]}//${splitUrl[2]}`;
+        return this.getBaseUploadUrl();
     };
 
     /**
@@ -170,8 +171,8 @@ class MultiputUpload extends BaseMultiput {
             return;
         }
 
-        const uploadHost = this.getUploadHostFromPreflightResponse(preflightResponse);
-        let createSessionUrl = `${uploadHost}/api/2.0/files/upload_sessions`;
+        const uploadUrl = this.getBaseUploadUrlFromPreflightResponse(preflightResponse);
+        let createSessionUrl = `${uploadUrl}/files/upload_sessions`;
 
         // Set up post body
         const postData: StringAnyMap = {
