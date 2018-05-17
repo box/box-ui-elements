@@ -26,7 +26,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
       items={
         Array [
           Object {
-            "created_at": 1234567890,
+            "created_at": "Thu Sep 26 33658 19:46:39 GMT-0600 (CST)",
             "created_by": Object {
               "id": 11,
               "name": "Akon",
@@ -39,7 +39,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             "assignees": Array [],
             "dueAt": 1234567891,
             "id": "1234",
-            "modified_at": 1234567891,
+            "modified_at": "Thu Sep 25 33658 19:46:39 GMT-0600 (CST)",
             "modified_by": Object {
               "id": 10,
               "name": "Jay-Z",

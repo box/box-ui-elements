@@ -80,6 +80,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
             <TextareaAutosize
               className="description-textarea"
               data-resin-target="description"
+              inputRef={[Function]}
               maxLength="255"
               maxRows={6}
               onBlur={[Function]}
@@ -98,7 +99,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
                 placeholder="Enter a description"
                 style={
                   Object {
-                    "height": -24,
+                    "height": 0,
                   }
                 }
                 value="foo"
