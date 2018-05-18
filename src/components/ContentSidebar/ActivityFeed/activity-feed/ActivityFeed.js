@@ -63,7 +63,7 @@ type State = {
     isInputOpen: boolean,
     approverSelectorContacts: Array<User>,
     mentionSelectorContacts: Array<User>,
-    feedItems: Array<Comment | Task | BoxItemVersion>
+    feedItems?: Array<Comment | Task | BoxItemVersion>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
@@ -75,7 +75,7 @@ class ActivityFeed extends React.Component<Props, State> {
         isInputOpen: false,
         approverSelectorContacts: [],
         mentionSelectorContacts: [],
-        feedItems: []
+        feedItems: undefined
     };
 
     feedContainer: null | HTMLElement;
@@ -181,7 +181,10 @@ class ActivityFeed extends React.Component<Props, State> {
 
     componentWillReceiveProps(nextProps: any): void {
         const { comments, tasks, versions } = nextProps;
-        this.sortFeedItems(comments, tasks, versions);
+        const { feedItems } = this.state;
+        if (!feedItems) {
+            this.sortFeedItems(comments, tasks, versions);
+        }
     }
 
     /**
@@ -226,12 +229,12 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className='bcs-activity-feed-items-container'
                 >
-                    {shouldShowEmptyState(feedItems) ? (
+                    {shouldShowEmptyState(feedItems || []) ? (
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
                             handlers={handlers}
-                            items={collapseFeedState(feedItems)}
+                            items={collapseFeedState(feedItems || [])}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
                             onCommentDelete={hasCommentPermission ? this.deleteComment : noop}

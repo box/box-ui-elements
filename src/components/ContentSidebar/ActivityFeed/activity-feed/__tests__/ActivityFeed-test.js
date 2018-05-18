@@ -178,6 +178,18 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
             expect(instance.sortFeedItems).toBeCalledWith(comments, tasks, undefined);
         });
+
+        test('should not invoke sortFeedItems() once feedState has already been set', () => {
+            const props = { comments, tasks, versions };
+            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
+            const instance = wrapper.instance();
+            instance.componentWillReceiveProps(props);
+
+            instance.sortFeedItems = jest.fn();
+            instance.componentWillReceiveProps(props);
+
+            expect(instance.sortFeedItems).not.toBeCalled();
+        });
     });
 
     describe('sortFeedItems()', () => {
