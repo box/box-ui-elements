@@ -164,38 +164,14 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     describe('componentWillReceiveProps()', () => {
-        test('should invoke attempFeedSort() with new props', () => {
+        test('should invoke sortFeedItems() with new props', () => {
             const props = { comments, tasks };
             const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
             const instance = wrapper.instance();
-            instance.attemptFeedSort = jest.fn();
+            instance.sortFeedItems = jest.fn();
             instance.componentWillReceiveProps(props);
 
-            expect(instance.attemptFeedSort).toBeCalledWith(props);
-        });
-    });
-
-    describe('attemptFeedSort()', () => {
-        it('should not invoke sortFeedItems() if comments, tasks, or versions are missing', () => {
-            const props = { comments, tasks };
-            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
-            const instance = wrapper.instance();
-            instance.sortFeedItems = jest.fn();
-
-            instance.attemptFeedSort(props);
-
-            expect(instance.sortFeedItems).not.toBeCalled();
-        });
-
-        it('should invoke sortFeedItems() if comments, tasks, and versions are present', () => {
-            const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
-            const instance = wrapper.instance();
-            instance.sortFeedItems = jest.fn();
-
-            instance.attemptFeedSort(props);
-
-            expect(instance.sortFeedItems).toBeCalled();
+            expect(instance.sortFeedItems).toBeCalledWith(comments, tasks, undefined);
         });
     });
 
@@ -204,7 +180,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
             const instance = wrapper.instance();
 
-            instance.sortFeedItems(comments.entries, tasks.entries);
+            instance.sortFeedItems(comments, tasks);
 
             const { feedItems } = instance.state;
             expect(feedItems[0].id).toEqual(comments.entries[0].id);

@@ -175,30 +175,35 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     componentDidMount(): void {
-        this.attemptFeedSort(this.props);
+        const { comments, tasks, versions } = this.props;
+        this.sortFeedItems(comments, tasks, versions);
     }
 
     componentWillReceiveProps(nextProps: any): void {
-        this.attemptFeedSort(nextProps);
+        const { comments, tasks, versions } = nextProps;
+        this.sortFeedItems(comments, tasks, versions);
     }
 
-    attemptFeedSort(props: any): void {
-        const { comments, tasks, versions } = props;
-        if (comments && tasks && versions) {
-            this.sortFeedItems(comments.entries, tasks.entries, versions.entries);
+    /**
+     * Sort feed valid feed items with new at the top, old at the bottom.
+     *
+     * @param args - Arguments list of each item container type that is allowed in the feed.
+     */
+    sortFeedItems(...args: Array<Comments | Tasks | FileVersions>): void {
+        const feedItems = [];
+
+        // If all items are not ready, don't sort and render the feed
+        if (args.some((itemContainer) => !itemContainer || !itemContainer.entries)) {
+            return;
         }
-    }
 
-    sortFeedItems(
-        comments?: Array<Comment> = [],
-        tasks?: Array<Task> = [],
-        versions?: Array<BoxItemVersion> = []
-    ): void {
-        const feedItems = [...comments, ...tasks, ...versions];
+        args.forEach((itemContainer) => {
+            feedItems.push(...itemContainer.entries);
+        });
 
         feedItems.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
 
-        return this.setState({ feedItems });
+        this.setState({ feedItems });
     }
 
     render(): React.Node {
