@@ -12,7 +12,17 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { FileVersions, Comments, Tasks, User, SelectorItems, BoxItem } from '../../../../flowTypes';
+import type {
+    BoxItemVersion,
+    FileVersions,
+    Comment,
+    Comments,
+    Task,
+    Tasks,
+    User,
+    SelectorItems,
+    BoxItem
+} from '../../../../flowTypes';
 import type {
     CommentHandlers,
     TaskHandlers,
@@ -52,7 +62,8 @@ type Props = {
 type State = {
     isInputOpen: boolean,
     approverSelectorContacts: Array<User>,
-    mentionSelectorContacts: Array<User>
+    mentionSelectorContacts: Array<User>,
+    feedItems: Array<Comment | Task | BoxItemVersion>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
@@ -63,7 +74,8 @@ class ActivityFeed extends React.Component<Props, State> {
     state = {
         isInputOpen: false,
         approverSelectorContacts: [],
-        mentionSelectorContacts: []
+        mentionSelectorContacts: [],
+        feedItems: []
     };
 
     feedContainer: null | HTMLElement;
@@ -162,28 +174,48 @@ class ActivityFeed extends React.Component<Props, State> {
         this.setState({ mentionSelectorContacts: getMentionWithQuery(searchStr) });
     };
 
+    componentDidMount(): void {
+        const { comments, tasks, versions } = this.props;
+        this.sortFeedItems(comments, tasks, versions);
+    }
+
+    componentWillReceiveProps(nextProps: any): void {
+        const { comments, tasks, versions } = nextProps;
+        this.sortFeedItems(comments, tasks, versions);
+    }
+
+    /**
+     * Sort valid feed items, descending by created_at time
+     *
+     * @param args Array<?Comments | ?Tasks | ?FileVersions> - Arguments list of each item container
+     * type that is allowed in the feed.
+     */
+    sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): void {
+        const feedItems = [];
+
+        // If all items are not ready, don't sort and render the feed
+        if (args.some((itemContainer) => !itemContainer || !itemContainer.entries)) {
+            return;
+        }
+
+        args.forEach((itemContainer) => {
+            // $FlowFixMe
+            feedItems.push(...itemContainer.entries);
+        });
+
+        feedItems.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+
+        this.setState({ feedItems });
+    }
+
     render(): React.Node {
-        const {
-            handlers,
-            inputState,
-            isLoading,
-            permissions,
-            translations,
-            getAvatarUrl,
-            comments,
-            tasks,
-            versions
-        } = this.props;
+        const { handlers, inputState, isLoading, permissions, translations, getAvatarUrl } = this.props;
         const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
         const { currentUser } = inputState;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
-
-        let feedState = [];
-        feedState = comments ? feedState.concat(comments.entries) : feedState;
-        feedState = tasks ? feedState.concat(tasks.entries) : feedState;
-        feedState = versions ? feedState.concat(versions.entries) : feedState;
+        const { feedItems } = this.state;
 
         return (
             // eslint-disable-next-line
@@ -194,12 +226,12 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className='bcs-activity-feed-items-container'
                 >
-                    {shouldShowEmptyState(feedState) ? (
+                    {shouldShowEmptyState(feedItems) ? (
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
                             handlers={handlers}
-                            items={collapseFeedState(feedState)}
+                            items={collapseFeedState(feedItems)}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
                             onCommentDelete={hasCommentPermission ? this.deleteComment : noop}

@@ -155,8 +155,8 @@ class Sidebar extends React.Component<Props, State> {
             tasksError,
             comments,
             commentsError,
-            versions,
-            getAvatarUrl
+            getAvatarUrl,
+            versions
         }: Props = this.props;
 
         const { view } = this.state;
