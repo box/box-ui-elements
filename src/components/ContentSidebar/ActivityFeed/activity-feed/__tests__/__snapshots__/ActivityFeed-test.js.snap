@@ -37,6 +37,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
           },
           Object {
             "assignees": Array [],
+            "created_at": "Thu Sep 25 33658 19:45:39 GMT-0600 (CST)",
             "dueAt": 1234567891,
             "id": "1234",
             "modified_at": "Thu Sep 25 33658 19:46:39 GMT-0600 (CST)",
@@ -48,6 +49,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             "type": "task",
           },
           Object {
+            "created_at": "Thu Sep 20 33658 19:45:39 GMT-0600 (CST)",
             "id": 123,
             "modified_at": 1234567891,
             "modified_by": Object {
