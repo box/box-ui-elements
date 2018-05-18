@@ -189,7 +189,7 @@ class ActivityFeed extends React.Component<Props, State> {
      *
      * @param args - Arguments list of each item container type that is allowed in the feed.
      */
-    sortFeedItems(...args: Array<Comments | Tasks | FileVersions>): void {
+    sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): void {
         const feedItems = [];
 
         // If all items are not ready, don't sort and render the feed
@@ -198,6 +198,7 @@ class ActivityFeed extends React.Component<Props, State> {
         }
 
         args.forEach((itemContainer) => {
+            // $FlowFixMe
             feedItems.push(...itemContainer.entries);
         });
 

@@ -5,6 +5,7 @@ import ActivityFeed from '../ActivityFeed';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 const comments = {
+    total_count: 1,
     entries: [
         {
             type: 'comment',
@@ -17,10 +18,12 @@ const comments = {
 };
 
 const tasks = {
+    total_count: 1,
     entries: [
         {
             type: 'task',
             id: '1234',
+            created_at: 'Thu Sep 25 33658 19:45:39 GMT-0600 (CST)',
             modified_at: 'Thu Sep 25 33658 19:46:39 GMT-0600 (CST)',
             tagged_message: 'test',
             modified_by: { name: 'Jay-Z', id: 10 },
@@ -31,10 +34,12 @@ const tasks = {
 };
 
 const versions = {
+    total_count: 1,
     entries: [
         {
             type: 'file_version',
             id: 123,
+            created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
             trashed_at: 1234567891,
             modified_at: 1234567891,
             modified_by: { name: 'Akon', id: 11 }
