@@ -12,21 +12,15 @@ describe('api/OffsetBasedAPI', () => {
     });
 
     describe('getQueryParameters()', () => {
-        beforeEach(() => {
-            offsetBasedAPI.offset = 0;
-            offsetBasedAPI.limit = LIMIT;
-        });
-
         test('should return query parameters with no fields', () => {
-            expect(offsetBasedAPI.getQueryParameters()).toEqual({
+            expect(offsetBasedAPI.getQueryParameters(0, LIMIT)).toEqual({
                 offset: 0,
                 limit: LIMIT
             });
         });
 
         test('should return query parameters with fields', () => {
-            offsetBasedAPI.fields = ['foo', 'bar'];
-            expect(offsetBasedAPI.getQueryParameters()).toEqual({
+            expect(offsetBasedAPI.getQueryParameters(0, LIMIT, ['foo', 'bar'])).toEqual({
                 offset: 0,
                 limit: LIMIT,
                 fields: 'foo,bar'
@@ -35,31 +29,24 @@ describe('api/OffsetBasedAPI', () => {
     });
 
     describe('hasMoreItems()', () => {
-        beforeEach(() => {
-            offsetBasedAPI.offset = LIMIT;
-        });
-
         test('should be more items', () => {
-            expect(offsetBasedAPI.hasMoreItems(LIMIT + 1)).toBe(true);
+            expect(offsetBasedAPI.hasMoreItems(LIMIT, LIMIT + 1)).toBe(true);
         });
 
         test('should be more items with no totalCount', () => {
-            expect(offsetBasedAPI.hasMoreItems()).toBe(true);
+            expect(offsetBasedAPI.hasMoreItems(LIMIT)).toBe(true);
         });
 
         test('should not be more items', () => {
-            expect(offsetBasedAPI.hasMoreItems(LIMIT)).toBe(false);
+            expect(offsetBasedAPI.hasMoreItems(LIMIT, LIMIT)).toBe(false);
         });
     });
 
     describe('offsetGetRequest()', () => {
         beforeEach(() => {
             offsetBasedAPI.getUrl = jest.fn(() => url);
-            offsetBasedAPI.offset = 0;
-            offsetBasedAPI.limit = 1000;
             offsetBasedAPI.successHandler = jest.fn();
             offsetBasedAPI.errorHandler = jest.fn();
-            offsetBasedAPI.shouldFetchAll = true;
         });
 
         test('should do two xhr calls and call successHandler once', () => {
@@ -74,7 +61,7 @@ describe('api/OffsetBasedAPI', () => {
                 )
             };
 
-            return offsetBasedAPI.offsetGetRequest().then(() => {
+            return offsetBasedAPI.offsetGetRequest('id', 0, 1000, true).then(() => {
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
                 expect(offsetBasedAPI.successHandler).toHaveBeenCalledTimes(1);
                 expect(offsetBasedAPI.errorHandler).not.toHaveBeenCalled();
@@ -90,7 +77,7 @@ describe('api/OffsetBasedAPI', () => {
                 )
             };
 
-            return offsetBasedAPI.offsetGetRequest().then(() => {
+            return offsetBasedAPI.offsetGetRequest('id', 0, 1000, true).then(() => {
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
                 expect(offsetBasedAPI.successHandler).toHaveBeenCalledTimes(1);
                 expect(offsetBasedAPI.errorHandler).not.toHaveBeenCalled();
@@ -99,6 +86,9 @@ describe('api/OffsetBasedAPI', () => {
     });
 
     describe('offsetGet()', () => {
+        const successCb = jest.fn();
+        const errorCb = jest.fn();
+
         beforeEach(() => {
             offsetBasedAPI.getUrl = jest.fn(() => url);
         });
@@ -106,9 +96,6 @@ describe('api/OffsetBasedAPI', () => {
         test('should not do anything if destroyed', () => {
             offsetBasedAPI.isDestroyed = jest.fn().mockReturnValueOnce(true);
             offsetBasedAPI.xhr = null;
-
-            const successCb = jest.fn();
-            const errorCb = jest.fn();
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).catch(() => {
                 expect(successCb).not.toHaveBeenCalled();
@@ -120,9 +107,6 @@ describe('api/OffsetBasedAPI', () => {
             offsetBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: offsetBasedAPIResponse }))
             };
-
-            const successCb = jest.fn();
-            const errorCb = jest.fn();
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
                 expect(successCb).toHaveBeenCalledWith(offsetBasedAPIResponse);
@@ -151,13 +135,7 @@ describe('api/OffsetBasedAPI', () => {
                 )
             };
 
-            const successCb = jest.fn();
-            const errorCb = jest.fn();
-
-            offsetBasedAPI.totalCount = 50;
-            offsetBasedAPI.offset = 50;
-
-            return offsetBasedAPI.offsetGet('id', successCb, errorCb).catch(() => {
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb, 50).catch(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).not.toHaveBeenCalled();
                 expect(offsetBasedAPI.xhr.get).not.toHaveBeenCalled();
@@ -169,9 +147,6 @@ describe('api/OffsetBasedAPI', () => {
             offsetBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
-
-            const successCb = jest.fn();
-            const errorCb = jest.fn();
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
                 expect(successCb).not.toHaveBeenCalled();

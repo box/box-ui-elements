@@ -13,27 +13,20 @@ describe('api/MarkerBasedAPI', () => {
 
     describe('hasMoreItems()', () => {
         test('should not be more items', () => {
-            markerBasedAPI.marker = null;
-            expect(markerBasedAPI.hasMoreItems()).toBe(false);
-
-            markerBasedAPI.marker = '';
-            expect(markerBasedAPI.hasMoreItems()).toBe(false);
+            expect(markerBasedAPI.hasMoreItems(null)).toBe(false);
+            expect(markerBasedAPI.hasMoreItems('')).toBe(false);
         });
 
         test('should be more items', () => {
-            markerBasedAPI.marker = 'next_marker';
-            expect(markerBasedAPI.hasMoreItems()).toBe(true);
+            expect(markerBasedAPI.hasMoreItems('next_marker')).toBe(true);
         });
     });
 
     describe('markerGetRequest()', () => {
         beforeEach(() => {
             markerBasedAPI.getUrl = jest.fn(() => url);
-            markerBasedAPI.marker = 'next_marker';
-            markerBasedAPI.limit = 1000;
             markerBasedAPI.successHandler = jest.fn();
             markerBasedAPI.errorHandler = jest.fn();
-            markerBasedAPI.shouldFetchAll = true;
         });
 
         test('should do two xhr calls and call successHandler once', () => {
@@ -52,7 +45,7 @@ describe('api/MarkerBasedAPI', () => {
                     )
             };
 
-            return markerBasedAPI.markerGetRequest().then(() => {
+            return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
                 expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
                 expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(1);
                 expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
@@ -68,7 +61,7 @@ describe('api/MarkerBasedAPI', () => {
                 )
             };
 
-            return markerBasedAPI.markerGetRequest().then(() => {
+            return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
                 expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
                 expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(1);
                 expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
@@ -85,7 +78,7 @@ describe('api/MarkerBasedAPI', () => {
         });
 
         test('should not do anything if destroyed', () => {
-            markerBasedAPI.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            markerBasedAPI.isDestroyed = jest.fn().mockReturnValue(true);
             markerBasedAPI.xhr = null;
 
             return markerBasedAPI
@@ -111,7 +104,9 @@ describe('api/MarkerBasedAPI', () => {
                     id: 'id',
                     successCallback,
                     errorCallback,
-                    marker: 'next_marker'
+                    marker: 'next_marker',
+                    limit: LIMIT,
+                    shouldFetchAll: true
                 })
                 .then(() => {
                     expect(successCallback).toHaveBeenCalledWith(markerBasedAPIResponse);
@@ -139,7 +134,9 @@ describe('api/MarkerBasedAPI', () => {
                     id: 'id',
                     successCallback,
                     errorCallback,
-                    marker: ''
+                    marker: '',
+                    limit: LIMIT,
+                    shouldFetchAll: true
                 })
                 .then(() => {
                     expect(successCallback).not.toHaveBeenCalled();

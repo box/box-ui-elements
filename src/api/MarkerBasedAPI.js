@@ -12,6 +12,7 @@ type Params = {
 
 type Data = {
     next_marker: string,
+    limit: number,
     entries: Array<any>
 };
 
@@ -22,44 +23,32 @@ class MarkerBasedApi extends Base {
     data: Data;
 
     /**
-     * @property {string}
-     */
-    marker: string;
-
-    /**
-     * @property {number}
-     */
-    limit: number;
-
-    /**
-     * @property {Object}
-     */
-    params: ?Object;
-
-    /**
-     * @property {string}
-     */
-    id: string;
-
-    /**
-     * @property {boolean}
-     */
-    shouldFetchAll: boolean;
-
-    /**
      * Determines if the API has more items to fetch
+     *
+     * @param {string} marker the marker from the start to start fetching at
      * @return {boolean} true if there are more items
      */
-    hasMoreItems(): boolean {
-        return this.marker !== null && this.marker !== '';
+    hasMoreItems(marker: string): boolean {
+        return marker !== null && marker !== '';
     }
 
     /**
      * Helper for get
      *
+     * @param {string} id the file id
+     * @param {string} marker the marker from the start to start fetching at
+     * @param {number} limit the number of items to fetch
+     * @param {Object} params the request query params
+     * @param {boolean} shouldFetchAll true if should get all the pages before calling
      * @private
      */
-    async markerGetRequest(): Promise<void> {
+    async markerGetRequest(
+        id: string,
+        marker: string,
+        limit: number,
+        shouldFetchAll: boolean,
+        params?: Object
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.resolve();
         }
@@ -67,22 +56,21 @@ class MarkerBasedApi extends Base {
         // Make the XHR request
         try {
             const queryParams: Params = {
-                marker: this.marker,
-                limit: this.limit,
-                ...this.params
+                ...params,
+                marker,
+                limit
             };
 
-            const { data }: { data: Data } = await this.getData(this.id, queryParams);
+            const { data }: { data: Data } = await this.getData(id, queryParams);
 
             const entries = this.data ? this.data.entries : [];
             this.data = {
                 ...data,
                 entries: entries.concat(data.entries)
             };
-            this.marker = data.next_marker;
-            const hasMoreItems = this.hasMoreItems();
-            if (this.shouldFetchAll && hasMoreItems) {
-                return this.markerGetRequest();
+            const nextMarker = data.next_marker;
+            if (shouldFetchAll && this.hasMoreItems(nextMarker)) {
+                return this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, params);
             }
 
             this.successHandler(this.data);
@@ -121,15 +109,10 @@ class MarkerBasedApi extends Base {
         params?: Object,
         shouldFetchAll?: boolean
     }): Promise<void> {
-        this.id = id;
-        this.marker = marker;
-        this.limit = limit;
-        this.params = params;
-        this.shouldFetchAll = shouldFetchAll;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        return this.markerGetRequest();
+        return this.markerGetRequest(id, marker, limit, shouldFetchAll, params);
     }
 }
 

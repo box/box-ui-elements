@@ -23,43 +23,21 @@ class OffsetBasedApi extends Base {
     data: Data;
 
     /**
-     * @property {number}
-     */
-    offset: number;
-
-    /**
-     * @property {number}
-     */
-    limit: number;
-
-    /**
-     * @property {Array<string>}
-     */
-    fields: ?Array<string>;
-
-    /**
-     * @property {string}
-     */
-    id: string;
-
-    /**
-     * @property {boolean}
-     */
-    shouldFetchAll: boolean;
-
-    /**
      * Gets query params for the API
      *
+     * @param {number} offset the offset from the start to start fetching at
+     * @param {number} limit the number of items to fetch
+     * @param {array} fields the fields to fetch
      * @return the query params object
      */
-    getQueryParameters(): Object {
+    getQueryParameters(offset: number, limit: number, fields?: Array<string>): Object {
         const queryParams: Params = {
-            offset: this.offset,
-            limit: this.limit
+            offset,
+            limit
         };
 
-        if (this.fields && this.fields.length > 0) {
-            queryParams.fields = this.fields.toString();
+        if (fields && fields.length > 0) {
+            queryParams.fields = fields.toString();
         }
 
         return queryParams;
@@ -67,28 +45,41 @@ class OffsetBasedApi extends Base {
 
     /**
      * Determines if the API has more items to fetch
+     *
+     * @param {number} offset the offset from the start to start fetching at
      * @param {number} totalCount the total number of items
      * @return {boolean} true if there are more items
      */
-    hasMoreItems(totalCount?: number): boolean {
-        return totalCount === undefined || this.offset < totalCount;
+    hasMoreItems(offset: number, totalCount?: number): boolean {
+        return totalCount === undefined || offset < totalCount;
     }
 
     /**
      * Helper for get
      *
+     * @param {string} id the file id
+     * @param {number} offset the offset from the start to start fetching at
+     * @param {number} limit the number of items to fetch
+     * @param {array} fields the fields to fetch
+     * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      * @private
      */
-    async offsetGetRequest(): Promise<void> {
+    async offsetGetRequest(
+        id: string,
+        offset: number,
+        limit: number,
+        shouldFetchAll: boolean,
+        fields?: Array<string>
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.resolve();
         }
 
         // Make the XHR request
         try {
-            const params = this.getQueryParameters();
+            const params = this.getQueryParameters(offset, limit, fields);
 
-            const { data }: { data: Data } = await this.getData(this.id, params);
+            const { data }: { data: Data } = await this.getData(id, params);
 
             const entries = this.data ? this.data.entries : [];
             this.data = {
@@ -96,9 +87,9 @@ class OffsetBasedApi extends Base {
                 entries: entries.concat(data.entries)
             };
             const totalCount = data.total_count;
-            this.offset += this.limit;
-            if (this.shouldFetchAll && this.hasMoreItems(totalCount)) {
-                return this.offsetGetRequest();
+            const nextOffset = offset + limit;
+            if (shouldFetchAll && this.hasMoreItems(nextOffset, totalCount)) {
+                return this.offsetGetRequest(id, nextOffset, limit, shouldFetchAll, fields);
             }
 
             this.successHandler(this.data);
@@ -127,17 +118,12 @@ class OffsetBasedApi extends Base {
         offset: number = 0,
         limit: number = 1000,
         fields?: Array<string>,
-        shouldFetchAll: boolean
+        shouldFetchAll: boolean = true
     ): Promise<void> {
-        this.id = id;
-        this.offset = offset;
-        this.limit = limit;
-        this.fields = fields;
-        this.shouldFetchAll = shouldFetchAll;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        return this.offsetGetRequest();
+        return this.offsetGetRequest(id, offset, limit, shouldFetchAll, fields);
     }
 }
 

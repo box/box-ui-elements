@@ -767,9 +767,9 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         this.api.getFileCollaboratorsAPI(true).markerGet({
             id: fileId,
+            limit: DEFAULT_MAX_COLLABORATORS,
             params: {
-                filter_term: searchStr,
-                limit: DEFAULT_MAX_COLLABORATORS
+                filter_term: searchStr
             },
             successCallback: this.getApproverContactsSuccessCallback,
             errorCallback: this.errorCallback
@@ -792,9 +792,9 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         this.api.getFileCollaboratorsAPI(true).markerGet({
             id: fileId,
+            limit: DEFAULT_MAX_COLLABORATORS,
             params: {
-                filter_term: searchStr,
-                limit: DEFAULT_MAX_COLLABORATORS
+                filter_term: searchStr
             },
             successCallback: this.getMentionContactsSuccessCallback,
             errorCallback: this.errorCallback
