@@ -5,11 +5,12 @@ import ActivityFeed from '../ActivityFeed';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 const comments = {
+    total_count: 1,
     entries: [
         {
             type: 'comment',
             id: '123',
-            created_at: 1234567890,
+            created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
             tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
             created_by: { name: 'Akon', id: 11 }
         }
@@ -17,11 +18,13 @@ const comments = {
 };
 
 const tasks = {
+    total_count: 1,
     entries: [
         {
             type: 'task',
             id: '1234',
-            modified_at: 1234567891,
+            created_at: 'Thu Sep 25 33658 19:45:39 GMT-0600 (CST)',
+            modified_at: 'Thu Sep 25 33658 19:46:39 GMT-0600 (CST)',
             tagged_message: 'test',
             modified_by: { name: 'Jay-Z', id: 10 },
             dueAt: 1234567891,
@@ -31,10 +34,12 @@ const tasks = {
 };
 
 const versions = {
+    total_count: 1,
     entries: [
         {
             type: 'file_version',
             id: 123,
+            created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
             trashed_at: 1234567891,
             modified_at: 1234567891,
             modified_by: { name: 'Akon', id: 11 }
@@ -161,5 +166,30 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             }
         });
         expect(stopPropagationSpy).toHaveBeenCalled();
+    });
+
+    describe('componentWillReceiveProps()', () => {
+        test('should invoke sortFeedItems() with new props', () => {
+            const props = { comments, tasks };
+            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
+            const instance = wrapper.instance();
+            instance.sortFeedItems = jest.fn();
+            instance.componentWillReceiveProps(props);
+
+            expect(instance.sortFeedItems).toBeCalledWith(comments, tasks, undefined);
+        });
+    });
+
+    describe('sortFeedItems()', () => {
+        it('should sort items based on date', () => {
+            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
+            const instance = wrapper.instance();
+
+            instance.sortFeedItems(comments, tasks);
+
+            const { feedItems } = instance.state;
+            expect(feedItems[0].id).toEqual(comments.entries[0].id);
+            expect(feedItems[1].id).toEqual(tasks.entries[0].id);
+        });
     });
 });
