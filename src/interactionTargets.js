@@ -43,10 +43,12 @@ export const SKILLS_TARGETS = {
     },
     TRANSCRIPTS: {
         CARD: 'skill-transcriptcard',
+        COPY: 'skill-transcriptcopy',
         EDIT: 'skill-transcriptedit',
         EDIT_SAVE: 'skill-transcripteditsave',
         EDIT_CANCEL: 'skill-transcripteditcancel',
-        TIMELINE: 'skill-keywordtimeslice'
+        TRANSCRIPT: 'skill-transcript',
+        EDIT_TEXT: 'skill-transcriptedittext'
     }
 };
 

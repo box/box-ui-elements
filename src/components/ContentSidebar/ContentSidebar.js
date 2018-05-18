@@ -8,9 +8,8 @@ import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
-import noop from 'lodash/noop';
-import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
+import noop from 'lodash/noop';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
@@ -71,7 +70,6 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onInteraction: Function,
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
@@ -122,8 +120,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasAccessStats: false,
         hasClassification: false,
         hasActivityFeed: false,
-        hasVersions: false,
-        onInteraction: noop
+        hasVersions: false
     };
 
     /**
@@ -258,19 +255,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * Function to log interactions
-     *
-     * @private
-     * @param {Object} data - some data
-     * @return {void}
-     */
-    onInteraction = (data: any): void => {
-        const { onInteraction }: Props = this.props;
-        const { file }: State = this.state;
-        onInteraction(Object.assign({}, { file: cloneDeep(file) }, data));
-    };
-
-    /**
      * Function to update file description
      *
      * @private
@@ -306,7 +290,6 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     setFileDescriptionSuccessCallback = (file: BoxItem): void => {
-        this.onInteraction({ target: 'description-change' });
         this.setState({ file, fileError: undefined });
     };
 
@@ -682,7 +665,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} id - File id
      * @return {void}
      */
-    onSkillChange = (index: number, removes: Array<SkillCardEntry> = [], adds: Array<SkillCardEntry> = []): void => {
+    onSkillChange = (
+        index: number,
+        removes: Array<SkillCardEntry> = [],
+        adds: Array<SkillCardEntry> = [],
+        replaces: Array<{ replaced: SkillCardEntry, replacement: SkillCardEntry }> = []
+    ): void => {
         const { hasSkills }: Props = this.props;
         const { file }: State = this.state;
         if (!hasSkills || !file) {
@@ -702,6 +690,19 @@ class ContentSidebar extends PureComponent<Props, State> {
         const card = cards[index];
         const path = `/cards/${index}`;
         const ops: JsonPatchData = [];
+
+        if (Array.isArray(replaces)) {
+            replaces.forEach(({ replaced, replacement }) => {
+                const idx = card.entries.findIndex((entry) => entry === replaced);
+                if (idx > -1) {
+                    ops.push({
+                        op: 'replace',
+                        path: `${path}/entries/${idx}`,
+                        value: replacement
+                    });
+                }
+            });
+        }
 
         if (Array.isArray(removes)) {
             removes.forEach((removed) => {
@@ -868,7 +869,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasActivityFeed={hasActivityFeed}
                                 appElement={this.appElement}
                                 rootElement={this.rootElement}
-                                onInteraction={this.onInteraction}
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
                                 onAccessStatsClick={onAccessStatsClick}

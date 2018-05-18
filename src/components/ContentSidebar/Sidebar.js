@@ -40,7 +40,6 @@ type Props = {
     rootElement: HTMLElement,
     appElement: HTMLElement,
     onAccessStatsClick?: Function,
-    onInteraction: Function,
     onDescriptionChange: Function,
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
@@ -140,7 +139,6 @@ class Sidebar extends React.Component<Props, State> {
             rootElement,
             appElement,
             onAccessStatsClick,
-            onInteraction,
             onDescriptionChange,
             onSkillChange,
             onClassificationClick,
@@ -160,9 +158,9 @@ class Sidebar extends React.Component<Props, State> {
             tasksError,
             comments,
             commentsError,
+            versions,
             approverSelectorContacts,
             mentionSelectorContacts,
-            versions,
             getAvatarUrl
         }: Props = this.props;
 
@@ -183,7 +181,7 @@ class Sidebar extends React.Component<Props, State> {
                     selectedView={view}
                     hasSkills={hasSkills && hasSkillsData(file)}
                     hasMetadata={hasMetadata}
-                    hasActivity={hasActivityFeed}
+                    hasActivityFeed={hasActivityFeed}
                     hasDetails={hasDetails}
                 />
                 {view === SIDEBAR_VIEW_DETAILS &&
@@ -200,7 +198,6 @@ class Sidebar extends React.Component<Props, State> {
                             rootElement={rootElement}
                             onSkillChange={onSkillChange}
                             onAccessStatsClick={onAccessStatsClick}
-                            onInteraction={onInteraction}
                             onClassificationClick={onClassificationClick}
                             onDescriptionChange={onDescriptionChange}
                             onVersionHistoryClick={onVersionHistoryClick}

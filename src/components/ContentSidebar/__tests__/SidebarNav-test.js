@@ -36,7 +36,7 @@ describe('components/ContentSidebar/SidebarNav', () => {
 
     test('should render activity tab', () => {
         const props = {
-            hasActivity: true
+            hasActivityFeed: true
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
@@ -61,7 +61,7 @@ describe('components/ContentSidebar/SidebarNav', () => {
     test('should select activity tab', () => {
         const props = {
             hasSkills: true,
-            hasActivity: true,
+            hasActivityFeed: true,
             hasMetadata: true,
             selectedView: 'activity'
         };

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Editable Skill Keywords card component
+ * @file Utilities for keywords skill
  * @author Box
  */
 
