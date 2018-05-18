@@ -39,11 +39,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 tagged_message='test'
                 handlers={allHandlers}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 {...props}
             />
         );
@@ -61,11 +58,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
             />
         );
@@ -103,11 +97,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 translations={translations}
             />
@@ -128,11 +119,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
             />
         );
@@ -154,11 +142,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
             />
@@ -181,11 +166,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...task}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
             />
@@ -206,11 +188,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
             />
@@ -250,11 +229,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
             />
@@ -276,11 +252,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
             />
@@ -301,11 +274,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
             />
         );
 
@@ -324,11 +294,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
             />
         );
@@ -348,11 +315,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
                 error={{
@@ -378,11 +342,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
                 error={{
@@ -415,11 +376,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 id='123'
                 {...comment}
                 currentUser={currentUser}
-                inputState={{
-                    currentUser,
-                    approverSelectorContacts,
-                    mentionSelectorContacts
-                }}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
             />
