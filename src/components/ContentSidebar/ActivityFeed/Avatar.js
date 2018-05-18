@@ -9,6 +9,7 @@ import type { User } from '../../../flowTypes';
 
 type Props = {
     user: User,
+    className?: string,
     getAvatarUrl: (string) => Promise<?string>
 };
 
@@ -47,7 +48,7 @@ class Avatar extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { user }: Props = this.props;
+        const { user, className }: Props = this.props;
         const { avatarUrl }: State = this.state;
 
         if (!avatarUrl) {
@@ -56,7 +57,7 @@ class Avatar extends React.PureComponent<Props, State> {
 
         const { id, name } = user;
 
-        return <AvatarComponent id={id} name={name} avatarUrl={avatarUrl} />;
+        return <AvatarComponent className={className} id={id} name={name} avatarUrl={avatarUrl} />;
     }
 }
 

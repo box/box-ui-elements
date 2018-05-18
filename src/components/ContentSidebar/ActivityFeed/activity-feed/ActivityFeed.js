@@ -148,7 +148,10 @@ class ActivityFeed extends React.Component<Props, State> {
             mentionSelectorContacts,
             currentUser,
             isDisabled,
-            getAvatarUrl
+            getAvatarUrl,
+            comments,
+            tasks,
+            versions
         } = this.props;
         const { isInputOpen } = this.state;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
@@ -157,7 +160,10 @@ class ActivityFeed extends React.Component<Props, State> {
         const getApproverWithQuery = getProp(handlers, 'contacts.approver', noop);
         const getMentionWithQuery = getProp(handlers, 'contacts.mention', noop);
 
-        const feedState = [];
+        let feedState = [];
+        feedState = comments ? feedState.concat(comments.entries) : feedState;
+        feedState = tasks ? feedState.concat(tasks.entries) : feedState;
+        feedState = versions ? feedState.concat(versions.entries) : feedState;
 
         return (
             // eslint-disable-next-line
@@ -207,6 +213,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         user={currentUser}
                         onCancel={this.approvalCommentFormCancelHandler}
                         onFocus={this.approvalCommentFormFocusHandler}
+                        getAvatarUrl={getAvatarUrl}
                     />
                 ) : null}
             </div>

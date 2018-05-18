@@ -23,7 +23,7 @@ import {
     DEFAULT_COLLAB_DEBOUNCE,
     DEFAULT_MAX_COLLABORATORS
 } from '../../constants';
-import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH } from '../../util/fields';
+import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
 import type {
@@ -167,7 +167,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @return the user avatar URL string for a given user with access token attached
      */
-    async getAvatarUrl(userId: string): Promise<?string> {
+    getAvatarUrl = async (userId: string): Promise<?string> => {
         const { fileId } = this.props;
 
         if (!fileId) {
@@ -175,7 +175,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         }
 
         return this.api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
-    }
+    };
 
     /**
      * Destroys api instances
@@ -248,7 +248,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                     fields: COMMENTS_FIELDS_TO_FETCH
                 });
                 this.fetchTasks(fileId);
-                this.fetchVersions(fileId);
+                this.fetchVersions({
+                    id: fileId,
+                    fields: VERSIONS_FIELDS_TO_FETCH
+                });
                 this.fetchCurrentUser(currentUser);
             }
         }
@@ -547,14 +550,21 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {boolean} shouldFetchAll true if should get all the pages before calling the sucessCallback
      * @return {void}
      */
-    fetchVersions(
+    fetchVersions({
+        id,
+        shouldDestroy = false,
+        offset = 0,
+        limit = 1000,
+        fields,
+        shouldFetchAll = true
+    }: {
         id: string,
-        shouldDestroy?: boolean = false,
-        offset: number = 0,
-        limit: number = 1000,
+        shouldDestroy?: boolean,
+        offset?: number,
+        limit?: number,
         fields?: Array<string>,
-        shouldFetchAll?: boolean = true
-    ): void {
+        shouldFetchAll?: boolean
+    }): void {
         if (shouldRenderSidebar(this.props)) {
             this.api
                 .getVersionsAPI(shouldDestroy)

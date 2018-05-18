@@ -34,10 +34,10 @@ type Props = {
         user: User,
         status: string
     }>,
-    createdAt: number | string,
-    createdBy: User,
+    created_at: number | string,
+    created_by: User,
     currentUser: User,
-    dueDate: any,
+    due_at: any,
     error: ActionItemError,
     handlers: {
         comments?: CommentHandlers,
@@ -58,11 +58,11 @@ type Props = {
     },
     translatedTaggedMessage: string,
     translations: Translations,
-    taggedMessage: string,
     currentUser: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
+    message: string,
     getAvatarUrl: (string) => Promise<?string>
 };
 
@@ -71,10 +71,10 @@ class Task extends React.Component<Props> {
     render(): React.Node {
         const {
             assignees,
-            createdAt,
-            createdBy,
+            created_at,
+            created_by,
             currentUser,
-            dueDate,
+            due_at,
             error,
             handlers,
             id,
@@ -83,7 +83,7 @@ class Task extends React.Component<Props> {
             onEdit,
             onTaskAssignmentUpdate,
             permissions,
-            taggedMessage,
+            message,
             translatedTaggedMessage,
             translations,
             approverSelectorContacts,
@@ -93,8 +93,8 @@ class Task extends React.Component<Props> {
         return (
             <div className={classNames('bcs-task', { 'bcs-is-pending': isPending || error })}>
                 <Comment
-                    createdAt={createdAt}
-                    createdBy={createdBy}
+                    created_at={created_at}
+                    created_by={created_by}
                     currentUser={currentUser}
                     error={error}
                     handlers={handlers}
@@ -103,7 +103,7 @@ class Task extends React.Component<Props> {
                     onDelete={onDelete}
                     onEdit={onEdit}
                     permissions={permissions}
-                    taggedMessage={taggedMessage}
+                    tagged_message={message}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
                     approverSelectorContacts={approverSelectorContacts}
@@ -115,10 +115,10 @@ class Task extends React.Component<Props> {
                         <strong>
                             <FormattedMessage {...messages.tasksForApproval} />
                         </strong>
-                        {dueDate ? (
+                        {due_at ? (
                             <span className='bcs-task-due-date'>
                                 <FormattedMessage {...messages.taskDueDate} />
-                                <FormattedDate value={dueDate} day='numeric' month='long' year='numeric' />
+                                <FormattedDate value={due_at} day='numeric' month='long' year='numeric' />
                             </span>
                         ) : null}
                     </div>

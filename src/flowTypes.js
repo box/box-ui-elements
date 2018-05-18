@@ -198,13 +198,19 @@ export type MetadataType = {
 export type BoxItemVersion = {
     id: string,
     type: string,
-    sha1: string,
+    sha1?: string,
     name?: string,
     size?: number,
-    created_at?: string,
+    created_at: string,
     modified_at?: string,
-    modified_by?: User,
-    trashed_at: ?string
+    modified_by: User,
+    trashed_at: ?string,
+    action: 'upload' | 'delete' | 'restore',
+    versions?: Array<BoxItemVersion>,
+    version_number: number,
+    version_start?: number,
+    version_end?: number,
+    collaborators?: Object
 };
 
 export type BoxItem = {
@@ -426,7 +432,7 @@ export type FileAccessStats = {
 };
 
 export type Task = {
-    type: string,
+    type: 'task',
     id: string,
     item: {
         type: string,
@@ -436,7 +442,14 @@ export type Task = {
         sha1: string,
         name: string
     },
-    due_at: ?string
+    created_at: string,
+    created_by: User,
+    due_at: string,
+    message: string,
+    task_assignment_collection: {
+        total_count: number,
+        entries: Array<User>
+    }
 };
 
 export type Tasks = {
@@ -445,13 +458,14 @@ export type Tasks = {
 };
 
 export type Comment = {
-    type: string,
+    type: 'comment',
     id: string,
-    is_reply_comment: boolean,
-    message: string,
+    is_reply_comment?: boolean,
+    tagged_message: string,
+    message?: string,
     created_by: User,
     created_at: string,
-    item: {
+    item?: {
         id: string,
         type: string
     },

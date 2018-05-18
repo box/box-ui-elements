@@ -5,6 +5,7 @@
  */
 
 import Base from './Base';
+import type { Task } from '../flowTypes';
 
 class Tasks extends Base {
     /**
@@ -19,6 +20,23 @@ class Tasks extends Base {
         }
         return `${this.getBaseApiUrl()}/files/${id}/tasks`;
     }
+
+    /**
+     * Formats the tasks api response to usable data
+     * @param {Object} data the api response data
+     */
+    successHandler = (data: any): void => {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
+            return;
+        }
+
+        const tasks = data.entries.map((task: Task) => ({
+            ...task,
+            assignees: task.task_assignment_collection.entries || []
+        }));
+
+        this.successCallback({ ...data, entries: tasks });
+    };
 }
 
 export default Tasks;

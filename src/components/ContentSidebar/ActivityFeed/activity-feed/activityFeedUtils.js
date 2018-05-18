@@ -2,14 +2,14 @@
  * @flow
  * @file Activity feed utility methods
  */
-import type { Item } from '../activityFeedFlowTypes';
+import type { FeedItems } from '../activityFeedFlowTypes';
 
 const ItemTypes = {
     fileVersion: 'file_version',
     upload: 'upload'
 };
 
-export function collapseFeedState(feedState: Array<Item>): Array<Item> {
+export function collapseFeedState(feedState: FeedItems): FeedItems {
     return feedState.reduce((collapsedFeedState, feedItem) => {
         const previousFeedItem = collapsedFeedState.pop();
 
@@ -24,30 +24,32 @@ export function collapseFeedState(feedState: Array<Item>): Array<Item> {
             previousFeedItem.action === ItemTypes.upload
         ) {
             const {
-                createdBy: prevCreatedBy,
+                modified_by: prevModifiedBy,
                 versions = [previousFeedItem],
-                versionStart = previousFeedItem.versionNumber,
-                versionEnd = previousFeedItem.versionNumber
+                version_start = previousFeedItem.version_number,
+                version_end = previousFeedItem.version_number
             } = previousFeedItem;
-            const { action, createdBy, id, versionNumber } = feedItem;
+            const { action, modified_by, created_at, trashed_at, id, version_number } = feedItem;
             const collaborators = previousFeedItem.collaborators || {
-                [prevCreatedBy.id]: { ...prevCreatedBy }
+                [prevModifiedBy.id]: { ...prevModifiedBy }
             };
 
             // add collaborators
-            collaborators[createdBy.id] = { ...createdBy };
+            collaborators[modified_by.id] = { ...modified_by };
 
             return collapsedFeedState.concat([
                 {
                     action,
                     collaborators,
-                    createdBy,
+                    created_at,
+                    modified_by,
+                    trashed_at,
                     id,
                     type: ItemTypes.fileVersion,
-                    versionNumber,
+                    version_number,
                     versions: versions.concat([feedItem]),
-                    versionStart: Math.min(versionStart, versionNumber),
-                    versionEnd: Math.max(versionEnd, versionNumber)
+                    version_start: Math.min(version_start, version_number),
+                    version_end: Math.max(version_end, version_number)
                 }
             ]);
         }
@@ -56,6 +58,6 @@ export function collapseFeedState(feedState: Array<Item>): Array<Item> {
     }, []);
 }
 
-export function shouldShowEmptyState(feedState: Array<Item>): boolean {
+export function shouldShowEmptyState(feedState: FeedItems): boolean {
     return feedState.length === 0 || (feedState.length === 1 && feedState[0].type === ItemTypes.fileVersion);
 }

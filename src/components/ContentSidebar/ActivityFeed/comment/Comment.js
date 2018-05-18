@@ -34,8 +34,10 @@ import type {
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
 type Props = {
-    createdBy: User,
-    createdAt: string | number,
+    created_by: User,
+    created_at: string | number,
+    is_reply_comment?: boolean,
+    modified_at?: string | number,
     permissions?: {
         comment_delete?: boolean,
         comment_edit?: boolean,
@@ -47,7 +49,7 @@ type Props = {
     error?: ActionItemError,
     onDelete?: Function,
     onEdit: Function,
-    taggedMessage: string,
+    tagged_message: string,
     translatedTaggedMessage?: string,
     translations: Translations,
     handlers: {
@@ -102,15 +104,15 @@ class Comment extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            createdBy,
-            createdAt,
+            created_by,
+            created_at,
             permissions,
             id,
             isPending,
             error,
             onDelete,
             onEdit,
-            taggedMessage,
+            tagged_message = '',
             translatedTaggedMessage,
             translations,
             handlers,
@@ -122,7 +124,7 @@ class Comment extends React.Component<Props, State> {
         } = this.props;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
-        const createdAtTimestamp = new Date(createdAt).getTime();
+        const createdAtTimestamp = new Date(created_at).getTime();
         const canDeleteTasks = getProp(permissions, 'task_delete', false);
         const canDeleteTasksOrComments = canDeleteTasks || getProp(permissions, 'comment_delete');
         const canEditTasksOrComments = getProp(permissions, 'task_edit') || getProp(permissions, 'comment_edit');
@@ -137,11 +139,11 @@ class Comment extends React.Component<Props, State> {
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={createdBy} />
+                    <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={created_by} />
                     <div className='bcs-comment-content'>
                         <div className='bcs-comment-headline'>
-                            <Link className='bcs-comment-user-name' href={`/profile/${createdBy.id}`}>
-                                {createdBy.name}
+                            <Link className='bcs-comment-user-name' href={`/profile/${created_by.id}`}>
+                                {created_by.name}
                             </Link>
                             <Tooltip
                                 text={
@@ -193,13 +195,13 @@ class Comment extends React.Component<Props, State> {
                                 onFocus={this.approvalCommentFormFocusHandler}
                                 isEditing={isEditing}
                                 entityId={id}
-                                taggedMessage={formatTaggedMessage(taggedMessage, id, true)}
+                                tagged_message={formatTaggedMessage(tagged_message, id, true)}
                             />
                         ) : null}
                         {!isEditing ? (
                             <CommentText
                                 id={id}
-                                taggedMessage={taggedMessage}
+                                tagged_message={tagged_message}
                                 translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}
                                 translationFailed={error ? true : null}

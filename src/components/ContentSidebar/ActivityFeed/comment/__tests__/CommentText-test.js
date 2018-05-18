@@ -6,7 +6,7 @@ import CommentText from '../CommentText';
 describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
     test('should properly format tagged comment', () => {
         const commentText = {
-            taggedMessage: 'How u doing @[2030326577:Young Jeezy]?'
+            tagged_message: 'How u doing @[2030326577:Young Jeezy]?'
         };
 
         const wrapper = shallow(<CommentText id='123' {...commentText} />);
@@ -16,7 +16,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
 
     test('should properly handle unicode variants of @ in tagged comments', () => {
         const commentText = {
-            taggedMessage: 'Hi ﹫[123:Half] ＠[222:Full] @[432:Latin]'
+            tagged_message: 'Hi ﹫[123:Half] ＠[222:Full] @[432:Latin]'
         };
 
         const wrapper = shallow(<CommentText id='123' {...commentText} />);
@@ -25,10 +25,10 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
     });
 
     test('should not show translate button by default, translation should be disabled', () => {
-        const commentText = { taggedMessage: 'test' };
+        const commentText = { tagged_message: 'test' };
 
         const wrapper = mount(<CommentText id='123' {...commentText} />);
-        expect(wrapper.find('.bcs-comment-text').text()).toEqual(commentText.taggedMessage);
+        expect(wrapper.find('.bcs-comment-text').text()).toEqual(commentText.tagged_message);
         expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(0);
         expect(wrapper.prop('translationEnabled')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false);
@@ -36,7 +36,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
 
     test('should show translate button when translation is enabled', () => {
         const translations = { translationEnabled: true };
-        const commentText = { taggedMessage: 'test' };
+        const commentText = { tagged_message: 'test' };
 
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
 
@@ -48,7 +48,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
     test('should show original button when translation is enabled and already showing translated comment', () => {
         const translations = { translationEnabled: true };
         const commentText = {
-            taggedMessage: 'test',
+            tagged_message: 'test',
             translatedTaggedMessage: 'translated'
         };
 
@@ -62,7 +62,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
     test('should show loading indicator when state is isLoading', () => {
         const translations = { translationEnabled: true };
         const commentText = {
-            taggedMessage: 'test',
+            tagged_message: 'test',
             translatedTaggedMessage: 'translated'
         };
 
@@ -78,7 +78,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             translationEnabled: true,
             onTranslate: onTranslateSpy
         };
-        const commentText = { taggedMessage: 'test' };
+        const commentText = { tagged_message: 'test' };
 
         const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
 
@@ -98,7 +98,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             onTranslate: onTranslateSpy
         };
         const commentText = {
-            taggedMessage: 'test',
+            tagged_message: 'test',
             translatedTaggedMessage: 'translated'
         };
 
@@ -121,7 +121,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             onTranslate: onTranslateSpy
         };
         const commentText = {
-            taggedMessage: 'test',
+            tagged_message: 'test',
             translatedTaggedMessage: 'translated'
         };
 

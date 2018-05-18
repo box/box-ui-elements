@@ -698,15 +698,15 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     versionDeleted: {
         id: 'be.versionDeleted',
-        defaultMessage: '{ name } deleted version { versionNumber }',
+        defaultMessage: '{ name } deleted version { version_number }',
         description:
-            'Message displayed in the activity feed for a deleted version. {name} is the user who performed the action. { versionNumber } is the file version string.'
+            'Message displayed in the activity feed for a deleted version. {name} is the user who performed the action. { version_number } is the file version string.'
     },
     versionRestored: {
         id: 'be.versionRestored',
-        defaultMessage: '{ name } restored version { versionNumber }',
+        defaultMessage: '{ name } restored version { version_number }',
         description:
-            'Message displayed in the activity feed for a restored version. {name} is the user who performed the action. { versionNumber } is the file version string.'
+            'Message displayed in the activity feed for a restored version. {name} is the user who performed the action. { version_number } is the file version string.'
     },
     versionMultipleUsersUploaded: {
         id: 'be.versionMultipleUsersUploaded',
@@ -727,9 +727,9 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     versionUploaded: {
         id: 'be.versionUploaded',
-        defaultMessage: '{ name } uploaded version { versionNumber }',
+        defaultMessage: '{ name } uploaded version { version_number }',
         description:
-            'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. { versionNumber } is the file version string.'
+            'Message displayed in the activity feed for a newly uploaded version. {name} is the user who performed the action. { version_number } is the file version string.'
     },
     defaultInlineErrorContentMessage: {
         id: 'be.defaultInlineErrorContentMessage',

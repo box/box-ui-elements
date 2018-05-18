@@ -18,8 +18,8 @@ import './Version.scss';
 function getMessageForAction(
     action: string,
     collaborators: { [collaborator_id: string]: User },
-    versionStart: number,
-    versionEnd: number
+    version_start: number,
+    version_end: number
 ): React.Node {
     // We only support collapsing for multiple upload versions
     if (action !== 'upload') {
@@ -28,6 +28,12 @@ function getMessageForAction(
     const collaboratorIDs = Object.keys(collaborators);
     const numberOfCollaborators = collaboratorIDs.length;
 
+    const versionRange: React.Node = (
+        <span className='bcs-version-range'>
+            {version_start} - {version_end}
+        </span>
+    );
+
     if (numberOfCollaborators === 1) {
         const collaborator = collaborators[collaboratorIDs[0]];
         return (
@@ -35,11 +41,7 @@ function getMessageForAction(
                 {...messages.versionUploadCollapsed}
                 values={{
                     name: <strong>{collaborator.name}</strong>,
-                    versions: (
-                        <span className='bcs-version-range'>
-                            {versionStart} - {versionEnd}
-                        </span>
-                    )
+                    versions: versionRange
                 }}
             />
         );
@@ -50,11 +52,7 @@ function getMessageForAction(
             {...messages.versionMultipleUsersUploaded}
             values={{
                 numberOfCollaborators,
-                versions: (
-                    <span className='bcs-version-range'>
-                        {versionStart} - {versionEnd}
-                    </span>
-                )
+                versions: versionRange
             }}
         />
     );
@@ -66,8 +64,8 @@ type Props = {
     intl: any,
     onInfo: Function,
     versions: FileVersions,
-    versionStart: number,
-    versionEnd: number
+    version_start: number,
+    version_end: number
 };
 
 const CollapsedVersion = ({
@@ -76,12 +74,12 @@ const CollapsedVersion = ({
     intl,
     onInfo,
     versions,
-    versionStart,
-    versionEnd
+    version_start,
+    version_end
 }: Props): React.Node => (
     <div className='bcs-collapsed-version'>
         <span className='bcs-version-message'>
-            {getMessageForAction(action, collaborators, versionStart, versionEnd)}
+            {getMessageForAction(action, collaborators, version_start, version_end)}
         </span>
         {onInfo ? (
             <span className='bcs-version-actions'>

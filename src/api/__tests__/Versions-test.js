@@ -17,4 +17,46 @@ describe('api/Versions', () => {
             expect(versions.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/versions');
         });
     });
+
+    describe('successHandler()', () => {
+        test('should return API response with properly formatted data', () => {
+            const uploadVersion = {
+                id: 123,
+                trashed_at: null,
+                modified_at: 1234567892,
+                modified_by: { name: 'Jay-Z', id: 10 }
+            };
+            const deleteVersion = {
+                id: 456,
+                trashed_at: 1234567891,
+                modified_at: 1234567891,
+                modified_by: { name: 'Akon', id: 11 }
+            };
+            const response = {
+                total_count: 2,
+                entries: [uploadVersion, deleteVersion]
+            };
+
+            versions.successCallback = jest.fn();
+
+            const formattedResponse = {
+                total_count: 2,
+                entries: [
+                    {
+                        ...deleteVersion,
+                        action: 'delete',
+                        version_number: 1
+                    },
+                    {
+                        ...uploadVersion,
+                        action: 'upload',
+                        version_number: 2
+                    }
+                ]
+            };
+
+            versions.successHandler(response);
+            expect(versions.successCallback).toBeCalledWith(formattedResponse);
+        });
+    });
 });

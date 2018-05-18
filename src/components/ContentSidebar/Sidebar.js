@@ -162,6 +162,7 @@ class Sidebar extends React.Component<Props, State> {
             commentsError,
             approverSelectorContacts,
             mentionSelectorContacts,
+            versions,
             getAvatarUrl
         }: Props = this.props;
 
@@ -229,6 +230,7 @@ class Sidebar extends React.Component<Props, State> {
                             approverSelectorContacts={approverSelectorContacts}
                             mentionSelectorContacts={mentionSelectorContacts}
                             commentsError={commentsError}
+                            versions={versions}
                             onCommentCreate={onCommentCreate}
                             onCommentDelete={onCommentDelete}
                             onTaskCreate={onTaskCreate}

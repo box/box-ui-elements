@@ -11,13 +11,13 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
     const render = (item) => shallow(<CollapsedVersion {...translationProps} {...item} />);
 
     test('should correctly render for single collaborator', () => {
-        const versionStart = 1;
-        const versionEnd = 10;
+        const version_start = 1;
+        const version_end = 10;
         const item = {
             action: 'upload',
             collaborators: { 1: { name: 'Person one', id: 1 } },
-            versionStart,
-            versionEnd
+            version_start,
+            version_end
         };
 
         const wrapper = render(item);
@@ -29,16 +29,16 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
     });
 
     test('should correctly render for multiple collaborators', () => {
-        const versionStart = 1;
-        const versionEnd = 10;
+        const version_start = 1;
+        const version_end = 10;
         const item = {
             action: 'upload',
             collaborators: {
                 1: { name: 'Person one', id: 1 },
                 2: { name: 'Person two', id: 2 }
             },
-            versionStart,
-            versionEnd
+            version_start,
+            version_end
         };
 
         const wrapper = render(item);
@@ -59,8 +59,8 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
                 1: { name: 'Person one', id: 1 },
                 2: { name: 'Person two', id: 2 }
             },
-            versionStart: 1,
-            versionEnd: 10
+            version_start: 1,
+            version_end: 10
         };
 
         const wrapper = render(item);
@@ -72,8 +72,8 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
         const item = {
             action: 'delete',
             collaborators: { 1: { name: 'Person one', id: 1 } },
-            versionStart: 1,
-            versionEnd: 10
+            version_start: 1,
+            version_end: 10
         };
 
         const wrapper = render(item);
