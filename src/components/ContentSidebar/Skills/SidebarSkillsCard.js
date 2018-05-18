@@ -62,6 +62,7 @@ const SidebarSkillsCard = ({
                     rootElement={rootElement}
                     appElement={appElement}
                     isEditable={isEditable}
+                    onSkillChange={onSkillChange}
                 />
             );
         default:

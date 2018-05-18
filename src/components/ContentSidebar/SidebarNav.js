@@ -25,13 +25,13 @@ import './SidebarNav.scss';
 type Props = {
     hasSkills: boolean,
     hasMetadata: boolean,
-    hasActivity: boolean,
+    hasActivityFeed: boolean,
     hasDetails: boolean,
     onToggle: Function,
     selectedView?: SidebarView
 };
 
-const SidebarNav = ({ hasSkills, hasMetadata, hasActivity, hasDetails, onToggle, selectedView }: Props) => (
+const SidebarNav = ({ hasSkills, hasMetadata, hasActivityFeed, hasDetails, onToggle, selectedView }: Props) => (
     <nav>
         {hasSkills && (
             <SidebarNavButton
@@ -43,7 +43,7 @@ const SidebarNav = ({ hasSkills, hasMetadata, hasActivity, hasDetails, onToggle,
                 <IconMagicWand />
             </SidebarNavButton>
         )}
-        {hasActivity && (
+        {hasActivityFeed && (
             <SidebarNavButton
                 tooltip={<FormattedMessage {...messages.sidebarActivityTitle} />}
                 onClick={() => onToggle(SIDEBAR_VIEW_ACTIVITY)}

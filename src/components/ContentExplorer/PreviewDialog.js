@@ -13,6 +13,7 @@ import messages from '../messages';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import Cache from '../../util/Cache';
 import type { BoxItem, Collection, Token } from '../../flowTypes';
+import type { ContentPreviewProps } from '../ContentPreview';
 
 type Props = {
     isOpen: boolean,
@@ -24,7 +25,6 @@ type Props = {
     appElement: HTMLElement,
     isTouch: boolean,
     onPreview: Function,
-    hasPreviewSidebar: boolean,
     canDownload: boolean,
     cache: Cache,
     apiHost: string,
@@ -32,7 +32,7 @@ type Props = {
     staticHost: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    onInteraction: Function,
+    contentPreviewProps: ContentPreviewProps,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     intl: any
@@ -46,7 +46,6 @@ const PreviewDialog = ({
     token,
     cache,
     currentCollection,
-    hasPreviewSidebar,
     canDownload,
     onCancel,
     onPreview,
@@ -55,7 +54,7 @@ const PreviewDialog = ({
     staticHost,
     sharedLink,
     sharedLinkPassword,
-    onInteraction,
+    contentPreviewProps,
     requestInterceptor,
     responseInterceptor,
     intl
@@ -82,6 +81,7 @@ const PreviewDialog = ({
             appElement={appElement}
         >
             <ContentPreview
+                {...contentPreviewProps}
                 fileId={item.id}
                 apiHost={apiHost}
                 appHost={appHost}
@@ -96,15 +96,9 @@ const PreviewDialog = ({
                 canDownload={canDownload}
                 sharedLink={sharedLink}
                 sharedLinkPassword={sharedLinkPassword}
-                onInteraction={onInteraction}
+                contentPreviewProps={contentPreviewProps}
                 requestInterceptor={requestInterceptor}
                 responseInterceptor={responseInterceptor}
-                hasSidebar={hasPreviewSidebar}
-                contentSidebarProps={{
-                    hasSkills: true,
-                    hasProperties: true
-                    // TODO: add more here as they are ready
-                }}
             />
         </Modal>
     );
