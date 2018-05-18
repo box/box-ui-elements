@@ -185,9 +185,10 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
-     * Sort feed valid feed items with new at the top, old at the bottom.
+     * Sort valid feed items, descending by created_at time
      *
-     * @param args - Arguments list of each item container type that is allowed in the feed.
+     * @param args Array<?Comments | ?Tasks | ?FileVersions> - Arguments list of each item container
+     * type that is allowed in the feed.
      */
     sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): void {
         const feedItems = [];
