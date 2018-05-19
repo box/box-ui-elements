@@ -6,7 +6,6 @@
 
 import OffsetBasedAPI from './OffsetBasedAPI';
 import type { BoxItem, Comment } from '../flowTypes';
-import { getTypedFileId } from '../util/file';
 import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_EDIT_COMMENT, PERMISSION_CAN_DELETE_COMMENT } from '../constants';
 
 class Comments extends OffsetBasedAPI {
@@ -75,7 +74,7 @@ class Comments extends OffsetBasedAPI {
      */
     createComment({
         file,
-        message = 'foo',
+        message,
         taggedMessage,
         successCallback,
         errorCallback
@@ -106,7 +105,7 @@ class Comments extends OffsetBasedAPI {
             }
         };
 
-        this.post(getTypedFileId(id), this.commentsUrl(), requestData, successCallback, errorCallback);
+        this.post(id, this.commentsUrl(), requestData, successCallback, errorCallback);
     }
 
     /**

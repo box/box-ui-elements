@@ -1,6 +1,7 @@
 import Base from '../Base';
 import Xhr from '../../util/Xhr';
 import Cache from '../../util/Cache';
+import { getBadItemError, getBadPermissionsError } from '../../util/error';
 
 let base;
 
@@ -46,6 +47,31 @@ describe('api/Base', () => {
         });
     });
 
+    describe('checkApiCallValidity()', () => {
+        const badItemError = getBadItemError();
+        const permissionsError = getBadPermissionsError();
+        test('should throw a bad item error for a missing file ID or permissions object', () => {
+            try {
+                base.checkApiCallValidity('can_edit', undefined, 'id');
+            } catch (error) {
+                expect(error.message).toBe(badItemError.message);
+            }
+
+            try {
+                base.checkApiCallValidity('can_edit', { permissions: { can_edit: false } }, null);
+            } catch (error) {
+                expect(error.message).toBe(badItemError.message);
+            }
+
+            try {
+                base.checkApiCallValidity('can_edit', { permissions: {} }, 'id');
+            } catch (error) {
+                expect(error.message).toBe(permissionsError.message);
+            }
+        });
+        test('should throw a bad permissions error if the given permission is missing or false', () => {});
+    });
+
     describe('getBaseApiUrl()', () => {
         test('should return correct api url', () => {
             base = new Base({
@@ -83,81 +109,97 @@ describe('api/Base', () => {
         });
     });
 
+    describe('get()', () => {
+        test('should make a correct GET request', () => {
+            const id = 'id';
+            const url = 'https://www.foo.com';
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+            const params = {
+                fields: 'start=0'
+            };
+            base.makeRequest = jest.fn();
+            base.getUrl = jest.fn(() => url);
+
+            base.get(id, successCb, errorCb, params);
+            expect(base.makeRequest).toHaveBeenCalledWith('GET', id, url, successCb, errorCb, params);
+        });
+    });
+
     describe('makeRequest()', () => {
-        describe('GET', () => {
-            const url = 'https://foo.bar';
-            test('should not do anything if destroyed', () => {
-                base.isDestroyed = jest.fn().mockReturnValueOnce(true);
-                base.xhr = null;
+        const url = 'https://foo.bar';
+        test('should not do anything if destroyed', () => {
+            base.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            base.xhr = null;
 
-                const successCb = jest.fn();
-                const errorCb = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
 
-                return base.makeRequest('GET', 'id', url, successCb, errorCb).catch(() => {
-                    expect(successCb).not.toHaveBeenCalled();
-                    expect(errorCb).not.toHaveBeenCalled();
+            return base.makeRequest('GET', 'id', url, successCb, errorCb).catch(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).not.toHaveBeenCalled();
+            });
+        });
+
+        test('should make xhr to get base and call success callback', () => {
+            base.xhr = {
+                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse }))
+            };
+
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            return base.makeRequest('POST', 'id', url, successCb, errorCb).then(() => {
+                expect(successCb).toHaveBeenCalledWith(baseResponse);
+                expect(base.xhr.post).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url
                 });
             });
+        });
 
-            test('should make xhr to get base and call success callback', () => {
-                base.xhr = {
-                    get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse }))
-                };
+        test('should call error callback when xhr fails', () => {
+            const error = new Error('error');
+            base.xhr = {
+                put: jest.fn().mockReturnValueOnce(Promise.reject(error))
+            };
 
-                const successCb = jest.fn();
-                const errorCb = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
 
-                return base.makeRequest('GET', 'id', url, successCb, errorCb).then(() => {
-                    expect(successCb).toHaveBeenCalledWith(baseResponse);
-                    expect(base.xhr.get).toHaveBeenCalledWith({
-                        id: 'file_id',
-                        url
-                    });
+            return base.makeRequest('PUT', 'id', url, successCb, errorCb).then(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).toHaveBeenCalledWith(error);
+                expect(base.xhr.put).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url
                 });
             });
+        });
 
-            test('should immediately reject if offset >= total_count', () => {
-                const pagedCommentsResponse = {
-                    total_count: 50,
-                    entries: []
-                };
-                base.xhr = {
-                    get: jest.fn().mockReturnValue(
-                        Promise.resolve({
-                            data: pagedCommentsResponse
-                        })
-                    )
-                };
+        test('should pass along request data', () => {
+            const requestData = {
+                data: {
+                    item: {
+                        id: 'id',
+                        type: 'file'
+                    },
+                    message: 'hello world'
+                }
+            };
+            base.xhr = {
+                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse }))
+            };
 
-                const successCb = jest.fn();
-                const errorCb = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
 
-                base.totalCount = 50;
-                base.offset = 50;
-
-                return base.makeRequest('GET', 'id', url, successCb, errorCb).catch(() => {
-                    expect(successCb).not.toHaveBeenCalled();
-                    expect(errorCb).not.toHaveBeenCalled();
-                    expect(base.xhr.get).not.toHaveBeenCalled();
-                });
-            });
-
-            test('should call error callback when xhr fails', () => {
-                const error = new Error('error');
-                base.xhr = {
-                    get: jest.fn().mockReturnValueOnce(Promise.reject(error))
-                };
-
-                const successCb = jest.fn();
-                const errorCb = jest.fn();
-
-                return base.makeRequest('GET', 'id', url, successCb, errorCb).then(() => {
-                    expect(successCb).not.toHaveBeenCalled();
-                    expect(errorCb).toHaveBeenCalledWith(error);
-                    expect(base.xhr.get).toHaveBeenCalledWith({
-                        id: 'file_id',
-                        url
-                    });
+            return base.makeRequest('POST', 'id', url, successCb, errorCb, requestData).then(() => {
+                expect(successCb).toHaveBeenCalledWith(baseResponse);
+                expect(base.xhr.post).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url,
+                    data: requestData.data
                 });
             });
         });

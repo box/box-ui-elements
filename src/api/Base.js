@@ -244,7 +244,7 @@ class Base {
      * @param {Function} errorCallback - The error callback
      * @param {Object} data optional data to delete
      */
-    delete(id: string, url: string, successCallback: Function, errorCallback: Function, data: Object = {}): void {
+    delete(id: string, url: string, successCallback: Function, errorCallback: Function, data?: Object = {}): void {
         this.makeRequest('DELETE', id, url, successCallback, errorCallback, data);
     }
 
