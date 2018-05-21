@@ -152,10 +152,9 @@ class Item extends Base {
      * @param {Object} item - Item to delete
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {Boolean} recursive - True for folders
      * @return {void}
      */
-    delete(item: BoxItem, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    deleteItem(item: BoxItem, successCallback: Function, errorCallback: Function = noop): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }

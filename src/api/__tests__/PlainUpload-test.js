@@ -280,13 +280,13 @@ describe('api/PlainUpload', () => {
         });
     });
 
-    describe('makeRequest', () => {
+    describe('makeUploadRequest', () => {
         test('should not do anything if API is destroyed', async () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.xhr = {
                 uploadFile: jest.fn()
             };
-            await upload.makeRequest({
+            await upload.makeUploadRequest({
                 fileId: '123',
                 fileName: 'hunter'
             });
@@ -304,7 +304,7 @@ describe('api/PlainUpload', () => {
                 uploadFile: jest.fn()
             };
 
-            upload.makeRequest({ data: {} });
+            upload.makeUploadRequest({ data: {} });
             expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
                 url: `${upload.uploadHost}/api/2.0/files/content`,
                 data: {
@@ -330,7 +330,7 @@ describe('api/PlainUpload', () => {
                 uploadFile: jest.fn()
             };
 
-            upload.makeRequest({ data: {} });
+            upload.makeUploadRequest({ data: {} });
             expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
                 url: `${upload.uploadHost}/api/2.0/files/${fileId}/content`,
                 data: expect.any(Object),
