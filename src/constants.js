@@ -113,6 +113,9 @@ export const PERMISSION_CAN_DELETE = 'can_delete';
 export const PERMISSION_CAN_UPLOAD = 'can_upload';
 export const PERMISSION_CAN_SHARE = 'can_share';
 export const PERMISSION_CAN_SET_SHARE_ACCESS = 'can_set_share_access';
+export const PERMISSION_CAN_COMMENT = 'can_comment';
+export const PERMISSION_CAN_EDIT_COMMENT = 'can_edit_comment';
+export const PERMISSION_CAN_DELETE_COMMENT = 'can_delete_comment';
 
 /* ------------- Delimiters for bread crumbs ---------------- */
 export const DELIMITER_SLASH: 'slash' = 'slash';

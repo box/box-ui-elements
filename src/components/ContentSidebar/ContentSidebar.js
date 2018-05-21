@@ -613,14 +613,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTasks(id: string, shouldDestroy?: boolean = false): void {
-        const params = {
-            fields: TASKS_FIELDS_TO_FETCH.toString()
+        const requestData = {
+            params: {
+                fields: TASKS_FIELDS_TO_FETCH.toString()
+            }
         };
 
         if (shouldRenderSidebar(this.props)) {
             this.api
                 .getTasksAPI(shouldDestroy)
-                .get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback, params);
+                .get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback, requestData);
         }
     }
 

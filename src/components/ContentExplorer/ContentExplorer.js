@@ -875,7 +875,7 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.setState({ isLoading: true });
-        this.api.getAPI(type).delete(selected, () => {
+        this.api.getAPI(type).deleteItem(selected, () => {
             onDelete(cloneDeep([selected]));
             this.refreshCollection();
         });

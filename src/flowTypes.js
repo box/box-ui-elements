@@ -99,6 +99,9 @@ export type Order = {
 };
 
 export type BoxItemPermission = {
+    can_comment?: boolean,
+    can_edit_comment?: boolean,
+    can_delete_comment?: boolean,
     can_preview?: boolean,
     can_rename?: boolean,
     can_download?: boolean,

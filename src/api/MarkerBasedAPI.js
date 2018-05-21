@@ -3,6 +3,7 @@
  * @file class for Box marker based API's to inherit common functionality from
  * @author Box
  */
+import { getTypedFileId } from '../util/file';
 import Base from './Base';
 
 type Params = {
@@ -55,13 +56,14 @@ class MarkerBasedApi extends Base {
 
         // Make the XHR request
         try {
+            const url = this.getUrl(id);
             const queryParams: Params = {
                 ...params,
                 marker,
                 limit
             };
 
-            const { data }: { data: Data } = await this.getData(id, queryParams);
+            const { data }: { data: Data } = await this.xhr.get({ url, id: getTypedFileId(id), params: queryParams });
 
             const entries = this.data ? this.data.entries : [];
             this.data = {
