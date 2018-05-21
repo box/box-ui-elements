@@ -31,6 +31,7 @@ describe('api/Tasks', () => {
             }
         };
 
+<<<<<<< HEAD
         test('should unnest the task_assignment_collection', () => {
             const result = tasks.format(task);
             expect(result).toEqual({
@@ -50,6 +51,16 @@ describe('api/Tasks', () => {
             task_assignment_collection: {
                 entries: []
             }
+=======
+        const formattedResponse = {
+            ...response,
+            entries: [
+                {
+                    ...task,
+                    assignees: []
+                }
+            ]
+>>>>>>> Chore: Adding tests
         };
 
         beforeEach(() => {
@@ -59,7 +70,7 @@ describe('api/Tasks', () => {
 
         test('should call the success callback with no data if none provided from API', () => {
             tasks.successHandler();
-            expect(tasks.successCallback).toBeCalledWith();
+            expect(tasks.successCallback).toBeCalledWith({});
         });
 
         test('should return API response with properly formatted data', () => {
