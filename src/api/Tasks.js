@@ -58,7 +58,7 @@ class Tasks extends Base {
 
         // There is no response data when deleting a task
         if (!data) {
-            this.successCallback();
+            this.successCallback({});
             return;
         }
 
