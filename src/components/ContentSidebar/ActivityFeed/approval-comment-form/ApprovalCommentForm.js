@@ -198,7 +198,6 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             getAvatarUrl
         } = this.props;
         const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
-
         const inputContainerClassNames = classNames('bcs-comment-input-container', className, {
             'bcs-comment-input-is-open': isOpen
         });

@@ -38,13 +38,11 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     isLoading?: boolean,
-    inputState: {
-        currentUser?: User,
-        approverSelectorContacts?: SelectorItems,
-        mentionSelectorContacts?: SelectorItems,
-        isDisabled?: boolean
-    },
+    currentUser?: User,
+    isDisabled?: boolean,
     handlers: {
         comments?: CommentHandlers,
         tasks?: TaskHandlers,
@@ -61,8 +59,6 @@ type Props = {
 
 type State = {
     isInputOpen: boolean,
-    approverSelectorContacts: Array<User>,
-    mentionSelectorContacts: Array<User>,
     feedItems: Array<Comment | Task | BoxItemVersion>
 };
 
@@ -73,8 +69,6 @@ class ActivityFeed extends React.Component<Props, State> {
 
     state = {
         isInputOpen: false,
-        approverSelectorContacts: [],
-        mentionSelectorContacts: [],
         feedItems: []
     };
 
@@ -156,24 +150,6 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
-    getApproverSelectorContacts = (searchStr: string): void => {
-        // using v2 api, search for approver on file with searchStr
-        // use collaborators endpoint /files/ID/collaborators
-        // update contacts state 'approverSelectorContacts'
-        // call user passed in handlers.contacts.getApproverWithQuery, if it exists
-        const getApproverWithQuery = getProp(this.props, 'handlers.contacts.getApproverWithQuery', noop);
-        this.setState({ approverSelectorContacts: getApproverWithQuery(searchStr) });
-    };
-
-    getMentionSelectorContacts = (searchStr: string): void => {
-        // using v2 api, search for mention on file with searchStr
-        // use collaborators endpoint /files/ID/collaborators
-        // update contacts state 'mentionSelectorContacts'
-        // call user passed in handlers.contacts.getMentionWithQuery, if it exists
-        const getMentionWithQuery = getProp(this.props, 'handlers.contacts.getMentionWithQuery', noop);
-        this.setState({ mentionSelectorContacts: getMentionWithQuery(searchStr) });
-    };
-
     componentDidMount(): void {
         const { comments, tasks, versions } = this.props;
         this.sortFeedItems(comments, tasks, versions);
@@ -209,13 +185,23 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     render(): React.Node {
-        const { handlers, inputState, isLoading, permissions, translations, getAvatarUrl } = this.props;
-        const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
-        const { currentUser } = inputState;
+        const {
+            handlers,
+            isLoading,
+            permissions,
+            translations,
+            approverSelectorContacts,
+            mentionSelectorContacts,
+            currentUser,
+            isDisabled,
+            getAvatarUrl
+        } = this.props;
+        const { isInputOpen, feedItems } = this.state;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
         const hasCommentPermission = getProp(permissions, 'comments', false);
         const hasTaskPermission = getProp(permissions, 'tasks', false);
-        const { feedItems } = this.state;
+        const getApproverWithQuery = getProp(handlers, 'contacts.approver', noop);
+        const getMentionWithQuery = getProp(handlers, 'contacts.mention', noop);
 
         return (
             // eslint-disable-next-line
@@ -232,6 +218,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <ActiveState
                             handlers={handlers}
                             items={collapseFeedState(feedItems)}
+                            isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
                             onCommentDelete={hasCommentPermission ? this.deleteComment : noop}
@@ -239,7 +226,6 @@ class ActivityFeed extends React.Component<Props, State> {
                             onTaskEdit={hasTaskPermission ? this.updateTask : noop}
                             onVersionInfo={this.openVersionHistoryPopup}
                             translations={translations}
-                            inputState={inputState}
                             getAvatarUrl={getAvatarUrl}
                         />
                     )}
@@ -251,20 +237,21 @@ class ActivityFeed extends React.Component<Props, State> {
                                 this.feedContainer.scrollTop = 0;
                             }
                         }}
-                        isDisabled={inputState.isDisabled}
+                        isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
                         className={classNames('bcs-activity-feed-comment-input', {
-                            'bcs-is-disabled': inputState.isDisabled
+                            'bcs-is-disabled': isDisabled
                         })}
                         createComment={hasCommentPermission ? this.createComment : noop}
                         createTask={hasTaskPermission ? this.createTask : noop}
-                        getApproverContactsWithQuery={this.getApproverSelectorContacts}
-                        getMentionContactsWithQuery={this.getMentionSelectorContacts}
+                        getApproverContactsWithQuery={getApproverWithQuery}
+                        getMentionContactsWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
                         user={currentUser}
                         onCancel={this.approvalCommentFormCancelHandler}
                         onFocus={this.approvalCommentFormFocusHandler}
+                        getAvatarUrl={getAvatarUrl}
                     />
                 ) : null}
             </div>

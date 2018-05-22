@@ -2,7 +2,7 @@ import FileAccessStats from '../FileAccessStats';
 
 let accessStats;
 
-describe('api/Versions', () => {
+describe('api/FileAccessStats', () => {
     beforeEach(() => {
         accessStats = new FileAccessStats({});
     });
@@ -13,7 +13,7 @@ describe('api/Versions', () => {
                 accessStats.getUrl();
             }).toThrow();
         });
-        test('should return correct version api url with id', () => {
+        test('should return correct access stats api url with id', () => {
             expect(accessStats.getUrl('foo')).toBe('https://api.box.com/2.0/file_access_stats/foo');
         });
     });

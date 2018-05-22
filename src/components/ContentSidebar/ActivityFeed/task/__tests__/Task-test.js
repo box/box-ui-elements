@@ -5,10 +5,6 @@ import Task from '../';
 
 jest.mock('../../comment/Comment', () => 'mock-comment');
 
-const inputState = {
-    currentUser: { name: 'Kanye West', id: 10 }
-};
-
 const allHandlers = {
     tasks: {
         edit: jest.fn()
@@ -18,6 +14,9 @@ const allHandlers = {
         getMentionWithQuery: jest.fn()
     }
 };
+
+const approverSelectorContacts = [];
+const mentionSelectorContacts = [];
 
 describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     const task = {
@@ -132,7 +131,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                 currentUser={currentUser}
                 {...task}
                 onTaskAssignmentUpdate={onTaskAssignmentUpdateSpy}
-                inputState={inputState}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
             />
         );
 
@@ -149,7 +149,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                 currentUser={currentUser}
                 {...task}
                 onTaskAssignmentUpdate={onTaskAssignmentUpdateSpy}
-                inputState={inputState}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
             />
         );
 
@@ -185,7 +186,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             <Task
                 {...myTask}
                 currentUser={currentUser}
-                inputState={inputState}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
             />
@@ -220,7 +222,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             <Task
                 {...myTask}
                 currentUser={currentUser}
-                inputState={inputState}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
             />
@@ -251,7 +254,14 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             ]
         };
 
-        const wrapper = shallow(<Task {...myTask} currentUser={currentUser} inputState={inputState} />);
+        const wrapper = shallow(
+            <Task
+                {...myTask}
+                currentUser={currentUser}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
+            />
+        );
 
         expect(wrapper.find('InlineDelete').length).toEqual(0);
     });
@@ -279,7 +289,13 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         };
 
         const wrapper = shallow(
-            <Task {...myTask} currentUser={currentUser} inputState={inputState} handlers={allHandlers} />
+            <Task
+                {...myTask}
+                currentUser={currentUser}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
+                handlers={allHandlers}
+            />
         );
 
         expect(wrapper.find('InlineEdit').length).toEqual(0);

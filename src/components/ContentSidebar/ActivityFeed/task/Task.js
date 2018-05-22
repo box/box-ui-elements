@@ -12,11 +12,10 @@ import CompletedAssignment from './CompletedAssignment';
 import messages from '../../../messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
-import type { ActionItemError, User } from '../../../../flowTypes';
+import type { ActionItemError, User, SelectorItems } from '../../../../flowTypes';
 import type {
     CommentHandlers,
     ContactHandlers,
-    InputState,
     TaskHandlers,
     Translations,
     VersionHandlers
@@ -47,7 +46,6 @@ type Props = {
         versions?: VersionHandlers
     },
     id: string,
-    inputState: InputState,
     isPending: boolean,
     onDelete: Function,
     onEdit: Function,
@@ -60,6 +58,10 @@ type Props = {
     },
     translatedTaggedMessage: string,
     translations: Translations,
+    currentUser: User,
+    isDisabled?: boolean,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     message: string,
     getAvatarUrl: (string) => Promise<?string>
 };
@@ -76,7 +78,6 @@ class Task extends React.Component<Props> {
             error,
             handlers,
             id,
-            inputState,
             isPending,
             onDelete,
             onEdit,
@@ -85,6 +86,8 @@ class Task extends React.Component<Props> {
             message,
             translatedTaggedMessage,
             translations,
+            approverSelectorContacts,
+            mentionSelectorContacts,
             getAvatarUrl
         } = this.props;
         return (
@@ -96,7 +99,6 @@ class Task extends React.Component<Props> {
                     error={error}
                     handlers={handlers}
                     id={id}
-                    inputState={inputState}
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}
@@ -104,6 +106,8 @@ class Task extends React.Component<Props> {
                     tagged_message={message}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
+                    approverSelectorContacts={approverSelectorContacts}
+                    mentionSelectorContacts={mentionSelectorContacts}
                     getAvatarUrl={getAvatarUrl}
                 />
                 <div className='bcs-task-approvers-container'>

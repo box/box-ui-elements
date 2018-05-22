@@ -8,13 +8,20 @@ import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
+import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
 import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, FIELD_METADATA_SKILLS } from '../../constants';
+import {
+    DEFAULT_HOSTNAME_API,
+    CLIENT_NAME_CONTENT_SIDEBAR,
+    FIELD_METADATA_SKILLS,
+    DEFAULT_COLLAB_DEBOUNCE,
+    DEFAULT_MAX_COLLABORATORS
+} from '../../constants';
 import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
@@ -28,9 +35,11 @@ import type {
     Comments,
     Tasks,
     User,
+    Collaborators,
     SkillCard,
     SkillCardEntry,
-    JsonPatchData
+    JsonPatchData,
+    SelectorItems
 } from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
@@ -69,9 +78,7 @@ type Props = {
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
-    onTaskAssignmentUpdate?: Function,
-    getApproverWithQuery?: Function,
-    getMentionWithQuery?: Function
+    onTaskAssignmentUpdate?: Function
 };
 
 type State = {
@@ -81,6 +88,8 @@ type State = {
     comments?: Comments,
     tasks?: Tasks,
     currentUser?: User,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
     versionError?: Errors,
     commentsError?: Errors,
@@ -475,6 +484,30 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * File approver contacts fetch success callback
+     *
+     * @private
+     * @param {BoxItemCollection} data - Collaborators response data
+     * @return {void}
+     */
+    getApproverContactsSuccessCallback = (collaborators: Collaborators): void => {
+        const { entries } = collaborators;
+        this.setState({ approverSelectorContacts: entries });
+    };
+
+    /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
+     * @param {BoxItemCollection} data - Collaborators response data
+     * @return {void}
+     */
+    getMentionContactsSuccessCallback = (collaborators: Collaborators): void => {
+        const { entries } = collaborators;
+        this.setState({ mentionSelectorContacts: entries });
+    };
+
+    /**
      * Fetches a file
      *
      * @private
@@ -719,6 +752,58 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
+     * @param {API} api - Box API instance
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @param {Function} successCallback - Fetch success callback
+     * @return {void}
+     */
+    getApproverWithQuery = debounce((searchStr: string): void => {
+        // Do not fetch without filter
+        const { fileId } = this.props;
+        if (!searchStr || searchStr.trim() === '' || !fileId) {
+            return;
+        }
+
+        this.api.getFileCollaboratorsAPI(true).markerGet({
+            id: fileId,
+            limit: DEFAULT_MAX_COLLABORATORS,
+            params: {
+                filter_term: searchStr
+            },
+            successCallback: this.getApproverContactsSuccessCallback,
+            errorCallback: this.errorCallback
+        });
+    }, DEFAULT_COLLAB_DEBOUNCE);
+
+    /**
+     * File @mention contacts fetch success callback
+     *
+     * @private
+     * @param {string} searchStr - Search string to filter file collaborators by
+     * @return {void}
+     */
+    getMentionWithQuery = debounce((searchStr: string): void => {
+        // Do not fetch without filter
+        const { fileId } = this.props;
+        if (!searchStr || searchStr.trim() === '' || !fileId) {
+            return;
+        }
+
+        this.api.getFileCollaboratorsAPI(true).markerGet({
+            id: fileId,
+            limit: DEFAULT_MAX_COLLABORATORS,
+            params: {
+                filter_term: searchStr
+            },
+            successCallback: this.getMentionContactsSuccessCallback,
+            errorCallback: this.errorCallback
+        });
+    }, DEFAULT_COLLAB_DEBOUNCE);
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -747,9 +832,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             onTaskCreate,
             onTaskDelete,
             onTaskUpdate,
-            onTaskAssignmentUpdate,
-            getApproverWithQuery,
-            getMentionWithQuery
+            onTaskAssignmentUpdate
         }: Props = this.props;
         const {
             file,
@@ -763,6 +846,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             versionError,
             commentsError,
             tasksError,
+            approverSelectorContacts,
+            mentionSelectorContacts,
             currentUserError
         }: State = this.state;
 
@@ -808,8 +893,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskDelete={onTaskDelete}
                                 onTaskUpdate={onTaskUpdate}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                                getApproverWithQuery={getApproverWithQuery}
-                                getMentionWithQuery={getMentionWithQuery}
+                                getApproverWithQuery={this.getApproverWithQuery}
+                                getMentionWithQuery={this.getMentionWithQuery}
+                                approverSelectorContacts={approverSelectorContacts}
+                                mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={this.getAvatarUrl}
                             />
                         ) : (

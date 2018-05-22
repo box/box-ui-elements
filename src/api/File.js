@@ -38,6 +38,8 @@ class File extends Item {
      * API for getting download URL for files
      *
      * @param {string} id - File id
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
      * @return {void}
      */
     getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): Promise<void> {

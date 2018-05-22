@@ -117,14 +117,25 @@ export type User = {
     name: string,
     login: string,
     email?: string,
-    avatar_url: string
+    avatar_url?: string
+};
+
+export type UserCollection = {
+    total_count?: number,
+    entries?: Array<User>,
+    order?: Array<Order>,
+    isLoaded?: boolean,
+    limit?: number,
+    offset?: number,
+    previous_marker?: string,
+    next_marker?: string
 };
 
 export type SelectorItem = {
     id?: string | number,
     name: string,
     item: Object,
-    value: any
+    value?: any
 };
 
 export type SelectorItems = Array<SelectorItem>;
@@ -171,7 +182,7 @@ export type SkillCard = {
     skill_card_type: SkillCardType,
     title?: string,
     duration?: number,
-    entries: SkillCardEntry[],
+    entries: Array<SkillCardEntry>,
     error?: string
 };
 
@@ -220,7 +231,7 @@ export type BoxItem = {
     modified_at?: string,
     created_at?: string,
     shared_link?: SharedLink,
-    allowed_shared_link_access_levels?: Access[],
+    allowed_shared_link_access_levels?: Array<Access>,
     has_collaborations?: boolean,
     is_externally_owned?: boolean,
     download_url?: string,
@@ -237,11 +248,13 @@ export type BoxItem = {
 
 export type BoxItemCollection = {
     total_count?: number,
-    entries?: BoxItem[],
-    order?: Order[],
+    entries?: Array<BoxItem>,
+    order?: Array<Order>,
     isLoaded?: boolean,
     limit?: number,
-    offset?: number
+    offset?: number,
+    previous_marker?: string,
+    next_marker?: string
 };
 
 export type FlattenedBoxItem = {
@@ -259,7 +272,7 @@ export type FlattenedBoxItem = {
     modified_at?: string,
     created_at?: string,
     shared_link?: SharedLink,
-    allowed_shared_link_access_levels?: Access[],
+    allowed_shared_link_access_levels?: Array<Access>,
     has_collaborations?: boolean,
     is_externally_owned?: boolean,
     download_url?: string,
@@ -274,27 +287,29 @@ export type FlattenedBoxItem = {
 
 export type FlattenedBoxItemCollection = {
     total_count?: number,
-    entries?: string[],
-    order?: Order[],
+    entries?: Array<string>,
+    order?: Array<Order>,
     isLoaded?: boolean,
     limit?: number,
-    offset?: number
+    offset?: number,
+    previous_marker?: string,
+    next_marker?: string
 };
 
 export type BoxPathCollection = {
     total_count: number,
-    entries: Crumb[]
+    entries: Array<Crumb>
 };
 
 export type Collection = {
     id?: string,
     name?: string,
     permissions?: BoxItemPermission,
-    breadcrumbs?: Crumb[],
+    breadcrumbs?: Array<Crumb>,
     percentLoaded?: number,
     sortBy?: SortBy,
     sortDirection?: SortDirection,
-    items?: BoxItem[],
+    items?: Array<BoxItem>,
     boxItem?: FlattenedBoxItem
 };
 
@@ -368,7 +383,7 @@ export type Recent = {
 
 export type RecentCollection = {
     order: Order,
-    entries: Recent[]
+    entries: Array<Recent>
 };
 
 export type MultiputConfig = {
@@ -463,6 +478,11 @@ export type Comment = {
 export type Comments = {
     total_count: number,
     entries: Array<Comment>
+};
+
+export type Collaborators = {
+    next_marker: 'string' | null,
+    entries: Array<SelectorItem>
 };
 
 export type JsonPatch = {

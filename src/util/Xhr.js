@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios';
-import type { Axios } from 'axios';
+import type { Axios, CancelTokenSource } from 'axios';
 import getProp from 'lodash/get';
 import TokenService from './TokenService';
 import { HEADER_CLIENT_NAME, HEADER_CLIENT_VERSION, HEADER_CONTENT_TYPE } from '../constants';
@@ -18,6 +18,7 @@ const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 class Xhr {
     id: ?string;
     axios: Axios;
+    axiosSource: CancelTokenSource;
     clientName: ?string;
     token: Token;
     version: ?string;
@@ -59,6 +60,7 @@ class Xhr {
         this.sharedLinkPassword = sharedLinkPassword;
         this.responseInterceptor = responseInterceptor;
         this.axios = axios.create();
+        this.axiosSource = axios.CancelToken.source();
 
         if (typeof responseInterceptor === 'function') {
             // Called on any non 2xx response
@@ -168,7 +170,12 @@ class Xhr {
         headers?: StringMap
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then((hdrs) =>
-            this.axios.get(url, { params, headers: hdrs, parsedUrl: this.getParsedUrl(url) })
+            this.axios.get(url, {
+                cancelToken: this.axiosSource.token,
+                params,
+                headers: hdrs,
+                parsedUrl: this.getParsedUrl(url)
+            })
         );
     }
 
@@ -394,6 +401,8 @@ class Xhr {
      * @return {void}
      */
     abort(): void {
+        this.axiosSource.cancel();
+
         if (!this.xhr) {
             return;
         }

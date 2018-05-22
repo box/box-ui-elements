@@ -97,6 +97,7 @@ class Base {
      * @return {void}
      */
     destroy(): void {
+        this.xhr.abort();
         this.destroyed = true;
     }
 

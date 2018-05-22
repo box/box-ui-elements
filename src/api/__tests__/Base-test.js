@@ -38,12 +38,18 @@ describe('api/Base', () => {
     });
 
     describe('destroy()', () => {
+        beforeEach(() => {
+            base.xhr = { abort: jest.fn() };
+        });
+
         test('should return false when no destroyed', () => {
             expect(base.isDestroyed()).toBeFalsy();
+            expect(base.xhr.abort).not.toHaveBeenCalled();
         });
         test('should return true when destroyed', () => {
             base.destroy();
             expect(base.isDestroyed()).toBeTruthy();
+            expect(base.xhr.abort).toHaveBeenCalled();
         });
     });
 

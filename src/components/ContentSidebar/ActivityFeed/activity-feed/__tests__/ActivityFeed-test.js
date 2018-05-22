@@ -57,30 +57,30 @@ const allHandlers = {
         create: jest.fn()
     },
     contacts: {
-        getApproverWithQuery: jest.fn(),
-        getMentionWithQuery: jest.fn()
+        approver: jest.fn(),
+        mention: jest.fn()
     }
 };
 
 describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render empty state', () => {
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render empty state with loading indicator', () => {
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} isLoading />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} isLoading />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should render approval comment form if comment submit handler is passed', () => {
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={allHandlers} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render activity state', () => {
         const wrapper = shallow(
-            <ActivityFeed inputState={{ currentUser }} comments={comments} tasks={tasks} versions={versions} />
+            <ActivityFeed currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
         expect(wrapper).toMatchSnapshot();
     });
@@ -90,13 +90,13 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             ...allHandlers,
             tasks: null
         };
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} handlers={noTaskHandler} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={noTaskHandler} />);
 
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
     });
 
     test('should show input when approvalCommentFormFocusHandler is called', () => {
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={allHandlers} />);
 
         const instance = wrapper.instance();
         instance.approvalCommentFormFocusHandler();
@@ -105,7 +105,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should hide input when approvalCommentFormCancelHandler is called', () => {
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={allHandlers} />);
 
         const instance = wrapper.instance();
         instance.approvalCommentFormFocusHandler();
@@ -122,7 +122,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             comments: true
         };
         const wrapper = mount(
-            <ActivityFeed permissions={permissions} inputState={{ currentUser }} handlers={allHandlers} />
+            <ActivityFeed permissions={permissions} currentUser={currentUser} handlers={allHandlers} />
         );
 
         const instance = wrapper.instance();
@@ -143,7 +143,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             tasks: true
         };
         const wrapper = mount(
-            <ActivityFeed permissions={permissions} inputState={{ currentUser }} handlers={allHandlers} />
+            <ActivityFeed permissions={permissions} currentUser={currentUser} handlers={allHandlers} />
         );
 
         const instance = wrapper.instance();
@@ -158,7 +158,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should stop event propagation onKeyDown', () => {
-        const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={allHandlers} />);
         const stopPropagationSpy = jest.fn();
         wrapper.find('.bcs-activity-feed').simulate('keydown', {
             nativeEvent: {

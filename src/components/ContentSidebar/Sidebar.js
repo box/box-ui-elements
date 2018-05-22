@@ -17,7 +17,8 @@ import type {
     Tasks,
     User,
     FileVersions,
-    SidebarView
+    SidebarView,
+    SelectorItems
 } from '../../flowTypes';
 import { shouldRenderDetailsSidebar } from './sidebarUtil';
 import SidebarNav from './SidebarNav';
@@ -54,6 +55,8 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     accessStats?: FileAccessStats,
     accessStatsError?: Errors,
     fileError?: Errors,
@@ -155,8 +158,10 @@ class Sidebar extends React.Component<Props, State> {
             tasksError,
             comments,
             commentsError,
-            getAvatarUrl,
-            versions
+            versions,
+            approverSelectorContacts,
+            mentionSelectorContacts,
+            getAvatarUrl
         }: Props = this.props;
 
         const { view } = this.state;
@@ -219,6 +224,8 @@ class Sidebar extends React.Component<Props, State> {
                             tasks={tasks}
                             tasksError={tasksError}
                             comments={comments}
+                            approverSelectorContacts={approverSelectorContacts}
+                            mentionSelectorContacts={mentionSelectorContacts}
                             commentsError={commentsError}
                             versions={versions}
                             onCommentCreate={onCommentCreate}
