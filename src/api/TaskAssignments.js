@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Helper for the box Tasks API
+ * @file Helper for the box Task Assignments API
  * @author Box
  */
 
@@ -11,9 +11,10 @@ import { PERMISSION_CAN_COMMENT } from '../constants';
 class TaskAssignments extends Base {
     /**
      * API URL for task assignments. Getting a list of assignments "/tasks/id/assignments" does not give us the fields
-     * we need. So instead we will only perform GET operations on an assignment by assignment basis.
+     * we need. So instead we will only perform GET operations on an assignment by assignment basis,
+     * and other endpoints will use the GET URL.
      *
-     * @param {string} id - a box task ID
+     * @param {string} id - a box task assignment ID
      * @return {string} base url for task assignments
      */
     getUrl(id?: string): string {
@@ -25,8 +26,8 @@ class TaskAssignments extends Base {
      * API for creating a task assignment on a file
      *
      * @param {BoxItem} file - File object that contains the task we are assigning to
-     * @param {string} taskId - Task that we are adding an assignment to
-     * @param {Object} assignTo - Object containing task assignees
+     * @param {string} taskId - Task id that we are adding an assignment to
+     * @param {Object} assignTo - Object containing task assignee
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -67,9 +68,9 @@ class TaskAssignments extends Base {
     }
 
     /**
-     * API for updating a task on a file
+     * API for updating a task assignment on a file
      *
-     * @param {BoxItem} file - File object for which we are creating a task
+     * @param {BoxItem} file - File object for which we are updating a task assignment
      * @param {string} taskAssignmentId - Task assignment to be edited
      * @param {string} resolutionStatus - The updated task assignment status
      * @param {Function} successCallback - Success callback
@@ -92,7 +93,7 @@ class TaskAssignments extends Base {
         const { id = '', permissions } = file;
 
         try {
-            // We don't know task_edit specific permissions, so let the client try and fail gracefully
+            // We don't know task_assignment_edit specific permissions, so let the client try and fail gracefully
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
             errorCallback(e);
@@ -107,10 +108,10 @@ class TaskAssignments extends Base {
     }
 
     /**
-     * API for deleting a task on a file
+     * API for deleting a task assignment on a file
      *
-     * @param {BoxItem} file - File object for which we are deleting a task
-     * @param {string} taskAssignmentId - Id of the task we are deleting
+     * @param {BoxItem} file - File object for which we are deleting a task assignment
+     * @param {string} taskAssignmentId - Id of the task assignment we are deleting
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -129,7 +130,7 @@ class TaskAssignments extends Base {
         const { id = '', permissions } = file;
 
         try {
-            // We don't know task_delete specific permissions, so let the client try and fail gracefully
+            // We don't know task_assignment_delete specific permissions, so let the client try and fail gracefully
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
             errorCallback(e);
