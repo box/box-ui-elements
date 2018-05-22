@@ -28,7 +28,6 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             "type": "comment",
           },
           Object {
-            "assignees": Array [],
             "created_at": "Thu Sep 25 33658 19:45:39 GMT-0600 (CST)",
             "dueAt": 1234567891,
             "id": "1234",
@@ -38,6 +37,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
               "name": "Jay-Z",
             },
             "tagged_message": "test",
+            "task_assignment_collection": Array [],
             "type": "task",
           },
           Object {

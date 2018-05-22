@@ -48,10 +48,18 @@ class Tasks extends Base {
             return;
         }
 
-        // Manually create the entries array if creating/updating a task
-        const entries = data.entries ? data.entries : [data];
+        // We don't have entries when updating/creating a task
+        if (!data.entries) {
+            const task = {
+                ...data,
+                task_assignment_collection: data.task_assignment_collection.entries || []
+            };
 
-        const tasks = entries.map((task: Task) => ({
+            this.successCallback(task);
+            return;
+        }
+
+        const tasks = data.entries.map((task: Task) => ({
             ...task,
             task_assignment_collection: task.task_assignment_collection.entries || []
         }));

@@ -61,20 +61,12 @@ describe('api/Tasks', () => {
 
         test('should return properly formatted data if only one task is returned from API', () => {
             const singleResponse = {
-                ...task
+                ...task,
+                task_assignment_collection: []
             };
 
-            const singleFormattedResponse = {
-                ...singleResponse,
-                entries: [
-                    {
-                        ...task,
-                        task_assignment_collection: []
-                    }
-                ]
-            };
             tasks.successHandler(task);
-            expect(tasks.successCallback).toBeCalledWith(singleFormattedResponse);
+            expect(tasks.successCallback).toBeCalledWith(singleResponse);
         });
     });
 

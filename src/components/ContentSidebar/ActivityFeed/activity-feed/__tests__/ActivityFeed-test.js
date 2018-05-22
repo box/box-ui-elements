@@ -28,7 +28,7 @@ const tasks = {
             tagged_message: 'test',
             modified_by: { name: 'Jay-Z', id: 10 },
             dueAt: 1234567891,
-            assignees: []
+            task_assignment_collection: []
         }
     ]
 };

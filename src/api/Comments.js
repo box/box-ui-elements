@@ -48,10 +48,18 @@ class Comments extends OffsetBasedAPI {
             return;
         }
 
-        // Manually create the entries array if creating/updating a comment
-        const entries = data.entries ? data.entries : [data];
+        // We don't have entries when updating/creating a comment
+        if (!data.entries) {
+            const comment = {
+                ...data,
+                tagged_message: data.tagged_message !== '' ? data.tagged_message : data.message
+            };
 
-        const comments = entries.map((comment: Comment) => {
+            this.successCallback(comment);
+            return;
+        }
+
+        const comments = data.entries.map((comment: Comment) => {
             const { tagged_message, message } = comment;
             return {
                 ...comment,

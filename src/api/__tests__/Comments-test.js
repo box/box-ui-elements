@@ -79,20 +79,12 @@ describe('api/Comments', () => {
 
         test('should return properly formatted data if only one comment is returned from API', () => {
             const singleResponse = {
-                ...comment
+                ...comment,
+                tagged_message: comment.message
             };
 
-            const singleFormattedResponse = {
-                ...singleResponse,
-                entries: [
-                    {
-                        ...comment,
-                        tagged_message: comment.message
-                    }
-                ]
-            };
             comments.successHandler(comment);
-            expect(comments.successCallback).toBeCalledWith(singleFormattedResponse);
+            expect(comments.successCallback).toBeCalledWith(singleResponse);
         });
     });
 
