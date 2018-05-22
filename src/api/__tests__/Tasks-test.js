@@ -57,7 +57,7 @@ describe('api/Tasks', () => {
             entries: [
                 {
                     ...task,
-                    assignees: []
+                    task_assignment_collection: []
                 }
             ]
 >>>>>>> Chore: Adding tests
@@ -70,7 +70,7 @@ describe('api/Tasks', () => {
 
         test('should call the success callback with no data if none provided from API', () => {
             tasks.successHandler();
-            expect(tasks.successCallback).toBeCalledWith({});
+            expect(tasks.successCallback).toBeCalledWith();
         });
 
         test('should return API response with properly formatted data', () => {

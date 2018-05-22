@@ -10,34 +10,16 @@ import { PERMISSION_CAN_COMMENT } from '../constants';
 
 class TaskAssignments extends Base {
     /**
-     * API URL for task assignments. Getting a list of assignments "/tasks/id/assignments" does not give us the field
+     * API URL for task assignments. Getting a list of assignments "/tasks/id/assignments" does not give us the fields
      * we need. So instead we will only perform GET operations on an assignment by assignment basis.
      *
      * @param {string} id - a box task ID
      * @return {string} base url for task assignments
      */
     getUrl(id?: string): string {
-        const baseUrl = `${this.getBaseApiUrl()}/tasks_assignments`;
+        const baseUrl = `${this.getBaseApiUrl()}/task_assignments`;
         return id ? `${baseUrl}/${id}` : baseUrl;
     }
-
-    /**
-     * Formats the tasks api response to usable data
-     * @param {Object} data the api response data
-     */
-    successHandler = (data: any): void => {
-        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
-            return;
-        }
-
-        // There is no response data when deleting a task
-        if (!data) {
-            this.successCallback({});
-            return;
-        }
-
-        this.successCallback({ ...data });
-    };
 
     /**
      * API for creating a task assignment on a file
@@ -58,7 +40,7 @@ class TaskAssignments extends Base {
     }: {
         file: BoxItem,
         taskId: string,
-        assignTo: Object,
+        assignTo: { id: string },
         successCallback: Function,
         errorCallback: Function
     }): void {
@@ -89,23 +71,20 @@ class TaskAssignments extends Base {
      *
      * @param {BoxItem} file - File object for which we are creating a task
      * @param {string} taskAssignmentId - Task assignment to be edited
-     * @param {string} message - A message from the assignee about the task
      * @param {string} resolutionStatus - The updated task assignment status
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    updateTask({
+    updateTaskAssignment({
         file,
         taskAssignmentId,
-        message,
         resolutionStatus,
         successCallback,
         errorCallback
     }: {
         file: BoxItem,
         taskAssignmentId: string,
-        message: string,
         resolutionStatus: string,
         successCallback: Function,
         errorCallback: Function
@@ -121,10 +100,7 @@ class TaskAssignments extends Base {
         }
 
         const requestData = {
-            data: {
-                message,
-                resolution_status: resolutionStatus
-            }
+            data: { resolution_status: resolutionStatus }
         };
 
         this.put(id, this.getUrl(taskAssignmentId), requestData, successCallback, errorCallback);
@@ -139,7 +115,7 @@ class TaskAssignments extends Base {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    deleteTask({
+    deleteTaskAssignment({
         file,
         taskAssignmentId,
         successCallback,
