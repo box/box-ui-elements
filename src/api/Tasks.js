@@ -34,8 +34,22 @@ class Tasks extends Base {
     }
 
     /**
+     * Formats task data for use in components.
+     *
+     * @param {string} [id] - An individual task entry from the API
+     * @return {Task} A task
+     */
+    format(task: Object): Task {
+        return {
+            ...task,
+            task_assignment_collection: task.task_assignment_collection.entries || []
+        };
+    }
+
+    /**
      * Formats the tasks api response to usable data
      * @param {Object} data the api response data
+     * @return {void}
      */
     successHandler = (data: any): void => {
         if (this.isDestroyed() || typeof this.successCallback !== 'function') {
@@ -50,20 +64,11 @@ class Tasks extends Base {
 
         // We don't have entries when updating/creating a task
         if (!data.entries) {
-            const task = {
-                ...data,
-                task_assignment_collection: data.task_assignment_collection.entries || []
-            };
-
-            this.successCallback(task);
+            this.successCallback(this.format(data));
             return;
         }
 
-        const tasks = data.entries.map((task: Task) => ({
-            ...task,
-            task_assignment_collection: task.task_assignment_collection.entries || []
-        }));
-
+        const tasks = data.entries.map(this.format);
         this.successCallback({ ...data, entries: tasks });
     };
 

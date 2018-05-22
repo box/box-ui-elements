@@ -47,44 +47,30 @@ describe('api/Comments', () => {
             is_reply_comment: true
         };
 
-        const response = {
-            total_count: 2,
-            entries: [comment, taggedComment]
-        };
-
-        const formattedResponse = {
-            ...response,
-            entries: [
-                {
-                    ...comment,
-                    tagged_message: comment.message
-                },
-                taggedComment
-            ]
-        };
-
         beforeEach(() => {
+            comments.format = jest.fn();
             comments.successCallback = jest.fn();
         });
 
         test('should call the success callback with no data if none provided from API', () => {
             comments.successHandler();
-            expect(comments.successCallback).toBeCalledWith({});
+            expect(comments.successCallback).toBeCalledWith();
         });
 
         test('should return API response with properly formatted data', () => {
+            const response = {
+                total_count: 2,
+                entries: [comment, taggedComment]
+            };
             comments.successHandler(response);
-            expect(comments.successCallback).toBeCalledWith(formattedResponse);
+            expect(comments.successCallback).toBeCalled();
+            expect(comments.format.mock.calls.length).toBe(2);
         });
 
         test('should return properly formatted data if only one comment is returned from API', () => {
-            const singleResponse = {
-                ...comment,
-                tagged_message: comment.message
-            };
-
             comments.successHandler(comment);
-            expect(comments.successCallback).toBeCalledWith(singleResponse);
+            expect(comments.successCallback).toBeCalled();
+            expect(comments.format).toBeCalledWith(comment);
         });
     });
 
