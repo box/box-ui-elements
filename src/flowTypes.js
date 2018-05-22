@@ -56,7 +56,7 @@ import {
     SIDEBAR_VIEW_METADATA
 } from './constants';
 
-export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
+export type Method = 'delete' | 'get' | 'head' | 'options' | 'post' | 'put';
 export type Token = null | typeof undefined | string | Function;
 export type TokenReadWrite = { read: string, write?: string };
 export type TokenLiteral = null | typeof undefined | string | TokenReadWrite;

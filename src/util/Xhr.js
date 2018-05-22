@@ -8,7 +8,15 @@ import axios from 'axios';
 import type { Axios, CancelTokenSource } from 'axios';
 import getProp from 'lodash/get';
 import TokenService from './TokenService';
-import { HEADER_CLIENT_NAME, HEADER_CLIENT_VERSION, HEADER_CONTENT_TYPE } from '../constants';
+import {
+    HEADER_CLIENT_NAME,
+    HEADER_CLIENT_VERSION,
+    HEADER_CONTENT_TYPE,
+    POST,
+    PUT,
+    DELETE,
+    OPTIONS
+} from '../constants';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
@@ -194,7 +202,7 @@ class Xhr {
         id,
         data,
         headers = {},
-        method = 'POST'
+        method = POST
     }: {
         url: string,
         id?: string,
@@ -233,7 +241,7 @@ class Xhr {
         data: PayloadType,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        return this.post({ id, url, data, headers, method: 'PUT' });
+        return this.post({ id, url, data, headers, method: PUT });
     }
 
     /**
@@ -256,7 +264,7 @@ class Xhr {
         data?: StringAnyMap,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        return this.post({ id, url, data, headers, method: 'DELETE' });
+        return this.post({ id, url, data, headers, method: DELETE });
     }
 
     /**
@@ -291,7 +299,7 @@ class Xhr {
                 this.axios({
                     url,
                     data,
-                    method: 'options',
+                    method: OPTIONS,
                     headers: hdrs
                 })
                     .then(successHandler)
@@ -321,7 +329,7 @@ class Xhr {
         url,
         data,
         headers = {},
-        method = 'POST',
+        method = POST,
         successHandler,
         errorHandler,
         progressHandler,

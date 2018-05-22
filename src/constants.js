@@ -207,3 +207,10 @@ export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
 export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
 export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
+
+/* ------------------ HTTP Requests  ---------------------- */
+export const GET = 'get';
+export const POST = 'post';
+export const PUT = 'put';
+export const DELETE = 'delete';
+export const OPTIONS = 'options';
