@@ -72,9 +72,19 @@ describe('api/Tasks', () => {
         });
 
         test('should return properly formatted data if only one task is returned from API', () => {
+<<<<<<< HEAD
             tasks.successHandler(task);
             expect(tasks.format).toBeCalled();
             expect(tasks.successCallback).toBeCalled();
+=======
+            const singleResponse = {
+                ...task,
+                task_assignment_collection: []
+            };
+
+            tasks.successHandler(task);
+            expect(tasks.successCallback).toBeCalledWith(singleResponse);
+>>>>>>> Fix: Fix data returned for update/delete, task properties
         });
     });
 
