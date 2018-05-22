@@ -51,7 +51,7 @@ class MarkerBasedApi extends Base {
         params?: Object
     ): Promise<void> {
         if (this.isDestroyed()) {
-            return Promise.resolve();
+            return;
         }
 
         // Make the XHR request
@@ -72,15 +72,14 @@ class MarkerBasedApi extends Base {
             };
             const nextMarker = data.next_marker;
             if (shouldFetchAll && this.hasMoreItems(nextMarker)) {
-                return this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, params);
+                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, params);
+                return;
             }
 
             this.successHandler(this.data);
         } catch (error) {
             this.errorHandler(error);
         }
-
-        return Promise.resolve();
     }
 
     /**

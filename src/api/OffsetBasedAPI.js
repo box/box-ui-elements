@@ -73,7 +73,7 @@ class OffsetBasedApi extends Base {
         fields?: Array<string>
     ): Promise<void> {
         if (this.isDestroyed()) {
-            return Promise.resolve();
+            return;
         }
 
         // Make the XHR request
@@ -91,15 +91,14 @@ class OffsetBasedApi extends Base {
             const totalCount = data.total_count;
             const nextOffset = offset + limit;
             if (shouldFetchAll && this.hasMoreItems(nextOffset, totalCount)) {
-                return this.offsetGetRequest(id, nextOffset, limit, shouldFetchAll, fields);
+                this.offsetGetRequest(id, nextOffset, limit, shouldFetchAll, fields);
+                return;
             }
 
             this.successHandler(this.data);
         } catch (error) {
             this.errorHandler(error);
         }
-
-        return Promise.resolve();
     }
 
     /**
