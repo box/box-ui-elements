@@ -57,7 +57,7 @@ class Base {
     /**
      * @property {Function}
      */
-    successCallback: (data: Object) => void;
+    successCallback: (data?: Object) => void;
 
     /**
      * @property {Function}

@@ -44,7 +44,7 @@ class Tasks extends Base {
 
         // There is no response data when deleting a task
         if (!data) {
-            this.successCallback({});
+            this.successCallback();
             return;
         }
 
@@ -53,7 +53,7 @@ class Tasks extends Base {
 
         const tasks = entries.map((task: Task) => ({
             ...task,
-            assignees: task.task_assignment_collection.entries || []
+            task_assignment_collection: task.task_assignment_collection.entries || []
         }));
 
         this.successCallback({ ...data, entries: tasks });
