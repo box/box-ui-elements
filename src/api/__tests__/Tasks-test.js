@@ -19,6 +19,27 @@ describe('api/Tasks', () => {
         });
     });
 
+    describe('format()', () => {
+        const task = {
+            type: 'task',
+            id: '1234',
+            created_at: { name: 'Jay-Z', id: 10 },
+            due_at: 1234567891,
+            message: 'test',
+            task_assignment_collection: {
+                entries: ['foo']
+            }
+        };
+
+        test('should unnest the task_assignment_collection', () => {
+            const result = tasks.format(task);
+            expect(result).toEqual({
+                ...task,
+                task_assignment_collection: ['foo']
+            });
+        });
+    });
+
     describe('successHandler()', () => {
         const task = {
             type: 'task',
@@ -30,22 +51,9 @@ describe('api/Tasks', () => {
                 entries: []
             }
         };
-        const response = {
-            total_count: 1,
-            entries: [task]
-        };
-
-        const formattedResponse = {
-            ...response,
-            entries: [
-                {
-                    ...task,
-                    task_assignment_collection: []
-                }
-            ]
-        };
 
         beforeEach(() => {
+            tasks.format = jest.fn();
             tasks.successCallback = jest.fn();
         });
 
@@ -55,26 +63,18 @@ describe('api/Tasks', () => {
         });
 
         test('should return API response with properly formatted data', () => {
-            tasks.successHandler(response);
-            expect(tasks.successCallback).toBeCalledWith(formattedResponse);
+            tasks.successHandler({
+                total_count: 2,
+                entries: [task, task]
+            });
+            expect(tasks.successCallback).toBeCalled();
+            expect(tasks.format.mock.calls.length).toBe(2);
         });
 
         test('should return properly formatted data if only one task is returned from API', () => {
-            const singleResponse = {
-                ...task
-            };
-
-            const singleFormattedResponse = {
-                ...singleResponse,
-                entries: [
-                    {
-                        ...task,
-                        task_assignment_collection: []
-                    }
-                ]
-            };
             tasks.successHandler(task);
-            expect(tasks.successCallback).toBeCalledWith(singleFormattedResponse);
+            expect(tasks.format).toBeCalled();
+            expect(tasks.successCallback).toBeCalled();
         });
     });
 

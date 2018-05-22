@@ -34,6 +34,19 @@ class Comments extends OffsetBasedAPI {
     }
 
     /**
+     * Formats comment data for use in components.
+     *
+     * @param {string} [id] - An individual comment entry from the API
+     * @return {Task} A task
+     */
+    format(comment: Object): Comment {
+        return {
+            ...comment,
+            tagged_message: comment.tagged_message !== '' ? comment.tagged_message : comment.message
+        };
+    }
+
+    /**
      * Formats the comments api response to usable data
      * @param {Object} data the api response data
      */
@@ -44,21 +57,17 @@ class Comments extends OffsetBasedAPI {
 
         // There is no response data when deleting a comment
         if (!data) {
-            this.successCallback({});
+            this.successCallback();
             return;
         }
 
-        // Manually create the entries array if creating/updating a comment
-        const entries = data.entries ? data.entries : [data];
+        // We don't have entries when updating/creating a comment
+        if (!data.entries) {
+            this.successCallback(this.format(data));
+            return;
+        }
 
-        const comments = entries.map((comment: Comment) => {
-            const { tagged_message, message } = comment;
-            return {
-                ...comment,
-                tagged_message: tagged_message !== '' ? tagged_message : message
-            };
-        });
-
+        const comments = data.entries.map(this.format);
         this.successCallback({ ...data, entries: comments });
     };
 

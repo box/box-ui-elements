@@ -198,6 +198,16 @@ class Base {
     }
 
     /**
+     * Formats an API entry for use in components
+     * @param {string} entry - an API response entry
+     */
+    /* eslint-disable no-unused-vars */
+    format(entry: Object) {
+        /* eslint-enable no-unused-vars */
+        throw new Error('Implement me!');
+    }
+
+    /**
      * Generic API GET
      *
      * @param {string} id - The file id

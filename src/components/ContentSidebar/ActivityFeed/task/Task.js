@@ -29,7 +29,7 @@ const TASK_COMPLETED = 'completed';
 const TASK_INCOMPLETE = 'incomplete';
 
 type Props = {
-    assignees: Array<{
+    task_assignment_collection: Array<{
         id: number,
         user: User,
         status: string
@@ -70,7 +70,7 @@ type Props = {
 class Task extends React.Component<Props> {
     render(): React.Node {
         const {
-            assignees,
+            task_assignment_collection,
             created_at,
             created_by,
             currentUser,
@@ -123,7 +123,7 @@ class Task extends React.Component<Props> {
                         ) : null}
                     </div>
                     <div className='bcs-task-assignees'>
-                        {assignees.map(({ id: taskAssignmentId, user: assigneeUser, status }) => {
+                        {task_assignment_collection.map(({ id: taskAssignmentId, user: assigneeUser, status }) => {
                             switch (status) {
                                 case TASK_INCOMPLETE:
                                     return (

@@ -25,7 +25,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         id: '123125',
         message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
         modified_by: { name: 'Tarrence van As', id: 10 },
-        assignees: [
+        task_assignment_collection: [
             {
                 id: 0,
                 user: { name: 'Jake Thomas', id: 1 },
@@ -63,7 +63,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             id: '123125',
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
@@ -168,7 +168,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
@@ -204,7 +204,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
@@ -240,7 +240,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
@@ -274,7 +274,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
