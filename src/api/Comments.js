@@ -25,7 +25,7 @@ class Comments extends OffsetBasedAPI {
     /**
      * API URL for comments endpoint
      *
-     * @param {string} [id] - A box comment file id
+     * @param {string} [id] - A box comment id
      * @return {string} base url for comments
      */
     commentsUrl(id?: string): string {
@@ -111,7 +111,7 @@ class Comments extends OffsetBasedAPI {
     /**
      * API for updating a comment on a file
      *
-     * @param {BoxItem} file - File object for which we are creating a comment
+     * @param {BoxItem} file - File object for which we are updating a comment
      * @param {string} commentId - Comment to be edited
      * @param {string} message - Comment message
      * @param {Function} successCallback - Success callback
@@ -148,7 +148,7 @@ class Comments extends OffsetBasedAPI {
     }
 
     /**
-     * API for creating a comment on a file
+     * API for deleting a comment on a file
      *
      * @param {BoxItem} file - File object for which we are deleting a comment
      * @param {string} commentId - Id of the comment we are deleting
