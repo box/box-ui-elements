@@ -611,19 +611,27 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} text - The comment's text
+     * @param {boolean} hasMention - The comment's text
      * @return {void}
      */
-    onCommentCreate = (text: string) => {
+    onCommentCreate = (text: string, hasMention: boolean) => {
         const { file } = this.state;
 
         if (!file) {
             throw getBadItemError();
         }
 
+        const message = {};
+
+        if (hasMention) {
+            message.taggedMessage = text;
+        } else {
+            message.message = text;
+        }
+
         this.api.getCommentsAPI(false).createComment({
             file,
-            message: text,
-            taggedMessage: text,
+            ...message,
             successCallback: noop,
             errorCallback: noop
         });

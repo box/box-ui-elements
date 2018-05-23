@@ -82,7 +82,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     onFormValidSubmitHandler = (formData: any): void => {
         const { createComment, createTask, intl, updateTask, onSubmit, entityId } = this.props;
 
-        const commentText = this.getFormattedCommentText();
+        const { text: commentText, hasMention } = this.getFormattedCommentText();
         if (!commentText) {
             return;
         }
@@ -103,7 +103,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         } else if (entityId) {
             updateTask({ text: commentText, id: entityId });
         } else {
-            createComment({ text: commentText });
+            createComment({ text: commentText, hasMention });
         }
 
         if (onSubmit) {
@@ -126,15 +126,18 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     /**
      * Formats the comment editor's text such that it will be accepted by the server.
      *
-     * @returns {string}
+     * @returns {Object}
      */
-    getFormattedCommentText = (): string => {
+    getFormattedCommentText = (): { text: string, hasMention: boolean } => {
         const { commentEditorState } = this.state;
 
         const contentState = commentEditorState.getCurrentContent();
         const blockMap = contentState.getBlockMap();
 
         const resultStringArr = [];
+
+        // The API needs to explicitly know if a message contains a mention.
+        let hasMention = false;
 
         // For all ContentBlocks in the ContentState:
         blockMap.forEach((block) => {
@@ -152,6 +155,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                         const entity = contentState.getEntity(entityKey);
                         const stringToAdd = `@[${entity.getData().id}:${text.substring(start + 1, end)}]`;
                         blockMapStringArr.push(stringToAdd);
+                        hasMention = true;
                     } else {
                         blockMapStringArr.push(text.substring(start, end));
                     }
@@ -162,7 +166,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
 
         // Concatentate the array of block strings with newlines
         // (Each block represents a paragraph)
-        return resultStringArr.join('\n');
+        return { text: resultStringArr.join('\n'), hasMention };
     };
 
     handleApproverSelectorInput = (value: any): void => {

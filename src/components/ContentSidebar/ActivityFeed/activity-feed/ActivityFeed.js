@@ -80,12 +80,12 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
     createComment = (args: any): void => {
-        const { text } = args;
+        const { text, hasMention } = args;
         // create a placeholder pending comment
         // create actual comment and send to Box V2 api
         // call user passed in handlers.comments.create, if it exists
         const createComment = getProp(this.props, 'handlers.comments.create', noop);
-        createComment(text);
+        createComment(text, hasMention);
 
         this.approvalCommentFormSubmitHandler();
     };
