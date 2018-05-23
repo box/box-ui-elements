@@ -53,10 +53,22 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
-    SIDEBAR_VIEW_METADATA
+    SIDEBAR_VIEW_METADATA,
+    HTTP_GET,
+    HTTP_POST,
+    HTTP_PUT,
+    HTTP_DELETE,
+    HTTP_OPTIONS,
+    HTTP_HEAD
 } from './constants';
 
-export type Method = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'POST' | 'PUT';
+export type Method =
+    | typeof HTTP_DELETE
+    | typeof HTTP_GET
+    | typeof HTTP_POST
+    | typeof HTTP_OPTIONS
+    | typeof HTTP_HEAD
+    | typeof HTTP_PUT;
 export type Token = null | typeof undefined | string | Function;
 export type TokenReadWrite = { read: string, write?: string };
 export type TokenLiteral = null | typeof undefined | string | TokenReadWrite;
