@@ -79,8 +79,14 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
-    createComment = (args: any): void => {
-        const { text, hasMention } = args;
+    /**
+     * Creates a comment
+     *
+     * @param {string} text - Comment text
+     * @param {boolean} hasMention - If this comment contains an at mention
+     * @return {void}
+     */
+    createComment = ({ text, hasMention }: { text: string, hasMention: boolean }): void => {
         // create a placeholder pending comment
         // create actual comment and send to Box V2 api
         // call user passed in handlers.comments.create, if it exists
@@ -218,6 +224,8 @@ class ActivityFeed extends React.Component<Props, State> {
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
                             onCommentDelete={hasCommentPermission ? this.deleteComment : noop}
+                            // We don't know task edit/delete specific permissions,
+                            // but you must at least be able to comment to do these operations.
                             onTaskDelete={hasCommentPermission ? this.deleteTask : noop}
                             onTaskEdit={hasCommentPermission ? this.updateTask : noop}
                             onVersionInfo={this.openVersionHistoryPopup}

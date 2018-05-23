@@ -82,8 +82,8 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     onFormValidSubmitHandler = (formData: any): void => {
         const { createComment, createTask, intl, updateTask, onSubmit, entityId } = this.props;
 
-        const { text: commentText, hasMention } = this.getFormattedCommentText();
-        if (!commentText) {
+        const { text, hasMention } = this.getFormattedCommentText();
+        if (!text) {
             return;
         }
 
@@ -96,14 +96,14 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                 return;
             }
             createTask({
-                text: commentText,
+                text,
                 approvers: approvers.map(({ value }) => value),
                 dueDate: formData.approverDateInput
             });
         } else if (entityId) {
-            updateTask({ text: commentText, id: entityId });
+            updateTask({ text, id: entityId });
         } else {
-            createComment({ text: commentText, hasMention });
+            createComment({ text, hasMention });
         }
 
         if (onSubmit) {
