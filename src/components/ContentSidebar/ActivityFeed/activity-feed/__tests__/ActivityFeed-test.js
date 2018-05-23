@@ -118,12 +118,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     test('should call create comment handler and close input on valid comment submit', () => {
         const createCommentSpy = jest.fn();
         allHandlers.comments.create = createCommentSpy;
-        const permissions = {
-            comments: true
+        const file = {
+            permissions: {
+                can_comment: true
+            }
         };
-        const wrapper = mount(
-            <ActivityFeed permissions={permissions} currentUser={currentUser} handlers={allHandlers} />
-        );
+        const wrapper = mount(<ActivityFeed file={file} currentUser={currentUser} handlers={allHandlers} />);
 
         const instance = wrapper.instance();
         const approvalCommentForm = wrapper.find('ApprovalCommentForm').at(0);
@@ -131,7 +131,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         instance.approvalCommentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        approvalCommentForm.prop('createComment')();
+        approvalCommentForm.prop('createComment')('foo');
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(createCommentSpy).toHaveBeenCalledTimes(1);
     });
@@ -139,12 +139,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     test('should call create task handler and close input on valid task submit', () => {
         const createTaskSpy = jest.fn();
         allHandlers.tasks.create = createTaskSpy;
-        const permissions = {
-            tasks: true
+        const file = {
+            permissions: {
+                can_comment: true
+            }
         };
-        const wrapper = mount(
-            <ActivityFeed permissions={permissions} currentUser={currentUser} handlers={allHandlers} />
-        );
+        const wrapper = mount(<ActivityFeed file={file} currentUser={currentUser} handlers={allHandlers} />);
 
         const instance = wrapper.instance();
         const approvalCommentForm = wrapper.find('ApprovalCommentForm').at(0);
