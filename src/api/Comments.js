@@ -89,7 +89,7 @@ class Comments extends OffsetBasedAPI {
         errorCallback
     }: {
         file: BoxItem,
-        message: string,
+        message?: string,
         taggedMessage?: string,
         successCallback: Function,
         errorCallback: Function
