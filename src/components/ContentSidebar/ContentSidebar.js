@@ -32,6 +32,7 @@ import type {
     StringMap,
     FileVersions,
     Errors,
+    Comment,
     Comments,
     Tasks,
     User,
@@ -607,14 +608,31 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Adds a comment to the state and return the new comment.
+     *
+     * @param {Function} resolve - Resolver function for onCommentCreate() returned Promise
+     * @param {Comment} comment - The newly created comment from the API
+     * @return {void}
+     */
+    addComment(resolve: Function, comment: Comment): void {
+        const { comments } = this.state;
+        if (comments.entries) {
+            comments.entries.push(comment);
+            this.setState({ comments });
+        }
+
+        resolve(comment);
+    }
+
+    /**
      * Posts a new comment to the API
      *
      * @private
      * @param {string} text - The comment's text
      * @param {boolean} hasMention - The comment's text
-     * @return {void}
+     * @return {Promise} Resolves when comment has been created. Rejects when error creating comment.
      */
-    onCommentCreate = (text: string, hasMention: boolean) => {
+    onCommentCreate = (text: string, hasMention: boolean): Promise => {
         const { file } = this.state;
 
         if (!file) {
@@ -629,11 +647,13 @@ class ContentSidebar extends PureComponent<Props, State> {
             message.message = text;
         }
 
-        this.api.getCommentsAPI(false).createComment({
-            file,
-            ...message,
-            successCallback: noop,
-            errorCallback: noop
+        return new Promise((resolve, reject) => {
+            this.api.getCommentsAPI(false).createComment({
+                file,
+                ...message,
+                successCallback: this.addComment.bind(this, resolve),
+                errorCallback: reject
+            });
         });
     };
 

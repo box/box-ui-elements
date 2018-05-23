@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
-import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
+import { collapseFeedState, shouldShowEmptyState, uuidv4 } from './activityFeedUtils';
 import type {
     BoxItemVersion,
     FileVersions,
@@ -79,13 +79,82 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
+    /**
+     * Add a placeholder pending feed item.
+     *
+     * @param {Object} itemBase - Base properties for item to be added to the feed as pending.
+     * @return {void}
+     */
+    addPendingItem = (itemBase: Object): void => {
+        const { currentUser } = this.props;
+        // create a placeholder pending feed item
+        const date = new Date().toISOString();
+        const feedItem = {
+            created_at: date,
+            created_by: currentUser,
+            modified_at: date,
+            isPending: true,
+            ...itemBase
+        };
+
+        const { feedItems } = this.state;
+        feedItems.unshift(feedItem);
+        this.setState({ feedItems });
+    };
+
+    /**
+     * Replace a pending feed item with actual feed item data.
+     *
+     * @param {Comment | Task} feedItem - API returned feed item data.
+     * @param {string} uuid - Unique ID of the pending item to replace.
+     * @return {void}
+     */
+    updatePendingItem = (feedItem: Comment | Task, uuid: string): void => {
+        let itemIndex = null;
+        const { feedItems } = this.state;
+        feedItems.find((item, index) => {
+            if (item.id === uuid) {
+                itemIndex = index;
+                return true;
+            }
+            return false;
+        });
+
+        // Replace item in the feed items or set as most recent item.
+        if (itemIndex !== null) {
+            feedItems[itemIndex] = feedItem;
+        } else {
+            feedItems.unshift(feedItem);
+        }
+
+        this.setState({ feedItems });
+    };
+
+    /**
+     * Create a comment, and make a pending item to be replaced once the API is successful.
+     *
+     * @param {any} args - Data returned by the Comment component on comment creation.
+     * @return {void}
+     */
     createComment = (args: any): void => {
         const { text, hasMention } = args;
-        // create a placeholder pending comment
-        // create actual comment and send to Box V2 api
-        // call user passed in handlers.comments.create, if it exists
-        const createComment = getProp(this.props, 'handlers.comments.create', noop);
-        createComment(text, hasMention);
+        const uuid = uuidv4();
+        const comment = {
+            id: uuid,
+            tagged_message: text,
+            type: 'comment'
+        };
+
+        this.addPendingItem(comment);
+
+        const createComment = getProp(this.props, 'handlers.comments.create', Promise.resolve({}));
+        createComment(text, hasMention).then((commentData) => {
+            const { message, tagged_message } = commentData;
+            // Comment component uses tagged_message only
+            commentData.tagged_message = hasMention ? tagged_message : message;
+
+            this.updatePendingItem(commentData, uuid);
+        });
 
         this.approvalCommentFormSubmitHandler();
     };
