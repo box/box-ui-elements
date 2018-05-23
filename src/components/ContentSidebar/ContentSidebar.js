@@ -45,6 +45,7 @@ import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
 import './ContentSidebar.scss';
+import { getBadItemError } from '../../util/error';
 
 type Props = {
     fileId?: string,
@@ -606,6 +607,29 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Posts a new comment to the API
+     *
+     * @private
+     * @param {string} text - The comment's text
+     * @return {void}
+     */
+    onCommentCreate = (text: string) => {
+        const { file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getCommentsAPI(false).createComment({
+            file,
+            message: text,
+            taggedMessage: text,
+            successCallback: noop,
+            errorCallback: noop
+        });
+    };
+
+    /**
      * Fetches the tasks for a file
      *
      * @private
@@ -827,7 +851,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             onVersionHistoryClick,
             onAccessStatsClick,
             onClassificationClick,
-            onCommentCreate,
             onCommentDelete,
             onTaskCreate,
             onTaskDelete,
@@ -887,7 +910,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 commentsError={commentsError}
                                 currentUser={currentUser}
                                 currentUserError={currentUserError}
-                                onCommentCreate={onCommentCreate}
+                                onCommentCreate={this.onCommentCreate}
                                 onCommentDelete={onCommentDelete}
                                 onTaskCreate={onTaskCreate}
                                 onTaskDelete={onTaskDelete}
