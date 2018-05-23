@@ -616,7 +616,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     addComment(resolve: Function, comment: Comment): void {
         const { comments } = this.state;
-        if (comments.entries) {
+        if (comments && comments.entries) {
             comments.entries.push(comment);
             this.setState({ comments });
         }
@@ -632,7 +632,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {boolean} hasMention - The comment's text
      * @return {Promise} Resolves when comment has been created. Rejects when error creating comment.
      */
-    onCommentCreate = (text: string, hasMention: boolean): Promise => {
+    onCommentCreate = (text: string, hasMention: boolean): Promise<Comment> => {
         const { file } = this.state;
 
         if (!file) {
