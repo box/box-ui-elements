@@ -15,6 +15,7 @@ import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
 import CommentsAPI from './Comments';
 import TasksAPI from './Tasks';
+import TaskAssignmentsAPI from './TaskAssignments';
 import FileAccessStatsAPI from './FileAccessStats';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
@@ -77,6 +78,11 @@ class APIFactory {
      * @property {TasksAPI}
      */
     tasksAPI: TasksAPI;
+
+    /**
+     * @property {TaskAssignmentsAPI}
+     */
+    taskAssignmentsAPI: TaskAssignmentsAPI;
 
     /*
      * @property {FileAccessStatsAPI}
@@ -353,6 +359,20 @@ class APIFactory {
         }
         this.tasksAPI = new TasksAPI(this.options);
         return this.tasksAPI;
+    }
+
+    /**
+     * API for tasks
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {TasksAPI} TaskAssignmentsAPI instance
+     */
+    getTaskAssignmentsAPI(shouldDestroy: boolean): TaskAssignmentsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
+        return this.taskAssignmentsAPI;
     }
 
     /*
