@@ -7,7 +7,7 @@ import noop from 'lodash/noop';
 import BaseMultiput from './BaseMultiput';
 import type { MultiputConfig, Options, MultiputData } from '../../flowTypes';
 import { updateQueryParameters } from '../../util/url';
-import { PUT } from '../../constants';
+import { HTTP_PUT } from '../../constants';
 import { getBoundedExpBackoffRetryDelay } from '../../util/uploads';
 
 const PART_STATE_NOT_STARTED: 0 = 0;
@@ -157,7 +157,7 @@ class MultiputPart extends BaseMultiput {
             url: this.sessionEndpoints.uploadPart,
             data: this.blob,
             headers,
-            method: PUT,
+            method: HTTP_PUT,
             successHandler: this.uploadSuccessHandler,
             errorHandler: this.uploadErrorHandler,
             progressHandler: this.uploadProgressHandler,

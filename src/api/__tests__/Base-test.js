@@ -2,7 +2,7 @@ import Base from '../Base';
 import Xhr from '../../util/Xhr';
 import Cache from '../../util/Cache';
 import { getBadItemError, getBadPermissionsError } from '../../util/error';
-import { GET, POST, PUT } from '../../constants';
+import { HTTP_GET, HTTP_POST, HTTP_PUT } from '../../constants';
 
 let base;
 
@@ -129,7 +129,7 @@ describe('api/Base', () => {
             base.getUrl = jest.fn(() => url);
 
             base.get(id, successCb, errorCb, params);
-            expect(base.makeRequest).toHaveBeenCalledWith(GET, id, url, successCb, errorCb, params);
+            expect(base.makeRequest).toHaveBeenCalledWith(HTTP_GET, id, url, successCb, errorCb, params);
         });
     });
 
@@ -142,7 +142,7 @@ describe('api/Base', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base.makeRequest(GET, 'id', url, successCb, errorCb).catch(() => {
+            return base.makeRequest(HTTP_GET, 'id', url, successCb, errorCb).catch(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).not.toHaveBeenCalled();
             });
@@ -156,7 +156,7 @@ describe('api/Base', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base.makeRequest(POST, 'id', url, successCb, errorCb).then(() => {
+            return base.makeRequest(HTTP_POST, 'id', url, successCb, errorCb).then(() => {
                 expect(successCb).toHaveBeenCalledWith(baseResponse);
                 expect(base.xhr.post).toHaveBeenCalledWith({
                     id: 'file_id',
@@ -174,7 +174,7 @@ describe('api/Base', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base.makeRequest(PUT, 'id', url, successCb, errorCb).then(() => {
+            return base.makeRequest(HTTP_PUT, 'id', url, successCb, errorCb).then(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).toHaveBeenCalledWith(error);
                 expect(base.xhr.put).toHaveBeenCalledWith({
@@ -201,7 +201,7 @@ describe('api/Base', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base.makeRequest(POST, 'id', url, successCb, errorCb, requestData).then(() => {
+            return base.makeRequest(HTTP_POST, 'id', url, successCb, errorCb, requestData).then(() => {
                 expect(successCb).toHaveBeenCalledWith(baseResponse);
                 expect(base.xhr.post).toHaveBeenCalledWith({
                     id: 'file_id',

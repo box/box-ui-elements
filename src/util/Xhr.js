@@ -12,10 +12,10 @@ import {
     HEADER_CLIENT_NAME,
     HEADER_CLIENT_VERSION,
     HEADER_CONTENT_TYPE,
-    POST,
-    PUT,
-    DELETE,
-    OPTIONS
+    HTTP_POST,
+    HTTP_PUT,
+    HTTP_DELETE,
+    HTTP_OPTIONS
 } from '../constants';
 import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
@@ -202,7 +202,7 @@ class Xhr {
         id,
         data,
         headers = {},
-        method = POST
+        method = HTTP_POST
     }: {
         url: string,
         id?: string,
@@ -241,7 +241,7 @@ class Xhr {
         data: PayloadType,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        return this.post({ id, url, data, headers, method: PUT });
+        return this.post({ id, url, data, headers, method: HTTP_PUT });
     }
 
     /**
@@ -264,7 +264,7 @@ class Xhr {
         data?: StringAnyMap,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        return this.post({ id, url, data, headers, method: DELETE });
+        return this.post({ id, url, data, headers, method: HTTP_DELETE });
     }
 
     /**
@@ -299,7 +299,7 @@ class Xhr {
                 this.axios({
                     url,
                     data,
-                    method: OPTIONS,
+                    method: HTTP_OPTIONS,
                     headers: hdrs
                 })
                     .then(successHandler)
@@ -329,7 +329,7 @@ class Xhr {
         url,
         data,
         headers = {},
-        method = POST,
+        method = HTTP_POST,
         successHandler,
         errorHandler,
         progressHandler,

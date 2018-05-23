@@ -10,7 +10,14 @@ import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
 import { getTypedFileId } from '../util/file';
 import { getBadItemError, getBadPermissionsError } from '../util/error';
-import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, GET, POST, PUT, DELETE } from '../constants';
+import {
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_UPLOAD,
+    HTTP_GET,
+    HTTP_POST,
+    HTTP_PUT,
+    HTTP_DELETE
+} from '../constants';
 import type { Options } from '../flowTypes';
 
 class Base {
@@ -217,7 +224,7 @@ class Base {
      */
     get(id: string, successCallback: Function, errorCallback: Function, params?: Object): void {
         const url = this.getUrl(id);
-        this.makeRequest(GET, id, url, successCallback, errorCallback, params);
+        this.makeRequest(HTTP_GET, id, url, successCallback, errorCallback, params);
     }
 
     /**
@@ -230,7 +237,7 @@ class Base {
      * @param {Function} errorCallback - The error callback
      */
     post(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): void {
-        this.makeRequest(POST, id, url, successCallback, errorCallback, data);
+        this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
     }
 
     /**
@@ -243,7 +250,7 @@ class Base {
      * @param {Function} errorCallback - The error callback
      */
     put(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): void {
-        this.makeRequest(PUT, id, url, successCallback, errorCallback, data);
+        this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
     }
 
     /**
@@ -256,7 +263,7 @@ class Base {
      * @param {Object} data optional data to delete
      */
     delete(id: string, url: string, successCallback: Function, errorCallback: Function, data?: Object = {}): void {
-        this.makeRequest(DELETE, id, url, successCallback, errorCallback, data);
+        this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
     }
 
     /**

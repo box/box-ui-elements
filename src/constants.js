@@ -209,8 +209,9 @@ export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
 
 /* ------------------ HTTP Requests  ---------------------- */
-export const GET = 'get';
-export const POST = 'post';
-export const PUT = 'put';
-export const DELETE = 'delete';
-export const OPTIONS = 'options';
+export const HTTP_GET = 'get';
+export const HTTP_POST = 'post';
+export const HTTP_PUT = 'put';
+export const HTTP_DELETE = 'delete';
+export const HTTP_OPTIONS = 'options';
+export const HTTP_HEAD = 'head';
