@@ -146,7 +146,6 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const createCommentStub = jest.fn();
         const commentText = { text: 'a comment', hasMention: false };
         const addApproval = 'on';
-        const approverDateInput = '2014-04-12';
 
         const wrapper = render({
             createComment: createCommentStub,
@@ -157,18 +156,18 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
 
         wrapper.setState({
-            approvers: [{ text: '123', value: 123 }, { text: '124', value: 124 }]
+            approvers: [{ text: '123', value: 123 }, { text: '124', value: 124 }],
+            approvalDate: '2014-04-12'
         });
 
         wrapper.find('Form').prop('onValidSubmit')({
-            addApproval,
-            approverDateInput
+            addApproval
         });
 
         expect(createTaskSpy).toHaveBeenCalledWith({
             text: commentText.text,
-            approvers: [123, 124],
-            dueDate: approverDateInput
+            assignees: [123, 124],
+            dueAt: '2014-04-12'
         });
         expect(instance.getFormattedCommentText).toHaveBeenCalledTimes(1);
     });
