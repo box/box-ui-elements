@@ -9,7 +9,7 @@ import FolderAPI from './api/Folder';
 import FileAPI from './api/File';
 import WebLinkAPI from './api/WebLink';
 import MultiputUploadAPI from './api/uploads/MultiputUpload';
-import PlainUploadAPI from './api/PlainUpload';
+import PlainUploadAPI from './api/uploads/PlainUpload';
 import Cache from './util/Cache';
 import {
     ACCESS_OPEN,

@@ -6,7 +6,7 @@
 
 import Cache from '../util/Cache';
 import ChunkedUploadAPI from './uploads/MultiputUpload';
-import PlainUploadAPI from './PlainUpload';
+import PlainUploadAPI from './uploads/PlainUpload';
 import FolderAPI from './Folder';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
