@@ -638,6 +638,31 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Posts a new task to the API
+     *
+     * @private
+     * @param {string} text - The task's text
+     * @param {Array} assignees - Array of assignees
+     * @param {string} dueAt - The comment's text
+     * @return {void}
+     */
+    onTaskCreate = (text: string, assignees: Array<SelectorItems>, dueAt: string) => {
+        const { file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getTasksAPI(false).createTask({
+            file,
+            message: text,
+            dueAt,
+            successCallback: noop,
+            errorCallback: noop
+        });
+    };
+
+    /**
      * Fetches the tasks for a file
      *
      * @private
@@ -860,7 +885,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             onAccessStatsClick,
             onClassificationClick,
             onCommentDelete,
-            onTaskCreate,
             onTaskDelete,
             onTaskUpdate,
             onTaskAssignmentUpdate
@@ -920,7 +944,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 currentUserError={currentUserError}
                                 onCommentCreate={this.onCommentCreate}
                                 onCommentDelete={onCommentDelete}
-                                onTaskCreate={onTaskCreate}
+                                onTaskCreate={this.onTaskCreate}
                                 onTaskDelete={onTaskDelete}
                                 onTaskUpdate={onTaskUpdate}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
