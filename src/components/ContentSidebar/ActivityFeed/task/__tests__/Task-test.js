@@ -5,10 +5,6 @@ import Task from '../';
 
 jest.mock('../../comment/Comment', () => 'mock-comment');
 
-const inputState = {
-    currentUser: { name: 'Kanye West', id: 10 }
-};
-
 const allHandlers = {
     tasks: {
         edit: jest.fn()
@@ -19,6 +15,9 @@ const allHandlers = {
     }
 };
 
+const approverSelectorContacts = [];
+const mentionSelectorContacts = [];
+
 describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     const task = {
         created_at: 12345678,
@@ -26,7 +25,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         id: '123125',
         message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
         modified_by: { name: 'Tarrence van As', id: 10 },
-        assignees: [
+        task_assignment_collection: [
             {
                 id: 0,
                 user: { name: 'Jake Thomas', id: 1 },
@@ -64,7 +63,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             id: '123125',
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
@@ -132,7 +131,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                 currentUser={currentUser}
                 {...task}
                 onTaskAssignmentUpdate={onTaskAssignmentUpdateSpy}
-                inputState={inputState}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
             />
         );
 
@@ -149,7 +149,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                 currentUser={currentUser}
                 {...task}
                 onTaskAssignmentUpdate={onTaskAssignmentUpdateSpy}
-                inputState={inputState}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
             />
         );
 
@@ -167,7 +168,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
@@ -185,7 +186,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             <Task
                 {...myTask}
                 currentUser={currentUser}
-                inputState={inputState}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
             />
@@ -202,7 +204,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
@@ -220,7 +222,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             <Task
                 {...myTask}
                 currentUser={currentUser}
-                inputState={inputState}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
             />
@@ -237,34 +240,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            assignees: [
-                {
-                    id: 0,
-                    user: { name: 'Jake Thomas', id: 1 },
-                    status: 'incomplete'
-                },
-                {
-                    id: 1,
-                    user: { name: 'Peter Pan', id: 2 },
-                    status: 'completed'
-                }
-            ]
-        };
-
-        const wrapper = shallow(<Task {...myTask} currentUser={currentUser} inputState={inputState} />);
-
-        expect(wrapper.find('InlineDelete').length).toEqual(0);
-    });
-
-    test('should not allow task creator to edit if onEdit handler is undefined', () => {
-        const myTask = {
-            created_at: Date.now(),
-            due_at: Date.now(),
-            id: '123125',
-            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            modified_by: { name: 'Tarrence van As', id: 10 },
-            permissions: {},
-            assignees: [
+            task_assignment_collection: [
                 {
                     id: 0,
                     user: { name: 'Jake Thomas', id: 1 },
@@ -279,7 +255,47 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         };
 
         const wrapper = shallow(
-            <Task {...myTask} currentUser={currentUser} inputState={inputState} handlers={allHandlers} />
+            <Task
+                {...myTask}
+                currentUser={currentUser}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
+            />
+        );
+
+        expect(wrapper.find('InlineDelete').length).toEqual(0);
+    });
+
+    test('should not allow task creator to edit if onEdit handler is undefined', () => {
+        const myTask = {
+            created_at: Date.now(),
+            due_at: Date.now(),
+            id: '123125',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            modified_by: { name: 'Tarrence van As', id: 10 },
+            permissions: {},
+            task_assignment_collection: [
+                {
+                    id: 0,
+                    user: { name: 'Jake Thomas', id: 1 },
+                    status: 'incomplete'
+                },
+                {
+                    id: 1,
+                    user: { name: 'Peter Pan', id: 2 },
+                    status: 'completed'
+                }
+            ]
+        };
+
+        const wrapper = shallow(
+            <Task
+                {...myTask}
+                currentUser={currentUser}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
+                handlers={allHandlers}
+            />
         );
 
         expect(wrapper.find('InlineEdit').length).toEqual(0);

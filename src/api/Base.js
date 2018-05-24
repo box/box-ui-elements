@@ -9,7 +9,15 @@ import type { $AxiosError } from 'axios';
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
 import { getTypedFileId } from '../util/file';
-import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../constants';
+import { getBadItemError, getBadPermissionsError } from '../util/error';
+import {
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_UPLOAD,
+    HTTP_GET,
+    HTTP_POST,
+    HTTP_PUT,
+    HTTP_DELETE
+} from '../constants';
 import type { Options } from '../flowTypes';
 
 class Base {
@@ -56,7 +64,7 @@ class Base {
     /**
      * @property {Function}
      */
-    successCallback: (data: Object) => void;
+    successCallback: (data?: Object) => void;
 
     /**
      * @property {Function}
@@ -96,15 +104,36 @@ class Base {
      * @return {void}
      */
     destroy(): void {
+        this.xhr.abort();
         this.destroyed = true;
     }
 
     /**
      * Asks the API if its destructor has been called
+     *
      * @return {void}
      */
     isDestroyed(): boolean {
         return this.destroyed;
+    }
+
+    /**
+     * Checks that our desired API call has sufficient permissions and an item ID
+     *
+     * @param {string} permissionToCheck - Permission to check
+     * @param {Object} permissions - Permissions object
+     * @param {string} id - Item id
+     * @return {void}
+     */
+    checkApiCallValidity(permissionToCheck: string, permissions?: Object, id?: string): void {
+        if (!id || !permissions) {
+            throw getBadItemError();
+        }
+
+        const permission = permissions[permissionToCheck];
+        if (!permission) {
+            throw getBadPermissionsError();
+        }
     }
 
     /**
@@ -139,7 +168,7 @@ class Base {
     /**
      * Generic success handler
      *
-     * @param {Object} data the response data
+     * @param {Object} data - The response data
      */
     successHandler = (data: any): void => {
         if (!this.isDestroyed() && typeof this.successCallback === 'function') {
@@ -150,7 +179,7 @@ class Base {
     /**
      * Generic error handler
      *
-     * @param {Object} data the response data
+     * @param {Object} data - The response data
      * @param {Function} errorCallback the error callback
      */
     errorHandler = (error: $AxiosError<any>): void => {
@@ -166,22 +195,8 @@ class Base {
     };
 
     /**
-     * Generic GET request
-     *
-     * @param {string} id the file id
-     * @param {Object} params the query params
-     */
-    getData(id: string, params?: Object): Promise<Object> {
-        return this.xhr.get({
-            id: getTypedFileId(id),
-            url: this.getUrl(id),
-            params
-        });
-    }
-
-    /**
      * Gets the URL for the API, meant to be overridden
-     * @param {string} id the file id
+     * @param {string} id - The item id
      */
     /* eslint-disable no-unused-vars */
     getUrl(id: string) {
@@ -190,14 +205,85 @@ class Base {
     }
 
     /**
-     * Generic API get
+     * Formats an API entry for use in components
+     * @param {string} entry - an API response entry
+     */
+    /* eslint-disable no-unused-vars */
+    format(entry: Object) {
+        /* eslint-enable no-unused-vars */
+        throw new Error('Implement me!');
+    }
+
+    /**
+     * Generic API GET
      *
-     * @param {string} id the file id
-     * @param {Function} successCallback the success callback
-     * @param {Function} errorCallback the error callback
+     * @param {string} id - The file id
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
      * @param {Object} params request params
      */
-    async get(id: string, successCallback: Function, errorCallback: Function, params?: Object): Promise<void> {
+    get(id: string, successCallback: Function, errorCallback: Function, params?: Object): void {
+        const url = this.getUrl(id);
+        this.makeRequest(HTTP_GET, id, url, successCallback, errorCallback, params);
+    }
+
+    /**
+     * Generic API POST
+     *
+     * @param {string} id - The file id
+     * @param {string} url - The url to post to
+     * @param {Object} data - The data to post
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     */
+    post(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): void {
+        this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
+    }
+
+    /**
+     * Generic API PUT
+     *
+     * @param {string} id - The file id
+     * @param {string} url - The url to put to
+     * @param {Object} data - The data to put
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     */
+    put(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): void {
+        this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
+    }
+
+    /**
+     * Generic API DELETE
+     *
+     * @param {string} id - The file id
+     * @param {string} url - The url of the item to delete
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     * @param {Object} data optional data to delete
+     */
+    delete(id: string, url: string, successCallback: Function, errorCallback: Function, data?: Object = {}): void {
+        this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
+    }
+
+    /**
+     * Generic API CRUD operations
+     *
+     * @param {string} method - which REST method to execute (GET, POST, PUT, DELETE)
+     * @param {string} id - The file id
+     * @param {string} url - The url of the item to operate on
+     * @param {Function} successCallback - The success callback
+     * @param {Function} errorCallback - The error callback
+     * @param {Object} requestData - Optional info to be added to the API call such as params or request body data
+     */
+    async makeRequest(
+        method: string,
+        id: string,
+        url: string,
+        successCallback: Function,
+        errorCallback: Function,
+        requestData: Object = {}
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return;
         }
@@ -205,9 +291,11 @@ class Base {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        // Make the XHR request
+        // $FlowFixMe
+        const xhrMethod: Function = this.xhr[method].bind(this.xhr);
+
         try {
-            const { data } = await this.getData(id, params);
+            const { data } = await xhrMethod({ id: getTypedFileId(id), url, ...requestData });
             this.successHandler(data);
         } catch (error) {
             this.errorHandler(error);

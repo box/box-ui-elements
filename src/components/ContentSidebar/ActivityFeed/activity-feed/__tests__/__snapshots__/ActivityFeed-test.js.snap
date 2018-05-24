@@ -15,18 +15,10 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
           "name": "Kanye West",
         }
       }
-      inputState={
-        Object {
-          "currentUser": Object {
-            "id": 10,
-            "name": "Kanye West",
-          },
-        }
-      }
       items={
         Array [
           Object {
-            "created_at": 1234567890,
+            "created_at": "Thu Sep 26 33658 19:46:39 GMT-0600 (CST)",
             "created_by": Object {
               "id": 11,
               "name": "Akon",
@@ -36,18 +28,20 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             "type": "comment",
           },
           Object {
-            "assignees": Array [],
+            "created_at": "Thu Sep 25 33658 19:45:39 GMT-0600 (CST)",
             "dueAt": 1234567891,
             "id": "1234",
-            "modified_at": 1234567891,
+            "modified_at": "Thu Sep 25 33658 19:46:39 GMT-0600 (CST)",
             "modified_by": Object {
               "id": 10,
               "name": "Jay-Z",
             },
             "tagged_message": "test",
+            "task_assignment_collection": Array [],
             "type": "task",
           },
           Object {
+            "created_at": "Thu Sep 20 33658 19:45:39 GMT-0600 (CST)",
             "id": 123,
             "modified_at": 1234567891,
             "modified_by": Object {
@@ -115,14 +109,12 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     />
   </div>
   <ApprovalCommentForm
-    approverSelectorContacts={Array []}
     className="bcs-activity-feed-comment-input"
     createComment={[Function]}
     createTask={[Function]}
-    getApproverContactsWithQuery={[Function]}
-    getMentionContactsWithQuery={[Function]}
+    getApproverContactsWithQuery={[MockFunction]}
+    getMentionContactsWithQuery={[MockFunction]}
     isOpen={false}
-    mentionSelectorContacts={Array []}
     onCancel={[Function]}
     onFocus={[Function]}
     onSubmit={[Function]}

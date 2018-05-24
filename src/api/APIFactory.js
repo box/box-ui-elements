@@ -15,9 +15,11 @@ import RecentsAPI from './Recents';
 import VersionsAPI from './Versions';
 import CommentsAPI from './Comments';
 import TasksAPI from './Tasks';
+import TaskAssignmentsAPI from './TaskAssignments';
 import FileAccessStatsAPI from './FileAccessStats';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
+import FileCollaboratorsAPI from './FileCollaborators';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
@@ -77,6 +79,11 @@ class APIFactory {
      */
     tasksAPI: TasksAPI;
 
+    /**
+     * @property {TaskAssignmentsAPI}
+     */
+    taskAssignmentsAPI: TaskAssignmentsAPI;
+
     /*
      * @property {FileAccessStatsAPI}
      */
@@ -91,6 +98,11 @@ class APIFactory {
      * @property {MetadataAPI}
      */
     metadataAPI: MetadataAPI;
+
+    /**
+     * @property {FileCollaboratorsAPI}
+     */
+    fileCollaboratorsAPI: FileCollaboratorsAPI;
 
     /**
      * [constructor]
@@ -170,6 +182,10 @@ class APIFactory {
         if (this.metadataAPI) {
             this.metadataAPI.destroy();
             delete this.metadataAPI;
+        }
+        if (this.fileCollaboratorsAPI) {
+            this.fileCollaboratorsAPI.destroy();
+            delete this.fileCollaboratorsAPI;
         }
         if (destroyCache) {
             this.options.cache = new Cache();
@@ -345,8 +361,22 @@ class APIFactory {
         return this.tasksAPI;
     }
 
+    /**
+     * API for tasks
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {TasksAPI} TaskAssignmentsAPI instance
+     */
+    getTaskAssignmentsAPI(shouldDestroy: boolean): TaskAssignmentsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
+        return this.taskAssignmentsAPI;
+    }
+
     /*
-     * API for fille access stats
+     * API for file access stats
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
      * @return {FileAccessStatsAPI} FileAccessStatsAPI instance
@@ -357,6 +387,20 @@ class APIFactory {
         }
         this.fileAccessStatsAPI = new FileAccessStatsAPI(this.options);
         return this.fileAccessStatsAPI;
+    }
+
+    /*
+     * API for file collaborators
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {FileCollaboratorsAPI} FileCollaboratorsAPI instance
+     */
+    getFileCollaboratorsAPI(shouldDestroy: boolean): FileCollaboratorsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+        this.fileCollaboratorsAPI = new FileCollaboratorsAPI(this.options);
+        return this.fileCollaboratorsAPI;
     }
 
     /*
