@@ -88,8 +88,7 @@ class ActivityFeed extends React.Component<Props, State> {
         };
 
         const { feedItems } = this.state;
-        feedItems.unshift(feedItem);
-        this.setState({ feedItems });
+        this.setState({ feedItems: [feedItem, ...feedItems] });
     };
 
     /**
@@ -102,7 +101,9 @@ class ActivityFeed extends React.Component<Props, State> {
     updateFeedItem = (feedItem: Comment | Task, uuid: string): void => {
         let itemIndex = null;
         const { feedItems } = this.state;
-        feedItems.find((item, index) => {
+        const newFeedItems = feedItems.slice();
+
+        newFeedItems.find((item, index) => {
             if (item.id === uuid) {
                 itemIndex = index;
                 return true;
@@ -112,8 +113,8 @@ class ActivityFeed extends React.Component<Props, State> {
 
         // Replace item in the feed items or set as most recent item.
         if (itemIndex !== null) {
-            feedItems[itemIndex] = feedItem;
-            this.setState({ feedItems });
+            newFeedItems[itemIndex] = feedItem;
+            this.setState({ feedItems: newFeedItems });
         }
     };
 
@@ -124,7 +125,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {void}
      */
     createComment = ({ text, hasMention }: { text: string, hasMention: boolean }): void => {
-        const uuid = uniqueId();
+        const uuid = uniqueId('comment_');
         const comment = {
             id: uuid,
             tagged_message: text,

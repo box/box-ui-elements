@@ -598,8 +598,9 @@ class ContentSidebar extends PureComponent<Props, State> {
     onCommentCreateSuccess(comment: Comment): void {
         const { comments } = this.state;
         if (comments && comments.entries) {
-            comments.entries.push(comment);
-            this.setState({ comments });
+            const newComments = { ...comments };
+            newComments.entries.push(comment);
+            this.setState({ comments: newComments });
         }
     }
 
