@@ -122,6 +122,11 @@
 
             .pill-selector-input-wrapper {
                 width: auto;
+
+                .pill-selector-input {
+                    border: none;
+                    box-shadow: none;
+                }
             }
         }
 
