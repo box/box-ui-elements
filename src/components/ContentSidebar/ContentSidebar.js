@@ -13,7 +13,6 @@ import noop from 'lodash/noop';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
-import Cache from '../../util/Cache';
 import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_API,
@@ -25,23 +24,6 @@ import {
 import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
-import type {
-    FileAccessStats,
-    Token,
-    BoxItem,
-    StringMap,
-    FileVersions,
-    Errors,
-    Comment,
-    Comments,
-    Tasks,
-    User,
-    Collaborators,
-    SkillCard,
-    SkillCardEntry,
-    JsonPatchData,
-    SelectorItems
-} from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -67,7 +49,7 @@ type Props = {
     hasVersions: boolean,
     language?: string,
     messages?: StringMap,
-    cache?: Cache,
+    cache?: APICache,
     sharedLink?: string,
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
@@ -660,6 +642,31 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Posts a new task to the API
+     *
+     * @private
+     * @param {string} text - The task's text
+     * @param {Array} assignees - Array of assignees
+     * @param {string} dueAt - The comment's text
+     * @return {void}
+     */
+    onTaskCreate = (text: string, assignees: Array<SelectorItems>, dueAt: string) => {
+        const { file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getTasksAPI(false).createTask({
+            file,
+            message: text,
+            dueAt,
+            successCallback: noop,
+            errorCallback: noop
+        });
+    };
+
+    /**
      * Fetches the tasks for a file
      *
      * @private
@@ -882,7 +889,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             onAccessStatsClick,
             onClassificationClick,
             onCommentDelete,
-            onTaskCreate,
             onTaskDelete,
             onTaskUpdate,
             onTaskAssignmentUpdate
@@ -942,7 +948,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 currentUserError={currentUserError}
                                 onCommentCreate={this.onCommentCreate}
                                 onCommentDelete={onCommentDelete}
-                                onTaskCreate={onTaskCreate}
+                                onTaskCreate={this.onTaskCreate}
                                 onTaskDelete={onTaskDelete}
                                 onTaskUpdate={onTaskUpdate}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}

@@ -12,7 +12,6 @@ import { digest } from '../../util/webcrypto';
 import hexToBase64 from '../../util/base64';
 import { DEFAULT_RETRY_DELAY_MS } from '../../constants';
 import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
-import type { StringAnyMap, MultiputConfig, Options } from '../../flowTypes';
 import createWorker from '../../util/uploadsSHA1Worker';
 
 // Constants used for specifying log event types.
@@ -34,13 +33,11 @@ class MultiputUpload extends BaseMultiput {
     createSessionNumRetriesPerformed: number;
     destinationFileId: ?string;
     folderId: string;
-    file: File;
     fileSha1: ?string;
     firstUnuploadedPartIndex: number;
     initialFileLastModified: ?string;
     initialFileSize: number;
     successCallback: Function;
-    errorCallback: Function;
     progressCallback: Function;
     options: Options;
     partSize: number;
@@ -56,9 +53,6 @@ class MultiputUpload extends BaseMultiput {
     sha1Worker: Worker;
     createSessionTimeout: TimeoutID;
     commitSessionTimeout: TimeoutID;
-    fileName: string;
-    fileId: ?string;
-    overwrite: boolean;
     partsUploaded: number;
 
     /**
@@ -143,8 +137,27 @@ class MultiputUpload extends BaseMultiput {
         this.overwrite = overwrite;
         this.fileId = fileId;
 
-        this.createSession();
+        this.makePreflightRequest();
     }
+
+    /**
+     * Update uploadHost with preflight response and return the base uploadUrl
+     *
+     * @private
+     * @param {Object} response
+     * @param {Object} [response.data]
+     * @return {string}
+     */
+    getBaseUploadUrlFromPreflightResponse = ({ data }: { data: { upload_url?: string } }) => {
+        if (!data || !data.upload_url) {
+            return this.getBaseUploadUrl();
+        }
+
+        const splitUrl = data.upload_url.split('/');
+        // splitUrl[0] is the protocol (e.g., https:), splitUrl[2] is hostname (e.g., www.box.com)
+        this.uploadHost = `${splitUrl[0]}//${splitUrl[2]}`;
+        return this.getBaseUploadUrl();
+    };
 
     /**
      * Creates upload session. If a file ID is supplied, use the Chunked Upload File Version
@@ -153,12 +166,13 @@ class MultiputUpload extends BaseMultiput {
      * @private
      * @return {void}
      */
-    createSession = async (): Promise<any> => {
+    preflightSuccessHandler = async (preflightResponse: Object): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
 
-        let createSessionUrl = `${this.getBaseUploadUrl()}/files/upload_sessions`;
+        const uploadUrl = this.getBaseUploadUrlFromPreflightResponse(preflightResponse);
+        let createSessionUrl = `${uploadUrl}/files/upload_sessions`;
 
         // Set up post body
         const postData: StringAnyMap = {
@@ -217,7 +231,7 @@ class MultiputUpload extends BaseMultiput {
      * @param {Error} error
      * @return {void}
      */
-    createSessionErrorHandler(error: Error): void {
+    createSessionErrorHandler = (error: Error): void => {
         if (this.isDestroyed()) {
             return;
         }
@@ -229,7 +243,7 @@ class MultiputUpload extends BaseMultiput {
 
         this.consoleLog('Too many create session failures, failing upload');
         this.sessionErrorHandler(error, LOG_EVENT_TYPE_CREATE_SESSION_RETRIES_EXCEEDED, JSON.stringify(error));
-    }
+    };
 
     /**
      * Schedule a retry for create session request upon failure
@@ -245,7 +259,7 @@ class MultiputUpload extends BaseMultiput {
         );
         this.createSessionNumRetriesPerformed += 1;
         this.consoleLog(`Retrying create session in ${retryDelayMs} ms`);
-        this.createSessionTimeout = setTimeout(this.createSession, retryDelayMs);
+        this.createSessionTimeout = setTimeout(this.makePreflightRequest, retryDelayMs);
     }
 
     /**

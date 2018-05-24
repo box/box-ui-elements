@@ -10,7 +10,6 @@ import { injectIntl } from 'react-intl';
 import ContentUploader from '../ContentUploader';
 import messages from '../messages';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
-import type { Token } from '../../flowTypes';
 
 type Props = {
     isOpen: boolean,
@@ -23,7 +22,7 @@ type Props = {
     onClose: Function,
     parentElement: HTMLElement,
     appElement: HTMLElement,
-    onUpload: Function,
+    onUpload?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     intl: any

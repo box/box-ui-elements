@@ -10,7 +10,6 @@ import Checkbox from 'box-react-ui/lib/components/checkbox/Checkbox';
 
 import AddApprovalFields from './AddApprovalFields';
 import messages from '../../../messages';
-import type { SelectorItems } from '../../../../flowTypes';
 
 type Props = {
     approvalDate: ?number,

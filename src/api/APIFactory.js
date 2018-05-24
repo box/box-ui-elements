@@ -6,7 +6,7 @@
 
 import Cache from '../util/Cache';
 import ChunkedUploadAPI from './uploads/MultiputUpload';
-import PlainUploadAPI from './PlainUpload';
+import PlainUploadAPI from './uploads/PlainUpload';
 import FolderAPI from './Folder';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
@@ -21,7 +21,6 @@ import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
 import FileCollaboratorsAPI from './FileCollaborators';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
-import type { Options, ItemType, ItemAPI } from '../flowTypes';
 
 class APIFactory {
     /**
@@ -197,8 +196,8 @@ class APIFactory {
      *
      * @return {Cache} cache instance
      */
-    getCache(): Cache {
-        return ((this.options.cache: any): Cache);
+    getCache(): APICache {
+        return ((this.options.cache: any): APICache);
     }
 
     /**

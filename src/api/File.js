@@ -8,9 +8,7 @@ import Item from './Item';
 import { getFieldsAsString } from '../util/fields';
 import { getTypedFileId } from '../util/file';
 import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS } from '../constants';
-import type Cache from '../util/Cache';
 import { getBadItemError, getBadPermissionsError } from '../util/error';
-import type { BoxItem } from '../flowTypes';
 
 class File extends Item {
     /**
@@ -126,7 +124,7 @@ class File extends Item {
             return Promise.reject();
         }
 
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         const key = this.getCacheKey(id);
 
         // Clear the cache if needed

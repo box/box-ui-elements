@@ -8,7 +8,7 @@ import React from 'react';
 import Sort from './Sort';
 import Add from './Add';
 import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS } from '../../constants';
-import type { View, Collection } from '../../flowTypes';
+
 import './SubHeaderRight.scss';
 
 type Props = {

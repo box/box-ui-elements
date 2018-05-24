@@ -14,8 +14,8 @@ type Props = {
     date: string,
     dateFormat?: Object,
     omitCommas?: boolean,
-    relative: boolean,
-    capitalize: boolean,
+    relative?: boolean,
+    capitalize?: boolean,
     intl: any
 };
 

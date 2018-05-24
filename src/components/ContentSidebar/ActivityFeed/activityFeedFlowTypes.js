@@ -4,8 +4,6 @@
  * @author Box
  */
 
-import type { SelectorItems, User, Comment, Task, BoxItemVersion } from '../../../flowTypes';
-
 export type CommentHandlers = {
     create?: Function,
     delete?: Function

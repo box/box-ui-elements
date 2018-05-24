@@ -10,8 +10,6 @@ import { injectIntl } from 'react-intl';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import 'react-virtualized/styles.css';
-import type { InjectIntlProvidedProps } from 'react-intl';
-
 import KeyBinder from '../KeyBinder';
 import headerCellRenderer from './headerCellRenderer';
 import sizeCellRenderer from './sizeCellRenderer';
@@ -29,7 +27,7 @@ import {
     FIELD_SIZE,
     VIEW_RECENTS
 } from '../../constants';
-import type { View, Collection } from '../../flowTypes';
+
 import './ItemList.scss';
 
 type Props = {

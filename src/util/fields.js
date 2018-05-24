@@ -42,7 +42,6 @@ import {
     FIELD_DUE_AT,
     FIELD_TRASHED_AT
 } from '../constants';
-import type { BoxItem } from '../flowTypes';
 
 // Optional Box file fields
 const BOX_ITEM_OPTIONAL_FIELDS = [FIELD_ITEM_COLLECTION];

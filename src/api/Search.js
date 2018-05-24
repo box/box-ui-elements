@@ -13,15 +13,6 @@ import sort from '../util/sorter';
 import { getFieldsAsString } from '../util/fields';
 import { CACHE_PREFIX_SEARCH, X_REP_HINTS } from '../constants';
 import { getBadItemError } from '../util/error';
-import type Cache from '../util/Cache';
-import type {
-    BoxItemCollection,
-    FlattenedBoxItem,
-    FlattenedBoxItemCollection,
-    SortBy,
-    SortDirection,
-    Collection
-} from '../flowTypes';
 
 const LIMIT_ITEM_FETCH = 200;
 
@@ -119,7 +110,7 @@ class Search extends Base {
      * @return {boolean} if items are loaded
      */
     isLoaded(): boolean {
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         if (!cache.has(this.key)) {
             return false;
         }
@@ -137,7 +128,7 @@ class Search extends Base {
             return;
         }
 
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         const search: FlattenedBoxItem = cache.get(this.key);
         const sortedSearch: FlattenedBoxItem = sort(search, this.sortBy, this.sortDirection, cache);
         const { item_collection }: FlattenedBoxItem = sortedSearch;

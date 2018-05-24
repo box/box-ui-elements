@@ -19,7 +19,7 @@ import {
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA
 } from '../../constants';
-import type { SidebarView } from '../../flowTypes';
+
 import './SidebarNav.scss';
 
 type Props = {

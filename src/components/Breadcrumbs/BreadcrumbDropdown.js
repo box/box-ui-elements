@@ -9,7 +9,6 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
 import Menu from 'box-react-ui/lib/components/menu/Menu';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
-import type { Crumb } from '../../flowTypes';
 import './BreadcrumbDropdown.scss';
 
 type Props = {

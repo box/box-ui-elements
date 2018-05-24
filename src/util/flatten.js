@@ -6,11 +6,6 @@
 
 import { getBadItemError } from './error';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
-import type { BoxItem } from '../flowTypes';
-import type File from '../api/File';
-import type Folder from '../api/Folder';
-import type WebLink from '../api/WebLink';
-import type Cache from './Cache';
 
 /**
  * Takes an item list and flattens it by moving
@@ -24,7 +19,7 @@ import type Cache from './Cache';
  * @param {WebLink} weblinkAPI api for web links
  * @return {Array} list with items replaced with reference keys
  */
-export default function(list: BoxItem[], folderAPI: Folder, fileAPI: File, weblinkAPI: WebLink): string[] {
+export default function(list: BoxItem[], folderAPI: FolderAPI, fileAPI: FileAPI, weblinkAPI: WebLinkAPI): string[] {
     const items: string[] = [];
     list.forEach((item: BoxItem) => {
         const { id, type }: BoxItem = item;
@@ -47,7 +42,7 @@ export default function(list: BoxItem[], folderAPI: Folder, fileAPI: File, webli
                 throw new Error('Unknown Type!');
         }
 
-        const cache: Cache = api.getCache();
+        const cache: APICache = api.getCache();
         const key: string = api.getCacheKey(id);
 
         if (cache.has(key)) {

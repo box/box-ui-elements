@@ -18,7 +18,6 @@ import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';
 import Avatar from '../Avatar';
 import messages from '../../../messages';
-import type { SelectorItems, User } from '../../../../flowTypes';
 
 import './ApprovalCommentForm.scss';
 
@@ -88,7 +87,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         }
 
         if (formData.addApproval === 'on') {
-            const { approvers } = this.state;
+            const { approvers, approvalDate } = this.state;
             if (approvers.length === 0) {
                 this.setState({
                     approverSelectorError: intl.formatMessage(commonMessages.requiredFieldError)
@@ -97,8 +96,8 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             }
             createTask({
                 text,
-                approvers: approvers.map(({ value }) => value),
-                dueDate: formData.approverDateInput
+                assignees: approvers.map(({ value }) => value),
+                dueAt: approvalDate
             });
         } else if (entityId) {
             updateTask({ text, id: entityId });
@@ -121,7 +120,9 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     onMentionSelectorChangeHandler = (nextEditorState: any): void =>
         this.setState({ commentEditorState: nextEditorState });
 
-    onApprovalDateChangeHandler = (date: number): void => this.setState({ approvalDate: date });
+    onApprovalDateChangeHandler = (date: number): void => {
+        this.setState({ approvalDate: date });
+    };
 
     /**
      * Formats the comment editor's text such that it will be accepted by the server.

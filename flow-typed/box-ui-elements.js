@@ -4,13 +4,16 @@
  * @author Box
  */
 /* eslint-disable no-use-before-define */
-import type { MessageDescriptor } from 'react-intl';
-import FolderAPI from './api/Folder';
-import FileAPI from './api/File';
-import WebLinkAPI from './api/WebLink';
-import MultiputUploadAPI from './api/uploads/MultiputUpload';
-import PlainUploadAPI from './api/PlainUpload';
-import Cache from './util/Cache';
+import type { MessageDescriptor, InjectIntlProvidedProps } from 'react-intl';
+import type { $AxiosError, Axios, CancelTokenSource } from 'axios';
+import type FolderAPI from '../src/api/Folder';
+import type FileAPI from '../src/api/File';
+import type WebLinkAPI from '../src/api/WebLink';
+import type MultiputUploadAPI from '../src/api/uploads/MultiputUpload';
+import type PlainUploadAPI from '../src/api/uploads/PlainUpload';
+import type APICache from '../src/util/Cache';
+import type { ContentSidebarProps } from '../src/components/ContentSidebar';
+import type { ContentPreviewProps } from '../src/components/ContentPreview';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -59,27 +62,29 @@ import {
     HTTP_PUT,
     HTTP_DELETE,
     HTTP_OPTIONS,
-    HTTP_HEAD
-} from './constants';
+    HTTP_HEAD,
+    SKILL_FACE,
+    SKILL_STATUS
+} from '../src/constants';
 
-export type Method =
+type Method =
     | typeof HTTP_DELETE
     | typeof HTTP_GET
     | typeof HTTP_POST
     | typeof HTTP_OPTIONS
     | typeof HTTP_HEAD
     | typeof HTTP_PUT;
-export type Token = null | typeof undefined | string | Function;
-export type TokenReadWrite = { read: string, write?: string };
-export type TokenLiteral = null | typeof undefined | string | TokenReadWrite;
-export type ClassComponent<P, S> = Class<React$Component<P, S>>;
-export type StringMap = { [string]: string };
-export type StringAnyMap = { [string]: any };
-export type StringBooleanMap = { [string]: boolean };
-export type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
-export type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
-export type DefaultView = typeof DEFAULT_VIEW_RECENTS | typeof DEFAULT_VIEW_FILES;
-export type View =
+type Token = null | typeof undefined | string | Function;
+type TokenReadWrite = { read: string, write?: string };
+type TokenLiteral = null | typeof undefined | string | TokenReadWrite;
+type ClassComponent<P, S> = Class<React$Component<P, S>>;
+type StringMap = { [string]: string };
+type StringAnyMap = { [string]: any };
+type StringBooleanMap = { [string]: boolean };
+type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
+type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
+type DefaultView = typeof DEFAULT_VIEW_RECENTS | typeof DEFAULT_VIEW_FILES;
+type View =
     | typeof VIEW_ERROR
     | typeof VIEW_SELECTED
     | typeof VIEW_RECENTS
@@ -88,29 +93,29 @@ export type View =
     | typeof VIEW_UPLOAD_EMPTY
     | typeof VIEW_UPLOAD_IN_PROGRESS
     | typeof VIEW_UPLOAD_SUCCESS;
-export type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
-export type SortableOptions = typeof SORT_NAME | typeof SORT_DATE | typeof SORT_SIZE;
-export type SortBy = typeof FIELD_NAME | typeof FIELD_MODIFIED_AT | typeof FIELD_INTERACTED_AT | typeof FIELD_SIZE;
-export type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-export type UploadStatus =
+type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
+type SortableOptions = typeof SORT_NAME | typeof SORT_DATE | typeof SORT_SIZE;
+type SortBy = typeof FIELD_NAME | typeof FIELD_MODIFIED_AT | typeof FIELD_INTERACTED_AT | typeof FIELD_SIZE;
+type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
+type UploadStatus =
     | typeof STATUS_PENDING
     | typeof STATUS_IN_PROGRESS
     | typeof STATUS_COMPLETE
     | typeof STATUS_ERROR;
-export type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
-export type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
+type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
+type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 
-export type SharedLink = {
+type SharedLink = {
     url: string,
     access: Access
 };
 
-export type Order = {
+type Order = {
     by: SortBy,
     direction: SortDirection
 };
 
-export type BoxItemPermission = {
+type BoxItemPermission = {
     can_comment?: boolean,
     can_edit_comment?: boolean,
     can_delete_comment?: boolean,
@@ -123,7 +128,7 @@ export type BoxItemPermission = {
     can_set_share_access?: boolean
 };
 
-export type User = {
+type User = {
     type: 'user',
     id: string,
     name: string,
@@ -132,7 +137,7 @@ export type User = {
     avatar_url?: string
 };
 
-export type UserCollection = {
+type UserCollection = {
     total_count?: number,
     entries?: Array<User>,
     order?: Array<Order>,
@@ -143,16 +148,16 @@ export type UserCollection = {
     next_marker?: string
 };
 
-export type SelectorItem = {
+type SelectorItem = {
     id?: string | number,
     name: string,
     item: Object,
     value?: any
 };
 
-export type SelectorItems = Array<SelectorItem>;
+type SelectorItems = Array<SelectorItem>;
 
-export type ActionItemError = {
+type ActionItemError = {
     title: string,
     message: string,
     action: {
@@ -161,26 +166,33 @@ export type ActionItemError = {
     }
 };
 
-export type OptionItem = {
+type OptionItem = {
     text: string,
     value: number | string
 };
 
-export type OptionItems = Array<OptionItem>;
+type OptionItems = Array<OptionItem>;
 
-export type SkillCardType =
+type SkillCardType =
     | typeof SKILL_KEYWORD
     | typeof SKILL_TIMELINE
     | typeof SKILL_TRANSCRIPT
-    | typeof SKILL_KEYVALUE;
-export type SkillCardEntryType = 'text' | 'image';
+    | typeof SKILL_FACE
+    | typeof SKILL_STATUS;
 
-export type SkillCardEntryTimeSlice = {
+type SkillCardEntryType = 'text' | 'image';
+
+type SkillCardLocalizableType = {
+    code?: string,
+    message?: string
+};
+
+type SkillCardEntryTimeSlice = {
     start: number,
     end?: number
 };
 
-export type SkillCardEntry = {
+type SkillCardEntry = {
     type?: SkillCardEntryType,
     text?: string,
     label?: string,
@@ -188,9 +200,12 @@ export type SkillCardEntry = {
     appears?: Array<SkillCardEntryTimeSlice>
 };
 
-export type SkillCard = {
+type SkillCard = {
     type: 'skill_card',
-    id: string,
+    id?: string,
+    file_version: BoxItemVersion,
+    status?: SkillCardLocalizableType,
+    skill_card_title: SkillCardLocalizableType,
     skill_card_type: SkillCardType,
     title?: string,
     duration?: number,
@@ -198,19 +213,19 @@ export type SkillCard = {
     error?: string
 };
 
-export type SkillCards = {
+type SkillCards = {
     cards: Array<SkillCard>
 };
 
-export type MetadataTemplate = {
+type MetadataTemplate = {
     boxSkillsCards?: SkillCards
 };
 
-export type MetadataType = {
+type MetadataType = {
     global?: MetadataTemplate
 };
 
-export type BoxItemVersion = {
+type BoxItemVersion = {
     id: string,
     type: string,
     sha1?: string,
@@ -228,7 +243,7 @@ export type BoxItemVersion = {
     collaborators?: Object
 };
 
-export type BoxItem = {
+type BoxItem = {
     id?: string,
     name?: string,
     size?: number,
@@ -258,7 +273,7 @@ export type BoxItem = {
     version_number?: string
 };
 
-export type BoxItemCollection = {
+type BoxItemCollection = {
     total_count?: number,
     entries?: Array<BoxItem>,
     order?: Array<Order>,
@@ -269,7 +284,7 @@ export type BoxItemCollection = {
     next_marker?: string
 };
 
-export type FlattenedBoxItem = {
+type FlattenedBoxItem = {
     id?: string,
     name?: string,
     size?: number,
@@ -297,7 +312,7 @@ export type FlattenedBoxItem = {
     file_version?: BoxItemVersion
 };
 
-export type FlattenedBoxItemCollection = {
+type FlattenedBoxItemCollection = {
     total_count?: number,
     entries?: Array<string>,
     order?: Array<Order>,
@@ -308,12 +323,12 @@ export type FlattenedBoxItemCollection = {
     next_marker?: string
 };
 
-export type BoxPathCollection = {
+type BoxPathCollection = {
     total_count: number,
     entries: Array<Crumb>
 };
 
-export type Collection = {
+type Collection = {
     id?: string,
     name?: string,
     permissions?: BoxItemPermission,
@@ -325,7 +340,7 @@ export type Collection = {
     boxItem?: FlattenedBoxItem
 };
 
-export type UploadItem = {
+type UploadItem = {
     api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
     error?: Object,
@@ -338,7 +353,7 @@ export type UploadItem = {
     options?: UploadItemAPIOptions
 };
 
-export type UploadItemAPIOptions = {
+type UploadItemAPIOptions = {
     apiHost?: string,
     fileId?: string,
     folderId?: string,
@@ -347,19 +362,19 @@ export type UploadItemAPIOptions = {
     uploadInitTimestamp?: number
 };
 
-export type UploadFileWithAPIOptions = {
+type UploadFileWithAPIOptions = {
     file: File,
     options?: UploadItemAPIOptions
 };
 
-export type ModalOptions = {
+type ModalOptions = {
     buttonLabel: string,
     buttonClassName: string,
     modalClassName: string,
     overlayClassName: string
 };
 
-export type IconType = {
+type IconType = {
     color?: string,
     secondaryColor?: string,
     className?: string,
@@ -367,19 +382,19 @@ export type IconType = {
     height?: number
 };
 
-export type Crumb = {
+type Crumb = {
     id?: string,
     name: string
 };
 
-export type Options = {
+type Options = {
     id?: string,
     token: Token,
     clientName?: string,
     version?: string,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    cache?: Cache,
+    cache?: APICache,
     apiHost?: string,
     uploadHost?: string,
     responseInterceptor?: Function,
@@ -388,17 +403,17 @@ export type Options = {
     consoleError?: boolean
 };
 
-export type Recent = {
+type Recent = {
     interacted_at: string,
     item: BoxItem
 };
 
-export type RecentCollection = {
+type RecentCollection = {
     order: Order,
     entries: Array<Recent>
 };
 
-export type MultiputConfig = {
+type MultiputConfig = {
     digestReadahead: number,
     initialRetryDelayMs: number,
     maxRetryDelayMs: number,
@@ -407,38 +422,38 @@ export type MultiputConfig = {
     retries: number
 };
 
-export type MultiputPart = {
+type MultiputPart = {
     offset: number,
     part_id: string,
     sha1: string,
     size: number
 };
 
-export type MultiputData = {
+type MultiputData = {
     part?: MultiputPart
 };
 
-export type FileVersions = {
+type FileVersions = {
     total_count: number,
     entries: Array<BoxItemVersion>
 };
 
-export type MaskError = {
+type MaskError = {
     errorHeader: MessageDescriptor,
     errorSubHeader?: MessageDescriptor
 };
 
-export type InlineError = {
+type InlineError = {
     title: MessageDescriptor,
     content: MessageDescriptor
 };
 
-export type Errors = {
+type Errors = {
     maskError?: MaskError,
     inlineError?: InlineError
 };
 
-export type FileAccessStats = {
+type FileAccessStats = {
     preview_count: number,
     download_count: number,
     comment_count: number,
@@ -446,7 +461,7 @@ export type FileAccessStats = {
     has_count_overflowed: boolean
 };
 
-export type Task = {
+type Task = {
     type: 'task',
     id: string,
     item: {
@@ -467,12 +482,12 @@ export type Task = {
     }
 };
 
-export type Tasks = {
+type Tasks = {
     total_count: number,
     entries: Array<Task>
 };
 
-export type Comment = {
+type Comment = {
     type: 'comment',
     id: string,
     is_reply_comment?: boolean,
@@ -487,25 +502,25 @@ export type Comment = {
     modified_at: string
 };
 
-export type Comments = {
+type Comments = {
     total_count: number,
     entries: Array<Comment>
 };
 
-export type Collaborators = {
+type Collaborators = {
     next_marker: 'string' | null,
     entries: Array<SelectorItem>
 };
 
-export type JsonPatch = {
+type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',
     path: string,
     value?: Object
 };
 
-export type JsonPatchData = Array<JsonPatch>;
+type JsonPatchData = Array<JsonPatch>;
 
-export type SidebarView =
+type SidebarView =
     | typeof SIDEBAR_VIEW_SKILLS
     | typeof SIDEBAR_VIEW_DETAILS
     | typeof SIDEBAR_VIEW_METADATA

@@ -19,7 +19,6 @@ import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight'
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
-import Cache from '../../util/Cache';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
 import TokenService from '../../util/TokenService';
@@ -36,8 +35,6 @@ import {
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW
 } from '../../constants';
-import type { Token, TokenLiteral, BoxItem, StringMap } from '../../flowTypes';
-import type { ContentSidebarProps } from '../ContentSidebar';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
@@ -65,7 +62,7 @@ type Props = {
     onClose?: Function,
     language: string,
     messages?: StringMap,
-    cache?: Cache,
+    cache?: APICache,
     collection: Array<string | BoxItem>,
     logoUrl?: string,
     sharedLink?: string,

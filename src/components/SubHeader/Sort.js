@@ -24,7 +24,7 @@ import {
     FIELD_INTERACTED_AT,
     FIELD_SIZE
 } from '../../constants';
-import type { SortBy, SortDirection, SortableOptions } from '../../flowTypes';
+
 import './Sort.scss';
 
 type Props = {

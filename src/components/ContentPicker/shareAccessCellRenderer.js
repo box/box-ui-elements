@@ -7,7 +7,6 @@
 import React from 'react';
 import isRowSelectable from './cellRendererHelper';
 import ShareAccessSelect from '../ShareAccessSelect';
-import type { BoxItem } from '../../flowTypes';
 
 export default (
     onChange: Function,

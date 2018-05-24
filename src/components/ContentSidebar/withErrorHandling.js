@@ -17,7 +17,6 @@ import {
     SKILLS_INTERNAL_SERVER_ERROR,
     SKILLS_UNKNOWN_ERROR
 } from '../../constants';
-import type { Errors } from '../../flowTypes';
 
 type Props = {
     errorCode?: string

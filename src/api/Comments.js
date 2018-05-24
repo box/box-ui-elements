@@ -5,7 +5,6 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import type { BoxItem, Comment } from '../flowTypes';
 import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_EDIT_COMMENT, PERMISSION_CAN_DELETE_COMMENT } from '../constants';
 
 class Comments extends OffsetBasedAPI {

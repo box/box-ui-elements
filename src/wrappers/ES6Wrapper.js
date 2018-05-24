@@ -9,7 +9,6 @@ import ReactDOM from 'react-dom';
 import { addLocaleData } from 'react-intl';
 import { DEFAULT_CONTAINER } from '../constants';
 import i18n from '../i18n';
-import type { StringMap, Token } from '../flowTypes';
 
 declare var __VERSION__: string;
 

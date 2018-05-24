@@ -8,10 +8,8 @@ import React from 'react';
 import withErrorHandling from '../withErrorHandling';
 import Transcript from './Transcript';
 import Keywords from './Keywords';
-import Keyvalues from './Keyvalues';
 import Faces from './Faces';
-import { SKILL_TRANSCRIPT, SKILL_KEYWORD, SKILL_TIMELINE, SKILL_KEYVALUE } from '../../../constants';
-import type { SkillCard } from '../../../flowTypes';
+import { SKILL_TRANSCRIPT, SKILL_KEYWORD, SKILL_TIMELINE } from '../../../constants';
 
 type Props = {
     getPreviewer: Function,
@@ -48,8 +46,6 @@ const SidebarSkillsCard = ({
                     onSkillChange={onSkillChange}
                 />
             );
-        case SKILL_KEYVALUE:
-            return <Keyvalues card={card} />;
         case SKILL_TIMELINE:
             return (
                 <Faces card={card} isEditable={isEditable} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />

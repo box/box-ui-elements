@@ -9,8 +9,6 @@ import setProp from 'lodash/set';
 import Base from './Base';
 import { getBadItemError } from '../util/error';
 import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
-import type Cache from '../util/Cache';
-import type { BoxItem, FlattenedBoxItem, FlattenedBoxItemCollection, BoxItemPermission } from '../flowTypes';
 
 class Item extends Base {
     /**
@@ -74,7 +72,7 @@ class Item extends Base {
      * @return {BoxItem} The newly updated object from the cache
      */
     merge(cacheKey: string, key: string, value: any): BoxItem {
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         cache.merge(cacheKey, setProp({}, key, value));
         return cache.get(cacheKey);
     }

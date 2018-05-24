@@ -14,17 +14,6 @@ import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import type {
-    BoxItemVersion,
-    FileVersions,
-    Comment,
-    Comments,
-    Task,
-    Tasks,
-    User,
-    SelectorItems,
-    BoxItem
-} from '../../../../flowTypes';
-import type {
     CommentHandlers,
     TaskHandlers,
     ContactHandlers,
@@ -165,12 +154,30 @@ class ActivityFeed extends React.Component<Props, State> {
         deleteComment(args);
     };
 
-    createTask = (args: any): void => {
+    /**
+     * Creates a task
+     *
+     * @param {string} text - Task text
+     * @param {Array} assignees - List of assignees
+     * @param {number} dueAt - Task's due date
+     * @return {void}
+     */
+    createTask = ({
+        text,
+        assignees,
+        dueAt
+    }: {
+        text: string,
+        assignees: Array<SelectorItems>,
+        dueAt: string
+    }): void => {
         // create a placeholder pending task
         // create actual task and send to Box V2 api
         // call user passed in handlers.tasks.create, if it exists
         const createTask = getProp(this.props, 'handlers.tasks.create', noop);
-        createTask(args);
+        const dueAtDate: Date = new Date(dueAt);
+        const dueAtString: string = dueAtDate.toISOString();
+        createTask(text, assignees, dueAtString);
 
         this.approvalCommentFormSubmitHandler();
     };

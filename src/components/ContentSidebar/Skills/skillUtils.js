@@ -5,7 +5,6 @@
  */
 
 import getProp from 'lodash/get';
-import type { BoxItem, SkillCard } from '../../../flowTypes';
 
 /**
  * Returns true if its a valid skills card.
