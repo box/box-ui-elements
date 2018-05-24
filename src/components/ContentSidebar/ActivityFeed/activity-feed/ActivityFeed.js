@@ -104,13 +104,13 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Replace a pending feed item with actual feed item data.
+     * Replace a feed item with new feed item data.
      *
      * @param {Comment | Task} feedItem - API returned feed item data.
-     * @param {string} uuid - Unique ID of the pending item to replace.
+     * @param {string} uuid - Unique ID of the feed item to replace.
      * @return {void}
      */
-    updatePendingItem = (feedItem: Comment | Task, uuid: string): void => {
+    updateFeedItem = (feedItem: Comment | Task, uuid: string): void => {
         let itemIndex = null;
         const { feedItems } = this.state;
         feedItems.find((item, index) => {
@@ -150,7 +150,7 @@ class ActivityFeed extends React.Component<Props, State> {
             // Comment component uses tagged_message only
             commentData.tagged_message = hasMention ? tagged_message : message;
 
-            this.updatePendingItem(commentData, uuid);
+            this.updateFeedItem(commentData, uuid);
         });
 
         this.approvalCommentFormSubmitHandler();
