@@ -608,20 +608,17 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * Adds a comment to the state and return the new comment.
+     * Adds a comment to the comments state.
      *
-     * @param {Function} resolve - Resolver function for onCommentCreate() returned Promise
      * @param {Comment} comment - The newly created comment from the API
      * @return {void}
      */
-    addComment(resolve: Function, comment: Comment): void {
+    onCommentCreateSuccess(comment: Comment): void {
         const { comments } = this.state;
         if (comments && comments.entries) {
             comments.entries.push(comment);
             this.setState({ comments });
         }
-
-        resolve(comment);
     }
 
     /**
@@ -648,10 +645,15 @@ class ContentSidebar extends PureComponent<Props, State> {
         }
 
         return new Promise((resolve, reject) => {
+            const onSuccess = (comment) => {
+                this.onCommentCreateSuccess(comment);
+                resolve(comment);
+            };
+
             this.api.getCommentsAPI(false).createComment({
                 file,
                 ...message,
-                successCallback: this.addComment.bind(this, resolve),
+                successCallback: onSuccess,
                 errorCallback: reject
             });
         });

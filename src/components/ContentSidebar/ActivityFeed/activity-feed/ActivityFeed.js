@@ -124,11 +124,8 @@ class ActivityFeed extends React.Component<Props, State> {
         // Replace item in the feed items or set as most recent item.
         if (itemIndex !== null) {
             feedItems[itemIndex] = feedItem;
-        } else {
-            feedItems.unshift(feedItem);
+            this.setState({ feedItems });
         }
-
-        this.setState({ feedItems });
     };
 
     /**

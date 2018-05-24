@@ -192,4 +192,8 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(feedItems[1].id).toEqual(tasks.entries[0].id);
         });
     });
+
+    describe('addPendingItem()', () => {});
+    describe('updatePendingItem()', () => {});
+    describe('createComment()');
 });
