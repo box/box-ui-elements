@@ -155,6 +155,7 @@ class MultiputUpload extends BaseMultiput {
         }
 
         const splitUrl = data.upload_url.split('/');
+        // splitUrl[0] is the protocol (e.g., https:), splitUrl[2] is hostname (e.g., www.box.com)
         this.uploadHost = `${splitUrl[0]}//${splitUrl[2]}`;
         return this.getBaseUploadUrl();
     };
