@@ -13,17 +13,6 @@ import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import type {
-    BoxItemVersion,
-    FileVersions,
-    Comment,
-    Comments,
-    Task,
-    Tasks,
-    User,
-    SelectorItems,
-    BoxItem
-} from '../../../../flowTypes';
-import type {
     CommentHandlers,
     TaskHandlers,
     ContactHandlers,
@@ -38,13 +27,11 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     isLoading?: boolean,
-    inputState: {
-        currentUser?: User,
-        approverSelectorContacts?: SelectorItems,
-        mentionSelectorContacts?: SelectorItems,
-        isDisabled?: boolean
-    },
+    currentUser?: User,
+    isDisabled?: boolean,
     handlers: {
         comments?: CommentHandlers,
         tasks?: TaskHandlers,
@@ -52,17 +39,11 @@ type Props = {
         versions?: VersionHandlers
     },
     translations?: Translations,
-    permissions?: {
-        comments?: boolean,
-        tasks?: boolean
-    },
     getAvatarUrl: (string) => Promise<?string>
 };
 
 type State = {
     isInputOpen: boolean,
-    approverSelectorContacts: Array<User>,
-    mentionSelectorContacts: Array<User>,
     feedItems?: Array<Comment | Task | BoxItemVersion>
 };
 
@@ -73,8 +54,6 @@ class ActivityFeed extends React.Component<Props, State> {
 
     state = {
         isInputOpen: false,
-        approverSelectorContacts: [],
-        mentionSelectorContacts: [],
         feedItems: undefined
     };
 
@@ -89,12 +68,19 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
-    createComment = (args: any): void => {
+    /**
+     * Creates a comment
+     *
+     * @param {string} text - Comment text
+     * @param {boolean} hasMention - If this comment contains an at mention
+     * @return {void}
+     */
+    createComment = ({ text, hasMention }: { text: string, hasMention: boolean }): void => {
         // create a placeholder pending comment
         // create actual comment and send to Box V2 api
         // call user passed in handlers.comments.create, if it exists
         const createComment = getProp(this.props, 'handlers.comments.create', noop);
-        createComment(args);
+        createComment(text, hasMention);
 
         this.approvalCommentFormSubmitHandler();
     };
@@ -108,12 +94,30 @@ class ActivityFeed extends React.Component<Props, State> {
         deleteComment(args);
     };
 
-    createTask = (args: any): void => {
+    /**
+     * Creates a task
+     *
+     * @param {string} text - Task text
+     * @param {Array} assignees - List of assignees
+     * @param {number} dueAt - Task's due date
+     * @return {void}
+     */
+    createTask = ({
+        text,
+        assignees,
+        dueAt
+    }: {
+        text: string,
+        assignees: Array<SelectorItems>,
+        dueAt: string
+    }): void => {
         // create a placeholder pending task
         // create actual task and send to Box V2 api
         // call user passed in handlers.tasks.create, if it exists
         const createTask = getProp(this.props, 'handlers.tasks.create', noop);
-        createTask(args);
+        const dueAtDate: Date = new Date(dueAt);
+        const dueAtString: string = dueAtDate.toISOString();
+        createTask(text, assignees, dueAtString);
 
         this.approvalCommentFormSubmitHandler();
     };
@@ -156,24 +160,6 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
-    getApproverSelectorContacts = (searchStr: string): void => {
-        // using v2 api, search for approver on file with searchStr
-        // use collaborators endpoint /files/ID/collaborators
-        // update contacts state 'approverSelectorContacts'
-        // call user passed in handlers.contacts.getApproverWithQuery, if it exists
-        const getApproverWithQuery = getProp(this.props, 'handlers.contacts.getApproverWithQuery', noop);
-        this.setState({ approverSelectorContacts: getApproverWithQuery(searchStr) });
-    };
-
-    getMentionSelectorContacts = (searchStr: string): void => {
-        // using v2 api, search for mention on file with searchStr
-        // use collaborators endpoint /files/ID/collaborators
-        // update contacts state 'mentionSelectorContacts'
-        // call user passed in handlers.contacts.getMentionWithQuery, if it exists
-        const getMentionWithQuery = getProp(this.props, 'handlers.contacts.getMentionWithQuery', noop);
-        this.setState({ mentionSelectorContacts: getMentionWithQuery(searchStr) });
-    };
-
     componentDidMount(): void {
         const { comments, tasks, versions } = this.props;
         this.sortFeedItems(comments, tasks, versions);
@@ -212,13 +198,22 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     render(): React.Node {
-        const { handlers, inputState, isLoading, permissions, translations, getAvatarUrl } = this.props;
-        const { approverSelectorContacts, mentionSelectorContacts, isInputOpen } = this.state;
-        const { currentUser } = inputState;
+        const {
+            handlers,
+            isLoading,
+            translations,
+            approverSelectorContacts,
+            mentionSelectorContacts,
+            currentUser,
+            isDisabled,
+            getAvatarUrl,
+            file
+        } = this.props;
+        const { isInputOpen, feedItems } = this.state;
         const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
-        const hasCommentPermission = getProp(permissions, 'comments', false);
-        const hasTaskPermission = getProp(permissions, 'tasks', false);
-        const { feedItems } = this.state;
+        const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
+        const getApproverWithQuery = getProp(handlers, 'contacts.approver', noop);
+        const getMentionWithQuery = getProp(handlers, 'contacts.mention', noop);
 
         return (
             // eslint-disable-next-line
@@ -234,15 +229,17 @@ class ActivityFeed extends React.Component<Props, State> {
                     ) : (
                         <ActiveState
                             handlers={handlers}
-                            items={collapseFeedState(feedItems || [])}
+                            items={collapseFeedState(feedItems)}
+                            isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
                             onCommentDelete={hasCommentPermission ? this.deleteComment : noop}
-                            onTaskDelete={hasTaskPermission ? this.deleteTask : noop}
-                            onTaskEdit={hasTaskPermission ? this.updateTask : noop}
+                            // We don't know task edit/delete specific permissions,
+                            // but you must at least be able to comment to do these operations.
+                            onTaskDelete={hasCommentPermission ? this.deleteTask : noop}
+                            onTaskEdit={hasCommentPermission ? this.updateTask : noop}
                             onVersionInfo={this.openVersionHistoryPopup}
                             translations={translations}
-                            inputState={inputState}
                             getAvatarUrl={getAvatarUrl}
                         />
                     )}
@@ -254,20 +251,21 @@ class ActivityFeed extends React.Component<Props, State> {
                                 this.feedContainer.scrollTop = 0;
                             }
                         }}
-                        isDisabled={inputState.isDisabled}
+                        isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
                         className={classNames('bcs-activity-feed-comment-input', {
-                            'bcs-is-disabled': inputState.isDisabled
+                            'bcs-is-disabled': isDisabled
                         })}
                         createComment={hasCommentPermission ? this.createComment : noop}
-                        createTask={hasTaskPermission ? this.createTask : noop}
-                        getApproverContactsWithQuery={this.getApproverSelectorContacts}
-                        getMentionContactsWithQuery={this.getMentionSelectorContacts}
+                        createTask={hasCommentPermission ? this.createTask : noop}
+                        getApproverContactsWithQuery={getApproverWithQuery}
+                        getMentionContactsWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
                         user={currentUser}
                         onCancel={this.approvalCommentFormCancelHandler}
                         onFocus={this.approvalCommentFormFocusHandler}
+                        getAvatarUrl={getAvatarUrl}
                     />
                 ) : null}
             </div>

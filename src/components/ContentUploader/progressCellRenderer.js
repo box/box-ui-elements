@@ -7,7 +7,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import ItemProgress from './ItemProgress';
 import { STATUS_ERROR, STATUS_IN_PROGRESS } from '../../constants';
-import type { UploadItem } from '../../flowTypes';
+
 import messages from '../messages';
 
 type Props = {

@@ -50,19 +50,6 @@ import {
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
-import type {
-    BoxItem,
-    Collection,
-    View,
-    SortDirection,
-    SortBy,
-    Access,
-    BoxItemPermission,
-    Token,
-    DefaultView,
-    StringMap
-} from '../../flowTypes';
-import type { ContentPreviewProps } from '../ContentPreview';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -91,7 +78,7 @@ type Props = {
     isTouch: boolean,
     autoFocus: boolean,
     className: string,
-    measureRef: Function,
+    measureRef?: Function,
     onDelete: Function,
     onDownload: Function,
     onPreview: Function,
@@ -875,7 +862,7 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.setState({ isLoading: true });
-        this.api.getAPI(type).delete(selected, () => {
+        this.api.getAPI(type).deleteItem(selected, () => {
             onDelete(cloneDeep([selected]));
             this.refreshCollection();
         });

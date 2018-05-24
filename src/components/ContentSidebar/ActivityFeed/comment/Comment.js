@@ -12,7 +12,6 @@ import { Link } from 'box-react-ui/lib/components/link';
 import { ReadableTime } from 'box-react-ui/lib/components/time';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
-import type { ActionItemError, User } from '../../../../flowTypes';
 import InlineDelete from './InlineDelete';
 import InlineEdit from './InlineEdit';
 import CommentInlineError from './CommentInlineError';
@@ -24,10 +23,10 @@ import messages from '../../../messages';
 
 import './Comment.scss';
 import type {
+    CommentHandlers,
     VersionHandlers,
     ContactHandlers,
     TaskHandlers,
-    InputState,
     Translations
 } from '../activityFeedFlowTypes';
 
@@ -53,11 +52,15 @@ type Props = {
     translatedTaggedMessage?: string,
     translations: Translations,
     handlers: {
+        comments?: CommentHandlers,
         tasks?: TaskHandlers,
         contacts?: ContactHandlers,
         versions?: VersionHandlers
     },
-    inputState: InputState,
+    currentUser: User,
+    isDisabled?: boolean,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     getAvatarUrl: (string) => Promise<?string>
 };
 
@@ -112,10 +115,12 @@ class Comment extends React.Component<Props, State> {
             translatedTaggedMessage,
             translations,
             handlers,
-            inputState,
+            currentUser,
+            isDisabled,
+            approverSelectorContacts,
+            mentionSelectorContacts,
             getAvatarUrl
         } = this.props;
-        const { approverSelectorContacts, mentionSelectorContacts, currentUser } = inputState;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
@@ -169,11 +174,11 @@ class Comment extends React.Component<Props, State> {
                         {isEditing ? (
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
-                                isDisabled={inputState.isDisabled}
+                                isDisabled={isDisabled}
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 className={classNames('bcs-activity-feed-comment-input', {
-                                    'bcs-is-disabled': inputState.isDisabled
+                                    'bcs-is-disabled': isDisabled
                                 })}
                                 // createComment={this.createCommentHandler}
                                 updateTask={this.updateTaskHandler}

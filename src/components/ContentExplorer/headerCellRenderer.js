@@ -7,7 +7,7 @@
 import React from 'react';
 import IconChevron from 'box-react-ui/lib/icons/general/IconChevron';
 import { SORT_ASC, COLOR_999 } from '../../constants';
-import type { SortBy, SortDirection } from '../../flowTypes';
+
 import './headerCellRenderer.scss';
 
 type Props = {

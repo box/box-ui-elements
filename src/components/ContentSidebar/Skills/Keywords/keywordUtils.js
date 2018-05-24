@@ -4,7 +4,6 @@
  * @author Box
  */
 
-import type { SkillCardEntry } from '../../../../flowTypes';
 import type { Pill } from './flowTypes';
 
 /**

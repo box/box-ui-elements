@@ -13,18 +13,6 @@ import sort from '../util/sorter';
 import { getBadItemError } from '../util/error';
 import { getFieldsAsString } from '../util/fields';
 import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, SORT_DESC, FIELD_INTERACTED_AT, X_REP_HINTS } from '../constants';
-import type Cache from '../util/Cache';
-import type {
-    Crumb,
-    BoxItem,
-    Recent,
-    RecentCollection,
-    Collection,
-    SortBy,
-    SortDirection,
-    FlattenedBoxItem,
-    FlattenedBoxItemCollection
-} from '../flowTypes';
 
 class Recents extends Base {
     /**
@@ -96,7 +84,7 @@ class Recents extends Base {
             return;
         }
 
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         const recents: FlattenedBoxItem = cache.get(this.key);
         const sortedRecents: FlattenedBoxItem = sort(recents, this.sortBy, this.sortDirection, cache);
         const { item_collection }: FlattenedBoxItem = sortedRecents;
@@ -235,7 +223,7 @@ class Recents extends Base {
         this.includePreviewFields = includePreviewFields;
         this.includePreviewSidebarFields = includePreviewSidebarFields;
 
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         this.key = this.getCacheKey(this.id);
 
         // Clear the cache if needed

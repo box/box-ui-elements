@@ -9,16 +9,6 @@ import DetailsSidebar from './DetailsSidebar';
 import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
-import type {
-    FileAccessStats,
-    BoxItem,
-    Errors,
-    Comments,
-    Tasks,
-    User,
-    FileVersions,
-    SidebarView
-} from '../../flowTypes';
 import { shouldRenderDetailsSidebar } from './sidebarUtil';
 import SidebarNav from './SidebarNav';
 import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
@@ -54,6 +44,8 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     accessStats?: FileAccessStats,
     accessStatsError?: Errors,
     fileError?: Errors,
@@ -155,8 +147,10 @@ class Sidebar extends React.Component<Props, State> {
             tasksError,
             comments,
             commentsError,
-            getAvatarUrl,
-            versions
+            versions,
+            approverSelectorContacts,
+            mentionSelectorContacts,
+            getAvatarUrl
         }: Props = this.props;
 
         const { view } = this.state;
@@ -219,6 +213,8 @@ class Sidebar extends React.Component<Props, State> {
                             tasks={tasks}
                             tasksError={tasksError}
                             comments={comments}
+                            approverSelectorContacts={approverSelectorContacts}
+                            mentionSelectorContacts={mentionSelectorContacts}
                             commentsError={commentsError}
                             versions={versions}
                             onCommentCreate={onCommentCreate}

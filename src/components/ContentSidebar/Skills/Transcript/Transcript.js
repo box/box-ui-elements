@@ -10,6 +10,8 @@ import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import IconCopy from 'box-react-ui/lib/icons/general/IconCopy';
+import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
+import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import TranscriptRow from './TranscriptRow';
 import { isValidTimeSlice } from './timeSliceUtils';
@@ -17,7 +19,7 @@ import { COLOR_999 } from '../../../../constants';
 import { copy } from '../../../../util/download';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 import messages from '../../../messages';
-import type { SkillCard, SkillCardEntry, SkillCardEntryTimeSlice } from '../../../../flowTypes';
+
 import './Transcript.scss';
 
 type Props = {
@@ -29,12 +31,13 @@ type Props = {
 
 type State = {
     isEditingIndex?: number,
-    newTranscriptText: string
+    newTranscriptText: string,
+    isCollapsed: boolean
 };
 
 class Transcript extends React.PureComponent<Props, State> {
     props: Props;
-    state: State = { isEditingIndex: undefined, newTranscriptText: '' };
+    state: State = { isEditingIndex: undefined, newTranscriptText: '', isCollapsed: true };
     copyBtn: HTMLButtonElement;
 
     /**
@@ -225,6 +228,18 @@ class Transcript extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Toggles transcript exapand and collapse
+     *
+     * @private
+     * @return {void}
+     */
+    toggleExpandCollapse = (): void => {
+        this.setState((prevState) => ({
+            isCollapsed: !prevState.isCollapsed
+        }));
+    };
+
+    /**
      * Renders the transcript
      *
      * @private
@@ -232,10 +247,13 @@ class Transcript extends React.PureComponent<Props, State> {
      */
     render() {
         const { card: { entries }, isEditable }: Props = this.props;
-        const { isEditingIndex }: State = this.state;
+        const { isEditingIndex, isCollapsed }: State = this.state;
         const isEditing = typeof isEditingIndex === 'number';
         const editBtnClassName = classNames('be-transcript-edit', {
             'be-transcript-is-editing': isEditing
+        });
+        const contentClassName = classNames({
+            'be-transcript-content-collapsed': isCollapsed
         });
 
         return (
@@ -247,6 +265,9 @@ class Transcript extends React.PureComponent<Props, State> {
                     onClick={this.copyTranscript}
                 >
                     <IconCopy color={COLOR_999} />
+                </PlainButton>
+                <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleExpandCollapse}>
+                    {isCollapsed ? <IconExpand color={COLOR_999} /> : <IconCollapse color={COLOR_999} />}
                 </PlainButton>
                 {isEditable && (
                     <PlainButton
@@ -263,7 +284,7 @@ class Transcript extends React.PureComponent<Props, State> {
                         <FormattedMessage {...messages.transcriptEdit} />
                     </div>
                 ) : null}
-                <div className='be-transcript-content'>{entries.map(this.transcriptMapper)}</div>
+                <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
             </div>
         );
     }

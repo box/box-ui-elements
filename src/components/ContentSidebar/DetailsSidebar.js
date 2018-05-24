@@ -14,7 +14,7 @@ import SidebarContent from './SidebarContent';
 import SidebarVersions from './SidebarVersions';
 import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
-import type { FileAccessStats, BoxItem, FileVersions, Errors } from '../../flowTypes';
+
 import './DetailsSidebar.scss';
 
 type Props = {

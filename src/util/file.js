@@ -5,7 +5,6 @@
  */
 
 import { TYPED_ID_FILE_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
-import type { BoxItem } from '../flowTypes';
 
 /**
  * Returns typed id for file. Useful for when

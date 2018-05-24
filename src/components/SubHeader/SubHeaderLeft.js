@@ -9,7 +9,6 @@ import { injectIntl } from 'react-intl';
 import messages from '../messages';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../constants';
-import type { View, Collection } from '../../flowTypes';
 
 type Props = {
     rootId: string,

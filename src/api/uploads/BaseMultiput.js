@@ -3,8 +3,7 @@
  * @file Multiput upload base class
  * @author Box
  */
-import Base from '../Base';
-import type { MultiputConfig, Options } from '../../flowTypes';
+import BaseUpload from './BaseUpload';
 
 const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     digestReadahead: 5, // How many parts past those currently uploading to precompute digest for
@@ -16,7 +15,7 @@ const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     retries: 5 // How many times to retry requests such as upload part or commit. Note that total number of attempts will be retries + 1 in worst case where all attempts fail.
 };
 
-class BaseMultiput extends Base {
+class BaseMultiput extends BaseUpload {
     config: MultiputConfig;
     sessionEndpoints: Object;
 

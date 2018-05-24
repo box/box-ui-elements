@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconCaretDown from 'box-react-ui/lib/icons/general/IconCaretDown';
@@ -14,7 +14,7 @@ import './SidebarSection.scss';
 type Props = {
     children?: any,
     className: string,
-    title?: string | React$Element<any>,
+    title?: string | React.Node,
     isOpen: boolean,
     interactionTarget?: string
 };
@@ -23,7 +23,7 @@ type State = {
     isOpen: boolean
 };
 
-class SidebarSection extends PureComponent<Props, State> {
+class SidebarSection extends React.PureComponent<Props, State> {
     props: Props;
     state: State;
 

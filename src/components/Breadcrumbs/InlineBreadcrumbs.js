@@ -9,7 +9,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import Breadcrumbs from './Breadcrumbs';
 import { DELIMITER_SLASH } from '../../constants';
-import type { BoxItem } from '../../flowTypes';
 import './InlineBreadcrumbs.scss';
 
 type Props = {

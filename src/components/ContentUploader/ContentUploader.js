@@ -33,15 +33,6 @@ import {
     TYPED_ID_FOLDER_PREFIX,
     TYPED_ID_FILE_PREFIX
 } from '../../constants';
-import type {
-    BoxItem,
-    UploadItem,
-    View,
-    Token,
-    StringMap,
-    UploadItemAPIOptions,
-    UploadFileWithAPIOptions
-} from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 
@@ -69,7 +60,6 @@ type Props = {
     messages?: StringMap,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    intl: any,
     useUploadsManager?: boolean,
     files?: Array<UploadFileWithAPIOptions | File>,
     onMinimize?: Function,

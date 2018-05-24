@@ -5,11 +5,17 @@
  */
 
 import axios from 'axios';
-import type { Axios } from 'axios';
 import getProp from 'lodash/get';
 import TokenService from './TokenService';
-import { HEADER_CLIENT_NAME, HEADER_CLIENT_VERSION, HEADER_CONTENT_TYPE } from '../constants';
-import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
+import {
+    HEADER_CLIENT_NAME,
+    HEADER_CLIENT_VERSION,
+    HEADER_CONTENT_TYPE,
+    HTTP_POST,
+    HTTP_PUT,
+    HTTP_DELETE,
+    HTTP_OPTIONS
+} from '../constants';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
@@ -18,6 +24,7 @@ const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 class Xhr {
     id: ?string;
     axios: Axios;
+    axiosSource: CancelTokenSource;
     clientName: ?string;
     token: Token;
     version: ?string;
@@ -59,6 +66,7 @@ class Xhr {
         this.sharedLinkPassword = sharedLinkPassword;
         this.responseInterceptor = responseInterceptor;
         this.axios = axios.create();
+        this.axiosSource = axios.CancelToken.source();
 
         if (typeof responseInterceptor === 'function') {
             // Called on any non 2xx response
@@ -168,7 +176,12 @@ class Xhr {
         headers?: StringMap
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then((hdrs) =>
-            this.axios.get(url, { params, headers: hdrs, parsedUrl: this.getParsedUrl(url) })
+            this.axios.get(url, {
+                cancelToken: this.axiosSource.token,
+                params,
+                headers: hdrs,
+                parsedUrl: this.getParsedUrl(url)
+            })
         );
     }
 
@@ -187,7 +200,7 @@ class Xhr {
         id,
         data,
         headers = {},
-        method = 'POST'
+        method = HTTP_POST
     }: {
         url: string,
         id?: string,
@@ -226,7 +239,7 @@ class Xhr {
         data: PayloadType,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        return this.post({ id, url, data, headers, method: 'PUT' });
+        return this.post({ id, url, data, headers, method: HTTP_PUT });
     }
 
     /**
@@ -249,7 +262,7 @@ class Xhr {
         data?: StringAnyMap,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        return this.post({ id, url, data, headers, method: 'DELETE' });
+        return this.post({ id, url, data, headers, method: HTTP_DELETE });
     }
 
     /**
@@ -284,7 +297,7 @@ class Xhr {
                 this.axios({
                     url,
                     data,
-                    method: 'options',
+                    method: HTTP_OPTIONS,
                     headers: hdrs
                 })
                     .then(successHandler)
@@ -314,7 +327,7 @@ class Xhr {
         url,
         data,
         headers = {},
-        method = 'POST',
+        method = HTTP_POST,
         successHandler,
         errorHandler,
         progressHandler,
@@ -394,6 +407,8 @@ class Xhr {
      * @return {void}
      */
     abort(): void {
+        this.axiosSource.cancel();
+
         if (!this.xhr) {
             return;
         }

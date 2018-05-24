@@ -8,7 +8,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import ProgressBar from './ProgressBar';
 import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR, VIEW_UPLOAD_EMPTY } from '../../constants';
-import type { View } from '../../flowTypes';
 
 import './OverallUploadsProgressBar.scss';
 

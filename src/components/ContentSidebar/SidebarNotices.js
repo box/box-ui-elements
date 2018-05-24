@@ -9,7 +9,7 @@ import getProp from 'lodash/get';
 import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
 import { addTime } from 'box-react-ui/lib/utils/datetime';
 import ItemExpirationNotice from 'box-react-ui/lib/features/item-details/ItemExpirationNotice';
-import type { BoxItem } from '../../flowTypes';
+
 import DateField from '../Date';
 
 const ONE_MINUTE_IN_MS = 60000;

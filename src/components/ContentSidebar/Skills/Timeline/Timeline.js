@@ -12,7 +12,7 @@ import IconTrackPrevious from 'box-react-ui/lib/icons/general/IconTrackPrevious'
 import Timeslice from './Timeslice';
 import { isValidStartTime } from '../Transcript/timeSliceUtils';
 import messages from '../../../messages';
-import type { SkillCardEntryTimeSlice, SkillCardEntryType } from '../../../../flowTypes';
+
 import './Timeline.scss';
 
 type Props = {

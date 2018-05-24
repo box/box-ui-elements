@@ -342,7 +342,7 @@ describe('api/Item', () => {
         });
     });
 
-    describe('delete()', () => {
+    describe('deleteItem()', () => {
         beforeEach(() => {
             file = {
                 id: 'id',
@@ -359,43 +359,43 @@ describe('api/Item', () => {
         test('should not do anything if destroyed', () => {
             item.isDestroyed = jest.fn().mockReturnValueOnce(true);
             item.xhr = null;
-            return expect(item.delete()).rejects.toBeUndefined();
+            return expect(item.deleteItem()).rejects.toBeUndefined();
         });
 
         test('should not do anything if id is missing', () => {
             delete file.id;
             item.xhr = null;
-            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
+            return expect(item.deleteItem(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should not do anything if parent is missing', () => {
             delete file.parent;
             item.xhr = null;
-            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
+            return expect(item.deleteItem(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should not do anything if parent id is missing', () => {
             delete file.parent.id;
             item.xhr = null;
-            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
+            return expect(item.deleteItem(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should not do anything if type is missing', () => {
             delete file.type;
             item.xhr = null;
-            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
+            return expect(item.deleteItem(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should not do anything if permissions is missing', () => {
             delete file.permissions;
             item.xhr = null;
-            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
+            return expect(item.deleteItem(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should not do anything if can delete is false', () => {
             delete file.permissions.can_delete;
             item.xhr = null;
-            return expect(item.delete(file, 'success', jest.fn())).rejects.toBeUndefined();
+            return expect(item.deleteItem(file, 'success', jest.fn())).rejects.toBeUndefined();
         });
 
         test('should make xhr to delete file and call success callback', () => {
@@ -405,7 +405,7 @@ describe('api/Item', () => {
             item.xhr = {
                 delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
-            return item.delete(file, 'success', 'error').then(() => {
+            return item.deleteItem(file, 'success', 'error').then(() => {
                 expect(item.deleteSuccessHandler).toHaveBeenCalledWith('success');
                 expect(item.errorHandler).not.toHaveBeenCalled();
                 expect(item.successCallback).toBe('success');
@@ -425,7 +425,7 @@ describe('api/Item', () => {
             item.xhr = {
                 delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
-            return item.delete(file, 'success', 'error').then(() => {
+            return item.deleteItem(file, 'success', 'error').then(() => {
                 expect(item.deleteSuccessHandler).toHaveBeenCalledWith('success');
                 expect(item.errorHandler).not.toHaveBeenCalled();
                 expect(item.successCallback).toBe('success');
@@ -445,7 +445,7 @@ describe('api/Item', () => {
             item.xhr = {
                 delete: jest.fn().mockReturnValueOnce(Promise.reject(error))
             };
-            return item.delete(file, 'success', 'error').then(() => {
+            return item.deleteItem(file, 'success', 'error').then(() => {
                 expect(item.errorHandler).toHaveBeenCalledWith(error);
                 expect(item.deleteSuccessHandler).not.toHaveBeenCalled();
                 expect(item.successCallback).toBe('success');
@@ -460,7 +460,7 @@ describe('api/Item', () => {
             item.xhr = {
                 delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
             };
-            return item.delete(file, 'success').catch(() => {
+            return item.deleteItem(file, 'success').catch(() => {
                 expect(item.errorCallback).toBe(noop);
             });
         });

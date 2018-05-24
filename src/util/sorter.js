@@ -6,8 +6,6 @@
 
 import comparator from './comparator';
 import { getBadItemError } from './error';
-import type { FlattenedBoxItem, Order, FlattenedBoxItemCollection, SortBy, SortDirection } from '../flowTypes';
-import type Cache from './Cache';
 
 function isSortingNeeded(order?: Order[], sortBy: SortBy, sortDirection: SortDirection): boolean {
     return !Array.isArray(order) || !order.some((entry) => entry.by === sortBy && entry.direction === sortDirection);
@@ -26,7 +24,7 @@ export default function(
     item: FlattenedBoxItem,
     sortBy: SortBy,
     sortDirection: SortDirection,
-    cache: Cache
+    cache: APICache
 ): FlattenedBoxItem {
     const { item_collection }: FlattenedBoxItem = item;
     if (!item_collection) {

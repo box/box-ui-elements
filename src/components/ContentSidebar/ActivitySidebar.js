@@ -9,7 +9,6 @@ import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
-import type { Errors, Comments, Tasks, FileVersions, BoxItem } from '../../flowTypes';
 
 type Props = {
     file: BoxItem,
@@ -25,6 +24,10 @@ type Props = {
     comments?: Comments,
     tasks?: Tasks,
     versions?: FileVersions,
+    currentUser?: User,
+    isDisabled?: boolean,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     commentsError?: Errors,
     tasksError?: Errors,
     getAvatarUrl: (string) => Promise<?string>
@@ -35,6 +38,10 @@ const ActivitySidebar = ({
     comments,
     tasks,
     versions,
+    currentUser,
+    isDisabled = false,
+    approverSelectorContacts,
+    mentionSelectorContacts,
     onCommentCreate,
     onCommentDelete,
     onTaskCreate,
@@ -52,12 +59,10 @@ const ActivitySidebar = ({
             comments={comments}
             tasks={tasks}
             versions={versions}
-            inputState={{
-                // $FlowFixMe
-                currentUser: {},
-                approverSelectorContacts: [],
-                mentionSelectorContacts: []
-            }}
+            approverSelectorContacts={approverSelectorContacts}
+            mentionSelectorContacts={mentionSelectorContacts}
+            currentUser={currentUser}
+            isDisabled={isDisabled}
             handlers={{
                 comments: {
                     create: onCommentCreate,
@@ -70,8 +75,8 @@ const ActivitySidebar = ({
                     onTaskAssignmentUpdate
                 },
                 contacts: {
-                    getApproverWithQuery,
-                    getMentionWithQuery
+                    approver: getApproverWithQuery,
+                    mention: getMentionWithQuery
                 },
                 versions: {
                     info: onVersionHistoryClick

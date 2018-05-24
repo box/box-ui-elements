@@ -9,7 +9,6 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import SidebarContent from './SidebarContent';
 import SidebarSkills from './Skills/SidebarSkills';
-import type { BoxItem } from '../../flowTypes';
 
 type Props = {
     file: BoxItem,

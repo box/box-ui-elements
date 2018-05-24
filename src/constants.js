@@ -113,6 +113,9 @@ export const PERMISSION_CAN_DELETE = 'can_delete';
 export const PERMISSION_CAN_UPLOAD = 'can_upload';
 export const PERMISSION_CAN_SHARE = 'can_share';
 export const PERMISSION_CAN_SET_SHARE_ACCESS = 'can_set_share_access';
+export const PERMISSION_CAN_COMMENT = 'can_comment';
+export const PERMISSION_CAN_EDIT_COMMENT = 'can_edit_comment';
+export const PERMISSION_CAN_DELETE_COMMENT = 'can_delete_comment';
 
 /* ------------- Delimiters for bread crumbs ---------------- */
 export const DELIMITER_SLASH: 'slash' = 'slash';
@@ -130,6 +133,8 @@ export const DEFAULT_HOSTNAME_APP = 'https://app.box.com';
 export const DEFAULT_CONTAINER = 'body';
 export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
+export const DEFAULT_COLLAB_DEBOUNCE = 500;
+export const DEFAULT_MAX_COLLABORATORS = 5;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
 export const CLIENT_NAME_CONTENT_TREE = 'ContentTree';
@@ -186,7 +191,8 @@ export const COLOR_WHITE = '#fff';
 export const SKILL_TRANSCRIPT: 'transcript' = 'transcript';
 export const SKILL_KEYWORD: 'keyword' = 'keyword';
 export const SKILL_TIMELINE: 'timeline' = 'timeline';
-export const SKILL_KEYVALUE: 'keyvalue' = 'keyvalue';
+export const SKILL_FACE: 'face' = 'face';
+export const SKILL_STATUS: 'status' = 'status';
 export const SKILLS_UNAUTHORIZED_REQUEST_ERROR = 'skills_unauthorized_request_error';
 export const SKILLS_FORBIDDEN_REQUEST_ERROR = 'skills_forbidden_request_error';
 export const SKILLS_INVALID_REQUEST_ERROR = 'skills_invalid_request_error';
@@ -202,3 +208,11 @@ export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
 export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
 export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
+
+/* ------------------ HTTP Requests  ---------------------- */
+export const HTTP_GET: 'get' = 'get';
+export const HTTP_POST: 'post' = 'post';
+export const HTTP_PUT: 'put' = 'put';
+export const HTTP_DELETE: 'delete' = 'delete';
+export const HTTP_OPTIONS: 'options' = 'options';
+export const HTTP_HEAD: 'head' = 'head';

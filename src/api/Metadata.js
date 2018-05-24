@@ -8,7 +8,6 @@ import File from './File';
 import { HEADER_CONTENT_TYPE } from '../constants';
 import { getBadItemError, getBadPermissionsError } from '../util/error';
 import { getTypedFileId } from '../util/file';
-import type { BoxItem, JsonPatchData } from '../flowTypes';
 
 class Metadata extends File {
     /**
