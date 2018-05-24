@@ -18,7 +18,6 @@ import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';
 import Avatar from '../Avatar';
 import messages from '../../../messages';
-import type { SelectorItems, User } from '../../../../flowTypes';
 
 import './ApprovalCommentForm.scss';
 

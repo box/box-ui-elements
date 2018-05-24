@@ -10,7 +10,6 @@ import ES6Wrapper from './ES6Wrapper';
 import ContentPickerPopup from '../components/ContentPicker/ContentPickerPopup';
 import ContentPickerComponent from '../components/ContentPicker/ContentPicker';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK, CLIENT_NAME_CONTENT_PICKER } from '../constants';
-import type { BoxItem, ModalOptions } from '../flowTypes';
 
 class ContentPicker extends ES6Wrapper {
     /**

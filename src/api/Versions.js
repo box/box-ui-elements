@@ -5,7 +5,6 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import type { BoxItemVersion } from '../flowTypes';
 
 const ACTION = {
     upload: 'upload',

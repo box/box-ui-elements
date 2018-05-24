@@ -10,7 +10,7 @@ import 'react-virtualized/styles.css';
 import nameCellRenderer from './nameCellRenderer';
 import progressCellRenderer from './progressCellRenderer';
 import actionCellRenderer from './actionCellRenderer';
-import type { UploadItem } from '../../flowTypes';
+
 import './ItemList.scss';
 
 type Props = {

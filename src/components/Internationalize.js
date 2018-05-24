@@ -6,7 +6,6 @@
 
 import React, { Children } from 'react';
 import { IntlProvider } from 'react-intl';
-import type { StringMap } from '../flowTypes';
 
 type Props = {
     language?: string,

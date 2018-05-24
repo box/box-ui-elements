@@ -15,7 +15,7 @@ import Face from './Face';
 import Timeline from '../Timeline';
 import messages from '../../../messages';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
-import type { SkillCard, SkillCardEntry } from '../../../../flowTypes';
+
 import './Faces.scss';
 
 type Props = {

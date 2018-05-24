@@ -641,7 +641,7 @@ babel-eslint@^8.2.2:
     eslint-scope "~3.7.1"
     eslint-visitor-keys "^1.0.0"
 
-babel-generator@^6.18.0, babel-generator@^6.7.7:
+babel-generator@^6.18.0:
   version "6.25.0"
   resolved "https://registry.yarnpkg.com/babel-generator/-/babel-generator-6.25.0.tgz#33a1af70d5f2890aeb465a4a7793c1df6a9ea9fc"
   dependencies:
@@ -820,7 +820,16 @@ babel-plugin-check-es2015-constants@^6.22.0:
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-istanbul@^4.1.4, babel-plugin-istanbul@^4.1.5:
+babel-plugin-flow-react-proptypes@^24.0.0:
+  version "24.0.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-flow-react-proptypes/-/babel-plugin-flow-react-proptypes-24.0.0.tgz#ff38e0ce64e31564b0de57235d45dc6811eea92d"
+  dependencies:
+    babel-core "^6.25.0"
+    babel-template "^6.25.0"
+    babel-traverse "^6.25.0"
+    babel-types "^6.25.0"
+
+babel-plugin-istanbul@^4.1.5:
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/babel-plugin-istanbul/-/babel-plugin-istanbul-4.1.5.tgz#6760cdd977f411d3e175bb064f2bc327d99b2b6e"
   dependencies:
@@ -1043,6 +1052,15 @@ babel-plugin-transform-es2015-modules-commonjs@^6.24.1:
     babel-template "^6.24.1"
     babel-types "^6.24.1"
 
+babel-plugin-transform-es2015-modules-commonjs@^6.26.2:
+  version "6.26.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-6.26.2.tgz#58a793863a9e7ca870bdc5a881117ffac27db6f3"
+  dependencies:
+    babel-plugin-transform-strict-mode "^6.24.1"
+    babel-runtime "^6.26.0"
+    babel-template "^6.26.0"
+    babel-types "^6.26.0"
+
 babel-plugin-transform-es2015-modules-systemjs@^6.23.0, babel-plugin-transform-es2015-modules-systemjs@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-systemjs/-/babel-plugin-transform-es2015-modules-systemjs-6.24.1.tgz#ff89a142b9119a906195f5f106ecf305d9407d23"
@@ -1140,7 +1158,7 @@ babel-plugin-transform-flow-strip-types@^6.22.0, babel-plugin-transform-flow-str
     babel-plugin-syntax-flow "^6.18.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-object-rest-spread@^6.22.0, babel-plugin-transform-object-rest-spread@^6.23.0:
+babel-plugin-transform-object-rest-spread@^6.22.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-object-rest-spread/-/babel-plugin-transform-object-rest-spread-6.26.0.tgz#0f36692d50fef6b7e2d4b3ac1478137a963b7b06"
   dependencies:
@@ -1175,7 +1193,7 @@ babel-plugin-transform-react-jsx@^6.24.1:
     babel-plugin-syntax-jsx "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-regenerator@^6.22.0, babel-plugin-transform-regenerator@^6.26.0:
+babel-plugin-transform-regenerator@^6.22.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-6.26.0.tgz#e0703696fbde27f0a3efcacf8b4dca2f7b3a8f2f"
   dependencies:
@@ -1187,7 +1205,7 @@ babel-plugin-transform-regenerator@^6.24.1:
   dependencies:
     regenerator-transform "0.9.11"
 
-babel-plugin-transform-require-ignore@^0.1.0:
+babel-plugin-transform-require-ignore@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-require-ignore/-/babel-plugin-transform-require-ignore-0.1.1.tgz#1abb0f803cc29646dd0057f538fdb4a98d6cb8b2"
 
@@ -1197,12 +1215,6 @@ babel-plugin-transform-strict-mode@^6.24.1:
   dependencies:
     babel-runtime "^6.22.0"
     babel-types "^6.24.1"
-
-babel-plugin-typecheck@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-typecheck/-/babel-plugin-typecheck-3.9.0.tgz#0edac7573ae24ee58c6f91319f574bc5124b0f0f"
-  dependencies:
-    babel-generator "^6.7.7"
 
 babel-polyfill@6.20.0:
   version "6.20.0"
@@ -1308,7 +1320,7 @@ babel-preset-react@^6.24.1:
     babel-plugin-transform-react-jsx-source "^6.22.0"
     babel-preset-flow "^6.23.0"
 
-babel-preset-stage-1@^6.5.0:
+babel-preset-stage-1@^6.24.1, babel-preset-stage-1@^6.5.0:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-preset-stage-1/-/babel-preset-stage-1-6.24.1.tgz#7692cd7dcd6849907e6ae4a0a85589cfb9e2bfb0"
   dependencies:

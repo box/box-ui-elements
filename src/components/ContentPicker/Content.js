@@ -9,13 +9,13 @@ import ItemList from './ItemList';
 import EmptyState from '../EmptyState';
 import ProgressBar from '../ProgressBar';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
-import type { View, Collection } from '../../flowTypes';
+
 import './Content.scss';
 
 type Props = {
     rootId: string,
     isSmall: boolean,
-    rootElement: HTMLElement,
+    rootElement?: HTMLElement,
     focusedRow: number,
     selectableType: string,
     tableRef: Function,

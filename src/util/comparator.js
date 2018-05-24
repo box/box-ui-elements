@@ -13,8 +13,6 @@ import {
     FIELD_NAME,
     FIELD_SIZE
 } from '../constants';
-import type { SortBy, SortDirection, BoxItem, ItemType } from '../flowTypes';
-import type Cache from './Cache';
 
 /**
  * Comparator function for sorting files and folders
@@ -23,7 +21,7 @@ import type Cache from './Cache';
  * @param {string} sortDirection desc or asc
  * @return {Function} comparator function
  */
-export default function(sortBy: SortBy, sortDirection: SortDirection, cache: Cache): Function {
+export default function(sortBy: SortBy, sortDirection: SortDirection, cache: APICache): Function {
     const invert: number = sortDirection === SORT_DESC ? 1 : -1;
     return (a: string, b: string): number => {
         const itemA: BoxItem = cache.get(a);

@@ -7,7 +7,6 @@
 import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
-import type { ClassComponent } from '../../flowTypes';
 
 type Props = {
     className: string

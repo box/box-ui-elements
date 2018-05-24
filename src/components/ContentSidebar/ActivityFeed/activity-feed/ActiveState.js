@@ -3,13 +3,10 @@
  * @file Active state component for Activity Feed
  */
 import * as React from 'react';
-import type { Node } from 'react';
-
 import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
 import Keywords from '../keywords';
-import type { User, SelectorItems } from '../../../../flowTypes';
 import type {
     TaskHandlers,
     CommentHandlers,
@@ -52,7 +49,7 @@ const ActiveState = ({
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl
-}: Props): Node => (
+}: Props): React.Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
             const { type, id, errorCode, versions } = item;

@@ -10,7 +10,7 @@ import iconCellRenderer from '../Item/iconCellRenderer';
 import ItemName from '../Item/ItemName';
 import ItemSubDetails from '../Item/ItemSubDetails';
 import { TYPE_FOLDER, VIEW_FOLDER } from '../../constants';
-import type { BoxItem } from '../../flowTypes';
+
 import './Cell.scss';
 
 export default (onExpanderClick: Function, onItemClick: Function, isSmall: boolean = false, isLoading: boolean) => ({

@@ -9,7 +9,7 @@ import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
 import FolderIcon from 'box-react-ui/lib/icons/folder-icon/FolderIcon';
 import BookmarkIcon from 'box-react-ui/lib/icons/bookmark-icon/BookmarkIcon';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../constants';
-import type { BoxItem } from '../../flowTypes';
+
 import './IconCell.scss';
 
 export function getIcon(dimension: number, rowData: BoxItem) {

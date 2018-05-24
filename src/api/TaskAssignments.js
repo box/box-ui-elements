@@ -5,7 +5,6 @@
  */
 
 import Base from './Base';
-import type { BoxItem } from '../flowTypes';
 import { PERMISSION_CAN_COMMENT } from '../constants';
 
 class TaskAssignments extends Base {

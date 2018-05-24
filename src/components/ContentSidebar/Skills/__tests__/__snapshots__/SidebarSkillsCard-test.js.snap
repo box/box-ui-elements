@@ -15,16 +15,6 @@ exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render an err
 </Component>
 `;
 
-exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keyvalues component 1`] = `
-<Keyvalues
-  card={
-    Object {
-      "skill_card_type": "keyvalue",
-    }
-  }
-/>
-`;
-
 exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keywords component 1`] = `
 <Keywords
   card={

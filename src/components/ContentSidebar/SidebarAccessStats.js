@@ -8,7 +8,7 @@ import React from 'react';
 import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
 import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
-import type { FileAccessStats, BoxItem } from '../../flowTypes';
+
 import messages from '../messages';
 import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';

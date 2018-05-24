@@ -10,7 +10,6 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import 'react-virtualized/styles.css';
 import cellRenderer from './cellRenderer';
 import { FIELD_NAME } from '../../constants';
-import type { BoxItem } from '../../flowTypes';
 
 type Props = {
     onItemClick: Function,

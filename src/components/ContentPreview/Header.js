@@ -13,7 +13,7 @@ import IconDownload from 'box-react-ui/lib/icons/general/IconDownloadSolid';
 import messages from '../messages';
 import { getIcon } from '../Item/iconCellRenderer';
 import { COLOR_999 } from '../../constants';
-import type { BoxItem } from '../../flowTypes';
+
 import './Header.scss';
 
 type Props = {

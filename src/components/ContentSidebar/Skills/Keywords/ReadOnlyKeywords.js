@@ -9,7 +9,6 @@ import PillCloud from 'box-react-ui/lib/components/pill-cloud/PillCloud';
 import Timeline from '../Timeline';
 import getPills from './keywordUtils';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
-import type { SkillCardEntry } from '../../../../flowTypes';
 import type { Pill, Pills } from './flowTypes';
 import './ReadOnlyKeywords.scss';
 

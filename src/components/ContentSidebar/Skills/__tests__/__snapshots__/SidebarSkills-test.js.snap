@@ -38,7 +38,12 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
   <sidebar-section
     interactionTarget=""
     key="card_1"
-    title={<FormattedMessage />}
+    title={
+      <FormattedMessage
+        defaultMessage="Skill Card"
+        id="be.defaultSkill"
+      />
+    }
   >
     <sidebar-skills-card
       appElement={[MockFunction]}
@@ -78,7 +83,12 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
   <sidebar-section
     interactionTarget=""
     key="card_2"
-    title={<FormattedMessage />}
+    title={
+      <FormattedMessage
+        defaultMessage="Skill Card"
+        id="be.defaultSkill"
+      />
+    }
   >
     <sidebar-skills-card
       appElement={[MockFunction]}

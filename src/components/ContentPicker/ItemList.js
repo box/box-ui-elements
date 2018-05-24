@@ -17,12 +17,12 @@ import iconCellRenderer from '../Item/iconCellRenderer';
 import isRowSelectable from './cellRendererHelper';
 import { isFocusableElement, focus } from '../../util/dom';
 import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
-import type { View, BoxItem, Collection } from '../../flowTypes';
+
 import './ItemList.scss';
 
 type Props = {
     rootId: string,
-    rootElement: HTMLElement,
+    rootElement?: HTMLElement,
     focusedRow: number,
     onItemSelect: Function,
     onItemClick: Function,

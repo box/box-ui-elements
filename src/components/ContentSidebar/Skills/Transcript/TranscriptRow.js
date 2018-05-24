@@ -9,7 +9,7 @@ import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import ReadOnlyTranscriptRow from './ReadOnlyTranscriptRow';
 import EditingTranscriptRow from './EditingTranscriptRow';
 import { isValidTimeSlice } from './timeSliceUtils';
-import type { SkillCardEntryTimeSlice } from '../../../../flowTypes';
+
 import './TranscriptRow.scss';
 
 type Props = {
