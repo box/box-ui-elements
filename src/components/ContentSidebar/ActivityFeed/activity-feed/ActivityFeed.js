@@ -44,7 +44,7 @@ type Props = {
 
 type State = {
     isInputOpen: boolean,
-    feedItems?: Array<Comment | Task | BoxItemVersion>
+    feedItems: Array<Comment | Task | BoxItemVersion>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
@@ -54,7 +54,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
     state = {
         isInputOpen: false,
-        feedItems: undefined
+        feedItems: []
     };
 
     feedContainer: null | HTMLElement;
@@ -168,7 +168,7 @@ class ActivityFeed extends React.Component<Props, State> {
     componentWillReceiveProps(nextProps: any): void {
         const { comments, tasks, versions } = nextProps;
         const { feedItems } = this.state;
-        if (!feedItems) {
+        if (!feedItems.length) {
             this.sortFeedItems(comments, tasks, versions);
         }
     }
@@ -224,7 +224,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className='bcs-activity-feed-items-container'
                 >
-                    {shouldShowEmptyState(feedItems || []) ? (
+                    {shouldShowEmptyState(feedItems) ? (
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
