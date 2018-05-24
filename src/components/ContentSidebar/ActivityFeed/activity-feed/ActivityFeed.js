@@ -6,12 +6,13 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import uniqueId from 'lodash/uniqueId';
 import classNames from 'classnames';
 
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
-import { collapseFeedState, shouldShowEmptyState, uuidv4 } from './activityFeedUtils';
+import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import type {
     BoxItemVersion,
     FileVersions,
@@ -137,7 +138,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {void}
      */
     createComment = ({ text, hasMention }: { text: string, hasMention: boolean }): void => {
-        const uuid = uuidv4();
+        const uuid = uniqueId();
         const comment = {
             id: uuid,
             tagged_message: text,
