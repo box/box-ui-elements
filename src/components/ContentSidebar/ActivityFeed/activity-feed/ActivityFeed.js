@@ -136,8 +136,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {any} args - Data returned by the Comment component on comment creation.
      * @return {void}
      */
-    createComment = (args: any): void => {
-        const { text, hasMention } = args;
+    createComment = ({ text, hasMention }: { text: string, hasMention: boolean }): void => {
         const uuid = uuidv4();
         const comment = {
             id: uuid,
@@ -287,6 +286,8 @@ class ActivityFeed extends React.Component<Props, State> {
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={this.updateTaskAssignment}
                             onCommentDelete={hasCommentPermission ? this.deleteComment : noop}
+                            // We don't know task edit/delete specific permissions,
+                            // but you must at least be able to comment to do these operations.
                             onTaskDelete={hasCommentPermission ? this.deleteTask : noop}
                             onTaskEdit={hasCommentPermission ? this.updateTask : noop}
                             onVersionInfo={this.openVersionHistoryPopup}
