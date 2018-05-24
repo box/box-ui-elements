@@ -21,7 +21,7 @@ import {
     TYPE_FILE,
     TYPE_WEBLINK
 } from '../../constants';
-import type { BoxItem } from '../../flowTypes';
+
 import './MoreOptionsCell.scss';
 
 export default (

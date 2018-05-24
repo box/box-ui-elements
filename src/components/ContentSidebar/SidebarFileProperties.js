@@ -10,14 +10,14 @@ import { injectIntl } from 'react-intl';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
-import type { BoxItem } from '../../flowTypes';
+
 import { FIELD_METADATA_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
 type Props = {
     file: BoxItem,
     onDescriptionChange: Function,
-    hasClassification: Boolean,
+    hasClassification: boolean,
     onClassificationClick: ?Function,
     intl: any
 };

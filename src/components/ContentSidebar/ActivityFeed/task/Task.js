@@ -12,7 +12,7 @@ import CompletedAssignment from './CompletedAssignment';
 import messages from '../../../messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
-import type { ActionItemError, User, SelectorItems } from '../../../../flowTypes';
+
 import type {
     CommentHandlers,
     ContactHandlers,

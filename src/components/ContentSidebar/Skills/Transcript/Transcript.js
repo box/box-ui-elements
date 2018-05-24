@@ -19,7 +19,7 @@ import { COLOR_999 } from '../../../../constants';
 import { copy } from '../../../../util/download';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 import messages from '../../../messages';
-import type { SkillCard, SkillCardEntry, SkillCardEntryTimeSlice } from '../../../../flowTypes';
+
 import './Transcript.scss';
 
 type Props = {

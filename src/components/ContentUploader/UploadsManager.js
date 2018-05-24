@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import ItemList from './ItemList';
 import OverallUploadsProgressBar from './OverallUploadsProgressBar';
 import './UploadsManager.scss';
-import type { UploadItem, View } from '../../flowTypes';
+
 import { STATUS_ERROR } from '../../constants';
 
 type Props = {

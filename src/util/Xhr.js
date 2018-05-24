@@ -5,7 +5,6 @@
  */
 
 import axios from 'axios';
-import type { Axios, CancelTokenSource } from 'axios';
 import getProp from 'lodash/get';
 import TokenService from './TokenService';
 import {
@@ -17,7 +16,6 @@ import {
     HTTP_DELETE,
     HTTP_OPTIONS
 } from '../constants';
-import type { Method, StringMap, StringAnyMap, Options, Token } from '../flowTypes';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
 

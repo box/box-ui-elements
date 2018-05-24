@@ -7,7 +7,6 @@
 import React, { PureComponent } from 'react';
 import noop from 'lodash/noop';
 import { isInputElement } from '../util/dom';
-import type { BoxItem } from '../flowTypes';
 
 type Props = {
     children: Function,

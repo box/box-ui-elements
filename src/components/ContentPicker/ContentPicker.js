@@ -45,18 +45,6 @@ import {
     ERROR_CODE_ITEM_NAME_IN_USE,
     TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
-import type {
-    BoxItem,
-    Collection,
-    View,
-    SortDirection,
-    SortBy,
-    Access,
-    BoxItemPermission,
-    Token,
-    DefaultView,
-    StringMap
-} from '../../flowTypes';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -83,7 +71,7 @@ type Props = {
     isLarge: boolean,
     isTouch: boolean,
     className: string,
-    measureRef: Function,
+    measureRef?: Function,
     defaultView: DefaultView,
     chooseButtonLabel?: string,
     cancelButtonLabel?: string,

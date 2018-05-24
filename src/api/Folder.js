@@ -13,16 +13,6 @@ import WebLinkAPI from '../api/WebLink';
 import { getFieldsAsString } from '../util/fields';
 import { CACHE_PREFIX_FOLDER, X_REP_HINTS } from '../constants';
 import { getBadItemError } from '../util/error';
-import type Cache from '../util/Cache';
-import type {
-    BoxItem,
-    BoxItemCollection,
-    FlattenedBoxItem,
-    FlattenedBoxItemCollection,
-    SortBy,
-    SortDirection,
-    Collection
-} from '../flowTypes';
 
 const LIMIT_ITEM_FETCH = 1000;
 
@@ -104,7 +94,7 @@ class Folder extends Item {
      * @return {boolean} if items are loaded
      */
     isLoaded(): boolean {
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         if (!cache.has(this.key)) {
             return false;
         }
@@ -122,7 +112,7 @@ class Folder extends Item {
             return;
         }
 
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         const folder: FlattenedBoxItem = cache.get(this.key);
         const sortedFolder: FlattenedBoxItem = sort(folder, this.sortBy, this.sortDirection, cache);
 
@@ -305,7 +295,7 @@ class Folder extends Item {
             return;
         }
         const childKey: string = this.getCacheKey(childId);
-        const cache: Cache = this.getCache();
+        const cache: APICache = this.getCache();
         const parent: FlattenedBoxItem = cache.get(this.key);
 
         const { item_collection }: FlattenedBoxItem = parent;

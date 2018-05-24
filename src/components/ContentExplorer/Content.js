@@ -9,7 +9,6 @@ import ItemList from './ItemList';
 import EmptyState from '../EmptyState';
 import ProgressBar from '../ProgressBar';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
-import type { Collection, View } from '../../flowTypes';
 import './Content.scss';
 
 /**
@@ -28,7 +27,7 @@ type Props = {
     view: View,
     rootId: string,
     tableRef: Function,
-    rootElement: HTMLElement,
+    rootElement?: HTMLElement,
     canShare: boolean,
     canDownload: boolean,
     canDelete: boolean,

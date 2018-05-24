@@ -7,7 +7,7 @@
 import React from 'react';
 import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderRight from './SubHeaderRight';
-import type { View, Collection } from '../../flowTypes';
+
 import './SubHeader.scss';
 
 type Props = {

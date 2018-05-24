@@ -7,8 +7,6 @@
 
 import { defineMessages } from 'react-intl';
 
-import type { MessageDescriptor } from 'react-intl';
-
 const messages: { [string]: MessageDescriptor } = defineMessages({
     today: {
         id: 'be.today',
@@ -345,20 +343,30 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for file properties section in the preview sidebar',
         defaultMessage: 'File Properties'
     },
+    defaultSkill: {
+        id: 'be.defaultSkill',
+        description: 'Label for default skill section in the preview sidebar',
+        defaultMessage: 'Skill Card'
+    },
     keywordSkill: {
         id: 'be.keywordSkill',
         description: 'Label for keywords skill section in the preview sidebar',
         defaultMessage: 'Keywords'
     },
+    faceSkill: {
+        id: 'be.faceSkill',
+        description: 'Label for face skill section in the preview sidebar',
+        defaultMessage: 'Faces'
+    },
     timelineSkill: {
         id: 'be.timelineSkill',
-        description: 'Label for timelines skill section in the preview sidebar',
-        defaultMessage: 'Timelines'
+        description: 'Label for face skill section in the preview sidebar',
+        defaultMessage: 'Faces'
     },
     transcriptSkill: {
         id: 'be.transcriptSkill',
-        description: 'Label for transcripts skill section in the preview sidebar',
-        defaultMessage: 'Transcripts'
+        description: 'Label for transcript skill section in the preview sidebar',
+        defaultMessage: 'Transcript'
     },
     skillUnknownError: {
         id: 'be.skillUnknownError',

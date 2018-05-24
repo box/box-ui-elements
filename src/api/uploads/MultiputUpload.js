@@ -12,7 +12,6 @@ import { digest } from '../../util/webcrypto';
 import hexToBase64 from '../../util/base64';
 import { DEFAULT_RETRY_DELAY_MS } from '../../constants';
 import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
-import type { StringAnyMap, MultiputConfig, Options } from '../../flowTypes';
 import createWorker from '../../util/uploadsSHA1Worker';
 
 // Constants used for specifying log event types.

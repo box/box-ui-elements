@@ -8,7 +8,7 @@ import React from 'react';
 import { InlineBreadcrumbs } from '../Breadcrumbs';
 import { VIEW_SEARCH, VIEW_SELECTED } from '../../constants';
 import ItemSubDetails from './ItemSubDetails';
-import type { View, BoxItem } from '../../flowTypes';
+
 import './ItemDetails.scss';
 
 type Props = {

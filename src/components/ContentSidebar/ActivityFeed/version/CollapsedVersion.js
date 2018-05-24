@@ -9,8 +9,6 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
-import type { User, FileVersions } from '../../../../flowTypes';
-
 import messages from '../../../messages';
 
 import './Version.scss';

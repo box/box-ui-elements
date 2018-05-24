@@ -5,7 +5,6 @@
  */
 import noop from 'lodash/noop';
 import BaseMultiput from './BaseMultiput';
-import type { MultiputConfig, Options, MultiputData } from '../../flowTypes';
 import { updateQueryParameters } from '../../util/url';
 import { HTTP_PUT } from '../../constants';
 import { getBoundedExpBackoffRetryDelay } from '../../util/uploads';

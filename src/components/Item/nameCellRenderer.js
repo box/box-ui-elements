@@ -8,7 +8,7 @@ import React from 'react';
 import ItemName from './ItemName';
 import ItemDetails from './ItemDetails';
 import { VIEW_SEARCH } from '../../constants';
-import type { View, BoxItem } from '../../flowTypes';
+
 import './NameCell.scss';
 
 export default (
