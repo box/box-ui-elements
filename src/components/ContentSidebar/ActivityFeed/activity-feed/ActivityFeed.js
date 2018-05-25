@@ -160,15 +160,45 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
+    /**
+     * Determine whether or not a sort should occur, based on new comments, tasks, versions. Also
+     * clears the feed state of old data if the file has been changed.
+     *
+     * @param {Comments} - [comments] - Object containing comments for the file.
+     * @param {Tasks} - [tasks] - Object containing tasks for the file.
+     * @param {FileVersions} - [versions] Object containing versions of the file.
+     * @param {BoxItem} - [file] The box file that comments, tasks, and versions belong to.
+     * @return {boolean} True if the feed should be sorted with new items.
+     */
+    shouldSortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file?: BoxItem): boolean {
+        if (!comments || !tasks || !versions) {
+            return false;
+        }
+
+        // Reset feed items if the file has changed
+        const { file: oldFile } = this.props;
+        if (file && file.id !== oldFile.id) {
+            this.setState({ feedItems: [] });
+        }
+
+        return true;
+    }
+
     componentDidMount(): void {
-        const { comments, tasks, versions } = this.props;
-        this.sortFeedItems(comments, tasks, versions);
+        const { comments, tasks, versions, file } = this.props;
+        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions, file);
+        if (shouldSort) {
+            // $FlowFixMe
+            this.sortFeedItems(comments, tasks, versions);
+        }
     }
 
     componentWillReceiveProps(nextProps: any): void {
-        const { comments, tasks, versions } = nextProps;
+        const { comments, tasks, versions, file } = nextProps;
         const { feedItems } = this.state;
-        if (!feedItems.length) {
+        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions, file);
+        if (shouldSort && !feedItems.length) {
+            // $FlowFixMe
             this.sortFeedItems(comments, tasks, versions);
         }
     }
@@ -179,14 +209,8 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param args Array<?Comments | ?Tasks | ?FileVersions> - Arguments list of each item container
      * type that is allowed in the feed.
      */
-    sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): void {
+    sortFeedItems(...args: Array<Comments | Tasks | FileVersions>): void {
         const feedItems = [];
-
-        // If all items are not ready, don't sort and render the feed
-        if (args.some((itemContainer) => !itemContainer || !itemContainer.entries)) {
-            return;
-        }
-
         args.forEach((itemContainer) => {
             // $FlowFixMe
             feedItems.push(...itemContainer.entries);
