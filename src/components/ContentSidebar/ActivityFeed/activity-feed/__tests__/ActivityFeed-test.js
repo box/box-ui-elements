@@ -171,11 +171,8 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('shouldSortFeedItems()', () => {
         let wrapper;
         let instance;
-        const file = {
-            id: '12345'
-        };
         beforeEach(() => {
-            wrapper = shallow(<ActivityFeed inputState={{ currentUser }} file={file} />);
+            wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
             instance = wrapper.instance();
         });
 
@@ -198,35 +195,37 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const result = instance.shouldSortFeedItems(comments, tasks, versions);
             expect(result).toBe(true);
         });
-
-        it('should not clear feed state if missing any comments, tasks, or versions', () => {
-            instance.setState({ feedItems: [...comments.entries] });
-            instance.shouldSortFeedItems(comments, undefined, versions, { id: 'abcdef' });
-            const { feedItems } = instance.state;
-            expect(feedItems.length).toBe(comments.entries.length);
-        });
-
-        it('should clear feed state if a new file', () => {
-            instance.setState({ feedItems: [...comments.entries] });
-            instance.shouldSortFeedItems(comments, tasks, versions, { id: 'abcdef' });
-            const { feedItems } = instance.state;
-            expect(feedItems.length).toBe(0);
-        });
     });
 
-    // shouldSortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file?: BoxItem): boolean {
-    //     if (!comments || !tasks || !versions) {
-    //         return false;
-    //     }
+    describe('clearFeedState()', () => {
+        let wrapper;
+        let instance;
+        const file = {
+            id: '12345'
+        };
+        beforeEach(() => {
+            wrapper = shallow(<ActivityFeed inputState={{ currentUser }} file={file} />);
+            instance = wrapper.instance();
+        });
 
-    //     // Reset feed items if the file has changed
-    //     const { file: oldFile } = this.props;
-    //     if (file && file.id !== oldFile.id) {
-    //         this.setState({ feedItems: [] });
-    //     }
+        it('should not clear feed state if using the same file', (done) => {
+            instance.setState({ feedItems: [...comments.entries] });
+            instance.clearFeedState(file).then(() => {
+                const { feedItems } = instance.state;
+                expect(feedItems.length).toBe(comments.entries.length);
+                done();
+            });
+        });
 
-    //     return true;
-    // }
+        it('should clear feed state if a new file', (done) => {
+            instance.setState({ feedItems: [...comments.entries] });
+            instance.clearFeedState({ id: 'abcdef' }).then(() => {
+                const { feedItems } = instance.state;
+                expect(feedItems.length).toBe(0);
+                done();
+            });
+        });
+    });
 
     describe('componentWillReceiveProps()', () => {
         test('should invoke sortFeedItems() with new props', () => {
