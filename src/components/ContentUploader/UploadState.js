@@ -12,7 +12,7 @@ import UploadSuccessState from 'box-react-ui/lib/icons/states/UploadSuccessState
 import messages from '../messages';
 import UploadStateContent from './UploadStateContent';
 import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
-import type { View } from '../../flowTypes';
+
 import './UploadState.scss';
 
 type Props = {

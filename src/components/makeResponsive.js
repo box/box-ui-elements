@@ -8,16 +8,12 @@ import * as React from 'react';
 import Measure from 'react-measure';
 import classNames from 'classnames';
 import { SIZE_LARGE, SIZE_MEDIUM, SIZE_SMALL, CLASS_IS_SMALL, CLASS_IS_TOUCH, CLASS_IS_MEDIUM } from '../constants';
-import type { Size } from '../flowTypes';
 
 type Props = {
     isTouch: boolean,
-    isSmall: boolean,
-    isLarge: boolean,
-    isMedium: boolean,
-    size: Size,
+    size?: Size,
     className: string,
-    componentRef: Function
+    componentRef?: Function
 };
 
 type State = {
@@ -26,7 +22,7 @@ type State = {
 
 const CROSS_OVER_WIDTH_SMALL = 600;
 const CROSS_OVER_WIDTH_MEDIUM = 800;
-const HAS_TOUCH = 'ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch);
+const HAS_TOUCH = !!('ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch));
 
 function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<any> {
     return class extends React.PureComponent<Props, State> {
@@ -34,6 +30,7 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
         state: State;
 
         static defaultProps = {
+            className: '',
             isTouch: HAS_TOUCH
         };
 

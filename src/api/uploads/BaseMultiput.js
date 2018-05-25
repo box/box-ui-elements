@@ -4,7 +4,6 @@
  * @author Box
  */
 import BaseUpload from './BaseUpload';
-import type { MultiputConfig, Options } from '../../flowTypes';
 
 const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     digestReadahead: 5, // How many parts past those currently uploading to precompute digest for

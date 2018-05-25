@@ -5,7 +5,6 @@
  */
 import * as React from 'react';
 import AvatarComponent from 'box-react-ui/lib/components/avatar';
-import type { User } from '../../../flowTypes';
 
 type Props = {
     user: User,

@@ -9,7 +9,6 @@ import Breadcrumb from './Breadcrumb';
 import BreadcrumbDropdown from './BreadcrumbDropdown';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
 import { DELIMITER_SLASH, DELIMITER_CARET } from '../../constants';
-import type { Crumb, Delimiter } from '../../flowTypes';
 import './Breadcrumbs.scss';
 
 type Props = {

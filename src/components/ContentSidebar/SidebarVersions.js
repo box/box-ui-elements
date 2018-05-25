@@ -6,7 +6,7 @@
 
 import React from 'react';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
-import type { BoxItem } from '../../flowTypes';
+
 import { DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 

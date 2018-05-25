@@ -4,8 +4,6 @@
  * @author Box
  */
 
-import type { StringAnyMap } from '../flowTypes';
-
 class Cache {
     /**
      * @property {*}

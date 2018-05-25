@@ -10,7 +10,6 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
 import messages from '../../../messages';
-import type { User } from '../../../../flowTypes';
 
 import './Version.scss';
 

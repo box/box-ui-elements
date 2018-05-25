@@ -10,7 +10,6 @@ import getSize from '../../util/size';
 import Datefield from '../Date';
 import messages from '../messages';
 import { VIEW_RECENTS } from '../../constants';
-import type { BoxItem, View } from '../../flowTypes';
 
 type Props = {
     item: BoxItem,

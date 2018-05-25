@@ -13,17 +13,6 @@ import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import type {
-    BoxItemVersion,
-    FileVersions,
-    Comment,
-    Comments,
-    Task,
-    Tasks,
-    User,
-    SelectorItems,
-    BoxItem
-} from '../../../../flowTypes';
-import type {
     CommentHandlers,
     TaskHandlers,
     ContactHandlers,

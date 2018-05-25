@@ -13,7 +13,7 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import messages from '../messages';
 import ShareAccessSelect from '../ShareAccessSelect';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
-import type { BoxItem } from '../../flowTypes';
+
 import './ShareDialog.scss';
 
 type Props = {

@@ -11,7 +11,7 @@ import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
-import type { SkillCard, SkillCardEntry } from '../../../../flowTypes';
+
 import './Keywords.scss';
 
 type Props = {

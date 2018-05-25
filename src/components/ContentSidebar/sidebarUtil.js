@@ -4,8 +4,6 @@
  * @author Box
  */
 
-import type { ContentSidebarProps } from './ContentSidebar';
-
 /**
  * Determines if we should bother rednering the sidebar
  *

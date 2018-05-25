@@ -10,7 +10,7 @@ const KEY_PREFIX = 'localStore';
 const SERVICE_VERSION = '0';
 
 class LocalStore {
-    memoryStore: Cache;
+    memoryStore: APICache;
     localStorage: typeof localStorage;
     isLocalStorageAvailable: boolean;
 

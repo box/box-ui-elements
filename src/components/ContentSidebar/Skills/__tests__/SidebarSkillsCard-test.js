@@ -4,7 +4,6 @@ import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import SidebarSkillsCard, { SidebarSkillsCardComponent } from '../SidebarSkillsCard';
 import Transcript from '../Transcript';
 import Keywords from '../Keywords';
-import Keyvalues from '../Keyvalues';
 import Faces from '../Faces';
 
 jest.mock('box-react-ui/lib/components/error-mask/ErrorMask', () => 'error-mask-mock');
@@ -28,14 +27,6 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
         const wrapper = getWrapper(cardProps);
 
         expect(wrapper.find(Keywords)).toHaveLength(1);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render keyvalues component', () => {
-        cardProps.card.skill_card_type = 'keyvalue';
-        const wrapper = getWrapper(cardProps);
-
-        expect(wrapper.find(Keyvalues)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 

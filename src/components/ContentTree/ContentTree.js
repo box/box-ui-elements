@@ -28,7 +28,7 @@ import {
     SORT_ASC,
     TYPED_ID_FOLDER_PREFIX
 } from '../../constants';
-import type { BoxItem, Collection, View, Token, StringMap } from '../../flowTypes';
+
 import '../fonts.scss';
 import '../base.scss';
 

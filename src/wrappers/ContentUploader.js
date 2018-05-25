@@ -9,7 +9,6 @@ import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentUploaderPopup from '../components/ContentUploader/ContentUploaderPopup';
 import ContentUploaderComponent from '../components/ContentUploader/ContentUploader';
-import type { BoxItem, ModalOptions } from '../flowTypes';
 
 class ContentUploader extends ES6Wrapper {
     /**

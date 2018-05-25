@@ -11,9 +11,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import ContentPreview from '../ContentPreview';
 import messages from '../messages';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
-import Cache from '../../util/Cache';
-import type { BoxItem, Collection, Token } from '../../flowTypes';
-import type { ContentPreviewProps } from '../ContentPreview';
 
 type Props = {
     isOpen: boolean,
@@ -26,7 +23,7 @@ type Props = {
     isTouch: boolean,
     onPreview: Function,
     canDownload: boolean,
-    cache: Cache,
+    cache: APICache,
     apiHost: string,
     appHost: string,
     staticHost: string,

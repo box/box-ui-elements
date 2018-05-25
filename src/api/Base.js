@@ -5,7 +5,6 @@
  */
 
 import noop from 'lodash/noop';
-import type { $AxiosError } from 'axios';
 import Xhr from '../util/Xhr';
 import Cache from '../util/Cache';
 import { getTypedFileId } from '../util/file';
@@ -18,13 +17,12 @@ import {
     HTTP_PUT,
     HTTP_DELETE
 } from '../constants';
-import type { Options } from '../flowTypes';
 
 class Base {
     /**
      * @property {Cache}
      */
-    cache: Cache;
+    cache: APICache;
 
     /**
      * @property {boolean}
@@ -161,7 +159,7 @@ class Base {
      *
      * @return {Cache} cache instance
      */
-    getCache(): Cache {
+    getCache(): APICache {
         return this.cache;
     }
 

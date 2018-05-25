@@ -3,25 +3,43 @@
         ["env", {
             "modules": false
         }],
+        "stage-1",
         "react",
         "flow"
     ],
-    "plugins": [
-        "transform-class-properties",
-        "transform-export-extensions",
-        "transform-object-rest-spread",
-        "transform-regenerator",
-        [
-            "react-intl",
-            {
-                "enforceDescriptions": true,
-                "messagesDir": "./i18n/json"
-            }
-        ]
-    ],
     "env": {
+        "dev": {
+            "plugins": [
+                "flow-react-proptypes",
+                [
+                    "react-intl",
+                    {
+                        "enforceDescriptions": true,
+                        "messagesDir": "./i18n/json"
+                    }
+                ]
+            ]
+        },
+        "production": {
+            "plugins": [
+                [
+                    "react-intl",
+                    {
+                        "enforceDescriptions": true,
+                        "messagesDir": "./i18n/json"
+                    }
+                ]
+            ]
+        },
         "npm": {
             "plugins": [
+                [
+                    "react-intl",
+                    {
+                        "enforceDescriptions": true,
+                        "messagesDir": "./i18n/json"
+                    }
+                ],
                 [
                     "babel-plugin-transform-require-ignore", {
                         "extensions": [".scss", ".css"]
@@ -33,15 +51,15 @@
             "plugins": [
                 "transform-es2015-modules-commonjs",
                 [
-                    "babel-plugin-transform-require-ignore", {
-                        "extensions": [".scss", ".css"]
-                    }
-                ],
-                [
                     "react-intl",
                     {
                         "enforceDescriptions": false,
                         "messagesDir": "./i18n/json"
+                    }
+                ],
+                [
+                    "babel-plugin-transform-require-ignore", {
+                        "extensions": [".scss", ".css"]
                     }
                 ]
             ]

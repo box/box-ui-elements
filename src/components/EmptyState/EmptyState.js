@@ -12,7 +12,7 @@ import SelectedItemsEmptyState from 'box-react-ui/lib/icons/states/SelectedItems
 import SearchEmptyState from 'box-react-ui/lib/icons/states/SearchEmptyState';
 import messages from '../messages';
 import { VIEW_ERROR, VIEW_FOLDER, VIEW_SEARCH, VIEW_SELECTED } from '../../constants';
-import type { View } from '../../flowTypes';
+
 import './EmptyState.scss';
 
 type Props = {

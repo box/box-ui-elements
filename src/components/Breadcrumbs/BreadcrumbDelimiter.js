@@ -7,7 +7,6 @@
 import React from 'react';
 import IconChevron from 'box-react-ui/lib/icons/general/IconChevron';
 import { DELIMITER_CARET, COLOR_999 } from '../../constants';
-import type { Delimiter } from '../../flowTypes';
 
 type Props = {
     delimiter?: Delimiter

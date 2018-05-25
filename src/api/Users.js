@@ -7,7 +7,6 @@
 import Base from './Base';
 import TokenService from '../util/TokenService';
 import { getTypedFileId } from '../util/file';
-import type { TokenLiteral } from '../flowTypes';
 
 class Users extends Base {
     /**

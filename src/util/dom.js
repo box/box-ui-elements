@@ -59,7 +59,7 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
  * @param {boolean|void} [focusRoot] - if root should be focused
  * @return {void}
  */
-export function focus(root: HTMLElement, selector?: string, focusRoot: boolean = true): void {
+export function focus(root?: HTMLElement, selector?: string, focusRoot: boolean = true): void {
     if (!root) {
         return;
     }

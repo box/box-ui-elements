@@ -9,7 +9,6 @@ import { FormattedMessage } from 'react-intl';
 import Datefield from '../Date';
 import messages from '../messages';
 import { FIELD_INTERACTED_AT } from '../../constants';
-import type { BoxItem } from '../../flowTypes';
 
 export default () => ({ dataKey, rowData }: { dataKey: string, rowData: BoxItem }) => {
     const { modified_at = '', interacted_at = '', modified_by }: BoxItem = rowData;

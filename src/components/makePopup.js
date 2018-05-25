@@ -8,7 +8,7 @@ import React, { PureComponent } from 'react';
 import Modal from 'react-modal';
 import noop from 'lodash/noop';
 import omit from 'lodash/omit';
-import type { ModalOptions } from '../flowTypes';
+
 import { CLIENT_NAME_CONTENT_PICKER, CLIENT_NAME_CONTENT_UPLOADER, CLIENT_NAME_CONTENT_TREE } from '../constants';
 
 type Props = {

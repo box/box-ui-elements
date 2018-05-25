@@ -10,7 +10,6 @@ import ES6Wrapper from './ES6Wrapper';
 import ContentTreePopup from '../components/ContentTree/ContentTreePopup';
 import ContentTreeComponent from '../components/ContentTree/ContentTree';
 import { CLIENT_NAME_CONTENT_TREE } from '../constants';
-import type { ModalOptions, BoxItem } from '../flowTypes';
 
 class ContentTree extends ES6Wrapper {
     /**

@@ -11,7 +11,7 @@ import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import IconMinus from 'box-react-ui/lib/icons/general/IconMinus';
 import { COLOR_999, COLOR_WHITE } from '../../../../constants';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
-import type { SkillCardEntry } from '../../../../flowTypes';
+
 import './Face.scss';
 
 type Props = {
