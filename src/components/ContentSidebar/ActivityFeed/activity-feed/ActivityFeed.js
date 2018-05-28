@@ -161,8 +161,7 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Determine whether or not a sort should occur, based on new comments, tasks, versions. Also
-     * clears the feed state of old data if the file has been changed.
+     * Determine whether or not a sort should occur, based on new comments, tasks, versions.
      *
      * @param {Comments} - [comments] - Object containing comments for the file.
      * @param {Tasks} - [tasks] - Object containing tasks for the file.
@@ -180,40 +179,42 @@ class ActivityFeed extends React.Component<Props, State> {
     /**
      *  If the file has changed, clear out the feed state.
      *
-     * @param {BoxItem} - [file] The box file that comments, tasks, and versions belong to.
-     * @return {void}
+     * @param {BoxItem} [file] The box file that comments, tasks, and versions belong to.
+     * @return {Promise} - A promise that resolves in 'true' if the feedItems are empty.
      */
-    clearFeedState(file?: BoxItem): void {
+    clearFeedItems(file?: BoxItem): Promise<boolean> {
         const { file: oldFile } = this.props;
         if (file && file.id !== oldFile.id) {
             return new Promise((resolve) => {
-                this.setState({ feedItems: [] }, resolve);
+                this.setState({ feedItems: [] }, () => {
+                    resolve(true);
+                });
             });
         }
 
-        return Promise.resolve();
+        // Also check to see if the feedItems list is empty.
+        const { feedItems } = this.state;
+        return Promise.resolve(!feedItems.length);
     }
 
     componentDidMount(): void {
         const { comments, tasks, versions, file } = this.props;
-        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
-        if (shouldSort) {
-            this.clearFeedState(file).then(() => {
-                // $FlowFixMe
-                this.sortFeedItems(comments, tasks, versions);
-            });
-        }
+        this.updateFeedItems(comments, tasks, versions, file);
     }
 
     componentWillReceiveProps(nextProps: any): void {
         const { comments, tasks, versions, file } = nextProps;
-        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
-        if (shouldSort) {
-            this.clearFeedState(file).then(() => {
+        this.updateFeedItems(comments, tasks, versions, file);
+    }
+
+    updateFeedItems(comments, tasks, versions, file) {
+        this.clearFeedItems(file).then((isEmpty) => {
+            const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
+            if (shouldSort && isEmpty) {
                 // $FlowFixMe
                 this.sortFeedItems(comments, tasks, versions);
-            });
-        }
+            }
+        });
     }
 
     /**
