@@ -78,11 +78,17 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render activity state', () => {
+    test('should correctly render activity state', (done) => {
         const wrapper = shallow(
             <ActivityFeed currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
-        expect(wrapper).toMatchSnapshot();
+
+        // To simulate promise resolution in `clearFeedItems()`
+        window.setTimeout(() => {
+            wrapper.update();
+            expect(wrapper).toMatchSnapshot();
+            done();
+        });
     });
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
@@ -197,29 +203,29 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
     });
 
-    describe('clearFeedState()', () => {
+    describe('clearFeedItems()', () => {
         let wrapper;
         let instance;
         const file = {
             id: '12345'
         };
         beforeEach(() => {
-            wrapper = shallow(<ActivityFeed inputState={{ currentUser }} file={file} />);
+            wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
             instance = wrapper.instance();
         });
 
-        it('should not clear feed state if using the same file', (done) => {
+        it('should not clear feed items if using the same file', (done) => {
             instance.setState({ feedItems: [...comments.entries] });
-            instance.clearFeedState(file).then(() => {
+            instance.clearFeedItems(file).then(() => {
                 const { feedItems } = instance.state;
                 expect(feedItems.length).toBe(comments.entries.length);
                 done();
             });
         });
 
-        it('should clear feed state if a new file', (done) => {
+        it('should clear feed items if a new file', (done) => {
             instance.setState({ feedItems: [...comments.entries] });
-            instance.clearFeedState({ id: 'abcdef' }).then(() => {
+            instance.clearFeedItems({ id: 'abcdef' }).then(() => {
                 const { feedItems } = instance.state;
                 expect(feedItems.length).toBe(0);
                 done();
@@ -228,19 +234,23 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     describe('componentWillReceiveProps()', () => {
-        test('should invoke sortFeedItems() with new props', () => {
+        test('should invoke sortFeedItems() with new props', (done) => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
             const instance = wrapper.instance();
-            instance.sortFeedItems = jest.fn();
+            instance.clearFeedItems = () => Promise.resolve(true);
+            instance.sortFeedItems = (com, tas, vers) => {
+                expect(com).toEqual(comments);
+                expect(tas).toEqual(tasks);
+                expect(vers).toEqual(versions);
+                done();
+            };
             instance.componentWillReceiveProps(props);
-
-            expect(instance.sortFeedItems).toBeCalledWith(comments, tasks, versions);
         });
 
-        test('should not invoke sortFeedItems() once feedState has already been set', () => {
+        test('should not invoke sortFeedItems() once feedItems has already been set', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
             const instance = wrapper.instance();
             instance.componentWillReceiveProps(props);
 
@@ -252,8 +262,9 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() if all feed items are not present', () => {
             const props = { comments, tasks };
-            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
             const instance = wrapper.instance();
+            instance.clearFeedItems = () => Promise.resolve(true);
             instance.sortFeedItems = jest.fn();
             instance.componentWillReceiveProps(props);
 
@@ -263,7 +274,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     describe('sortFeedItems()', () => {
         it('should sort items based on date', () => {
-            const wrapper = shallow(<ActivityFeed inputState={{ currentUser }} />);
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
             const instance = wrapper.instance();
 
             instance.sortFeedItems(comments, tasks);
