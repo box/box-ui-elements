@@ -207,7 +207,7 @@ class ActivityFeed extends React.Component<Props, State> {
         this.updateFeedItems(comments, tasks, versions, file);
     }
 
-    updateFeedItems(comments, tasks, versions, file) {
+    updateFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file: BoxItem) {
         this.clearFeedItems(file).then((isEmpty) => {
             const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
             if (shouldSort && isEmpty) {
