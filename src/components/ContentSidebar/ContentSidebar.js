@@ -126,7 +126,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /* @property {State} - Initial state of the component */
-    initialState;
+    initialState: State;
 
     /**
      * [constructor]
