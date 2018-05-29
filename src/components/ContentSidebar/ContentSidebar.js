@@ -638,7 +638,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {boolean} hasMention - The comment's text
      * @return {Promise} Resolves when comment has been created. Rejects when error creating comment.
      */
-    onCommentCreate = (text: string, hasMention: boolean): Promise<Comment> => {
+    onCommentCreate = (
+        text: string,
+        hasMention: boolean,
+        successCallback: (comment: Comment) => void = noop,
+        errorCallback: (e: Error) => void = noop
+    ): Promise<Comment> => {
         const { file } = this.state;
 
         if (!file) {
@@ -653,18 +658,17 @@ class ContentSidebar extends PureComponent<Props, State> {
             message.message = text;
         }
 
-        return new Promise((resolve, reject) => {
-            const onSuccess = (comment) => {
+        this.api.getCommentsAPI(false).createComment({
+            file,
+            ...message,
+            successCallback: (comment: Comment) => {
                 this.onCommentCreateSuccess(comment);
-                resolve(comment);
-            };
-
-            this.api.getCommentsAPI(false).createComment({
-                file,
-                ...message,
-                successCallback: onSuccess,
-                errorCallback: reject
-            });
+                successCallback(comment);
+            },
+            errorCallback: (e: Error) => {
+                this.errorCallback(e);
+                errorCallback(e);
+            }
         });
     };
 

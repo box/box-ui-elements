@@ -114,6 +114,32 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
+     * Callback for successful creation of a Comment.
+     *
+     * @param {Comment} commentData - API returned Comment
+     * @param {string} id - ID of the feed item to update with the new comment data
+     * @return {void}
+     */
+    createCommentSuccessCallback = (commentData: Comment, id: string): void => {
+        const { message, tagged_message } = commentData;
+        // Comment component uses tagged_message only
+        commentData.tagged_message = tagged_message || message;
+
+        this.updateFeedItem(commentData, id);
+    };
+
+    /**
+     * Callback for error while creating of a Comment.
+     *
+     * @param {Error} error - Error thrown while creating the Comment
+     * @param {string} id - ID of the feed item to update as no longer pending
+     * @return {void}
+     */
+    createCommentErrorCallback = (error: Error, id: string): void => {
+        console.log('Implement createCommentErrorCallback() via updateFeedItemPendingStatus()', error, id);
+    };
+
+    /**
      * Create a comment, and make a pending item to be replaced once the API is successful.
      *
      * @param {any} args - Data returned by the Comment component on comment creation.
@@ -129,14 +155,17 @@ class ActivityFeed extends React.Component<Props, State> {
 
         this.addPendingItem(comment);
 
-        const createComment = getProp(this.props, 'handlers.comments.create', Promise.resolve({}));
-        createComment(text, hasMention).then((commentData) => {
-            const { message, tagged_message } = commentData;
-            // Comment component uses tagged_message only
-            commentData.tagged_message = hasMention ? tagged_message : message;
-
-            this.updateFeedItem(commentData, uuid);
-        });
+        const createComment = getProp(this.props, 'handlers.comments.create', noop);
+        createComment(
+            text,
+            hasMention,
+            (commentData: Comment) => {
+                this.createCommentSuccessCallback(commentData, uuid);
+            },
+            (error: Error) => {
+                this.createCommentErrorCallback(error, uuid);
+            }
+        );
 
         this.approvalCommentFormSubmitHandler();
     };
