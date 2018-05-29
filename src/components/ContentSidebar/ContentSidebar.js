@@ -646,6 +646,126 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Updates a task
+     *
+     * @private
+     * @param {string} taskId - The task's id
+     * @param {Array} message - The task's text
+     * @param {string} dueAt - The comment's text
+     * @return {void}
+     */
+    onTaskUpdate = (
+        taskId: string,
+        message: string,
+        successCallback: (task: Task) => void = noop,
+        errorCallback: (e: Error) => void = noop,
+        dueAt?: string
+    ) => {
+        const { file } = this.state;
+        const { onTaskUpdate = noop } = this.props;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getTasksAPI(false).updateTask({
+            file,
+            taskId,
+            message,
+            dueAt,
+            successCallback: (task: Task) => {
+                onTaskUpdate(task);
+                successCallback(task);
+                this.onTaskUpdateSuccessCallback(task);
+            },
+            errorCallback: (e: Error) => {
+                errorCallback(e);
+                this.errorCallback(e);
+            }
+        });
+    };
+
+    /**
+     * Task update success callback
+     *
+     * @private
+     * @param {Object} task - Box task
+     * @return {void}
+     */
+    onTaskUpdateSuccessCallback(task: Task) {
+        const { tasks } = this.state;
+
+        if (tasks) {
+            const { entries, total_count: totalCount } = tasks;
+
+            this.setState({
+                tasks: {
+                    entries: [task, ...entries],
+                    total_count: totalCount + 1
+                }
+            });
+        }
+    }
+
+    /**
+     * Deletes a task
+     *
+     * @private
+     * @param {string} taskId - The task's id
+     * @param {Array} message - The task's text
+     * @param {string} dueAt - The comment's text
+     * @return {void}
+     */
+    onTaskDelete = (
+        taskId: string,
+        successCallback: (taskId: string) => void = noop,
+        errorCallback: (e: Error, taskId: string) => void = noop
+    ) => {
+        const { file } = this.state;
+        const { onTaskDelete = noop } = this.props;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getTasksAPI(false).deleteTask({
+            file,
+            taskId,
+            successCallback: () => {
+                onTaskDelete(taskId);
+                successCallback(taskId);
+                this.onTaskDeleteSuccessCallback(taskId);
+            },
+            errorCallback: (e: Error) => {
+                errorCallback(e, taskId);
+                this.errorCallback(e);
+            }
+        });
+    };
+
+    /**
+     * Task update success callback
+     *
+     * @private
+     * @param {Object} task - Box task
+     * @return {void}
+     */
+    onTaskDeleteSuccessCallback(taskId: string) {
+        const { tasks } = this.state;
+
+        if (tasks) {
+            const { entries, total_count: totalCount } = tasks;
+
+            this.setState({
+                tasks: {
+                    entries: entries.filter((task) => task.id !== taskId),
+                    total_count: totalCount - 1
+                }
+            });
+        }
+    }
+
+    /**
      * Fetches the tasks for a file
      *
      * @private
@@ -868,8 +988,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             onAccessStatsClick,
             onClassificationClick,
             onCommentDelete,
-            onTaskDelete,
-            onTaskUpdate,
             onTaskAssignmentUpdate
         }: Props = this.props;
         const {
@@ -928,8 +1046,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onCommentCreate={this.onCommentCreate}
                                 onCommentDelete={onCommentDelete}
                                 onTaskCreate={this.onTaskCreate}
-                                onTaskDelete={onTaskDelete}
-                                onTaskUpdate={onTaskUpdate}
+                                onTaskDelete={this.onTaskDelete}
+                                onTaskUpdate={this.onTaskUpdate}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}

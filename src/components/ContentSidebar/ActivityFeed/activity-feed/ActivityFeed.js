@@ -117,28 +117,141 @@ class ActivityFeed extends React.Component<Props, State> {
         const createTask = getProp(this.props, 'handlers.tasks.create', noop);
         const dueAtDate: Date = new Date(dueAt);
         const dueAtString: string = dueAtDate.toISOString();
-        createTask(text, assignees, dueAtString);
+        createTask(text, assignees, this.updateTaskSuccessCallback, this.updateTaskErrorCallback, dueAtString);
 
         this.approvalCommentFormSubmitHandler();
     };
 
-    updateTask = (args: any): void => {
+    // TODO: delete once Justin's PR merged as its duplicate
+    updateFeedItem = (feedItem: Comment | Task, id: string): void => {
+        this.setState({
+            feedItems: this.state.feedItems.map((item: Comment | Task | BoxItemVersion) => {
+                if (item.id === id) {
+                    // $FlowFixMe
+                    return {
+                        ...item,
+                        ...feedItem
+                    };
+                }
+                return item;
+            })
+        });
+    };
+
+    /**
+     * Called on successful update of a task
+     *
+     * @param {Object} task the updated task
+     */
+    updateTaskSuccessCallback = (task: Task) => {
+        const { id } = task;
+
+        this.updateFeedItem(
+            {
+                ...task,
+                isPending: false
+            },
+            id
+        );
+    };
+
+    /**
+     * Called on failed update of a task
+     *
+     * @param {Object} e the error
+     */
+    updateTaskErrorCallback = (e: Error, id: string) => {
+        this.updateFeedItemPendingStatus(id, false);
+    };
+
+    /**
+     * Called on failed deletion of a task
+     *
+     * @param {Object} e the error
+     */
+    deleteTaskErrorCallback = (e: Error, id: string) => {
+        this.updateFeedItemPendingStatus(id, false);
+    };
+
+    /**
+     * Called on successful deletion of a comment
+     *
+     * @param {Object} task the updated task
+     */
+    deleteCommentSuccessCallback = (id: string) => {
+        this.deleteFeedItem(id);
+    };
+
+    /**
+     * Called on failed update of a comment
+     *
+     * @param {Object} e the error
+     */
+    deleteCommentErrorCallback = (e: Error, id: string) => {
+        this.updateFeedItemPendingStatus(id, false);
+    };
+
+    /**
+     * Updates a feed item's pending status
+     *
+     * @param {Object} item the feed item to update
+     * @param {boolean} isPending true if the feed item is to be updated to pending=true
+     */
+    updateFeedItemPendingStatus = (id: string, isPending: boolean) => {
+        this.setState({
+            feedItems: this.state.feedItems.map((feedItem: Comment | Task | BoxItemVersion) => {
+                if (feedItem.id === id) {
+                    // $FlowFixMe
+                    return {
+                        ...feedItem,
+                        isPending
+                    };
+                }
+                return feedItem;
+            })
+        });
+    };
+
+    /**
+     * Deletes a feed item from the state
+     *
+     * @param {Object} item the item to be deleted
+     */
+    deleteFeedItem = (id: string) => {
+        this.setState({
+            feedItems: this.state.feedItems.filter((feedItem) => feedItem.id !== id)
+        });
+    };
+
+    /**
+     * Updates a task in the state
+     *
+     * @param {Object} args a subset of the task
+     */
+    updateTask = ({ text, id }: { text: string, id: string }): void => {
         // get previous task assignment state
         // update the task via v2 api
         // update task state OR
         // if it fails, revert to previous task state
         // call user passed in handlers.tasks.edit, if it exists
         const updateTask = getProp(this.props, 'handlers.tasks.edit', noop);
-        updateTask(args);
+        this.updateFeedItemPendingStatus(id, true);
+        updateTask(id, text, this.updateTaskSuccessCallback, this.updateTaskErrorCallback);
     };
 
-    deleteTask = (args: any): void => {
+    /**
+     * Updates a task in the state
+     *
+     * @param {Object} args a subset of the task
+     */
+    deleteTask = ({ id }: { id: string }): void => {
         // remove task from task list
         // removeItemByTypeAndId('task', args.id);
         // delete the task via v2 api
         // call user passed in handlers.tasks.delete, if it exists
         const deleteTask = getProp(this.props, 'handlers.tasks.delete', noop);
-        deleteTask(args);
+        this.updateFeedItemPendingStatus(id, true);
+        deleteTask(id, this.deleteFeedItem, this.deleteTaskErrorCallback);
     };
 
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string): void => {
@@ -167,6 +280,9 @@ class ActivityFeed extends React.Component<Props, State> {
 
     componentWillReceiveProps(nextProps: any): void {
         const { comments, tasks, versions } = nextProps;
+        if (this.state.feedItems.length > 0) {
+            return;
+        }
         this.sortFeedItems(comments, tasks, versions);
     }
 

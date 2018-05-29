@@ -37,7 +37,7 @@ type Props = {
     onCommentDelete?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
-    onTaskUpdate?: Function,
+    onTaskUpdate: Function,
     onTaskAssignmentUpdate?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
