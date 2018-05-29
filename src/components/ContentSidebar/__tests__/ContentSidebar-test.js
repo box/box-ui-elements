@@ -162,7 +162,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         test('should add the comment to the comment entries state', () => {
             instance.setState({
                 comments: {
-                    total_count: 1,
+                    total_count: 0,
                     entries: []
                 }
             });
@@ -173,6 +173,22 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             const { comments } = instance.state;
             expect(comments.entries.length).toBe(1);
+        });
+
+        test('should increase total_count of the comment state', () => {
+            instance.setState({
+                comments: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.onCommentCreateSuccess({
+                type: 'comment'
+            });
+
+            const { comments } = instance.state;
+            expect(comments.total_count).toBe(1);
         });
     });
 

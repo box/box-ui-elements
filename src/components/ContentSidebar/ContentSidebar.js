@@ -613,7 +613,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * Adds a comment to the comments state.
+     * Adds a comment to the comments state and increases total_count.
      *
      * @param {Comment} comment - The newly created comment from the API
      * @return {void}
@@ -622,8 +622,11 @@ class ContentSidebar extends PureComponent<Props, State> {
         const { comments } = this.state;
         if (comments && comments.entries) {
             const newComments = { ...comments };
+            newComments.total_count += 1;
             newComments.entries.push(comment);
-            this.setState({ comments: newComments });
+            this.setState({
+                comments: newComments
+            });
         }
     }
 

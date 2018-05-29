@@ -95,27 +95,22 @@ class ActivityFeed extends React.Component<Props, State> {
      * Replace a feed item with new feed item data.
      *
      * @param {Comment | Task} feedItem - API returned feed item data.
-     * @param {string} uuid - Unique ID of the feed item to replace.
+     * @param {string} id - ID of the feed item to replace.
      * @return {void}
      */
-    updateFeedItem = (feedItem: Comment | Task, uuid: string): void => {
-        let itemIndex = null;
-        const { feedItems } = this.state;
-        const newFeedItems = feedItems.slice();
-
-        newFeedItems.find((item, index) => {
-            if (item.id === uuid) {
-                itemIndex = index;
-                return true;
-            }
-            return false;
+    updateFeedItem = (feedItem: Comment | Task, id: string): void => {
+        this.setState({
+            feedItems: this.state.feedItems.map((item: Comment | Task | BoxItemVersion) => {
+                if (item.id === id) {
+                    // $FlowFixMe
+                    return {
+                        ...item,
+                        ...feedItem
+                    };
+                }
+                return item;
+            })
         });
-
-        // Replace item in the feed items or set as most recent item.
-        if (itemIndex !== null) {
-            newFeedItems[itemIndex] = feedItem;
-            this.setState({ feedItems: newFeedItems });
-        }
     };
 
     /**
