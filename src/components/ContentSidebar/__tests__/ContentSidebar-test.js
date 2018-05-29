@@ -27,6 +27,23 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         document.body.removeChild(rootElement);
     });
 
+    describe('componentWillReceiveProps()', () => {
+        test('should reset state to initialState if the fileid has changed', () => {
+            const props = {
+                fileId: '123456'
+            };
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+            const newProps = {
+                fileId: 'abcdefg'
+            };
+            instance.setState = jest.fn();
+            instance.componentWillReceiveProps(newProps);
+
+            expect(instance.setState).toBeCalledWith(instance.initialState);
+        });
+    });
+
     describe('setFileDescriptionErrorCallback()', () => {
         let instance;
         let wrapper;

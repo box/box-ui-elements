@@ -10,6 +10,7 @@ import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
+import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
@@ -107,6 +108,26 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasVersions: false
     };
 
+    state = {
+        file: undefined,
+        accessStats: undefined,
+        versions: undefined,
+        comments: undefined,
+        tasks: undefined,
+        currentUser: undefined,
+        approverSelectorContacts: undefined,
+        mentionSelectorContacts: undefined,
+        fileError: undefined,
+        versionError: undefined,
+        commentsError: undefined,
+        tasksError: undefined,
+        accessStatsError: undefined,
+        currentUserError: undefined
+    };
+
+    /* @property {State} - Initial state of the component */
+    initialState: State;
+
     /**
      * [constructor]
      *
@@ -126,7 +147,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             responseInterceptor
         } = props;
 
-        this.state = {};
         this.id = uniqueid('bcs_');
         this.api = new API({
             cache,
@@ -138,6 +158,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor
         });
+
+        // Clone initial state to allow for state reset on new files
+        this.initialState = cloneDeep(this.state);
     }
 
     /**
@@ -206,7 +229,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         const hasFileIdChanged = newFileId !== fileId;
 
         if (hasFileIdChanged) {
-            this.setState({});
+            this.setState(this.initialState);
             this.fetchData(nextProps);
         }
     }
