@@ -13,20 +13,12 @@ import SidebarSkills from './Skills/SidebarSkills';
 type Props = {
     file: BoxItem,
     getPreviewer: Function,
-    rootElement: HTMLElement,
-    appElement: HTMLElement,
     onSkillChange: Function
 };
 
-const SkillsSidebar = ({ file, getPreviewer, rootElement, appElement, onSkillChange }: Props) => (
+const SkillsSidebar = ({ file, getPreviewer, onSkillChange }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarSkillsTitle} />}>
-        <SidebarSkills
-            file={file}
-            getPreviewer={getPreviewer}
-            rootElement={rootElement}
-            appElement={appElement}
-            onSkillChange={onSkillChange}
-        />
+        <SidebarSkills file={file} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />
     </SidebarContent>
 );
 

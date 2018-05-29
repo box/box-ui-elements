@@ -5,40 +5,29 @@
  */
 
 import React from 'react';
-import withErrorHandling from '../withErrorHandling';
+import Status from './Status';
 import Transcript from './Transcript';
 import Keywords from './Keywords';
 import Faces from './Faces';
-import { SKILL_TRANSCRIPT, SKILL_KEYWORD, SKILL_TIMELINE } from '../../../constants';
+import { SKILLS_TRANSCRIPT, SKILLS_KEYWORD, SKILLS_TIMELINE, SKILLS_FACE, SKILLS_STATUS } from '../../../constants';
 
 type Props = {
     getPreviewer: Function,
-    rootElement: HTMLElement,
-    appElement: HTMLElement,
     onSkillChange: Function,
     card: SkillCard,
     cards: Array<SkillCard>,
-    isEditable: boolean,
-    errorCode: ?string
+    isEditable: boolean
 };
 
-const SidebarSkillsCard = ({
-    card,
-    cards,
-    isEditable,
-    onSkillChange,
-    getPreviewer,
-    rootElement,
-    appElement
-}: Props) => {
+const SidebarSkillsCard = ({ card, cards, isEditable, onSkillChange, getPreviewer }: Props) => {
     switch (card.skill_card_type) {
-        case SKILL_KEYWORD:
+        case SKILLS_KEYWORD:
             return (
                 <Keywords
                     card={card}
                     transcript={
                         isEditable
-                            ? cards.find(({ skill_card_type }) => skill_card_type === SKILL_TRANSCRIPT)
+                            ? cards.find(({ skill_card_type }) => skill_card_type === SKILLS_TRANSCRIPT)
                             : undefined
                     }
                     isEditable={isEditable}
@@ -46,25 +35,25 @@ const SidebarSkillsCard = ({
                     onSkillChange={onSkillChange}
                 />
             );
-        case SKILL_TIMELINE:
+        case SKILLS_TIMELINE:
+        case SKILLS_FACE:
             return (
                 <Faces card={card} isEditable={isEditable} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />
             );
-        case SKILL_TRANSCRIPT:
+        case SKILLS_TRANSCRIPT:
             return (
                 <Transcript
                     card={card}
                     getPreviewer={getPreviewer}
-                    rootElement={rootElement}
-                    appElement={appElement}
                     isEditable={isEditable}
                     onSkillChange={onSkillChange}
                 />
             );
+        case SKILLS_STATUS:
+            return <Status card={card} />;
         default:
             return null;
     }
 };
 
-export { SidebarSkillsCard as SidebarSkillsCardComponent };
-export default withErrorHandling(SidebarSkillsCard);
+export default SidebarSkillsCard;

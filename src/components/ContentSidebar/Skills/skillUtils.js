@@ -12,8 +12,7 @@ import getProp from 'lodash/get';
  * @param {SkillCard} card - box skill card
  * @return {boolean} if its valid skills card
  */
-const isValidSkillsCard = (card: SkillCard): boolean =>
-    !!card.error || (Array.isArray(card.entries) && card.entries.length > 0);
+const isValidSkillsCard = (card: SkillCard): boolean => !!card.error || Array.isArray(card.entries);
 
 /**
  * Returns true if there are valid skills to show.
