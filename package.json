@@ -122,7 +122,7 @@
     "babel-template": "^6.25.0",
     "babel-types": "^6.25.0",
     "box-locales": "^0.0.1",
-    "box-react-ui": "^22.23.0",
+    "box-react-ui": "^22.27.0",
     "circular-dependency-plugin": "^4.4.0",
     "classnames": "^2.2.5",
     "color": "^3.0.0",
