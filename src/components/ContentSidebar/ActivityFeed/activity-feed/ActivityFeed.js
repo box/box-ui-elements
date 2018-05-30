@@ -255,11 +255,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {boolean} True if the feed should be sorted with new items.
      */
     shouldSortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions): boolean {
-        if (!comments || !tasks || !versions) {
-            return false;
-        }
-
-        return true;
+        return !!(comments && tasks && versions);
     }
 
     /**
@@ -275,9 +271,7 @@ class ActivityFeed extends React.Component<Props, State> {
             return true;
         }
 
-        // Also check to see if the feedItems list is empty.
-        const { feedItems } = this.state;
-        return !feedItems.length;
+        return false;
     }
 
     componentDidMount(): void {
@@ -290,10 +284,21 @@ class ActivityFeed extends React.Component<Props, State> {
         this.updateFeedItems(comments, tasks, versions, file);
     }
 
-    updateFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file: BoxItem) {
-        const wasEmptied = this.clearFeedItems(file);
+    /**
+     * Checks to see if feed items should be added to the feed, and invokes the add and sort.
+     *
+     * @param {Comments} comments - API returned comments for this file
+     * @param {Tasks} tasks - API returned tasks for this file
+     * @param {FileVersions} versions - API returned file versions for this file
+     * @param {BoxItem} file - The file that owns all of the activity feed items
+     * @return {void}
+     */
+    updateFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file: BoxItem): void {
+        const isFeedEmpty = this.clearFeedItems(file);
         const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
-        if (shouldSort && wasEmptied) {
+        const { feedItems } = this.state;
+
+        if (shouldSort && (isFeedEmpty || !feedItems.length)) {
             // $FlowFixMe
             this.sortFeedItems(comments, tasks, versions);
         }

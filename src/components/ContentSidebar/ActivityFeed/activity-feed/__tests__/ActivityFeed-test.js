@@ -169,6 +169,53 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(stopPropagationSpy).toHaveBeenCalled();
     });
 
+    describe('updateFeedItems()', () => {
+        let wrapper;
+        let instance;
+        const file = {
+            id: '12345'
+        };
+        beforeEach(() => {
+            wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
+            instance = wrapper.instance();
+            instance.sortFeedItems = jest.fn();
+        });
+
+        it('should not invoke sortFeedItems() if the feed item types required are missing', () => {
+            instance.updateFeedItems(); // no params means missing items
+
+            expect(instance.sortFeedItems).not.toBeCalled();
+        });
+
+        it('should not invoke sortFeedItems() if the current feed has not been emptied', () => {
+            instance.setState({ feedItems: [...comments.entries, ...tasks.entries] });
+            instance.clearFeedItems = jest.fn().mockReturnValue(false);
+            instance.shouldSortFeedItems = jest.fn().mockReturnValue(true);
+            instance.updateFeedItems(comments, tasks, versions);
+
+            expect(instance.sortFeedItems).not.toBeCalled();
+        });
+
+        it('should not invoke sortFeedItems() if there are items in the feed', () => {
+            instance.setState({ feedItems: [...comments.entries, ...tasks.entries] });
+            instance.clearFeedItems = jest.fn().mockReturnValue(false);
+            instance.shouldSortFeedItems = jest.fn().mockReturnValue(true);
+
+            instance.updateFeedItems(comments, tasks, versions);
+
+            expect(instance.sortFeedItems).not.toBeCalled();
+        });
+
+        it('should invoke sortFeedItems() if all conditions are met', () => {
+            instance.clearFeedItems = jest.fn().mockReturnValue(true);
+            instance.shouldSortFeedItems = jest.fn().mockReturnValue(true);
+
+            instance.updateFeedItems(comments, tasks, versions);
+
+            expect(instance.sortFeedItems).toBeCalledWith(comments, tasks, versions);
+        });
+    });
+
     describe('shouldSortFeedItems()', () => {
         let wrapper;
         let instance;
@@ -216,12 +263,25 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(feedItems.length).toBe(comments.entries.length);
         });
 
+        it('should return false if feedItems was not emptied', () => {
+            instance.setState({ feedItems: [...comments.entries] });
+            const wasEmptied = instance.clearFeedItems(file);
+
+            expect(wasEmptied).toBe(false);
+        });
+
         it('should clear feed items if a new file', () => {
             instance.setState({ feedItems: [...comments.entries] });
             instance.clearFeedItems({ id: 'abcdef' });
 
             const { feedItems } = instance.state;
             expect(feedItems.length).toBe(0);
+        });
+        it('should return true if feedItems was emptied', () => {
+            instance.setState({ feedItems: [...comments.entries] });
+            const wasEmptied = instance.clearFeedItems({ id: 'abcdef' });
+
+            expect(wasEmptied).toBe(true);
         });
     });
 
