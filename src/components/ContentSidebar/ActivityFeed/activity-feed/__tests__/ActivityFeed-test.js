@@ -365,18 +365,54 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
     });
 
+    describe('createCommentSuccessCallback()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            instance = wrapper.instance();
+            instance.updateFeedItem = jest.fn();
+        });
+
+        it('should invoke updateFeedItem() with the new API returned comment, and the id to replace', () => {
+            const text = 'yay';
+            const id = '0987654321';
+            instance.createCommentSuccessCallback({ tagged_message: text }, id);
+
+            expect(instance.updateFeedItem).toBeCalledWith({ tagged_message: text }, id);
+        });
+
+        it('should assign tagged_message of the comment with tagged_message value if it exists', (done) => {
+            const text = 'yay';
+            const id = '0987654321';
+            instance.updateFeedItem = (comment) => {
+                const { tagged_message } = comment;
+                expect(tagged_message).toEqual(text);
+                done();
+            };
+            instance.createCommentSuccessCallback({ tagged_message: text }, id);
+        });
+
+        it('should assign tagged_message of the comment with message value if it exists', (done) => {
+            const text = 'yay';
+            const id = '0987654321';
+            instance.updateFeedItem = (comment) => {
+                const { tagged_message } = comment;
+                expect(tagged_message).toEqual(text);
+                done();
+            };
+            instance.createCommentSuccessCallback({ message: text }, id);
+        });
+    });
+
     describe('createComment()', () => {
         let wrapper;
         let instance;
+        const create = jest.fn();
         const message = 'message';
-        const tagged_message = 'tagged_message';
         const handlers = {
             comments: {
-                create: () =>
-                    Promise.resolve({
-                        message,
-                        tagged_message
-                    })
+                create
             }
         };
         beforeEach(() => {
@@ -396,49 +432,52 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             });
         });
 
-        test('should invoke updateFeedItem item to finalize comment', (done) => {
-            instance.createComment({ text: 'irrelevant text', hasMention: true });
-            instance.updateFeedItem = () => {
-                done();
-            };
+        test('should invoke the handler prop create() function with data to create comment and callbacks', () => {
+            const hasMention = true;
+            instance.createComment({ text: message, hasMention });
+
+            expect(create).toBeCalledWith(message, hasMention, expect.any(Function), expect.any(Function));
         });
 
-        test('should set tagged_message prop of finalized item if it contains mentions', (done) => {
-            instance.updateFeedItem = (data) => {
-                expect(data.tagged_message).toBe(tagged_message);
-                done();
+        test('should invoke createCommentSuccessCallback() with new comment and id on success creating', () => {
+            const createComment = (text, hasMention, onSuccess) => {
+                const comment = {
+                    message,
+                    hasMention
+                };
+                onSuccess(comment);
             };
-            instance.createComment({ text: 'irrelevant text', hasMention: true });
+            const newHandlers = {
+                comments: {
+                    create: createComment
+                }
+            };
+            wrapper.setProps({ handlers: newHandlers });
+            instance.createCommentSuccessCallback = jest.fn();
+
+            const hasMention = true;
+            instance.createComment({ text: message, hasMention });
+
+            // Should be called with new comment and the 'uniqueId' returned from lodash/uniqueId
+            expect(instance.createCommentSuccessCallback).toBeCalledWith({ message, hasMention }, 'uniqueId');
         });
 
-        test('should set message prop of finalized item if it does not contains mentions', (done) => {
-            instance.updateFeedItem = (data) => {
-                expect(data.tagged_message).toBe(message);
-                done();
+        test('should invoke createCommentErrorCallback() with error and id on fail to create', () => {
+            const createComment = (text, hasMention, onSuccess, onFail) => {
+                onFail(new Error('You fail!'));
             };
-            instance.createComment({ text: 'irrelevant text', hasMention: false });
+            const newHandlers = {
+                comments: {
+                    create: createComment
+                }
+            };
+            wrapper.setProps({ handlers: newHandlers });
+            instance.createCommentErrorCallback = jest.fn();
+
+            instance.createComment({ text: message });
+
+            // Should be called with new comment and the 'uniqueId' returned from lodash/uniqueId
+            expect(instance.createCommentErrorCallback).toBeCalledWith(expect.any(Error), 'uniqueId');
         });
     });
 });
-
-// createComment = ({ text, hasMention }: { text: string, hasMention: boolean }): void => {
-//     const uuid = uniqueId();
-//     const comment = {
-//         id: uuid,
-//         tagged_message: text,
-//         type: 'comment'
-//     };
-
-//     this.addPendingItem(comment);
-
-//     const createComment = getProp(this.props, 'handlers.comments.create', Promise.resolve({}));
-//     createComment(text, hasMention).then((commentData) => {
-//         const { message, tagged_message } = commentData;
-//         // Comment component uses tagged_message only
-//         commentData.tagged_message = hasMention ? tagged_message : message;
-
-//         this.updatePendingItem(commentData, uuid);
-//     });
-
-//     this.approvalCommentFormSubmitHandler();
-// };

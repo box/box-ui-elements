@@ -636,14 +636,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @private
      * @param {string} text - The comment's text
      * @param {boolean} hasMention - The comment's text
-     * @return {Promise} Resolves when comment has been created. Rejects when error creating comment.
+     * @param {Function} successCallback - Called on successful comment creation
+     * @param {Function} errorCallback - Called on failure to create comment
+     * @return {void}
      */
     onCommentCreate = (
         text: string,
         hasMention: boolean,
         successCallback: (comment: Comment) => void = noop,
         errorCallback: (e: Error) => void = noop
-    ): Promise<Comment> => {
+    ): void => {
         const { file } = this.state;
 
         if (!file) {

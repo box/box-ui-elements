@@ -253,10 +253,46 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.onCommentCreate('text');
         });
 
-        test('should return a promise', () => {
+        test('should invoke provided successCallback with a new comment if api was successful', (done) => {
+            const onSuccess = jest.fn();
+            commentsAPI = {
+                createComment: ({ successCallback }) => {
+                    successCallback();
+                    expect(onSuccess).toBeCalled();
+                    done();
+                }
+            };
             instance.setState({ file });
-            const retValue = instance.onCommentCreate('text');
-            expect(retValue).toBeInstanceOf(Promise);
+
+            instance.onCommentCreate('text', false, onSuccess);
+        });
+
+        test('should invoke errorCallback() if it failed to create a comment', (done) => {
+            instance.errorCallback = jest.fn();
+            commentsAPI = {
+                createComment: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onCommentCreate('text');
+        });
+
+        test('should invoke provided errorCallback if it failed to create a comment', (done) => {
+            const testErrorCallback = jest.fn();
+            commentsAPI = {
+                createComment: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(testErrorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onCommentCreate('text', false, jest.fn(), testErrorCallback);
         });
     });
 });

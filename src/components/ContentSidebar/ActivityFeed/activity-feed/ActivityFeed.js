@@ -121,7 +121,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {void}
      */
     createCommentSuccessCallback = (commentData: Comment, id: string): void => {
-        const { message, tagged_message } = commentData;
+        const { message = '', tagged_message = '' } = commentData;
         // Comment component uses tagged_message only
         commentData.tagged_message = tagged_message || message;
 
@@ -156,6 +156,7 @@ class ActivityFeed extends React.Component<Props, State> {
         this.addPendingItem(comment);
 
         const createComment = getProp(this.props, 'handlers.comments.create', noop);
+
         createComment(
             text,
             hasMention,
