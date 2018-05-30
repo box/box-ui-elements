@@ -180,21 +180,18 @@ class ActivityFeed extends React.Component<Props, State> {
      *  If the file has changed, clear out the feed state.
      *
      * @param {BoxItem} [file] The box file that comments, tasks, and versions belong to.
-     * @return {Promise} - A promise that resolves in 'true' if the feedItems are empty.
+     * @return {boolean} - True if the feedItems were emptied.
      */
-    clearFeedItems(file?: BoxItem): Promise<boolean> {
+    clearFeedItems(file?: BoxItem): boolean {
         const { file: oldFile } = this.props;
         if (file && file.id !== oldFile.id) {
-            return new Promise((resolve) => {
-                this.setState({ feedItems: [] }, () => {
-                    resolve(true);
-                });
-            });
+            this.setState({ feedItems: [] });
+            return true;
         }
 
         // Also check to see if the feedItems list is empty.
         const { feedItems } = this.state;
-        return Promise.resolve(!feedItems.length);
+        return !feedItems.length;
     }
 
     componentDidMount(): void {
@@ -208,13 +205,12 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     updateFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file: BoxItem) {
-        this.clearFeedItems(file).then((isEmpty) => {
-            const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
-            if (shouldSort && isEmpty) {
-                // $FlowFixMe
-                this.sortFeedItems(comments, tasks, versions);
-            }
-        });
+        const wasEmptied = this.clearFeedItems(file);
+        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
+        if (shouldSort && wasEmptied) {
+            // $FlowFixMe
+            this.sortFeedItems(comments, tasks, versions);
+        }
     }
 
     /**
