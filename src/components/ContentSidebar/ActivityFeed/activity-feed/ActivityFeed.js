@@ -101,6 +101,7 @@ class ActivityFeed extends React.Component<Props, State> {
         this.setState({
             feedItems: this.state.feedItems.map((item: Comment | Task | BoxItemVersion) => {
                 if (item.id === id) {
+                    item.isPending = false;
                     // $FlowFixMe
                     return {
                         ...item,
@@ -128,7 +129,7 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Callback for error while creating of a Comment.
+     * Callback for error while creating a Comment.
      *
      * @param {Error} error - Error thrown while creating the Comment
      * @param {string} id - ID of the feed item to update as no longer pending
@@ -180,6 +181,28 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
+     * Callback for successful creation of a Task.
+     *
+     * @param {Task} task - API returned task
+     * @param {string} id - ID of the feed item to update with the new task data
+     * @return {void}
+     */
+    createTaskSuccessCallback(task: Task, id: string): void {
+        this.updateFeedItem(task, id);
+    }
+
+    /**
+     * Callback for error while creating a Task.
+     *
+     * @param {Error} error - Error thrown while creating the Task
+     * @param {string} id - ID of the feed item to update as no longer pending
+     * @return {void}
+     */
+    createTaskErrorCallback(error: Error, id: string): void {
+        console.log('Implement createTaskErrorCallback() via updateFeedItemPendingStatus()', error, id);
+    }
+
+    /**
      * Creates a task
      *
      * @param {string} text - Task text
@@ -196,13 +219,38 @@ class ActivityFeed extends React.Component<Props, State> {
         assignees: Array<SelectorItems>,
         dueAt: string
     }): void => {
+        const uuid = uniqueId('task_');
+        let dueAtString;
+        if (dueAt) {
+            const dueAtDate: Date = new Date(dueAt);
+            dueAtString = dueAtDate.toISOString();
+        }
+        const task = {
+            due_at: dueAtString,
+            id: uuid,
+            is_completed: false,
+            message: text,
+            task_assignment_collection: [],
+            type: 'task'
+        };
+
+        this.addPendingItem(task);
+
         // create a placeholder pending task
         // create actual task and send to Box V2 api
         // call user passed in handlers.tasks.create, if it exists
         const createTask = getProp(this.props, 'handlers.tasks.create', noop);
-        const dueAtDate: Date = new Date(dueAt);
-        const dueAtString: string = dueAtDate.toISOString();
-        createTask(text, assignees, dueAtString);
+        createTask(
+            text,
+            assignees,
+            dueAtString,
+            (taskData: Task) => {
+                this.createTaskSuccessCallback(taskData, uuid);
+            },
+            (error: Error) => {
+                this.createTaskErrorCallback(error, uuid);
+            }
+        );
 
         this.approvalCommentFormSubmitHandler();
     };

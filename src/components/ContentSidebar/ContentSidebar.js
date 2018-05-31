@@ -675,15 +675,41 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Adds a task to the tasks state and increases total_count.
+     *
+     * @param {Task} task - The newly created task from the API
+     * @return {void}
+     */
+    onTaskCreateSuccess(task: Task): void {
+        const { tasks } = this.state;
+        if (tasks && tasks.entries) {
+            const newTasks = { ...tasks };
+            newTasks.total_count += 1;
+            newTasks.entries.push(task);
+            this.setState({
+                tasks: newTasks
+            });
+        }
+    }
+
+    /**
      * Posts a new task to the API
      *
      * @private
      * @param {string} text - The task's text
      * @param {Array} assignees - Array of assignees
      * @param {string} dueAt - The comment's text
+     * @param {Function} successCallback - Called on successful task creation
+     * @param {Function} errorCallback - Called on failure to task comment
      * @return {void}
      */
-    onTaskCreate = (text: string, assignees: Array<SelectorItems>, dueAt: string) => {
+    onTaskCreate = (
+        text: string,
+        assignees: Array<SelectorItems>,
+        dueAt?: string,
+        successCallback: (task: Task) => void = noop,
+        errorCallback: (e: Error) => void = noop
+    ) => {
         const { file } = this.state;
 
         if (!file) {
@@ -694,8 +720,14 @@ class ContentSidebar extends PureComponent<Props, State> {
             file,
             message: text,
             dueAt,
-            successCallback: noop,
-            errorCallback: noop
+            successCallback: (task: Task) => {
+                this.onTaskCreateSuccess(task);
+                successCallback(task);
+            },
+            errorCallback: (e: Error) => {
+                this.errorCallback(e);
+                errorCallback(e);
+            }
         });
     };
 
