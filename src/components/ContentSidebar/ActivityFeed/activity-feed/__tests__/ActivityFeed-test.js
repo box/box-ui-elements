@@ -541,4 +541,121 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(instance.createCommentErrorCallback).toBeCalledWith(expect.any(Error), 'uniqueId');
         });
     });
+
+    describe('createTaskSuccessCallback()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            instance = wrapper.instance();
+        });
+
+        it('should invoke updateFeedItem() with task and id to update', () => {
+            const task = {
+                message: 'a message'
+            };
+            const id = 'uniqueId';
+            instance.updateFeedItem = jest.fn();
+            instance.createTaskSuccessCallback(task, id);
+
+            expect(instance.updateFeedItem).toBeCalledWith(task, id);
+        });
+    });
+
+    describe('createTask()', () => {
+        let wrapper;
+        let instance;
+        const create = jest.fn();
+        const text = 'message';
+        const handlers = {
+            tasks: {
+                create
+            }
+        };
+        beforeEach(() => {
+            wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={handlers} />);
+            instance = wrapper.instance();
+            instance.addPendingItem = jest.fn();
+            instance.updateFeedItem = jest.fn();
+        });
+
+        test('should creating a pending item', () => {
+            const dueAt = 123456;
+            const dueDateString = new Date(dueAt).toISOString();
+            instance.createTask({ text, dueAt });
+
+            expect(instance.addPendingItem).toBeCalledWith({
+                due_at: dueDateString,
+                id: 'uniqueId',
+                is_completed: false,
+                message: text,
+                task_assignment_collection: [],
+                type: 'task'
+            });
+        });
+
+        test('should invoke the handler prop create() function with data to create comment and callbacks', () => {
+            const assignees = [{ name: 'voldemort' }];
+            const dueAt = 1123456;
+            instance.createTask({ text, assignees, dueAt });
+
+            expect(create).toBeCalledWith(
+                text,
+                assignees,
+                new Date(dueAt).toISOString(),
+                expect.any(Function),
+                expect.any(Function)
+            );
+        });
+
+        test('should invoke createCommentSuccessCallback() with new comment and id on success creating', () => {
+            const createTask = (textContent, assignees, dueAt, onSuccess) => {
+                const task = {
+                    assignees,
+                    due_at: dueAt,
+                    message: textContent
+                };
+                onSuccess(task);
+            };
+            const newHandlers = {
+                tasks: {
+                    create: createTask
+                }
+            };
+            wrapper.setProps({ handlers: newHandlers });
+            instance.createTaskSuccessCallback = jest.fn();
+
+            const assignees = [];
+            const dueAt = 123456789;
+            instance.createTask({ text, assignees, dueAt });
+
+            // Should be called with new task and the 'uniqueId' returned from lodash/uniqueId
+            expect(instance.createTaskSuccessCallback).toBeCalledWith(
+                {
+                    message: text,
+                    assignees,
+                    due_at: new Date(dueAt).toISOString()
+                },
+                'uniqueId'
+            );
+        });
+
+        test('should invoke createCommentErrorCallback() with error and id on fail to create', () => {
+            const createTask = (textContent, assignees, dueAt, onSuccess, onFail) => {
+                onFail(new Error('You fail!'));
+            };
+            const newHandlers = {
+                tasks: {
+                    create: createTask
+                }
+            };
+            wrapper.setProps({ handlers: newHandlers });
+            instance.createTaskErrorCallback = jest.fn();
+
+            instance.createTask({ text });
+
+            // Should be called with new comment and the 'uniqueId' returned from lodash/uniqueId
+            expect(instance.createTaskErrorCallback).toBeCalledWith(expect.any(Error), 'uniqueId');
+        });
+    });
 });

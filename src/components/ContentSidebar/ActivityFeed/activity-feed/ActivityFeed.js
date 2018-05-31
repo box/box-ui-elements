@@ -225,6 +225,7 @@ class ActivityFeed extends React.Component<Props, State> {
             const dueAtDate: Date = new Date(dueAt);
             dueAtString = dueAtDate.toISOString();
         }
+
         const task = {
             due_at: dueAtString,
             id: uuid,

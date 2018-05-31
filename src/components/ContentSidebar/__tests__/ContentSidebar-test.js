@@ -295,4 +295,132 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.onCommentCreate('text', false, jest.fn(), testErrorCallback);
         });
     });
+
+    describe('onTaskCreateSuccess()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should not add to the task entries state if there is none', () => {
+            instance.setState({ tasks: undefined });
+            instance.setState = jest.fn();
+
+            instance.onTaskCreateSuccess({});
+
+            expect(instance.setState).not.toBeCalled();
+        });
+
+        test('should add the task to the task entries state', () => {
+            instance.setState({
+                tasks: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.onTaskCreateSuccess({
+                type: 'task'
+            });
+
+            const { tasks } = instance.state;
+            expect(tasks.entries.length).toBe(1);
+        });
+
+        test('should increase total_count of the task state', () => {
+            instance.setState({
+                tasks: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.onTaskCreateSuccess({
+                type: 'task'
+            });
+
+            const { tasks } = instance.state;
+            expect(tasks.total_count).toBe(1);
+        });
+    });
+
+    describe.only('onTaskCreate()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+        const file = {
+            id: 'I_AM_A_FILE'
+        };
+        const api = {
+            getTasksAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.onTaskCreate).toThrow('Bad box item!');
+        });
+
+        test('should invoke onTaskCreateSuccess() with a new task if api was successful', (done) => {
+            instance.onTaskCreateSuccess = jest.fn();
+            tasksAPI = {
+                createTask: ({ successCallback }) => {
+                    successCallback();
+                    expect(instance.onTaskCreateSuccess).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onTaskCreate('text');
+        });
+
+        test('should invoke provided successCallback with a new task if api was successful', (done) => {
+            const onSuccess = jest.fn();
+            tasksAPI = {
+                createTask: ({ successCallback }) => {
+                    successCallback();
+                    expect(onSuccess).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onTaskCreate('text', undefined, undefined, onSuccess);
+        });
+
+        test('should invoke errorCallback() if it failed to create a task', (done) => {
+            instance.errorCallback = jest.fn();
+            tasksAPI = {
+                createTask: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onTaskCreate('text');
+        });
+
+        test('should invoke provided errorCallback if it failed to create a task', (done) => {
+            const testErrorCallback = jest.fn();
+            tasksAPI = {
+                createTask: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(testErrorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onTaskCreate('text', undefined, undefined, undefined, testErrorCallback);
+        });
+    });
 });
