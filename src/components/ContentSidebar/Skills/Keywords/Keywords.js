@@ -5,11 +5,14 @@
  */
 
 import React, { PureComponent } from 'react';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
+import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
+import messages from '../../../messages';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 
 import './Keywords.scss';
@@ -164,6 +167,7 @@ class Keywords extends PureComponent<Props, State> {
         const { card, getPreviewer, isEditable }: Props = this.props;
         const { duration }: SkillCard = card;
         const { isEditing, keywords, removes, adds }: State = this.state;
+        const hasKeywords = keywords.length > 0;
         const entries = keywords.filter((face: SkillCardEntry) => !removes.includes(face)).concat(adds);
         const editClassName = classNames('be-keyword-edit', {
             'be-keyword-is-editing': isEditing
@@ -171,17 +175,18 @@ class Keywords extends PureComponent<Props, State> {
 
         return (
             <div className='be-keywords'>
-                {isEditable && (
-                    <PlainButton
-                        type='button'
-                        className={editClassName}
-                        onClick={this.toggleIsEditing}
-                        data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
-                    >
-                        <IconEdit />
-                    </PlainButton>
-                )}
-                {isEditable && isEditing ? (
+                {hasKeywords &&
+                    isEditable && (
+                        <PlainButton
+                            type='button'
+                            className={editClassName}
+                            onClick={this.toggleIsEditing}
+                            data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
+                        >
+                            <IconEdit />
+                        </PlainButton>
+                    )}
+                {isEditing && (
                     <EditableKeywords
                         keywords={entries}
                         onSave={this.onSave}
@@ -189,9 +194,15 @@ class Keywords extends PureComponent<Props, State> {
                         onDelete={this.onDelete}
                         onCancel={this.onCancel}
                     />
-                ) : (
-                    <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
                 )}
+                {!isEditing &&
+                    hasKeywords && (
+                        <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
+                    )}
+                {!isEditing &&
+                    !hasKeywords && (
+                        <ErrorMask errorHeader={<FormattedMessage {...messages.skillNoInfoFoundError} />} />
+                    )}
             </div>
         );
     }
