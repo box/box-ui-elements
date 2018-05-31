@@ -77,7 +77,6 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     addPendingItem = (itemBase: Object): void => {
         const { currentUser } = this.props;
-        // create a placeholder pending feed item
         const date = new Date().toISOString();
         const feedItem = {
             created_at: date,
