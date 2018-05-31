@@ -85,13 +85,20 @@ class ActivityFeed extends React.Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    deleteComment = (args: any): void => {
+    /**
+     * Deletes a comment
+     *
+     * @param {string} id - Comment id
+     * @return {void}
+     */
+    deleteComment = ({ id }: { id: string }): void => {
         // remove comment from list of comments
         // removeItemByTypeAndId('comment', args.id);
         // delete the comment via V2 API
         // call user passed in handlers.comments.delete, if it exists
         const deleteComment = getProp(this.props, 'handlers.comments.delete', noop);
-        deleteComment(args);
+        this.updateFeedItemPendingStatus(id, true);
+        deleteComment(id, this.deleteFeedItem, this.feedItemErrorCallback);
     };
 
     /**
@@ -117,7 +124,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const createTask = getProp(this.props, 'handlers.tasks.create', noop);
         const dueAtDate: Date = new Date(dueAt);
         const dueAtString: string = dueAtDate.toISOString();
-        createTask(text, assignees, this.updateTaskSuccessCallback, this.updateTaskErrorCallback, dueAtString);
+        createTask(text, assignees, dueAtString);
 
         this.approvalCommentFormSubmitHandler();
     };
@@ -156,38 +163,12 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Called on failed update of a task
+     * Called on failed update/delete of a feed item
      *
      * @param {Object} e the error
+     * @param {string} id the feed item's id
      */
-    updateTaskErrorCallback = (e: Error, id: string) => {
-        this.updateFeedItemPendingStatus(id, false);
-    };
-
-    /**
-     * Called on failed deletion of a task
-     *
-     * @param {Object} e the error
-     */
-    deleteTaskErrorCallback = (e: Error, id: string) => {
-        this.updateFeedItemPendingStatus(id, false);
-    };
-
-    /**
-     * Called on successful deletion of a comment
-     *
-     * @param {Object} task the updated task
-     */
-    deleteCommentSuccessCallback = (id: string) => {
-        this.deleteFeedItem(id);
-    };
-
-    /**
-     * Called on failed update of a comment
-     *
-     * @param {Object} e the error
-     */
-    deleteCommentErrorCallback = (e: Error, id: string) => {
+    feedItemErrorCallback = (e: Error, id: string) => {
         this.updateFeedItemPendingStatus(id, false);
     };
 
@@ -236,7 +217,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // call user passed in handlers.tasks.edit, if it exists
         const updateTask = getProp(this.props, 'handlers.tasks.edit', noop);
         this.updateFeedItemPendingStatus(id, true);
-        updateTask(id, text, this.updateTaskSuccessCallback, this.updateTaskErrorCallback);
+        updateTask(id, text, this.updateTaskSuccessCallback, this.feedItemErrorCallback);
     };
 
     /**
@@ -251,7 +232,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // call user passed in handlers.tasks.delete, if it exists
         const deleteTask = getProp(this.props, 'handlers.tasks.delete', noop);
         this.updateFeedItemPendingStatus(id, true);
-        deleteTask(id, this.deleteFeedItem, this.deleteTaskErrorCallback);
+        deleteTask(id, this.deleteFeedItem, this.feedItemErrorCallback);
     };
 
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string): void => {

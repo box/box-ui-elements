@@ -597,7 +597,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {boolean} hasMention - The comment's text
      * @return {void}
      */
-    onCommentCreate = (text: string, hasMention: boolean) => {
+    createComment = (text: string, hasMention: boolean) => {
         const { file } = this.state;
 
         if (!file) {
@@ -629,7 +629,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} dueAt - The comment's text
      * @return {void}
      */
-    onTaskCreate = (text: string, assignees: Array<SelectorItems>, dueAt: string) => {
+    createTask = (text: string, assignees: Array<SelectorItems>, dueAt: string) => {
         const { file } = this.state;
 
         if (!file) {
@@ -651,10 +651,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @private
      * @param {string} taskId - The task's id
      * @param {Array} message - The task's text
-     * @param {string} dueAt - The comment's text
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @param {string} dueAt - The date the task is due
      * @return {void}
      */
-    onTaskUpdate = (
+    updateTask = (
         taskId: string,
         message: string,
         successCallback: (task: Task) => void = noop,
@@ -676,7 +678,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             successCallback: (task: Task) => {
                 onTaskUpdate(task);
                 successCallback(task);
-                this.onTaskUpdateSuccessCallback(task);
+                this.updateTaskSuccessCallback(task);
             },
             errorCallback: (e: Error) => {
                 errorCallback(e);
@@ -692,7 +694,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} task - Box task
      * @return {void}
      */
-    onTaskUpdateSuccessCallback(task: Task) {
+    updateTaskSuccessCallback(task: Task) {
         const { tasks } = this.state;
 
         if (tasks) {
@@ -712,11 +714,11 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} taskId - The task's id
-     * @param {Array} message - The task's text
-     * @param {string} dueAt - The comment's text
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
-    onTaskDelete = (
+    deleteTask = (
         taskId: string,
         successCallback: (taskId: string) => void = noop,
         errorCallback: (e: Error, taskId: string) => void = noop
@@ -734,7 +736,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             successCallback: () => {
                 onTaskDelete(taskId);
                 successCallback(taskId);
-                this.onTaskDeleteSuccessCallback(taskId);
+                this.deleteTaskSuccessCallback(taskId);
             },
             errorCallback: (e: Error) => {
                 errorCallback(e, taskId);
@@ -750,7 +752,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} task - Box task
      * @return {void}
      */
-    onTaskDeleteSuccessCallback(taskId: string) {
+    deleteTaskSuccessCallback(taskId: string) {
         const { tasks } = this.state;
 
         if (tasks) {
@@ -759,6 +761,64 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.setState({
                 tasks: {
                     entries: entries.filter((task) => task.id !== taskId),
+                    total_count: totalCount - 1
+                }
+            });
+        }
+    }
+
+    /**
+     * Deletes a comment
+     *
+     * @private
+     * @param {string} commentId - The comment's id
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    deleteComment = (
+        commentId: string,
+        successCallback: (commentId: string) => void = noop,
+        errorCallback: (e: Error, commentId: string) => void = noop
+    ) => {
+        const { file } = this.state;
+        const { onCommentDelete = noop } = this.props;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getCommentsAPI(false).deleteComment({
+            file,
+            commentId,
+            successCallback: () => {
+                onCommentDelete(commentId);
+                successCallback(commentId);
+                this.deleteCommentSuccessCallback(commentId);
+            },
+            errorCallback: (e: Error) => {
+                errorCallback(e, commentId);
+                this.errorCallback(e);
+            }
+        });
+    };
+
+    /**
+     * Comment delete success callback
+     *
+     * @private
+     * @param {string} commentId - The comment's id
+     * @return {void}
+     */
+    deleteCommentSuccessCallback(commentId: string) {
+        const { comments } = this.state;
+
+        if (comments) {
+            const { entries, total_count: totalCount } = comments;
+
+            this.setState({
+                comments: {
+                    entries: entries.filter((comment) => comment.id !== commentId),
                     total_count: totalCount - 1
                 }
             });
@@ -987,7 +1047,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             onVersionHistoryClick,
             onAccessStatsClick,
             onClassificationClick,
-            onCommentDelete,
             onTaskAssignmentUpdate
         }: Props = this.props;
         const {
@@ -1043,11 +1102,11 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 commentsError={commentsError}
                                 currentUser={currentUser}
                                 currentUserError={currentUserError}
-                                onCommentCreate={this.onCommentCreate}
-                                onCommentDelete={onCommentDelete}
-                                onTaskCreate={this.onTaskCreate}
-                                onTaskDelete={this.onTaskDelete}
-                                onTaskUpdate={this.onTaskUpdate}
+                                onCommentCreate={this.createComment}
+                                onCommentDelete={this.deleteComment}
+                                onTaskCreate={this.createTask}
+                                onTaskDelete={this.deleteTask}
+                                onTaskUpdate={this.updateTask}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}
