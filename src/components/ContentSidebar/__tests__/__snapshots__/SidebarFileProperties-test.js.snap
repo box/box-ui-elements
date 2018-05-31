@@ -176,7 +176,6 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
       <dd>
         1 B
       </dd>
-      <RetentionPolicy />
       <ClassificationProperty />
     </dl>
   </ItemProperties>
@@ -279,7 +278,6 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
       <dd>
         1 B
       </dd>
-      <RetentionPolicy />
       <ClassificationProperty
         data-resin-target="editclassification"
         openModal={[MockFunction]}
@@ -380,7 +378,6 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
       <dd>
         1 B
       </dd>
-      <RetentionPolicy />
       <ClassificationProperty
         data-resin-target="addclassification"
         openModal={[MockFunction]}
