@@ -2,7 +2,6 @@
 
 .be .bcs-comment-input-container {
     @import '~box-react-ui/lib/styles/common/overlay';
-    @import '~box-react-ui/lib/styles/common/forms';
 
     border-top: solid 1px $off-white;
     display: flex;
@@ -16,6 +15,8 @@
     }
 
     .bcs-comment-input {
+        @import '~box-react-ui/lib/styles/common/forms';
+
         box-shadow: none;
         margin-bottom: 15px;
         margin-top: 20px;
@@ -122,11 +123,6 @@
 
             .pill-selector-input-wrapper {
                 width: auto;
-
-                .pill-selector-input {
-                    border: none;
-                    box-shadow: none;
-                }
             }
         }
 
