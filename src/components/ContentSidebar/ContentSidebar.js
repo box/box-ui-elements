@@ -613,14 +613,39 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Adds a comment to the comments state and increases total_count.
+     *
+     * @param {Comment} comment - The newly created comment from the API
+     * @return {void}
+     */
+    onCommentCreateSuccess(comment: Comment): void {
+        const { comments } = this.state;
+        if (comments && comments.entries) {
+            const newComments = { ...comments };
+            newComments.total_count += 1;
+            newComments.entries.push(comment);
+            this.setState({
+                comments: newComments
+            });
+        }
+    }
+
+    /**
      * Posts a new comment to the API
      *
      * @private
      * @param {string} text - The comment's text
      * @param {boolean} hasMention - The comment's text
+     * @param {Function} successCallback - Called on successful comment creation
+     * @param {Function} errorCallback - Called on failure to create comment
      * @return {void}
      */
-    onCommentCreate = (text: string, hasMention: boolean) => {
+    onCommentCreate = (
+        text: string,
+        hasMention: boolean,
+        successCallback: (comment: Comment) => void = noop,
+        errorCallback: (e: Error) => void = noop
+    ): void => {
         const { file } = this.state;
 
         if (!file) {
@@ -638,8 +663,14 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.api.getCommentsAPI(false).createComment({
             file,
             ...message,
-            successCallback: noop,
-            errorCallback: noop
+            successCallback: (comment: Comment) => {
+                this.onCommentCreateSuccess(comment);
+                successCallback(comment);
+            },
+            errorCallback: (e: Error) => {
+                this.errorCallback(e);
+                errorCallback(e);
+            }
         });
     };
 
