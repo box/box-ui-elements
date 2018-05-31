@@ -277,6 +277,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const { feedItems } = instance.state;
             expect(feedItems.length).toBe(0);
         });
+
         it('should return true if feedItems was emptied', () => {
             instance.setState({ feedItems: [...comments.entries] });
             const wasEmptied = instance.clearFeedItems({ id: 'abcdef' });
