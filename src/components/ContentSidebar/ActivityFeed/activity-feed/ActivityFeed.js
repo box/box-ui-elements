@@ -102,6 +102,8 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems: this.state.feedItems.map((item: Comment | Task | BoxItemVersion) => {
                 if (item.id === id) {
                     // $FlowFixMe
+                    item.isPending = false;
+                    // $FlowFixMe
                     return {
                         ...item,
                         ...feedItem

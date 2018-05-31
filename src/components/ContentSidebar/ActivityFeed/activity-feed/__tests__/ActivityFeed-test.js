@@ -405,6 +405,26 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(feedItems[0].message).toBe(message);
         });
 
+        test('should mark the item with matching item as longer pending', () => {
+            const uuid = 'a1b2c3d4e5f6';
+            const message = 'This is missing in the pending item';
+            const oldFeedItems = [
+                {
+                    id: uuid
+                }
+            ];
+            const item = {
+                message
+            };
+            instance.setState({ feedItems: oldFeedItems });
+
+            // New item details
+            instance.updateFeedItem(item, uuid);
+
+            const { feedItems } = instance.state;
+            expect(feedItems[0].isPending).toBe(false);
+        });
+
         test('should do nothing if it can\'t find an item with matching uuid', () => {
             const uuid = 'a1b2c3d4e5f6';
             const message = 'This is missing in the pending item';
