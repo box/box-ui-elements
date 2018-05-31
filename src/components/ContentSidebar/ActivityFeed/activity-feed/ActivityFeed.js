@@ -6,6 +6,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import uniqueId from 'lodash/uniqueId';
 import classNames from 'classnames';
 
 import ActiveState from './ActiveState';
@@ -69,18 +70,104 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
     /**
-     * Creates a comment
+     * Add a placeholder pending feed item.
      *
-     * @param {string} text - Comment text
-     * @param {boolean} hasMention - If this comment contains an at mention
+     * @param {Object} itemBase - Base properties for item to be added to the feed as pending.
+     * @return {void}
+     */
+    addPendingItem = (itemBase: Object): void => {
+        const { currentUser } = this.props;
+        const date = new Date().toISOString();
+        const feedItem = {
+            created_at: date,
+            created_by: currentUser,
+            modified_at: date,
+            isPending: true,
+            ...itemBase
+        };
+
+        const { feedItems } = this.state;
+        this.setState({ feedItems: [feedItem, ...feedItems] });
+    };
+
+    /**
+     * Replace a feed item with new feed item data.
+     *
+     * @param {Comment | Task} feedItem - API returned feed item data.
+     * @param {string} id - ID of the feed item to replace.
+     * @return {void}
+     */
+    updateFeedItem = (feedItem: Comment | Task, id: string): void => {
+        this.setState({
+            feedItems: this.state.feedItems.map((item: Comment | Task | BoxItemVersion) => {
+                if (item.id === id) {
+                    // $FlowFixMe
+                    item.isPending = false;
+                    // $FlowFixMe
+                    return {
+                        ...item,
+                        ...feedItem
+                    };
+                }
+                return item;
+            })
+        });
+    };
+
+    /**
+     * Callback for successful creation of a Comment.
+     *
+     * @param {Comment} commentData - API returned Comment
+     * @param {string} id - ID of the feed item to update with the new comment data
+     * @return {void}
+     */
+    createCommentSuccessCallback = (commentData: Comment, id: string): void => {
+        const { message = '', tagged_message = '' } = commentData;
+        // Comment component uses tagged_message only
+        commentData.tagged_message = tagged_message || message;
+
+        this.updateFeedItem(commentData, id);
+    };
+
+    /**
+     * Callback for error while creating of a Comment.
+     *
+     * @param {Error} error - Error thrown while creating the Comment
+     * @param {string} id - ID of the feed item to update as no longer pending
+     * @return {void}
+     */
+    createCommentErrorCallback = (error: Error, id: string): void => {
+        console.log('Implement createCommentErrorCallback() via updateFeedItemPendingStatus()', error, id);
+    };
+
+    /**
+     * Create a comment, and make a pending item to be replaced once the API is successful.
+     *
+     * @param {any} args - Data returned by the Comment component on comment creation.
      * @return {void}
      */
     createComment = ({ text, hasMention }: { text: string, hasMention: boolean }): void => {
-        // create a placeholder pending comment
-        // create actual comment and send to Box V2 api
-        // call user passed in handlers.comments.create, if it exists
+        const uuid = uniqueId('comment_');
+        const comment = {
+            id: uuid,
+            tagged_message: text,
+            type: 'comment'
+        };
+
+        this.addPendingItem(comment);
+
         const createComment = getProp(this.props, 'handlers.comments.create', noop);
-        createComment(text, hasMention);
+
+        createComment(
+            text,
+            hasMention,
+            (commentData: Comment) => {
+                this.createCommentSuccessCallback(commentData, uuid);
+            },
+            (error: Error) => {
+                this.createCommentErrorCallback(error, uuid);
+            }
+        );
 
         this.approvalCommentFormSubmitHandler();
     };
@@ -254,17 +341,62 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
+    /**
+     * Determine whether or not a sort should occur, based on new comments, tasks, versions.
+     *
+     * @param {Comments} - [comments] - Object containing comments for the file.
+     * @param {Tasks} - [tasks] - Object containing tasks for the file.
+     * @param {FileVersions} - [versions] Object containing versions of the file.
+     * @return {boolean} True if the feed should be sorted with new items.
+     */
+    shouldSortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions): boolean {
+        return !!(comments && tasks && versions);
+    }
+
+    /**
+     *  If the file has changed, clear out the feed state.
+     *
+     * @param {BoxItem} [file] The box file that comments, tasks, and versions belong to.
+     * @return {boolean} - True if the feedItems were emptied.
+     */
+    clearFeedItems(file?: BoxItem): boolean {
+        const { file: oldFile } = this.props;
+        if (file && file.id !== oldFile.id) {
+            this.setState({ feedItems: [] });
+            return true;
+        }
+
+        return false;
+    }
+
     componentDidMount(): void {
-        const { comments, tasks, versions } = this.props;
-        this.sortFeedItems(comments, tasks, versions);
+        const { comments, tasks, versions, file } = this.props;
+        this.updateFeedItems(comments, tasks, versions, file);
     }
 
     componentWillReceiveProps(nextProps: any): void {
-        const { comments, tasks, versions } = nextProps;
-        if (this.state.feedItems.length > 0) {
-            return;
+        const { comments, tasks, versions, file } = nextProps;
+        this.updateFeedItems(comments, tasks, versions, file);
+    }
+
+    /**
+     * Checks to see if feed items should be added to the feed, and invokes the add and sort.
+     *
+     * @param {Comments} comments - API returned comments for this file
+     * @param {Tasks} tasks - API returned tasks for this file
+     * @param {FileVersions} versions - API returned file versions for this file
+     * @param {BoxItem} file - The file that owns all of the activity feed items
+     * @return {void}
+     */
+    updateFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file: BoxItem): void {
+        const isFeedEmpty = this.clearFeedItems(file);
+        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
+        const { feedItems } = this.state;
+
+        if (shouldSort && (isFeedEmpty || !feedItems.length)) {
+            // $FlowFixMe
+            this.sortFeedItems(comments, tasks, versions);
         }
-        this.sortFeedItems(comments, tasks, versions);
     }
 
     /**
@@ -273,14 +405,8 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param args Array<?Comments | ?Tasks | ?FileVersions> - Arguments list of each item container
      * type that is allowed in the feed.
      */
-    sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): void {
+    sortFeedItems(...args: Array<Comments | Tasks | FileVersions>): void {
         const feedItems = [];
-
-        // If all items are not ready, don't sort and render the feed
-        if (args.some((itemContainer) => !itemContainer || !itemContainer.entries)) {
-            return;
-        }
-
         args.forEach((itemContainer) => {
             // $FlowFixMe
             feedItems.push(...itemContainer.entries);

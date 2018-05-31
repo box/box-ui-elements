@@ -37,6 +37,21 @@ exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render ed
 </div>
 `;
 
+exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render error when no faces 1`] = `
+<div
+  className="be-faces"
+>
+  <ErrorMask
+    errorHeader={
+      <FormattedMessage
+        defaultMessage="We’re sorry, no skills information was found."
+        id="be.skillNoInfoFoundError"
+      />
+    }
+  />
+</div>
+`;
+
 exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render faces when not editable 1`] = `
 <div
   className="be-faces"

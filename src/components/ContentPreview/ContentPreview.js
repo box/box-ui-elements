@@ -71,7 +71,7 @@ type Props = {
     onMetric?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    previewInstance: any
+    previewInstance?: any
 };
 
 type State = {

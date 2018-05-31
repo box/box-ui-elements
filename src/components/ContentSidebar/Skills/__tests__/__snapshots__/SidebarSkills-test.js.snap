@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards when there are valid skills 1`] = `
+exports[`components/ContentSidebar/Skills/SidebarSkills should have no editable permission if can_upload is false 1`] = `
 <SidebarSkills
-  appElement={[MockFunction]}
   file={
     Object {
       "metadata": Object {
@@ -12,10 +11,69 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
               Object {
                 "entries": Array [
                   Object {
-                    "title": "foo",
+                    "title": "bar",
                   },
                 ],
               },
+            ],
+          },
+        },
+      },
+      "permissions": Object {
+        "can_upload": false,
+      },
+    }
+  }
+  getPreviewer={[MockFunction]}
+>
+  <sidebar-section
+    interactionTarget=""
+    key="card_7"
+    title={
+      <FormattedMessage
+        defaultMessage="Skill Card"
+        id="be.defaultSkill"
+      />
+    }
+  >
+    <sidebar-skills-card
+      card={
+        Object {
+          "entries": Array [
+            Object {
+              "title": "bar",
+            },
+          ],
+        }
+      }
+      cards={
+        Array [
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+          },
+        ]
+      }
+      getPreviewer={[MockFunction]}
+      isEditable={false}
+      onSkillChange={[Function]}
+    />
+  </sidebar-section>
+</SidebarSkills>
+`;
+
+exports[`components/ContentSidebar/Skills/SidebarSkills should render only the valid cards 1`] = `
+<SidebarSkills
+  file={
+    Object {
+      "metadata": Object {
+        "global": Object {
+          "boxSkillsCards": Object {
+            "cards": Array [
+              Object {},
               Object {
                 "entries": Array [
                   Object {
@@ -33,11 +91,10 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
     }
   }
   getPreviewer={[MockFunction]}
-  rootElement={[MockFunction]}
 >
   <sidebar-section
     interactionTarget=""
-    key="card_1"
+    key="card_6"
     title={
       <FormattedMessage
         defaultMessage="Skill Card"
@@ -46,52 +103,6 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
     }
   >
     <sidebar-skills-card
-      appElement={[MockFunction]}
-      card={
-        Object {
-          "entries": Array [
-            Object {
-              "title": "foo",
-            },
-          ],
-        }
-      }
-      cards={
-        Array [
-          Object {
-            "entries": Array [
-              Object {
-                "title": "foo",
-              },
-            ],
-          },
-          Object {
-            "entries": Array [
-              Object {
-                "title": "bar",
-              },
-            ],
-          },
-        ]
-      }
-      getPreviewer={[MockFunction]}
-      isEditable={true}
-      onSkillChange={[Function]}
-      rootElement={[MockFunction]}
-    />
-  </sidebar-section>
-  <sidebar-section
-    interactionTarget=""
-    key="card_2"
-    title={
-      <FormattedMessage
-        defaultMessage="Skill Card"
-        id="be.defaultSkill"
-      />
-    }
-  >
-    <sidebar-skills-card
-      appElement={[MockFunction]}
       card={
         Object {
           "entries": Array [
@@ -103,13 +114,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
       }
       cards={
         Array [
-          Object {
-            "entries": Array [
-              Object {
-                "title": "foo",
-              },
-            ],
-          },
+          Object {},
           Object {
             "entries": Array [
               Object {
@@ -122,7 +127,351 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
       getPreviewer={[MockFunction]}
       isEditable={true}
       onSkillChange={[Function]}
-      rootElement={[MockFunction]}
+    />
+  </sidebar-section>
+</SidebarSkills>
+`;
+
+exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards when there are valid skills 1`] = `
+<SidebarSkills
+  file={
+    Object {
+      "metadata": Object {
+        "global": Object {
+          "boxSkillsCards": Object {
+            "cards": Array [
+              Object {
+                "entries": Array [
+                  Object {
+                    "title": "foo",
+                  },
+                ],
+                "skill_card_title": Object {
+                  "code": "skills_faces",
+                },
+              },
+              Object {
+                "entries": Array [
+                  Object {
+                    "title": "bar",
+                  },
+                ],
+                "skill_card_title": Object {
+                  "code": "skills_transcript",
+                },
+              },
+              Object {
+                "entries": Array [
+                  Object {
+                    "title": "bar",
+                  },
+                ],
+                "skill_card_title": Object {
+                  "code": "skills_topics",
+                },
+              },
+              Object {
+                "entries": Array [
+                  Object {
+                    "title": "bar",
+                  },
+                ],
+                "skill_card_title": Object {
+                  "message": "title",
+                },
+              },
+            ],
+          },
+        },
+      },
+      "permissions": Object {
+        "can_upload": true,
+      },
+    }
+  }
+  getPreviewer={[MockFunction]}
+>
+  <sidebar-section
+    interactionTarget=""
+    key="card_1"
+    title={
+      <FormattedMessage
+        defaultMessage="Faces"
+        id="be.faceSkill"
+      />
+    }
+  >
+    <sidebar-skills-card
+      card={
+        Object {
+          "entries": Array [
+            Object {
+              "title": "foo",
+            },
+          ],
+          "skill_card_title": Object {
+            "code": "skills_faces",
+          },
+        }
+      }
+      cards={
+        Array [
+          Object {
+            "entries": Array [
+              Object {
+                "title": "foo",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_faces",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_transcript",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_topics",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "message": "title",
+            },
+          },
+        ]
+      }
+      getPreviewer={[MockFunction]}
+      isEditable={true}
+      onSkillChange={[Function]}
+    />
+  </sidebar-section>
+  <sidebar-section
+    interactionTarget=""
+    key="card_2"
+    title={
+      <FormattedMessage
+        defaultMessage="Transcript"
+        id="be.transcriptSkill"
+      />
+    }
+  >
+    <sidebar-skills-card
+      card={
+        Object {
+          "entries": Array [
+            Object {
+              "title": "bar",
+            },
+          ],
+          "skill_card_title": Object {
+            "code": "skills_transcript",
+          },
+        }
+      }
+      cards={
+        Array [
+          Object {
+            "entries": Array [
+              Object {
+                "title": "foo",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_faces",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_transcript",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_topics",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "message": "title",
+            },
+          },
+        ]
+      }
+      getPreviewer={[MockFunction]}
+      isEditable={true}
+      onSkillChange={[Function]}
+    />
+  </sidebar-section>
+  <sidebar-section
+    interactionTarget=""
+    key="card_3"
+    title={
+      <FormattedMessage
+        defaultMessage="Keywords"
+        id="be.keywordSkill"
+      />
+    }
+  >
+    <sidebar-skills-card
+      card={
+        Object {
+          "entries": Array [
+            Object {
+              "title": "bar",
+            },
+          ],
+          "skill_card_title": Object {
+            "code": "skills_topics",
+          },
+        }
+      }
+      cards={
+        Array [
+          Object {
+            "entries": Array [
+              Object {
+                "title": "foo",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_faces",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_transcript",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_topics",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "message": "title",
+            },
+          },
+        ]
+      }
+      getPreviewer={[MockFunction]}
+      isEditable={true}
+      onSkillChange={[Function]}
+    />
+  </sidebar-section>
+  <sidebar-section
+    interactionTarget=""
+    key="card_4"
+    title="title"
+  >
+    <sidebar-skills-card
+      card={
+        Object {
+          "entries": Array [
+            Object {
+              "title": "bar",
+            },
+          ],
+          "skill_card_title": Object {
+            "message": "title",
+          },
+        }
+      }
+      cards={
+        Array [
+          Object {
+            "entries": Array [
+              Object {
+                "title": "foo",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_faces",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_transcript",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "code": "skills_topics",
+            },
+          },
+          Object {
+            "entries": Array [
+              Object {
+                "title": "bar",
+              },
+            ],
+            "skill_card_title": Object {
+              "message": "title",
+            },
+          },
+        ]
+      }
+      getPreviewer={[MockFunction]}
+      isEditable={true}
+      onSkillChange={[Function]}
     />
   </sidebar-section>
 </SidebarSkills>

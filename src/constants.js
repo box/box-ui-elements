@@ -187,17 +187,17 @@ export const COLOR_999 = '#999';
 export const COLOR_WHITE = '#fff';
 
 /* ------------------ Skills  ---------------------- */
-export const SKILL_TRANSCRIPT: 'transcript' = 'transcript';
-export const SKILL_KEYWORD: 'keyword' = 'keyword';
-export const SKILL_TIMELINE: 'timeline' = 'timeline';
-export const SKILL_FACE: 'face' = 'face';
-export const SKILL_STATUS: 'status' = 'status';
-export const SKILLS_UNAUTHORIZED_REQUEST_ERROR = 'skills_unauthorized_request_error';
-export const SKILLS_FORBIDDEN_REQUEST_ERROR = 'skills_forbidden_request_error';
-export const SKILLS_INVALID_REQUEST_ERROR = 'skills_invalid_request_error';
-export const SKILLS_NOT_FOUND_ERROR = 'skills_not_found_error';
+export const SKILLS_TRANSCRIPT: 'transcript' = 'transcript';
+export const SKILLS_KEYWORD: 'keyword' = 'keyword';
+export const SKILLS_TIMELINE: 'timeline' = 'timeline';
+export const SKILLS_FACE: 'face' = 'face';
+export const SKILLS_STATUS: 'status' = 'status';
 export const SKILLS_INTERNAL_SERVER_ERROR = 'skills_internal_server_error';
 export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
+export const SKILLS_INVALID_FILE_SIZE = 'skills_invalid_file_size_error';
+export const SKILLS_INVALID_FILE_FORMAT = 'skills_invalid_file_format_error';
+export const SKILLS_NO_INFO_FOUND = 'skills_no_info_found_error';
+export const SKILLS_PENDING = 'skills_pending_status';
 
 /* ------------------ File Extensions  ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
