@@ -3,14 +3,6 @@ import { shallow } from 'enzyme';
 import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import withErrorHandling from '../withErrorHandling';
-import {
-    SKILLS_UNAUTHORIZED_REQUEST_ERROR,
-    SKILLS_FORBIDDEN_REQUEST_ERROR,
-    SKILLS_INVALID_REQUEST_ERROR,
-    SKILLS_NOT_FOUND_ERROR,
-    SKILLS_INTERNAL_SERVER_ERROR,
-    SKILLS_UNKNOWN_ERROR
-} from '../../../constants';
 
 describe('components/withErrorHandling', () => {
     const WrappedComponent = () => <div />;
@@ -67,28 +59,6 @@ describe('components/withErrorHandling', () => {
         expect(wrapper.find(ErrorMask)).toHaveLength(1);
         expect(wrapper.find(InlineError).exists()).toBe(false);
         expect(wrapper.find(WrappedComponent).exists()).toBe(false);
-    });
-
-    test('should render an ErrorMask if an error code is passed', () => {
-        const errorCodes = [
-            SKILLS_UNAUTHORIZED_REQUEST_ERROR,
-            SKILLS_FORBIDDEN_REQUEST_ERROR,
-            SKILLS_INVALID_REQUEST_ERROR,
-            SKILLS_NOT_FOUND_ERROR,
-            SKILLS_INTERNAL_SERVER_ERROR,
-            SKILLS_UNKNOWN_ERROR
-        ];
-
-        errorCodes.forEach((errorCode) => {
-            const props = {
-                errorCode
-            };
-            const wrapper = getWrapper(props);
-            expect(wrapper.find(ErrorMask)).toHaveLength(1);
-            expect(wrapper.find(InlineError).exists()).toBe(false);
-            expect(wrapper.find(WrappedComponent).exists()).toBe(false);
-            expect(wrapper).toMatchSnapshot();
-        });
     });
 
     test('should render an InlineError, along with the wrapped component', () => {

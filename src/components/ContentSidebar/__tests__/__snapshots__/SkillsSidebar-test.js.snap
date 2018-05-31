@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/Skills/SkillsSidebar should render skills sidebar component 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Skills"
+      id="be.sidebarSkillsTitle"
+    />
+  }
+>
+  <SidebarSkills
+    file={Object {}}
+    getPreviewer={[MockFunction]}
+    onSkillChange={[MockFunction]}
+  />
+</SidebarContent>
+`;

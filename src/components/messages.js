@@ -371,17 +371,22 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     skillUnknownError: {
         id: 'be.skillUnknownError',
         description: 'Default error message when skills fail to run',
-        defaultMessage: 'Something went wrong while running this skill or fetching its data.'
+        defaultMessage: 'Something went wrong with running this skill or fetching its data.'
     },
-    skillUnauthorizedError: {
-        id: 'be.skillUnauthorizedError',
-        description: 'Error message when skills unauthorized',
-        defaultMessage: 'You are unauthorized to see this skill.'
+    skillInvalidFileSizeError: {
+        id: 'be.skillInvalidFileSizeError',
+        description: 'Error message when skill fails due to file size',
+        defaultMessage: 'We’re sorry, no skills information was found. This file size is currently not supported.'
     },
-    skillForbiddenError: {
-        id: 'be.skillForbiddenError',
-        description: 'Error message when skills forbidden',
-        defaultMessage: 'You are forbidden to see this skill.'
+    skillInvalidFileExtensionError: {
+        id: 'be.skillInvalidFileExtensionError',
+        description: 'Error message when skill fails due to file extension',
+        defaultMessage: 'We’re sorry, no skills information was found. This file extension is currently not supported.'
+    },
+    skillNoInfoFoundError: {
+        id: 'be.skillNoInfoFoundError',
+        description: 'Error message when a skill has no data',
+        defaultMessage: 'We’re sorry, no skills information was found.'
     },
     uploadErrorTooManyFiles: {
         id: 'be.uploadErrorTooManyFiles',

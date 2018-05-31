@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/Skills/Status should render default status 1`] = `
+<ErrorMask
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="Something went wrong with running this skill or fetching its data."
+      id="be.skillUnknownError"
+    />
+  }
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/Status should render default status with message 1`] = `
+<ErrorMask
+  errorHeader="error"
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/Status should render file ext error 1`] = `
+<ErrorMask
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="We’re sorry, no skills information was found. This file extension is currently not supported."
+      id="be.skillInvalidFileExtensionError"
+    />
+  }
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/Status should render file size error 1`] = `
+<ErrorMask
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="We’re sorry, no skills information was found. This file size is currently not supported."
+      id="be.skillInvalidFileSizeError"
+    />
+  }
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/Status should render internal server error 1`] = `
+<ErrorMask
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="Something went wrong with running this skill or fetching its data."
+      id="be.skillUnknownError"
+    />
+  }
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/Status should render pending status 1`] = `<LoadingIndicator />`;
+
+exports[`components/ContentSidebar/Skills/Status should render unkown error 1`] = `
+<ErrorMask
+  errorHeader={
+    <FormattedMessage
+      defaultMessage="Something went wrong with running this skill or fetching its data."
+      id="be.skillUnknownError"
+    />
+  }
+/>
+`;
