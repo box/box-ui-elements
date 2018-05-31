@@ -142,7 +142,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
-    describe('onCommentCreateSuccess()', () => {
+    describe('createCommentSuccessCallback()', () => {
         let instance;
         let wrapper;
         beforeEach(() => {
@@ -154,7 +154,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState({ comments: undefined });
             instance.setState = jest.fn();
 
-            instance.onCommentCreateSuccess({});
+            instance.createCommentSuccessCallback({});
 
             expect(instance.setState).not.toBeCalled();
         });
@@ -167,7 +167,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 }
             });
 
-            instance.onCommentCreateSuccess({
+            instance.createCommentSuccessCallback({
                 type: 'comment'
             });
 
@@ -183,7 +183,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 }
             });
 
-            instance.onCommentCreateSuccess({
+            instance.createCommentSuccessCallback({
                 type: 'comment'
             });
 
@@ -192,7 +192,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
-    describe('onCommentCreate()', () => {
+    describe('createComment()', () => {
         let instance;
         let wrapper;
         let commentsAPI;
@@ -210,7 +210,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
 
         test('should throw an error if there is no file in the state', () => {
-            expect(instance.onCommentCreate).toThrow('Bad box item!');
+            expect(instance.createComment).toThrow('Bad box item!');
         });
 
         test('should have "message" data if comment does not contain mentions', (done) => {
@@ -223,7 +223,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
             instance.setState({ file });
 
-            instance.onCommentCreate(text, false);
+            instance.createComment(text, false);
         });
 
         test('should have "tagged_message" data if comment contains mentions', (done) => {
@@ -236,21 +236,21 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
             instance.setState({ file });
 
-            instance.onCommentCreate(text, true);
+            instance.createComment(text, true);
         });
 
-        test('should invoke onCommentCreateSuccess() with a new comment if api was successful', (done) => {
-            instance.onCommentCreateSuccess = jest.fn();
+        test('should invoke createCommentSuccessCallback() with a new comment if api was successful', (done) => {
+            instance.createCommentSuccessCallback = jest.fn();
             commentsAPI = {
                 createComment: ({ successCallback }) => {
                     successCallback();
-                    expect(instance.onCommentCreateSuccess).toBeCalled();
+                    expect(instance.createCommentSuccessCallback).toBeCalled();
                     done();
                 }
             };
             instance.setState({ file });
 
-            instance.onCommentCreate('text');
+            instance.createComment('text');
         });
 
         test('should invoke provided successCallback with a new comment if api was successful', (done) => {
@@ -264,7 +264,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
             instance.setState({ file });
 
-            instance.onCommentCreate('text', false, onSuccess);
+            instance.createComment('text', false, onSuccess);
         });
 
         test('should invoke errorCallback() if it failed to create a comment', (done) => {
@@ -278,7 +278,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
             instance.setState({ file });
 
-            instance.onCommentCreate('text');
+            instance.createComment('text');
         });
 
         test('should invoke provided errorCallback if it failed to create a comment', (done) => {
@@ -292,7 +292,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
             instance.setState({ file });
 
-            instance.onCommentCreate('text', false, jest.fn(), testErrorCallback);
+            instance.createComment('text', false, jest.fn(), testErrorCallback);
         });
     });
 });
