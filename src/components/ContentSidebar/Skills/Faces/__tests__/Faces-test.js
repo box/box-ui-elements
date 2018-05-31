@@ -3,6 +3,20 @@ import { shallow } from 'enzyme';
 import Faces from '../Faces';
 
 describe('components/ContentSidebar/Skills/Faces/Faces', () => {
+    test('should correctly render error when no faces', () => {
+        const props = {
+            card: {
+                duration: 100,
+                entries: []
+            },
+            isEditable: false,
+            onSkillChange: jest.fn()
+        };
+
+        const wrapper = shallow(<Faces {...props} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should correctly render faces when not editable', () => {
         const props = {
             card: {

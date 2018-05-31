@@ -26,8 +26,6 @@ type Props = {
     hasClassification: boolean,
     hasActivityFeed: boolean,
     hasVersions: boolean,
-    rootElement: HTMLElement,
-    appElement: HTMLElement,
     onAccessStatsClick?: Function,
     onDescriptionChange: Function,
     onClassificationClick?: Function,
@@ -125,8 +123,6 @@ class Sidebar extends React.Component<Props, State> {
             hasClassification,
             hasActivityFeed,
             hasVersions,
-            rootElement,
-            appElement,
             onAccessStatsClick,
             onDescriptionChange,
             onSkillChange,
@@ -183,8 +179,6 @@ class Sidebar extends React.Component<Props, State> {
                             hasAccessStats={hasAccessStats}
                             hasClassification={hasClassification}
                             hasVersions={hasVersions}
-                            appElement={appElement}
-                            rootElement={rootElement}
                             onSkillChange={onSkillChange}
                             onAccessStatsClick={onAccessStatsClick}
                             onClassificationClick={onClassificationClick}
@@ -197,13 +191,7 @@ class Sidebar extends React.Component<Props, State> {
                     )}
                 {view === SIDEBAR_VIEW_SKILLS &&
                     hasSidebarSkills && (
-                        <SkillsSidebar
-                            file={file}
-                            getPreviewer={getPreviewer}
-                            appElement={appElement}
-                            rootElement={rootElement}
-                            onSkillChange={onSkillChange}
-                        />
+                        <SkillsSidebar file={file} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />
                     )}
                 {view === SIDEBAR_VIEW_ACTIVITY &&
                     hasActivityFeed && (

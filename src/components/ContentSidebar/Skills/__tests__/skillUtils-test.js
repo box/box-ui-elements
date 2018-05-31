@@ -23,11 +23,11 @@ describe('components/ContentSidebar/skillUtils/hasSkills', () => {
     });
 
     test('should return false when box skills cards empty', () => {
-        expect(isValidSkillsCard({ entries: [] })).toBeFalsy();
+        expect(isValidSkillsCard({ entries: [] })).toBeTruthy();
         expect(hasSkills({ metadata: { global: { boxSkillsCards: { cards: [] } } } })).toBeFalsy();
     });
 
-    test('should return false when box skills cards entries empty', () => {
+    test('should return true when box skills cards entries empty', () => {
         expect(
             hasSkills({
                 metadata: {
@@ -42,7 +42,7 @@ describe('components/ContentSidebar/skillUtils/hasSkills', () => {
                     }
                 }
             })
-        ).toBeFalsy();
+        ).toBeTruthy();
     });
 
     test('should return true when box skills cards has error', () => {

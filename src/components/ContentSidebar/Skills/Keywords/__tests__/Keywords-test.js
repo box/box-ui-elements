@@ -66,4 +66,19 @@ describe('components/ContentSidebar/Skills/Keywords/Keywords', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should correctly render error mask when no keywords', () => {
+        const props = {
+            card: {
+                duration: 100,
+                entries: []
+            },
+            transcript: { duration: 100 },
+            isEditable: true,
+            onSkillChange: jest.fn()
+        };
+
+        const wrapper = shallow(<Keywords {...props} />);
+        expect(wrapper).toMatchSnapshot();
+    });
 });
