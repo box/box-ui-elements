@@ -8,6 +8,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import IconCopy from 'box-react-ui/lib/icons/general/IconCopy';
 import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
@@ -19,7 +20,6 @@ import { COLOR_999 } from '../../../../constants';
 import { copy } from '../../../../util/download';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 import messages from '../../../messages';
-
 import './Transcript.scss';
 
 type Props = {
@@ -248,6 +248,7 @@ class Transcript extends React.PureComponent<Props, State> {
     render() {
         const { card: { entries }, isEditable }: Props = this.props;
         const { isEditingIndex, isCollapsed }: State = this.state;
+        const hasEntries = entries.length > 0;
         const isEditing = typeof isEditingIndex === 'number';
         const editBtnClassName = classNames('be-transcript-edit', {
             'be-transcript-is-editing': isEditing
@@ -258,33 +259,42 @@ class Transcript extends React.PureComponent<Props, State> {
 
         return (
             <div className='be-transcript'>
-                <PlainButton
-                    type='button'
-                    className='be-transcript-copy'
-                    getDOMRef={this.copyBtnRef}
-                    onClick={this.copyTranscript}
-                >
-                    <IconCopy color={COLOR_999} />
-                </PlainButton>
-                <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleExpandCollapse}>
-                    {isCollapsed ? <IconExpand color={COLOR_999} /> : <IconCollapse color={COLOR_999} />}
-                </PlainButton>
-                {isEditable && (
+                {hasEntries && (
                     <PlainButton
                         type='button'
-                        className={editBtnClassName}
-                        onClick={this.toggleIsEditing}
-                        data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
+                        className='be-transcript-copy'
+                        getDOMRef={this.copyBtnRef}
+                        onClick={this.copyTranscript}
                     >
-                        <IconEdit />
+                        <IconCopy color={COLOR_999} />
                     </PlainButton>
                 )}
+                {hasEntries && (
+                    <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleExpandCollapse}>
+                        {isCollapsed ? <IconExpand color={COLOR_999} /> : <IconCollapse color={COLOR_999} />}
+                    </PlainButton>
+                )}
+                {hasEntries &&
+                    isEditable && (
+                        <PlainButton
+                            type='button'
+                            className={editBtnClassName}
+                            onClick={this.toggleIsEditing}
+                            data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
+                        >
+                            <IconEdit />
+                        </PlainButton>
+                    )}
                 {isEditing ? (
                     <div className='be-transcript-edit-message'>
                         <FormattedMessage {...messages.transcriptEdit} />
                     </div>
                 ) : null}
-                <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
+                {hasEntries ? (
+                    <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
+                ) : (
+                    <ErrorMask errorHeader={<FormattedMessage {...messages.skillNoInfoFoundError} />} />
+                )}
             </div>
         );
     }

@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/Skills/Sidebar should render activity sidebar 1`] = `
+<React.Fragment>
+  <SidebarNav
+    hasActivityFeed={true}
+    hasDetails={false}
+    onToggle={[Function]}
+    selectedView="activity"
+  />
+  <ActivitySidebar />
+</React.Fragment>
+`;
+
+exports[`components/ContentSidebar/Skills/Sidebar should render details sidebar 1`] = `
+<React.Fragment>
+  <SidebarNav
+    hasDetails={true}
+    onToggle={[Function]}
+    selectedView="details"
+  />
+  <DetailsSidebar
+    hasProperties={true}
+  />
+</React.Fragment>
+`;
+
+exports[`components/ContentSidebar/Skills/Sidebar should render no sidebar 1`] = `
+<React.Fragment>
+  <SidebarNav
+    hasDetails={false}
+    onToggle={[Function]}
+    selectedView="details"
+  />
+</React.Fragment>
+`;
+
+exports[`components/ContentSidebar/Skills/Sidebar should render skills sidebar 1`] = `
+<React.Fragment>
+  <SidebarNav
+    hasDetails={false}
+    hasSkills={true}
+    onToggle={[Function]}
+    selectedView="skills"
+  />
+  <SkillsSidebar />
+</React.Fragment>
+`;

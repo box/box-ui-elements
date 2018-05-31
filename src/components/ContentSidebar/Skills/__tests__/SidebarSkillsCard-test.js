@@ -1,24 +1,20 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
-import SidebarSkillsCard, { SidebarSkillsCardComponent } from '../SidebarSkillsCard';
+import { shallow } from 'enzyme';
+import SidebarSkillsCard from '../SidebarSkillsCard';
 import Transcript from '../Transcript';
 import Keywords from '../Keywords';
 import Faces from '../Faces';
-
-jest.mock('box-react-ui/lib/components/error-mask/ErrorMask', () => 'error-mask-mock');
+import Status from '../Status';
 
 describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
-    const getWrapper = (props) => shallow(<SidebarSkillsCardComponent {...props} />);
+    const getWrapper = (props) => shallow(<SidebarSkillsCard {...props} />);
 
     let cardProps;
 
     beforeEach(() => {
         cardProps = {
             card: {},
-            getPreviewer: jest.fn(),
-            rootElement: jest.fn(),
-            appElement: jest.fn()
+            getPreviewer: jest.fn()
         };
     });
 
@@ -32,6 +28,14 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
 
     test('should render timelines component', () => {
         cardProps.card.skill_card_type = 'timeline';
+        const wrapper = getWrapper(cardProps);
+
+        expect(wrapper.find(Faces)).toHaveLength(1);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render face component', () => {
+        cardProps.card.skill_card_type = 'face';
         const wrapper = getWrapper(cardProps);
 
         expect(wrapper.find(Faces)).toHaveLength(1);
@@ -55,12 +59,10 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
     });
 
     test('should render an error from the error code', () => {
-        const props = {
-            errorCode: 'foo'
-        };
-        const wrapper = mount(<SidebarSkillsCard {...props} />);
+        cardProps.card.skill_card_type = 'status';
+        const wrapper = getWrapper(cardProps);
 
-        expect(wrapper.find(ErrorMask)).toHaveLength(1);
+        expect(wrapper.find(Status)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 });

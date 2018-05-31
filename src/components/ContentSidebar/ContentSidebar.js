@@ -993,8 +993,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasAccessStats={hasAccessStats}
                                 hasClassification={hasClassification}
                                 hasActivityFeed={hasActivityFeed}
-                                appElement={this.appElement}
-                                rootElement={this.rootElement}
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
                                 onAccessStatsClick={onAccessStatsClick}

@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
+import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import Button from 'box-react-ui/lib/components/button/Button';
@@ -143,6 +144,7 @@ class Faces extends React.PureComponent<Props, State> {
         const { card, isEditable, getPreviewer }: Props = this.props;
         const { selected, faces, removes, isEditing }: State = this.state;
         const { duration }: SkillCard = card;
+        const hasFaces = faces.length > 0;
         const entries = faces.filter((face: SkillCardEntry) => !removes.includes(face));
         const editClassName = classNames('be-faces', {
             'be-faces-is-editing': isEditing
@@ -150,28 +152,33 @@ class Faces extends React.PureComponent<Props, State> {
 
         return (
             <div className={editClassName}>
-                {isEditable && (
-                    <PlainButton
-                        type='button'
-                        className='be-face-edit'
-                        onClick={this.toggleIsEditing}
-                        data-resin-target={SKILLS_TARGETS.FACES.EDIT}
-                    >
-                        <IconEdit />
-                    </PlainButton>
+                {hasFaces &&
+                    isEditable && (
+                        <PlainButton
+                            type='button'
+                            className='be-face-edit'
+                            onClick={this.toggleIsEditing}
+                            data-resin-target={SKILLS_TARGETS.FACES.EDIT}
+                        >
+                            <IconEdit />
+                        </PlainButton>
+                    )}
+                {hasFaces ? (
+                    entries.map((face: SkillCardEntry, index: number) => (
+                        /* eslint-disable react/no-array-index-key */
+                        <Face
+                            key={index}
+                            face={face}
+                            selected={selected}
+                            isEditing={isEditing}
+                            onDelete={this.onDelete}
+                            onSelect={this.onSelect}
+                        />
+                        /* eslint-enable react/no-array-index-key */
+                    ))
+                ) : (
+                    <ErrorMask errorHeader={<FormattedMessage {...messages.skillNoInfoFoundError} />} />
                 )}
-                {entries.map((face: SkillCardEntry, index: number) => (
-                    /* eslint-disable react/no-array-index-key */
-                    <Face
-                        key={index}
-                        face={face}
-                        selected={selected}
-                        isEditing={isEditing}
-                        onDelete={this.onDelete}
-                        onSelect={this.onSelect}
-                    />
-                    /* eslint-enable react/no-array-index-key */
-                ))}
                 {!!selected &&
                     !isEditing &&
                     Array.isArray(selected.appears) &&
@@ -183,17 +190,16 @@ class Faces extends React.PureComponent<Props, State> {
                             interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
                         />
                     )}
-                {isEditable &&
-                    isEditing && (
-                        <div className='be-faces-buttons'>
-                            <Button onClick={this.onCancel} data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}>
-                                <FormattedMessage {...messages.cancel} />
-                            </Button>
-                            <PrimaryButton onClick={this.onSave} data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}>
-                                <FormattedMessage {...messages.save} />
-                            </PrimaryButton>
-                        </div>
-                    )}
+                {isEditing && (
+                    <div className='be-faces-buttons'>
+                        <Button onClick={this.onCancel} data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}>
+                            <FormattedMessage {...messages.cancel} />
+                        </Button>
+                        <PrimaryButton onClick={this.onSave} data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}>
+                            <FormattedMessage {...messages.save} />
+                        </PrimaryButton>
+                    </div>
+                )}
             </div>
         );
     }

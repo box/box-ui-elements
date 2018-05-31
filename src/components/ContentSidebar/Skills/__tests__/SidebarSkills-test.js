@@ -2,7 +2,6 @@ import React from 'react';
 import { mount } from 'enzyme';
 import SidebarSkills from '../SidebarSkills';
 import SidebarSkillsCard from '../SidebarSkillsCard';
-import * as skillUtils from '../skillUtils';
 
 jest.mock('../../SidebarSection', () => 'sidebar-section');
 jest.mock('../SidebarSkillsCard', () => 'sidebar-skills-card');
@@ -11,8 +10,6 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
     const getWrapper = (props) => mount(<SidebarSkills {...props} />);
 
     test('should render the cards when there are valid skills', () => {
-        skillUtils.isValidSkillsCard = jest.fn(() => true);
-
         const props = {
             file: {
                 permissions: {
@@ -23,8 +20,44 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                         boxSkillsCards: {
                             cards: [
                                 {
+                                    skill_card_title: { code: 'skills_faces' },
                                     entries: [{ title: 'foo' }]
                                 },
+                                {
+                                    skill_card_title: { code: 'skills_transcript' },
+                                    entries: [{ title: 'bar' }]
+                                },
+                                {
+                                    skill_card_title: { code: 'skills_topics' },
+                                    entries: [{ title: 'bar' }]
+                                },
+                                {
+                                    skill_card_title: { message: 'title' },
+                                    entries: [{ title: 'bar' }]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            getPreviewer: jest.fn()
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(SidebarSkillsCard)).toHaveLength(4);
+    });
+
+    test('should render only the valid cards', () => {
+        const props = {
+            file: {
+                permissions: {
+                    can_upload: true
+                },
+                metadata: {
+                    global: {
+                        boxSkillsCards: {
+                            cards: [
+                                {},
                                 {
                                     entries: [{ title: 'bar' }]
                                 }
@@ -33,12 +66,35 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                     }
                 }
             },
-            getPreviewer: jest.fn(),
-            rootElement: jest.fn(),
-            appElement: jest.fn()
+            getPreviewer: jest.fn()
         };
         const wrapper = getWrapper(props);
-        expect(wrapper.find(SidebarSkillsCard)).toHaveLength(2);
         expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(SidebarSkillsCard)).toHaveLength(1);
+    });
+
+    test('should have no editable permission if can_upload is false', () => {
+        const props = {
+            file: {
+                permissions: {
+                    can_upload: false
+                },
+                metadata: {
+                    global: {
+                        boxSkillsCards: {
+                            cards: [
+                                {
+                                    entries: [{ title: 'bar' }]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            getPreviewer: jest.fn()
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(SidebarSkillsCard)).toHaveLength(1);
     });
 });
