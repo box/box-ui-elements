@@ -217,30 +217,6 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Replace a feed item with new feed item data.
-     *
-     * @param {Comment | Task} feedItem - API returned feed item data.
-     * @param {string} id - ID of the feed item to replace.
-     * @return {void}
-     */
-    updateFeedItem = (feedItem: Comment | Task, id: string): void => {
-        this.setState({
-            feedItems: this.state.feedItems.map((item: Comment | Task | BoxItemVersion) => {
-                if (item.id === id) {
-                    // $FlowFixMe
-                    item.isPending = false;
-                    // $FlowFixMe
-                    return {
-                        ...item,
-                        ...feedItem
-                    };
-                }
-                return item;
-            })
-        });
-    };
-
-    /**
      * Called on successful update of a task
      *
      * @param {Object} task the updated task
