@@ -14,6 +14,10 @@ const {
 
 jest.mock('../Sidebar', () => 'sidebar');
 
+const file = {
+    id: 'I_AM_A_FILE'
+};
+
 describe('components/ContentSidebar/ContentSidebar', () => {
     let rootElement;
     const getWrapper = (props) => mount(<ContentSidebar {...props} />, { attachTo: rootElement });
@@ -196,9 +200,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let instance;
         let wrapper;
         let commentsAPI;
-        const file = {
-            id: 'I_AM_A_FILE'
-        };
+
         const api = {
             getCommentsAPI: () => commentsAPI
         };
@@ -283,6 +285,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should invoke provided errorCallback if it failed to create a comment', (done) => {
             const testErrorCallback = jest.fn();
+            instance.errorCallback = jest.fn();
+
             commentsAPI = {
                 createComment: ({ errorCallback }) => {
                     errorCallback();
@@ -293,6 +297,381 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState({ file });
 
             instance.createComment('text', false, jest.fn(), testErrorCallback);
+        });
+    });
+
+    describe('createTask()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+
+        const api = {
+            getTaskAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.createTask).toThrow('Bad box item!');
+        });
+    });
+
+    describe('updateTask()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+
+        const api = {
+            getTasksAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.updateTask).toThrow('Bad box item!');
+        });
+
+        test('should execute success callback', (done) => {
+            const onTaskUpdate = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                onTaskUpdate
+            });
+            instance.updateTaskSuccessCallback = jest.fn();
+
+            tasksAPI = {
+                updateTask: ({ successCallback }) => {
+                    successCallback();
+
+                    expect(instance.updateTaskSuccessCallback).toBeCalled();
+                    expect(onTaskUpdate).toBeCalled();
+                    expect(successCb).toBeCalled();
+                    expect(errorCb).not.toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file });
+            instance.updateTask('1', 'foo', successCb, errorCb);
+        });
+
+        test('should execute error callback', (done) => {
+            const onTaskUpdate = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                onTaskUpdate
+            });
+            instance.updateTaskSuccessCallback = jest.fn();
+            instance.errorCallback = jest.fn();
+
+            tasksAPI = {
+                updateTask: ({ errorCallback }) => {
+                    errorCallback();
+
+                    expect(instance.updateTaskSuccessCallback).not.toBeCalled();
+                    expect(onTaskUpdate).not.toBeCalled();
+                    expect(successCb).not.toBeCalled();
+                    expect(errorCb).toBeCalled();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file }, () => {
+                instance.updateTask('1', 'foo', successCb, errorCb);
+            });
+        });
+    });
+
+    describe('updateTaskSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should add the task to the task entries state', () => {
+            wrapper.setState({
+                tasks: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.updateTaskSuccessCallback({
+                type: 'task'
+            });
+
+            const { tasks } = instance.state;
+            expect(tasks.entries.length).toBe(1);
+        });
+
+        test('should increase total_count of the task state', () => {
+            wrapper.setState({
+                tasks: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.updateTaskSuccessCallback({
+                type: 'task'
+            });
+
+            const { tasks } = instance.state;
+            expect(tasks.total_count).toBe(1);
+        });
+    });
+
+    describe('deleteTaskSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should not delete the task entries state if invalid task id', () => {
+            wrapper.setState({
+                tasks: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id: '1'
+                        }
+                    ]
+                }
+            });
+
+            instance.deleteTaskSuccessCallback('2');
+            expect(wrapper.state('tasks').total_count).toBe(1);
+        });
+
+        test('should delete the task entry', () => {
+            const id = '1';
+
+            wrapper.setState({
+                tasks: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id
+                        }
+                    ]
+                }
+            });
+
+            instance.deleteTaskSuccessCallback(id);
+
+            const tasks = wrapper.state('tasks');
+            expect(tasks.total_count).toBe(0);
+            expect(tasks.entries.length).toBe(0);
+        });
+    });
+
+    describe('deleteTask()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+
+        const api = {
+            getTasksAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.updateTask).toThrow('Bad box item!');
+        });
+
+        test('should execute success callback', (done) => {
+            const onTaskUpdate = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                onTaskUpdate
+            });
+            instance.updateTaskSuccessCallback = jest.fn();
+
+            tasksAPI = {
+                updateTask: ({ successCallback }) => {
+                    successCallback();
+
+                    expect(instance.updateTaskSuccessCallback).toBeCalled();
+                    expect(onTaskUpdate).toBeCalled();
+                    expect(successCb).toBeCalled();
+                    expect(errorCb).not.toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file });
+            instance.updateTask('1', 'foo', successCb, errorCb);
+        });
+
+        test('should execute error callback', (done) => {
+            const onTaskUpdate = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                onTaskUpdate
+            });
+            instance.updateTaskSuccessCallback = jest.fn();
+            instance.errorCallback = jest.fn();
+
+            tasksAPI = {
+                updateTask: ({ errorCallback }) => {
+                    errorCallback();
+
+                    expect(instance.updateTaskSuccessCallback).not.toBeCalled();
+                    expect(onTaskUpdate).not.toBeCalled();
+                    expect(successCb).not.toBeCalled();
+                    expect(errorCb).toBeCalled();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file }, () => {
+                instance.updateTask('1', 'foo', successCb, errorCb);
+            });
+        });
+    });
+
+    describe('deleteComment()', () => {
+        let instance;
+        let wrapper;
+        let commentsAPI;
+
+        const api = {
+            getCommentsAPI: () => commentsAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should execute success callback', (done) => {
+            const onCommentDelete = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                onCommentDelete
+            });
+            instance.deleteCommentSuccessCallback = jest.fn();
+
+            commentsAPI = {
+                deleteComment: ({ successCallback }) => {
+                    successCallback();
+
+                    expect(instance.deleteCommentSuccessCallback).toBeCalled();
+                    expect(onCommentDelete).toBeCalled();
+                    expect(successCb).toBeCalled();
+                    expect(errorCb).not.toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file });
+            instance.deleteComment('1', successCb, errorCb);
+        });
+
+        test('should execute error callback', (done) => {
+            const onCommentDelete = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                onCommentDelete
+            });
+            instance.deleteCommentSuccessCallback = jest.fn();
+            instance.errorCallback = jest.fn();
+
+            commentsAPI = {
+                deleteComment: ({ errorCallback }) => {
+                    errorCallback();
+
+                    expect(instance.deleteCommentSuccessCallback).not.toBeCalled();
+                    expect(onCommentDelete).not.toBeCalled();
+                    expect(successCb).not.toBeCalled();
+                    expect(errorCb).toBeCalled();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file }, () => {
+                instance.deleteComment('1', successCb, errorCb);
+            });
+        });
+    });
+
+    describe('deleteCommentSuccessCallback', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should not delete the comment entries state if invalid comment id', () => {
+            wrapper.setState({
+                comments: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id: '1'
+                        }
+                    ]
+                }
+            });
+            instance.setState = jest.fn();
+
+            instance.deleteCommentSuccessCallback('2');
+            expect(wrapper.state('comments').total_count).toBe(1);
+        });
+
+        test('should delete the comments entry', () => {
+            const id = '1';
+
+            wrapper.setState({
+                comments: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id
+                        }
+                    ]
+                }
+            });
+
+            instance.deleteCommentSuccessCallback(id);
+
+            const comments = wrapper.state('comments');
+            expect(comments.total_count).toBe(0);
+            expect(comments.entries.length).toBe(0);
         });
     });
 });

@@ -621,11 +621,11 @@ class ContentSidebar extends PureComponent<Props, State> {
     createCommentSuccessCallback(comment: Comment): void {
         const { comments } = this.state;
         if (comments && comments.entries) {
-            const newComments = { ...comments };
-            newComments.total_count += 1;
-            newComments.entries.push(comment);
             this.setState({
-                comments: newComments
+                comments: {
+                    entries: [...comments.entries, comment],
+                    total_count: comments.total_count + 1
+                }
             });
         }
     }
@@ -806,20 +806,22 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} task - Box task
      * @return {void}
      */
-    deleteTaskSuccessCallback(taskId: string) {
+    deleteTaskSuccessCallback = (taskId: string) => {
         const { tasks } = this.state;
 
         if (tasks) {
-            const { entries, total_count: totalCount } = tasks;
+            const { entries } = tasks;
+
+            const newEntries = entries.filter((task) => task.id !== taskId);
 
             this.setState({
                 tasks: {
-                    entries: entries.filter((task) => task.id !== taskId),
-                    total_count: totalCount - 1
+                    entries: newEntries,
+                    total_count: newEntries.length
                 }
             });
         }
-    }
+    };
 
     /**
      * Deletes a comment
@@ -864,20 +866,22 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} commentId - The comment's id
      * @return {void}
      */
-    deleteCommentSuccessCallback(commentId: string) {
+    deleteCommentSuccessCallback = (commentId: string) => {
         const { comments } = this.state;
 
         if (comments) {
-            const { entries, total_count: totalCount } = comments;
+            const { entries } = comments;
+
+            const newEntries = entries.filter((comment) => comment.id !== commentId);
 
             this.setState({
                 comments: {
-                    entries: entries.filter((comment) => comment.id !== commentId),
-                    total_count: totalCount - 1
+                    entries: newEntries,
+                    total_count: newEntries.length
                 }
             });
         }
-    }
+    };
 
     /**
      * Fetches the tasks for a file
