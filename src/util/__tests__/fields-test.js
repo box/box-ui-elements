@@ -28,7 +28,8 @@ import {
     FIELD_VERSION_NUMBER,
     FIELD_METADATA_SKILLS,
     FIELD_ITEM_EXPIRATION,
-    FIELD_METADATA_CLASSIFICATION
+    FIELD_METADATA_CLASSIFICATION,
+    FIELD_COMMENT_COUNT
 } from '../../constants';
 
 describe('util/fields/getFieldsAsString()', () => {
@@ -109,6 +110,7 @@ describe('util/fields/getFieldsAsString()', () => {
                     FIELD_ITEM_EXPIRATION,
                     FIELD_METADATA_CLASSIFICATION,
                     FIELD_VERSION_NUMBER,
+                    FIELD_COMMENT_COUNT,
                     FIELD_REPRESENTATIONS,
                     FIELD_SHA1,
                     FIELD_WATERMARK_INFO,
