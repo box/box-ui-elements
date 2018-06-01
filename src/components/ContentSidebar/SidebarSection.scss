@@ -22,6 +22,10 @@
     &:focus {
         border-bottom-color: $blue;
         text-decoration: none;
+
+        svg path {
+            fill: $twos;
+        }
     }
 
     .icon-caret-down {
