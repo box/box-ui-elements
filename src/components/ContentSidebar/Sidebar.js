@@ -73,20 +73,6 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     /**
-     * Called when sidebar gets new properties
-     *
-     * @private
-     * @return {void}
-     */
-    componentWillReceiveProps(nextProps: Props): void {
-        const newView = this.getDefaultView(nextProps);
-        const { view }: State = this.state;
-        if (view && newView !== view) {
-            this.setState({ view: newView });
-        }
-    }
-
-    /**
      * Determines the default view
      *
      * @private

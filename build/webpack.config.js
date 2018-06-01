@@ -45,6 +45,9 @@ function getConfig(isReactExternalized) {
                 'box-react-ui-locale-data': path.resolve(`node_modules/box-react-ui/i18n/${language}`)
             }
         },
+        devServer: {
+            host: '0.0.0.0'
+        },
         resolveLoader: {
             modules: [path.resolve('src'), path.resolve('node_modules')]
         },
