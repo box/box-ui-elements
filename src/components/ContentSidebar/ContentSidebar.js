@@ -680,7 +680,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Task} task - The newly created task from the API
      * @return {void}
      */
-    onTaskCreateSuccess(task: Task): void {
+    createTaskSuccess(task: Task): void {
         const { tasks } = this.state;
         if (tasks && tasks.entries) {
             const newTasks = { ...tasks };
@@ -700,10 +700,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Array} assignees - Array of assignees
      * @param {string} dueAt - The comment's text
      * @param {Function} successCallback - Called on successful task creation
-     * @param {Function} errorCallback - Called on failure to task comment
+     * @param {Function} errorCallback - Called on failure to create task
      * @return {void}
      */
-    onTaskCreate = (
+    createTask = (
         text: string,
         assignees: Array<SelectorItems>,
         dueAt?: string,
@@ -721,7 +721,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             message: text,
             dueAt,
             successCallback: (task: Task) => {
-                this.onTaskCreateSuccess(task);
+                this.createTaskSuccess(task);
                 successCallback(task);
             },
             errorCallback: (e: Error) => {
@@ -1011,7 +1011,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 currentUserError={currentUserError}
                                 onCommentCreate={this.onCommentCreate}
                                 onCommentDelete={onCommentDelete}
-                                onTaskCreate={this.onTaskCreate}
+                                onTaskCreate={this.createTask}
                                 onTaskDelete={onTaskDelete}
                                 onTaskUpdate={onTaskUpdate}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}

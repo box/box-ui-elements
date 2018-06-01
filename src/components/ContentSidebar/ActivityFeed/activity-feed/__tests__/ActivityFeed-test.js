@@ -405,26 +405,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(feedItems[0].message).toBe(message);
         });
 
-        test('should mark the item with matching item as longer pending', () => {
-            const uuid = 'a1b2c3d4e5f6';
-            const message = 'This is missing in the pending item';
-            const oldFeedItems = [
-                {
-                    id: uuid
-                }
-            ];
-            const item = {
-                message
-            };
-            instance.setState({ feedItems: oldFeedItems });
-
-            // New item details
-            instance.updateFeedItem(item, uuid);
-
-            const { feedItems } = instance.state;
-            expect(feedItems[0].isPending).toBe(false);
-        });
-
         test('should do nothing if it can\'t find an item with matching uuid', () => {
             const uuid = 'a1b2c3d4e5f6';
             const message = 'This is missing in the pending item';
@@ -460,7 +440,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const id = '0987654321';
             instance.createCommentSuccessCallback({ tagged_message: text }, id);
 
-            expect(instance.updateFeedItem).toBeCalledWith({ tagged_message: text }, id);
+            expect(instance.updateFeedItem).toBeCalledWith({ tagged_message: text, isPending: false }, id);
         });
 
         it('should assign tagged_message of the comment with tagged_message value if it exists', (done) => {
@@ -471,7 +451,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 expect(tagged_message).toEqual(text);
                 done();
             };
-            instance.createCommentSuccessCallback({ tagged_message: text }, id);
+            instance.createCommentSuccessCallback({ tagged_message: text, isPending: false }, id);
         });
 
         it('should assign tagged_message of the comment with message value if it exists', (done) => {
@@ -572,7 +552,8 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         it('should invoke updateFeedItem() with task and id to update', () => {
             const task = {
-                message: 'a message'
+                message: 'a message',
+                isPending: false
             };
             const id = 'uniqueId';
             instance.updateFeedItem = jest.fn();

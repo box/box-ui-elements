@@ -102,8 +102,6 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems: this.state.feedItems.map((item: Comment | Task | BoxItemVersion) => {
                 if (item.id === id) {
                     // $FlowFixMe
-                    item.isPending = false;
-                    // $FlowFixMe
                     return {
                         ...item,
                         ...feedItem
@@ -126,7 +124,13 @@ class ActivityFeed extends React.Component<Props, State> {
         // Comment component uses tagged_message only
         commentData.tagged_message = tagged_message || message;
 
-        this.updateFeedItem(commentData, id);
+        this.updateFeedItem(
+            {
+                ...commentData,
+                isPending: false
+            },
+            id
+        );
     };
 
     /**
@@ -137,7 +141,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {void}
      */
     createCommentErrorCallback = (error: Error, id: string): void => {
-        console.log('Implement createCommentErrorCallback() via updateFeedItemPendingStatus()', error, id);
+        console.error('Implement createCommentErrorCallback() via updateFeedItemPendingStatus()', error, id);
     };
 
     /**
@@ -189,7 +193,13 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {void}
      */
     createTaskSuccessCallback(task: Task, id: string): void {
-        this.updateFeedItem(task, id);
+        this.updateFeedItem(
+            {
+                ...task,
+                isPending: false
+            },
+            id
+        );
     }
 
     /**
@@ -200,7 +210,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {void}
      */
     createTaskErrorCallback(error: Error, id: string): void {
-        console.log('Implement createTaskErrorCallback() via updateFeedItemPendingStatus()', error, id);
+        console.error('Implement createTaskErrorCallback() via updateFeedItemPendingStatus()', error, id);
     }
 
     /**

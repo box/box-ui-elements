@@ -296,7 +296,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
-    describe('onTaskCreateSuccess()', () => {
+    describe('createTaskSuccess()', () => {
         let instance;
         let wrapper;
         beforeEach(() => {
@@ -308,12 +308,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState({ tasks: undefined });
             instance.setState = jest.fn();
 
-            instance.onTaskCreateSuccess({});
+            instance.createTaskSuccess({});
 
             expect(instance.setState).not.toBeCalled();
         });
 
-        test('should add the task to the task entries state', () => {
+        test('should add the task to the task entries state, and increates total_count by one', () => {
             instance.setState({
                 tasks: {
                     total_count: 0,
@@ -321,32 +321,17 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 }
             });
 
-            instance.onTaskCreateSuccess({
+            instance.createTaskSuccess({
                 type: 'task'
             });
 
             const { tasks } = instance.state;
             expect(tasks.entries.length).toBe(1);
-        });
-
-        test('should increase total_count of the task state', () => {
-            instance.setState({
-                tasks: {
-                    total_count: 0,
-                    entries: []
-                }
-            });
-
-            instance.onTaskCreateSuccess({
-                type: 'task'
-            });
-
-            const { tasks } = instance.state;
             expect(tasks.total_count).toBe(1);
         });
     });
 
-    describe.only('onTaskCreate()', () => {
+    describe.only('createTask()', () => {
         let instance;
         let wrapper;
         let tasksAPI;
@@ -364,21 +349,21 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
 
         test('should throw an error if there is no file in the state', () => {
-            expect(instance.onTaskCreate).toThrow('Bad box item!');
+            expect(instance.createTask).toThrow('Bad box item!');
         });
 
-        test('should invoke onTaskCreateSuccess() with a new task if api was successful', (done) => {
-            instance.onTaskCreateSuccess = jest.fn();
+        test('should invoke createTaskSuccess() with a new task if api was successful', (done) => {
+            instance.createTaskSuccess = jest.fn();
             tasksAPI = {
                 createTask: ({ successCallback }) => {
                     successCallback();
-                    expect(instance.onTaskCreateSuccess).toBeCalled();
+                    expect(instance.createTaskSuccess).toBeCalled();
                     done();
                 }
             };
             instance.setState({ file });
 
-            instance.onTaskCreate('text');
+            instance.createTask('text');
         });
 
         test('should invoke provided successCallback with a new task if api was successful', (done) => {
@@ -392,7 +377,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
             instance.setState({ file });
 
-            instance.onTaskCreate('text', undefined, undefined, onSuccess);
+            instance.createTask('text', undefined, undefined, onSuccess);
         });
 
         test('should invoke errorCallback() if it failed to create a task', (done) => {
@@ -406,7 +391,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
             instance.setState({ file });
 
-            instance.onTaskCreate('text');
+            instance.createTask('text');
         });
 
         test('should invoke provided errorCallback if it failed to create a task', (done) => {
@@ -420,7 +405,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
             instance.setState({ file });
 
-            instance.onTaskCreate('text', undefined, undefined, undefined, testErrorCallback);
+            instance.createTask('text', undefined, undefined, undefined, testErrorCallback);
         });
     });
 });
