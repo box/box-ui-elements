@@ -23,18 +23,20 @@ export function collapseFeedState(feedState: FeedItems): FeedItems {
             feedItem.action === ItemTypes.upload &&
             previousFeedItem.action === ItemTypes.upload
         ) {
-            const parsedVersionNumber = parseInt(previousFeedItem.version_number, 10);
+            const parsedPreviousVersionNumber = parseInt(previousFeedItem.version_number, 10);
 
             const {
                 modified_by: prevModifiedBy,
                 versions = [previousFeedItem],
-                version_start = parsedVersionNumber,
-                version_end = parsedVersionNumber
+                version_start = parsedPreviousVersionNumber,
+                version_end = parsedPreviousVersionNumber
             } = previousFeedItem;
             const { action, modified_by, created_at, trashed_at, id, version_number } = feedItem;
             const collaborators = previousFeedItem.collaborators || {
                 [prevModifiedBy.id]: { ...prevModifiedBy }
             };
+
+            const parsedVersionNumber = parseInt(previousFeedItem.version_number, 10);
 
             // add collaborators
             collaborators[modified_by.id] = { ...modified_by };
