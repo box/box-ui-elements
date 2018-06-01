@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/Skills/Transcript/TranscriptRow should correctly render read when editing 1`] = `<EditingTranscriptRow />`;
+
+exports[`components/ContentSidebar/Skills/Transcript/TranscriptRow should correctly render read when not editing 1`] = `<ReadOnlyTranscriptRow />`;
