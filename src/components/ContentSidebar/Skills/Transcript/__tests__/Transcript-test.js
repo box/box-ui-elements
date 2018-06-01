@@ -18,6 +18,28 @@ describe('components/ContentSidebar/Skills/Transcript/Transcript', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should correctly render expand button', () => {
+        const props = {
+            card: {
+                duration: 100,
+                entries: [
+                    { text: 'foo' },
+                    { text: 'bar' },
+                    { text: 'bar1' },
+                    { text: 'bar2' },
+                    { text: 'bar3' },
+                    { text: 'bar4' }
+                ]
+            },
+            transcript: { duration: 100 },
+            isEditable: true,
+            onSkillChange: jest.fn()
+        };
+
+        const wrapper = shallow(<Transcript {...props} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should correctly render error mask when no Transcript', () => {
         const props = {
             card: {
