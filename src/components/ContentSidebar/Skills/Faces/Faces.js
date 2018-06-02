@@ -14,9 +14,9 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import Face from './Face';
 import Timeline from '../Timeline';
+import SkillsBusyIndicator from '../SkillsBusyIndicator';
 import messages from '../../../messages';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
-
 import './Faces.scss';
 
 type Props = {
@@ -29,6 +29,7 @@ type Props = {
 type State = {
     selected?: SkillCardEntry,
     isEditing: boolean,
+    isLoading: boolean,
     faces: Array<SkillCardEntry>,
     removes: Array<SkillCardEntry>
 };
@@ -48,7 +49,8 @@ class Faces extends React.PureComponent<Props, State> {
         this.state = {
             faces: props.card.entries,
             removes: [],
-            isEditing: false
+            isEditing: false,
+            isLoading: false
         };
     }
 
@@ -60,7 +62,13 @@ class Faces extends React.PureComponent<Props, State> {
      * @return {void}
      */
     resetState(props: Props): void {
-        this.setState({ faces: props.card.entries, removes: [], isEditing: false, selected: undefined });
+        this.setState({
+            faces: props.card.entries,
+            removes: [],
+            isEditing: false,
+            selected: undefined,
+            isLoading: false
+        });
     }
 
     /**
@@ -120,8 +128,11 @@ class Faces extends React.PureComponent<Props, State> {
     onSave = (): void => {
         const { onSkillChange }: Props = this.props;
         const { removes }: State = this.state;
-        onSkillChange(removes);
         this.toggleIsEditing();
+        if (removes.length > 0) {
+            this.setState({ isLoading: true });
+            onSkillChange(removes);
+        }
     };
 
     /**
@@ -142,7 +153,7 @@ class Faces extends React.PureComponent<Props, State> {
      */
     render() {
         const { card, isEditable, getPreviewer }: Props = this.props;
-        const { selected, faces, removes, isEditing }: State = this.state;
+        const { selected, faces, removes, isEditing, isLoading }: State = this.state;
         const { duration }: SkillCard = card;
         const hasFaces = faces.length > 0;
         const entries = faces.filter((face: SkillCardEntry) => !removes.includes(face));
@@ -153,7 +164,8 @@ class Faces extends React.PureComponent<Props, State> {
         return (
             <div className={editClassName}>
                 {hasFaces &&
-                    isEditable && (
+                    isEditable &&
+                    !isLoading && (
                         <PlainButton
                             type='button'
                             className='be-face-edit'
@@ -192,14 +204,23 @@ class Faces extends React.PureComponent<Props, State> {
                     )}
                 {isEditing && (
                     <div className='be-faces-buttons'>
-                        <Button onClick={this.onCancel} data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}>
+                        <Button
+                            type='button'
+                            onClick={this.onCancel}
+                            data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}
+                        >
                             <FormattedMessage {...messages.cancel} />
                         </Button>
-                        <PrimaryButton onClick={this.onSave} data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}>
+                        <PrimaryButton
+                            type='button'
+                            onClick={this.onSave}
+                            data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}
+                        >
                             <FormattedMessage {...messages.save} />
                         </PrimaryButton>
                     </div>
                 )}
+                {isLoading && <SkillsBusyIndicator />}
             </div>
         );
     }

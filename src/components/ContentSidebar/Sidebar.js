@@ -73,17 +73,56 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     /**
+     * Should update the view if the view isn't applicable
+     *
+     * @private
+     * @return {void}
+     */
+    componentWillReceiveProps(nextProps: Props): void {
+        const { view }: State = this.state;
+        if (
+            (view === SIDEBAR_VIEW_SKILLS && !this.canHaveSkillsSidebar(nextProps)) ||
+            (view === SIDEBAR_VIEW_ACTIVITY && !this.canHaveActivitySidebar(nextProps))
+        ) {
+            this.setState({ view: this.getDefaultView(nextProps) });
+        }
+    }
+
+    /**
+     * Determines if skills sidebar is allowed
+     *
+     * @private
+     * @return {string} default view
+     */
+    canHaveSkillsSidebar(props: Props): boolean {
+        const { hasSkills, file } = props;
+        return hasSkills && hasSkillsData(file);
+    }
+
+    /**
+     * Determines if activity sidebar is allowed
+     *
+     * @private
+     * @return {string} default view
+     */
+    canHaveActivitySidebar(props: Props): boolean {
+        const { hasActivityFeed } = props;
+        return hasActivityFeed;
+    }
+
+    /**
      * Determines the default view
      *
      * @private
      * @return {string} default view
      */
     getDefaultView(props: Props): SidebarView {
-        const { hasSkills, hasActivityFeed, file } = props;
-        let view = hasSkills && hasSkillsData(file) ? SIDEBAR_VIEW_SKILLS : undefined;
-        view = view || (hasActivityFeed ? SIDEBAR_VIEW_ACTIVITY : undefined);
-        view = view || SIDEBAR_VIEW_DETAILS;
-        return view;
+        if (this.canHaveSkillsSidebar(props)) {
+            return SIDEBAR_VIEW_SKILLS;
+        } else if (this.canHaveActivitySidebar(props)) {
+            return SIDEBAR_VIEW_ACTIVITY;
+        }
+        return SIDEBAR_VIEW_DETAILS;
     }
 
     /**
@@ -136,7 +175,7 @@ class Sidebar extends React.Component<Props, State> {
         }: Props = this.props;
 
         const { view } = this.state;
-        const hasSidebarSkills = hasSkills && hasSkillsData(file);
+        const hasSidebarSkills = this.canHaveSkillsSidebar(this.props);
         const hasDetails = shouldRenderDetailsSidebar({
             hasProperties,
             hasAccessStats,

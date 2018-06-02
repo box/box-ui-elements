@@ -135,13 +135,13 @@ class EditableKeywords extends React.PureComponent<Props, State> {
                     value={keyword}
                 />
                 <div className='be-keywords-buttons'>
-                    <Button onClick={onCancel}>
+                    <Button type='button' onClick={onCancel}>
                         <FormattedMessage
                             {...messages.cancel}
                             data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_CANCEL}
                         />
                     </Button>
-                    <PrimaryButton onClick={onSave}>
+                    <PrimaryButton type='button' onClick={onSave}>
                         <FormattedMessage {...messages.save} data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_SAVE} />
                     </PrimaryButton>
                 </div>

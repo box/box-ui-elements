@@ -4,24 +4,28 @@ exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly
 <div
   className="be-transcript"
 >
-  <PlainButton
-    className="be-transcript-copy"
-    getDOMRef={[Function]}
-    onClick={[Function]}
-    type="button"
+  <div
+    className="be-transcript-actions"
   >
-    <IconCopy
-      color="#999"
-    />
-  </PlainButton>
-  <PlainButton
-    className="be-transcript-edit"
-    data-resin-target="skill-transcriptedit"
-    onClick={[Function]}
-    type="button"
-  >
-    <IconEdit />
-  </PlainButton>
+    <PlainButton
+      className="be-transcript-copy"
+      getDOMRef={[Function]}
+      onClick={[Function]}
+      type="button"
+    >
+      <IconCopy
+        color="#999"
+      />
+    </PlainButton>
+    <PlainButton
+      className="be-transcript-edit"
+      data-resin-target="skill-transcriptedit"
+      onClick={[Function]}
+      type="button"
+    >
+      <IconEdit />
+    </PlainButton>
+  </div>
   <div
     className="be-transcript-content-collapsed"
   >
@@ -68,33 +72,37 @@ exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly
 <div
   className="be-transcript"
 >
-  <PlainButton
-    className="be-transcript-copy"
-    getDOMRef={[Function]}
-    onClick={[Function]}
-    type="button"
+  <div
+    className="be-transcript-actions"
   >
-    <IconCopy
-      color="#999"
-    />
-  </PlainButton>
-  <PlainButton
-    className="be-transcript-expand"
-    onClick={[Function]}
-    type="button"
-  >
-    <IconExpand
-      color="#999"
-    />
-  </PlainButton>
-  <PlainButton
-    className="be-transcript-edit"
-    data-resin-target="skill-transcriptedit"
-    onClick={[Function]}
-    type="button"
-  >
-    <IconEdit />
-  </PlainButton>
+    <PlainButton
+      className="be-transcript-copy"
+      getDOMRef={[Function]}
+      onClick={[Function]}
+      type="button"
+    >
+      <IconCopy
+        color="#999"
+      />
+    </PlainButton>
+    <PlainButton
+      className="be-transcript-expand"
+      onClick={[Function]}
+      type="button"
+    >
+      <IconExpand
+        color="#999"
+      />
+    </PlainButton>
+    <PlainButton
+      className="be-transcript-edit"
+      data-resin-target="skill-transcriptedit"
+      onClick={[Function]}
+      type="button"
+    >
+      <IconEdit />
+    </PlainButton>
+  </div>
   <div
     className="be-transcript-content-collapsed"
   >
@@ -166,16 +174,20 @@ exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly
 <div
   className="be-transcript"
 >
-  <PlainButton
-    className="be-transcript-copy"
-    getDOMRef={[Function]}
-    onClick={[Function]}
-    type="button"
+  <div
+    className="be-transcript-actions"
   >
-    <IconCopy
-      color="#999"
-    />
-  </PlainButton>
+    <PlainButton
+      className="be-transcript-copy"
+      getDOMRef={[Function]}
+      onClick={[Function]}
+      type="button"
+    >
+      <IconCopy
+        color="#999"
+      />
+    </PlainButton>
+  </div>
   <div
     className="be-transcript-content-collapsed"
   >
@@ -200,5 +212,37 @@ exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly
       text="bar"
     />
   </div>
+</div>
+`;
+
+exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly render when isLoading is true 1`] = `
+<div
+  className="be-transcript"
+>
+  <div
+    className="be-transcript-content-collapsed"
+  >
+    <TranscriptRow
+      interactionTarget="skill-transcript"
+      isEditing={false}
+      key="0"
+      onCancel={[Function]}
+      onChange={[Function]}
+      onClick={[Function]}
+      onSave={[Function]}
+      text="foo"
+    />
+    <TranscriptRow
+      interactionTarget="skill-transcript"
+      isEditing={false}
+      key="1"
+      onCancel={[Function]}
+      onChange={[Function]}
+      onClick={[Function]}
+      onSave={[Function]}
+      text="bar"
+    />
+  </div>
+  <SkillsBusyIndicator />
 </div>
 `;

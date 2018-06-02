@@ -43,6 +43,7 @@ const Face = ({ face, selected, isEditing, onDelete, onSelect }: Props) => {
             </PlainButton>
             {isEditing && (
                 <PlainButton
+                    type='button'
                     className='be-face-delete'
                     data-resin-target={SKILLS_TARGETS.FACES.DELETE}
                     onClick={() => onDelete(face)}

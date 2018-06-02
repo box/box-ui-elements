@@ -6,11 +6,9 @@
 import React from 'react';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
-import 'react-virtualized/styles.css';
 import nameCellRenderer from './nameCellRenderer';
 import progressCellRenderer from './progressCellRenderer';
 import actionCellRenderer from './actionCellRenderer';
-
 import './ItemList.scss';
 
 type Props = {

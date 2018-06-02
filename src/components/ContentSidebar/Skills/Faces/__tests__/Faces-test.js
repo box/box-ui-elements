@@ -92,4 +92,21 @@ describe('components/ContentSidebar/Skills/Faces/Faces', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should correctly render when isLoading is true', () => {
+        const props = {
+            card: {
+                duration: 100,
+                entries: [{ text: 'foo' }, { text: 'bar' }]
+            },
+            transcript: { duration: 100 },
+            isEditable: true,
+            onSkillChange: jest.fn()
+        };
+
+        const wrapper = shallow(<Faces {...props} />);
+        wrapper.setState({ isLoading: true });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });

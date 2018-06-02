@@ -139,6 +139,7 @@ exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render sa
     <Button
       data-resin-target="skill-faceeditcancel"
       onClick={[Function]}
+      type="button"
     >
       <FormattedMessage
         defaultMessage="Cancel"
@@ -148,6 +149,7 @@ exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render sa
     <PrimaryButton
       data-resin-target="skill-faceeditsave"
       onClick={[Function]}
+      type="button"
     >
       <FormattedMessage
         defaultMessage="Save"
@@ -225,5 +227,35 @@ exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render ti
       ]
     }
   />
+</div>
+`;
+
+exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render when isLoading is true 1`] = `
+<div
+  className="be-faces"
+>
+  <Face
+    face={
+      Object {
+        "text": "foo",
+      }
+    }
+    isEditing={false}
+    key="0"
+    onDelete={[Function]}
+    onSelect={[Function]}
+  />
+  <Face
+    face={
+      Object {
+        "text": "bar",
+      }
+    }
+    isEditing={false}
+    key="1"
+    onDelete={[Function]}
+    onSelect={[Function]}
+  />
+  <SkillsBusyIndicator />
 </div>
 `;

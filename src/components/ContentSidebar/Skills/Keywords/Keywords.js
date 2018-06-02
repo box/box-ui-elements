@@ -12,6 +12,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
+import SkillsBusyIndicator from '../SkillsBusyIndicator';
 import messages from '../../../messages';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 
@@ -27,6 +28,7 @@ type Props = {
 
 type State = {
     isEditing: boolean,
+    isLoading: boolean,
     keywords: Array<SkillCardEntry>,
     adds: Array<SkillCardEntry>,
     removes: Array<SkillCardEntry>
@@ -48,7 +50,8 @@ class Keywords extends PureComponent<Props, State> {
             keywords: props.card.entries,
             adds: [],
             removes: [],
-            isEditing: false
+            isEditing: false,
+            isLoading: false
         };
     }
 
@@ -60,7 +63,13 @@ class Keywords extends PureComponent<Props, State> {
      * @return {void}
      */
     resetState(props: Props): void {
-        this.setState({ keywords: props.card.entries, adds: [], removes: [], isEditing: false });
+        this.setState({
+            keywords: props.card.entries,
+            adds: [],
+            removes: [],
+            isEditing: false,
+            isLoading: false
+        });
     }
 
     /**
@@ -143,8 +152,11 @@ class Keywords extends PureComponent<Props, State> {
     onSave = (): void => {
         const { onSkillChange }: Props = this.props;
         const { removes, adds }: State = this.state;
-        onSkillChange(removes, adds);
         this.toggleIsEditing();
+        if (removes.length > 0 || adds.length > 0) {
+            this.setState({ isLoading: true });
+            onSkillChange(removes, adds);
+        }
     };
 
     /**
@@ -166,7 +178,7 @@ class Keywords extends PureComponent<Props, State> {
     render() {
         const { card, getPreviewer, isEditable }: Props = this.props;
         const { duration }: SkillCard = card;
-        const { isEditing, keywords, removes, adds }: State = this.state;
+        const { isEditing, isLoading, keywords, removes, adds }: State = this.state;
         const hasKeywords = keywords.length > 0;
         const entries = keywords.filter((face: SkillCardEntry) => !removes.includes(face)).concat(adds);
         const editClassName = classNames('be-keyword-edit', {
@@ -176,7 +188,8 @@ class Keywords extends PureComponent<Props, State> {
         return (
             <div className='be-keywords'>
                 {hasKeywords &&
-                    isEditable && (
+                    isEditable &&
+                    !isLoading && (
                         <PlainButton
                             type='button'
                             className={editClassName}
@@ -203,6 +216,7 @@ class Keywords extends PureComponent<Props, State> {
                     !hasKeywords && (
                         <ErrorMask errorHeader={<FormattedMessage {...messages.skillNoInfoFoundError} />} />
                     )}
+                {isLoading && <SkillsBusyIndicator />}
             </div>
         );
     }
