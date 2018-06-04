@@ -683,11 +683,9 @@ class ContentSidebar extends PureComponent<Props, State> {
     createTaskSuccess(task: Task): void {
         const { tasks } = this.state;
         if (tasks && tasks.entries) {
-            const newTasks = { ...tasks };
-            newTasks.total_count += 1;
-            newTasks.entries.push(task);
             this.setState({
-                tasks: newTasks
+                entries: [...tasks.entries, task],
+                total_count: tasks.total_count + 1
             });
         }
     }
