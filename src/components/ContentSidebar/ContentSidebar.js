@@ -618,14 +618,14 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Comment} comment - The newly created comment from the API
      * @return {void}
      */
-    onCommentCreateSuccess(comment: Comment): void {
+    createCommentSuccessCallback(comment: Comment): void {
         const { comments } = this.state;
         if (comments && comments.entries) {
-            const newComments = { ...comments };
-            newComments.total_count += 1;
-            newComments.entries.push(comment);
             this.setState({
-                comments: newComments
+                comments: {
+                    entries: [...comments.entries, comment],
+                    total_count: comments.total_count + 1
+                }
             });
         }
     }
@@ -640,7 +640,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Function} errorCallback - Called on failure to create comment
      * @return {void}
      */
-    onCommentCreate = (
+    createComment = (
         text: string,
         hasMention: boolean,
         successCallback: (comment: Comment) => void = noop,
@@ -664,7 +664,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             file,
             ...message,
             successCallback: (comment: Comment) => {
-                this.onCommentCreateSuccess(comment);
+                this.createCommentSuccessCallback(comment);
                 successCallback(comment);
             },
             errorCallback: (e: Error) => {
@@ -729,6 +729,198 @@ class ContentSidebar extends PureComponent<Props, State> {
                 errorCallback(e);
             }
         });
+    };
+
+    /**
+     * Updates a task
+     *
+     * @private
+     * @param {string} taskId - The task's id
+     * @param {Array} message - The task's text
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @param {string} dueAt - The date the task is due
+     * @return {void}
+     */
+    updateTask = (
+        taskId: string,
+        message: string,
+        successCallback: (task: Task) => void = noop,
+        errorCallback: (e: Error) => void = noop,
+        dueAt?: string
+    ) => {
+        const { file } = this.state;
+        const { onTaskUpdate = noop } = this.props;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getTasksAPI(false).updateTask({
+            file,
+            taskId,
+            message,
+            dueAt,
+            successCallback: (task: Task) => {
+                onTaskUpdate(task);
+                successCallback(task);
+                this.updateTaskSuccessCallback(task);
+            },
+            errorCallback: (e: Error) => {
+                errorCallback(e);
+                this.errorCallback(e);
+            }
+        });
+    };
+
+    /**
+     * Task update success callback
+     *
+     * @private
+     * @param {Object} task - Box task
+     * @return {void}
+     */
+    updateTaskSuccessCallback(task: Task) {
+        const { tasks } = this.state;
+        const { id } = task;
+
+        if (tasks) {
+            const { entries, total_count } = tasks;
+
+            this.setState({
+                tasks: {
+                    entries: entries.map((item) => {
+                        if (item.id === id) {
+                            return {
+                                ...task
+                            };
+                        }
+                        return item;
+                    }),
+                    total_count
+                }
+            });
+        }
+    }
+
+    /**
+     * Deletes a task
+     *
+     * @private
+     * @param {string} taskId - The task's id
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    deleteTask = (
+        taskId: string,
+        successCallback: (taskId: string) => void = noop,
+        errorCallback: (e: Error, taskId: string) => void = noop
+    ) => {
+        const { file } = this.state;
+        const { onTaskDelete = noop } = this.props;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getTasksAPI(false).deleteTask({
+            file,
+            taskId,
+            successCallback: () => {
+                onTaskDelete(taskId);
+                successCallback(taskId);
+                this.deleteTaskSuccessCallback(taskId);
+            },
+            errorCallback: (e: Error) => {
+                errorCallback(e, taskId);
+                this.errorCallback(e);
+            }
+        });
+    };
+
+    /**
+     * Task update success callback
+     *
+     * @private
+     * @param {Object} task - Box task
+     * @return {void}
+     */
+    deleteTaskSuccessCallback = (taskId: string) => {
+        const { tasks } = this.state;
+
+        if (tasks) {
+            const { entries } = tasks;
+
+            const newEntries = entries.filter((task) => task.id !== taskId);
+
+            this.setState({
+                tasks: {
+                    entries: newEntries,
+                    total_count: newEntries.length
+                }
+            });
+        }
+    };
+
+    /**
+     * Deletes a comment
+     *
+     * @private
+     * @param {string} commentId - The comment's id
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    deleteComment = (
+        commentId: string,
+        successCallback: (commentId: string) => void = noop,
+        errorCallback: (e: Error, commentId: string) => void = noop
+    ) => {
+        const { file } = this.state;
+        const { onCommentDelete = noop } = this.props;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getCommentsAPI(false).deleteComment({
+            file,
+            commentId,
+            successCallback: () => {
+                onCommentDelete(commentId);
+                successCallback(commentId);
+                this.deleteCommentSuccessCallback(commentId);
+            },
+            errorCallback: (e: Error) => {
+                errorCallback(e, commentId);
+                this.errorCallback(e);
+            }
+        });
+    };
+
+    /**
+     * Comment delete success callback
+     *
+     * @private
+     * @param {string} commentId - The comment's id
+     * @return {void}
+     */
+    deleteCommentSuccessCallback = (commentId: string) => {
+        const { comments } = this.state;
+
+        if (comments) {
+            const { entries } = comments;
+
+            const newEntries = entries.filter((comment) => comment.id !== commentId);
+
+            this.setState({
+                comments: {
+                    entries: newEntries,
+                    total_count: newEntries.length
+                }
+            });
+        }
     };
 
     /**
@@ -953,9 +1145,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             onVersionHistoryClick,
             onAccessStatsClick,
             onClassificationClick,
-            onCommentDelete,
-            onTaskDelete,
-            onTaskUpdate,
             onTaskAssignmentUpdate
         }: Props = this.props;
         const {
@@ -1009,11 +1198,11 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 commentsError={commentsError}
                                 currentUser={currentUser}
                                 currentUserError={currentUserError}
-                                onCommentCreate={this.onCommentCreate}
-                                onCommentDelete={onCommentDelete}
+                                onCommentCreate={this.createComment}
+                                onCommentDelete={this.deleteComment}
                                 onTaskCreate={this.createTask}
-                                onTaskDelete={onTaskDelete}
-                                onTaskUpdate={onTaskUpdate}
+                                onTaskDelete={this.deleteTask}
+                                onTaskUpdate={this.updateTask}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}

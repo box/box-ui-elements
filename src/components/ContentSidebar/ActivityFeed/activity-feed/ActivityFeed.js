@@ -176,13 +176,20 @@ class ActivityFeed extends React.Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    deleteComment = (args: any): void => {
+    /**
+     * Deletes a comment
+     *
+     * @param {string} id - Comment id
+     * @return {void}
+     */
+    deleteComment = ({ id }: { id: string }): void => {
         // remove comment from list of comments
         // removeItemByTypeAndId('comment', args.id);
         // delete the comment via V2 API
         // call user passed in handlers.comments.delete, if it exists
         const deleteComment = getProp(this.props, 'handlers.comments.delete', noop);
-        deleteComment(args);
+        this.updateFeedItemPendingStatus(id, true);
+        deleteComment(id, this.deleteFeedItem, this.feedItemErrorCallback);
     };
 
     /**
@@ -267,23 +274,94 @@ class ActivityFeed extends React.Component<Props, State> {
         this.approvalCommentFormSubmitHandler();
     };
 
-    updateTask = (args: any): void => {
+    /**
+     * Called on successful update of a task
+     *
+     * @param {Object} task the updated task
+     */
+    updateTaskSuccessCallback = (task: Task) => {
+        const { id } = task;
+
+        this.updateFeedItem(
+            {
+                ...task,
+                isPending: false
+            },
+            id
+        );
+    };
+
+    /**
+     * Called on failed update/delete of a feed item
+     *
+     * @param {Object} e the error
+     * @param {string} id the feed item's id
+     */
+    feedItemErrorCallback = (e: Error, id: string) => {
+        this.updateFeedItemPendingStatus(id, false);
+    };
+
+    /**
+     * Updates a feed item's pending status
+     *
+     * @param {Object} item the feed item to update
+     * @param {boolean} isPending true if the feed item is to be updated to pending=true
+     */
+    updateFeedItemPendingStatus = (id: string, isPending: boolean) => {
+        this.setState({
+            feedItems: this.state.feedItems.map((feedItem: Comment | Task | BoxItemVersion) => {
+                if (feedItem.id === id) {
+                    // $FlowFixMe
+                    return {
+                        ...feedItem,
+                        isPending
+                    };
+                }
+                return feedItem;
+            })
+        });
+    };
+
+    /**
+     * Deletes a feed item from the state
+     *
+     * @param {Object} item the item to be deleted
+     */
+    deleteFeedItem = (id: string) => {
+        this.setState({
+            feedItems: this.state.feedItems.filter((feedItem) => feedItem.id !== id)
+        });
+    };
+
+    /**
+     * Updates a task in the state
+     *
+     * @param {Object} args a subset of the task
+     */
+    updateTask = ({ text, id }: { text: string, id: string }): void => {
         // get previous task assignment state
         // update the task via v2 api
         // update task state OR
         // if it fails, revert to previous task state
         // call user passed in handlers.tasks.edit, if it exists
         const updateTask = getProp(this.props, 'handlers.tasks.edit', noop);
-        updateTask(args);
+        this.updateFeedItemPendingStatus(id, true);
+        updateTask(id, text, this.updateTaskSuccessCallback, this.feedItemErrorCallback);
     };
 
-    deleteTask = (args: any): void => {
+    /**
+     * Updates a task in the state
+     *
+     * @param {Object} args a subset of the task
+     */
+    deleteTask = ({ id }: { id: string }): void => {
         // remove task from task list
         // removeItemByTypeAndId('task', args.id);
         // delete the task via v2 api
         // call user passed in handlers.tasks.delete, if it exists
         const deleteTask = getProp(this.props, 'handlers.tasks.delete', noop);
-        deleteTask(args);
+        this.updateFeedItemPendingStatus(id, true);
+        deleteTask(id, this.deleteFeedItem, this.feedItemErrorCallback);
     };
 
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string): void => {
