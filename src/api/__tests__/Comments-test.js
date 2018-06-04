@@ -1,5 +1,5 @@
 import Comments from '../Comments';
-import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_EDIT_COMMENT, PERMISSION_CAN_DELETE_COMMENT } from '../../constants';
+import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../../constants';
 
 let comments;
 
@@ -123,8 +123,10 @@ describe('api/Comments', () => {
             test('should check for valid comment edit permissions', () => {
                 comments.updateComment({ file, commentId, message, successCb, errorCb });
                 expect(comments.checkApiCallValidity).toBeCalledWith(
-                    PERMISSION_CAN_EDIT_COMMENT,
-                    file.permissions,
+                    PERMISSION_CAN_EDIT,
+                    {
+                        [PERMISSION_CAN_EDIT]: true
+                    },
                     file.id
                 );
             });
@@ -155,8 +157,10 @@ describe('api/Comments', () => {
             test('should check for valid comment delete permissions', () => {
                 comments.deleteComment({ file, commentId, successCb, errorCb });
                 expect(comments.checkApiCallValidity).toBeCalledWith(
-                    PERMISSION_CAN_DELETE_COMMENT,
-                    file.permissions,
+                    PERMISSION_CAN_DELETE,
+                    {
+                        [PERMISSION_CAN_DELETE]: true
+                    },
                     file.id
                 );
             });

@@ -5,7 +5,7 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_EDIT_COMMENT, PERMISSION_CAN_DELETE_COMMENT } from '../constants';
+import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../constants';
 
 class Comments extends OffsetBasedAPI {
     /**
@@ -139,10 +139,15 @@ class Comments extends OffsetBasedAPI {
         successCallback: Function,
         errorCallback: Function
     }): void {
-        const { id = '', permissions } = file;
+        const { id = '' } = file;
+
+        // TODO: grab this from the comment once implemented in API
+        const permissions = {
+            [PERMISSION_CAN_EDIT]: true
+        };
 
         try {
-            this.checkApiCallValidity(PERMISSION_CAN_EDIT_COMMENT, permissions, id);
+            this.checkApiCallValidity(PERMISSION_CAN_EDIT, permissions, id);
         } catch (e) {
             errorCallback(e);
             return;
@@ -175,10 +180,15 @@ class Comments extends OffsetBasedAPI {
         successCallback: Function,
         errorCallback: Function
     }): void {
-        const { id = '', permissions } = file;
+        const { id = '' } = file;
+
+        // TODO: grab this from the comment once implemented in API
+        const permissions = {
+            [PERMISSION_CAN_DELETE]: true
+        };
 
         try {
-            this.checkApiCallValidity(PERMISSION_CAN_DELETE_COMMENT, permissions, id);
+            this.checkApiCallValidity(PERMISSION_CAN_DELETE, permissions, id);
         } catch (e) {
             errorCallback(e);
             return;
