@@ -680,7 +680,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Task} task - The newly created task from the API
      * @return {void}
      */
-    createTaskSuccess(task: Task): void {
+    createTaskSuccessCallback(task: Task): void {
         const { tasks } = this.state;
         if (tasks && tasks.entries) {
             this.setState({
@@ -721,7 +721,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             message: text,
             dueAt,
             successCallback: (task: Task) => {
-                this.createTaskSuccess(task);
+                this.createTaskSuccessCallback(task);
                 successCallback(task);
             },
             errorCallback: (e: Error) => {

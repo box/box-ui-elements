@@ -296,7 +296,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
-    describe('createTaskSuccess()', () => {
+    describe('createTaskSuccessCallback()', () => {
         let instance;
         let wrapper;
         beforeEach(() => {
@@ -308,7 +308,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState({ tasks: undefined });
             instance.setState = jest.fn();
 
-            instance.createTaskSuccess({});
+            instance.createTaskSuccessCallback({});
 
             expect(instance.setState).not.toBeCalled();
         });
@@ -321,7 +321,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 }
             });
 
-            instance.createTaskSuccess({
+            instance.createTaskSuccessCallback({
                 type: 'task'
             });
 
@@ -352,12 +352,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(instance.createTask).toThrow('Bad box item!');
         });
 
-        test('should invoke createTaskSuccess() with a new task if api was successful', (done) => {
-            instance.createTaskSuccess = jest.fn();
+        test('should invoke createTaskSuccessCallback() with a new task if api was successful', (done) => {
+            instance.createTaskSuccessCallback = jest.fn();
             tasksAPI = {
                 createTask: ({ successCallback }) => {
                     successCallback();
-                    expect(instance.createTaskSuccess).toBeCalled();
+                    expect(instance.createTaskSuccessCallback).toBeCalled();
                     done();
                 }
             };
