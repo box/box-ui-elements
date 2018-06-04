@@ -736,9 +736,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let instance;
         let wrapper;
         let tasksAPI;
-        const file = {
-            id: 'I_AM_A_FILE'
-        };
         const api = {
             getTasksAPI: () => tasksAPI
         };

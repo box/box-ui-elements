@@ -141,7 +141,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {void}
      */
     createCommentErrorCallback = (error: Error, id: string): void => {
-        console.error('Implement createCommentErrorCallback() via updateFeedItemPendingStatus()', error, id);
+        this.feedItemErrorCallback(error, id);
     };
 
     /**
@@ -217,7 +217,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @return {void}
      */
     createTaskErrorCallback(error: Error, id: string): void {
-        console.error('Implement createTaskErrorCallback() via updateFeedItemPendingStatus()', error, id);
+        this.feedItemErrorCallback(error, id);
     }
 
     /**
