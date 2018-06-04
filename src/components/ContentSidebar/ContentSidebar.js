@@ -684,8 +684,10 @@ class ContentSidebar extends PureComponent<Props, State> {
         const { tasks } = this.state;
         if (tasks && tasks.entries) {
             this.setState({
-                entries: [...tasks.entries, task],
-                total_count: tasks.total_count + 1
+                tasks: {
+                    entries: [...tasks.entries, task],
+                    total_count: tasks.total_count + 1
+                }
             });
         }
     }
