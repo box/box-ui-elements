@@ -696,4 +696,114 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(comments.entries.length).toBe(0);
         });
     });
+
+    describe('createTaskSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should not add to the task entries state if there is none', () => {
+            instance.setState({ tasks: undefined });
+            instance.setState = jest.fn();
+
+            instance.createTaskSuccessCallback({});
+
+            expect(instance.setState).not.toBeCalled();
+        });
+
+        test('should add the task to the task entries state, and increates total_count by one', () => {
+            instance.setState({
+                tasks: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.createTaskSuccessCallback({
+                type: 'task'
+            });
+
+            const { tasks } = instance.state;
+            expect(tasks.entries.length).toBe(1);
+            expect(tasks.total_count).toBe(1);
+        });
+    });
+
+    describe.only('createTask()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+        const api = {
+            getTasksAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.createTask).toThrow('Bad box item!');
+        });
+
+        test('should invoke createTaskSuccessCallback() with a new task if api was successful', (done) => {
+            instance.createTaskSuccessCallback = jest.fn();
+            tasksAPI = {
+                createTask: ({ successCallback }) => {
+                    successCallback();
+                    expect(instance.createTaskSuccessCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createTask('text');
+        });
+
+        test('should invoke provided successCallback with a new task if api was successful', (done) => {
+            const onSuccess = jest.fn();
+            tasksAPI = {
+                createTask: ({ successCallback }) => {
+                    successCallback();
+                    expect(onSuccess).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createTask('text', undefined, undefined, onSuccess);
+        });
+
+        test('should invoke errorCallback() if it failed to create a task', (done) => {
+            instance.errorCallback = jest.fn();
+            tasksAPI = {
+                createTask: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createTask('text');
+        });
+
+        test('should invoke provided errorCallback if it failed to create a task', (done) => {
+            const testErrorCallback = jest.fn();
+            tasksAPI = {
+                createTask: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(testErrorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createTask('text', undefined, undefined, undefined, testErrorCallback);
+        });
+    });
 });
