@@ -52,16 +52,20 @@ const currentUser = { name: 'Kanye West', id: 10 };
 
 const allHandlers = {
     comments: {
-        create: jest.fn()
+        create: jest.fn(),
+        delete: jest.fn()
     },
     tasks: {
-        create: jest.fn()
+        create: jest.fn(),
+        delete: jest.fn()
     },
     contacts: {
         approver: jest.fn(),
         mention: jest.fn()
     }
 };
+
+const getWrapper = (props) => shallow(<ActivityFeed currentUser={currentUser} {...props} />);
 
 describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render empty state', () => {
@@ -559,6 +563,152 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
             // Should be called with new comment and the 'uniqueId' returned from lodash/uniqueId
             expect(instance.createCommentErrorCallback).toBeCalledWith(expect.any(Error), 'uniqueId');
+        });
+    });
+
+    describe('deleteComment()', () => {
+        test('should call the deleteComment prop if it exists', () => {
+            const id = '1;';
+            const wrapper = getWrapper({ handlers: allHandlers });
+            wrapper.instance().updateFeedItemPendingStatus = jest.fn();
+            wrapper.instance().deleteFeedItem = jest.fn();
+            wrapper.instance().feedItemErrorCallback = jest.fn();
+            wrapper.update();
+
+            wrapper.instance().deleteComment({ id });
+
+            expect(allHandlers.comments.delete).toBeCalledWith(
+                id,
+                wrapper.instance().deleteFeedItem,
+                wrapper.instance().feedItemErrorCallback
+            );
+            expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, true);
+        });
+    });
+
+    describe('deleteTask()', () => {
+        test('should call the deleteTask prop if it exists', () => {
+            const id = '1;';
+            const wrapper = getWrapper({ handlers: allHandlers });
+            wrapper.instance().updateFeedItemPendingStatus = jest.fn();
+            wrapper.instance().deleteFeedItem = jest.fn();
+            wrapper.instance().feedItemErrorCallback = jest.fn();
+            wrapper.update();
+
+            wrapper.instance().deleteTask({ id });
+
+            expect(allHandlers.tasks.delete).toBeCalledWith(
+                id,
+                wrapper.instance().deleteFeedItem,
+                wrapper.instance().feedItemErrorCallback
+            );
+            expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, true);
+        });
+    });
+
+    describe('updateTaskSuccessCallback()', () => {
+        test('should update the task with the new data, not be pending', () => {
+            const wrapper = getWrapper();
+            wrapper.instance().updateFeedItem = jest.fn();
+            wrapper.update();
+            const task = tasks.entries[0];
+            wrapper.instance().updateTaskSuccessCallback(task);
+
+            expect(wrapper.instance().updateFeedItem).toBeCalledWith(
+                {
+                    ...task,
+                    isPending: false
+                },
+                task.id
+            );
+        });
+    });
+
+    describe('feedItemErrorCallback()', () => {
+        test('should update the feed item to not be pending', () => {
+            const id = '1';
+            const wrapper = getWrapper();
+            wrapper.instance().updateFeedItemPendingStatus = jest.fn();
+            wrapper.update();
+            wrapper.instance().feedItemErrorCallback('foo', id);
+
+            expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, false);
+        });
+    });
+
+    describe('updateFeedItemPendingStatus()', () => {
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+        });
+
+        test('should set the feed item pending status to be true', (done) => {
+            const id = '1';
+            wrapper.setState(
+                {
+                    feedItems: [
+                        {
+                            id
+                        }
+                    ]
+                },
+                () => {
+                    wrapper.instance().updateFeedItemPendingStatus(id, true);
+                    wrapper.update();
+
+                    expect(wrapper.state('feedItems')[0].isPending).toBe(true);
+                    done();
+                }
+            );
+        });
+
+        test('should set the feed item pending status to be false', (done) => {
+            const id = '1';
+            wrapper.setState(
+                {
+                    feedItems: [
+                        {
+                            id,
+                            isPending: true
+                        }
+                    ]
+                },
+                () => {
+                    wrapper.instance().updateFeedItemPendingStatus(id, false);
+                    wrapper.update();
+
+                    expect(wrapper.state('feedItems')[0].isPending).toBe(false);
+                    done();
+                }
+            );
+        });
+    });
+
+    describe('deleteFeedItem()', () => {
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+        });
+
+        test('should remove the feed item', (done) => {
+            const id = '1';
+            wrapper.setState(
+                {
+                    feedItems: [
+                        {
+                            id
+                        }
+                    ]
+                },
+                () => {
+                    expect(wrapper.state('feedItems').length).toBe(1);
+                    wrapper.instance().deleteFeedItem(id);
+                    wrapper.update();
+
+                    expect(wrapper.state('feedItems').length).toBe(0);
+                    done();
+                }
+            );
         });
     });
 });

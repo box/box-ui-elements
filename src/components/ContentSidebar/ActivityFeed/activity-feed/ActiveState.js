@@ -67,6 +67,10 @@ const ActiveState = ({
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
+                                // TODO: remove once comment permissions are part of API
+                                permissions={{
+                                    comment_delete: true
+                                }}
                             />
                         </li>
                     );
@@ -84,6 +88,11 @@ const ActiveState = ({
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
+                                // permissions are not part of task API so hard code to true
+                                permissions={{
+                                    task_edit: true,
+                                    task_delete: true
+                                }}
                             />
                         </li>
                     );
