@@ -249,6 +249,7 @@ class Transcript extends React.PureComponent<Props, State> {
         const { card: { entries }, isEditable }: Props = this.props;
         const { isEditingIndex, isCollapsed }: State = this.state;
         const hasEntries = entries.length > 0;
+        const hasManyEntries = entries.length > 5;
         const isEditing = typeof isEditingIndex === 'number';
         const editBtnClassName = classNames('be-transcript-edit', {
             'be-transcript-is-editing': isEditing
@@ -269,7 +270,7 @@ class Transcript extends React.PureComponent<Props, State> {
                         <IconCopy color={COLOR_999} />
                     </PlainButton>
                 )}
-                {hasEntries && (
+                {hasManyEntries && (
                     <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleExpandCollapse}>
                         {isCollapsed ? <IconExpand color={COLOR_999} /> : <IconCollapse color={COLOR_999} />}
                     </PlainButton>

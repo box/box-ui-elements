@@ -141,4 +141,158 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(instance.setState).toBeCalledWith({ currentUser, currentUserError: undefined });
         });
     });
+
+    describe('onCommentCreateSuccess()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should not add to the comment entries state if there is none', () => {
+            instance.setState({ comments: undefined });
+            instance.setState = jest.fn();
+
+            instance.onCommentCreateSuccess({});
+
+            expect(instance.setState).not.toBeCalled();
+        });
+
+        test('should add the comment to the comment entries state', () => {
+            instance.setState({
+                comments: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.onCommentCreateSuccess({
+                type: 'comment'
+            });
+
+            const { comments } = instance.state;
+            expect(comments.entries.length).toBe(1);
+        });
+
+        test('should increase total_count of the comment state', () => {
+            instance.setState({
+                comments: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.onCommentCreateSuccess({
+                type: 'comment'
+            });
+
+            const { comments } = instance.state;
+            expect(comments.total_count).toBe(1);
+        });
+    });
+
+    describe('onCommentCreate()', () => {
+        let instance;
+        let wrapper;
+        let commentsAPI;
+        const file = {
+            id: 'I_AM_A_FILE'
+        };
+        const api = {
+            getCommentsAPI: () => commentsAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.onCommentCreate).toThrow('Bad box item!');
+        });
+
+        test('should have "message" data if comment does not contain mentions', (done) => {
+            const text = 'My tagged_message';
+            commentsAPI = {
+                createComment: ({ message }) => {
+                    expect(message).toEqual(text);
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onCommentCreate(text, false);
+        });
+
+        test('should have "tagged_message" data if comment contains mentions', (done) => {
+            const text = 'My tagged_message';
+            commentsAPI = {
+                createComment: ({ taggedMessage }) => {
+                    expect(taggedMessage).toEqual(text);
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onCommentCreate(text, true);
+        });
+
+        test('should invoke onCommentCreateSuccess() with a new comment if api was successful', (done) => {
+            instance.onCommentCreateSuccess = jest.fn();
+            commentsAPI = {
+                createComment: ({ successCallback }) => {
+                    successCallback();
+                    expect(instance.onCommentCreateSuccess).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onCommentCreate('text');
+        });
+
+        test('should invoke provided successCallback with a new comment if api was successful', (done) => {
+            const onSuccess = jest.fn();
+            commentsAPI = {
+                createComment: ({ successCallback }) => {
+                    successCallback();
+                    expect(onSuccess).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onCommentCreate('text', false, onSuccess);
+        });
+
+        test('should invoke errorCallback() if it failed to create a comment', (done) => {
+            instance.errorCallback = jest.fn();
+            commentsAPI = {
+                createComment: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onCommentCreate('text');
+        });
+
+        test('should invoke provided errorCallback if it failed to create a comment', (done) => {
+            const testErrorCallback = jest.fn();
+            commentsAPI = {
+                createComment: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(testErrorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.onCommentCreate('text', false, jest.fn(), testErrorCallback);
+        });
+    });
 });
