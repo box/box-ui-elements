@@ -36,5 +36,9 @@
         button:last-child {
             margin-left: 10px;
         }
+
+        .btn-plain:hover svg path {
+            fill: $twos;
+        }
     }
 }

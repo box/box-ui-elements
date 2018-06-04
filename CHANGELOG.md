@@ -1,13 +1,100 @@
-<a name="4.4.1"></a>
+## 5.0.0 (2018-06-01)
+
+* Update: access stats API integration (#258) ([12c1251](https://github.com/box/box-ui-elements/commit/12c1251)), closes [#258](https://github.com/box/box-ui-elements/issues/258)
+* Update: Add `previewInstance` prop to ContentPreview (#301) ([3e4310c](https://github.com/box/box-ui-elements/commit/3e4310c)), closes [#301](https://github.com/box/box-ui-elements/issues/301)
+* Update: Add exapnd / collpase button (#334) ([e18547c](https://github.com/box/box-ui-elements/commit/e18547c)), closes [#334](https://github.com/box/box-ui-elements/issues/334)
+* Update: avatar component className prop (#319) ([d9622da](https://github.com/box/box-ui-elements/commit/d9622da)), closes [#319](https://github.com/box/box-ui-elements/issues/319)
+* Update: Minor button css styling for skill cards (#345) ([0278c1b](https://github.com/box/box-ui-elements/commit/0278c1b)), closes [#345](https://github.com/box/box-ui-elements/issues/345)
+* Update: Modify token service to account for multiple tokens (#270) ([2739833](https://github.com/box/box-ui-elements/commit/2739833)), closes [#270](https://github.com/box/box-ui-elements/issues/270)
+* Update: MultiputUpload should use upload host from preflight response (#324) ([a043806](https://github.com/box/box-ui-elements/commit/a043806)), closes [#324](https://github.com/box/box-ui-elements/issues/324)
+* Update: Readme with some preview details ([eb8c4f8](https://github.com/box/box-ui-elements/commit/eb8c4f8))
+* Update: Sidebar nav styles and icons (#312) ([33bdd24](https://github.com/box/box-ui-elements/commit/33bdd24)), closes [#312](https://github.com/box/box-ui-elements/issues/312) [#999](https://github.com/box/box-ui-elements/issues/999)
+* Update: user avatar hooked up to v2 API (#310) ([0715428](https://github.com/box/box-ui-elements/commit/0715428)), closes [#310](https://github.com/box/box-ui-elements/issues/310)
+* Breaking: add error and success interceptors for requests and responses (#298) ([1446633](https://github.com/box/box-ui-elements/commit/1446633)), closes [#298](https://github.com/box/box-ui-elements/issues/298)
+* Breaking: Introduce contentSidebarProps to pass to ContentSidebar (#288) ([51e5e8a](https://github.com/box/box-ui-elements/commit/51e5e8a)), closes [#288](https://github.com/box/box-ui-elements/issues/288)
+* Breaking: Package upgrades and fixes (#344) ([2fa0fe5](https://github.com/box/box-ui-elements/commit/2fa0fe5)), closes [#344](https://github.com/box/box-ui-elements/issues/344)
+* Breaking: Sidebar design changes (#304) ([41b1f18](https://github.com/box/box-ui-elements/commit/41b1f18)), closes [#304](https://github.com/box/box-ui-elements/issues/304)
+* Breaking: Transcript skill editing (#317) ([00b9d1c](https://github.com/box/box-ui-elements/commit/00b9d1c)), closes [#317](https://github.com/box/box-ui-elements/issues/317)
+* Breaking: Updating the skills UI (#295) ([b369ce6](https://github.com/box/box-ui-elements/commit/b369ce6)), closes [#295](https://github.com/box/box-ui-elements/issues/295)
+* Add user api to content sidebar (#303) ([c4c58fd](https://github.com/box/box-ui-elements/commit/c4c58fd)), closes [#303](https://github.com/box/box-ui-elements/issues/303)
+* Handle create success, and pending state, for comment (#332) ([f8fef57](https://github.com/box/box-ui-elements/commit/f8fef57)), closes [#332](https://github.com/box/box-ui-elements/issues/332)
+* Remove datetime (#254) ([544ef37](https://github.com/box/box-ui-elements/commit/544ef37)), closes [#254](https://github.com/box/box-ui-elements/issues/254)
+* Revert "Chore: Updating preview version default to v1.37.1" (#261) ([549ac10](https://github.com/box/box-ui-elements/commit/549ac10)), closes [#261](https://github.com/box/box-ui-elements/issues/261)
+* Update constants.js (#255) ([6b43a42](https://github.com/box/box-ui-elements/commit/6b43a42)), closes [#255](https://github.com/box/box-ui-elements/issues/255)
+* Update Preview Version to 1.42.0 (#294) ([dc54358](https://github.com/box/box-ui-elements/commit/dc54358)), closes [#294](https://github.com/box/box-ui-elements/issues/294)
+* Mojito: Update translations (#251) ([6f864c3](https://github.com/box/box-ui-elements/commit/6f864c3)), closes [#251](https://github.com/box/box-ui-elements/issues/251)
+* Mojito: Update translations (#265) ([8692f1a](https://github.com/box/box-ui-elements/commit/8692f1a)), closes [#265](https://github.com/box/box-ui-elements/issues/265)
+* Mojito: Update translations (#272) ([d4b0f6d](https://github.com/box/box-ui-elements/commit/d4b0f6d)), closes [#272](https://github.com/box/box-ui-elements/issues/272)
+* Mojito: Update translations (#278) ([6724b57](https://github.com/box/box-ui-elements/commit/6724b57)), closes [#278](https://github.com/box/box-ui-elements/issues/278)
+* Mojito: Update translations (#282) ([58cb924](https://github.com/box/box-ui-elements/commit/58cb924)), closes [#282](https://github.com/box/box-ui-elements/issues/282)
+* Mojito: Update translations (#287) ([4291e63](https://github.com/box/box-ui-elements/commit/4291e63)), closes [#287](https://github.com/box/box-ui-elements/issues/287)
+* Mojito: Update translations (#290) ([9c227cf](https://github.com/box/box-ui-elements/commit/9c227cf)), closes [#290](https://github.com/box/box-ui-elements/issues/290)
+* Mojito: Update translations (#296) ([ce901a9](https://github.com/box/box-ui-elements/commit/ce901a9)), closes [#296](https://github.com/box/box-ui-elements/issues/296)
+* Mojito: Update translations (#300) ([c85073f](https://github.com/box/box-ui-elements/commit/c85073f)), closes [#300](https://github.com/box/box-ui-elements/issues/300)
+* Mojito: Update translations (#305) ([256950a](https://github.com/box/box-ui-elements/commit/256950a)), closes [#305](https://github.com/box/box-ui-elements/issues/305)
+* Mojito: Update translations (#308) ([05cbfc6](https://github.com/box/box-ui-elements/commit/05cbfc6)), closes [#308](https://github.com/box/box-ui-elements/issues/308)
+* Mojito: Update translations (#309) ([d590f84](https://github.com/box/box-ui-elements/commit/d590f84)), closes [#309](https://github.com/box/box-ui-elements/issues/309)
+* Mojito: Update translations (#314) ([4e14338](https://github.com/box/box-ui-elements/commit/4e14338)), closes [#314](https://github.com/box/box-ui-elements/issues/314)
+* Mojito: Update translations (#316) ([e837a1f](https://github.com/box/box-ui-elements/commit/e837a1f)), closes [#316](https://github.com/box/box-ui-elements/issues/316)
+* Mojito: Update translations (#321) ([5e412a4](https://github.com/box/box-ui-elements/commit/5e412a4)), closes [#321](https://github.com/box/box-ui-elements/issues/321)
+* Mojito: Update translations (#323) ([304594c](https://github.com/box/box-ui-elements/commit/304594c)), closes [#323](https://github.com/box/box-ui-elements/issues/323)
+* Mojito: Update translations (#333) ([6519af3](https://github.com/box/box-ui-elements/commit/6519af3)), closes [#333](https://github.com/box/box-ui-elements/issues/333)
+* Mojito: Update translations (#338) ([dd7693f](https://github.com/box/box-ui-elements/commit/dd7693f)), closes [#338](https://github.com/box/box-ui-elements/issues/338)
+* Mojito: Update translations (#342) ([23bc1b8](https://github.com/box/box-ui-elements/commit/23bc1b8)), closes [#342](https://github.com/box/box-ui-elements/issues/342)
+* New: Activity feed for sidebar (#230) ([bdc559e](https://github.com/box/box-ui-elements/commit/bdc559e)), closes [#230](https://github.com/box/box-ui-elements/issues/230)
+* New: Add babel react proptypes plugin (#337) ([13c7888](https://github.com/box/box-ui-elements/commit/13c7888)), closes [#337](https://github.com/box/box-ui-elements/issues/337)
+* New: Add item expiration to details sidebar (#241) ([62ac5cd](https://github.com/box/box-ui-elements/commit/62ac5cd)), closes [#241](https://github.com/box/box-ui-elements/issues/241)
+* New: Adding ActivityFeed to Sidebar w/ dummy data prototype (#276) ([069bcc4](https://github.com/box/box-ui-elements/commit/069bcc4)), closes [#276](https://github.com/box/box-ui-elements/issues/276)
+* New: Classification link in details sidebar (#269) ([152d29f](https://github.com/box/box-ui-elements/commit/152d29f)), closes [#269](https://github.com/box/box-ui-elements/issues/269)
+* New: Comments can now be posted to the API (#331) ([b8ab563](https://github.com/box/box-ui-elements/commit/b8ab563)), closes [#331](https://github.com/box/box-ui-elements/issues/331)
+* New: Populate @mentions user list in AF (#302) ([7089bae](https://github.com/box/box-ui-elements/commit/7089bae)), closes [#302](https://github.com/box/box-ui-elements/issues/302)
+* New: Populate AF with comments, tasks, & versions (#307) ([3514b46](https://github.com/box/box-ui-elements/commit/3514b46)), closes [#307](https://github.com/box/box-ui-elements/issues/307)
+* New: sidebar component error handling (#250) ([3b2bca6](https://github.com/box/box-ui-elements/commit/3b2bca6)), closes [#250](https://github.com/box/box-ui-elements/issues/250)
+* New: Status card and update to skill error messages (#341) ([a6c2a26](https://github.com/box/box-ui-elements/commit/a6c2a26)), closes [#341](https://github.com/box/box-ui-elements/issues/341)
+* New: Tasks can be added via the API (#335) ([a695a9a](https://github.com/box/box-ui-elements/commit/a695a9a)), closes [#335](https://github.com/box/box-ui-elements/issues/335)
+* New: version and tasks API (#283) ([d36b24f](https://github.com/box/box-ui-elements/commit/d36b24f)), closes [#283](https://github.com/box/box-ui-elements/issues/283)
+* Chore: Add flow stub for draft-js (#281) ([c0deda9](https://github.com/box/box-ui-elements/commit/c0deda9)), closes [#281](https://github.com/box/box-ui-elements/issues/281)
+* Chore: Add props for metric and error callbacks (#256) ([ce466d5](https://github.com/box/box-ui-elements/commit/ce466d5)), closes [#256](https://github.com/box/box-ui-elements/issues/256)
+* Chore: add react-intl flow-typed (#259) ([f544b95](https://github.com/box/box-ui-elements/commit/f544b95)), closes [#259](https://github.com/box/box-ui-elements/issues/259)
+* Chore: Adding create/update/delete endpoints for comments (#320) ([fb43bea](https://github.com/box/box-ui-elements/commit/fb43bea)), closes [#320](https://github.com/box/box-ui-elements/issues/320)
+* Chore: Adding general and details tab interaction targets (#284) ([70afad6](https://github.com/box/box-ui-elements/commit/70afad6)), closes [#284](https://github.com/box/box-ui-elements/issues/284)
+* Chore: Adding task assignment CRUD operations (#328) ([25e60c5](https://github.com/box/box-ui-elements/commit/25e60c5)), closes [#328](https://github.com/box/box-ui-elements/issues/328)
+* Chore: Adding task CRUD operations  (#327) ([231d0eb](https://github.com/box/box-ui-elements/commit/231d0eb)), closes [#327](https://github.com/box/box-ui-elements/issues/327)
+* Chore: Don't sort if feedState already exists (#325) ([87eb3f3](https://github.com/box/box-ui-elements/commit/87eb3f3)), closes [#325](https://github.com/box/box-ui-elements/issues/325)
+* Chore: Explicitly set state at start, and reset on fileid change (#339) ([291be01](https://github.com/box/box-ui-elements/commit/291be01)), closes [#339](https://github.com/box/box-ui-elements/issues/339)
+* Chore: Fix Activity Feed styling after skills re-design (#306) ([567ed4e](https://github.com/box/box-ui-elements/commit/567ed4e)), closes [#306](https://github.com/box/box-ui-elements/issues/306)
+* Chore: Fix flow error for draft-js (#277) ([f0cda1b](https://github.com/box/box-ui-elements/commit/f0cda1b)), closes [#277](https://github.com/box/box-ui-elements/issues/277)
+* Chore: Refactoring HTTP strings (#330) ([9855679](https://github.com/box/box-ui-elements/commit/9855679)), closes [#330](https://github.com/box/box-ui-elements/issues/330)
+* Chore: Remove brui reset style. Add proper style to AF.scss (#280) ([cda83e8](https://github.com/box/box-ui-elements/commit/cda83e8)), closes [#280](https://github.com/box/box-ui-elements/issues/280)
+* Chore: remove maxLength since it is set in ItemProperties (#262) ([7f07e49](https://github.com/box/box-ui-elements/commit/7f07e49)), closes [#262](https://github.com/box/box-ui-elements/issues/262)
+* Chore: Sort activity feed items at initial load (#322) ([2cf022c](https://github.com/box/box-ui-elements/commit/2cf022c)), closes [#322](https://github.com/box/box-ui-elements/issues/322)
+* Chore: Switching how items are passed to AF, adding fields for tasks and comments API (#293) ([df2069c](https://github.com/box/box-ui-elements/commit/df2069c)), closes [#293](https://github.com/box/box-ui-elements/issues/293)
+* Chore: tests match new API additions. Tests for passing user obj (#315) ([677a517](https://github.com/box/box-ui-elements/commit/677a517)), closes [#315](https://github.com/box/box-ui-elements/issues/315)
+* Chore: Update issue templates (#311) ([0f6c4c8](https://github.com/box/box-ui-elements/commit/0f6c4c8)), closes [#311](https://github.com/box/box-ui-elements/issues/311)
+* Chore: updated User flow type to match api data (#313) ([f29756a](https://github.com/box/box-ui-elements/commit/f29756a)), closes [#313](https://github.com/box/box-ui-elements/issues/313)
+* Chore: Updating preview version default (#260) ([3964386](https://github.com/box/box-ui-elements/commit/3964386)), closes [#260](https://github.com/box/box-ui-elements/issues/260)
+* Chore: Upgrade Preview to v1.39.2 (#266) ([a6f00c0](https://github.com/box/box-ui-elements/commit/a6f00c0)), closes [#266](https://github.com/box/box-ui-elements/issues/266)
+* Chore: use enzyme-to-json to serialize snapshots (#252) ([07ea30f](https://github.com/box/box-ui-elements/commit/07ea30f)), closes [#252](https://github.com/box/box-ui-elements/issues/252)
+* Fix: ContentUploader file input should reset properly (#297) ([2dccb4b](https://github.com/box/box-ui-elements/commit/2dccb4b)), closes [#297](https://github.com/box/box-ui-elements/issues/297)
+* Fix: Ensure getAvatarUrl gets passed to Comment.js + fix version messages (#318) ([d387716](https://github.com/box/box-ui-elements/commit/d387716)), closes [#318](https://github.com/box/box-ui-elements/issues/318)
+* Fix: Fix data returned for update/delete, task properties (#329) ([a5afa9f](https://github.com/box/box-ui-elements/commit/a5afa9f)), closes [#329](https://github.com/box/box-ui-elements/issues/329)
+* Fix: flow error in UploadStateContent (#299) ([a7ef76f](https://github.com/box/box-ui-elements/commit/a7ef76f)), closes [#299](https://github.com/box/box-ui-elements/issues/299)
+* Fix: Remove upload progress bar when item is pending (#253) ([e2e641e](https://github.com/box/box-ui-elements/commit/e2e641e)), closes [#253](https://github.com/box/box-ui-elements/issues/253) [#226](https://github.com/box/box-ui-elements/issues/226)
+* Docs: Remove Content Tree documentation (#291) ([6ec099e](https://github.com/box/box-ui-elements/commit/6ec099e)), closes [#291](https://github.com/box/box-ui-elements/issues/291)
+* Docs: Tweak README.md (#292) ([36c653a](https://github.com/box/box-ui-elements/commit/36c653a)), closes [#292](https://github.com/box/box-ui-elements/issues/292)
+* Upgrade: preview to 1.0.40 (#274) ([51235f3](https://github.com/box/box-ui-elements/commit/51235f3)), closes [#274](https://github.com/box/box-ui-elements/issues/274)
+
+
+
 ## <small>4.4.1 (2018-03-30)</small>
 
+* Release: 4.4.1 ([0bdedd5](https://github.com/box/box-ui-elements/commit/0bdedd5))
 * Fix: IE11 issue with left navigation icon in preview (#248) ([27e0477](https://github.com/box/box-ui-elements/commit/27e0477)), closes [#248](https://github.com/box/box-ui-elements/issues/248)
 * Chore: Respect autoFocus and useHotkeys properties (#246) ([6423292](https://github.com/box/box-ui-elements/commit/6423292)), closes [#246](https://github.com/box/box-ui-elements/issues/246)
 * Docs: Add issue report template (#247) ([ed3f097](https://github.com/box/box-ui-elements/commit/ed3f097)), closes [#247](https://github.com/box/box-ui-elements/issues/247)
 
 
 
-<a name="4.4.0"></a>
 ## 4.4.0 (2018-03-30)
 
 * Release: 4.4.0 ([342356d](https://github.com/box/box-ui-elements/commit/342356d))
@@ -26,7 +113,6 @@
 
 
 
-<a name="4.3.2"></a>
 ## <small>4.3.2 (2018-03-15)</small>
 
 * Release: 4.3.2 ([468ea1f](https://github.com/box/box-ui-elements/commit/468ea1f))
@@ -34,7 +120,6 @@
 
 
 
-<a name="4.3.1"></a>
 ## <small>4.3.1 (2018-03-15)</small>
 
 * Release: 4.3.1 ([0b0c0c9](https://github.com/box/box-ui-elements/commit/0b0c0c9))
@@ -42,7 +127,6 @@
 
 
 
-<a name="4.3.0"></a>
 ## 4.3.0 (2018-03-14)
 
 * Release: 4.3.0 ([1456442](https://github.com/box/box-ui-elements/commit/1456442))
@@ -52,7 +136,6 @@
 
 
 
-<a name="4.2.1"></a>
 ## <small>4.2.1 (2018-03-14)</small>
 
 * Release: 4.2.1 ([571f7b2](https://github.com/box/box-ui-elements/commit/571f7b2))
@@ -63,7 +146,6 @@
 
 
 
-<a name="4.2.0"></a>
 ## 4.2.0 (2018-03-10)
 
 * Release: 4.2.0 ([14e777b](https://github.com/box/box-ui-elements/commit/14e777b))
@@ -72,7 +154,6 @@
 
 
 
-<a name="4.1.0"></a>
 ## 4.1.0 (2018-03-09)
 
 * Release: 4.1.0 ([6587cad](https://github.com/box/box-ui-elements/commit/6587cad))
@@ -83,7 +164,6 @@
 
 
 
-<a name="4.0.1"></a>
 ## <small>4.0.1 (2018-03-07)</small>
 
 * Release: 4.0.1 ([296110e](https://github.com/box/box-ui-elements/commit/296110e))
@@ -91,7 +171,6 @@
 
 
 
-<a name="4.0.0"></a>
 ## 4.0.0 (2018-03-07)
 
 * Release: 4.0.0 ([6403da3](https://github.com/box/box-ui-elements/commit/6403da3))
@@ -111,7 +190,6 @@
 
 
 
-<a name="3.6.1"></a>
 ## <small>3.6.1 (2018-02-09)</small>
 
 * Release: 3.6.1 ([7ee663b](https://github.com/box/box-ui-elements/commit/7ee663b))
@@ -123,7 +201,6 @@
 
 
 
-<a name="3.6.0"></a>
 ## 3.6.0 (2018-02-05)
 
 * Release: 3.6.0 ([25b515d](https://github.com/box/box-ui-elements/commit/25b515d))
@@ -133,7 +210,6 @@
 
 
 
-<a name="3.5.2"></a>
 ## <small>3.5.2 (2018-01-19)</small>
 
 * Release: 3.5.2 ([4b52d1a](https://github.com/box/box-ui-elements/commit/4b52d1a))
@@ -143,7 +219,6 @@
 
 
 
-<a name="3.5.1"></a>
 ## <small>3.5.1 (2018-01-16)</small>
 
 * Release: 3.5.1 ([ccf3344](https://github.com/box/box-ui-elements/commit/ccf3344))
@@ -152,7 +227,6 @@
 
 
 
-<a name="3.5.0"></a>
 ## 3.5.0 (2018-01-16)
 
 * Release: 3.5.0 ([dba942f](https://github.com/box/box-ui-elements/commit/dba942f))
@@ -162,7 +236,6 @@
 
 
 
-<a name="3.4.1"></a>
 ## <small>3.4.1 (2018-01-12)</small>
 
 * Release: 3.4.1 ([6f02373](https://github.com/box/box-ui-elements/commit/6f02373))
@@ -174,7 +247,6 @@
 
 
 
-<a name="3.4.0"></a>
 ## 3.4.0 (2018-01-10)
 
 * Release: 3.4.0 ([5c92eaa](https://github.com/box/box-ui-elements/commit/5c92eaa))
@@ -187,7 +259,6 @@
 
 
 
-<a name="3.3.0"></a>
 ## 3.3.0 (2018-01-08)
 
 * Release: 3.3.0 ([40121b8](https://github.com/box/box-ui-elements/commit/40121b8))
@@ -196,7 +267,6 @@
 
 
 
-<a name="3.2.0"></a>
 ## 3.2.0 (2018-01-05)
 
 * Release: 3.2.0 ([54ba418](https://github.com/box/box-ui-elements/commit/54ba418))
@@ -204,7 +274,6 @@
 
 
 
-<a name="3.1.0"></a>
 ## 3.1.0 (2018-01-04)
 
 * Release: 3.1.0 ([caf8d2c](https://github.com/box/box-ui-elements/commit/caf8d2c))
@@ -212,7 +281,6 @@
 
 
 
-<a name="3.0.1"></a>
 ## <small>3.0.1 (2018-01-03)</small>
 
 * Release: 3.0.1 ([05c4277](https://github.com/box/box-ui-elements/commit/05c4277))
@@ -220,7 +288,6 @@
 
 
 
-<a name="3.0.0"></a>
 ## 3.0.0 (2018-01-03)
 
 * Release: 3.0.0 ([a3d23c8](https://github.com/box/box-ui-elements/commit/a3d23c8))
@@ -243,7 +310,6 @@
 
 
 
-<a name="2.2.0"></a>
 ## 2.2.0 (2017-11-17)
 
 * Release: 2.2.0 ([eedf560](https://github.com/box/box-ui-elements/commit/eedf560))
@@ -251,7 +317,6 @@
 
 
 
-<a name="2.1.4"></a>
 ## <small>2.1.4 (2017-11-16)</small>
 
 * Release: 2.1.4 ([6580802](https://github.com/box/box-ui-elements/commit/6580802))
@@ -259,7 +324,6 @@
 
 
 
-<a name="2.1.3"></a>
 ## <small>2.1.3 (2017-11-16)</small>
 
 * Release: 2.1.3 ([eca19e3](https://github.com/box/box-ui-elements/commit/eca19e3))
@@ -270,7 +334,6 @@
 
 
 
-<a name="2.1.2"></a>
 ## <small>2.1.2 (2017-11-13)</small>
 
 * Release: 2.1.2 ([8080751](https://github.com/box/box-ui-elements/commit/8080751))
@@ -278,7 +341,6 @@
 
 
 
-<a name="2.1.1"></a>
 ## <small>2.1.1 (2017-11-13)</small>
 
 * Release: 2.1.1 ([36b7734](https://github.com/box/box-ui-elements/commit/36b7734))
@@ -286,7 +348,6 @@
 
 
 
-<a name="2.1.0"></a>
 ## 2.1.0 (2017-11-13)
 
 * Release: 2.1.0 ([10394fb](https://github.com/box/box-ui-elements/commit/10394fb))
@@ -303,7 +364,6 @@
 
 
 
-<a name="2.0.0"></a>
 ## 2.0.0 (2017-11-03)
 
 * Release: 2.0.0 ([e841db8](https://github.com/box/box-ui-elements/commit/e841db8))
@@ -318,7 +378,6 @@
 
 
 
-<a name="1.6.1"></a>
 ## <small>1.6.1 (2017-10-27)</small>
 
 * Release: 1.6.1 ([492c95a](https://github.com/box/box-ui-elements/commit/492c95a))
@@ -327,7 +386,6 @@
 
 
 
-<a name="1.6.0"></a>
 ## 1.6.0 (2017-10-26)
 
 * Release: 1.6.0 ([ed7f158](https://github.com/box/box-ui-elements/commit/ed7f158))
@@ -337,7 +395,6 @@
 
 
 
-<a name="1.5.2"></a>
 ## <small>1.5.2 (2017-10-06)</small>
 
 * Release: 1.5.2 ([ac48c8a](https://github.com/box/box-ui-elements/commit/ac48c8a))
@@ -345,7 +402,6 @@
 
 
 
-<a name="1.5.1"></a>
 ## <small>1.5.1 (2017-10-05)</small>
 
 * Release: 1.5.1 ([145bf6f](https://github.com/box/box-ui-elements/commit/145bf6f))
@@ -353,7 +409,6 @@
 
 
 
-<a name="1.5.0"></a>
 ## 1.5.0 (2017-10-05)
 
 * Release: 1.5.0 ([a3648ab](https://github.com/box/box-ui-elements/commit/a3648ab))
@@ -365,7 +420,6 @@
 
 
 
-<a name="1.4.1"></a>
 ## <small>1.4.1 (2017-10-02)</small>
 
 * Release: 1.4.1 ([14cd9d6](https://github.com/box/box-ui-elements/commit/14cd9d6))
@@ -374,7 +428,6 @@
 
 
 
-<a name="1.4.0"></a>
 ## 1.4.0 (2017-09-29)
 
 * Release: 1.4.0 ([87e87d4](https://github.com/box/box-ui-elements/commit/87e87d4))
@@ -383,7 +436,6 @@
 
 
 
-<a name="1.3.1"></a>
 ## <small>1.3.1 (2017-09-27)</small>
 
 * Release: 1.3.1 ([fd10b4a](https://github.com/box/box-ui-elements/commit/fd10b4a))
@@ -392,7 +444,6 @@
 
 
 
-<a name="1.3.0"></a>
 ## 1.3.0 (2017-09-26)
 
 * Release: 1.3.0 ([751339a](https://github.com/box/box-ui-elements/commit/751339a))
@@ -400,7 +451,6 @@
 
 
 
-<a name="1.2.2"></a>
 ## <small>1.2.2 (2017-09-23)</small>
 
 * Release: 1.2.2 ([3040cc6](https://github.com/box/box-ui-elements/commit/3040cc6))
@@ -408,14 +458,12 @@
 
 
 
-<a name="1.2.1"></a>
 ## <small>1.2.1 (2017-09-22)</small>
 
 * Release: 1.2.1 ([42ba915](https://github.com/box/box-ui-elements/commit/42ba915))
 
 
 
-<a name="1.2.0"></a>
 ## 1.2.0 (2017-09-22)
 
 * Release: 1.2.0 ([92c75cd](https://github.com/box/box-ui-elements/commit/92c75cd))
@@ -434,7 +482,6 @@
 
 
 
-<a name="1.1.0"></a>
 ## 1.1.0 (2017-08-19)
 
 * Release: 1.1.0 ([4fefce1](https://github.com/box/box-ui-elements/commit/4fefce1))
@@ -464,7 +511,6 @@
 
 
 
-<a name="1.0.2"></a>
 ## <small>1.0.2 (2017-07-14)</small>
 
 * Release: 1.0.2 ([e0eb813](https://github.com/box/box-ui-elements/commit/e0eb813))
@@ -476,7 +522,6 @@
 
 
 
-<a name="1.0.1"></a>
 ## <small>1.0.1 (2017-07-13)</small>
 
 * Release: 1.0.1 ([a43b101](https://github.com/box/box-ui-elements/commit/a43b101))
@@ -484,7 +529,6 @@
 
 
 
-<a name="1.0.0"></a>
 ## 1.0.0 (2017-07-13)
 
 * Release: 1.0.0 ([2c2f7ed](https://github.com/box/box-ui-elements/commit/2c2f7ed))
@@ -495,7 +539,6 @@
 
 
 
-<a name="0.45.0"></a>
 ## 0.45.0 (2017-07-12)
 
 * Release: 0.45.0 ([a679f52](https://github.com/box/box-ui-elements/commit/a679f52))
@@ -506,21 +549,18 @@
 
 
 
-<a name="0.44.0"></a>
 ## 0.44.0 (2017-07-12)
 
 * Release: 0.44.0 ([fc933b4](https://github.com/box/box-ui-elements/commit/fc933b4))
 
 
 
-<a name="0.43.0"></a>
 ## 0.43.0 (2017-07-12)
 
 * Release: 0.43.0 ([77a7676](https://github.com/box/box-ui-elements/commit/77a7676))
 
 
 
-<a name="0.42.0"></a>
 ## 0.42.0 (2017-07-12)
 
 * Release: 0.42.0 ([84ed7b4](https://github.com/box/box-ui-elements/commit/84ed7b4))
@@ -530,7 +570,6 @@
 
 
 
-<a name="0.41.0"></a>
 ## 0.41.0 (2017-07-06)
 
 * Release: 0.41.0 ([17e88b5](https://github.com/box/box-ui-elements/commit/17e88b5))
@@ -538,7 +577,6 @@
 
 
 
-<a name="0.40.0"></a>
 ## 0.40.0 (2017-07-06)
 
 * Release: 0.40.0 ([1cc8dd2](https://github.com/box/box-ui-elements/commit/1cc8dd2))
@@ -547,7 +585,6 @@
 
 
 
-<a name="0.39.0"></a>
 ## 0.39.0 (2017-07-06)
 
 * Release: 0.39.0 ([70acc5e](https://github.com/box/box-ui-elements/commit/70acc5e))
@@ -563,7 +600,6 @@
 
 
 
-<a name="0.38.0"></a>
 ## 0.38.0 (2017-06-29)
 
 * Release: 0.38.0 ([1992e3f](https://github.com/box/box-ui-elements/commit/1992e3f))
