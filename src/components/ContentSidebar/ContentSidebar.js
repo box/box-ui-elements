@@ -750,14 +750,22 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     updateTaskSuccessCallback(task: Task) {
         const { tasks } = this.state;
+        const { id } = task;
 
         if (tasks) {
-            const { entries, total_count: totalCount } = tasks;
+            const { entries, total_count } = tasks;
 
             this.setState({
                 tasks: {
-                    entries: [task, ...entries],
-                    total_count: totalCount + 1
+                    entries: entries.map((item) => {
+                        if (item.id === id) {
+                            return {
+                                ...task
+                            };
+                        }
+                        return item;
+                    }),
+                    total_count
                 }
             });
         }

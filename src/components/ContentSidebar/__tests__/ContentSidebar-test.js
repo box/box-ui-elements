@@ -403,36 +403,58 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance = wrapper.instance();
         });
 
-        test('should add the task to the task entries state', () => {
+        test('should update the task', () => {
+            const id = '1';
+            const message = 'foo';
+
             wrapper.setState({
                 tasks: {
-                    total_count: 0,
-                    entries: []
+                    total_count: 1,
+                    entries: [
+                        {
+                            id,
+                            message: 'bar'
+                        }
+                    ]
                 }
             });
 
             instance.updateTaskSuccessCallback({
-                type: 'task'
+                id,
+                type: 'task',
+                message
             });
 
             const { tasks } = instance.state;
             expect(tasks.entries.length).toBe(1);
+            expect(tasks.entries[0].message).toBe(message);
         });
 
-        test('should increase total_count of the task state', () => {
+        test('should not update if invalid id', () => {
+            const id = '1';
+            const message = 'foo';
+
             wrapper.setState({
                 tasks: {
-                    total_count: 0,
-                    entries: []
+                    total_count: 1,
+                    entries: [
+                        {
+                            id,
+                            message
+                        }
+                    ]
                 }
             });
 
             instance.updateTaskSuccessCallback({
-                type: 'task'
+                id: '2',
+                type: 'task',
+                message: 'bar'
             });
 
             const { tasks } = instance.state;
-            expect(tasks.total_count).toBe(1);
+            expect(tasks.entries.length).toBe(1);
+            expect(tasks.entries[0].message).toBe(message);
         });
     });
 
