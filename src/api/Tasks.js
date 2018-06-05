@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT } from '../constants';
+import { PERMISSION_CAN_COMMENT, HTTP_GET } from '../constants';
 
 class Tasks extends Base {
     /**
@@ -46,30 +46,26 @@ class Tasks extends Base {
     }
 
     /**
-     * Formats the tasks api response to usable data
-     * @param {Object} data the api response data
+     * API for creating a task on a file
+     *
+     * @param {BoxItem} file - File object for which we are creating a task
+     * @param {string} taskId - Task ID
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {Object} params request params
      * @return {void}
      */
-    successHandler = (data: any): void => {
-        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
-            return;
-        }
-
-        // There is no response data when deleting a task
-        if (!data) {
-            this.successCallback();
-            return;
-        }
-
-        // We don't have entries when updating/creating a task
-        if (!data.entries) {
-            this.successCallback(this.format(data));
-            return;
-        }
-
-        const tasks = data.entries.map(this.format);
-        this.successCallback({ ...data, entries: tasks });
-    };
+    getAssignments(
+        file: BoxItem,
+        taskId: string,
+        successCallback: Function,
+        errorCallback: Function,
+        params?: Object
+    ): void {
+        const { id = '' } = file;
+        const url = `${this.tasksUrl(taskId)}/assignments`;
+        this.makeRequest(HTTP_GET, id, url, successCallback, errorCallback, params);
+    }
 
     /**
      * API for creating a task on a file

@@ -22,7 +22,12 @@ import {
     DEFAULT_COLLAB_DEBOUNCE,
     DEFAULT_MAX_COLLABORATORS
 } from '../../constants';
-import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
+import {
+    COMMENTS_FIELDS_TO_FETCH,
+    TASKS_FIELDS_TO_FETCH,
+    VERSIONS_FIELDS_TO_FETCH,
+    TASK_ASSIGNMENTS_FIELDS_TO_FETCH
+} from '../../util/fields';
 import messages from '../messages';
 import { shouldRenderSidebar } from './sidebarUtil';
 import '../fonts.scss';
@@ -74,6 +79,7 @@ type State = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    tasksWithAssignments?: Tasks,
     currentUser?: User,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
@@ -116,6 +122,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         versions: undefined,
         comments: undefined,
         tasks: undefined,
+        tasksWithAssignments: undefined,
         currentUser: undefined,
         approverSelectorContacts: undefined,
         mentionSelectorContacts: undefined,
@@ -468,6 +475,53 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTasksSuccessCallback = (tasks: Tasks): void => {
         this.setState({ tasks, tasksError: undefined });
+        this.fetchTaskAssignments(tasks);
+    };
+
+    /**
+     * Update Tasks to include task assignments
+     *
+     * @private
+     * @param {Array<Task>} entries - Box task entries
+     * @param {TaskAssignments} assignments - Box task assigments
+     * @return {TaskAssignments} Updated Box task assignments
+     */
+    replaceTaskAssignments(entries, assignments) {
+        return {
+            total_count: assignments.entries.length,
+            entries: entries.map((item) => {
+                const assignment = assignments.entries.find((a) => a.id === item.id);
+                if (assignment) {
+                    return {
+                        ...assignment
+                    };
+                }
+                return item;
+            })
+        };
+    }
+
+    /**
+     * File task assignment fetch success callback
+     *
+     * @private
+     * @param {TaskAssignments} assignments - Box task assigment
+     * @return {void}
+     */
+    fetchTaskAssignmentsSuccessCallback = (assignments: TaskAssignments): void => {
+        const { entries, total_count } = this.state.tasks;
+        this.setState({
+            tasksWithAssignments: {
+                entries: entries.map((task) => ({
+                    ...task,
+                    task_assignment_collection: this.replaceTaskAssignments(
+                        task.task_assignment_collection.entries,
+                        assignments
+                    )
+                })),
+                total_count
+            }
+        });
     };
 
     /**
@@ -950,6 +1004,39 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Fetches the task assignments for each task
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchTaskAssignments(tasks: Tasks, shouldDestroy?: boolean = false): void {
+        if (!shouldRenderSidebar(this.props)) {
+            return;
+        }
+
+        const requestData = {
+            params: {
+                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH.toString()
+            }
+        };
+
+        const { entries } = tasks;
+        const { file } = this.state;
+        entries.forEach((task) => {
+            this.api
+                .getTasksAPI(shouldDestroy)
+                .getAssignments(
+                    file,
+                    task.id,
+                    this.fetchTaskAssignmentsSuccessCallback,
+                    this.fetchTasksErrorCallback,
+                    requestData
+                );
+        });
+    }
+
+    /**
      * Fetches the access stats for a file
      *
      * @private
@@ -1158,7 +1245,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             accessStats,
             versions,
             comments,
-            tasks,
+            tasksWithAssignments,
             currentUser,
             accessStatsError,
             fileError,
@@ -1198,7 +1285,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
                                 versionError={versionError}
-                                tasks={tasks}
+                                tasks={tasksWithAssignments}
                                 tasksError={tasksError}
                                 comments={comments}
                                 commentsError={commentsError}

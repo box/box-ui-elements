@@ -115,35 +115,36 @@ class Task extends React.Component<Props> {
                         ) : null}
                     </div>
                     <div className='bcs-task-assignees'>
-                        {task_assignment_collection.map(({ id: taskAssignmentId, user: assigneeUser, status }) => {
-                            switch (status) {
-                                case TASK_INCOMPLETE:
-                                    return (
-                                        <PendingAssignment
-                                            {...assigneeUser}
-                                            key={assigneeUser.id}
-                                            onTaskApproval={() =>
-                                                onTaskAssignmentUpdate(id, taskAssignmentId, TASK_APPROVED)
-                                            }
-                                            onTaskReject={() =>
-                                                onTaskAssignmentUpdate(id, taskAssignmentId, TASK_REJECTED)
-                                            }
-                                            shouldShowActions={
-                                                onTaskAssignmentUpdate &&
-                                                currentUser &&
-                                                assigneeUser.id === currentUser.id
-                                            }
-                                        />
-                                    );
-                                case TASK_COMPLETED:
-                                case TASK_APPROVED:
-                                    return <CompletedAssignment {...assigneeUser} key={assigneeUser.id} />;
-                                case TASK_REJECTED:
-                                    return <RejectedAssignment {...assigneeUser} key={assigneeUser.id} />;
-                                default:
-                                    return null;
+                        {task_assignment_collection.entries.map(
+                            ({ id: assignmentId, assigned_to, resolution_state }) => {
+                                switch (resolution_state) {
+                                    case TASK_INCOMPLETE:
+                                        return (
+                                            <PendingAssignment
+                                                {...assigned_to}
+                                                key={assigned_to.id}
+                                                onTaskApproval={() =>
+                                                    onTaskAssignmentUpdate(id, assignmentId, TASK_APPROVED)
+                                                }
+                                                onTaskReject={() =>
+                                                    onTaskAssignmentUpdate(id, assignmentId, TASK_REJECTED)
+                                                }
+                                                shouldShowActions={
+                                                    onTaskAssignmentUpdate &&
+                                                    currentUser &&
+                                                    assigned_to.id === currentUser.id
+                                                }
+                                            />
+                                        );
+                                    case TASK_COMPLETED:
+                                    case TASK_APPROVED:
+                                        return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
+                                    default:
+                                        // NOTE: Tasks with a 'rejected' status are improperly returned from the API w/ an unknown resolution_status. Default setting any task assignments without an explicit resolution_status to be a rejected assignment.
+                                        return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
+                                }
                             }
-                        })}
+                        )}
                     </div>
                 </div>
             </div>
