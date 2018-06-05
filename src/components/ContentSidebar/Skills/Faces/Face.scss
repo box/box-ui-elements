@@ -7,7 +7,7 @@
         position: relative; // For delete and minus icons
     }
 
-    .be-face {
+    .btn-plain.be-face {
         border-radius: 100%;
         overflow: hidden;
 
@@ -37,12 +37,12 @@
         }
     }
 
-    .be-face-unselected .be-face img {
+    .be-face-unselected .btn-plain.be-face img {
         filter: none;
         opacity: .4;
     }
 
-    .be-face-delete {
+    .btn-plain.be-face-delete {
         background-color: white;
         border: 1px solid $downtown-grey;
         border-radius: 100%;
@@ -55,7 +55,7 @@
     }
 
     &.be-faces-is-editing {
-        .be-face:hover img {
+        .btn-plain.be-face:hover img {
             cursor: default;
             transform: none;
         }

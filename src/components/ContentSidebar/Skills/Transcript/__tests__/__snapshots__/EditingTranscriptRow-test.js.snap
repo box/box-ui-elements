@@ -23,14 +23,18 @@ exports[`components/ContentSidebar/Skills/Transcript/TranscriptRow should correc
     <div
       className="be-transcript-buttons"
     >
-      <Button>
+      <Button
+        type="button"
+      >
         <FormattedMessage
           data-resin-target="skill-transcripteditcancel"
           defaultMessage="Cancel"
           id="be.cancel"
         />
       </Button>
-      <PrimaryButton>
+      <PrimaryButton
+        type="button"
+      >
         <FormattedMessage
           data-resin-target="skill-transcripteditsave"
           defaultMessage="Save"
@@ -60,14 +64,18 @@ exports[`components/ContentSidebar/Skills/Transcript/TranscriptRow should correc
     <div
       className="be-transcript-buttons"
     >
-      <Button>
+      <Button
+        type="button"
+      >
         <FormattedMessage
           data-resin-target="skill-transcripteditcancel"
           defaultMessage="Cancel"
           id="be.cancel"
         />
       </Button>
-      <PrimaryButton>
+      <PrimaryButton
+        type="button"
+      >
         <FormattedMessage
           data-resin-target="skill-transcripteditsave"
           defaultMessage="Save"

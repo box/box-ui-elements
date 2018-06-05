@@ -15,6 +15,7 @@ import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import TranscriptRow from './TranscriptRow';
+import SkillsBusyIndicator from '../SkillsBusyIndicator';
 import { isValidTimeSlice } from './timeSliceUtils';
 import { COLOR_999 } from '../../../../constants';
 import { copy } from '../../../../util/download';
@@ -31,13 +32,19 @@ type Props = {
 
 type State = {
     isEditingIndex?: number,
+    isLoading: boolean,
     newTranscriptText: string,
     isCollapsed: boolean
 };
 
 class Transcript extends React.PureComponent<Props, State> {
     props: Props;
-    state: State = { isEditingIndex: undefined, newTranscriptText: '', isCollapsed: true };
+    state: State = {
+        isEditingIndex: undefined,
+        newTranscriptText: '',
+        isCollapsed: true,
+        isLoading: false
+    };
     copyBtn: HTMLButtonElement;
 
     /**
@@ -48,7 +55,11 @@ class Transcript extends React.PureComponent<Props, State> {
      */
     componentWillReceiveProps(): void {
         const wasEditing = typeof this.state.isEditingIndex === 'number';
-        this.setState({ isEditingIndex: wasEditing ? -1 : undefined, newTranscriptText: '' });
+        this.setState({
+            isEditingIndex: wasEditing ? -1 : undefined,
+            newTranscriptText: '',
+            isLoading: false
+        });
     }
 
     /**
@@ -142,6 +153,7 @@ class Transcript extends React.PureComponent<Props, State> {
         if (entry.text === newTranscriptText) {
             this.onCancel();
         } else {
+            this.setState({ isLoading: true, isEditingIndex: -1 });
             onSkillChange(null, null, [
                 {
                     replacement: { ...entry, text: newTranscriptText },
@@ -182,10 +194,12 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onClick = (index: number): void => {
+        const { card: { entries } }: Props = this.props;
         const { isEditingIndex }: State = this.state;
         if (typeof isEditingIndex === 'number') {
             this.setState({
-                isEditingIndex: index
+                isEditingIndex: index,
+                newTranscriptText: entries[index].text
             });
         } else {
             this.previewSegment(index);
@@ -247,7 +261,7 @@ class Transcript extends React.PureComponent<Props, State> {
      */
     render() {
         const { card: { entries }, isEditable }: Props = this.props;
-        const { isEditingIndex, isCollapsed }: State = this.state;
+        const { isEditingIndex, isCollapsed, isLoading }: State = this.state;
         const hasEntries = entries.length > 0;
         const hasManyEntries = entries.length > 5;
         const isEditing = typeof isEditingIndex === 'number';
@@ -260,31 +274,41 @@ class Transcript extends React.PureComponent<Props, State> {
 
         return (
             <div className='be-transcript'>
-                {hasEntries && (
-                    <PlainButton
-                        type='button'
-                        className='be-transcript-copy'
-                        getDOMRef={this.copyBtnRef}
-                        onClick={this.copyTranscript}
-                    >
-                        <IconCopy color={COLOR_999} />
-                    </PlainButton>
-                )}
-                {hasManyEntries && (
-                    <PlainButton type='button' className='be-transcript-expand' onClick={this.toggleExpandCollapse}>
-                        {isCollapsed ? <IconExpand color={COLOR_999} /> : <IconCollapse color={COLOR_999} />}
-                    </PlainButton>
-                )}
                 {hasEntries &&
-                    isEditable && (
-                        <PlainButton
-                            type='button'
-                            className={editBtnClassName}
-                            onClick={this.toggleIsEditing}
-                            data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
-                        >
-                            <IconEdit />
-                        </PlainButton>
+                    !isLoading && (
+                        <div className='be-transcript-actions'>
+                            <PlainButton
+                                type='button'
+                                className='be-transcript-copy'
+                                getDOMRef={this.copyBtnRef}
+                                onClick={this.copyTranscript}
+                            >
+                                <IconCopy color={COLOR_999} />
+                            </PlainButton>
+                            {hasManyEntries && (
+                                <PlainButton
+                                    type='button'
+                                    className='be-transcript-expand'
+                                    onClick={this.toggleExpandCollapse}
+                                >
+                                    {isCollapsed ? (
+                                        <IconExpand color={COLOR_999} />
+                                    ) : (
+                                        <IconCollapse color={COLOR_999} />
+                                    )}
+                                </PlainButton>
+                            )}
+                            {isEditable && (
+                                <PlainButton
+                                    type='button'
+                                    className={editBtnClassName}
+                                    onClick={this.toggleIsEditing}
+                                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
+                                >
+                                    <IconEdit />
+                                </PlainButton>
+                            )}
+                        </div>
                     )}
                 {isEditing ? (
                     <div className='be-transcript-edit-message'>
@@ -296,6 +320,7 @@ class Transcript extends React.PureComponent<Props, State> {
                 ) : (
                     <ErrorMask errorHeader={<FormattedMessage {...messages.skillNoInfoFoundError} />} />
                 )}
+                {isLoading && <SkillsBusyIndicator />}
             </div>
         );
     }

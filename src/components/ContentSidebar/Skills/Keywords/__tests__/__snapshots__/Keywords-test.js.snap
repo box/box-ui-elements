@@ -113,3 +113,24 @@ exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly ren
   />
 </div>
 `;
+
+exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render when isLoading is true 1`] = `
+<div
+  className="be-keywords"
+>
+  <ReadOnlyselecteds
+    duration={100}
+    keywords={
+      Array [
+        Object {
+          "text": "foo",
+        },
+        Object {
+          "text": "bar",
+        },
+      ]
+    }
+  />
+  <SkillsBusyIndicator />
+</div>
+`;

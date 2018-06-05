@@ -3,7 +3,7 @@
 .be-faces {
     position: relative; // For section title icons
 
-    .be-face-edit {
+    .btn-plain.be-face-edit {
         border-radius: 3px;
         height: 24px;
         padding-top: 1px;
@@ -23,7 +23,7 @@
     }
 
     &.be-faces-is-editing {
-        .be-face-edit {
+        .btn-plain.be-face-edit {
             background-color: $off-white;
         }
     }
