@@ -8,7 +8,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
-import 'react-virtualized/styles.css';
 import KeyBinder from '../KeyBinder';
 import shareAccessCellRenderer from './shareAccessCellRenderer';
 import checkboxCellRenderer from './checkboxCellRenderer';

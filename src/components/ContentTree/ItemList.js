@@ -7,9 +7,9 @@
 import React from 'react';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
-import 'react-virtualized/styles.css';
 import cellRenderer from './cellRenderer';
 import { FIELD_NAME } from '../../constants';
+import './ItemList.scss';
 
 type Props = {
     onItemClick: Function,

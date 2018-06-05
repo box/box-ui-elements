@@ -39,6 +39,7 @@ exports[`components/ContentSidebar/Skills/Face/Face should correctly render a fa
     className="be-face-delete"
     data-resin-target="skill-facedelete"
     onClick={[Function]}
+    type="button"
   >
     <IconClose
       color="#999"

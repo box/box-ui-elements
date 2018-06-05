@@ -32,6 +32,7 @@ exports[`components/ContentSidebar/Skills/Keywords/EditableKeywords should corre
   >
     <Button
       onClick={[MockFunction]}
+      type="button"
     >
       <FormattedMessage
         data-resin-target="skill-keywordeditcancel"
@@ -41,6 +42,7 @@ exports[`components/ContentSidebar/Skills/Keywords/EditableKeywords should corre
     </Button>
     <PrimaryButton
       onClick={[MockFunction]}
+      type="button"
     >
       <FormattedMessage
         data-resin-target="skill-keywordeditsave"

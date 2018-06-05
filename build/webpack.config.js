@@ -3,7 +3,7 @@ const packageJSON = require('../package.json');
 const TranslationsPlugin = require('./TranslationsPlugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const license = require('./license');
@@ -19,19 +19,22 @@ const outputDir = process.env.OUTPUT;
 const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
-
+const entries = {
+    picker: path.resolve('src/wrappers/ContentPickers.js'),
+    uploader: path.resolve('src/wrappers/ContentUploader.js'),
+    explorer: path.resolve('src/wrappers/ContentExplorer.js'),
+    tree: path.resolve('src/wrappers/ContentTree.js'),
+    preview: path.resolve('src/wrappers/ContentPreview.js'),
+    sidebar: path.resolve('src/wrappers/ContentSidebar.js')
+}
+const entriesToBuild = typeof process.env.ENTRY === 'string' ? {
+    [process.env.ENTRY]: entries[process.env.ENTRY]
+} : entries;
 
 function getConfig(isReactExternalized) {
     const config = {
         bail: true,
-        entry: {
-            picker: path.resolve('src/wrappers/ContentPickers.js'),
-            uploader: path.resolve('src/wrappers/ContentUploader.js'),
-            explorer: path.resolve('src/wrappers/ContentExplorer.js'),
-            tree: path.resolve('src/wrappers/ContentTree.js'),
-            preview: path.resolve('src/wrappers/ContentPreview.js'),
-            sidebar: path.resolve('src/wrappers/ContentSidebar.js')
-        },
+        entry: entriesToBuild,
         output: {
             path: outputPath,
             filename: `[name]${isReactExternalized ? noReactSuffix : ''}.js`,
@@ -60,35 +63,16 @@ function getConfig(isReactExternalized) {
                 },
                 {
                     test: /\.s?css$/,
-                    use: ExtractTextPlugin.extract({
-                        fallback: 'style-loader',
-                        use: [
-                            {
-                                loader: 'css-loader',
-                                options: { importLoaders: 1 }
-                            },
-                            {
-                                loader: 'postcss-loader'
-                            },
-                            {
-                                loader: 'sass-loader'
-                            }
-                        ]
-                    })
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        'css-loader',
+                        'postcss-loader',
+                        'sass-loader'
+                    ]
                 }
             ]
         },
         plugins: [
-            new BannerPlugin(license),
-            new OptimizeCssAssetsPlugin({
-                cssProcessorOptions: {
-                    safe: true
-                }
-            }),
-            new ExtractTextPlugin({
-                filename: '[name].css',
-                allChunks: true
-            }),
             new DefinePlugin({
                 __LANGUAGE__: JSON.stringify(language),
                 __VERSION__: JSON.stringify(version),
@@ -96,7 +80,17 @@ function getConfig(isReactExternalized) {
                     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                     BABEL_ENV: JSON.stringify(process.env.BABEL_ENV)
                 }
-            })
+            }),
+            new MiniCssExtractPlugin({
+                filename: '[name].css'
+            }),
+            new OptimizeCssAssetsPlugin({
+                cssProcessorOptions: {
+                    discardComments: { removeAll: true },
+                    safe: true
+                }
+            }),
+            new BannerPlugin(license)
         ],
         stats: {
             assets: true,

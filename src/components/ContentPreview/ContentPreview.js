@@ -723,6 +723,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     render() {
         const {
+            apiHost,
             isSmall,
             token,
             language,
@@ -787,8 +788,9 @@ class ContentPreview extends PureComponent<Props, State> {
                             <ContentSidebar
                                 {...contentSidebarProps}
                                 isSmall={isSmall}
-                                cache={this.api.getCache()}
+                                apiHost={apiHost}
                                 token={token}
+                                cache={this.api.getCache()}
                                 fileId={this.getFileId(file)}
                                 getPreviewer={this.getPreviewer}
                                 sharedLink={sharedLink}

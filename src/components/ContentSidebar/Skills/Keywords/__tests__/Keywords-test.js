@@ -81,4 +81,21 @@ describe('components/ContentSidebar/Skills/Keywords/Keywords', () => {
         const wrapper = shallow(<Keywords {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should correctly render when isLoading is true', () => {
+        const props = {
+            card: {
+                duration: 100,
+                entries: [{ text: 'foo' }, { text: 'bar' }]
+            },
+            transcript: { duration: 100 },
+            isEditable: true,
+            onSkillChange: jest.fn()
+        };
+
+        const wrapper = shallow(<Keywords {...props} />);
+        wrapper.setState({ isLoading: true });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });
