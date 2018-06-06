@@ -26,7 +26,7 @@ describe('api/TaskAssignments', () => {
             id: '987654321'
         };
 
-        const resolutionStatus = 'rejected';
+        const resolutionState = 'rejected';
         const successCb = jest.fn();
         const errorCb = jest.fn();
 
@@ -81,7 +81,7 @@ describe('api/TaskAssignments', () => {
 
         describe('updateTaskAssignment()', () => {
             test('should check for valid task assignment permissions', () => {
-                taskAssignments.updateTaskAssignment({ file, taskAssignmentId, resolutionStatus, successCb, errorCb });
+                taskAssignments.updateTaskAssignment({ file, taskAssignmentId, resolutionState, successCb, errorCb });
                 expect(taskAssignments.checkApiCallValidity).toBeCalledWith(
                     PERMISSION_CAN_COMMENT,
                     file.permissions,
@@ -91,13 +91,13 @@ describe('api/TaskAssignments', () => {
 
             test('should put a well formed task update to the tasks endpoint', () => {
                 const requestData = {
-                    data: { resolution_status: resolutionStatus }
+                    data: { resolution_state: resolutionState }
                 };
 
                 taskAssignments.updateTaskAssignment({
                     file,
                     taskAssignmentId,
-                    resolutionStatus,
+                    resolutionState,
                     successCallback: successCb,
                     errorCallback: errorCb
                 });

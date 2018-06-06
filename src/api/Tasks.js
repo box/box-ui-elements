@@ -39,9 +39,14 @@ class Tasks extends Base {
      * @return {Task} A task
      */
     format(task: Object): Task {
+        const {entries} = task.task_assignment_collection;
+        entries.forEach((assignment) => {
+            assignment.resolution_state = 'incomplete';
+        });
+
         return {
             ...task,
-            task_assignment_collection: task.task_assignment_collection.entries || []
+            task_assignment_collection: entries || []
         };
     }
 

@@ -541,7 +541,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                 const assignment = assignments.entries.find((a) => a.id === item.id);
                 if (assignment) {
                     return {
-                        ...assignment
+                        ...assignment,
+                        resolution_state: assignment.message.toLowerCase() || assignment.resolution_state
                     };
                 }
                 return item;
@@ -899,6 +900,75 @@ class ContentSidebar extends PureComponent<Props, State> {
                             };
                         }
                         return item;
+                    }),
+                    total_count
+                }
+            });
+        }
+    }
+
+    /**
+     * Updates a task assignment
+     *
+     * @private
+     * @param {string} taskId - The task's id
+     * @param {string} taskAssignmentId - The task assignments's id
+     * @param {string} resolutionState - The new resolution state of the task assignment
+     * @param {string} message - The task assignments text
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    updateTaskAssignment = (
+        taskId: string,
+        taskAssignmentId: string,
+        resolutionState: string,
+        successCallback: (taskAssignment: Task) => void = noop,
+        errorCallback: (e: Error) => void = noop
+    ) => {
+        const { file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getTaskAssignmentsAPI(false).updateTaskAssignment({
+            file,
+            taskAssignmentId,
+            resolutionState,
+            successCallback,
+            errorCallback: (e: Error) => {
+                errorCallback(e);
+                this.errorCallback(e);
+            }
+        });
+    };
+
+    /**
+     * Task update success callback
+     *
+     * @private
+     * @param {Object} task - Box task
+     * @return {void}
+     */
+    updateTaskAssignmentSuccessCallback(taskAssignment: Task) {
+        const { tasks } = this.state;
+        const { id } = taskAssignment;
+
+        if (tasks) {
+            const { entries, total_count } = tasks;
+
+            this.setState({
+                tasks: {
+                    entries: entries.map((task) => {
+                        task.forEach((assignment) => {
+                            if (assignment.id === id) {
+                                return {
+                                    ...taskAssignment
+                                };
+                            }
+                        });
+                        return task;
                     }),
                     total_count
                 }
@@ -1296,7 +1366,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             onVersionHistoryClick,
             onAccessStatsClick,
             onClassificationClick,
-            onTaskAssignmentUpdate,
             getUserProfileUrl
         }: Props = this.props;
         const {
@@ -1374,7 +1443,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskCreate={this.createTask}
                                 onTaskDelete={this.deleteTask}
                                 onTaskUpdate={this.updateTask}
-                                onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                onTaskAssignmentUpdate={this.updateTaskAssignment}
                                 getUserProfileUrl={getUserProfileUrl}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}

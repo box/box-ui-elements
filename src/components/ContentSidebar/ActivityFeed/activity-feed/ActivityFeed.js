@@ -305,7 +305,31 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string): void => {
         const updateTaskAssignment = this.props.onTaskAssignmentUpdate || noop;
-        updateTaskAssignment(taskId, taskAssignmentId, status);
+        const { feedItems } = this.state;
+        const task = feedItems.find((item) => !!(item.id === taskId));
+        updateTaskAssignment(taskId, taskAssignmentId, status, (assignment) => {
+            const assignments = task.task_assignment_collection.entries;
+            this.updateFeedItem(
+                {
+                    ...task,
+                    task_assignment_collection: {
+                        entries: assignments.map((item: TaskAssignment) => {
+                            if (item.id === assignment.id) {
+                                // $FlowFixMe
+                                return {
+                                    ...item,
+                                    ...assignment,
+                                    resolution_state: assignment.message.toLowerCase() || assignment.resolution_state
+                                };
+                            }
+                            return item;
+                        }),
+                        total_count: task.task_assignment_collection.total_count
+                    }
+                },
+                taskId
+            );
+        });
     };
 
     /**
