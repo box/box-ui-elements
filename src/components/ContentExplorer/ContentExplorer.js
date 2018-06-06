@@ -525,6 +525,8 @@ class ContentExplorer extends Component<Props, State> {
             // Query was cleared out, load the prior folder
             // The prior folder is always the parent folder for search
             this.fetchFolder(folderId, false);
+            // Cancel the debounce so we don't search on a previous query
+            this.debouncedSearch.cancel();
             return;
         }
 
