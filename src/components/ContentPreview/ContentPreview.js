@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
+import cloneDeep from 'lodash/cloneDeep';
 import omit from 'lodash/omit';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
@@ -59,6 +60,7 @@ type Props = {
     measureRef: Function,
     onLoad: Function,
     onNavigate: Function,
+    onDownload: Function,
     onClose?: Function,
     language: string,
     messages?: StringMap,
@@ -106,6 +108,7 @@ class ContentPreview extends PureComponent<Props, State> {
         hasHeader: false,
         autoFocus: false,
         useHotkeys: true,
+        onDownload: noop,
         onError: noop,
         onLoad: noop,
         onMetric: noop,
@@ -604,8 +607,11 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     download = () => {
+        const { onDownload }: Props = this.props;
+        const { file }: State = this.state;
         if (this.preview) {
             this.preview.download();
+            onDownload(cloneDeep(file));
         }
     };
 
