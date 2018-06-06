@@ -22,6 +22,7 @@ type Props = {
     appElement: HTMLElement,
     isTouch: boolean,
     onPreview: Function,
+    onDownload: Function,
     canDownload: boolean,
     cache: APICache,
     apiHost: string,
@@ -46,6 +47,7 @@ const PreviewDialog = ({
     canDownload,
     onCancel,
     onPreview,
+    onDownload,
     apiHost,
     appHost,
     staticHost,
@@ -90,6 +92,7 @@ const PreviewDialog = ({
                 collection={files}
                 onLoad={onLoad}
                 onClose={onCancel}
+                onDownload={onDownload}
                 canDownload={canDownload}
                 sharedLink={sharedLink}
                 sharedLinkPassword={sharedLinkPassword}

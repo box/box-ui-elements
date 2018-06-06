@@ -1169,6 +1169,7 @@ class ContentExplorer extends Component<Props, State> {
             className,
             measureRef,
             onPreview,
+            onDownload,
             onUpload,
             requestInterceptor,
             responseInterceptor,
@@ -1324,6 +1325,7 @@ class ContentExplorer extends Component<Props, State> {
                             parentElement={this.rootElement}
                             appElement={this.appElement}
                             onPreview={onPreview}
+                            onDownload={onDownload}
                             canDownload={canDownload}
                             cache={this.api.getCache()}
                             apiHost={apiHost}
