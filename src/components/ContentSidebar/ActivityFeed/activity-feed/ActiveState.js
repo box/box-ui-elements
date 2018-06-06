@@ -3,6 +3,7 @@
  * @file Active state component for Activity Feed
  */
 import * as React from 'react';
+import getProp from 'lodash/get';
 import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
@@ -52,7 +53,7 @@ const ActiveState = ({
 }: Props): React.Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
-            const { type, id, errorCode, versions } = item;
+            const { type, id, errorCode, versions, permissions } = item;
 
             switch (type) {
                 case 'comment':
@@ -67,9 +68,9 @@ const ActiveState = ({
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
-                                // TODO: remove once comment permissions are part of API
                                 permissions={{
-                                    comment_delete: true
+                                    comment_delete: getProp(permissions, 'can_delete', false),
+                                    comment_edit: getProp(permissions, 'can_edit', false)
                                 }}
                             />
                         </li>
