@@ -732,7 +732,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
-    describe.only('createTask()', () => {
+    describe('createTask()', () => {
         let instance;
         let wrapper;
         let tasksAPI;

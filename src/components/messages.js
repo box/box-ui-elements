@@ -348,6 +348,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for default skill section in the preview sidebar',
         defaultMessage: 'Skill Card'
     },
+    statusSkill: {
+        id: 'be.statusSkill',
+        description: 'Label for status skill card in the preview sidebar',
+        defaultMessage: 'Status'
+    },
+    errorSkill: {
+        id: 'be.errorSkill',
+        description: 'Label for error skill card in the preview sidebar',
+        defaultMessage: 'Error'
+    },
     keywordSkill: {
         id: 'be.keywordSkill',
         description: 'Label for keywords skill section in the preview sidebar',
