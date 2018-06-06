@@ -1,5 +1,19 @@
+## <small>5.0.1 (2018-06-06)</small>
+
+* Fix: Properly forward onDownload from Content Explorer to Preview (#353) ([997ccd4](https://github.com/box/box-ui-elements/commit/997ccd4)), closes [#353](https://github.com/box/box-ui-elements/issues/353)
+* Fix: Release issues (#348) ([d9353e6](https://github.com/box/box-ui-elements/commit/d9353e6)), closes [#348](https://github.com/box/box-ui-elements/issues/348)
+* Fix: Task CSS styling (#336) ([4127b12](https://github.com/box/box-ui-elements/commit/4127b12)), closes [#336](https://github.com/box/box-ui-elements/issues/336)
+* Use Preview versions 1.44.0 (#352) ([71c9323](https://github.com/box/box-ui-elements/commit/71c9323)), closes [#352](https://github.com/box/box-ui-elements/issues/352)
+* New: Hack to remove moment.js from build (#349) ([7182843](https://github.com/box/box-ui-elements/commit/7182843)), closes [#349](https://github.com/box/box-ui-elements/issues/349)
+* New: Handle create success for tasks (#343) ([bc2c109](https://github.com/box/box-ui-elements/commit/bc2c109)), closes [#343](https://github.com/box/box-ui-elements/issues/343)
+* New: task edit and delete (#340) ([536ee28](https://github.com/box/box-ui-elements/commit/536ee28)), closes [#340](https://github.com/box/box-ui-elements/issues/340)
+* Mojito: Update translations (#347) ([a6e1588](https://github.com/box/box-ui-elements/commit/a6e1588)), closes [#347](https://github.com/box/box-ui-elements/issues/347)
+
+
+
 ## 5.0.0 (2018-06-01)
 
+* Release: 5.0.0 ([e6510c0](https://github.com/box/box-ui-elements/commit/e6510c0))
 * Update: access stats API integration (#258) ([12c1251](https://github.com/box/box-ui-elements/commit/12c1251)), closes [#258](https://github.com/box/box-ui-elements/issues/258)
 * Update: Add `previewInstance` prop to ContentPreview (#301) ([3e4310c](https://github.com/box/box-ui-elements/commit/3e4310c)), closes [#301](https://github.com/box/box-ui-elements/issues/301)
 * Update: Add exapnd / collpase button (#334) ([e18547c](https://github.com/box/box-ui-elements/commit/e18547c)), closes [#334](https://github.com/box/box-ui-elements/issues/334)
