@@ -61,7 +61,8 @@ type Props = {
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
+    getUserProfileUrl?: (number) => Promise<?string>
 };
 
 type State = {
@@ -119,7 +120,8 @@ class Comment extends React.Component<Props, State> {
             isDisabled,
             approverSelectorContacts,
             mentionSelectorContacts,
-            getAvatarUrl
+            getAvatarUrl,
+            getUserProfileUrl
         } = this.props;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
@@ -194,7 +196,7 @@ class Comment extends React.Component<Props, State> {
                                 onFocus={this.approvalCommentFormFocusHandler}
                                 isEditing={isEditing}
                                 entityId={id}
-                                tagged_message={formatTaggedMessage(tagged_message, id, true)}
+                                tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
                             />
                         ) : null}
                         {!isEditing ? (
@@ -204,6 +206,7 @@ class Comment extends React.Component<Props, State> {
                                 translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}
                                 translationFailed={error ? true : null}
+                                getUserProfileUrl={getUserProfileUrl}
                             />
                         ) : null}
                     </div>

@@ -17,7 +17,8 @@ type Props = {
     translatedTaggedMessage?: string,
     translationEnabled?: boolean,
     onTranslate: Function,
-    translationFailed?: ?boolean
+    translationFailed?: ?boolean,
+    getUserProfileUrl?: (number) => Promise<?string>
 };
 
 type State = {
@@ -68,7 +69,7 @@ class CommentText extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { id, tagged_message, translatedTaggedMessage, translationEnabled } = this.props;
+        const { id, tagged_message, translatedTaggedMessage, translationEnabled, getUserProfileUrl } = this.props;
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
@@ -78,7 +79,7 @@ class CommentText extends React.Component<Props, State> {
             </div>
         ) : (
             <div className='bcs-comment-text'>
-                {formatTaggedMessage(commentToDisplay, id, false)}
+                {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>
         );

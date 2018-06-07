@@ -30,7 +30,8 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     commentsError?: Errors,
     tasksError?: Errors,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
+    getUserProfileUrl?: Function
 };
 
 const ActivitySidebar = ({
@@ -51,7 +52,8 @@ const ActivitySidebar = ({
     getApproverWithQuery,
     getMentionWithQuery,
     onVersionHistoryClick,
-    getAvatarUrl
+    getAvatarUrl,
+    getUserProfileUrl
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed
@@ -83,6 +85,7 @@ const ActivitySidebar = ({
                 }
             }}
             getAvatarUrl={getAvatarUrl}
+            getUserProfileUrl={getUserProfileUrl}
         />
     </SidebarContent>
 );

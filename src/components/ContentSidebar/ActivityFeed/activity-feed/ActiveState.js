@@ -33,7 +33,8 @@ type Props = {
     onTaskEdit?: Function,
     onVersionInfo?: Function,
     translations?: Translations,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
+    getUserProfileUrl?: (number) => Promise<?string>
 };
 
 const ActiveState = ({
@@ -48,7 +49,8 @@ const ActiveState = ({
     handlers,
     approverSelectorContacts,
     mentionSelectorContacts,
-    getAvatarUrl
+    getAvatarUrl,
+    getUserProfileUrl
 }: Props): React.Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
@@ -67,6 +69,7 @@ const ActiveState = ({
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
+                                getUserProfileUrl={getUserProfileUrl}
                                 // TODO: remove once comment permissions are part of API
                                 permissions={{
                                     comment_delete: true
@@ -88,6 +91,7 @@ const ActiveState = ({
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
+                                getUserProfileUrl={getUserProfileUrl}
                                 // permissions are not part of task API so hard code to true
                                 permissions={{
                                     task_edit: true,

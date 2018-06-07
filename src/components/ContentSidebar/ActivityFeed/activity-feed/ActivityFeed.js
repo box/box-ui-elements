@@ -40,7 +40,8 @@ type Props = {
         versions?: VersionHandlers
     },
     translations?: Translations,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
+    getUserProfileUrl?: (number) => Promise<?string>
 };
 
 type State = {
@@ -469,6 +470,7 @@ class ActivityFeed extends React.Component<Props, State> {
             currentUser,
             isDisabled,
             getAvatarUrl,
+            getUserProfileUrl,
             file
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
@@ -503,6 +505,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onVersionInfo={this.openVersionHistoryPopup}
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
+                            getUserProfileUrl={getUserProfileUrl}
                         />
                     )}
                 </div>

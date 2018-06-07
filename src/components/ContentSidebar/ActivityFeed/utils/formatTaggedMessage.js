@@ -22,12 +22,14 @@ const splitRegex = /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w
  * @param {String} tagged_message The message string to format
  * @param {String} itemID The id of the tagged message
  * @param {Boolean} shouldReturnString The boolean value whether it should return string
+ * @param {Function} [getUserProfileUrl] The method to generate a user profile url
  * @returns {String|React.Node}
  */
 const formatTaggedMessage = (
     tagged_message: string,
     itemID: string,
-    shouldReturnString: boolean
+    shouldReturnString: boolean,
+    getUserProfileUrl?: Function
 ): React.Node | string => {
     const contentItems = tagged_message.split(splitRegex).map((text: string, contentIndex: number) => {
         const contentKey = `${contentIndex}-${itemID}`;
@@ -38,7 +40,13 @@ const formatTaggedMessage = (
             if (shouldReturnString) {
                 return `${trigger}${name}`;
             }
-            return <Mention id={Number(id)} key={contentKey}>{`${trigger}${name}`}</Mention>;
+            return (
+                <Mention
+                    id={Number(id)}
+                    key={contentKey}
+                    getUserProfileUrl={getUserProfileUrl}
+                >{`${trigger}${name}`}</Mention>
+            );
         }
 
         if (!shouldReturnString) {
