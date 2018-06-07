@@ -165,6 +165,7 @@ class Comments extends OffsetBasedAPI {
      *
      * @param {BoxItem} file - File object for which we are deleting a comment
      * @param {string} commentId - Id of the comment we are deleting
+     * @param {Object} permissions - The known permissions of the comment we're deleting
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -172,20 +173,17 @@ class Comments extends OffsetBasedAPI {
     deleteComment({
         file,
         commentId,
+        permissions,
         successCallback,
         errorCallback
     }: {
         file: BoxItem,
         commentId: string,
+        permissions: Object,
         successCallback: Function,
         errorCallback: Function
     }): void {
         const { id = '' } = file;
-
-        // TODO: grab this from the comment once implemented in API
-        const permissions = {
-            [PERMISSION_CAN_DELETE]: true
-        };
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_DELETE, permissions, id);

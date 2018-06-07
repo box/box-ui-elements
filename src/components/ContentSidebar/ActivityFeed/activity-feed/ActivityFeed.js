@@ -180,16 +180,17 @@ class ActivityFeed extends React.Component<Props, State> {
      * Deletes a comment
      *
      * @param {string} id - Comment id
+     * @param {Object} permissions - Permissions for the comment
      * @return {void}
      */
-    deleteComment = ({ id }: { id: string }): void => {
+    deleteComment = ({ id, permissions }: { id: string, permissions: Object }): void => {
         // remove comment from list of comments
         // removeItemByTypeAndId('comment', args.id);
         // delete the comment via V2 API
         // call user passed in handlers.comments.delete, if it exists
         const deleteComment = getProp(this.props, 'handlers.comments.delete', noop);
         this.updateFeedItemPendingStatus(id, true);
-        deleteComment(id, this.deleteFeedItem, this.feedItemErrorCallback);
+        deleteComment(id, permissions, this.deleteFeedItem, this.feedItemErrorCallback);
     };
 
     /**

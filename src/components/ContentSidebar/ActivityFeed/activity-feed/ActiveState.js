@@ -69,8 +69,8 @@ const ActiveState = ({
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
                                 permissions={{
-                                    comment_delete: getProp(permissions, 'can_delete', false),
-                                    comment_edit: getProp(permissions, 'can_edit', false)
+                                    can_delete: getProp(permissions, 'can_delete', false),
+                                    can_edit: getProp(permissions, 'can_edit', false)
                                 }}
                             />
                         </li>
@@ -91,8 +91,8 @@ const ActiveState = ({
                                 getAvatarUrl={getAvatarUrl}
                                 // permissions are not part of task API so hard code to true
                                 permissions={{
-                                    task_edit: true,
-                                    task_delete: true
+                                    can_delete: true,
+                                    can_edit: true
                                 }}
                             />
                         </li>

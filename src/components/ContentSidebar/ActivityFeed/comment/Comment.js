@@ -38,13 +38,12 @@ type Props = {
     is_reply_comment?: boolean,
     modified_at?: string | number,
     permissions?: {
-        comment_delete?: boolean,
-        comment_edit?: boolean,
-        task_edit?: boolean,
-        task_delete?: boolean
+        can_delete?: boolean,
+        can_edit?: boolean
     },
     id: string,
     isPending?: boolean,
+    inlineDeleteMessage?: MessageDescriptor,
     error?: ActionItemError,
     onDelete?: Function,
     onEdit: Function,
@@ -107,6 +106,7 @@ class Comment extends React.Component<Props, State> {
             created_at,
             permissions,
             id,
+            inlineDeleteMessage = messages.commentDeletePrompt,
             isPending,
             error,
             onDelete,
@@ -124,9 +124,12 @@ class Comment extends React.Component<Props, State> {
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
         const createdAtTimestamp = new Date(created_at).getTime();
-        const canDeleteTasks = getProp(permissions, 'task_delete', false);
-        const canDeleteTasksOrComments = canDeleteTasks || getProp(permissions, 'comment_delete');
-        const canEditTasksOrComments = getProp(permissions, 'task_edit') || getProp(permissions, 'comment_edit');
+        const canDelete = getProp(permissions, 'can_delete', false);
+        const canEdit = getProp(permissions, 'can_edit', false);
+
+        // const canDeleteTasks = getProp(permissions, 'task_delete', false);
+        // const canDeleteTasksOrComments = canDeleteTasks || getProp(permissions, 'comment_delete');
+        // const canEditTasksOrComments = getProp(permissions, 'task_edit') || getProp(permissions, 'comment_edit');
 
         return (
             <div className='bcs-comment-container'>
@@ -156,17 +159,12 @@ class Comment extends React.Component<Props, State> {
                                     <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
-                            {onEdit && canEditTasksOrComments ? <InlineEdit id={id} toEdit={toEdit} /> : null}
-                            {onDelete && canDeleteTasksOrComments ? (
+                            {onEdit && canEdit ? <InlineEdit id={id} toEdit={toEdit} /> : null}
+                            {onDelete && canDelete ? (
                                 <InlineDelete
                                     id={id}
-                                    message={
-                                        canDeleteTasks ? (
-                                            <FormattedMessage {...messages.taskDeletePrompt} />
-                                        ) : (
-                                            <FormattedMessage {...messages.commentDeletePrompt} />
-                                        )
-                                    }
+                                    permissions={permissions}
+                                    message={<FormattedMessage {...inlineDeleteMessage} />}
                                     onDelete={onDelete}
                                 />
                             ) : null}
