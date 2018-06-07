@@ -66,6 +66,10 @@ const getCardTitle = ({ skill_card_type, skill_card_title = {} }: SkillCard): st
             return <FormattedMessage {...messages.transcriptSkill} />;
         case 'skills_topics':
             return <FormattedMessage {...messages.keywordSkill} />;
+        case 'skills_status':
+            return <FormattedMessage {...messages.statusSkill} />;
+        case 'skills_error':
+            return <FormattedMessage {...messages.errorSkill} />;
         default:
             return message || <FormattedMessage {...defaultMessage} />;
     }

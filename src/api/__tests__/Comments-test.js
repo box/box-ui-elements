@@ -1,5 +1,6 @@
 import Comments from '../Comments';
 import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../../constants';
+import { COMMENTS_FIELDS_TO_FETCH } from '../../util/fields';
 
 let comments;
 
@@ -111,6 +112,9 @@ describe('api/Comments', () => {
                         },
                         message,
                         taggedMessage: undefined
+                    },
+                    params: {
+                        fields: COMMENTS_FIELDS_TO_FETCH.toString()
                     }
                 };
 
