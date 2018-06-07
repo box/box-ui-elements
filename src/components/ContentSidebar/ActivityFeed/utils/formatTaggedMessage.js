@@ -41,11 +41,7 @@ const formatTaggedMessage = (
                 return `${trigger}${name}`;
             }
             return (
-                <Mention
-                    id={Number(id)}
-                    key={contentKey}
-                    getUserProfileUrl={getUserProfileUrl}
-                >{`${trigger}${name}`}</Mention>
+                <Mention id={id} key={contentKey} getUserProfileUrl={getUserProfileUrl}>{`${trigger}${name}`}</Mention>
             );
         }
 

@@ -64,7 +64,7 @@ type Props = {
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
-    getUserProfileUrl?: (number) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<?string>
 };
 
 type State = {

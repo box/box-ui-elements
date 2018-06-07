@@ -18,7 +18,7 @@ type Props = {
     translationEnabled?: boolean,
     onTranslate: Function,
     translationFailed?: ?boolean,
-    getUserProfileUrl?: (number) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<?string>
 };
 
 type State = {

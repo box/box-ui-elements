@@ -7,9 +7,9 @@ import * as React from 'react';
 
 type Props = {
     children?: React.Node,
-    id: number,
+    id: string,
     mentionTrigger?: any,
-    getUserProfileUrl?: (number) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<?string>
 };
 
 type State = {
@@ -18,7 +18,7 @@ type State = {
 
 class Mention extends React.PureComponent<Props, State> {
     state = {
-        profileUrl: '#'
+        profileUrl: null
     };
 
     /**
@@ -52,10 +52,13 @@ class Mention extends React.PureComponent<Props, State> {
     render() {
         const { children, ...rest } = this.props;
         const { profileUrl } = this.state;
-        return (
+
+        return profileUrl ? (
             <a {...rest} style={{ display: 'inline-block' }} href={profileUrl}>
                 {children}
             </a>
+        ) : (
+            children
         );
     }
 }

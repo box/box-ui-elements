@@ -62,7 +62,7 @@ type Props = {
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (number) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<?string>
 };
 
 type State = {
@@ -143,9 +143,13 @@ class Comment extends React.Component<Props, State> {
                     <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={created_by} />
                     <div className='bcs-comment-content'>
                         <div className='bcs-comment-headline'>
-                            <Link className='bcs-comment-user-name' href={`/profile/${created_by.id}`}>
-                                {created_by.name}
-                            </Link>
+                            {getUserProfileUrl ? (
+                                <Link className='bcs-comment-user-name' href={getUserProfileUrl(created_by.id)}>
+                                    {created_by.name}
+                                </Link>
+                            ) : (
+                                <div className='bcs-comment-user-name'>{created_by.name}</div>
+                            )}
                             <Tooltip
                                 text={
                                     <FormattedMessage

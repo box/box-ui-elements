@@ -51,7 +51,7 @@ type Props = {
     tasksError?: Errors,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (number) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<?string>
 };
 
 type State = {

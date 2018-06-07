@@ -6,7 +6,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
 >
   How u doing 
   <Mention
-    id={2030326577}
+    id="2030326577"
     key="1-123"
   >
     @Young Jeezy
@@ -21,21 +21,21 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
 >
   Hi 
   <Mention
-    id={123}
+    id="123"
     key="1-123"
   >
     ﹫Half
   </Mention>
    
   <Mention
-    id={222}
+    id="222"
     key="3-123"
   >
     ＠Full
   </Mention>
    
   <Mention
-    id={432}
+    id="432"
     key="5-123"
   >
     @Latin

@@ -64,7 +64,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     message: string,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (number) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<?string>
 };
 
 // eslint-disable-next-line
