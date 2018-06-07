@@ -95,7 +95,39 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
 </div>
 `;
 
-exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should render approval comment form if comment submit handler is passed 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if comment permissions are not present 1`] = `
+<div
+  className="bcs-activity-feed"
+  onKeyDown={[Function]}
+>
+  <div
+    className="bcs-activity-feed-items-container"
+  >
+    <EmptyState
+      isLoading={false}
+      showCommentMessage={false}
+    />
+  </div>
+</div>
+`;
+
+exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if comment submit handler is not passed in 1`] = `
+<div
+  className="bcs-activity-feed"
+  onKeyDown={[Function]}
+>
+  <div
+    className="bcs-activity-feed-items-container"
+  >
+    <EmptyState
+      isLoading={false}
+      showCommentMessage={false}
+    />
+  </div>
+</div>
+`;
+
+exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should render approval comment form if comment submit handler is passed in and comment permissions 1`] = `
 <div
   className="bcs-activity-feed"
   onKeyDown={[Function]}

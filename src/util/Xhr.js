@@ -191,6 +191,7 @@ class Xhr {
      * @param {string} id - Box item id
      * @param {string} url - The URL to fetch
      * @param {Object} data - JS Object representation of JSON data to send
+     * @param {Object} params - Optional query params for the request
      * @param {Object} [headers] - Key-value map of headers
      * @param {string} [method] - xhr type
      * @return {Promise} - HTTP response
@@ -199,12 +200,14 @@ class Xhr {
         url,
         id,
         data,
+        params,
         headers = {},
         method = HTTP_POST
     }: {
         url: string,
         id?: string,
         data: PayloadType,
+        params?: StringAnyMap,
         headers?: StringMap,
         method?: Method
     }): Promise<StringAnyMap> {
@@ -212,6 +215,7 @@ class Xhr {
             this.axios({
                 url,
                 data,
+                params,
                 method,
                 parsedUrl: this.getParsedUrl(url),
                 headers: hdrs
@@ -225,6 +229,7 @@ class Xhr {
      * @param {string} id - Box item id
      * @param {string} url - The URL to fetch
      * @param {Object} data - JS Object representation of JSON data to send
+     * @param {Object} params - Optional query params for the request
      * @param {Object} [headers] - Key-value map of headers
      * @return {Promise} - HTTP response
      */
@@ -232,14 +237,16 @@ class Xhr {
         url,
         id,
         data,
+        params,
         headers = {}
     }: {
         url: string,
         id?: string,
         data: PayloadType,
+        params?: StringAnyMap,
         headers?: StringMap
     }): Promise<StringAnyMap> {
-        return this.post({ id, url, data, headers, method: HTTP_PUT });
+        return this.post({ id, url, data, params, headers, method: HTTP_PUT });
     }
 
     /**
