@@ -472,8 +472,12 @@ class ActivityFeed extends React.Component<Props, State> {
             file
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
-        const showApprovalCommentForm = !!(currentUser && getProp(handlers, 'comments.create', false));
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
+        const showApprovalCommentForm = !!(
+            currentUser &&
+            hasCommentPermission &&
+            getProp(handlers, 'comments.create', false)
+        );
         const getApproverWithQuery = getProp(handlers, 'contacts.approver', noop);
         const getMentionWithQuery = getProp(handlers, 'contacts.mention', noop);
 
