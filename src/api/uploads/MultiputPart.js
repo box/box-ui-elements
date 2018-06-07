@@ -171,7 +171,7 @@ class MultiputPart extends BaseMultiput {
      * @param {Object} data
      * @return {void}
      */
-    uploadSuccessHandler = (data: Object) => {
+    uploadSuccessHandler = ({ data }: { data: Object }) => {
         if (this.isDestroyed()) {
             return;
         }
@@ -271,7 +271,9 @@ class MultiputPart extends BaseMultiput {
                 this.consoleLog(`Part ${this.toJSON()} is available on server. Not re-uploading.`);
                 this.id = parts[0].part_id;
                 this.uploadSuccessHandler({
-                    part: parts[0]
+                    data: {
+                        part: parts[0]
+                    }
                 });
                 return;
             }

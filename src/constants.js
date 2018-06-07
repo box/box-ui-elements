@@ -52,6 +52,7 @@ export const ACCESS_COLLAB: 'collaborators' = 'collaborators';
 export const ACCESS_COMPANY: 'company' = 'company';
 
 /* ----------------------- Headers -------------------------- */
+export const HEADER_ACCEPT = 'Accept';
 export const HEADER_CONTENT_TYPE = 'Content-Type';
 export const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 export const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
