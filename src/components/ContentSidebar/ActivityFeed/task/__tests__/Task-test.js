@@ -36,7 +36,11 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                 user: { name: 'Peter Pan', id: 2 },
                 status: 'completed'
             }
-        ]
+        ],
+        permissions: {
+            can_delete: true,
+            can_edit: true
+        }
     };
     const currentUser = { name: 'Jake Thomas', id: 1 };
 
