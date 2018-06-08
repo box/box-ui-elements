@@ -122,6 +122,7 @@ class Comments extends OffsetBasedAPI {
      * @param {BoxItem} file - File object for which we are updating a comment
      * @param {string} commentId - Comment to be edited
      * @param {string} message - Comment message
+     * @param {Object} permissions - The known permissions of the comment we're updating
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -130,6 +131,7 @@ class Comments extends OffsetBasedAPI {
         file,
         commentId,
         message,
+        permissions,
         successCallback,
         errorCallback
     }: {
@@ -140,11 +142,6 @@ class Comments extends OffsetBasedAPI {
         errorCallback: Function
     }): void {
         const { id = '' } = file;
-
-        // TODO: grab this from the comment once implemented in API
-        const permissions = {
-            [PERMISSION_CAN_EDIT]: true
-        };
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_EDIT, permissions, id);
