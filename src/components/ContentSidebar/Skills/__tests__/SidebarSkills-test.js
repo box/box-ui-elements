@@ -21,19 +21,27 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                             cards: [
                                 {
                                     skill_card_title: { code: 'skills_faces' },
-                                    entries: [{ title: 'foo' }]
+                                    entries: []
                                 },
                                 {
                                     skill_card_title: { code: 'skills_transcript' },
-                                    entries: [{ title: 'bar' }]
+                                    entries: []
                                 },
                                 {
                                     skill_card_title: { code: 'skills_topics' },
-                                    entries: [{ title: 'bar' }]
+                                    entries: []
+                                },
+                                {
+                                    skill_card_title: { code: 'skills_status' },
+                                    entries: []
+                                },
+                                {
+                                    skill_card_title: { code: 'skills_error' },
+                                    entries: []
                                 },
                                 {
                                     skill_card_title: { message: 'title' },
-                                    entries: [{ title: 'bar' }]
+                                    entries: []
                                 }
                             ]
                         }
@@ -44,7 +52,7 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
-        expect(wrapper.find(SidebarSkillsCard)).toHaveLength(4);
+        expect(wrapper.find(SidebarSkillsCard)).toHaveLength(6);
     });
 
     test('should render only the valid cards', () => {

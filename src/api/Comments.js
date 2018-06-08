@@ -6,6 +6,7 @@
 
 import OffsetBasedAPI from './OffsetBasedAPI';
 import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../constants';
+import { COMMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
 class Comments extends OffsetBasedAPI {
     /**
@@ -110,6 +111,9 @@ class Comments extends OffsetBasedAPI {
                 },
                 message,
                 tagged_message: taggedMessage
+            },
+            params: {
+                fields: COMMENTS_FIELDS_TO_FETCH.toString()
             }
         };
 

@@ -78,8 +78,37 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render approval comment form if comment submit handler is passed', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={allHandlers} />);
+    test('should render approval comment form if comment submit handler is passed in and comment permissions', () => {
+        const file = {
+            permissions: {
+                can_comment: true
+            }
+        };
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={allHandlers} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not render approval comment form if comment submit handler is not passed in', () => {
+        const file = {
+            permissions: {
+                can_comment: true
+            }
+        };
+        const handlers = {
+            ...allHandlers,
+            comments: null
+        };
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={handlers} />);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not render approval comment form if comment permissions are not present', () => {
+        const file = {
+            permissions: {
+                can_comment: false
+            }
+        };
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={allHandlers} />);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -95,7 +124,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             ...allHandlers,
             tasks: null
         };
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={noTaskHandler} />);
+        const file = {
+            permissions: {
+                can_comment: true
+            }
+        };
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={noTaskHandler} />);
 
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
     });
