@@ -37,10 +37,7 @@ type Props = {
     created_at: string | number,
     is_reply_comment?: boolean,
     modified_at?: string | number,
-    permissions?: {
-        can_delete?: boolean,
-        can_edit?: boolean
-    },
+    permissions?: BoxItemPermission,
     id: string,
     isPending?: boolean,
     inlineDeleteMessage?: MessageDescriptor,
@@ -126,10 +123,6 @@ class Comment extends React.Component<Props, State> {
         const createdAtTimestamp = new Date(created_at).getTime();
         const canDelete = getProp(permissions, 'can_delete', false);
         const canEdit = getProp(permissions, 'can_edit', false);
-
-        // const canDeleteTasks = getProp(permissions, 'task_delete', false);
-        // const canDeleteTasksOrComments = canDeleteTasks || getProp(permissions, 'comment_delete');
-        // const canEditTasksOrComments = getProp(permissions, 'task_edit') || getProp(permissions, 'comment_edit');
 
         return (
             <div className='bcs-comment-container'>

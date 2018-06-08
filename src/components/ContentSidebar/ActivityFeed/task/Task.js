@@ -50,10 +50,7 @@ type Props = {
     onDelete: Function,
     onEdit: Function,
     onTaskAssignmentUpdate: Function,
-    permissions?: {
-        can_delete?: boolean,
-        can_edit?: boolean
-    },
+    permissions?: BoxItemPermission,
     translatedTaggedMessage: string,
     translations: Translations,
     currentUser: User,

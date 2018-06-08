@@ -180,10 +180,10 @@ class ActivityFeed extends React.Component<Props, State> {
      * Deletes a comment
      *
      * @param {string} id - Comment id
-     * @param {Object} permissions - Permissions for the comment
+     * @param {BoxItemPermission} permissions - Permissions for the comment
      * @return {void}
      */
-    deleteComment = ({ id, permissions }: { id: string, permissions: Object }): void => {
+    deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
         // remove comment from list of comments
         // removeItemByTypeAndId('comment', args.id);
         // delete the comment via V2 API

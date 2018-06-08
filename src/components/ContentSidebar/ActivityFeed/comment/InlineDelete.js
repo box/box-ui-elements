@@ -15,7 +15,7 @@ import messages from '../../../messages';
 
 type Props = {
     onDelete: Function,
-    permissions: Object,
+    permissions: BoxItemPermission,
     id: string,
     intl: any,
     message: React.Node
