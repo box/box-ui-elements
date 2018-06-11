@@ -17,9 +17,7 @@ type State = {
 };
 
 class Mention extends React.PureComponent<Props, State> {
-    state = {
-        profileUrl: null
-    };
+    state = {};
 
     /**
      * Success handler for getting avatar url
@@ -50,8 +48,8 @@ class Mention extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { children, ...rest } = this.props;
-        const { profileUrl } = this.state;
+        const { children, ...rest }: Props = this.props;
+        const { profileUrl }: State = this.state;
 
         return profileUrl ? (
             <a {...rest} style={{ display: 'inline-block' }} href={profileUrl}>
