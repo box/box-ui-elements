@@ -33,9 +33,10 @@
                         contentSidebarProps: {
                             hasSkills: true,
                             hasActivityFeed: true,
-                            hasProperties: true
+                            hasProperties: true,
+                            getUserProfileUrl: (id) => { return Promise.resolve('#'); }
                         },
-                        getUserProfileUrl: (id) => { return Promise.resolve('#'); }
+
                     }
                 });
             }

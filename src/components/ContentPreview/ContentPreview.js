@@ -73,8 +73,7 @@ type Props = {
     onMetric?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    previewInstance?: any,
-    getUserProfileUrl?: Function
+    previewInstance?: any
 };
 
 type State = {
@@ -744,8 +743,7 @@ class ContentPreview extends PureComponent<Props, State> {
             sharedLink,
             sharedLinkPassword,
             requestInterceptor,
-            responseInterceptor,
-            getUserProfileUrl
+            responseInterceptor
         }: Props = this.props;
 
         const { file }: State = this.state;
@@ -805,7 +803,6 @@ class ContentPreview extends PureComponent<Props, State> {
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}
                                 responseInterceptor={responseInterceptor}
-                                getUserProfileUrl={getUserProfileUrl}
                             />
                         )}
                     </div>
