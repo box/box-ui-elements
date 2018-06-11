@@ -27,7 +27,7 @@ class BaseUpload extends Base {
      * @private
      * @return {void}
      */
-    makePreflightRequest(): void {
+    makePreflightRequest = (): void => {
         if (this.isDestroyed()) {
             return;
         }
@@ -50,7 +50,7 @@ class BaseUpload extends Base {
             successHandler: this.preflightSuccessHandler,
             errorHandler: this.preflightErrorHandler
         });
-    }
+    };
 
     /**
      * Handles a preflight error
