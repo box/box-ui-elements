@@ -701,16 +701,21 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('deleteComment()', () => {
         test('should call the deleteComment prop if it exists', () => {
             const id = '1;';
+            const permissions = {
+                can_edit: false,
+                can_delte: true
+            };
             const wrapper = getWrapper({ handlers: allHandlers });
             wrapper.instance().updateFeedItemPendingStatus = jest.fn();
             wrapper.instance().deleteFeedItem = jest.fn();
             wrapper.instance().feedItemErrorCallback = jest.fn();
             wrapper.update();
 
-            wrapper.instance().deleteComment({ id });
+            wrapper.instance().deleteComment({ id, permissions });
 
             expect(allHandlers.comments.delete).toBeCalledWith(
                 id,
+                permissions,
                 wrapper.instance().deleteFeedItem,
                 wrapper.instance().feedItemErrorCallback
             );

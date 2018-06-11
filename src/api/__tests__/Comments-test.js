@@ -125,14 +125,11 @@ describe('api/Comments', () => {
 
         describe('updateComment()', () => {
             test('should check for valid comment edit permissions', () => {
-                comments.updateComment({ file, commentId, message, successCb, errorCb });
-                expect(comments.checkApiCallValidity).toBeCalledWith(
-                    PERMISSION_CAN_EDIT,
-                    {
-                        [PERMISSION_CAN_EDIT]: true
-                    },
-                    file.id
-                );
+                const permissions = {
+                    [PERMISSION_CAN_EDIT]: true
+                };
+                comments.updateComment({ file, commentId, permissions, message, successCb, errorCb });
+                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_EDIT, permissions, file.id);
             });
 
             test('should put a well formed comment update to the comments endpoint', () => {
@@ -159,14 +156,11 @@ describe('api/Comments', () => {
 
         describe('deleteComment()', () => {
             test('should check for valid comment delete permissions', () => {
-                comments.deleteComment({ file, commentId, successCb, errorCb });
-                expect(comments.checkApiCallValidity).toBeCalledWith(
-                    PERMISSION_CAN_DELETE,
-                    {
-                        [PERMISSION_CAN_DELETE]: true
-                    },
-                    file.id
-                );
+                const permissions = {
+                    [PERMISSION_CAN_DELETE]: true
+                };
+                comments.deleteComment({ file, commentId, permissions, successCb, errorCb });
+                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_DELETE, permissions, file.id);
             });
 
             test('should delete a comment from the comments endpoint', () => {

@@ -126,6 +126,7 @@ class Comments extends OffsetBasedAPI {
      * @param {BoxItem} file - File object for which we are updating a comment
      * @param {string} commentId - Comment to be edited
      * @param {string} message - Comment message
+     * @param {BoxItemPermission} permissions - The known permissions of the comment we're updating
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -134,21 +135,18 @@ class Comments extends OffsetBasedAPI {
         file,
         commentId,
         message,
+        permissions,
         successCallback,
         errorCallback
     }: {
         file: BoxItem,
         commentId: string,
         message: string,
+        permissions: BoxItemPermission,
         successCallback: Function,
         errorCallback: Function
     }): void {
         const { id = '' } = file;
-
-        // TODO: grab this from the comment once implemented in API
-        const permissions = {
-            [PERMISSION_CAN_EDIT]: true
-        };
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_EDIT, permissions, id);
@@ -169,6 +167,7 @@ class Comments extends OffsetBasedAPI {
      *
      * @param {BoxItem} file - File object for which we are deleting a comment
      * @param {string} commentId - Id of the comment we are deleting
+     * @param {BoxItemPermission} permissions - The known permissions of the comment we're deleting
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -176,20 +175,17 @@ class Comments extends OffsetBasedAPI {
     deleteComment({
         file,
         commentId,
+        permissions,
         successCallback,
         errorCallback
     }: {
         file: BoxItem,
         commentId: string,
+        permissions: BoxItemPermission,
         successCallback: Function,
         errorCallback: Function
     }): void {
         const { id = '' } = file;
-
-        // TODO: grab this from the comment once implemented in API
-        const permissions = {
-            [PERMISSION_CAN_DELETE]: true
-        };
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_DELETE, permissions, id);

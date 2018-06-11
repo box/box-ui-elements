@@ -15,6 +15,7 @@ import messages from '../../../messages';
 
 type Props = {
     onDelete: Function,
+    permissions: BoxItemPermission,
     id: string,
     intl: any,
     message: React.Node
@@ -30,8 +31,8 @@ class InlineDelete extends React.Component<Props, State> {
     };
 
     onDeleteConfirmedHandler = (): void => {
-        const { id, onDelete } = this.props;
-        onDelete({ id });
+        const { id, onDelete, permissions } = this.props;
+        onDelete({ id, permissions });
     };
 
     handleFlyoutOpen = (): void => {
