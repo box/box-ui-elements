@@ -3,6 +3,7 @@
  * @file Active state component for Activity Feed
  */
 import * as React from 'react';
+import getProp from 'lodash/get';
 import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
@@ -54,7 +55,7 @@ const ActiveState = ({
 }: Props): React.Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
-            const { type, id, errorCode, versions } = item;
+            const { type, id, errorCode, versions, permissions } = item;
 
             switch (type) {
                 case 'comment':
@@ -70,9 +71,9 @@ const ActiveState = ({
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
-                                // TODO: remove once comment permissions are part of API
                                 permissions={{
-                                    comment_delete: true
+                                    can_delete: getProp(permissions, 'can_delete', false),
+                                    can_edit: getProp(permissions, 'can_edit', false)
                                 }}
                             />
                         </li>
@@ -94,8 +95,8 @@ const ActiveState = ({
                                 getUserProfileUrl={getUserProfileUrl}
                                 // permissions are not part of task API so hard code to true
                                 permissions={{
-                                    task_edit: true,
-                                    task_delete: true
+                                    can_delete: true,
+                                    can_edit: true
                                 }}
                             />
                         </li>

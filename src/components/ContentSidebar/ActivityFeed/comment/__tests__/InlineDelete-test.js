@@ -9,8 +9,9 @@ const translationProps = {
 };
 
 describe('components/ContentSidebar/ActivityFeed/comment/InlineDelete', () => {
+    const id = '123';
     const render = (props = {}) =>
-        shallow(<InlineDelete {...translationProps} id='123' message='test' onDelete={() => {}} {...props} />);
+        shallow(<InlineDelete {...translationProps} id={id} message='test' onDelete={() => {}} {...props} />);
 
     test('should correctly render comment', () => {
         const wrapper = render();
@@ -31,11 +32,15 @@ describe('components/ContentSidebar/ActivityFeed/comment/InlineDelete', () => {
 
     test('should call onDelete handler when comment deletion is confirmed', () => {
         const onDeleteSpy = jest.fn();
-        const wrapper = render({ onDelete: onDeleteSpy });
+        const permissions = {
+            can_edit: true,
+            can_delete: false
+        };
+        const wrapper = render({ onDelete: onDeleteSpy, permissions });
 
         const yesBtn = wrapper.find('.bcs-comment-delete-yes');
         yesBtn.simulate('click');
 
-        expect(onDeleteSpy).toHaveBeenCalledWith({ id: '123' });
+        expect(onDeleteSpy).toHaveBeenCalledWith({ id, permissions });
     });
 });

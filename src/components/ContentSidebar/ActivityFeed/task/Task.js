@@ -50,12 +50,7 @@ type Props = {
     onDelete: Function,
     onEdit: Function,
     onTaskAssignmentUpdate: Function,
-    permissions?: {
-        comment_delete?: boolean,
-        comment_edit?: boolean,
-        task_edit?: boolean,
-        task_delete?: boolean
-    },
+    permissions?: BoxItemPermission,
     translatedTaggedMessage: string,
     translations: Translations,
     currentUser: User,
@@ -101,6 +96,7 @@ class Task extends React.Component<Props> {
                     error={error}
                     handlers={handlers}
                     id={id}
+                    inlineDeleteMessage={messages.taskDeletePrompt}
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}

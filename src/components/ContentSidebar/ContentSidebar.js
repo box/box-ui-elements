@@ -869,12 +869,14 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} commentId - The comment's id
+     * @param {BoxItemPermission} permissions - The comment's permissions
      * @param {Function} successCallback - the function which will be called on success
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
     deleteComment = (
         commentId: string,
+        permissions: BoxItemPermission,
         successCallback: (commentId: string) => void = noop,
         errorCallback: (e: Error, commentId: string) => void = noop
     ) => {
@@ -888,6 +890,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.api.getCommentsAPI(false).deleteComment({
             file,
             commentId,
+            permissions,
             successCallback: () => {
                 onCommentDelete(commentId);
                 successCallback(commentId);

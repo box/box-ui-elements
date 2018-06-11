@@ -134,7 +134,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { comment_delete: true }
+            permissions: { can_delete: true }
         };
 
         const wrapper = shallow(
@@ -158,7 +158,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { task_delete: true }
+            permissions: { can_delete: true }
         };
 
         const wrapper = shallow(
@@ -181,7 +181,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { task_edit: true }
+            permissions: { can_edit: true }
         };
         const wrapper = mount(
             <Comment
@@ -369,7 +369,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: '2016-11-02T11:35:14-07:00',
             tagged_message: 'test @[3203255873:test user] ',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { task_edit: true }
+            permissions: { can_edit: true }
         };
         const wrapper = mount(
             <Comment

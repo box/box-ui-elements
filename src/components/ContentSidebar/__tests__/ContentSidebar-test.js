@@ -617,7 +617,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
 
             instance.setState({ file });
-            instance.deleteComment('1', successCb, errorCb);
+            instance.deleteComment('1', {}, successCb, errorCb);
         });
 
         test('should execute error callback', (done) => {
@@ -645,7 +645,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
 
             instance.setState({ file }, () => {
-                instance.deleteComment('1', successCb, errorCb);
+                instance.deleteComment('1', {}, successCb, errorCb);
             });
         });
     });
