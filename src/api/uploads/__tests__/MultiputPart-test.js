@@ -62,7 +62,7 @@ describe('api/uploads/MultiputPart', () => {
         test('should noop if destroyed', () => {
             MultiputPartTest.destroyed = true;
             MultiputPartTest.onSuccess = jest.fn();
-            MultiputPartTest.uploadSuccessHandler();
+            MultiputPartTest.uploadSuccessHandler({});
             expect(MultiputPartTest.onSuccess).not.toHaveBeenCalled();
         });
 
@@ -70,7 +70,7 @@ describe('api/uploads/MultiputPart', () => {
             const data = { hi: 1 };
             MultiputPartTest.destroyed = false;
             MultiputPartTest.onSuccess = jest.fn();
-            MultiputPartTest.uploadSuccessHandler(data);
+            MultiputPartTest.uploadSuccessHandler({ data });
             expect(MultiputPartTest.data).toBe(data);
             expect(MultiputPartTest.blob).toBeNull();
             expect(MultiputPartTest.onSuccess).toHaveBeenCalledWith(MultiputPartTest);
@@ -179,7 +179,7 @@ describe('api/uploads/MultiputPart', () => {
 
             await MultiputPartTest.retryUpload();
             expect(MultiputPartTest.upload).not.toHaveBeenCalled();
-            expect(MultiputPartTest.uploadSuccessHandler).toHaveBeenCalledWith({ part });
+            expect(MultiputPartTest.uploadSuccessHandler).toHaveBeenCalledWith({ data: { part } });
         });
 
         withData(

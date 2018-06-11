@@ -8,6 +8,7 @@ import axios from 'axios';
 import getProp from 'lodash/get';
 import TokenService from './TokenService';
 import {
+    HEADER_ACCEPT,
     HEADER_CLIENT_NAME,
     HEADER_CLIENT_VERSION,
     HEADER_CONTENT_TYPE,
@@ -354,145 +355,81 @@ class Xhr {
         idleTimeoutDuration?: number,
         idleTimeoutHandler?: Function
     }): Promise<any> {
-        let formData;
-        if (data && !(data instanceof Blob) && data.attributes) {
-            formData = new FormData();
-            Object.keys(data).forEach((key) => {
-                formData.append(key, data[key]);
-            });
-        }
-
         return this.getHeaders(id, headers)
             .then((hdrs) => {
-                // Remove Accept/Content-Type added by getHeaders()
-                delete hdrs.Accept;
-                delete hdrs[HEADER_CONTENT_TYPE];
+                let idleTimeout;
+                let progressHandlerToUse = progressHandler;
 
-                if (headers[HEADER_CONTENT_TYPE]) {
-                    hdrs[HEADER_CONTENT_TYPE] = headers[HEADER_CONTENT_TYPE];
-                }
-
-                this.xhr = new XMLHttpRequest();
-                this.xhr.open(method, url, true);
-
-                Object.keys(hdrs).forEach((header) => {
-                    this.xhr.setRequestHeader(header, hdrs[header]);
-                });
-
-                this.xhr.addEventListener('load', () => {
-                    const { readyState, status, responseText, DONE } = this.xhr;
-                    if (readyState === DONE) {
-                        const response = status === 204 ? responseText : JSON.parse(responseText);
-                        if (status >= 200 && status < 300) {
-                            successHandler(response);
-                        } else {
-                            errorHandler(response);
-                        }
-                    }
-                });
-
-                this.xhr.addEventListener('error', errorHandler);
-
-                if (progressHandler && this.xhr.upload) {
-                    this.xhr.upload.addEventListener('progress', progressHandler);
-                }
-
-                const dataSent = formData || data;
                 if (withIdleTimeout) {
-                    this.xhrSendWithIdleTimeout(dataSent, idleTimeoutDuration, idleTimeoutHandler);
-                } else {
-                    this.xhr.send(dataSent);
+                    // Func that aborts upload and executes timeout callback
+                    const idleTimeoutFunc = () => {
+                        this.abort();
+
+                        if (idleTimeoutHandler) {
+                            idleTimeoutHandler();
+                        }
+                    };
+
+                    idleTimeout = setTimeout(idleTimeoutFunc, idleTimeoutDuration);
+
+                    // Progress handler that aborts upload if there has been no progress for >= timeoutMs
+                    progressHandlerToUse = (event) => {
+                        clearTimeout(idleTimeout);
+                        idleTimeout = setTimeout(idleTimeoutFunc, idleTimeoutDuration);
+                        progressHandler(event);
+                    };
                 }
+
+                this.axios({
+                    url,
+                    data,
+                    transformRequest: (reqData, reqHeaders) => {
+                        // Remove Accept & Content-Type added by getHeaders()
+                        delete reqHeaders[HEADER_ACCEPT];
+                        delete reqHeaders[HEADER_CONTENT_TYPE];
+
+                        if (headers[HEADER_CONTENT_TYPE]) {
+                            reqHeaders[HEADER_CONTENT_TYPE] = headers[HEADER_CONTENT_TYPE];
+                        }
+
+                        // Convert to FormData if needed
+                        if (reqData && !(reqData instanceof Blob) && reqData.attributes) {
+                            const formData = new FormData();
+                            Object.keys(reqData).forEach((key) => {
+                                formData.append(key, reqData[key]);
+                            });
+
+                            return formData;
+                        }
+
+                        return reqData;
+                    },
+                    method,
+                    headers: hdrs,
+                    onUploadProgress: progressHandlerToUse,
+                    cancelToken: this.axiosSource.token
+                })
+                    .then((response) => {
+                        clearTimeout(idleTimeout);
+                        successHandler(response);
+                    })
+                    .catch((error) => {
+                        clearTimeout(idleTimeout);
+                        errorHandler(error);
+                    });
             })
             .catch(errorHandler);
     }
 
     /**
-     * Aborts a request made with native XHR. Currently, this only
-     * works for aborting a file upload.
+     * Aborts an axios request.
      *
      * @return {void}
      */
     abort(): void {
-        this.axiosSource.cancel();
-
-        if (!this.xhr) {
-            return;
+        if (this.axiosSource) {
+            this.axiosSource.cancel();
         }
-
-        // readyState is set to UNSENT if request has already been aborted
-        const { readyState, UNSENT, DONE } = this.xhr;
-        if (readyState !== UNSENT && readyState !== DONE) {
-            this.xhr.abort();
-        }
-    }
-
-    /**
-     * Returns a handler for setInterval used in xhrSendWithIdleTimeout()
-     *
-     * @private
-     * @param {number} lastProgress
-     * @param {number} timeoutMs
-     * @param {function} clear
-     * @param {?function} onTimeout
-     * @return {function}
-     */
-    getXhrIdleIntervalHandler(
-        lastProgress: number,
-        timeoutMs: number,
-        clear: Function,
-        onTimeout?: Function
-    ): Function {
-        return () => {
-            if (Date.now() - lastProgress <= timeoutMs) {
-                return;
-            }
-
-            this.xhr.abort();
-            clear();
-
-            if (onTimeout) {
-                onTimeout();
-            }
-        };
-    }
-
-    /**
-     * Executes an upload via XMLHTTPRequest and aborts it if there is no progress event for at least timeoutMs.
-     *
-     * @private
-     * @param {Object} data - Will be passed to xhr.send()
-     * @param {number} [timeoutMs] - idle timeout, in milliseconds.
-     * @param {function} [onTimeout] - callback invoked when request has timed out
-     * @return {void}
-     */
-    xhrSendWithIdleTimeout(data: Object, timeoutMs?: number = DEFAULT_UPLOAD_TIMEOUT_MS, onTimeout?: Function): void {
-        let interval;
-        let lastLoaded = 0;
-        let lastProgress = Date.now();
-
-        this.xhr.upload.addEventListener('progress', (event: ProgressEvent) => {
-            if (event.loaded > lastLoaded) {
-                lastLoaded = event.loaded;
-                lastProgress = Date.now();
-            }
-        });
-
-        function clear(): void {
-            if (!interval) {
-                return;
-            }
-
-            clearInterval(interval);
-            interval = null;
-        }
-
-        this.xhr.addEventListener('abort', clear);
-        this.xhr.addEventListener('load', clear);
-        this.xhr.addEventListener('error', clear);
-
-        interval = setInterval(this.getXhrIdleIntervalHandler(lastProgress, timeoutMs, clear, onTimeout), 1000);
-        this.xhr.send(data);
     }
 }
 
