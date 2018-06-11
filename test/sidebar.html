@@ -134,7 +134,8 @@
                     hasSkills: true,
                     hasNotices: true,
                     hasVersions: true,
-                    hasActivityFeed:true
+                    hasActivityFeed:true,
+                    getUserProfileUrl: (id) => { return Promise.resolve('#'); }
                 });
             }
             load();
