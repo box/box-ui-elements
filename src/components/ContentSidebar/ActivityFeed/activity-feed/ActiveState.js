@@ -34,7 +34,7 @@ type Props = {
     onVersionInfo?: Function,
     translations?: Translations,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 const ActiveState = ({

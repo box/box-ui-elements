@@ -41,7 +41,7 @@ type Props = {
     },
     translations?: Translations,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 type State = {

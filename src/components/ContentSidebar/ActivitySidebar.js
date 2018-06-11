@@ -31,7 +31,7 @@ type Props = {
     commentsError?: Errors,
     tasksError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 const ActivitySidebar = ({

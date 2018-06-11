@@ -62,7 +62,7 @@ type Props = {
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 type State = {

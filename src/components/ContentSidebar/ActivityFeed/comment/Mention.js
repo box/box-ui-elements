@@ -9,11 +9,11 @@ type Props = {
     children?: React.Node,
     id: string,
     mentionTrigger?: any,
-    getUserProfileUrl?: (string) => Promise<?string>
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 type State = {
-    profileUrl: ?string
+    profileUrl?: string
 };
 
 class Mention extends React.PureComponent<Props, State> {
@@ -24,7 +24,7 @@ class Mention extends React.PureComponent<Props, State> {
      *
      * @param {string} avatarUrl the user avatar url
      */
-    getProfileUrlHandler = (profileUrl: ?string) => {
+    getProfileUrlHandler = (profileUrl?: string) => {
         this.setState({
             profileUrl
         });
