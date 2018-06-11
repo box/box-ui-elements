@@ -24,12 +24,11 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
       <div
         className="bcs-comment-headline"
       >
-        <Link
+        <div
           className="bcs-comment-user-name"
-          href="/profile/10"
         >
           50 Cent
-        </Link>
+        </div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -92,12 +91,11 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
       <div
         className="bcs-comment-headline"
       >
-        <Link
+        <div
           className="bcs-comment-user-name"
-          href="/profile/10"
         >
           50 Cent
-        </Link>
+        </div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -161,12 +159,11 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render an
       <div
         className="bcs-comment-headline"
       >
-        <Link
+        <div
           className="bcs-comment-user-name"
-          href="/profile/10"
         >
           50 Cent
-        </Link>
+        </div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -233,12 +230,11 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render co
       <div
         className="bcs-comment-headline"
       >
-        <Link
+        <div
           className="bcs-comment-user-name"
-          href="/profile/10"
         >
           50 Cent
-        </Link>
+        </div>
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}

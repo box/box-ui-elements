@@ -34,7 +34,8 @@ type Props = {
     onTaskEdit?: Function,
     onVersionInfo?: Function,
     translations?: Translations,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 const ActiveState = ({
@@ -49,7 +50,8 @@ const ActiveState = ({
     handlers,
     approverSelectorContacts,
     mentionSelectorContacts,
-    getAvatarUrl
+    getAvatarUrl,
+    getUserProfileUrl
 }: Props): React.Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
@@ -68,6 +70,7 @@ const ActiveState = ({
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
+                                getUserProfileUrl={getUserProfileUrl}
                                 permissions={{
                                     can_delete: getProp(permissions, 'can_delete', false),
                                     can_edit: getProp(permissions, 'can_edit', false)
@@ -89,6 +92,7 @@ const ActiveState = ({
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
+                                getUserProfileUrl={getUserProfileUrl}
                                 // permissions are not part of task API so hard code to true
                                 permissions={{
                                     can_delete: true,

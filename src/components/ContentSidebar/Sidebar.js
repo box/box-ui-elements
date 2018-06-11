@@ -50,7 +50,8 @@ type Props = {
     commentsError?: Errors,
     tasksError?: Errors,
     currentUserError?: Errors,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 type State = {
@@ -171,7 +172,8 @@ class Sidebar extends React.Component<Props, State> {
             versions,
             approverSelectorContacts,
             mentionSelectorContacts,
-            getAvatarUrl
+            getAvatarUrl,
+            getUserProfileUrl
         }: Props = this.props;
 
         const { view } = this.state;
@@ -236,6 +238,7 @@ class Sidebar extends React.Component<Props, State> {
                             onTaskDelete={onTaskDelete}
                             onTaskUpdate={onTaskUpdate}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                            getUserProfileUrl={getUserProfileUrl}
                             getApproverWithQuery={getApproverWithQuery}
                             getMentionWithQuery={getMentionWithQuery}
                             getAvatarUrl={getAvatarUrl}

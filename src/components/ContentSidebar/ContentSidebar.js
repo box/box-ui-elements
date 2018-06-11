@@ -63,7 +63,8 @@ type Props = {
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
-    onTaskAssignmentUpdate?: Function
+    onTaskAssignmentUpdate?: Function,
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 type State = {
@@ -1148,7 +1149,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             onVersionHistoryClick,
             onAccessStatsClick,
             onClassificationClick,
-            onTaskAssignmentUpdate
+            onTaskAssignmentUpdate,
+            getUserProfileUrl
         }: Props = this.props;
         const {
             file,
@@ -1207,6 +1209,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskDelete={this.deleteTask}
                                 onTaskUpdate={this.updateTask}
                                 onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                getUserProfileUrl={getUserProfileUrl}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}
                                 approverSelectorContacts={approverSelectorContacts}

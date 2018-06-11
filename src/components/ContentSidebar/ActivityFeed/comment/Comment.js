@@ -57,7 +57,8 @@ type Props = {
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
+    getUserProfileUrl?: (string) => Promise<string>
 };
 
 type State = {
@@ -116,7 +117,8 @@ class Comment extends React.Component<Props, State> {
             isDisabled,
             approverSelectorContacts,
             mentionSelectorContacts,
-            getAvatarUrl
+            getAvatarUrl,
+            getUserProfileUrl
         } = this.props;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
@@ -137,9 +139,13 @@ class Comment extends React.Component<Props, State> {
                     <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={created_by} />
                     <div className='bcs-comment-content'>
                         <div className='bcs-comment-headline'>
-                            <Link className='bcs-comment-user-name' href={`/profile/${created_by.id}`}>
-                                {created_by.name}
-                            </Link>
+                            {getUserProfileUrl ? (
+                                <Link className='bcs-comment-user-name' href={getUserProfileUrl(created_by.id)}>
+                                    {created_by.name}
+                                </Link>
+                            ) : (
+                                <div className='bcs-comment-user-name'>{created_by.name}</div>
+                            )}
                             <Tooltip
                                 text={
                                     <FormattedMessage
@@ -185,7 +191,7 @@ class Comment extends React.Component<Props, State> {
                                 onFocus={this.approvalCommentFormFocusHandler}
                                 isEditing={isEditing}
                                 entityId={id}
-                                tagged_message={formatTaggedMessage(tagged_message, id, true)}
+                                tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
                             />
                         ) : null}
                         {!isEditing ? (
@@ -195,6 +201,7 @@ class Comment extends React.Component<Props, State> {
                                 translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}
                                 translationFailed={error ? true : null}
+                                getUserProfileUrl={getUserProfileUrl}
                             />
                         ) : null}
                     </div>
