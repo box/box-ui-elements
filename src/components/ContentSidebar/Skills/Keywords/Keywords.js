@@ -7,7 +7,6 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import EditableKeywords from './EditableKeywords';
@@ -212,10 +211,7 @@ class Keywords extends PureComponent<Props, State> {
                     hasKeywords && (
                         <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
                     )}
-                {!isEditing &&
-                    !hasKeywords && (
-                        <ErrorMask errorHeader={<FormattedMessage {...messages.skillNoInfoFoundError} />} />
-                    )}
+                {!isEditing && !hasKeywords && <FormattedMessage {...messages.skillNoInfoFoundError} />}
                 {isLoading && <SkillsBusyIndicator />}
             </div>
         );

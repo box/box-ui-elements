@@ -8,7 +8,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import IconCopy from 'box-react-ui/lib/icons/general/IconCopy';
 import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
@@ -318,7 +317,7 @@ class Transcript extends React.PureComponent<Props, State> {
                 {hasEntries ? (
                     <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
                 ) : (
-                    <ErrorMask errorHeader={<FormattedMessage {...messages.skillNoInfoFoundError} />} />
+                    <FormattedMessage {...messages.skillNoInfoFoundError} />
                 )}
                 {isLoading && <SkillsBusyIndicator />}
             </div>

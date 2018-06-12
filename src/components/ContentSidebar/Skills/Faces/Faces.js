@@ -7,7 +7,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import Button from 'box-react-ui/lib/components/button/Button';
@@ -189,7 +188,7 @@ class Faces extends React.PureComponent<Props, State> {
                         /* eslint-enable react/no-array-index-key */
                     ))
                 ) : (
-                    <ErrorMask errorHeader={<FormattedMessage {...messages.skillNoInfoFoundError} />} />
+                    <FormattedMessage {...messages.skillNoInfoFoundError} />
                 )}
                 {!!selected &&
                     !isEditing &&
