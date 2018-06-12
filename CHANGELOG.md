@@ -1,5 +1,21 @@
+## <small>5.0.2 (2018-06-12)</small>
+
+* Mojito: Update translations (#359) ([f23abfe](https://github.com/box/box-ui-elements/commit/f23abfe)), closes [#359](https://github.com/box/box-ui-elements/issues/359)
+* Mojito: Update translations (#369) ([9a89335](https://github.com/box/box-ui-elements/commit/9a89335)), closes [#369](https://github.com/box/box-ui-elements/issues/369)
+* Fix: Cancel debounced search when query is deleted (#357) ([ab1f26e](https://github.com/box/box-ui-elements/commit/ab1f26e)), closes [#357](https://github.com/box/box-ui-elements/issues/357)
+* Fix: Get proper fields back on comment create (#363) ([27921ac](https://github.com/box/box-ui-elements/commit/27921ac)), closes [#363](https://github.com/box/box-ui-elements/issues/363)
+* Fix: Status card and error messages (#368) ([6c4243f](https://github.com/box/box-ui-elements/commit/6c4243f)), closes [#368](https://github.com/box/box-ui-elements/issues/368)
+* Update: Clicking on @mentions will use the getUserProfileUrl prop (#361) ([48302ff](https://github.com/box/box-ui-elements/commit/48302ff)), closes [#361](https://github.com/box/box-ui-elements/issues/361)
+* Update: Skill Card titles for Error and Status (#355) ([fb7143f](https://github.com/box/box-ui-elements/commit/fb7143f)), closes [#355](https://github.com/box/box-ui-elements/issues/355)
+* Chore: Check comment permissions for icons and edit/delete (#364) ([2a769ad](https://github.com/box/box-ui-elements/commit/2a769ad)), closes [#364](https://github.com/box/box-ui-elements/issues/364)
+* Chore: Only show comment approval form with correct permissions and a handler (#358) ([80ddd72](https://github.com/box/box-ui-elements/commit/80ddd72)), closes [#358](https://github.com/box/box-ui-elements/issues/358)
+* Chore: Refactor uploads to use axios (#362) ([6a6e7f2](https://github.com/box/box-ui-elements/commit/6a6e7f2)), closes [#362](https://github.com/box/box-ui-elements/issues/362) [#204](https://github.com/box/box-ui-elements/issues/204)
+
+
+
 ## <small>5.0.1 (2018-06-06)</small>
 
+* Release: 5.0.1 ([8242f90](https://github.com/box/box-ui-elements/commit/8242f90))
 * Fix: Properly forward onDownload from Content Explorer to Preview (#353) ([997ccd4](https://github.com/box/box-ui-elements/commit/997ccd4)), closes [#353](https://github.com/box/box-ui-elements/issues/353)
 * Fix: Release issues (#348) ([d9353e6](https://github.com/box/box-ui-elements/commit/d9353e6)), closes [#348](https://github.com/box/box-ui-elements/issues/348)
 * Fix: Task CSS styling (#336) ([4127b12](https://github.com/box/box-ui-elements/commit/4127b12)), closes [#336](https://github.com/box/box-ui-elements/issues/336)
