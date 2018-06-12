@@ -22,24 +22,24 @@ import messages from '../../../messages';
 import './ApprovalCommentForm.scss';
 
 type Props = {
-    approverSelectorContacts: SelectorItems,
     className: string,
-    createComment: Function,
-    createTask: Function,
-    updateTask: Function,
+    createComment?: Function,
+    createTask?: Function,
+    updateTask?: Function,
     getApproverContactsWithQuery: Function,
     getMentionContactsWithQuery: Function,
     intl: any,
-    isDisabled: boolean,
+    isDisabled?: boolean,
     isOpen: boolean,
-    mentionSelectorContacts: SelectorItems,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     onCancel: Function,
     onFocus: Function,
     onSubmit: Function,
     user: User,
-    isEditing: boolean,
-    entityId: string,
-    tagged_message: string,
+    isEditing?: boolean,
+    entityId?: string,
+    tagged_message?: string,
     getAvatarUrl: (string) => Promise<?string>
 };
 
@@ -86,7 +86,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             return;
         }
 
-        if (formData.addApproval === 'on') {
+        if (formData.addApproval === 'on' && createTask) {
             const { approvers, approvalDate } = this.state;
             if (approvers.length === 0) {
                 this.setState({
@@ -99,9 +99,9 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                 assignees: approvers.map(({ value }) => value),
                 dueAt: approvalDate
             });
-        } else if (entityId) {
+        } else if (entityId && updateTask) {
             updateTask({ text, id: entityId });
-        } else {
+        } else if (createComment) {
             createComment({ text, hasMention });
         }
 

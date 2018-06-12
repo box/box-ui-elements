@@ -511,6 +511,8 @@ class ActivityFeed extends React.Component<Props, State> {
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}
+                            approverSelectorContacts={approverSelectorContacts}
+                            mentionSelectorContacts={mentionSelectorContacts}
                         />
                     )}
                 </div>

@@ -16,7 +16,7 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translationEnabled?: boolean,
-    onTranslate: Function,
+    onTranslate?: Function,
     translationFailed?: ?boolean,
     getUserProfileUrl?: (string) => Promise<string>
 };
@@ -55,7 +55,7 @@ class CommentText extends React.Component<Props, State> {
 
     handleTranslate = (event: SyntheticMouseEvent<>): void => {
         const { id, tagged_message, onTranslate, translatedTaggedMessage } = this.props;
-        if (!translatedTaggedMessage) {
+        if (!translatedTaggedMessage && onTranslate) {
             this.setState({ isLoading: true });
             onTranslate({ id, tagged_message });
         }
