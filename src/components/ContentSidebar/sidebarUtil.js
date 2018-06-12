@@ -39,4 +39,16 @@ const shouldRenderSidebar = (props: ContentSidebarProps): boolean => {
     return !!shouldRenderDetailsSidebar(props) || !!hasActivityFeed || !!hasSkills || !!hasMetadata;
 };
 
-export { shouldRenderDetailsSidebar, shouldRenderSidebar };
+/**
+ * Returns true if there is a comment or version
+ *
+ * @param {BoxItem} file - box file
+ * @return {boolean} true if there are comments or versions to display in the activity feed
+ */
+const hasActivityFeedItems = (file: BoxItem): boolean => {
+    // We are unable to quickly display whether there are tasks, so just check comments and versions
+    const { version_number: versionNumber = '1', comment_count: commentCount = 0 } = file;
+    return parseInt(versionNumber, 10) > 1 || commentCount > 0;
+};
+
+export { shouldRenderDetailsSidebar, shouldRenderSidebar, hasActivityFeedItems };

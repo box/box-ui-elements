@@ -1,4 +1,4 @@
-import { shouldRenderDetailsSidebar, shouldRenderSidebar } from '../sidebarUtil';
+import { shouldRenderDetailsSidebar, shouldRenderSidebar, hasActivityFeedItems } from '../sidebarUtil';
 
 describe('components/ContentSidebar/sidebarUtil', () => {
     describe('shouldRenderSidebar()', () => {
@@ -48,6 +48,28 @@ describe('components/ContentSidebar/sidebarUtil', () => {
         });
         test('should return true when notices should render', () => {
             expect(shouldRenderDetailsSidebar({ hasNotices: true })).toBeTruthy();
+        });
+    });
+
+    describe('hasActivityFeedItems', () => {
+        test('should return true if there is more than 1 version', () => {
+            expect(hasActivityFeedItems({ version_number: '2' })).toBe(true);
+        });
+
+        test('should return true if there is more than 0 comments', () => {
+            expect(hasActivityFeedItems({ comment_count: 1 })).toBe(true);
+        });
+
+        test('should return true if there is more than 1 version and comment', () => {
+            expect(hasActivityFeedItems({ version_number: '2', comment_count: 2 })).toBe(true);
+        });
+
+        test('should return false if there is 1 version and 0 comments', () => {
+            expect(hasActivityFeedItems({ version_number: '1', comment_count: 0 })).toBe(false);
+        });
+
+        test('should return false if missing required fields', () => {
+            expect(hasActivityFeedItems({})).toBe(false);
         });
     });
 });
