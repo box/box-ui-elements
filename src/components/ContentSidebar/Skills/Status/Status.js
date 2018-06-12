@@ -6,8 +6,6 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import messages from '../../../messages';
 import {
     SKILLS_INTERNAL_SERVER_ERROR,
@@ -38,14 +36,15 @@ const Status = ({ card }: Props) => {
             localizedMessage = messages.skillUnknownError;
             break;
         case SKILLS_PENDING:
-            return <LoadingIndicator />;
+            localizedMessage = messages.skillPendingStatus;
+            break;
         default:
             if (message) {
-                return <ErrorMask errorHeader={message} />;
+                return message;
             }
     }
 
-    return <ErrorMask errorHeader={<FormattedMessage {...localizedMessage} />} />;
+    return <FormattedMessage {...localizedMessage} />;
 };
 
 export default Status;
