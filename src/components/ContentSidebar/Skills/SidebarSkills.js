@@ -81,21 +81,23 @@ const SidebarSkills = ({ file, getPreviewer, onSkillChange }: Props): Array<Reac
     const isSkillEditable = !!permissions.can_upload;
 
     return cards.map((card: SkillCard, index: number) => {
-        const { id } = card;
-        const cardId = id || uniqueId('card_');
-        const isValid = isValidSkillsCard(card);
-        const interactionTarget = getCardInteractionTarget(card);
-        const title = getCardTitle(card);
-
-        if (card.error) {
+        if (card.error && !card.status) {
             card.skill_card_type = SKILLS_STATUS;
             card.status = {
                 code: SKILLS_UNKNOWN_ERROR
             };
+            delete card.error;
         }
 
+        const { id } = card;
+        const cardId = id || uniqueId('card_');
+        const isValid = isValidSkillsCard(file, card);
+        const interactionTarget = getCardInteractionTarget(card);
+        const title = getCardTitle(card);
+        const hasEntries = Array.isArray(card.entries) ? card.entries.length > 0 : isValid;
+
         return isValid ? (
-            <SidebarSection key={cardId} interactionTarget={interactionTarget} title={title}>
+            <SidebarSection key={cardId} isOpen={hasEntries} interactionTarget={interactionTarget} title={title}>
                 <SidebarSkillsCard
                     card={card}
                     cards={cards}

@@ -378,6 +378,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for transcript skill section in the preview sidebar',
         defaultMessage: 'Transcript'
     },
+    skillPendingStatus: {
+        id: 'be.skillPendingStatus',
+        description: 'Default message when skills are still running',
+        defaultMessage: 'The skill hasn’t finished running. Please try reloading the page later.'
+    },
     skillUnknownError: {
         id: 'be.skillUnknownError',
         description: 'Default error message when skills fail to run',

@@ -21,7 +21,7 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                             cards: [
                                 {
                                     skill_card_title: { code: 'skills_faces' },
-                                    entries: []
+                                    entries: [{}]
                                 },
                                 {
                                     skill_card_title: { code: 'skills_transcript' },
@@ -33,7 +33,7 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                                 },
                                 {
                                     skill_card_title: { code: 'skills_status' },
-                                    entries: []
+                                    entries: [{}]
                                 },
                                 {
                                     skill_card_title: { code: 'skills_error' },
@@ -41,7 +41,7 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                                 },
                                 {
                                     skill_card_title: { message: 'title' },
-                                    entries: []
+                                    entries: [{}]
                                 }
                             ]
                         }
