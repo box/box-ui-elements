@@ -1,9 +1,11 @@
 /**
  * @flow
- * @file Mention component
+ * @file UserLink component
  */
 
 import * as React from 'react';
+
+import { Link } from 'box-react-ui/lib/components/link';
 
 type Props = {
     children?: React.Node,
@@ -16,7 +18,7 @@ type State = {
     profileUrl?: string
 };
 
-class Mention extends React.PureComponent<Props, State> {
+class UserLink extends React.PureComponent<Props, State> {
     state = {};
 
     /**
@@ -52,13 +54,13 @@ class Mention extends React.PureComponent<Props, State> {
         const { profileUrl }: State = this.state;
 
         return profileUrl ? (
-            <a {...rest} style={{ display: 'inline-block' }} href={profileUrl}>
+            <Link {...rest} href={profileUrl}>
                 {children}
-            </a>
+            </Link>
         ) : (
             children
         );
     }
 }
 
-export default Mention;
+export default UserLink;

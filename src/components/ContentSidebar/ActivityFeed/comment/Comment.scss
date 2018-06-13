@@ -97,6 +97,12 @@
 
             .link {
                 white-space: normal;
+
+                &.bcs-comment-mention {
+                    color: $box-blue;
+                    display: inline-block;
+                    overflow: initial;
+                }
             }
 
             .bcs-comment-translate {
