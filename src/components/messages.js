@@ -624,6 +624,21 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: 'Delete task?',
         description: 'Confirmation prompt text to delete task'
     },
+    taskCreateErrorNotificationMessage: {
+        id: 'be.taskCreateErrorNotificationMessage',
+        description: 'Notification error message when a task creation fails',
+        defaultMessage: 'We\'re sorry, something went wrong when creating this task.'
+    },
+    taskEditErrorNotificationMessage: {
+        id: 'be.taskEditErrorNotificationMessage',
+        description: 'Notification error message when a task edit fails',
+        defaultMessage: 'We\'re sorry, something went wrong when editing this task.'
+    },
+    taskDeleteErrorNotificationMessage: {
+        id: 'be.taskDeleteErrorNotificationMessage',
+        description: 'Notification error message when a task deletion fails',
+        defaultMessage: 'We\'re sorry, something went wrong when deleting this task.'
+    },
     commentDeleteConfirm: {
         id: 'be.commentDeleteConfirm',
         defaultMessage: 'Yes',
@@ -658,6 +673,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.commentPostedFullDateTime',
         defaultMessage: '{time, date, full} at {time, time, short}',
         description: 'Comment posted full date time for title'
+    },
+    commentCreateErrorNotificationMessage: {
+        id: 'be.commentCreateErrorNotificationMessage',
+        description: 'Notification error message when a comment creation fails',
+        defaultMessage: 'We\'re sorry, something went wrong when creating this comment.'
+    },
+    commentDeleteErrorNotificationMessage: {
+        id: 'be.commentDeleteErrorNotificationMessage',
+        description: 'Notification error message when a comment deletion fails',
+        defaultMessage: 'We\'re sorry, something went wrong when deleting this comment.'
     },
     completedAssignment: {
         id: 'be.completedAssignment',
