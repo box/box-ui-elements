@@ -9,10 +9,10 @@ import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
 
-import { Link } from 'box-react-ui/lib/components/link';
 import { ReadableTime } from 'box-react-ui/lib/components/time';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
+import UserLink from './UserLink';
 import InlineDelete from './InlineDelete';
 import InlineEdit from './InlineEdit';
 import CommentInlineError from './CommentInlineError';
@@ -141,13 +141,12 @@ class Comment extends React.Component<Props, State> {
                     <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={created_by} />
                     <div className='bcs-comment-content'>
                         <div className='bcs-comment-headline'>
-                            {getUserProfileUrl ? (
-                                <Link className='bcs-comment-user-name' href={getUserProfileUrl(created_by.id)}>
-                                    {created_by.name}
-                                </Link>
-                            ) : (
-                                <div className='bcs-comment-user-name'>{created_by.name}</div>
-                            )}
+                            <UserLink
+                                className='bcs-comment-user-name'
+                                id={created_by.id}
+                                name={created_by.name}
+                                getUserProfileUrl={getUserProfileUrl}
+                            />
                             <Tooltip
                                 text={
                                     <FormattedMessage
