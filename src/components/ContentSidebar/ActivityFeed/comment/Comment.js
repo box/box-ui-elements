@@ -142,10 +142,9 @@ class Comment extends React.Component<Props, State> {
                             <UserLink
                                 className='bcs-comment-user-name'
                                 id={created_by.id}
+                                name={created_by.name}
                                 getUserProfileUrl={getUserProfileUrl}
-                            >
-                                {created_by.name}
-                            </UserLink>
+                            />
                             <Tooltip
                                 text={
                                     <FormattedMessage

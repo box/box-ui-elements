@@ -8,8 +8,8 @@ import * as React from 'react';
 import { Link } from 'box-react-ui/lib/components/link';
 
 type Props = {
-    children?: React.Node,
     id: string,
+    name: string,
     mentionTrigger?: any,
     getUserProfileUrl?: (string) => Promise<string>
 };
@@ -50,15 +50,15 @@ class UserLink extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { children, ...rest }: Props = this.props;
+        const { name, ...rest }: Props = this.props;
         const { profileUrl }: State = this.state;
 
         return profileUrl ? (
             <Link {...rest} href={profileUrl}>
-                {children}
+                {name}
             </Link>
         ) : (
-            children
+            name
         );
     }
 }

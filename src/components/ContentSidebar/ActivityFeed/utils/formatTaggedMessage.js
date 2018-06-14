@@ -43,10 +43,11 @@ const formatTaggedMessage = (
             return (
                 <UserLink
                     id={id}
+                    name={`${trigger}${name}`}
                     className='bcs-comment-mention'
                     getUserProfileUrl={getUserProfileUrl}
                     key={contentKey}
-                >{`${trigger}${name}`}</UserLink>
+                />
             );
         }
 
