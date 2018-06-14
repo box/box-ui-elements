@@ -9,9 +9,8 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
     className="bcs-comment-mention"
     id="2030326577"
     key="1-123"
-  >
-    @Young Jeezy
-  </UserLink>
+    name="@Young Jeezy"
+  />
   ?
 </div>
 `;
@@ -25,24 +24,21 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
     className="bcs-comment-mention"
     id="123"
     key="1-123"
-  >
-    ﹫Half
-  </UserLink>
+    name="﹫Half"
+  />
    
   <UserLink
     className="bcs-comment-mention"
     id="222"
     key="3-123"
-  >
-    ＠Full
-  </UserLink>
+    name="＠Full"
+  />
    
   <UserLink
     className="bcs-comment-mention"
     id="432"
     key="5-123"
-  >
-    @Latin
-  </UserLink>
+    name="@Latin"
+  />
 </div>
 `;

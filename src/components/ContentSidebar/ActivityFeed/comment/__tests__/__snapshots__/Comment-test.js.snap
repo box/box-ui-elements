@@ -27,9 +27,8 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
         <UserLink
           className="bcs-comment-user-name"
           id={10}
-        >
-          50 Cent
-        </UserLink>
+          name="50 Cent"
+        />
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -95,9 +94,8 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
         <UserLink
           className="bcs-comment-user-name"
           id={10}
-        >
-          50 Cent
-        </UserLink>
+          name="50 Cent"
+        />
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -164,9 +162,8 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render an
         <UserLink
           className="bcs-comment-user-name"
           id={10}
-        >
-          50 Cent
-        </UserLink>
+          name="50 Cent"
+        />
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
@@ -236,9 +233,8 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render co
         <UserLink
           className="bcs-comment-user-name"
           id={10}
-        >
-          50 Cent
-        </UserLink>
+          name="50 Cent"
+        />
         <Tooltip
           constrainToScrollParent={false}
           constrainToWindow={true}
