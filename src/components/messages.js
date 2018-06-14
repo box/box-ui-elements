@@ -246,7 +246,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     createDialogErrorInUse: {
         id: 'be.createDialogErrorInUse',
         description: 'Error text for create folder dialog when name is already in use',
-        defaultMessage: 'An folder with the same name already exists.'
+        defaultMessage: 'A folder with the same name already exists.'
     },
     shareDialogLabel: {
         id: 'be.shareDialogLabel',
