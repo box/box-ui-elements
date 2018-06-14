@@ -561,7 +561,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(instance.createCommentSuccessCallback).toBeCalledWith({ message, hasMention }, 'uniqueId');
         });
 
-        test('should invoke createCommentErrorCallback() with error and id on fail to create', () => {
+        test('should delete pending feed item when creation fails', () => {
             const createComment = (text, hasMention, onSuccess, onFail) => {
                 onFail(new Error('You fail!'));
             };
@@ -571,12 +571,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 }
             };
             wrapper.setProps({ handlers: newHandlers });
-            instance.createCommentErrorCallback = jest.fn();
+            instance.deleteFeedItem = jest.fn();
 
             instance.createComment({ text: message });
 
-            // Should be called with new comment and the 'uniqueId' returned from lodash/uniqueId
-            expect(instance.createCommentErrorCallback).toBeCalledWith(expect.any(Error), 'uniqueId');
+            // Should be called with the 'uniqueId' returned from lodash/uniqueId
+            expect(instance.deleteFeedItem).toBeCalledWith('uniqueId');
         });
     });
 
@@ -679,7 +679,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             );
         });
 
-        test('should invoke createCommentErrorCallback() with error and id on fail to create', () => {
+        test('should delete the pending feed item on when failing to create a task', () => {
             const createTask = (textContent, assignees, dueAt, onSuccess, onFail) => {
                 onFail(new Error('You fail!'));
             };
@@ -689,12 +689,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 }
             };
             wrapper.setProps({ handlers: newHandlers });
-            instance.createTaskErrorCallback = jest.fn();
+            instance.deleteFeedItem = jest.fn();
 
             instance.createTask({ text });
 
-            // Should be called with new comment and the 'uniqueId' returned from lodash/uniqueId
-            expect(instance.createTaskErrorCallback).toBeCalledWith(expect.any(Error), 'uniqueId');
+            // Should be called with the 'uniqueId' returned from lodash/uniqueId
+            expect(instance.deleteFeedItem).toBeCalledWith('uniqueId');
         });
     });
 
@@ -717,7 +717,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 id,
                 permissions,
                 wrapper.instance().deleteFeedItem,
-                wrapper.instance().feedItemErrorCallback
+                expect.any(Function)
             );
             expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, true);
         });
@@ -737,7 +737,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(allHandlers.tasks.delete).toBeCalledWith(
                 id,
                 wrapper.instance().deleteFeedItem,
-                wrapper.instance().feedItemErrorCallback
+                expect.any(Function)
             );
             expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, true);
         });
@@ -758,18 +758,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 },
                 task.id
             );
-        });
-    });
-
-    describe('feedItemErrorCallback()', () => {
-        test('should update the feed item to not be pending', () => {
-            const id = '1';
-            const wrapper = getWrapper();
-            wrapper.instance().updateFeedItemPendingStatus = jest.fn();
-            wrapper.update();
-            wrapper.instance().feedItemErrorCallback('foo', id);
-
-            expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, false);
         });
     });
 
