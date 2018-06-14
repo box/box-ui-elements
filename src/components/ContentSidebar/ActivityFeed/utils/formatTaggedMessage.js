@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 import { Link } from 'box-react-ui/lib/components/link';
-import Mention from '../comment/Mention';
+import UserLink from '../comment/UserLink';
 
 // this regex matches one of the following regular expressions:
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
@@ -16,7 +16,7 @@ const splitRegex = /((?:[@＠﹫]\[[0-9]+:[^\]]+])|(?:\b(?:(?:ht|f)tps?:\/\/)[\w
 
 /**
  * Formats a message a string and replaces the following:
- * - all occurrence of mention patterns with a Mention component
+ * - all occurrence of mention patterns with a UserLink component
  * - all occurrence of urls with a Link component
  * Ex mention format: @[123:Hello World]
  * @param {String} tagged_message The message string to format
@@ -41,7 +41,13 @@ const formatTaggedMessage = (
                 return `${trigger}${name}`;
             }
             return (
-                <Mention id={id} key={contentKey} getUserProfileUrl={getUserProfileUrl}>{`${trigger}${name}`}</Mention>
+                <UserLink
+                    id={id}
+                    name={`${trigger}${name}`}
+                    className='bcs-comment-mention'
+                    getUserProfileUrl={getUserProfileUrl}
+                    key={contentKey}
+                />
             );
         }
 

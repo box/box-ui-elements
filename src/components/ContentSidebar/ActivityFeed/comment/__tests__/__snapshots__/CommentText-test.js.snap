@@ -5,12 +5,12 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
   className="bcs-comment-text"
 >
   How u doing 
-  <Mention
+  <UserLink
+    className="bcs-comment-mention"
     id="2030326577"
     key="1-123"
-  >
-    @Young Jeezy
-  </Mention>
+    name="@Young Jeezy"
+  />
   ?
 </div>
 `;
@@ -20,25 +20,25 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
   className="bcs-comment-text"
 >
   Hi 
-  <Mention
+  <UserLink
+    className="bcs-comment-mention"
     id="123"
     key="1-123"
-  >
-    ﹫Half
-  </Mention>
+    name="﹫Half"
+  />
    
-  <Mention
+  <UserLink
+    className="bcs-comment-mention"
     id="222"
     key="3-123"
-  >
-    ＠Full
-  </Mention>
+    name="＠Full"
+  />
    
-  <Mention
+  <UserLink
+    className="bcs-comment-mention"
     id="432"
     key="5-123"
-  >
-    @Latin
-  </Mention>
+    name="@Latin"
+  />
 </div>
 `;

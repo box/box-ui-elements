@@ -364,7 +364,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         expect(onActionSpy).toHaveBeenCalledTimes(1);
     });
 
-    test('should not have Mention object when shouldReturnString is true', () => {
+    test('should not have UserLink mention object when shouldReturnString is true', () => {
         const comment = {
             created_at: '2016-11-02T11:35:14-07:00',
             tagged_message: 'test @[3203255873:test user] ',
@@ -387,13 +387,13 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.find('ApprovalCommentForm').length).toEqual(0);
         expect(wrapper.find('CommentText').length).toEqual(1);
         expect(wrapper.state('isEditing')).toBe(false);
-        expect(wrapper.find('Mention').length).toEqual(1);
+        expect(wrapper.find('UserLink').length).toEqual(2);
         expect(wrapper.state('isEditing')).toBe(false);
 
         wrapper.instance().toEdit();
         wrapper.update();
         expect(wrapper.state('isEditing')).toBe(true);
         expect(wrapper.find('InlineEdit').length).toEqual(2);
-        expect(wrapper.find('Mention').length).toEqual(0);
+        expect(wrapper.find('UserLink').length).toEqual(1);
     });
 });
