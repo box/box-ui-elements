@@ -4,11 +4,13 @@
  */
 
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueId from 'lodash/uniqueId';
 import classNames from 'classnames';
 
+import Notification from 'box-react-ui/lib/components/notification/Notification';
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
@@ -20,6 +22,7 @@ import type {
     VersionHandlers,
     Translations
 } from '../activityFeedFlowTypes';
+import messages from '../../../messages';
 
 import './ActivityFeed.scss';
 
@@ -46,7 +49,8 @@ type Props = {
 
 type State = {
     isInputOpen: boolean,
-    feedItems: Array<Comment | Task | BoxItemVersion>
+    feedItems: Array<Comment | Task | BoxItemVersion>,
+    writeError?: MaskError
 };
 
 class ActivityFeed extends React.Component<Props, State> {
@@ -56,7 +60,8 @@ class ActivityFeed extends React.Component<Props, State> {
 
     state = {
         isInputOpen: false,
-        feedItems: []
+        feedItems: [],
+        writeError: undefined
     };
 
     feedContainer: null | HTMLElement;
@@ -135,6 +140,21 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
+     * Callback for failed creation of a Comment.
+     *
+     * @param {string} id - ID of the feed item to remove
+     * @return {void}
+     */
+    createCommentErrorCallback = (id: string): void => {
+        this.deleteFeedItem(id);
+        this.setState({
+            writeError: {
+                errorHeader: messages.commentCreateErrorNotificationMessage
+            }
+        });
+    };
+
+    /**
      * Create a comment, and make a pending item to be replaced once the API is successful.
      *
      * @param {any} args - Data returned by the Comment component on comment creation.
@@ -159,7 +179,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 this.createCommentSuccessCallback(commentData, uuid);
             },
             () => {
-                this.deleteFeedItem(uuid);
+                this.createCommentErrorCallback(uuid);
             }
         );
 
@@ -167,20 +187,30 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Deletes a comment
+     * Called on unsuccessful deletion of a comment.
      *
-     * @param {string} id - Comment id
+     * @param {Object} id - Comment Id
+     */
+    deleteCommentErrorCallback = (id: string) => {
+        this.updateFeedItemPendingStatus(id, false);
+        this.setState({
+            writeError: {
+                errorHeader: messages.commentDeleteErrorNotificationMessage
+            }
+        });
+    };
+
+    /**
+     * Deletes a comment.
+     *
+     * @param {string} id - Comment ID
      * @param {BoxItemPermission} permissions - Permissions for the comment
      * @return {void}
      */
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
-        // remove comment from list of comments
-        // removeItemByTypeAndId('comment', args.id);
-        // delete the comment via V2 API
-        // call user passed in handlers.comments.delete, if it exists
         const deleteComment = getProp(this.props, 'handlers.comments.delete', noop);
         this.updateFeedItemPendingStatus(id, true);
-        deleteComment(id, permissions, this.deleteFeedItem, () => this.updateFeedItemPendingStatus(id, false));
+        deleteComment(id, permissions, this.deleteFeedItem, () => this.deleteCommentErrorCallback(id));
     };
 
     /**
@@ -201,7 +231,22 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
-     * Creates a task
+     * Callback for Task creation failure.
+     *
+     * @param {string} id - ID of the feed item to delete
+     * @return {void}
+     */
+    createTaskErrorCallback(id: string): void {
+        this.deleteFeedItem(id);
+        this.setState({
+            writeError: {
+                errorHeader: messages.taskCreateErrorNotificationMessage
+            }
+        });
+    }
+
+    /**
+     * Creates a task.
      *
      * @param {string} text - Task text
      * @param {Array} assignees - List of assignees
@@ -234,10 +279,6 @@ class ActivityFeed extends React.Component<Props, State> {
         };
 
         this.addPendingItem(task);
-
-        // create a placeholder pending task
-        // create actual task and send to Box V2 api
-        // call user passed in handlers.tasks.create, if it exists
         const createTask = getProp(this.props, 'handlers.tasks.create', noop);
         createTask(
             text,
@@ -247,7 +288,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 this.createTaskSuccessCallback(taskData, uuid);
             },
             () => {
-                this.deleteFeedItem(uuid);
+                this.createTaskErrorCallback(uuid);
             }
         );
 
@@ -255,27 +296,10 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Called on successful update of a task
+     * Updates a feed item's pending status.
      *
-     * @param {Object} task the updated task
-     */
-    updateTaskSuccessCallback = (task: Task) => {
-        const { id } = task;
-
-        this.updateFeedItem(
-            {
-                ...task,
-                isPending: false
-            },
-            id
-        );
-    };
-
-    /**
-     * Updates a feed item's pending status
-     *
-     * @param {Object} item the feed item to update
-     * @param {boolean} isPending true if the feed item is to be updated to pending=true
+     * @param {Object} item - The feed item to update
+     * @param {boolean} isPending - True if the feed item is to be updated to pending=true
      */
     updateFeedItemPendingStatus = (id: string, isPending: boolean) => {
         this.setState({
@@ -293,9 +317,9 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Deletes a feed item from the state
+     * Deletes a feed item from the state.
      *
-     * @param {Object} item the item to be deleted
+     * @param {Object} item - The item to be deleted
      */
     deleteFeedItem = (id: string) => {
         this.setState({
@@ -304,53 +328,92 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Updates a task in the state
+     * Updates a given task on a successful update.
      *
-     * @param {Object} args a subset of the task
+     * @param {Object} task - The updated task
      */
-    updateTask = ({ text, id }: { text: string, id: string }): void => {
-        // get previous task assignment state
-        // update the task via v2 api
-        // update task state OR
-        // if it fails, revert to previous task state
-        // call user passed in handlers.tasks.edit, if it exists
-        const updateTask = getProp(this.props, 'handlers.tasks.edit', noop);
-        this.updateFeedItemPendingStatus(id, true);
-        updateTask(id, text, this.updateTaskSuccessCallback, () => this.updateFeedItemPendingStatus(id, false));
+    updateTaskSuccessCallback = (task: Task) => {
+        const { id } = task;
+
+        this.updateFeedItem(
+            {
+                ...task,
+                isPending: false
+            },
+            id
+        );
     };
 
     /**
-     * Updates a task in the state
+     * Restores task and sets the error state on an unsuccessful update of a task.
      *
-     * @param {Object} args a subset of the task
+     * @param {Object} id - Task Id
      */
-    deleteTask = ({ id }: { id: string }): void => {
-        // remove task from task list
-        // removeItemByTypeAndId('task', args.id);
-        // delete the task via v2 api
-        // call user passed in handlers.tasks.delete, if it exists
-        const deleteTask = getProp(this.props, 'handlers.tasks.delete', noop);
-        this.updateFeedItemPendingStatus(id, true);
-        deleteTask(id, this.deleteFeedItem, () => {
-            this.updateFeedItemPendingStatus(id, false);
+    updateTaskErrorCallback = (id: string) => {
+        this.updateFeedItemPendingStatus(id, false);
+        this.setState({
+            writeError: {
+                errorHeader: messages.taskEditErrorNotificationMessage
+            }
         });
     };
 
+    /**
+     * Updates a task in the state via the API.
+     *
+     * @param {Object} args - A subset of the task
+     */
+    updateTask = ({ text, id }: { text: string, id: string }): void => {
+        const updateTask = getProp(this.props, 'handlers.tasks.edit', noop);
+        this.updateFeedItemPendingStatus(id, true);
+        updateTask(id, text, this.updateTaskSuccessCallback, () => this.updateTaskErrorCallback(id));
+    };
+
+    /**
+     * Restores task and sets the error state on an unsuccessful deletion of a task.
+     *
+     * @param {Object} id - Task Id
+     */
+    deleteTaskErrorCallback = (id: string) => {
+        this.updateFeedItemPendingStatus(id, false);
+        this.setState({
+            writeError: {
+                errorHeader: messages.taskDeleteErrorNotificationMessage
+            }
+        });
+    };
+
+    /**
+     * Deletes a task via the API.
+     *
+     * @param {Object} args - A subset of the task
+     */
+    deleteTask = ({ id }: { id: string }): void => {
+        const deleteTask = getProp(this.props, 'handlers.tasks.delete', noop);
+        this.updateFeedItemPendingStatus(id, true);
+        deleteTask(id, this.deleteFeedItem, () => this.deleteTaskErrorCallback(id));
+    };
+
+    /**
+     * Updates a task assignment via the API.
+     *
+     * @param {string} taskId - ID of task to be updated
+     * @param {string} taskAssignmentId - Task assignment ID
+     * @param {string} status - New task assignment status
+     * @return {void}
+     */
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string): void => {
-        // Determine fixedStatus from status. 'approved' === 'complete', 'rejected' === 'done'
-        // get previous task state
-        // add task to state
-        // update assignment via V2 API
-        // failure? revert to previous task state
-        // call user passed in handlers.tasks.onTaskAssignmentUpdate, if it exists
         const updateTaskAssignment = getProp(this.props, 'handlers.tasks.onTaskAssignmentUpdate', noop);
         updateTaskAssignment(taskId, taskAssignmentId, status);
     };
 
+    /**
+     * Invokes version history popup handler.
+     *
+     * @param {Object} data - Version history data
+     * @return {void}
+     */
     openVersionHistoryPopup = (data: any): void => {
-        // get version number from data
-        // open the pop for version history
-        // call user passed in handlers.versions.info, if it exists
         const versionInfoHandler = getProp(this.props, 'handlers.versions.info', noop);
         versionInfoHandler(data);
     };
@@ -358,9 +421,9 @@ class ActivityFeed extends React.Component<Props, State> {
     /**
      * Determine whether or not a sort should occur, based on new comments, tasks, versions.
      *
-     * @param {Comments} - [comments] - Object containing comments for the file.
-     * @param {Tasks} - [tasks] - Object containing tasks for the file.
-     * @param {FileVersions} - [versions] Object containing versions of the file.
+     * @param {Comments} comments - Object containing comments for the file.
+     * @param {Tasks} tasks - Object containing tasks for the file.
+     * @param {FileVersions} versions - Object containing versions of the file.
      * @return {boolean} True if the feed should be sorted with new items.
      */
     shouldSortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions): boolean {
@@ -370,8 +433,8 @@ class ActivityFeed extends React.Component<Props, State> {
     /**
      *  If the file has changed, clear out the feed state.
      *
-     * @param {BoxItem} [file] The box file that comments, tasks, and versions belong to.
-     * @return {boolean} - True if the feedItems were emptied.
+     * @param {BoxItem} file - The box file that comments, tasks, and versions belong to.
+     * @return {boolean} True if the feedItems were emptied.
      */
     clearFeedItems(file?: BoxItem): boolean {
         const { file: oldFile } = this.props;
@@ -414,9 +477,9 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
-     * Sort valid feed items, descending by created_at time
+     * Sort valid feed items, descending by created_at time.
      *
-     * @param args Array<?Comments | ?Tasks | ?FileVersions> - Arguments list of each item container
+     * @param {Array<?Comments | ?Tasks | ?FileVersions>} args - Arguments list of each item container
      * type that is allowed in the feed.
      */
     sortFeedItems(...args: Array<Comments | Tasks | FileVersions>): void {
@@ -431,6 +494,17 @@ class ActivityFeed extends React.Component<Props, State> {
         this.setState({ feedItems });
     }
 
+    /**
+     * Resets the error state after notification close.
+     *
+     * @return {void}
+     */
+    onErrorNotificationClose = () => {
+        this.setState({
+            writeError: undefined
+        });
+    };
+
     render(): React.Node {
         const {
             handlers,
@@ -444,7 +518,7 @@ class ActivityFeed extends React.Component<Props, State> {
             getUserProfileUrl,
             file
         } = this.props;
-        const { isInputOpen, feedItems } = this.state;
+        const { isInputOpen, feedItems, writeError } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(
             currentUser &&
@@ -457,6 +531,13 @@ class ActivityFeed extends React.Component<Props, State> {
         return (
             // eslint-disable-next-line
             <div className="bcs-activity-feed" onKeyDown={this.onKeyDown}>
+                {writeError ? (
+                    <div className='bcs-activity-feed-error-wrapper'>
+                        <Notification type='error' onClose={this.onErrorNotificationClose} duration='short'>
+                            <FormattedMessage {...writeError.errorHeader} />
+                        </Notification>
+                    </div>
+                ) : null}
                 <div
                     ref={(ref) => {
                         this.feedContainer = ref;
