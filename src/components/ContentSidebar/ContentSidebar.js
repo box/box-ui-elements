@@ -20,7 +20,8 @@ import {
     CLIENT_NAME_CONTENT_SIDEBAR,
     FIELD_METADATA_SKILLS,
     DEFAULT_COLLAB_DEBOUNCE,
-    DEFAULT_MAX_COLLABORATORS
+    DEFAULT_MAX_COLLABORATORS,
+    HTTP_GET
 } from '../../constants';
 import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
@@ -972,11 +973,19 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
+        const { fileId = '' } = this.props;
         if (shouldRenderSidebar(this.props)) {
             if (typeof user === 'undefined') {
+                const url = this.api.getUsersAPI(false).getUrl();
                 this.api
                     .getUsersAPI(shouldDestroy)
-                    .get('', this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
+                    .makeRequest(
+                        HTTP_GET,
+                        fileId,
+                        url,
+                        this.fetchCurrentUserSuccessCallback,
+                        this.fetchCurrentUserErrorCallback
+                    );
             } else {
                 this.setState({ currentUser: user, currentUserError: undefined });
             }
