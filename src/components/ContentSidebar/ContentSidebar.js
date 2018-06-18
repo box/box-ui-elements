@@ -56,16 +56,14 @@ type Props = {
     translations?: Translations,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onAccessStatsClick?: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
-    getUserProfileUrl?: (string) => Promise<string>
+    getUserProfileUrl?: (string) => Promise<string>,
+    _internalProps: Object
 };
 
 type State = {
@@ -107,7 +105,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasAccessStats: false,
         hasClassification: false,
         hasActivityFeed: false,
-        hasVersions: false
+        hasVersions: false,
+        _internalProps: {}
     };
 
     state = {
@@ -1147,11 +1146,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             hasVersions,
             className,
-            onVersionHistoryClick,
-            onAccessStatsClick,
-            onClassificationClick,
             onTaskAssignmentUpdate,
-            getUserProfileUrl
+            getUserProfileUrl,
+            _internalProps
         }: Props = this.props;
         const {
             file,
@@ -1190,9 +1187,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 hasActivityFeed={hasActivityFeed}
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
-                                onAccessStatsClick={onAccessStatsClick}
-                                onClassificationClick={onClassificationClick}
-                                onVersionHistoryClick={onVersionHistoryClick}
                                 onSkillChange={this.onSkillChange}
                                 hasVersions={hasVersions}
                                 accessStatsError={accessStatsError}
@@ -1216,6 +1210,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={this.getAvatarUrl}
+                                _internalProps={_internalProps}
                             />
                         ) : (
                             <div className='bcs-loading'>

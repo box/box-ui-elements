@@ -11,11 +11,11 @@ import { DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 
 type Props = {
-    onVersionHistoryClick?: Function,
-    file: BoxItem
+    file: BoxItem,
+    _internalProps: Object
 };
 
-const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {
+const SidebarVersions = ({ _internalProps, file }: Props) => {
     const { version_number } = file;
 
     const versionNumber = parseInt(version_number, 10);
@@ -27,7 +27,7 @@ const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {
     return (
         <VersionHistoryLink
             data-resin-target={DETAILS_TARGETS.VERSION_HISTORY}
-            onClick={onVersionHistoryClick}
+            onClick={_internalProps.onVersionHistoryClick}
             versionCount={versionNumber}
         />
     );

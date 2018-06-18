@@ -78,12 +78,15 @@
                     hasAccessStats: true,
                     hasVersions: true,
                     hasNotices: true,
-                    onVersionHistoryClick : function(){
+                    _internalProps: {
+                        onVersionHistoryClick : function(){
                         alert('hello, world!');
-                    },
-                    onAccessStatsClick: () => {
-                        alert('Hello, world!');
+                        },
+                        onAccessStatsClick: () => {
+                            alert('Hello, world!');
+                        }
                     }
+    
                 });
 
                 const sidebar2 = new ContentSidebar();

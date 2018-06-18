@@ -25,14 +25,12 @@ type Props = {
     hasAccessStats: boolean,
     hasClassification: boolean,
     hasVersions: boolean,
-    onAccessStatsClick?: Function,
     onDescriptionChange: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     versions?: FileVersions,
     accessStatsError?: Errors,
     fileError?: Errors,
-    versionError?: Errors
+    versionError?: Errors,
+    _internalProps: Object
 };
 
 const DetailsSidebar = ({
@@ -43,24 +41,22 @@ const DetailsSidebar = ({
     hasAccessStats,
     hasClassification,
     hasVersions,
-    onAccessStatsClick,
     onDescriptionChange,
-    onClassificationClick,
-    onVersionHistoryClick,
     versions,
     accessStatsError,
     fileError,
-    versionError
+    versionError,
+    _internalProps
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
         {(hasVersions || hasNotices) && (
             <div className='bcs-details-content'>
                 {hasVersions && (
                     <SidebarVersions
-                        onVersionHistoryClick={onVersionHistoryClick}
                         versions={versions}
                         file={file}
                         {...versionError}
+                        _internalProps={_internalProps}
                     />
                 )}
                 {hasNotices && <SidebarNotices file={file} />}
@@ -76,16 +72,16 @@ const DetailsSidebar = ({
                     file={file}
                     {...fileError}
                     hasClassification={hasClassification}
-                    onClassificationClick={onClassificationClick}
+                    _internalProps={_internalProps}
                 />
             </SidebarSection>
         )}
         {hasAccessStats && (
             <SidebarAccessStats
                 accessStats={accessStats}
-                onAccessStatsClick={onAccessStatsClick}
                 file={file}
                 {...accessStatsError}
+                _internalProps={_internalProps}
             />
         )}
     </SidebarContent>
