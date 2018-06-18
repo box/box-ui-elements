@@ -50,7 +50,7 @@ class UserLink extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { name, ...rest }: Props = this.props;
+        const { name, getUserProfileUrl, ...rest }: Props = this.props;
         const { profileUrl }: State = this.state;
 
         return profileUrl ? (
