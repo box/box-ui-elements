@@ -17,7 +17,8 @@ class PlainUpload extends BaseUpload {
      * @param {Object} data - Upload success data
      * @return {void}
      */
-    uploadSuccessHandler = ({ entries }: { entries: BoxItem[] }): void => {
+    uploadSuccessHandler = ({ data }: Object): void => {
+        const { entries }: { entries: BoxItem[] } = data;
         if (this.isDestroyed()) {
             return;
         }
