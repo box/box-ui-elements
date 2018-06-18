@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -79,14 +80,14 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         this.setState({ isAddApprovalVisible: formData.addApproval === 'on' });
 
     onFormValidSubmitHandler = (formData: any): void => {
-        const { createComment, createTask, intl, updateTask, onSubmit, entityId } = this.props;
+        const { createComment = noop, createTask = noop, intl, updateTask = noop, onSubmit, entityId } = this.props;
 
         const { text, hasMention } = this.getFormattedCommentText();
         if (!text) {
             return;
         }
 
-        if (formData.addApproval === 'on' && createTask) {
+        if (formData.addApproval === 'on') {
             const { approvers, approvalDate } = this.state;
             if (approvers.length === 0) {
                 this.setState({
@@ -99,9 +100,9 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                 assignees: approvers.map(({ value }) => value),
                 dueAt: approvalDate
             });
-        } else if (entityId && updateTask) {
+        } else if (entityId) {
             updateTask({ text, id: entityId });
-        } else if (createComment) {
+        } else {
             createComment({ text, hasMention });
         }
 

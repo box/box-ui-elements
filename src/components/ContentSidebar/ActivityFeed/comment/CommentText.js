@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator';
 
@@ -54,8 +55,8 @@ class CommentText extends React.Component<Props, State> {
     }
 
     handleTranslate = (event: SyntheticMouseEvent<>): void => {
-        const { id, tagged_message, onTranslate, translatedTaggedMessage } = this.props;
-        if (!translatedTaggedMessage && onTranslate) {
+        const { id, tagged_message, onTranslate = noop, translatedTaggedMessage } = this.props;
+        if (!translatedTaggedMessage) {
             this.setState({ isLoading: true });
             onTranslate({ id, tagged_message });
         }
