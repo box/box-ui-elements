@@ -20,8 +20,7 @@ import {
     CLIENT_NAME_CONTENT_SIDEBAR,
     FIELD_METADATA_SKILLS,
     DEFAULT_COLLAB_DEBOUNCE,
-    DEFAULT_MAX_COLLABORATORS,
-    HTTP_GET
+    DEFAULT_MAX_COLLABORATORS
 } from '../../constants';
 import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
 import messages from '../messages';
@@ -54,7 +53,6 @@ type Props = {
     cache?: APICache,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    translations?: Translations,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onAccessStatsClick?: Function,
@@ -976,16 +974,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         const { fileId = '' } = this.props;
         if (shouldRenderSidebar(this.props)) {
             if (typeof user === 'undefined') {
-                const url = this.api.getUsersAPI(false).getUrl();
                 this.api
                     .getUsersAPI(shouldDestroy)
-                    .makeRequest(
-                        HTTP_GET,
-                        fileId,
-                        url,
-                        this.fetchCurrentUserSuccessCallback,
-                        this.fetchCurrentUserErrorCallback
-                    );
+                    .get(fileId, this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
             } else {
                 this.setState({ currentUser: user, currentUserError: undefined });
             }
