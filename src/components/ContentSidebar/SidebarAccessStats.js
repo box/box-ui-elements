@@ -17,11 +17,11 @@ import withErrorHandling from './withErrorHandling';
 type Props = {
     onAccessStatsClick?: Function,
     accessStats?: FileAccessStats,
-    file: BoxItem
+    file: BoxItem,
+    _internalProps: Object
 };
 
 const SidebarAccessStats = ({
-    onAccessStatsClick,
     accessStats = {
         preview_count: 0,
         comment_count: 0,
@@ -29,7 +29,8 @@ const SidebarAccessStats = ({
         edit_count: 0,
         has_count_overflowed: false
     },
-    file
+    file,
+    _internalProps
 }: Props) => {
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
@@ -51,7 +52,7 @@ const SidebarAccessStats = ({
                 previewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.PREVIEWS }}
                 editCount={edit_count}
                 editStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.EDITS }}
-                openAccessStatsModal={onAccessStatsClick}
+                openAccessStatsModal={_internalProps.onAccessStatsClick}
                 isBoxNote={isBoxNote(file)}
                 viewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS }}
             />

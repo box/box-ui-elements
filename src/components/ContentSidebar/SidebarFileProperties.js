@@ -19,16 +19,11 @@ type Props = {
     onDescriptionChange: Function,
     hasClassification: boolean,
     onClassificationClick: ?Function,
-    intl: any
+    intl: any,
+    _internalProps: Object
 };
 
-const SidebarFileProperties = ({
-    file,
-    onDescriptionChange,
-    hasClassification,
-    onClassificationClick,
-    intl
-}: Props) => {
+const SidebarFileProperties = ({ file, onDescriptionChange, hasClassification, intl, _internalProps }: Props) => {
     const value = getProp(file, `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
 
     return (
@@ -44,7 +39,7 @@ const SidebarFileProperties = ({
             classificationProps={
                 hasClassification
                     ? {
-                        openModal: onClassificationClick,
+                        openModal: _internalProps.onClassificationClick,
                         value,
                         [INTERACTION_TARGET]: value
                             ? DETAILS_TARGETS.CLASSIFICATION_EDIT

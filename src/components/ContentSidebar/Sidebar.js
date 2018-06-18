@@ -26,10 +26,7 @@ type Props = {
     hasClassification: boolean,
     hasActivityFeed: boolean,
     hasVersions: boolean,
-    onAccessStatsClick?: Function,
     onDescriptionChange: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     onSkillChange: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
@@ -51,7 +48,8 @@ type Props = {
     tasksError?: Errors,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>
+    getUserProfileUrl?: (string) => Promise<string>,
+    _internalProps: Object
 };
 
 type State = {
@@ -149,11 +147,8 @@ class Sidebar extends React.Component<Props, State> {
             hasClassification,
             hasActivityFeed,
             hasVersions,
-            onAccessStatsClick,
             onDescriptionChange,
             onSkillChange,
-            onClassificationClick,
-            onVersionHistoryClick,
             onCommentCreate,
             onCommentDelete,
             onTaskCreate,
@@ -173,7 +168,8 @@ class Sidebar extends React.Component<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             getAvatarUrl,
-            getUserProfileUrl
+            getUserProfileUrl,
+            _internalProps
         }: Props = this.props;
 
         const { view } = this.state;
@@ -207,13 +203,11 @@ class Sidebar extends React.Component<Props, State> {
                             hasClassification={hasClassification}
                             hasVersions={hasVersions}
                             onSkillChange={onSkillChange}
-                            onAccessStatsClick={onAccessStatsClick}
-                            onClassificationClick={onClassificationClick}
                             onDescriptionChange={onDescriptionChange}
-                            onVersionHistoryClick={onVersionHistoryClick}
                             accessStats={accessStats}
                             accessStatsError={accessStatsError}
                             fileError={fileError}
+                            _internalProps={_internalProps}
                         />
                     )}
                 {view === SIDEBAR_VIEW_SKILLS &&
