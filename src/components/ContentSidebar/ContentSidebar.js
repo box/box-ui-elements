@@ -79,7 +79,7 @@ type State = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
-    tasksWithAssignments?: Tasks,
+    tasksWithoutAssignments?: Tasks,
     currentUser?: User,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
@@ -122,7 +122,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         versions: undefined,
         comments: undefined,
         tasks: undefined,
-        tasksWithAssignments: undefined,
+        tasksWithoutAssignments: undefined,
         currentUser: undefined,
         approverSelectorContacts: undefined,
         mentionSelectorContacts: undefined,
@@ -470,12 +470,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File tasks fetch success callback
      *
      * @private
-     * @param {Object} tasks - Box task
+     * @param {Object} tasksWithoutAssignments - Box task without assignments
      * @return {void}
      */
-    fetchTasksSuccessCallback = (tasks: Tasks): void => {
-        this.setState({ tasks, tasksError: undefined });
-        this.fetchTaskAssignments(tasks);
+    fetchTasksSuccessCallback = (tasksWithoutAssignments: Tasks): void => {
+        this.setState({ tasksWithoutAssignments, tasksError: undefined });
+        this.fetchTaskAssignments(tasksWithoutAssignments);
     };
 
     /**
@@ -509,9 +509,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTaskAssignmentsSuccessCallback = (assignments: TaskAssignments): void => {
-        const { entries, total_count } = this.state.tasks;
+        const { entries, total_count } = this.state.tasksWithoutAssignments;
         this.setState({
-            tasksWithAssignments: {
+            tasks: {
                 entries: entries.map((task) => ({
                     ...task,
                     task_assignment_collection: this.replaceTaskAssignments(
@@ -1245,7 +1245,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             accessStats,
             versions,
             comments,
-            tasksWithAssignments,
+            tasks,
             currentUser,
             accessStatsError,
             fileError,
@@ -1285,7 +1285,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
                                 versionError={versionError}
-                                tasks={tasksWithAssignments}
+                                tasks={tasks}
                                 tasksError={tasksError}
                                 comments={comments}
                                 commentsError={commentsError}

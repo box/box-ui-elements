@@ -16,6 +16,7 @@ import RejectedAssignment from './RejectedAssignment';
 import type { CommentHandlers, ContactHandlers, TaskHandlers, VersionHandlers } from '../activityFeedFlowTypes';
 
 import './Task.scss';
+import TaskAssignments from '../../../../api/TaskAssignments';
 
 const TASK_APPROVED = 'approved';
 const TASK_REJECTED = 'rejected';
@@ -23,11 +24,7 @@ const TASK_COMPLETED = 'completed';
 const TASK_INCOMPLETE = 'incomplete';
 
 type Props = {
-    task_assignment_collection: Array<{
-        id: string,
-        user: User,
-        status: string
-    }>,
+    task_assignment_collection: TaskAssignments,
     created_at: number | string,
     created_by: User,
     currentUser?: User,
