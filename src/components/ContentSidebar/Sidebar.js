@@ -39,6 +39,7 @@ type Props = {
     onTaskAssignmentUpdate?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
+    translations?: Translations,
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,

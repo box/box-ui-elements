@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -22,24 +23,24 @@ import messages from '../../../messages';
 import './ApprovalCommentForm.scss';
 
 type Props = {
-    approverSelectorContacts: SelectorItems,
     className: string,
-    createComment: Function,
-    createTask: Function,
-    updateTask: Function,
+    createComment?: Function,
+    createTask?: Function,
+    updateTask?: Function,
     getApproverContactsWithQuery: Function,
     getMentionContactsWithQuery: Function,
     intl: any,
-    isDisabled: boolean,
+    isDisabled?: boolean,
     isOpen: boolean,
-    mentionSelectorContacts: SelectorItems,
+    approverSelectorContacts?: SelectorItems,
+    mentionSelectorContacts?: SelectorItems,
     onCancel: Function,
     onFocus: Function,
     onSubmit: Function,
     user: User,
-    isEditing: boolean,
-    entityId: string,
-    tagged_message: string,
+    isEditing?: boolean,
+    entityId?: string,
+    tagged_message?: string,
     getAvatarUrl: (string) => Promise<?string>
 };
 
@@ -79,7 +80,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         this.setState({ isAddApprovalVisible: formData.addApproval === 'on' });
 
     onFormValidSubmitHandler = (formData: any): void => {
-        const { createComment, createTask, intl, updateTask, onSubmit, entityId } = this.props;
+        const { createComment = noop, createTask = noop, intl, updateTask = noop, onSubmit, entityId } = this.props;
 
         const { text, hasMention } = this.getFormattedCommentText();
         if (!text) {

@@ -13,13 +13,7 @@ import messages from '../../../messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
 
-import type {
-    CommentHandlers,
-    ContactHandlers,
-    TaskHandlers,
-    Translations,
-    VersionHandlers
-} from '../activityFeedFlowTypes';
+import type { CommentHandlers, ContactHandlers, TaskHandlers, VersionHandlers } from '../activityFeedFlowTypes';
 
 import './Task.scss';
 
@@ -30,15 +24,15 @@ const TASK_INCOMPLETE = 'incomplete';
 
 type Props = {
     task_assignment_collection: Array<{
-        id: number,
+        id: string,
         user: User,
         status: string
     }>,
     created_at: number | string,
     created_by: User,
-    currentUser: User,
+    currentUser?: User,
     due_at: any,
-    error: ActionItemError,
+    error?: ActionItemError,
     handlers: {
         comments?: CommentHandlers,
         tasks?: TaskHandlers,
@@ -46,14 +40,13 @@ type Props = {
         versions?: VersionHandlers
     },
     id: string,
-    isPending: boolean,
-    onDelete: Function,
-    onEdit: Function,
+    isPending?: boolean,
+    onDelete?: Function,
+    onEdit?: Function,
     onTaskAssignmentUpdate: Function,
     permissions?: BoxItemPermission,
-    translatedTaggedMessage: string,
-    translations: Translations,
-    currentUser: User,
+    translatedTaggedMessage?: string,
+    translations?: Translations,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
@@ -136,7 +129,9 @@ class Task extends React.Component<Props> {
                                                 onTaskAssignmentUpdate(id, taskAssignmentId, TASK_REJECTED)
                                             }
                                             shouldShowActions={
-                                                onTaskAssignmentUpdate && assigneeUser.id === currentUser.id
+                                                onTaskAssignmentUpdate &&
+                                                currentUser &&
+                                                assigneeUser.id === currentUser.id
                                             }
                                         />
                                     );

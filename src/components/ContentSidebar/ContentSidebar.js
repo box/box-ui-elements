@@ -53,6 +53,7 @@ type Props = {
     cache?: APICache,
     sharedLink?: string,
     sharedLinkPassword?: string,
+    translations?: Translations,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onAccessStatsClick?: Function,

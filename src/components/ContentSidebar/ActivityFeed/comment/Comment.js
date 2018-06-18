@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
@@ -22,13 +23,7 @@ import Avatar from '../Avatar';
 import messages from '../../../messages';
 
 import './Comment.scss';
-import type {
-    CommentHandlers,
-    VersionHandlers,
-    ContactHandlers,
-    TaskHandlers,
-    Translations
-} from '../activityFeedFlowTypes';
+import type { CommentHandlers, VersionHandlers, ContactHandlers, TaskHandlers } from '../activityFeedFlowTypes';
 
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
@@ -43,17 +38,17 @@ type Props = {
     inlineDeleteMessage?: MessageDescriptor,
     error?: ActionItemError,
     onDelete?: Function,
-    onEdit: Function,
+    onEdit?: Function,
     tagged_message: string,
     translatedTaggedMessage?: string,
-    translations: Translations,
+    translations?: Translations,
     handlers: {
         comments?: CommentHandlers,
         tasks?: TaskHandlers,
         contacts?: ContactHandlers,
         versions?: VersionHandlers
     },
-    currentUser: User,
+    currentUser?: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
@@ -83,7 +78,7 @@ class Comment extends React.Component<Props, State> {
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
     updateTaskHandler = (args: any): void => {
-        const { onEdit } = this.props;
+        const { onEdit = noop } = this.props;
         onEdit(args);
         this.approvalCommentFormSubmitHandler();
     };
@@ -112,7 +107,6 @@ class Comment extends React.Component<Props, State> {
             tagged_message = '',
             translatedTaggedMessage,
             translations,
-            handlers,
             currentUser,
             isDisabled,
             approverSelectorContacts,
@@ -176,14 +170,9 @@ class Comment extends React.Component<Props, State> {
                                 className={classNames('bcs-activity-feed-comment-input', {
                                     'bcs-is-disabled': isDisabled
                                 })}
-                                // createComment={this.createCommentHandler}
                                 updateTask={this.updateTaskHandler}
-                                getApproverContactsWithQuery={
-                                    handlers && handlers.contacts ? handlers.contacts.getApproverWithQuery : null
-                                }
-                                getMentionContactsWithQuery={
-                                    handlers && handlers.contacts ? handlers.contacts.getMentionWithQuery : null
-                                }
+                                getApproverContactsWithQuery={getProp(this.props, 'handlers.contacts.approver', noop)}
+                                getMentionContactsWithQuery={getProp(this.props, 'handlers.contacts.mention', noop)}
                                 isOpen={isInputOpen}
                                 user={currentUser}
                                 onCancel={this.approvalCommentFormCancelHandler}
@@ -191,6 +180,7 @@ class Comment extends React.Component<Props, State> {
                                 isEditing={isEditing}
                                 entityId={id}
                                 tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
+                                getAvatarUrl={getAvatarUrl}
                             />
                         ) : null}
                         {!isEditing ? (
