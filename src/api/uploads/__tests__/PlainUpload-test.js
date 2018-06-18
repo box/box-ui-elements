@@ -15,7 +15,7 @@ describe('api/uploads/PlainUpload', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.successCallback = jest.fn();
             upload.uploadSuccessHandler({
-                entries: {}
+                data: { entries: {} }
             });
             expect(upload.successCallback).not.toHaveBeenCalled();
         });
@@ -27,7 +27,7 @@ describe('api/uploads/PlainUpload', () => {
             upload.successCallback = jest.fn();
 
             upload.uploadSuccessHandler({
-                entries
+                data: { entries }
             });
             expect(upload.successCallback).toHaveBeenCalledWith(entries);
         });
