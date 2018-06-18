@@ -8,7 +8,7 @@ exports[`components/ContentSidebar/Skills/Timeline/Timeslice should correctly re
   style={
     Object {
       "backgroundColor": "#0061d5",
-      "left": "30px",
+      "left": "29px",
       "width": "6px",
     }
   }
@@ -24,7 +24,7 @@ exports[`components/ContentSidebar/Skills/Timeline/Timeslice should correctly re
   style={
     Object {
       "backgroundColor": "#0061d5",
-      "left": "30px",
+      "left": "29px",
       "width": "29px",
     }
   }

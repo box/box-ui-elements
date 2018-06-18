@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import ContentSidebar from '../ContentSidebar';
 import messages from '../../messages';
+import SidebarUtils from '../SidebarUtils';
 
 const {
     fileDescriptionInlineErrorTitleMessage,
@@ -12,6 +13,7 @@ const {
     currentUserErrorHeaderMessage
 } = messages;
 
+jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
 
 const file = {
@@ -23,6 +25,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
     const getWrapper = (props) => mount(<ContentSidebar {...props} />, { attachTo: rootElement });
 
     beforeEach(() => {
+        SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
         rootElement = document.createElement('div');
         document.body.appendChild(rootElement);
     });
@@ -32,7 +35,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
     });
 
     describe('componentWillReceiveProps()', () => {
-        test('should reset state to initialState if the fileid has changed', () => {
+        test('should fetch data when file id has changed', () => {
             const props = {
                 fileId: '123456'
             };
@@ -41,10 +44,26 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const newProps = {
                 fileId: 'abcdefg'
             };
-            instance.setState = jest.fn();
+            instance.fetchData = jest.fn();
             instance.componentWillReceiveProps(newProps);
 
-            expect(instance.setState).toBeCalledWith(instance.initialState);
+            expect(instance.fetchData).toBeCalledWith(newProps);
+        });
+
+        test('should set new view when visibility may have changed', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const newProps = {
+                isCollapsed: true
+            };
+            instance.setState({ file });
+
+            instance.setState = jest.fn();
+            instance.getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
+            instance.componentWillReceiveProps(newProps);
+
+            expect(instance.getDefaultSidebarView).toBeCalledWith(true, file);
+            expect(instance.setState).toBeCalledWith({ view: 'view' });
         });
     });
 
@@ -804,6 +823,131 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState({ file });
 
             instance.createTask('text', undefined, undefined, undefined, testErrorCallback);
+        });
+    });
+
+    describe('getDefaultSidebarView()', () => {
+        test('should return undefined when collapsed', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            expect(instance.getDefaultSidebarView(true, {})).toBeUndefined();
+        });
+
+        test('should return undefined when no file', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            expect(instance.getDefaultSidebarView(false)).toBeUndefined();
+        });
+
+        test('should return skills when no current view is skills and skills exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.setState({ view: 'skills' });
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
+        });
+
+        test('should return activity when current view is activity and skills exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.setState({ view: 'activity' });
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
+        });
+
+        test('should return details when current view is details and skills or activity both exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.setState({ view: 'details' });
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('details');
+        });
+
+        test('should default to skills when no current view and skills exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
+        });
+
+        test('should default to activity when no current view and skills dont exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
+        });
+
+        test('should default to details when no current view and skills or activity dont exist', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('details');
+        });
+
+        test('should default to activity when current view is skills but new view has no skills', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.setState({ view: 'skills' });
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
+        });
+
+        test('should default to details when current view is skills but new view has no skills', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.setState({ view: 'skills' });
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('details');
+        });
+
+        test('should default to skills when current view is details but new view has no details', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.setState({ view: 'details' });
+
+            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+
+            expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
         });
     });
 });

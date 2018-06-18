@@ -1,8 +1,10 @@
 @import '../variables';
 
 .bcs-content {
+    border-left: 1px solid $off-white;
+    margin-left: -1px; // -1px to make nav button hover not have blank space
     position: relative;
-    width: 340px;
+    width: 341px; // 1px extra to account for the margin left
 
     .bcs-title {
         border-bottom: 1px solid $off-white;
@@ -10,7 +12,7 @@
         font-weight: 200;
         height: 60px; // Same as section top below
         line-height: 60px;
-        margin: 0 25px 15px 20px;
+        margin: 0 25px;
         padding: 0;
     }
 
@@ -18,13 +20,12 @@
         bottom: 0;
         left: 0;
         overflow: auto;
-        padding-top: 10px;
+        padding-top: 15px;
         position: absolute; // Prevents non-sidebar parts from re-painting
         right: 0;
         top: 60px; // Same as title above
 
         .bcs-scroll-content {
-            height: 100%;
             width: 323px; // 17px less than the total width for scroll bar
         }
     }
