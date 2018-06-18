@@ -13,13 +13,7 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type {
-    CommentHandlers,
-    TaskHandlers,
-    ContactHandlers,
-    VersionHandlers,
-    Translations
-} from '../activityFeedFlowTypes';
+import type { CommentHandlers, TaskHandlers, ContactHandlers, VersionHandlers } from '../activityFeedFlowTypes';
 
 import './ActivityFeed.scss';
 

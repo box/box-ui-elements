@@ -13,13 +13,7 @@ import messages from '../../../messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
 
-import type {
-    CommentHandlers,
-    ContactHandlers,
-    TaskHandlers,
-    Translations,
-    VersionHandlers
-} from '../activityFeedFlowTypes';
+import type { CommentHandlers, ContactHandlers, TaskHandlers, VersionHandlers } from '../activityFeedFlowTypes';
 
 import './Task.scss';
 

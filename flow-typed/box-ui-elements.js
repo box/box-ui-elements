@@ -512,6 +512,11 @@ type Collaborators = {
     entries: Array<SelectorItem>
 };
 
+type Translations = {
+    translationEnabled?: boolean,
+    onTranslate?: Function
+};
+
 type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',
     path: string,

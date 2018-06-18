@@ -13,7 +13,6 @@ import type {
     CommentHandlers,
     ContactHandlers,
     VersionHandlers,
-    Translations,
     FeedItems
 } from '../activityFeedFlowTypes';
 

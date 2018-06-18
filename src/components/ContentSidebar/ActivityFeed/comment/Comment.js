@@ -23,13 +23,7 @@ import Avatar from '../Avatar';
 import messages from '../../../messages';
 
 import './Comment.scss';
-import type {
-    CommentHandlers,
-    VersionHandlers,
-    ContactHandlers,
-    TaskHandlers,
-    Translations
-} from '../activityFeedFlowTypes';
+import type { CommentHandlers, VersionHandlers, ContactHandlers, TaskHandlers } from '../activityFeedFlowTypes';
 
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 

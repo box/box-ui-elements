@@ -25,16 +25,4 @@ export type VersionHandlers = {
     info?: Function
 };
 
-export type InputState = {
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
-    currentUser?: User,
-    isDisabled?: boolean
-};
-
 export type FeedItems = Array<Comment | Task | BoxItemVersion>;
-
-export type Translations = {
-    translationEnabled?: boolean,
-    onTranslate?: Function
-};
