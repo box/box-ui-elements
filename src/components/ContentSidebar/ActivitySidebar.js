@@ -21,6 +21,7 @@ type Props = {
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
     onVersionHistoryClick?: Function,
+    translations?: Translations,
     comments?: Comments,
     tasks?: Tasks,
     versions?: FileVersions,

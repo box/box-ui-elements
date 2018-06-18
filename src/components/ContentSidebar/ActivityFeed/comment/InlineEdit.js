@@ -13,7 +13,7 @@ import messages from '../../../messages';
 
 type Props = {
     toEdit: Function,
-    id: Function,
+    id: string,
     intl: any
 };
 

@@ -15,9 +15,8 @@ import messages from '../../../messages';
 type Props = {
     approvalDate: ?number,
     approvers: SelectorItems,
-    approverSelectorContacts: SelectorItems,
+    approverSelectorContacts?: SelectorItems,
     approverSelectorError: string,
-    formatMessage: Function,
     onApprovalDateChange: Function,
     onApproverSelectorInput: Function,
     onApproverSelectorRemove: Function,

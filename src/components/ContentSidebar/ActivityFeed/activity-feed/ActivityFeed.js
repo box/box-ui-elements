@@ -13,13 +13,7 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type {
-    CommentHandlers,
-    TaskHandlers,
-    ContactHandlers,
-    VersionHandlers,
-    Translations
-} from '../activityFeedFlowTypes';
+import type { CommentHandlers, TaskHandlers, ContactHandlers, VersionHandlers } from '../activityFeedFlowTypes';
 
 import './ActivityFeed.scss';
 
@@ -481,6 +475,8 @@ class ActivityFeed extends React.Component<Props, State> {
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}
+                            approverSelectorContacts={approverSelectorContacts}
+                            mentionSelectorContacts={mentionSelectorContacts}
                         />
                     )}
                 </div>

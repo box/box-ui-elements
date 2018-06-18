@@ -22,9 +22,9 @@ class UserLink extends React.PureComponent<Props, State> {
     state = {};
 
     /**
-     * Success handler for getting avatar url
+     * Success handler for getting profile url
      *
-     * @param {string} avatarUrl the user avatar url
+     * @param {string} profileUrl the user profile url
      */
     getProfileUrlHandler = (profileUrl?: string) => {
         this.setState({
@@ -33,9 +33,9 @@ class UserLink extends React.PureComponent<Props, State> {
     };
 
     /**
-     * Gets the avatar URL for the user from the getAvatarUrl prop
+     * Gets the profile URL for the user from the getUserProfileUrl prop
      *
-     * @return {Promise} a promise which resolves with the avatarUrl string
+     * @return {Promise} a promise which resolves with the profileUrl string
      */
     getUserProfileUrl() {
         const { id, getUserProfileUrl }: Props = this.props;
@@ -50,7 +50,7 @@ class UserLink extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { name, ...rest }: Props = this.props;
+        const { name, getUserProfileUrl, ...rest }: Props = this.props;
         const { profileUrl }: State = this.state;
 
         return profileUrl ? (
