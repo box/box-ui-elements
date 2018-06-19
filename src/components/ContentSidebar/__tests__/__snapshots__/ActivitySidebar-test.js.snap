@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/ActivitySidebar should render the activity feed sidebar 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Activity"
+      id="be.sidebarActivityTitle"
+    />
+  }
+>
+  <ActivityFeed
+    handlers={
+      Object {
+        "comments": Object {
+          "create": undefined,
+          "delete": undefined,
+        },
+        "contacts": Object {
+          "approver": undefined,
+          "mention": undefined,
+        },
+        "tasks": Object {
+          "create": undefined,
+          "delete": undefined,
+          "edit": undefined,
+          "onTaskAssignmentUpdate": undefined,
+        },
+        "versions": Object {
+          "info": undefined,
+        },
+      }
+    }
+    isDisabled={false}
+    isLoading={false}
+  />
+</SidebarContent>
+`;

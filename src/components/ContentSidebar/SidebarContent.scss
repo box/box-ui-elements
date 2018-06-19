@@ -28,5 +28,14 @@
         .bcs-scroll-content {
             width: 323px; // 17px less than the total width for scroll bar
         }
+
+        .bcs.bcs-activity & {
+            padding-top: 0;
+
+            .bcs-scroll-content {
+                height: 100%;
+                width: 100%;
+            }
+        }
     }
 }
