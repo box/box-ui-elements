@@ -57,7 +57,6 @@ type Props = {
     cache?: APICache,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    translations?: Translations,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onAccessStatsClick?: Function,
@@ -1035,11 +1034,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
+        const { fileId = '' } = this.props;
         if (SidebarUtils.canHaveSidebar(this.props)) {
             if (typeof user === 'undefined') {
                 this.api
                     .getUsersAPI(shouldDestroy)
-                    .get('', this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
+                    .get(fileId, this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
             } else {
                 this.setState({ currentUser: user, currentUserError: undefined });
             }
