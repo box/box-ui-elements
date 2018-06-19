@@ -20,8 +20,8 @@ type State = {
     size: Size
 };
 
-const CROSS_OVER_WIDTH_SMALL = 600;
-const CROSS_OVER_WIDTH_MEDIUM = 800;
+const CROSS_OVER_WIDTH_SMALL = 700;
+const CROSS_OVER_WIDTH_MEDIUM = 1000;
 const HAS_TOUCH = !!('ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch));
 
 function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<any> {
@@ -43,8 +43,25 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
         constructor(props: Props) {
             super(props);
             this.state = {
-                size: props.size || SIZE_LARGE
+                size: props.size || this.getSize(window.innerWidth)
             };
+        }
+
+        /**
+         * Calculates the new size
+         *
+         * @private
+         * @param {Component} react component
+         * @return {void}
+         */
+        getSize(width: number) {
+            let size = SIZE_LARGE;
+            if (width <= CROSS_OVER_WIDTH_SMALL) {
+                size = SIZE_SMALL;
+            } else if (width <= CROSS_OVER_WIDTH_MEDIUM) {
+                size = SIZE_MEDIUM;
+            }
+            return size;
         }
 
         /**
@@ -55,13 +72,7 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
          * @return {void}
          */
         onResize = ({ bounds: { width } }: { bounds: ClientRect }) => {
-            let size = SIZE_LARGE;
-            if (width <= CROSS_OVER_WIDTH_SMALL) {
-                size = SIZE_SMALL;
-            } else if (width <= CROSS_OVER_WIDTH_MEDIUM) {
-                size = SIZE_MEDIUM;
-            }
-            this.setState({ size });
+            this.setState({ size: this.getSize(width) });
         };
 
         /**

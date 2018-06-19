@@ -74,7 +74,7 @@ describe('components/ContentSidebar/SidebarNav', () => {
         expect(
             wrapper
                 .find(SidebarNavButton)
-                .at(1)
+                .at(0)
                 .prop('isSelected')
         ).toBeTruthy();
         expect(wrapper).toMatchSnapshot();

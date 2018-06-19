@@ -26,7 +26,7 @@ import TokenService from '../../util/TokenService';
 import { isValidBoxFile } from '../../util/fields';
 import { isInputElement, focus } from '../../util/dom';
 import { getTypedFileId } from '../../util/file';
-import { shouldRenderSidebar } from '../ContentSidebar/sidebarUtil';
+import SidebarUtils from '../ContentSidebar/SidebarUtils';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -43,11 +43,10 @@ import './ContentPreview.scss';
 type Props = {
     fileId: string,
     version: string,
-    isSmall: boolean,
+    isLarge: boolean,
     autoFocus: boolean,
     useHotkeys: boolean,
     contentSidebarProps: ContentSidebarProps,
-    hasSidebar: boolean,
     canDownload?: boolean,
     showDownload?: boolean,
     hasHeader: boolean,
@@ -102,7 +101,6 @@ class ContentPreview extends PureComponent<Props, State> {
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         language: DEFAULT_PREVIEW_LOCALE,
         version: DEFAULT_PREVIEW_VERSION,
-        hasSidebar: false,
         canDownload: true,
         showDownload: true,
         hasHeader: false,
@@ -166,12 +164,15 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { fileId, token }: Props = this.props;
+        const { fileId, token, isLarge }: Props = this.props;
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
+        const hasSizeChanged = nextProps.isLarge !== isLarge;
 
         if (hasTokenChanged || hasFileIdChanged) {
             this.fetchFile(nextProps.fileId);
+        } else if (hasSizeChanged) {
+            this.forceUpdate();
         }
     }
 
@@ -494,7 +495,6 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!id) {
             throw InvalidIdError;
         }
-        const { hasSidebar }: Props = this.props;
         this.api
             .getFileAPI()
             .file(
@@ -502,7 +502,7 @@ class ContentPreview extends PureComponent<Props, State> {
                 successCallback || this.fetchFileSuccessCallback,
                 errorCallback || this.errorCallback,
                 false,
-                hasSidebar
+                SidebarUtils.canHaveSidebar(this.props.contentSidebarProps)
             );
     }
 
@@ -730,13 +730,12 @@ class ContentPreview extends PureComponent<Props, State> {
     render() {
         const {
             apiHost,
-            isSmall,
+            isLarge,
             token,
             language,
             messages,
             className,
             contentSidebarProps,
-            hasSidebar,
             hasHeader,
             onClose,
             measureRef,
@@ -752,7 +751,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
         const hasRightNavigation = collection.length > 1 && fileIndex > -1 && fileIndex < collection.length - 1;
         const isValidFile = isValidBoxFile(file, true, true);
-        const isSidebarVisible = isValidFile && hasSidebar && shouldRenderSidebar(contentSidebarProps);
+        const isSidebarVisible = isValidFile && SidebarUtils.shouldRenderSidebar(contentSidebarProps, file);
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -793,7 +792,7 @@ class ContentPreview extends PureComponent<Props, State> {
                         {isSidebarVisible && (
                             <ContentSidebar
                                 {...contentSidebarProps}
-                                isSmall={isSmall}
+                                isCollapsed={!isLarge}
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}
