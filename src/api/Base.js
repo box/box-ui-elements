@@ -220,6 +220,7 @@ class Base {
      * @param {Function} errorCallback - The error callback
      * @param {Object} params request params
      * @param {string} url - API url
+     * @returns {Promise}
      */
     get({
         id,
@@ -233,7 +234,7 @@ class Base {
         errorCallback: Function,
         params?: Object,
         url?: string
-    }): void {
+    }): Promise<any> {
         const apiUrl = url || this.getUrl(id);
         return this.makeRequest(HTTP_GET, id, apiUrl, successCallback, errorCallback, params);
     }

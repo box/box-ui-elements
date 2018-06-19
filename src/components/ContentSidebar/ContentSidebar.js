@@ -544,14 +544,14 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Update Tasks to include task assignments
      *
      * @private
-     * @param {Array<Task>} entries - Box task entries
+     * @param {Array<TaskAssignment>} entries - Box task assignment entries
      * @param {TaskAssignments} assignments - Box task assigments
      * @return {TaskAssignments} Updated Box task assignments
      */
-    populateTaskAssignments(entries, assignments) {
+    populateTaskAssignments(entries: Array<TaskAssignment>, assignments: TaskAssignments): TaskAssignments {
         return {
             total_count: assignments.entries.length,
-            entries: entries.map((item) => {
+            entries: entries.map((item: TaskAssignment) => {
                 const assignment = assignments.entries.find((a) => a.id === item.id);
                 if (assignment) {
                     return {
@@ -571,7 +571,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTaskAssignmentsSuccessCallback = (assignments: TaskAssignments): void => {
-        const { entries, total_count } = this.state.tasksWithoutAssignments;
+        const { tasksWithoutAssignments } = this.state;
+        if (!tasksWithoutAssignments) {
+            return;
+        }
+
+        const { entries, total_count } = tasksWithoutAssignments;
         this.setState({
             tasksWithoutAssignments: {
                 entries: entries.map((task) => ({
@@ -1076,7 +1081,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTaskAssignments(tasks: Tasks, shouldDestroy?: boolean = false): void {
-        if (!SidebarUtils.canHaveSidebar(this.props)) {
+        const { fileId }: Props = this.props;
+        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
             return;
         }
 
@@ -1087,7 +1093,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         };
 
         const { entries } = tasks;
-        const { fileId }: Props = this.props;
         const taskAssignmentPromises = [];
         entries.forEach((task) => {
             const promise = this.api

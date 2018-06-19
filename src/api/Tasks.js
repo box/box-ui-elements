@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT, HTTP_GET } from '../constants';
+import { PERMISSION_CAN_COMMENT } from '../constants';
 
 class Tasks extends Base {
     /**
@@ -61,7 +61,7 @@ class Tasks extends Base {
         successCallback: Function,
         errorCallback: Function,
         params?: Object
-    ): void {
+    ): Promise<any> {
         const url = `${this.tasksUrl(taskId)}/assignments`;
         return this.get({ id, successCallback, errorCallback, params, url });
     }

@@ -16,7 +16,6 @@ import RejectedAssignment from './RejectedAssignment';
 import type { CommentHandlers, ContactHandlers, TaskHandlers, VersionHandlers } from '../activityFeedFlowTypes';
 
 import './Task.scss';
-import TaskAssignments from '../../../../api/TaskAssignments';
 
 const TASK_APPROVED = 'approved';
 const TASK_REJECTED = 'rejected';
@@ -112,36 +111,38 @@ class Task extends React.Component<Props> {
                         ) : null}
                     </div>
                     <div className='bcs-task-assignees'>
-                        {task_assignment_collection.entries.map(
-                            ({ id: assignmentId, assigned_to, resolution_state }) => {
-                                switch (resolution_state) {
-                                    case TASK_COMPLETED:
-                                    case TASK_APPROVED:
-                                        return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
-                                    case TASK_REJECTED:
-                                        return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
-                                    case TASK_INCOMPLETE:
-                                    default:
-                                        return (
-                                            <PendingAssignment
-                                                {...assigned_to}
-                                                key={assigned_to.id}
-                                                onTaskApproval={() =>
-                                                    onTaskAssignmentUpdate(id, assignmentId, TASK_APPROVED)
-                                                }
-                                                onTaskReject={() =>
-                                                    onTaskAssignmentUpdate(id, assignmentId, TASK_REJECTED)
-                                                }
-                                                shouldShowActions={
-                                                    onTaskAssignmentUpdate &&
-                                                    currentUser &&
-                                                    assigned_to.id === currentUser.id
-                                                }
-                                            />
-                                        );
+                        {task_assignment_collection && task_assignment_collection.entries
+                            ? task_assignment_collection.entries.map(
+                                ({ id: assignmentId, assigned_to, resolution_state }) => {
+                                    switch (resolution_state) {
+                                        case TASK_COMPLETED:
+                                        case TASK_APPROVED:
+                                            return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
+                                        case TASK_REJECTED:
+                                            return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
+                                        case TASK_INCOMPLETE:
+                                        default:
+                                            return (
+                                                <PendingAssignment
+                                                    {...assigned_to}
+                                                    key={assigned_to.id}
+                                                    onTaskApproval={() =>
+                                                        onTaskAssignmentUpdate(id, assignmentId, TASK_APPROVED)
+                                                    }
+                                                    onTaskReject={() =>
+                                                        onTaskAssignmentUpdate(id, assignmentId, TASK_REJECTED)
+                                                    }
+                                                    shouldShowActions={
+                                                        onTaskAssignmentUpdate &&
+                                                          currentUser &&
+                                                          assigned_to.id === currentUser.id
+                                                    }
+                                                />
+                                            );
+                                    }
                                 }
-                            }
-                        )}
+                            )
+                            : null}
                     </div>
                 </div>
             </div>
