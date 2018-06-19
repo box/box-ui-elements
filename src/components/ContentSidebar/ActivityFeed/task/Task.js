@@ -115,7 +115,13 @@ class Task extends React.Component<Props> {
                         {task_assignment_collection.entries.map(
                             ({ id: assignmentId, assigned_to, resolution_state }) => {
                                 switch (resolution_state) {
+                                    case TASK_COMPLETED:
+                                    case TASK_APPROVED:
+                                        return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
+                                    case TASK_REJECTED:
+                                        return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
                                     case TASK_INCOMPLETE:
+                                    default:
                                         return (
                                             <PendingAssignment
                                                 {...assigned_to}
@@ -133,12 +139,6 @@ class Task extends React.Component<Props> {
                                                 }
                                             />
                                         );
-                                    case TASK_COMPLETED:
-                                    case TASK_APPROVED:
-                                        return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
-                                    default:
-                                        // NOTE: Tasks with a 'rejected' status are improperly returned from the API w/ an unknown resolution_status. Default setting any task assignments without an explicit resolution_status to be a rejected assignment.
-                                        return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
                                 }
                             }
                         )}

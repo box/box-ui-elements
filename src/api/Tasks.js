@@ -48,23 +48,22 @@ class Tasks extends Base {
     /**
      * API for creating a task on a file
      *
-     * @param {BoxItem} file - File object for which we are creating a task
+     * @param {string} id - a box file id
      * @param {string} taskId - Task ID
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {Object} params request params
-     * @return {void}
+     * @return {Promise}
      */
     getAssignments(
-        file: BoxItem,
+        id: string,
         taskId: string,
         successCallback: Function,
         errorCallback: Function,
         params?: Object
     ): void {
-        const { id = '' } = file;
         const url = `${this.tasksUrl(taskId)}/assignments`;
-        this.makeRequest(HTTP_GET, id, url, successCallback, errorCallback, params);
+        return this.makeRequest(HTTP_GET, id, url, successCallback, errorCallback, params);
     }
 
     /**

@@ -470,7 +470,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File tasks fetch success callback
      *
      * @private
-     * @param {Object} tasksWithoutAssignments - Box task without assignments
+     * @param {Object} tasks - Box task without assignments
      * @return {void}
      */
     fetchTasksSuccessCallback = (tasksWithoutAssignments: Tasks): void => {
@@ -511,7 +511,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchTaskAssignmentsSuccessCallback = (assignments: TaskAssignments): void => {
         const { entries, total_count } = this.state.tasksWithoutAssignments;
         this.setState({
-            tasks: {
+            tasksWithoutAssignments: {
                 entries: entries.map((task) => ({
                     ...task,
                     task_assignment_collection: this.replaceTaskAssignments(
@@ -1022,17 +1022,25 @@ class ContentSidebar extends PureComponent<Props, State> {
         };
 
         const { entries } = tasks;
-        const { file } = this.state;
+        const { fileId }: Props = this.props;
+        const taskAssignmentPromises = [];
         entries.forEach((task) => {
-            this.api
+            const promise = this.api
                 .getTasksAPI(shouldDestroy)
                 .getAssignments(
-                    file,
+                    fileId,
                     task.id,
                     this.fetchTaskAssignmentsSuccessCallback,
                     this.fetchTasksErrorCallback,
                     requestData
                 );
+            taskAssignmentPromises.push(promise);
+        });
+
+        Promise.all(taskAssignmentPromises).then(() => {
+            this.setState({
+                tasks: this.state.tasksWithoutAssignments
+            });
         });
     }
 
