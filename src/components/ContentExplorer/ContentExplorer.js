@@ -25,6 +25,7 @@ import makeResponsive from '../makeResponsive';
 import openUrlInsideIframe from '../../util/iframe';
 import { isFocusableElement, isInputElement, focus } from '../../util/dom';
 import Internationalize from '../Internationalize';
+import SidebarUtils from '../ContentSidebar/SidebarUtils';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -155,7 +156,9 @@ class ContentExplorer extends Component<Props, State> {
         onUpload: noop,
         onNavigate: noop,
         defaultView: DEFAULT_VIEW_FILES,
-        contentPreviewProps: {}
+        contentPreviewProps: {
+            contentSidebarProps: {}
+        }
     };
 
     /**
@@ -395,7 +398,6 @@ class ContentExplorer extends Component<Props, State> {
     fetchFolder = (id?: string, triggerNavigationEvent: boolean = true, forceFetch: boolean = false) => {
         const { rootFolderId, canPreview, contentPreviewProps }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
-        const { hasSidebar }: ContentPreviewProps = contentPreviewProps;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
 
         // If we are navigating around, aka not first load
@@ -424,7 +426,7 @@ class ContentExplorer extends Component<Props, State> {
             this.errorCallback,
             forceFetch,
             canPreview,
-            hasSidebar
+            SidebarUtils.canHaveSidebar(contentPreviewProps.contentSidebarProps)
         );
     };
 
@@ -491,7 +493,6 @@ class ContentExplorer extends Component<Props, State> {
     debouncedSearch = debounce((id: string, query: string, forceFetch?: boolean) => {
         const { canPreview, contentPreviewProps }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
-        const { hasSidebar }: ContentPreviewProps = contentPreviewProps;
         this.api
             .getSearchAPI()
             .search(
@@ -503,7 +504,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.errorCallback,
                 forceFetch,
                 canPreview,
-                hasSidebar
+                SidebarUtils.canHaveSidebar(contentPreviewProps.contentSidebarProps)
             );
     }, DEFAULT_SEARCH_DEBOUNCE);
 
@@ -582,7 +583,6 @@ class ContentExplorer extends Component<Props, State> {
     showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
         const { rootFolderId, canPreview, contentPreviewProps }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
-        const { hasSidebar }: ContentPreviewProps = contentPreviewProps;
 
         // Recents are sorted by a different date field than the rest
         const by = sortBy === FIELD_MODIFIED_AT ? FIELD_INTERACTED_AT : sortBy;
@@ -605,7 +605,7 @@ class ContentExplorer extends Component<Props, State> {
             this.errorCallback,
             forceFetch,
             canPreview,
-            hasSidebar
+            SidebarUtils.canHaveSidebar(contentPreviewProps.contentSidebarProps)
         );
     }
 

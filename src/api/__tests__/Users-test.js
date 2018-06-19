@@ -11,9 +11,11 @@ describe('api/Users', () => {
         test('should return correct users api url without id', () => {
             expect(users.getUrl()).toBe('https://api.box.com/2.0/users/me');
         });
+    });
 
-        test('should return correct users api url with id', () => {
-            expect(users.getUrl('foo')).toBe('https://api.box.com/2.0/users/foo');
+    describe('getAvatarUrl()', () => {
+        test('should return correct users avatar url', () => {
+            expect(users.getAvatarUrl('foo')).toBe('https://api.box.com/2.0/users/foo/avatar');
         });
     });
 });
