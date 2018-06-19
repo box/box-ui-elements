@@ -75,19 +75,6 @@ exports[`components/ContentSidebar/SidebarNav should render skills tab 1`] = `
 exports[`components/ContentSidebar/SidebarNav should select activity tab 1`] = `
 <nav>
   <SidebarNavButton
-    interactionTarget="sidebarskills"
-    isSelected={false}
-    onClick={[Function]}
-    tooltip={
-      <FormattedMessage
-        defaultMessage="Skills"
-        id="be.sidebarSkillsTitle"
-      />
-    }
-  >
-    <IconMagicWand />
-  </SidebarNavButton>
-  <SidebarNavButton
     interactionTarget="sidebaractivity"
     isSelected={true}
     onClick={[Function]}
@@ -99,6 +86,19 @@ exports[`components/ContentSidebar/SidebarNav should select activity tab 1`] = `
     }
   >
     <IconChatRound />
+  </SidebarNavButton>
+  <SidebarNavButton
+    interactionTarget="sidebarskills"
+    isSelected={false}
+    onClick={[Function]}
+    tooltip={
+      <FormattedMessage
+        defaultMessage="Skills"
+        id="be.sidebarSkillsTitle"
+      />
+    }
+  >
+    <IconMagicWand />
   </SidebarNavButton>
   <SidebarNavButton
     interactionTarget="sidebarmetadata"

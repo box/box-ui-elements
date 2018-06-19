@@ -4,8 +4,6 @@ exports[`components/ContentSidebar/Skills/Sidebar should render activity sidebar
 <React.Fragment>
   <SidebarNav
     hasActivityFeed={true}
-    hasDetails={false}
-    onToggle={[Function]}
     selectedView="activity"
   />
   <ActivitySidebar />
@@ -16,31 +14,22 @@ exports[`components/ContentSidebar/Skills/Sidebar should render details sidebar 
 <React.Fragment>
   <SidebarNav
     hasDetails={true}
-    onToggle={[Function]}
     selectedView="details"
   />
-  <DetailsSidebar
-    hasProperties={true}
-  />
+  <DetailsSidebar />
 </React.Fragment>
 `;
 
 exports[`components/ContentSidebar/Skills/Sidebar should render no sidebar 1`] = `
 <React.Fragment>
-  <SidebarNav
-    hasDetails={false}
-    onToggle={[Function]}
-    selectedView="details"
-  />
+  <SidebarNav />
 </React.Fragment>
 `;
 
 exports[`components/ContentSidebar/Skills/Sidebar should render skills sidebar 1`] = `
 <React.Fragment>
   <SidebarNav
-    hasDetails={false}
     hasSkills={true}
-    onToggle={[Function]}
     selectedView="skills"
   />
   <SkillsSidebar />
