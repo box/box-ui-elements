@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT, HTTP_GET } from '../constants';
+import { PERMISSION_CAN_COMMENT } from '../constants';
 
 class Tasks extends Base {
     /**
