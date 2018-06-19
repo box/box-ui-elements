@@ -219,11 +219,23 @@ class Base {
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      * @param {Object} params request params
-     * @param {string} customUrl - optional custom API url
+     * @param {string} url - API url
      */
-    get(id: string, successCallback: Function, errorCallback: Function, params?: Object, customUrl?: string): void {
-        const url = customUrl || this.getUrl(id);
-        return this.makeRequest(HTTP_GET, id, url, successCallback, errorCallback, params);
+    get({
+        id,
+        successCallback,
+        errorCallback,
+        params,
+        url
+    }: {
+        id: string,
+        successCallback: Function,
+        errorCallback: Function,
+        params?: Object,
+        url?: string
+    }): void {
+        const apiUrl = url || this.getUrl(id);
+        return this.makeRequest(HTTP_GET, id, apiUrl, successCallback, errorCallback, params);
     }
 
     /**

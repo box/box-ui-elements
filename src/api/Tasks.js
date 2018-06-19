@@ -63,7 +63,7 @@ class Tasks extends Base {
         params?: Object
     ): void {
         const url = `${this.tasksUrl(taskId)}/assignments`;
-        return this.get(id, successCallback, errorCallback, params, url);
+        return this.get({ id, successCallback, errorCallback, params, url });
     }
 
     /**

@@ -1059,9 +1059,12 @@ class ContentSidebar extends PureComponent<Props, State> {
         };
 
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api
-                .getTasksAPI(shouldDestroy)
-                .get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback, requestData);
+            this.api.getTasksAPI(shouldDestroy).get({
+                id,
+                successCallback: this.fetchTasksSuccessCallback,
+                errorCallback: this.fetchTasksErrorCallback,
+                params: requestData
+            });
         }
     }
 
@@ -1073,7 +1076,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchTaskAssignments(tasks: Tasks, shouldDestroy?: boolean = false): void {
-        if (!shouldRenderSidebar(this.props)) {
+        if (!SidebarUtils.canHaveSidebar(this.props)) {
             return;
         }
 
@@ -1115,9 +1118,11 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFileAccessStats(id: string, shouldDestroy?: boolean = false): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api
-                .getFileAccessStatsAPI(shouldDestroy)
-                .get(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
+            this.api.getFileAccessStatsAPI(shouldDestroy).get({
+                id,
+                successCallback: this.fetchFileAccessStatsSuccessCallback,
+                errorCallback: this.fetchFileAccessStatsErrorCallback
+            });
         }
     }
 
@@ -1132,9 +1137,11 @@ class ContentSidebar extends PureComponent<Props, State> {
         const { fileId = '' } = this.props;
         if (SidebarUtils.canHaveSidebar(this.props)) {
             if (typeof user === 'undefined') {
-                this.api
-                    .getUsersAPI(shouldDestroy)
-                    .get(fileId, this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
+                this.api.getUsersAPI(shouldDestroy).get({
+                    id: fileId,
+                    successCallback: this.fetchCurrentUserSuccessCallback,
+                    errorCallback: this.fetchCurrentUserErrorCallback
+                });
             } else {
                 this.setState({ currentUser: user, currentUserError: undefined });
             }
