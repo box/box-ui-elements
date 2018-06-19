@@ -17,20 +17,13 @@ type Props = {
     currentUser?: User,
     file: BoxItem,
     getPreviewer: Function,
+    detailsSidebarProps: Object,
     hasSkills: boolean,
-    hasProperties: boolean,
     hasMetadata: boolean,
-    hasNotices: boolean,
-    hasAccessStats: boolean,
-    hasClassification: boolean,
     hasActivityFeed: boolean,
-    hasVersions: boolean,
     hasSkills: boolean,
     hasDetails: boolean,
-    onAccessStatsClick?: Function,
     onDescriptionChange: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     onSkillChange: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
@@ -42,6 +35,7 @@ type Props = {
     getMentionWithQuery?: Function,
     translations?: Translations,
     versions?: FileVersions,
+    versionError?: Errors,
     comments?: Comments,
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
@@ -62,20 +56,13 @@ const Sidebar = ({
     currentUser,
     file,
     getPreviewer,
-    hasProperties,
     hasMetadata,
-    hasNotices,
-    hasAccessStats,
-    hasClassification,
     hasActivityFeed,
-    hasVersions,
     hasSkills,
     hasDetails,
-    onAccessStatsClick,
+    detailsSidebarProps,
     onDescriptionChange,
     onSkillChange,
-    onClassificationClick,
-    onVersionHistoryClick,
     onCommentCreate,
     onCommentDelete,
     onTaskCreate,
@@ -92,6 +79,7 @@ const Sidebar = ({
     comments,
     commentsError,
     versions,
+    versionError,
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl,
@@ -111,20 +99,13 @@ const Sidebar = ({
             hasDetails && (
                 <DetailsSidebar
                     file={file}
-                    hasProperties={hasProperties}
-                    hasMetadata={hasMetadata}
-                    hasNotices={hasNotices}
-                    hasAccessStats={hasAccessStats}
-                    hasClassification={hasClassification}
-                    hasVersions={hasVersions}
-                    onSkillChange={onSkillChange}
-                    onAccessStatsClick={onAccessStatsClick}
-                    onClassificationClick={onClassificationClick}
                     onDescriptionChange={onDescriptionChange}
-                    onVersionHistoryClick={onVersionHistoryClick}
+                    versions={versions}
+                    versionError={versionError}
                     accessStats={accessStats}
                     accessStatsError={accessStatsError}
                     fileError={fileError}
+                    {...detailsSidebarProps}
                 />
             )}
         {view === SIDEBAR_VIEW_SKILLS &&

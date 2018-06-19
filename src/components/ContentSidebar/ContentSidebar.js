@@ -50,13 +50,9 @@ type Props = {
     currentUser?: User,
     getPreviewer: Function,
     hasSkills: boolean,
-    hasProperties: boolean,
+    detailsSidebarProps: Object,
     hasMetadata: boolean,
-    hasNotices: boolean,
-    hasAccessStats: boolean,
-    hasClassification: boolean,
     hasActivityFeed: boolean,
-    hasVersions: boolean,
     language?: string,
     messages?: StringMap,
     cache?: APICache,
@@ -64,9 +60,6 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onAccessStatsClick?: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
@@ -110,13 +103,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         getPreviewer: noop,
         currentUser: undefined,
         hasSkills: false,
-        hasProperties: false,
         hasMetadata: false,
-        hasNotices: false,
-        hasAccessStats: false,
-        hasClassification: false,
         hasActivityFeed: false,
-        hasVersions: false
+        detailsSidebarProps: {}
     };
 
     initialState: State = {
@@ -260,7 +249,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasActivityFeed, hasAccessStats, currentUser }: Props) {
+    fetchData({ fileId, hasActivityFeed, detailsSidebarProps, currentUser }: Props) {
+        const { hasAccessStats } = detailsSidebarProps;
         if (!fileId) {
             return;
         }
@@ -1285,17 +1275,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             language,
             messages: intlMessages,
             getPreviewer,
-            hasProperties,
+            detailsSidebarProps,
             hasMetadata,
-            hasNotices,
-            hasAccessStats,
-            hasClassification,
             hasActivityFeed,
-            hasVersions,
             className,
-            onVersionHistoryClick,
-            onAccessStatsClick,
-            onClassificationClick,
             onTaskAssignmentUpdate,
             getUserProfileUrl
         }: Props = this.props;
@@ -1327,13 +1310,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         );
 
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const hasDetails = SidebarUtils.shouldRenderDetailsSidebar({
-            hasProperties,
-            hasAccessStats,
-            hasClassification,
-            hasNotices,
-            hasVersions
-        });
+        const hasDetails = SidebarUtils.shouldRenderDetailsSidebar(this.props);
 
         return (
             <Internationalize language={language} messages={intlMessages}>
@@ -1343,23 +1320,16 @@ class ContentSidebar extends PureComponent<Props, State> {
                             <Sidebar
                                 file={((file: any): BoxItem)}
                                 view={view}
+                                detailsSidebarProps={detailsSidebarProps}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}
                                 hasDetails={hasDetails}
-                                hasProperties={hasProperties}
                                 hasMetadata={hasMetadata}
-                                hasNotices={hasNotices}
-                                hasAccessStats={hasAccessStats}
-                                hasClassification={hasClassification}
                                 hasActivityFeed={hasActivityFeed}
                                 onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
-                                onAccessStatsClick={onAccessStatsClick}
-                                onClassificationClick={onClassificationClick}
-                                onVersionHistoryClick={onVersionHistoryClick}
                                 onSkillChange={this.onSkillChange}
-                                hasVersions={hasVersions}
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
                                 versionError={versionError}

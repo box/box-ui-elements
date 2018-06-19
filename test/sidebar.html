@@ -73,31 +73,34 @@
                 const sidebar1 = new ContentSidebar();
                 sidebar1.show(fileId, token, {
                     container: '.sidebar1',
-                    hasProperties: true,
-                    hasNotices: true,
-                    hasAccessStats: true,
-                    hasVersions: true,
-                    hasNotices: true,
-                    onVersionHistoryClick : function(){
-                        alert('hello, world!');
-                    },
-                    onAccessStatsClick: () => {
-                        alert('Hello, world!');
+                    isLarge: true,
+                    detailsSidebarProps: {
+                        hasProperties: true,
+                        hasNotices: true,
+                        hasAccessStats: true,
+                        hasVersions: true,
+                        hasNotices: true,
+                        onVersionHistoryClick : function(){
+                            alert('hello, world!');
+                        },
+                        onAccessStatsClick: () => {
+                            alert('Hello, world!');
+                        }
                     }
                 });
 
                 const sidebar2 = new ContentSidebar();
                 sidebar2.show(fileId, token, {
                     container: '.sidebar2',
-                    hasProperties: true,
-                    hasSkills: true,
-                    hasTitle: true,
-                    hasNotices: true,
-                    hasVersions: true,
-                    hasAccessStats: true,
-                    hasNotices: true,
+                    isLarge: true,
+                    detailsSidebarProps: {
+                        hasProperties: true,
+                        hasSkills: true,
+                        hasNotices: true,
+                        hasVersions: true,
+                        hasAccessStats: true
+                    },
                     hasActivityFeed: true
-
                 });
 
                 const sidebar3 = new ContentSidebar();
@@ -132,10 +135,12 @@
                 });
                 sidebar3.show(fileId, token, {
                     container: '.sidebar3',
-                    hasProperties: true,
+                    detailsSidebarProps: {
+                        hasProperties: true,
+                        hasNotices: true,
+                        hasVersions: true,
+                    },
                     hasSkills: true,
-                    hasNotices: true,
-                    hasVersions: true,
                     hasActivityFeed:true,
                     getUserProfileUrl: (id) => { return Promise.resolve('#'); }
                 });
