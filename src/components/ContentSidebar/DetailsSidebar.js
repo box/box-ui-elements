@@ -91,4 +91,15 @@ const DetailsSidebar = ({
     </SidebarContent>
 );
 
+export type DetailsSidebarProps = {
+    hasNotices: boolean,
+    hasProperties: boolean,
+    hasAccessStats: boolean,
+    hasClassification: boolean,
+    hasVersions: boolean,
+    onAccessStatsClick?: Function,
+    onClassificationClick?: Function,
+    onVersionHistoryClick?: Function
+};
+
 export default DetailsSidebar;

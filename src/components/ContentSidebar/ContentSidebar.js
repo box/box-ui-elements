@@ -14,6 +14,7 @@ import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
+import type { DetailsSidebarProps } from './DetailsSidebar';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 import {
@@ -50,7 +51,7 @@ type Props = {
     currentUser?: User,
     getPreviewer: Function,
     hasSkills: boolean,
-    detailsSidebarProps: Object,
+    detailsSidebarProps: DetailsSidebarProps,
     hasMetadata: boolean,
     hasActivityFeed: boolean,
     language?: string,
