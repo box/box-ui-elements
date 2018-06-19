@@ -105,7 +105,13 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasSkills: false,
         hasMetadata: false,
         hasActivityFeed: false,
-        detailsSidebarProps: {}
+        detailsSidebarProps: {
+            hasProperties: false,
+            hasNotices: false,
+            hasAccessStats: false,
+            hasClassification: false,
+            hasVersions: false
+        }
     };
 
     initialState: State = {
