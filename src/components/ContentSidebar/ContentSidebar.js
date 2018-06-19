@@ -486,7 +486,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {TaskAssignments} assignments - Box task assigments
      * @return {TaskAssignments} Updated Box task assignments
      */
-    replaceTaskAssignments(entries, assignments) {
+    populateTaskAssignments(entries, assignments) {
         return {
             total_count: assignments.entries.length,
             entries: entries.map((item) => {
@@ -514,7 +514,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             tasksWithoutAssignments: {
                 entries: entries.map((task) => ({
                     ...task,
-                    task_assignment_collection: this.replaceTaskAssignments(
+                    task_assignment_collection: this.populateTaskAssignments(
                         task.task_assignment_collection.entries,
                         assignments
                     )
