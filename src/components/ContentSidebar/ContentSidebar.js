@@ -1236,6 +1236,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         const styleClassName = classNames(
             'be bcs',
             {
+                [`bcs-${view}`]: !!view,
                 'bcs-is-open': !!view
             },
             className
