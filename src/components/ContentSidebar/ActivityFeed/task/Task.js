@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
@@ -66,7 +67,7 @@ class Task extends React.Component<Props> {
             isPending,
             onDelete,
             onEdit,
-            onTaskAssignmentUpdate,
+            onTaskAssignmentUpdate = noop,
             permissions,
             message,
             translatedTaggedMessage,
