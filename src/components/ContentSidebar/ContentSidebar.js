@@ -9,6 +9,7 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
+import extend from 'lodash/extend';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
@@ -1271,6 +1272,17 @@ class ContentSidebar extends PureComponent<Props, State> {
     }, DEFAULT_COLLAB_DEBOUNCE);
 
     /**
+     * Returns detailsSidebarProps replacing missing props with their defaults
+     *
+     * @private
+     * @return {DetailsSidebarProps} the merged detailsSidebarProps
+     */
+    getdetailsSidebarProps(): DetailsSidebarProps {
+        const { detailsSidebarProps } = this.props;
+        return extend(ContentSidebar.defaultProps.detailsSidebarProps, detailsSidebarProps);
+    }
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -1282,7 +1294,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             language,
             messages: intlMessages,
             getPreviewer,
-            detailsSidebarProps,
             hasMetadata,
             hasActivityFeed,
             className,
@@ -1319,6 +1330,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.shouldRenderDetailsSidebar(this.props);
 
+        const detailsSidebarPropsWithDefaults = this.getdetailsSidebarProps();
+
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <aside id={this.id} className={styleClassName}>
@@ -1327,7 +1340,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                             <Sidebar
                                 file={((file: any): BoxItem)}
                                 view={view}
-                                detailsSidebarProps={detailsSidebarProps}
+                                detailsSidebarProps={detailsSidebarPropsWithDefaults}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}

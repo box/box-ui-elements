@@ -92,11 +92,11 @@ const DetailsSidebar = ({
 );
 
 export type DetailsSidebarProps = {
-    hasNotices: boolean,
-    hasProperties: boolean,
-    hasAccessStats: boolean,
-    hasClassification: boolean,
-    hasVersions: boolean,
+    hasNotices?: boolean,
+    hasProperties?: boolean,
+    hasAccessStats?: boolean,
+    hasClassification?: boolean,
+    hasVersions?: boolean,
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function
