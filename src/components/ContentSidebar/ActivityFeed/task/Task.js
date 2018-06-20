@@ -13,8 +13,6 @@ import messages from '../../../messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
 
-import type { CommentHandlers, ContactHandlers, TaskHandlers, VersionHandlers } from '../activityFeedFlowTypes';
-
 import './Task.scss';
 
 const TASK_APPROVED = 'approved';
@@ -33,17 +31,11 @@ type Props = {
     currentUser?: User,
     due_at: any,
     error?: ActionItemError,
-    handlers: {
-        comments?: CommentHandlers,
-        tasks?: TaskHandlers,
-        contacts?: ContactHandlers,
-        versions?: VersionHandlers
-    },
     id: string,
     isPending?: boolean,
     onDelete?: Function,
     onEdit?: Function,
-    onTaskAssignmentUpdate: Function,
+    onAssignmentUpdate: Function,
     permissions?: BoxItemPermission,
     translatedTaggedMessage?: string,
     translations?: Translations,
@@ -65,12 +57,11 @@ class Task extends React.Component<Props> {
             currentUser,
             due_at,
             error,
-            handlers,
             id,
             isPending,
             onDelete,
             onEdit,
-            onTaskAssignmentUpdate,
+            onAssignmentUpdate,
             permissions,
             message,
             translatedTaggedMessage,
@@ -87,7 +78,6 @@ class Task extends React.Component<Props> {
                     created_by={created_by}
                     currentUser={currentUser}
                     error={error}
-                    handlers={handlers}
                     id={id}
                     inlineDeleteMessage={messages.taskDeletePrompt}
                     isPending={isPending}
@@ -123,15 +113,11 @@ class Task extends React.Component<Props> {
                                             {...assigneeUser}
                                             key={assigneeUser.id}
                                             onTaskApproval={() =>
-                                                onTaskAssignmentUpdate(id, taskAssignmentId, TASK_APPROVED)
+                                                onAssignmentUpdate(id, taskAssignmentId, TASK_APPROVED)
                                             }
-                                            onTaskReject={() =>
-                                                onTaskAssignmentUpdate(id, taskAssignmentId, TASK_REJECTED)
-                                            }
+                                            onTaskReject={() => onAssignmentUpdate(id, taskAssignmentId, TASK_REJECTED)}
                                             shouldShowActions={
-                                                onTaskAssignmentUpdate &&
-                                                currentUser &&
-                                                assigneeUser.id === currentUser.id
+                                                onAssignmentUpdate && currentUser && assigneeUser.id === currentUser.id
                                             }
                                         />
                                     );

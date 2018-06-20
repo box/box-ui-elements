@@ -23,7 +23,6 @@ import Avatar from '../Avatar';
 import messages from '../../../messages';
 
 import './Comment.scss';
-import type { CommentHandlers, VersionHandlers, ContactHandlers, TaskHandlers } from '../activityFeedFlowTypes';
 
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
@@ -42,12 +41,8 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
-    handlers: {
-        comments?: CommentHandlers,
-        tasks?: TaskHandlers,
-        contacts?: ContactHandlers,
-        versions?: VersionHandlers
-    },
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function,
     currentUser?: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
@@ -112,7 +107,9 @@ class Comment extends React.Component<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             getAvatarUrl,
-            getUserProfileUrl
+            getUserProfileUrl,
+            getApproverWithQuery,
+            getMentionWithQuery
         } = this.props;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
@@ -171,8 +168,8 @@ class Comment extends React.Component<Props, State> {
                                     'bcs-is-disabled': isDisabled
                                 })}
                                 updateTask={this.updateTaskHandler}
-                                getApproverContactsWithQuery={getProp(this.props, 'handlers.contacts.approver', noop)}
-                                getMentionContactsWithQuery={getProp(this.props, 'handlers.contacts.mention', noop)}
+                                getApproverWithQuery={getApproverWithQuery}
+                                getMentionWithQuery={getMentionWithQuery}
                                 isOpen={isInputOpen}
                                 user={currentUser}
                                 onCancel={this.approvalCommentFormCancelHandler}
