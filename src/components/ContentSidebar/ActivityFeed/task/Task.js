@@ -134,7 +134,7 @@ class Task extends React.Component<Props> {
                                                         onTaskAssignmentUpdate(id, assignmentId, TASK_REJECTED)
                                                     }
                                                     shouldShowActions={
-                                                        onTaskAssignmentUpdate &&
+                                                        onTaskAssignmentUpdate !== noop &&
                                                           currentUser &&
                                                           assigned_to.id === currentUser.id
                                                     }

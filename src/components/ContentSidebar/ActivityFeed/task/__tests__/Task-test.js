@@ -25,18 +25,21 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         id: '123125',
         message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
         modified_by: { name: 'Tarrence van As', id: 10 },
-        task_assignment_collection: [
-            {
-                id: 0,
-                user: { name: 'Jake Thomas', id: 1 },
-                status: 'incomplete'
-            },
-            {
-                id: 1,
-                user: { name: 'Peter Pan', id: 2 },
-                status: 'completed'
-            }
-        ],
+        task_assignment_collection: {
+            total_count: 2,
+            entries: [
+                {
+                    id: 0,
+                    assigned_to: { name: 'Jake Thomas', id: 1 },
+                    resolution_state: 'incomplete'
+                },
+                {
+                    id: 1,
+                    assigned_to: { name: 'Peter Pan', id: 2 },
+                    resolution_state: 'completed'
+                }
+            ]
+        },
         permissions: {
             can_delete: true,
             can_edit: true
@@ -60,29 +63,33 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render task', () => {
+    test('should correctly render a pending task', () => {
         const myTask = {
             created_at: Date.now(),
             due_at: Date.now(),
             id: '123125',
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
-            task_assignment_collection: [
-                {
-                    id: 0,
-                    user: { name: 'Jake Thomas', id: 1 },
-                    status: 'incomplete'
-                },
-                {
-                    id: 1,
-                    user: { name: 'Peter Pan', id: 2 },
-                    status: 'completed'
-                }
-            ],
+            permissions: {},
+            task_assignment_collection: {
+                total_count: 2,
+                entries: [
+                    {
+                        id: 0,
+                        assigned_to: { name: 'Jake Thomas', id: 1 },
+                        resolution_state: 'incomplete'
+                    },
+                    {
+                        id: 1,
+                        assigned_to: { name: 'Peter Pan', id: 2 },
+                        resolution_state: 'completed'
+                    }
+                ]
+            },
             isPending: true
         };
-        const wrapper = shallow(<Task currentUser={currentUser} {...myTask} />);
 
+        const wrapper = shallow(<Task currentUser={currentUser} {...myTask} />);
         expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
@@ -172,18 +179,21 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            task_assignment_collection: [
-                {
-                    id: 0,
-                    user: { name: 'Jake Thomas', id: 1 },
-                    status: 'incomplete'
-                },
-                {
-                    id: 1,
-                    user: { name: 'Peter Pan', id: 2 },
-                    status: 'completed'
-                }
-            ]
+            task_assignment_collection: {
+                total_count: 2,
+                entries: [
+                    {
+                        id: 0,
+                        assigned_to: { name: 'Jake Thomas', id: 1 },
+                        resolution_state: 'incomplete'
+                    },
+                    {
+                        id: 1,
+                        assigned_to: { name: 'Peter Pan', id: 2 },
+                        resolution_state: 'completed'
+                    }
+                ]
+            }
         };
 
         const wrapper = shallow(
@@ -208,18 +218,21 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            task_assignment_collection: [
-                {
-                    id: 0,
-                    user: { name: 'Jake Thomas', id: 1 },
-                    status: 'incomplete'
-                },
-                {
-                    id: 1,
-                    user: { name: 'Peter Pan', id: 2 },
-                    status: 'completed'
-                }
-            ]
+            task_assignment_collection: {
+                total_count: 2,
+                entries: [
+                    {
+                        id: 0,
+                        assigned_to: { name: 'Jake Thomas', id: 1 },
+                        resolution_state: 'incomplete'
+                    },
+                    {
+                        id: 1,
+                        assigned_to: { name: 'Peter Pan', id: 2 },
+                        resolution_state: 'completed'
+                    }
+                ]
+            }
         };
 
         const wrapper = mount(
@@ -244,18 +257,21 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            task_assignment_collection: [
-                {
-                    id: 0,
-                    user: { name: 'Jake Thomas', id: 1 },
-                    status: 'incomplete'
-                },
-                {
-                    id: 1,
-                    user: { name: 'Peter Pan', id: 2 },
-                    status: 'completed'
-                }
-            ]
+            task_assignment_collection: {
+                total_count: 2,
+                entries: [
+                    {
+                        id: 0,
+                        assigned_to: { name: 'Jake Thomas', id: 1 },
+                        resolution_state: 'incomplete'
+                    },
+                    {
+                        id: 1,
+                        assigned_to: { name: 'Peter Pan', id: 2 },
+                        resolution_state: 'completed'
+                    }
+                ]
+            }
         };
 
         const wrapper = shallow(
@@ -278,18 +294,21 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
-            task_assignment_collection: [
-                {
-                    id: 0,
-                    user: { name: 'Jake Thomas', id: 1 },
-                    status: 'incomplete'
-                },
-                {
-                    id: 1,
-                    user: { name: 'Peter Pan', id: 2 },
-                    status: 'completed'
-                }
-            ]
+            task_assignment_collection: {
+                total_count: 2,
+                entries: [
+                    {
+                        id: 0,
+                        assigned_to: { name: 'Jake Thomas', id: 1 },
+                        resolution_state: 'incomplete'
+                    },
+                    {
+                        id: 1,
+                        assigned_to: { name: 'Peter Pan', id: 2 },
+                        resolution_state: 'completed'
+                    }
+                ]
+            }
         };
 
         const wrapper = shallow(

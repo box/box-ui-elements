@@ -40,44 +40,6 @@ describe('api/Tasks', () => {
         });
     });
 
-    describe('successHandler()', () => {
-        const task = {
-            type: 'task',
-            id: '1234',
-            created_at: { name: 'Jay-Z', id: 10 },
-            due_at: 1234567891,
-            message: 'test',
-            task_assignment_collection: {
-                entries: []
-            }
-        };
-
-        beforeEach(() => {
-            tasks.format = jest.fn();
-            tasks.successCallback = jest.fn();
-        });
-
-        test('should call the success callback with no data if none provided from API', () => {
-            tasks.successHandler();
-            expect(tasks.successCallback).toBeCalledWith();
-        });
-
-        test('should return API response with properly formatted data', () => {
-            tasks.successHandler({
-                total_count: 2,
-                entries: [task, task]
-            });
-            expect(tasks.successCallback).toBeCalled();
-            expect(tasks.format.mock.calls.length).toBe(2);
-        });
-
-        test('should return properly formatted data if only one task is returned from API', () => {
-            tasks.successHandler(task);
-            expect(tasks.format).toBeCalled();
-            expect(tasks.successCallback).toBeCalled();
-        });
-    });
-
     describe('tasksUrl()', () => {
         test('should add an id if provided', () => {
             expect(tasks.tasksUrl('foo')).toBe('https://api.box.com/2.0/tasks/foo');
@@ -103,8 +65,8 @@ describe('api/Tasks', () => {
             tasks.delete = jest.fn();
             tasks.checkApiCallValidity = jest.fn(() => true);
 
-            const url = 'https://www.foo.com/tasks';
-            tasks.tasksUrl = jest.fn(() => url);
+            const url = 'https://www.foo.com';
+            tasks.getBaseApiUrl = jest.fn(() => url);
         });
 
         describe('createTask()', () => {
@@ -167,6 +129,7 @@ describe('api/Tasks', () => {
                 expect(tasks.put).toBeCalledWith('foo', tasks.tasksUrl(taskId), requestData, successCb, errorCb);
             });
         });
+
         describe('deleteTask()', () => {
             test('should check for valid task delete permissions', () => {
                 tasks.deleteTask({ file, taskId, successCb, errorCb });
@@ -176,6 +139,22 @@ describe('api/Tasks', () => {
             test('should delete a task from the tasks endpoint', () => {
                 tasks.deleteTask({ file, taskId, successCallback: successCb, errorCallback: errorCb });
                 expect(tasks.delete).toBeCalledWith('foo', tasks.tasksUrl(taskId), successCb, errorCb);
+            });
+        });
+
+        describe('getAssignments()', () => {
+            test('should make a correct GET request for assignments for the specified task', () => {
+                const id = 'id';
+                const url = `${tasks.tasksUrl(taskId)}/assignments`;
+                const successCallback = jest.fn();
+                const errorCallback = jest.fn();
+                const params = {
+                    fields: 'start=0'
+                };
+                tasks.get = jest.fn();
+
+                tasks.getAssignments(id, taskId, successCallback, errorCallback, params);
+                expect(tasks.get).toHaveBeenCalledWith({ id, url, successCallback, errorCallback, params });
             });
         });
     });

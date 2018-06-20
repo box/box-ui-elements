@@ -120,16 +120,16 @@ describe('api/Base', () => {
         test('should make a correct GET request', () => {
             const id = 'id';
             const url = 'https://www.foo.com';
-            const successCb = jest.fn();
-            const errorCb = jest.fn();
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
             const params = {
                 fields: 'start=0'
             };
             base.makeRequest = jest.fn();
             base.getUrl = jest.fn(() => url);
 
-            base.get(id, successCb, errorCb, params);
-            expect(base.makeRequest).toHaveBeenCalledWith(HTTP_GET, id, url, successCb, errorCb, params);
+            base.get({ id, successCallback, errorCallback, params });
+            expect(base.makeRequest).toHaveBeenCalledWith(HTTP_GET, id, url, successCallback, errorCallback, params);
         });
     });
 
