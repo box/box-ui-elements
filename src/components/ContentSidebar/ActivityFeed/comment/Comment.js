@@ -41,12 +41,8 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
-    getApproverWithQuery?: Function,
-    getMentionWithQuery?: Function,
     currentUser?: User,
     isDisabled?: boolean,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>
 };
@@ -104,12 +100,8 @@ class Comment extends React.Component<Props, State> {
             translations,
             currentUser,
             isDisabled,
-            approverSelectorContacts,
-            mentionSelectorContacts,
             getAvatarUrl,
-            getUserProfileUrl,
-            getApproverWithQuery,
-            getMentionWithQuery
+            getUserProfileUrl
         } = this.props;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
@@ -162,14 +154,10 @@ class Comment extends React.Component<Props, State> {
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}
-                                approverSelectorContacts={approverSelectorContacts}
-                                mentionSelectorContacts={mentionSelectorContacts}
                                 className={classNames('bcs-activity-feed-comment-input', {
                                     'bcs-is-disabled': isDisabled
                                 })}
                                 updateTask={this.updateTaskHandler}
-                                getApproverWithQuery={getApproverWithQuery}
-                                getMentionWithQuery={getMentionWithQuery}
                                 isOpen={isInputOpen}
                                 user={currentUser}
                                 onCancel={this.approvalCommentFormCancelHandler}

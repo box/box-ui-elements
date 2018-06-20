@@ -40,8 +40,6 @@ type Props = {
     translatedTaggedMessage?: string,
     translations?: Translations,
     isDisabled?: boolean,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     message: string,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>
@@ -66,8 +64,6 @@ class Task extends React.Component<Props> {
             message,
             translatedTaggedMessage,
             translations,
-            approverSelectorContacts,
-            mentionSelectorContacts,
             getAvatarUrl,
             getUserProfileUrl
         } = this.props;
@@ -87,8 +83,6 @@ class Task extends React.Component<Props> {
                     tagged_message={message}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
-                    approverSelectorContacts={approverSelectorContacts}
-                    mentionSelectorContacts={mentionSelectorContacts}
                     getAvatarUrl={getAvatarUrl}
                     getUserProfileUrl={getUserProfileUrl}
                 />

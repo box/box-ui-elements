@@ -27,8 +27,8 @@ type Props = {
     createComment?: Function,
     createTask?: Function,
     updateTask?: Function,
-    getApproverWithQuery: Function,
-    getMentionWithQuery: Function,
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function,
     intl: any,
     isDisabled?: boolean,
     isOpen: boolean,
@@ -172,7 +172,8 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     };
 
     handleApproverSelectorInput = (value: any): void => {
-        this.props.getApproverWithQuery(value);
+        const { getApproverWithQuery = noop } = this.props;
+        getApproverWithQuery(value);
         this.setState({ approverSelectorError: '' });
     };
 
@@ -191,7 +192,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             approverSelectorContacts,
             className,
             createTask,
-            getMentionWithQuery,
+            getMentionWithQuery = noop,
             intl: { formatMessage },
             isDisabled,
             isOpen,

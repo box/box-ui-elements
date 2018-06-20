@@ -11,8 +11,6 @@ import Keywords from '../keywords';
 
 type Props = {
     currentUser?: User,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     items: FeedItems,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
@@ -33,8 +31,6 @@ const ActiveState = ({
     onTaskAssignmentUpdate,
     onVersionInfo,
     translations,
-    approverSelectorContacts,
-    mentionSelectorContacts,
     getAvatarUrl,
     getUserProfileUrl
 }: Props): React.Node => (
@@ -51,8 +47,6 @@ const ActiveState = ({
                                 currentUser={currentUser}
                                 onDelete={onCommentDelete}
                                 translations={translations}
-                                approverSelectorContacts={approverSelectorContacts}
-                                mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
                                 permissions={{
@@ -72,8 +66,6 @@ const ActiveState = ({
                                 onEdit={onTaskEdit}
                                 onAssignmentUpdate={onTaskAssignmentUpdate}
                                 translations={translations}
-                                approverSelectorContacts={approverSelectorContacts}
-                                mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
                                 // permissions are not part of task API so hard code to true
