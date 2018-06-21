@@ -103,6 +103,8 @@ export const FIELD_IS_COMPLETED = 'is_completed';
 export const FIELD_MESSAGE = 'message';
 export const FIELD_TAGGED_MESSAGE = 'tagged_message';
 export const FIELD_TRASHED_AT = 'trashed_at';
+export const FIELD_ASSIGNED_TO = 'assigned_to';
+export const FIELD_RESOLUTION_STATE = 'resolution_state';
 export const METADATA_SKILLS = 'metadata.global.boxSkillsCards';
 export const METADATA_CLASSIFICATION = 'metadata.enterprise.securityClassification-6VMVochwUWo';
 

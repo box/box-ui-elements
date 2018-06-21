@@ -46,30 +46,25 @@ class Tasks extends Base {
     }
 
     /**
-     * Formats the tasks api response to usable data
-     * @param {Object} data the api response data
-     * @return {void}
+     * API for creating a task on a file
+     *
+     * @param {string} id - a box file id
+     * @param {string} taskId - Task ID
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {Object} params request params
+     * @return {Promise}
      */
-    successHandler = (data: any): void => {
-        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
-            return;
-        }
-
-        // There is no response data when deleting a task
-        if (!data) {
-            this.successCallback();
-            return;
-        }
-
-        // We don't have entries when updating/creating a task
-        if (!data.entries) {
-            this.successCallback(this.format(data));
-            return;
-        }
-
-        const tasks = data.entries.map(this.format);
-        this.successCallback({ ...data, entries: tasks });
-    };
+    getAssignments(
+        id: string,
+        taskId: string,
+        successCallback: Function,
+        errorCallback: Function,
+        params?: Object
+    ): Promise<any> {
+        const url = `${this.tasksUrl(taskId)}/assignments`;
+        return this.get({ id, successCallback, errorCallback, params, url });
+    }
 
     /**
      * API for creating a task on a file

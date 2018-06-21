@@ -40,7 +40,9 @@ import {
     FIELD_MESSAGE,
     FIELD_TAGGED_MESSAGE,
     FIELD_DUE_AT,
-    FIELD_TRASHED_AT
+    FIELD_TRASHED_AT,
+    FIELD_ASSIGNED_TO,
+    FIELD_RESOLUTION_STATE
 } from '../constants';
 
 // Optional Box file fields
@@ -99,6 +101,9 @@ export const TASKS_FIELDS_TO_FETCH = [
 
 // Fields needed to get tasks data
 export const VERSIONS_FIELDS_TO_FETCH = [FIELD_TRASHED_AT, FIELD_CREATED_AT, FIELD_MODIFIED_AT, FIELD_MODIFIED_BY];
+
+// Fields needed to get task assignments data
+export const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE];
 
 // Fields needed to get tasks data
 export const COMMENTS_FIELDS_TO_FETCH = [

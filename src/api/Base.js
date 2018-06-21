@@ -219,10 +219,24 @@ class Base {
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      * @param {Object} params request params
+     * @param {string} url - API url
+     * @returns {Promise}
      */
-    get(id: string, successCallback: Function, errorCallback: Function, params?: Object): void {
-        const url = this.getUrl(id);
-        this.makeRequest(HTTP_GET, id, url, successCallback, errorCallback, params);
+    get({
+        id,
+        successCallback,
+        errorCallback,
+        params,
+        url
+    }: {
+        id: string,
+        successCallback: Function,
+        errorCallback: Function,
+        params?: Object,
+        url?: string
+    }): Promise<any> {
+        const apiUrl = url || this.getUrl(id);
+        return this.makeRequest(HTTP_GET, id, apiUrl, successCallback, errorCallback, params);
     }
 
     /**
