@@ -86,8 +86,8 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
-    test('should show actions for current user and if onTaskAssignmentUpdate is defined', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} {...task} onTaskAssignmentUpdate={jest.fn()} />);
+    test('should show actions for current user and if onAssignmentUpdate is defined', () => {
+        const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
 
         expect(
             wrapper
@@ -106,7 +106,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     });
 
     test('should show tooltips when actions are shown', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} {...task} onTaskAssignmentUpdate={jest.fn()} />);
+        const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
         const assignment = shallow(
             wrapper
                 .find('.bcs-task-assignees')
@@ -117,7 +117,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         expect(assignment).toMatchSnapshot();
     });
 
-    test('should not show actions for current user if onTaskAssignmentUpdate is not defined', () => {
+    test('should not show actions for current user if onAssignmentUpdate is not defined', () => {
         const wrapper = shallow(<Task currentUser={currentUser} {...task} />);
 
         expect(
@@ -128,13 +128,13 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         ).toBe(false);
     });
 
-    test('should call onTaskAssignmentUpdate with approved status when check is clicked', () => {
-        const onTaskAssignmentUpdateSpy = jest.fn();
+    test('should call onAssignmentUpdate with approved status when check is clicked', () => {
+        const onAssignmentUpdateSpy = jest.fn();
         const wrapper = mount(
             <Task
                 currentUser={currentUser}
                 {...task}
-                onTaskAssignmentUpdate={onTaskAssignmentUpdateSpy}
+                onAssignmentUpdate={onAssignmentUpdateSpy}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
             />
@@ -143,16 +143,16 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         const checkButton = wrapper.find('.bcs-task-check-btn').hostNodes();
         checkButton.simulate('click');
 
-        expect(onTaskAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'approved');
+        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'approved');
     });
 
-    test('should call onTaskAssignmentUpdate with rejected status when check is clicked', () => {
-        const onTaskAssignmentUpdateSpy = jest.fn();
+    test('should call onAssignmentUpdate with rejected status when check is clicked', () => {
+        const onAssignmentUpdateSpy = jest.fn();
         const wrapper = mount(
             <Task
                 currentUser={currentUser}
                 {...task}
-                onTaskAssignmentUpdate={onTaskAssignmentUpdateSpy}
+                onAssignmentUpdate={onAssignmentUpdateSpy}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
             />
@@ -161,7 +161,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         const checkButton = wrapper.find('.bcs-task-x-btn').hostNodes();
         checkButton.simulate('click');
 
-        expect(onTaskAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'rejected');
+        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'rejected');
     });
 
     test('should not allow user to delete if they lack delete permissions on the comment', () => {

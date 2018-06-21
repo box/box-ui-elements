@@ -146,7 +146,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         this.addPendingItem(comment);
 
-        const createComment = getProp(this.props, 'onCommentCreate', noop);
+        const createComment = this.props.onCommentCreate || noop;
 
         createComment(
             text,
@@ -174,7 +174,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // removeItemByTypeAndId('comment', args.id);
         // delete the comment via V2 API
         // call user passed in onCommentDelete, if it exists
-        const deleteComment = getProp(this.props, 'onCommentDelete', noop);
+        const deleteComment = this.props.onCommentDelete || noop;
         this.updateFeedItemPendingStatus(id, true);
         deleteComment(id, permissions, this.deleteFeedItem, () => this.updateFeedItemPendingStatus(id, false));
     };
@@ -234,7 +234,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // create a placeholder pending task
         // create actual task and send to Box V2 api
         // call user passed in onTaskCreate, if it exists
-        const createTask = getProp(this.props, 'onTaskCreate', noop);
+        const createTask = this.props.onTaskCreate || noop;
         createTask(
             text,
             assignees,
@@ -310,7 +310,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // update task state OR
         // if it fails, revert to previous task state
         // call user passed in onTaskUpdate, if it exists
-        const updateTask = getProp(this.props, 'onTaskUpdate', noop);
+        const updateTask = this.props.onTaskUpdate || noop;
         this.updateFeedItemPendingStatus(id, true);
         updateTask(id, text, this.updateTaskSuccessCallback, () => this.updateFeedItemPendingStatus(id, false));
     };
@@ -325,7 +325,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // removeItemByTypeAndId('task', args.id);
         // delete the task via v2 api
         // call user passed in onTaskDelete, if it exists
-        const deleteTask = getProp(this.props, 'onTaskDelete', noop);
+        const deleteTask = this.props.onTaskDelete || noop;
         this.updateFeedItemPendingStatus(id, true);
         deleteTask(id, this.deleteFeedItem, () => {
             this.updateFeedItemPendingStatus(id, false);
@@ -339,7 +339,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // update assignment via V2 API
         // failure? revert to previous task state
         // call user passed in onTaskAssignmentUpdate, if it exists
-        const updateTaskAssignment = getProp(this.props, 'onTaskAssignmentUpdate', noop);
+        const updateTaskAssignment = this.props.onTaskAssignmentUpdate || noop;
         updateTaskAssignment(taskId, taskAssignmentId, status);
     };
 
@@ -347,7 +347,7 @@ class ActivityFeed extends React.Component<Props, State> {
         // get version number from data
         // open the pop for version history
         // call user passed in onVersionHistoryClick, if it exists
-        const versionInfoHandler = getProp(this.props, 'onVersionHistoryClick', noop);
+        const versionInfoHandler = this.props.onVersionHistoryClick || noop;
         versionInfoHandler(data);
     };
 

@@ -15,7 +15,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
     const render = (props) =>
         mount(
             <ApprovalCommentForm
-                getMentionContactsWithQuery={() => {}}
+                getMentionWithQuery={() => {}}
                 user={{ id: 123, name: 'foo bar' }}
                 intl={intlFake}
                 {...props}
@@ -341,18 +341,18 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
     });
 
     describe('handleApproverSelectorInput()', () => {
-        test('should call getApproverContactsWithQuery() when called', () => {
+        test('should call getApproverWithQuery() when called', () => {
             const value = 'test';
-            const getApproverContactsWithQuery = jest.fn();
-            const wrapper = render({ getApproverContactsWithQuery });
+            const getApproverWithQuery = jest.fn();
+            const wrapper = render({ getApproverWithQuery });
             wrapper.instance().handleApproverSelectorInput(value);
 
-            expect(getApproverContactsWithQuery).toHaveBeenCalledWith(value);
+            expect(getApproverWithQuery).toHaveBeenCalledWith(value);
         });
 
         test('should clear approver selector error when called', () => {
             const wrapper = render({
-                getApproverContactsWithQuery: jest.fn()
+                getApproverWithQuery: jest.fn()
             });
             wrapper.setState({ approverSelectorError: 'test' });
             wrapper.instance().handleApproverSelectorInput('hi');

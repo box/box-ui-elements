@@ -45,7 +45,7 @@ type Props = {
 };
 
 type State = {
-    approvalDate: ?date,
+    approvalDate: ?Date,
     approvers: SelectorItems,
     approverSelectorError: string,
     commentEditorState: any,
@@ -121,7 +121,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     onMentionSelectorChangeHandler = (nextEditorState: any): void =>
         this.setState({ commentEditorState: nextEditorState });
 
-    onApprovalDateChangeHandler = (date: number): void => {
+    onApprovalDateChangeHandler = (date: Date): void => {
         this.setState({ approvalDate: date });
     };
 

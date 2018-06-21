@@ -13,7 +13,7 @@ import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-drop
 import messages from '../../../messages';
 
 type Props = {
-    approvalDate: ?date,
+    approvalDate: ?Date,
     approvers: SelectorItems,
     approverSelectorContacts?: SelectorItems,
     approverSelectorError: string,
