@@ -529,18 +529,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * File tasks fetch success callback
-     *
-     * @private
-     * @param {Object} tasks - Box task without assignments
-     * @return {void}
-     */
-    fetchTasksSuccessCallback = (tasksWithoutAssignments: Tasks): void => {
-        this.setState({ tasksWithoutAssignments, tasksError: undefined });
-        this.fetchTaskAssignments(tasksWithoutAssignments);
-    };
-
-    /**
      * Update Tasks to include task assignments
      *
      * @private
@@ -567,28 +555,22 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File task assignment fetch success callback
      *
      * @private
+     * @param {Tasks} tasks - Box tasks
      * @param {TaskAssignments} assignments - Box task assigment
-     * @return {void}
+     * @return {Object}
      */
-    fetchTaskAssignmentsSuccessCallback = (assignments: TaskAssignments): void => {
-        const { tasksWithoutAssignments } = this.state;
-        if (!tasksWithoutAssignments) {
-            return;
-        }
-
-        const { entries, total_count } = tasksWithoutAssignments;
-        this.setState({
-            tasksWithoutAssignments: {
-                entries: entries.map((task) => ({
-                    ...task,
-                    task_assignment_collection: this.populateTaskAssignments(
-                        task.task_assignment_collection.entries,
-                        assignments
-                    )
-                })),
-                total_count
-            }
-        });
+    fetchTaskAssignmentsSuccessCallback = (tasks: Tasks, assignments: TaskAssignments): void => {
+        const { entries, total_count } = tasks;
+        return {
+            entries: entries.map((task) => ({
+                ...task,
+                task_assignment_collection: this.populateTaskAssignments(
+                    task.task_assignment_collection.entries,
+                    assignments
+                )
+            })),
+            total_count
+        };
     };
 
     /**
@@ -1066,7 +1048,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (SidebarUtils.canHaveSidebar(this.props)) {
             this.api.getTasksAPI(shouldDestroy).get({
                 id,
-                successCallback: this.fetchTasksSuccessCallback,
+                successCallback: this.fetchTaskAssignments,
                 errorCallback: this.fetchTasksErrorCallback,
                 params: requestData
             });
@@ -1080,7 +1062,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} id - File id
      * @return {void}
      */
-    fetchTaskAssignments(tasks: Tasks, shouldDestroy?: boolean = false): void {
+    fetchTaskAssignments = (tasksWithoutAssignments: Tasks, shouldDestroy?: boolean = false): void => {
         const { fileId }: Props = this.props;
         if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
             return;
@@ -1092,27 +1074,24 @@ class ContentSidebar extends PureComponent<Props, State> {
             }
         };
 
-        const { entries } = tasks;
+        let tasks = tasksWithoutAssignments;
+        const { entries } = tasksWithoutAssignments;
         const taskAssignmentPromises = [];
         entries.forEach((task) => {
-            const promise = this.api
-                .getTasksAPI(shouldDestroy)
-                .getAssignments(
-                    fileId,
-                    task.id,
-                    this.fetchTaskAssignmentsSuccessCallback,
-                    this.fetchTasksErrorCallback,
-                    requestData
-                );
+            const promise = this.api.getTasksAPI(shouldDestroy).getAssignments(
+                fileId,
+                task.id,
+                (assignments) => {
+                    tasks = this.fetchTaskAssignmentsSuccessCallback(tasks, assignments);
+                },
+                this.fetchTasksErrorCallback,
+                requestData
+            );
             taskAssignmentPromises.push(promise);
         });
 
-        Promise.all(taskAssignmentPromises).then(() => {
-            this.setState({
-                tasks: this.state.tasksWithoutAssignments
-            });
-        });
-    }
+        Promise.all(taskAssignmentPromises).then(() => this.setState({ tasks }));
+    };
 
     /**
      * Fetches the access stats for a file
