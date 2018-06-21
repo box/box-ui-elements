@@ -516,6 +516,8 @@ type Comments = {
     entries: Array<Comment>
 };
 
+type FeedItems = Array<Comment | Task | BoxItemVersion>;
+
 type Collaborators = {
     next_marker: 'string' | null,
     entries: Array<SelectorItem>

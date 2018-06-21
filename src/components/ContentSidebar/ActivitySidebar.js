@@ -66,25 +66,15 @@ const ActivitySidebar = ({
             mentionSelectorContacts={mentionSelectorContacts}
             currentUser={currentUser}
             isDisabled={isDisabled}
-            handlers={{
-                comments: {
-                    create: onCommentCreate,
-                    delete: onCommentDelete
-                },
-                tasks: {
-                    create: onTaskCreate,
-                    delete: onTaskDelete,
-                    edit: onTaskUpdate,
-                    onTaskAssignmentUpdate
-                },
-                contacts: {
-                    approver: getApproverWithQuery,
-                    mention: getMentionWithQuery
-                },
-                versions: {
-                    info: onVersionHistoryClick
-                }
-            }}
+            onCommentCreate={onCommentCreate}
+            onCommentDelete={onCommentDelete}
+            onTaskCreate={onTaskCreate}
+            onTaskDelete={onTaskDelete}
+            onTaskUpdate={onTaskUpdate}
+            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+            getApproverWithQuery={getApproverWithQuery}
+            getMentionWithQuery={getMentionWithQuery}
+            onVersionHistoryClick={onVersionHistoryClick}
             getAvatarUrl={getAvatarUrl}
             getUserProfileUrl={getUserProfileUrl}
         />

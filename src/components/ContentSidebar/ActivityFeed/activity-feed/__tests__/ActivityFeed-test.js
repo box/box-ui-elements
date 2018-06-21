@@ -50,21 +50,6 @@ const versions = {
 
 const currentUser = { name: 'Kanye West', id: 10 };
 
-const allHandlers = {
-    comments: {
-        create: jest.fn(),
-        delete: jest.fn()
-    },
-    tasks: {
-        create: jest.fn(),
-        delete: jest.fn()
-    },
-    contacts: {
-        approver: jest.fn(),
-        mention: jest.fn()
-    }
-};
-
 const getWrapper = (props) => shallow(<ActivityFeed currentUser={currentUser} {...props} />);
 
 describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
@@ -84,21 +69,17 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 can_comment: true
             }
         };
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should not render approval comment form if comment submit handler is not passed in', () => {
+    test('should not render approval comment form if only comment submit handler is not passed in', () => {
         const file = {
             permissions: {
                 can_comment: true
             }
         };
-        const handlers = {
-            ...allHandlers,
-            comments: null
-        };
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={handlers} />);
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -108,7 +89,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 can_comment: false
             }
         };
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -120,22 +101,18 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
-        const noTaskHandler = {
-            ...allHandlers,
-            tasks: null
-        };
         const file = {
             permissions: {
                 can_comment: true
             }
         };
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={noTaskHandler} />);
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
 
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
     });
 
     test('should show input when approvalCommentFormFocusHandler is called', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
 
         const instance = wrapper.instance();
         instance.approvalCommentFormFocusHandler();
@@ -144,7 +121,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should hide input when approvalCommentFormCancelHandler is called', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
 
         const instance = wrapper.instance();
         instance.approvalCommentFormFocusHandler();
@@ -156,13 +133,14 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should call create comment handler and close input on valid comment submit', () => {
         const createCommentSpy = jest.fn().mockReturnValue(Promise.resolve({}));
-        allHandlers.comments.create = createCommentSpy;
         const file = {
             permissions: {
                 can_comment: true
             }
         };
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={allHandlers} />);
+        const wrapper = shallow(
+            <ActivityFeed file={file} currentUser={currentUser} onCommentCreate={createCommentSpy} />
+        );
 
         const instance = wrapper.instance();
         const approvalCommentForm = wrapper.find('ApprovalCommentForm').at(0);
@@ -177,13 +155,19 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should call create task handler and close input on valid task submit', () => {
         const createTaskSpy = jest.fn();
-        allHandlers.tasks.create = createTaskSpy;
         const file = {
             permissions: {
                 can_comment: true
             }
         };
-        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} handlers={allHandlers} />);
+        const wrapper = shallow(
+            <ActivityFeed
+                file={file}
+                currentUser={currentUser}
+                onCommentCreate={jest.fn()}
+                onTaskCreate={createTaskSpy}
+            />
+        );
 
         const instance = wrapper.instance();
         const approvalCommentForm = wrapper.find('ApprovalCommentForm').at(0);
@@ -197,7 +181,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should stop event propagation onKeyDown', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={allHandlers} />);
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
         const stopPropagationSpy = jest.fn();
         wrapper.find('.bcs-activity-feed').simulate('keydown', {
             nativeEvent: {
@@ -509,13 +493,9 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         let instance;
         const create = jest.fn();
         const message = 'message';
-        const handlers = {
-            comments: {
-                create
-            }
-        };
+
         beforeEach(() => {
-            wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={handlers} />);
+            wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={create} />);
             instance = wrapper.instance();
             instance.addPendingItem = jest.fn();
             instance.updateFeedItem = jest.fn();
@@ -539,19 +519,14 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
 
         test('should invoke createCommentSuccessCallback() with new comment and id on success creating', () => {
-            const createComment = (text, hasMention, onSuccess) => {
+            const onCommentCreate = (text, hasMention, onSuccess) => {
                 const comment = {
                     message,
                     hasMention
                 };
                 onSuccess(comment);
             };
-            const newHandlers = {
-                comments: {
-                    create: createComment
-                }
-            };
-            wrapper.setProps({ handlers: newHandlers });
+            wrapper.setProps({ onCommentCreate });
             instance.createCommentSuccessCallback = jest.fn();
 
             const hasMention = true;
@@ -562,15 +537,10 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
 
         test('should delete pending feed item when creation fails', () => {
-            const createComment = (text, hasMention, onSuccess, onFail) => {
+            const onCommentCreate = (text, hasMention, onSuccess, onFail) => {
                 onFail(new Error('You fail!'));
             };
-            const newHandlers = {
-                comments: {
-                    create: createComment
-                }
-            };
-            wrapper.setProps({ handlers: newHandlers });
+            wrapper.setProps({ onCommentCreate });
             instance.deleteFeedItem = jest.fn();
 
             instance.createComment({ text: message });
@@ -583,6 +553,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('createTaskSuccessCallback()', () => {
         let wrapper;
         let instance;
+
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
             instance = wrapper.instance();
@@ -606,13 +577,9 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         let instance;
         const create = jest.fn();
         const text = 'message';
-        const handlers = {
-            tasks: {
-                create
-            }
-        };
+
         beforeEach(() => {
-            wrapper = shallow(<ActivityFeed currentUser={currentUser} handlers={handlers} />);
+            wrapper = shallow(<ActivityFeed currentUser={currentUser} onTaskCreate={create} />);
             instance = wrapper.instance();
             instance.addPendingItem = jest.fn();
             instance.updateFeedItem = jest.fn();
@@ -648,7 +615,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
 
         test('should invoke createCommentSuccessCallback() with new comment and id on success creating', () => {
-            const createTask = (textContent, assignees, dueAt, onSuccess) => {
+            const onTaskCreate = (textContent, assignees, dueAt, onSuccess) => {
                 const task = {
                     assignees,
                     due_at: dueAt,
@@ -656,12 +623,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 };
                 onSuccess(task);
             };
-            const newHandlers = {
-                tasks: {
-                    create: createTask
-                }
-            };
-            wrapper.setProps({ handlers: newHandlers });
+            wrapper.setProps({ onTaskCreate });
             instance.createTaskSuccessCallback = jest.fn();
 
             const assignees = [];
@@ -680,15 +642,10 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
 
         test('should delete the pending feed item on when failing to create a task', () => {
-            const createTask = (textContent, assignees, dueAt, onSuccess, onFail) => {
+            const onTaskCreate = (textContent, assignees, dueAt, onSuccess, onFail) => {
                 onFail(new Error('You fail!'));
             };
-            const newHandlers = {
-                tasks: {
-                    create: createTask
-                }
-            };
-            wrapper.setProps({ handlers: newHandlers });
+            wrapper.setProps({ onTaskCreate });
             instance.deleteFeedItem = jest.fn();
 
             instance.createTask({ text });
@@ -705,7 +662,8 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 can_edit: false,
                 can_delte: true
             };
-            const wrapper = getWrapper({ handlers: allHandlers });
+            const onCommentDelete = jest.fn();
+            const wrapper = getWrapper({ onCommentDelete });
             wrapper.instance().updateFeedItemPendingStatus = jest.fn();
             wrapper.instance().deleteFeedItem = jest.fn();
             wrapper.instance().feedItemErrorCallback = jest.fn();
@@ -713,7 +671,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
             wrapper.instance().deleteComment({ id, permissions });
 
-            expect(allHandlers.comments.delete).toBeCalledWith(
+            expect(onCommentDelete).toBeCalledWith(
                 id,
                 permissions,
                 wrapper.instance().deleteFeedItem,
@@ -726,7 +684,8 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('deleteTask()', () => {
         test('should call the deleteTask prop if it exists', () => {
             const id = '1;';
-            const wrapper = getWrapper({ handlers: allHandlers });
+            const onTaskDelete = jest.fn();
+            const wrapper = getWrapper({ onTaskDelete });
             wrapper.instance().updateFeedItemPendingStatus = jest.fn();
             wrapper.instance().deleteFeedItem = jest.fn();
             wrapper.instance().feedItemErrorCallback = jest.fn();
@@ -734,11 +693,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
             wrapper.instance().deleteTask({ id });
 
-            expect(allHandlers.tasks.delete).toBeCalledWith(
-                id,
-                wrapper.instance().deleteFeedItem,
-                expect.any(Function)
-            );
+            expect(onTaskDelete).toBeCalledWith(id, wrapper.instance().deleteFeedItem, expect.any(Function));
             expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, true);
         });
     });

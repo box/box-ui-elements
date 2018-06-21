@@ -27,8 +27,8 @@ type Props = {
     createComment?: Function,
     createTask?: Function,
     updateTask?: Function,
-    getApproverContactsWithQuery: Function,
-    getMentionContactsWithQuery: Function,
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function,
     intl: any,
     isDisabled?: boolean,
     isOpen: boolean,
@@ -45,7 +45,7 @@ type Props = {
 };
 
 type State = {
-    approvalDate: ?number,
+    approvalDate: ?Date,
     approvers: SelectorItems,
     approverSelectorError: string,
     commentEditorState: any,
@@ -121,7 +121,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     onMentionSelectorChangeHandler = (nextEditorState: any): void =>
         this.setState({ commentEditorState: nextEditorState });
 
-    onApprovalDateChangeHandler = (date: number): void => {
+    onApprovalDateChangeHandler = (date: Date): void => {
         this.setState({ approvalDate: date });
     };
 
@@ -172,7 +172,8 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     };
 
     handleApproverSelectorInput = (value: any): void => {
-        this.props.getApproverContactsWithQuery(value);
+        const { getApproverWithQuery = noop } = this.props;
+        getApproverWithQuery(value);
         this.setState({ approverSelectorError: '' });
     };
 
@@ -191,7 +192,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             approverSelectorContacts,
             className,
             createTask,
-            getMentionContactsWithQuery,
+            getMentionWithQuery = noop,
             intl: { formatMessage },
             isDisabled,
             isOpen,
@@ -228,7 +229,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             label='Comment'
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
-                            onMention={getMentionContactsWithQuery}
+                            onMention={getMentionWithQuery}
                             placeholder={tagged_message || formatMessage(messages.commentWrite)}
                             validateOnBlur={false}
                         />

@@ -2,7 +2,6 @@
  * @flow
  * @file Activity feed utility methods
  */
-import type { FeedItems } from '../activityFeedFlowTypes';
 
 const ItemTypes = {
     fileVersion: 'file_version',

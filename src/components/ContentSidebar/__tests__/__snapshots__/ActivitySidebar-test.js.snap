@@ -10,27 +10,6 @@ exports[`components/ContentSidebar/ActivitySidebar should render the activity fe
   }
 >
   <ActivityFeed
-    handlers={
-      Object {
-        "comments": Object {
-          "create": undefined,
-          "delete": undefined,
-        },
-        "contacts": Object {
-          "approver": undefined,
-          "mention": undefined,
-        },
-        "tasks": Object {
-          "create": undefined,
-          "delete": undefined,
-          "edit": undefined,
-          "onTaskAssignmentUpdate": undefined,
-        },
-        "versions": Object {
-          "info": undefined,
-        },
-      }
-    }
     isDisabled={false}
     isLoading={false}
   />

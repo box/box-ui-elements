@@ -13,7 +13,6 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-import type { CommentHandlers, TaskHandlers, ContactHandlers, VersionHandlers } from '../activityFeedFlowTypes';
 
 import './ActivityFeed.scss';
 
@@ -27,12 +26,15 @@ type Props = {
     isLoading?: boolean,
     currentUser?: User,
     isDisabled?: boolean,
-    handlers: {
-        comments?: CommentHandlers,
-        tasks?: TaskHandlers,
-        contacts?: ContactHandlers,
-        versions?: VersionHandlers
-    },
+    onCommentCreate?: Function,
+    onCommentDelete?: Function,
+    onTaskCreate?: Function,
+    onTaskDelete?: Function,
+    onTaskUpdate?: Function,
+    onTaskAssignmentUpdate?: Function,
+    getApproverWithQuery?: Function,
+    getMentionWithQuery?: Function,
+    onVersionHistoryClick?: Function,
     translations?: Translations,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>
@@ -144,7 +146,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         this.addPendingItem(comment);
 
-        const createComment = getProp(this.props, 'handlers.comments.create', noop);
+        const createComment = this.props.onCommentCreate || noop;
 
         createComment(
             text,
@@ -171,8 +173,8 @@ class ActivityFeed extends React.Component<Props, State> {
         // remove comment from list of comments
         // removeItemByTypeAndId('comment', args.id);
         // delete the comment via V2 API
-        // call user passed in handlers.comments.delete, if it exists
-        const deleteComment = getProp(this.props, 'handlers.comments.delete', noop);
+        // call user passed in onCommentDelete, if it exists
+        const deleteComment = this.props.onCommentDelete || noop;
         this.updateFeedItemPendingStatus(id, true);
         deleteComment(id, permissions, this.deleteFeedItem, () => this.updateFeedItemPendingStatus(id, false));
     };
@@ -231,8 +233,8 @@ class ActivityFeed extends React.Component<Props, State> {
 
         // create a placeholder pending task
         // create actual task and send to Box V2 api
-        // call user passed in handlers.tasks.create, if it exists
-        const createTask = getProp(this.props, 'handlers.tasks.create', noop);
+        // call user passed in onTaskCreate, if it exists
+        const createTask = this.props.onTaskCreate || noop;
         createTask(
             text,
             assignees,
@@ -307,8 +309,8 @@ class ActivityFeed extends React.Component<Props, State> {
         // update the task via v2 api
         // update task state OR
         // if it fails, revert to previous task state
-        // call user passed in handlers.tasks.edit, if it exists
-        const updateTask = getProp(this.props, 'handlers.tasks.edit', noop);
+        // call user passed in onTaskUpdate, if it exists
+        const updateTask = this.props.onTaskUpdate || noop;
         this.updateFeedItemPendingStatus(id, true);
         updateTask(id, text, this.updateTaskSuccessCallback, () => this.updateFeedItemPendingStatus(id, false));
     };
@@ -322,8 +324,8 @@ class ActivityFeed extends React.Component<Props, State> {
         // remove task from task list
         // removeItemByTypeAndId('task', args.id);
         // delete the task via v2 api
-        // call user passed in handlers.tasks.delete, if it exists
-        const deleteTask = getProp(this.props, 'handlers.tasks.delete', noop);
+        // call user passed in onTaskDelete, if it exists
+        const deleteTask = this.props.onTaskDelete || noop;
         this.updateFeedItemPendingStatus(id, true);
         deleteTask(id, this.deleteFeedItem, () => {
             this.updateFeedItemPendingStatus(id, false);
@@ -336,16 +338,16 @@ class ActivityFeed extends React.Component<Props, State> {
         // add task to state
         // update assignment via V2 API
         // failure? revert to previous task state
-        // call user passed in handlers.tasks.onTaskAssignmentUpdate, if it exists
-        const updateTaskAssignment = getProp(this.props, 'handlers.tasks.onTaskAssignmentUpdate', noop);
+        // call user passed in onTaskAssignmentUpdate, if it exists
+        const updateTaskAssignment = this.props.onTaskAssignmentUpdate || noop;
         updateTaskAssignment(taskId, taskAssignmentId, status);
     };
 
     openVersionHistoryPopup = (data: any): void => {
         // get version number from data
         // open the pop for version history
-        // call user passed in handlers.versions.info, if it exists
-        const versionInfoHandler = getProp(this.props, 'handlers.versions.info', noop);
+        // call user passed in onVersionHistoryClick, if it exists
+        const versionInfoHandler = this.props.onVersionHistoryClick || noop;
         versionInfoHandler(data);
     };
 
@@ -427,7 +429,6 @@ class ActivityFeed extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            handlers,
             isLoading,
             translations,
             approverSelectorContacts,
@@ -436,17 +437,14 @@ class ActivityFeed extends React.Component<Props, State> {
             isDisabled,
             getAvatarUrl,
             getUserProfileUrl,
-            file
+            file,
+            onCommentCreate,
+            getApproverWithQuery,
+            getMentionWithQuery
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
-        const showApprovalCommentForm = !!(
-            currentUser &&
-            hasCommentPermission &&
-            getProp(handlers, 'comments.create', false)
-        );
-        const getApproverWithQuery = getProp(handlers, 'contacts.approver', noop);
-        const getMentionWithQuery = getProp(handlers, 'contacts.mention', noop);
+        const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
 
         return (
             // eslint-disable-next-line
@@ -461,7 +459,6 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
-                            handlers={handlers}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
@@ -475,8 +472,6 @@ class ActivityFeed extends React.Component<Props, State> {
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}
-                            approverSelectorContacts={approverSelectorContacts}
-                            mentionSelectorContacts={mentionSelectorContacts}
                         />
                     )}
                 </div>
@@ -495,8 +490,9 @@ class ActivityFeed extends React.Component<Props, State> {
                         })}
                         createComment={hasCommentPermission ? this.createComment : noop}
                         createTask={hasCommentPermission ? this.createTask : noop}
-                        getApproverContactsWithQuery={getApproverWithQuery}
-                        getMentionContactsWithQuery={getMentionWithQuery}
+                        updateTask={hasCommentPermission ? this.updateTask : noop}
+                        getApproverWithQuery={getApproverWithQuery}
+                        getMentionWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
                         user={currentUser}
                         onCancel={this.approvalCommentFormCancelHandler}
