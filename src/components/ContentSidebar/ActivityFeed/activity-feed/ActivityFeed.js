@@ -225,7 +225,10 @@ class ActivityFeed extends React.Component<Props, State> {
             id: uuid,
             is_completed: false,
             message: text,
-            task_assignment_collection: [],
+            task_assignment_collection: {
+                entries: [],
+                total_count: 0
+            },
             type: 'task'
         };
 
