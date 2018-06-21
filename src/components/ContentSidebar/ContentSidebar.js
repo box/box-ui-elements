@@ -83,7 +83,6 @@ type State = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
-    tasksWithoutAssignments?: Tasks,
     currentUser?: User,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
@@ -127,7 +126,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         versions: undefined,
         comments: undefined,
         tasks: undefined,
-        tasksWithoutAssignments: undefined,
         currentUser: undefined,
         approverSelectorContacts: undefined,
         mentionSelectorContacts: undefined,
@@ -555,8 +553,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File task assignment fetch success callback
      *
      * @private
-     * @param {Tasks} tasks - Box tasks
-     * @param {TaskAssignments} assignments - Box task assigment
+     * @param {Tasks} tasks - Box tasks to be populated with assignments
+     * @param {TaskAssignments} assignments - Fetched Box task assigments for specified task
      * @return {Object}
      */
     fetchTaskAssignmentsSuccessCallback = (tasks: Tasks, assignments: TaskAssignments): Tasks => {
@@ -1114,7 +1112,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Fetches a Users info
      *
      * @private
-     * @param {string} [id] - User id. If missing, gets user that the current token was generated for.
+     * @param {User} [user] - Box User. If missing, gets user that the current token was generated for.
      * @return {void}
      */
     fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
