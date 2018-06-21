@@ -26,7 +26,12 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS
 } from '../../constants';
-import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
+import {
+    COMMENTS_FIELDS_TO_FETCH,
+    TASKS_FIELDS_TO_FETCH,
+    VERSIONS_FIELDS_TO_FETCH,
+    TASK_ASSIGNMENTS_FIELDS_TO_FETCH
+} from '../../util/fields';
 import messages from '../messages';
 import SidebarUtils from './SidebarUtils';
 import '../fonts.scss';
@@ -522,14 +527,48 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * File tasks fetch success callback
+     * Update Tasks to include task assignments
      *
      * @private
-     * @param {Object} tasks - Box task
-     * @return {void}
+     * @param {Array<TaskAssignment>} entries - Box task assignment entries
+     * @param {TaskAssignments} assignments - Box task assigments
+     * @return {TaskAssignments} Updated Box task assignments
      */
-    fetchTasksSuccessCallback = (tasks: Tasks): void => {
-        this.setState({ tasks, tasksError: undefined });
+    populateTaskAssignments(entries: Array<TaskAssignment>, assignments: TaskAssignments): TaskAssignments {
+        return {
+            total_count: assignments.entries.length,
+            entries: entries.map((item: TaskAssignment) => {
+                const assignment = assignments.entries.find((a) => a.id === item.id);
+                if (assignment) {
+                    return {
+                        ...assignment
+                    };
+                }
+                return item;
+            })
+        };
+    }
+
+    /**
+     * File task assignment fetch success callback
+     *
+     * @private
+     * @param {Tasks} tasks - Box tasks to be populated with assignments
+     * @param {TaskAssignments} assignments - Fetched Box task assigments for specified task
+     * @return {Object}
+     */
+    fetchTaskAssignmentsSuccessCallback = (tasks: Tasks, assignments: TaskAssignments): Tasks => {
+        const { entries, total_count } = tasks;
+        return {
+            entries: entries.map((task) => ({
+                ...task,
+                task_assignment_collection: this.populateTaskAssignments(
+                    task.task_assignment_collection.entries,
+                    assignments
+                )
+            })),
+            total_count
+        };
     };
 
     /**
@@ -1005,11 +1044,52 @@ class ContentSidebar extends PureComponent<Props, State> {
         };
 
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api
-                .getTasksAPI(shouldDestroy)
-                .get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback, requestData);
+            this.api.getTasksAPI(shouldDestroy).get({
+                id,
+                successCallback: this.fetchTaskAssignments,
+                errorCallback: this.fetchTasksErrorCallback,
+                params: requestData
+            });
         }
     }
+
+    /**
+     * Fetches the task assignments for each task
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchTaskAssignments = (tasksWithoutAssignments: Tasks, shouldDestroy?: boolean = false): void => {
+        const { fileId }: Props = this.props;
+        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
+            return;
+        }
+
+        const requestData = {
+            params: {
+                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH.toString()
+            }
+        };
+
+        let tasks = tasksWithoutAssignments;
+        const { entries } = tasksWithoutAssignments;
+        const taskAssignmentPromises = [];
+        entries.forEach((task) => {
+            const promise = this.api.getTasksAPI(shouldDestroy).getAssignments(
+                fileId,
+                task.id,
+                (assignments) => {
+                    tasks = this.fetchTaskAssignmentsSuccessCallback(tasks, assignments);
+                },
+                this.fetchTasksErrorCallback,
+                requestData
+            );
+            taskAssignmentPromises.push(promise);
+        });
+
+        Promise.all(taskAssignmentPromises).then(() => this.setState({ tasks }));
+    };
 
     /**
      * Fetches the access stats for a file
@@ -1020,9 +1100,11 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFileAccessStats(id: string, shouldDestroy?: boolean = false): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api
-                .getFileAccessStatsAPI(shouldDestroy)
-                .get(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
+            this.api.getFileAccessStatsAPI(shouldDestroy).get({
+                id,
+                successCallback: this.fetchFileAccessStatsSuccessCallback,
+                errorCallback: this.fetchFileAccessStatsErrorCallback
+            });
         }
     }
 
@@ -1030,16 +1112,18 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Fetches a Users info
      *
      * @private
-     * @param {string} [id] - User id. If missing, gets user that the current token was generated for.
+     * @param {User} [user] - Box User. If missing, gets user that the current token was generated for.
      * @return {void}
      */
     fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
         const { fileId = '' } = this.props;
         if (SidebarUtils.canHaveSidebar(this.props)) {
             if (typeof user === 'undefined') {
-                this.api
-                    .getUsersAPI(shouldDestroy)
-                    .get(fileId, this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
+                this.api.getUsersAPI(shouldDestroy).get({
+                    id: fileId,
+                    successCallback: this.fetchCurrentUserSuccessCallback,
+                    errorCallback: this.fetchCurrentUserErrorCallback
+                });
             } else {
                 this.setState({ currentUser: user, currentUserError: undefined });
             }

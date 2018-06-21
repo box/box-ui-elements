@@ -4,6 +4,7 @@
  */
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
@@ -23,11 +24,7 @@ const TASK_COMPLETED = 'completed';
 const TASK_INCOMPLETE = 'incomplete';
 
 type Props = {
-    task_assignment_collection: Array<{
-        id: string,
-        user: User,
-        status: string
-    }>,
+    task_assignment_collection: TaskAssignments,
     created_at: number | string,
     created_by: User,
     currentUser?: User,
@@ -70,7 +67,7 @@ class Task extends React.Component<Props> {
             isPending,
             onDelete,
             onEdit,
-            onTaskAssignmentUpdate,
+            onTaskAssignmentUpdate = noop,
             permissions,
             message,
             translatedTaggedMessage,
@@ -115,35 +112,38 @@ class Task extends React.Component<Props> {
                         ) : null}
                     </div>
                     <div className='bcs-task-assignees'>
-                        {task_assignment_collection.map(({ id: taskAssignmentId, user: assigneeUser, status }) => {
-                            switch (status) {
-                                case TASK_INCOMPLETE:
-                                    return (
-                                        <PendingAssignment
-                                            {...assigneeUser}
-                                            key={assigneeUser.id}
-                                            onTaskApproval={() =>
-                                                onTaskAssignmentUpdate(id, taskAssignmentId, TASK_APPROVED)
-                                            }
-                                            onTaskReject={() =>
-                                                onTaskAssignmentUpdate(id, taskAssignmentId, TASK_REJECTED)
-                                            }
-                                            shouldShowActions={
-                                                onTaskAssignmentUpdate &&
-                                                currentUser &&
-                                                assigneeUser.id === currentUser.id
-                                            }
-                                        />
-                                    );
-                                case TASK_COMPLETED:
-                                case TASK_APPROVED:
-                                    return <CompletedAssignment {...assigneeUser} key={assigneeUser.id} />;
-                                case TASK_REJECTED:
-                                    return <RejectedAssignment {...assigneeUser} key={assigneeUser.id} />;
-                                default:
-                                    return null;
-                            }
-                        })}
+                        {task_assignment_collection && task_assignment_collection.entries
+                            ? task_assignment_collection.entries.map(
+                                ({ id: assignmentId, assigned_to, resolution_state }) => {
+                                    switch (resolution_state) {
+                                        case TASK_COMPLETED:
+                                        case TASK_APPROVED:
+                                            return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
+                                        case TASK_REJECTED:
+                                            return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
+                                        case TASK_INCOMPLETE:
+                                        default:
+                                            return (
+                                                <PendingAssignment
+                                                    {...assigned_to}
+                                                    key={assigned_to.id}
+                                                    onTaskApproval={() =>
+                                                        onTaskAssignmentUpdate(id, assignmentId, TASK_APPROVED)
+                                                    }
+                                                    onTaskReject={() =>
+                                                        onTaskAssignmentUpdate(id, assignmentId, TASK_REJECTED)
+                                                    }
+                                                    shouldShowActions={
+                                                        onTaskAssignmentUpdate !== noop &&
+                                                          currentUser &&
+                                                          assigned_to.id === currentUser.id
+                                                    }
+                                                />
+                                            );
+                                    }
+                                }
+                            )
+                            : null}
                     </div>
                 </div>
             </div>

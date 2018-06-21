@@ -461,6 +461,18 @@ type FileAccessStats = {
     has_count_overflowed: boolean
 };
 
+type TaskAssignment = {
+    type: 'task_assignment',
+    id: string,
+    assigned_to: User,
+    resolution_state: string
+};
+
+type TaskAssignments = {
+    total_count: number,
+    entries: Array<TaskAssignment>
+};
+
 type Task = {
     type: 'task',
     id: string,
@@ -476,10 +488,7 @@ type Task = {
     created_by: User,
     due_at: string,
     message: string,
-    task_assignment_collection: {
-        total_count: number,
-        entries: Array<User>
-    }
+    task_assignment_collection: TaskAssignments
 };
 
 type Tasks = {
