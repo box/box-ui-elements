@@ -1,5 +1,15 @@
+## 5.2.0 (2018-06-21)
+
+* Chore: Remove handlers prop from AF + cleanup mention/approver contacts in Tasks (#394) ([ea46ca4](https://github.com/box/box-ui-elements/commit/ea46ca4)), closes [#394](https://github.com/box/box-ui-elements/issues/394)
+* Update: Populate AF tasks with task assignments (#387) ([affdd1e](https://github.com/box/box-ui-elements/commit/affdd1e)), closes [#387](https://github.com/box/box-ui-elements/issues/387)
+* Mojito: Update translations (#393) ([b3f1d60](https://github.com/box/box-ui-elements/commit/b3f1d60)), closes [#393](https://github.com/box/box-ui-elements/issues/393)
+* Fix: Fix styles when there is no user profile URL (#392) ([3aa464d](https://github.com/box/box-ui-elements/commit/3aa464d)), closes [#392](https://github.com/box/box-ui-elements/issues/392)
+
+
+
 ## 5.1.0 (2018-06-19)
 
+* Release: 5.1.0 ([c48cd39](https://github.com/box/box-ui-elements/commit/c48cd39))
 * Fix: Activity feed layout (#390) ([a56b738](https://github.com/box/box-ui-elements/commit/a56b738)), closes [#390](https://github.com/box/box-ui-elements/issues/390)
 * Fix: correct error handling responses for activity feed actions (#378) ([858a069](https://github.com/box/box-ui-elements/commit/858a069)), closes [#378](https://github.com/box/box-ui-elements/issues/378)
 * Fix: Design feedback and bug fixes (#386) ([7e91d0b](https://github.com/box/box-ui-elements/commit/7e91d0b)), closes [#386](https://github.com/box/box-ui-elements/issues/386)
