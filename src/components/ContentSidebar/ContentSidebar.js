@@ -559,7 +559,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {TaskAssignments} assignments - Box task assigment
      * @return {Object}
      */
-    fetchTaskAssignmentsSuccessCallback = (tasks: Tasks, assignments: TaskAssignments): void => {
+    fetchTaskAssignmentsSuccessCallback = (tasks: Tasks, assignments: TaskAssignments): Tasks => {
         const { entries, total_count } = tasks;
         return {
             entries: entries.map((task) => ({
