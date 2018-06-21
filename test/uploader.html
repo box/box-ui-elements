@@ -1,42 +1,44 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Box Content Uploader Test Page</title>
-        <style>
-            body,
-            html {
-                background: #ccc;
-                border: 0 none;
-                box-sizing: border-box !important;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                width: 100%;
-            }
 
-            .uploader1 {
-                width: 100%;
-                height: 600px;
-                overflow: auto;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Box Content Uploader Test Page</title>
+    <style>
+        body,
+        html {
+            background: #ccc;
+            border: 0 none;
+            box-sizing: border-box !important;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
 
-            .container {
-                margin: 50px 0;
-            }
+        .uploader1 {
+            width: 100%;
+            height: 500px;
+            overflow: auto;
+        }
 
-            .inputs {
-                margin: 50px;
-            }
+        .inputs,
+        h1 {
+            display: inline-block;
+        }
 
-            .inputs div {
-                display: flex;
-            }
-        </style>
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/uploader.css" />
-    </head>
-    <body>
+        .inputs div {
+            display: flex;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../dev/en-US/uploader.css" />
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Content Uploader</h1>
         <div class="inputs">
             <div>
                 <label>
@@ -45,61 +47,65 @@
                 </label>
                 <label>
                     <div>Auth Token</div>
-                    <input class="token" type="text" placeholder="Enter auth token" />
+                    <input class="token" type="password" placeholder="Enter auth token" />
                 </label>
             </div>
-            <button type="button" onclick="load()">Submit</button>
+            <button type="button" onclick="handleSubmit()">Submit</button>
         </div>
-        <div class="container">
-            <h1>Content Uploader</h1>
-            <div class="uploader1"></div>
-        </div>
-        <script src="../dev/en-US/uploader.js"></script>
-        <script>
-            // Set token and folder ID to locally stored values if available
-            (function() {
-                const storageToken = localStorage.getItem('token');
-                const storageFolder = localStorage.getItem('folderId');
+        <div class="uploader1"></div>
+    </div>
+    <script src="../dev/en-US/uploader.js"></script>
+    <script>
+        // Set token and folder ID to locally stored values if available
+        (function () {
+            const storageToken = localStorage.getItem('token');
+            const storageFolder = localStorage.getItem('folderId');
 
-                document.querySelector('.token').value = storageToken || null;
-                document.querySelector('.folder').value = storageFolder || 0;
-            })();
+            document.querySelector('.token').value = storageToken || null;
+            document.querySelector('.folder').value = storageFolder || 0;
+        })();
 
-            function load() {
-                const { ContentUploader } = Box;
-
-                const token = document.querySelector('.token').value || localStorage.getItem('token');
-                const folderId = document.querySelector('.folder').value || localStorage.getItem('folderId');
-
-                localStorage.setItem('token', token);
-                localStorage.setItem('folderId', folderId);
-
-                const typedId = `folder_${folderId}`;
-
-                const tokenGenerator = () => {
-                    return Promise.resolve({
-                        write: token
-                    });
-                };
-
-                const uploader1 = new ContentUploader();
-                document.querySelector('.uploader1').innerHTML = '';
-
-                uploader1.on('upload', (data) => {
-                    console.log(`Successfully uploaded a file: ${data ? data.id : 'No File ID'}`);
-                });
-                uploader1.on('error', (data) => {
-                    console.log(`Failed to upload: ${JSON.stringify(data)}`);
-                });
-                uploader1.on('complete', (data) => {
-                    console.log(`All files successfully uploaded: ${JSON.stringify(data)}`);
-                });
-
-                uploader1.show(folderId, tokenGenerator, {
-                    container: '.uploader1'
-                });
-            }
+        function handleSubmit() {
             load();
-        </script>
-    </body>
+            location.reload();
+        }
+
+        function load() {
+            const { ContentUploader } = Box;
+
+            const token = document.querySelector('.token').value || localStorage.getItem('token');
+            const folderId = document.querySelector('.folder').value || localStorage.getItem('folderId');
+
+            localStorage.setItem('token', token);
+            localStorage.setItem('folderId', folderId);
+
+            const typedId = `folder_${folderId}`;
+
+            const tokenGenerator = () => {
+                return Promise.resolve({
+                    write: token
+                });
+            };
+
+            const uploader1 = new ContentUploader();
+            document.querySelector('.uploader1').innerHTML = '';
+
+            uploader1.on('upload', (data) => {
+                console.log(`Successfully uploaded a file: ${data ? data.id : 'No File ID'}`);
+            });
+            uploader1.on('error', (data) => {
+                console.log(`Failed to upload: ${JSON.stringify(data)}`);
+            });
+            uploader1.on('complete', (data) => {
+                console.log(`All files successfully uploaded: ${JSON.stringify(data)}`);
+            });
+
+            uploader1.show(folderId, tokenGenerator, {
+                container: '.uploader1'
+            });
+        }
+        load();
+    </script>
+</body>
+
 </html>

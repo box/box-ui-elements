@@ -296,19 +296,20 @@ class Folder extends Item {
         }
         const childKey: string = this.getCacheKey(childId);
         const cache: APICache = this.getCache();
-        const parent: FlattenedBoxItem = cache.get(this.key);
+        const parent: FlattenedBoxItem | BoxItem = cache.get(this.key) || data;
 
-        const { item_collection }: FlattenedBoxItem = parent;
+        const { item_collection } = parent;
         if (!item_collection) {
             throw getBadItemError();
         }
 
-        const { total_count, entries }: FlattenedBoxItemCollection = item_collection;
+        const { total_count, entries } = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
 
         cache.set(childKey, data);
+        // $FlowFixMe
         item_collection.entries = [childKey].concat(entries);
         item_collection.total_count = total_count + 1;
         this.successCallback(data);
@@ -340,7 +341,7 @@ class Folder extends Item {
     }
 
     /**
-     * API to rename an Item
+     * API to create a folder
      *
      * @param {string} id - parent folder id
      * @param {string} name - new folder name

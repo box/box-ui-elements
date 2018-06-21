@@ -21,12 +21,17 @@ const ICON_CHECK_COLOR = '#26C281';
 type Props = {
     status: UploadStatus,
     onClick: Function,
+    isFolder?: boolean,
     intl: any
 };
 
-const ItemAction = ({ status, onClick, intl }: Props) => {
+const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     let icon = <IconClose />;
     let tooltip = intl.formatMessage(messages.uploadsCancelButtonTooltip);
+
+    if (isFolder && status !== STATUS_PENDING) {
+        return null;
+    }
 
     switch (status) {
         case STATUS_COMPLETE:

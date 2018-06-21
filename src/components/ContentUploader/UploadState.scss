@@ -63,3 +63,9 @@
 .bcu-upload-state-message + .be-input-link {
     margin-top: 5px;
 }
+
+.be-upload-input-container {
+    .be-input-link {
+        display: inline-block;
+    }
+}

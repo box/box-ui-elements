@@ -413,15 +413,25 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Message shown when there is a network error when uploading',
         defaultMessage: 'A network error has occured while trying to upload.'
     },
-    uploadEmpty: {
-        id: 'be.uploadEmpty',
-        description: 'Message shown when there are no items to upload',
-        defaultMessage: 'Drag and drop files or'
+    uploadEmptyWithFolderUploadEnabled: {
+        id: 'be.uploadEmptyWithFolderUploadEnabled',
+        description: 'Message shown when there are no items to upload and folder upload is enabled',
+        defaultMessage: 'Drag and Drop Files and Folders'
     },
-    uploadEmptyInput: {
-        id: 'be.uploadEmptyInput',
-        description: 'Message shown for upload link when there are no items to upload',
-        defaultMessage: 'browse your device'
+    uploadEmptyWithFolderUploadDisabled: {
+        id: 'be.uploadEmptyWithFolderUploadDisabled',
+        description: 'Message shown when there are no items to upload and folder upload is disabled',
+        defaultMessage: 'Drag and Drop Files'
+    },
+    uploadEmptyFileInput: {
+        id: 'be.uploadEmptyFileInput',
+        description: 'Message shown for upload link for uploading more files when there are no items to upload',
+        defaultMessage: 'Select Files'
+    },
+    uploadEmptyFolderInput: {
+        id: 'be.uploadEmptyFolderInput',
+        description: 'Message shown for upload link for uploading more folders when there are no items to upload',
+        defaultMessage: 'Select Folders'
     },
     uploadNoDragDrop: {
         id: 'be.uploadNoDragDrop',
@@ -436,12 +446,22 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     uploadSuccess: {
         id: 'be.uploadSuccess',
         description: 'Message shown when all files have been successfully uploaded',
-        defaultMessage: 'Success! Your files have been uploaded'
+        defaultMessage: 'Success! Your files have been uploaded.'
     },
-    uploadSuccessInput: {
-        id: 'be.uploadSuccessInput',
-        description: 'Message shown for upload link after a successful upload',
-        defaultMessage: 'Upload additional files'
+    uploadSuccessFileInput: {
+        id: 'be.uploadSuccessFileInput',
+        description: 'Message shown for upload link for uploading more files after a successful upload',
+        defaultMessage: 'Select More Files'
+    },
+    uploadSuccessFolderInput: {
+        id: 'be.uploadSuccessFolderInput',
+        description: 'Message shown for upload link for uploading more folders after a successful upload',
+        defaultMessage: 'Select More Folders'
+    },
+    uploadOptions: {
+        id: 'be.uploadOptions',
+        description: 'Message shown for letting user choose between {option1} and {option2}',
+        defaultMessage: '{option1} or {option2}'
     },
     nameASC: {
         id: 'be.nameASC',

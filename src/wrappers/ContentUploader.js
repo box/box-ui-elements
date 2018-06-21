@@ -55,8 +55,9 @@ class ContentUploader extends ES6Wrapper {
         const {
             modal,
             useUploadsManager = false,
+            isFolderUploadEnabled = false, // WIP
             ...rest
-        }: { modal?: ModalOptions, useUploadsManager?: boolean } = this.options;
+        }: { modal?: ModalOptions, useUploadsManager?: boolean, isFolderUploadEnabled: boolean } = this.options;
         const UploaderComponent = modal ? ContentUploaderPopup : ContentUploaderComponent;
 
         render(
@@ -71,6 +72,7 @@ class ContentUploader extends ES6Wrapper {
                 onError={this.onError}
                 onUpload={this.onUpload}
                 useUploadsManager={useUploadsManager}
+                isFolderUploadEnabled={isFolderUploadEnabled}
                 modal={((modal: any): ModalOptions)}
                 {...rest}
             />,

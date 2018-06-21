@@ -16,6 +16,7 @@ import UploadsManager from './UploadsManager';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
+import FolderUpload from '../../api/uploads/FolderUpload';
 import {
     DEFAULT_ROOT,
     CLIENT_NAME_CONTENT_UPLOADER,
@@ -63,7 +64,8 @@ type Props = {
     useUploadsManager?: boolean,
     files?: Array<UploadFileWithAPIOptions | File>,
     onMinimize?: Function,
-    onUpload: Function
+    onUpload: Function,
+    isFolderUploadEnabled: boolean // WIP
 };
 
 type State = {
@@ -104,7 +106,8 @@ class ContentUploader extends Component<Props, State> {
         useUploadsManager: false,
         files: [],
         onMinimize: noop,
-        onCancel: noop
+        onCancel: noop,
+        isFolderUploadEnabled: false
     };
 
     /**
@@ -211,16 +214,26 @@ class ContentUploader extends Component<Props, State> {
      *
      * @param {UploadFileWithAPIOptions | File} file
      */
-    getFileId(file) {
+    getFileId(file: UploadFileWithAPIOptions | File) {
         if (!file.options) {
+            // $FlowFixMe file is File type
             return file.name;
         }
 
-        if (!file.options.folderId || !file.options.uploadInitTimestamp) {
-            return file.file.name;
+        // $FlowFixMe file is UploadFileWithAPIOptions type
+        const fileWithOptions: UploadFileWithAPIOptions = file;
+
+        if (
+            fileWithOptions.options &&
+            fileWithOptions.options.folderId &&
+            fileWithOptions.options.uploadInitTimestamp
+        ) {
+            // $FlowFixMe webkitRelativePath is available on certain browsers
+            const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
+            return `${fileName}_${fileWithOptions.options.folderId}_${fileWithOptions.options.uploadInitTimestamp}`;
         }
 
-        return `${file.file.name}_${file.options.folderId}_${file.options.uploadInitTimestamp}`;
+        return fileWithOptions.file.name;
     }
 
     /**
@@ -233,11 +246,80 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     addFilesToUploadQueue = (files: Array<UploadFileWithAPIOptions | File>, withApiOptions, itemUpdateCallback) => {
-        const { fileLimit, useUploadsManager } = this.props;
-        const { view, items } = this.state;
+        // $FlowFixMe webkitRelativePath is available on certain browsers
+        const isFolder = files[0].webkitRelativePath;
 
         clearTimeout(this.resetItemsTimeout);
 
+        if (isFolder) {
+            this.addFilesWithRelativePathToQueue(files, withApiOptions, itemUpdateCallback);
+            return;
+        }
+
+        this.addFilesWithoutRelativePathToQueue(files, withApiOptions, itemUpdateCallback);
+    };
+
+    // eslint-disable-next-line
+    addDataTransferItemsToUploadQueue(dataTransferItems: DataTransferItemList) {
+        // @TODO: implement
+    }
+
+    /**
+     * Converts File API to upload items and adds to upload queue for files with webkitRelativePath.
+     *
+     * @private
+     * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
+     * @param {boolean} withApiOptions - whether file objects contain Api options
+     * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
+     * @return {void}
+     */
+    addFilesWithRelativePathToQueue(files: Array<UploadFileWithAPIOptions | File>, withApiOptions, itemUpdateCallback) {
+        const { rootFolderId } = this.props;
+        const factory = this.createAPIFactory();
+        const folderAPI = factory.getFolderAPI();
+
+        const folderUpload = new FolderUpload(
+            folderAPI.create.bind(folderAPI),
+            this.addFilesWithoutRelativePathToQueue,
+            rootFolderId,
+            this.addToQueue
+        );
+
+        folderUpload.buildFolderTree(files);
+
+        const folderName = Object.keys(folderUpload.folderNodes)[0];
+
+        this.addToQueue(
+            [
+                // $FlowFixMe no file property
+                {
+                    extension: '',
+                    name: folderName,
+                    status: STATUS_PENDING,
+                    api: folderUpload,
+                    isFolder: true,
+                    progress: 100,
+                    size: 1
+                }
+            ],
+            itemUpdateCallback
+        );
+    }
+
+    /**
+     * Converts File API to upload items and adds to upload queue for files without webkitRelativePath.
+     *
+     * @private
+     * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
+     * @param {boolean} withApiOptions - whether file objects contain Api options
+     * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
+     * @return {void}
+     */
+    addFilesWithoutRelativePathToQueue = (
+        files: Array<UploadFileWithAPIOptions | File>,
+        withApiOptions,
+        itemUpdateCallback
+    ) => {
         // Convert files from the file API to upload items
         const newItems = this.getNewFiles(files).map((file) => {
             let uploadFile = file;
@@ -276,6 +358,21 @@ class ContentUploader extends Component<Props, State> {
         if (newItems.length <= 0) {
             return;
         }
+
+        this.addToQueue(newItems, itemUpdateCallback);
+    };
+
+    /**
+     * Add new items to the upload queue
+     *
+     * @private
+     * @param {Array<UploadFileWithAPIOptions | File>} newItems - Files to be added to upload queue
+     * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
+     * @return {void}
+     */
+    addToQueue = (newItems: UploadItem[], itemUpdateCallback: Function) => {
+        const { fileLimit, useUploadsManager } = this.props;
+        const { view, items } = this.state;
 
         let updatedItems = [];
         const prevItemsNum = items.length;
@@ -485,12 +582,16 @@ class ContentUploader extends Component<Props, State> {
      * Updates view and internal upload collection with provided items.
      *
      * @private
-     * @param {UploadItem[]} item - Itmes to update collection with
+     * @param {UploadItem[]} item - Items to update collection with
+     * @param {Function} callback
      * @return {void}
      */
-    updateViewAndCollection(items: UploadItem[], callback) {
+    updateViewAndCollection(items: UploadItem[], callback?: Function) {
         const { onComplete, useUploadsManager }: Props = this.props;
-        const someUploadIsInProgress = items.some((uploadItem) => uploadItem.status !== STATUS_COMPLETE);
+        const someUploadIsFile = items.some((uploadItem) => !uploadItem.isFolder);
+        const someUploadFileIsInProgress = items.some(
+            (uploadItem) => !uploadItem.isFolder && uploadItem.status !== STATUS_COMPLETE
+        );
         const someUploadHasFailed = items.some((uploadItem) => uploadItem.status === STATUS_ERROR);
         const allFilesArePending = !items.some((uploadItem) => uploadItem.status !== STATUS_PENDING);
         const noFileIsPendingOrInProgress = items.every(
@@ -502,7 +603,7 @@ class ContentUploader extends Component<Props, State> {
             view = VIEW_UPLOAD_EMPTY;
         } else if (someUploadHasFailed && useUploadsManager) {
             view = VIEW_ERROR;
-        } else if (someUploadIsInProgress) {
+        } else if (someUploadFileIsInProgress || !someUploadIsFile) {
             view = VIEW_UPLOAD_IN_PROGRESS;
         } else {
             view = VIEW_UPLOAD_SUCCESS;
@@ -733,7 +834,8 @@ class ContentUploader extends Component<Props, State> {
             measureRef,
             isTouch,
             fileLimit,
-            useUploadsManager
+            useUploadsManager,
+            isFolderUploadEnabled
         }: Props = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
 
@@ -761,11 +863,13 @@ class ContentUploader extends Component<Props, State> {
                     <div className={styleClassName} id={this.id} ref={measureRef}>
                         <DroppableContent
                             addFiles={this.addFilesToUploadQueue}
+                            addDataTransferItems={this.addDataTransferItemsToUploadQueue}
                             allowedTypes={['Files']}
                             items={items}
                             isTouch={isTouch}
                             view={view}
                             onClick={this.onClick}
+                            isFolderUploadEnabled={isFolderUploadEnabled}
                         />
                         <Footer
                             hasFiles={hasFiles}
