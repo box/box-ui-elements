@@ -595,7 +595,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 id: 'uniqueId',
                 is_completed: false,
                 message: text,
-                task_assignment_collection: [],
+                task_assignment_collection: { entries: [], total_count: 0 },
                 type: 'task'
             });
         });
