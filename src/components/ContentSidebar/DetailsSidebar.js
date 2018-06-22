@@ -17,32 +17,35 @@ import SidebarFileProperties from './SidebarFileProperties';
 
 import './DetailsSidebar.scss';
 
+export type DetailsSidebarProps = {
+    hasNotices?: boolean,
+    hasProperties?: boolean,
+    hasAccessStats?: boolean,
+    hasClassification?: boolean,
+    hasVersions?: boolean,
+    onAccessStatsClick?: Function,
+    onClassificationClick?: Function,
+    onVersionHistoryClick?: Function
+};
+
 type Props = {
     accessStats?: FileAccessStats,
     file: BoxItem,
-    hasNotices: boolean,
-    hasProperties: boolean,
-    hasAccessStats: boolean,
-    hasClassification: boolean,
-    hasVersions: boolean,
-    onAccessStatsClick?: Function,
     onDescriptionChange: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     versions?: FileVersions,
     accessStatsError?: Errors,
     fileError?: Errors,
     versionError?: Errors
-};
+} & DetailsSidebarProps;
 
 const DetailsSidebar = ({
     accessStats,
     file,
-    hasProperties,
-    hasNotices,
-    hasAccessStats,
-    hasClassification,
-    hasVersions,
+    hasProperties = false,
+    hasNotices = false,
+    hasAccessStats = false,
+    hasClassification = false,
+    hasVersions = false,
     onAccessStatsClick,
     onDescriptionChange,
     onClassificationClick,
@@ -90,16 +93,5 @@ const DetailsSidebar = ({
         )}
     </SidebarContent>
 );
-
-export type DetailsSidebarProps = {
-    hasNotices?: boolean,
-    hasProperties?: boolean,
-    hasAccessStats?: boolean,
-    hasClassification?: boolean,
-    hasVersions?: boolean,
-    onAccessStatsClick?: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function
-};
 
 export default DetailsSidebar;

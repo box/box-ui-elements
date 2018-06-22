@@ -9,7 +9,6 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
-import extend from 'lodash/extend';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
@@ -107,13 +106,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasSkills: false,
         hasMetadata: false,
         hasActivityFeed: false,
-        detailsSidebarProps: {
-            hasProperties: false,
-            hasNotices: false,
-            hasAccessStats: false,
-            hasClassification: false,
-            hasVersions: false
-        }
+        detailsSidebarProps: {}
     };
 
     initialState: State = {
@@ -258,7 +251,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
     fetchData({ fileId, hasActivityFeed, detailsSidebarProps, currentUser }: Props) {
-        const { hasAccessStats } = detailsSidebarProps;
+        const { hasAccessStats = false } = detailsSidebarProps;
         if (!fileId) {
             return;
         }
@@ -1272,17 +1265,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     }, DEFAULT_COLLAB_DEBOUNCE);
 
     /**
-     * Returns detailsSidebarProps replacing missing props with their defaults
-     *
-     * @private
-     * @return {DetailsSidebarProps} the merged detailsSidebarProps
-     */
-    getdetailsSidebarProps(): DetailsSidebarProps {
-        const { detailsSidebarProps } = this.props;
-        return extend(ContentSidebar.defaultProps.detailsSidebarProps, detailsSidebarProps);
-    }
-
-    /**
      * Renders the file preview
      *
      * @private
@@ -1298,7 +1280,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             className,
             onTaskAssignmentUpdate,
-            getUserProfileUrl
+            getUserProfileUrl,
+            detailsSidebarProps
         }: Props = this.props;
         const {
             file,
@@ -1330,8 +1313,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.shouldRenderDetailsSidebar(this.props);
 
-        const detailsSidebarPropsWithDefaults = this.getdetailsSidebarProps();
-
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <aside id={this.id} className={styleClassName}>
@@ -1340,7 +1321,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                             <Sidebar
                                 file={((file: any): BoxItem)}
                                 view={view}
-                                detailsSidebarProps={detailsSidebarPropsWithDefaults}
+                                detailsSidebarProps={detailsSidebarProps}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}
