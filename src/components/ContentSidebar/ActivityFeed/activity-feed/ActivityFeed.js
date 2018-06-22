@@ -348,7 +348,7 @@ class ActivityFeed extends React.Component<Props, State> {
             taskAssignmentId,
             status,
             (updatedAssignment) => this.updateTaskAssignmentSuccessCallback(task, updatedAssignment),
-            () => this.updateFeedItem(this.createFeedError(messages.taskAssignmentUpdateErrorMessage), taskAssignmentId)
+            () => this.updateFeedItem(this.createFeedError(messages.taskUpdateErrorMessage), taskAssignmentId)
         );
     };
 
