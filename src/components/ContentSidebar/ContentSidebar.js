@@ -540,9 +540,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             entries: entries.map((item: TaskAssignment) => {
                 const assignment = assignments.entries.find((a) => a.id === item.id);
                 if (assignment) {
+                    const { message, resolution_state } = assignment;
                     return {
                         ...assignment,
-                        resolution_state: assignment.message.toLowerCase() || assignment.resolution_state
+                        resolution_state: message.toLowerCase() || resolution_state
                     };
                 }
                 return item;
