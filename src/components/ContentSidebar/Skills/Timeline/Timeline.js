@@ -17,7 +17,6 @@ import './Timeline.scss';
 
 type Props = {
     type?: SkillCardEntryType,
-    color?: string,
     text?: string,
     url?: string,
     timeslices?: SkillCardEntryTimeSlice[],
@@ -26,7 +25,7 @@ type Props = {
     interactionTarget: string
 };
 
-const Timeline = ({ color, text = '', duration = 0, timeslices = [], getPreviewer, interactionTarget }: Props) => {
+const Timeline = ({ text = '', duration = 0, timeslices = [], getPreviewer, interactionTarget }: Props) => {
     let timeSliceIndex = -1;
 
     const playSegment = (index: number, incr: number = 0) => {
@@ -45,14 +44,13 @@ const Timeline = ({ color, text = '', duration = 0, timeslices = [], getPreviewe
         <div className='be-timeline'>
             {text && <div className='be-timeline-label'>{text}</div>}
             <div className='be-timeline-line-wrapper'>
-                <div className='be-timeline-line' style={{ backgroundColor: color }} />
+                <div className='be-timeline-line' />
                 {timeslices.map(
                     ({ start, end }: SkillCardEntryTimeSlice, index) => (
                         /* eslint-disable react/no-array-index-key */
                         <Timeslice
                             key={index}
                             index={index}
-                            color={color}
                             start={start}
                             end={end}
                             duration={duration}

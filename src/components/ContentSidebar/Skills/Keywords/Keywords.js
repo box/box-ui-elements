@@ -105,15 +105,11 @@ class Keywords extends PureComponent<Props, State> {
         const { transcript }: Props = this.props;
         const { adds } = this.state;
         const locations = [];
+        const regex = new RegExp(`\\b${((keyword.text: any): string)}\\b`, 'i');
 
         if (transcript && Array.isArray(transcript.entries)) {
             transcript.entries.forEach(({ text, appears }: SkillCardEntry): void => {
-                if (
-                    text &&
-                    text.includes(((keyword.text: any): string)) &&
-                    Array.isArray(appears) &&
-                    appears.length > 0
-                ) {
+                if (text && regex.test(text) && Array.isArray(appears) && appears.length > 0) {
                     locations.push(appears[0]);
                 }
             });
