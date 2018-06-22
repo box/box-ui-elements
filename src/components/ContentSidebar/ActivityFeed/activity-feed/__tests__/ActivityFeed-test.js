@@ -49,7 +49,6 @@ const versions = {
 };
 
 const currentUser = { name: 'Kanye West', id: 10 };
-
 const getWrapper = (props) => shallow(<ActivityFeed currentUser={currentUser} {...props} />);
 
 describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
@@ -168,7 +167,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 onTaskCreate={createTaskSpy}
             />
         );
-
         const instance = wrapper.instance();
         const approvalCommentForm = wrapper.find('ApprovalCommentForm').at(0);
 
@@ -468,9 +466,10 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         it('should assign tagged_message of the comment with tagged_message value if it exists', (done) => {
             const text = 'yay';
             const id = '0987654321';
-            instance.updateFeedItem = (comment) => {
+            instance.updateFeedItem = (comment, commentId) => {
                 const { tagged_message } = comment;
                 expect(tagged_message).toEqual(text);
+                expect(commentId).toBe(id);
                 done();
             };
             instance.createCommentSuccessCallback({ tagged_message: text, isPending: false }, id);
@@ -479,9 +478,10 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         it('should assign tagged_message of the comment with message value if it exists', (done) => {
             const text = 'yay';
             const id = '0987654321';
-            instance.updateFeedItem = (comment) => {
+            instance.updateFeedItem = (comment, commentId) => {
                 const { tagged_message } = comment;
                 expect(tagged_message).toEqual(text);
+                expect(commentId).toBe(id);
                 done();
             };
             instance.createCommentSuccessCallback({ message: text }, id);
@@ -493,7 +493,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         let instance;
         const create = jest.fn();
         const message = 'message';
-
+  
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={create} />);
             instance = wrapper.instance();
@@ -536,17 +536,17 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(instance.createCommentSuccessCallback).toBeCalledWith({ message, hasMention }, 'uniqueId');
         });
 
-        test('should delete pending feed item when creation fails', () => {
-            const onCommentCreate = (text, hasMention, onSuccess, onFail) => {
-                onFail(new Error('You fail!'));
+        test('should invoke update the feed item with an AF error on failure to create', () => {
+            const onCommentCreate = (text, hasMention, onSuccess, onFailure) => {
+                onFailure({ status: 409 });
             };
             wrapper.setProps({ onCommentCreate });
-            instance.deleteFeedItem = jest.fn();
+            instance.createFeedError = jest.fn().mockReturnValue('foo');
 
-            instance.createComment({ text: message });
+            const hasMention = false;
+            instance.createComment({ text: message, hasMention });
 
-            // Should be called with the 'uniqueId' returned from lodash/uniqueId
-            expect(instance.deleteFeedItem).toBeCalledWith('uniqueId');
+            expect(instance.updateFeedItem).toBeCalledWith('foo', 'uniqueId');
         });
     });
 
@@ -641,17 +641,21 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             );
         });
 
-        test('should delete the pending feed item on when failing to create a task', () => {
-            const onTaskCreate = (textContent, assignees, dueAt, onSuccess, onFail) => {
-                onFail(new Error('You fail!'));
+        test('should invoke update the feed item with an AF error on failure creating', () => {
+            const onTaskCreate = (textContent, assignees, dueAt, onSuccess, onFailure) => {
+                onFailure();
             };
             wrapper.setProps({ onTaskCreate });
-            instance.deleteFeedItem = jest.fn();
+            instance.createTaskSuccessCallback = jest.fn();
+            instance.updateFeedItem = jest.fn();
+            instance.createFeedError = jest.fn().mockReturnValue('error');
 
-            instance.createTask({ text });
+            const assignees = [];
+            const dueAt = 123456789;
+            instance.createTask({ text, assignees, dueAt });
 
-            // Should be called with the 'uniqueId' returned from lodash/uniqueId
-            expect(instance.deleteFeedItem).toBeCalledWith('uniqueId');
+            expect(instance.createTaskSuccessCallback).not.toHaveBeenCalled();
+            expect(instance.updateFeedItem).toBeCalledWith('error', 'uniqueId');
         });
     });
 
@@ -660,13 +664,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const id = '1;';
             const permissions = {
                 can_edit: false,
-                can_delte: true
+                can_delete: true
             };
             const onCommentDelete = jest.fn();
             const wrapper = getWrapper({ onCommentDelete });
-            wrapper.instance().updateFeedItemPendingStatus = jest.fn();
             wrapper.instance().deleteFeedItem = jest.fn();
-            wrapper.instance().feedItemErrorCallback = jest.fn();
+            wrapper.instance().updateFeedItem = jest.fn();
             wrapper.update();
 
             wrapper.instance().deleteComment({ id, permissions });
@@ -677,7 +680,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 wrapper.instance().deleteFeedItem,
                 expect.any(Function)
             );
-            expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, true);
         });
     });
 
@@ -686,15 +688,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const id = '1;';
             const onTaskDelete = jest.fn();
             const wrapper = getWrapper({ onTaskDelete });
-            wrapper.instance().updateFeedItemPendingStatus = jest.fn();
             wrapper.instance().deleteFeedItem = jest.fn();
-            wrapper.instance().feedItemErrorCallback = jest.fn();
+            wrapper.instance().updateFeedItem = jest.fn();
             wrapper.update();
 
             wrapper.instance().deleteTask({ id });
-
             expect(onTaskDelete).toBeCalledWith(id, wrapper.instance().deleteFeedItem, expect.any(Function));
-            expect(wrapper.instance().updateFeedItemPendingStatus).toBeCalledWith(id, true);
         });
     });
 
@@ -712,54 +711,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                     isPending: false
                 },
                 task.id
-            );
-        });
-    });
-
-    describe('updateFeedItemPendingStatus()', () => {
-        let wrapper;
-        beforeEach(() => {
-            wrapper = getWrapper();
-        });
-
-        test('should set the feed item pending status to be true', (done) => {
-            const id = '1';
-            wrapper.setState(
-                {
-                    feedItems: [
-                        {
-                            id
-                        }
-                    ]
-                },
-                () => {
-                    wrapper.instance().updateFeedItemPendingStatus(id, true);
-                    wrapper.update();
-
-                    expect(wrapper.state('feedItems')[0].isPending).toBe(true);
-                    done();
-                }
-            );
-        });
-
-        test('should set the feed item pending status to be false', (done) => {
-            const id = '1';
-            wrapper.setState(
-                {
-                    feedItems: [
-                        {
-                            id,
-                            isPending: true
-                        }
-                    ]
-                },
-                () => {
-                    wrapper.instance().updateFeedItemPendingStatus(id, false);
-                    wrapper.update();
-
-                    expect(wrapper.state('feedItems')[0].isPending).toBe(false);
-                    done();
-                }
             );
         });
     });

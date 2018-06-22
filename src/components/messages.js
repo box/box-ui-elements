@@ -609,6 +609,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: '@mention users to notify them.',
         description: 'Mentioning call to action displayed below the comment input'
     },
+    errorOccured: {
+        id: 'be.errorOccured',
+        defaultMessage: 'An error occured',
+        description: 'Title when an error occurs'
+    },
     commentCancel: {
         id: 'be.commentCancel',
         defaultMessage: 'Cancel',
@@ -618,11 +623,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.commentDeleteCancel',
         defaultMessage: 'No',
         description: 'Button text to cancel comment deletion'
-    },
-    taskDeletePrompt: {
-        id: 'be.taskDeletePrompt',
-        defaultMessage: 'Delete task?',
-        description: 'Confirmation prompt text to delete task'
     },
     commentDeleteConfirm: {
         id: 'be.commentDeleteConfirm',
@@ -658,6 +658,41 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.commentPostedFullDateTime',
         defaultMessage: '{time, date, full} at {time, time, short}',
         description: 'Comment posted full date time for title'
+    },
+    commentCreateErrorMessage: {
+        id: 'be.commentCreateErrorMessage',
+        description: 'Error message when a comment creation fails',
+        defaultMessage: 'There was an error creating this comment.'
+    },
+    commentCreateConflictMessage: {
+        id: 'be.commentCreateConflictMessage',
+        description: 'Error message when a comment creation fails due to a conflict',
+        defaultMessage: 'This comment already exists.'
+    },
+    commentDeleteErrorMessage: {
+        id: 'be.commentDeleteErrorMessage',
+        description: 'Error message when a comment deletion fails',
+        defaultMessage: 'There was an error deleting this comment.'
+    },
+    taskDeletePrompt: {
+        id: 'be.taskDeletePrompt',
+        defaultMessage: 'Delete task?',
+        description: 'Confirmation prompt text to delete task'
+    },
+    taskCreateErrorMessage: {
+        id: 'be.taskCreateErrornMessage',
+        description: 'Error message when a task creation fails',
+        defaultMessage: 'There was an error creating this task.'
+    },
+    taskUpdateErrorMessage: {
+        id: 'be.taskEditErrorMessage',
+        description: 'Error message when a task edit fails',
+        defaultMessage: 'There was an error updating this task.'
+    },
+    taskDeleteErrorMessage: {
+        id: 'be.taskDeleteErrorMessage',
+        description: 'Error message when a task deletion fails',
+        defaultMessage: 'There was an error deleting this task.'
     },
     completedAssignment: {
         id: 'be.completedAssignment',

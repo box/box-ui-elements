@@ -13,7 +13,7 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
-
+import messages from '../../../messages';
 import './ActivityFeed.scss';
 
 type Props = {
@@ -89,19 +89,18 @@ class ActivityFeed extends React.Component<Props, State> {
 
     /**
      * Replace a feed item with new feed item data.
-     *
-     * @param {Comment | Task} feedItem - API returned feed item data.
+     * @param {Object} updates - The new data to be applied to the feed item.
      * @param {string} id - ID of the feed item to replace.
      * @return {void}
      */
-    updateFeedItem = (feedItem: Comment | Task, id: string): void => {
+    updateFeedItem = (updates: Object, id: string): void => {
         this.setState({
             feedItems: this.state.feedItems.map((item: Comment | Task | BoxItemVersion) => {
                 if (item.id === id) {
                     // $FlowFixMe
                     return {
                         ...item,
-                        ...feedItem
+                        ...updates
                     };
                 }
                 return item;
@@ -154,8 +153,10 @@ class ActivityFeed extends React.Component<Props, State> {
             (commentData: Comment) => {
                 this.createCommentSuccessCallback(commentData, uuid);
             },
-            () => {
-                this.deleteFeedItem(uuid);
+            (e) => {
+                const errorMessage =
+                    e.status === 409 ? messages.commentCreateConflictMessage : messages.commentCreateErrorMessage;
+                this.updateFeedItem(this.createFeedError(errorMessage), uuid);
             }
         );
 
@@ -163,20 +164,18 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Deletes a comment
+     * Deletes a comment.
      *
-     * @param {string} id - Comment id
+     * @param {string} id - Comment ID
      * @param {BoxItemPermission} permissions - Permissions for the comment
      * @return {void}
      */
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
-        // remove comment from list of comments
-        // removeItemByTypeAndId('comment', args.id);
-        // delete the comment via V2 API
-        // call user passed in onCommentDelete, if it exists
         const deleteComment = this.props.onCommentDelete || noop;
-        this.updateFeedItemPendingStatus(id, true);
-        deleteComment(id, permissions, this.deleteFeedItem, () => this.updateFeedItemPendingStatus(id, false));
+        this.updateFeedItem({ isPending: true }, id);
+        deleteComment(id, permissions, this.deleteFeedItem, () =>
+            this.updateFeedItem(this.createFeedError(messages.commentDeleteErrorMessage), id)
+        );
     };
 
     /**
@@ -197,7 +196,7 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
-     * Creates a task
+     * Creates a task.
      *
      * @param {string} text - Task text
      * @param {Array} assignees - List of assignees
@@ -233,10 +232,6 @@ class ActivityFeed extends React.Component<Props, State> {
         };
 
         this.addPendingItem(task);
-
-        // create a placeholder pending task
-        // create actual task and send to Box V2 api
-        // call user passed in onTaskCreate, if it exists
         const createTask = this.props.onTaskCreate || noop;
         createTask(
             text,
@@ -246,7 +241,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 this.createTaskSuccessCallback(taskData, uuid);
             },
             () => {
-                this.deleteFeedItem(uuid);
+                this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
             }
         );
 
@@ -254,47 +249,9 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Called on successful update of a task
+     * Deletes a feed item from the state.
      *
-     * @param {Object} task the updated task
-     */
-    updateTaskSuccessCallback = (task: Task) => {
-        const { id } = task;
-
-        this.updateFeedItem(
-            {
-                ...task,
-                isPending: false
-            },
-            id
-        );
-    };
-
-    /**
-     * Updates a feed item's pending status
-     *
-     * @param {Object} item the feed item to update
-     * @param {boolean} isPending true if the feed item is to be updated to pending=true
-     */
-    updateFeedItemPendingStatus = (id: string, isPending: boolean) => {
-        this.setState({
-            feedItems: this.state.feedItems.map((feedItem: Comment | Task | BoxItemVersion) => {
-                if (feedItem.id === id) {
-                    // $FlowFixMe
-                    return {
-                        ...feedItem,
-                        isPending
-                    };
-                }
-                return feedItem;
-            })
-        });
-    };
-
-    /**
-     * Deletes a feed item from the state
-     *
-     * @param {Object} item the item to be deleted
+     * @param {Object} item - The item to be deleted
      */
     deleteFeedItem = (id: string) => {
         this.setState({
@@ -303,53 +260,61 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Updates a task in the state
+     * Updates a given task on a successful update.
      *
-     * @param {Object} args a subset of the task
+     * @param {Object} task - The updated task
      */
-    updateTask = ({ text, id }: { text: string, id: string }): void => {
-        // get previous task assignment state
-        // update the task via v2 api
-        // update task state OR
-        // if it fails, revert to previous task state
-        // call user passed in onTaskUpdate, if it exists
-        const updateTask = this.props.onTaskUpdate || noop;
-        this.updateFeedItemPendingStatus(id, true);
-        updateTask(id, text, this.updateTaskSuccessCallback, () => this.updateFeedItemPendingStatus(id, false));
+    updateTaskSuccessCallback = (task: Task) => {
+        const { id } = task;
+        this.updateFeedItem({ ...task, isPending: false }, id);
     };
 
     /**
-     * Updates a task in the state
+     * Updates a task in the state via the API.
      *
-     * @param {Object} args a subset of the task
+     * @param {Object} args - A subset of the task
      */
-    deleteTask = ({ id }: { id: string }): void => {
-        // remove task from task list
-        // removeItemByTypeAndId('task', args.id);
-        // delete the task via v2 api
-        // call user passed in onTaskDelete, if it exists
-        const deleteTask = this.props.onTaskDelete || noop;
-        this.updateFeedItemPendingStatus(id, true);
-        deleteTask(id, this.deleteFeedItem, () => {
-            this.updateFeedItemPendingStatus(id, false);
-        });
+    updateTask = ({ text, id }: { text: string, id: string }): void => {
+        const updateTask = this.props.onTaskUpdate || noop;
+        this.updateFeedItem({ isPending: true }, id);
+        updateTask(id, text, this.updateTaskSuccessCallback, () =>
+            this.updateFeedItem(this.createFeedError(messages.taskUpdateErrorMessage), id)
+        );
     };
 
+    /**
+     * Deletes a task via the API.
+     *
+     * @param {Object} args - A subset of the task
+     */
+    deleteTask = ({ id }: { id: string }): void => {
+        const deleteTask = this.props.onTaskDelete || noop;
+        this.updateFeedItem({ isPending: true }, id);
+        deleteTask(id, this.deleteFeedItem, () =>
+            this.updateFeedItem(this.createFeedError(messages.taskDeleteErrorMessage), id)
+        );
+    };
+
+    /**
+     * Updates a task assignment via the API.
+     *
+     * @param {string} taskId - ID of task to be updated
+     * @param {string} taskAssignmentId - Task assignment ID
+     * @param {string} status - New task assignment status
+     * @return {void}
+     */
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string): void => {
-        // Determine fixedStatus from status. 'approved' === 'complete', 'rejected' === 'done'
-        // get previous task state
-        // add task to state
-        // update assignment via V2 API
-        // failure? revert to previous task state
-        // call user passed in onTaskAssignmentUpdate, if it exists
         const updateTaskAssignment = this.props.onTaskAssignmentUpdate || noop;
         updateTaskAssignment(taskId, taskAssignmentId, status);
     };
 
+    /**
+     * Invokes version history popup handler.
+     *
+     * @param {Object} data - Version history data
+     * @return {void}
+     */
     openVersionHistoryPopup = (data: any): void => {
-        // get version number from data
-        // open the pop for version history
-        // call user passed in onVersionHistoryClick, if it exists
         const versionInfoHandler = this.props.onVersionHistoryClick || noop;
         versionInfoHandler(data);
     };
@@ -357,9 +322,9 @@ class ActivityFeed extends React.Component<Props, State> {
     /**
      * Determine whether or not a sort should occur, based on new comments, tasks, versions.
      *
-     * @param {Comments} - [comments] - Object containing comments for the file.
-     * @param {Tasks} - [tasks] - Object containing tasks for the file.
-     * @param {FileVersions} - [versions] Object containing versions of the file.
+     * @param {Comments} comments - Object containing comments for the file.
+     * @param {Tasks} tasks - Object containing tasks for the file.
+     * @param {FileVersions} versions - Object containing versions of the file.
      * @return {boolean} True if the feed should be sorted with new items.
      */
     shouldSortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions): boolean {
@@ -369,8 +334,8 @@ class ActivityFeed extends React.Component<Props, State> {
     /**
      *  If the file has changed, clear out the feed state.
      *
-     * @param {BoxItem} [file] The box file that comments, tasks, and versions belong to.
-     * @return {boolean} - True if the feedItems were emptied.
+     * @param {BoxItem} file - The box file that comments, tasks, and versions belong to.
+     * @return {boolean} True if the feedItems were emptied.
      */
     clearFeedItems(file?: BoxItem): boolean {
         const { file: oldFile } = this.props;
@@ -380,6 +345,20 @@ class ActivityFeed extends React.Component<Props, State> {
         }
 
         return false;
+    }
+
+    /**
+     *  Constructs an error object that renders to an inline feed error
+     *
+     * @param {string} message - The error message body.
+     * @param {string} title - The error message title.
+
+     * @return {Object} An error message object 
+     */
+    createFeedError(message: string, title?: string = messages.errorOccured) {
+        return {
+            error: { message, title }
+        };
     }
 
     componentDidMount(): void {
@@ -413,9 +392,9 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
-     * Sort valid feed items, descending by created_at time
+     * Sort valid feed items, descending by created_at time.
      *
-     * @param args Array<?Comments | ?Tasks | ?FileVersions> - Arguments list of each item container
+     * @param {Array<?Comments | ?Tasks | ?FileVersions>} args - Arguments list of each item container
      * type that is allowed in the feed.
      */
     sortFeedItems(...args: Array<Comments | Tasks | FileVersions>): void {

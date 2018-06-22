@@ -158,10 +158,10 @@ type SelectorItem = {
 type SelectorItems = Array<SelectorItem>;
 
 type ActionItemError = {
-    title: string,
-    message: string,
-    action: {
-        text: string,
+    title: MessageDescriptor,
+    message: MessageDescriptor,
+    action?: {
+        text: MessageDescriptor,
         onAction: Function
     }
 };
