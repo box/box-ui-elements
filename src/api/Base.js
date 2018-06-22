@@ -248,8 +248,8 @@ class Base {
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      */
-    post(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): void {
-        this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
+    post(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): Promise<any> {
+        return this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
     }
 
     /**
@@ -261,8 +261,8 @@ class Base {
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      */
-    put(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): void {
-        this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
+    put(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): Promise<any> {
+        return this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
     }
 
     /**
@@ -274,8 +274,14 @@ class Base {
      * @param {Function} errorCallback - The error callback
      * @param {Object} data optional data to delete
      */
-    delete(id: string, url: string, successCallback: Function, errorCallback: Function, data?: Object = {}): void {
-        this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
+    delete(
+        id: string,
+        url: string,
+        successCallback: Function,
+        errorCallback: Function,
+        data?: Object = {}
+    ): Promise<any> {
+        return this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
     }
 
     /**
