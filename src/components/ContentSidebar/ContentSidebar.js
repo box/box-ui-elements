@@ -914,7 +914,6 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {string} taskId - The task's id
      * @param {string} taskAssignmentId - The task assignments's id
      * @param {string} resolutionState - The new resolution state of the task assignment
-     * @param {string} message - The task assignments text
      * @param {Function} successCallback - the function which will be called on success
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
@@ -943,38 +942,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             }
         });
     };
-
-    /**
-     * Task update success callback
-     *
-     * @private
-     * @param {Object} task - Box task
-     * @return {void}
-     */
-    updateTaskAssignmentSuccessCallback(taskAssignment: Task) {
-        const { tasks } = this.state;
-        const { id } = taskAssignment;
-
-        if (tasks) {
-            const { entries, total_count } = tasks;
-
-            this.setState({
-                tasks: {
-                    entries: entries.map((task) => {
-                        task.forEach((assignment) => {
-                            if (assignment.id === id) {
-                                return {
-                                    ...taskAssignment
-                                };
-                            }
-                        });
-                        return task;
-                    }),
-                    total_count
-                }
-            });
-        }
-    }
 
     /**
      * Deletes a task

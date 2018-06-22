@@ -296,6 +296,40 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
+     * Updates the task assignment state of the updated task
+     *
+     * @param {Task} task - Box task
+     * @param {TaskAssignment} updatedAssignment - New task assignment from API
+     * @return {void}
+     */
+    updateTaskAssignmentSuccessCallback = (task: Task, updatedAssignment: TaskAssignment) => {
+        const { entries, total_count } = task.task_assignment_collection;
+
+        const assignments = entries.map((item: TaskAssignment) => {
+            if (item.id === updatedAssignment.id) {
+                const resolution_state = updatedAssignment.message.toLowerCase() || updatedAssignment.resolution_state;
+                return {
+                    ...item,
+                    ...updatedAssignment,
+                    resolution_state
+                };
+            }
+            return item;
+        });
+
+        this.updateFeedItem(
+            {
+                ...task,
+                task_assignment_collection: {
+                    entries: assignments,
+                    total_count
+                }
+            },
+            task.id
+        );
+    };
+
+    /**
      * Updates a task assignment via the API.
      *
      * @param {string} taskId - ID of task to be updated
@@ -307,29 +341,13 @@ class ActivityFeed extends React.Component<Props, State> {
         const updateTaskAssignment = this.props.onTaskAssignmentUpdate || noop;
         const { feedItems } = this.state;
         const task = feedItems.find((item) => !!(item.id === taskId));
-        updateTaskAssignment(taskId, taskAssignmentId, status, (assignment) => {
-            const assignments = task.task_assignment_collection.entries;
-            this.updateFeedItem(
-                {
-                    ...task,
-                    task_assignment_collection: {
-                        entries: assignments.map((item: TaskAssignment) => {
-                            if (item.id === assignment.id) {
-                                // $FlowFixMe
-                                return {
-                                    ...item,
-                                    ...assignment,
-                                    resolution_state: assignment.message.toLowerCase() || assignment.resolution_state
-                                };
-                            }
-                            return item;
-                        }),
-                        total_count: task.task_assignment_collection.total_count
-                    }
-                },
-                taskId
-            );
-        });
+        if (!task) {
+            return;
+        }
+
+        updateTaskAssignment(taskId, taskAssignmentId, status, (updatedAssignment) =>
+            this.updateTaskAssignmentSuccessCallback(task, updatedAssignment)
+        );
     };
 
     /**
@@ -377,7 +395,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {string} message - The error message body.
      * @param {string} title - The error message title.
 
-     * @return {Object} An error message object 
+     * @return {Object} An error message object
      */
     createFeedError(message: string, title?: string = messages.errorOccured) {
         return {
