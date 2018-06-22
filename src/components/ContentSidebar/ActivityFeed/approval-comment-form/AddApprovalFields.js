@@ -40,7 +40,7 @@ const AddApprovalFields = ({
         .filter(({ id }) => !approvers.find(({ value }) => value === id))
         // map to datalist item format
         .map(({ id, item }) => ({
-            login: item.login,
+            ...item,
             text: item.name,
             value: id
         }));
@@ -57,8 +57,8 @@ const AddApprovalFields = ({
                 selectedOptions={approvers}
                 selectorOptions={approverOptions}
             >
-                {approverOptions.map(({ login, text, value }) => (
-                    <ContactDatalistItem key={value} name={text} subtitle={login} />
+                {approverOptions.map(({ id, name, email }) => (
+                    <ContactDatalistItem key={id} name={name} subtitle={email} />
                 ))}
             </PillSelectorDropdown>
             <DatePicker
