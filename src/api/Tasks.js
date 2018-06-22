@@ -33,24 +33,6 @@ class Tasks extends Base {
     }
 
     /**
-     * Formats task data for use in components.
-     *
-     * @param {string} [id] - An individual task entry from the API
-     * @return {Task} A task
-     */
-    format(task: Object): Task {
-        const {entries} = task.task_assignment_collection;
-        entries.forEach((assignment) => {
-            assignment.resolution_state = 'incomplete';
-        });
-
-        return {
-            ...task,
-            task_assignment_collection: entries || []
-        };
-    }
-
-    /**
      * API for creating a task on a file
      *
      * @param {string} id - a box file id

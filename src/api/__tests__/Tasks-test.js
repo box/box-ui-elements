@@ -19,30 +19,6 @@ describe('api/Tasks', () => {
         });
     });
 
-    describe('format()', () => {
-        const task = {
-            type: 'task',
-            id: '1234',
-            created_at: { name: 'Jay-Z', id: 10 },
-            due_at: 1234567891,
-            message: 'test',
-            task_assignment_collection: {
-                entries: ['foo']
-            }
-        };
-
-        test('should unnest the task_assignment_collection', () => {
-            const result = tasks.format(task);
-            expect(result).toEqual({
-                ...task,
-                task_assignment_collection: {
-                    entries: ['foo'],
-                    total_count: 1
-                }
-            });
-        });
-    });
-
     describe('tasksUrl()', () => {
         test('should add an id if provided', () => {
             expect(tasks.tasksUrl('foo')).toBe('https://api.box.com/2.0/tasks/foo');
