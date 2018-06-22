@@ -23,7 +23,6 @@ type Props = {
     hasActivityFeed: boolean,
     hasSkills: boolean,
     hasDetails: boolean,
-    onDescriptionChange: Function,
     onSkillChange: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
@@ -35,14 +34,10 @@ type Props = {
     getMentionWithQuery?: Function,
     translations?: Translations,
     versions?: FileVersions,
-    versionError?: Errors,
     comments?: Comments,
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    accessStats?: FileAccessStats,
-    accessStatsError?: Errors,
-    fileError?: Errors,
     commentsError?: Errors,
     tasksError?: Errors,
     currentUserError?: Errors,
@@ -61,7 +56,6 @@ const Sidebar = ({
     hasSkills,
     hasDetails,
     detailsSidebarProps,
-    onDescriptionChange,
     onSkillChange,
     onCommentCreate,
     onCommentDelete,
@@ -71,15 +65,11 @@ const Sidebar = ({
     onTaskAssignmentUpdate,
     getApproverWithQuery,
     getMentionWithQuery,
-    accessStats,
-    accessStatsError,
-    fileError,
     tasks,
     tasksError,
     comments,
     commentsError,
     versions,
-    versionError,
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl,
@@ -96,18 +86,7 @@ const Sidebar = ({
             hasDetails={hasDetails}
         />
         {view === SIDEBAR_VIEW_DETAILS &&
-            hasDetails && (
-                <DetailsSidebar
-                    file={file}
-                    onDescriptionChange={onDescriptionChange}
-                    versions={versions}
-                    versionError={versionError}
-                    accessStats={accessStats}
-                    accessStatsError={accessStatsError}
-                    fileError={fileError}
-                    {...detailsSidebarProps}
-                />
-            )}
+            hasDetails && <DetailsSidebar file={file} versions={versions} {...detailsSidebarProps} />}
         {view === SIDEBAR_VIEW_SKILLS &&
             hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&

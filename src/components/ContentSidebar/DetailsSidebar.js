@@ -17,15 +17,17 @@ import SidebarFileProperties from './SidebarFileProperties';
 
 import './DetailsSidebar.scss';
 
-export type DetailsSidebarProps = {
+type ExternalProps = {
     hasNotices?: boolean,
     hasProperties?: boolean,
     hasAccessStats?: boolean,
     hasClassification?: boolean,
     hasVersions?: boolean,
+    retentionPolicy?: Object,
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
+    onRetentionPolicyExtendClick?: Function
 };
 
 type Props = {
@@ -36,7 +38,7 @@ type Props = {
     accessStatsError?: Errors,
     fileError?: Errors,
     versionError?: Errors
-} & DetailsSidebarProps;
+} & ExternalProps;
 
 const DetailsSidebar = ({
     accessStats,
@@ -94,4 +96,5 @@ const DetailsSidebar = ({
     </SidebarContent>
 );
 
+export type DetailsSidebarProps = ExternalProps;
 export default DetailsSidebar;

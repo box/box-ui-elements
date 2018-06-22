@@ -14,7 +14,6 @@ import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
-import type { DetailsSidebarProps } from './DetailsSidebar';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 import {
@@ -34,12 +33,13 @@ import {
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH
 } from '../../util/fields';
 import messages from '../messages';
+import { getBadItemError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
+import type { DetailsSidebarProps } from './DetailsSidebar';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
 import './ContentSidebar.scss';
-import { getBadItemError } from '../../util/error';
 
 type Props = {
     fileId?: string,
@@ -1321,14 +1321,20 @@ class ContentSidebar extends PureComponent<Props, State> {
                             <Sidebar
                                 file={((file: any): BoxItem)}
                                 view={view}
-                                detailsSidebarProps={detailsSidebarProps}
+                                detailsSidebarProps={{
+                                    accessStats,
+                                    accessStatsError,
+                                    versionError,
+                                    fileError,
+                                    onDescriptionChange: this.onDescriptionChange,
+                                    ...detailsSidebarProps
+                                }}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasActivityFeed={hasActivityFeed}
-                                onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
                                 onSkillChange={this.onSkillChange}
                                 accessStatsError={accessStatsError}
