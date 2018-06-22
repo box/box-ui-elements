@@ -29,7 +29,10 @@ const tasks = {
             tagged_message: 'test',
             modified_by: { name: 'Jay-Z', id: 10 },
             dueAt: 1234567891,
-            task_assignment_collection: []
+            task_assignment_collection: {
+                entries: [],
+                total_count: 0
+            }
         }
     ]
 };
@@ -493,7 +496,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         let instance;
         const create = jest.fn();
         const message = 'message';
-  
+
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={create} />);
             instance = wrapper.instance();

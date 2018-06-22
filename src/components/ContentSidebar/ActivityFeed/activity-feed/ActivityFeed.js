@@ -340,7 +340,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const updateTaskAssignment = this.props.onTaskAssignmentUpdate || noop;
         const { feedItems } = this.state;
         const task = feedItems.find((item) => !!(item.id === taskId));
-        if (!task) {
+        if (!(task instanceof Task)) {
             return;
         }
 

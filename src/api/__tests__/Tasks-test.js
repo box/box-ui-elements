@@ -35,7 +35,10 @@ describe('api/Tasks', () => {
             const result = tasks.format(task);
             expect(result).toEqual({
                 ...task,
-                task_assignment_collection: ['foo']
+                task_assignment_collection: {
+                    entries: ['foo'],
+                    total_count: 1
+                }
             });
         });
     });
