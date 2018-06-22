@@ -39,6 +39,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
     modifiedAt="2018-04-18T16:56:05.352Z"
     onDescriptionChange={[MockFunction]}
     owner="foo"
+    retentionPolicyProps={Object {}}
     size="1 B"
     uploader="foo"
   >
@@ -196,6 +197,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render ItemPrope
   modifiedAt="2018-04-18T16:56:05.352Z"
   onDescriptionChange={[MockFunction]}
   owner="foo"
+  retentionPolicyProps={Object {}}
   size="1 B"
   uploader="foo"
 />
@@ -264,6 +266,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
         "data-resin-target": "description",
       }
     }
+    retentionPolicyProps={Object {}}
     size="1 B"
   >
     <dl
@@ -365,6 +368,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
         "data-resin-target": "description",
       }
     }
+    retentionPolicyProps={Object {}}
     size="1 B"
   >
     <dl
