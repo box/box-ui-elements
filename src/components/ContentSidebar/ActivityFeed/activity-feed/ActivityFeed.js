@@ -318,7 +318,6 @@ class ActivityFeed extends React.Component<Props, State> {
 
         this.updateFeedItem(
             {
-                ...task,
                 task_assignment_collection: {
                     entries: assignments,
                     total_count
