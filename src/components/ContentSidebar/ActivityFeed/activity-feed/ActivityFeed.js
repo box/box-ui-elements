@@ -307,11 +307,10 @@ class ActivityFeed extends React.Component<Props, State> {
 
         const assignments = entries.map((item: TaskAssignment) => {
             if (item.id === updatedAssignment.id) {
-                const resolution_state = updatedAssignment.message.toLowerCase() || updatedAssignment.resolution_state;
                 return {
                     ...item,
                     ...updatedAssignment,
-                    resolution_state
+                    resolution_state: updatedAssignment.message.toLowerCase()
                 };
             }
             return item;
@@ -345,8 +344,12 @@ class ActivityFeed extends React.Component<Props, State> {
             return;
         }
 
-        updateTaskAssignment(taskId, taskAssignmentId, status, (updatedAssignment) =>
-            this.updateTaskAssignmentSuccessCallback(task, updatedAssignment)
+        updateTaskAssignment(
+            taskId,
+            taskAssignmentId,
+            status,
+            (updatedAssignment) => this.updateTaskAssignmentSuccessCallback(task, updatedAssignment),
+            () => this.updateFeedItem(this.createFeedError(messages.taskAssignmentUpdateErrorMessage), taskAssignmentId)
         );
     };
 

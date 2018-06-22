@@ -689,6 +689,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Error message when a task edit fails',
         defaultMessage: 'There was an error updating this task.'
     },
+    taskAssignmentUpdateErrorMessage: {
+        id: 'be.taskAssignmentUpdateErrorMessage',
+        description: 'Error message when a task assignment update fails',
+        defaultMessage: 'There was an error updating this task assignment.'
+    },
     taskDeleteErrorMessage: {
         id: 'be.taskDeleteErrorMessage',
         description: 'Error message when a task deletion fails',
