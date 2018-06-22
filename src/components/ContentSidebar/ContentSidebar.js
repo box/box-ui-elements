@@ -543,7 +543,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                     const { message, resolution_state } = assignment;
                     return {
                         ...assignment,
-                        resolution_state: message.toLowerCase() || resolution_state
+                        resolution_state: message ? message.toLowerCase() : resolution_state
                     };
                 }
                 return item;
