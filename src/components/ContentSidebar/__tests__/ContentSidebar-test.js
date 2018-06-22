@@ -724,12 +724,17 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
+    describe('createTaskAssignmentObject()', () => {
+        test('should create a well formed task assignment object', () => {});
+    });
+
     describe('createTaskSuccessCallback()', () => {
         let instance;
         let wrapper;
         beforeEach(() => {
             wrapper = getWrapper();
             instance = wrapper.instance();
+            instance.setState({ file });
         });
 
         test('should not add to the task entries state if there is none', () => {
@@ -741,22 +746,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(instance.setState).not.toBeCalled();
         });
 
-        test('should add the task to the task entries state, and increates total_count by one', () => {
-            instance.setState({
-                tasks: {
-                    total_count: 0,
-                    entries: []
-                }
-            });
-
-            instance.createTaskSuccessCallback({
-                type: 'task'
-            });
-
-            const { tasks } = instance.state;
-            expect(tasks.entries.length).toBe(1);
-            expect(tasks.total_count).toBe(1);
-        });
+        test('should create a TaskAssignment for each assignment', () => {});
+        test('should attempt to delete task on assignment creation failure', () => {});
+        test('should call the success callback and update the state once all assignments have been created', () => {});
     });
 
     describe('createTask()', () => {
@@ -786,48 +778,23 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     done();
                 }
             };
-            instance.setState({ file });
 
+            instance.setState({ file });
             instance.createTask('text');
         });
 
-        test('should invoke provided successCallback with a new task if api was successful', (done) => {
-            const onSuccess = jest.fn();
-            tasksAPI = {
-                createTask: ({ successCallback }) => {
-                    successCallback();
-                    expect(onSuccess).toBeCalled();
-                    done();
-                }
-            };
-            instance.setState({ file });
-
-            instance.createTask('text', undefined, undefined, onSuccess);
-        });
-
-        test('should invoke errorCallback() if it failed to create a task', (done) => {
+        test('should invoke errorCallback() if the API failed to create a task', (done) => {
             instance.errorCallback = jest.fn();
-            tasksAPI = {
-                createTask: ({ errorCallback }) => {
-                    errorCallback();
-                    expect(instance.errorCallback).toBeCalled();
-                    done();
-                }
-            };
-            instance.setState({ file });
-
-            instance.createTask('text');
-        });
-
-        test('should invoke provided errorCallback if it failed to create a task', (done) => {
             const testErrorCallback = jest.fn();
             tasksAPI = {
                 createTask: ({ errorCallback }) => {
                     errorCallback();
+                    expect(instance.errorCallback).toBeCalled();
                     expect(testErrorCallback).toBeCalled();
                     done();
                 }
             };
+
             instance.setState({ file });
             instance.errorCallback = jest.fn();
 

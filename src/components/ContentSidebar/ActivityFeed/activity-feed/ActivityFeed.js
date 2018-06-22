@@ -215,15 +215,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {number} dueAt - Task's due date
      * @return {void}
      */
-    createTask = ({
-        text,
-        assignees,
-        dueAt
-    }: {
-        text: string,
-        assignees: Array<SelectorItems>,
-        dueAt: string
-    }): void => {
+    createTask = ({ text, assignees, dueAt }: { text: string, assignees: SelectorItems, dueAt: string }): void => {
         const uuid = uniqueId('task_');
         let dueAtString;
         if (dueAt) {
@@ -231,14 +223,21 @@ class ActivityFeed extends React.Component<Props, State> {
             dueAtString = dueAtDate.toISOString();
         }
 
+        const pendingAssignees = assignees.map((assignee: SelectorItem) => ({
+            assigned_to: {
+                id: assignee.id,
+                name: assignee.name
+            }
+        }));
+
         const task = {
             due_at: dueAtString,
             id: uuid,
             is_completed: false,
             message: text,
             task_assignment_collection: {
-                entries: [],
-                total_count: 0
+                entries: pendingAssignees,
+                total_count: assignees.length
             },
             type: 'task'
         };

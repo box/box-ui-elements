@@ -793,19 +793,80 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Creates a task assignment object to be inserted into a newly created task
+     *
+
+     * @param {Function} successCallback - Task create success callback
+     * @param {Function} errorCallback - Task create error callback
+     * @return {TaskAssignment}
+     */
+    createTaskAssignmentObject(data: any) {
+        const { id: assignmentId, assigned_to, message, resolution_state } = data;
+        return {
+            type: 'task_assignment',
+            id: assignmentId,
+            assigned_to,
+            message,
+            resolution_state
+        };
+    }
+
+    /**
      * Adds a task to the tasks state and increases total_count.
      *
      * @param {Task} task - The newly created task from the API
+     * @param {SelectorItems} assignees - The list of users assigned to this task
+     * @param {Function} successCallback - Task create success callback
+     * @param {Function} errorCallback - Task create error callback
+
      * @return {void}
      */
-    createTaskSuccessCallback(task: Task): void {
-        const { tasks } = this.state;
+    createTaskSuccessCallback(
+        task: Task,
+        assignees: SelectorItems,
+        successCallback: Function,
+        errorCallback: Function
+    ): void {
+        const { tasks, file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
         if (tasks && tasks.entries) {
-            this.setState({
-                tasks: {
-                    entries: [...tasks.entries, task],
-                    total_count: tasks.total_count + 1
-                }
+            const assignmentPromises = [];
+            assignees.forEach((assignee: SelectorItem) => {
+                const assignmentPromise = this.api.getTaskAssignmentsAPI(false).createTaskAssignment({
+                    file,
+                    taskId: task.id,
+                    assignTo: { id: assignee.id },
+                    successCallback: (data) => {
+                        // Increment the assignment collection count and add the new assignment
+                        const updatedTask: TaskAssignment = this.createTaskAssignmentObject(data);
+                        task.task_assignment_collection.total_count += 1;
+                        task.task_assignment_collection.entries.push(updatedTask);
+                    },
+                    errorCallback: (e) => {
+                        this.errorCallback(e);
+                        errorCallback(e);
+                        // Attempt to delete the task due to it's bad assignment
+                        this.deleteTask(task.id);
+                    }
+                });
+
+                assignmentPromises.push(assignmentPromise);
+            });
+
+            Promise.all(assignmentPromises).then(() => {
+                // After all assignments have been created, update the state with
+                // the updated task object
+                successCallback(task);
+                this.setState({
+                    tasks: {
+                        entries: [...tasks.entries, task],
+                        total_count: tasks.total_count + 1
+                    }
+                });
             });
         }
     }
@@ -815,7 +876,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} text - The task's text
-     * @param {Array} assignees - Array of assignees
+     * @param {SelectorItems} assignees - Array of assignees IDs
      * @param {string} dueAt - The comment's text
      * @param {Function} successCallback - Called on successful task creation
      * @param {Function} errorCallback - Called on failure to create task
@@ -823,7 +884,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     createTask = (
         text: string,
-        assignees: Array<SelectorItems>,
+        assignees: SelectorItems,
         dueAt?: string,
         successCallback: (task: Task) => void = noop,
         errorCallback: (e: Error) => void = noop
@@ -839,8 +900,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             message: text,
             dueAt,
             successCallback: (task: Task) => {
-                this.createTaskSuccessCallback(task);
-                successCallback(task);
+                this.createTaskSuccessCallback(task, assignees, successCallback, errorCallback);
             },
             errorCallback: (e: Error) => {
                 this.errorCallback(e);

@@ -145,7 +145,7 @@ type UserCollection = {
 };
 
 type SelectorItem = {
-    id?: string | number,
+    id: string,
     name: string,
     item: Object,
     value?: any
