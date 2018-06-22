@@ -63,7 +63,13 @@ class TaskAssignments extends Base {
             }
         };
 
-        this.post(id, this.getUrl(), requestData, successCallback, errorCallback);
+        this.post({
+            id,
+            url: this.getUrl(),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**

@@ -83,8 +83,8 @@ describe('api/Comments', () => {
 
         const commentId = '123';
         const message = 'hello world';
-        const successCb = jest.fn();
-        const errorCb = jest.fn();
+        const successCallback = jest.fn();
+        const errorCallback = jest.fn();
 
         beforeEach(() => {
             comments.get = jest.fn();
@@ -99,7 +99,7 @@ describe('api/Comments', () => {
 
         describe('createComment()', () => {
             test('should check for valid comment permissions', () => {
-                comments.createComment({ file, message, successCb, errorCb });
+                comments.createComment({ file, message, successCallback, errorCallback });
                 expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_COMMENT, file.permissions, file.id);
             });
 
@@ -118,8 +118,14 @@ describe('api/Comments', () => {
                     }
                 };
 
-                comments.createComment({ file, message, successCallback: successCb, errorCallback: errorCb });
-                expect(comments.post).toBeCalledWith('foo', comments.commentsUrl(), requestData, successCb, errorCb);
+                comments.createComment({ file, message, successCallback, errorCallback });
+                expect(comments.post).toBeCalledWith({
+                    id: 'foo',
+                    url: comments.commentsUrl(),
+                    data: requestData,
+                    successCallback,
+                    errorCallback
+                });
             });
         });
 
@@ -128,7 +134,7 @@ describe('api/Comments', () => {
                 const permissions = {
                     [PERMISSION_CAN_EDIT]: true
                 };
-                comments.updateComment({ file, commentId, permissions, message, successCb, errorCb });
+                comments.updateComment({ file, commentId, permissions, message, successCallback, errorCallback });
                 expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_EDIT, permissions, file.id);
             });
 
@@ -141,15 +147,15 @@ describe('api/Comments', () => {
                     file,
                     commentId,
                     message,
-                    successCallback: successCb,
-                    errorCallback: errorCb
+                    successCallback,
+                    errorCallback
                 });
                 expect(comments.put).toBeCalledWith(
                     'foo',
                     comments.commentsUrl(commentId),
                     requestData,
-                    successCb,
-                    errorCb
+                    successCallback,
+                    errorCallback
                 );
             });
         });
@@ -159,13 +165,18 @@ describe('api/Comments', () => {
                 const permissions = {
                     [PERMISSION_CAN_DELETE]: true
                 };
-                comments.deleteComment({ file, commentId, permissions, successCb, errorCb });
+                comments.deleteComment({ file, commentId, permissions, successCallback, errorCallback });
                 expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_DELETE, permissions, file.id);
             });
 
             test('should delete a comment from the comments endpoint', () => {
-                comments.deleteComment({ file, commentId, successCallback: successCb, errorCallback: errorCb });
-                expect(comments.delete).toBeCalledWith('foo', comments.commentsUrl(commentId), successCb, errorCb);
+                comments.deleteComment({ file, commentId, successCallback, errorCallback });
+                expect(comments.delete).toBeCalledWith(
+                    'foo',
+                    comments.commentsUrl(commentId),
+                    successCallback,
+                    errorCallback
+                );
             });
         });
     });

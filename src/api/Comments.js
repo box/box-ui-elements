@@ -117,7 +117,13 @@ class Comments extends OffsetBasedAPI {
             }
         };
 
-        this.post(id, this.commentsUrl(), requestData, successCallback, errorCallback);
+        this.post({
+            id,
+            url: this.commentsUrl(),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**

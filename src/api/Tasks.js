@@ -96,7 +96,13 @@ class Tasks extends Base {
             }
         };
 
-        this.post(id, this.tasksUrl(), requestData, successCallback, errorCallback);
+        this.post({
+            id,
+            url: this.tasksUrl(),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**

@@ -248,7 +248,19 @@ class Base {
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
      */
-    post(id: string, url: string, data: Object, successCallback: Function, errorCallback: Function): Promise<any> {
+    post({
+        id,
+        url,
+        data,
+        successCallback,
+        errorCallback
+    }: {
+        id: string,
+        url: string,
+        data: Object,
+        successCallback: Function,
+        errorCallback: Function
+    }): Promise<any> {
         return this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
     }
 
