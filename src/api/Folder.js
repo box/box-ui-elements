@@ -296,20 +296,24 @@ class Folder extends Item {
         }
         const childKey: string = this.getCacheKey(childId);
         const cache: APICache = this.getCache();
-        const parent: FlattenedBoxItem | BoxItem = cache.get(this.key) || data;
+        const parent: FlattenedBoxItem = cache.get(this.key);
 
-        const { item_collection } = parent;
+        if (!parent) {
+            this.successCallback(data);
+            return;
+        }
+
+        const { item_collection }: FlattenedBoxItem = parent;
         if (!item_collection) {
             throw getBadItemError();
         }
 
-        const { total_count, entries } = item_collection;
+        const { total_count, entries }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
 
         cache.set(childKey, data);
-        // $FlowFixMe
         item_collection.entries = [childKey].concat(entries);
         item_collection.total_count = total_count + 1;
         this.successCallback(data);

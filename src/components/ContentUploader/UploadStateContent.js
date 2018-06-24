@@ -60,7 +60,7 @@ const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChang
     return (
         <div>
             {messageContent}
-            {inputsContent && <div className='be-upload-input-container'>{inputsContent}</div>}
+            {inputsContent && <div className='bcu-upload-input-container'>{inputsContent}</div>}
         </div>
     );
 };

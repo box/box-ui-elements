@@ -3,93 +3,162 @@
  * @file Recursively create folder and upload files
  * @author Box
  */
+import FolderAPI from '../../api/Folder';
 
-import { STATUS_COMPLETE } from '../../constants';
+import { STATUS_COMPLETE, ERROR_CODE_ITEM_NAME_IN_USE } from '../../constants';
 
 class FolderUploadNode {
     addFolderToQueue: Function;
-    createFolder: Function;
-    files: Array<File> = [];
+    files: Array<UploadFileWithAPIOptions | File> = [];
     folderID: string;
     folders: Object = {};
     name: string;
     parentFolderID: string;
     uploadFile: Function;
+    areAPIOptionsInFiles: boolean;
+    baseAPIOptions: Object;
 
     /**
      * [constructor]
      *
      * @param {string} name
-     * @param {Function} createFolder
      * @param {Function} uploadFile
      * @param {Function} addFolderToQueue
      * @returns {void}
      */
-    constructor(name: string, createFolder: Function, uploadFile: Function, addFolderToQueue: Function) {
+    constructor(
+        name: string,
+        uploadFile: Function,
+        addFolderToQueue: Function,
+        areAPIOptionsInFiles: boolean,
+        baseAPIOptions: Object
+    ) {
         this.name = name;
-        this.createFolder = createFolder;
         this.uploadFile = uploadFile;
         this.addFolderToQueue = addFolderToQueue;
+        this.areAPIOptionsInFiles = areAPIOptionsInFiles;
+        this.baseAPIOptions = baseAPIOptions;
     }
 
     /**
-     * Upload a folder upload node
+     * Upload a folder
      *
+     * @public
      * @param {string} parentFolderID
      * @param {Function} errorCallback
      * @param {boolean} isRoot
      * @returns {Promise}
      */
     async upload(parentFolderID: string, errorCallback: Function, isRoot: boolean = false) {
+        await this.createAndUploadFolder(parentFolderID, errorCallback, isRoot);
+        this.uploadFile(this.getFormattedFiles(), true);
+        this.uploadChildFolders(errorCallback);
+    }
+
+    /**
+     * Upload all child folders
+     *
+     * @private
+     * @param {Function} errorCallback
+     * @returns {Promise}
+     */
+    uploadChildFolders = async (errorCallback: Function) => {
+        // $FlowFixMe
+        const folderNodes: Array<FolderUploadNode> = Object.values(this.folders);
+        const promises = folderNodes.map((folder) => folder.upload(this.folderID, errorCallback));
+
+        await Promise.all(promises);
+    };
+
+    /**
+     * Create folder and add it to the upload queue
+     *
+     * @private
+     * @param {string} parentFolderID
+     * @param {Function} errorCallback
+     * @param {boolean} isRoot
+     * @returns {Promise}
+     */
+    createAndUploadFolder = async (parentFolderID: string, errorCallback: Function, isRoot: boolean) => {
         try {
-            const data = await this.createFolderPromise(parentFolderID);
+            const data = await this.createFolder(parentFolderID);
             this.folderID = data.id;
         } catch (error) {
-            if (error.code !== 'item_name_in_use') {
+            // @TODO: Handle 429
+            if (error.code !== ERROR_CODE_ITEM_NAME_IN_USE) {
                 errorCallback(error);
             }
             this.folderID = error.context_info.conflicts[0].id;
         }
 
-        if (!isRoot) {
-            this.addFolderToQueue([
-                {
-                    extension: '',
-                    name: this.name,
-                    status: STATUS_COMPLETE,
-                    isFolder: true
-                }
-            ]);
+        if (isRoot) {
+            return;
         }
 
-        const filesWithOptions = this.files.map((file) => ({
-            file,
-            options: {
+        this.addFolderToQueue([
+            {
+                extension: '',
+                name: this.name,
+                status: STATUS_COMPLETE,
+                isFolder: true,
+                size: 1,
+                progress: 100
+            }
+        ]);
+    };
+
+    /**
+     * Format files to Array<UploadFileWithAPIOptions> for upload
+     *
+     * @private
+     * @param {string} parentFolderID
+     * @param {Function} errorCallback
+     * @param {boolean} isRoot
+     * @returns {Array<UploadFileWithAPIOptions>}
+     */
+    getFormattedFiles = (): Array<UploadFileWithAPIOptions> =>
+        this.files.map((fileData: File | UploadFileWithAPIOptions) => {
+            let file = fileData;
+            const additionalOptions = {
                 folderId: this.folderID,
                 uploadInitTimestamp: Date.now()
+            };
+            let options = additionalOptions;
+
+            if (this.areAPIOptionsInFiles) {
+                // In case this.areAPIOptionsInFiles is true, this.files is Array<UploadItemAPIOptions>
+                // fileData.file is File type, and we expand fileData.options with additionalOptions
+
+                // $FlowFixMe fileData is UploadFileWithAPIOptions type
+                file = fileData.file; // eslint-disable-line prefer-destructuring
+                options = {
+                    // $FlowFixMe fileData is UploadFileWithAPIOptions type
+                    ...fileData.options,
+                    ...additionalOptions
+                };
             }
-        }));
 
-        this.uploadFile(filesWithOptions, true);
-
-        /* eslint-disable no-restricted-syntax */
-        // $FlowFixMe this.folders values are FolderUploadNode
-        for (const folder: FolderUploadNode of Object.values(this.folders)) {
-            // eslint-disable-next-line no-await-in-loop
-            await folder.upload(this.folderID, errorCallback);
-        }
-        /* eslint-enable no-restricted-syntax */
-    }
+            return {
+                // $FlowFixMe file is File type
+                file,
+                options
+            };
+        });
 
     /**
      * Promisify create folder
      *
+     * @private
      * @param {string} parentFolderID
      * @returns {Promise}
      */
-    createFolderPromise(parentFolderID: string): Promise<any> {
+    createFolder(parentFolderID: string): Promise<any> {
+        const folderAPI = new FolderAPI({
+            ...this.baseAPIOptions,
+            id: `folder_${this.parentFolderID}`
+        });
         return new Promise((resolve, reject) => {
-            this.createFolder(parentFolderID, this.name, resolve, reject);
+            folderAPI.create(parentFolderID, this.name, resolve, reject);
         });
     }
 }

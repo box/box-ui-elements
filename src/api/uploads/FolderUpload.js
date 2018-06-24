@@ -12,40 +12,46 @@ class FolderUpload {
     folderNodes: Object = {};
     files: Array<File> = [];
     destinationFolderID: string;
-    createFolder: Function;
     uploadFile: Function;
     addFolderToQueue: Function;
+    areAPIOptionsInFiles: boolean;
+    baseAPIOptions: Object;
 
     /**
      * [constructor]
      *
-     * @param {Function} createFolder
      * @param {Function} uploadFile
      * @param {string} destinationFolderID
      * @param {Function} addFolderToQueue
+     * @param {boolean} areAPIOptionsInFiles
+     * @param {Object} baseAPIOptions
      * @return {void}
      */
     constructor(
-        createFolder: Function,
         uploadFile: Function,
         destinationFolderID: string,
-        addFolderToQueue: Function
+        addFolderToQueue: Function,
+        areAPIOptionsInFiles: boolean,
+        baseAPIOptions: Object
     ): void {
-        this.createFolder = createFolder;
         this.uploadFile = uploadFile;
         this.destinationFolderID = destinationFolderID;
         this.addFolderToQueue = addFolderToQueue;
+        this.areAPIOptionsInFiles = areAPIOptionsInFiles;
+        this.baseAPIOptions = baseAPIOptions;
     }
 
     /**
      * Creates a folder tree from wekbkitRelativePath
      *
-     * @param  {FileList} Array<UploadFileWithAPIOptions | File> | FileList
+     * @public
+     * @param  {Array} Array<UploadFileWithAPIOptions | File> | FileList
      * @returns {void}
      */
     buildFolderTree(fileList: Array<UploadFileWithAPIOptions | File> | FileList): void {
         // FileList does not natively have forEach, hence this workaround
-        Array.prototype.forEach.call(fileList, (file) => {
+        Array.prototype.forEach.call(fileList, (fileData) => {
+            const file = this.areAPIOptionsInFiles ? fileData.file : fileData;
             const pathArray = file.webkitRelativePath.split(PATH_DELIMITER).slice(0, -1);
             if (pathArray.length <= 0) {
                 return;
@@ -58,15 +64,16 @@ class FolderUpload {
                 if (!subTree[folderName]) {
                     subTree[folderName] = new FolderUploadNode(
                         folderName,
-                        this.createFolder,
                         this.uploadFile,
-                        this.addFolderToQueue
+                        this.addFolderToQueue,
+                        this.areAPIOptionsInFiles,
+                        this.baseAPIOptions
                     );
                 }
 
                 if (index === pathArray.length - 1) {
                     // end of path, push the file
-                    subTree[folderName].files.push(file);
+                    subTree[folderName].files.push(fileData);
                 } else {
                     // walk the tree
                     subTree = subTree[folderName].folders;
@@ -78,6 +85,7 @@ class FolderUpload {
     /**
      * Upload folderNodes
      *
+     * @public
      * @param {Object} Options
      * @param {Function} options.errorCallback
      * @returns {void}
@@ -91,6 +99,8 @@ class FolderUpload {
 
     /**
      * Noop cancel
+     *
+     * @public
      */
     cancel() {}
 }

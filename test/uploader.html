@@ -49,6 +49,10 @@
                     <div>Auth Token</div>
                     <input class="token" type="password" placeholder="Enter auth token" />
                 </label>
+                <label>
+                    <div>Enable Folder Upload</div>
+                    <input class="enableFolderUpload" type="checkbox" />
+                </label>
             </div>
             <button type="button" onclick="handleSubmit()">Submit</button>
         </div>
@@ -60,9 +64,11 @@
         (function () {
             const storageToken = localStorage.getItem('token');
             const storageFolder = localStorage.getItem('folderId');
+            const storageEnableFolderUpload = localStorage.getItem('enableFolderUpload');
 
             document.querySelector('.token').value = storageToken || null;
             document.querySelector('.folder').value = storageFolder || 0;
+            document.querySelector('.enableFolderUpload').checked = storageEnableFolderUpload !== undefined ? storageEnableFolderUpload === 'true' : false;
         })();
 
         function handleSubmit() {
@@ -75,9 +81,11 @@
 
             const token = document.querySelector('.token').value || localStorage.getItem('token');
             const folderId = document.querySelector('.folder').value || localStorage.getItem('folderId');
+            const enableFolderUpload = document.querySelector('.enableFolderUpload').checked;
 
             localStorage.setItem('token', token);
             localStorage.setItem('folderId', folderId);
+            localStorage.setItem('enableFolderUpload', enableFolderUpload);
 
             const typedId = `folder_${folderId}`;
 
@@ -101,7 +109,8 @@
             });
 
             uploader1.show(folderId, tokenGenerator, {
-                container: '.uploader1'
+                container: '.uploader1',
+                isFolderUploadEnabled: enableFolderUpload
             });
         }
         load();
