@@ -76,7 +76,7 @@ describe('api/uploads/FolderUploadNode', () => {
             expect(folderUploadNodeInstance.folderId).toBe(folderId);
         });
 
-        test('should call errorCallback when create folder is not successful and error code is not ERROR_CODE_ITEM_NAME_IN_USE', async () => {
+        test('should call errorCallback when create folder fails and error code is not ITEM_NAME_IN_USE', async () => {
             const errorCallback = jest.fn();
             const isRoot = true;
             const error = { code: 'random' };
@@ -88,7 +88,7 @@ describe('api/uploads/FolderUploadNode', () => {
             expect(errorCallback).toHaveBeenCalledWith(error);
         });
 
-        test('should recovery correctly from ERROR_CODE_ITEM_NAME_IN_USE', async () => {
+        test('should recovery correctly from ITEM_NAME_IN_USE', async () => {
             const errorCallback = jest.fn();
             const folderId = '1';
             const isRoot = true;
@@ -102,7 +102,7 @@ describe('api/uploads/FolderUploadNode', () => {
             expect(folderUploadNodeInstance.folderId).toBe(folderId);
         });
 
-        test('should call addFolderToQueue() when folder is created successfully and folder is not root folder', async () => {
+        test('should call addFolderToQueue when folder is created successfully for non-root folder', async () => {
             const folderId = '1';
             const errorCallback = () => 'errorCallback';
             const isRoot = false;
@@ -124,7 +124,7 @@ describe('api/uploads/FolderUploadNode', () => {
             ]);
         });
 
-        test('should not addFolderToQueue() when folder is created successfully and folder is root folder', async () => {
+        test('should not addFolderToQueue() when folder is created successfully for root folder', async () => {
             const folderId = '1';
             const errorCallback = () => 'errorCallback';
             const isRoot = true;
