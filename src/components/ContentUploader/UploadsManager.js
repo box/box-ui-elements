@@ -40,12 +40,14 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
     };
 
     const totalSize = items.reduce(
-        (updatedSize, item) => (item.status === STATUS_ERROR ? updatedSize : updatedSize + item.size),
+        (updatedSize, item) => (item.status === STATUS_ERROR || item.isFolder ? updatedSize : updatedSize + item.size),
         0
     );
     const totalUploaded = items.reduce(
         (updatedSize, item) =>
-            item.status === STATUS_ERROR ? updatedSize : updatedSize + item.size * item.progress / 100.0,
+            item.status === STATUS_ERROR || item.isFolder
+                ? updatedSize
+                : updatedSize + item.size * item.progress / 100.0,
         0
     );
     const percent = totalUploaded / totalSize * 100;

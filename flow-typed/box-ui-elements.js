@@ -97,11 +97,7 @@ type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type SortableOptions = typeof SORT_NAME | typeof SORT_DATE | typeof SORT_SIZE;
 type SortBy = typeof FIELD_NAME | typeof FIELD_MODIFIED_AT | typeof FIELD_INTERACTED_AT | typeof FIELD_SIZE;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-type UploadStatus =
-    | typeof STATUS_PENDING
-    | typeof STATUS_IN_PROGRESS
-    | typeof STATUS_COMPLETE
-    | typeof STATUS_ERROR;
+type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 
@@ -350,7 +346,8 @@ type UploadItem = {
     progress: number,
     size: number,
     status: UploadStatus,
-    options?: UploadItemAPIOptions
+    options?: UploadItemAPIOptions,
+    isFolder?: boolean
 };
 
 type UploadItemAPIOptions = {
@@ -358,7 +355,6 @@ type UploadItemAPIOptions = {
     fileId?: string,
     folderId?: string,
     token?: Token,
-    uploadHost?: string,
     uploadInitTimestamp?: number
 };
 

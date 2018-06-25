@@ -51,7 +51,8 @@
 
             <label>
                 <div>Choose File To Upload</div>
-                <input class="file-input" multiple type='file' />
+                <input class="file-input" multiple type='file' webkitdirectory='' directory='' />
+                <!-- <input class="file-input" multiple type='file' /> -->
             </label>
         </div>
         <button type="button" onclick="load()">Submit</button>
@@ -101,21 +102,14 @@
             uploader1.show(null, null, {
                 container: '.uploader1',
                 useUploadsManager: true,
+                isFolderUploadEnabled: true,
             });
 
             fileInput.onchange = function (event) {
                 const filesWithOptions = Array.from(event.target.files).map((file) => ({
                     file,
                     options: {
-                        folderId, token: () => {
-                            const typedId = `folder_${folderId}`;
-                            // Resolve with a map of typed ID (aka file_{FILE_ID} or folder_{FOLDER_ID}) -> token to use
-                            const tokenMap = {
-                                [typedId]: token
-                            }
-
-                            return Promise.resolve(tokenMap);
-                        }
+                        folderId, token: () => Promise.resolve(token)
                     }
                 }))
                 uploader1.component.addFilesWithOptionsToUploadQueueAndStartUpload(filesWithOptions)
