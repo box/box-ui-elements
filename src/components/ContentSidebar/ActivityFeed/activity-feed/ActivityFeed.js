@@ -41,14 +41,12 @@ type Props = {
 
 type State = {
     isInputOpen: boolean,
-    isLoading: boolean,
     feedItems: Array<Comment | Task | BoxItemVersion>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
         isInputOpen: false,
-        isLoading: true,
         feedItems: []
     };
 
@@ -423,10 +421,8 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     updateFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file: BoxItem): void {
         const isFeedEmpty = this.clearFeedItems(file);
-        const { feedItems } = this.state;
-
         const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
-        this.setState({ isLoading: !shouldSort });
+        const { feedItems } = this.state;
 
         if (shouldSort && (isFeedEmpty || !feedItems.length)) {
             // $FlowFixMe
@@ -464,11 +460,15 @@ class ActivityFeed extends React.Component<Props, State> {
             file,
             onCommentCreate,
             getApproverWithQuery,
-            getMentionWithQuery
+            getMentionWithQuery,
+            comments,
+            tasks,
+            versions
         } = this.props;
-        const { isInputOpen, isLoading, feedItems } = this.state;
+        const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
+        const isLoading = !this.shouldSortFeedItems(comments, tasks, versions);
 
         return (
             // eslint-disable-next-line
