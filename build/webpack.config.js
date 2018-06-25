@@ -20,12 +20,12 @@ const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
 const entries = {
-    // picker: path.resolve('src/wrappers/ContentPickers.js'),
-    uploader: path.resolve('src/wrappers/ContentUploader.js')
-    // explorer: path.resolve('src/wrappers/ContentExplorer.js'),
-    // tree: path.resolve('src/wrappers/ContentTree.js'),
-    // preview: path.resolve('src/wrappers/ContentPreview.js'),
-    // sidebar: path.resolve('src/wrappers/ContentSidebar.js')
+    picker: path.resolve('src/wrappers/ContentPickers.js'),
+    uploader: path.resolve('src/wrappers/ContentUploader.js'),
+    explorer: path.resolve('src/wrappers/ContentExplorer.js'),
+    tree: path.resolve('src/wrappers/ContentTree.js'),
+    preview: path.resolve('src/wrappers/ContentPreview.js'),
+    sidebar: path.resolve('src/wrappers/ContentSidebar.js')
 };
 const entriesToBuild =
     typeof process.env.ENTRY === 'string'
@@ -136,4 +136,4 @@ function getConfig(isReactExternalized) {
     return config;
 }
 
-module.exports = isDev ? getConfig(false) : getConfig(!react);
+module.exports = isDev ? [getConfig(true), getConfig(false)] : getConfig(!react);
