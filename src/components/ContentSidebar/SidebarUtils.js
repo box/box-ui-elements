@@ -16,13 +16,8 @@ class SidebarUtils {
      * @param {BoxItem} file - box file
      * @return {Boolean} true if we should render
      */
-    static canHaveDetailsSidebar({
-        hasProperties,
-        hasNotices,
-        hasAccessStats,
-        hasClassification,
-        hasVersions
-    }: ContentSidebarProps): boolean {
+    static canHaveDetailsSidebar({ detailsSidebarProps = {} }: ContentSidebarProps): boolean {
+        const { hasProperties, hasAccessStats, hasClassification, hasVersions, hasNotices } = detailsSidebarProps;
         return !!hasProperties || !!hasAccessStats || !!hasClassification || !!hasVersions || !!hasNotices;
     }
 

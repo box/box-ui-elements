@@ -8,24 +8,9 @@ import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
 import Keywords from '../keywords';
-import type {
-    TaskHandlers,
-    CommentHandlers,
-    ContactHandlers,
-    VersionHandlers,
-    FeedItems
-} from '../activityFeedFlowTypes';
 
 type Props = {
     currentUser?: User,
-    handlers: {
-        comments?: CommentHandlers,
-        tasks?: TaskHandlers,
-        contacts?: ContactHandlers,
-        versions?: VersionHandlers
-    },
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     items: FeedItems,
     onCommentDelete?: Function,
     onTaskAssignmentUpdate?: Function,
@@ -46,9 +31,6 @@ const ActiveState = ({
     onTaskAssignmentUpdate,
     onVersionInfo,
     translations,
-    handlers,
-    approverSelectorContacts,
-    mentionSelectorContacts,
     getAvatarUrl,
     getUserProfileUrl
 }: Props): React.Node => (
@@ -65,9 +47,6 @@ const ActiveState = ({
                                 currentUser={currentUser}
                                 onDelete={onCommentDelete}
                                 translations={translations}
-                                handlers={handlers}
-                                approverSelectorContacts={approverSelectorContacts}
-                                mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
                                 permissions={{
@@ -85,11 +64,8 @@ const ActiveState = ({
                                 currentUser={currentUser}
                                 onDelete={onTaskDelete}
                                 onEdit={onTaskEdit}
-                                onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                onAssignmentUpdate={onTaskAssignmentUpdate}
                                 translations={translations}
-                                handlers={handlers}
-                                approverSelectorContacts={approverSelectorContacts}
-                                mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
                                 // permissions are not part of task API so hard code to true

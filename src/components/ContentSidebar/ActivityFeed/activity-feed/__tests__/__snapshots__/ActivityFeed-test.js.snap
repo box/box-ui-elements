@@ -111,7 +111,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
 </div>
 `;
 
-exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if comment submit handler is not passed in 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if only comment submit handler is not passed in 1`] = `
 <div
   className="bcs-activity-feed"
   onKeyDown={[Function]}
@@ -144,12 +144,11 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-comment-input"
     createComment={[Function]}
     createTask={[Function]}
-    getApproverContactsWithQuery={[MockFunction]}
-    getMentionContactsWithQuery={[MockFunction]}
     isOpen={false}
     onCancel={[Function]}
     onFocus={[Function]}
     onSubmit={[Function]}
+    updateTask={[Function]}
     user={
       Object {
         "id": 10,

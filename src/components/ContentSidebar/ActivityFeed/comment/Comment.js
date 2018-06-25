@@ -23,7 +23,6 @@ import Avatar from '../Avatar';
 import messages from '../../../messages';
 
 import './Comment.scss';
-import type { CommentHandlers, VersionHandlers, ContactHandlers, TaskHandlers } from '../activityFeedFlowTypes';
 
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
@@ -42,16 +41,8 @@ type Props = {
     tagged_message: string,
     translatedTaggedMessage?: string,
     translations?: Translations,
-    handlers: {
-        comments?: CommentHandlers,
-        tasks?: TaskHandlers,
-        contacts?: ContactHandlers,
-        versions?: VersionHandlers
-    },
     currentUser?: User,
     isDisabled?: boolean,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>
 };
@@ -109,8 +100,6 @@ class Comment extends React.Component<Props, State> {
             translations,
             currentUser,
             isDisabled,
-            approverSelectorContacts,
-            mentionSelectorContacts,
             getAvatarUrl,
             getUserProfileUrl
         } = this.props;
@@ -165,14 +154,10 @@ class Comment extends React.Component<Props, State> {
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}
-                                approverSelectorContacts={approverSelectorContacts}
-                                mentionSelectorContacts={mentionSelectorContacts}
                                 className={classNames('bcs-activity-feed-comment-input', {
                                     'bcs-is-disabled': isDisabled
                                 })}
                                 updateTask={this.updateTaskHandler}
-                                getApproverContactsWithQuery={getProp(this.props, 'handlers.contacts.approver', noop)}
-                                getMentionContactsWithQuery={getProp(this.props, 'handlers.contacts.mention', noop)}
                                 isOpen={isInputOpen}
                                 user={currentUser}
                                 onCancel={this.approvalCommentFormCancelHandler}

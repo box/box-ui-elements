@@ -63,6 +63,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly rende
         name="Jake Thomas"
         onTaskApproval={[Function]}
         onTaskReject={[Function]}
+        shouldShowActions={false}
       />
       <CompletedAssignment
         id={2}
@@ -123,6 +124,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
         name="Jake Thomas"
         onTaskApproval={[Function]}
         onTaskReject={[Function]}
+        shouldShowActions={false}
       />
       <CompletedAssignment
         id={2}
@@ -134,7 +136,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
 </div>
 `;
 
-exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions for current user and if onTaskAssignmentUpdate is defined 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions for current user and if onAssignmentUpdate is defined 1`] = `
 <div
   className="bcs-task"
 >

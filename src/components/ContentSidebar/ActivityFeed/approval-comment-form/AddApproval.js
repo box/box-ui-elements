@@ -12,7 +12,7 @@ import AddApprovalFields from './AddApprovalFields';
 import messages from '../../../messages';
 
 type Props = {
-    approvalDate: ?number,
+    approvalDate: ?Date,
     approvers: SelectorItems,
     approverSelectorContacts?: SelectorItems,
     approverSelectorError: string,

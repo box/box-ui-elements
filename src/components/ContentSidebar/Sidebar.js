@@ -17,26 +17,18 @@ type Props = {
     currentUser?: User,
     file: BoxItem,
     getPreviewer: Function,
+    detailsSidebarProps: Object,
     hasSkills: boolean,
-    hasProperties: boolean,
     hasMetadata: boolean,
-    hasNotices: boolean,
-    hasAccessStats: boolean,
-    hasClassification: boolean,
     hasActivityFeed: boolean,
-    hasVersions: boolean,
     hasSkills: boolean,
     hasDetails: boolean,
-    onAccessStatsClick?: Function,
-    onDescriptionChange: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     onSkillChange: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
-    onTaskUpdate: Function,
+    onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
@@ -46,9 +38,6 @@ type Props = {
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    accessStats?: FileAccessStats,
-    accessStatsError?: Errors,
-    fileError?: Errors,
     commentsError?: Errors,
     tasksError?: Errors,
     currentUserError?: Errors,
@@ -62,20 +51,12 @@ const Sidebar = ({
     currentUser,
     file,
     getPreviewer,
-    hasProperties,
     hasMetadata,
-    hasNotices,
-    hasAccessStats,
-    hasClassification,
     hasActivityFeed,
-    hasVersions,
     hasSkills,
     hasDetails,
-    onAccessStatsClick,
-    onDescriptionChange,
+    detailsSidebarProps,
     onSkillChange,
-    onClassificationClick,
-    onVersionHistoryClick,
     onCommentCreate,
     onCommentDelete,
     onTaskCreate,
@@ -84,9 +65,6 @@ const Sidebar = ({
     onTaskAssignmentUpdate,
     getApproverWithQuery,
     getMentionWithQuery,
-    accessStats,
-    accessStatsError,
-    fileError,
     tasks,
     tasksError,
     comments,
@@ -108,25 +86,7 @@ const Sidebar = ({
             hasDetails={hasDetails}
         />
         {view === SIDEBAR_VIEW_DETAILS &&
-            hasDetails && (
-                <DetailsSidebar
-                    file={file}
-                    hasProperties={hasProperties}
-                    hasMetadata={hasMetadata}
-                    hasNotices={hasNotices}
-                    hasAccessStats={hasAccessStats}
-                    hasClassification={hasClassification}
-                    hasVersions={hasVersions}
-                    onSkillChange={onSkillChange}
-                    onAccessStatsClick={onAccessStatsClick}
-                    onClassificationClick={onClassificationClick}
-                    onDescriptionChange={onDescriptionChange}
-                    onVersionHistoryClick={onVersionHistoryClick}
-                    accessStats={accessStats}
-                    accessStatsError={accessStatsError}
-                    fileError={fileError}
-                />
-            )}
+            hasDetails && <DetailsSidebar file={file} versions={versions} {...detailsSidebarProps} />}
         {view === SIDEBAR_VIEW_SKILLS &&
             hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&

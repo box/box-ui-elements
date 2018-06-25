@@ -26,14 +26,20 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS
 } from '../../constants';
-import { COMMENTS_FIELDS_TO_FETCH, TASKS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../../util/fields';
+import {
+    COMMENTS_FIELDS_TO_FETCH,
+    TASKS_FIELDS_TO_FETCH,
+    VERSIONS_FIELDS_TO_FETCH,
+    TASK_ASSIGNMENTS_FIELDS_TO_FETCH
+} from '../../util/fields';
 import messages from '../messages';
+import { getBadItemError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
+import type { DetailsSidebarProps } from './DetailsSidebar';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
 import './ContentSidebar.scss';
-import { getBadItemError } from '../../util/error';
 
 type Props = {
     fileId?: string,
@@ -45,13 +51,9 @@ type Props = {
     currentUser?: User,
     getPreviewer: Function,
     hasSkills: boolean,
-    hasProperties: boolean,
+    detailsSidebarProps: DetailsSidebarProps,
     hasMetadata: boolean,
-    hasNotices: boolean,
-    hasAccessStats: boolean,
-    hasClassification: boolean,
     hasActivityFeed: boolean,
-    hasVersions: boolean,
     language?: string,
     messages?: StringMap,
     cache?: APICache,
@@ -59,9 +61,6 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onAccessStatsClick?: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
@@ -105,13 +104,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         getPreviewer: noop,
         currentUser: undefined,
         hasSkills: false,
-        hasProperties: false,
         hasMetadata: false,
-        hasNotices: false,
-        hasAccessStats: false,
-        hasClassification: false,
         hasActivityFeed: false,
-        hasVersions: false
+        detailsSidebarProps: {}
     };
 
     initialState: State = {
@@ -255,7 +250,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasActivityFeed, hasAccessStats, currentUser }: Props) {
+    fetchData({ fileId, hasActivityFeed, detailsSidebarProps, currentUser }: Props) {
+        const { hasAccessStats = false } = detailsSidebarProps;
         if (!fileId) {
             return;
         }
@@ -522,14 +518,48 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * File tasks fetch success callback
+     * Update Tasks to include task assignments
      *
      * @private
-     * @param {Object} tasks - Box task
-     * @return {void}
+     * @param {Array<TaskAssignment>} entries - Box task assignment entries
+     * @param {TaskAssignments} assignments - Box task assigments
+     * @return {TaskAssignments} Updated Box task assignments
      */
-    fetchTasksSuccessCallback = (tasks: Tasks): void => {
-        this.setState({ tasks, tasksError: undefined });
+    populateTaskAssignments(entries: Array<TaskAssignment>, assignments: TaskAssignments): TaskAssignments {
+        return {
+            total_count: assignments.entries.length,
+            entries: entries.map((item: TaskAssignment) => {
+                const assignment = assignments.entries.find((a) => a.id === item.id);
+                if (assignment) {
+                    return {
+                        ...assignment
+                    };
+                }
+                return item;
+            })
+        };
+    }
+
+    /**
+     * File task assignment fetch success callback
+     *
+     * @private
+     * @param {Tasks} tasks - Box tasks to be populated with assignments
+     * @param {TaskAssignments} assignments - Fetched Box task assigments for specified task
+     * @return {Object}
+     */
+    fetchTaskAssignmentsSuccessCallback = (tasks: Tasks, assignments: TaskAssignments): Tasks => {
+        const { entries, total_count } = tasks;
+        return {
+            entries: entries.map((task) => ({
+                ...task,
+                task_assignment_collection: this.populateTaskAssignments(
+                    task.task_assignment_collection.entries,
+                    assignments
+                )
+            })),
+            total_count
+        };
     };
 
     /**
@@ -1005,11 +1035,52 @@ class ContentSidebar extends PureComponent<Props, State> {
         };
 
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api
-                .getTasksAPI(shouldDestroy)
-                .get(id, this.fetchTasksSuccessCallback, this.fetchTasksErrorCallback, requestData);
+            this.api.getTasksAPI(shouldDestroy).get({
+                id,
+                successCallback: this.fetchTaskAssignments,
+                errorCallback: this.fetchTasksErrorCallback,
+                params: requestData
+            });
         }
     }
+
+    /**
+     * Fetches the task assignments for each task
+     *
+     * @private
+     * @param {string} id - File id
+     * @return {void}
+     */
+    fetchTaskAssignments = (tasksWithoutAssignments: Tasks, shouldDestroy?: boolean = false): void => {
+        const { fileId }: Props = this.props;
+        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
+            return;
+        }
+
+        const requestData = {
+            params: {
+                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH.toString()
+            }
+        };
+
+        let tasks = tasksWithoutAssignments;
+        const { entries } = tasksWithoutAssignments;
+        const taskAssignmentPromises = [];
+        entries.forEach((task) => {
+            const promise = this.api.getTasksAPI(shouldDestroy).getAssignments(
+                fileId,
+                task.id,
+                (assignments) => {
+                    tasks = this.fetchTaskAssignmentsSuccessCallback(tasks, assignments);
+                },
+                this.fetchTasksErrorCallback,
+                requestData
+            );
+            taskAssignmentPromises.push(promise);
+        });
+
+        Promise.all(taskAssignmentPromises).then(() => this.setState({ tasks }));
+    };
 
     /**
      * Fetches the access stats for a file
@@ -1020,9 +1091,11 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFileAccessStats(id: string, shouldDestroy?: boolean = false): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api
-                .getFileAccessStatsAPI(shouldDestroy)
-                .get(id, this.fetchFileAccessStatsSuccessCallback, this.fetchFileAccessStatsErrorCallback);
+            this.api.getFileAccessStatsAPI(shouldDestroy).get({
+                id,
+                successCallback: this.fetchFileAccessStatsSuccessCallback,
+                errorCallback: this.fetchFileAccessStatsErrorCallback
+            });
         }
     }
 
@@ -1030,16 +1103,18 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Fetches a Users info
      *
      * @private
-     * @param {string} [id] - User id. If missing, gets user that the current token was generated for.
+     * @param {User} [user] - Box User. If missing, gets user that the current token was generated for.
      * @return {void}
      */
     fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
         const { fileId = '' } = this.props;
         if (SidebarUtils.canHaveSidebar(this.props)) {
             if (typeof user === 'undefined') {
-                this.api
-                    .getUsersAPI(shouldDestroy)
-                    .get(fileId, this.fetchCurrentUserSuccessCallback, this.fetchCurrentUserErrorCallback);
+                this.api.getUsersAPI(shouldDestroy).get({
+                    id: fileId,
+                    successCallback: this.fetchCurrentUserSuccessCallback,
+                    errorCallback: this.fetchCurrentUserErrorCallback
+                });
             } else {
                 this.setState({ currentUser: user, currentUserError: undefined });
             }
@@ -1201,19 +1276,12 @@ class ContentSidebar extends PureComponent<Props, State> {
             language,
             messages: intlMessages,
             getPreviewer,
-            hasProperties,
             hasMetadata,
-            hasNotices,
-            hasAccessStats,
-            hasClassification,
             hasActivityFeed,
-            hasVersions,
             className,
-            onVersionHistoryClick,
-            onAccessStatsClick,
-            onClassificationClick,
             onTaskAssignmentUpdate,
-            getUserProfileUrl
+            getUserProfileUrl,
+            detailsSidebarProps
         }: Props = this.props;
         const {
             file,
@@ -1243,13 +1311,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         );
 
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const hasDetails = SidebarUtils.shouldRenderDetailsSidebar({
-            hasProperties,
-            hasAccessStats,
-            hasClassification,
-            hasNotices,
-            hasVersions
-        });
+        const hasDetails = SidebarUtils.shouldRenderDetailsSidebar(this.props);
 
         return (
             <Internationalize language={language} messages={intlMessages}>
@@ -1259,23 +1321,22 @@ class ContentSidebar extends PureComponent<Props, State> {
                             <Sidebar
                                 file={((file: any): BoxItem)}
                                 view={view}
+                                detailsSidebarProps={{
+                                    accessStats,
+                                    accessStatsError,
+                                    versionError,
+                                    fileError,
+                                    onDescriptionChange: this.onDescriptionChange,
+                                    ...detailsSidebarProps
+                                }}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}
                                 hasDetails={hasDetails}
-                                hasProperties={hasProperties}
                                 hasMetadata={hasMetadata}
-                                hasNotices={hasNotices}
-                                hasAccessStats={hasAccessStats}
-                                hasClassification={hasClassification}
                                 hasActivityFeed={hasActivityFeed}
-                                onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
-                                onAccessStatsClick={onAccessStatsClick}
-                                onClassificationClick={onClassificationClick}
-                                onVersionHistoryClick={onVersionHistoryClick}
                                 onSkillChange={this.onSkillChange}
-                                hasVersions={hasVersions}
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
                                 versionError={versionError}
