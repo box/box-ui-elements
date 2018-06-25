@@ -55,13 +55,19 @@ const currentUser = { name: 'Kanye West', id: 10 };
 const getWrapper = (props) => shallow(<ActivityFeed currentUser={currentUser} {...props} />);
 
 describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
-    test('should correctly render empty state', () => {
+    test('should correctly render empty loading state', () => {
         const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render empty state with loading indicator', () => {
-        const wrapper = shallow(<ActivityFeed currentUser={currentUser} isLoading />);
+    test('should correctly render empty state', () => {
+        const items = {
+            total_count: 0,
+            entries: []
+        };
+        const wrapper = shallow(
+            <ActivityFeed currentUser={currentUser} comments={items} tasks={items} versions={items} />
+        );
         expect(wrapper).toMatchSnapshot();
     });
 
