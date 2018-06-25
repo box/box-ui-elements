@@ -3,19 +3,23 @@
  * @file Upload state content component
  */
 
-import React from 'react';
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+import messages from '../messages';
+import UploadInput from './UploadInput';
 
 type Props = {
-    message?: React$Element<any>,
-    inputLabel?: React$Element<any>,
-    useButton?: boolean,
-    onChange?: Function
+    fileInputLabel?: React.Node,
+    folderInputLabel?: React.Node,
+    message?: React.Node,
+    onChange?: Function,
+    useButton?: boolean
 };
 
-/* eslint-disable jsx-a11y/label-has-for */
-const UploadStateContent = ({ message, inputLabel, useButton = false, onChange }: Props) => {
+const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChange, useButton = false }: Props) => {
     const messageContent = message ? <div className='bcu-upload-state-message'>{message}</div> : null;
     const inputLabelClass = useButton ? 'btn btn-primary be-input-btn' : 'be-input-link';
+    const shouldShowFolderUploadInput = !useButton && !!folderInputLabel;
 
     const handleChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
         if (!onChange) {
@@ -29,20 +33,36 @@ const UploadStateContent = ({ message, inputLabel, useButton = false, onChange }
         currentTarget.value = '';
     };
 
-    const inputContent = (
-        <label className={inputLabelClass}>
-            {inputLabel}
-            <input className='be-input' multiple type='file' onChange={handleChange} />
-        </label>
+    const fileInputContent = (
+        <UploadInput inputLabelClass={inputLabelClass} inputLabel={fileInputLabel} handleChange={handleChange} />
     );
+    const folderInputContent = shouldShowFolderUploadInput ? (
+        <UploadInput
+            isFolderUpload
+            inputLabelClass={inputLabelClass}
+            inputLabel={folderInputLabel}
+            handleChange={handleChange}
+        />
+    ) : null;
+
+    let inputsContent;
+    if (fileInputContent && folderInputContent) {
+        inputsContent = (
+            <FormattedMessage
+                {...messages.uploadOptions}
+                values={{ option1: fileInputContent, option2: folderInputContent }}
+            />
+        );
+    } else if (fileInputContent) {
+        inputsContent = fileInputContent;
+    }
 
     return (
         <div>
             {messageContent}
-            {inputLabel ? inputContent : null}
+            {inputsContent && <div className='bcu-upload-input-container'>{inputsContent}</div>}
         </div>
     );
 };
-/* eslint-enable jsx-a11y/label-has-for */
 
 export default UploadStateContent;

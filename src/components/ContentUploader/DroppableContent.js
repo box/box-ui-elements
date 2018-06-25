@@ -28,6 +28,13 @@ const dropDefinition = {
     onDrop: (event, props) => {
         let { dataTransfer: { files } } = event;
 
+        // @TODO: DataTransferItem upload
+        // const { dataTransfer: { items } } = event;
+        // if (items) {
+        //     props.addDataTransferItems(items);
+        //     return;
+        // }
+
         // This filters out all files without an extension since there is no other
         // good way to filter out folders
         /* eslint-disable no-redeclare */
@@ -49,11 +56,13 @@ type Props = {
     view: View,
     items: UploadItem[],
     addFiles: Function,
-    onClick: Function
+    onClick: Function,
+    addDataTransferItems: Function,
+    isFolderUploadEnabled: boolean
 };
 
 const DroppableContent = makeDroppable(dropDefinition)(
-    ({ canDrop, isOver, isTouch, view, items, addFiles, onClick }: Props) => {
+    ({ canDrop, isOver, isTouch, view, items, addFiles, onClick, isFolderUploadEnabled }: Props) => {
         const handleSelectFiles = ({ target: { files } }: any) => addFiles(files);
         const hasItems = items.length > 0;
 
@@ -67,6 +76,7 @@ const DroppableContent = makeDroppable(dropDefinition)(
                     isTouch={isTouch}
                     view={view}
                     onSelect={handleSelectFiles}
+                    isFolderUploadEnabled={isFolderUploadEnabled}
                 />
             </div>
         );
