@@ -72,7 +72,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-items-container"
   >
     <EmptyState
-      isLoading={false}
+      isLoading={true}
       showCommentMessage={false}
     />
   </div>
@@ -104,7 +104,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-items-container"
   >
     <EmptyState
-      isLoading={false}
+      isLoading={true}
       showCommentMessage={false}
     />
   </div>
@@ -120,7 +120,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-items-container"
   >
     <EmptyState
-      isLoading={false}
+      isLoading={true}
       showCommentMessage={false}
     />
   </div>
@@ -136,7 +136,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-items-container"
   >
     <EmptyState
-      isLoading={false}
+      isLoading={true}
       showCommentMessage={true}
     />
   </div>
