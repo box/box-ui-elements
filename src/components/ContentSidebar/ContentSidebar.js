@@ -66,7 +66,6 @@ type Props = {
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
-    onTaskAssignmentUpdate?: Function,
     getUserProfileUrl?: (string) => Promise<string>
 };
 
@@ -1317,7 +1316,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasMetadata,
             hasActivityFeed,
             className,
-            onTaskAssignmentUpdate,
             getUserProfileUrl,
             detailsSidebarProps
         }: Props = this.props;
