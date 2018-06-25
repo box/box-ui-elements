@@ -23,7 +23,6 @@ type Props = {
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    isLoading?: boolean,
     currentUser?: User,
     isDisabled?: boolean,
     onCommentCreate?: Function,
@@ -42,16 +41,14 @@ type Props = {
 
 type State = {
     isInputOpen: boolean,
+    isLoading: boolean,
     feedItems: Array<Comment | Task | BoxItemVersion>
 };
 
 class ActivityFeed extends React.Component<Props, State> {
-    static defaultProps = {
-        isLoading: false
-    };
-
     state = {
         isInputOpen: false,
+        isLoading: true,
         feedItems: []
     };
 
@@ -353,7 +350,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {string} message - The error message body.
      * @param {string} title - The error message title.
 
-     * @return {Object} An error message object 
+     * @return {Object} An error message object
      */
     createFeedError(message: string, title?: string = messages.errorOccured) {
         return {
@@ -382,8 +379,10 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     updateFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file: BoxItem): void {
         const isFeedEmpty = this.clearFeedItems(file);
-        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
         const { feedItems } = this.state;
+
+        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
+        this.setState({ isLoading: !shouldSort });
 
         if (shouldSort && (isFeedEmpty || !feedItems.length)) {
             // $FlowFixMe
@@ -411,7 +410,6 @@ class ActivityFeed extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            isLoading,
             translations,
             approverSelectorContacts,
             mentionSelectorContacts,
@@ -424,7 +422,7 @@ class ActivityFeed extends React.Component<Props, State> {
             getApproverWithQuery,
             getMentionWithQuery
         } = this.props;
-        const { isInputOpen, feedItems } = this.state;
+        const { isInputOpen, isLoading, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
 
