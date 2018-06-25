@@ -298,6 +298,11 @@ class Folder extends Item {
         const cache: APICache = this.getCache();
         const parent: FlattenedBoxItem = cache.get(this.key);
 
+        if (!parent) {
+            this.successCallback(data);
+            return;
+        }
+
         const { item_collection }: FlattenedBoxItem = parent;
         if (!item_collection) {
             throw getBadItemError();
@@ -340,7 +345,7 @@ class Folder extends Item {
     }
 
     /**
-     * API to rename an Item
+     * API to create a folder
      *
      * @param {string} id - parent folder id
      * @param {string} name - new folder name
