@@ -192,8 +192,8 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
     test('should filter approver selector options correctly', () => {
         const wrapper = render({
             approverSelectorContacts: [
-                { id: 123, item: { name: 'name' }, name: 'name' },
-                { id: 234, item: { name: 'test' }, name: 'test' }
+                { id: 123, item: { id: 123, name: 'name' }, name: 'name' },
+                { id: 234, item: { id: 234, name: 'test' }, name: 'test' }
             ],
             createTask: jest.fn()
         });

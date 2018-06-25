@@ -66,6 +66,22 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
 </div>
 `;
 
+exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should correctly render empty loading state 1`] = `
+<div
+  className="bcs-activity-feed"
+  onKeyDown={[Function]}
+>
+  <div
+    className="bcs-activity-feed-items-container"
+  >
+    <EmptyState
+      isLoading={true}
+      showCommentMessage={false}
+    />
+  </div>
+</div>
+`;
+
 exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should correctly render empty state 1`] = `
 <div
   className="bcs-activity-feed"
@@ -82,7 +98,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
 </div>
 `;
 
-exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should correctly render empty state with loading indicator 1`] = `
+exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if comment permissions are not present 1`] = `
 <div
   className="bcs-activity-feed"
   onKeyDown={[Function]}
@@ -98,22 +114,6 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
 </div>
 `;
 
-exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if comment permissions are not present 1`] = `
-<div
-  className="bcs-activity-feed"
-  onKeyDown={[Function]}
->
-  <div
-    className="bcs-activity-feed-items-container"
-  >
-    <EmptyState
-      isLoading={false}
-      showCommentMessage={false}
-    />
-  </div>
-</div>
-`;
-
 exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should not render approval comment form if only comment submit handler is not passed in 1`] = `
 <div
   className="bcs-activity-feed"
@@ -123,7 +123,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-items-container"
   >
     <EmptyState
-      isLoading={false}
+      isLoading={true}
       showCommentMessage={false}
     />
   </div>
@@ -139,7 +139,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-items-container"
   >
     <EmptyState
-      isLoading={false}
+      isLoading={true}
       showCommentMessage={true}
     />
   </div>
