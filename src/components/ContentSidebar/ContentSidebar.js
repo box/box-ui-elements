@@ -66,7 +66,6 @@ type Props = {
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
-    onTaskAssignmentUpdate?: Function,
     getUserProfileUrl?: (string) => Promise<string>
 };
 
@@ -531,8 +530,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             entries: entries.map((item: TaskAssignment) => {
                 const assignment = assignments.entries.find((a) => a.id === item.id);
                 if (assignment) {
+                    const { message, resolution_state } = assignment;
                     return {
-                        ...assignment
+                        ...assignment,
+                        resolution_state: message ? message.toLowerCase() : resolution_state
                     };
                 }
                 return item;
@@ -896,6 +897,42 @@ class ContentSidebar extends PureComponent<Props, State> {
             });
         }
     }
+
+    /**
+     * Updates a task assignment
+     *
+     * @private
+     * @param {string} taskId - The task's id
+     * @param {string} taskAssignmentId - The task assignments's id
+     * @param {string} resolutionState - The new resolution state of the task assignment
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @return {void}
+     */
+    updateTaskAssignment = (
+        taskId: string,
+        taskAssignmentId: string,
+        resolutionState: string,
+        successCallback: (taskAssignment: Task) => void = noop,
+        errorCallback: (e: Error) => void = noop
+    ) => {
+        const { file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getTaskAssignmentsAPI(false).updateTaskAssignment({
+            file,
+            taskAssignmentId,
+            resolutionState,
+            successCallback,
+            errorCallback: (e: Error) => {
+                errorCallback(e);
+                this.errorCallback(e);
+            }
+        });
+    };
 
     /**
      * Deletes a task
@@ -1279,7 +1316,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasMetadata,
             hasActivityFeed,
             className,
-            onTaskAssignmentUpdate,
             getUserProfileUrl,
             detailsSidebarProps
         }: Props = this.props;
@@ -1351,7 +1387,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskCreate={this.createTask}
                                 onTaskDelete={this.deleteTask}
                                 onTaskUpdate={this.updateTask}
-                                onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                                onTaskAssignmentUpdate={this.updateTaskAssignment}
                                 getUserProfileUrl={getUserProfileUrl}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}
