@@ -11,7 +11,7 @@ const PATH_DELIMITER = '/';
 class FolderUpload {
     folderNodes: Object = {};
     files: Array<File> = [];
-    destinationFolderID: string;
+    destinationFolderId: string;
     uploadFile: Function;
     addFolderToQueue: Function;
     areAPIOptionsInFiles: boolean;
@@ -21,7 +21,7 @@ class FolderUpload {
      * [constructor]
      *
      * @param {Function} uploadFile
-     * @param {string} destinationFolderID
+     * @param {string} destinationFolderId
      * @param {Function} addFolderToQueue
      * @param {boolean} areAPIOptionsInFiles
      * @param {Object} baseAPIOptions
@@ -29,13 +29,13 @@ class FolderUpload {
      */
     constructor(
         uploadFile: Function,
-        destinationFolderID: string,
+        destinationFolderId: string,
         addFolderToQueue: Function,
         areAPIOptionsInFiles: boolean,
         baseAPIOptions: Object
     ): void {
         this.uploadFile = uploadFile;
-        this.destinationFolderID = destinationFolderID;
+        this.destinationFolderId = destinationFolderId;
         this.addFolderToQueue = addFolderToQueue;
         this.areAPIOptionsInFiles = areAPIOptionsInFiles;
         this.baseAPIOptions = baseAPIOptions;
@@ -52,6 +52,8 @@ class FolderUpload {
         // FileList does not natively have forEach, hence this workaround
         Array.prototype.forEach.call(fileList, (fileData) => {
             const file = this.areAPIOptionsInFiles ? fileData.file : fileData;
+            const fileAPIOptions = this.areAPIOptionsInFiles ? fileData.options : {};
+
             const pathArray = file.webkitRelativePath.split(PATH_DELIMITER).slice(0, -1);
             if (pathArray.length <= 0) {
                 return;
@@ -66,14 +68,17 @@ class FolderUpload {
                         folderName,
                         this.uploadFile,
                         this.addFolderToQueue,
-                        this.areAPIOptionsInFiles,
-                        this.baseAPIOptions
+                        fileAPIOptions,
+                        {
+                            ...this.baseAPIOptions,
+                            ...fileAPIOptions
+                        }
                     );
                 }
 
                 if (index === pathArray.length - 1) {
                     // end of path, push the file
-                    subTree[folderName].files.push(fileData);
+                    subTree[folderName].files.push(file);
                 } else {
                     // walk the tree
                     subTree = subTree[folderName].folders;
@@ -93,7 +98,7 @@ class FolderUpload {
     upload({ errorCallback }: { errorCallback: Function }): void {
         // $FlowFixMe
         Object.values(this.folderNodes).forEach((node: FolderUploadNode) => {
-            node.upload(this.destinationFolderID, errorCallback, true);
+            node.upload(this.destinationFolderId, errorCallback, true);
         });
     }
 

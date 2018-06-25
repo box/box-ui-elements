@@ -9,13 +9,13 @@ import { STATUS_COMPLETE, ERROR_CODE_ITEM_NAME_IN_USE } from '../../constants';
 
 class FolderUploadNode {
     addFolderToQueue: Function;
-    files: Array<UploadFileWithAPIOptions | File> = [];
-    folderID: string;
+    files: Array<File> = [];
+    folderId: string;
     folders: Object = {};
     name: string;
-    parentFolderID: string;
+    parentFolderId: string;
     uploadFile: Function;
-    areAPIOptionsInFiles: boolean;
+    fileAPIOptions: Object;
     baseAPIOptions: Object;
 
     /**
@@ -30,13 +30,13 @@ class FolderUploadNode {
         name: string,
         uploadFile: Function,
         addFolderToQueue: Function,
-        areAPIOptionsInFiles: boolean,
+        fileAPIOptions: Object,
         baseAPIOptions: Object
     ) {
         this.name = name;
         this.uploadFile = uploadFile;
         this.addFolderToQueue = addFolderToQueue;
-        this.areAPIOptionsInFiles = areAPIOptionsInFiles;
+        this.fileAPIOptions = fileAPIOptions;
         this.baseAPIOptions = baseAPIOptions;
     }
 
@@ -44,13 +44,15 @@ class FolderUploadNode {
      * Upload a folder
      *
      * @public
-     * @param {string} parentFolderID
+     * @param {string} parentFolderId
      * @param {Function} errorCallback
      * @param {boolean} isRoot
      * @returns {Promise}
      */
-    async upload(parentFolderID: string, errorCallback: Function, isRoot: boolean = false) {
-        await this.createAndUploadFolder(parentFolderID, errorCallback, isRoot);
+    async upload(parentFolderId: string, errorCallback: Function, isRoot: boolean = false) {
+        this.parentFolderId = parentFolderId;
+
+        await this.createAndUploadFolder(errorCallback, isRoot);
         this.uploadFile(this.getFormattedFiles(), true);
         this.uploadChildFolders(errorCallback);
     }
@@ -65,7 +67,7 @@ class FolderUploadNode {
     uploadChildFolders = async (errorCallback: Function) => {
         // $FlowFixMe
         const folderNodes: Array<FolderUploadNode> = Object.values(this.folders);
-        const promises = folderNodes.map((folder) => folder.upload(this.folderID, errorCallback));
+        const promises = folderNodes.map((folder) => folder.upload(this.folderId, errorCallback));
 
         await Promise.all(promises);
     };
@@ -74,21 +76,21 @@ class FolderUploadNode {
      * Create folder and add it to the upload queue
      *
      * @private
-     * @param {string} parentFolderID
      * @param {Function} errorCallback
      * @param {boolean} isRoot
      * @returns {Promise}
      */
-    createAndUploadFolder = async (parentFolderID: string, errorCallback: Function, isRoot: boolean) => {
+    createAndUploadFolder = async (errorCallback: Function, isRoot: boolean) => {
         try {
-            const data = await this.createFolder(parentFolderID);
-            this.folderID = data.id;
+            const data = await this.createFolder();
+            this.folderId = data.id;
         } catch (error) {
             // @TODO: Handle 429
             if (error.code !== ERROR_CODE_ITEM_NAME_IN_USE) {
                 errorCallback(error);
+                return;
             }
-            this.folderID = error.context_info.conflicts[0].id;
+            this.folderId = error.context_info.conflicts[0].id;
         }
 
         if (isRoot) {
@@ -111,54 +113,31 @@ class FolderUploadNode {
      * Format files to Array<UploadFileWithAPIOptions> for upload
      *
      * @private
-     * @param {string} parentFolderID
-     * @param {Function} errorCallback
-     * @param {boolean} isRoot
      * @returns {Array<UploadFileWithAPIOptions>}
      */
     getFormattedFiles = (): Array<UploadFileWithAPIOptions> =>
-        this.files.map((fileData: File | UploadFileWithAPIOptions) => {
-            let file = fileData;
-            const additionalOptions = {
-                folderId: this.folderID,
+        this.files.map((file: File) => ({
+            file,
+            options: {
+                ...this.fileAPIOptions,
+                folderId: this.folderId,
                 uploadInitTimestamp: Date.now()
-            };
-            let options = additionalOptions;
-
-            if (this.areAPIOptionsInFiles) {
-                // In case this.areAPIOptionsInFiles is true, this.files is Array<UploadItemAPIOptions>
-                // fileData.file is File type, and we expand fileData.options with additionalOptions
-
-                // $FlowFixMe fileData is UploadFileWithAPIOptions type
-                file = fileData.file; // eslint-disable-line prefer-destructuring
-                options = {
-                    // $FlowFixMe fileData is UploadFileWithAPIOptions type
-                    ...fileData.options,
-                    ...additionalOptions
-                };
             }
-
-            return {
-                // $FlowFixMe file is File type
-                file,
-                options
-            };
-        });
+        }));
 
     /**
      * Promisify create folder
      *
      * @private
-     * @param {string} parentFolderID
      * @returns {Promise}
      */
-    createFolder(parentFolderID: string): Promise<any> {
+    createFolder(): Promise<any> {
         const folderAPI = new FolderAPI({
             ...this.baseAPIOptions,
-            id: `folder_${this.parentFolderID}`
+            id: `folder_${this.parentFolderId}`
         });
         return new Promise((resolve, reject) => {
-            folderAPI.create(parentFolderID, this.name, resolve, reject);
+            folderAPI.create(this.parentFolderId, this.name, resolve, reject);
         });
     }
 }
