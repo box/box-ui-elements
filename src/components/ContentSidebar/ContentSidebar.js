@@ -33,12 +33,13 @@ import {
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH
 } from '../../util/fields';
 import messages from '../messages';
+import { getBadItemError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
+import type { DetailsSidebarProps } from './DetailsSidebar';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
 import './ContentSidebar.scss';
-import { getBadItemError } from '../../util/error';
 
 type Props = {
     fileId?: string,
@@ -50,13 +51,9 @@ type Props = {
     currentUser?: User,
     getPreviewer: Function,
     hasSkills: boolean,
-    hasProperties: boolean,
+    detailsSidebarProps: DetailsSidebarProps,
     hasMetadata: boolean,
-    hasNotices: boolean,
-    hasAccessStats: boolean,
-    hasClassification: boolean,
     hasActivityFeed: boolean,
-    hasVersions: boolean,
     language?: string,
     messages?: StringMap,
     cache?: APICache,
@@ -64,9 +61,6 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onAccessStatsClick?: Function,
-    onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
@@ -110,13 +104,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         getPreviewer: noop,
         currentUser: undefined,
         hasSkills: false,
-        hasProperties: false,
         hasMetadata: false,
-        hasNotices: false,
-        hasAccessStats: false,
-        hasClassification: false,
         hasActivityFeed: false,
-        hasVersions: false
+        detailsSidebarProps: {}
     };
 
     initialState: State = {
@@ -260,7 +250,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasActivityFeed, hasAccessStats, currentUser }: Props) {
+    fetchData({ fileId, hasActivityFeed, detailsSidebarProps, currentUser }: Props) {
+        const { hasAccessStats = false } = detailsSidebarProps;
         if (!fileId) {
             return;
         }
@@ -1323,18 +1314,12 @@ class ContentSidebar extends PureComponent<Props, State> {
             language,
             messages: intlMessages,
             getPreviewer,
-            hasProperties,
             hasMetadata,
-            hasNotices,
-            hasAccessStats,
-            hasClassification,
             hasActivityFeed,
-            hasVersions,
             className,
-            onVersionHistoryClick,
-            onAccessStatsClick,
-            onClassificationClick,
-            getUserProfileUrl
+            onTaskAssignmentUpdate,
+            getUserProfileUrl,
+            detailsSidebarProps
         }: Props = this.props;
         const {
             file,
@@ -1364,13 +1349,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         );
 
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const hasDetails = SidebarUtils.shouldRenderDetailsSidebar({
-            hasProperties,
-            hasAccessStats,
-            hasClassification,
-            hasNotices,
-            hasVersions
-        });
+        const hasDetails = SidebarUtils.shouldRenderDetailsSidebar(this.props);
 
         return (
             <Internationalize language={language} messages={intlMessages}>
@@ -1380,23 +1359,22 @@ class ContentSidebar extends PureComponent<Props, State> {
                             <Sidebar
                                 file={((file: any): BoxItem)}
                                 view={view}
+                                detailsSidebarProps={{
+                                    accessStats,
+                                    accessStatsError,
+                                    versionError,
+                                    fileError,
+                                    onDescriptionChange: this.onDescriptionChange,
+                                    ...detailsSidebarProps
+                                }}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}
                                 hasDetails={hasDetails}
-                                hasProperties={hasProperties}
                                 hasMetadata={hasMetadata}
-                                hasNotices={hasNotices}
-                                hasAccessStats={hasAccessStats}
-                                hasClassification={hasClassification}
                                 hasActivityFeed={hasActivityFeed}
-                                onDescriptionChange={this.onDescriptionChange}
                                 accessStats={accessStats}
-                                onAccessStatsClick={onAccessStatsClick}
-                                onClassificationClick={onClassificationClick}
-                                onVersionHistoryClick={onVersionHistoryClick}
                                 onSkillChange={this.onSkillChange}
-                                hasVersions={hasVersions}
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
                                 versionError={versionError}
