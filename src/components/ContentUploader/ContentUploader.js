@@ -11,6 +11,7 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import cloneDeep from 'lodash/cloneDeep';
+import { getTypedFileId, getTypedFolderId } from '../../util/file';
 import API from '../../api';
 import DroppableContent from './DroppableContent';
 import UploadsManager from './UploadsManager';
@@ -31,9 +32,7 @@ import {
     STATUS_IN_PROGRESS,
     STATUS_COMPLETE,
     STATUS_ERROR,
-    ERROR_CODE_UPLOAD_FILE_LIMIT,
-    TYPED_ID_FOLDER_PREFIX,
-    TYPED_ID_FILE_PREFIX
+    ERROR_CODE_UPLOAD_FILE_LIMIT
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -168,8 +167,8 @@ class ContentUploader extends Component<Props, State> {
         const { rootFolderId } = this.props;
         const folderId = getProp(uploadAPIOptions, 'folderId') || rootFolderId;
         const fileId = getProp(uploadAPIOptions, 'fileId');
-        const itemFolderId = `${TYPED_ID_FOLDER_PREFIX}${folderId}`;
-        const itemFileId = fileId ? `${TYPED_ID_FILE_PREFIX}${fileId}` : null;
+        const itemFolderId = getTypedFolderId(folderId);
+        const itemFileId = fileId ? getTypedFileId(fileId) : null;
 
         return new API({
             ...this.getBaseAPIOptions(),

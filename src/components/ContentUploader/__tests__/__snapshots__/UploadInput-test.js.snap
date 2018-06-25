@@ -6,7 +6,6 @@ exports[`components/ContentUploader/UploadInput should render correctly when inp
 >
   yo
   <input
-    className="be-input"
     multiple={true}
     onChange={[Function]}
     type="file"
@@ -22,7 +21,6 @@ exports[`components/ContentUploader/UploadInput should render correctly when isF
 >
   yo
   <input
-    className="be-input"
     directory=""
     multiple={true}
     onChange={[Function]}

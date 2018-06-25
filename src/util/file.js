@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import { TYPED_ID_FILE_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
+import { TYPED_ID_FILE_PREFIX, TYPED_ID_FOLDER_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
 
 /**
  * Returns typed id for file. Useful for when
@@ -15,6 +15,15 @@ import { TYPED_ID_FILE_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
  */
 export function getTypedFileId(id: string): string {
     return `${TYPED_ID_FILE_PREFIX}${id}`;
+}
+
+/**
+ * Returns typed id for folder.
+ * @param {id} id the folder id
+ * @return {string} typed id for folder
+ */
+export function getTypedFolderId(id: string): string {
+    return `${TYPED_ID_FOLDER_PREFIX}${id}`;
 }
 
 /**

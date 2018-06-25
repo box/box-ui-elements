@@ -26,7 +26,6 @@ const UploadInput = ({
         <label className={inputLabelClass}>
             {inputLabel}
             <input
-                className='be-input'
                 multiple={isMultiple}
                 type='file'
                 onChange={handleChange}
