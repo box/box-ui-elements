@@ -213,7 +213,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         it('should not invoke sortFeedItems() if the current feed has not been emptied', () => {
             instance.setState({ feedItems: [...comments.entries, ...tasks.entries] });
             instance.clearFeedItems = jest.fn().mockReturnValue(false);
-            instance.shouldSortFeedItems = jest.fn().mockReturnValue(true);
+            instance.areFeedItemsLoaded = jest.fn().mockReturnValue(true);
             instance.updateFeedItems(comments, tasks, versions);
 
             expect(instance.sortFeedItems).not.toBeCalled();
@@ -222,7 +222,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         it('should not invoke sortFeedItems() if there are items in the feed', () => {
             instance.setState({ feedItems: [...comments.entries, ...tasks.entries] });
             instance.clearFeedItems = jest.fn().mockReturnValue(false);
-            instance.shouldSortFeedItems = jest.fn().mockReturnValue(true);
+            instance.areFeedItemsLoaded = jest.fn().mockReturnValue(true);
 
             instance.updateFeedItems(comments, tasks, versions);
 
@@ -231,7 +231,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         it('should invoke sortFeedItems() if all conditions are met', () => {
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
-            instance.shouldSortFeedItems = jest.fn().mockReturnValue(true);
+            instance.areFeedItemsLoaded = jest.fn().mockReturnValue(true);
 
             instance.updateFeedItems(comments, tasks, versions);
 
@@ -239,7 +239,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
     });
 
-    describe('shouldSortFeedItems()', () => {
+    describe('areFeedItemsLoaded()', () => {
         let wrapper;
         let instance;
         beforeEach(() => {
@@ -248,22 +248,22 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
 
         it('should return false if missing comments', () => {
-            const result = instance.shouldSortFeedItems(undefined, tasks, versions);
+            const result = instance.areFeedItemsLoaded(undefined, tasks, versions);
             expect(result).toBe(false);
         });
 
         it('should return false if missing tasks', () => {
-            const result = instance.shouldSortFeedItems(comments, undefined, versions);
+            const result = instance.areFeedItemsLoaded(comments, undefined, versions);
             expect(result).toBe(false);
         });
 
         it('should return false if missing versions', () => {
-            const result = instance.shouldSortFeedItems(comments, tasks, undefined);
+            const result = instance.areFeedItemsLoaded(comments, tasks, undefined);
             expect(result).toBe(false);
         });
 
         it('should return true if all feed items are available', () => {
-            const result = instance.shouldSortFeedItems(comments, tasks, versions);
+            const result = instance.areFeedItemsLoaded(comments, tasks, versions);
             expect(result).toBe(true);
         });
     });
