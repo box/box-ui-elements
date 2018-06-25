@@ -10,25 +10,25 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             expect(SidebarUtils.canHaveSidebar({ hasSkills: true })).toBeTruthy();
         });
         test('should return true when properties should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasProperties: true })).toBeTruthy();
+            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasProperties: true } })).toBeTruthy();
         });
         test('should return true when access stats should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasAccessStats: true })).toBeTruthy();
+            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasAccessStats: true } })).toBeTruthy();
         });
         test('should return true when metadata should render', () => {
             expect(SidebarUtils.canHaveSidebar({ hasMetadata: true })).toBeTruthy();
         });
         test('should return true when classification should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasClassification: true })).toBeTruthy();
+            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasClassification: true } })).toBeTruthy();
         });
         test('should return true when activity feed should render', () => {
             expect(SidebarUtils.canHaveSidebar({ hasActivityFeed: true })).toBeTruthy();
         });
         test('should return true when versions should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasVersions: true })).toBeTruthy();
+            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasVersions: true } })).toBeTruthy();
         });
         test('should return true when notices should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasNotices: true })).toBeTruthy();
+            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasNotices: true } })).toBeTruthy();
         });
     });
     describe('shouldRenderDetailsSidebar()', () => {
@@ -36,19 +36,27 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             expect(SidebarUtils.shouldRenderDetailsSidebar({})).toBeFalsy();
         });
         test('should return true when properties should render', () => {
-            expect(SidebarUtils.shouldRenderDetailsSidebar({ hasProperties: true })).toBeTruthy();
+            expect(
+                SidebarUtils.shouldRenderDetailsSidebar({ detailsSidebarProps: { hasProperties: true } })
+            ).toBeTruthy();
         });
         test('should return true when access stats should render', () => {
-            expect(SidebarUtils.shouldRenderDetailsSidebar({ hasAccessStats: true })).toBeTruthy();
+            expect(
+                SidebarUtils.shouldRenderDetailsSidebar({ detailsSidebarProps: { hasAccessStats: true } })
+            ).toBeTruthy();
         });
         test('should return true when classification should render', () => {
-            expect(SidebarUtils.shouldRenderDetailsSidebar({ hasClassification: true })).toBeTruthy();
+            expect(
+                SidebarUtils.shouldRenderDetailsSidebar({ detailsSidebarProps: { hasClassification: true } })
+            ).toBeTruthy();
         });
         test('should return true when versions should render', () => {
-            expect(SidebarUtils.shouldRenderDetailsSidebar({ hasVersions: true })).toBeTruthy();
+            expect(
+                SidebarUtils.shouldRenderDetailsSidebar({ detailsSidebarProps: { hasVersions: true } })
+            ).toBeTruthy();
         });
         test('should return true when notices should render', () => {
-            expect(SidebarUtils.shouldRenderDetailsSidebar({ hasNotices: true })).toBeTruthy();
+            expect(SidebarUtils.shouldRenderDetailsSidebar({ detailsSidebarProps: { hasNotices: true } })).toBeTruthy();
         });
     });
     describe('shouldRenderSkillsSidebar()', () => {
