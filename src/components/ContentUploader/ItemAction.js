@@ -61,4 +61,5 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     );
 };
 
+export { ItemAction as ItemActionForTesting };
 export default injectIntl(ItemAction);

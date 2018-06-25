@@ -7,6 +7,7 @@ jest.mock('../../../api/Folder');
 
 let folderUploadNodeInstance;
 let folderCreateMock;
+
 describe('api/uploads/FolderUploadNode', () => {
     const name = 'hi';
 
