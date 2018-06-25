@@ -1,0 +1,171 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentUploader/UploadState should render VIEW_ERROR correctly 1`] = `
+<div
+  className="bcu-upload-state"
+>
+  <div>
+    <ErrorEmptyState />
+    <UploadStateContent
+      message={
+        <FormattedMessage
+          defaultMessage="A network error has occured while trying to upload."
+          id="be.uploadError"
+        />
+      }
+    />
+  </div>
+  <div
+    className="bcu-drag-drop-overlay"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_EMPTY correctly 1`] = `
+<div
+  className="bcu-upload-state"
+>
+  <div>
+    <UploadStartState />
+    <UploadStateContent
+      fileInputLabel={
+        <FormattedMessage
+          defaultMessage="Select Files"
+          id="be.uploadEmptyFileInput"
+        />
+      }
+      folderInputLabel={false}
+      message={
+        <FormattedMessage
+          defaultMessage="Drag and Drop Files"
+          id="be.uploadEmptyWithFolderUploadDisabled"
+        />
+      }
+      onChange={[Function]}
+    />
+  </div>
+  <div
+    className="bcu-drag-drop-overlay"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_EMPTY correctly when folder upload is enabled 1`] = `
+<div
+  className="bcu-upload-state"
+>
+  <div>
+    <UploadStartState />
+    <UploadStateContent
+      fileInputLabel={
+        <FormattedMessage
+          defaultMessage="Select Files"
+          id="be.uploadEmptyFileInput"
+        />
+      }
+      folderInputLabel={
+        <FormattedMessage
+          defaultMessage="Select Folders"
+          id="be.uploadEmptyFolderInput"
+        />
+      }
+      message={
+        <FormattedMessage
+          defaultMessage="Drag and Drop Files and Folders"
+          id="be.uploadEmptyWithFolderUploadEnabled"
+        />
+      }
+      onChange={[Function]}
+    />
+  </div>
+  <div
+    className="bcu-drag-drop-overlay"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_IN_PROGRESS correctly 1`] = `
+<div
+  className="bcu-upload-state"
+>
+  <div>
+    <UploadStartState />
+    <UploadStateContent
+      message={
+        <FormattedMessage
+          defaultMessage="Drag and drop to add additional files"
+          id="be.uploadInProgress"
+        />
+      }
+    />
+  </div>
+  <div
+    className="bcu-drag-drop-overlay"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_SUCCESS correctly  when folder upload is enabled 1`] = `
+<div
+  className="bcu-upload-state"
+>
+  <div>
+    <UploadSuccessState />
+    <UploadStateContent
+      fileInputLabel={
+        <FormattedMessage
+          defaultMessage="Select More Files"
+          id="be.uploadSuccessFileInput"
+        />
+      }
+      folderInputLabel={
+        <FormattedMessage
+          defaultMessage="Select More Folders"
+          id="be.uploadSuccessFolderInput"
+        />
+      }
+      message={
+        <FormattedMessage
+          defaultMessage="Success! Your files have been uploaded."
+          id="be.uploadSuccess"
+        />
+      }
+      onChange={[Function]}
+      useButton={false}
+    />
+  </div>
+  <div
+    className="bcu-drag-drop-overlay"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_SUCCESS correctly 1`] = `
+<div
+  className="bcu-upload-state"
+>
+  <div>
+    <UploadSuccessState />
+    <UploadStateContent
+      fileInputLabel={
+        <FormattedMessage
+          defaultMessage="Select More Files"
+          id="be.uploadSuccessFileInput"
+        />
+      }
+      folderInputLabel={false}
+      message={
+        <FormattedMessage
+          defaultMessage="Success! Your files have been uploaded."
+          id="be.uploadSuccess"
+        />
+      }
+      onChange={[Function]}
+      useButton={false}
+    />
+  </div>
+  <div
+    className="bcu-drag-drop-overlay"
+  />
+</div>
+`;

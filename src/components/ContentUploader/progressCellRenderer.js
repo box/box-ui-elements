@@ -34,8 +34,12 @@ const getErrorMessage = (errorCode: ?string) => {
 };
 
 export default () => ({ rowData }: Props) => {
-    const { status, error = {} } = rowData;
+    const { status, error = {}, isFolder } = rowData;
     const { code } = error;
+
+    if (isFolder && status !== STATUS_ERROR) {
+        return null;
+    }
 
     switch (status) {
         case STATUS_IN_PROGRESS:

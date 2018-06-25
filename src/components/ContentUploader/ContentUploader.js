@@ -7,15 +7,18 @@
 import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import cloneDeep from 'lodash/cloneDeep';
+import { getTypedFileId, getTypedFolderId } from '../../util/file';
 import API from '../../api';
 import DroppableContent from './DroppableContent';
 import UploadsManager from './UploadsManager';
 import Footer from './Footer';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
+import FolderUpload from '../../api/uploads/FolderUpload';
 import {
     DEFAULT_ROOT,
     CLIENT_NAME_CONTENT_UPLOADER,
@@ -29,49 +32,48 @@ import {
     STATUS_IN_PROGRESS,
     STATUS_COMPLETE,
     STATUS_ERROR,
-    ERROR_CODE_UPLOAD_FILE_LIMIT,
-    TYPED_ID_FOLDER_PREFIX,
-    TYPED_ID_FILE_PREFIX
+    ERROR_CODE_UPLOAD_FILE_LIMIT
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
 
 type Props = {
-    rootFolderId: string,
-    token: Token,
-    sharedLink?: string,
-    sharedLinkPassword?: string,
     apiHost: string,
-    uploadHost: string,
-    clientName: string,
-    className: string,
     chunked: boolean,
+    className: string,
+    clientName: string,
     fileLimit: number,
+    files?: Array<UploadFileWithAPIOptions | File>,
+    isFolderUploadEnabled: boolean,
+    isLarge: boolean,
+    isSmall: boolean,
+    isTouch: boolean,
+    language?: string,
+    measureRef: Function,
+    messages?: StringMap,
+    onCancel: Function,
     onClose: Function,
     onComplete: Function,
     onError: Function,
+    onMinimize?: Function,
     onUpload: Function,
-    onCancel: Function,
-    isSmall: boolean,
-    isLarge: boolean,
-    isTouch: boolean,
-    measureRef: Function,
-    language?: string,
-    messages?: StringMap,
+    onUpload: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    useUploadsManager?: boolean,
-    files?: Array<UploadFileWithAPIOptions | File>,
-    onMinimize?: Function,
-    onUpload: Function
+    rootFolderId: string,
+    sharedLink?: string,
+    sharedLinkPassword?: string,
+    token?: Token,
+    uploadHost: string,
+    useUploadsManager?: boolean // WIP
 };
 
 type State = {
     errorCode?: string,
-    items: UploadItem[],
+    isUploadsManagerExpanded: boolean,
     itemIds: Object,
-    view: View,
-    isUploadsManagerExpanded: boolean
+    items: UploadItem[],
+    view: View
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
@@ -104,7 +106,8 @@ class ContentUploader extends Component<Props, State> {
         useUploadsManager: false,
         files: [],
         onMinimize: noop,
-        onCancel: noop
+        onCancel: noop,
+        isFolderUploadEnabled: false
     };
 
     /**
@@ -161,8 +164,27 @@ class ContentUploader extends Component<Props, State> {
      * @return {API}
      */
     createAPIFactory(uploadAPIOptions?: UploadItemAPIOptions): API {
+        const { rootFolderId } = this.props;
+        const folderId = getProp(uploadAPIOptions, 'folderId') || rootFolderId;
+        const fileId = getProp(uploadAPIOptions, 'fileId');
+        const itemFolderId = getTypedFolderId(folderId);
+        const itemFileId = fileId ? getTypedFileId(fileId) : null;
+
+        return new API({
+            ...this.getBaseAPIOptions(),
+            id: itemFileId || itemFolderId,
+            ...uploadAPIOptions
+        });
+    }
+
+    /**
+     * Return base API options from props
+     *
+     * @private
+     * @returns {Object}
+     */
+    getBaseAPIOptions = (): Object => {
         const {
-            rootFolderId,
             token,
             sharedLink,
             sharedLinkPassword,
@@ -173,14 +195,7 @@ class ContentUploader extends Component<Props, State> {
             responseInterceptor
         } = this.props;
 
-        const itemFolderId =
-            uploadAPIOptions && uploadAPIOptions.folderId
-                ? `${TYPED_ID_FOLDER_PREFIX}${uploadAPIOptions.folderId}`
-                : `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`;
-        const itemFileId =
-            uploadAPIOptions && uploadAPIOptions.fileId ? `${TYPED_ID_FILE_PREFIX}${uploadAPIOptions.fileId}` : null;
-
-        const options = {
+        return {
             token,
             sharedLink,
             sharedLinkPassword,
@@ -188,12 +203,9 @@ class ContentUploader extends Component<Props, State> {
             uploadHost,
             clientName,
             requestInterceptor,
-            responseInterceptor,
-            id: itemFileId || itemFolderId,
-            ...uploadAPIOptions
+            responseInterceptor
         };
-        return new API(options);
-    }
+    };
 
     /**
      * Given an array of files, return the files that are new to the Content Uploader
@@ -209,18 +221,29 @@ class ContentUploader extends Component<Props, State> {
     /**
      * Generates file id based on file properties
      *
+     * When folderId or uploadInitTimestamp is missing from file options, file name is returned as file id.
+     * Otherwise, fileName_folderId_uploadInitTimestamp is used as file id.
+     *
      * @param {UploadFileWithAPIOptions | File} file
      */
-    getFileId(file) {
+    getFileId(file: UploadFileWithAPIOptions | File) {
         if (!file.options) {
+            // $FlowFixMe file is File type
             return file.name;
         }
 
-        if (!file.options.folderId || !file.options.uploadInitTimestamp) {
-            return file.file.name;
+        // $FlowFixMe file is UploadFileWithAPIOptions type
+        const fileWithOptions: UploadFileWithAPIOptions = file;
+
+        const folderId = getProp(fileWithOptions, 'options.folderId');
+        const uploadInitTimestamp = getProp(fileWithOptions, 'options.uploadInitTimestamp');
+        if (folderId && uploadInitTimestamp) {
+            // $FlowFixMe webkitRelativePath is available on certain browsers
+            const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
+            return `${fileName}_${folderId}_${uploadInitTimestamp}`;
         }
 
-        return `${file.file.name}_${file.options.folderId}_${file.options.uploadInitTimestamp}`;
+        return fileWithOptions.file.name;
     }
 
     /**
@@ -228,22 +251,113 @@ class ContentUploader extends Component<Props, State> {
      *
      * @private
      * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
-     * @param {boolean} withApiOptions - whether file objects contain Api options
+     * @param {boolean} areAPIOptionsInFiles - whether file objects are UploadFileWithAPIOptions type
      * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
      * @return {void}
      */
-    addFilesToUploadQueue = (files: Array<UploadFileWithAPIOptions | File>, withApiOptions, itemUpdateCallback) => {
-        const { fileLimit, useUploadsManager } = this.props;
-        const { view, items } = this.state;
+    addFilesToUploadQueue = (
+        files: Array<UploadFileWithAPIOptions | File>,
+        areAPIOptionsInFiles,
+        itemUpdateCallback
+    ) => {
+        if (files.length <= 0) {
+            return;
+        }
+
+        // $FlowFixMe webkitRelativePath is available on certain browsers
+        const isFolder = areAPIOptionsInFiles ? files[0].file.webkitRelativePath : files[0].webkitRelativePath;
 
         clearTimeout(this.resetItemsTimeout);
 
+        if (isFolder) {
+            this.addFilesWithRelativePathToQueue(files, areAPIOptionsInFiles, itemUpdateCallback);
+            return;
+        }
+
+        this.addFilesWithoutRelativePathToQueue(files, areAPIOptionsInFiles, itemUpdateCallback);
+    };
+
+    // eslint-disable-next-line
+    addDataTransferItemsToUploadQueue(dataTransferItems: DataTransferItemList) {
+        // @TODO: implement
+    }
+
+    /**
+     * Converts File API to upload items and adds to upload queue for files with webkitRelativePath.
+     *
+     * @private
+     * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
+     * @param {boolean} areAPIOptionsInFiles - whether file objects are UploadFileWithAPIOptions type
+     * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
+     * @return {void}
+     */
+    addFilesWithRelativePathToQueue(
+        files: Array<UploadFileWithAPIOptions | File>,
+        areAPIOptionsInFiles: boolean,
+        itemUpdateCallback: Function
+    ) {
+        if (files.length <= 0) {
+            return;
+        }
+
+        const { rootFolderId } = this.props;
+        // $FlowFixMe
+        const fileAPIOptions: Object = files[0].options || {};
+        const folderId = fileAPIOptions.folderId ? fileAPIOptions.folderId : rootFolderId;
+        const uploadBaseAPIOptions = {
+            ...this.getBaseAPIOptions(),
+            ...fileAPIOptions
+        };
+
+        const folderUpload = new FolderUpload(
+            this.addFilesWithoutRelativePathToQueue,
+            folderId,
+            this.addToQueue,
+            areAPIOptionsInFiles,
+            uploadBaseAPIOptions
+        );
+
+        folderUpload.buildFolderTree(files);
+
+        const folderName = Object.keys(folderUpload.folderNodes)[0];
+
+        this.addToQueue(
+            [
+                // $FlowFixMe no file property
+                {
+                    extension: '',
+                    name: folderName,
+                    status: STATUS_PENDING,
+                    api: folderUpload,
+                    isFolder: true,
+                    progress: 100,
+                    size: 1
+                }
+            ],
+            itemUpdateCallback
+        );
+    }
+
+    /**
+     * Converts File API to upload items and adds to upload queue for files with webkitRelativePath missing or ignored.
+     *
+     * @private
+     * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
+     * @param {boolean} areAPIOptionsInFiles - whether file objects are UploadFileWithAPIOptions type
+     * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
+     * @return {void}
+     */
+    addFilesWithoutRelativePathToQueue = (
+        files: Array<UploadFileWithAPIOptions | File>,
+        areAPIOptionsInFiles,
+        itemUpdateCallback
+    ) => {
         // Convert files from the file API to upload items
         const newItems = this.getNewFiles(files).map((file) => {
             let uploadFile = file;
             let uploadAPIOptions = {};
 
-            if (withApiOptions) {
+            if (areAPIOptionsInFiles) {
                 uploadFile = file.file;
                 uploadAPIOptions = file.options;
             }
@@ -276,6 +390,21 @@ class ContentUploader extends Component<Props, State> {
         if (newItems.length <= 0) {
             return;
         }
+
+        this.addToQueue(newItems, itemUpdateCallback);
+    };
+
+    /**
+     * Add new items to the upload queue
+     *
+     * @private
+     * @param {Array<UploadFileWithAPIOptions | File>} newItems - Files to be added to upload queue
+     * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
+     * @return {void}
+     */
+    addToQueue = (newItems: UploadItem[], itemUpdateCallback: Function) => {
+        const { fileLimit, useUploadsManager } = this.props;
+        const { view, items } = this.state;
 
         let updatedItems = [];
         const prevItemsNum = items.length;
@@ -336,7 +465,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     removeFileFromUploadQueue(item: UploadItem) {
-        const { onCancel } = this.props;
+        const { onCancel, useUploadsManager } = this.props;
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
 
@@ -347,7 +476,7 @@ class ContentUploader extends Component<Props, State> {
         items.splice(items.indexOf(item), 1);
 
         // Minimize uploads manager if there are no more items
-        const callback = this.props.useUploadsManager && !items.length ? this.minimizeUploadsManager : noop;
+        const callback = useUploadsManager && !items.length ? this.minimizeUploadsManager : noop;
 
         onCancel([item]);
         this.updateViewAndCollection(items, callback);
@@ -485,12 +614,16 @@ class ContentUploader extends Component<Props, State> {
      * Updates view and internal upload collection with provided items.
      *
      * @private
-     * @param {UploadItem[]} item - Itmes to update collection with
+     * @param {UploadItem[]} item - Items to update collection with
+     * @param {Function} callback
      * @return {void}
      */
-    updateViewAndCollection(items: UploadItem[], callback) {
+    updateViewAndCollection(items: UploadItem[], callback?: Function) {
         const { onComplete, useUploadsManager }: Props = this.props;
-        const someUploadIsInProgress = items.some((uploadItem) => uploadItem.status !== STATUS_COMPLETE);
+        const someUploadIsFile = items.some((uploadItem) => !uploadItem.isFolder);
+        const someUploadFileIsInProgress = items.some(
+            (uploadItem) => !uploadItem.isFolder && uploadItem.status !== STATUS_COMPLETE
+        );
         const someUploadHasFailed = items.some((uploadItem) => uploadItem.status === STATUS_ERROR);
         const allFilesArePending = !items.some((uploadItem) => uploadItem.status !== STATUS_PENDING);
         const noFileIsPendingOrInProgress = items.every(
@@ -502,7 +635,7 @@ class ContentUploader extends Component<Props, State> {
             view = VIEW_UPLOAD_EMPTY;
         } else if (someUploadHasFailed && useUploadsManager) {
             view = VIEW_ERROR;
-        } else if (someUploadIsInProgress) {
+        } else if (someUploadFileIsInProgress || !someUploadIsFile) {
             view = VIEW_UPLOAD_IN_PROGRESS;
         } else {
             view = VIEW_UPLOAD_SUCCESS;
@@ -733,7 +866,8 @@ class ContentUploader extends Component<Props, State> {
             measureRef,
             isTouch,
             fileLimit,
-            useUploadsManager
+            useUploadsManager,
+            isFolderUploadEnabled
         }: Props = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
 
@@ -761,11 +895,13 @@ class ContentUploader extends Component<Props, State> {
                     <div className={styleClassName} id={this.id} ref={measureRef}>
                         <DroppableContent
                             addFiles={this.addFilesToUploadQueue}
+                            addDataTransferItems={this.addDataTransferItemsToUploadQueue}
                             allowedTypes={['Files']}
                             items={items}
                             isTouch={isTouch}
                             view={view}
                             onClick={this.onClick}
+                            isFolderUploadEnabled={isFolderUploadEnabled}
                         />
                         <Footer
                             hasFiles={hasFiles}

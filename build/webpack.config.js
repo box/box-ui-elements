@@ -26,10 +26,13 @@ const entries = {
     tree: path.resolve('src/wrappers/ContentTree.js'),
     preview: path.resolve('src/wrappers/ContentPreview.js'),
     sidebar: path.resolve('src/wrappers/ContentSidebar.js')
-}
-const entriesToBuild = typeof process.env.ENTRY === 'string' ? {
-    [process.env.ENTRY]: entries[process.env.ENTRY]
-} : entries;
+};
+const entriesToBuild =
+    typeof process.env.ENTRY === 'string'
+        ? {
+            [process.env.ENTRY]: entries[process.env.ENTRY]
+        }
+        : entries;
 
 function getConfig(isReactExternalized) {
     const config = {
@@ -64,12 +67,7 @@ function getConfig(isReactExternalized) {
                 },
                 {
                     test: /\.s?css$/,
-                    use: [
-                        MiniCssExtractPlugin.loader,
-                        'css-loader',
-                        'postcss-loader',
-                        'sass-loader'
-                    ]
+                    use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
                 }
             ]
         },
