@@ -465,7 +465,8 @@ type TaskAssignment = {
     type: 'task_assignment',
     id: string,
     assigned_to: User,
-    resolution_state: string
+    resolution_state: string,
+    message: string
 };
 
 type TaskAssignments = {
@@ -476,14 +477,6 @@ type TaskAssignments = {
 type Task = {
     type: 'task',
     id: string,
-    item: {
-        type: string,
-        id: string,
-        sequence_id: string,
-        etag: string,
-        sha1: string,
-        name: string
-    },
     created_at: string,
     created_by: User,
     due_at: string,
@@ -504,10 +497,6 @@ type Comment = {
     message?: string,
     created_by: User,
     created_at: string,
-    item?: {
-        id: string,
-        type: string
-    },
     modified_at: string
 };
 

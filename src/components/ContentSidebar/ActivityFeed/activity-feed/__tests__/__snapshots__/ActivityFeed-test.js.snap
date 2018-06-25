@@ -37,7 +37,10 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
               "name": "Jay-Z",
             },
             "tagged_message": "test",
-            "task_assignment_collection": Array [],
+            "task_assignment_collection": Object {
+              "entries": Array [],
+              "total_count": 0,
+            },
             "type": "task",
           },
           Object {
