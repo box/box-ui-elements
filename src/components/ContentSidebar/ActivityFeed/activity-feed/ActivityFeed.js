@@ -23,7 +23,6 @@ type Props = {
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    isLoading?: boolean,
     currentUser?: User,
     isDisabled?: boolean,
     onCommentCreate?: Function,
@@ -46,10 +45,6 @@ type State = {
 };
 
 class ActivityFeed extends React.Component<Props, State> {
-    static defaultProps = {
-        isLoading: false
-    };
-
     state = {
         isInputOpen: false,
         feedItems: []
@@ -364,14 +359,14 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Determine whether or not a sort should occur, based on new comments, tasks, versions.
+     * Determine whether or not the feed items have been fetched and loaded
      *
      * @param {Comments} comments - Object containing comments for the file.
      * @param {Tasks} tasks - Object containing tasks for the file.
      * @param {FileVersions} versions - Object containing versions of the file.
-     * @return {boolean} True if the feed should be sorted with new items.
+     * @return {boolean} True if the feed items have successfully fetched
      */
-    shouldSortFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions): boolean {
+    areFeedItemsLoaded(comments?: Comments, tasks?: Tasks, versions?: FileVersions): boolean {
         return !!(comments && tasks && versions);
     }
 
@@ -426,7 +421,7 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     updateFeedItems(comments?: Comments, tasks?: Tasks, versions?: FileVersions, file: BoxItem): void {
         const isFeedEmpty = this.clearFeedItems(file);
-        const shouldSort = this.shouldSortFeedItems(comments, tasks, versions);
+        const shouldSort = this.areFeedItemsLoaded(comments, tasks, versions);
         const { feedItems } = this.state;
 
         if (shouldSort && (isFeedEmpty || !feedItems.length)) {
@@ -455,7 +450,6 @@ class ActivityFeed extends React.Component<Props, State> {
 
     render(): React.Node {
         const {
-            isLoading,
             translations,
             approverSelectorContacts,
             mentionSelectorContacts,
@@ -466,11 +460,15 @@ class ActivityFeed extends React.Component<Props, State> {
             file,
             onCommentCreate,
             getApproverWithQuery,
-            getMentionWithQuery
+            getMentionWithQuery,
+            comments,
+            tasks,
+            versions
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
+        const isLoading = !this.areFeedItemsLoaded(comments, tasks, versions);
 
         return (
             // eslint-disable-next-line
