@@ -296,6 +296,38 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
+     * Updates the task assignment state of the updated task
+     *
+     * @param {Task} task - Box task
+     * @param {TaskAssignment} updatedAssignment - New task assignment from API
+     * @return {void}
+     */
+    updateTaskAssignmentSuccessCallback = (task: Task, updatedAssignment: TaskAssignment) => {
+        const { entries, total_count } = task.task_assignment_collection;
+
+        const assignments = entries.map((item: TaskAssignment) => {
+            if (item.id === updatedAssignment.id) {
+                return {
+                    ...item,
+                    ...updatedAssignment,
+                    resolution_state: updatedAssignment.message.toLowerCase()
+                };
+            }
+            return item;
+        });
+
+        this.updateFeedItem(
+            {
+                task_assignment_collection: {
+                    entries: assignments,
+                    total_count
+                }
+            },
+            task.id
+        );
+    };
+
+    /**
      * Updates a task assignment via the API.
      *
      * @param {string} taskId - ID of task to be updated
@@ -305,7 +337,19 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string): void => {
         const updateTaskAssignment = this.props.onTaskAssignmentUpdate || noop;
-        updateTaskAssignment(taskId, taskAssignmentId, status);
+        const { feedItems } = this.state;
+        const task = feedItems.find((item) => !!(item.id === taskId));
+        if (!(task instanceof Task)) {
+            return;
+        }
+
+        updateTaskAssignment(
+            taskId,
+            taskAssignmentId,
+            status,
+            (updatedAssignment) => this.updateTaskAssignmentSuccessCallback(task, updatedAssignment),
+            () => this.updateFeedItem(this.createFeedError(messages.taskUpdateErrorMessage), taskAssignmentId)
+        );
     };
 
     /**
@@ -353,7 +397,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {string} message - The error message body.
      * @param {string} title - The error message title.
 
-     * @return {Object} An error message object 
+     * @return {Object} An error message object
      */
     createFeedError(message: string, title?: string = messages.errorOccured) {
         return {
