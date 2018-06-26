@@ -334,7 +334,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const updateTaskAssignment = this.props.onTaskAssignmentUpdate || noop;
         const { feedItems } = this.state;
         const task = feedItems.find((item) => !!(item.id === taskId));
-        if (!(task instanceof Task)) {
+        if (!task || task.type !== 'task') {
             return;
         }
 
@@ -342,7 +342,10 @@ class ActivityFeed extends React.Component<Props, State> {
             taskId,
             taskAssignmentId,
             status,
-            (updatedAssignment) => this.updateTaskAssignmentSuccessCallback(task, updatedAssignment),
+            (updatedAssignment) => {
+                // $FlowFixMe
+                this.updateTaskAssignmentSuccessCallback(task, updatedAssignment);
+            },
             () => this.updateFeedItem(this.createFeedError(messages.taskUpdateErrorMessage), taskAssignmentId)
         );
     };
