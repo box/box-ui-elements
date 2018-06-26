@@ -128,7 +128,7 @@ type User = {
     type: 'user',
     id: string,
     name: string,
-    login: string,
+    login?: string,
     email?: string,
     avatar_url?: string
 };
