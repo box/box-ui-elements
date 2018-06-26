@@ -85,7 +85,13 @@
                         },
                         onAccessStatsClick: () => {
                             alert('Hello, world!');
-                        }
+                        },
+                        retentionPolicy: {
+                            dispositionTime: 1556317461,
+                            policyType: 'finite',
+                            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion'
+                        },
+                        onRetentionPolicyExtendClick: () => alert('hello world!')
                     }
                 });
 

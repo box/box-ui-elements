@@ -1,4 +1,4 @@
-import { isBoxNote, getTypedFileId } from '../file';
+import { isBoxNote, getTypedFileId, getTypedFolderId } from '../file';
 
 describe('util/file', () => {
     describe('isBoxNote()', () => {
@@ -20,8 +20,14 @@ describe('util/file', () => {
     });
 
     describe('getTypedFileId()', () => {
-        test('should false when file is not a box note', () => {
+        test('should return typed file id correctly', () => {
             expect(getTypedFileId('foo')).toBe('file_foo');
+        });
+    });
+
+    describe('getTypedFolderId()', () => {
+        test('should return typed folder id correctly', () => {
+            expect(getTypedFolderId('foo')).toBe('folder_foo');
         });
     });
 });

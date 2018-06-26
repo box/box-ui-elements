@@ -19,6 +19,7 @@
         "afterEach": false,
         "before": false,
         "beforeEach": false,
+        "beforeAll": false,
         "describe": false,
         "expect": false,
         "test": false,

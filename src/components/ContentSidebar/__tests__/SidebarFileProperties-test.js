@@ -48,6 +48,23 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
         }
     };
 
+    const retentionPolicyProps = {
+        file: {
+            size: '1'
+        },
+        hasRetentionPolicy: true,
+        onRetentionPolicyExtendClick: jest.fn(),
+        retentionPolicy: {
+            dispositionTime: 1556317461,
+            policyName: 'test policy',
+            policyType: 'finite',
+            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion'
+        },
+        intl: {
+            locale: 'en'
+        }
+    };
+
     test('should render ItemProperties', () => {
         const wrapper = getWrapper(props);
 
@@ -89,6 +106,11 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
         // Only onClassificationClick callback is passed
         classificationProps.file.metadata = null;
         const wrapper = getMountWrapper(classificationProps);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render retention policy information when given proper props and callback', () => {
+        const wrapper = getMountWrapper(retentionPolicyProps);
         expect(wrapper).toMatchSnapshot();
     });
 });

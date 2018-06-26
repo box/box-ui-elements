@@ -21,10 +21,11 @@ type Props = {
     isOver: boolean,
     isTouch: boolean,
     view: View,
-    onSelect: Function
+    onSelect: Function,
+    isFolderUploadEnabled: boolean
 };
 
-const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect }: Props) => {
+const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFolderUploadEnabled }: Props) => {
     let icon;
     let content;
     /* eslint-disable jsx-a11y/label-has-for */
@@ -41,14 +42,23 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect }: Pro
                     <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />
                 ) : isTouch ? (
                     <UploadStateContent
-                        inputLabel={<FormattedMessage {...messages.uploadNoDragDrop} />}
+                        fileInputLabel={<FormattedMessage {...messages.uploadNoDragDrop} />}
                         useButton
                         onChange={onSelect}
                     />
                 ) : (
                     <UploadStateContent
-                        inputLabel={<FormattedMessage {...messages.uploadEmptyInput} />}
-                        message={<FormattedMessage {...messages.uploadEmpty} />}
+                        fileInputLabel={<FormattedMessage {...messages.uploadEmptyFileInput} />}
+                        folderInputLabel={
+                            isFolderUploadEnabled && <FormattedMessage {...messages.uploadEmptyFolderInput} />
+                        }
+                        message={
+                            isFolderUploadEnabled ? (
+                                <FormattedMessage {...messages.uploadEmptyWithFolderUploadEnabled} />
+                            ) : (
+                                <FormattedMessage {...messages.uploadEmptyWithFolderUploadDisabled} />
+                            )
+                        }
                         onChange={onSelect}
                     />
                 );
@@ -62,7 +72,10 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect }: Pro
             icon = <UploadSuccessState />;
             content = (
                 <UploadStateContent
-                    inputLabel={<FormattedMessage {...messages.uploadSuccessInput} />}
+                    fileInputLabel={<FormattedMessage {...messages.uploadSuccessFileInput} />}
+                    folderInputLabel={
+                        isFolderUploadEnabled && <FormattedMessage {...messages.uploadSuccessFolderInput} />
+                    }
                     message={<FormattedMessage {...messages.uploadSuccess} />}
                     useButton={isTouch}
                     onChange={onSelect}
