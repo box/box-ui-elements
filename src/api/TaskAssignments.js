@@ -63,7 +63,13 @@ class TaskAssignments extends Base {
             }
         };
 
-        this.post(id, this.getUrl(), requestData, successCallback, errorCallback);
+        this.post({
+            id,
+            url: this.getUrl(),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**
@@ -106,7 +112,13 @@ class TaskAssignments extends Base {
             data: { resolution_state: resolutionState, message }
         };
 
-        this.put(id, this.getUrl(taskAssignmentId), requestData, successCallback, errorCallback);
+        this.put({
+            id,
+            url: this.getUrl(taskAssignmentId),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**
@@ -139,7 +151,12 @@ class TaskAssignments extends Base {
             return;
         }
 
-        this.delete(id, this.getUrl(taskAssignmentId), successCallback, errorCallback);
+        this.delete({
+            id,
+            url: this.getUrl(taskAssignmentId),
+            successCallback,
+            errorCallback
+        });
     }
 }
 

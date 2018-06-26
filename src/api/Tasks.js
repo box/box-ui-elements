@@ -96,7 +96,13 @@ class Tasks extends Base {
             }
         };
 
-        this.post(id, this.tasksUrl(), requestData, successCallback, errorCallback);
+        this.post({
+            id,
+            url: this.tasksUrl(),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**
@@ -142,7 +148,13 @@ class Tasks extends Base {
             requestData.data.due_at = dueAt;
         }
 
-        this.put(id, this.tasksUrl(taskId), requestData, successCallback, errorCallback);
+        this.put({
+            id,
+            url: this.tasksUrl(taskId),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**
@@ -175,7 +187,12 @@ class Tasks extends Base {
             return;
         }
 
-        this.delete(id, this.tasksUrl(taskId), successCallback, errorCallback);
+        this.delete({
+            id,
+            url: this.tasksUrl(taskId),
+            successCallback,
+            errorCallback
+        });
     }
 }
 
