@@ -19,6 +19,9 @@ type Props = {
     onDescriptionChange: Function,
     hasClassification: boolean,
     onClassificationClick: ?Function,
+    hasRetentionPolicy: boolean,
+    retentionPolicy?: Object,
+    onRetentionPolicyExtendClick?: Function,
     intl: any
 };
 
@@ -27,6 +30,9 @@ const SidebarFileProperties = ({
     onDescriptionChange,
     hasClassification,
     onClassificationClick,
+    hasRetentionPolicy,
+    retentionPolicy,
+    onRetentionPolicyExtendClick,
     intl
 }: Props) => {
     const value = getProp(file, `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
@@ -49,6 +55,14 @@ const SidebarFileProperties = ({
                         [INTERACTION_TARGET]: value
                             ? DETAILS_TARGETS.CLASSIFICATION_EDIT
                             : DETAILS_TARGETS.CLASSIFICATION_ADD
+                    }
+                    : {}
+            }
+            retentionPolicyProps={
+                hasRetentionPolicy
+                    ? {
+                        ...retentionPolicy,
+                        openModal: onRetentionPolicyExtendClick
                     }
                     : {}
             }
