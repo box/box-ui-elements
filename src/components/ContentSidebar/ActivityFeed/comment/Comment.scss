@@ -95,6 +95,11 @@
             white-space: pre-wrap;
             word-wrap: break-word;
 
+            .bcs-comment-mention {
+                display: inline-block;
+                overflow: initial;
+            }
+
             .link {
                 white-space: normal;
 
