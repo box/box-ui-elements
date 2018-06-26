@@ -117,7 +117,13 @@ class Comments extends OffsetBasedAPI {
             }
         };
 
-        this.post(id, this.commentsUrl(), requestData, successCallback, errorCallback);
+        this.post({
+            id,
+            url: this.commentsUrl(),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**
@@ -159,7 +165,13 @@ class Comments extends OffsetBasedAPI {
             data: { message }
         };
 
-        this.put(id, this.commentsUrl(commentId), requestData, successCallback, errorCallback);
+        this.put({
+            id,
+            url: this.commentsUrl(commentId),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**
@@ -194,7 +206,12 @@ class Comments extends OffsetBasedAPI {
             return;
         }
 
-        this.delete(id, this.commentsUrl(commentId), successCallback, errorCallback);
+        this.delete({
+            id,
+            url: this.commentsUrl(commentId),
+            successCallback,
+            errorCallback
+        });
     }
 }
 
