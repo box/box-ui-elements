@@ -107,13 +107,13 @@ describe('api/TaskAssignments', () => {
                     successCallback,
                     errorCallback
                 });
-                expect(taskAssignments.put).toBeCalledWith(
-                    'foo',
-                    taskAssignments.getUrl(taskAssignmentId),
-                    requestData,
+                expect(taskAssignments.put).toBeCalledWith({
+                    id: 'foo',
+                    url: taskAssignments.getUrl(taskAssignmentId),
+                    data: requestData,
                     successCallback,
                     errorCallback
-                );
+                });
             });
         });
 

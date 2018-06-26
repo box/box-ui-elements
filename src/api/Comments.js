@@ -165,7 +165,13 @@ class Comments extends OffsetBasedAPI {
             data: { message }
         };
 
-        this.put(id, this.commentsUrl(commentId), requestData, successCallback, errorCallback);
+        this.put({
+            id,
+            url: this.commentsUrl(commentId),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**

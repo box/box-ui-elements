@@ -112,7 +112,13 @@ class TaskAssignments extends Base {
             data: { resolution_state: resolutionState, message }
         };
 
-        this.put(id, this.getUrl(taskAssignmentId), requestData, successCallback, errorCallback);
+        this.put({
+            id,
+            url: this.getUrl(taskAssignmentId),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**

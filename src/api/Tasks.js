@@ -148,7 +148,13 @@ class Tasks extends Base {
             requestData.data.due_at = dueAt;
         }
 
-        this.put(id, this.tasksUrl(taskId), requestData, successCallback, errorCallback);
+        this.put({
+            id,
+            url: this.tasksUrl(taskId),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**

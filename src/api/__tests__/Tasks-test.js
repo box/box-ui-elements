@@ -95,13 +95,13 @@ describe('api/Tasks', () => {
                     successCallback,
                     errorCallback
                 });
-                expect(tasks.put).toBeCalledWith(
-                    'foo',
-                    tasks.tasksUrl(taskId),
-                    requestData,
+                expect(tasks.put).toBeCalledWith({
+                    id: 'foo',
+                    url: tasks.tasksUrl(taskId),
+                    data: requestData,
                     successCallback,
                     errorCallback
-                );
+                });
             });
 
             test('should put a well formed task update to the tasks endpoint when due_at is included', () => {
@@ -117,13 +117,13 @@ describe('api/Tasks', () => {
                     successCallback,
                     errorCallback
                 });
-                expect(tasks.put).toBeCalledWith(
-                    'foo',
-                    tasks.tasksUrl(taskId),
-                    requestData,
+                expect(tasks.put).toBeCalledWith({
+                    id: 'foo',
+                    url: tasks.tasksUrl(taskId),
+                    data: requestData,
                     successCallback,
                     errorCallback
-                );
+                });
             });
         });
 

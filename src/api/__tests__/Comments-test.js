@@ -150,13 +150,13 @@ describe('api/Comments', () => {
                     successCallback,
                     errorCallback
                 });
-                expect(comments.put).toBeCalledWith(
-                    'foo',
-                    comments.commentsUrl(commentId),
-                    requestData,
+                expect(comments.put).toBeCalledWith({
+                    id: 'foo',
+                    url: comments.commentsUrl(commentId),
+                    data: requestData,
                     successCallback,
                     errorCallback
-                );
+                });
             });
         });
 
