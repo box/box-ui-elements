@@ -134,12 +134,12 @@ describe('api/TaskAssignments', () => {
                     successCallback,
                     errorCallback
                 });
-                expect(taskAssignments.delete).toBeCalledWith(
-                    'foo',
-                    taskAssignments.getUrl(taskAssignmentId),
+                expect(taskAssignments.delete).toBeCalledWith({
+                    id: 'foo',
+                    url: taskAssignments.getUrl(taskAssignmentId),
                     successCallback,
                     errorCallback
-                );
+                });
             });
         });
     });

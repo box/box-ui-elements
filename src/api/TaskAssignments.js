@@ -151,7 +151,12 @@ class TaskAssignments extends Base {
             return;
         }
 
-        this.delete(id, this.getUrl(taskAssignmentId), successCallback, errorCallback);
+        this.delete({
+            id,
+            url: this.getUrl(taskAssignmentId),
+            successCallback,
+            errorCallback
+        });
     }
 }
 

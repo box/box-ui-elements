@@ -171,12 +171,12 @@ describe('api/Comments', () => {
 
             test('should delete a comment from the comments endpoint', () => {
                 comments.deleteComment({ file, commentId, successCallback, errorCallback });
-                expect(comments.delete).toBeCalledWith(
-                    'foo',
-                    comments.commentsUrl(commentId),
+                expect(comments.delete).toBeCalledWith({
+                    id: 'foo',
+                    url: comments.commentsUrl(commentId),
                     successCallback,
                     errorCallback
-                );
+                });
             });
         });
     });

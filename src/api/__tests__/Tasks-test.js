@@ -135,7 +135,12 @@ describe('api/Tasks', () => {
 
             test('should delete a task from the tasks endpoint', () => {
                 tasks.deleteTask({ file, taskId, successCallback, errorCallback });
-                expect(tasks.delete).toBeCalledWith('foo', tasks.tasksUrl(taskId), successCallback, errorCallback);
+                expect(tasks.delete).toBeCalledWith({
+                    id: 'foo',
+                    url: tasks.tasksUrl(taskId),
+                    successCallback,
+                    errorCallback
+                });
             });
         });
 
@@ -143,8 +148,6 @@ describe('api/Tasks', () => {
             test('should make a correct GET request for assignments for the specified task', () => {
                 const id = 'id';
                 const url = `${tasks.tasksUrl(taskId)}/assignments`;
-                const successCallback = jest.fn();
-                const errorCallback = jest.fn();
                 const params = {
                     fields: 'start=0'
                 };

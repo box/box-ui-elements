@@ -206,7 +206,12 @@ class Comments extends OffsetBasedAPI {
             return;
         }
 
-        this.delete(id, this.commentsUrl(commentId), successCallback, errorCallback);
+        this.delete({
+            id,
+            url: this.commentsUrl(commentId),
+            successCallback,
+            errorCallback
+        });
     }
 }
 

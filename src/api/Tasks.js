@@ -187,7 +187,12 @@ class Tasks extends Base {
             return;
         }
 
-        this.delete(id, this.tasksUrl(taskId), successCallback, errorCallback);
+        this.delete({
+            id,
+            url: this.tasksUrl(taskId),
+            successCallback,
+            errorCallback
+        });
     }
 }
 
