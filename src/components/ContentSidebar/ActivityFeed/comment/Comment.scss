@@ -96,17 +96,12 @@
             word-wrap: break-word;
 
             .bcs-comment-mention {
+                white-space: normal;
                 display: inline-block;
                 overflow: initial;
-            }
 
-            .link {
-                white-space: normal;
-
-                &.bcs-comment-mention {
+                .link & {
                     color: $box-blue;
-                    display: inline-block;
-                    overflow: initial;
                 }
             }
 
