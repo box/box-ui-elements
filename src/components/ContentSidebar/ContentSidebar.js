@@ -349,7 +349,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchVersionsErrorCallback = (e: Error) => {
         this.setState({
-            versions: undefined,
+            versions: {
+                total_count: 0,
+                entries: []
+            },
             versionError: {
                 maskError: {
                     errorHeader: messages.versionHistoryErrorHeaderMessage,
@@ -369,7 +372,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchCommentsErrorCallback = (e: Error) => {
         this.setState({
-            comments: undefined,
+            comments: {
+                total_count: 0,
+                entries: []
+            },
             commentsError: e
         });
         this.errorCallback(e);
@@ -384,7 +390,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTasksErrorCallback = (e: Error) => {
         this.setState({
-            tasks: undefined,
+            tasks: {
+                total_count: 0,
+                entries: []
+            },
             tasksError: e
         });
     };
