@@ -1,5 +1,22 @@
+## <small>5.2.1 (2018-06-26)</small>
+
+* Upgrade: Preview v1.46.0 (#405) ([73bc09e](https://github.com/box/box-ui-elements/commit/73bc09e)), closes [#405](https://github.com/box/box-ui-elements/issues/405)
+* New: Adding inline errors to activity feed write actions (#383) ([8577515](https://github.com/box/box-ui-elements/commit/8577515)), closes [#383](https://github.com/box/box-ui-elements/issues/383)
+* New: Display retention policy (#403) ([7e85ccc](https://github.com/box/box-ui-elements/commit/7e85ccc)), closes [#403](https://github.com/box/box-ui-elements/issues/403)
+* New: folder upload with webkitRelativePath (#395) ([f156292](https://github.com/box/box-ui-elements/commit/f156292)), closes [#395](https://github.com/box/box-ui-elements/issues/395)
+* Chore: Return promises from all API CRUD operations (#401) ([4ce2690](https://github.com/box/box-ui-elements/commit/4ce2690)), closes [#401](https://github.com/box/box-ui-elements/issues/401)
+* Chore: Show Activity Feed loading state while fetching feed items (#404) ([0c2f34a](https://github.com/box/box-ui-elements/commit/0c2f34a)), closes [#404](https://github.com/box/box-ui-elements/issues/404)
+* Update: Task assignments can be updated via the API (#397) ([9675775](https://github.com/box/box-ui-elements/commit/9675775)), closes [#397](https://github.com/box/box-ui-elements/issues/397)
+* Breaking: Refactoring details tab specific props (#391) ([3391311](https://github.com/box/box-ui-elements/commit/3391311)), closes [#391](https://github.com/box/box-ui-elements/issues/391)
+* Fix: Formattng of approverSelectorContacts for Tasks (#402) ([67e403c](https://github.com/box/box-ui-elements/commit/67e403c)), closes [#402](https://github.com/box/box-ui-elements/issues/402)
+* Fix: pending task from createTask method (#396) ([1b14d44](https://github.com/box/box-ui-elements/commit/1b14d44)), closes [#396](https://github.com/box/box-ui-elements/issues/396)
+* Mojito: Update translations (#398) ([b0e06d7](https://github.com/box/box-ui-elements/commit/b0e06d7)), closes [#398](https://github.com/box/box-ui-elements/issues/398)
+
+
+
 ## 5.2.0 (2018-06-21)
 
+* Release: 5.2.0 ([c111253](https://github.com/box/box-ui-elements/commit/c111253))
 * Chore: Remove handlers prop from AF + cleanup mention/approver contacts in Tasks (#394) ([ea46ca4](https://github.com/box/box-ui-elements/commit/ea46ca4)), closes [#394](https://github.com/box/box-ui-elements/issues/394)
 * Update: Populate AF tasks with task assignments (#387) ([affdd1e](https://github.com/box/box-ui-elements/commit/affdd1e)), closes [#387](https://github.com/box/box-ui-elements/issues/387)
 * Mojito: Update translations (#393) ([b3f1d60](https://github.com/box/box-ui-elements/commit/b3f1d60)), closes [#393](https://github.com/box/box-ui-elements/issues/393)
