@@ -97,10 +97,16 @@
 
             .bcs-comment-mention {
                 white-space: normal;
-                display: inline-block;
+                display: inline;
                 overflow: initial;
+            }
 
-                .link & {
+            .link {
+                &:hover {
+                    text-decoration: underline;
+                }
+
+                &.bcs-comment-mention {
                     color: $box-blue;
                 }
             }
