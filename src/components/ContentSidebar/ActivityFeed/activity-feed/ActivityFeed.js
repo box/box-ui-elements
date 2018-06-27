@@ -446,6 +446,23 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems.push(...itemContainer.entries);
         });
 
+        const { file } = this.props;
+        const { restored_from, modified_at } = file;
+        if (restored_from) {
+            const restoredVersion = feedItems.find(
+                (feedItem) => feedItem.type === 'file_version' && feedItem.id === restored_from.id
+            );
+
+            if (restoredVersion) {
+                // $FlowFixMe
+                feedItems.push({
+                    ...restoredVersion,
+                    created_at: modified_at,
+                    action: 'restore'
+                });
+            }
+        }
+
         feedItems.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
 
         this.setState({ feedItems });
