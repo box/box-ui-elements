@@ -92,16 +92,22 @@
         }
 
         .bcs-comment-text {
+            @import '~box-react-ui/lib/styles/common/links';
+
             white-space: pre-wrap;
             word-wrap: break-word;
 
-            .link {
+            .bcs-comment-mention {
+                display: inline-block;
+                overflow: initial;
                 white-space: normal;
+            }
 
-                &.bcs-comment-mention {
-                    color: $box-blue;
-                    display: inline-block;
-                    overflow: initial;
+            .link {
+                color: $box-blue;
+
+                &:hover {
+                    text-decoration: underline;
                 }
             }
 
