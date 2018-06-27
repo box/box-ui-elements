@@ -40,6 +40,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     commentsError?: Errors,
     tasksError?: Errors,
+    versionError?: Errors,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>,
@@ -70,6 +71,7 @@ const Sidebar = ({
     comments,
     commentsError,
     versions,
+    versionError,
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl,
@@ -97,10 +99,11 @@ const Sidebar = ({
                     tasks={tasks}
                     tasksError={tasksError}
                     comments={comments}
-                    approverSelectorContacts={approverSelectorContacts}
-                    mentionSelectorContacts={mentionSelectorContacts}
                     commentsError={commentsError}
                     versions={versions}
+                    versionError={versionError}
+                    approverSelectorContacts={approverSelectorContacts}
+                    mentionSelectorContacts={mentionSelectorContacts}
                     onCommentCreate={onCommentCreate}
                     onCommentDelete={onCommentDelete}
                     onTaskCreate={onTaskCreate}
