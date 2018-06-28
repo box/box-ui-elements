@@ -38,6 +38,8 @@ type Props = {
     translations?: Translations,
     isDisabled?: boolean,
     message: string,
+    mentionSelectorContacts?: SelectorItems,
+    getMentionWithQuery?: Function,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>
 };
@@ -62,7 +64,9 @@ class Task extends React.Component<Props> {
             translatedTaggedMessage,
             translations,
             getAvatarUrl,
-            getUserProfileUrl
+            getUserProfileUrl,
+            getMentionWithQuery,
+            mentionSelectorContacts
         } = this.props;
         return (
             <div className={classNames('bcs-task', { 'bcs-is-pending': isPending || error })}>
@@ -82,6 +86,8 @@ class Task extends React.Component<Props> {
                     translations={translations}
                     getAvatarUrl={getAvatarUrl}
                     getUserProfileUrl={getUserProfileUrl}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    getMentionWithQuery={getMentionWithQuery}
                 />
                 <div className='bcs-task-approvers-container'>
                     <div className='bcs-task-approvers-header'>
