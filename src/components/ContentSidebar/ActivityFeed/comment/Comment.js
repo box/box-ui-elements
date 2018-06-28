@@ -43,6 +43,8 @@ type Props = {
     translations?: Translations,
     currentUser?: User,
     isDisabled?: boolean,
+    mentionSelectorContacts?: SelectorItems,
+    getMentionWithQuery?: Function,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>
 };
@@ -101,7 +103,9 @@ class Comment extends React.Component<Props, State> {
             currentUser,
             isDisabled,
             getAvatarUrl,
-            getUserProfileUrl
+            getUserProfileUrl,
+            getMentionWithQuery,
+            mentionSelectorContacts
         } = this.props;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
@@ -166,6 +170,8 @@ class Comment extends React.Component<Props, State> {
                                 entityId={id}
                                 tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
                                 getAvatarUrl={getAvatarUrl}
+                                mentionSelectorContacts={mentionSelectorContacts}
+                                getMentionWithQuery={getMentionWithQuery}
                             />
                         ) : null}
                         {!isEditing ? (
