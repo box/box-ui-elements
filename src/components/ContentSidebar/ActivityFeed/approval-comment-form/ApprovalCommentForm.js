@@ -97,7 +97,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             }
             createTask({
                 text,
-                assignees: approvers.map(({ value }) => value),
+                assignees: approvers,
                 dueAt: approvalDate
             });
         } else if (entityId) {
