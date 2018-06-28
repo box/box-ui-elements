@@ -14,7 +14,7 @@ import Tooltip from 'box-react-ui/lib/components/tooltip';
 import messages from '../../../messages';
 
 type Props = {
-    name?: string,
+    name: string,
     onTaskApproval?: Function,
     onTaskReject?: Function,
     shouldShowActions: boolean
@@ -22,7 +22,7 @@ type Props = {
 
 const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActions }: Props): React.Node => (
     <div className='bcs-task-pending-assignment'>
-        {name && <div className='bcs-task-assignment-name'>{name}</div>}
+        <div className='bcs-task-assignment-name'>{name}</div>
         {shouldShowActions ? (
             <div className='bcs-task-assignment-actions'>
                 <Tooltip position='bottom-center' text={<FormattedMessage {...messages.taskApprove} />}>
