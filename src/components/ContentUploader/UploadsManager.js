@@ -65,6 +65,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}
                 view={view}
+                numberOfItems={items.length}
             />
             <div className='bcu-uploads-manager-item-list'>
                 <ItemList items={items} view={view} onClick={onItemActionClick} />

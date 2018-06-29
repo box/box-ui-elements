@@ -5,6 +5,88 @@
  */
 
 /**
+ * Returns true if file contains API options
+ *
+ * @param {File | UploadFileWithAPIOptions} item
+ * @returns {boolean}
+ */
+function doesFileContainAPIOptions(file: File | UploadFileWithAPIOptions): boolean {
+    // $FlowFixMe
+    return file.options && file.file;
+}
+
+/**
+ * Returns true if item contains API options
+ *
+ * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} item
+ * @returns {boolean}
+ */
+function doesDataTransferItemContainAPIOptions(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): boolean {
+    // $FlowFixMe
+    return item.options && item.item;
+}
+
+/**
+ * Converts File or UploadFileWithAPIOptions to File
+ *
+ * @param {File | UploadFileWithAPIOptions} file
+ * @returns {File}
+ */
+function getFile(file: File | UploadFileWithAPIOptions): File {
+    if (doesFileContainAPIOptions(file)) {
+        // $FlowFixMe
+        return file.file;
+    }
+    // $FlowFixMe
+    return file;
+}
+
+/**
+ * Converts DataTransferItem or UploadDataTransferItemWithAPIOptions to DataTransferItem
+ *
+ * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} item
+ * @returns {DataTransferItem}
+ */
+function getDataTransferItem(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): DataTransferItem {
+    if (doesDataTransferItemContainAPIOptions(item)) {
+        // $FlowFixMe
+        return item.item;
+    }
+    // $FlowFixMe
+    return item;
+}
+
+/**
+ * Get API Options from file
+ *
+ * @param {File | UploadFileWithAPIOptions} file
+ * @returns {UploadItemAPIOptions}
+ */
+function getFileAPIOptions(file: File | UploadFileWithAPIOptions): UploadItemAPIOptions {
+    if (doesFileContainAPIOptions(file)) {
+        // $FlowFixMe
+        return file.options;
+    }
+    return {};
+}
+
+/**
+ * Get API Options from item
+ *
+ * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} item
+ * @returns {UploadItemAPIOptions}
+ */
+function getDataTransferItemAPIOptions(
+    item: DataTransferItem | UploadDataTransferItemWithAPIOptions
+): UploadItemAPIOptions {
+    if (doesDataTransferItemContainAPIOptions(item)) {
+        // $FlowFixMe
+        return item.options;
+    }
+    return {};
+}
+
+/**
  * Returns true if the given object is a Date instance encoding a valid date
  * (i.e. new Date('this is not a timestamp') should return false).
  *
@@ -81,4 +163,113 @@ function getBoundedExpBackoffRetryDelay(initialRetryDelay: number, maxRetryDelay
     return delay > maxRetryDelay ? maxRetryDelay : delay;
 }
 
-export { toISOStringNoMS, getFileLastModifiedAsISONoMSIfPossible, tryParseJson, getBoundedExpBackoffRetryDelay };
+/**
+ * Get entry from dataTransferItem
+ *
+ * @param {DataTransferItem} item
+ * @returns {FileSystemFileEntry}
+ */
+function getEntryFromDataTransferItem(item: DataTransferItem): FileSystemFileEntry {
+    // $FlowFixMe
+    return (item.webkitGetAsEntry || item.mozGetAsEntry || item.getAsEntry).call(item);
+}
+
+/**
+ * Check if a dataTransferItem is a folder
+ *
+ * @param {UploadDataTransferItemWithAPIOptions | DataTransferItem} itemData
+ * @returns {boolean}
+ */
+function isDataTransferItemAFolder(itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem): boolean {
+    const item = itemData.item ? itemData.item : itemData;
+    // $FlowFixMe item is DataTransferItem type
+    const entry = getEntryFromDataTransferItem(item);
+    if (!entry) {
+        return false;
+    }
+
+    return entry.isDirectory;
+}
+
+/**
+ * Get dataTransferItems of folder type
+ *
+ * @param {DataTransferItemList | Array<UploadDataTransferItemWithAPIOptions | DataTransferItem>} dataTransferItems
+ * @returns {Array<DataTransferItem>}
+ */
+function getFolderDataTransferItems(
+    dataTransferItems: DataTransferItemList | Array<UploadDataTransferItemWithAPIOptions | DataTransferItem>
+): Array<DataTransferItem> {
+    return [].filter.call(dataTransferItems, isDataTransferItemAFolder);
+}
+
+/**
+ * Get dataTransferItems of file type
+ *
+ * @param {DataTransferItemList | Array<UploadDataTransferItemWithAPIOptions | DataTransferItem>} dataTransferItems
+ * @returns {Array<DataTransferItem>}
+ */
+function getFileDataTransferItems(
+    dataTransferItems: DataTransferItemList | Array<UploadDataTransferItemWithAPIOptions | DataTransferItem>
+): Array<DataTransferItem> {
+    return [].filter.call(dataTransferItems, (item) => !isDataTransferItemAFolder(item));
+}
+
+/**
+ * Get file from FileSystemFileEntry
+ *
+ * @param {FileSystemFileEntry} entry
+ * @returns {Promise<File>}
+ */
+function getFileFromEntry(entry: FileSystemFileEntry): Promise<File> {
+    return new Promise((resolve) => {
+        entry.file((file) => {
+            resolve(file);
+        });
+    });
+}
+
+/**
+ * Get file from DataTransferItem or UploadDataTransferItemWithAPIOptions
+ *
+ * @param {UploadDataTransferItemWithAPIOptions | DataTransferItem} itemData
+ * @returns {Promise<File | UploadFileWithAPIOptions>}
+ */
+async function getFileFromDataTransferItem(
+    itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem
+): Promise<File | UploadFileWithAPIOptions> {
+    const item = getDataTransferItem(itemData);
+    // $FlowFixMe item is DataTransferItem type
+    const entry = getEntryFromDataTransferItem(item);
+    const file = await getFileFromEntry(entry);
+    // $FlowFixMe itemOption is UploadItemAPIOptions type
+    const itemOption: UploadItemAPIOptions = itemData.options;
+    if (itemOption) {
+        return {
+            // $FlowFixMe UploadFileWithAPIOptions
+            file,
+            options: itemOption
+        };
+    }
+
+    return file;
+}
+
+export {
+    getFileFromEntry,
+    toISOStringNoMS,
+    getFileLastModifiedAsISONoMSIfPossible,
+    tryParseJson,
+    getBoundedExpBackoffRetryDelay,
+    getFolderDataTransferItems,
+    getEntryFromDataTransferItem,
+    isDataTransferItemAFolder,
+    getFileDataTransferItems,
+    getFileFromDataTransferItem,
+    doesFileContainAPIOptions,
+    doesDataTransferItemContainAPIOptions,
+    getFile,
+    getDataTransferItem,
+    getFileAPIOptions,
+    getDataTransferItemAPIOptions
+};

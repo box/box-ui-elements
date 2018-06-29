@@ -14,7 +14,7 @@ describe('api/uploads/FolderUpload', () => {
             const upload1 = jest.fn();
             const upload2 = jest.fn();
             const errorCallback = () => 'errorCallback';
-            folderUploadInstance.folderNodes = {
+            folderUploadInstance.folders = {
                 1: { upload: upload1 },
                 2: { upload: upload2 }
             };
@@ -26,26 +26,26 @@ describe('api/uploads/FolderUpload', () => {
         });
     });
 
-    describe('buildFolderTree()', () => {
-        test('should construct folderNodes correctly when areAPIOptionsInFiles is true', () => {
-            folderUploadInstance.buildFolderTree([
-                { file: { webkitRelativePath: 'a' } },
-                { file: { name: 'f1', webkitRelativePath: 'a/f1' } },
-                { file: { name: 'f2', webkitRelativePath: 'a/f2' } },
-                { file: { name: 'f3', webkitRelativePath: 'a/b/f3' } },
-                { file: { name: 'f4', webkitRelativePath: 'a/c/f4' } }
+    describe('buildFolderTreeFromWebkitRelativePath()', () => {
+        test('should construct folders correctly when API options exist', () => {
+            folderUploadInstance.buildFolderTreeFromWebkitRelativePath([
+                { file: { webkitRelativePath: 'a' }, options: {} },
+                { file: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} },
+                { file: { name: 'f2', webkitRelativePath: 'a/f2' }, options: {} },
+                { file: { name: 'f3', webkitRelativePath: 'a/b/f3' }, options: {} },
+                { file: { name: 'f4', webkitRelativePath: 'a/c/f4' }, options: {} }
             ]);
 
             // /
             // - a/
-            expect(Object.values(folderUploadInstance.folderNodes)).toHaveLength(1);
-            expect(Object.keys(folderUploadInstance.folderNodes)).toEqual(['a']);
+            expect(Object.values(folderUploadInstance.folders)).toHaveLength(1);
+            expect(Object.keys(folderUploadInstance.folders)).toEqual(['a']);
             // /a/
             // - f1
             // - f2
             // - b/
             // - c/
-            const folderA = folderUploadInstance.folderNodes.a;
+            const folderA = folderUploadInstance.folders.a;
             expect(Object.keys(folderA.folders)).toHaveLength(2);
             expect(Object.keys(folderA.folders)).toEqual(['b', 'c']);
             expect(folderA.files).toHaveLength(2);
@@ -64,9 +64,9 @@ describe('api/uploads/FolderUpload', () => {
             expect(folderC.files.map((item) => item.name)).toEqual(['f4']);
         });
 
-        test('should construct folderNodes correctly when areAPIOptionsInFiles is false', () => {
+        test('should construct folders correctly when API options are missing', () => {
             folderUploadInstance = new FolderUpload(noop, destinationFolderID, noop, false, {});
-            folderUploadInstance.buildFolderTree([
+            folderUploadInstance.buildFolderTreeFromWebkitRelativePath([
                 { webkitRelativePath: 'a' },
                 { name: 'f1', webkitRelativePath: 'a/f1' },
                 { name: 'f2', webkitRelativePath: 'a/f2' },
@@ -76,14 +76,14 @@ describe('api/uploads/FolderUpload', () => {
 
             // /
             // - a/
-            expect(Object.values(folderUploadInstance.folderNodes)).toHaveLength(1);
-            expect(Object.keys(folderUploadInstance.folderNodes)).toEqual(['a']);
+            expect(Object.values(folderUploadInstance.folders)).toHaveLength(1);
+            expect(Object.keys(folderUploadInstance.folders)).toEqual(['a']);
             // /a/
             // - f1
             // - f2
             // - b/
             // - c/
-            const folderA = folderUploadInstance.folderNodes.a;
+            const folderA = folderUploadInstance.folders.a;
             expect(Object.keys(folderA.folders)).toHaveLength(2);
             expect(Object.keys(folderA.folders)).toEqual(['b', 'c']);
             expect(folderA.files).toHaveLength(2);

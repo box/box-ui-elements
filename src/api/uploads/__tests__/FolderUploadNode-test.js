@@ -36,7 +36,7 @@ describe('api/uploads/FolderUploadNode', () => {
             await folderUploadNodeInstance.upload(parentFolderId, errorCallback, isRoot);
 
             expect(folderUploadNodeInstance.createAndUploadFolder).toHaveBeenCalledWith(errorCallback, isRoot);
-            expect(folderUploadNodeInstance.uploadFile).toHaveBeenCalledWith(files, true);
+            expect(folderUploadNodeInstance.uploadFile).toHaveBeenCalledWith(files, expect.any(Function));
             expect(folderUploadNodeInstance.uploadChildFolders).toHaveBeenCalledWith(errorCallback);
         });
     });

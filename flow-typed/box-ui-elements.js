@@ -526,3 +526,16 @@ type SidebarView =
     | typeof SIDEBAR_VIEW_DETAILS
     | typeof SIDEBAR_VIEW_METADATA
     | typeof SIDEBAR_VIEW_ACTIVITY;
+
+type FileSystemFileEntry = {
+    createReader: Function,
+    file: Function,
+    isDirectory: boolean,
+    isFile: boolean,
+    name: string
+};
+
+type UploadDataTransferItemWithAPIOptions = {
+    item: DataTransferItem,
+    options?: UploadItemAPIOptions
+};
