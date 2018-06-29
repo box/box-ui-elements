@@ -8,13 +8,13 @@ Please fill out the following template so we can reproduce and fix your issue as
 
 **Note:** if your issue includes a potential security vulnerability, please do not file it here. Instead, email the issue to security@box.com for support.
 
-**Note:** if your issue involves annotations.js/css, please report the issue [here](https://github.com/box/box-annotations/issues/new).
+**Note:** if your issue involves previewing files, please report the issue [here](https://github.com/box/box-content-preview/issues/new/choose).
 
 **Environment:**
-- Preview version:
+- Elements version:
 
 **Desktop (please complete the following information):**
- - OS: [e.g. iOS]
+ - OS: [e.g. Windows 10]
  - Browser [e.g. chrome, safari]
  - Version [e.g. 22]
 
