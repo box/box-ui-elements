@@ -19,27 +19,6 @@ describe('api/Tasks', () => {
         });
     });
 
-    describe('format()', () => {
-        const task = {
-            type: 'task',
-            id: '1234',
-            created_at: { name: 'Jay-Z', id: 10 },
-            due_at: 1234567891,
-            message: 'test',
-            task_assignment_collection: {
-                entries: ['foo']
-            }
-        };
-
-        test('should unnest the task_assignment_collection', () => {
-            const result = tasks.format(task);
-            expect(result).toEqual({
-                ...task,
-                task_assignment_collection: ['foo']
-            });
-        });
-    });
-
     describe('tasksUrl()', () => {
         test('should add an id if provided', () => {
             expect(tasks.tasksUrl('foo')).toBe('https://api.box.com/2.0/tasks/foo');
@@ -55,8 +34,8 @@ describe('api/Tasks', () => {
         const taskId = '123';
         const message = 'hello world';
         const dueAt = '2018-09-06';
-        const successCb = jest.fn();
-        const errorCb = jest.fn();
+        const successCallback = jest.fn();
+        const errorCallback = jest.fn();
 
         beforeEach(() => {
             tasks.get = jest.fn();
@@ -71,7 +50,7 @@ describe('api/Tasks', () => {
 
         describe('createTask()', () => {
             test('should check for valid task permissions', () => {
-                tasks.createTask({ file, message, successCb, errorCb });
+                tasks.createTask({ file, message, successCallback, errorCallback });
                 expect(tasks.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_COMMENT, file.permissions, file.id);
             });
 
@@ -87,14 +66,20 @@ describe('api/Tasks', () => {
                     }
                 };
 
-                tasks.createTask({ file, message, dueAt, successCallback: successCb, errorCallback: errorCb });
-                expect(tasks.post).toBeCalledWith('foo', tasks.tasksUrl(), requestData, successCb, errorCb);
+                tasks.createTask({ file, message, dueAt, successCallback, errorCallback });
+                expect(tasks.post).toBeCalledWith({
+                    id: 'foo',
+                    url: tasks.tasksUrl(),
+                    data: requestData,
+                    successCallback,
+                    errorCallback
+                });
             });
         });
 
         describe('updateTask()', () => {
             test('should check for valid task permissions', () => {
-                tasks.updateTask({ file, taskId, message, successCb, errorCb });
+                tasks.updateTask({ file, taskId, message, successCallback, errorCallback });
                 expect(tasks.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_COMMENT, file.permissions, file.id);
             });
 
@@ -107,10 +92,16 @@ describe('api/Tasks', () => {
                     file,
                     taskId,
                     message,
-                    successCallback: successCb,
-                    errorCallback: errorCb
+                    successCallback,
+                    errorCallback
                 });
-                expect(tasks.put).toBeCalledWith('foo', tasks.tasksUrl(taskId), requestData, successCb, errorCb);
+                expect(tasks.put).toBeCalledWith({
+                    id: 'foo',
+                    url: tasks.tasksUrl(taskId),
+                    data: requestData,
+                    successCallback,
+                    errorCallback
+                });
             });
 
             test('should put a well formed task update to the tasks endpoint when due_at is included', () => {
@@ -123,22 +114,33 @@ describe('api/Tasks', () => {
                     taskId,
                     message,
                     dueAt,
-                    successCallback: successCb,
-                    errorCallback: errorCb
+                    successCallback,
+                    errorCallback
                 });
-                expect(tasks.put).toBeCalledWith('foo', tasks.tasksUrl(taskId), requestData, successCb, errorCb);
+                expect(tasks.put).toBeCalledWith({
+                    id: 'foo',
+                    url: tasks.tasksUrl(taskId),
+                    data: requestData,
+                    successCallback,
+                    errorCallback
+                });
             });
         });
 
         describe('deleteTask()', () => {
             test('should check for valid task delete permissions', () => {
-                tasks.deleteTask({ file, taskId, successCb, errorCb });
+                tasks.deleteTask({ file, taskId, successCallback, errorCallback });
                 expect(tasks.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_COMMENT, file.permissions, file.id);
             });
 
             test('should delete a task from the tasks endpoint', () => {
-                tasks.deleteTask({ file, taskId, successCallback: successCb, errorCallback: errorCb });
-                expect(tasks.delete).toBeCalledWith('foo', tasks.tasksUrl(taskId), successCb, errorCb);
+                tasks.deleteTask({ file, taskId, successCallback, errorCallback });
+                expect(tasks.delete).toBeCalledWith({
+                    id: 'foo',
+                    url: tasks.tasksUrl(taskId),
+                    successCallback,
+                    errorCallback
+                });
             });
         });
 
@@ -146,8 +148,6 @@ describe('api/Tasks', () => {
             test('should make a correct GET request for assignments for the specified task', () => {
                 const id = 'id';
                 const url = `${tasks.tasksUrl(taskId)}/assignments`;
-                const successCallback = jest.fn();
-                const errorCallback = jest.fn();
                 const params = {
                     fields: 'start=0'
                 };

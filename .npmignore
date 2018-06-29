@@ -35,3 +35,7 @@ browserslist
 .conventional-changelog-lintrc
 *~~bak
 flow-typed
+.github
+.prettierignore
+.eslintignore
+

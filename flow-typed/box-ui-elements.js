@@ -97,11 +97,7 @@ type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type SortableOptions = typeof SORT_NAME | typeof SORT_DATE | typeof SORT_SIZE;
 type SortBy = typeof FIELD_NAME | typeof FIELD_MODIFIED_AT | typeof FIELD_INTERACTED_AT | typeof FIELD_SIZE;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-type UploadStatus =
-    | typeof STATUS_PENDING
-    | typeof STATUS_IN_PROGRESS
-    | typeof STATUS_COMPLETE
-    | typeof STATUS_ERROR;
+type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 
@@ -132,7 +128,7 @@ type User = {
     type: 'user',
     id: string,
     name: string,
-    login: string,
+    login?: string,
     email?: string,
     avatar_url?: string
 };
@@ -350,7 +346,8 @@ type UploadItem = {
     progress: number,
     size: number,
     status: UploadStatus,
-    options?: UploadItemAPIOptions
+    options?: UploadItemAPIOptions,
+    isFolder?: boolean
 };
 
 type UploadItemAPIOptions = {
@@ -358,7 +355,6 @@ type UploadItemAPIOptions = {
     fileId?: string,
     folderId?: string,
     token?: Token,
-    uploadHost?: string,
     uploadInitTimestamp?: number
 };
 
@@ -465,7 +461,8 @@ type TaskAssignment = {
     type: 'task_assignment',
     id: string,
     assigned_to: User,
-    resolution_state: string
+    resolution_state: string,
+    message: string
 };
 
 type TaskAssignments = {
@@ -476,14 +473,6 @@ type TaskAssignments = {
 type Task = {
     type: 'task',
     id: string,
-    item: {
-        type: string,
-        id: string,
-        sequence_id: string,
-        etag: string,
-        sha1: string,
-        name: string
-    },
     created_at: string,
     created_by: User,
     due_at: string,
@@ -504,10 +493,6 @@ type Comment = {
     message?: string,
     created_by: User,
     created_at: string,
-    item?: {
-        id: string,
-        type: string
-    },
     modified_at: string
 };
 

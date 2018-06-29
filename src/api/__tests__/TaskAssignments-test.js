@@ -26,9 +26,9 @@ describe('api/TaskAssignments', () => {
             id: '987654321'
         };
 
-        const resolutionStatus = 'rejected';
-        const successCb = jest.fn();
-        const errorCb = jest.fn();
+        const resolutionState = 'rejected';
+        const successCallback = jest.fn();
+        const errorCallback = jest.fn();
 
         beforeEach(() => {
             taskAssignments.get = jest.fn();
@@ -43,7 +43,7 @@ describe('api/TaskAssignments', () => {
 
         describe('createTaskAssignment()', () => {
             test('should check for valid task assignment permissions', () => {
-                taskAssignments.createTaskAssignment({ file, taskId, successCb, errorCb });
+                taskAssignments.createTaskAssignment({ file, taskId, successCallback, errorCallback });
                 expect(taskAssignments.checkApiCallValidity).toBeCalledWith(
                     PERMISSION_CAN_COMMENT,
                     file.permissions,
@@ -66,22 +66,28 @@ describe('api/TaskAssignments', () => {
                     file,
                     taskId,
                     assignTo,
-                    successCallback: successCb,
-                    errorCallback: errorCb
+                    successCallback,
+                    errorCallback
                 });
-                expect(taskAssignments.post).toBeCalledWith(
-                    'foo',
-                    taskAssignments.getUrl(taskId),
-                    requestData,
-                    successCb,
-                    errorCb
-                );
+                expect(taskAssignments.post).toBeCalledWith({
+                    id: 'foo',
+                    url: taskAssignments.getUrl(taskId),
+                    data: requestData,
+                    successCallback,
+                    errorCallback
+                });
             });
         });
 
         describe('updateTaskAssignment()', () => {
             test('should check for valid task assignment permissions', () => {
-                taskAssignments.updateTaskAssignment({ file, taskAssignmentId, resolutionStatus, successCb, errorCb });
+                taskAssignments.updateTaskAssignment({
+                    file,
+                    taskAssignmentId,
+                    resolutionState,
+                    successCallback,
+                    errorCallback
+                });
                 expect(taskAssignments.checkApiCallValidity).toBeCalledWith(
                     PERMISSION_CAN_COMMENT,
                     file.permissions,
@@ -91,29 +97,29 @@ describe('api/TaskAssignments', () => {
 
             test('should put a well formed task update to the tasks endpoint', () => {
                 const requestData = {
-                    data: { resolution_status: resolutionStatus }
+                    data: { resolution_state: resolutionState }
                 };
 
                 taskAssignments.updateTaskAssignment({
                     file,
                     taskAssignmentId,
-                    resolutionStatus,
-                    successCallback: successCb,
-                    errorCallback: errorCb
+                    resolutionState,
+                    successCallback,
+                    errorCallback
                 });
-                expect(taskAssignments.put).toBeCalledWith(
-                    'foo',
-                    taskAssignments.getUrl(taskAssignmentId),
-                    requestData,
-                    successCb,
-                    errorCb
-                );
+                expect(taskAssignments.put).toBeCalledWith({
+                    id: 'foo',
+                    url: taskAssignments.getUrl(taskAssignmentId),
+                    data: requestData,
+                    successCallback,
+                    errorCallback
+                });
             });
         });
 
         describe('deleteTaskAssignment()', () => {
             test('should check for valid task assignment delete permissions', () => {
-                taskAssignments.deleteTaskAssignment({ file, taskAssignmentId, successCb, errorCb });
+                taskAssignments.deleteTaskAssignment({ file, taskAssignmentId, successCallback, errorCallback });
                 expect(taskAssignments.checkApiCallValidity).toBeCalledWith(
                     PERMISSION_CAN_COMMENT,
                     file.permissions,
@@ -125,15 +131,15 @@ describe('api/TaskAssignments', () => {
                 taskAssignments.deleteTaskAssignment({
                     file,
                     taskAssignmentId,
-                    successCallback: successCb,
-                    errorCallback: errorCb
+                    successCallback,
+                    errorCallback
                 });
-                expect(taskAssignments.delete).toBeCalledWith(
-                    'foo',
-                    taskAssignments.getUrl(taskAssignmentId),
-                    successCb,
-                    errorCb
-                );
+                expect(taskAssignments.delete).toBeCalledWith({
+                    id: 'foo',
+                    url: taskAssignments.getUrl(taskAssignmentId),
+                    successCallback,
+                    errorCallback
+                });
             });
         });
     });

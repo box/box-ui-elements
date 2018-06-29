@@ -33,19 +33,6 @@ class Tasks extends Base {
     }
 
     /**
-     * Formats task data for use in components.
-     *
-     * @param {string} [id] - An individual task entry from the API
-     * @return {Task} A task
-     */
-    format(task: Object): Task {
-        return {
-            ...task,
-            task_assignment_collection: task.task_assignment_collection.entries || []
-        };
-    }
-
-    /**
      * API for creating a task on a file
      *
      * @param {string} id - a box file id
@@ -109,7 +96,13 @@ class Tasks extends Base {
             }
         };
 
-        this.post(id, this.tasksUrl(), requestData, successCallback, errorCallback);
+        this.post({
+            id,
+            url: this.tasksUrl(),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**
@@ -155,7 +148,13 @@ class Tasks extends Base {
             requestData.data.due_at = dueAt;
         }
 
-        this.put(id, this.tasksUrl(taskId), requestData, successCallback, errorCallback);
+        this.put({
+            id,
+            url: this.tasksUrl(taskId),
+            data: requestData,
+            successCallback,
+            errorCallback
+        });
     }
 
     /**
@@ -188,7 +187,12 @@ class Tasks extends Base {
             return;
         }
 
-        this.delete(id, this.tasksUrl(taskId), successCallback, errorCallback);
+        this.delete({
+            id,
+            url: this.tasksUrl(taskId),
+            successCallback,
+            errorCallback
+        });
     }
 }
 

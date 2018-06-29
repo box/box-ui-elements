@@ -124,7 +124,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.45.0';
+export const DEFAULT_PREVIEW_VERSION = '1.46.0';
 export const DEFAULT_PREVIEW_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -183,8 +183,6 @@ export const DEFAULT_RETRY_DELAY_MS = 3000;
 export const MS_IN_S = 1000;
 
 /* ------------------ Colors  ---------------------- */
-export const COLOR_BOX_BLUE = '#0061d5';
-export const COLOR_BOX_BLUE_LIGHT = '#dbe8f8';
 export const COLOR_RED = '#c82341';
 export const COLOR_999 = '#999';
 export const COLOR_WHITE = '#fff';

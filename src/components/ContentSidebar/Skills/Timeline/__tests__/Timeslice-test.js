@@ -25,4 +25,16 @@ describe('components/ContentSidebar/Skills/Timeline/Timeslice', () => {
         const wrapper = shallow(<Timeslice {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should correctly render the time slice by re adjusting start to fit in', () => {
+        const props = {
+            start: 99,
+            end: 100,
+            duration: 100,
+            interactionTarget: 'foobar'
+        };
+
+        const wrapper = shallow(<Timeslice {...props} />);
+        expect(wrapper).toMatchSnapshot();
+    });
 });

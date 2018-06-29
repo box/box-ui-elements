@@ -146,6 +146,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const createCommentStub = jest.fn();
         const commentText = { text: 'a comment', hasMention: false };
         const addApproval = 'on';
+        const approvers = [{ text: '123', value: 123 }, { text: '124', value: 124 }];
 
         const wrapper = render({
             createComment: createCommentStub,
@@ -156,7 +157,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
 
         wrapper.setState({
-            approvers: [{ text: '123', value: 123 }, { text: '124', value: 124 }],
+            approvers,
             approvalDate: '2014-04-12'
         });
 
@@ -166,7 +167,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
 
         expect(createTaskSpy).toHaveBeenCalledWith({
             text: commentText.text,
-            assignees: [123, 124],
+            assignees: approvers,
             dueAt: '2014-04-12'
         });
         expect(instance.getFormattedCommentText).toHaveBeenCalledTimes(1);
@@ -192,8 +193,8 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
     test('should filter approver selector options correctly', () => {
         const wrapper = render({
             approverSelectorContacts: [
-                { id: 123, item: { name: 'name' }, name: 'name' },
-                { id: 234, item: { name: 'test' }, name: 'test' }
+                { id: 123, item: { id: 123, name: 'name' }, name: 'name' },
+                { id: 234, item: { id: 234, name: 'test' }, name: 'test' }
             ],
             createTask: jest.fn()
         });

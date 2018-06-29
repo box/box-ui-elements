@@ -22,6 +22,7 @@ type ExternalProps = {
     hasProperties?: boolean,
     hasAccessStats?: boolean,
     hasClassification?: boolean,
+    hasRetentionPolicy?: boolean,
     hasVersions?: boolean,
     retentionPolicy?: Object,
     onAccessStatsClick?: Function,
@@ -47,6 +48,7 @@ const DetailsSidebar = ({
     hasNotices = false,
     hasAccessStats = false,
     hasClassification = false,
+    hasRetentionPolicy = false,
     hasVersions = false,
     onAccessStatsClick,
     onDescriptionChange,
@@ -55,7 +57,9 @@ const DetailsSidebar = ({
     versions,
     accessStatsError,
     fileError,
-    versionError
+    versionError,
+    retentionPolicy,
+    onRetentionPolicyExtendClick
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
         {(hasVersions || hasNotices) && (
@@ -82,6 +86,9 @@ const DetailsSidebar = ({
                     {...fileError}
                     hasClassification={hasClassification}
                     onClassificationClick={onClassificationClick}
+                    hasRetentionPolicy={hasRetentionPolicy}
+                    retentionPolicy={retentionPolicy}
+                    onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
                 />
             </SidebarSection>
         )}
