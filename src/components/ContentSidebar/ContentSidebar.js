@@ -801,10 +801,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {TaskAssignment}
      */
     createTaskAssignmentObject(data: any) {
-        const { id: assignmentId, assigned_to, message, resolution_state } = data;
+        const { id, assigned_to, message, resolution_state } = data;
         return {
             type: 'task_assignment',
-            id: assignmentId,
+            id,
             assigned_to,
             message,
             resolution_state

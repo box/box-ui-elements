@@ -725,7 +725,24 @@ describe('components/ContentSidebar/ContentSidebar', () => {
     });
 
     describe('createTaskAssignmentObject()', () => {
-        test('should create a well formed task assignment object', () => {});
+        test('should create a well formed task assignment object', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const data = {
+                id: '123',
+                assigned_to: {
+                    id: '1',
+                    name: 'A. User'
+                },
+                message: 'this is a task',
+                resolution_state: null
+            };
+
+            expect(instance.createTaskAssignmentObject(data)).toEqual({
+                type: 'task_assignment',
+                ...data
+            });
+        });
     });
 
     describe('createTaskSuccessCallback()', () => {
