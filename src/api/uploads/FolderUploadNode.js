@@ -148,6 +148,61 @@ class FolderUploadNode {
     }
 
     /**
+     * Create FolderUploadNode instances from entries
+     *
+     * @private
+     * @param {Array<FileSystemFileEntry>} entries
+     * @returns {Promise<any>}
+     */
+    createFolderUploadNodesFromEntries = async (entries: Array<FileSystemFileEntry>): Promise<any> => {
+        await Promise.all(
+            entries.map(async (entry) => {
+                const { isFile, name } = entry;
+
+                if (isFile) {
+                    const file = await getFileFromEntry(entry);
+                    this.files.push(file);
+                    return;
+                }
+
+                this.folders[name] = new FolderUploadNode(
+                    name,
+                    this.uploadFile,
+                    this.addFolderToQueue,
+                    this.fileAPIOptions,
+                    {
+                        ...this.baseAPIOptions,
+                        ...this.fileAPIOptions
+                    },
+                    entry
+                );
+            })
+        );
+    };
+
+    /**
+     * Recursively read an entry
+     *
+     * @private
+     * @param {DirectoryReader} reader
+     * @param {Function} resolve
+     * @returns {void}
+     */
+    readEntry = (reader: DirectoryReader, resolve: Function) => {
+        reader.readEntries(async (entries) => {
+            // Quit recursing when there are no remaining entries.
+            if (!entries.length) {
+                resolve();
+                return;
+            }
+
+            await this.createFolderUploadNodesFromEntries(entries);
+
+            this.readEntry(reader, resolve);
+        }, noop);
+    };
+
+    /**
      * Build current folder from entry
      *
      * @private
@@ -158,46 +213,11 @@ class FolderUploadNode {
             return Promise.resolve();
         }
 
-        const me = this;
-
         return new Promise(async (resolve) => {
             // $FlowFixMe entry is not empty
-            const reader = me.entry.createReader();
+            const reader = this.entry.createReader();
 
-            function read() {
-                reader.readEntries(async (results) => {
-                    // Quit recursing when there are no remaining results.
-                    if (!results.length) {
-                        resolve();
-                        return;
-                    }
-
-                    await results.map(async (fileEntry) => {
-                        const { isFile, name } = fileEntry;
-
-                        if (isFile) {
-                            const file = await getFileFromEntry(fileEntry);
-                            me.files.push(file);
-                            return;
-                        }
-
-                        me.folders[name] = new FolderUploadNode(
-                            name,
-                            me.uploadFile,
-                            me.addFolderToQueue,
-                            me.fileAPIOptions,
-                            {
-                                ...me.baseAPIOptions,
-                                ...me.fileAPIOptions
-                            },
-                            fileEntry
-                        );
-                    });
-
-                    read();
-                }, noop);
-            }
-            read();
+            this.readEntry(reader, resolve);
         });
     };
 }

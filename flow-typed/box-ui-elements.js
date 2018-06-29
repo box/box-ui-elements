@@ -541,3 +541,7 @@ type UploadDataTransferItemWithAPIOptions = {
 };
 
 type UploadFile = File & { webkitRelativePath?: string };
+
+type DirectoryReader = {
+    readEntries: (Function, Function) => void
+};

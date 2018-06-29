@@ -90,10 +90,10 @@ const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 const UPLOAD_CONCURRENCY = 6;
-const FOLDER_UPLOAD_API_INSTANCE_STUB = {
-    upload: noop,
+const getFolderUploadAPIStub = () => ({
+    upload: ({successCallback}) => {successCallback()},
     cancel: noop
-};
+});
 
 class ContentUploader extends Component<Props, State> {
     id: string;
@@ -414,8 +414,6 @@ class ContentUploader extends Component<Props, State> {
      */
     addFoldersToUploadQueue = (folderUpload: FolderUpload, itemUpdateCallback: Function): void => {
         Object.keys(folderUpload.folders).forEach((folderName, index) => {
-            const isFirst = index === 0;
-
             this.addToQueue(
                 [
                     // $FlowFixMe no file property
@@ -423,14 +421,13 @@ class ContentUploader extends Component<Props, State> {
                         // folderUpload.upload() uploads all folders, so we use the real folder upload api instance
                         // for only the first folder. The rest of the folders are added to the queue with stub
                         // api instances.
-                        api: isFirst ? folderUpload : FOLDER_UPLOAD_API_INSTANCE_STUB,
+                        api: index === 0 ? folderUpload : getFolderUploadAPIStub(),
                         extension: '',
                         isFolder: true,
                         name: folderName,
                         progress: 0,
                         size: 1,
-                        // Only initialize the first folder item with STATUS_PENDING
-                        status: isFirst ? STATUS_PENDING : STATUS_COMPLETE
+                        status: STATUS_PENDING
                     }
                 ],
                 itemUpdateCallback
@@ -635,11 +632,12 @@ class ContentUploader extends Component<Props, State> {
             fileId: options && options.fileId ? options.fileId : null
         };
 
-        api.upload(uploadOptions);
 
         item.status = STATUS_IN_PROGRESS;
         const { items } = this.state;
         items[items.indexOf(item)] = item;
+
+        api.upload(uploadOptions);
 
         this.updateViewAndCollection(items);
     }
