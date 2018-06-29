@@ -21,9 +21,7 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
-    commentsError?: Errors,
-    tasksError?: Errors,
-    versionError?: Errors,
+    activityFeedError?: Errors,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -451,17 +449,17 @@ class ActivityFeed extends React.Component<Props, State> {
 
         feedItems.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
 
-        const { commentsError, tasksError, versionError } = this.props;
-        if (commentsError || tasksError || versionError) {
+        if (this.props.activityFeedError) {
+            // $FlowFixMe
             this.setState({
                 feedItems: [
                     this.createFeedError(messages.activityFeedItemApiError, messages.errorOccured),
                     ...feedItems
                 ]
             });
+        } else {
+            this.setState({ feedItems });
         }
-
-        this.setState({ feedItems });
     }
 
     render(): React.Node {

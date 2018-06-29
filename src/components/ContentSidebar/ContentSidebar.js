@@ -81,8 +81,7 @@ type State = {
     mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
     versionError?: Errors,
-    commentsError?: Errors,
-    tasksError?: Errors,
+    activityFeedError?: Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors
 };
@@ -120,8 +119,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         mentionSelectorContacts: undefined,
         fileError: undefined,
         versionError: undefined,
-        commentsError: undefined,
-        tasksError: undefined,
+        activityFeedError: undefined,
         accessStatsError: undefined,
         currentUserError: undefined
     };
@@ -358,7 +356,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                     errorHeader: messages.versionHistoryErrorHeaderMessage,
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
-            }
+            },
+            activityFeedError: e
         });
         this.errorCallback(e);
     };
@@ -376,7 +375,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            commentsError: e
+            activityFeedError: e
         });
         this.errorCallback(e);
     };
@@ -394,7 +393,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            tasksError: e
+            activityFeedError: e
         });
     };
 
@@ -522,7 +521,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCommentsSuccessCallback = (comments: Comments): void => {
-        this.setState({ comments, commentsError: undefined });
+        this.setState({ comments, activityFeedError: undefined });
     };
 
     /**
@@ -1339,8 +1338,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             accessStatsError,
             fileError,
             versionError,
-            commentsError,
-            tasksError,
+            activityFeedError,
             approverSelectorContacts,
             mentionSelectorContacts,
             currentUserError
@@ -1384,11 +1382,9 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onSkillChange={this.onSkillChange}
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
-                                versionError={versionError}
                                 tasks={tasks}
-                                tasksError={tasksError}
                                 comments={comments}
-                                commentsError={commentsError}
+                                activityFeedError={activityFeedError}
                                 currentUser={currentUser}
                                 currentUserError={currentUserError}
                                 onCommentCreate={this.createComment}

@@ -38,9 +38,7 @@ type Props = {
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    commentsError?: Errors,
-    tasksError?: Errors,
-    versionError?: Errors,
+    activityFeedError?: Errors,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>,
@@ -67,11 +65,9 @@ const Sidebar = ({
     getApproverWithQuery,
     getMentionWithQuery,
     tasks,
-    tasksError,
     comments,
-    commentsError,
     versions,
-    versionError,
+    activityFeedError,
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl,
@@ -97,11 +93,9 @@ const Sidebar = ({
                     currentUser={currentUser}
                     file={file}
                     tasks={tasks}
-                    tasksError={tasksError}
                     comments={comments}
-                    commentsError={commentsError}
                     versions={versions}
-                    versionError={versionError}
+                    activityFeedError={activityFeedError}
                     approverSelectorContacts={approverSelectorContacts}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onCommentCreate={onCommentCreate}

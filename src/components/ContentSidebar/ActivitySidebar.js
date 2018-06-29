@@ -25,9 +25,7 @@ type Props = {
     comments?: Comments,
     tasks?: Tasks,
     versions?: FileVersions,
-    commentsError?: Errors,
-    tasksError?: Errors,
-    versionError?: Errors,
+    activityFeedError?: Errors,
     currentUser?: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
@@ -58,19 +56,15 @@ const ActivitySidebar = ({
     onVersionHistoryClick,
     getAvatarUrl,
     getUserProfileUrl,
-    commentsError,
-    tasksError,
-    versionError
+    activityFeedError
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed
             file={file}
             comments={comments}
-            commentsError={commentsError}
             tasks={tasks}
-            tasksError={tasksError}
             versions={versions}
-            versionError={versionError}
+            activityFeedError={activityFeedError}
             approverSelectorContacts={approverSelectorContacts}
             mentionSelectorContacts={mentionSelectorContacts}
             currentUser={currentUser}
