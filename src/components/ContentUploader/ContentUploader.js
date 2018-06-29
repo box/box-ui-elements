@@ -233,7 +233,7 @@ class ContentUploader extends Component<Props, State> {
     getNewFiles = (files: Array<UploadFileWithAPIOptions | File>) => {
         const { itemIds } = this.state;
 
-        return [].filter.call(files, (file) => !(this.getFileId(file) in itemIds));
+        return Array.from(files).filter((file) => !(this.getFileId(file) in itemIds));
     };
 
     /**
@@ -305,7 +305,7 @@ class ContentUploader extends Component<Props, State> {
         const folderItems = [];
         const fileItems = [];
 
-        [].forEach.call(dataTransferItems, (item) => {
+        Array.from(dataTransferItems).forEach((item) => {
             if (isDataTransferItemAFolder(item) && isFolderUploadEnabled) {
                 folderItems.push(item);
             } else {

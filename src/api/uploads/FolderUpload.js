@@ -52,8 +52,7 @@ class FolderUpload {
      * @returns {void}
      */
     buildFolderTreeFromWebkitRelativePath(fileList: Array<UploadFileWithAPIOptions | UploadFile> | FileList): void {
-        // FileList does not natively have forEach, hence this workaround
-        [].forEach.call(fileList, (fileData) => {
+        Array.from(fileList).forEach((fileData) => {
             const file = getFile(fileData);
             const { webkitRelativePath } = file;
 

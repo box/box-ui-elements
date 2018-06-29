@@ -29,8 +29,8 @@ const dropDefinition = {
     /**
      * Validates whether a file can be dropped or not.
      */
-    dropValidator: ({ allowedTypes }: { allowedTypes: Array<string> }, dataTransfer) =>
-        [].some.call(dataTransfer.types, (type) => allowedTypes.indexOf(type) > -1),
+    dropValidator: ({ allowedTypes }: { allowedTypes: Array<string> }, { types }: { types: Array<string> }) =>
+        Array.from(types).some((type) => allowedTypes.indexOf(type) > -1),
 
     /**
      * Determines what happens after a file is dropped

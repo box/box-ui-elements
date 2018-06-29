@@ -189,30 +189,6 @@ function isDataTransferItemAFolder(itemData: UploadDataTransferItemWithAPIOption
 }
 
 /**
- * Get dataTransferItems of folder type
- *
- * @param {DataTransferItemList | Array<UploadDataTransferItemWithAPIOptions | DataTransferItem>} dataTransferItems
- * @returns {Array<DataTransferItem>}
- */
-function getFolderDataTransferItems(
-    dataTransferItems: DataTransferItemList | Array<UploadDataTransferItemWithAPIOptions | DataTransferItem>
-): Array<DataTransferItem> {
-    return [].filter.call(dataTransferItems, isDataTransferItemAFolder);
-}
-
-/**
- * Get dataTransferItems of file type
- *
- * @param {DataTransferItemList | Array<UploadDataTransferItemWithAPIOptions | DataTransferItem>} dataTransferItems
- * @returns {Array<DataTransferItem>}
- */
-function getFileDataTransferItems(
-    dataTransferItems: DataTransferItemList | Array<UploadDataTransferItemWithAPIOptions | DataTransferItem>
-): Array<DataTransferItem> {
-    return [].filter.call(dataTransferItems, (item) => !isDataTransferItemAFolder(item));
-}
-
-/**
  * Get file from FileSystemFileEntry
  *
  * @param {FileSystemFileEntry} entry
@@ -255,10 +231,8 @@ export {
     getFileLastModifiedAsISONoMSIfPossible,
     tryParseJson,
     getBoundedExpBackoffRetryDelay,
-    getFolderDataTransferItems,
     getEntryFromDataTransferItem,
     isDataTransferItemAFolder,
-    getFileDataTransferItems,
     getFileFromDataTransferItem,
     doesFileContainAPIOptions,
     doesDataTransferItemContainAPIOptions,
