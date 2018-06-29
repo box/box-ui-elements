@@ -4,15 +4,17 @@
  * @author Box
  */
 
+const DEFAULT_API_OPTIONS = {};
+
 /**
  * Returns true if file contains API options
  *
- * @param {File | UploadFileWithAPIOptions} item
+ * @param {UploadFile | UploadFileWithAPIOptions} item
  * @returns {boolean}
  */
-function doesFileContainAPIOptions(file: File | UploadFileWithAPIOptions): boolean {
-    // $FlowFixMe
-    return file.options && file.file;
+function doesFileContainAPIOptions(file: UploadFile | UploadFileWithAPIOptions): boolean {
+    // $FlowFixMe UploadFileWithAPIOptions has `file` and `options` properties
+    return !!(file.options && file.file);
 }
 
 /**
@@ -22,23 +24,22 @@ function doesFileContainAPIOptions(file: File | UploadFileWithAPIOptions): boole
  * @returns {boolean}
  */
 function doesDataTransferItemContainAPIOptions(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): boolean {
-    // $FlowFixMe
-    return item.options && item.item;
+    // $FlowFixMe UploadDataTransferItemWithAPIOptions has `item` and `options` properties
+    return !!(item.options && item.item);
 }
 
 /**
- * Converts File or UploadFileWithAPIOptions to File
+ * Converts UploadFile or UploadFileWithAPIOptions to UploadFile
  *
- * @param {File | UploadFileWithAPIOptions} file
- * @returns {File}
+ * @param {UploadFile | UploadFileWithAPIOptions} file
+ * @returns {UploadFile}
  */
-function getFile(file: File | UploadFileWithAPIOptions): File {
+function getFile(file: UploadFile | UploadFileWithAPIOptions): UploadFile {
     if (doesFileContainAPIOptions(file)) {
-        // $FlowFixMe
-        return file.file;
+        return ((file: any): UploadFileWithAPIOptions).file;
     }
-    // $FlowFixMe
-    return file;
+
+    return ((file: any): UploadFile);
 }
 
 /**
@@ -49,25 +50,23 @@ function getFile(file: File | UploadFileWithAPIOptions): File {
  */
 function getDataTransferItem(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): DataTransferItem {
     if (doesDataTransferItemContainAPIOptions(item)) {
-        // $FlowFixMe
-        return item.item;
+        return ((item: any): UploadDataTransferItemWithAPIOptions).item;
     }
-    // $FlowFixMe
-    return item;
+
+    return ((item: any): DataTransferItem);
 }
 
 /**
  * Get API Options from file
  *
- * @param {File | UploadFileWithAPIOptions} file
+ * @param {UploadFile | UploadFileWithAPIOptions} file
  * @returns {UploadItemAPIOptions}
  */
-function getFileAPIOptions(file: File | UploadFileWithAPIOptions): UploadItemAPIOptions {
+function getFileAPIOptions(file: UploadFile | UploadFileWithAPIOptions): UploadItemAPIOptions {
     if (doesFileContainAPIOptions(file)) {
-        // $FlowFixMe
-        return file.options;
+        return ((file: any): UploadFileWithAPIOptions).options || DEFAULT_API_OPTIONS;
     }
-    return {};
+    return DEFAULT_API_OPTIONS;
 }
 
 /**
@@ -80,10 +79,9 @@ function getDataTransferItemAPIOptions(
     item: DataTransferItem | UploadDataTransferItemWithAPIOptions
 ): UploadItemAPIOptions {
     if (doesDataTransferItemContainAPIOptions(item)) {
-        // $FlowFixMe
-        return item.options;
+        return ((item: any): UploadDataTransferItemWithAPIOptions).options || DEFAULT_API_OPTIONS;
     }
-    return {};
+    return DEFAULT_API_OPTIONS;
 }
 
 /**
@@ -115,10 +113,10 @@ function toISOStringNoMS(date: Date): string {
  * '2017-04-18T17:14:27Z'), or null if no such date can be extracted from the file object.
  * (Nothing on the Internet guarantees that the file object has this info.)
  *
- * @param {File} file
+ * @param {UploadFile} file
  * @return {?string}
  */
-function getFileLastModifiedAsISONoMSIfPossible(file: File): ?string {
+function getFileLastModifiedAsISONoMSIfPossible(file: UploadFile): ?string {
     if (
         // $FlowFixMe https://github.com/facebook/flow/issues/6131
         file.lastModified &&
@@ -182,8 +180,7 @@ function getEntryFromDataTransferItem(item: DataTransferItem): FileSystemFileEnt
  */
 function isDataTransferItemAFolder(itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem): boolean {
     const item = itemData.item ? itemData.item : itemData;
-    // $FlowFixMe item is DataTransferItem type
-    const entry = getEntryFromDataTransferItem(item);
+    const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
     if (!entry) {
         return false;
     }
@@ -219,9 +216,9 @@ function getFileDataTransferItems(
  * Get file from FileSystemFileEntry
  *
  * @param {FileSystemFileEntry} entry
- * @returns {Promise<File>}
+ * @returns {Promise<UploadFile>}
  */
-function getFileFromEntry(entry: FileSystemFileEntry): Promise<File> {
+function getFileFromEntry(entry: FileSystemFileEntry): Promise<UploadFile> {
     return new Promise((resolve) => {
         entry.file((file) => {
             resolve(file);
@@ -233,22 +230,19 @@ function getFileFromEntry(entry: FileSystemFileEntry): Promise<File> {
  * Get file from DataTransferItem or UploadDataTransferItemWithAPIOptions
  *
  * @param {UploadDataTransferItemWithAPIOptions | DataTransferItem} itemData
- * @returns {Promise<File | UploadFileWithAPIOptions>}
+ * @returns {Promise<UploadFile | UploadFileWithAPIOptions>}
  */
 async function getFileFromDataTransferItem(
     itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem
-): Promise<File | UploadFileWithAPIOptions> {
+): Promise<UploadFile | UploadFileWithAPIOptions> {
     const item = getDataTransferItem(itemData);
-    // $FlowFixMe item is DataTransferItem type
-    const entry = getEntryFromDataTransferItem(item);
+    const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
     const file = await getFileFromEntry(entry);
-    // $FlowFixMe itemOption is UploadItemAPIOptions type
-    const itemOption: UploadItemAPIOptions = itemData.options;
-    if (itemOption) {
+
+    if (doesDataTransferItemContainAPIOptions(itemData)) {
         return {
-            // $FlowFixMe UploadFileWithAPIOptions
-            file,
-            options: itemOption
+            file: ((file: any): UploadFile),
+            options: getDataTransferItemAPIOptions(itemData)
         };
     }
 

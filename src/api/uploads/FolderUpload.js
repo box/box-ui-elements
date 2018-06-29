@@ -16,8 +16,8 @@ import {
 const PATH_DELIMITER = '/';
 
 class FolderUpload {
-    folders: Object = {};
-    files: Array<File> = [];
+    folders: { [string]: FolderUploadNode } = {};
+    files: Array<UploadFile> = [];
     destinationFolderId: string;
     uploadFile: Function;
     addFolderToQueue: Function;
@@ -48,14 +48,13 @@ class FolderUpload {
      * Creates a folder tree from wekbkitRelativePath
      *
      * @public
-     * @param  {Array} Array<UploadFileWithAPIOptions | File> | FileList
+     * @param  {Array} Array<UploadFileWithAPIOptions | UploadFile> | FileList
      * @returns {void}
      */
-    buildFolderTreeFromWebkitRelativePath(fileList: Array<UploadFileWithAPIOptions | File> | FileList): void {
+    buildFolderTreeFromWebkitRelativePath(fileList: Array<UploadFileWithAPIOptions | UploadFile> | FileList): void {
         // FileList does not natively have forEach, hence this workaround
-        Array.prototype.forEach.call(fileList, (fileData) => {
+        [].forEach.call(fileList, (fileData) => {
             const file = getFile(fileData);
-            // $FlowFixMe webkitRelativePath is checked below
             const { webkitRelativePath } = file;
 
             if (!webkitRelativePath) {
@@ -143,11 +142,9 @@ class FolderUpload {
         errorCallback: Function,
         successCallback: Function
     }): Promise<any> {
+        const nodes = ((Object.values(this.folders): any): Array<FolderUploadNode>);
         await Promise.all(
-            // $FlowFixMe;
-            Object.values(this.folders).map((node: FolderUploadNode) =>
-                node.upload(this.destinationFolderId, errorCallback, true)
-            )
+            nodes.map((node: FolderUploadNode) => node.upload(this.destinationFolderId, errorCallback, true))
         );
 
         successCallback();

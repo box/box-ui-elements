@@ -341,7 +341,7 @@ type UploadItem = {
     boxFile?: BoxItem,
     error?: Object,
     extension: string,
-    file: File,
+    file: UploadFile,
     name: string,
     progress: number,
     size: number,
@@ -359,7 +359,7 @@ type UploadItemAPIOptions = {
 };
 
 type UploadFileWithAPIOptions = {
-    file: File,
+    file: UploadFile,
     options?: UploadItemAPIOptions
 };
 
@@ -539,3 +539,5 @@ type UploadDataTransferItemWithAPIOptions = {
     item: DataTransferItem,
     options?: UploadItemAPIOptions
 };
+
+type UploadFile = File & { webkitRelativePath?: string };

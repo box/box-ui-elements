@@ -17,10 +17,10 @@ type Props = {
     onClick: Function,
     onKeyDown: Function,
     view: View,
-    numberOfItems: number
+    isEmpty: boolean
 };
 
-const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible, numberOfItems }: Props) => {
+const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible, isEmpty }: Props) => {
     /**
      * Get upload status
      *
@@ -42,7 +42,7 @@ const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisibl
     };
 
     const getPercent = () => {
-        if (view === VIEW_UPLOAD_SUCCESS || (view === VIEW_UPLOAD_EMPTY && numberOfItems === 0)) {
+        if (view === VIEW_UPLOAD_SUCCESS || (view === VIEW_UPLOAD_EMPTY && isEmpty)) {
             return 100;
         } else if (view === VIEW_ERROR) {
             return 0;

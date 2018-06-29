@@ -41,7 +41,8 @@ import {
     getFile,
     getFileAPIOptions,
     getDataTransferItemAPIOptions,
-    isDataTransferItemAFolder
+    isDataTransferItemAFolder,
+    doesFileContainAPIOptions
 } from '../../util/uploads';
 
 type Props = {
@@ -163,11 +164,11 @@ class ContentUploader extends Component<Props, State> {
     componentWillReceiveProps(nextProps: Props) {
         const { files, dataTransferItems, useUploadsManager } = nextProps;
 
-        const noFiles = !files || !files.length;
-        const noItems = !dataTransferItems || !dataTransferItems.length;
-        const noUploads = noFiles && noItems;
+        const hasFiles = Array.isArray(files) && files.length > 0;
+        const hasItems = Array.isArray(dataTransferItems) && dataTransferItems.length > 0;
+        const hasUploads = hasFiles || hasItems;
 
-        if (!useUploadsManager || noUploads) {
+        if (!useUploadsManager || !hasUploads) {
             return;
         }
 
@@ -241,21 +242,17 @@ class ContentUploader extends Component<Props, State> {
      * When folderId or uploadInitTimestamp is missing from file options, file name is returned as file id.
      * Otherwise, fileName_folderId_uploadInitTimestamp is used as file id.
      *
-     * @param {UploadFileWithAPIOptions | File} file
+     * @param {UploadFileWithAPIOptions | UploadFile} file
      */
-    getFileId(file: UploadFileWithAPIOptions | File) {
-        if (!file.options) {
-            // $FlowFixMe file is File type
-            return file.name;
+    getFileId(file: UploadFileWithAPIOptions | UploadFile) {
+        if (!doesFileContainAPIOptions(file)) {
+            return ((file: any): UploadFile).name;
         }
 
-        // $FlowFixMe file is UploadFileWithAPIOptions type
-        const fileWithOptions: UploadFileWithAPIOptions = file;
-
+        const fileWithOptions = ((file: any): UploadFileWithAPIOptions);
         const folderId = getProp(fileWithOptions, 'options.folderId');
         const uploadInitTimestamp = getProp(fileWithOptions, 'options.uploadInitTimestamp');
         if (folderId && uploadInitTimestamp) {
-            // $FlowFixMe webkitRelativePath is available on certain browsers
             const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
             return `${fileName}_${folderId}_${uploadInitTimestamp}`;
         }
@@ -267,12 +264,12 @@ class ContentUploader extends Component<Props, State> {
      * Converts File API to upload items and adds to upload queue.
      *
      * @private
-     * @param {Array<UploadFileWithAPIOptions | File>} files - Files to be added to upload queue
+     * @param {Array<UploadFileWithAPIOptions | UploadFile>} files - Files to be added to upload queue
      * @param {Function} itemUpdateCallback - function to be invoked after items status are updated
      * @return {void}
      */
-    addFilesToUploadQueue = (files?: Array<UploadFileWithAPIOptions | File>, itemUpdateCallback: Function) => {
-        if (!files || files.length <= 0) {
+    addFilesToUploadQueue = (files?: Array<UploadFileWithAPIOptions | UploadFile>, itemUpdateCallback: Function) => {
+        if (!files || files.length === 0) {
             return;
         }
 
@@ -280,7 +277,6 @@ class ContentUploader extends Component<Props, State> {
 
         const firstFile = getFile(files[0]);
 
-        // $FlowFixMe File type can have webkitRelativePath
         if (firstFile.webkitRelativePath) {
             this.addFilesWithRelativePathToQueue(files, itemUpdateCallback);
             return;
@@ -302,7 +298,7 @@ class ContentUploader extends Component<Props, State> {
         itemUpdateCallback: Function
     ): void => {
         const { isFolderUploadEnabled } = this.props;
-        if (!dataTransferItems || dataTransferItems.length <= 0) {
+        if (!dataTransferItems || dataTransferItems.length === 0) {
             return;
         }
 
@@ -352,7 +348,7 @@ class ContentUploader extends Component<Props, State> {
         itemUpdateCallback: Function
     ): Promise<any> => {
         const { rootFolderId } = this.props;
-        if (dataTransferItems.length <= 0) {
+        if (dataTransferItems.length === 0) {
             return;
         }
 
@@ -375,7 +371,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     addFilesWithRelativePathToQueue(files: Array<UploadFileWithAPIOptions | File>, itemUpdateCallback: Function) {
-        if (files.length <= 0) {
+        if (files.length === 0) {
             return;
         }
 
@@ -484,7 +480,7 @@ class ContentUploader extends Component<Props, State> {
             return uploadItem;
         });
 
-        if (newItems.length <= 0) {
+        if (newItems.length === 0) {
             return;
         }
 

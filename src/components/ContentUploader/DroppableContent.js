@@ -10,26 +10,6 @@ import makeDroppable from '../Droppable';
 
 import './DroppableContent.scss';
 
-/**
- * Definition for drag and drop behavior.
- */
-const dropDefinition = {
-    /**
-     * Validates whether a file can be dropped or not.
-     */
-    dropValidator: ({ allowedTypes }, dataTransfer) =>
-        [].some.call(dataTransfer.types, (type) => allowedTypes.indexOf(type) > -1),
-
-    /**
-     * Determines what happens after a file is dropped
-     */
-    onDrop: (event, { addDataTransferItemsToUploadQueue }) => {
-        const { dataTransfer: { items } } = event;
-
-        addDataTransferItemsToUploadQueue(items);
-    }
-};
-
 type Props = {
     canDrop: boolean,
     isOver: boolean,
@@ -40,6 +20,26 @@ type Props = {
     onClick: Function,
     addDataTransferItemsToUploadQueue: Function,
     isFolderUploadEnabled: boolean
+};
+
+/**
+ * Definition for drag and drop behavior.
+ */
+const dropDefinition = {
+    /**
+     * Validates whether a file can be dropped or not.
+     */
+    dropValidator: ({ allowedTypes }: { allowedTypes: Array<string> }, dataTransfer) =>
+        [].some.call(dataTransfer.types, (type) => allowedTypes.indexOf(type) > -1),
+
+    /**
+     * Determines what happens after a file is dropped
+     */
+    onDrop: (event, { addDataTransferItemsToUploadQueue }: Props) => {
+        const { dataTransfer: { items } } = event;
+
+        addDataTransferItemsToUploadQueue(items);
+    }
 };
 
 const DroppableContent = makeDroppable(dropDefinition)(
