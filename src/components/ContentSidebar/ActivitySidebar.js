@@ -30,8 +30,6 @@ type Props = {
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    commentsError?: Errors,
-    tasksError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>
 };
