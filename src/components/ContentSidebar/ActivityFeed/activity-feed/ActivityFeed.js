@@ -21,7 +21,7 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
-    activityFeedError?: Errors,
+    activityFeedError?: InlineError,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -449,17 +449,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         feedItems.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
 
-        if (this.props.activityFeedError) {
-            // $FlowFixMe
-            this.setState({
-                feedItems: [
-                    this.createFeedError(messages.activityFeedItemApiError, messages.errorOccured),
-                    ...feedItems
-                ]
-            });
-        } else {
-            this.setState({ feedItems });
-        }
+        this.setState({ feedItems });
     }
 
     render(): React.Node {
@@ -477,7 +467,8 @@ class ActivityFeed extends React.Component<Props, State> {
             getMentionWithQuery,
             comments,
             tasks,
-            versions
+            versions,
+            activityFeedError
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -497,6 +488,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
+                            inlineError={activityFeedError}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}

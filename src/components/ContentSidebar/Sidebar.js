@@ -38,7 +38,7 @@ type Props = {
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    activityFeedError?: Errors,
+    activityFeedError?: InlineError,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>,

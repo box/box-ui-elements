@@ -25,7 +25,7 @@ type Props = {
     comments?: Comments,
     tasks?: Tasks,
     versions?: FileVersions,
-    activityFeedError?: Errors,
+    activityFeedError?: InlineError,
     currentUser?: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,

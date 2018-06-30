@@ -81,7 +81,7 @@ type State = {
     mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
     versionError?: Errors,
-    activityFeedError?: Errors,
+    activityFeedError?: InlineError,
     accessStatsError?: Errors,
     currentUserError?: Errors
 };
@@ -357,7 +357,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
             },
-            activityFeedError: e
+            activityFeedError: {
+                title: messages.errorOccured,
+                content: messages.activityFeedItemApiError
+            }
         });
         this.errorCallback(e);
     };
@@ -375,7 +378,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: e
+            activityFeedError: {
+                title: messages.errorOccured,
+                content: messages.activityFeedItemApiError
+            }
         });
         this.errorCallback(e);
     };
@@ -393,8 +399,12 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: e
+            activityFeedError: {
+                title: messages.errorOccured,
+                content: messages.activityFeedItemApiError
+            }
         });
+        this.errorCallback(e);
     };
 
     /**
@@ -521,7 +531,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCommentsSuccessCallback = (comments: Comments): void => {
-        this.setState({ comments, activityFeedError: undefined });
+        this.setState({ comments });
     };
 
     /**
