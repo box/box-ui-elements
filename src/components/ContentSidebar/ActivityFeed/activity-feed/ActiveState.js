@@ -4,7 +4,6 @@
  */
 import * as React from 'react';
 import getProp from 'lodash/get';
-import InlineError from 'box-react-ui/lib/components/inline-error';
 import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
@@ -42,16 +41,7 @@ const ActiveState = ({
 }: Props): React.Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
-            const { type, id, errorCode, versions, permissions, error } = item;
-
-            if (error) {
-                return (
-                    <li className='bcs-error-item' key={type + error.message.id}>
-                        <InlineError title={error.title.defaultMessage}>{error.message.defaultMessage}</InlineError>
-                    </li>
-                );
-            }
-
+            const { type, id, errorCode, versions, permissions } = item;
             switch (type) {
                 case 'comment':
                     return (
