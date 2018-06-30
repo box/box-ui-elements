@@ -796,11 +796,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Creates a task assignment object to be inserted into a newly created task
      *
 
-     * @param {Function} successCallback - Task create success callback
-     * @param {Function} errorCallback - Task create error callback
+     * @param {TaskAssignment} data - Task create success callback
      * @return {TaskAssignment}
      */
-    createTaskAssignmentObject(data: any) {
+    createTaskAssignmentObject(data: TaskAssignment) {
         const { id, assigned_to, message, resolution_state } = data;
         return {
             type: 'task_assignment',
@@ -833,42 +832,50 @@ class ContentSidebar extends PureComponent<Props, State> {
             throw getBadItemError();
         }
 
-        if (tasks && tasks.entries) {
-            const assignmentPromises = [];
-            assignees.forEach((assignee: SelectorItem) => {
-                const assignmentPromise = this.api.getTaskAssignmentsAPI(false).createTaskAssignment({
+        if (!tasks || !tasks.entries) {
+            return;
+        }
+
+        const assignmentPromises = [];
+        assignees.forEach((assignee: SelectorItem) => {
+            // Create a promise for each assignment
+            const assignmentPromise = new Promise((resolve, reject) => {
+                this.api.getTaskAssignmentsAPI(false).createTaskAssignment({
                     file,
                     taskId: task.id,
                     assignTo: { id: assignee.id },
-                    successCallback: (data) => {
+                    successCallback: (data: TaskAssignment) => {
                         // Increment the assignment collection count and add the new assignment
                         const updatedTask: TaskAssignment = this.createTaskAssignmentObject(data);
                         task.task_assignment_collection.total_count += 1;
                         task.task_assignment_collection.entries.push(updatedTask);
+                        resolve();
                     },
                     errorCallback: (e) => {
                         this.errorCallback(e);
                         errorCallback(e);
                         // Attempt to delete the task due to it's bad assignment
                         this.deleteTask(task.id);
-                    }
-                });
-
-                assignmentPromises.push(assignmentPromise);
-            });
-
-            Promise.all(assignmentPromises).then(() => {
-                // After all assignments have been created, update the state with
-                // the updated task object
-                successCallback(task);
-                this.setState({
-                    tasks: {
-                        entries: [...tasks.entries, task],
-                        total_count: tasks.total_count + 1
+                        reject();
                     }
                 });
             });
-        }
+
+            assignmentPromises.push(assignmentPromise);
+        });
+
+        Promise.all(assignmentPromises).then(() => {
+            // After all assignments have been created, update the state with
+            // the updated task object
+            this.setState({
+                tasks: {
+                    entries: [...tasks.entries, task],
+                    total_count: tasks.total_count + 1
+                }
+            });
+
+            successCallback(task);
+        });
     }
 
     /**
@@ -876,7 +883,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} text - The task's text
-     * @param {SelectorItems} assignees - Array of assignees IDs
+     * @param {SelectorItems} assignees - List of users assigned to this task
      * @param {string} dueAt - The comment's text
      * @param {Function} successCallback - Called on successful task creation
      * @param {Function} errorCallback - Called on failure to create task

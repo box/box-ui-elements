@@ -475,7 +475,7 @@ type Task = {
     id: string,
     created_at: string,
     created_by: User,
-    due_at: string,
+    due_at?: string,
     message: string,
     task_assignment_collection: TaskAssignments
 };

@@ -43,14 +43,14 @@ class TaskAssignments extends Base {
         assignTo: { id: string },
         successCallback: Function,
         errorCallback: Function
-    }): Promise<any> {
+    }): void {
         const { id = '', permissions } = file;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
             errorCallback(e);
-            return Promise.reject(e);
+            Promise.reject(e);
         }
 
         const requestData = {
@@ -63,7 +63,7 @@ class TaskAssignments extends Base {
             }
         };
 
-        return this.post({
+        this.post({
             id,
             url: this.getUrl(),
             data: requestData,

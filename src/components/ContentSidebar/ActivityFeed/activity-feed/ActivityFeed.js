@@ -237,7 +237,7 @@ class ActivityFeed extends React.Component<Props, State> {
             message: text,
             task_assignment_collection: {
                 entries: pendingAssignees,
-                total_count: assignees.length
+                total_count: pendingAssignees.length
             },
             type: 'task'
         };
