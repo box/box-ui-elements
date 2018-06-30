@@ -33,7 +33,7 @@ import {
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH
 } from '../../util/fields';
 import messages from '../messages';
-import { getBadItemError } from '../../util/error';
+import { getBadItemError, getActivityFeedApiError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import '../fonts.scss';
@@ -357,10 +357,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
             },
-            activityFeedError: {
-                title: messages.errorOccured,
-                content: messages.activityFeedItemApiError
-            }
+            activityFeedError: getActivityFeedApiError()
         });
         this.errorCallback(e);
     };
@@ -378,10 +375,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: {
-                title: messages.errorOccured,
-                content: messages.activityFeedItemApiError
-            }
+            activityFeedError: getActivityFeedApiError()
         });
         this.errorCallback(e);
     };
@@ -399,10 +393,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: {
-                title: messages.errorOccured,
-                content: messages.activityFeedItemApiError
-            }
+            activityFeedError: getActivityFeedApiError()
         });
         this.errorCallback(e);
     };

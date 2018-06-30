@@ -42,6 +42,7 @@ const ActiveState = ({
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
             const { type, id, errorCode, versions, permissions } = item;
+
             switch (type) {
                 case 'comment':
                     return (
