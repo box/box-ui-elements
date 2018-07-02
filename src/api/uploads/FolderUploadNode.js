@@ -213,7 +213,7 @@ class FolderUploadNode {
             return Promise.resolve();
         }
 
-        return new Promise(async (resolve) => {
+        return new Promise((resolve) => {
             // $FlowFixMe entry is not empty
             const reader = this.entry.createReader();
 

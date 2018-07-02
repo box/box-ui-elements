@@ -3,6 +3,12 @@ import FolderUpload from '../FolderUpload';
 
 let folderUploadInstance;
 const destinationFolderID = '123';
+jest.mock('../../../util/uploads', () => ({
+    ...require.requireActual('../../../util/uploads'),
+    getDataTransferItem: jest.fn((item) => item.item || item),
+    getEntryFromDataTransferItem: jest.fn((item) => item),
+    getDataTransferItemAPIOptions: jest.fn((item) => item.options || {})
+}));
 
 describe('api/uploads/FolderUpload', () => {
     beforeEach(() => {
@@ -100,6 +106,34 @@ describe('api/uploads/FolderUpload', () => {
             expect(Object.keys(folderC.folders)).toHaveLength(0);
             expect(folderC.files).toHaveLength(1);
             expect(folderC.files.map((item) => item.name)).toEqual(['f4']);
+        });
+    });
+
+    describe('buildFolderTreeFromDataTransferItems()', () => {
+        test('should construct folders correctly', async () => {
+            const createFolderUploadNodeMock = jest.fn();
+            folderUploadInstance.createFolderUploadNode = createFolderUploadNodeMock;
+
+            await folderUploadInstance.buildFolderTreeFromDataTransferItems([
+                { item: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} },
+                { item: { name: 'f4', webkitRelativePath: 'a/c/f4' }, options: {} }
+            ]);
+
+            expect(createFolderUploadNodeMock).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    describe('createFolderUploadNode()', () => {
+        test('should create FolderUploadNode correctly', () => {
+            const name = 'hi';
+            const apiOptions = { apiOptions: true };
+            const entry = { entry: true };
+
+            const nodeInstance = folderUploadInstance.createFolderUploadNode(name, apiOptions, entry);
+
+            expect(nodeInstance.name).toEqual(name);
+            expect(nodeInstance.fileAPIOptions).toEqual(apiOptions);
+            expect(nodeInstance.entry).toEqual(entry);
         });
     });
 });

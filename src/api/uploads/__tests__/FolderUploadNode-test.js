@@ -4,6 +4,10 @@ import FolderAPI from '../../../api/Folder';
 import { ERROR_CODE_ITEM_NAME_IN_USE, STATUS_COMPLETE } from '../../../constants';
 
 jest.mock('../../../api/Folder');
+jest.mock('../../../util/uploads', () => ({
+    ...require.requireActual('../../../util/uploads'),
+    getFileFromEntry: jest.fn((entry) => entry)
+}));
 
 let folderUploadNodeInstance;
 let folderCreateMock;
@@ -183,6 +187,55 @@ describe('api/uploads/FolderUploadNode', () => {
 
             expect(FolderAPI).toHaveBeenCalled();
             expect(folderCreateMock).toHaveBeenCalled();
+        });
+    });
+
+    describe('buildCurrentFolderFromEntry()', () => {
+        test('should resolve when entry is empty', async () => {
+            folderUploadNodeInstance.entry = undefined;
+
+            try {
+                await folderUploadNodeInstance.buildCurrentFolderFromEntry();
+            } catch (error) {
+                throw Error('buildCurrentFolderFromEntry throws an error');
+            }
+        });
+
+        test('should readEntry() when entry is not empty', async () => {
+            const reader = { reader: true };
+            folderUploadNodeInstance.readEntry = (readerParam, resolve) => {
+                expect(readerParam).toEqual(reader);
+                resolve();
+            };
+            folderUploadNodeInstance.entry = {
+                createReader: () => reader
+            };
+
+            await folderUploadNodeInstance.buildCurrentFolderFromEntry();
+        });
+    });
+
+    describe('readEntry()', () => {
+        test('should call readEntries() on the reader instance', async () => {
+            const readEntriesMock = jest.fn();
+            const reader = { readEntries: readEntriesMock };
+
+            await folderUploadNodeInstance.readEntry(reader, noop);
+
+            expect(readEntriesMock).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe('createFolderUploadNodesFromEntries()', () => {
+        test('should create folders and files from entries', async () => {
+            const entries = [{ name: '1', isFile: true }, { name: '2', isFile: false }, { name: '3', isFile: true }];
+
+            await folderUploadNodeInstance.createFolderUploadNodesFromEntries(entries);
+
+            expect(folderUploadNodeInstance.files).toEqual([{ name: '1', isFile: true }, { name: '3', isFile: true }]);
+            expect(Object.keys(folderUploadNodeInstance.folders)).toHaveLength(1);
+            expect(folderUploadNodeInstance.folders['2'].name).toEqual('2');
+            expect(folderUploadNodeInstance.folders['2'].entry).toEqual(entries[1]);
         });
     });
 });

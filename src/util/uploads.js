@@ -179,7 +179,7 @@ function getEntryFromDataTransferItem(item: DataTransferItem): FileSystemFileEnt
  * @returns {boolean}
  */
 function isDataTransferItemAFolder(itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem): boolean {
-    const item = itemData.item ? itemData.item : itemData;
+    const item = getDataTransferItem(itemData);
     const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
     if (!entry) {
         return false;
@@ -226,6 +226,7 @@ async function getFileFromDataTransferItem(
 }
 
 export {
+    DEFAULT_API_OPTIONS,
     getFileFromEntry,
     toISOStringNoMS,
     getFileLastModifiedAsISONoMSIfPossible,
