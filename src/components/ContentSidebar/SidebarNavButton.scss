@@ -1,14 +1,28 @@
 @import '../variables';
 
-.bcs .btn-plain.bcs-nav-btn {
-    border-left: 3px solid transparent;
-    display: block;
-    height: 60px;
-    margin-left: -1px; // takes on one of the borders
-    width: 60px;
+.bcs .bcs-nav-btn {
+    display: flex;
+    position: relative;
+
+    .bcs-nav-btn-border {
+        height: 60px;
+        left: -1px;
+        pointer-events: none;
+        position: absolute;
+        width: 3px;
+    }
+
+    .btn-plain {
+        background-color: transparent;
+        display: block;
+        height: 60px;
+        width: 59px; // 1px for left border
+    }
 
     &.bcs-nav-btn-is-selected {
-        border-left-color: $blue;
+        .bcs-nav-btn-border {
+            background-color: $blue;
+        }
 
         svg path {
             fill: $blue;
@@ -19,7 +33,7 @@
         background-color: $ffive;
 
         &:not(.bcs-nav-btn-is-selected) svg path {
-            fill: $twos;
+            fill: $fours;
         }
     }
 }
