@@ -364,7 +364,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const errorCb = jest.fn();
 
             wrapper.setProps({
-                onTaskUpdate
+                activitySidebarProps: {
+                    onTaskUpdate
+                }
             });
             instance.updateTaskSuccessCallback = jest.fn();
 
@@ -390,7 +392,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const errorCb = jest.fn();
 
             wrapper.setProps({
-                onTaskUpdate
+                activitySidebarProps: {
+                    onTaskUpdate
+                }
             });
             instance.updateTaskSuccessCallback = jest.fn();
             instance.errorCallback = jest.fn();
@@ -548,7 +552,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const errorCb = jest.fn();
 
             wrapper.setProps({
-                onTaskUpdate
+                activitySidebarProps: {
+                    onTaskUpdate
+                }
             });
             instance.updateTaskSuccessCallback = jest.fn();
 
@@ -619,7 +625,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const errorCb = jest.fn();
 
             wrapper.setProps({
-                onCommentDelete
+                activitySidebarProps: {
+                    onCommentDelete
+                }
             });
             instance.deleteCommentSuccessCallback = jest.fn();
 
@@ -821,6 +829,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 }
             };
             instance.setState({ file });
+            instance.errorCallback = jest.fn();
 
             instance.createTask('text', undefined, undefined, undefined, testErrorCallback);
         });
@@ -948,6 +957,33 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
+        });
+    });
+
+    describe('setFileDescriptionSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should update the file state', () => {
+            instance.setFileDescriptionSuccessCallback(file);
+
+            const { file: fileState, fileError } = instance.state;
+            expect(fileState).toEqual(file);
+            expect(fileError).toBe(undefined);
+        });
+
+        test('should reset fileError if one was previously set', () => {
+            const fileError = 'test error';
+            instance.setState({ fileError });
+            expect(fileError).toBe(fileError);
+
+            instance.setFileDescriptionSuccessCallback(file);
+            const { fileError: fileErrorState } = instance.state;
+            expect(fileErrorState).toBe(undefined);
         });
     });
 });

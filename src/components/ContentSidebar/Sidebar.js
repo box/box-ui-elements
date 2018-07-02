@@ -10,6 +10,8 @@ import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
 import SidebarNav from './SidebarNav';
 import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
+import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { ActivitySidebarProps } from './ActivitySidebar';
 import './Sidebar.scss';
 
 type Props = {
@@ -17,19 +19,14 @@ type Props = {
     currentUser?: User,
     file: BoxItem,
     getPreviewer: Function,
-    detailsSidebarProps: Object,
+    activitySidebarProps: ActivitySidebarProps,
+    detailsSidebarProps: DetailsSidebarProps,
     hasSkills: boolean,
     hasMetadata: boolean,
     hasActivityFeed: boolean,
     hasSkills: boolean,
     hasDetails: boolean,
     onSkillChange: Function,
-    onCommentCreate?: Function,
-    onCommentDelete?: Function,
-    onTaskCreate?: Function,
-    onTaskDelete?: Function,
-    onTaskUpdate?: Function,
-    onTaskAssignmentUpdate?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
     translations?: Translations,
@@ -42,7 +39,6 @@ type Props = {
     tasksError?: Errors,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>,
     onToggle: Function
 };
 
@@ -55,14 +51,9 @@ const Sidebar = ({
     hasActivityFeed,
     hasSkills,
     hasDetails,
+    activitySidebarProps,
     detailsSidebarProps,
     onSkillChange,
-    onCommentCreate,
-    onCommentDelete,
-    onTaskCreate,
-    onTaskDelete,
-    onTaskUpdate,
-    onTaskAssignmentUpdate,
     getApproverWithQuery,
     getMentionWithQuery,
     tasks,
@@ -73,7 +64,6 @@ const Sidebar = ({
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl,
-    getUserProfileUrl,
     onToggle
 }: Props) => (
     <React.Fragment>
@@ -101,16 +91,10 @@ const Sidebar = ({
                     mentionSelectorContacts={mentionSelectorContacts}
                     commentsError={commentsError}
                     versions={versions}
-                    onCommentCreate={onCommentCreate}
-                    onCommentDelete={onCommentDelete}
-                    onTaskCreate={onTaskCreate}
-                    onTaskDelete={onTaskDelete}
-                    onTaskUpdate={onTaskUpdate}
-                    onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                    getUserProfileUrl={getUserProfileUrl}
                     getApproverWithQuery={getApproverWithQuery}
                     getMentionWithQuery={getMentionWithQuery}
                     getAvatarUrl={getAvatarUrl}
+                    {...activitySidebarProps}
                 />
             )}
     </React.Fragment>
