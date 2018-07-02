@@ -8,10 +8,17 @@ import * as React from 'react';
 import DetailsSidebar from './DetailsSidebar';
 import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
+import MetadataSidebar from './MetadataSidebar';
 import SidebarNav from './SidebarNav';
-import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
+import {
+    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_METADATA
+} from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { MetadataSidebarProps } from './MetadataSidebar';
 import './Sidebar.scss';
 
 type Props = {
@@ -21,12 +28,12 @@ type Props = {
     getPreviewer: Function,
     activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
+    metadataSidebarProps: MetadataSidebarProps,
     hasSkills: boolean,
     hasMetadata: boolean,
     hasActivityFeed: boolean,
     hasSkills: boolean,
     hasDetails: boolean,
-    onSkillChange: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
     translations?: Translations,
@@ -53,7 +60,7 @@ const Sidebar = ({
     hasDetails,
     activitySidebarProps,
     detailsSidebarProps,
-    onSkillChange,
+    metadataSidebarProps,
     getApproverWithQuery,
     getMentionWithQuery,
     tasks,
@@ -84,8 +91,7 @@ const Sidebar = ({
                     {...detailsSidebarProps}
                 />
             )}
-        {view === SIDEBAR_VIEW_SKILLS &&
-            hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />}
+        {view === SIDEBAR_VIEW_SKILLS && hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&
             hasActivityFeed && (
                 <ActivitySidebar
@@ -104,6 +110,7 @@ const Sidebar = ({
                     {...activitySidebarProps}
                 />
             )}
+        {view === SIDEBAR_VIEW_METADATA && hasMetadata && <MetadataSidebar file={file} {...metadataSidebarProps} />}
     </React.Fragment>
 );
 

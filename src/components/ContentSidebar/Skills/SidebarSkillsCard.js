@@ -15,16 +15,18 @@ type Props = {
     getPreviewer: Function,
     onSkillChange: Function,
     card: SkillCard,
+    hasError: boolean,
     cards: Array<SkillCard>,
     isEditable: boolean
 };
 
-const SidebarSkillsCard = ({ card, cards, isEditable, onSkillChange, getPreviewer }: Props) => {
+const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, getPreviewer }: Props) => {
     switch (card.skill_card_type) {
         case SKILLS_KEYWORD:
             return (
                 <Keywords
                     card={card}
+                    hasError={hasError}
                     transcript={
                         isEditable
                             ? cards.find(({ skill_card_type }) => skill_card_type === SKILLS_TRANSCRIPT)
@@ -38,12 +40,19 @@ const SidebarSkillsCard = ({ card, cards, isEditable, onSkillChange, getPreviewe
         case SKILLS_TIMELINE:
         case SKILLS_FACE:
             return (
-                <Faces card={card} isEditable={isEditable} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />
+                <Faces
+                    card={card}
+                    hasError={hasError}
+                    isEditable={isEditable}
+                    getPreviewer={getPreviewer}
+                    onSkillChange={onSkillChange}
+                />
             );
         case SKILLS_TRANSCRIPT:
             return (
                 <Transcript
                     card={card}
+                    hasError={hasError}
                     getPreviewer={getPreviewer}
                     isEditable={isEditable}
                     onSkillChange={onSkillChange}

@@ -32,6 +32,6 @@ exports[`components/ContentSidebar/Skills/Sidebar should render skills sidebar 1
     hasSkills={true}
     selectedView="skills"
   />
-  <SkillsSidebar />
+  <Component />
 </React.Fragment>
 `;

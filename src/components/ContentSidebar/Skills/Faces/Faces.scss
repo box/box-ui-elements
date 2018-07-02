@@ -3,6 +3,10 @@
 .be-faces {
     position: relative; // For section title icons
 
+    .inline-alert {
+        margin: 0 0 20px;
+    }
+
     .btn-plain.be-face-edit {
         border-radius: 3px;
         height: 24px;
@@ -18,7 +22,8 @@
     }
 
     .be-faces-buttons {
-        margin: 7px -5px 0 0;
+        margin-right: -5px;
+        padding-top: 7px;
         text-align: right;
     }
 
