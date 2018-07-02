@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import SidebarNavButton from '../SidebarNavButton';
 
 describe('components/ContentSidebar/SidebarNavButton', () => {
@@ -22,7 +21,7 @@ describe('components/ContentSidebar/SidebarNavButton', () => {
             isSelected: true
         };
         const wrapper = getWrapper(props);
-        expect(wrapper.find(PlainButton).prop('className')).toBe('bcs-nav-btn bcs-nav-btn-is-selected');
+        expect(wrapper.childAt(0).prop('className')).toBe('bcs-nav-btn bcs-nav-btn-is-selected');
         expect(wrapper).toMatchSnapshot();
     });
 });

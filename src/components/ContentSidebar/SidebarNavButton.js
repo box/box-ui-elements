@@ -20,16 +20,16 @@ type Props = {
 
 const SidebarNavButton = ({ tooltip, isSelected, onClick, interactionTarget, children }: Props) => (
     <Tooltip text={tooltip} position='middle-left'>
-        <PlainButton
-            type='button'
+        <div
             className={classNames('bcs-nav-btn', {
                 'bcs-nav-btn-is-selected': isSelected
             })}
-            onClick={onClick}
-            data-resin-target={interactionTarget}
         >
-            {children}
-        </PlainButton>
+            <div className='bcs-nav-btn-border' />
+            <PlainButton type='button' onClick={onClick} data-resin-target={interactionTarget}>
+                {children}
+            </PlainButton>
+        </div>
     </Tooltip>
 );
 
