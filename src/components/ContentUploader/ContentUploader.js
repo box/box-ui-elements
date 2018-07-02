@@ -91,7 +91,9 @@ const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 const UPLOAD_CONCURRENCY = 6;
 const getFolderUploadAPIStub = () => ({
-    upload: ({successCallback}) => {successCallback()},
+    upload: ({ successCallback }) => {
+        successCallback();
+    },
     cancel: noop
 });
 
@@ -245,19 +247,18 @@ class ContentUploader extends Component<Props, State> {
      * @param {UploadFileWithAPIOptions | UploadFile} file
      */
     getFileId(file: UploadFileWithAPIOptions | UploadFile) {
+        const { rootFolderId } = this.props;
+
         if (!doesFileContainAPIOptions(file)) {
             return ((file: any): UploadFile).name;
         }
 
         const fileWithOptions = ((file: any): UploadFileWithAPIOptions);
-        const folderId = getProp(fileWithOptions, 'options.folderId');
-        const uploadInitTimestamp = getProp(fileWithOptions, 'options.uploadInitTimestamp');
-        if (folderId && uploadInitTimestamp) {
-            const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
-            return `${fileName}_${folderId}_${uploadInitTimestamp}`;
-        }
+        const folderId = getProp(fileWithOptions, 'options.folderId', rootFolderId);
+        const uploadInitTimestamp = getProp(fileWithOptions, 'options.uploadInitTimestamp', 0);
+        const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
 
-        return fileWithOptions.file.name;
+        return `${fileName}_${folderId}_${uploadInitTimestamp}`;
     }
 
     /**
@@ -306,9 +307,10 @@ class ContentUploader extends Component<Props, State> {
         const fileItems = [];
 
         Array.from(dataTransferItems).forEach((item) => {
-            if (isDataTransferItemAFolder(item) && isFolderUploadEnabled) {
+            const isDirectory = isDataTransferItemAFolder(item);
+            if (isDirectory && isFolderUploadEnabled) {
                 folderItems.push(item);
-            } else {
+            } else if (!isDirectory) {
                 fileItems.push(item);
             }
         });
@@ -420,7 +422,7 @@ class ContentUploader extends Component<Props, State> {
                     {
                         // folderUpload.upload() uploads all folders, so we use the real folder upload api instance
                         // for only the first folder. The rest of the folders are added to the queue with stub
-                        // api instances.
+                        // API instances.
                         api: index === 0 ? folderUpload : getFolderUploadAPIStub(),
                         extension: '',
                         isFolder: true,
@@ -631,7 +633,6 @@ class ContentUploader extends Component<Props, State> {
             overwrite: true,
             fileId: options && options.fileId ? options.fileId : null
         };
-
 
         item.status = STATUS_IN_PROGRESS;
         const { items } = this.state;
