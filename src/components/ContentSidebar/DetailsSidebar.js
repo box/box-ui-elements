@@ -26,7 +26,7 @@ type ExternalProps = {
     hasVersions?: boolean,
     retentionPolicy?: Object,
     onAccessStatsClick?: Function,
-    onClassificationClick?: Function,
+    onClassificationClick?: (onClassificationChange: Function) => void,
     onVersionHistoryClick?: Function,
     onRetentionPolicyExtendClick?: Function,
     onDescriptionChange?: Function

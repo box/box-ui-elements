@@ -986,4 +986,62 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(fileErrorState).toBe(undefined);
         });
     });
+
+    describe('onClassificationChange()', () => {
+        let instance;
+        let wrapper;
+        let fetchFile;
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            fetchFile = jest.fn();
+            instance.fetchFile = fetchFile;
+        });
+
+        it('should clear the file and fetch a new one', () => {
+            wrapper.setProps({
+                fileId: file.id
+            });
+            wrapper.setState({
+                file
+            });
+
+            instance.onClassificationChange();
+            expect(wrapper.state('file')).toBe(undefined);
+            expect(fetchFile).toBeCalledWith(file.id, true);
+        });
+
+        it('should return undefined if there is no file id', () => {
+            wrapper.setState({
+                file
+            });
+
+            instance.onClassificationChange();
+            expect(wrapper.state('file')).toBe(undefined);
+            expect(fetchFile).not.toBeCalled();
+        });
+    });
+
+    describe('onClassificationClick()', () => {
+        let instance;
+        let wrapper;
+        let onClassificationClick;
+
+        beforeEach(() => {
+            onClassificationClick = jest.fn();
+            wrapper = getWrapper({
+                detailsSidebarProps: {
+                    onClassificationClick
+                }
+            });
+            instance = wrapper.instance();
+            instance.onClassificationChange = jest.fn();
+        });
+
+        it('should call onClassificationClick with the refresh function', () => {
+            instance.onClassificationClick();
+            expect(onClassificationClick).toBeCalledWith(instance.onClassificationChange);
+        });
+    });
 });

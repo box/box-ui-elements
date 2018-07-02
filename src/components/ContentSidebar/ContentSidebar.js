@@ -1302,6 +1302,37 @@ class ContentSidebar extends PureComponent<Props, State> {
     }, DEFAULT_COLLAB_DEBOUNCE);
 
     /**
+     * Refreshes sidebar when classification is changed
+     *
+     * @private
+     * @return {void}
+     */
+    onClassificationChange = (): void => {
+        this.setState({
+            file: undefined
+        });
+
+        const { fileId } = this.props;
+        if (!fileId) {
+            return;
+        }
+
+        this.fetchFile(fileId, true);
+    };
+
+    /**
+     * Opens classification modal with refresh callback
+     *
+     * @private
+     * @return {void}
+     */
+    onClassificationClick = (): void => {
+        const { onClassificationClick = noop } = this.props.detailsSidebarProps;
+
+        onClassificationClick(this.onClassificationChange);
+    };
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -1363,6 +1394,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     versionError,
                                     fileError,
                                     onDescriptionChange: this.onDescriptionChange,
+                                    onClassificationChange: this.onClassificationChange,
                                     ...detailsSidebarProps
                                 }}
                                 activitySidebarProps={activitySidebarProps}
