@@ -797,11 +797,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description:
             'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. { numberOfCollaborators } is a number and { versions } is a range of versions.'
     },
-    versionTooManyVersions: {
-        id: 'be.versionTooManyVersions',
-        defaultMessage: 'Multiple versions of this file',
-        description: 'Message displayed in the activity feed when we have too many versions to display'
-    },
     versionUploadCollapsed: {
         id: 'be.versionUploadCollapsed',
         defaultMessage: '{ name } uploaded versions { versions }',

@@ -97,11 +97,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
         test('should set a maskError if there is an error in fetching version history', () => {
             instance.fetchVersionsErrorCallback();
-            const inlineErrorState = wrapper.state().versionError.maskError;
             expect(typeof versionHistoryErrorHeaderMessage).toBe('object');
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(versionHistoryErrorHeaderMessage);
-            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
         });
     });
 
