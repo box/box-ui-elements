@@ -8,10 +8,16 @@ exports[`components/ContentSidebar/SidebarNavButton should render nav button pro
   text="foo"
   theme="default"
 >
-  <PlainButton
+  <div
     className="bcs-nav-btn"
-    type="button"
-  />
+  >
+    <div
+      className="bcs-nav-btn-border"
+    />
+    <PlainButton
+      type="button"
+    />
+  </div>
 </Tooltip>
 `;
 
@@ -23,9 +29,15 @@ exports[`components/ContentSidebar/SidebarNavButton should render nav button pro
   text="foo"
   theme="default"
 >
-  <PlainButton
+  <div
     className="bcs-nav-btn bcs-nav-btn-is-selected"
-    type="button"
-  />
+  >
+    <div
+      className="bcs-nav-btn-border"
+    />
+    <PlainButton
+      type="button"
+    />
+  </div>
 </Tooltip>
 `;

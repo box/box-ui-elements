@@ -3,9 +3,10 @@
  * @file Recursively create folder and upload files
  * @author Box
  */
+import noop from 'lodash/noop';
 import FolderAPI from '../../api/Folder';
-
 import { STATUS_COMPLETE, ERROR_CODE_ITEM_NAME_IN_USE } from '../../constants';
+import { getFileFromEntry } from '../../util/uploads';
 
 class FolderUploadNode {
     addFolderToQueue: Function;
@@ -17,6 +18,7 @@ class FolderUploadNode {
     uploadFile: Function;
     fileAPIOptions: Object;
     baseAPIOptions: Object;
+    entry: ?FileSystemFileEntry;
 
     /**
      * [constructor]
@@ -31,13 +33,15 @@ class FolderUploadNode {
         uploadFile: Function,
         addFolderToQueue: Function,
         fileAPIOptions: Object,
-        baseAPIOptions: Object
+        baseAPIOptions: Object,
+        entry?: FileSystemFileEntry
     ) {
         this.name = name;
         this.uploadFile = uploadFile;
         this.addFolderToQueue = addFolderToQueue;
         this.fileAPIOptions = fileAPIOptions;
         this.baseAPIOptions = baseAPIOptions;
+        this.entry = entry;
     }
 
     /**
@@ -53,8 +57,8 @@ class FolderUploadNode {
         this.parentFolderId = parentFolderId;
 
         await this.createAndUploadFolder(errorCallback, isRoot);
-        this.uploadFile(this.getFormattedFiles(), true);
-        this.uploadChildFolders(errorCallback);
+        this.uploadFile(this.getFormattedFiles(), noop);
+        await this.uploadChildFolders(errorCallback);
     }
 
     /**
@@ -66,8 +70,8 @@ class FolderUploadNode {
      */
     uploadChildFolders = async (errorCallback: Function) => {
         // $FlowFixMe
-        const folderNodes: Array<FolderUploadNode> = Object.values(this.folders);
-        const promises = folderNodes.map((folder) => folder.upload(this.folderId, errorCallback));
+        const folders: Array<FolderUploadNode> = Object.values(this.folders);
+        const promises = folders.map((folder) => folder.upload(this.folderId, errorCallback));
 
         await Promise.all(promises);
     };
@@ -81,6 +85,8 @@ class FolderUploadNode {
      * @returns {Promise}
      */
     createAndUploadFolder = async (errorCallback: Function, isRoot: boolean) => {
+        await this.buildCurrentFolderFromEntry();
+
         try {
             const data = await this.createFolder();
             this.folderId = data.id;
@@ -140,6 +146,80 @@ class FolderUploadNode {
             folderAPI.create(this.parentFolderId, this.name, resolve, reject);
         });
     }
+
+    /**
+     * Create FolderUploadNode instances from entries
+     *
+     * @private
+     * @param {Array<FileSystemFileEntry>} entries
+     * @returns {Promise<any>}
+     */
+    createFolderUploadNodesFromEntries = async (entries: Array<FileSystemFileEntry>): Promise<any> => {
+        await Promise.all(
+            entries.map(async (entry) => {
+                const { isFile, name } = entry;
+
+                if (isFile) {
+                    const file = await getFileFromEntry(entry);
+                    this.files.push(file);
+                    return;
+                }
+
+                this.folders[name] = new FolderUploadNode(
+                    name,
+                    this.uploadFile,
+                    this.addFolderToQueue,
+                    this.fileAPIOptions,
+                    {
+                        ...this.baseAPIOptions,
+                        ...this.fileAPIOptions
+                    },
+                    entry
+                );
+            })
+        );
+    };
+
+    /**
+     * Recursively read an entry
+     *
+     * @private
+     * @param {DirectoryReader} reader
+     * @param {Function} resolve
+     * @returns {void}
+     */
+    readEntry = (reader: DirectoryReader, resolve: Function) => {
+        reader.readEntries(async (entries) => {
+            // Quit recursing when there are no remaining entries.
+            if (!entries.length) {
+                resolve();
+                return;
+            }
+
+            await this.createFolderUploadNodesFromEntries(entries);
+
+            this.readEntry(reader, resolve);
+        }, noop);
+    };
+
+    /**
+     * Build current folder from entry
+     *
+     * @private
+     * @returns {Promise<any>}
+     */
+    buildCurrentFolderFromEntry = (): Promise<any> => {
+        if (!this.entry) {
+            return Promise.resolve();
+        }
+
+        return new Promise((resolve) => {
+            // $FlowFixMe entry is not empty
+            const reader = this.entry.createReader();
+
+            this.readEntry(reader, resolve);
+        });
+    };
 }
 
 export default FolderUploadNode;
