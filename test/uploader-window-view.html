@@ -33,6 +33,14 @@
         .inputs div {
             display: flex;
         }
+
+        .drop-zone {
+            background-color: white;
+            border: 1px solid black;
+            height: 300px;
+            text-align: center;
+            width: 100%;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="../dev/en-US/uploader.css" />
 </head>
@@ -55,10 +63,13 @@
                 <!-- <input class="file-input" multiple type='file' /> -->
             </label>
         </div>
-        <button type="button" onclick="load()">Submit</button>
+        <button type="button" onclick="handleSubmit()">Submit</button>
     </div>
     <div class="container">
         <h1>Upload Manager - Choose File to Upload </h1>
+        <div class="drop-zone">
+            <h2>Drop Files/Folders Here</h2>
+        </div>
         <div class="uploader1"></div>
     </div>
     <script src="../dev/en-US/uploader.js"></script>
@@ -73,12 +84,19 @@
             document.querySelector('.folder').value = storageFolder || 0;
         })();
 
+        function handleSubmit() {
+            load();
+            location.reload();
+        }
+
+
         function load() {
             const { ContentUploader } = Box;
 
             const token = document.querySelector('.token').value || localStorage.getItem('token');
             const folderId = document.querySelector('.folder').value || localStorage.getItem('folderId');
             const fileInput = document.querySelector('.file-input');
+            const dropZone = document.querySelector('.drop-zone');
 
             localStorage.setItem('token', token);
             localStorage.setItem('folderId', folderId);
@@ -114,6 +132,23 @@
                 }))
                 uploader1.component.addFilesWithOptionsToUploadQueueAndStartUpload(filesWithOptions)
             };
+
+            dropZone.ondrop = function drop(event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const itemsWithOptions = Array.from(event.dataTransfer.items).map((item) => ({
+                    item,
+                    options: {
+                        folderId, token: () => Promise.resolve(token)
+                    }
+                }))
+                uploader1.component.addFilesWithOptionsToUploadQueueAndStartUpload([], itemsWithOptions)
+            }
+
+            dropZone.ondragover = function allowDrop(ev) {
+                ev.preventDefault();
+            }
         }
         load();
     </script>
