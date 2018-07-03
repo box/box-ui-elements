@@ -21,7 +21,7 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
-    activityFeedError?: InlineError,
+    activityFeedError?: Error,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -61,6 +61,18 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
+
+    /**
+     *  Constructs an Activity Feed error object that renders to an inline feed error
+     *
+     * @return {Object} An inline error message object
+     */
+    createActivityFeedApiError(): InlineError {
+        return {
+            title: messages.errorOccured,
+            content: messages.activityFeedItemApiError
+        };
+    }
 
     /**
      * Add a placeholder pending feed item.
@@ -488,7 +500,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
-                            inlineError={activityFeedError}
+                            inlineError={activityFeedError ? this.createActivityFeedApiError() : undefined}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
