@@ -122,6 +122,14 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(inlineErrorState.errorHeader).toEqual(fileAccessStatsErrorHeaderMessage);
             expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
         });
+
+        test('should not set a maskError if the error if forbidden', () => {
+            instance.fetchFileAccessStatsErrorCallback({
+                status: 403
+            });
+            const { accessStatsError } = wrapper.state();
+            expect(accessStatsError).toBeUndefined();
+        });
     });
 
     describe('fetchCurrentUserErrorCallback()', () => {
