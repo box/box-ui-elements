@@ -66,6 +66,57 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
 </div>
 `;
 
+exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should correctly render activity state with an inline error if some feed items fail to fetch 1`] = `
+<div
+  className="bcs-activity-feed"
+  onKeyDown={[Function]}
+>
+  <div
+    className="bcs-activity-feed-items-container"
+  >
+    <Component
+      currentUser={
+        Object {
+          "id": 10,
+          "name": "Kanye West",
+        }
+      }
+      inlineError={
+        Object {
+          "content": Object {
+            "defaultMessage": "There was a problem loading the activity feed. Please refresh the page or try again later.",
+            "id": "be.activityFeedItemApiError",
+          },
+          "title": Object {
+            "defaultMessage": "An error occured",
+            "id": "be.errorOccured",
+          },
+        }
+      }
+      items={
+        Array [
+          Object {
+            "created_at": "Thu Sep 26 33658 19:46:39 GMT-0600 (CST)",
+            "created_by": Object {
+              "id": 11,
+              "name": "Akon",
+            },
+            "id": "123",
+            "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+            "type": "comment",
+          },
+        ]
+      }
+      onCommentDelete={[Function]}
+      onTaskAssignmentUpdate={[Function]}
+      onTaskDelete={[Function]}
+      onTaskEdit={[Function]}
+      onVersionInfo={[Function]}
+    />
+  </div>
+</div>
+`;
+
 exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should correctly render empty loading state 1`] = `
 <div
   className="bcs-activity-feed"

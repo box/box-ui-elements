@@ -108,6 +108,24 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should correctly render activity state with an inline error if some feed items fail to fetch', () => {
+        const items = {
+            total_count: 0,
+            entries: []
+        };
+        const someError = {};
+        const wrapper = shallow(
+            <ActivityFeed
+                currentUser={currentUser}
+                activityFeedError={someError}
+                comments={comments}
+                tasks={items}
+                versions={items}
+            />
+        );
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should not expose add approval ui if task submit handler is not passed', () => {
         const file = {
             permissions: {
