@@ -565,28 +565,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * File task assignment fetch success callback
-     *
-     * @private
-     * @param {Tasks} tasks - Box tasks to be populated with assignments
-     * @param {TaskAssignments} assignments - Fetched Box task assigments for specified task
-     * @return {Object}
-     */
-    fetchTaskAssignmentsSuccessCallback = (tasks: Tasks, assignments: TaskAssignments): Tasks => {
-        const { entries, total_count } = tasks;
-        return {
-            entries: entries.map((task) => ({
-                ...task,
-                task_assignment_collection: this.populateTaskAssignments(
-                    task.task_assignment_collection.entries,
-                    assignments
-                )
-            })),
-            total_count
-        };
-    };
-
-    /**
      * File access stats fetch success callback
      *
      * @private
@@ -793,21 +771,30 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Creates a task assignment object to be inserted into a newly created task
+     * Sorts and formats assignments, and then adds them to their task. 
      *
 
      * @param {TaskAssignment} data - Task create success callback
-     * @return {TaskAssignment}
+     * @return {Task}
      */
-    createTaskAssignmentObject(data: TaskAssignment) {
-        const { id, assigned_to, message, resolution_state } = data;
-        return {
-            type: 'task_assignment',
-            id,
-            assigned_to,
-            message,
-            resolution_state
-        };
+    appendAssignmentsToTask(task: Task, assignments: Array<TaskAssignment>) {
+        if (!assignments) {
+            return task;
+        }
+
+        task.task_assignment_collection.entries = assignments.map((taskAssignment) => {
+            const { id, assigned_to, message, resolution_state } = taskAssignment;
+            return {
+                type: 'task_assignment',
+                id,
+                assigned_to,
+                message,
+                resolution_state
+            };
+        });
+        // Increment the assignment collection count by the number of new assignments
+        task.task_assignment_collection.total_count += assignments.length;
+        return task;
     }
 
     /**
@@ -844,13 +831,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                     file,
                     taskId: task.id,
                     assignTo: { id: assignee.id },
-                    successCallback: (data: TaskAssignment) => {
-                        // Increment the assignment collection count and add the new assignment
-                        const updatedTask: TaskAssignment = this.createTaskAssignmentObject(data);
-                        task.task_assignment_collection.total_count += 1;
-                        task.task_assignment_collection.entries.push(updatedTask);
-                        resolve();
-                    },
+                    successCallback: (data: TaskAssignment) => resolve(data),
                     errorCallback: (e) => {
                         this.errorCallback(e);
                         errorCallback(e);
@@ -864,12 +845,13 @@ class ContentSidebar extends PureComponent<Props, State> {
             assignmentPromises.push(assignmentPromise);
         });
 
-        Promise.all(assignmentPromises).then(() => {
+        Promise.all(assignmentPromises).then((taskAssignments) => {
+            const formattedTask = this.appendAssignmentsToTask(task, taskAssignments);
             // After all assignments have been created, update the state with
             // the updated task object
             this.setState({
                 tasks: {
-                    entries: [...tasks.entries, task],
+                    entries: [...tasks.entries, formattedTask],
                     total_count: tasks.total_count + 1
                 }
             });
@@ -1190,23 +1172,33 @@ class ContentSidebar extends PureComponent<Props, State> {
             }
         };
 
-        let tasks = tasksWithoutAssignments;
         const { entries } = tasksWithoutAssignments;
-        const taskAssignmentPromises = [];
-        entries.forEach((task) => {
-            const promise = this.api.getTasksAPI(shouldDestroy).getAssignments(
-                fileId,
-                task.id,
-                (assignments) => {
-                    tasks = this.fetchTaskAssignmentsSuccessCallback(tasks, assignments);
-                },
-                this.fetchTaskAssignmentsErrorCallback,
-                requestData
-            );
-            taskAssignmentPromises.push(promise);
+        const formattedTasks = { total_count: 0, entries: [] };
+        const assignmentPromises = [];
+        entries.forEach((task: Task) => {
+            const assignmentPromise = new Promise((resolve) => {
+                this.api.getTasksAPI(shouldDestroy).getAssignments(
+                    fileId,
+                    task.id,
+                    (assignments) => {
+                        formattedTasks.entries.push(this.appendAssignmentsToTask(task, assignments.entries));
+                        formattedTasks.total_count += 1;
+                        resolve();
+                    },
+                    (e) => {
+                        this.fetchTaskAssignmentsErrorCallback(e);
+                        resolve();
+                    },
+                    requestData
+                );
+            });
+
+            assignmentPromises.push(assignmentPromise);
         });
 
-        Promise.all(taskAssignmentPromises).then(() => this.setState({ tasks }));
+        Promise.all(assignmentPromises).then(() => {
+            this.setState({ tasks: formattedTasks });
+        });
     };
 
     /**
