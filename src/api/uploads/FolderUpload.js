@@ -5,16 +5,22 @@
  */
 
 import FolderUploadNode from './FolderUploadNode';
+import {
+    getEntryFromDataTransferItem,
+    getFile,
+    getFileAPIOptions,
+    getDataTransferItem,
+    getDataTransferItemAPIOptions
+} from '../../util/uploads';
 
 const PATH_DELIMITER = '/';
 
 class FolderUpload {
-    folderNodes: Object = {};
-    files: Array<File> = [];
+    folders: { [string]: FolderUploadNode } = {};
+    files: Array<UploadFile> = [];
     destinationFolderId: string;
     uploadFile: Function;
     addFolderToQueue: Function;
-    areAPIOptionsInFiles: boolean;
     baseAPIOptions: Object;
 
     /**
@@ -23,7 +29,6 @@ class FolderUpload {
      * @param {Function} uploadFile
      * @param {string} destinationFolderId
      * @param {Function} addFolderToQueue
-     * @param {boolean} areAPIOptionsInFiles
      * @param {Object} baseAPIOptions
      * @return {void}
      */
@@ -31,13 +36,11 @@ class FolderUpload {
         uploadFile: Function,
         destinationFolderId: string,
         addFolderToQueue: Function,
-        areAPIOptionsInFiles: boolean,
         baseAPIOptions: Object
     ): void {
         this.uploadFile = uploadFile;
         this.destinationFolderId = destinationFolderId;
         this.addFolderToQueue = addFolderToQueue;
-        this.areAPIOptionsInFiles = areAPIOptionsInFiles;
         this.baseAPIOptions = baseAPIOptions;
     }
 
@@ -45,35 +48,30 @@ class FolderUpload {
      * Creates a folder tree from wekbkitRelativePath
      *
      * @public
-     * @param  {Array} Array<UploadFileWithAPIOptions | File> | FileList
+     * @param  {Array} Array<UploadFileWithAPIOptions | UploadFile> | FileList
      * @returns {void}
      */
-    buildFolderTree(fileList: Array<UploadFileWithAPIOptions | File> | FileList): void {
-        // FileList does not natively have forEach, hence this workaround
-        Array.prototype.forEach.call(fileList, (fileData) => {
-            const file = this.areAPIOptionsInFiles ? fileData.file : fileData;
-            const fileAPIOptions = this.areAPIOptionsInFiles ? fileData.options : {};
+    buildFolderTreeFromWebkitRelativePath(fileList: Array<UploadFileWithAPIOptions | UploadFile> | FileList): void {
+        Array.from(fileList).forEach((fileData) => {
+            const file = getFile(fileData);
+            const { webkitRelativePath } = file;
 
-            const pathArray = file.webkitRelativePath.split(PATH_DELIMITER).slice(0, -1);
+            if (!webkitRelativePath) {
+                return;
+            }
+
+            const fileAPIOptions = getFileAPIOptions(fileData);
+            const pathArray = webkitRelativePath.split(PATH_DELIMITER).slice(0, -1);
             if (pathArray.length <= 0) {
                 return;
             }
 
-            let subTree = this.folderNodes;
+            let subTree = this.folders;
             // Walk the path
             pathArray.forEach((folderName, index) => {
                 // Create new child folder
                 if (!subTree[folderName]) {
-                    subTree[folderName] = new FolderUploadNode(
-                        folderName,
-                        this.uploadFile,
-                        this.addFolderToQueue,
-                        fileAPIOptions,
-                        {
-                            ...this.baseAPIOptions,
-                            ...fileAPIOptions
-                        }
-                    );
+                    subTree[folderName] = this.createFolderUploadNode(folderName, fileAPIOptions);
                 }
 
                 if (index === pathArray.length - 1) {
@@ -88,18 +86,67 @@ class FolderUpload {
     }
 
     /**
-     * Upload folderNodes
+     * Build folder tree from dataTransferItems
+     *
+     * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
+     * @returns {Promise<any>}
+     */
+    async buildFolderTreeFromDataTransferItems(
+        dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>
+    ) {
+        dataTransferItems.forEach((itemData) => {
+            const item = getDataTransferItem(itemData);
+            const apiOptions = getDataTransferItemAPIOptions(itemData);
+            const entry = getEntryFromDataTransferItem(item);
+            const { name } = entry;
+
+            this.folders[name] = this.createFolderUploadNode(name, apiOptions, entry);
+        });
+    }
+
+    /**
+     * Create a FolderUploadNode instance
+     *
+     * @param {string} name
+     * @param {Object} apiOptions
+     * @param {FileSystemFileEntry} [entry]
+     * @returns {FolderUploadNode}
+     */
+    createFolderUploadNode(name: string, apiOptions: Object, entry?: FileSystemFileEntry): FolderUploadNode {
+        return new FolderUploadNode(
+            name,
+            this.uploadFile,
+            this.addFolderToQueue,
+            apiOptions,
+            {
+                ...this.baseAPIOptions,
+                ...apiOptions
+            },
+            entry
+        );
+    }
+
+    /**
+     * Upload folders
      *
      * @public
      * @param {Object} Options
      * @param {Function} options.errorCallback
-     * @returns {void}
+     * @returns {Promise<any>}
      */
-    upload({ errorCallback }: { errorCallback: Function }): void {
-        // $FlowFixMe
-        Object.values(this.folderNodes).forEach((node: FolderUploadNode) => {
-            node.upload(this.destinationFolderId, errorCallback, true);
-        });
+    async upload({
+        errorCallback,
+        successCallback
+    }: {
+        errorCallback: Function,
+        successCallback: Function
+    }): Promise<any> {
+        const nodes = ((Object.values(this.folders): any): Array<FolderUploadNode>);
+        await Promise.all(
+            nodes.map((node: FolderUploadNode) => node.upload(this.destinationFolderId, errorCallback, true))
+        );
+
+        successCallback();
     }
 
     /**
