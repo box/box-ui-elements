@@ -33,7 +33,7 @@ import {
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH
 } from '../../util/fields';
 import messages from '../messages';
-import { getBadItemError, getActivityFeedApiError } from '../../util/error';
+import { getBadItemError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import '../fonts.scss';
@@ -339,6 +339,18 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     *  Constructs an Activity Feed error object that renders to an inline feed error
+     *
+     * @return {Object} An inline error message object
+     */
+    createActivityFeedApiError(): InlineError {
+        return {
+            title: messages.errorOccured,
+            content: messages.activityFeedItemApiError
+        };
+    }
+
+    /**
      * Handles a failed file version fetch
      *
      * @private
@@ -357,7 +369,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
             },
-            activityFeedError: getActivityFeedApiError()
+            activityFeedError: this.createActivityFeedApiError()
         });
         this.errorCallback(e);
     };
@@ -375,7 +387,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: getActivityFeedApiError()
+            activityFeedError: this.createActivityFeedApiError()
         });
         this.errorCallback(e);
     };
@@ -393,7 +405,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: getActivityFeedApiError()
+            activityFeedError: this.createActivityFeedApiError()
         });
         this.errorCallback(e);
     };
