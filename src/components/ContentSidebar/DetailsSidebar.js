@@ -38,8 +38,7 @@ type Props = {
     onDescriptionChange: Function,
     versions?: FileVersions,
     accessStatsError?: Errors,
-    fileError?: Errors,
-    versionError?: Errors
+    fileError?: Errors
 } & ExternalProps;
 
 const DetailsSidebar = ({
@@ -58,7 +57,6 @@ const DetailsSidebar = ({
     versions,
     accessStatsError,
     fileError,
-    versionError,
     retentionPolicy,
     onRetentionPolicyExtendClick
 }: Props) => (
@@ -66,12 +64,7 @@ const DetailsSidebar = ({
         {(hasVersions || hasNotices) && (
             <div className='bcs-details-content'>
                 {hasVersions && (
-                    <SidebarVersions
-                        onVersionHistoryClick={onVersionHistoryClick}
-                        versions={versions}
-                        file={file}
-                        {...versionError}
-                    />
+                    <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} file={file} />
                 )}
                 {hasNotices && <SidebarNotices file={file} />}
             </div>

@@ -76,7 +76,6 @@ type State = {
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
-    versionError?: Errors,
     activityFeedError?: Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors
@@ -115,7 +114,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         approverSelectorContacts: undefined,
         mentionSelectorContacts: undefined,
         fileError: undefined,
-        versionError: undefined,
         activityFeedError: undefined,
         accessStatsError: undefined,
         currentUserError: undefined
@@ -351,12 +349,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            versionError: {
-                maskError: {
-                    errorHeader: messages.versionHistoryErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
-                }
-            },
             activityFeedError: e
         });
         this.errorCallback(e);
@@ -525,7 +517,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchVersionsSuccessCallback = (versions: FileVersions): void => {
-        this.setState({ versions, versionError: undefined });
+        this.setState({ versions });
     };
 
     /**
@@ -1352,7 +1344,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             currentUser,
             accessStatsError,
             fileError,
-            versionError,
             activityFeedError,
             approverSelectorContacts,
             mentionSelectorContacts,
@@ -1382,7 +1373,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 detailsSidebarProps={{
                                     accessStats,
                                     accessStatsError,
-                                    versionError,
                                     fileError,
                                     onDescriptionChange: this.onDescriptionChange,
                                     ...detailsSidebarProps
