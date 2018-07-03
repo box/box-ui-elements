@@ -6,14 +6,6 @@
     border-top: solid 1px $off-white;
     display: flex;
 
-    div[contentEditable="true"] {
-        width: auto;
-    }
-
-    .public-DraftEditorPlaceholder-root {
-        margin: 8px 10px;
-    }
-
     .bcs-comment-input {
         @import '~box-react-ui/lib/styles/common/forms';
 
