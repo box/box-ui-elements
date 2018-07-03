@@ -21,6 +21,7 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    activityFeedError?: InlineError,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -492,7 +493,8 @@ class ActivityFeed extends React.Component<Props, State> {
             getMentionWithQuery,
             comments,
             tasks,
-            versions
+            versions,
+            activityFeedError
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -512,6 +514,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
+                            inlineError={activityFeedError}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}

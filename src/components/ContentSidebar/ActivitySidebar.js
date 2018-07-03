@@ -25,12 +25,11 @@ type Props = {
     comments?: Comments,
     tasks?: Tasks,
     versions?: FileVersions,
+    activityFeedError?: InlineError,
     currentUser?: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    commentsError?: Errors,
-    tasksError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
     getUserProfileUrl?: (string) => Promise<string>
 };
@@ -54,7 +53,8 @@ const ActivitySidebar = ({
     getMentionWithQuery,
     onVersionHistoryClick,
     getAvatarUrl,
-    getUserProfileUrl
+    getUserProfileUrl,
+    activityFeedError
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed
@@ -62,6 +62,7 @@ const ActivitySidebar = ({
             comments={comments}
             tasks={tasks}
             versions={versions}
+            activityFeedError={activityFeedError}
             approverSelectorContacts={approverSelectorContacts}
             mentionSelectorContacts={mentionSelectorContacts}
             currentUser={currentUser}
