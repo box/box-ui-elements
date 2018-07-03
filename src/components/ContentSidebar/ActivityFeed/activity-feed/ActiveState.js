@@ -8,6 +8,7 @@ import Comment from '../comment';
 import Task from '../task';
 import Version, { CollapsedVersion, VersionError } from '../version';
 import Keywords from '../keywords';
+import withErrorHandling from '../../withErrorHandling';
 
 type Props = {
     currentUser?: User,
@@ -115,4 +116,5 @@ const ActiveState = ({
     </ul>
 );
 
-export default ActiveState;
+export { ActiveState as ActiveStateComponent };
+export default withErrorHandling(ActiveState);
