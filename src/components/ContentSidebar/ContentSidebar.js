@@ -411,6 +411,22 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Handles a failed file task assignment fetch
+     *
+     * @private
+     * @param {Tasks} tasks - API Tasks
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchTaskAssignmentsErrorCallback = (tasks: Tasks, e: Error): void => {
+        this.setState({
+            tasks,
+            activityFeedError: this.createActivityFeedApiError()
+        });
+        this.errorCallback(e);
+    };
+
+    /**
      * Handles a failed file access stats fetch
      *
      * @private
@@ -1111,7 +1127,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTaskAssignments = (tasksWithoutAssignments: Tasks, shouldDestroy?: boolean = false): void => {
         const { fileId }: Props = this.props;
-        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
+        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId || !tasksWithoutAssignments) {
             return;
         }
 
@@ -1131,7 +1147,9 @@ class ContentSidebar extends PureComponent<Props, State> {
                 (assignments) => {
                     tasks = this.fetchTaskAssignmentsSuccessCallback(tasks, assignments);
                 },
-                this.fetchTasksErrorCallback,
+                (error) => {
+                    tasks = this.fetchTaskAssignmentsErrorCallback(tasks, error);
+                },
                 requestData
             );
             taskAssignmentPromises.push(promise);
