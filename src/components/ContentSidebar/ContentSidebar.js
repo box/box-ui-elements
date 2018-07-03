@@ -81,7 +81,7 @@ type State = {
     mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
     versionError?: Errors,
-    activityFeedError?: InlineError,
+    activityFeedError?: Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors
 };
@@ -339,18 +339,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     *  Constructs an Activity Feed error object that renders to an inline feed error
-     *
-     * @return {Object} An inline error message object
-     */
-    createActivityFeedApiError(): InlineError {
-        return {
-            title: messages.errorOccured,
-            content: messages.activityFeedItemApiError
-        };
-    }
-
-    /**
      * Handles a failed file version fetch
      *
      * @private
@@ -369,7 +357,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
             },
-            activityFeedError: this.createActivityFeedApiError()
+            activityFeedError: e
         });
         this.errorCallback(e);
     };
@@ -387,7 +375,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: this.createActivityFeedApiError()
+            activityFeedError: e
         });
         this.errorCallback(e);
     };
@@ -405,7 +393,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: this.createActivityFeedApiError()
+            activityFeedError: e
         });
         this.errorCallback(e);
     };
@@ -414,14 +402,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Handles a failed file task assignment fetch
      *
      * @private
-     * @param {Tasks} tasks - API Tasks
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchTaskAssignmentsErrorCallback = (tasks: Tasks, e: Error): void => {
+    fetchTaskAssignmentsErrorCallback = (e: Error): void => {
         this.setState({
-            tasks,
-            activityFeedError: this.createActivityFeedApiError()
+            activityFeedError: e
         });
         this.errorCallback(e);
     };
@@ -1127,7 +1113,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTaskAssignments = (tasksWithoutAssignments: Tasks, shouldDestroy?: boolean = false): void => {
         const { fileId }: Props = this.props;
-        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId || !tasksWithoutAssignments) {
+        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
             return;
         }
 
@@ -1147,9 +1133,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 (assignments) => {
                     tasks = this.fetchTaskAssignmentsSuccessCallback(tasks, assignments);
                 },
-                (error) => {
-                    tasks = this.fetchTaskAssignmentsErrorCallback(tasks, error);
-                },
+                this.fetchTaskAssignmentsErrorCallback,
                 requestData
             );
             taskAssignmentPromises.push(promise);
