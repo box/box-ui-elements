@@ -65,6 +65,10 @@ const versions = {
 };
 
 const file = {
+    id: '12345',
+    permissions: {
+        can_comment: true
+    },
     modified_at: 1234567891,
     restored_from: {
         id: first_version.id,
@@ -93,31 +97,19 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should render approval comment form if comment submit handler is passed in and comment permissions', () => {
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not render approval comment form if only comment submit handler is not passed in', () => {
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not render approval comment form if comment permissions are not present', () => {
-        const file = {
-            permissions: {
-                can_comment: false
-            }
-        };
+        file.permissions.can_comment = false;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
         expect(wrapper).toMatchSnapshot();
     });
@@ -130,11 +122,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
 
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
@@ -162,11 +150,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should call create comment handler and close input on valid comment submit', () => {
         const createCommentSpy = jest.fn().mockReturnValue(Promise.resolve({}));
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(
             <ActivityFeed file={file} currentUser={currentUser} onCommentCreate={createCommentSpy} />
         );
@@ -184,11 +168,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should call create task handler and close input on valid task submit', () => {
         const createTaskSpy = jest.fn();
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(
             <ActivityFeed
                 file={file}
@@ -222,9 +202,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('updateFeedItems()', () => {
         let wrapper;
         let instance;
-        const file = {
-            id: '12345'
-        };
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
             instance = wrapper.instance();
@@ -298,9 +275,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('clearFeedItems()', () => {
         let wrapper;
         let instance;
-        const file = {
-            id: '12345'
-        };
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
             instance = wrapper.instance();
