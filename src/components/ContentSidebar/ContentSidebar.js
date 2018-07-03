@@ -81,7 +81,8 @@ type State = {
     mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
     versionError?: Errors,
-    activityFeedError?: InlineError,
+    commentsError?: Errors,
+    tasksError?: Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors
 };
@@ -119,7 +120,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         mentionSelectorContacts: undefined,
         fileError: undefined,
         versionError: undefined,
-        activityFeedError: undefined,
+        commentsError: undefined,
+        tasksError: undefined,
         accessStatsError: undefined,
         currentUserError: undefined
     };
@@ -339,18 +341,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     *  Constructs an Activity Feed error object that renders to an inline feed error
-     *
-     * @return {Object} An inline error message object
-     */
-    createActivityFeedApiError(): InlineError {
-        return {
-            title: messages.errorOccured,
-            content: messages.activityFeedItemApiError
-        };
-    }
-
-    /**
      * Handles a failed file version fetch
      *
      * @private
@@ -359,17 +349,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchVersionsErrorCallback = (e: Error) => {
         this.setState({
-            versions: {
-                total_count: 0,
-                entries: []
-            },
+            versions: undefined,
             versionError: {
                 maskError: {
                     errorHeader: messages.versionHistoryErrorHeaderMessage,
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
-            },
-            activityFeedError: this.createActivityFeedApiError()
+            }
         });
         this.errorCallback(e);
     };
@@ -383,11 +369,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchCommentsErrorCallback = (e: Error) => {
         this.setState({
-            comments: {
-                total_count: 0,
-                entries: []
-            },
-            activityFeedError: this.createActivityFeedApiError()
+            comments: undefined,
+            commentsError: e
         });
         this.errorCallback(e);
     };
@@ -401,13 +384,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTasksErrorCallback = (e: Error) => {
         this.setState({
-            tasks: {
-                total_count: 0,
-                entries: []
-            },
-            activityFeedError: this.createActivityFeedApiError()
+            tasks: undefined,
+            tasksError: e
         });
-        this.errorCallback(e);
     };
 
     /**
@@ -534,7 +513,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCommentsSuccessCallback = (comments: Comments): void => {
-        this.setState({ comments });
+        this.setState({ comments, commentsError: undefined });
     };
 
     /**
@@ -1111,7 +1090,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTaskAssignments = (tasksWithoutAssignments: Tasks, shouldDestroy?: boolean = false): void => {
         const { fileId }: Props = this.props;
-        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
+        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId || !tasksWithoutAssignments) {
             return;
         }
 
@@ -1351,7 +1330,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             accessStatsError,
             fileError,
             versionError,
-            activityFeedError,
+            commentsError,
+            tasksError,
             approverSelectorContacts,
             mentionSelectorContacts,
             currentUserError
@@ -1395,9 +1375,11 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onSkillChange={this.onSkillChange}
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
+                                versionError={versionError}
                                 tasks={tasks}
+                                tasksError={tasksError}
                                 comments={comments}
-                                activityFeedError={activityFeedError}
+                                commentsError={commentsError}
                                 currentUser={currentUser}
                                 currentUserError={currentUserError}
                                 onCommentCreate={this.createComment}
