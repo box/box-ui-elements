@@ -50,6 +50,7 @@ class TaskAssignments extends Base {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
             errorCallback(e);
+            return;
         }
 
         const requestData = {
