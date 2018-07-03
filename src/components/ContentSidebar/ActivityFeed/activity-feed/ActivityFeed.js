@@ -414,6 +414,32 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
+     * Adds a versions entry if the current file version was restored from a previous version
+     *
+     * @param {FileVersions} versions - API returned file versions for this file
+     * @return {FileVersions} modified versions array including the version restore
+     */
+    updateRestoredVersions(versions: FileVersions) {
+        const { file } = this.props;
+        const { restored_from, modified_at } = file;
+
+        if (restored_from) {
+            const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
+
+            if (restoredVersion) {
+                // $FlowFixMe
+                versions.entries.push({
+                    ...restoredVersion,
+                    created_at: modified_at,
+                    action: 'restore'
+                });
+            }
+        }
+
+        return versions;
+    }
+
+    /**
      * Checks to see if feed items should be added to the feed, and invokes the add and sort.
      *
      * @param {Comments} comments - API returned comments for this file
@@ -429,7 +455,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (shouldSort && (isFeedEmpty || !feedItems.length)) {
             // $FlowFixMe
-            this.sortFeedItems(comments, tasks, versions);
+            this.sortFeedItems(comments, tasks, this.updateRestoredVersions(versions));
         }
     }
 
@@ -445,23 +471,6 @@ class ActivityFeed extends React.Component<Props, State> {
             // $FlowFixMe
             feedItems.push(...itemContainer.entries);
         });
-
-        const { file } = this.props;
-        const { restored_from, modified_at } = file;
-        if (restored_from) {
-            const restoredVersion = feedItems.find(
-                (feedItem) => feedItem.type === 'file_version' && feedItem.id === restored_from.id
-            );
-
-            if (restoredVersion) {
-                // $FlowFixMe
-                feedItems.push({
-                    ...restoredVersion,
-                    created_at: modified_at,
-                    action: 'restore'
-                });
-            }
-        }
 
         feedItems.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
 
