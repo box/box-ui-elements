@@ -80,7 +80,8 @@ type State = {
     commentsError?: Errors,
     tasksError?: Errors,
     accessStatsError?: Errors,
-    currentUserError?: Errors
+    currentUserError?: Errors,
+    isCollapsed?: boolean
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -139,7 +140,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             apiHost,
             clientName,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
+            isCollapsed
         } = props;
 
         this.id = uniqueid('bcs_');
@@ -155,7 +157,10 @@ class ContentSidebar extends PureComponent<Props, State> {
         });
 
         // Clone initial state to allow for state reset on new files
-        this.state = cloneDeep(this.initialState);
+        this.state = cloneDeep({
+            ...this.initialState,
+            isCollapsed
+        });
     }
 
     /**
@@ -208,7 +213,10 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (hasFileIdChanged) {
             this.fetchData(nextProps);
         } else if (hasVisibilityChanged) {
-            this.setState({ view: this.getDefaultSidebarView(nextProps.isCollapsed, file) });
+            this.setState({
+                isCollapsed: nextProps.isCollapsed,
+                view: this.getDefaultSidebarView(nextProps.isCollapsed, file)
+            });
         }
     }
 
@@ -491,7 +499,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        this.setState({ file, view: this.getDefaultSidebarView(this.props.isCollapsed, file) });
+        this.setState({ file, view: this.getDefaultSidebarView(this.state.isCollapsed, file) });
     };
 
     /**
@@ -1365,14 +1373,15 @@ class ContentSidebar extends PureComponent<Props, State> {
             tasksError,
             approverSelectorContacts,
             mentionSelectorContacts,
-            currentUserError
+            currentUserError,
+            isCollapsed
         }: State = this.state;
 
         const styleClassName = classNames(
             'be bcs',
             {
                 [`bcs-${view}`]: !!view,
-                'bcs-is-open': !!view
+                'bcs-is-open': !!view || !isCollapsed
             },
             className
         );
