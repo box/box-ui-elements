@@ -5,6 +5,7 @@ import ActivityFeed from '../ActivityFeed';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
+
 const comments = {
     total_count: 1,
     entries: [
@@ -37,12 +38,24 @@ const tasks = {
     ]
 };
 
+const first_version = {
+    action: 'upload',
+    type: 'file_version',
+    id: 123,
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    trashed_at: 1234567891,
+    modified_at: 1234567891,
+    modified_by: { name: 'Akon', id: 11 }
+};
+
 const versions = {
     total_count: 1,
     entries: [
+        first_version,
         {
+            action: 'delete',
             type: 'file_version',
-            id: 123,
+            id: 234,
             created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
             trashed_at: 1234567891,
             modified_at: 1234567891,
@@ -51,8 +64,16 @@ const versions = {
     ]
 };
 
+const file = {
+    modified_at: 1234567891,
+    restored_from: {
+        id: first_version.id,
+        type: first_version.type
+    }
+};
+
 const currentUser = { name: 'Kanye West', id: 10 };
-const getWrapper = (props) => shallow(<ActivityFeed currentUser={currentUser} {...props} />);
+const getWrapper = (props) => shallow(<ActivityFeed file={file} currentUser={currentUser} {...props} />);
 
 describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render empty loading state', () => {
@@ -66,7 +87,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             entries: []
         };
         const wrapper = shallow(
-            <ActivityFeed currentUser={currentUser} comments={items} tasks={items} versions={items} />
+            <ActivityFeed file={file} currentUser={currentUser} comments={items} tasks={items} versions={items} />
         );
         expect(wrapper).toMatchSnapshot();
     });
@@ -103,7 +124,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should correctly render activity state', () => {
         const wrapper = shallow(
-            <ActivityFeed currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
+            <ActivityFeed file={file} currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
         expect(wrapper).toMatchSnapshot();
     });
@@ -318,7 +339,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('componentWillReceiveProps()', () => {
         test('should invoke sortFeedItems() with new props', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
             const instance = wrapper.instance();
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
@@ -329,7 +350,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() once feedItems has already been set', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
             const instance = wrapper.instance();
             instance.componentWillReceiveProps(props);
 
@@ -341,7 +362,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() if all feed items are not present', () => {
             const props = { comments, tasks };
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
             const instance = wrapper.instance();
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
@@ -412,6 +433,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
             instance = wrapper.instance();
+            instance.updateRestoredVersions = jest.fn();
         });
 
         test('should replace the item with matching uuid in feedItems', () => {
