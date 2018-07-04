@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should correctly render empty state 1`] = `
+<ActiveState
+  items={Array []}
+/>
+`;
+
+exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should correctly render with an inline error if some feed items fail to fetch 1`] = `
+<React.Fragment>
+  <InlineError
+    title={
+      <FormattedMessage
+        0="t"
+      />
+    }
+  >
+    <FormattedMessage
+      0="m"
+    />
+  </InlineError>
+  <ActiveState
+    items={Array []}
+  />
+</React.Fragment>
+`;
+
+exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should correctly render with comments, tasks, versions 1`] = `
+<ActiveState
+  items={
+    Array [
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "id": 123,
+        "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
+        "type": "comment",
+      },
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "created_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "dueAt": "2018-07-03T14:43:52-07:00",
+        "id": 234,
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "modified_by": Object {
+          "id": 10,
+          "name": "Jay-Z",
+        },
+        "tagged_message": "test",
+        "task_assignment_collection": Object {
+          "entries": Array [],
+          "total_count": 0,
+        },
+        "type": "task",
+      },
+      Object {
+        "created_at": "2018-07-03T14:43:52-07:00",
+        "id": 345,
+        "modified_at": "2018-07-03T14:43:52-07:00",
+        "modified_by": Object {
+          "id": 11,
+          "name": "Akon",
+        },
+        "trashed_at": "2018-07-03T14:43:52-07:00",
+        "type": "file_version",
+      },
+    ]
+  }
+/>
+`;
