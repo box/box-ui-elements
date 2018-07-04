@@ -774,7 +774,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * Sorts and formats assignments, and then adds them to their task. 
      *
 
-     * @param {TaskAssignment} data - Task create success callback
+     * @param {Task} task - Task to which the assignments belong
+     * @param {Task} assignments - List of task assignments
      * @return {Task}
      */
     appendAssignmentsToTask(task: Task, assignments: Array<TaskAssignment>) {
@@ -792,6 +793,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 resolution_state
             };
         });
+
         // Increment the assignment collection count by the number of new assignments
         task.task_assignment_collection.total_count += assignments.length;
         return task;
