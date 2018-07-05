@@ -13,7 +13,6 @@
 .bce-item-row {
     border-left: 2px solid transparent;
     border-top: 1px solid $off-white;
-    outline: none;
 
     .bce-item-coloumn {
         color: $sevens;
@@ -95,7 +94,6 @@
         &:hover,
         &:focus {
             color: $dark-cerulean;
-            outline: none;
         }
     }
 }
