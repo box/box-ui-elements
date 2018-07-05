@@ -435,7 +435,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {FileVersions} versions - API returned file versions for this file
      * @return {FileVersions} modified versions array including the version restore
      */
-    addRestoredVersions(versions: FileVersions) {
+    addRestoredVersion(versions: FileVersions) {
         const { file } = this.props;
         const { restored_from, modified_at } = file;
 
@@ -472,7 +472,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (shouldSort && (isFeedEmpty || !feedItems.length)) {
             // $FlowFixMe
-            this.sortFeedItems(comments, tasks, this.addRestoredVersions(versions));
+            this.sortFeedItems(comments, tasks, this.addRestoredVersion(versions));
         }
     }
 

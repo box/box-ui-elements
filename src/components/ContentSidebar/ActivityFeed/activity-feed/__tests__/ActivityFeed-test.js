@@ -768,12 +768,12 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         });
     });
 
-    describe('addRestoredVersions()', () => {
+    describe('addRestoredVersion()', () => {
         test('should return versions array with added entries for restored versions', () => {
             const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} versions={versions} />);
             const instance = wrapper.instance();
 
-            const versionsWithRestore = instance.addRestoredVersions(versions);
+            const versionsWithRestore = instance.addRestoredVersion(versions);
             expect(versionsWithRestore.entries.length).toEqual(3);
         });
     });
