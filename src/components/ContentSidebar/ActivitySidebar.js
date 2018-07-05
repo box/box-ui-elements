@@ -17,7 +17,6 @@ type ExternalProps = {
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
-    onVersionHistoryClick?: Function,
     getUserProfileUrl?: (string) => Promise<string>
 };
 
@@ -34,7 +33,8 @@ type Props = {
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
+    onVersionHistoryClick?: Function
 } & ExternalProps;
 
 const ActivitySidebar = ({
