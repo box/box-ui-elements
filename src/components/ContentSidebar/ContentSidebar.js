@@ -36,6 +36,7 @@ import messages from '../messages';
 import { getBadItemError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { ActivitySidebarProps } from './ActivitySidebar';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -51,6 +52,7 @@ type Props = {
     currentUser?: User,
     getPreviewer: Function,
     hasSkills: boolean,
+    activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
     hasMetadata: boolean,
     hasActivityFeed: boolean,
@@ -61,12 +63,7 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onCommentCreate?: Function,
-    onCommentDelete?: Function,
-    onTaskCreate?: Function,
-    onTaskDelete?: Function,
-    onTaskUpdate?: Function,
-    getUserProfileUrl?: (string) => Promise<string>
+    onVersionHistoryClick?: Function
 };
 
 type State = {
@@ -81,8 +78,7 @@ type State = {
     mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
     versionError?: Errors,
-    commentsError?: Errors,
-    tasksError?: Errors,
+    activityFeedError?: Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors
 };
@@ -105,6 +101,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasSkills: false,
         hasMetadata: false,
         hasActivityFeed: false,
+        activitySidebarProps: {},
         detailsSidebarProps: {}
     };
 
@@ -120,8 +117,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         mentionSelectorContacts: undefined,
         fileError: undefined,
         versionError: undefined,
-        commentsError: undefined,
-        tasksError: undefined,
+        activityFeedError: undefined,
         accessStatsError: undefined,
         currentUserError: undefined
     };
@@ -315,6 +311,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     setFileDescriptionSuccessCallback = (file: BoxItem): void => {
+        const { onDescriptionChange = noop } = this.props.detailsSidebarProps;
+        onDescriptionChange(file);
+
         this.setState({ file, fileError: undefined });
     };
 
@@ -349,13 +348,17 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchVersionsErrorCallback = (e: Error) => {
         this.setState({
-            versions: undefined,
+            versions: {
+                total_count: 0,
+                entries: []
+            },
             versionError: {
                 maskError: {
                     errorHeader: messages.versionHistoryErrorHeaderMessage,
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
-            }
+            },
+            activityFeedError: e
         });
         this.errorCallback(e);
     };
@@ -369,8 +372,11 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchCommentsErrorCallback = (e: Error) => {
         this.setState({
-            comments: undefined,
-            commentsError: e
+            comments: {
+                total_count: 0,
+                entries: []
+            },
+            activityFeedError: e
         });
         this.errorCallback(e);
     };
@@ -384,9 +390,27 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTasksErrorCallback = (e: Error) => {
         this.setState({
-            tasks: undefined,
-            tasksError: e
+            tasks: {
+                total_count: 0,
+                entries: []
+            },
+            activityFeedError: e
         });
+        this.errorCallback(e);
+    };
+
+    /**
+     * Handles a failed file task assignment fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchTaskAssignmentsErrorCallback = (e: Error): void => {
+        this.setState({
+            activityFeedError: e
+        });
+        this.errorCallback(e);
     };
 
     /**
@@ -513,7 +537,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchCommentsSuccessCallback = (comments: Comments): void => {
-        this.setState({ comments, commentsError: undefined });
+        this.setState({ comments });
     };
 
     /**
@@ -845,7 +869,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         dueAt?: string
     ) => {
         const { file } = this.state;
-        const { onTaskUpdate = noop } = this.props;
+        const { onTaskUpdate = noop } = this.props.activitySidebarProps;
 
         if (!file) {
             throw getBadItemError();
@@ -949,7 +973,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         errorCallback: (e: Error, taskId: string) => void = noop
     ) => {
         const { file } = this.state;
-        const { onTaskDelete = noop } = this.props;
+        const { onTaskDelete = noop } = this.props.activitySidebarProps;
 
         if (!file) {
             throw getBadItemError();
@@ -1011,7 +1035,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         errorCallback: (e: Error, commentId: string) => void = noop
     ) => {
         const { file } = this.state;
-        const { onCommentDelete = noop } = this.props;
+        const { onCommentDelete = noop } = this.props.activitySidebarProps;
 
         if (!file) {
             throw getBadItemError();
@@ -1090,7 +1114,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTaskAssignments = (tasksWithoutAssignments: Tasks, shouldDestroy?: boolean = false): void => {
         const { fileId }: Props = this.props;
-        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId || !tasksWithoutAssignments) {
+        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
             return;
         }
 
@@ -1110,7 +1134,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 (assignments) => {
                     tasks = this.fetchTaskAssignmentsSuccessCallback(tasks, assignments);
                 },
-                this.fetchTasksErrorCallback,
+                this.fetchTaskAssignmentsErrorCallback,
                 requestData
             );
             taskAssignmentPromises.push(promise);
@@ -1316,8 +1340,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasMetadata,
             hasActivityFeed,
             className,
-            getUserProfileUrl,
-            detailsSidebarProps
+            activitySidebarProps,
+            detailsSidebarProps,
+            onVersionHistoryClick
         }: Props = this.props;
         const {
             file,
@@ -1330,8 +1355,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             accessStatsError,
             fileError,
             versionError,
-            commentsError,
-            tasksError,
+            activityFeedError,
             approverSelectorContacts,
             mentionSelectorContacts,
             currentUserError
@@ -1365,6 +1389,15 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     onDescriptionChange: this.onDescriptionChange,
                                     ...detailsSidebarProps
                                 }}
+                                activitySidebarProps={{
+                                    ...activitySidebarProps,
+                                    onCommentCreate: this.createComment,
+                                    onCommentDelete: this.deleteComment,
+                                    onTaskCreate: this.createTask,
+                                    onTaskDelete: this.deleteTask,
+                                    onTaskUpdate: this.updateTask,
+                                    onTaskAssignmentUpdate: this.updateTaskAssignment
+                                }}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}
@@ -1375,26 +1408,18 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onSkillChange={this.onSkillChange}
                                 accessStatsError={accessStatsError}
                                 fileError={fileError}
-                                versionError={versionError}
                                 tasks={tasks}
-                                tasksError={tasksError}
                                 comments={comments}
-                                commentsError={commentsError}
+                                activityFeedError={activityFeedError}
                                 currentUser={currentUser}
                                 currentUserError={currentUserError}
-                                onCommentCreate={this.createComment}
-                                onCommentDelete={this.deleteComment}
-                                onTaskCreate={this.createTask}
-                                onTaskDelete={this.deleteTask}
-                                onTaskUpdate={this.updateTask}
-                                onTaskAssignmentUpdate={this.updateTaskAssignment}
-                                getUserProfileUrl={getUserProfileUrl}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={this.getAvatarUrl}
                                 onToggle={this.onToggle}
+                                onVersionHistoryClick={onVersionHistoryClick}
                             />
                         ) : (
                             <div className='bcs-loading'>

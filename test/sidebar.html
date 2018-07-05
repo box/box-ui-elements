@@ -80,9 +80,6 @@
                         hasAccessStats: true,
                         hasVersions: true,
                         hasNotices: true,
-                        onVersionHistoryClick : function(){
-                            alert('hello, world!');
-                        },
                         onAccessStatsClick: () => {
                             alert('Hello, world!');
                         },
@@ -92,6 +89,9 @@
                             retentionPolicyDescription: 'test policy (1 year retention & auto-deletion'
                         },
                         onRetentionPolicyExtendClick: () => alert('hello world!')
+                    },
+                    onVersionHistoryClick : function(){
+                        alert('hello, world!');
                     }
                 });
 
@@ -147,7 +147,9 @@
                     },
                     hasSkills: true,
                     hasActivityFeed:true,
-                    getUserProfileUrl: (id) => { return Promise.resolve('#'); }
+                    activitySidebarProps: {
+                        getUserProfileUrl: (id) => { return Promise.resolve('#'); }
+                    }
                 });
             }
             load();
