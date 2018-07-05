@@ -65,18 +65,17 @@ class ActivityFeed extends React.Component<Props, State> {
     /**
      *  Constructs an Activity Feed error object that renders to an inline feed error
      *
-     * @return {Object} An inline error message object
+     * @return {Errors} An inline error message object
      */
-    createActivityFeedApiError(e?: Errors): InlineError {
-        if (!e) {
-            // $FlowFixMe
-            return e;
-        }
-
-        return {
-            title: messages.errorOccured,
-            content: messages.activityFeedItemApiError
-        };
+    createActivityFeedApiError(e?: Errors): ?Errors {
+        return e
+            ? {
+                inlineError: {
+                    title: messages.errorOccured,
+                    content: messages.activityFeedItemApiError
+                }
+            }
+            : {};
     }
 
     /**
@@ -491,6 +490,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
         const isLoading = !this.areFeedItemsLoaded(comments, tasks, versions);
+        const activityFeedApiError = this.createActivityFeedApiError(activityFeedError);
 
         return (
             // eslint-disable-next-line
@@ -505,7 +505,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
-                            inlineError={this.createActivityFeedApiError(activityFeedError)}
+                            {...activityFeedApiError}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
