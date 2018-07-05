@@ -27,7 +27,6 @@ type ExternalProps = {
     retentionPolicy?: Object,
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
-    onVersionHistoryClick?: Function,
     onRetentionPolicyExtendClick?: Function,
     onDescriptionChange?: Function
 };
@@ -39,7 +38,8 @@ type Props = {
     versions?: FileVersions,
     accessStatsError?: Errors,
     fileError?: Errors,
-    versionError?: Errors
+    versionError?: Errors,
+    onVersionHistoryClick?: Function
 } & ExternalProps;
 
 const DetailsSidebar = ({
