@@ -1098,7 +1098,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTaskAssignments = (tasksWithoutAssignments: Tasks, shouldDestroy?: boolean = false): void => {
         const { fileId }: Props = this.props;
-        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId) {
+        if (!SidebarUtils.canHaveSidebar(this.props) || !fileId || !tasksWithoutAssignments) {
             return;
         }
 
@@ -1381,7 +1381,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             'be bcs',
             {
                 [`bcs-${view}`]: !!view,
-                'bcs-is-open': !!view || !isCollapsed
+                'bcs-is-open': !isCollapsed
             },
             className
         );

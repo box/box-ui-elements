@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentUploader/OverallUploadsProgressBar should render correctly when view is VIEW_ERROR 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Some Uploads Failed"
+      id="be.uploadsManagerUploadFailed"
+    />
+  </span>
+  <ProgressBar
+    percent={0}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/OverallUploadsProgressBar should render correctly when view is VIEW_UPLOAD_EMPTY 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Completed"
+      id="be.uploadsManagerUploadComplete"
+    />
+  </span>
+  <ProgressBar
+    percent={2}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/OverallUploadsProgressBar should render correctly when view is VIEW_UPLOAD_IN_PROGRESS 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Uploading"
+      id="be.uploadsManagerUploadInProgress"
+    />
+  </span>
+  <ProgressBar
+    percent={2}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/OverallUploadsProgressBar should render correctly when view is VIEW_UPLOAD_SUCCESS 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Completed"
+      id="be.uploadsManagerUploadComplete"
+    />
+  </span>
+  <ProgressBar
+    percent={100}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;

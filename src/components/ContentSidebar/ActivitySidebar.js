@@ -17,6 +17,7 @@ type ExternalProps = {
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
+    onVersionHistoryClick?: Function,
     getUserProfileUrl?: (string) => Promise<string>
 };
 
@@ -24,19 +25,16 @@ type Props = {
     file: BoxItem,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
-    onVersionHistoryClick?: Function,
     translations?: Translations,
     comments?: Comments,
     tasks?: Tasks,
     versions?: FileVersions,
+    activityFeedError?: InlineError,
     currentUser?: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    commentsError?: Errors,
-    tasksError?: Errors,
-    getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>
+    getAvatarUrl: (string) => Promise<?string>
 } & ExternalProps;
 
 const ActivitySidebar = ({
@@ -58,7 +56,8 @@ const ActivitySidebar = ({
     getMentionWithQuery,
     onVersionHistoryClick,
     getAvatarUrl,
-    getUserProfileUrl
+    getUserProfileUrl,
+    activityFeedError
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed
@@ -66,6 +65,7 @@ const ActivitySidebar = ({
             comments={comments}
             tasks={tasks}
             versions={versions}
+            activityFeedError={activityFeedError}
             approverSelectorContacts={approverSelectorContacts}
             mentionSelectorContacts={mentionSelectorContacts}
             currentUser={currentUser}
