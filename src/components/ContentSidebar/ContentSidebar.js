@@ -36,6 +36,7 @@ import messages from '../messages';
 import { getBadItemError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { ActivitySidebarProps } from './ActivitySidebar';
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -51,6 +52,7 @@ type Props = {
     currentUser?: User,
     getPreviewer: Function,
     hasSkills: boolean,
+    activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
     hasMetadata: boolean,
     hasActivityFeed: boolean,
@@ -60,13 +62,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
-    responseInterceptor?: Function,
-    onCommentCreate?: Function,
-    onCommentDelete?: Function,
-    onTaskCreate?: Function,
-    onTaskDelete?: Function,
-    onTaskUpdate?: Function,
-    getUserProfileUrl?: (string) => Promise<string>
+    responseInterceptor?: Function
 };
 
 type State = {
@@ -104,6 +100,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasSkills: false,
         hasMetadata: false,
         hasActivityFeed: false,
+        activitySidebarProps: {},
         detailsSidebarProps: {}
     };
 
@@ -313,6 +310,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     setFileDescriptionSuccessCallback = (file: BoxItem): void => {
+        const { onDescriptionChange = noop } = this.props.detailsSidebarProps;
+        onDescriptionChange(file);
+
         this.setState({ file, fileError: undefined });
     };
 
@@ -868,7 +868,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         dueAt?: string
     ) => {
         const { file } = this.state;
-        const { onTaskUpdate = noop } = this.props;
+        const { onTaskUpdate = noop } = this.props.activitySidebarProps;
 
         if (!file) {
             throw getBadItemError();
@@ -972,7 +972,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         errorCallback: (e: Error, taskId: string) => void = noop
     ) => {
         const { file } = this.state;
-        const { onTaskDelete = noop } = this.props;
+        const { onTaskDelete = noop } = this.props.activitySidebarProps;
 
         if (!file) {
             throw getBadItemError();
@@ -1034,7 +1034,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         errorCallback: (e: Error, commentId: string) => void = noop
     ) => {
         const { file } = this.state;
-        const { onCommentDelete = noop } = this.props;
+        const { onCommentDelete = noop } = this.props.activitySidebarProps;
 
         if (!file) {
             throw getBadItemError();
@@ -1339,7 +1339,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasMetadata,
             hasActivityFeed,
             className,
-            getUserProfileUrl,
+            activitySidebarProps,
             detailsSidebarProps
         }: Props = this.props;
         const {
@@ -1387,6 +1387,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     onDescriptionChange: this.onDescriptionChange,
                                     ...detailsSidebarProps
                                 }}
+                                activitySidebarProps={activitySidebarProps}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}
@@ -1408,7 +1409,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 onTaskDelete={this.deleteTask}
                                 onTaskUpdate={this.updateTask}
                                 onTaskAssignmentUpdate={this.updateTaskAssignment}
-                                getUserProfileUrl={getUserProfileUrl}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}
                                 approverSelectorContacts={approverSelectorContacts}
