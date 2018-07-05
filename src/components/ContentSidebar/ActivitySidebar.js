@@ -10,17 +10,21 @@ import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
 
-type Props = {
-    file: BoxItem,
+type ExternalProps = {
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
+    onVersionHistoryClick?: Function,
+    getUserProfileUrl?: (string) => Promise<string>
+};
+
+type Props = {
+    file: BoxItem,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
-    onVersionHistoryClick?: Function,
     translations?: Translations,
     comments?: Comments,
     tasks?: Tasks,
@@ -30,9 +34,8 @@ type Props = {
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>
-};
+    getAvatarUrl: (string) => Promise<?string>
+} & ExternalProps;
 
 const ActivitySidebar = ({
     file,
@@ -82,4 +85,5 @@ const ActivitySidebar = ({
     </SidebarContent>
 );
 
+export type ActivitySidebarProps = ExternalProps;
 export default ActivitySidebar;
