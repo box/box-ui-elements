@@ -101,7 +101,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render activity state', () => {
+    test('should correctly render active state', () => {
         const wrapper = shallow(
             <ActivityFeed currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
@@ -749,6 +749,22 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                     done();
                 }
             );
+        });
+    });
+
+    describe('createActivityFeedApiError()', () => {
+        test('returns an Errors object if an API error occured', () => {
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const instance = wrapper.instance();
+            const error = instance.createActivityFeedApiError({});
+            expect(error.inlineError).not.toBeUndefined();
+        });
+
+        test('should return an empty object if no API error occured', () => {
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const instance = wrapper.instance();
+            const error = instance.createActivityFeedApiError();
+            expect(error.inlineError).toBeUndefined();
         });
     });
 });
