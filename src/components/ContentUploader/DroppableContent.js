@@ -10,45 +10,6 @@ import makeDroppable from '../Droppable';
 
 import './DroppableContent.scss';
 
-/**
- * Definition for drag and drop behavior.
- */
-const dropDefinition = {
-    /**
-     * Validates whether a file can be dropped or not.
-     */
-    dropValidator: (props, dataTransfer) => {
-        const { allowedTypes } = props;
-        return [].some.call(dataTransfer.types, (type) => allowedTypes.indexOf(type) > -1);
-    },
-
-    /**
-     * Determines what happens after a file is dropped
-     */
-    onDrop: (event, props) => {
-        let { dataTransfer: { files } } = event;
-
-        // @TODO: DataTransferItem upload
-        // const { dataTransfer: { items } } = event;
-        // if (items) {
-        //     props.addDataTransferItems(items);
-        //     return;
-        // }
-
-        // This filters out all files without an extension since there is no other
-        // good way to filter out folders
-        /* eslint-disable no-redeclare */
-        files = [].filter.call(files, (file) => {
-            const { name } = file;
-            const extension = name.substr(name.lastIndexOf('.') + 1);
-            return extension.length !== name.length;
-        });
-        /* eslint-enable no-redeclare */
-
-        props.addFiles(files);
-    }
-};
-
 type Props = {
     canDrop: boolean,
     isOver: boolean,
@@ -57,8 +18,28 @@ type Props = {
     items: UploadItem[],
     addFiles: Function,
     onClick: Function,
-    addDataTransferItems: Function,
+    addDataTransferItemsToUploadQueue: Function,
     isFolderUploadEnabled: boolean
+};
+
+/**
+ * Definition for drag and drop behavior.
+ */
+const dropDefinition = {
+    /**
+     * Validates whether a file can be dropped or not.
+     */
+    dropValidator: ({ allowedTypes }: { allowedTypes: Array<string> }, { types }: { types: Array<string> }) =>
+        Array.from(types).some((type) => allowedTypes.indexOf(type) > -1),
+
+    /**
+     * Determines what happens after a file is dropped
+     */
+    onDrop: (event, { addDataTransferItemsToUploadQueue }: Props) => {
+        const { dataTransfer: { items } } = event;
+
+        addDataTransferItemsToUploadQueue(items);
+    }
 };
 
 const DroppableContent = makeDroppable(dropDefinition)(

@@ -48,9 +48,9 @@ class Tasks extends Base {
         successCallback: Function,
         errorCallback: Function,
         params?: Object
-    ): Promise<any> {
+    ): void {
         const url = `${this.tasksUrl(taskId)}/assignments`;
-        return this.get({ id, successCallback, errorCallback, params, url });
+        this.get({ id, successCallback, errorCallback, params, url });
     }
 
     /**
