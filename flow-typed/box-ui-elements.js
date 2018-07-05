@@ -267,10 +267,7 @@ type BoxItem = {
     file_version?: BoxItemVersion,
     is_download_available: boolean,
     version_number?: string,
-    restored_from?: {
-        id: 'string',
-        type: 'file_version'
-    }
+    restored_from?: BoxItemVersion
 };
 
 type BoxItemCollection = {
