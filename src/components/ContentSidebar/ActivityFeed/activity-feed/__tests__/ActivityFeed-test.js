@@ -627,7 +627,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             );
         });
 
-        test('should invoke createCommentSuccessCallback() with new comment and id on success creating', () => {
+        test('should invoke createTaskSuccessCallback() with new comment and id on success creating', () => {
             const onTaskCreate = (textContent, assignees, dueAt, onSuccess) => {
                 const task = {
                     assignees,

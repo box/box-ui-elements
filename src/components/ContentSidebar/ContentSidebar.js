@@ -800,6 +800,22 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Handles a failed task assignment create
+     *
+     * @param {Task} task - The task for which the assignment create failed
+     * @param {Task} e - The API error
+     * @param {Function} errorCallback - Passed in error callback
+
+     * @return {void}
+     */
+    createTaskAssignmentErrorCallback(e: Error, task: Task, errorCallback: Function) {
+        this.errorCallback(e);
+        errorCallback(e);
+        // Attempt to delete the task due to it's bad assignment
+        this.deleteTask(task.id);
+    }
+
+    /**
      * Adds a task to the tasks state and increases total_count.
      *
      * @param {Task} task - The newly created task from the API
@@ -835,10 +851,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                     assignTo: { id: assignee.id },
                     successCallback: (data: TaskAssignment) => resolve(data),
                     errorCallback: (e) => {
-                        this.errorCallback(e);
-                        errorCallback(e);
-                        // Attempt to delete the task due to it's bad assignment
-                        this.deleteTask(task.id);
+                        this.createTaskAssignmentErrorCallback(e, task, errorCallback);
                         reject();
                     }
                 });

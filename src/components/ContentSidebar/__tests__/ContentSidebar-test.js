@@ -724,6 +724,61 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
+    describe('appendAssignmentsToTask', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should correctly format a task with assignment, increment assignment count', () => {
+            const task = {
+                task_assignment_collection: {
+                    entries: [],
+                    total_count: 0
+                }
+            };
+
+            const assignments = [
+                { id: '1', assigned_to: { id: '1234' }, message: 'foo', resolution_state: 'completed' }
+            ];
+            const expectedResult = {
+                task_assignment_collection: {
+                    entries: [{ ...assignments[0], type: 'task_assignment' }],
+                    total_count: 1
+                }
+            };
+
+            const result = instance.appendAssignmentsToTask(task, assignments);
+            expect(result.task_assignment_collection.total_count).toBe(1);
+            expect(result).toEqual(expectedResult);
+        });
+    });
+
+    describe('createTaskAssignmentErrorCallback', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should call error callbacks and attempt to delete bad task', () => {
+            instance.deleteTask = jest.fn();
+            instance.errorCallback = jest.fn();
+            const localErrorCallback = jest.fn();
+            const task = { id: 'foo' };
+            const e = new Error();
+
+            instance.createTaskAssignmentErrorCallback(e, task, localErrorCallback);
+
+            expect(instance.deleteTask).toBeCalledWith(task.id);
+            expect(instance.errorCallback).toBeCalled();
+            expect(localErrorCallback).toBeCalled();
+        });
+    });
+
     describe('createTaskSuccessCallback()', () => {
         let instance;
         let wrapper;
@@ -739,7 +794,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance = wrapper.instance();
             instance.setState({ file });
             instance.api = api;
-            instance.createTaskAssignmentObject = jest.fn();
             assignees = [{ id: '1', name: 'A. User' }, { id: '2', name: 'B. User' }];
             task = {
                 type: 'task',
@@ -764,7 +818,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 createTaskAssignment: ({ successCallback }) => {
                     const data = { id: 1 };
                     successCallback(data);
-                    expect(instance.createTaskAssignmentObject).toBeCalledWith(data);
                 }
             };
 
@@ -772,19 +825,19 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 task,
                 assignees,
                 () => {
-                    expect(instance.createTaskAssignmentObject).toBeCalledTwice();
+                    expect(instance.createTaskAssignment).toBeCalledTwice();
                 },
                 () => {}
             );
         });
 
-        test('should attempt to delete task on assignment creation failure', () => {
-            instance.deleteTask = jest.fn();
+        test('should handle a failed task assignment create', () => {
+            instance.createTaskAssignmentErrorCallback = jest.fn();
 
             taskAssignmentsAPI = {
                 createTaskAssignment: ({ task: erroredTask, errorCallback }) => {
                     errorCallback();
-                    expect(instance.deleteTask).toBeCalledWith(erroredTask.id);
+                    expect(instance.createTaskAssignmentErrorCallback(erroredTask.id));
                 }
             };
 
@@ -799,6 +852,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
 
         test('should call the success callback and update the state once all assignments have been created', () => {
+            instance.appendAssignmentsToTask = jest.fn();
+
             taskAssignmentsAPI = {
                 createTaskAssignment: ({ successCallback: assignmentSuccessCallback }) => {
                     const data = { id: 1 };
@@ -817,6 +872,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 task,
                 assignees,
                 () => {
+                    expect(instance.appendAssignmentsToTask).toBeCalled();
                     expect(instance.setState).toBeCalled();
                     const { tasks } = this.state;
                     expect(tasks.entries.length).toBe(1);
