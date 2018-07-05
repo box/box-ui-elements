@@ -62,7 +62,8 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
-    responseInterceptor?: Function
+    responseInterceptor?: Function,
+    onVersionHistoryClick?: Function
 };
 
 type State = {
@@ -1340,7 +1341,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             className,
             activitySidebarProps,
-            detailsSidebarProps
+            detailsSidebarProps,
+            onVersionHistoryClick
         }: Props = this.props;
         const {
             file,
@@ -1417,6 +1419,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={this.getAvatarUrl}
                                 onToggle={this.onToggle}
+                                onVersionHistoryClick={onVersionHistoryClick}
                             />
                         ) : (
                             <div className='bcs-loading'>

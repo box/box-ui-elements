@@ -38,7 +38,8 @@ type Props = {
     activityFeedError?: Errors,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
-    onToggle: Function
+    onToggle: Function,
+    onVersionHistoryClick?: Function
 };
 
 const Sidebar = ({
@@ -62,7 +63,8 @@ const Sidebar = ({
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl,
-    onToggle
+    onToggle,
+    onVersionHistoryClick
 }: Props) => (
     <React.Fragment>
         <SidebarNav
@@ -74,7 +76,14 @@ const Sidebar = ({
             hasDetails={hasDetails}
         />
         {view === SIDEBAR_VIEW_DETAILS &&
-            hasDetails && <DetailsSidebar file={file} versions={versions} {...detailsSidebarProps} />}
+            hasDetails && (
+                <DetailsSidebar
+                    file={file}
+                    versions={versions}
+                    onVersionHistoryClick={onVersionHistoryClick}
+                    {...detailsSidebarProps}
+                />
+            )}
         {view === SIDEBAR_VIEW_SKILLS &&
             hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&
@@ -91,6 +100,7 @@ const Sidebar = ({
                     getApproverWithQuery={getApproverWithQuery}
                     getMentionWithQuery={getMentionWithQuery}
                     getAvatarUrl={getAvatarUrl}
+                    onVersionHistoryClick={onVersionHistoryClick}
                     {...activitySidebarProps}
                 />
             )}
