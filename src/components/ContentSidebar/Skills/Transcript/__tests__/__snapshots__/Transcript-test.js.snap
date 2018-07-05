@@ -239,6 +239,6 @@ exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly
       text="bar"
     />
   </div>
-  <SkillsBusyIndicator />
+  <BusyIndicator />
 </div>
 `;

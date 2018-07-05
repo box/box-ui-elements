@@ -69,6 +69,7 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
         const wrapper = getWrapper(props);
 
         expect(wrapper.find(ItemProperties)).toHaveLength(1);
+        expect(wrapper.find('BusyIndicator')).toHaveLength(0);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -112,5 +113,15 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
     test('should render retention policy information when given proper props and callback', () => {
         const wrapper = getMountWrapper(retentionPolicyProps);
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render ItemProperties with BusyIndicator', () => {
+        const wrapper = getWrapper({
+            ...props,
+            isLoading: true
+        });
+
+        expect(wrapper.find(ItemProperties)).toHaveLength(1);
+        expect(wrapper.find('BusyIndicator')).toHaveLength(1);
     });
 });

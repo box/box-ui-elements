@@ -14,7 +14,7 @@ import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import TranscriptRow from './TranscriptRow';
-import SkillsBusyIndicator from '../SkillsBusyIndicator';
+import BusyIndicator from '../../BusyIndicator';
 import { isValidTimeSlice } from './timeSliceUtils';
 import { COLOR_999 } from '../../../../constants';
 import { copy } from '../../../../util/download';
@@ -319,7 +319,7 @@ class Transcript extends React.PureComponent<Props, State> {
                 ) : (
                     <FormattedMessage {...messages.skillNoInfoFoundError} />
                 )}
-                {isLoading && <SkillsBusyIndicator />}
+                {isLoading && <BusyIndicator />}
             </div>
         );
     }

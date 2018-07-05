@@ -127,6 +127,6 @@ exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly ren
       ]
     }
   />
-  <SkillsBusyIndicator />
+  <BusyIndicator />
 </div>
 `;

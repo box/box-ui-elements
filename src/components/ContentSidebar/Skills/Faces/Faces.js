@@ -13,7 +13,7 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import Face from './Face';
 import Timeline from '../Timeline';
-import SkillsBusyIndicator from '../SkillsBusyIndicator';
+import BusyIndicator from '../../BusyIndicator';
 import messages from '../../../messages';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 import './Faces.scss';
@@ -219,7 +219,7 @@ class Faces extends React.PureComponent<Props, State> {
                         </PrimaryButton>
                     </div>
                 )}
-                {isLoading && <SkillsBusyIndicator />}
+                {isLoading && <BusyIndicator />}
             </div>
         );
     }

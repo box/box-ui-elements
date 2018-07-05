@@ -1012,26 +1012,20 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.fetchFile = fetchFile;
         });
 
-        it('should clear the file and fetch a new one', () => {
+        test('should refetch the file', () => {
             wrapper.setProps({
                 fileId: file.id
             });
-            wrapper.setState({
-                file
-            });
-
             instance.onClassificationChange();
-            expect(wrapper.state('file')).toBe(undefined);
             expect(fetchFile).toBeCalledWith(file.id, true);
         });
 
-        it('should return undefined if there is no file id', () => {
+        test('should not refetch the file there is no file id', () => {
             wrapper.setState({
                 file
             });
 
             instance.onClassificationChange();
-            expect(wrapper.state('file')).toBe(undefined);
             expect(fetchFile).not.toBeCalled();
         });
     });
@@ -1052,9 +1046,100 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.onClassificationChange = jest.fn();
         });
 
-        it('should call onClassificationClick with the refresh function', () => {
+        test('should call onClassificationClick with the refresh function', () => {
             instance.onClassificationClick();
             expect(onClassificationClick).toBeCalledWith(instance.onClassificationChange);
+        });
+    });
+
+    describe('fetchFile()', () => {
+        let fileStub;
+        let wrapper;
+        let instance;
+        let fetchFileSuccessCallback;
+        let fetchFileErrorCallback;
+
+        beforeEach(() => {
+            wrapper = getWrapper({
+                file
+            });
+            instance = wrapper.instance();
+            fileStub = jest.fn();
+            fetchFileSuccessCallback = jest.fn();
+            fetchFileErrorCallback = jest.fn();
+            instance.api = {
+                getFileAPI: () => ({
+                    file: fileStub
+                })
+            };
+            instance.fetchFileSuccessCallback = fetchFileSuccessCallback;
+            instance.fetchFileErrorCallback = fetchFileErrorCallback;
+        });
+
+        test('should fetch the file with forceFetch', () => {
+            instance.fetchFile(file.id);
+            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, false, true);
+        });
+
+        test('should fetch the file with forceFetch', () => {
+            instance.fetchFile(file.id);
+            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, false, true);
+        });
+    });
+
+    describe('fetchFileSuccessCallback()', () => {
+        let setState;
+        let getDefaultSidebarView;
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            setState = jest.fn();
+            getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
+            wrapper = getWrapper({
+                file
+            });
+            instance = wrapper.instance();
+            instance.getDefaultSidebarView = getDefaultSidebarView;
+            instance.setState = setState;
+        });
+
+        test('should set the file state to be the file response', () => {
+            instance.fetchFileSuccessCallback(file);
+
+            expect(getDefaultSidebarView).toBeCalledWith(false, file);
+            expect(setState).toBeCalledWith({
+                file,
+                view: 'view',
+                isFileLoading: false
+            });
+        });
+    });
+
+    describe('fetchFileErrorCallback()', () => {
+        let setState;
+        let wrapper;
+        let instance;
+        let errorCallback;
+        beforeEach(() => {
+            setState = jest.fn();
+            errorCallback = jest.fn();
+            wrapper = getWrapper({
+                file
+            });
+            instance = wrapper.instance();
+            instance.setState = setState;
+            instance.errorCallback = errorCallback;
+        });
+
+        test('should set isFileLoading to be false, and call the errorCallback', () => {
+            const err = 'test error';
+            instance.fetchFileErrorCallback(err);
+
+            expect(setState).toBeCalledWith({
+                isFileLoading: false
+            });
+            expect(errorCallback).toBeCalledWith(err);
         });
     });
 });

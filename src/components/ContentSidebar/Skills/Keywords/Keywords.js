@@ -11,7 +11,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
-import SkillsBusyIndicator from '../SkillsBusyIndicator';
+import BusyIndicator from '../../BusyIndicator';
 import messages from '../../../messages';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 
@@ -208,7 +208,7 @@ class Keywords extends PureComponent<Props, State> {
                         <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
                     )}
                 {!isEditing && !hasKeywords && <FormattedMessage {...messages.skillNoInfoFoundError} />}
-                {isLoading && <SkillsBusyIndicator />}
+                {isLoading && <BusyIndicator />}
             </div>
         );
     }
