@@ -767,4 +767,14 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(error.inlineError).toBeUndefined();
         });
     });
+
+    describe('addRestoredVersions()', () => {
+        test('should return versions array with added entries for restored versions', () => {
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} versions={versions} />);
+            const instance = wrapper.instance();
+
+            const versionsWithRestore = instance.addRestoredVersions(versions);
+            expect(versionsWithRestore.entries.length).toEqual(3);
+        });
+    });
 });
