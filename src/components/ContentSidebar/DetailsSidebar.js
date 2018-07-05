@@ -28,7 +28,8 @@ type ExternalProps = {
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
     onVersionHistoryClick?: Function,
-    onRetentionPolicyExtendClick?: Function
+    onRetentionPolicyExtendClick?: Function,
+    onDescriptionChange?: Function
 };
 
 type Props = {
