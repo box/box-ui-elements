@@ -67,7 +67,12 @@ class ActivityFeed extends React.Component<Props, State> {
      *
      * @return {Object} An inline error message object
      */
-    createActivityFeedApiError(): InlineError {
+    createActivityFeedApiError(e?: Errors): InlineError {
+        if (!e) {
+            // $FlowFixMe
+            return e;
+        }
+
         return {
             title: messages.errorOccured,
             content: messages.activityFeedItemApiError
@@ -500,7 +505,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
-                            inlineError={activityFeedError ? this.createActivityFeedApiError() : undefined}
+                            inlineError={this.createActivityFeedApiError(activityFeedError)}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
