@@ -779,6 +779,55 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
+    describe('createTaskAssignment', () => {
+        let instance;
+        let wrapper;
+        let taskAssignmentsAPI;
+        const task = {
+            type: 'task',
+            id: '1234',
+            created_at: '1',
+            message: 'test',
+            task_assignment_collection: []
+        };
+        const api = {
+            getTaskAssignmentsAPI: () => taskAssignmentsAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should resolve on a successful task assignment create', () => {
+            taskAssignmentsAPI = {
+                createTaskAssignment: jest.fn().mockReturnValue('foo')
+            };
+
+            const promise = instance.createTaskAssignment({ id: '1' }, task, { id: '1234' }, () => {});
+            expect(taskAssignmentsAPI.createTaskAssignment).toBeCalled();
+
+            promise.then((data) => {
+                expect(data).toBe('foo');
+            });
+        });
+
+        test('should call the error callback on a task assignment failure', () => {
+            taskAssignmentsAPI = {
+                createTaskAssignment: jest.fn().mockReturnValue(Promise.reject())
+            };
+            instance.createTaskAssignmentErrorCallback = jest.fn();
+
+            const promise = instance.createTaskAssignment({ id: '1' }, task, { id: '1234' }, () => {});
+            expect(taskAssignmentsAPI.createTaskAssignment).toBeCalled();
+
+            promise.catch(() => {
+                expect(instance.createTaskAssignmentErrorCallback).toBeCalled();
+            });
+        });
+    });
+
     describe('createTaskSuccessCallback()', () => {
         let instance;
         let wrapper;
@@ -794,6 +843,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance = wrapper.instance();
             instance.setState({ file });
             instance.api = api;
+            instance.createTaskAssignment = jest.fn();
+            instance.appendAssignmentsToTask = jest.fn();
             assignees = [{ id: '1', name: 'A. User' }, { id: '2', name: 'B. User' }];
             task = {
                 type: 'task',
@@ -802,6 +853,13 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 message: 'test',
                 task_assignment_collection: []
             };
+
+            instance.setState({
+                tasks: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
         });
 
         test('should not add to the task entries state if there is none', () => {
@@ -810,77 +868,26 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.createTaskSuccessCallback();
 
-            expect(instance.setState).not.toBeCalled();
+            expect(instance.createTaskAssignment).not.toBeCalled();
         });
 
         test('should create a TaskAssignment for each assignment', () => {
-            taskAssignmentsAPI = {
-                createTaskAssignment: ({ successCallback }) => {
-                    const data = { id: 1 };
-                    successCallback(data);
-                }
-            };
-
-            instance.createTaskSuccessCallback(
-                task,
-                assignees,
-                () => {
-                    expect(instance.createTaskAssignment).toBeCalledTwice();
-                },
-                () => {}
-            );
-        });
-
-        test('should handle a failed task assignment create', () => {
-            instance.createTaskAssignmentErrorCallback = jest.fn();
-
-            taskAssignmentsAPI = {
-                createTaskAssignment: ({ task: erroredTask, errorCallback }) => {
-                    errorCallback();
-                    expect(instance.createTaskAssignmentErrorCallback(erroredTask.id));
-                }
-            };
-
-            instance.createTaskSuccessCallback(
-                task,
-                assignees,
-                () => {},
-                () => {
-                    expect(instance.deleteTask).toBeCalledTwice();
-                }
-            );
+            instance.createTaskAssignment.mockReturnValue(Promise.resolve());
+            instance.createTaskSuccessCallback(task, assignees, () => {}, () => {});
+            expect(instance.createTaskAssignment).toBeCalledTimes(2);
         });
 
         test('should call the success callback and update the state once all assignments have been created', () => {
             instance.appendAssignmentsToTask = jest.fn();
+            instance.setState = jest.fn();
+            instance.createTaskAssignment.mockReturnValue(Promise.resolve());
+            const successCallback = jest.fn();
 
-            taskAssignmentsAPI = {
-                createTaskAssignment: ({ successCallback: assignmentSuccessCallback }) => {
-                    const data = { id: 1 };
-                    assignmentSuccessCallback(data);
-                }
-            };
-
-            instance.setState({
-                tasks: {
-                    total_count: 0,
-                    entries: []
-                }
+            return instance.createTaskSuccessCallback(task, assignees, successCallback, () => {}).then(() => {
+                expect(instance.appendAssignmentsToTask).toBeCalled();
+                expect(instance.setState).toBeCalled();
+                expect(successCallback).toBeCalled();
             });
-
-            instance.createTaskSuccessCallback(
-                task,
-                assignees,
-                () => {
-                    expect(instance.appendAssignmentsToTask).toBeCalled();
-                    expect(instance.setState).toBeCalled();
-                    const { tasks } = this.state;
-                    expect(tasks.entries.length).toBe(1);
-                    const assignedTask = tasks.entries[0];
-                    expect(assignedTask.task_assignment_collection.length).toBe(2);
-                },
-                () => {}
-            );
         });
     });
 

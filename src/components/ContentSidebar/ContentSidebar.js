@@ -771,7 +771,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Sorts and formats assignments, and then adds them to their task. 
+     * Formats assignments, and then adds them to their task. 
      *
 
      * @param {Task} task - Task to which the assignments belong
@@ -816,6 +816,31 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
+     * Creates a task assignment via the API. 
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Task} task - The newly created task from the API
+     * @param {SelectorItem} assignee - The user assigned to this task
+     * @param {Function} errorCallback - Task create error callback
+
+     * @return {Promise<TaskAssignment}
+     */
+    createTaskAssignment(file: BoxItem, task: Task, assignee: SelectorItem, errorCallback: Function) {
+        return new Promise((resolve, reject) => {
+            this.api.getTaskAssignmentsAPI(false).createTaskAssignment({
+                file,
+                taskId: task.id,
+                assignTo: { id: assignee.id },
+                successCallback: (data: TaskAssignment) => resolve(data),
+                errorCallback: (e) => {
+                    this.createTaskAssignmentErrorCallback(e, task, errorCallback);
+                    reject();
+                }
+            });
+        });
+    }
+
+    /**
      * Adds a task to the tasks state and increases total_count.
      *
      * @param {Task} task - The newly created task from the API
@@ -823,14 +848,14 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Function} successCallback - Task create success callback
      * @param {Function} errorCallback - Task create error callback
 
-     * @return {void}
+     * @return {Promise<any>}
      */
     createTaskSuccessCallback(
         task: Task,
         assignees: SelectorItems,
         successCallback: Function,
         errorCallback: Function
-    ): void {
+    ): Promise<any> {
         const { tasks, file } = this.state;
 
         if (!file) {
@@ -838,29 +863,16 @@ class ContentSidebar extends PureComponent<Props, State> {
         }
 
         if (!tasks || !tasks.entries) {
-            return;
+            return Promise.reject();
         }
 
         const assignmentPromises = [];
         assignees.forEach((assignee: SelectorItem) => {
             // Create a promise for each assignment
-            const assignmentPromise = new Promise((resolve, reject) => {
-                this.api.getTaskAssignmentsAPI(false).createTaskAssignment({
-                    file,
-                    taskId: task.id,
-                    assignTo: { id: assignee.id },
-                    successCallback: (data: TaskAssignment) => resolve(data),
-                    errorCallback: (e) => {
-                        this.createTaskAssignmentErrorCallback(e, task, errorCallback);
-                        reject();
-                    }
-                });
-            });
-
-            assignmentPromises.push(assignmentPromise);
+            assignmentPromises.push(this.createTaskAssignment(file, task, assignee, errorCallback));
         });
 
-        Promise.all(assignmentPromises).then((taskAssignments) => {
+        return Promise.all(assignmentPromises).then((taskAssignments) => {
             const formattedTask = this.appendAssignmentsToTask(task, taskAssignments);
             // After all assignments have been created, update the state with
             // the updated task object
