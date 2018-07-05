@@ -1,5 +1,27 @@
 import { withData } from 'leche';
-import { toISOStringNoMS, getFileLastModifiedAsISONoMSIfPossible, tryParseJson } from '../uploads';
+import {
+    toISOStringNoMS,
+    getFileLastModifiedAsISONoMSIfPossible,
+    tryParseJson,
+    isDataTransferItemAFolder,
+    getFileFromDataTransferItem,
+    doesFileContainAPIOptions,
+    doesDataTransferItemContainAPIOptions,
+    getFile,
+    getDataTransferItem,
+    getFileAPIOptions,
+    getDataTransferItemAPIOptions,
+    DEFAULT_API_OPTIONS
+} from '../uploads';
+
+const mockFile = { name: 'hi' };
+const entry = {
+    file: (fn) => {
+        fn(mockFile);
+    }
+};
+const mockItem = { kind: 'file', webkitGetAsEntry: () => entry };
+const options = { options: true };
 
 describe('util/uploads', () => {
     describe('toISOStringNoMS()', () => {
@@ -68,5 +90,146 @@ describe('util/uploads', () => {
                 });
             }
         );
+    });
+
+    describe('doesFileContainAPIOptions()', () => {
+        test('should return true when argument is UploadFileWithAPIOptions type', () => {
+            expect(
+                doesFileContainAPIOptions({
+                    file: mockFile,
+                    options
+                })
+            ).toBeTruthy();
+        });
+
+        test('should return false when argument is UploadFile type', () => {
+            expect(doesFileContainAPIOptions(mockFile)).toBeFalsy();
+        });
+    });
+
+    describe('doesDataTransferItemContainAPIOptions()', () => {
+        test('should return true when argument is UploadDataTransferItemWithAPIOptions type', () => {
+            expect(
+                doesDataTransferItemContainAPIOptions({
+                    item: mockItem,
+                    options
+                })
+            ).toBeTruthy();
+        });
+
+        test('should return false when argument is DataTransferItem type', () => {
+            expect(doesDataTransferItemContainAPIOptions(mockItem)).toBeFalsy();
+        });
+    });
+
+    describe('getFile()', () => {
+        test('should return file when argument is UploadFileWithAPIOptions type', () => {
+            expect(
+                getFile({
+                    file: mockFile,
+                    options
+                })
+            ).toEqual(mockFile);
+        });
+
+        test('should return file when argument is UploadFile type', () => {
+            expect(getFile(mockFile)).toEqual(mockFile);
+        });
+    });
+
+    describe('getDataTransferItem()', () => {
+        test('should return item when argument is UploadDataTransferItemWithAPIOptions type', () => {
+            expect(
+                getDataTransferItem({
+                    item: mockItem,
+                    options
+                })
+            ).toEqual(mockItem);
+        });
+
+        test('should return item when argument is DataTransferItem type', () => {
+            expect(getDataTransferItem(mockItem)).toEqual(mockItem);
+        });
+    });
+
+    describe('getFileAPIOptions()', () => {
+        test('should return options when argument is UploadFileWithAPIOptions type', () => {
+            expect(
+                getFileAPIOptions({
+                    file: mockFile,
+                    options
+                })
+            ).toEqual(options);
+        });
+
+        test('should return DEFAULT_API_OPTIONS when argument is UploadFile type', () => {
+            expect(getFileAPIOptions(mockFile)).toEqual(DEFAULT_API_OPTIONS);
+        });
+    });
+
+    describe('getDataTransferItemAPIOptions()', () => {
+        test('should return options when argument is UploadDataTransferItemWithAPIOptions type', () => {
+            expect(
+                getDataTransferItemAPIOptions({
+                    item: mockItem,
+                    options
+                })
+            ).toEqual(options);
+        });
+
+        test('should return DEFAULT_API_OPTIONS when argument is DataTransferItem type', () => {
+            expect(getDataTransferItemAPIOptions(mockItem)).toEqual(DEFAULT_API_OPTIONS);
+        });
+    });
+
+    describe('getFileFromDataTransferItem()', () => {
+        // eslint-disable-next-line
+        test('should return file of UploadFileWithAPIOptions type when itemData is UploadDataTransferItemWithAPIOptions type', async () => {
+            const itemData = {
+                item: mockItem,
+                options
+            };
+
+            expect(await getFileFromDataTransferItem(itemData)).toEqual({
+                file: mockFile,
+                options
+            });
+        });
+    });
+
+    describe('isDataTransferItemAFolder()', () => {
+        test('should return true if item is a folder', () => {
+            const folderEntry = {
+                isDirectory: true
+            };
+            const folderItem = { kind: '', webkitGetAsEntry: () => folderEntry };
+
+            const itemData = {
+                item: folderItem,
+                options
+            };
+
+            expect(isDataTransferItemAFolder(itemData)).toBeTruthy();
+        });
+
+        test('should return false if item is not a folder', () => {
+            const fileEntry = {
+                isDirectory: false
+            };
+            const fileItem = { kind: '', webkitGetAsEntry: () => fileEntry };
+
+            const itemData = {
+                item: fileItem,
+                options
+            };
+
+            expect(isDataTransferItemAFolder(itemData)).toBeFalsy();
+        });
+
+        test('should return false if item does not have an entry', () => {
+            const fileItem = { kind: '', webkitGetAsEntry: () => undefined };
+
+            expect(isDataTransferItemAFolder(fileItem)).toBeFalsy();
+        });
     });
 });

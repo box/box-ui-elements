@@ -35,8 +35,7 @@ type Props = {
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    commentsError?: Errors,
-    tasksError?: Errors,
+    activityFeedError?: InlineError,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
     onToggle: Function
@@ -57,10 +56,9 @@ const Sidebar = ({
     getApproverWithQuery,
     getMentionWithQuery,
     tasks,
-    tasksError,
     comments,
-    commentsError,
     versions,
+    activityFeedError,
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl,
@@ -85,12 +83,11 @@ const Sidebar = ({
                     currentUser={currentUser}
                     file={file}
                     tasks={tasks}
-                    tasksError={tasksError}
                     comments={comments}
+                    versions={versions}
+                    activityFeedError={activityFeedError}
                     approverSelectorContacts={approverSelectorContacts}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    commentsError={commentsError}
-                    versions={versions}
                     getApproverWithQuery={getApproverWithQuery}
                     getMentionWithQuery={getMentionWithQuery}
                     getAvatarUrl={getAvatarUrl}
