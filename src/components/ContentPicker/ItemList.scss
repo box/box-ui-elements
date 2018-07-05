@@ -14,7 +14,6 @@
     border-bottom: 1px solid transparent;
     border-left: 2px solid transparent;
     border-top: 1px solid $off-white;
-    outline: none;
 
     &.bcp-item-row-selected {
         background-color: $light-blue;
@@ -55,7 +54,6 @@
                 background-image: linear-gradient(45deg, transparent 50%, $blue 50%), linear-gradient(135deg, $blue 50%, transparent 50%);
                 border-color: $blue;
                 color: $blue;
-                outline: none;
             }
         }
     }

@@ -16,7 +16,6 @@
     letter-spacing: .3px;
     line-height: 20px;
     margin: 0;
-    outline: none;
     overflow: hidden;
     padding: 0;
     user-select: none;
@@ -96,7 +95,6 @@
             background-image: linear-gradient(45deg, transparent 50%, $blue 50%), linear-gradient(135deg, $blue 50%, transparent 50%);
             border-color: $blue;
             color: $blue;
-            outline: none;
         }
 
         &:disabled {
@@ -182,7 +180,6 @@
         line-height: 16px;
         margin: 0;
         max-width: 100%;
-        outline: none;
         overflow: hidden;
         padding: 0;
         text-align: center;
