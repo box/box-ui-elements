@@ -22,8 +22,9 @@ const getUploadStatus = (view: string) => {
         case VIEW_UPLOAD_IN_PROGRESS:
             return <FormattedMessage {...messages.uploadsManagerUploadInProgress} />;
         case VIEW_UPLOAD_SUCCESS:
-        case VIEW_UPLOAD_EMPTY:
             return <FormattedMessage {...messages.uploadsManagerUploadComplete} />;
+        case VIEW_UPLOAD_EMPTY:
+            return <FormattedMessage {...messages.uploadsManagerUploadPrompt} />;
         case VIEW_ERROR:
             return <FormattedMessage {...messages.uploadsManagerUploadFailed} />;
         default:
@@ -35,17 +36,18 @@ const getUploadStatus = (view: string) => {
  * Get overall upload progress percentage
  *
  * @param {string} view
- * @param {boolean} isEmpty - true if there are no items in the upload queue
  * @param {number} percent
  */
-const getPercent = (view: string, isEmpty: boolean, percent: number): number => {
-    if (view === VIEW_UPLOAD_SUCCESS || (view === VIEW_UPLOAD_EMPTY && isEmpty)) {
-        return 100;
-    } else if (view === VIEW_ERROR) {
-        return 0;
+const getPercent = (view: string, percent: number): number => {
+    switch (view) {
+        case VIEW_UPLOAD_SUCCESS:
+            return 100;
+        case VIEW_UPLOAD_EMPTY:
+        case VIEW_ERROR:
+            return 0;
+        default:
+            return percent;
     }
-
-    return percent;
 };
 
 type Props = {
@@ -53,11 +55,10 @@ type Props = {
     percent: number,
     onClick: Function,
     onKeyDown: Function,
-    view: View,
-    isEmpty: boolean
+    view: View
 };
 
-const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible, isEmpty }: Props) => (
+const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible }: Props) => (
     <div
         className='bcu-overall-progress-bar'
         onClick={onClick}
@@ -66,7 +67,7 @@ const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisibl
         tabIndex={isVisible ? '0' : '-1'}
     >
         <span className='bcu-upload-status'>{getUploadStatus(view)}</span>
-        <ProgressBar percent={getPercent(view, isEmpty, percent)} />
+        <ProgressBar percent={getPercent(view, percent)} />
         <span className='bcu-uploads-manager-toggle' />
     </div>
 );
