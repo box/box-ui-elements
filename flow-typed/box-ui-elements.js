@@ -266,7 +266,8 @@ type BoxItem = {
     metadata?: MetadataType,
     file_version?: BoxItemVersion,
     is_download_available: boolean,
-    version_number?: string
+    version_number?: string,
+    restored_from?: BoxItemVersion
 };
 
 type BoxItemCollection = {

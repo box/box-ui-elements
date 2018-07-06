@@ -6,7 +6,7 @@ import * as React from 'react';
 import getProp from 'lodash/get';
 import Comment from '../comment';
 import Task from '../task';
-import Version, { CollapsedVersion, VersionError } from '../version';
+import Version, { CollapsedVersion } from '../version';
 import Keywords from '../keywords';
 import withErrorHandling from '../../withErrorHandling';
 
@@ -41,7 +41,7 @@ const ActiveState = ({
 }: Props): React.Node => (
     <ul className='bcs-activity-feed-active-state'>
         {items.map((item: any) => {
-            const { type, id, errorCode, versions, permissions } = item;
+            const { type, id, versions, permissions } = item;
 
             switch (type) {
                 case 'comment':
@@ -91,16 +91,6 @@ const ActiveState = ({
                             ) : (
                                 <Version {...item} onInfo={onVersionInfo} />
                             )}
-                        </li>
-                    );
-                case 'file_version_error':
-                    // we currently only display this if errorCode is tooManyVersions
-                    if (errorCode !== 'tooManyVersions') {
-                        return null;
-                    }
-                    return (
-                        <li className='bcs-version-item' key={type + errorCode}>
-                            <VersionError {...item} />
                         </li>
                     );
                 case 'keywords':
