@@ -824,11 +824,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Default error mask bottom message',
         defaultMessage: 'Please refresh the page or try again later.'
     },
-    versionHistoryErrorHeaderMessage: {
-        id: 'be.versionHistoryErrorHeaderMessage',
-        description: 'Version history error message',
-        defaultMessage: 'Something went wrong when fetching the version history.'
-    },
     fileAccessStatsErrorHeaderMessage: {
         id: 'be.fileAccessStatsErrorHeaderMessage',
         description: 'File access stats error message',

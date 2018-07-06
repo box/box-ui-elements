@@ -7,7 +7,6 @@ import SidebarUtils from '../SidebarUtils';
 const {
     fileDescriptionInlineErrorTitleMessage,
     defaultInlineErrorContentMessage,
-    versionHistoryErrorHeaderMessage,
     defaultErrorMaskSubHeaderMessage,
     fileAccessStatsErrorHeaderMessage,
     currentUserErrorHeaderMessage
