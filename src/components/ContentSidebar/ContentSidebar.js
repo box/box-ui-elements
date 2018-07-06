@@ -408,7 +408,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchTaskAssignmentsErrorCallback = (e: Error): void => {
+    fetchTaskAssignmentsErrorCallback = (e: $AxiosXHR<any>): void => {
         this.setState({
             activityFeedError: e
         });
@@ -780,7 +780,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Formats assignments, and then adds them to their task. 
+     * Formats assignments, and then adds them to their task.
      *
 
      * @param {Task} task - Task to which the assignments belong
@@ -817,7 +817,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
      * @return {void}
      */
-    createTaskAssignmentErrorCallback(e: Error, task: Task, errorCallback: Function) {
+    createTaskAssignmentErrorCallback(e: $AxiosXHR<any>, task: Task, errorCallback: Function) {
         this.errorCallback(e);
         errorCallback(e);
         // Attempt to delete the task due to it's bad assignment
@@ -825,7 +825,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * Creates a task assignment via the API. 
+     * Creates a task assignment via the API.
      *
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {Task} task - The newly created task from the API
