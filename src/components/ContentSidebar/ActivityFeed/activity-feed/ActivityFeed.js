@@ -512,7 +512,8 @@ class ActivityFeed extends React.Component<Props, State> {
             comments,
             tasks,
             versions,
-            activityFeedError
+            activityFeedError,
+            onVersionHistoryClick
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -543,7 +544,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             // but you must at least be able to comment to do these operations.
                             onTaskDelete={hasCommentPermission ? this.deleteTask : noop}
                             onTaskEdit={hasCommentPermission ? this.updateTask : noop}
-                            onVersionInfo={this.openVersionHistoryPopup}
+                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}
