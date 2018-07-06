@@ -63,20 +63,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).toBeCalledWith(true, file);
-            expect(instance.setState).toBeCalledWith({ view: 'view', isCollapsed: true });
-        });
-
-        test('should update the isCollapsed state when isCollapsed prop changed', () => {
-            const wrapper = getWrapper({
-                isCollapsed: false
-            });
-            expect(wrapper.state('isCollapsed')).toBe(false);
-
-            const newProps = {
-                isCollapsed: true
-            };
-            wrapper.setProps(newProps);
-            expect(wrapper.state('isCollapsed')).toBe(true);
+            expect(instance.setState).toBeCalledWith({ view: 'view' });
         });
     });
 
