@@ -26,8 +26,7 @@ type ExternalProps = {
     hasVersions?: boolean,
     retentionPolicy?: Object,
     onAccessStatsClick?: Function,
-    onClassificationClick?: (onClassificationChange: Function) => void,
-    onVersionHistoryClick?: Function,
+    onClassificationClick?: Function,
     onRetentionPolicyExtendClick?: Function,
     onDescriptionChange?: Function
 };
@@ -40,6 +39,7 @@ export type Props = {
     accessStatsError?: Errors,
     fileError?: Errors,
     versionError?: Errors,
+    onVersionHistoryClick?: Function,
     isFileLoading?: boolean
 } & ExternalProps;
 
