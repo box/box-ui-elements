@@ -17,6 +17,7 @@ import messages from '../../../messages';
 import './ActivityFeed.scss';
 
 const VERSION_RESTORE_ACTION = 'restore';
+const TASK_INCOMPLETE = 'incomplete';
 
 type Props = {
     file: BoxItem,
@@ -229,7 +230,8 @@ class ActivityFeed extends React.Component<Props, State> {
             assigned_to: {
                 id: assignee.id,
                 name: assignee.name
-            }
+            },
+            resolution_state: TASK_INCOMPLETE
         }));
 
         const task = {

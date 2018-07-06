@@ -602,7 +602,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 is_completed: false,
                 message: text,
                 task_assignment_collection: {
-                    entries: [{ assigned_to: { id: '1234', name: 'A. User' } }],
+                    entries: [{ assigned_to: { id: '1234', name: 'A. User' }, resolution_state: 'incomplete' }],
                     total_count: 1
                 },
                 type: 'task'

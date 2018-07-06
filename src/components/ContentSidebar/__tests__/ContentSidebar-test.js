@@ -727,7 +727,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance = wrapper.instance();
         });
 
-        test('should correctly format a task with assignment, increment assignment count', () => {
+        test('should correctly format a task with assignment with a message, increment assignment count', () => {
             const task = {
                 task_assignment_collection: {
                     entries: [],
@@ -736,8 +736,29 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             };
 
             const assignments = [
-                { id: '1', assigned_to: { id: '1234' }, message: 'foo', resolution_state: 'completed' }
+                { id: '1', assigned_to: { id: '1234' }, message: 'completed', resolution_state: 'completed' }
             ];
+            const expectedResult = {
+                task_assignment_collection: {
+                    entries: [{ ...assignments[0], type: 'task_assignment' }],
+                    total_count: 1
+                }
+            };
+
+            const result = instance.appendAssignmentsToTask(task, assignments);
+            expect(result.task_assignment_collection.total_count).toBe(1);
+            expect(result).toEqual(expectedResult);
+        });
+
+        test('should correctly format a task with assignment, increment assignment count', () => {
+            const task = {
+                task_assignment_collection: {
+                    entries: [],
+                    total_count: 0
+                }
+            };
+
+            const assignments = [{ id: '1', assigned_to: { id: '1234' }, resolution_state: 'completed' }];
             const expectedResult = {
                 task_assignment_collection: {
                     entries: [{ ...assignments[0], type: 'task_assignment' }],
