@@ -16,6 +16,8 @@ import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import messages from '../../../messages';
 import './ActivityFeed.scss';
 
+const VERSION_RESTORE_ACTION = 'restore';
+
 type Props = {
     file: BoxItem,
     versions?: FileVersions,
@@ -447,7 +449,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 versions.entries.push({
                     ...restoredVersion,
                     created_at: modified_at,
-                    action: 'restore'
+                    action: VERSION_RESTORE_ACTION
                 });
                 versions.total_count += 1;
             }
