@@ -70,7 +70,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
           Object {
             "action": "restore",
             "created_at": 1234567891,
-            "id": 123,
+            "id": 987,
             "modified_at": 1234567891,
             "modified_by": Object {
               "id": 11,
@@ -85,7 +85,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
       onTaskAssignmentUpdate={[Function]}
       onTaskDelete={[Function]}
       onTaskEdit={[Function]}
-      onVersionInfo={[Function]}
+      onVersionInfo={null}
     />
   </div>
 </div>
