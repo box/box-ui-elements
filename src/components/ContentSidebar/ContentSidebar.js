@@ -85,6 +85,13 @@ type State = {
     currentUserError?: Errors
 };
 
+const activityFeedInlineError: Errors = {
+    inlineError: {
+        title: messages.errorOccured,
+        content: messages.activityFeedItemApiError
+    }
+};
+
 class ContentSidebar extends PureComponent<Props, State> {
     id: string;
     props: Props;
@@ -360,7 +367,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
             },
-            activityFeedError: e
+            activityFeedError: activityFeedInlineError
         });
         this.errorCallback(e);
     };
@@ -378,7 +385,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: e
+            activityFeedError: activityFeedInlineError
         });
         this.errorCallback(e);
     };
@@ -396,7 +403,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: e
+            activityFeedError: activityFeedInlineError
         });
         this.errorCallback(e);
     };
@@ -410,7 +417,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTaskAssignmentsErrorCallback = (e: $AxiosXHR<any>): void => {
         this.setState({
-            activityFeedError: e
+            activityFeedError: activityFeedInlineError
         });
         this.errorCallback(e);
     };
