@@ -7,10 +7,11 @@ import SidebarUtils from '../SidebarUtils';
 const {
     fileDescriptionInlineErrorTitleMessage,
     defaultInlineErrorContentMessage,
-    versionHistoryErrorHeaderMessage,
     defaultErrorMaskSubHeaderMessage,
     fileAccessStatsErrorHeaderMessage,
-    currentUserErrorHeaderMessage
+    currentUserErrorHeaderMessage,
+    errorOccured,
+    activityFeedItemApiError
 } = messages;
 
 jest.mock('../SidebarUtils');
@@ -18,6 +19,16 @@ jest.mock('../Sidebar', () => 'sidebar');
 
 const file = {
     id: 'I_AM_A_FILE'
+};
+
+const defaultResponse = {
+    total_count: 0,
+    entries: []
+};
+
+const activityFeedError = {
+    title: errorOccured,
+    content: activityFeedItemApiError
 };
 
 describe('components/ContentSidebar/ContentSidebar', () => {
@@ -96,12 +107,77 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.errorCallback = jest.fn();
         });
         test('should set a maskError if there is an error in fetching version history', () => {
-            instance.fetchVersionsErrorCallback();
-            const inlineErrorState = wrapper.state().versionError.maskError;
-            expect(typeof versionHistoryErrorHeaderMessage).toBe('object');
-            expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(versionHistoryErrorHeaderMessage);
-            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+            const err = 'error';
+            instance.fetchVersionsErrorCallback(err);
+            const activityFeedErrorState = wrapper.state().activityFeedError.inlineError;
+            expect(typeof errorOccured).toBe('object');
+            expect(typeof activityFeedItemApiError).toBe('object');
+            expect(activityFeedErrorState).toEqual(activityFeedError);
+            expect(instance.errorCallback).toBeCalledWith(err);
+        });
+    });
+
+    describe('fetchCommentsErrorCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            const props = {};
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+        test('should set default comment response and error', () => {
+            const err = 'error';
+            instance.fetchCommentsErrorCallback(err);
+            const comments = wrapper.state('comments');
+            expect(comments).toEqual(defaultResponse);
+            const inlineErrorState = wrapper.state().activityFeedError.inlineError;
+            expect(typeof errorOccured).toBe('object');
+            expect(typeof activityFeedItemApiError).toBe('object');
+            expect(inlineErrorState).toEqual(activityFeedError);
+            expect(instance.errorCallback).toBeCalledWith(err);
+        });
+    });
+
+    describe('fetchTasksErrorCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            const props = {};
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+        test('should set default task response and error', () => {
+            const err = 'error';
+            instance.fetchTasksErrorCallback(err);
+            const comments = wrapper.state('tasks');
+            expect(comments).toEqual(defaultResponse);
+            const inlineErrorState = wrapper.state().activityFeedError.inlineError;
+            expect(typeof errorOccured).toBe('object');
+            expect(typeof activityFeedItemApiError).toBe('object');
+            expect(inlineErrorState).toEqual(activityFeedError);
+            expect(instance.errorCallback).toBeCalledWith(err);
+        });
+    });
+
+    describe('fetchTaskAssignmentsErrorCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            const props = {};
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+        test('should set default task response and error', () => {
+            const err = 'error';
+            instance.fetchTasksErrorCallback(err);
+            const inlineErrorState = wrapper.state().activityFeedError.inlineError;
+            expect(typeof errorOccured).toBe('object');
+            expect(typeof activityFeedItemApiError).toBe('object');
+            expect(inlineErrorState).toEqual(activityFeedError);
+            expect(instance.errorCallback).toBeCalledWith(err);
         });
     });
 
@@ -121,6 +197,14 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
             expect(inlineErrorState.errorHeader).toEqual(fileAccessStatsErrorHeaderMessage);
             expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+        });
+
+        test('should not set a maskError if the error if forbidden', () => {
+            instance.fetchFileAccessStatsErrorCallback({
+                status: 403
+            });
+            const { accessStatsError } = wrapper.state();
+            expect(accessStatsError).toBeUndefined();
         });
     });
 

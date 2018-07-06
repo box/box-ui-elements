@@ -38,7 +38,6 @@ export type Props = {
     versions?: FileVersions,
     accessStatsError?: Errors,
     fileError?: Errors,
-    versionError?: Errors,
     onVersionHistoryClick?: Function,
     isFileLoading?: boolean
 } & ExternalProps;
@@ -59,7 +58,6 @@ const DetailsSidebar = ({
     versions,
     accessStatsError,
     fileError,
-    versionError,
     retentionPolicy,
     onRetentionPolicyExtendClick,
     isFileLoading
@@ -68,12 +66,7 @@ const DetailsSidebar = ({
         {(hasVersions || hasNotices) && (
             <div className='bcs-details-content'>
                 {hasVersions && (
-                    <SidebarVersions
-                        onVersionHistoryClick={onVersionHistoryClick}
-                        versions={versions}
-                        file={file}
-                        {...versionError}
-                    />
+                    <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} file={file} />
                 )}
                 {hasNotices && <SidebarNotices file={file} />}
             </div>

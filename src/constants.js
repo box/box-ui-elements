@@ -73,6 +73,7 @@ export const FIELD_PERMISSIONS = 'permissions';
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_MODIFIED_AT: 'modified_at' = 'modified_at';
+export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
@@ -216,3 +217,6 @@ export const HTTP_PUT: 'put' = 'put';
 export const HTTP_DELETE: 'delete' = 'delete';
 export const HTTP_OPTIONS: 'options' = 'options';
 export const HTTP_HEAD: 'head' = 'head';
+
+/* ------------------ HTTP Codes  ---------------------- */
+export const UNAUTHORIZED_CODE = 403;

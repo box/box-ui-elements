@@ -16,6 +16,8 @@ import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import messages from '../../../messages';
 import './ActivityFeed.scss';
 
+const VERSION_RESTORE_ACTION = 'restore';
+
 type Props = {
     file: BoxItem,
     versions?: FileVersions,
@@ -61,22 +63,6 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
-
-    /**
-     *  Constructs an Activity Feed error object that renders to an inline feed error
-     *
-     * @return {Errors} An inline error message object
-     */
-    createActivityFeedApiError(e?: Errors): ?Errors {
-        return e
-            ? {
-                inlineError: {
-                    title: messages.errorOccured,
-                    content: messages.activityFeedItemApiError
-                }
-            }
-            : {};
-    }
 
     /**
      * Add a placeholder pending feed item.
@@ -430,6 +416,33 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
+     * Adds a versions entry if the current file version was restored from a previous version
+     *
+     * @param {FileVersions} versions - API returned file versions for this file
+     * @return {FileVersions} modified versions array including the version restore
+     */
+    addRestoredVersion(versions: FileVersions) {
+        const { file } = this.props;
+        const { restored_from, modified_at } = file;
+
+        if (restored_from) {
+            const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
+
+            if (restoredVersion) {
+                // $FlowFixMe
+                versions.entries.push({
+                    ...restoredVersion,
+                    created_at: modified_at,
+                    action: VERSION_RESTORE_ACTION
+                });
+                versions.total_count += 1;
+            }
+        }
+
+        return versions;
+    }
+
+    /**
      * Checks to see if feed items should be added to the feed, and invokes the add and sort.
      *
      * @param {Comments} comments - API returned comments for this file
@@ -445,7 +458,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (shouldSort && (isFeedEmpty || !feedItems.length)) {
             // $FlowFixMe
-            this.sortFeedItems(comments, tasks, versions);
+            this.sortFeedItems(comments, tasks, this.addRestoredVersion(versions));
         }
     }
 
@@ -489,7 +502,6 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
         const isLoading = !this.areFeedItemsLoaded(comments, tasks, versions);
-        const activityFeedApiError = this.createActivityFeedApiError(activityFeedError);
 
         return (
             // eslint-disable-next-line
@@ -504,7 +516,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
-                            {...activityFeedApiError}
+                            {...activityFeedError}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}

@@ -5,6 +5,7 @@ import ActivityFeed from '../ActivityFeed';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
+
 const comments = {
     total_count: 1,
     entries: [
@@ -37,22 +38,45 @@ const tasks = {
     ]
 };
 
+const first_version = {
+    action: 'upload',
+    type: 'file_version',
+    id: 123,
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    trashed_at: 1234567891,
+    modified_at: 1234567891,
+    modified_by: { name: 'Akon', id: 11 }
+};
+
+const deleted_version = {
+    action: 'delete',
+    type: 'file_version',
+    id: 234,
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    trashed_at: 1234567891,
+    modified_at: 1234567891,
+    modified_by: { name: 'Akon', id: 11 }
+};
+
 const versions = {
     total_count: 1,
-    entries: [
-        {
-            type: 'file_version',
-            id: 123,
-            created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-            trashed_at: 1234567891,
-            modified_at: 1234567891,
-            modified_by: { name: 'Akon', id: 11 }
-        }
-    ]
+    entries: [first_version, deleted_version]
+};
+
+const file = {
+    id: '12345',
+    permissions: {
+        can_comment: true
+    },
+    modified_at: 1234567891,
+    restored_from: {
+        id: first_version.id,
+        type: first_version.type
+    }
 };
 
 const currentUser = { name: 'Kanye West', id: 10 };
-const getWrapper = (props) => shallow(<ActivityFeed currentUser={currentUser} {...props} />);
+const getWrapper = (props) => shallow(<ActivityFeed file={file} currentUser={currentUser} {...props} />);
 
 describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render empty loading state', () => {
@@ -66,54 +90,39 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             entries: []
         };
         const wrapper = shallow(
-            <ActivityFeed currentUser={currentUser} comments={items} tasks={items} versions={items} />
+            <ActivityFeed file={file} currentUser={currentUser} comments={items} tasks={items} versions={items} />
         );
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should render approval comment form if comment submit handler is passed in and comment permissions', () => {
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not render approval comment form if only comment submit handler is not passed in', () => {
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not render approval comment form if comment permissions are not present', () => {
-        const file = {
-            permissions: {
-                can_comment: false
-            }
-        };
+        file.permissions.can_comment = false;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should correctly render active state', () => {
+        versions.entries = [first_version, deleted_version];
         const wrapper = shallow(
-            <ActivityFeed currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
+            <ActivityFeed file={file} currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
 
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
@@ -141,11 +150,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should call create comment handler and close input on valid comment submit', () => {
         const createCommentSpy = jest.fn().mockReturnValue(Promise.resolve({}));
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(
             <ActivityFeed file={file} currentUser={currentUser} onCommentCreate={createCommentSpy} />
         );
@@ -163,11 +168,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should call create task handler and close input on valid task submit', () => {
         const createTaskSpy = jest.fn();
-        const file = {
-            permissions: {
-                can_comment: true
-            }
-        };
+        file.permissions.can_comment = true;
         const wrapper = shallow(
             <ActivityFeed
                 file={file}
@@ -201,9 +202,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('updateFeedItems()', () => {
         let wrapper;
         let instance;
-        const file = {
-            id: '12345'
-        };
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
             instance = wrapper.instance();
@@ -277,9 +275,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('clearFeedItems()', () => {
         let wrapper;
         let instance;
-        const file = {
-            id: '12345'
-        };
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
             instance = wrapper.instance();
@@ -318,7 +313,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     describe('componentWillReceiveProps()', () => {
         test('should invoke sortFeedItems() with new props', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
             const instance = wrapper.instance();
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
@@ -329,7 +324,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() once feedItems has already been set', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
             const instance = wrapper.instance();
             instance.componentWillReceiveProps(props);
 
@@ -341,7 +336,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() if all feed items are not present', () => {
             const props = { comments, tasks };
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
             const instance = wrapper.instance();
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
@@ -412,6 +407,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         beforeEach(() => {
             wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
             instance = wrapper.instance();
+            instance.updateRestoredVersions = jest.fn();
         });
 
         test('should replace the item with matching uuid in feedItems', () => {
@@ -753,22 +749,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                     done();
                 }
             );
-        });
-    });
-
-    describe('createActivityFeedApiError()', () => {
-        test('returns an Errors object if an API error occured', () => {
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
-            const instance = wrapper.instance();
-            const error = instance.createActivityFeedApiError({});
-            expect(error.inlineError).not.toBeUndefined();
-        });
-
-        test('should return an empty object if no API error occured', () => {
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
-            const instance = wrapper.instance();
-            const error = instance.createActivityFeedApiError();
-            expect(error.inlineError).toBeUndefined();
         });
     });
 });
