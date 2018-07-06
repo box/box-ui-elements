@@ -93,7 +93,28 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
+    test('should not show actions if task is pending', () => {
+        task.isPending = true;
+        const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
+
+        expect(
+            wrapper
+                .find('.bcs-task-assignees')
+                .children()
+                .getElements()[0].props.shouldShowActions
+        ).toBe(false);
+        expect(
+            !!wrapper
+                .find('.bcs-task-assignees')
+                .children()
+                .getElements()[1].props.shouldShowActions
+        ).toBe(false);
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should show actions for current user and if onAssignmentUpdate is defined', () => {
+        task.isPending = false;
         const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
 
         expect(

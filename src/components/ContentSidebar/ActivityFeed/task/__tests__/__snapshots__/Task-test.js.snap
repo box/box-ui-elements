@@ -94,6 +94,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
         "id": "be.taskDeletePrompt",
       }
     }
+    isPending={false}
     permissions={
       Object {
         "can_delete": true,
@@ -136,6 +137,82 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
 </div>
 `;
 
+exports[`components/ContentSidebar/ActivityFeed/task/Task should not show actions if task is pending 1`] = `
+<div
+  className="bcs-task bcs-is-pending"
+>
+  <mock-comment
+    created_at={12345678}
+    currentUser={
+      Object {
+        "id": 1,
+        "name": "Jake Thomas",
+      }
+    }
+    id="123125"
+    inlineDeleteMessage={
+      Object {
+        "defaultMessage": "Delete task?",
+        "id": "be.taskDeletePrompt",
+      }
+    }
+    isPending={true}
+    permissions={
+      Object {
+        "can_delete": true,
+        "can_edit": true,
+      }
+    }
+    tagged_message="Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! ."
+  />
+  <div
+    className="bcs-task-approvers-container"
+  >
+    <div
+      className="bcs-task-approvers-header"
+    >
+      <strong>
+        <FormattedMessage
+          defaultMessage="Tasks"
+          id="be.tasksForApproval"
+        />
+      </strong>
+      <span
+        className="bcs-task-due-date"
+      >
+        <FormattedMessage
+          defaultMessage="Due"
+          id="be.taskDueDate"
+        />
+        <FormattedDate
+          day="numeric"
+          month="long"
+          value={87654321}
+          year="numeric"
+        />
+      </span>
+    </div>
+    <div
+      className="bcs-task-assignees"
+    >
+      <PendingAssignment
+        id={1}
+        key="1"
+        name="Jake Thomas"
+        onTaskApproval={[Function]}
+        onTaskReject={[Function]}
+        shouldShowActions={false}
+      />
+      <CompletedAssignment
+        id={2}
+        key="2"
+        name="Peter Pan"
+      />
+    </div>
+  </div>
+</div>
+`;
+
 exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions for current user and if onAssignmentUpdate is defined 1`] = `
 <div
   className="bcs-task"
@@ -155,6 +232,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions fo
         "id": "be.taskDeletePrompt",
       }
     }
+    isPending={false}
     permissions={
       Object {
         "can_delete": true,
