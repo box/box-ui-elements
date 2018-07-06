@@ -6,16 +6,12 @@
     border-top: solid 1px $off-white;
     display: flex;
 
-    div[contentEditable="true"] {
-        width: auto;
-    }
-
-    .public-DraftEditorPlaceholder-root {
-        margin: 8px 10px;
-    }
-
     .bcs-comment-input {
         @import '~box-react-ui/lib/styles/common/forms';
+
+        div[contentEditable="true"].public-DraftEditor-content {
+            width: auto;
+        }
 
         box-shadow: none;
         margin-bottom: 15px;
@@ -68,7 +64,6 @@
                 max-height: 140px;
                 min-height: 68px;
                 overflow: auto;
-                width: auto;
             }
 
             ~ .bcs-comment-add-approver {
