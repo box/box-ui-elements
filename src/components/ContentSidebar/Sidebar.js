@@ -10,6 +10,8 @@ import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
 import SidebarNav from './SidebarNav';
 import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
+import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { ActivitySidebarProps } from './ActivitySidebar';
 import './Sidebar.scss';
 
 type Props = {
@@ -17,19 +19,14 @@ type Props = {
     currentUser?: User,
     file: BoxItem,
     getPreviewer: Function,
-    detailsSidebarProps: Object,
+    activitySidebarProps: ActivitySidebarProps,
+    detailsSidebarProps: DetailsSidebarProps,
     hasSkills: boolean,
     hasMetadata: boolean,
     hasActivityFeed: boolean,
     hasSkills: boolean,
     hasDetails: boolean,
     onSkillChange: Function,
-    onCommentCreate?: Function,
-    onCommentDelete?: Function,
-    onTaskCreate?: Function,
-    onTaskDelete?: Function,
-    onTaskUpdate?: Function,
-    onTaskAssignmentUpdate?: Function,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
     translations?: Translations,
@@ -38,12 +35,11 @@ type Props = {
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    commentsError?: Errors,
-    tasksError?: Errors,
+    activityFeedError?: Errors,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>,
-    onToggle: Function
+    onToggle: Function,
+    onVersionHistoryClick?: Function
 };
 
 const Sidebar = ({
@@ -55,26 +51,20 @@ const Sidebar = ({
     hasActivityFeed,
     hasSkills,
     hasDetails,
+    activitySidebarProps,
     detailsSidebarProps,
     onSkillChange,
-    onCommentCreate,
-    onCommentDelete,
-    onTaskCreate,
-    onTaskDelete,
-    onTaskUpdate,
-    onTaskAssignmentUpdate,
     getApproverWithQuery,
     getMentionWithQuery,
     tasks,
-    tasksError,
     comments,
-    commentsError,
     versions,
+    activityFeedError,
     approverSelectorContacts,
     mentionSelectorContacts,
     getAvatarUrl,
-    getUserProfileUrl,
-    onToggle
+    onToggle,
+    onVersionHistoryClick
 }: Props) => (
     <React.Fragment>
         <SidebarNav
@@ -86,7 +76,14 @@ const Sidebar = ({
             hasDetails={hasDetails}
         />
         {view === SIDEBAR_VIEW_DETAILS &&
-            hasDetails && <DetailsSidebar file={file} versions={versions} {...detailsSidebarProps} />}
+            hasDetails && (
+                <DetailsSidebar
+                    file={file}
+                    versions={versions}
+                    onVersionHistoryClick={onVersionHistoryClick}
+                    {...detailsSidebarProps}
+                />
+            )}
         {view === SIDEBAR_VIEW_SKILLS &&
             hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&
@@ -95,22 +92,16 @@ const Sidebar = ({
                     currentUser={currentUser}
                     file={file}
                     tasks={tasks}
-                    tasksError={tasksError}
                     comments={comments}
+                    versions={versions}
+                    activityFeedError={activityFeedError}
                     approverSelectorContacts={approverSelectorContacts}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    commentsError={commentsError}
-                    versions={versions}
-                    onCommentCreate={onCommentCreate}
-                    onCommentDelete={onCommentDelete}
-                    onTaskCreate={onTaskCreate}
-                    onTaskDelete={onTaskDelete}
-                    onTaskUpdate={onTaskUpdate}
-                    onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                    getUserProfileUrl={getUserProfileUrl}
                     getApproverWithQuery={getApproverWithQuery}
                     getMentionWithQuery={getMentionWithQuery}
                     getAvatarUrl={getAvatarUrl}
+                    onVersionHistoryClick={onVersionHistoryClick}
+                    {...activitySidebarProps}
                 />
             )}
     </React.Fragment>

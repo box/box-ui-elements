@@ -101,7 +101,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render activity state', () => {
+    test('should correctly render active state', () => {
         const wrapper = shallow(
             <ActivityFeed currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
@@ -510,7 +510,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             instance.updateFeedItem = jest.fn();
         });
 
-        test('should creating a pending item', () => {
+        test('should create a pending item', () => {
             instance.createComment({ text: message });
 
             expect(instance.addPendingItem).toBeCalledWith({
@@ -594,17 +594,21 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             instance.updateFeedItem = jest.fn();
         });
 
-        test('should creating a pending item', () => {
+        test('should create a pending item', () => {
             const dueAt = 123456;
             const dueDateString = new Date(dueAt).toISOString();
-            instance.createTask({ text, dueAt });
+            const assignees = [{ id: '1234', name: 'A. User' }];
+            instance.createTask({ text, dueAt, assignees });
 
             expect(instance.addPendingItem).toBeCalledWith({
                 due_at: dueDateString,
                 id: 'uniqueId',
                 is_completed: false,
                 message: text,
-                task_assignment_collection: { entries: [], total_count: 0 },
+                task_assignment_collection: {
+                    entries: [{ assigned_to: { id: '1234', name: 'A. User' } }],
+                    total_count: 1
+                },
                 type: 'task'
             });
         });
@@ -623,7 +627,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             );
         });
 
-        test('should invoke createCommentSuccessCallback() with new comment and id on success creating', () => {
+        test('should invoke createTaskSuccessCallback() with new comment and id on success creating', () => {
             const onTaskCreate = (textContent, assignees, dueAt, onSuccess) => {
                 const task = {
                     assignees,
@@ -749,6 +753,22 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                     done();
                 }
             );
+        });
+    });
+
+    describe('createActivityFeedApiError()', () => {
+        test('returns an Errors object if an API error occured', () => {
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const instance = wrapper.instance();
+            const error = instance.createActivityFeedApiError({});
+            expect(error.inlineError).not.toBeUndefined();
+        });
+
+        test('should return an empty object if no API error occured', () => {
+            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+            const instance = wrapper.instance();
+            const error = instance.createActivityFeedApiError();
+            expect(error.inlineError).toBeUndefined();
         });
     });
 });

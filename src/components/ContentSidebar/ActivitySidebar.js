@@ -10,30 +10,32 @@ import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
 
-type Props = {
-    file: BoxItem,
+type ExternalProps = {
     onCommentCreate?: Function,
     onCommentDelete?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
+    getUserProfileUrl?: (string) => Promise<string>
+};
+
+type Props = {
+    file: BoxItem,
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
-    onVersionHistoryClick?: Function,
     translations?: Translations,
     comments?: Comments,
     tasks?: Tasks,
     versions?: FileVersions,
+    activityFeedError?: Errors,
     currentUser?: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    commentsError?: Errors,
-    tasksError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>
-};
+    onVersionHistoryClick?: Function
+} & ExternalProps;
 
 const ActivitySidebar = ({
     file,
@@ -54,7 +56,8 @@ const ActivitySidebar = ({
     getMentionWithQuery,
     onVersionHistoryClick,
     getAvatarUrl,
-    getUserProfileUrl
+    getUserProfileUrl,
+    activityFeedError
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed
@@ -62,6 +65,7 @@ const ActivitySidebar = ({
             comments={comments}
             tasks={tasks}
             versions={versions}
+            activityFeedError={activityFeedError}
             approverSelectorContacts={approverSelectorContacts}
             mentionSelectorContacts={mentionSelectorContacts}
             currentUser={currentUser}
@@ -81,4 +85,5 @@ const ActivitySidebar = ({
     </SidebarContent>
 );
 
+export type ActivitySidebarProps = ExternalProps;
 export default ActivitySidebar;

@@ -49,13 +49,28 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
         }
 
         /**
-         * Adds event listeners once the component mounts@inheritdoc
+         * Adds event listeners once the component mounts
          * @inheritdoc
          */
         componentDidMount() {
+            this.bindDragDropHandlers();
+        }
+
+        componentDidUpdate() {
+            if (this.droppableEl) {
+                return;
+            }
+
+            this.bindDragDropHandlers();
+        }
+
+        /**
+         * Bind drag and drop event handlers to the droppableEl
+         */
+        bindDragDropHandlers = () => {
             const droppableEl = findDOMNode(this); // eslint-disable-line react/no-find-dom-node
             if (!droppableEl || !(droppableEl instanceof Element)) {
-                throw new Error('Bad mount in makeDroppable');
+                return;
             }
 
             // add event listeners directly on the element
@@ -65,7 +80,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             droppableEl.addEventListener('drop', this.handleDrop);
 
             this.droppableEl = droppableEl;
-        }
+        };
 
         /**
          * Removes event listeners when the component is going to unmount

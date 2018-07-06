@@ -15,8 +15,8 @@ import messages from '../../../messages';
 
 type Props = {
     name: string,
-    onTaskApproval: Function,
-    onTaskReject: Function,
+    onTaskApproval?: Function,
+    onTaskReject?: Function,
     shouldShowActions: boolean
 };
 
