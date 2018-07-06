@@ -13,6 +13,7 @@ import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
+import type { $AxiosXHR } from 'axios';
 import Sidebar from './Sidebar';
 import API from '../../api';
 import Internationalize from '../Internationalize';
@@ -24,7 +25,8 @@ import {
     DEFAULT_MAX_COLLABORATORS,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
-    SIDEBAR_VIEW_DETAILS
+    SIDEBAR_VIEW_DETAILS,
+    UNAUTHORIZED_CODE
 } from '../../constants';
 import {
     COMMENTS_FIELDS_TO_FETCH,
@@ -80,6 +82,13 @@ type State = {
     activityFeedError?: Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors
+};
+
+const activityFeedInlineError: Errors = {
+    inlineError: {
+        title: messages.errorOccured,
+        content: messages.activityFeedItemApiError
+    }
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -323,7 +332,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {BoxItem} file - Original file description
      * @return {void}
      */
-    setFileDescriptionErrorCallback = (e: Error, file: BoxItem): void => {
+    setFileDescriptionErrorCallback = (e: $AxiosXHR<any>, file: BoxItem): void => {
         // Reset the state back to the original description since the API call failed
         this.setState({
             file,
@@ -344,13 +353,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchVersionsErrorCallback = (e: Error) => {
+    fetchVersionsErrorCallback = (e: $AxiosXHR<any>) => {
         this.setState({
             versions: {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: e
+            activityFeedError: activityFeedInlineError
         });
         this.errorCallback(e);
     };
@@ -362,13 +371,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchCommentsErrorCallback = (e: Error) => {
+    fetchCommentsErrorCallback = (e: $AxiosXHR<any>) => {
         this.setState({
             comments: {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: e
+            activityFeedError: activityFeedInlineError
         });
         this.errorCallback(e);
     };
@@ -380,13 +389,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchTasksErrorCallback = (e: Error) => {
+    fetchTasksErrorCallback = (e: $AxiosXHR<any>) => {
         this.setState({
             tasks: {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: e
+            activityFeedError: activityFeedInlineError
         });
         this.errorCallback(e);
     };
@@ -398,9 +407,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchTaskAssignmentsErrorCallback = (e: Error): void => {
+    fetchTaskAssignmentsErrorCallback = (e: $AxiosXHR<any>): void => {
         this.setState({
-            activityFeedError: e
+            activityFeedError: activityFeedInlineError
         });
         this.errorCallback(e);
     };
@@ -412,15 +421,21 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchFileAccessStatsErrorCallback = (e: Error) => {
-        this.setState({
-            accessStats: undefined,
-            accessStatsError: {
+    fetchFileAccessStatsErrorCallback = (e: $AxiosXHR<any>) => {
+        let accessStatsError;
+
+        if (getProp(e, 'status') !== UNAUTHORIZED_CODE) {
+            accessStatsError = {
                 maskError: {
                     errorHeader: messages.fileAccessStatsErrorHeaderMessage,
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
                 }
-            }
+            };
+        }
+
+        this.setState({
+            accessStats: undefined,
+            accessStatsError
         });
         this.errorCallback(e);
     };
@@ -432,7 +447,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchCurrentUserErrorCallback = (e: Error) => {
+    fetchCurrentUserErrorCallback = (e: $AxiosXHR<any>) => {
         this.setState({
             currentUser: undefined,
             currentUserError: {
@@ -452,7 +467,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} error - Error object
      * @return {void}
      */
-    errorCallback = (error: Error): void => {
+    errorCallback = (error: $AxiosXHR<any>): void => {
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
@@ -733,7 +748,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         text: string,
         hasMention: boolean,
         successCallback: (comment: Comment) => void = noop,
-        errorCallback: (e: Error) => void = noop
+        errorCallback: (e: $AxiosXHR<any>) => void = noop
     ): void => {
         const { file } = this.state;
 
@@ -756,7 +771,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 this.createCommentSuccessCallback(comment);
                 successCallback(comment);
             },
-            errorCallback: (e: Error) => {
+            errorCallback: (e: $AxiosXHR<any>) => {
                 this.errorCallback(e);
                 errorCallback(e);
             }
@@ -764,7 +779,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Formats assignments, and then adds them to their task. 
+     * Formats assignments, and then adds them to their task.
      *
 
      * @param {Task} task - Task to which the assignments belong
@@ -801,7 +816,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
      * @return {void}
      */
-    createTaskAssignmentErrorCallback(e: Error, task: Task, errorCallback: Function) {
+    createTaskAssignmentErrorCallback(e: $AxiosXHR<any>, task: Task, errorCallback: Function) {
         this.errorCallback(e);
         errorCallback(e);
         // Attempt to delete the task due to it's bad assignment
@@ -809,7 +824,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * Creates a task assignment via the API. 
+     * Creates a task assignment via the API.
      *
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {Task} task - The newly created task from the API
@@ -896,7 +911,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         assignees: SelectorItems,
         dueAt?: string,
         successCallback: (task: Task) => void = noop,
-        errorCallback: (e: Error) => void = noop
+        errorCallback: (e: $AxiosXHR<any>) => void = noop
     ) => {
         const { file } = this.state;
 
@@ -911,7 +926,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             successCallback: (task: Task) => {
                 this.createTaskSuccessCallback(task, assignees, successCallback, errorCallback);
             },
-            errorCallback: (e: Error) => {
+            errorCallback: (e: $AxiosXHR<any>) => {
                 this.errorCallback(e);
                 errorCallback(e);
             }
@@ -933,7 +948,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         taskId: string,
         message: string,
         successCallback: (task: Task) => void = noop,
-        errorCallback: (e: Error) => void = noop,
+        errorCallback: (e: $AxiosXHR<any>) => void = noop,
         dueAt?: string
     ) => {
         const { file } = this.state;
@@ -953,7 +968,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 successCallback(task);
                 this.updateTaskSuccessCallback(task);
             },
-            errorCallback: (e: Error) => {
+            errorCallback: (e: $AxiosXHR<any>) => {
                 errorCallback(e);
                 this.errorCallback(e);
             }
@@ -1006,7 +1021,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         taskAssignmentId: string,
         resolutionState: string,
         successCallback: (taskAssignment: Task) => void = noop,
-        errorCallback: (e: Error) => void = noop
+        errorCallback: (e: $AxiosXHR<any>) => void = noop
     ) => {
         const { file } = this.state;
 
@@ -1019,7 +1034,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             taskAssignmentId,
             resolutionState,
             successCallback,
-            errorCallback: (e: Error) => {
+            errorCallback: (e: $AxiosXHR<any>) => {
                 errorCallback(e);
                 this.errorCallback(e);
             }
@@ -1038,7 +1053,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     deleteTask = (
         taskId: string,
         successCallback: (taskId: string) => void = noop,
-        errorCallback: (e: Error, taskId: string) => void = noop
+        errorCallback: (e: $AxiosXHR<any>, taskId: string) => void = noop
     ) => {
         const { file } = this.state;
         const { onTaskDelete = noop } = this.props.activitySidebarProps;
@@ -1055,7 +1070,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 successCallback(taskId);
                 this.deleteTaskSuccessCallback(taskId);
             },
-            errorCallback: (e: Error) => {
+            errorCallback: (e: $AxiosXHR<any>) => {
                 errorCallback(e, taskId);
                 this.errorCallback(e);
             }
@@ -1100,7 +1115,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         commentId: string,
         permissions: BoxItemPermission,
         successCallback: (commentId: string) => void = noop,
-        errorCallback: (e: Error, commentId: string) => void = noop
+        errorCallback: (e: $AxiosXHR<any>, commentId: string) => void = noop
     ) => {
         const { file } = this.state;
         const { onCommentDelete = noop } = this.props.activitySidebarProps;
@@ -1118,7 +1133,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 successCallback(commentId);
                 this.deleteCommentSuccessCallback(commentId);
             },
-            errorCallback: (e: Error) => {
+            errorCallback: (e: $AxiosXHR<any>) => {
                 errorCallback(e, commentId);
                 this.errorCallback(e);
             }
