@@ -42,7 +42,8 @@ import {
     FIELD_DUE_AT,
     FIELD_TRASHED_AT,
     FIELD_ASSIGNED_TO,
-    FIELD_RESOLUTION_STATE
+    FIELD_RESOLUTION_STATE,
+    FIELD_RESTORED_FROM
 } from '../constants';
 
 // Optional Box file fields
@@ -76,7 +77,8 @@ const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_METADATA_SKILLS,
     FIELD_ITEM_EXPIRATION,
     FIELD_METADATA_CLASSIFICATION,
-    FIELD_VERSION_NUMBER
+    FIELD_VERSION_NUMBER,
+    FIELD_RESTORED_FROM
 ];
 
 // Additional fields needed for preview

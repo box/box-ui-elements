@@ -44,7 +44,32 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             "type": "task",
           },
           Object {
+            "action": "upload",
             "created_at": "Thu Sep 20 33658 19:45:39 GMT-0600 (CST)",
+            "id": 123,
+            "modified_at": 1234567891,
+            "modified_by": Object {
+              "id": 11,
+              "name": "Akon",
+            },
+            "trashed_at": 1234567891,
+            "type": "file_version",
+          },
+          Object {
+            "action": "delete",
+            "created_at": "Thu Sep 20 33658 19:45:39 GMT-0600 (CST)",
+            "id": 234,
+            "modified_at": 1234567891,
+            "modified_by": Object {
+              "id": 11,
+              "name": "Akon",
+            },
+            "trashed_at": 1234567891,
+            "type": "file_version",
+          },
+          Object {
+            "action": "restore",
+            "created_at": 1234567891,
             "id": 123,
             "modified_at": 1234567891,
             "modified_by": Object {

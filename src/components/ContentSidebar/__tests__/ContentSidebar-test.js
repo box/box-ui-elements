@@ -7,7 +7,6 @@ import SidebarUtils from '../SidebarUtils';
 const {
     fileDescriptionInlineErrorTitleMessage,
     defaultInlineErrorContentMessage,
-    versionHistoryErrorHeaderMessage,
     defaultErrorMaskSubHeaderMessage,
     fileAccessStatsErrorHeaderMessage,
     currentUserErrorHeaderMessage,
@@ -110,12 +109,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         test('should set a maskError if there is an error in fetching version history', () => {
             const err = 'error';
             instance.fetchVersionsErrorCallback(err);
-            const inlineErrorState = wrapper.state().versionError.maskError;
-            expect(typeof versionHistoryErrorHeaderMessage).toBe('object');
-            expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(versionHistoryErrorHeaderMessage);
-            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
-
             const activityFeedErrorState = wrapper.state().activityFeedError.inlineError;
             expect(typeof errorOccured).toBe('object');
             expect(typeof activityFeedItemApiError).toBe('object');
