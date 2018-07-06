@@ -48,20 +48,19 @@ const first_version = {
     modified_by: { name: 'Akon', id: 11 }
 };
 
+const deleted_version = {
+    action: 'delete',
+    type: 'file_version',
+    id: 234,
+    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+    trashed_at: 1234567891,
+    modified_at: 1234567891,
+    modified_by: { name: 'Akon', id: 11 }
+};
+
 const versions = {
     total_count: 1,
-    entries: [
-        first_version,
-        {
-            action: 'delete',
-            type: 'file_version',
-            id: 234,
-            created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-            trashed_at: 1234567891,
-            modified_at: 1234567891,
-            modified_by: { name: 'Akon', id: 11 }
-        }
-    ]
+    entries: [first_version, deleted_version]
 };
 
 const file = {
@@ -115,6 +114,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should correctly render active state', () => {
+        versions.entries = [first_version, deleted_version];
         const wrapper = shallow(
             <ActivityFeed file={file} currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
@@ -770,6 +770,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     describe('addRestoredVersion()', () => {
         test('should return versions array with added entries for restored versions', () => {
+            versions.entries = [first_version, deleted_version];
             const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} versions={versions} />);
             const instance = wrapper.instance();
 
