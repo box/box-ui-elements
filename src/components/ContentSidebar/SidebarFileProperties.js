@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import * as React from 'react';
+import React from 'react';
 import getProp from 'lodash/get';
 import { injectIntl } from 'react-intl';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
