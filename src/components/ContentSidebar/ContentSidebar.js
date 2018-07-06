@@ -470,7 +470,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchFileErrorCallback = (e: Error) => {
+    fetchFileErrorCallback = (e: $AxiosXHR<any>) => {
         this.setState({
             isFileLoading: false
         });
