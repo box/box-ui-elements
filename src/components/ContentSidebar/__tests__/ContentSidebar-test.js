@@ -7,7 +7,6 @@ import SidebarUtils from '../SidebarUtils';
 const {
     fileDescriptionInlineErrorTitleMessage,
     defaultInlineErrorContentMessage,
-    versionHistoryErrorHeaderMessage,
     defaultErrorMaskSubHeaderMessage,
     fileAccessStatsErrorHeaderMessage,
     currentUserErrorHeaderMessage
@@ -97,7 +96,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
         test('should set a maskError if there is an error in fetching version history', () => {
             instance.fetchVersionsErrorCallback();
-            expect(typeof versionHistoryErrorHeaderMessage).toBe('object');
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
         });
     });
