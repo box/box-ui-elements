@@ -55,7 +55,7 @@ type Props = {
     modified_by: User,
     id: string,
     intl: any,
-    onInfo: Function,
+    onInfo?: Function,
     version_number: number
 };
 
