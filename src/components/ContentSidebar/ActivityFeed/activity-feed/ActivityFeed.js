@@ -21,6 +21,7 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
+    activityFeedError?: Errors,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     currentUser?: User,
@@ -60,6 +61,22 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
     approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
+
+    /**
+     *  Constructs an Activity Feed error object that renders to an inline feed error
+     *
+     * @return {Errors} An inline error message object
+     */
+    createActivityFeedApiError(e?: Errors): ?Errors {
+        return e
+            ? {
+                inlineError: {
+                    title: messages.errorOccured,
+                    content: messages.activityFeedItemApiError
+                }
+            }
+            : {};
+    }
 
     /**
      * Add a placeholder pending feed item.
@@ -198,15 +215,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {number} dueAt - Task's due date
      * @return {void}
      */
-    createTask = ({
-        text,
-        assignees,
-        dueAt
-    }: {
-        text: string,
-        assignees: Array<SelectorItems>,
-        dueAt: string
-    }): void => {
+    createTask = ({ text, assignees, dueAt }: { text: string, assignees: SelectorItems, dueAt: string }): void => {
         const uuid = uniqueId('task_');
         let dueAtString;
         if (dueAt) {
@@ -214,14 +223,21 @@ class ActivityFeed extends React.Component<Props, State> {
             dueAtString = dueAtDate.toISOString();
         }
 
+        const pendingAssignees = assignees.map((assignee: SelectorItem) => ({
+            assigned_to: {
+                id: assignee.id,
+                name: assignee.name
+            }
+        }));
+
         const task = {
             due_at: dueAtString,
             id: uuid,
             is_completed: false,
             message: text,
             task_assignment_collection: {
-                entries: [],
-                total_count: 0
+                entries: pendingAssignees,
+                total_count: pendingAssignees.length
             },
             type: 'task'
         };
@@ -466,12 +482,14 @@ class ActivityFeed extends React.Component<Props, State> {
             getMentionWithQuery,
             comments,
             tasks,
-            versions
+            versions,
+            activityFeedError
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
         const isLoading = !this.areFeedItemsLoaded(comments, tasks, versions);
+        const activityFeedApiError = this.createActivityFeedApiError(activityFeedError);
 
         return (
             // eslint-disable-next-line
@@ -486,6 +504,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
+                            {...activityFeedApiError}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}

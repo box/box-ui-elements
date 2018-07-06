@@ -145,7 +145,7 @@ type UserCollection = {
 };
 
 type SelectorItem = {
-    id?: string | number,
+    id: string,
     name: string,
     item: Object,
     value?: any
@@ -341,7 +341,7 @@ type UploadItem = {
     boxFile?: BoxItem,
     error?: Object,
     extension: string,
-    file: File,
+    file: UploadFile,
     name: string,
     progress: number,
     size: number,
@@ -359,7 +359,7 @@ type UploadItemAPIOptions = {
 };
 
 type UploadFileWithAPIOptions = {
-    file: File,
+    file: UploadFile,
     options?: UploadItemAPIOptions
 };
 
@@ -475,7 +475,7 @@ type Task = {
     id: string,
     created_at: string,
     created_by: User,
-    due_at: string,
+    due_at?: string,
     message: string,
     task_assignment_collection: TaskAssignments
 };
@@ -526,3 +526,22 @@ type SidebarView =
     | typeof SIDEBAR_VIEW_DETAILS
     | typeof SIDEBAR_VIEW_METADATA
     | typeof SIDEBAR_VIEW_ACTIVITY;
+
+type FileSystemFileEntry = {
+    createReader: Function,
+    file: Function,
+    isDirectory: boolean,
+    isFile: boolean,
+    name: string
+};
+
+type UploadDataTransferItemWithAPIOptions = {
+    item: DataTransferItem,
+    options?: UploadItemAPIOptions
+};
+
+type UploadFile = File & { webkitRelativePath?: string };
+
+type DirectoryReader = {
+    readEntries: (Function, Function) => void
+};

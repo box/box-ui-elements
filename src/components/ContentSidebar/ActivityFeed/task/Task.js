@@ -22,7 +22,7 @@ const TASK_COMPLETED = 'completed';
 const TASK_INCOMPLETE = 'incomplete';
 
 type Props = {
-    task_assignment_collection: TaskAssignments,
+    task_assignment_collection: TaskAssignments | SelectorItems,
     created_at: number | string,
     created_by: User,
     currentUser?: User,
