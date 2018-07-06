@@ -25,7 +25,8 @@ import {
     DEFAULT_MAX_COLLABORATORS,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
-    SIDEBAR_VIEW_DETAILS
+    SIDEBAR_VIEW_DETAILS,
+    UNAUTHORIZED_CODE
 } from '../../constants';
 import {
     COMMENTS_FIELDS_TO_FETCH,
@@ -41,8 +42,6 @@ import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
 import './ContentSidebar.scss';
-
-const UNAUTHORIZED_CODE = 403;
 
 type Props = {
     fileId?: string,

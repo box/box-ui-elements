@@ -216,3 +216,6 @@ export const HTTP_PUT: 'put' = 'put';
 export const HTTP_DELETE: 'delete' = 'delete';
 export const HTTP_OPTIONS: 'options' = 'options';
 export const HTTP_HEAD: 'head' = 'head';
+
+/* ------------------ HTTP Codes  ---------------------- */
+export const UNAUTHORIZED_CODE = 403;
