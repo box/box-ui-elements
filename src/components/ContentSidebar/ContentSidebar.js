@@ -1346,7 +1346,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Opens classification modal with refresh callback
+     * Add classification click handler
      *
      * @private
      * @return {void}
@@ -1421,8 +1421,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     versionError,
                                     fileError,
                                     isFileLoading,
-                                    onDescriptionChange: this.onDescriptionChange,
                                     onClassificationChange: this.onClassificationChange,
+                                    onDescriptionChange: this.onDescriptionChange,
                                     ...detailsSidebarProps
                                 }}
                                 activitySidebarProps={activitySidebarProps}

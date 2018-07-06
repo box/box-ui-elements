@@ -185,22 +185,24 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
 `;
 
 exports[`components/ContentSidebar/SidebarFileProperties should render ItemProperties 1`] = `
-<ItemProperties
-  classificationProps={Object {}}
-  createdAt="2018-04-18T16:56:05.352Z"
-  description="foo"
-  descriptionTextareaProps={
-    Object {
-      "data-resin-target": "description",
+<React.Fragment>
+  <ItemProperties
+    classificationProps={Object {}}
+    createdAt="2018-04-18T16:56:05.352Z"
+    description="foo"
+    descriptionTextareaProps={
+      Object {
+        "data-resin-target": "description",
+      }
     }
-  }
-  modifiedAt="2018-04-18T16:56:05.352Z"
-  onDescriptionChange={[MockFunction]}
-  owner="foo"
-  retentionPolicyProps={Object {}}
-  size="1 B"
-  uploader="foo"
-/>
+    modifiedAt="2018-04-18T16:56:05.352Z"
+    onDescriptionChange={[MockFunction]}
+    owner="foo"
+    retentionPolicyProps={Object {}}
+    size="1 B"
+    uploader="foo"
+  />
+</React.Fragment>
 `;
 
 exports[`components/ContentSidebar/SidebarFileProperties should render an error 1`] = `
