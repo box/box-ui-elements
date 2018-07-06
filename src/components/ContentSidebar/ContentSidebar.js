@@ -62,7 +62,8 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
-    responseInterceptor?: Function
+    responseInterceptor?: Function,
+    onVersionHistoryClick?: Function
 };
 
 type State = {
@@ -557,28 +558,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * File task assignment fetch success callback
-     *
-     * @private
-     * @param {Tasks} tasks - Box tasks to be populated with assignments
-     * @param {TaskAssignments} assignments - Fetched Box task assigments for specified task
-     * @return {Object}
-     */
-    fetchTaskAssignmentsSuccessCallback = (tasks: Tasks, assignments: TaskAssignments): Tasks => {
-        const { entries, total_count } = tasks;
-        return {
-            entries: entries.map((task) => ({
-                ...task,
-                task_assignment_collection: this.populateTaskAssignments(
-                    task.task_assignment_collection.entries,
-                    assignments
-                )
-            })),
-            total_count
-        };
-    };
-
-    /**
      * File access stats fetch success callback
      *
      * @private
@@ -785,21 +764,120 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Formats assignments, and then adds them to their task. 
+     *
+
+     * @param {Task} task - Task to which the assignments belong
+     * @param {Task} assignments - List of task assignments
+     * @return {Task}
+     */
+    appendAssignmentsToTask(task: Task, assignments: Array<TaskAssignment>) {
+        if (!assignments) {
+            return task;
+        }
+
+        task.task_assignment_collection.entries = assignments.map((taskAssignment) => {
+            const { id, assigned_to, message, resolution_state } = taskAssignment;
+            return {
+                type: 'task_assignment',
+                id,
+                assigned_to,
+                message,
+                resolution_state
+            };
+        });
+
+        // Increment the assignment collection count by the number of new assignments
+        task.task_assignment_collection.total_count += assignments.length;
+        return task;
+    }
+
+    /**
+     * Handles a failed task assignment create
+     *
+     * @param {Task} task - The task for which the assignment create failed
+     * @param {Task} e - The API error
+     * @param {Function} errorCallback - Passed in error callback
+
+     * @return {void}
+     */
+    createTaskAssignmentErrorCallback(e: Error, task: Task, errorCallback: Function) {
+        this.errorCallback(e);
+        errorCallback(e);
+        // Attempt to delete the task due to it's bad assignment
+        this.deleteTask(task.id);
+    }
+
+    /**
+     * Creates a task assignment via the API. 
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Task} task - The newly created task from the API
+     * @param {SelectorItem} assignee - The user assigned to this task
+     * @param {Function} errorCallback - Task create error callback
+
+     * @return {Promise<TaskAssignment}
+     */
+    createTaskAssignment(file: BoxItem, task: Task, assignee: SelectorItem, errorCallback: Function) {
+        return new Promise((resolve, reject) => {
+            this.api.getTaskAssignmentsAPI(false).createTaskAssignment({
+                file,
+                taskId: task.id,
+                assignTo: { id: assignee.id },
+                successCallback: (data: TaskAssignment) => resolve(data),
+                errorCallback: (e) => {
+                    this.createTaskAssignmentErrorCallback(e, task, errorCallback);
+                    reject();
+                }
+            });
+        });
+    }
+
+    /**
      * Adds a task to the tasks state and increases total_count.
      *
      * @param {Task} task - The newly created task from the API
-     * @return {void}
+     * @param {SelectorItems} assignees - The list of users assigned to this task
+     * @param {Function} successCallback - Task create success callback
+     * @param {Function} errorCallback - Task create error callback
+
+     * @return {Promise<any>}
      */
-    createTaskSuccessCallback(task: Task): void {
-        const { tasks } = this.state;
-        if (tasks && tasks.entries) {
+    createTaskSuccessCallback(
+        task: Task,
+        assignees: SelectorItems,
+        successCallback: Function,
+        errorCallback: Function
+    ): Promise<any> {
+        const { tasks, file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        if (!tasks || !tasks.entries) {
+            return Promise.reject();
+        }
+
+        const assignmentPromises = [];
+        assignees.forEach((assignee: SelectorItem) => {
+            // Create a promise for each assignment
+            assignmentPromises.push(this.createTaskAssignment(file, task, assignee, errorCallback));
+        });
+
+        return Promise.all(assignmentPromises).then((taskAssignments) => {
+            const formattedTask = this.appendAssignmentsToTask(task, taskAssignments);
+            // After all assignments have been created, update the state with
+            // the updated task object
             this.setState({
                 tasks: {
-                    entries: [...tasks.entries, task],
+                    entries: [...tasks.entries, formattedTask],
                     total_count: tasks.total_count + 1
                 }
             });
-        }
+
+            successCallback(task);
+        });
     }
 
     /**
@@ -807,7 +885,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} text - The task's text
-     * @param {Array} assignees - Array of assignees
+     * @param {SelectorItems} assignees - List of users assigned to this task
      * @param {string} dueAt - The comment's text
      * @param {Function} successCallback - Called on successful task creation
      * @param {Function} errorCallback - Called on failure to create task
@@ -815,7 +893,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     createTask = (
         text: string,
-        assignees: Array<SelectorItems>,
+        assignees: SelectorItems,
         dueAt?: string,
         successCallback: (task: Task) => void = noop,
         errorCallback: (e: Error) => void = noop
@@ -831,8 +909,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             message: text,
             dueAt,
             successCallback: (task: Task) => {
-                this.createTaskSuccessCallback(task);
-                successCallback(task);
+                this.createTaskSuccessCallback(task, assignees, successCallback, errorCallback);
             },
             errorCallback: (e: Error) => {
                 this.errorCallback(e);
@@ -1115,23 +1192,33 @@ class ContentSidebar extends PureComponent<Props, State> {
             }
         };
 
-        let tasks = tasksWithoutAssignments;
         const { entries } = tasksWithoutAssignments;
-        const taskAssignmentPromises = [];
-        entries.forEach((task) => {
-            const promise = this.api.getTasksAPI(shouldDestroy).getAssignments(
-                fileId,
-                task.id,
-                (assignments) => {
-                    tasks = this.fetchTaskAssignmentsSuccessCallback(tasks, assignments);
-                },
-                this.fetchTaskAssignmentsErrorCallback,
-                requestData
-            );
-            taskAssignmentPromises.push(promise);
+        const formattedTasks = { total_count: 0, entries: [] };
+        const assignmentPromises = [];
+        entries.forEach((task: Task) => {
+            const assignmentPromise = new Promise((resolve) => {
+                this.api.getTasksAPI(shouldDestroy).getAssignments(
+                    fileId,
+                    task.id,
+                    (assignments) => {
+                        formattedTasks.entries.push(this.appendAssignmentsToTask(task, assignments.entries));
+                        formattedTasks.total_count += 1;
+                        resolve();
+                    },
+                    (e) => {
+                        this.fetchTaskAssignmentsErrorCallback(e);
+                        resolve();
+                    },
+                    requestData
+                );
+            });
+
+            assignmentPromises.push(assignmentPromise);
         });
 
-        Promise.all(taskAssignmentPromises).then(() => this.setState({ tasks }));
+        Promise.all(assignmentPromises).then(() => {
+            this.setState({ tasks: formattedTasks });
+        });
     };
 
     /**
@@ -1332,7 +1419,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             hasActivityFeed,
             className,
             activitySidebarProps,
-            detailsSidebarProps
+            detailsSidebarProps,
+            onVersionHistoryClick
         }: Props = this.props;
         const {
             file,
@@ -1377,7 +1465,15 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     onDescriptionChange: this.onDescriptionChange,
                                     ...detailsSidebarProps
                                 }}
-                                activitySidebarProps={activitySidebarProps}
+                                activitySidebarProps={{
+                                    ...activitySidebarProps,
+                                    onCommentCreate: this.createComment,
+                                    onCommentDelete: this.deleteComment,
+                                    onTaskCreate: this.createTask,
+                                    onTaskDelete: this.deleteTask,
+                                    onTaskUpdate: this.updateTask,
+                                    onTaskAssignmentUpdate: this.updateTaskAssignment
+                                }}
                                 versions={versions}
                                 getPreviewer={getPreviewer}
                                 hasSkills={hasSkills}
@@ -1393,18 +1489,13 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 activityFeedError={activityFeedError}
                                 currentUser={currentUser}
                                 currentUserError={currentUserError}
-                                onCommentCreate={this.createComment}
-                                onCommentDelete={this.deleteComment}
-                                onTaskCreate={this.createTask}
-                                onTaskDelete={this.deleteTask}
-                                onTaskUpdate={this.updateTask}
-                                onTaskAssignmentUpdate={this.updateTaskAssignment}
                                 getApproverWithQuery={this.getApproverWithQuery}
                                 getMentionWithQuery={this.getMentionWithQuery}
                                 approverSelectorContacts={approverSelectorContacts}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 getAvatarUrl={this.getAvatarUrl}
                                 onToggle={this.onToggle}
+                                onVersionHistoryClick={onVersionHistoryClick}
                             />
                         ) : (
                             <div className='bcs-loading'>
