@@ -439,7 +439,7 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     addRestoredVersion(versions: FileVersions) {
         const { file } = this.props;
-        const { restored_from, modified_at } = file;
+        const { restored_from, modified_at, file_version } = file;
 
         if (restored_from) {
             const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
@@ -448,6 +448,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 // $FlowFixMe
                 versions.entries.push({
                     ...restoredVersion,
+                    id: file_version.id,
                     created_at: modified_at,
                     action: VERSION_RESTORE_ACTION
                 });
