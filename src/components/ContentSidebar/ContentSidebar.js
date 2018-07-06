@@ -81,7 +81,6 @@ type State = {
     tasksError?: Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors,
-    isCollapsed?: boolean,
     isFileLoading?: boolean
 };
 
@@ -158,10 +157,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         });
 
         // Clone initial state to allow for state reset on new files
-        this.state = cloneDeep({
-            ...this.initialState,
-            isCollapsed
-        });
+        this.state = cloneDeep(this.initialState);
     }
 
     /**
@@ -215,7 +211,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.fetchData(nextProps);
         } else if (hasVisibilityChanged) {
             this.setState({
-                isCollapsed: nextProps.isCollapsed,
                 view: this.getDefaultSidebarView(nextProps.isCollapsed, file)
             });
         }
@@ -514,7 +509,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        this.setState({ file, view: this.getDefaultSidebarView(this.state.isCollapsed, file), isFileLoading: false });
+        this.setState({ file, view: this.getDefaultSidebarView(this.props.isCollapsed, file), isFileLoading: false });
     };
 
     /**
@@ -1391,7 +1386,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             currentUserError,
-            isCollapsed,
             isFileLoading
         }: State = this.state;
 
@@ -1399,7 +1393,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             'be bcs',
             {
                 [`bcs-${view}`]: !!view,
-                'bcs-is-open': !isCollapsed
+                'bcs-is-open': !!view
             },
             className
         );

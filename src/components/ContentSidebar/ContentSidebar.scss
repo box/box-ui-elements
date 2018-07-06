@@ -1,13 +1,13 @@
 @import '../variables';
 
-$sidebarWidth: 400px;
+$sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
 
 .be {
     &.bcs {
         background-color: $haze;
         display: flex;
         max-width: $sidebarWidth;
-        min-width: 60px;
+        min-width: $sidebarTabsWidth;
         width: auto;
     }
 

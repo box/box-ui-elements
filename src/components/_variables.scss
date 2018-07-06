@@ -29,6 +29,9 @@ $lighter-light-blue: rgba($light-blue, .4) !default;
 
 $font: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
+$sidebarTabsWidth: 60px;
+$sidebarContentWidth: 340px;
+
 @mixin rendering {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
