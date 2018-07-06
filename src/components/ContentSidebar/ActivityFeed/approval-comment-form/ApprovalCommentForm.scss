@@ -9,6 +9,10 @@
     .bcs-comment-input {
         @import '~box-react-ui/lib/styles/common/forms';
 
+        div[contentEditable="true"].public-DraftEditor-content {
+            width: auto;
+        }
+
         box-shadow: none;
         margin-bottom: 15px;
         margin-top: 20px;
@@ -60,7 +64,6 @@
                 max-height: 140px;
                 min-height: 68px;
                 overflow: auto;
-                width: auto;
             }
 
             ~ .bcs-comment-add-approver {
