@@ -69,6 +69,9 @@ const file = {
         can_comment: true
     },
     modified_at: 1234567891,
+    file_version: {
+        id: 987
+    },
     restored_from: {
         id: first_version.id,
         type: first_version.type

@@ -425,7 +425,7 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     addRestoredVersion(versions: FileVersions) {
         const { file } = this.props;
-        const { restored_from, modified_at } = file;
+        const { restored_from, modified_at, file_version } = file;
 
         if (restored_from) {
             const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
@@ -434,6 +434,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 // $FlowFixMe
                 versions.entries.push({
                     ...restoredVersion,
+                    id: file_version.id,
                     created_at: modified_at,
                     action: VERSION_RESTORE_ACTION
                 });
@@ -498,7 +499,8 @@ class ActivityFeed extends React.Component<Props, State> {
             comments,
             tasks,
             versions,
-            activityFeedError
+            activityFeedError,
+            onVersionHistoryClick
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -528,7 +530,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             // but you must at least be able to comment to do these operations.
                             onTaskDelete={hasCommentPermission ? this.deleteTask : noop}
                             onTaskEdit={hasCommentPermission ? this.updateTask : noop}
-                            onVersionInfo={this.openVersionHistoryPopup}
+                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}
