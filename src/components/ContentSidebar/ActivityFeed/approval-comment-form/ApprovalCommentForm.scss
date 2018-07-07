@@ -38,6 +38,10 @@
                 margin-right: 0;
                 margin-top: 0;
             }
+
+            .btn:last-child {
+                margin-left: 10px;
+            }
         }
 
         ~ .bcs-comment-add-approver {
@@ -106,10 +110,6 @@
         .bcs-comment-add-approver-date-input {
             margin-left: 0;
             margin-right: 0;
-
-            .date-picker-open-btn {
-                bottom: 6px;
-            }
         }
 
         .pill-selector-wrapper {
