@@ -207,13 +207,17 @@ function getFileFromEntry(entry: FileSystemFileEntry): Promise<UploadFile> {
  * Get file from DataTransferItem or UploadDataTransferItemWithAPIOptions
  *
  * @param {UploadDataTransferItemWithAPIOptions | DataTransferItem} itemData
- * @returns {Promise<UploadFile | UploadFileWithAPIOptions>}
+ * @returns {Promise<UploadFile | UploadFileWithAPIOptions | null>}
  */
 async function getFileFromDataTransferItem(
     itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem
 ): Promise<UploadFile | UploadFileWithAPIOptions> {
     const item = getDataTransferItem(itemData);
     const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
+    if (!entry) {
+        return null;
+    }
+
     const file = await getFileFromEntry(entry);
 
     if (doesDataTransferItemContainAPIOptions(itemData)) {

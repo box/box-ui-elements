@@ -338,6 +338,10 @@ class ContentUploader extends Component<Props, State> {
     ): void => {
         dataTransferItems.forEach(async (item) => {
             const file = await getFileFromDataTransferItem(item);
+            if (!file) {
+                return;
+            }
+
             this.addFilesWithoutRelativePathToQueue([file], itemUpdateCallback);
         });
     };
