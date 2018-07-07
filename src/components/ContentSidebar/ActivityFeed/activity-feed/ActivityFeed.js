@@ -432,7 +432,8 @@ class ActivityFeed extends React.Component<Props, State> {
                 // $FlowFixMe
                 versions.entries.push({
                     ...restoredVersion,
-                    id: file_version.id || restoredVersion.id,
+                    // $FlowFixMe
+                    id: file_version.id,
                     created_at: modified_at,
                     action: VERSION_RESTORE_ACTION
                 });
