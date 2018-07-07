@@ -431,7 +431,6 @@ class ActivityFeed extends React.Component<Props, State> {
             const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
 
             if (restoredVersion) {
-                // $FlowFixMe
                 versions.entries.push({
                     ...restoredVersion,
                     // $FlowFixMe
