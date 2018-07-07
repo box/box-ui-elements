@@ -117,17 +117,22 @@ class Task extends React.Component<Props> {
                                                 <PendingAssignment
                                                     {...assigned_to}
                                                     key={assigned_to.id}
-                                                    onTaskApproval={() =>
-                                                        onAssignmentUpdate(id, assignmentId, TASK_APPROVED)
+                                                    onTaskApproval={
+                                                        isPending
+                                                            ? noop
+                                                            : () =>
+                                                                onAssignmentUpdate(id, assignmentId, TASK_APPROVED)
                                                     }
-                                                    onTaskReject={() =>
-                                                        onAssignmentUpdate(id, assignmentId, TASK_REJECTED)
+                                                    onTaskReject={
+                                                        isPending
+                                                            ? noop
+                                                            : () =>
+                                                                onAssignmentUpdate(id, assignmentId, TASK_REJECTED)
                                                     }
                                                     shouldShowActions={
                                                         onAssignmentUpdate !== noop &&
                                                           currentUser &&
-                                                          assigned_to.id === currentUser.id &&
-                                                          !isPending
+                                                          assigned_to.id === currentUser.id
                                                     }
                                                 />
                                             );
