@@ -69,6 +69,9 @@ const file = {
         can_comment: true
     },
     modified_at: 1234567891,
+    file_version: {
+        id: 987
+    },
     restored_from: {
         id: first_version.id,
         type: first_version.type
@@ -749,33 +752,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                     done();
                 }
             );
-        });
-    });
-
-    describe('createActivityFeedApiError()', () => {
-        test('returns an Errors object if an API error occured', () => {
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
-            const instance = wrapper.instance();
-            const error = instance.createActivityFeedApiError({});
-            expect(error.inlineError).not.toBeUndefined();
-        });
-
-        test('should return an empty object if no API error occured', () => {
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
-            const instance = wrapper.instance();
-            const error = instance.createActivityFeedApiError();
-            expect(error.inlineError).toBeUndefined();
-        });
-    });
-
-    describe('addRestoredVersion()', () => {
-        test('should return versions array with added entries for restored versions', () => {
-            versions.entries = [first_version, deleted_version];
-            const wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} versions={versions} />);
-            const instance = wrapper.instance();
-
-            const versionsWithRestore = instance.addRestoredVersion(versions);
-            expect(versionsWithRestore.entries.length).toEqual(3);
         });
     });
 });

@@ -60,7 +60,7 @@ type Props = {
     action: 'upload',
     collaborators: { [collaborator_id: string]: User },
     intl: any,
-    onInfo: Function,
+    onInfo?: Function,
     versions: FileVersions,
     version_start: number,
     version_end: number

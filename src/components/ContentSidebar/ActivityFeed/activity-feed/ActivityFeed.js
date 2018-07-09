@@ -66,22 +66,6 @@ class ActivityFeed extends React.Component<Props, State> {
     approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
     /**
-     *  Constructs an Activity Feed error object that renders to an inline feed error
-     *
-     * @return {Errors} An inline error message object
-     */
-    createActivityFeedApiError(e?: Errors): ?Errors {
-        return e
-            ? {
-                inlineError: {
-                    title: messages.errorOccured,
-                    content: messages.activityFeedItemApiError
-                }
-            }
-            : {};
-    }
-
-    /**
      * Add a placeholder pending feed item.
      *
      * @param {Object} itemBase - Base properties for item to be added to the feed as pending.
@@ -441,7 +425,7 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     addRestoredVersion(versions: FileVersions) {
         const { file } = this.props;
-        const { restored_from, modified_at } = file;
+        const { restored_from, modified_at, file_version } = file;
 
         if (restored_from) {
             const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
@@ -450,6 +434,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 // $FlowFixMe
                 versions.entries.push({
                     ...restoredVersion,
+                    id: file_version.id,
                     created_at: modified_at,
                     action: VERSION_RESTORE_ACTION
                 });
@@ -514,13 +499,13 @@ class ActivityFeed extends React.Component<Props, State> {
             comments,
             tasks,
             versions,
-            activityFeedError
+            activityFeedError,
+            onVersionHistoryClick
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
         const isLoading = !this.areFeedItemsLoaded(comments, tasks, versions);
-        const activityFeedApiError = this.createActivityFeedApiError(activityFeedError);
 
         return (
             // eslint-disable-next-line
@@ -535,7 +520,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
-                            {...activityFeedApiError}
+                            {...activityFeedError}
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
@@ -545,7 +530,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             // but you must at least be able to comment to do these operations.
                             onTaskDelete={hasCommentPermission ? this.deleteTask : noop}
                             onTaskEdit={hasCommentPermission ? this.updateTask : noop}
-                            onVersionInfo={this.openVersionHistoryPopup}
+                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}
