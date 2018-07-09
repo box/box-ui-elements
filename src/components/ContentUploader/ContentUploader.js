@@ -468,7 +468,7 @@ class ContentUploader extends Component<Props, State> {
         const { rootFolderId } = this.props;
 
         // Convert files from the file API to upload items
-        const newItems = this.getNewFiles(files).map((file) => {
+        const newItems = files.map((file) => {
             const uploadFile = getFile(file);
             const uploadAPIOptions = getFileAPIOptions(file);
             const { name, size } = uploadFile;
