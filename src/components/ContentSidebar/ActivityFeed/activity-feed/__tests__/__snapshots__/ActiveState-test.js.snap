@@ -56,9 +56,11 @@ exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should 
         "task_assignment_collection": Object {
           "entries": Array [
             Object {
-              "id": 11,
-              "name": "Akon",
-              "resolution_state": "completed",
+              "assigned_to": Object {
+                "id": 11,
+                "name": "Akon",
+              },
+              "resolution_state": "incomplete",
             },
           ],
           "total_count": 1,

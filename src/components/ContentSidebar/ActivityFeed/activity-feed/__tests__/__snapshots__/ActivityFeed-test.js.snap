@@ -38,8 +38,16 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             },
             "tagged_message": "test",
             "task_assignment_collection": Object {
-              "entries": Array [],
-              "total_count": 0,
+              "entries": Array [
+                Object {
+                  "assigned_to": Object {
+                    "id": 11,
+                    "name": "Akon",
+                  },
+                  "resolution_state": "incomplete",
+                },
+              ],
+              "total_count": 1,
             },
             "type": "task",
           },
