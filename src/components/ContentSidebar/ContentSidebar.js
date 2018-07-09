@@ -548,31 +548,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Update Tasks to include task assignments
-     *
-     * @private
-     * @param {Array<TaskAssignment>} entries - Box task assignment entries
-     * @param {TaskAssignments} assignments - Box task assigments
-     * @return {TaskAssignments} Updated Box task assignments
-     */
-    populateTaskAssignments(entries: Array<TaskAssignment>, assignments: TaskAssignments): TaskAssignments {
-        return {
-            total_count: assignments.entries.length,
-            entries: entries.map((item: TaskAssignment) => {
-                const assignment = assignments.entries.find((a) => a.id === item.id);
-                if (assignment) {
-                    const { message, resolution_state } = assignment;
-                    return {
-                        ...assignment,
-                        resolution_state: message ? message.toLowerCase() : resolution_state
-                    };
-                }
-                return item;
-            })
-        };
-    }
-
-    /**
      * File access stats fetch success callback
      *
      * @private
@@ -798,7 +773,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 id,
                 assigned_to,
                 message,
-                resolution_state
+                resolution_state: message ? message.toLowerCase() : resolution_state
             };
         });
 

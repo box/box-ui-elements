@@ -62,7 +62,7 @@ const ActiveState = ({
                         </li>
                     );
                 case 'task':
-                    return (
+                    return item.task_assignment_collection.entries.total_count ? (
                         <li className='bcs-activity-feed-task' key={type + id}>
                             <Task
                                 {...item}
@@ -82,7 +82,7 @@ const ActiveState = ({
                                 }}
                             />
                         </li>
-                    );
+                    ) : null;
                 case 'file_version':
                     return (
                         <li className='bcs-version-item' key={type + id}>

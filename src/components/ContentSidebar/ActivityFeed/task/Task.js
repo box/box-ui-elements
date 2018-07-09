@@ -112,7 +112,6 @@ class Task extends React.Component<Props> {
                                         case TASK_REJECTED:
                                             return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
                                         case TASK_INCOMPLETE:
-                                        default:
                                             return (
                                                 <PendingAssignment
                                                     {...assigned_to}
@@ -136,6 +135,8 @@ class Task extends React.Component<Props> {
                                                     }
                                                 />
                                             );
+                                        default:
+                                            return null;
                                     }
                                 }
                             )

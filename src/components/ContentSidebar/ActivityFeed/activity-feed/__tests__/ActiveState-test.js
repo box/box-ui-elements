@@ -21,8 +21,8 @@ const items = [
         modified_by: { name: 'Jay-Z', id: 10 },
         dueAt: '2018-07-03T14:43:52-07:00',
         task_assignment_collection: {
-            entries: [],
-            total_count: 0
+            entries: [{ assigned_to: { name: 'Akon', id: 11 }, resolution_state: 'incomplete' }],
+            total_count: 1
         }
     },
     {
