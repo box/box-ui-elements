@@ -9,9 +9,9 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
+import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
-import BusyIndicator from '../../BusyIndicator';
 import messages from '../../../messages';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 
@@ -181,35 +181,36 @@ class Keywords extends PureComponent<Props, State> {
         });
 
         return (
-            <div className='be-keywords'>
-                {hasKeywords &&
-                    isEditable &&
-                    !isLoading && (
-                        <PlainButton
-                            type='button'
-                            className={editClassName}
-                            onClick={this.toggleIsEditing}
-                            data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
-                        >
-                            <IconEdit />
-                        </PlainButton>
+            <LoadingIndicatorWrapper isLoading={isLoading}>
+                <div className='be-keywords'>
+                    {hasKeywords &&
+                        isEditable &&
+                        !isLoading && (
+                            <PlainButton
+                                type='button'
+                                className={editClassName}
+                                onClick={this.toggleIsEditing}
+                                data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
+                            >
+                                <IconEdit />
+                            </PlainButton>
+                        )}
+                    {isEditing && (
+                        <EditableKeywords
+                            keywords={entries}
+                            onSave={this.onSave}
+                            onAdd={this.onAdd}
+                            onDelete={this.onDelete}
+                            onCancel={this.onCancel}
+                        />
                     )}
-                {isEditing && (
-                    <EditableKeywords
-                        keywords={entries}
-                        onSave={this.onSave}
-                        onAdd={this.onAdd}
-                        onDelete={this.onDelete}
-                        onCancel={this.onCancel}
-                    />
-                )}
-                {!isEditing &&
-                    hasKeywords && (
-                        <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
-                    )}
-                {!isEditing && !hasKeywords && <FormattedMessage {...messages.skillNoInfoFoundError} />}
-                {isLoading && <BusyIndicator />}
-            </div>
+                    {!isEditing &&
+                        hasKeywords && (
+                            <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
+                        )}
+                    {!isEditing && !hasKeywords && <FormattedMessage {...messages.skillNoInfoFoundError} />}
+                </div>
+            </LoadingIndicatorWrapper>
         );
     }
 }

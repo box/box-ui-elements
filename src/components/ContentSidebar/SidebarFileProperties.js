@@ -8,9 +8,9 @@ import React from 'react';
 import getProp from 'lodash/get';
 import { injectIntl } from 'react-intl';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
+import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
-import BusyIndicator from './BusyIndicator';
 
 import { FIELD_METADATA_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
@@ -41,7 +41,7 @@ const SidebarFileProperties = ({
     const value = getProp(file, `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
 
     return (
-        <React.Fragment>
+        <LoadingIndicatorWrapper isLoading={isLoading}>
             <ItemProperties
                 createdAt={file.created_at}
                 description={file.description}
@@ -71,8 +71,7 @@ const SidebarFileProperties = ({
                         : {}
                 }
             />
-            {isLoading && <BusyIndicator />}
-        </React.Fragment>
+        </LoadingIndicatorWrapper>
     );
 };
 
