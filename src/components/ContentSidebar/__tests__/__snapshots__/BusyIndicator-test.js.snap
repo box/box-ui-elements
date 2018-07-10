@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`components/ContentSidebar/BusyIndicator should correctly render 1`] = `
-<div
-  className="bcs-is-busy"
->
-  <LoadingIndicator />
-</div>
-`;
