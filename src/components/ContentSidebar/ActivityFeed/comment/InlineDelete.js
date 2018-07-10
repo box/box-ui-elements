@@ -12,6 +12,7 @@ import { Flyout, Overlay } from 'box-react-ui/lib/components/flyout';
 import IconTrash from 'box-react-ui/lib/icons/general/IconTrash';
 
 import messages from '../../../messages';
+import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 type Props = {
     onDelete: Function,
@@ -52,7 +53,11 @@ class InlineDelete extends React.Component<Props, State> {
                 })}
             >
                 <Flyout onClose={this.handleFlyoutClose} onOpen={this.handleFlyoutOpen} position='middle-left'>
-                    <PlainButton aria-label={intl.formatMessage(messages.deleteLabel)} className='bcs-comment-delete'>
+                    <PlainButton
+                        aria-label={intl.formatMessage(messages.deleteLabel)}
+                        className='bcs-comment-delete'
+                        data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
+                    >
                         <IconTrash />
                     </PlainButton>
                     <Overlay>
