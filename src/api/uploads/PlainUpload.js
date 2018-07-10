@@ -6,6 +6,9 @@
 
 import noop from 'lodash/noop';
 import BaseUpload from './BaseUpload';
+import { digest } from '../../util/webcrypto';
+
+const CONTENT_MD5_HEADER = 'Content-MD5';
 
 class PlainUpload extends BaseUpload {
     successCallback: Function;
@@ -51,9 +54,9 @@ class PlainUpload extends BaseUpload {
      *
      * @param {Object} - Request options
      * @param {boolean} [options.url] - Upload URL to use
-     * @return {void}
+     * @return {Promise} Async function promise
      */
-    preflightSuccessHandler = ({ data }: { data: { upload_url?: string } }): void => {
+    preflightSuccessHandler = async ({ data }: { data: { upload_url?: string } }): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
@@ -73,16 +76,27 @@ class PlainUpload extends BaseUpload {
             parent: { id: this.folderId }
         });
 
-        this.xhr.uploadFile({
+        const options = {
             url: uploadUrl,
             data: {
                 attributes,
                 file: this.file
             },
+            headers: {},
             successHandler: this.uploadSuccessHandler,
             errorHandler: this.preflightErrorHandler,
             progressHandler: this.uploadProgressHandler
-        });
+        };
+
+        // Calculate SHA1 for file consistency check
+        const sha1 = await this.computeSHA1(this.file);
+        if (sha1) {
+            options.headers = {
+                [CONTENT_MD5_HEADER]: sha1
+            };
+        }
+
+        this.xhr.uploadFile(options);
     };
 
     /**
@@ -147,6 +161,29 @@ class PlainUpload extends BaseUpload {
         }
 
         clearTimeout(this.retryTimeout);
+    }
+
+    /**
+     * Calculates SHA1 of a file
+     *
+     * @param {File} file
+     * @return {Promise} Promise that resolves with SHA1 digest
+     */
+    async computeSHA1(file: File): Promise<any> {
+        let sha1 = '';
+
+        try {
+            // Adapted from https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
+            const reader = new window.FileReader();
+            const { buffer } = await this.readFile(reader, file);
+            const hashBuffer: ArrayBuffer = await digest('SHA-1', buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            sha1 = hashArray.map((b) => `00${b.toString(16)}`.slice(-2)).join('');
+        } catch (e) {
+            // Return empty sha1 if hashing fails
+        }
+
+        return sha1;
     }
 }
 
