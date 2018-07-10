@@ -26,34 +26,62 @@ exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should 
 `;
 
 exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should correctly render with comments, tasks, versions 1`] = `
-<ActiveState
-  items={
-    Array [
-      Object {
-        "created_at": "2018-07-03T14:43:52-07:00",
-        "created_by": Object {
+<ul
+  className="bcs-activity-feed-active-state"
+>
+  <li
+    className="bcs-activity-feed-comment"
+    key="comment123"
+  >
+    <Comment
+      created_at="2018-07-03T14:43:52-07:00"
+      created_by={
+        Object {
           "id": 11,
           "name": "Akon",
-        },
-        "id": 123,
-        "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
-        "type": "comment",
-      },
-      Object {
-        "created_at": "2018-07-03T14:43:52-07:00",
-        "created_by": Object {
+        }
+      }
+      id={123}
+      permissions={
+        Object {
+          "can_delete": false,
+          "can_edit": false,
+        }
+      }
+      tagged_message="test @[123:Jeezy] @[10:Kanye West]"
+      type="comment"
+    />
+  </li>
+  <li
+    className="bcs-activity-feed-task"
+    key="task234"
+  >
+    <Task
+      created_at="2018-07-03T14:43:52-07:00"
+      created_by={
+        Object {
           "id": 11,
           "name": "Akon",
-        },
-        "dueAt": "2018-07-03T14:43:52-07:00",
-        "id": 234,
-        "modified_at": "2018-07-03T14:43:52-07:00",
-        "modified_by": Object {
+        }
+      }
+      dueAt="2018-07-03T14:43:52-07:00"
+      id={234}
+      modified_at="2018-07-03T14:43:52-07:00"
+      modified_by={
+        Object {
           "id": 10,
           "name": "Jay-Z",
-        },
-        "tagged_message": "test",
-        "task_assignment_collection": Object {
+        }
+      }
+      permissions={
+        Object {
+          "can_delete": true,
+          "can_edit": true,
+        }
+      }
+      tagged_message="test"
+      task_assignment_collection={
+        Object {
           "entries": Array [
             Object {
               "assigned_to": Object {
@@ -64,21 +92,28 @@ exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should 
             },
           ],
           "total_count": 1,
-        },
-        "type": "task",
-      },
-      Object {
-        "created_at": "2018-07-03T14:43:52-07:00",
-        "id": 345,
-        "modified_at": "2018-07-03T14:43:52-07:00",
-        "modified_by": Object {
+        }
+      }
+      type="task"
+    />
+  </li>
+  <li
+    className="bcs-version-item"
+    key="file_version345"
+  >
+    <Version
+      created_at="2018-07-03T14:43:52-07:00"
+      id={345}
+      modified_at="2018-07-03T14:43:52-07:00"
+      modified_by={
+        Object {
           "id": 11,
           "name": "Akon",
-        },
-        "trashed_at": "2018-07-03T14:43:52-07:00",
-        "type": "file_version",
-      },
-    ]
-  }
-/>
+        }
+      }
+      trashed_at="2018-07-03T14:43:52-07:00"
+      type="file_version"
+    />
+  </li>
+</ul>
 `;
