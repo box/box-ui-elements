@@ -645,13 +645,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFile(id: string, forceFetch: boolean = false): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api
-                .getFileAPI()
-                .file(id, this.fetchFileSuccessCallback, this.fetchFileErrorCallback, forceFetch, true);
-
             this.setState({
                 isFileLoading: true
             });
+
+            this.api
+                .getFileAPI()
+                .file(id, this.fetchFileSuccessCallback, this.fetchFileErrorCallback, forceFetch, true);
         }
     }
 
