@@ -86,12 +86,13 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(box-react-ui|react-virtualized)/)"
     ],
-    "collectCoverage": false,
+    "collectCoverage": true,
     "coverageDirectory": "<rootDir>/reports",
     "collectCoverageFrom": [
-      "src/**/*.js",
+      "src/components/ContentSidebar/**/*.js",
       "!**/node_modules/**",
-      "!**/__tests__/**"
+      "!**/__tests__/**",
+      "!**/index.js"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/build/enzyme-adapter.js",
     "snapshotSerializers": [
