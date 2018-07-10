@@ -19,28 +19,28 @@ class FolderUpload {
     folders: { [string]: FolderUploadNode } = {};
     files: Array<UploadFile> = [];
     destinationFolderId: string;
-    uploadFile: Function;
-    addFolderToQueue: Function;
+    addFilesToUploadQueue: Function;
+    addFolderToUploadQueue: Function;
     baseAPIOptions: Object;
 
     /**
      * [constructor]
      *
-     * @param {Function} uploadFile
+     * @param {Function} addFilesToUploadQueue
      * @param {string} destinationFolderId
-     * @param {Function} addFolderToQueue
+     * @param {Function} addFolderToUploadQueue
      * @param {Object} baseAPIOptions
      * @return {void}
      */
     constructor(
-        uploadFile: Function,
+        addFilesToUploadQueue: Function,
         destinationFolderId: string,
-        addFolderToQueue: Function,
+        addFolderToUploadQueue: Function,
         baseAPIOptions: Object
     ): void {
-        this.uploadFile = uploadFile;
+        this.addFilesToUploadQueue = addFilesToUploadQueue;
         this.destinationFolderId = destinationFolderId;
-        this.addFolderToQueue = addFolderToQueue;
+        this.addFolderToUploadQueue = addFolderToUploadQueue;
         this.baseAPIOptions = baseAPIOptions;
     }
 
@@ -86,22 +86,20 @@ class FolderUpload {
     }
 
     /**
-     * Build folder tree from dataTransferItems
+     * Build folder tree from dataTransferItem
      *
-     * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
+     * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} dataTransferItem
      * @returns {Promise<any>}
      */
-    async buildFolderTreeFromDataTransferItems(
-        dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>
+    async buildFolderTreeFromDataTransferItem(
+        dataTransferItem: DataTransferItem | UploadDataTransferItemWithAPIOptions
     ) {
-        dataTransferItems.forEach((itemData) => {
-            const item = getDataTransferItem(itemData);
-            const apiOptions = getDataTransferItemAPIOptions(itemData);
-            const entry = getEntryFromDataTransferItem(item);
-            const { name } = entry;
+        const item = getDataTransferItem(dataTransferItem);
+        const apiOptions = getDataTransferItemAPIOptions(dataTransferItem);
+        const entry = getEntryFromDataTransferItem(item);
+        const { name } = entry;
 
-            this.folders[name] = this.createFolderUploadNode(name, apiOptions, entry);
-        });
+        this.folders[name] = this.createFolderUploadNode(name, apiOptions, entry);
     }
 
     /**
@@ -115,8 +113,8 @@ class FolderUpload {
     createFolderUploadNode(name: string, apiOptions: Object, entry?: FileSystemFileEntry): FolderUploadNode {
         return new FolderUploadNode(
             name,
-            this.uploadFile,
-            this.addFolderToQueue,
+            this.addFilesToUploadQueue,
+            this.addFolderToUploadQueue,
             apiOptions,
             {
                 ...this.baseAPIOptions,
@@ -142,11 +140,19 @@ class FolderUpload {
         successCallback: Function
     }): Promise<any> {
         const nodes = ((Object.values(this.folders): any): Array<FolderUploadNode>);
-        await Promise.all(
-            nodes.map((node: FolderUploadNode) => node.upload(this.destinationFolderId, errorCallback, true))
-        );
+        if (nodes.length < 1) {
+            return;
+        }
 
-        successCallback();
+        // There should be only 1 FolderUploadNode in the `this.folders`
+        const node = nodes[0];
+        await node.upload(this.destinationFolderId, errorCallback, true);
+        // Simulate BoxItem
+        successCallback([
+            {
+                id: node.folderId
+            }
+        ]);
     }
 
     /**

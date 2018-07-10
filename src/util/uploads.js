@@ -211,7 +211,7 @@ function getFileFromEntry(entry: FileSystemFileEntry): Promise<UploadFile> {
  */
 async function getFileFromDataTransferItem(
     itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem
-): Promise<UploadFile | UploadFileWithAPIOptions> {
+): Promise<UploadFile | UploadFileWithAPIOptions | null> {
     const item = getDataTransferItem(itemData);
     const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
     if (!entry) {

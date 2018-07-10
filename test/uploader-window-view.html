@@ -107,7 +107,8 @@
             document.querySelector('.uploader1').innerHTML = '';
 
             uploader1.on('upload', (data) => {
-                console.log(`Successfully uploaded a file: ${data ? data.id : 'No File ID'}`);
+                console.log('Successfully uploaded a file:');
+                console.log(data);
             });
             uploader1.on('error', (data) => {
                 console.log(`Failed to upload: ${JSON.stringify(data)}`);

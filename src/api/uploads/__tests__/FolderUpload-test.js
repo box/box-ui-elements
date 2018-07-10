@@ -16,19 +16,16 @@ describe('api/uploads/FolderUpload', () => {
     });
 
     describe('upload()', () => {
-        test('should upload each folder node', () => {
+        test('should upload folder node', () => {
             const upload1 = jest.fn();
-            const upload2 = jest.fn();
             const errorCallback = () => 'errorCallback';
             folderUploadInstance.folders = {
-                1: { upload: upload1 },
-                2: { upload: upload2 }
+                1: { upload: upload1 }
             };
 
-            folderUploadInstance.upload({ errorCallback });
+            folderUploadInstance.upload({ errorCallback, noop });
 
             expect(upload1).toHaveBeenCalledWith(destinationFolderID, errorCallback, true);
-            expect(upload2).toHaveBeenCalledWith(destinationFolderID, errorCallback, true);
         });
     });
 
@@ -109,17 +106,16 @@ describe('api/uploads/FolderUpload', () => {
         });
     });
 
-    describe('buildFolderTreeFromDataTransferItems()', () => {
+    describe('buildFolderTreeFromDataTransferItem()', () => {
         test('should construct folders correctly', async () => {
             const createFolderUploadNodeMock = jest.fn();
             folderUploadInstance.createFolderUploadNode = createFolderUploadNodeMock;
 
-            await folderUploadInstance.buildFolderTreeFromDataTransferItems([
-                { item: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} },
-                { item: { name: 'f4', webkitRelativePath: 'a/c/f4' }, options: {} }
+            await folderUploadInstance.buildFolderTreeFromDataTransferItem([
+                { item: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} }
             ]);
 
-            expect(createFolderUploadNodeMock).toHaveBeenCalledTimes(2);
+            expect(createFolderUploadNodeMock).toHaveBeenCalledTimes(1);
         });
     });
 
