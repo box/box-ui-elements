@@ -33,36 +33,4 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
 
         expect(wrapper.find('SidebarContent').children()).toHaveLength(0);
     });
-
-    test('should have onClassificationClick prop on SidebarFileProperties', () => {
-        const onClassificationClick = jest.fn();
-        const wrapper = getWrapper({
-            file: {
-                ...file,
-                permissions: {
-                    can_upload: true
-                }
-            },
-            hasProperties: true,
-            onClassificationClick
-        });
-
-        expect(wrapper.find('SidebarFileProperties').prop('onClassificationClick')).toEqual(onClassificationClick);
-    });
-
-    test('should not have onClassificationClick prop on SidebarFileProperties', () => {
-        const onClassificationClick = jest.fn();
-        const wrapper = getWrapper({
-            file: {
-                ...file,
-                permissions: {
-                    can_upload: false
-                }
-            },
-            hasProperties: true,
-            onClassificationClick
-        });
-
-        expect(wrapper.find('SidebarFileProperties').prop('onClassificationClick')).toBeUndefined();
-    });
 });

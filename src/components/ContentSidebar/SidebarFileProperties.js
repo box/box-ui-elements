@@ -25,6 +25,21 @@ type Props = {
     intl: any
 };
 
+/**
+ * Gets the openModal prop for ItemProperties
+ *
+ * @param {Object} file the box file
+ * @param {Function} onClassificationClick the optional callback
+ */
+export const getClassificationModal = (file: BoxItem, onClassificationClick: ?Function) => {
+    // Changing classification requires edit metadata permission, which is included in can_upload
+    if (onClassificationClick && getProp(file, 'permissions.can_upload', false)) {
+        return onClassificationClick;
+    }
+
+    return undefined;
+};
+
 const SidebarFileProperties = ({
     file,
     onDescriptionChange,
@@ -50,7 +65,7 @@ const SidebarFileProperties = ({
             classificationProps={
                 hasClassification
                     ? {
-                        openModal: onClassificationClick,
+                        openModal: getClassificationModal(file, onClassificationClick),
                         value,
                         [INTERACTION_TARGET]: value
                             ? DETAILS_TARGETS.CLASSIFICATION_EDIT

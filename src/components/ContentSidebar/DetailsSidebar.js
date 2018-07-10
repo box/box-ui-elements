@@ -6,7 +6,6 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import getProp from 'lodash/get';
 import messages from '../messages';
 import { SECTION_TARGETS } from '../../interactionTargets';
 import SidebarAccessStats from './SidebarAccessStats';
@@ -80,11 +79,7 @@ const DetailsSidebar = ({
                     file={file}
                     {...fileError}
                     hasClassification={hasClassification}
-                    onClassificationClick={
-                        onClassificationClick && getProp(file, 'permissions.can_upload', false)
-                            ? onClassificationClick
-                            : undefined
-                    }
+                    onClassificationClick={onClassificationClick}
                     hasRetentionPolicy={hasRetentionPolicy}
                     retentionPolicy={retentionPolicy}
                     onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
