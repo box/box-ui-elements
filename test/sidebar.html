@@ -103,7 +103,8 @@
                         hasProperties: true,
                         hasNotices: true,
                         hasVersions: true,
-                        hasAccessStats: true
+                        hasAccessStats: true,
+                        hasClassification: true
                     },
                     hasActivityFeed: true,
                     hasSkills: true,
@@ -145,6 +146,11 @@
                         hasProperties: true,
                         hasNotices: true,
                         hasVersions: true,
+                        hasClassification: true,
+                        onClassificationClick: (refreshFn) => {
+                            console.log('refreshing');
+                            refreshFn();
+                        }
                     },
                     hasSkills: true,
                     hasActivityFeed:true,
