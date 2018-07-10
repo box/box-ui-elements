@@ -1,34 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/withErrorHandling should render a ErrorMask 1`] = `
-<ErrorMask
-  errorHeader={
-    <FormattedMessage
-      defaultMessage="baz"
-      description="bar"
-      id="foo"
-    />
-  }
-/>
+<SidebarSection
+  className=""
+  isOpen={true}
+>
+  <ErrorMask
+    errorHeader={
+      <FormattedMessage
+        defaultMessage="baz"
+        description="bar"
+        id="foo"
+      />
+    }
+  />
+</SidebarSection>
 `;
 
 exports[`components/withErrorHandling should render a ErrorMask with sub header 1`] = `
-<ErrorMask
-  errorHeader={
-    <FormattedMessage
-      defaultMessage="baz"
-      description="bar"
-      id="foo"
-    />
-  }
-  errorSubHeader={
-    <FormattedMessage
-      defaultMessage="baz"
-      description="bar"
-      id="foo"
-    />
-  }
-/>
+<SidebarSection
+  className=""
+  isOpen={true}
+>
+  <ErrorMask
+    errorHeader={
+      <FormattedMessage
+        defaultMessage="baz"
+        description="bar"
+        id="foo"
+      />
+    }
+    errorSubHeader={
+      <FormattedMessage
+        defaultMessage="baz"
+        description="bar"
+        id="foo"
+      />
+    }
+  />
+</SidebarSection>
 `;
 
 exports[`components/withErrorHandling should render an InlineError, along with the wrapped component 1`] = `
