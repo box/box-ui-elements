@@ -10,7 +10,7 @@ import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay 
 import { retryNumOfTimes } from '../../util/function';
 import { digest } from '../../util/webcrypto';
 import hexToBase64 from '../../util/base64';
-import { DEFAULT_RETRY_DELAY_MS } from '../../constants';
+import { DEFAULT_RETRY_DELAY_MS, UNAUTHORIZED_CODE } from '../../constants';
 import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
 import createWorker from '../../util/uploadsSHA1Worker';
 
@@ -205,8 +205,9 @@ class MultiputUpload extends BaseMultiput {
             }
 
             if (
-                (errorData && (errorData.status === 403 && errorData.code === 'storage_limit_exceeded')) ||
-                (errorData.status === 403 && errorData.code === 'access_denied_insufficient_permissions')
+                (errorData &&
+                    (errorData.status === UNAUTHORIZED_CODE && errorData.code === 'storage_limit_exceeded')) ||
+                (errorData.status === UNAUTHORIZED_CODE && errorData.code === 'access_denied_insufficient_permissions')
             ) {
                 this.errorCallback(errorData);
                 return;
@@ -453,26 +454,6 @@ class MultiputUpload extends BaseMultiput {
                 return;
             }
         }
-    }
-
-    /**
-     * Read a blob with FileReader
-     *
-     * @param {FileReader} reader
-     * @param {Blob} blob
-     * @return {Promise}
-     */
-    readFile(reader: FileReader, blob: Blob): Promise<any> {
-        return new Promise((resolve, reject) => {
-            reader.readAsArrayBuffer(blob);
-            reader.onload = () => {
-                resolve({
-                    buffer: reader.result,
-                    readCompleteTimestamp: Date.now()
-                });
-            };
-            reader.onerror = reject;
-        });
     }
 
     /**

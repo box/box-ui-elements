@@ -128,6 +128,31 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should not allow actions when comment is pending', () => {
+        const comment = {
+            created_at: TIME_STRING_SEPT_27_2017,
+            tagged_message: 'test',
+            created_by: { name: '50 Cent', id: 10 },
+            permissions: { can_delete: true },
+            isPending: true
+        };
+
+        const wrapper = shallow(
+            <Comment
+                id='123'
+                {...comment}
+                currentUser={currentUser}
+                approverSelectorContacts={approverSelectorContacts}
+                mentionSelectorContacts={mentionSelectorContacts}
+                handlers={allHandlers}
+                onDelete={jest.fn()}
+            />
+        );
+
+        expect(wrapper.find('InlineDelete').length).toEqual(0);
+        expect(wrapper.find('InlineEdit').length).toEqual(0);
+    });
+
     // eslint-disable-next-line
     test('should allow user to delete if they have delete permissions on the comment and delete handler is defined', () => {
         const comment = {

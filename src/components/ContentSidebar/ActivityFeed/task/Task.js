@@ -112,16 +112,21 @@ class Task extends React.Component<Props> {
                                         case TASK_REJECTED:
                                             return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
                                         case TASK_INCOMPLETE:
-                                        default:
                                             return (
                                                 <PendingAssignment
                                                     {...assigned_to}
                                                     key={assigned_to.id}
-                                                    onTaskApproval={() =>
-                                                        onAssignmentUpdate(id, assignmentId, TASK_APPROVED)
+                                                    onTaskApproval={
+                                                        isPending
+                                                            ? noop
+                                                            : () =>
+                                                                onAssignmentUpdate(id, assignmentId, TASK_APPROVED)
                                                     }
-                                                    onTaskReject={() =>
-                                                        onAssignmentUpdate(id, assignmentId, TASK_REJECTED)
+                                                    onTaskReject={
+                                                        isPending
+                                                            ? noop
+                                                            : () =>
+                                                                onAssignmentUpdate(id, assignmentId, TASK_REJECTED)
                                                     }
                                                     shouldShowActions={
                                                         onAssignmentUpdate !== noop &&
@@ -130,6 +135,8 @@ class Task extends React.Component<Props> {
                                                     }
                                                 />
                                             );
+                                        default:
+                                            return null;
                                     }
                                 }
                             )

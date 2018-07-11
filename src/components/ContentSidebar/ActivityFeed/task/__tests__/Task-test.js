@@ -94,6 +94,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     });
 
     test('should show actions for current user and if onAssignmentUpdate is defined', () => {
+        task.isPending = false;
         const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
 
         expect(

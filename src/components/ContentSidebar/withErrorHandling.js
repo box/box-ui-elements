@@ -9,6 +9,8 @@ import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import { FormattedMessage } from 'react-intl';
 
+import SidebarSection from './SidebarSection';
+
 type Props = {
     errorCode?: string
 } & Errors;
@@ -21,12 +23,14 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
 }: Props) => {
     if (maskError) {
         return (
-            <ErrorMask
-                errorHeader={<FormattedMessage {...maskError.errorHeader} />}
-                errorSubHeader={
-                    maskError.errorSubHeader ? <FormattedMessage {...maskError.errorSubHeader} /> : undefined
-                }
-            />
+            <SidebarSection>
+                <ErrorMask
+                    errorHeader={<FormattedMessage {...maskError.errorHeader} />}
+                    errorSubHeader={
+                        maskError.errorSubHeader ? <FormattedMessage {...maskError.errorSubHeader} /> : undefined
+                    }
+                />
+            </SidebarSection>
         );
     } else if (inlineError) {
         return (
