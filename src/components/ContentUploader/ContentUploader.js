@@ -92,12 +92,6 @@ const FILE_LIMIT_DEFAULT = 100; // Upload at most 100 files at once by default
 const HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT = 8000;
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 const UPLOAD_CONCURRENCY = 6;
-const getFolderUploadAPIStub = () => ({
-    upload: ({ successCallback }) => {
-        successCallback();
-    },
-    cancel: noop
-});
 
 class ContentUploader extends Component<Props, State> {
     id: string;
@@ -385,7 +379,7 @@ class ContentUploader extends Component<Props, State> {
         newItems.forEach(async (item) => {
             const folderUpload = this.getFolderUploadAPI(folderId);
             await folderUpload.buildFolderTreeFromDataTransferItem(item);
-            this.addFoldersToUploadQueue(folderUpload, itemUpdateCallback, fileAPIOptions);
+            this.addFolderToUploadQueue(folderUpload, itemUpdateCallback, fileAPIOptions);
         });
     };
 
@@ -411,7 +405,7 @@ class ContentUploader extends Component<Props, State> {
         // Only 1 folder tree can be built with files having webkitRelativePath properties
         folderUpload.buildFolderTreeFromWebkitRelativePath(files);
 
-        this.addFoldersToUploadQueue(folderUpload, itemUpdateCallback, fileAPIOptions);
+        this.addFolderToUploadQueue(folderUpload, itemUpdateCallback, fileAPIOptions);
     }
 
     /**
@@ -428,7 +422,7 @@ class ContentUploader extends Component<Props, State> {
     };
 
     /**
-     * Add folders to upload queue
+     * Add folder to upload queue
      *
      * @private
      * @param {FolderUpload} folderUpload
@@ -436,28 +430,23 @@ class ContentUploader extends Component<Props, State> {
      * @param {Object} apiOptions
      * @return {void}
      */
-    addFoldersToUploadQueue = (folderUpload: FolderUpload, itemUpdateCallback: Function, apiOptions: Object): void => {
-        Object.keys(folderUpload.folders).forEach((folderName, index) => {
-            this.addToQueue(
-                [
-                    // $FlowFixMe no file property
-                    {
-                        // folderUpload.upload() uploads all folders, so we use the real folder upload api instance
-                        // for only the first folder. The rest of the folders are added to the queue with stub
-                        // API instances.
-                        api: index === 0 ? folderUpload : getFolderUploadAPIStub(),
-                        extension: '',
-                        isFolder: true,
-                        name: folderName,
-                        options: apiOptions,
-                        progress: 0,
-                        size: 1,
-                        status: STATUS_PENDING
-                    }
-                ],
-                itemUpdateCallback
-            );
-        });
+    addFolderToUploadQueue = (folderUpload: FolderUpload, itemUpdateCallback: Function, apiOptions: Object): void => {
+        this.addToQueue(
+            [
+                // $FlowFixMe no file property
+                {
+                    api: folderUpload,
+                    extension: '',
+                    isFolder: true,
+                    name: folderUpload.folder.name,
+                    options: apiOptions,
+                    progress: 0,
+                    size: 1,
+                    status: STATUS_PENDING
+                }
+            ],
+            itemUpdateCallback
+        );
     };
 
     /**

@@ -99,6 +99,7 @@ class FolderUploadNode {
             this.folderId = error.context_info.conflicts[0].id;
         }
 
+        // The root folder has already been added to the upload queue in ContentUploader
         if (isRoot) {
             return;
         }

@@ -16,7 +16,7 @@ import {
 const PATH_DELIMITER = '/';
 
 class FolderUpload {
-    folders: { [string]: FolderUploadNode } = {};
+    folder: FolderUploadNode;
     files: Array<UploadFile> = [];
     destinationFolderId: string;
     addFilesToUploadQueue: Function;
@@ -45,7 +45,7 @@ class FolderUpload {
     }
 
     /**
-     * Creates a folder tree from wekbkitRelativePath
+     * Create a folder tree from fileList wekbkitRelativePath
      *
      * @public
      * @param  {Array} Array<UploadFileWithAPIOptions | UploadFile> | FileList
@@ -66,15 +66,28 @@ class FolderUpload {
                 return;
             }
 
-            let subTree = this.folders;
-            // Walk the path
-            pathArray.forEach((folderName, index) => {
+            // Since only 1 folder tree can be uploaded a time with using webkitRelativePath, the root folder name
+            // of all the files should be the same.
+            if (!this.folder) {
+                const rootFolderName = pathArray[0];
+                this.folder = this.createFolderUploadNode(rootFolderName, fileAPIOptions);
+            }
+
+            // Add file to the root folder
+            if (pathArray.length === 1) {
+                this.folder.files.push(file);
+            }
+
+            let subTree = this.folder.folders;
+            // Walk the path after the root folder
+            const pathArryAfterRoot = pathArray.slice(1);
+            pathArryAfterRoot.forEach((folderName, index) => {
                 // Create new child folder
                 if (!subTree[folderName]) {
                     subTree[folderName] = this.createFolderUploadNode(folderName, fileAPIOptions);
                 }
 
-                if (index === pathArray.length - 1) {
+                if (index === pathArryAfterRoot.length - 1) {
                     // end of path, push the file
                     subTree[folderName].files.push(file);
                 } else {
@@ -86,7 +99,7 @@ class FolderUpload {
     }
 
     /**
-     * Build folder tree from dataTransferItem
+     * Build folder tree from dataTransferItem, which can only represent 1 folder tree
      *
      * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} dataTransferItem
      * @returns {Promise<any>}
@@ -99,7 +112,7 @@ class FolderUpload {
         const entry = getEntryFromDataTransferItem(item);
         const { name } = entry;
 
-        this.folders[name] = this.createFolderUploadNode(name, apiOptions, entry);
+        this.folder = this.createFolderUploadNode(name, apiOptions, entry);
     }
 
     /**
@@ -139,18 +152,11 @@ class FolderUpload {
         errorCallback: Function,
         successCallback: Function
     }): Promise<any> {
-        const nodes = ((Object.values(this.folders): any): Array<FolderUploadNode>);
-        if (nodes.length < 1) {
-            return;
-        }
-
-        // There should be only 1 FolderUploadNode in the `this.folders`
-        const node = nodes[0];
-        await node.upload(this.destinationFolderId, errorCallback, true);
+        await this.folder.upload(this.destinationFolderId, errorCallback, true);
         // Simulate BoxItem
         successCallback([
             {
-                id: node.folderId
+                id: this.folder.folderId
             }
         ]);
     }

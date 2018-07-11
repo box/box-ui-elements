@@ -19,9 +19,7 @@ describe('api/uploads/FolderUpload', () => {
         test('should upload folder node', () => {
             const upload1 = jest.fn();
             const errorCallback = () => 'errorCallback';
-            folderUploadInstance.folders = {
-                1: { upload: upload1 }
-            };
+            folderUploadInstance.folder = { upload: upload1 };
 
             folderUploadInstance.upload({ errorCallback, noop });
 
@@ -41,14 +39,13 @@ describe('api/uploads/FolderUpload', () => {
 
             // /
             // - a/
-            expect(Object.values(folderUploadInstance.folders)).toHaveLength(1);
-            expect(Object.keys(folderUploadInstance.folders)).toEqual(['a']);
+            expect(folderUploadInstance.folder.name).toEqual('a');
             // /a/
             // - f1
             // - f2
             // - b/
             // - c/
-            const folderA = folderUploadInstance.folders.a;
+            const folderA = folderUploadInstance.folder;
             expect(Object.keys(folderA.folders)).toHaveLength(2);
             expect(Object.keys(folderA.folders)).toEqual(['b', 'c']);
             expect(folderA.files).toHaveLength(2);
@@ -79,14 +76,13 @@ describe('api/uploads/FolderUpload', () => {
 
             // /
             // - a/
-            expect(Object.values(folderUploadInstance.folders)).toHaveLength(1);
-            expect(Object.keys(folderUploadInstance.folders)).toEqual(['a']);
+            expect(folderUploadInstance.folder.name).toEqual('a');
             // /a/
             // - f1
             // - f2
             // - b/
             // - c/
-            const folderA = folderUploadInstance.folders.a;
+            const folderA = folderUploadInstance.folder;
             expect(Object.keys(folderA.folders)).toHaveLength(2);
             expect(Object.keys(folderA.folders)).toEqual(['b', 'c']);
             expect(folderA.files).toHaveLength(2);
