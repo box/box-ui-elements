@@ -30,6 +30,7 @@ type Props = {
  *
  * @param {Object} file the box file
  * @param {Function} onClassificationClick the optional callback
+ * @returns {Function|undefined} the callback function if it is passed in, and the user has permissions
  */
 export const getClassificationModal = (file: BoxItem, onClassificationClick: ?Function) => {
     // Changing classification requires edit metadata permission, which is included in can_upload
