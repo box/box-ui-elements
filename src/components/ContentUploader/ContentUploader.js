@@ -233,7 +233,7 @@ class ContentUploader extends Component<Props, State> {
         const { rootFolderId } = this.props;
         const { itemIds } = this.state;
 
-        return Array.from(files).filter((file) => !(getFileId(file, rootFolderId) in itemIds));
+        return Array.from(files).filter((file) => !itemIds[getFileId(file, rootFolderId)]);
     };
 
     /**
@@ -245,7 +245,7 @@ class ContentUploader extends Component<Props, State> {
         const { rootFolderId } = this.props;
         const { itemIds } = this.state;
 
-        return Array.from(items).filter((item) => !(getDataTransferItemId(item, rootFolderId) in itemIds));
+        return Array.from(items).filter((item) => !itemIds[getDataTransferItemId(item, rootFolderId)]);
     };
 
     /**
@@ -282,6 +282,7 @@ class ContentUploader extends Component<Props, State> {
 
         const firstFile = getFile(newFiles[0]);
 
+        // webkitRelativePath should be ignored when the upload destination folder is known
         if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
             this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
             return;
