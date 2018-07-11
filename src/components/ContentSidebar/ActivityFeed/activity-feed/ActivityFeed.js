@@ -428,8 +428,8 @@ class ActivityFeed extends React.Component<Props, State> {
         const { restored_from, modified_at, file_version } = file;
 
         // Ensures restored version is only added on first feed loads
-        const lastVersion = versions.total_count ? versions.entries[versions.total_count - 1] : null;
-        if (lastVersion && lastVersion.action !== VERSION_RESTORE_ACTION && restored_from) {
+        const lastVersion = versions.total_count ? versions.entries[versions.total_count - 1] : {};
+        if (restored_from && lastVersion.action !== VERSION_RESTORE_ACTION) {
             const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
 
             if (restoredVersion) {
