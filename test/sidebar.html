@@ -147,6 +147,9 @@
                         hasNotices: true,
                         hasVersions: true,
                         hasClassification: true,
+                        bannerPolicy: {
+                            body: 'classification tooltip'
+                        },
                         onClassificationClick: (refreshFn) => {
                             console.log('refreshing');
                             refreshFn();

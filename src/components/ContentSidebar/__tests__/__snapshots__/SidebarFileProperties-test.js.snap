@@ -1,5 +1,97 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/ContentSidebar/SidebarFileProperties render() should not render a tooltip if no banner policy body is provided 1`] = `
+<SidebarFileProperties
+  file={
+    Object {
+      "metadata": null,
+      "permissions": Object {
+        "can_upload": true,
+      },
+      "size": "1",
+    }
+  }
+  hasClassification={true}
+  intl={
+    Object {
+      "locale": "en",
+    }
+  }
+  onClassificationClick={[MockFunction]}
+>
+  <LoadingIndicatorWrapper>
+    <div
+      className="loading-indicator-wrapper "
+    >
+      <ItemProperties
+        classificationProps={
+          Object {
+            "data-resin-target": "addclassification",
+            "openModal": [MockFunction],
+            "tooltip": undefined,
+            "value": undefined,
+          }
+        }
+        descriptionTextareaProps={
+          Object {
+            "data-resin-target": "description",
+          }
+        }
+        retentionPolicyProps={Object {}}
+        size="1 B"
+      >
+        <dl
+          className="item-properties"
+        >
+          <FormattedMessage
+            defaultMessage="Size"
+            id="boxui.itemDetails.size"
+            tagName="dt"
+          >
+            <div />
+          </FormattedMessage>
+          <dd>
+            1 B
+          </dd>
+          <RetentionPolicy />
+          <ClassificationProperty
+            data-resin-target="addclassification"
+            openModal={[MockFunction]}
+          >
+            <FormattedMessage
+              defaultMessage="Classification"
+              id="boxui.classification.classification"
+              tagName="dt"
+            >
+              <div />
+            </FormattedMessage>
+            <dd>
+              <PlainButton
+                className="lnk"
+                onClick={[MockFunction]}
+              >
+                <button
+                  className="btn-plain lnk"
+                  onClick={[MockFunction]}
+                  type="submit"
+                >
+                  <FormattedMessage
+                    defaultMessage="Add Classification"
+                    id="boxui.classification.addClassification"
+                  >
+                    <div />
+                  </FormattedMessage>
+                </button>
+              </PlainButton>
+            </dd>
+          </ClassificationProperty>
+        </dl>
+      </ItemProperties>
+    </div>
+  </LoadingIndicatorWrapper>
+</SidebarFileProperties>
+`;
+
 exports[`components/ContentSidebar/SidebarFileProperties render() should not render classification information if hasClassification is false 1`] = `
 <SidebarFileProperties
   file={
@@ -241,6 +333,11 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
 
 exports[`components/ContentSidebar/SidebarFileProperties render() should render classification information and not link when given proper metadata 1`] = `
 <SidebarFileProperties
+  bannerPolicy={
+    Object {
+      "body": "tooltip value",
+    }
+  }
   file={
     Object {
       "metadata": Object {
@@ -273,6 +370,7 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
           Object {
             "data-resin-target": "editclassification",
             "openModal": undefined,
+            "tooltip": "tooltip value",
             "value": "Public",
           }
         }
@@ -300,6 +398,7 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
           <RetentionPolicy />
           <ClassificationProperty
             data-resin-target="editclassification"
+            tooltip="tooltip value"
             value="Public"
           >
             <FormattedMessage
@@ -314,19 +413,65 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
                 className="mbs"
               >
                 <ClassificationBadge
+                  tooltip="tooltip value"
                   tooltipPosition="middle-left"
                   value="Public"
                 >
-                  <Badge
-                    className="classification-badge"
-                    type="warning"
+                  <Tooltip
+                    constrainToScrollParent={false}
+                    constrainToWindow={true}
+                    position="middle-left"
+                    text="tooltip value"
+                    theme="default"
                   >
-                    <span
-                      className="badge badge-warning classification-badge"
+                    <TetherComponent
+                      attachment="middle right"
+                      bodyElement={
+                        <body>
+                          <textarea
+                            style="min-height: 0 !important; max-height: none !important; height: 0px !important; visibility: hidden !important; overflow: hidden !important; position: absolute !important; z-index: -1000 !important; top: 0px !important; right: 0px;"
+                          />
+                        </body>
+                      }
+                      classPrefix="tooltip"
+                      constraints={
+                        Array [
+                          Object {
+                            "attachment": "together",
+                            "to": "window",
+                          },
+                        ]
+                      }
+                      enabled={false}
+                      renderElementTag="div"
+                      renderElementTo={null}
+                      targetAttachment="middle left"
                     >
-                      Public
-                    </span>
-                  </Badge>
+                      <Badge
+                        className="classification-badge"
+                        key=".0"
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                        tabIndex="0"
+                        type="warning"
+                      >
+                        <span
+                          className="badge badge-warning classification-badge"
+                          onBlur={[Function]}
+                          onFocus={[Function]}
+                          onKeyDown={[Function]}
+                          onMouseEnter={[Function]}
+                          onMouseLeave={[Function]}
+                          tabIndex="0"
+                        >
+                          Public
+                        </span>
+                      </Badge>
+                    </TetherComponent>
+                  </Tooltip>
                 </ClassificationBadge>
               </div>
             </dd>
@@ -340,6 +485,11 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
 
 exports[`components/ContentSidebar/SidebarFileProperties render() should render classification link only when given callback and has_upload permission is true 1`] = `
 <SidebarFileProperties
+  bannerPolicy={
+    Object {
+      "body": "tooltip value",
+    }
+  }
   file={
     Object {
       "metadata": null,
@@ -366,6 +516,7 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
           Object {
             "data-resin-target": "addclassification",
             "openModal": [MockFunction],
+            "tooltip": "tooltip value",
             "value": undefined,
           }
         }
@@ -394,6 +545,7 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
           <ClassificationProperty
             data-resin-target="addclassification"
             openModal={[MockFunction]}
+            tooltip="tooltip value"
           >
             <FormattedMessage
               defaultMessage="Classification"

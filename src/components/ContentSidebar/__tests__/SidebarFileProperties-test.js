@@ -36,6 +36,9 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
     const classificationProps = {
         hasClassification: true,
         onClassificationClick: jest.fn(),
+        bannerPolicy: {
+            body: 'tooltip value'
+        },
         file: {
             size: '1',
             metadata: {
@@ -115,6 +118,21 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
             // Only onClassificationClick callback is passed
             const wrapper = getMountWrapper({
                 ...classificationProps,
+                file: {
+                    ...classificationProps.file,
+                    permissions: {
+                        can_upload: true
+                    },
+                    metadata: null
+                }
+            });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should not render a tooltip if no banner policy body is provided', () => {
+            const wrapper = getMountWrapper({
+                ...classificationProps,
+                bannerPolicy: undefined,
                 file: {
                     ...classificationProps.file,
                     permissions: {
