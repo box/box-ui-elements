@@ -212,6 +212,7 @@ class ContentTree extends Component<Props, State> {
                 if (item.path_collection && item.path_collection.total_count > length) {
                     return item.path_collection.entries[length].id !== id;
                 }
+
                 return true;
             });
             currentCollection.items = newItems;
@@ -241,6 +242,7 @@ class ContentTree extends Component<Props, State> {
         ) {
             return;
         }
+
         const grid: any = findDOMNode(this.table.Grid); // eslint-disable-line react/no-find-dom-node
         grid.focus();
     }
@@ -260,6 +262,7 @@ class ContentTree extends Component<Props, State> {
             if (item.type) {
                 return type.indexOf(item.type) > -1;
             }
+
             return false;
         });
         let { currentCollection }: State = this.state;

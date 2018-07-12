@@ -81,6 +81,7 @@ class BaseUpload extends Base {
                 if (!this.fileId && !!conflictFileId) {
                     this.fileId = conflictFileId;
                 }
+
                 // Error response contains file ID to upload a new file version for
                 this.makePreflightRequest();
             } else {
@@ -90,6 +91,7 @@ class BaseUpload extends Base {
                 this.fileName = `${this.fileName.substr(0, this.fileName.lastIndexOf('.'))}-${Date.now()}${extension}`;
                 this.makePreflightRequest();
             }
+
             this.retryCount += 1;
             // When rate limited, retry after interval defined in header
         } else if (errorData && (errorData.status === 429 || errorData.code === 'too_many_requests')) {
@@ -139,6 +141,7 @@ class BaseUpload extends Base {
                     readCompleteTimestamp: Date.now()
                 });
             };
+
             reader.onerror = reject;
         });
     }

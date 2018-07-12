@@ -95,6 +95,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                 });
                 return;
             }
+
             createTask({
                 text,
                 assignees: approvers,

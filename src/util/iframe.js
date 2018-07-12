@@ -22,6 +22,7 @@ function createDownloadIframe(): HTMLIFrameElement {
             document.body.appendChild(iframe);
         }
     }
+
     // Clean the iframe up
     iframe.contentDocument.write('<head></head><body></body>');
     return iframe;

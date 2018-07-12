@@ -491,6 +491,7 @@ class ContentUploader extends Component<Props, State> {
             if (uploadAPIOptions) {
                 uploadItem.options = uploadAPIOptions;
             }
+
             itemIds[getFileId(uploadItem, rootFolderId)] = true;
 
             return uploadItem;

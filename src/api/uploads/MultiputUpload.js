@@ -539,6 +539,7 @@ class MultiputUpload extends BaseMultiput {
         if (this.isDestroyed()) {
             return;
         }
+
         // Don't send entire part since XHR can't be cloned
         const partInformation = { index: part.index, offset: part.offset, size: part.partSize };
         this.sha1Worker.postMessage(
@@ -735,6 +736,7 @@ class MultiputUpload extends BaseMultiput {
         if (status !== 202) {
             this.commitRetryCount += 1;
         }
+
         const retryDelayMs = retryAfterMs || defaultRetryDelayMs;
         this.consoleLog(`Retrying commit in ${retryDelayMs} ms`);
         this.commitSessionTimeout = setTimeout(this.commitSession, retryDelayMs);

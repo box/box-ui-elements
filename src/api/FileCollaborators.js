@@ -17,6 +17,7 @@ class FileCollaborators extends MarkerBasedAPI {
         if (!id) {
             throw new Error('Missing file id!');
         }
+
         return `${this.getBaseApiUrl()}/files/${id}/collaborators`;
     }
 

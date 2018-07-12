@@ -111,11 +111,13 @@ const ItemList = ({
         if (index === -1) {
             return 'bce-item-header-row';
         }
+
         const { selected } = items[index];
         return classNames(`bce-item-row bce-item-row-${index}`, {
             'bce-item-row-selected': selected
         });
     };
+
     const sort = ({ sortBy: by, sortDirection: direction }) => {
         onSortChange(by, direction);
     };

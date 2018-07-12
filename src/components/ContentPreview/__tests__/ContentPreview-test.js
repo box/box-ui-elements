@@ -17,6 +17,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                 this.updateFileCache = jest.fn();
                 this.show = jest.fn();
             };
+
             file = { id: '123' };
 
             props = {
@@ -76,6 +77,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                 this.updateFileCache = jest.fn();
                 this.show = jest.fn();
             };
+
             file = { id: '123' };
         });
 

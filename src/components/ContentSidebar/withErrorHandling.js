@@ -42,6 +42,7 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
             </React.Fragment>
         );
     }
+
     return <WrappedComponent {...rest} />;
 };
 

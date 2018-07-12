@@ -102,6 +102,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         ...updates
                     };
                 }
+
                 return item;
             })
         });
@@ -312,6 +313,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     resolution_state: updatedAssignment.message.toLowerCase()
                 };
             }
+
             return item;
         });
 

@@ -28,6 +28,7 @@ class Users extends Base {
         if (!id) {
             throw new Error('Missing user id');
         }
+
         return `${this.getBaseApiUrl()}/users/${id}/avatar`;
     }
 
