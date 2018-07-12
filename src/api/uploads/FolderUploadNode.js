@@ -96,6 +96,7 @@ class FolderUploadNode {
                 errorCallback(error);
                 return;
             }
+
             this.folderId = error.context_info.conflicts[0].id;
         }
 

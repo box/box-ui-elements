@@ -118,6 +118,7 @@ class KeyBinder extends PureComponent<Props, State> {
         if (isInputElement(event.target)) {
             return;
         }
+
         const {
             columnCount,
             rowCount,

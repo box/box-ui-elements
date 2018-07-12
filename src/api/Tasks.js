@@ -18,6 +18,7 @@ class Tasks extends Base {
         if (!id) {
             throw new Error('Missing file id!');
         }
+
         return `${this.getBaseApiUrl()}/files/${id}/tasks`;
     }
 

@@ -50,6 +50,7 @@ export default function(list: BoxItem[], folderAPI: FolderAPI, fileAPI: FileAPI,
         } else {
             cache.set(key, item);
         }
+
         items.push(key);
     });
     return items;

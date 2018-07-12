@@ -17,6 +17,7 @@ class FileAccessStats extends Base {
         if (!id) {
             throw new Error('Missing file id!');
         }
+
         return `${this.getBaseApiUrl()}/file_access_stats/${id}`;
     }
 }

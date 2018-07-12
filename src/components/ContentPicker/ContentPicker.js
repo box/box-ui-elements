@@ -870,48 +870,56 @@ class ContentPicker extends Component<Props, State> {
                     focus(this.rootElement, '.be-breadcrumb button', false);
                     event.preventDefault();
                 }
+
                 break;
             case 'f':
                 if (this.globalModifier) {
                     this.fetchFolder(rootFolderId);
                     event.preventDefault();
                 }
+
                 break;
             case 'c':
                 if (this.globalModifier) {
                     this.choose();
                     event.preventDefault();
                 }
+
                 break;
             case 'x':
                 if (this.globalModifier) {
                     this.cancel();
                     event.preventDefault();
                 }
+
                 break;
             case 's':
                 if (this.globalModifier) {
                     this.showSelected();
                     event.preventDefault();
                 }
+
                 break;
             case 'u':
                 if (this.globalModifier) {
                     this.upload();
                     event.preventDefault();
                 }
+
                 break;
             case 'r':
                 if (this.globalModifier) {
                     this.showRecents();
                     event.preventDefault();
                 }
+
                 break;
             case 'n':
                 if (this.globalModifier) {
                     this.createFolder();
                     event.preventDefault();
                 }
+
                 break;
             default:
                 this.globalModifier = false;

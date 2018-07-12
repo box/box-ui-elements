@@ -53,6 +53,7 @@ class Browser {
                 typeof mse.isTypeSupported === 'function' &&
                 mse.isTypeSupported('video/mp4; codecs="avc1.64001E"');
         }
+
         return isDashSupported;
     }
 }

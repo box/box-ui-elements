@@ -37,6 +37,7 @@ function download(string: string, name: string) {
         if (document.body) {
             document.body.removeChild(a);
         }
+
         URL.revokeObjectURL(url);
     }, 100);
 }
