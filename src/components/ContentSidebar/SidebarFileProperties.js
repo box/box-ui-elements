@@ -8,6 +8,7 @@ import React from 'react';
 import getProp from 'lodash/get';
 import { injectIntl } from 'react-intl';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
+import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
 
@@ -22,7 +23,8 @@ type Props = {
     hasRetentionPolicy: boolean,
     retentionPolicy?: Object,
     onRetentionPolicyExtendClick?: Function,
-    intl: any
+    intl: any,
+    isLoading: boolean
 };
 
 /**
@@ -49,40 +51,43 @@ const SidebarFileProperties = ({
     hasRetentionPolicy,
     retentionPolicy,
     onRetentionPolicyExtendClick,
+    isLoading,
     intl
 }: Props) => {
     const value = getProp(file, `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
 
     return (
-        <ItemProperties
-            createdAt={file.created_at}
-            description={file.description}
-            modifiedAt={file.modified_at}
-            owner={getProp(file, 'owned_by.name')}
-            size={getFileSize(file.size, intl.locale)}
-            uploader={getProp(file, 'created_by.name')}
-            onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
-            descriptionTextareaProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.DESCRIPTION }}
-            classificationProps={
-                hasClassification
-                    ? {
-                        openModal: getClassificationModal(file, onClassificationClick),
-                        value,
-                        [INTERACTION_TARGET]: value
-                            ? DETAILS_TARGETS.CLASSIFICATION_EDIT
-                            : DETAILS_TARGETS.CLASSIFICATION_ADD
-                    }
-                    : {}
-            }
-            retentionPolicyProps={
-                hasRetentionPolicy
-                    ? {
-                        ...retentionPolicy,
-                        openModal: onRetentionPolicyExtendClick
-                    }
-                    : {}
-            }
-        />
+        <LoadingIndicatorWrapper isLoading={isLoading}>
+            <ItemProperties
+                createdAt={file.created_at}
+                description={file.description}
+                modifiedAt={file.modified_at}
+                owner={getProp(file, 'owned_by.name')}
+                size={getFileSize(file.size, intl.locale)}
+                uploader={getProp(file, 'created_by.name')}
+                onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
+                descriptionTextareaProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.DESCRIPTION }}
+                classificationProps={
+                    hasClassification
+                        ? {
+                            openModal: getClassificationModal(file, onClassificationClick),
+                            value,
+                            [INTERACTION_TARGET]: value
+                                ? DETAILS_TARGETS.CLASSIFICATION_EDIT
+                                : DETAILS_TARGETS.CLASSIFICATION_ADD
+                        }
+                        : {}
+                }
+                retentionPolicyProps={
+                    hasRetentionPolicy
+                        ? {
+                            ...retentionPolicy,
+                            openModal: onRetentionPolicyExtendClick
+                        }
+                        : {}
+                }
+            />
+        </LoadingIndicatorWrapper>
     );
 };
 

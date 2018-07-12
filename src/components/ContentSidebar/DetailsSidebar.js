@@ -31,14 +31,15 @@ type ExternalProps = {
     onDescriptionChange?: Function
 };
 
-type Props = {
+export type Props = {
     accessStats?: FileAccessStats,
     file: BoxItem,
     onDescriptionChange: Function,
     versions?: FileVersions,
     accessStatsError?: Errors,
     fileError?: Errors,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
+    isFileLoading?: boolean
 } & ExternalProps;
 
 const DetailsSidebar = ({
@@ -58,7 +59,8 @@ const DetailsSidebar = ({
     accessStatsError,
     fileError,
     retentionPolicy,
-    onRetentionPolicyExtendClick
+    onRetentionPolicyExtendClick,
+    isFileLoading
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
         {(hasVersions || hasNotices) && (
@@ -83,6 +85,7 @@ const DetailsSidebar = ({
                     hasRetentionPolicy={hasRetentionPolicy}
                     retentionPolicy={retentionPolicy}
                     onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
+                    isLoading={isFileLoading}
                 />
             </SidebarSection>
         )}

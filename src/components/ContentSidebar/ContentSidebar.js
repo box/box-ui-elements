@@ -46,7 +46,7 @@ import './ContentSidebar.scss';
 
 type Props = {
     fileId?: string,
-    isCollapsed?: boolean,
+    isCollapsed: boolean,
     clientName: string,
     apiHost: string,
     token: Token,
@@ -81,7 +81,8 @@ type State = {
     fileError?: Errors,
     activityFeedError?: Errors,
     accessStatsError?: Errors,
-    currentUserError?: Errors
+    currentUserError?: Errors,
+    isFileLoading?: boolean
 };
 
 const activityFeedInlineError: Errors = {
@@ -214,7 +215,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (hasFileIdChanged) {
             this.fetchData(nextProps);
         } else if (hasVisibilityChanged) {
-            this.setState({ view: this.getDefaultSidebarView(nextProps.isCollapsed, file) });
+            this.setState({
+                view: this.getDefaultSidebarView(nextProps.isCollapsed, file)
+            });
         }
     }
 
@@ -461,6 +464,20 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
+     * Handles a failed file info fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @return {void}
+     */
+    fetchFileErrorCallback = (e: $AxiosXHR<any>) => {
+        this.setState({
+            isFileLoading: false
+        });
+        this.errorCallback(e);
+    };
+
+    /**
      * Network error callback
      *
      * @private
@@ -522,7 +539,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        this.setState({ file, view: this.getDefaultSidebarView(this.props.isCollapsed, file) });
+        this.setState({ file, view: this.getDefaultSidebarView(this.props.isCollapsed, file), isFileLoading: false });
     };
 
     /**
@@ -603,7 +620,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFile(id: string, forceFetch: boolean = false): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api.getFileAPI().file(id, this.fetchFileSuccessCallback, this.errorCallback, forceFetch, true);
+            this.setState({
+                isFileLoading: true
+            });
+
+            this.api
+                .getFileAPI()
+                .file(id, this.fetchFileSuccessCallback, this.fetchFileErrorCallback, forceFetch, true);
         }
     }
 
@@ -1394,6 +1417,33 @@ class ContentSidebar extends PureComponent<Props, State> {
     }, DEFAULT_COLLAB_DEBOUNCE);
 
     /**
+     * Refreshes sidebar when classification is changed
+     *
+     * @private
+     * @return {void}
+     */
+    onClassificationChange = (): void => {
+        const { fileId } = this.props;
+        if (!fileId) {
+            return;
+        }
+
+        this.fetchFile(fileId, true);
+    };
+
+    /**
+     * Add classification click handler
+     *
+     * @private
+     * @return {void}
+     */
+    onClassificationClick = (): void => {
+        const { onClassificationClick = noop } = this.props.detailsSidebarProps;
+
+        onClassificationClick(this.onClassificationChange);
+    };
+
+    /**
      * Renders the file preview
      *
      * @private
@@ -1410,7 +1460,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             className,
             activitySidebarProps,
             detailsSidebarProps,
-            onVersionHistoryClick
+            onVersionHistoryClick,
+            isCollapsed
         }: Props = this.props;
         const {
             file,
@@ -1425,14 +1476,15 @@ class ContentSidebar extends PureComponent<Props, State> {
             activityFeedError,
             approverSelectorContacts,
             mentionSelectorContacts,
-            currentUserError
+            currentUserError,
+            isFileLoading
         }: State = this.state;
 
         const styleClassName = classNames(
             'be bcs',
             {
                 [`bcs-${view}`]: !!view,
-                'bcs-is-open': !!view
+                'bcs-is-open': !!view || !isCollapsed
             },
             className
         );
@@ -1452,6 +1504,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     accessStats,
                                     accessStatsError,
                                     fileError,
+                                    isFileLoading,
+                                    onClassificationChange: this.onClassificationChange,
                                     onDescriptionChange: this.onDescriptionChange,
                                     ...detailsSidebarProps
                                 }}
