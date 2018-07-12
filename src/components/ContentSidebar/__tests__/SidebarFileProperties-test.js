@@ -133,13 +133,13 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
     });
 
     describe('getClassificationModal()', () => {
-        test('should have onClassificationClick prop on SidebarFileProperties', () => {
+        test('should not have onClassificationClick prop on SidebarFileProperties when can_upload is falsy', () => {
             expect(
                 getClassificationModal(classificationProps.file, classificationProps.onClassificationClick)
             ).toBeUndefined();
         });
 
-        test('should not have onClassificationClick prop on SidebarFileProperties', () => {
+        test('should have onClassificationClick prop on SidebarFileProperties when can_upload is true', () => {
             expect(
                 getClassificationModal(
                     {
