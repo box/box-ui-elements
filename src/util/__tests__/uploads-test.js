@@ -11,11 +11,14 @@ import {
     getDataTransferItem,
     getFileAPIOptions,
     getDataTransferItemAPIOptions,
-    DEFAULT_API_OPTIONS
+    DEFAULT_API_OPTIONS,
+    getFileId,
+    getDataTransferItemId
 } from '../uploads';
 
 const mockFile = { name: 'hi' };
 const entry = {
+    name: 'hi',
     file: (fn) => {
         fn(mockFile);
     }
@@ -230,6 +233,76 @@ describe('util/uploads', () => {
             const fileItem = { kind: '', webkitGetAsEntry: () => undefined };
 
             expect(isDataTransferItemAFolder(fileItem)).toBeFalsy();
+        });
+    });
+
+    describe('getFileId()', () => {
+        test('should return file id correctly when file does not contain API options', () => {
+            const file = {
+                name: 'hi'
+            };
+
+            expect(getFileId(file)).toBe('hi');
+        });
+
+        test('should return file id correctly when file does contain API options', () => {
+            const file = {
+                file: {
+                    name: 'hi'
+                },
+                options: {
+                    folderId: '0',
+                    uploadInitTimestamp: 123123
+                }
+            };
+
+            expect(getFileId(file)).toBe('hi_0_123123');
+        });
+    });
+
+    describe('getFileId()', () => {
+        test('should return file id correctly when file does not contain API options', () => {
+            const file = {
+                name: 'hi'
+            };
+
+            expect(getFileId(file)).toBe('hi');
+        });
+
+        test('should return file id correctly when file does contain API options', () => {
+            const file = {
+                file: {
+                    name: 'hi'
+                },
+                options: {
+                    folderId: '0',
+                    uploadInitTimestamp: 123123
+                }
+            };
+
+            expect(getFileId(file)).toBe('hi_0_123123');
+        });
+    });
+
+    describe('getDataTransferItemId()', () => {
+        const rootFolderId = 0;
+        const now = Date.now();
+        Date.now = jest.fn(() => now);
+
+        test('should return item id correctly when item does not contain API options', () => {
+            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe(`hi_0_${now}`);
+        });
+
+        test('should return item id correctly when item does contain API options', () => {
+            const item = {
+                item: mockItem,
+                options: {
+                    folderId: '0',
+                    uploadInitTimestamp: 123123
+                }
+            };
+
+            expect(getDataTransferItemId(item, rootFolderId)).toBe('hi_0_123123');
         });
     });
 });

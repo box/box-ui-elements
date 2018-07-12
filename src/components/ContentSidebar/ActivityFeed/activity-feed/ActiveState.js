@@ -62,7 +62,7 @@ const ActiveState = ({
                         </li>
                     );
                 case 'task':
-                    return item.task_assignment_collection.entries.total_count ? (
+                    return item.task_assignment_collection.total_count ? (
                         <li className='bcs-activity-feed-task' key={type + id}>
                             <Task
                                 {...item}

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import ActiveState from '../ActiveState';
+import Task from '../../task/Task';
 
 const items = [
     {
@@ -32,6 +33,20 @@ const items = [
         trashed_at: '2018-07-03T14:43:52-07:00',
         modified_at: '2018-07-03T14:43:52-07:00',
         modified_by: { name: 'Akon', id: 11 }
+    },
+    {
+        type: 'task',
+        id: 234,
+        created_at: '2018-07-03T14:43:52-07:00',
+        created_by: { name: 'Akon', id: 11 },
+        modified_at: '2018-07-03T14:43:52-07:00',
+        tagged_message: 'test',
+        modified_by: { name: 'Jay-Z', id: 10 },
+        dueAt: '2018-07-03T14:43:52-07:00',
+        task_assignment_collection: {
+            entries: [],
+            total_count: 0
+        }
     }
 ];
 
@@ -44,8 +59,9 @@ describe('components/ContentSidebar/ActiveState/activity-feed/ActiveState', () =
     });
 
     test('should correctly render with comments, tasks, versions', () => {
-        const wrapper = shallow(<ActiveState items={items} />);
+        const wrapper = shallow(<ActiveState items={items} />).dive();
         expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find(Task)).toHaveLength(1);
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {

@@ -12,6 +12,7 @@ import './UploadsManager.scss';
 import { STATUS_ERROR } from '../../constants';
 
 type Props = {
+    isVisible: boolean,
     isExpanded: boolean,
     items: UploadItem[],
     onItemActionClick: Function,
@@ -19,9 +20,7 @@ type Props = {
     view: View
 };
 
-const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, isExpanded }: Props) => {
-    const isVisible = items.length > 0;
-
+const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, isExpanded, isVisible }: Props) => {
     /**
      * Keydown handler for progress bar
      *
@@ -65,7 +64,6 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}
                 view={view}
-                isEmpty={items.length === 0}
             />
             <div className='bcu-uploads-manager-item-list'>
                 <ItemList items={items} view={view} onClick={onItemActionClick} />
