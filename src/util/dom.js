@@ -15,6 +15,7 @@ export function isInputElement(element: HTMLElement | EventTarget | null): boole
     if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
+
     const tag = element.tagName.toLowerCase();
     return (
         tag === 'input' ||
@@ -35,6 +36,7 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
     if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
+
     const tag = element.tagName.toLowerCase();
 
     // Box React UI sensitive checks
@@ -63,10 +65,12 @@ export function focus(root?: HTMLElement, selector?: string, focusRoot: boolean 
     if (!root) {
         return;
     }
+
     if (!selector) {
         root.focus();
         return;
     }
+
     const element = root.querySelector(selector);
     if (element && typeof element.focus === 'function') {
         element.focus();

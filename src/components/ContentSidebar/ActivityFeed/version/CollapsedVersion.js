@@ -23,6 +23,7 @@ function getMessageForAction(
     if (action !== 'upload') {
         return null;
     }
+
     const collaboratorIDs = Object.keys(collaborators);
     const numberOfCollaborators = collaboratorIDs.length;
 

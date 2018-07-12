@@ -90,6 +90,7 @@ class MultiputPart extends BaseMultiput {
         if (this.rangeEnd > fileSize - 1) {
             this.rangeEnd = fileSize - 1;
         }
+
         this.onSuccess = onSuccess || noop;
         this.onError = onError || noop;
         this.onProgress = onProgress || noop;
@@ -277,6 +278,7 @@ class MultiputPart extends BaseMultiput {
                 });
                 return;
             }
+
             this.consoleLog(`Part ${this.toJSON()} is not available on server. Re-uploading.`);
             throw new Error('Part not found on the server');
         } catch (error) {
@@ -284,6 +286,7 @@ class MultiputPart extends BaseMultiput {
             if (response && response.status) {
                 this.consoleLog(`Error ${response.status} while listing part ${this.toJSON()}. Re-uploading.`);
             }
+
             this.numUploadRetriesPerformed += 1;
             this.upload();
         }

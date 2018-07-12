@@ -138,9 +138,11 @@ class Xhr {
                 headers.BoxApi = `${headers.BoxApi}&shared_link_password=${this.sharedLinkPassword}`;
             }
         }
+
         if (this.clientName) {
             headers[HEADER_CLIENT_NAME] = this.clientName;
         }
+
         if (this.version) {
             headers[HEADER_CLIENT_VERSION] = this.version;
         }

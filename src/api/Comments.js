@@ -19,6 +19,7 @@ class Comments extends OffsetBasedAPI {
         if (!id) {
             throw new Error('Missing file id!');
         }
+
         return `${this.getBaseApiUrl()}/files/${id}/comments`;
     }
 

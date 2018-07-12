@@ -174,6 +174,7 @@ class ES6Wrapper extends EventEmitter {
         } catch (e) {
             // do nothing
         }
+
         return false;
     }
 }

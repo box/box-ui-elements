@@ -65,6 +65,7 @@ class TokenService {
         if (token && typeof token === 'object') {
             return token.read;
         }
+
         return token;
     }
 
@@ -82,6 +83,7 @@ class TokenService {
         if (token && typeof token === 'object') {
             return token.write || token.read;
         }
+
         return token;
     }
 

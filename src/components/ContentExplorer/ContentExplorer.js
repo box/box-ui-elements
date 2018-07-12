@@ -817,6 +817,7 @@ class ContentExplorer extends Component<Props, State> {
             openUrlInsideIframe(url);
             onDownload(cloneDeep([selected]));
         };
+
         const { type }: BoxItem = selected;
         if (type === TYPE_FILE) {
             this.api.getFileAPI().getDownloadUrl(id, openUrl, noop);
@@ -1104,30 +1105,35 @@ class ContentExplorer extends Component<Props, State> {
                     focus(this.rootElement, '.be-breadcrumb button', false);
                     event.preventDefault();
                 }
+
                 break;
             case 'f':
                 if (this.globalModifier) {
                     this.fetchFolder(rootFolderId);
                     event.preventDefault();
                 }
+
                 break;
             case 'u':
                 if (this.globalModifier) {
                     this.upload();
                     event.preventDefault();
                 }
+
                 break;
             case 'r':
                 if (this.globalModifier) {
                     this.showRecents();
                     event.preventDefault();
                 }
+
                 break;
             case 'n':
                 if (this.globalModifier) {
                     this.createFolder();
                     event.preventDefault();
                 }
+
                 break;
             default:
                 this.globalModifier = false;

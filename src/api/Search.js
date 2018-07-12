@@ -114,6 +114,7 @@ class Search extends Base {
         if (!cache.has(this.key)) {
             return false;
         }
+
         const { item_collection = {} }: FlattenedBoxItem = cache.get(this.key);
         return !!item_collection.isLoaded;
     }
@@ -216,6 +217,7 @@ class Search extends Base {
         if (this.isDestroyed()) {
             return;
         }
+
         this.errorCallback(error);
     };
 

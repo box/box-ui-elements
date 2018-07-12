@@ -56,6 +56,7 @@ export default function(sortBy: SortBy, sortDirection: SortDirection, cache: API
                 // Should never reach here
                 throw new Error('Unsupported sort field!');
             }
+
             return 0;
         }
 

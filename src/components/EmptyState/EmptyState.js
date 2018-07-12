@@ -43,6 +43,7 @@ const EmptyState = ({ view, isLoading }: Props) => {
             type = <FolderEmptyState />;
             break;
     }
+
     return (
         <div className='be-empty'>
             {type}

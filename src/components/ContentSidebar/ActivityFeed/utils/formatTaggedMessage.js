@@ -40,6 +40,7 @@ const formatTaggedMessage = (
             if (shouldReturnString) {
                 return `${trigger}${name}`;
             }
+
             return (
                 <UserLink
                     id={id}

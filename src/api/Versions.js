@@ -23,6 +23,7 @@ class Versions extends OffsetBasedAPI {
         if (!id) {
             throw new Error('Missing file id!');
         }
+
         return `${this.getBaseApiUrl()}/files/${id}/versions`;
     }
 

@@ -234,6 +234,7 @@ const createWorker = () => {
         (window.URL || window.webkitURL).revokeObjectURL(workerUrl);
         worker.oldTerminate();
     };
+
     return worker;
 };
 

@@ -61,6 +61,7 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
             } else if (width <= CROSS_OVER_WIDTH_MEDIUM) {
                 size = SIZE_MEDIUM;
             }
+
             return size;
         }
 
