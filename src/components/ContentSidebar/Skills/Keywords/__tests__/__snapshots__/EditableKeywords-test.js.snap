@@ -5,6 +5,7 @@ exports[`components/ContentSidebar/Skills/Keywords/EditableKeywords should corre
   className="pill-selector-wrapper"
 >
   <PillSelector
+    disabled={false}
     error=""
     inputProps={Object {}}
     onBlur={[Function]}
