@@ -21,6 +21,7 @@ function getLogo(isSmall: boolean, url?: string) {
     } else if (typeof url === 'string') {
         return <img alt='' src={url} className='be-logo-custom' />;
     }
+
     return (
         <div className='be-logo-placeholder'>
             <FormattedMessage {...messages.logo} />

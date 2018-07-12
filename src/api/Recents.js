@@ -163,6 +163,7 @@ class Recents extends Base {
         if (this.isDestroyed()) {
             return;
         }
+
         this.errorCallback(error);
     };
 
@@ -175,6 +176,7 @@ class Recents extends Base {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
+
         return this.xhr
             .get({
                 url: this.getUrl(),

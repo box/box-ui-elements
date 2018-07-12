@@ -21,6 +21,7 @@ class Metadata extends File {
         if (!field.startsWith('metadata')) {
             throw new Error('Metadata field should start with metadata');
         }
+
         return `${this.getUrl(id)}/${field.replace(/\./g, '/')}`;
     }
 

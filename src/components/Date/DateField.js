@@ -38,9 +38,11 @@ const DateField = ({
         if (isYesterdaysDate) {
             Message = <FormattedMessage {...messages.yesterday} />;
         }
+
         if (capitalize) {
             return <span className='be-date-capitalize'>{Message}</span>;
         }
+
         return Message;
     }
 

@@ -211,6 +211,7 @@ describe('api/uploads/FolderUploadNode', () => {
                 expect(readerParam).toEqual(reader);
                 resolve();
             };
+
             folderUploadNodeInstance.entry = {
                 createReader: () => reader
             };

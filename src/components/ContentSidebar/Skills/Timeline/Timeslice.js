@@ -24,6 +24,7 @@ const Timeslice = ({ start, end, duration, onClick, index, interactionTarget }: 
     if (typeof start !== 'number' || !duration || start >= duration) {
         return null;
     }
+
     const barLength = LENGTH_TEXT_ITEMLINE;
     let startLeft = Math.round(start * barLength / duration);
     const minEnding = startLeft + MIN_WIDTH; // Need at least some width to be clickable

@@ -51,6 +51,7 @@ class CommentText extends React.Component<Props, State> {
         } else {
             button = <TranslateButton handleTranslate={this.handleTranslate} />;
         }
+
         return button;
     }
 
@@ -60,6 +61,7 @@ class CommentText extends React.Component<Props, State> {
             this.setState({ isLoading: true });
             onTranslate({ id, tagged_message });
         }
+
         this.setState({ isTranslation: true });
         event.preventDefault();
     };

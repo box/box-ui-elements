@@ -90,6 +90,7 @@ class Cache {
         if (this.has(key)) {
             return this.cache[key];
         }
+
         return undefined;
     }
 }
