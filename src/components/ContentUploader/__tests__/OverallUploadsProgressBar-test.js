@@ -9,7 +9,6 @@ describe('components/ContentUploader/OverallUploadsProgressBar', () => {
         shallow(
             <OverallUploadsProgressBar
                 isVisible
-                isEmpty={false}
                 view={VIEW_UPLOAD_EMPTY}
                 percent={2}
                 onClick={noop}

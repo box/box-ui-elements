@@ -553,6 +553,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Text shown when uploads are in progress',
         defaultMessage: 'Uploading'
     },
+    uploadsManagerUploadPrompt: {
+        id: 'be.uploadsManagerUploadPrompt',
+        description: 'Text shown to guide the user to drag drop file to upload',
+        defaultMessage: 'Drop files on this page to upload them into this folder.'
+    },
     uploadsManagerUploadComplete: {
         id: 'be.uploadsManagerUploadComplete',
         description: 'Text shown when uploads are completed',

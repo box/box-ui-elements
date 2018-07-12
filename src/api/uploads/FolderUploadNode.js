@@ -9,13 +9,13 @@ import { STATUS_COMPLETE, ERROR_CODE_ITEM_NAME_IN_USE } from '../../constants';
 import { getFileFromEntry } from '../../util/uploads';
 
 class FolderUploadNode {
-    addFolderToQueue: Function;
+    addFolderToUploadQueue: Function;
     files: Array<File> = [];
     folderId: string;
     folders: Object = {};
     name: string;
     parentFolderId: string;
-    uploadFile: Function;
+    addFilesToUploadQueue: Function;
     fileAPIOptions: Object;
     baseAPIOptions: Object;
     entry: ?FileSystemFileEntry;
@@ -24,21 +24,21 @@ class FolderUploadNode {
      * [constructor]
      *
      * @param {string} name
-     * @param {Function} uploadFile
-     * @param {Function} addFolderToQueue
+     * @param {Function} addFilesToUploadQueue
+     * @param {Function} addFolderToUploadQueue
      * @returns {void}
      */
     constructor(
         name: string,
-        uploadFile: Function,
-        addFolderToQueue: Function,
+        addFilesToUploadQueue: Function,
+        addFolderToUploadQueue: Function,
         fileAPIOptions: Object,
         baseAPIOptions: Object,
         entry?: FileSystemFileEntry
     ) {
         this.name = name;
-        this.uploadFile = uploadFile;
-        this.addFolderToQueue = addFolderToQueue;
+        this.addFilesToUploadQueue = addFilesToUploadQueue;
+        this.addFolderToUploadQueue = addFolderToUploadQueue;
         this.fileAPIOptions = fileAPIOptions;
         this.baseAPIOptions = baseAPIOptions;
         this.entry = entry;
@@ -57,7 +57,7 @@ class FolderUploadNode {
         this.parentFolderId = parentFolderId;
 
         await this.createAndUploadFolder(errorCallback, isRoot);
-        this.uploadFile(this.getFormattedFiles(), noop);
+        this.addFilesToUploadQueue(this.getFormattedFiles(), noop, true);
         await this.uploadChildFolders(errorCallback);
     }
 
@@ -99,11 +99,12 @@ class FolderUploadNode {
             this.folderId = error.context_info.conflicts[0].id;
         }
 
+        // The root folder has already been added to the upload queue in ContentUploader
         if (isRoot) {
             return;
         }
 
-        this.addFolderToQueue([
+        this.addFolderToUploadQueue([
             {
                 extension: '',
                 name: this.name,
@@ -167,8 +168,8 @@ class FolderUploadNode {
 
                 this.folders[name] = new FolderUploadNode(
                     name,
-                    this.uploadFile,
-                    this.addFolderToQueue,
+                    this.addFilesToUploadQueue,
+                    this.addFolderToUploadQueue,
                     this.fileAPIOptions,
                     {
                         ...this.baseAPIOptions,

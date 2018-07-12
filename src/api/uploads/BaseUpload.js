@@ -122,6 +122,26 @@ class BaseUpload extends Base {
             this.retryCount += 1;
         }
     };
+
+    /**
+     * Read a blob with FileReader
+     *
+     * @param {FileReader} reader
+     * @param {Blob} blob
+     * @return {Promise}
+     */
+    readFile(reader: FileReader, blob: Blob): Promise<any> {
+        return new Promise((resolve, reject) => {
+            reader.readAsArrayBuffer(blob);
+            reader.onload = () => {
+                resolve({
+                    buffer: reader.result,
+                    readCompleteTimestamp: Date.now()
+                });
+            };
+            reader.onerror = reject;
+        });
+    }
 }
 
 export default BaseUpload;

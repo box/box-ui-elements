@@ -31,8 +31,8 @@ const tasks = {
             modified_by: { name: 'Jay-Z', id: 10 },
             dueAt: 1234567891,
             task_assignment_collection: {
-                entries: [],
-                total_count: 0
+                entries: [{ assigned_to: { name: 'Akon', id: 11 }, resolution_state: 'incomplete' }],
+                total_count: 1
             }
         }
     ]
@@ -69,6 +69,9 @@ const file = {
         can_comment: true
     },
     modified_at: 1234567891,
+    file_version: {
+        id: 987
+    },
     restored_from: {
         id: first_version.id,
         type: first_version.type
@@ -602,7 +605,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 is_completed: false,
                 message: text,
                 task_assignment_collection: {
-                    entries: [{ assigned_to: { id: '1234', name: 'A. User' } }],
+                    entries: [{ assigned_to: { id: '1234', name: 'A. User' }, resolution_state: 'incomplete' }],
                     total_count: 1
                 },
                 type: 'task'

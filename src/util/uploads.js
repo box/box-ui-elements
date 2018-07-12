@@ -3,6 +3,7 @@
  * @file Utility functions for uploads
  * @author Box
  */
+import getProp from 'lodash/get';
 
 const DEFAULT_API_OPTIONS = {};
 
@@ -206,13 +207,17 @@ function getFileFromEntry(entry: FileSystemFileEntry): Promise<UploadFile> {
  * Get file from DataTransferItem or UploadDataTransferItemWithAPIOptions
  *
  * @param {UploadDataTransferItemWithAPIOptions | DataTransferItem} itemData
- * @returns {Promise<UploadFile | UploadFileWithAPIOptions>}
+ * @returns {Promise<UploadFile | UploadFileWithAPIOptions | null>}
  */
 async function getFileFromDataTransferItem(
     itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem
-): Promise<UploadFile | UploadFileWithAPIOptions> {
+): Promise<UploadFile | UploadFileWithAPIOptions | null> {
     const item = getDataTransferItem(itemData);
     const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
+    if (!entry) {
+        return null;
+    }
+
     const file = await getFileFromEntry(entry);
 
     if (doesDataTransferItemContainAPIOptions(itemData)) {
@@ -225,20 +230,64 @@ async function getFileFromDataTransferItem(
     return file;
 }
 
+/**
+ * Generates file id based on file properties
+ *
+ * When folderId or uploadInitTimestamp is missing from file options, file name is returned as file id.
+ * Otherwise, fileName_folderId_uploadInitTimestamp is used as file id.
+ *
+ * @param {UploadFileWithAPIOptions | UploadFile} file
+ * @param {string} rootFolderId
+ * @returns {string}
+ */
+function getFileId(file: UploadFileWithAPIOptions | UploadFile, rootFolderId: string): string {
+    if (!doesFileContainAPIOptions(file)) {
+        return ((file: any): UploadFile).name;
+    }
+
+    const fileWithOptions = ((file: any): UploadFileWithAPIOptions);
+    const folderId = getProp(fileWithOptions, 'options.folderId', rootFolderId);
+    const uploadInitTimestamp = getProp(fileWithOptions, 'options.uploadInitTimestamp', Date.now());
+    const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
+
+    return `${fileName}_${folderId}_${uploadInitTimestamp}`;
+}
+
+/**
+ * Generates item id based on item properties
+ * E.g., folder1_0_123124124
+ *
+ * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} itemData
+ * @param {string} rootFolderId
+ * @returns {string}
+ */
+function getDataTransferItemId(
+    itemData: DataTransferItem | UploadDataTransferItemWithAPIOptions,
+    rootFolderId: string
+): string {
+    const item = getDataTransferItem(itemData);
+    const { name } = getEntryFromDataTransferItem(item);
+    const { folderId = rootFolderId, uploadInitTimestamp = Date.now() } = getDataTransferItemAPIOptions(itemData);
+
+    return `${name}_${folderId}_${uploadInitTimestamp}`;
+}
+
 export {
     DEFAULT_API_OPTIONS,
-    getFileFromEntry,
-    toISOStringNoMS,
-    getFileLastModifiedAsISONoMSIfPossible,
-    tryParseJson,
-    getBoundedExpBackoffRetryDelay,
-    getEntryFromDataTransferItem,
-    isDataTransferItemAFolder,
-    getFileFromDataTransferItem,
-    doesFileContainAPIOptions,
     doesDataTransferItemContainAPIOptions,
-    getFile,
+    doesFileContainAPIOptions,
+    getBoundedExpBackoffRetryDelay,
     getDataTransferItem,
+    getDataTransferItemAPIOptions,
+    getDataTransferItemId,
+    getEntryFromDataTransferItem,
+    getFile,
     getFileAPIOptions,
-    getDataTransferItemAPIOptions
+    getFileFromDataTransferItem,
+    getFileFromEntry,
+    getFileId,
+    getFileLastModifiedAsISONoMSIfPossible,
+    isDataTransferItemAFolder,
+    toISOStringNoMS,
+    tryParseJson
 };

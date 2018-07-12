@@ -1,7 +1,7 @@
 import PlainUpload from '../PlainUpload';
+import * as crypto from '../../../util/webcrypto';
 
 let upload;
-let file;
 
 describe('api/uploads/PlainUpload', () => {
     beforeEach(() => {
@@ -135,7 +135,7 @@ describe('api/uploads/PlainUpload', () => {
 
         test('should generate upload URL and make request if no URL is provided', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-
+            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve('somehash'));
             upload.file = {
                 name: 'warlock'
             };
@@ -144,16 +144,46 @@ describe('api/uploads/PlainUpload', () => {
                 uploadFile: jest.fn()
             };
 
-            upload.preflightSuccessHandler({ data: {} });
-            expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
-                url: `${upload.uploadHost}/api/2.0/files/content`,
-                data: {
-                    attributes: expect.any(String),
-                    file: upload.file
-                },
-                successHandler: expect.any(Function),
-                errorHandler: expect.any(Function),
-                progressHandler: expect.any(Function)
+            return upload.preflightSuccessHandler({ data: {} }).then(() => {
+                expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
+                    url: `${upload.uploadHost}/api/2.0/files/content`,
+                    data: {
+                        attributes: expect.any(String),
+                        file: upload.file
+                    },
+                    headers: {
+                        'Content-MD5': 'somehash'
+                    },
+                    successHandler: expect.any(Function),
+                    errorHandler: expect.any(Function),
+                    progressHandler: expect.any(Function)
+                });
+            });
+        });
+
+        test('should upload with no Content-MD5 hash if hashing fails', () => {
+            upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve(''));
+            upload.file = {
+                name: 'warlock'
+            };
+            upload.folderId = '123';
+            upload.xhr = {
+                uploadFile: jest.fn()
+            };
+
+            return upload.preflightSuccessHandler({ data: {} }).then(() => {
+                expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
+                    url: `${upload.uploadHost}/api/2.0/files/content`,
+                    data: {
+                        attributes: expect.any(String),
+                        file: upload.file
+                    },
+                    headers: {},
+                    successHandler: expect.any(Function),
+                    errorHandler: expect.any(Function),
+                    progressHandler: expect.any(Function)
+                });
             });
         });
 
@@ -161,6 +191,7 @@ describe('api/uploads/PlainUpload', () => {
             const fileId = '123';
 
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve('somehash'));
             upload.file = {
                 name: 'warlock'
             };
@@ -170,13 +201,17 @@ describe('api/uploads/PlainUpload', () => {
                 uploadFile: jest.fn()
             };
 
-            upload.preflightSuccessHandler({ data: {} });
-            expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
-                url: `${upload.uploadHost}/api/2.0/files/${fileId}/content`,
-                data: expect.any(Object),
-                successHandler: expect.any(Function),
-                errorHandler: expect.any(Function),
-                progressHandler: expect.any(Function)
+            return upload.preflightSuccessHandler({ data: {} }).then(() => {
+                expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
+                    url: `${upload.uploadHost}/api/2.0/files/${fileId}/content`,
+                    data: expect.any(Object),
+                    headers: {
+                        'Content-MD5': 'somehash'
+                    },
+                    successHandler: expect.any(Function),
+                    errorHandler: expect.any(Function),
+                    progressHandler: expect.any(Function)
+                });
             });
         });
     });
@@ -191,7 +226,7 @@ describe('api/uploads/PlainUpload', () => {
 
         test('should set properties and make preflight request', () => {
             const folderId = '123';
-            file = {};
+            const file = {};
             const successCallback = () => {};
             const errorCallback = () => {};
             const progressCallback = () => {};
@@ -234,6 +269,20 @@ describe('api/uploads/PlainUpload', () => {
             };
             upload.cancel();
             expect(upload.xhr.abort).toHaveBeenCalled();
+        });
+    });
+
+    describe('computeSHA1()', () => {
+        it('should read file and compute digest', () => {
+            const file = new File(['123'], 'sample.jpg');
+            upload.readFile = jest.fn().mockReturnValueOnce(Promise.resolve({ buffer: new ArrayBuffer(3) }));
+            crypto.digest = jest.fn().mockReturnValueOnce(Promise.resolve(new ArrayBuffer(3)));
+
+            return upload.computeSHA1(file).then((computedSHA1) => {
+                expect(upload.readFile).toBeCalled();
+                expect(crypto.digest).toBeCalled();
+                expect(computedSHA1).toEqual('000000');
+            });
         });
     });
 });
