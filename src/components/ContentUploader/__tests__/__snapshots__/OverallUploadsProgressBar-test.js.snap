@@ -37,12 +37,12 @@ exports[`components/ContentUploader/OverallUploadsProgressBar should render corr
     className="bcu-upload-status"
   >
     <FormattedMessage
-      defaultMessage="Completed"
-      id="be.uploadsManagerUploadComplete"
+      defaultMessage="Drop files on this page to upload them into this folder."
+      id="be.uploadsManagerUploadPrompt"
     />
   </span>
   <ProgressBar
-    percent={2}
+    percent={0}
   />
   <span
     className="bcu-uploads-manager-toggle"

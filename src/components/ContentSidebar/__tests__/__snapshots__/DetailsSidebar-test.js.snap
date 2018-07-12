@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/DetailsSidebar should render DetailsSidebar with all components 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Details"
+      id="be.sidebarDetailsTitle"
+    />
+  }
+>
+  <div
+    className="bcs-details-content"
+  >
+    <SidebarVersions
+      file={
+        Object {
+          "id": "foo",
+        }
+      }
+    />
+    <SidebarNotices
+      file={
+        Object {
+          "id": "foo",
+        }
+      }
+    />
+  </div>
+  <SidebarSection
+    className=""
+    interactionTarget="fileproperties"
+    isOpen={true}
+    title={
+      <FormattedMessage
+        defaultMessage="File Properties"
+        id="be.sidebarProperties"
+      />
+    }
+  >
+    <SidebarFileProperties
+      file={
+        Object {
+          "id": "foo",
+        }
+      }
+      hasClassification={true}
+      hasRetentionPolicy={true}
+    />
+  </SidebarSection>
+  <SidebarAccessStats
+    file={
+      Object {
+        "id": "foo",
+      }
+    }
+  />
+</SidebarContent>
+`;

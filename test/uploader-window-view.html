@@ -107,7 +107,8 @@
             document.querySelector('.uploader1').innerHTML = '';
 
             uploader1.on('upload', (data) => {
-                console.log(`Successfully uploaded a file: ${data ? data.id : 'No File ID'}`);
+                console.log('Successfully uploaded a file:');
+                console.log(data);
             });
             uploader1.on('error', (data) => {
                 console.log(`Failed to upload: ${JSON.stringify(data)}`);
@@ -121,6 +122,7 @@
                 container: '.uploader1',
                 useUploadsManager: true,
                 isFolderUploadEnabled: true,
+                isUploadsManagerVisible: true
             });
 
             fileInput.onchange = function (event) {
@@ -140,9 +142,14 @@
                 const itemsWithOptions = Array.from(event.dataTransfer.items).map((item) => ({
                     item,
                     options: {
-                        folderId, token: () => Promise.resolve(token)
+                        folderId,
+                        token: () => Promise.resolve(token),
+                        uploadInitTimestamp: Date.now()
                     }
                 }))
+                // Should only upload once. ContentUploader should be able to filter out identical upload attempts.
+                uploader1.component.addFilesWithOptionsToUploadQueueAndStartUpload([], itemsWithOptions)
+                uploader1.component.addFilesWithOptionsToUploadQueueAndStartUpload([], itemsWithOptions)
                 uploader1.component.addFilesWithOptionsToUploadQueueAndStartUpload([], itemsWithOptions)
             }
 

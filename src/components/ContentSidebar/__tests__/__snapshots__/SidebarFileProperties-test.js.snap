@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentSidebar/SidebarFileProperties should not render classification information if no props are included 1`] = `
+exports[`components/ContentSidebar/SidebarFileProperties render() should not render classification information if hasClassification is false 1`] = `
 <SidebarFileProperties
   file={
     Object {
@@ -190,7 +190,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should not render class
 </SidebarFileProperties>
 `;
 
-exports[`components/ContentSidebar/SidebarFileProperties should render ItemProperties 1`] = `
+exports[`components/ContentSidebar/SidebarFileProperties render() should render ItemProperties 1`] = `
 <LoadingIndicatorWrapper>
   <ItemProperties
     classificationProps={Object {}}
@@ -211,7 +211,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render ItemPrope
 </LoadingIndicatorWrapper>
 `;
 
-exports[`components/ContentSidebar/SidebarFileProperties should render an error 1`] = `
+exports[`components/ContentSidebar/SidebarFileProperties render() should render an error 1`] = `
 <React.Fragment>
   <InlineError
     title={
@@ -239,7 +239,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render an error 
 </React.Fragment>
 `;
 
-exports[`components/ContentSidebar/SidebarFileProperties should render classification information when given proper metadata and callback 1`] = `
+exports[`components/ContentSidebar/SidebarFileProperties render() should render classification information and not link when given proper metadata 1`] = `
 <SidebarFileProperties
   file={
     Object {
@@ -249,6 +249,9 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
             "Box__Security__Classification__Key": "Public",
           },
         },
+      },
+      "permissions": Object {
+        "can_upload": false,
       },
       "size": "1",
     }
@@ -269,7 +272,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
         classificationProps={
           Object {
             "data-resin-target": "editclassification",
-            "openModal": [MockFunction],
+            "openModal": undefined,
             "value": "Public",
           }
         }
@@ -297,7 +300,6 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
           <RetentionPolicy />
           <ClassificationProperty
             data-resin-target="editclassification"
-            openModal={[MockFunction]}
             value="Public"
           >
             <FormattedMessage
@@ -327,23 +329,6 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
                   </Badge>
                 </ClassificationBadge>
               </div>
-              <PlainButton
-                className="lnk"
-                onClick={[MockFunction]}
-              >
-                <button
-                  className="btn-plain lnk"
-                  onClick={[MockFunction]}
-                  type="submit"
-                >
-                  <FormattedMessage
-                    defaultMessage="Edit"
-                    id="boxui.classification.edit"
-                  >
-                    <div />
-                  </FormattedMessage>
-                </button>
-              </PlainButton>
             </dd>
           </ClassificationProperty>
         </dl>
@@ -353,11 +338,14 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
 </SidebarFileProperties>
 `;
 
-exports[`components/ContentSidebar/SidebarFileProperties should render classification link when given correct callback 1`] = `
+exports[`components/ContentSidebar/SidebarFileProperties render() should render classification link only when given callback and has_upload permission is true 1`] = `
 <SidebarFileProperties
   file={
     Object {
       "metadata": null,
+      "permissions": Object {
+        "can_upload": true,
+      },
       "size": "1",
     }
   }
@@ -441,7 +429,7 @@ exports[`components/ContentSidebar/SidebarFileProperties should render classific
 </SidebarFileProperties>
 `;
 
-exports[`components/ContentSidebar/SidebarFileProperties should render retention policy information when given proper props and callback 1`] = `
+exports[`components/ContentSidebar/SidebarFileProperties render() should render retention policy information when given proper props and callback 1`] = `
 <SidebarFileProperties
   file={
     Object {

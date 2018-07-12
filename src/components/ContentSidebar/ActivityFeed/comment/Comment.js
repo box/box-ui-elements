@@ -144,8 +144,8 @@ class Comment extends React.Component<Props, State> {
                                     <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
-                            {onEdit && canEdit ? <InlineEdit id={id} toEdit={toEdit} /> : null}
-                            {onDelete && canDelete ? (
+                            {onEdit && canEdit && !isPending ? <InlineEdit id={id} toEdit={toEdit} /> : null}
+                            {onDelete && canDelete && !isPending ? (
                                 <InlineDelete
                                     id={id}
                                     permissions={permissions}

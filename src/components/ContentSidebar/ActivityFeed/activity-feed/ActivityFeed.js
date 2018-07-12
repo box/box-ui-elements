@@ -17,6 +17,7 @@ import messages from '../../../messages';
 import './ActivityFeed.scss';
 
 const VERSION_RESTORE_ACTION = 'restore';
+const TASK_INCOMPLETE = 'incomplete';
 
 type Props = {
     file: BoxItem,
@@ -213,7 +214,8 @@ class ActivityFeed extends React.Component<Props, State> {
             assigned_to: {
                 id: assignee.id,
                 name: assignee.name
-            }
+            },
+            resolution_state: TASK_INCOMPLETE
         }));
 
         const task = {
@@ -423,15 +425,18 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     addRestoredVersion(versions: FileVersions) {
         const { file } = this.props;
-        const { restored_from, modified_at } = file;
+        const { restored_from, modified_at, file_version } = file;
 
-        if (restored_from) {
+        // Ensures restored version is only added on first feed loads
+        const lastVersion = versions.total_count ? versions.entries[versions.total_count - 1] : {};
+        if (restored_from && lastVersion.action !== VERSION_RESTORE_ACTION) {
             const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
 
             if (restoredVersion) {
-                // $FlowFixMe
                 versions.entries.push({
                     ...restoredVersion,
+                    // $FlowFixMe
+                    id: file_version.id,
                     created_at: modified_at,
                     action: VERSION_RESTORE_ACTION
                 });
@@ -496,7 +501,8 @@ class ActivityFeed extends React.Component<Props, State> {
             comments,
             tasks,
             versions,
-            activityFeedError
+            activityFeedError,
+            onVersionHistoryClick
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -526,7 +532,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             // but you must at least be able to comment to do these operations.
                             onTaskDelete={hasCommentPermission ? this.deleteTask : noop}
                             onTaskEdit={hasCommentPermission ? this.updateTask : noop}
-                            onVersionInfo={this.openVersionHistoryPopup}
+                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}

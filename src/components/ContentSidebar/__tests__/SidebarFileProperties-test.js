@@ -2,7 +2,10 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
-import SidebarFileProperties, { SidebarFilePropertiesComponent } from '../SidebarFileProperties';
+import SidebarFileProperties, {
+    SidebarFilePropertiesComponent,
+    getClassificationModal
+} from '../SidebarFileProperties';
 import { KEY_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../../constants';
 
 describe('components/ContentSidebar/SidebarFileProperties', () => {
@@ -41,6 +44,9 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
                         [KEY_CLASSIFICATION_TYPE]: 'Public'
                     }
                 }
+            },
+            permissions: {
+                can_upload: false
             }
         },
         intl: {
@@ -65,52 +71,86 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
         }
     };
 
-    test('should render ItemProperties', () => {
-        const wrapper = getWrapper(props);
+    describe('render()', () => {
+        test('should render ItemProperties', () => {
+            const wrapper = getWrapper(props);
 
-        expect(wrapper.find(ItemProperties)).toHaveLength(1);
-        expect(wrapper).toMatchSnapshot();
+            expect(wrapper.find(ItemProperties)).toHaveLength(1);
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render an error', () => {
+            const fakeError = {
+                id: 'foo',
+                description: 'bar',
+                defaultMessage: 'baz'
+            };
+
+            const errorProps = {
+                inlineError: {
+                    title: fakeError,
+                    content: fakeError
+                }
+            };
+            const wrapper = shallow(<SidebarFileProperties {...errorProps} />).dive();
+
+            expect(wrapper.find(InlineError)).toHaveLength(1);
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should not render classification information if hasClassification is false', () => {
+            const wrapper = getMountWrapper({
+                ...props,
+                hasClassification: false
+            });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render classification information and not link when given proper metadata', () => {
+            const wrapper = getMountWrapper(classificationProps);
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render classification link only when given callback and has_upload permission is true', () => {
+            // Only onClassificationClick callback is passed
+            const wrapper = getMountWrapper({
+                ...classificationProps,
+                file: {
+                    ...classificationProps.file,
+                    permissions: {
+                        can_upload: true
+                    },
+                    metadata: null
+                }
+            });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render retention policy information when given proper props and callback', () => {
+            const wrapper = getMountWrapper(retentionPolicyProps);
+            expect(wrapper).toMatchSnapshot();
+        });
     });
 
-    test('should render an error', () => {
-        const fakeError = {
-            id: 'foo',
-            description: 'bar',
-            defaultMessage: 'baz'
-        };
+    describe('getClassificationModal()', () => {
+        test('should not have onClassificationClick prop on SidebarFileProperties when can_upload is falsy', () => {
+            expect(
+                getClassificationModal(classificationProps.file, classificationProps.onClassificationClick)
+            ).toBeUndefined();
+        });
 
-        const errorProps = {
-            inlineError: {
-                title: fakeError,
-                content: fakeError
-            }
-        };
-        const wrapper = shallow(<SidebarFileProperties {...errorProps} />).dive();
-
-        expect(wrapper.find(InlineError)).toHaveLength(1);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should not render classification information if no props are included', () => {
-        props.hasClassification = false;
-        const wrapper = getMountWrapper(props);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render classification information when given proper metadata and callback', () => {
-        const wrapper = getMountWrapper(classificationProps);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render classification link when given correct callback', () => {
-        // Only onClassificationClick callback is passed
-        classificationProps.file.metadata = null;
-        const wrapper = getMountWrapper(classificationProps);
-        expect(wrapper).toMatchSnapshot();
-    });
-
-    test('should render retention policy information when given proper props and callback', () => {
-        const wrapper = getMountWrapper(retentionPolicyProps);
-        expect(wrapper).toMatchSnapshot();
+        test('should have onClassificationClick prop on SidebarFileProperties when can_upload is true', () => {
+            expect(
+                getClassificationModal(
+                    {
+                        ...classificationProps.file,
+                        permissions: {
+                            can_upload: true
+                        }
+                    },
+                    classificationProps.onClassificationClick
+                )
+            ).toEqual(classificationProps.onClassificationClick);
+        });
     });
 });

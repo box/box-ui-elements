@@ -16,19 +16,14 @@ describe('api/uploads/FolderUpload', () => {
     });
 
     describe('upload()', () => {
-        test('should upload each folder node', () => {
+        test('should upload folder node', () => {
             const upload1 = jest.fn();
-            const upload2 = jest.fn();
             const errorCallback = () => 'errorCallback';
-            folderUploadInstance.folders = {
-                1: { upload: upload1 },
-                2: { upload: upload2 }
-            };
+            folderUploadInstance.folder = { upload: upload1 };
 
-            folderUploadInstance.upload({ errorCallback });
+            folderUploadInstance.upload({ errorCallback, noop });
 
             expect(upload1).toHaveBeenCalledWith(destinationFolderID, errorCallback, true);
-            expect(upload2).toHaveBeenCalledWith(destinationFolderID, errorCallback, true);
         });
     });
 
@@ -44,14 +39,13 @@ describe('api/uploads/FolderUpload', () => {
 
             // /
             // - a/
-            expect(Object.values(folderUploadInstance.folders)).toHaveLength(1);
-            expect(Object.keys(folderUploadInstance.folders)).toEqual(['a']);
+            expect(folderUploadInstance.folder.name).toEqual('a');
             // /a/
             // - f1
             // - f2
             // - b/
             // - c/
-            const folderA = folderUploadInstance.folders.a;
+            const folderA = folderUploadInstance.folder;
             expect(Object.keys(folderA.folders)).toHaveLength(2);
             expect(Object.keys(folderA.folders)).toEqual(['b', 'c']);
             expect(folderA.files).toHaveLength(2);
@@ -82,14 +76,13 @@ describe('api/uploads/FolderUpload', () => {
 
             // /
             // - a/
-            expect(Object.values(folderUploadInstance.folders)).toHaveLength(1);
-            expect(Object.keys(folderUploadInstance.folders)).toEqual(['a']);
+            expect(folderUploadInstance.folder.name).toEqual('a');
             // /a/
             // - f1
             // - f2
             // - b/
             // - c/
-            const folderA = folderUploadInstance.folders.a;
+            const folderA = folderUploadInstance.folder;
             expect(Object.keys(folderA.folders)).toHaveLength(2);
             expect(Object.keys(folderA.folders)).toEqual(['b', 'c']);
             expect(folderA.files).toHaveLength(2);
@@ -109,17 +102,16 @@ describe('api/uploads/FolderUpload', () => {
         });
     });
 
-    describe('buildFolderTreeFromDataTransferItems()', () => {
+    describe('buildFolderTreeFromDataTransferItem()', () => {
         test('should construct folders correctly', async () => {
             const createFolderUploadNodeMock = jest.fn();
             folderUploadInstance.createFolderUploadNode = createFolderUploadNodeMock;
 
-            await folderUploadInstance.buildFolderTreeFromDataTransferItems([
-                { item: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} },
-                { item: { name: 'f4', webkitRelativePath: 'a/c/f4' }, options: {} }
+            await folderUploadInstance.buildFolderTreeFromDataTransferItem([
+                { item: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} }
             ]);
 
-            expect(createFolderUploadNodeMock).toHaveBeenCalledTimes(2);
+            expect(createFolderUploadNodeMock).toHaveBeenCalledTimes(1);
         });
     });
 
