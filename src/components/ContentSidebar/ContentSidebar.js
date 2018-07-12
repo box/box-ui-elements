@@ -346,6 +346,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 }
             }
         });
+
         this.errorCallback(e);
     };
 
@@ -364,6 +365,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             },
             activityFeedError: activityFeedInlineError
         });
+
         this.errorCallback(e);
     };
 
@@ -382,6 +384,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             },
             activityFeedError: activityFeedInlineError
         });
+
         this.errorCallback(e);
     };
 
@@ -400,6 +403,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             },
             activityFeedError: activityFeedInlineError
         });
+
         this.errorCallback(e);
     };
 
@@ -414,6 +418,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.setState({
             activityFeedError: activityFeedInlineError
         });
+
         this.errorCallback(e);
     };
 
@@ -440,6 +445,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             accessStats: undefined,
             accessStatsError
         });
+
         this.errorCallback(e);
     };
 
@@ -460,6 +466,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 }
             }
         });
+
         this.errorCallback(e);
     };
 
@@ -474,6 +481,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.setState({
             isFileLoading: false
         });
+
         this.errorCallback(e);
     };
 
