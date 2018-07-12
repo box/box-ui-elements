@@ -13,8 +13,8 @@ import IconCopy from 'box-react-ui/lib/icons/general/IconCopy';
 import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from 'box-react-ui/lib/utils/datetime';
+import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import TranscriptRow from './TranscriptRow';
-import SkillsBusyIndicator from '../SkillsBusyIndicator';
 import { isValidTimeSlice } from './timeSliceUtils';
 import { COLOR_999 } from '../../../../constants';
 import { copy } from '../../../../util/download';
@@ -272,55 +272,56 @@ class Transcript extends React.PureComponent<Props, State> {
         });
 
         return (
-            <div className='be-transcript'>
-                {hasEntries &&
-                    !isLoading && (
-                        <div className='be-transcript-actions'>
-                            <PlainButton
-                                type='button'
-                                className='be-transcript-copy'
-                                getDOMRef={this.copyBtnRef}
-                                onClick={this.copyTranscript}
-                            >
-                                <IconCopy color={COLOR_999} />
-                            </PlainButton>
-                            {hasManyEntries && (
+            <LoadingIndicatorWrapper isLoading={isLoading}>
+                <div className='be-transcript'>
+                    {hasEntries &&
+                        !isLoading && (
+                            <div className='be-transcript-actions'>
                                 <PlainButton
                                     type='button'
-                                    className='be-transcript-expand'
-                                    onClick={this.toggleExpandCollapse}
+                                    className='be-transcript-copy'
+                                    getDOMRef={this.copyBtnRef}
+                                    onClick={this.copyTranscript}
                                 >
-                                    {isCollapsed ? (
-                                        <IconExpand color={COLOR_999} />
-                                    ) : (
-                                        <IconCollapse color={COLOR_999} />
-                                    )}
+                                    <IconCopy color={COLOR_999} />
                                 </PlainButton>
-                            )}
-                            {isEditable && (
-                                <PlainButton
-                                    type='button'
-                                    className={editBtnClassName}
-                                    onClick={this.toggleIsEditing}
-                                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
-                                >
-                                    <IconEdit />
-                                </PlainButton>
-                            )}
+                                {hasManyEntries && (
+                                    <PlainButton
+                                        type='button'
+                                        className='be-transcript-expand'
+                                        onClick={this.toggleExpandCollapse}
+                                    >
+                                        {isCollapsed ? (
+                                            <IconExpand color={COLOR_999} />
+                                        ) : (
+                                            <IconCollapse color={COLOR_999} />
+                                        )}
+                                    </PlainButton>
+                                )}
+                                {isEditable && (
+                                    <PlainButton
+                                        type='button'
+                                        className={editBtnClassName}
+                                        onClick={this.toggleIsEditing}
+                                        data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
+                                    >
+                                        <IconEdit />
+                                    </PlainButton>
+                                )}
+                            </div>
+                        )}
+                    {isEditing ? (
+                        <div className='be-transcript-edit-message'>
+                            <FormattedMessage {...messages.transcriptEdit} />
                         </div>
+                    ) : null}
+                    {hasEntries ? (
+                        <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
+                    ) : (
+                        <FormattedMessage {...messages.skillNoInfoFoundError} />
                     )}
-                {isEditing ? (
-                    <div className='be-transcript-edit-message'>
-                        <FormattedMessage {...messages.transcriptEdit} />
-                    </div>
-                ) : null}
-                {hasEntries ? (
-                    <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
-                ) : (
-                    <FormattedMessage {...messages.skillNoInfoFoundError} />
-                )}
-                {isLoading && <SkillsBusyIndicator />}
-            </div>
+                </div>
+            </LoadingIndicatorWrapper>
         );
     }
 }

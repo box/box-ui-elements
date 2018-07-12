@@ -9,11 +9,11 @@ import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
+import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import Face from './Face';
 import Timeline from '../Timeline';
-import SkillsBusyIndicator from '../SkillsBusyIndicator';
 import messages from '../../../messages';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 import './Faces.scss';
@@ -161,66 +161,67 @@ class Faces extends React.PureComponent<Props, State> {
         });
 
         return (
-            <div className={editClassName}>
-                {hasFaces &&
-                    isEditable &&
-                    !isLoading && (
-                        <PlainButton
-                            type='button'
-                            className='be-face-edit'
-                            onClick={this.toggleIsEditing}
-                            data-resin-target={SKILLS_TARGETS.FACES.EDIT}
-                        >
-                            <IconEdit />
-                        </PlainButton>
+            <LoadingIndicatorWrapper isLoading={isLoading}>
+                <div className={editClassName}>
+                    {hasFaces &&
+                        isEditable &&
+                        !isLoading && (
+                            <PlainButton
+                                type='button'
+                                className='be-face-edit'
+                                onClick={this.toggleIsEditing}
+                                data-resin-target={SKILLS_TARGETS.FACES.EDIT}
+                            >
+                                <IconEdit />
+                            </PlainButton>
+                        )}
+                    {hasFaces ? (
+                        entries.map((face: SkillCardEntry, index: number) => (
+                            /* eslint-disable react/no-array-index-key */
+                            <Face
+                                key={index}
+                                face={face}
+                                selected={selected}
+                                isEditing={isEditing}
+                                onDelete={this.onDelete}
+                                onSelect={this.onSelect}
+                            />
+                            /* eslint-enable react/no-array-index-key */
+                        ))
+                    ) : (
+                        <FormattedMessage {...messages.skillNoInfoFoundError} />
                     )}
-                {hasFaces ? (
-                    entries.map((face: SkillCardEntry, index: number) => (
-                        /* eslint-disable react/no-array-index-key */
-                        <Face
-                            key={index}
-                            face={face}
-                            selected={selected}
-                            isEditing={isEditing}
-                            onDelete={this.onDelete}
-                            onSelect={this.onSelect}
-                        />
-                        /* eslint-enable react/no-array-index-key */
-                    ))
-                ) : (
-                    <FormattedMessage {...messages.skillNoInfoFoundError} />
-                )}
-                {!!selected &&
-                    !isEditing &&
-                    Array.isArray(selected.appears) &&
-                    selected.appears.length > 0 && (
-                        <Timeline
-                            timeslices={selected.appears}
-                            duration={duration}
-                            getPreviewer={getPreviewer}
-                            interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
-                        />
+                    {!!selected &&
+                        !isEditing &&
+                        Array.isArray(selected.appears) &&
+                        selected.appears.length > 0 && (
+                            <Timeline
+                                timeslices={selected.appears}
+                                duration={duration}
+                                getPreviewer={getPreviewer}
+                                interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
+                            />
+                        )}
+                    {isEditing && (
+                        <div className='be-faces-buttons'>
+                            <Button
+                                type='button'
+                                onClick={this.onCancel}
+                                data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}
+                            >
+                                <FormattedMessage {...messages.cancel} />
+                            </Button>
+                            <PrimaryButton
+                                type='button'
+                                onClick={this.onSave}
+                                data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}
+                            >
+                                <FormattedMessage {...messages.save} />
+                            </PrimaryButton>
+                        </div>
                     )}
-                {isEditing && (
-                    <div className='be-faces-buttons'>
-                        <Button
-                            type='button'
-                            onClick={this.onCancel}
-                            data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}
-                        >
-                            <FormattedMessage {...messages.cancel} />
-                        </Button>
-                        <PrimaryButton
-                            type='button'
-                            onClick={this.onSave}
-                            data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}
-                        >
-                            <FormattedMessage {...messages.save} />
-                        </PrimaryButton>
-                    </div>
-                )}
-                {isLoading && <SkillsBusyIndicator />}
-            </div>
+                </div>
+            </LoadingIndicatorWrapper>
         );
     }
 }
