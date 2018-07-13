@@ -1,5 +1,12 @@
+## 5.4.0 (2018-07-13)
+
+* Chore: Ignore BRUI flow errors (#455) ([838858c](https://github.com/box/box-ui-elements/commit/838858c)), closes [#455](https://github.com/box/box-ui-elements/issues/455)
+
+
+
 ## 5.3.0 (2018-07-12)
 
+* Release: 5.3.0 ([53f2e95](https://github.com/box/box-ui-elements/commit/53f2e95))
 * Chore: ApprovalCommentForm CSS fixes (#441) ([0fd5ddc](https://github.com/box/box-ui-elements/commit/0fd5ddc)), closes [#441](https://github.com/box/box-ui-elements/issues/441)
 * Chore: Cleanup unused versionError from ContentSidebar/DetailsSidebar (#432) ([cf20551](https://github.com/box/box-ui-elements/commit/cf20551)), closes [#432](https://github.com/box/box-ui-elements/issues/432)
 * Chore: Enforcing new lines after multiline block statements (#451) ([acc711b](https://github.com/box/box-ui-elements/commit/acc711b)), closes [#451](https://github.com/box/box-ui-elements/issues/451)
