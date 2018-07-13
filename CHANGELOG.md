@@ -1,5 +1,12 @@
+## <small>5.4.1 (2018-07-13)</small>
+
+* Update: BRUI to v27.17.0 (#456) ([73d1659](https://github.com/box/box-ui-elements/commit/73d1659)), closes [#456](https://github.com/box/box-ui-elements/issues/456)
+
+
+
 ## 5.4.0 (2018-07-13)
 
+* Release: 5.4.0 ([03dd0b8](https://github.com/box/box-ui-elements/commit/03dd0b8))
 * Chore: Ignore BRUI flow errors (#455) ([838858c](https://github.com/box/box-ui-elements/commit/838858c)), closes [#455](https://github.com/box/box-ui-elements/issues/455)
 
 
