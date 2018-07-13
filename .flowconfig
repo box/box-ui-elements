@@ -11,6 +11,9 @@
 .*/node_modules/webpack*
 .*/node_modules/draft-js*
 
+[untyped]
+.*/node_modules/box-react-ui/*
+
 [include]
 ./src
 
