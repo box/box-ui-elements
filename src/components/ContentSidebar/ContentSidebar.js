@@ -608,18 +608,63 @@ class ContentSidebar extends PureComponent<Props, State> {
         }
     }
 
-    /**
-     * Adds a comment to the comments state and increases total_count.
-     *
-     * @param {Comment} comment - The newly created comment from the API
-     * @return {void}
-     */
-    createCommentSuccessCallback = (): void => {
+    feedSuccessCallback = (): void => {
         this.fetchFeedItems();
     };
 
-    createCommentErrorCallback = (e: $AxiosXHR<any>) => {
+    feedErrorCallback = (e: $AxiosXHR<any>) => {
         this.errorCallback(e);
+        this.fetchFeedItems();
+    };
+
+    /**
+     * Deletes a task via the API.
+     *
+     * @param {Object} args - A subset of the task
+     */
+    deleteTask = ({ id }: { id: string }): void => {
+        const { file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getFeedAPI(false).deleteTask(file, id, this.feedSuccessCallback, this.feedErrorCallback);
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
+    /**
+     * Updates a task in the state via the API.
+     *
+     * @param {Object} args - A subset of the task
+     */
+    updateTask = ({ text, id }: { text: string, id: string }): void => {
+        const { file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api.getFeedAPI(false).updateTask(file, id, text, this.feedSuccessCallback, this.feedErrorCallback);
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
+    deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
+        const { file } = this.state;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api
+            .getFeedAPI(false)
+            .deleteComment(file, id, permissions, this.feedSuccessCallback, this.feedErrorCallback);
+
+        // need to load the pending item
         this.fetchFeedItems();
     };
 
@@ -629,8 +674,6 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @private
      * @param {string} text - The comment's text
      * @param {boolean} hasMention - The comment's text
-     * @param {Function} successCallback - Called on successful comment creation
-     * @param {Function} errorCallback - Called on failure to create comment
      * @return {void}
      */
     createComment = (text: string, hasMention: boolean): void => {
@@ -646,44 +689,12 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         this.api
             .getFeedAPI(false)
-            .createComment(
-                file,
-                currentUser,
-                text,
-                hasMention,
-                this.createCommentSuccessCallback,
-                this.createCommentErrorCallback
-            );
+            .createComment(file, currentUser, text, hasMention, this.feedSuccessCallback, this.feedErrorCallback);
 
         // need to load the pending item
         this.fetchFeedItems();
     };
 
-    /**
-     * Adds a comment to the comments state and increases total_count.
-     *
-     * @param {Comment} comment - The newly created comment from the API
-     * @return {void}
-     */
-    createTaskSuccessCallback = (): void => {
-        this.fetchFeedItems();
-    };
-
-    createTaskErrorCallback = (e: $AxiosXHR<any>) => {
-        this.errorCallback(e);
-        this.fetchFeedItems();
-    };
-
-    /**
-     * Posts a new comment to the API
-     *
-     * @private
-     * @param {string} text - The comment's text
-     * @param {boolean} hasMention - The comment's text
-     * @param {Function} successCallback - Called on successful comment creation
-     * @param {Function} errorCallback - Called on failure to create comment
-     * @return {void}
-     */
     createTask = (message: string, assignees: SelectorItems, dueAt: string): void => {
         const { file, currentUser } = this.state;
 
@@ -697,15 +708,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         this.api
             .getFeedAPI(false)
-            .createTask(
-                file,
-                currentUser,
-                message,
-                assignees,
-                dueAt,
-                this.createTaskSuccessCallback,
-                this.createTaskErrorCallback
-            );
+            .createTask(file, currentUser, message, assignees, dueAt, this.feedSuccessCallback, this.feedErrorCallback);
 
         // need to load the pending item
         this.fetchFeedItems();

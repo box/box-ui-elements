@@ -244,6 +244,7 @@ class Feed extends Base {
         }
 
         this.id = file.id;
+        this.updateFeedItem({ isPending: true }, taskId);
         const feedItems = this.getCachedItems(this.id);
         if (feedItems) {
             const taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
@@ -296,39 +297,85 @@ class Feed extends Base {
     };
 
     /**
+     * Updates a task
+     *
+     * @private
+     * @param {string} taskId - The task's id
+     * @param {Array} message - The task's text
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
+     * @param {string} dueAt - The date the task is due
+     * @return {void}
+     */
+    updateTask = (
+        file: BoxItem,
+        taskId: string,
+        message: string,
+        successCallback: (task: Task) => void = noop,
+        errorCallback: (e: $AxiosXHR<any>) => void = noop,
+        dueAt?: string
+    ) => {
+        if (!file || !file.id) {
+            throw getBadItemError();
+        }
+
+        this.id = file.id;
+        this.updateFeedItem({ isPending: true }, taskId);
+        this.tasksAPI = new TasksAPI(this.options);
+        this.tasksAPI.updateTask({
+            file,
+            taskId,
+            message,
+            dueAt,
+            successCallback: (task: Task) => {
+                this.updateFeedItem(
+                    {
+                        ...task,
+                        isPending: false
+                    },
+                    task.id
+                );
+                if (!this.isDestroyed()) {
+                    successCallback(task);
+                }
+            },
+            errorCallback: (e: $AxiosXHR<any>) => {
+                this.errorCallback(e);
+                if (!this.isDestroyed()) {
+                    errorCallback(e);
+                }
+            }
+        });
+    };
+
+    /**
      * Deletes a comment.
      *
      * @param {string} id - Comment ID
      * @param {BoxItemPermission} permissions - Permissions for the comment
      * @return {void}
      */
-    deleteComment = ({
-        file,
-        commentId,
-        permissions,
-        successCallback,
-        errorCallback
-    }: {
+    deleteComment = (
         file: BoxItem,
         commentId: string,
         permissions: BoxItemPermission,
         successCallback: Function,
         errorCallback: Function
-    }): void => {
-        this.updateFeedItem({ isPending: true }, commentId);
+    ): void => {
         this.commentsAPI = new CommentsAPI(this.options);
         if (!file || !file.id) {
             throw getBadItemError();
         }
 
-        const fileId = file.id;
+        this.id = file.id;
+        this.updateFeedItem({ isPending: true }, commentId);
 
         this.commentsAPI.deleteComment({
             file,
             commentId,
             permissions,
             successCallback: () => {
-                this.deleteCommentSuccessCallback(fileId, commentId);
+                this.deleteCommentSuccessCallback(commentId);
                 if (!this.isDestroyed()) {
                     successCallback();
                 }
@@ -342,8 +389,8 @@ class Feed extends Base {
         });
     };
 
-    deleteCommentSuccessCallback = (fileId: string, commentId: string) => {
-        this.deleteFeedItem(fileId, commentId);
+    deleteCommentSuccessCallback = (commentId: string) => {
+        this.deleteFeedItem(this.id, commentId);
     };
 
     deleteCommentErrorCallback = (commentId: string) => {
@@ -365,7 +412,7 @@ class Feed extends Base {
         assignees: SelectorItems,
         successCallback: Function,
         errorCallback: Function
-    ): Promise<any> {
+    ): void {
         if (!file) {
             throw getBadItemError();
         }
@@ -376,7 +423,7 @@ class Feed extends Base {
             assignmentPromises.push(this.createTaskAssignment(file, task, assignee, errorCallback));
         });
 
-        return Promise.all(assignmentPromises).then((taskAssignments: Array<TaskAssignment>) => {
+        Promise.all(assignmentPromises).then((taskAssignments: Array<TaskAssignment>) => {
             const formattedTask = this.appendAssignmentsToTask(task, taskAssignments);
             this.updateFeedItem(
                 {
@@ -486,7 +533,7 @@ class Feed extends Base {
                     resolve(taskAssignment);
                 },
                 errorCallback: (e) => {
-                    this.createTaskAssignmentErrorCallback(e, task, errorCallback);
+                    this.createTaskAssignmentErrorCallback(e, file, task, errorCallback);
                     reject();
                 }
             });
@@ -501,11 +548,11 @@ class Feed extends Base {
      * @param {Function} errorCallback - Passed in error callback
      * @return {void}
      */
-    createTaskAssignmentErrorCallback(e: $AxiosXHR<any>, task: Task, errorCallback: Function) {
+    createTaskAssignmentErrorCallback(e: $AxiosXHR<any>, file: BoxItem, task: Task, errorCallback: Function) {
         this.errorCallback(e);
         errorCallback(e);
         // Attempt to delete the task due to it's bad assignment
-        this.deleteTask(task.id);
+        this.deleteTask(file, task.id);
     }
 
     /**
@@ -529,17 +576,22 @@ class Feed extends Base {
 
         this.id = file.id;
         this.tasksAPI = new TasksAPI(this.options);
+        this.updateFeedItem({ isPending: true }, taskId);
 
         this.tasksAPI.deleteTask({
             file,
             taskId,
             successCallback: () => {
-                successCallback(taskId);
                 this.deleteTaskSuccessCallback(taskId);
+                if (!this.isDestroyed()) {
+                    successCallback(taskId);
+                }
             },
             errorCallback: (e: $AxiosXHR<any>) => {
-                errorCallback(e, taskId);
                 this.errorCallback(e);
+                if (!this.isDestroyed()) {
+                    errorCallback(e, taskId);
+                }
             }
         });
     };
@@ -819,6 +871,7 @@ class Feed extends Base {
      */
     destroy() {
         super.destroy();
+
         if (this.commentsAPI) {
             this.commentsAPI.destroy();
             delete this.commentsAPI;

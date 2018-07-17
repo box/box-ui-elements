@@ -82,65 +82,6 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     /**
-     * Updates a task in the state via the API.
-     *
-     * @param {Object} args - A subset of the task
-     */
-    updateTask = ({ text, id }: { text: string, id: string }): void => {
-        const updateTask = this.props.onTaskUpdate || noop;
-        this.updateFeedItem({ isPending: true }, id);
-        updateTask(id, text, this.updateTaskSuccessCallback, () =>
-            this.updateFeedItem(this.createFeedError(messages.taskUpdateErrorMessage), id)
-        );
-    };
-
-    /**
-     * Deletes a task via the API.
-     *
-     * @param {Object} args - A subset of the task
-     */
-    deleteTask = ({ id }: { id: string }): void => {
-        const deleteTask = this.props.onTaskDelete || noop;
-        this.updateFeedItem({ isPending: true }, id);
-        deleteTask(id, this.deleteFeedItem, () =>
-            this.updateFeedItem(this.createFeedError(messages.taskDeleteErrorMessage), id)
-        );
-    };
-
-    /**
-     * Updates the task assignment state of the updated task
-     *
-     * @param {Task} task - Box task
-     * @param {TaskAssignment} updatedAssignment - New task assignment from API
-     * @return {void}
-     */
-    updateTaskAssignmentSuccessCallback = (task: Task, updatedAssignment: TaskAssignment) => {
-        const { entries, total_count } = task.task_assignment_collection;
-
-        const assignments = entries.map((item: TaskAssignment) => {
-            if (item.id === updatedAssignment.id) {
-                return {
-                    ...item,
-                    ...updatedAssignment,
-                    resolution_state: updatedAssignment.message.toLowerCase()
-                };
-            }
-
-            return item;
-        });
-
-        this.updateFeedItem(
-            {
-                task_assignment_collection: {
-                    entries: assignments,
-                    total_count
-                }
-            },
-            task.id
-        );
-    };
-
-    /**
      * Invokes version history popup handler.
      *
      * @param {Object} data - Version history data
@@ -196,7 +137,11 @@ class ActivityFeed extends React.Component<Props, State> {
             getMentionWithQuery,
             activityFeedError,
             onVersionHistoryClick,
-            feedItems
+            feedItems,
+            onCommentDelete,
+            onTaskDelete,
+            onTaskUpdate,
+            onTaskAssignmentUpdate
         } = this.props;
         const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -219,12 +164,12 @@ class ActivityFeed extends React.Component<Props, State> {
                             items={collapseFeedState(feedItems)}
                             isDisabled={isDisabled}
                             currentUser={currentUser}
-                            onTaskAssignmentUpdate={this.updateTaskAssignment}
-                            onCommentDelete={hasCommentPermission ? this.deleteComment : noop}
+                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                            onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             // We don't know task edit/delete specific permissions,
                             // but you must at least be able to comment to do these operations.
-                            onTaskDelete={hasCommentPermission ? this.deleteTask : noop}
-                            onTaskEdit={hasCommentPermission ? this.updateTask : noop}
+                            onTaskDelete={hasCommentPermission ? onTaskDelete : noop}
+                            onTaskEdit={hasCommentPermission ? onTaskUpdate : noop}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
