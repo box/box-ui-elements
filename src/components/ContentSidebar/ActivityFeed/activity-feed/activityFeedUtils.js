@@ -56,7 +56,3 @@ export function collapseFeedState(feedState: FeedItems): FeedItems {
         return collapsedFeedState.concat([previousFeedItem, feedItem]);
     }, []);
 }
-
-export function shouldShowEmptyState(feedState: FeedItems): boolean {
-    return feedState.length === 0 || (feedState.length === 1 && feedState[0].type === ItemTypes.fileVersion);
-}

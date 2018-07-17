@@ -25,23 +25,18 @@ type Props = {
     getApproverWithQuery?: Function,
     getMentionWithQuery?: Function,
     translations?: Translations,
-    comments?: Comments,
-    tasks?: Tasks,
-    versions?: FileVersions,
     activityFeedError?: Errors,
     currentUser?: User,
     isDisabled?: boolean,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     getAvatarUrl: (string) => Promise<?string>,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
+    feedItems?: FeedItems
 } & ExternalProps;
 
 const ActivitySidebar = ({
     file,
-    comments,
-    tasks,
-    versions,
     currentUser,
     isDisabled = false,
     approverSelectorContacts,
@@ -57,14 +52,12 @@ const ActivitySidebar = ({
     onVersionHistoryClick,
     getAvatarUrl,
     getUserProfileUrl,
-    activityFeedError
+    activityFeedError,
+    feedItems
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed
             file={file}
-            comments={comments}
-            tasks={tasks}
-            versions={versions}
             activityFeedError={activityFeedError}
             approverSelectorContacts={approverSelectorContacts}
             mentionSelectorContacts={mentionSelectorContacts}
@@ -81,6 +74,7 @@ const ActivitySidebar = ({
             onVersionHistoryClick={onVersionHistoryClick}
             getAvatarUrl={getAvatarUrl}
             getUserProfileUrl={getUserProfileUrl}
+            feedItems={feedItems}
         />
     </SidebarContent>
 );
