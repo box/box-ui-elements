@@ -624,7 +624,6 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     deleteTask = ({ id }: { id: string }): void => {
         const { file } = this.state;
-
         if (!file) {
             throw getBadItemError();
         }
@@ -642,7 +641,6 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     updateTask = ({ text, id }: { text: string, id: string }): void => {
         const { file } = this.state;
-
         if (!file) {
             throw getBadItemError();
         }
@@ -653,9 +651,30 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
+    updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string, message?: string): void => {
+        const { file } = this.state;
+        if (!file) {
+            throw getBadItemError();
+        }
+
+        this.api
+            .getFeedAPI(false)
+            .updateTaskAssignment(
+                file,
+                taskId,
+                taskAssignmentId,
+                status,
+                message,
+                this.feedSuccessCallback,
+                this.feedErrorCallback
+            );
+
+        // need to load the pending item
+        this.fetchFeedItems();
+    };
+
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
         const { file } = this.state;
-
         if (!file) {
             throw getBadItemError();
         }
@@ -678,7 +697,6 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     createComment = (text: string, hasMention: boolean): void => {
         const { file, currentUser } = this.state;
-
         if (!file) {
             throw getBadItemError();
         }
@@ -697,7 +715,6 @@ class ContentSidebar extends PureComponent<Props, State> {
 
     createTask = (message: string, assignees: SelectorItems, dueAt: string): void => {
         const { file, currentUser } = this.state;
-
         if (!file) {
             throw getBadItemError();
         }

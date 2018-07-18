@@ -6,18 +6,15 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
-import uniqueId from 'lodash/uniqueId';
 import classNames from 'classnames';
 
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState } from './activityFeedUtils';
-import messages from '../../../messages';
 import './ActivityFeed.scss';
 
 const VERSION_RESTORE_ACTION = 'restore';
-const TASK_INCOMPLETE = 'incomplete';
 
 type Props = {
     file: BoxItem,
@@ -42,15 +39,26 @@ type Props = {
 };
 
 type State = {
-    isInputOpen: boolean
+    isInputOpen: boolean,
+    feedItems: ?FeedItems
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
-        isInputOpen: false
+        isInputOpen: false,
+        feedItems: undefined
     };
 
     feedContainer: null | HTMLElement;
+
+    componentWillReceiveProps(nextProps: Props) {
+        const { feedItems } = nextProps;
+        if (this.props.feedItems !== feedItems) {
+            this.setState({
+                feedItems
+            });
+        }
+    }
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
@@ -137,13 +145,12 @@ class ActivityFeed extends React.Component<Props, State> {
             getMentionWithQuery,
             activityFeedError,
             onVersionHistoryClick,
-            feedItems,
             onCommentDelete,
             onTaskDelete,
             onTaskUpdate,
             onTaskAssignmentUpdate
         } = this.props;
-        const { isInputOpen } = this.state;
+        const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
 

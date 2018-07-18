@@ -22,7 +22,6 @@ import messages from '../components/messages';
 
 const DEFAULT_START = 0;
 const DEFAULT_END = 1000;
-const VERSION_RESTORE_ACTION = 'restore';
 const TASK_INCOMPLETE = 'incomplete';
 
 class Feed extends Base {
@@ -235,7 +234,7 @@ class Feed extends Base {
         taskId: string,
         taskAssignmentId: string,
         resolutionState: string,
-        message: string,
+        message?: string,
         successCallback: Function,
         errorCallback: Function
     ): void => {
@@ -245,22 +244,20 @@ class Feed extends Base {
 
         this.id = file.id;
         this.updateFeedItem({ isPending: true }, taskId);
-        const feedItems = this.getCachedItems(this.id);
-        if (feedItems) {
-            const taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
-
-            taskAssignmentsAPI.updateTaskAssignment({
-                file,
-                taskAssignmentId,
-                resolutionState,
-                message,
-                successCallback: this.updateTaskAssignmentSuccessCallback,
-                errorCallback: (e: $AxiosXHR<any>) => {
-                    errorCallback(e);
-                    this.errorCallback(e);
-                }
-            });
-        }
+        const taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
+        taskAssignmentsAPI.updateTaskAssignment({
+            file,
+            taskAssignmentId,
+            resolutionState,
+            message,
+            successCallback: (taskAssignment: TaskAssignment) => {
+                this.updateTaskAssignmentSuccessCallback(taskId, taskAssignment, successCallback);
+            },
+            errorCallback: (e: $AxiosXHR<any>) => {
+                errorCallback(e);
+                this.errorCallback(e);
+            }
+        });
     };
 
     /**
@@ -270,30 +267,42 @@ class Feed extends Base {
      * @param {TaskAssignment} updatedAssignment - New task assignment from API
      * @return {void}
      */
-    updateTaskAssignmentSuccessCallback = (task: Task, updatedAssignment: TaskAssignment) => {
-        const { entries, total_count } = task.task_assignment_collection;
+    updateTaskAssignmentSuccessCallback = (
+        taskId: string,
+        updatedAssignment: TaskAssignment,
+        successCallback: Function
+    ): void => {
+        const feedItems = this.getCachedItems(this.id);
+        if (feedItems) {
+            // $FlowFixMe
+            const task: ?Task = feedItems.find((item) => item.type === 'task' && item.id === taskId);
+            if (task) {
+                const { entries, total_count } = task.task_assignment_collection;
+                const assignments = entries.map((item: TaskAssignment) => {
+                    if (item.id === updatedAssignment.id) {
+                        return {
+                            ...item,
+                            ...updatedAssignment,
+                            resolution_state: updatedAssignment.message.toLowerCase()
+                        };
+                    }
 
-        const assignments = entries.map((item: TaskAssignment) => {
-            if (item.id === updatedAssignment.id) {
-                return {
-                    ...item,
-                    ...updatedAssignment,
-                    resolution_state: updatedAssignment.message.toLowerCase()
-                };
+                    return item;
+                });
+
+                this.updateFeedItem(
+                    {
+                        task_assignment_collection: {
+                            entries: assignments,
+                            total_count
+                        },
+                        isPending: false
+                    },
+                    taskId
+                );
+                successCallback(updatedAssignment);
             }
-
-            return item;
-        });
-
-        this.updateFeedItem(
-            {
-                task_assignment_collection: {
-                    entries: assignments,
-                    total_count
-                }
-            },
-            task.id
-        );
+        }
     };
 
     /**
