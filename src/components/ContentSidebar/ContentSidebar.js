@@ -995,6 +995,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 ...task
                             };
                         }
+
                         return item;
                     }),
                     total_count

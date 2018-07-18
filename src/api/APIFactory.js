@@ -134,58 +134,72 @@ class APIFactory {
             this.fileAPI.destroy();
             delete this.fileAPI;
         }
+
         if (this.weblinkAPI) {
             this.weblinkAPI.destroy();
             delete this.weblinkAPI;
         }
+
         if (this.plainUploadAPI) {
             this.plainUploadAPI.destroy();
             delete this.plainUploadAPI;
         }
+
         if (this.chunkedUploadAPI) {
             this.chunkedUploadAPI.destroy();
             delete this.chunkedUploadAPI;
         }
+
         if (this.folderAPI) {
             this.folderAPI.destroy();
             delete this.folderAPI;
         }
+
         if (this.searchAPI) {
             this.searchAPI.destroy();
             delete this.searchAPI;
         }
+
         if (this.recentsAPI) {
             this.recentsAPI.destroy();
             delete this.recentsAPI;
         }
+
         if (this.versionsAPI) {
             this.versionsAPI.destroy();
             delete this.versionsAPI;
         }
+
         if (this.fileAccessStatsAPI) {
             this.fileAccessStatsAPI.destroy();
             delete this.fileAccessStatsAPI;
         }
+
         if (this.tasksAPI) {
             this.tasksAPI.destroy();
             delete this.tasksAPI;
         }
+
         if (this.commentsAPI) {
             this.commentsAPI.destroy();
             delete this.commentsAPI;
         }
+
         if (this.usersAPI) {
             this.usersAPI.destroy();
             delete this.usersAPI;
         }
+
         if (this.metadataAPI) {
             this.metadataAPI.destroy();
             delete this.metadataAPI;
         }
+
         if (this.fileCollaboratorsAPI) {
             this.fileCollaboratorsAPI.destroy();
             delete this.fileCollaboratorsAPI;
         }
+
         if (destroyCache) {
             this.options.cache = new Cache();
         }
@@ -314,6 +328,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
+
         this.metadataAPI = new MetadataAPI(this.options);
         return this.metadataAPI;
     }
@@ -328,6 +343,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
+
         this.versionsAPI = new VersionsAPI(this.options);
         return this.versionsAPI;
     }
@@ -342,6 +358,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
+
         this.commentsAPI = new CommentsAPI(this.options);
         return this.commentsAPI;
     }
@@ -356,6 +373,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
+
         this.tasksAPI = new TasksAPI(this.options);
         return this.tasksAPI;
     }
@@ -370,6 +388,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
+
         this.taskAssignmentsAPI = new TaskAssignmentsAPI(this.options);
         return this.taskAssignmentsAPI;
     }
@@ -384,6 +403,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
+
         this.fileAccessStatsAPI = new FileAccessStatsAPI(this.options);
         return this.fileAccessStatsAPI;
     }
@@ -398,6 +418,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
+
         this.fileCollaboratorsAPI = new FileCollaboratorsAPI(this.options);
         return this.fileCollaboratorsAPI;
     }
@@ -412,6 +433,7 @@ class APIFactory {
         if (shouldDestroy) {
             this.destroy();
         }
+
         this.usersAPI = new UsersAPI(this.options);
         return this.usersAPI;
     }

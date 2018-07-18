@@ -151,6 +151,7 @@ function getFields(includePreview?: boolean = false, includePreviewSidebar?: boo
         // Preview may not have a sidebar
         fields = getFieldsIncludingPreview();
     }
+
     return fields;
 }
 
@@ -181,6 +182,7 @@ export function isValidBoxFile(
     if (!file || typeof file !== 'object') {
         return false;
     }
+
     const fields = getFields(includePreview, includePreviewSidebar).filter(
         (field) => BOX_ITEM_OPTIONAL_FIELDS.indexOf(field) < 0
     );

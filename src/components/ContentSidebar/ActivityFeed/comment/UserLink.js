@@ -42,6 +42,7 @@ class UserLink extends React.PureComponent<Props, State> {
         if (!getUserProfileUrl) {
             return Promise.resolve();
         }
+
         return getUserProfileUrl(id).then(this.getProfileUrlHandler);
     }
 

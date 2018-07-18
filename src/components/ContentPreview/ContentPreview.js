@@ -495,6 +495,7 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!id) {
             throw InvalidIdError;
         }
+
         this.api
             .getFileAPI()
             .file(
@@ -517,11 +518,13 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!this.preview || !file) {
             return null;
         }
+
         const viewer = this.preview.getCurrentViewer();
         const previewingFile = this.preview.getCurrentFile();
         if (!previewingFile || !viewer || previewingFile.id !== file.id) {
             return null;
         }
+
         return viewer;
     };
 
@@ -541,6 +544,7 @@ class ContentPreview extends PureComponent<Props, State> {
         if (index < 0) {
             return collection.indexOf(file.id);
         }
+
         return index;
     }
 

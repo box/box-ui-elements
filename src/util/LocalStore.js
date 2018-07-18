@@ -49,6 +49,7 @@ class LocalStore {
         if (!this.localStorage) {
             return false;
         }
+
         try {
             this.localStorage.setItem(this.buildKey('TestKey'), 'testValue');
             this.localStorage.removeItem(this.buildKey('TestKey'));
@@ -92,6 +93,7 @@ class LocalStore {
                 if (!item) {
                     return null;
                 }
+
                 return JSON.parse(item);
             } catch (e) {
                 return null;
@@ -115,8 +117,10 @@ class LocalStore {
             } catch (e) {
                 // no-op
             }
+
             return;
         }
+
         this.memoryStore.unset(key);
     }
 }

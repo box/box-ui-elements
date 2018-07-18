@@ -480,6 +480,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 expect(commentId).toBe(id);
                 done();
             };
+
             instance.createCommentSuccessCallback({ tagged_message: text, isPending: false }, id);
         });
 
@@ -492,6 +493,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 expect(commentId).toBe(id);
                 done();
             };
+
             instance.createCommentSuccessCallback({ message: text }, id);
         });
     });
@@ -534,6 +536,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 };
                 onSuccess(comment);
             };
+
             wrapper.setProps({ onCommentCreate });
             instance.createCommentSuccessCallback = jest.fn();
 
@@ -548,6 +551,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const onCommentCreate = (text, hasMention, onSuccess, onFailure) => {
                 onFailure({ status: 409 });
             };
+
             wrapper.setProps({ onCommentCreate });
             instance.createFeedError = jest.fn().mockReturnValue('foo');
 
@@ -635,6 +639,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 };
                 onSuccess(task);
             };
+
             wrapper.setProps({ onTaskCreate });
             instance.createTaskSuccessCallback = jest.fn();
 
@@ -657,6 +662,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const onTaskCreate = (textContent, assignees, dueAt, onSuccess, onFailure) => {
                 onFailure();
             };
+
             wrapper.setProps({ onTaskCreate });
             instance.createTaskSuccessCallback = jest.fn();
             instance.updateFeedItem = jest.fn();

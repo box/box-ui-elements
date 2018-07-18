@@ -25,6 +25,7 @@ type ExternalProps = {
     hasRetentionPolicy?: boolean,
     hasVersions?: boolean,
     retentionPolicy?: Object,
+    bannerPolicy?: Object,
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
     onRetentionPolicyExtendClick?: Function,
@@ -59,6 +60,7 @@ const DetailsSidebar = ({
     accessStatsError,
     fileError,
     retentionPolicy,
+    bannerPolicy,
     onRetentionPolicyExtendClick,
     isFileLoading
 }: Props) => (
@@ -84,6 +86,7 @@ const DetailsSidebar = ({
                     onClassificationClick={onClassificationClick}
                     hasRetentionPolicy={hasRetentionPolicy}
                     retentionPolicy={retentionPolicy}
+                    bannerPolicy={bannerPolicy}
                     onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
                     isLoading={isFileLoading}
                 />

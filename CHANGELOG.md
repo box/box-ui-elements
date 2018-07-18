@@ -1,5 +1,67 @@
+## <small>5.4.1 (2018-07-13)</small>
+
+* Update: BRUI to v27.17.0 (#456) ([73d1659](https://github.com/box/box-ui-elements/commit/73d1659)), closes [#456](https://github.com/box/box-ui-elements/issues/456)
+
+
+
+## 5.4.0 (2018-07-13)
+
+* Release: 5.4.0 ([03dd0b8](https://github.com/box/box-ui-elements/commit/03dd0b8))
+* Chore: Ignore BRUI flow errors (#455) ([838858c](https://github.com/box/box-ui-elements/commit/838858c)), closes [#455](https://github.com/box/box-ui-elements/issues/455)
+
+
+
+## 5.3.0 (2018-07-12)
+
+* Release: 5.3.0 ([53f2e95](https://github.com/box/box-ui-elements/commit/53f2e95))
+* Chore: ApprovalCommentForm CSS fixes (#441) ([0fd5ddc](https://github.com/box/box-ui-elements/commit/0fd5ddc)), closes [#441](https://github.com/box/box-ui-elements/issues/441)
+* Chore: Cleanup unused versionError from ContentSidebar/DetailsSidebar (#432) ([cf20551](https://github.com/box/box-ui-elements/commit/cf20551)), closes [#432](https://github.com/box/box-ui-elements/issues/432)
+* Chore: Enforcing new lines after multiline block statements (#451) ([acc711b](https://github.com/box/box-ui-elements/commit/acc711b)), closes [#451](https://github.com/box/box-ui-elements/issues/451)
+* Chore: Ensure that task/comment actions are disabled on pending items (#439) ([4869dde](https://github.com/box/box-ui-elements/commit/4869dde)), closes [#439](https://github.com/box/box-ui-elements/issues/439)
+* Chore: Ignore failed feed items when an AF fetch call fails (#410) ([3e35e3f](https://github.com/box/box-ui-elements/commit/3e35e3f)), closes [#410](https://github.com/box/box-ui-elements/issues/410)
+* Chore: Making login prop optional, for User type (#409) ([fa7ae7e](https://github.com/box/box-ui-elements/commit/fa7ae7e)), closes [#409](https://github.com/box/box-ui-elements/issues/409)
+* Chore: Modify API POST/PUT/DELETE requests to expect an object (#407) ([d2125a1](https://github.com/box/box-ui-elements/commit/d2125a1)), closes [#407](https://github.com/box/box-ui-elements/issues/407)
+* Chore: Sidebar CSS cleanup (#448) ([39e4183](https://github.com/box/box-ui-elements/commit/39e4183)), closes [#448](https://github.com/box/box-ui-elements/issues/448)
+* Chore: Support @mentions in Tasks (#411) ([4e49e87](https://github.com/box/box-ui-elements/commit/4e49e87)), closes [#411](https://github.com/box/box-ui-elements/issues/411)
+* Chore: Support rendering classification tooltip (#454) ([52245f1](https://github.com/box/box-ui-elements/commit/52245f1)), closes [#454](https://github.com/box/box-ui-elements/issues/454)
+* Chore: update bug report template (#420) ([3a210f3](https://github.com/box/box-ui-elements/commit/3a210f3)), closes [#420](https://github.com/box/box-ui-elements/issues/420)
+* Chore: Upgrade BRUI to v23.15.1 (#453) ([0e98547](https://github.com/box/box-ui-elements/commit/0e98547)), closes [#453](https://github.com/box/box-ui-elements/issues/453)
+* New: Display restored file versions in activity feed if available (#415) ([83db9e8](https://github.com/box/box-ui-elements/commit/83db9e8)), closes [#415](https://github.com/box/box-ui-elements/issues/415)
+* New: drag and drop folder upload (#418) ([a62967d](https://github.com/box/box-ui-elements/commit/a62967d)), closes [#418](https://github.com/box/box-ui-elements/issues/418)
+* New: Refresh classification (#434) ([ed7a7f3](https://github.com/box/box-ui-elements/commit/ed7a7f3)), closes [#434](https://github.com/box/box-ui-elements/issues/434)
+* New: Tasks are now created with assignments (#417) ([ec8d549](https://github.com/box/box-ui-elements/commit/ec8d549)), closes [#417](https://github.com/box/box-ui-elements/issues/417)
+* New: UploadsManager drag and drop upload empty state (#437) ([b5f382c](https://github.com/box/box-ui-elements/commit/b5f382c)), closes [#437](https://github.com/box/box-ui-elements/issues/437)
+*  Update: conditionally render classification (#443) ([dc343fd](https://github.com/box/box-ui-elements/commit/dc343fd)), closes [#443](https://github.com/box/box-ui-elements/issues/443)
+* Mojito: Update translations (#406) ([98824bd](https://github.com/box/box-ui-elements/commit/98824bd)), closes [#406](https://github.com/box/box-ui-elements/issues/406)
+* Mojito: Update translations (#414) ([2f511e4](https://github.com/box/box-ui-elements/commit/2f511e4)), closes [#414](https://github.com/box/box-ui-elements/issues/414)
+* Mojito: Update translations (#422) ([cc572b2](https://github.com/box/box-ui-elements/commit/cc572b2)), closes [#422](https://github.com/box/box-ui-elements/issues/422)
+* Mojito: Update translations (#425) ([2b9b163](https://github.com/box/box-ui-elements/commit/2b9b163)), closes [#425](https://github.com/box/box-ui-elements/issues/425)
+* Mojito: Update translations (#430) ([54f6d37](https://github.com/box/box-ui-elements/commit/54f6d37)), closes [#430](https://github.com/box/box-ui-elements/issues/430)
+* Mojito: Update translations (#435) ([3d1cb59](https://github.com/box/box-ui-elements/commit/3d1cb59)), closes [#435](https://github.com/box/box-ui-elements/issues/435)
+* Mojito: Update translations (#450) ([562a2a4](https://github.com/box/box-ui-elements/commit/562a2a4)), closes [#450](https://github.com/box/box-ui-elements/issues/450)
+* Fix: @mention CSS when mentions don't render as links (#412) ([2b626ad](https://github.com/box/box-ui-elements/commit/2b626ad)), closes [#412](https://github.com/box/box-ui-elements/issues/412)
+* Fix: Center mask errors using a SidebarSection (#444) ([ba027cd](https://github.com/box/box-ui-elements/commit/ba027cd)), closes [#444](https://github.com/box/box-ui-elements/issues/444)
+* Fix: Display remaining tasks when a task assignments API request fails to fetch (#429) ([292c192](https://github.com/box/box-ui-elements/commit/292c192)), closes [#429](https://github.com/box/box-ui-elements/issues/429)
+* Fix: Don't show (i) icon when onVersionHistoryClick is missing (#436) ([6ff7379](https://github.com/box/box-ui-elements/commit/6ff7379)), closes [#436](https://github.com/box/box-ui-elements/issues/436)
+* Fix: Ensures restored version is only added on first feed load (#449) ([685a452](https://github.com/box/box-ui-elements/commit/685a452)), closes [#449](https://github.com/box/box-ui-elements/issues/449)
+* Fix: Fetching task assignment resolution states (#438) ([d3248a4](https://github.com/box/box-ui-elements/commit/d3248a4)), closes [#438](https://github.com/box/box-ui-elements/issues/438)
+* Fix: Flow error in updateTaskAssignment (#408) ([79c4f3a](https://github.com/box/box-ui-elements/commit/79c4f3a)), closes [#408](https://github.com/box/box-ui-elements/issues/408)
+* Fix: Pass full approvers object on task create (#416) ([3249096](https://github.com/box/box-ui-elements/commit/3249096)), closes [#416](https://github.com/box/box-ui-elements/issues/416)
+* Fix: Preview sidebar nav border (#424) ([1b6bbc1](https://github.com/box/box-ui-elements/commit/1b6bbc1)), closes [#424](https://github.com/box/box-ui-elements/issues/424)
+* Fix: send correct props to ActivitySidebar (#433) ([b18d4de](https://github.com/box/box-ui-elements/commit/b18d4de)), closes [#433](https://github.com/box/box-ui-elements/issues/433)
+* Fix: Tasks should only display with assignments (#447) ([ba89ba2](https://github.com/box/box-ui-elements/commit/ba89ba2)), closes [#447](https://github.com/box/box-ui-elements/issues/447)
+* Update: Compute SHA1 and add to plain file upload (#440) ([b081ce1](https://github.com/box/box-ui-elements/commit/b081ce1)), closes [#440](https://github.com/box/box-ui-elements/issues/440)
+* Update: don't show access stats error on 403 (#426) ([490f3e6](https://github.com/box/box-ui-elements/commit/490f3e6)), closes [#426](https://github.com/box/box-ui-elements/issues/426)
+* Update: Improve regex to search for keywords in transcript (#399) ([ec8ddb7](https://github.com/box/box-ui-elements/commit/ec8ddb7)), closes [#399](https://github.com/box/box-ui-elements/issues/399)
+* Update: remove css overrides for ApprovalCommentForm (#427) ([dd7331b](https://github.com/box/box-ui-elements/commit/dd7331b)), closes [#427](https://github.com/box/box-ui-elements/issues/427)
+* Update: remove extra margin from pending item (#428) ([d6a0a3f](https://github.com/box/box-ui-elements/commit/d6a0a3f)), closes [#428](https://github.com/box/box-ui-elements/issues/428)
+* Breaking: consolidate activity feed props (#423) ([02ab1e7](https://github.com/box/box-ui-elements/commit/02ab1e7)), closes [#423](https://github.com/box/box-ui-elements/issues/423)
+
+
+
 ## <small>5.2.1 (2018-06-26)</small>
 
+* Release: 5.2.1 ([f54fd44](https://github.com/box/box-ui-elements/commit/f54fd44))
 * Upgrade: Preview v1.46.0 (#405) ([73bc09e](https://github.com/box/box-ui-elements/commit/73bc09e)), closes [#405](https://github.com/box/box-ui-elements/issues/405)
 * New: Adding inline errors to activity feed write actions (#383) ([8577515](https://github.com/box/box-ui-elements/commit/8577515)), closes [#383](https://github.com/box/box-ui-elements/issues/383)
 * New: Display retention policy (#403) ([7e85ccc](https://github.com/box/box-ui-elements/commit/7e85ccc)), closes [#403](https://github.com/box/box-ui-elements/issues/403)

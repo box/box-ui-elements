@@ -98,6 +98,7 @@ class Folder extends Item {
         if (!cache.has(this.key)) {
             return false;
         }
+
         const { item_collection = {} }: FlattenedBoxItem = cache.get(this.key);
         return !!item_collection.isLoaded;
     }
@@ -294,6 +295,7 @@ class Folder extends Item {
         if (this.isDestroyed() || !childId) {
             return;
         }
+
         const childKey: string = this.getCacheKey(childId);
         const cache: APICache = this.getCache();
         const parent: FlattenedBoxItem = cache.get(this.key);

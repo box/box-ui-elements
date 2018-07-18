@@ -71,6 +71,7 @@ const ItemList = ({
         if (index === -1) {
             return '';
         }
+
         const { selected, type } = items[index];
         const isSelectable = isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, items[index]);
         return classNames(`bcp-item-row bcp-item-row-${index}`, {

@@ -22,6 +22,7 @@ type Props = {
     onClassificationClick: ?Function,
     hasRetentionPolicy: boolean,
     retentionPolicy?: Object,
+    bannerPolicy?: Object,
     onRetentionPolicyExtendClick?: Function,
     intl: any,
     isLoading: boolean
@@ -50,6 +51,7 @@ const SidebarFileProperties = ({
     onClassificationClick,
     hasRetentionPolicy,
     retentionPolicy,
+    bannerPolicy,
     onRetentionPolicyExtendClick,
     isLoading,
     intl
@@ -71,6 +73,7 @@ const SidebarFileProperties = ({
                     hasClassification
                         ? {
                             openModal: getClassificationModal(file, onClassificationClick),
+                            tooltip: getProp(bannerPolicy, 'body'),
                             value,
                             [INTERACTION_TARGET]: value
                                 ? DETAILS_TARGETS.CLASSIFICATION_EDIT

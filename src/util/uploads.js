@@ -67,6 +67,7 @@ function getFileAPIOptions(file: UploadFile | UploadFileWithAPIOptions): UploadI
     if (doesFileContainAPIOptions(file)) {
         return ((file: any): UploadFileWithAPIOptions).options || DEFAULT_API_OPTIONS;
     }
+
     return DEFAULT_API_OPTIONS;
 }
 
@@ -82,6 +83,7 @@ function getDataTransferItemAPIOptions(
     if (doesDataTransferItemContainAPIOptions(item)) {
         return ((item: any): UploadDataTransferItemWithAPIOptions).options || DEFAULT_API_OPTIONS;
     }
+
     return DEFAULT_API_OPTIONS;
 }
 
