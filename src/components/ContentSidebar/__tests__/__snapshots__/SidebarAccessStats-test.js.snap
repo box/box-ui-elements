@@ -57,9 +57,14 @@ exports[`components/ContentSidebar/SidebarAccessStats should render the componen
         "data-resin-target": "accessstats-previews",
       }
     }
-    viewStatButtonProps={
+    viewMoreButtonProps={
       Object {
         "data-resin-target": "accessstats-viewdetails",
+      }
+    }
+    viewStatButtonProps={
+      Object {
+        "data-resin-target": "accessstats-views",
       }
     }
   />

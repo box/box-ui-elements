@@ -16,12 +16,23 @@ export const DETAILS_TARGETS = {
         DOWNLOADS: 'accessstats-downloads',
         EDITS: 'accessstats-edits',
         PREVIEWS: 'accessstats-previews',
+        VIEWS: 'accessstats-views',
         VIEW_DETAILS: 'accessstats-viewdetails'
     },
     CLASSIFICATION_ADD: 'addclassification',
     CLASSIFICATION_EDIT: 'editclassification',
     DESCRIPTION: 'description',
     VERSION_HISTORY: 'versionhistory'
+};
+
+export const ACTIVITY_TARGETS = {
+    INLINE_EDIT: 'inlineedit',
+    INLINE_DELETE: 'inlinedelete',
+    APPROVAL_FORM_ADD_TASK: 'apporvalformaddtask',
+    APPROVAL_FORM_CANCEL: 'approvalformcancel',
+    APPROVAL_FORM_POST: 'approvalformpost',
+    PROFILE: 'profile',
+    MENTION: 'mention'
 };
 
 export const SKILLS_TARGETS = {

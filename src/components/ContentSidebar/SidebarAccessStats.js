@@ -49,11 +49,12 @@ const SidebarAccessStats = ({
                 downloadStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS }}
                 previewCount={preview_count}
                 previewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.PREVIEWS }}
+                viewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEWS }}
                 editCount={edit_count}
                 editStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.EDITS }}
                 openAccessStatsModal={onAccessStatsClick}
                 isBoxNote={isBoxNote(file)}
-                viewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS }}
+                viewMoreButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS }}
             />
         </SidebarSection>
     );
