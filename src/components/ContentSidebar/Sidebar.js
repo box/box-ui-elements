@@ -27,17 +27,9 @@ type Props = {
     hasSkills: boolean,
     hasDetails: boolean,
     onSkillChange: Function,
-    getApproverWithQuery?: Function,
-    getMentionWithQuery?: Function,
     translations?: Translations,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
-    activityFeedError?: Errors,
-    currentUserError?: Errors,
-    getAvatarUrl: (string) => Promise<?string>,
     onToggle: Function,
-    onVersionHistoryClick?: Function,
-    feedItems?: FeedItems
+    onVersionHistoryClick?: Function
 };
 
 const Sidebar = ({
@@ -52,15 +44,8 @@ const Sidebar = ({
     activitySidebarProps,
     detailsSidebarProps,
     onSkillChange,
-    getApproverWithQuery,
-    getMentionWithQuery,
-    activityFeedError,
-    approverSelectorContacts,
-    mentionSelectorContacts,
-    getAvatarUrl,
     onToggle,
-    onVersionHistoryClick,
-    feedItems
+    onVersionHistoryClick
 }: Props) => (
     <React.Fragment>
         <SidebarNav
@@ -86,14 +71,7 @@ const Sidebar = ({
                 <ActivitySidebar
                     currentUser={currentUser}
                     file={file}
-                    activityFeedError={activityFeedError}
-                    approverSelectorContacts={approverSelectorContacts}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    getApproverWithQuery={getApproverWithQuery}
-                    getMentionWithQuery={getMentionWithQuery}
-                    getAvatarUrl={getAvatarUrl}
                     onVersionHistoryClick={onVersionHistoryClick}
-                    feedItems={feedItems}
                     {...activitySidebarProps}
                 />
             )}

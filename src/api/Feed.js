@@ -23,6 +23,7 @@ import messages from '../components/messages';
 const DEFAULT_START = 0;
 const DEFAULT_END = 1000;
 const TASK_INCOMPLETE = 'incomplete';
+const VERSION_RESTORE_ACTION = 'restore';
 
 class Feed extends Base {
     /**
@@ -70,6 +71,12 @@ class Feed extends Base {
         return `feedItems_${id}`;
     }
 
+    /**
+     * Gets the items from the cache
+     *
+     * @private
+     * @param {string} id the cache id
+     */
     getCachedItems(id: string): ?FeedItems {
         const cache = this.getCache();
         const cacheKey = this.getCacheKey(id);
@@ -77,6 +84,13 @@ class Feed extends Base {
         return feedItems;
     }
 
+    /**
+     * Sets the items in the cache
+     *
+     * @private
+     * @param {string} id - the cache id
+     * @param {Array} items - the feed items to cache
+     */
     setCachedItems(id: string, items: FeedItems) {
         const cache = this.getCache();
         const cacheKey = this.getCacheKey(id);
@@ -84,12 +98,20 @@ class Feed extends Base {
     }
 
     /**
+     * Gets the feed items
      *
-     * @param {string} id - File id
+     * @private
+     * @param {BoxItem} file - The file to which the task is assigned
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      */
-    feedItems(id: string, successCallback: Function, errorCallback: Function): void {
+    feedItems(file: BoxItem, successCallback: Function, errorCallback: Function): void {
+        const { id } = file;
+
+        if (!id) {
+            throw getBadItemError();
+        }
+
         const cachedItems: ?FeedItems = this.getCachedItems(id);
         if (cachedItems) {
             successCallback(cachedItems);
@@ -98,12 +120,15 @@ class Feed extends Base {
 
         this.id = id;
         this.hasError = false;
-        const comments = this.fetchComments();
-        const versions = this.fetchVersions();
-        const tasks = this.fetchTasks();
+        const versionsPromise = this.fetchVersions();
+        const commentsPromise = this.fetchComments();
+        const tasksPromise = this.fetchTasks();
 
-        Promise.all([comments, versions, tasks]).then((feedItems: Array<?Comments | ?Tasks | ?FileVersions>) => {
-            const sortedFeedItems = this.sortFeedItems.apply(null, feedItems);
+        Promise.all([versionsPromise, commentsPromise, tasksPromise]).then((feedItems) => {
+            const versions: ?FileVersions = feedItems[0];
+            const versionsWithRestoredVersion = this.addRestoredVersion(file, versions);
+            const unsortedFeedItems = [versionsWithRestoredVersion, ...feedItems.slice(1)];
+            const sortedFeedItems = this.sortFeedItems.apply(null, unsortedFeedItems);
             this.setCachedItems(id, sortedFeedItems);
             if (!this.isDestroyed()) {
                 if (this.hasError) {
@@ -118,8 +143,10 @@ class Feed extends Base {
     /**
      * Sort valid feed items, descending by created_at time.
      *
+     * @private
      * @param {Array<?Comments | ?Tasks | ?FileVersions>} args - Arguments list of each item container
      * type that is allowed in the feed.
+     * @return {Array<?Comments | ?Tasks | ?FileVersions>} the sorted feed items
      */
     sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): FeedItems {
         const feedItems = [];
@@ -135,7 +162,7 @@ class Feed extends Base {
      * Fetches the comments for a file
      *
      * @private
-     * @return {Promise} the file comments
+     * @return {Promise} - the file comments
      */
     fetchComments(): Promise<?Comments> {
         if (this.commentsAPI) {
@@ -163,7 +190,7 @@ class Feed extends Base {
      * Fetches the versions for a file
      *
      * @private
-     * @return {Promise} the file versions
+     * @return {Promise} - the file versions
      */
     fetchVersions(): Promise<?FileVersions> {
         if (this.versionsAPI) {
@@ -191,8 +218,7 @@ class Feed extends Base {
      * Fetches the tasks for a file
      *
      * @private
-     * @param {string} id - File id
-     * @return {Promise} the tasks with assignments
+     * @return {Promise} - the feed items
      */
     fetchTasks(): Promise<?Tasks> {
         if (this.tasksAPI) {
@@ -222,11 +248,15 @@ class Feed extends Base {
     }
 
     /**
-     * Updates a task assignment via the API.
+     * Updates a task assignment
      *
+     * @param {BoxItem} file - The file to which the task is assigned
      * @param {string} taskId - ID of task to be updated
      * @param {string} taskAssignmentId - Task assignment ID
-     * @param {string} status - New task assignment status
+     * @param {string} resolutionState - New task assignment status
+     * @param {string} message - the message to the assignee
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
     updateTaskAssignment = (
@@ -263,8 +293,9 @@ class Feed extends Base {
     /**
      * Updates the task assignment state of the updated task
      *
-     * @param {Task} task - Box task
+     * @param {string} taskId - Box task id
      * @param {TaskAssignment} updatedAssignment - New task assignment from API
+     * @param {Function} successCallback - the function which will be called on success
      * @return {void}
      */
     updateTaskAssignmentSuccessCallback = (
@@ -308,7 +339,7 @@ class Feed extends Base {
     /**
      * Updates a task
      *
-     * @private
+     * @param {BoxItem} file - The file to which the task is assigned
      * @param {string} taskId - The task's id
      * @param {Array} message - The task's text
      * @param {Function} successCallback - the function which will be called on success
@@ -360,8 +391,11 @@ class Feed extends Base {
     /**
      * Deletes a comment.
      *
-     * @param {string} id - Comment ID
+     * @param {BoxItem} file - The file to which the comment belongs to
+     * @param {string} commentId - Comment ID
      * @param {BoxItemPermission} permissions - Permissions for the comment
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error     *
      * @return {void}
      */
     deleteComment = (
@@ -384,7 +418,7 @@ class Feed extends Base {
             commentId,
             permissions,
             successCallback: () => {
-                this.deleteCommentSuccessCallback(commentId);
+                this.deleteFeedItemSuccessCallback(commentId);
                 if (!this.isDestroyed()) {
                     successCallback();
                 }
@@ -398,22 +432,29 @@ class Feed extends Base {
         });
     };
 
-    deleteCommentSuccessCallback = (commentId: string) => {
-        this.deleteFeedItem(this.id, commentId);
-    };
-
+    /**
+     * Error callback for deleting a comment
+     *
+     * @private
+     * @param {string} commentId - the comment id
+     * @return {void}
+     */
     deleteCommentErrorCallback = (commentId: string) => {
         this.updateFeedItem(this.createFeedError(messages.commentDeleteErrorMessage), commentId);
     };
 
     /**
-     * Callback for successful creation of a Task.
+     * Callback for successful creation of a Task. Creates a task assignment
      *
-     * @param {Task} task - API returned task
+     * @private
+     * @param {BoxItem} file - The file to which the task is assigned
      * @param {string} id - ID of the feed item to update with the new task data
+     * @param {Task} task - API returned task
+     * @param {Array} assignees - List of assignees
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error     *
      * @return {void}
      */
-
     createTaskSuccessCallback(
         file: BoxItem,
         id: string,
@@ -449,9 +490,13 @@ class Feed extends Base {
     /**
      * Creates a task.
      *
-     * @param {string} text - Task text
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {string} message - Task text
      * @param {Array} assignees - List of assignees
      * @param {number} dueAt - Task's due date
+     * @param {Function} successCallback - the function which will be called on success
+     * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
      */
     createTask = (
@@ -552,8 +597,10 @@ class Feed extends Base {
     /**
      * Handles a failed task assignment create
      *
+     * @private
+     * @param {Object} e - The axios error
+     * @param {BoxItem} file - The file to which the task is assigned
      * @param {Task} task - The task for which the assignment create failed
-     * @param {Task} e - The API error
      * @param {Function} errorCallback - Passed in error callback
      * @return {void}
      */
@@ -568,6 +615,7 @@ class Feed extends Base {
      * Deletes a task
      *
      * @private
+     * @param {BoxItem} file - The file to which the task is assigned
      * @param {string} taskId - The task's id
      * @param {Function} successCallback - the function which will be called on success
      * @param {Function} errorCallback - the function which will be called on error
@@ -591,7 +639,7 @@ class Feed extends Base {
             file,
             taskId,
             successCallback: () => {
-                this.deleteTaskSuccessCallback(taskId);
+                this.deleteFeedItemSuccessCallback(taskId);
                 if (!this.isDestroyed()) {
                     successCallback(taskId);
                 }
@@ -606,20 +654,22 @@ class Feed extends Base {
     };
 
     /**
-     * Task update success callback
+     * Feed item delete success callback
      *
      * @private
-     * @param {Object} task - Box task
+     * @param {string} id - the feed items id
      * @return {void}
      */
-    deleteTaskSuccessCallback = (taskId: string) => {
-        this.deleteFeedItem(this.id, taskId);
+    deleteFeedItemSuccessCallback = (id: string) => {
+        this.deleteFeedItem(this.id, id);
     };
 
     /**
-     * Deletes a feed item from the state.
+     * Deletes a feed item from the cache
      *
-     * @param {Object} item - The item to be deleted
+     * @param {string} fileId - the file id
+     * @param {string} id - The id of the feed item to be deleted
+     * @param {string} type - the type of the feed item to be deleted
      */
     deleteFeedItem = (fileId: string, id: string) => {
         this.id = fileId;
@@ -693,7 +743,7 @@ class Feed extends Base {
 
     /**
      * Formats assignments, and then adds them to their task.
-     *
+     * @private
      * @param {Task} task - Task to which the assignments belong
      * @param {Task} assignments - List of task assignments
      * @return {Task}
@@ -721,7 +771,9 @@ class Feed extends Base {
 
     /**
      * Add a placeholder pending feed item.
-     *
+     * @private
+     * @param {string} id - the feed item's id
+     * @param {Object} currentUser - the user who performed the action
      * @param {Object} itemBase - Base properties for item to be added to the feed as pending.
      * @return {void}
      */
@@ -741,7 +793,7 @@ class Feed extends Base {
 
     /**
      * Callback for successful creation of a Comment.
-     *
+     * @private
      * @param {Comment} commentData - API returned Comment
      * @param {string} id - ID of the feed item to update with the new comment data
      * @return {void}
@@ -759,12 +811,12 @@ class Feed extends Base {
             id
         );
     };
+
     /**
-     *  Constructs an error object that renders to an inline feed error
-     *
+     * Constructs an error object that renders to an inline feed error
+     * @private
      * @param {string} message - The error message body.
      * @param {string} title - The error message title.
-
      * @return {Object} An error message object
      */
     createFeedError(message: string, title?: string = messages.errorOccured) {
@@ -775,13 +827,14 @@ class Feed extends Base {
 
     /**
      * Replace a feed item with new feed item data.
+     * @private
      * @param {Object} updates - The new data to be applied to the feed item.
      * @param {string} id - ID of the feed item to replace.
      * @return {void}
      */
     updateFeedItem = (updates: Object, id: string): void => {
         if (!this.id) {
-            throw new Error('Missing cache id');
+            throw new Error('Missing file id');
         }
 
         const feedItems = this.getCachedItems(this.id);
@@ -805,7 +858,12 @@ class Feed extends Base {
     /**
      * Create a comment, and make a pending item to be replaced once the API is successful.
      *
-     * @param {any} args - Data returned by the Comment component on comment creation.
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {Object} currentUser - the user who performed the action
+     * @param {string} text - the comment text
+     * @param {boolean} hasMention - true if there is an @mention in the text
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
      * @return {void}
      */
     createComment = (
@@ -858,6 +916,38 @@ class Feed extends Base {
             }
         });
     };
+
+    /**
+     * Adds a versions entry if the current file version was restored from a previous version
+     *
+     * @param {BoxItem} file - The file to which the task is assigned
+     * @param {FileVersions} versions - API returned file versions for this file
+     * @return {FileVersions} modified versions array including the version restore
+     */
+    addRestoredVersion(file: BoxItem, versions: ?FileVersions): ?FileVersions {
+        if (!versions) {
+            return undefined;
+        }
+
+        const { restored_from, modified_at, file_version } = file;
+        if (restored_from && file_version) {
+            const restoredVersion: ?BoxItemVersion = versions.entries.find(
+                (version) => version.id === restored_from.id
+            );
+
+            if (restoredVersion) {
+                versions.entries.push({
+                    ...restoredVersion,
+                    id: file_version.id,
+                    created_at: modified_at,
+                    action: VERSION_RESTORE_ACTION
+                });
+                versions.total_count += 1;
+            }
+        }
+
+        return versions;
+    }
 
     /**
      * Destroys all the task assignment API's

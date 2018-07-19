@@ -9,7 +9,6 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
-import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
@@ -21,16 +20,14 @@ import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
     FIELD_METADATA_SKILLS,
-    DEFAULT_COLLAB_DEBOUNCE,
-    DEFAULT_MAX_COLLABORATORS,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     UNAUTHORIZED_CODE
 } from '../../constants';
 import messages from '../messages';
-import { getBadItemError, getBadUserError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
+import APIContext from '../APIContext';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import '../fonts.scss';
@@ -66,22 +63,10 @@ type State = {
     view: SidebarView,
     file?: BoxItem,
     accessStats?: FileAccessStats,
-    currentUser?: User,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
-    activityFeedError?: Errors,
     accessStatsError?: Errors,
-    currentUserError?: Errors,
     isFileLoading?: boolean,
     feedItems?: FeedItems
-};
-
-const activityFeedInlineError: Errors = {
-    inlineError: {
-        title: messages.errorOccured,
-        content: messages.activityFeedItemApiError
-    }
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -110,17 +95,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         view: undefined,
         file: undefined,
         accessStats: undefined,
-        versions: undefined,
-        comments: undefined,
-        tasks: undefined,
-        currentUser: undefined,
-        approverSelectorContacts: undefined,
-        mentionSelectorContacts: undefined,
         fileError: undefined,
-        activityFeedError: undefined,
-        accessStatsError: undefined,
-        currentUserError: undefined,
-        feedItems: undefined
+        accessStatsError: undefined
     };
 
     /**
@@ -225,30 +201,12 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Gets the user avatar URL
-     *
-     * @param {string} userId the user id
-     * @param {string} fileId the file id
-     *
-     * @return the user avatar URL string for a given user with access token attached
-     */
-    getAvatarUrl = async (userId: string): Promise<?string> => {
-        const { fileId } = this.props;
-
-        if (!fileId) {
-            return null;
-        }
-
-        return this.api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, fileId);
-    };
-
-    /**
      * Fetches the data for the sidebar
      *
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasActivityFeed, detailsSidebarProps, currentUser }: Props) {
+    fetchData({ fileId, detailsSidebarProps }: Props) {
         const { hasAccessStats = false } = detailsSidebarProps;
         if (!fileId) {
             return;
@@ -263,56 +221,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (hasAccessStats) {
             this.fetchFileAccessStats(fileId);
         }
-
-        if (hasActivityFeed) {
-            this.fetchFeedItems();
-            this.fetchCurrentUser(currentUser);
-        }
     }
-
-    /**
-     * Fetches the feed items for the sidebar
-     *
-     * @param {boolean} shouldDestroy true if the api factory should be destroyed
-     */
-    fetchFeedItems(shouldDestroy: boolean = false) {
-        if (SidebarUtils.canHaveSidebar(this.props)) {
-            const { fileId } = this.props;
-            if (!fileId) {
-                return;
-            }
-
-            this.api
-                .getFeedAPI(shouldDestroy)
-                .feedItems(fileId, this.fetchFeedItemsSuccessCallback, this.fetchFeedItemsErrorCallback);
-        }
-    }
-
-    /**
-     * Handles a successful feed API fetch
-     *
-     * @private
-     * @param {BoxItem} file - Updated file object
-     * @return {void}
-     */
-    fetchFeedItemsSuccessCallback = (feedItems: FeedItems): void => {
-        this.setState({ feedItems, activityFeedError: undefined });
-    };
-
-    /**
-     * Handles a failed file comment fetch
-     *
-     * @private
-     * @param {Error} e - API error
-     * @return {void}
-     */
-    fetchFeedItemsErrorCallback = (e: $AxiosXHR<any>) => {
-        this.setState({
-            feedItems: [],
-            activityFeedError: activityFeedInlineError
-        });
-        this.errorCallback(e);
-    };
 
     /**
      * Function to update file description
@@ -400,26 +309,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.setState({
             accessStats: undefined,
             accessStatsError
-        });
-        this.errorCallback(e);
-    };
-
-    /**
-     * Handles a failed file user info fetch
-     *
-     * @private
-     * @param {Error} e - API error
-     * @return {void}
-     */
-    fetchCurrentUserErrorCallback = (e: $AxiosXHR<any>) => {
-        this.setState({
-            currentUser: undefined,
-            currentUserError: {
-                maskError: {
-                    errorHeader: messages.currentUserErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
-                }
-            }
         });
         this.errorCallback(e);
     };
@@ -515,41 +404,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * User fetch success callback
-     *
-     * @private
-     * @param {Object} currentUser - User info object
-     * @return {void}
-     */
-    fetchCurrentUserSuccessCallback = (user: User): void => {
-        this.setState({ currentUser: user, currentUserError: undefined });
-    };
-
-    /**
-     * File approver contacts fetch success callback
-     *
-     * @private
-     * @param {BoxItemCollection} data - Collaborators response data
-     * @return {void}
-     */
-    getApproverContactsSuccessCallback = (collaborators: Collaborators): void => {
-        const { entries } = collaborators;
-        this.setState({ approverSelectorContacts: entries });
-    };
-
-    /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
-     * @param {BoxItemCollection} data - Collaborators response data
-     * @return {void}
-     */
-    getMentionContactsSuccessCallback = (collaborators: Collaborators): void => {
-        const { entries } = collaborators;
-        this.setState({ mentionSelectorContacts: entries });
-    };
-
-    /**
      * Fetches a file
      *
      * @private
@@ -585,151 +439,6 @@ class ContentSidebar extends PureComponent<Props, State> {
             });
         }
     }
-
-    /**
-     * Fetches a Users info
-     *
-     * @private
-     * @param {User} [user] - Box User. If missing, gets user that the current token was generated for.
-     * @return {void}
-     */
-    fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
-        const { fileId = '' } = this.props;
-        if (SidebarUtils.canHaveSidebar(this.props)) {
-            if (typeof user === 'undefined') {
-                this.api.getUsersAPI(shouldDestroy).get({
-                    id: fileId,
-                    successCallback: this.fetchCurrentUserSuccessCallback,
-                    errorCallback: this.fetchCurrentUserErrorCallback
-                });
-            } else {
-                this.setState({ currentUser: user, currentUserError: undefined });
-            }
-        }
-    }
-
-    feedSuccessCallback = (): void => {
-        this.fetchFeedItems();
-    };
-
-    feedErrorCallback = (e: $AxiosXHR<any>) => {
-        this.errorCallback(e);
-        this.fetchFeedItems();
-    };
-
-    /**
-     * Deletes a task via the API.
-     *
-     * @param {Object} args - A subset of the task
-     */
-    deleteTask = ({ id }: { id: string }): void => {
-        const { file } = this.state;
-        if (!file) {
-            throw getBadItemError();
-        }
-
-        this.api.getFeedAPI(false).deleteTask(file, id, this.feedSuccessCallback, this.feedErrorCallback);
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
-
-    /**
-     * Updates a task in the state via the API.
-     *
-     * @param {Object} args - A subset of the task
-     */
-    updateTask = ({ text, id }: { text: string, id: string }): void => {
-        const { file } = this.state;
-        if (!file) {
-            throw getBadItemError();
-        }
-
-        this.api.getFeedAPI(false).updateTask(file, id, text, this.feedSuccessCallback, this.feedErrorCallback);
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
-
-    updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string, message?: string): void => {
-        const { file } = this.state;
-        if (!file) {
-            throw getBadItemError();
-        }
-
-        this.api
-            .getFeedAPI(false)
-            .updateTaskAssignment(
-                file,
-                taskId,
-                taskAssignmentId,
-                status,
-                message,
-                this.feedSuccessCallback,
-                this.feedErrorCallback
-            );
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
-
-    deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
-        const { file } = this.state;
-        if (!file) {
-            throw getBadItemError();
-        }
-
-        this.api
-            .getFeedAPI(false)
-            .deleteComment(file, id, permissions, this.feedSuccessCallback, this.feedErrorCallback);
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
-
-    /**
-     * Posts a new comment to the API
-     *
-     * @private
-     * @param {string} text - The comment's text
-     * @param {boolean} hasMention - The comment's text
-     * @return {void}
-     */
-    createComment = (text: string, hasMention: boolean): void => {
-        const { file, currentUser } = this.state;
-        if (!file) {
-            throw getBadItemError();
-        }
-
-        if (!currentUser) {
-            throw getBadUserError();
-        }
-
-        this.api
-            .getFeedAPI(false)
-            .createComment(file, currentUser, text, hasMention, this.feedSuccessCallback, this.feedErrorCallback);
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
-
-    createTask = (message: string, assignees: SelectorItems, dueAt: string): void => {
-        const { file, currentUser } = this.state;
-        if (!file) {
-            throw getBadItemError();
-        }
-
-        if (!currentUser) {
-            throw getBadUserError();
-        }
-
-        this.api
-            .getFeedAPI(false)
-            .createTask(file, currentUser, message, assignees, dueAt, this.feedSuccessCallback, this.feedErrorCallback);
-
-        // need to load the pending item
-        this.fetchFeedItems();
-    };
 
     /**
      * Patches skill metadata
@@ -823,58 +532,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
-     * @param {API} api - Box API instance
-     * @param {string} searchStr - Search string to filter file collaborators by
-     * @param {Function} successCallback - Fetch success callback
-     * @return {void}
-     */
-    getApproverWithQuery = debounce((searchStr: string): void => {
-        // Do not fetch without filter
-        const { fileId } = this.props;
-        if (!searchStr || searchStr.trim() === '' || !fileId) {
-            return;
-        }
-
-        this.api.getFileCollaboratorsAPI(true).markerGet({
-            id: fileId,
-            limit: DEFAULT_MAX_COLLABORATORS,
-            params: {
-                filter_term: searchStr
-            },
-            successCallback: this.getApproverContactsSuccessCallback,
-            errorCallback: this.errorCallback
-        });
-    }, DEFAULT_COLLAB_DEBOUNCE);
-
-    /**
-     * File @mention contacts fetch success callback
-     *
-     * @private
-     * @param {string} searchStr - Search string to filter file collaborators by
-     * @return {void}
-     */
-    getMentionWithQuery = debounce((searchStr: string): void => {
-        // Do not fetch without filter
-        const { fileId } = this.props;
-        if (!searchStr || searchStr.trim() === '' || !fileId) {
-            return;
-        }
-
-        this.api.getFileCollaboratorsAPI(true).markerGet({
-            id: fileId,
-            limit: DEFAULT_MAX_COLLABORATORS,
-            params: {
-                filter_term: searchStr
-            },
-            successCallback: this.getMentionContactsSuccessCallback,
-            errorCallback: this.errorCallback
-        });
-    }, DEFAULT_COLLAB_DEBOUNCE);
-
-    /**
      * Refreshes sidebar when classification is changed
      *
      * @private
@@ -925,13 +582,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             file,
             view,
             accessStats,
-            currentUser,
             accessStatsError,
             fileError,
-            activityFeedError,
-            approverSelectorContacts,
-            mentionSelectorContacts,
-            currentUserError,
             isFileLoading,
             feedItems
         }: State = this.state;
@@ -953,48 +605,34 @@ class ContentSidebar extends PureComponent<Props, State> {
                 <aside id={this.id} className={styleClassName}>
                     <div className='be-app-element'>
                         {SidebarUtils.shouldRenderSidebar(this.props, file) ? (
-                            <Sidebar
-                                file={((file: any): BoxItem)}
-                                view={view}
-                                detailsSidebarProps={{
-                                    accessStats,
-                                    accessStatsError,
-                                    fileError,
-                                    isFileLoading,
-                                    onClassificationChange: this.onClassificationChange,
-                                    onDescriptionChange: this.onDescriptionChange,
-                                    ...detailsSidebarProps
-                                }}
-                                activitySidebarProps={{
-                                    ...activitySidebarProps,
-                                    onCommentCreate: this.createComment,
-                                    onCommentDelete: this.deleteComment,
-                                    onTaskCreate: this.createTask,
-                                    onTaskDelete: this.deleteTask,
-                                    onTaskUpdate: this.updateTask,
-                                    onTaskAssignmentUpdate: this.updateTaskAssignment
-                                }}
-                                getPreviewer={getPreviewer}
-                                hasSkills={hasSkills}
-                                hasDetails={hasDetails}
-                                hasMetadata={hasMetadata}
-                                hasActivityFeed={hasActivityFeed}
-                                accessStats={accessStats}
-                                onSkillChange={this.onSkillChange}
-                                accessStatsError={accessStatsError}
-                                fileError={fileError}
-                                activityFeedError={activityFeedError}
-                                currentUser={currentUser}
-                                currentUserError={currentUserError}
-                                getApproverWithQuery={this.getApproverWithQuery}
-                                getMentionWithQuery={this.getMentionWithQuery}
-                                approverSelectorContacts={approverSelectorContacts}
-                                mentionSelectorContacts={mentionSelectorContacts}
-                                getAvatarUrl={this.getAvatarUrl}
-                                onToggle={this.onToggle}
-                                onVersionHistoryClick={onVersionHistoryClick}
-                                feedItems={feedItems}
-                            />
+                            <APIContext.Provider value={this.api}>
+                                <Sidebar
+                                    file={((file: any): BoxItem)}
+                                    view={view}
+                                    detailsSidebarProps={{
+                                        accessStats,
+                                        accessStatsError,
+                                        fileError,
+                                        isFileLoading,
+                                        onClassificationChange: this.onClassificationChange,
+                                        onDescriptionChange: this.onDescriptionChange,
+                                        ...detailsSidebarProps
+                                    }}
+                                    activitySidebarProps={activitySidebarProps}
+                                    getPreviewer={getPreviewer}
+                                    hasSkills={hasSkills}
+                                    hasDetails={hasDetails}
+                                    hasMetadata={hasMetadata}
+                                    hasActivityFeed={hasActivityFeed}
+                                    accessStats={accessStats}
+                                    onSkillChange={this.onSkillChange}
+                                    accessStatsError={accessStatsError}
+                                    fileError={fileError}
+                                    onToggle={this.onToggle}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    feedItems={feedItems}
+                                />
+                            </APIContext.Provider>
                         ) : (
                             <div className='bcs-loading'>
                                 <LoadingIndicator />

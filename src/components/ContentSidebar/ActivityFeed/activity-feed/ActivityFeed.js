@@ -14,8 +14,6 @@ import EmptyState from './EmptyState';
 import { collapseFeedState } from './activityFeedUtils';
 import './ActivityFeed.scss';
 
-const VERSION_RESTORE_ACTION = 'restore';
-
 type Props = {
     file: BoxItem,
     activityFeedError?: Errors,
@@ -39,26 +37,15 @@ type Props = {
 };
 
 type State = {
-    isInputOpen: boolean,
-    feedItems: ?FeedItems
+    isInputOpen: boolean
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
-        isInputOpen: false,
-        feedItems: undefined
+        isInputOpen: false
     };
 
     feedContainer: null | HTMLElement;
-
-    componentWillReceiveProps(nextProps: Props) {
-        const { feedItems } = nextProps;
-        if (this.props.feedItems !== feedItems) {
-            this.setState({
-                feedItems
-            });
-        }
-    }
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
@@ -100,36 +87,6 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
-    /**
-     * Adds a versions entry if the current file version was restored from a previous version
-     *
-     * @param {FileVersions} versions - API returned file versions for this file
-     * @return {FileVersions} modified versions array including the version restore
-     */
-    addRestoredVersion(versions: FileVersions) {
-        const { file } = this.props;
-        const { restored_from, modified_at, file_version } = file;
-
-        // Ensures restored version is only added on first feed loads
-        const lastVersion = versions.total_count ? versions.entries[versions.total_count - 1] : {};
-        if (restored_from && lastVersion.action !== VERSION_RESTORE_ACTION) {
-            const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
-
-            if (restoredVersion) {
-                versions.entries.push({
-                    ...restoredVersion,
-                    // $FlowFixMe
-                    id: file_version.id,
-                    created_at: modified_at,
-                    action: VERSION_RESTORE_ACTION
-                });
-                versions.total_count += 1;
-            }
-        }
-
-        return versions;
-    }
-
     render(): React.Node {
         const {
             translations,
@@ -148,11 +105,12 @@ class ActivityFeed extends React.Component<Props, State> {
             onCommentDelete,
             onTaskDelete,
             onTaskUpdate,
-            onTaskAssignmentUpdate
+            onTaskAssignmentUpdate,
+            feedItems
         } = this.props;
-        const { isInputOpen, feedItems } = this.state;
+        const { isInputOpen } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
-        const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate);
+        const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         return (
             // eslint-disable-next-line
@@ -163,7 +121,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className='bcs-activity-feed-items-container'
                 >
-                    {!feedItems ? (
+                    {!feedItems || !currentUser ? (
                         <EmptyState isLoading showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
@@ -201,7 +159,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         })}
                         createComment={hasCommentPermission ? this.onCommentCreate : noop}
                         createTask={hasCommentPermission ? this.onTaskCreate : noop}
-                        updateTask={hasCommentPermission ? this.updateTask : noop}
+                        updateTask={hasCommentPermission ? onTaskUpdate : noop}
                         getApproverWithQuery={getApproverWithQuery}
                         getMentionWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
