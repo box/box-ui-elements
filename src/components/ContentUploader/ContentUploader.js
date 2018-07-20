@@ -155,6 +155,17 @@ class ContentUploader extends Component<Props, State> {
     }
 
     /**
+     * Cancels pending uploads
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    componentWillUnmount() {
+        this.cancel();
+    }
+
+    /**
      * Adds new items to the queue when files prop gets updated in window view
      *
      * @param {Props} nextProps
