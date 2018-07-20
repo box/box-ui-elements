@@ -21,6 +21,7 @@ import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
 import messages from '../../../messages';
+import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 import './Comment.scss';
 
@@ -128,6 +129,7 @@ class Comment extends React.Component<Props, State> {
                         <div className='bcs-comment-headline'>
                             <UserLink
                                 className='bcs-comment-user-name'
+                                data-resin-target={ACTIVITY_TARGETS.PROFILE}
                                 id={created_by.id}
                                 name={created_by.name}
                                 getUserProfileUrl={getUserProfileUrl}

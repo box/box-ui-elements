@@ -9,6 +9,7 @@ import { injectIntl } from 'react-intl';
 import Checkbox from 'box-react-ui/lib/components/checkbox/Checkbox';
 
 import AddApprovalFields from './AddApprovalFields';
+import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 import messages from '../../../messages';
 
 type Props = {
@@ -39,6 +40,7 @@ const AddApproval = ({
     <div className='bcs-comment-add-approver'>
         <Checkbox
             className='bcs-comment-add-approver-checkbox'
+            data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_ADD_TASK}
             label={intl.formatMessage(messages.approvalAddTask)}
             name='addApproval'
             isChecked={isAddApprovalVisible}
