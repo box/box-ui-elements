@@ -1,5 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/ContentUploader/OverallUploadsProgressBar should render correctly when isDragging is true 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="0"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Drop files on this page to upload them into this folder."
+      id="be.uploadsManagerUploadPrompt"
+    />
+  </span>
+  <ProgressBar
+    percent={0}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;
+
+exports[`components/ContentUploader/OverallUploadsProgressBar should render correctly when isVisible is false 1`] = `
+<div
+  className="bcu-overall-progress-bar"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex="-1"
+>
+  <span
+    className="bcu-upload-status"
+  >
+    <FormattedMessage
+      defaultMessage="Drop files on this page to upload them into this folder."
+      id="be.uploadsManagerUploadPrompt"
+    />
+  </span>
+  <ProgressBar
+    percent={0}
+  />
+  <span
+    className="bcu-uploads-manager-toggle"
+  />
+</div>
+`;
+
 exports[`components/ContentUploader/OverallUploadsProgressBar should render correctly when view is VIEW_ERROR 1`] = `
 <div
   className="bcu-overall-progress-bar"
