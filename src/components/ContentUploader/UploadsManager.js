@@ -12,15 +12,24 @@ import './UploadsManager.scss';
 import { STATUS_ERROR } from '../../constants';
 
 type Props = {
-    isVisible: boolean,
+    isDragging: boolean,
     isExpanded: boolean,
+    isVisible: boolean,
     items: UploadItem[],
     onItemActionClick: Function,
     toggleUploadsManager: Function,
     view: View
 };
 
-const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, isExpanded, isVisible }: Props) => {
+const UploadsManager = ({
+    items,
+    view,
+    onItemActionClick,
+    toggleUploadsManager,
+    isExpanded,
+    isVisible,
+    isDragging
+}: Props) => {
     /**
      * Keydown handler for progress bar
      *
@@ -60,6 +69,7 @@ const UploadsManager = ({ items, view, onItemActionClick, toggleUploadsManager, 
         >
             <OverallUploadsProgressBar
                 isVisible={isVisible}
+                isDragging={isDragging}
                 percent={percent}
                 onClick={toggleUploadsManager}
                 onKeyDown={handleProgressBarKeyDown}

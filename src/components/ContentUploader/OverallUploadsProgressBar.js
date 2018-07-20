@@ -51,6 +51,7 @@ const getPercent = (view: string, percent: number): number => {
 };
 
 type Props = {
+    isDragging: boolean,
     isVisible: boolean,
     percent: number,
     onClick: Function,
@@ -58,18 +59,30 @@ type Props = {
     view: View
 };
 
-const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isVisible }: Props) => (
-    <div
-        className='bcu-overall-progress-bar'
-        onClick={onClick}
-        onKeyDown={onKeyDown}
-        role='button'
-        tabIndex={isVisible ? '0' : '-1'}
-    >
-        <span className='bcu-upload-status'>{getUploadStatus(view)}</span>
-        <ProgressBar percent={getPercent(view, percent)} />
-        <span className='bcu-uploads-manager-toggle' />
-    </div>
-);
+const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDragging, isVisible }: Props) => {
+    // Show the upload prompt and set progress to 0 when the uploads manager
+    // is invisible or is having files dragged to it
+    const shouldShowPrompt = isDragging || !isVisible;
+    const status = shouldShowPrompt ? (
+        <FormattedMessage {...messages.uploadsManagerUploadPrompt} />
+    ) : (
+        getUploadStatus(view)
+    );
+    const updatedPercent = shouldShowPrompt ? 0 : getPercent(view, percent);
+
+    return (
+        <div
+            className='bcu-overall-progress-bar'
+            onClick={onClick}
+            onKeyDown={onKeyDown}
+            role='button'
+            tabIndex={isVisible ? '0' : '-1'}
+        >
+            <span className='bcu-upload-status'>{status}</span>
+            <ProgressBar percent={updatedPercent} />
+            <span className='bcu-uploads-manager-toggle' />
+        </div>
+    );
+};
 
 export default OverallUploadsProgressBar;
