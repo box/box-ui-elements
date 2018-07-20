@@ -984,7 +984,7 @@ class ContentUploader extends Component<Props, State> {
             fileLimit,
             useUploadsManager,
             isFolderUploadEnabled,
-            isDraggingItemsToUploadsManager
+            isDraggingItemsToUploadsManager = false
         }: Props = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
         const isEmpty = items.length === 0;
