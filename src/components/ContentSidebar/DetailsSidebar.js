@@ -6,7 +6,6 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import messages from '../messages';
 import { SECTION_TARGETS } from '../../interactionTargets';
 import SidebarAccessStats from './SidebarAccessStats';
@@ -75,24 +74,23 @@ const DetailsSidebar = ({
             </div>
         )}
         {hasProperties && (
-            <LoadingIndicatorWrapper isLoading={isFileLoading}>
-                <SidebarSection
-                    interactionTarget={SECTION_TARGETS.FILE_PROPERTIES}
-                    title={<FormattedMessage {...messages.sidebarProperties} />}
-                >
-                    <SidebarFileProperties
-                        onDescriptionChange={onDescriptionChange}
-                        file={file}
-                        {...fileError}
-                        hasClassification={hasClassification}
-                        onClassificationClick={onClassificationClick}
-                        hasRetentionPolicy={hasRetentionPolicy}
-                        retentionPolicy={retentionPolicy}
-                        bannerPolicy={bannerPolicy}
-                        onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
-                    />
-                </SidebarSection>
-            </LoadingIndicatorWrapper>
+            <SidebarSection
+                interactionTarget={SECTION_TARGETS.FILE_PROPERTIES}
+                title={<FormattedMessage {...messages.sidebarProperties} />}
+            >
+                <SidebarFileProperties
+                    onDescriptionChange={onDescriptionChange}
+                    file={file}
+                    {...fileError}
+                    hasClassification={hasClassification}
+                    onClassificationClick={onClassificationClick}
+                    hasRetentionPolicy={hasRetentionPolicy}
+                    retentionPolicy={retentionPolicy}
+                    bannerPolicy={bannerPolicy}
+                    onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
+                    isLoading={isFileLoading}
+                />
+            </SidebarSection>
         )}
         {hasAccessStats && (
             <SidebarAccessStats

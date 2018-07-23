@@ -27,29 +27,27 @@ exports[`components/ContentSidebar/DetailsSidebar should render DetailsSidebar w
       }
     />
   </div>
-  <LoadingIndicatorWrapper>
-    <SidebarSection
-      className=""
-      interactionTarget="fileproperties"
-      isOpen={true}
-      title={
-        <FormattedMessage
-          defaultMessage="File Properties"
-          id="be.sidebarProperties"
-        />
-      }
-    >
-      <SidebarFileProperties
-        file={
-          Object {
-            "id": "foo",
-          }
-        }
-        hasClassification={true}
-        hasRetentionPolicy={true}
+  <SidebarSection
+    className=""
+    interactionTarget="fileproperties"
+    isOpen={true}
+    title={
+      <FormattedMessage
+        defaultMessage="File Properties"
+        id="be.sidebarProperties"
       />
-    </SidebarSection>
-  </LoadingIndicatorWrapper>
+    }
+  >
+    <SidebarFileProperties
+      file={
+        Object {
+          "id": "foo",
+        }
+      }
+      hasClassification={true}
+      hasRetentionPolicy={true}
+    />
+  </SidebarSection>
   <SidebarAccessStats
     file={
       Object {

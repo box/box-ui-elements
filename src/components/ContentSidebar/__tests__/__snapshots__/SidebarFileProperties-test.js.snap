@@ -19,70 +19,76 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should not ren
   }
   onClassificationClick={[MockFunction]}
 >
-  <ItemProperties
-    classificationProps={
-      Object {
-        "data-resin-target": "addclassification",
-        "openModal": [MockFunction],
-        "tooltip": undefined,
-        "value": undefined,
-      }
-    }
-    descriptionTextareaProps={
-      Object {
-        "data-resin-target": "description",
-      }
-    }
-    retentionPolicyProps={Object {}}
-    size="1 B"
-  >
-    <dl
-      className="item-properties"
+  <LoadingIndicatorWrapper>
+    <div
+      className="loading-indicator-wrapper "
     >
-      <FormattedMessage
-        defaultMessage="Size"
-        id="boxui.itemDetails.size"
-        tagName="dt"
+      <ItemProperties
+        classificationProps={
+          Object {
+            "data-resin-target": "addclassification",
+            "openModal": [MockFunction],
+            "tooltip": undefined,
+            "value": undefined,
+          }
+        }
+        descriptionTextareaProps={
+          Object {
+            "data-resin-target": "description",
+          }
+        }
+        retentionPolicyProps={Object {}}
+        size="1 B"
       >
-        <div />
-      </FormattedMessage>
-      <dd>
-        1 B
-      </dd>
-      <RetentionPolicy />
-      <ClassificationProperty
-        data-resin-target="addclassification"
-        openModal={[MockFunction]}
-      >
-        <FormattedMessage
-          defaultMessage="Classification"
-          id="boxui.classification.classification"
-          tagName="dt"
+        <dl
+          className="item-properties"
         >
-          <div />
-        </FormattedMessage>
-        <dd>
-          <PlainButton
-            className="lnk"
-            onClick={[MockFunction]}
+          <FormattedMessage
+            defaultMessage="Size"
+            id="boxui.itemDetails.size"
+            tagName="dt"
           >
-            <button
-              className="btn-plain lnk"
-              onClick={[MockFunction]}
-              type="submit"
+            <div />
+          </FormattedMessage>
+          <dd>
+            1 B
+          </dd>
+          <RetentionPolicy />
+          <ClassificationProperty
+            data-resin-target="addclassification"
+            openModal={[MockFunction]}
+          >
+            <FormattedMessage
+              defaultMessage="Classification"
+              id="boxui.classification.classification"
+              tagName="dt"
             >
-              <FormattedMessage
-                defaultMessage="Add Classification"
-                id="boxui.classification.addClassification"
+              <div />
+            </FormattedMessage>
+            <dd>
+              <PlainButton
+                className="lnk"
+                onClick={[MockFunction]}
               >
-                <div />
-              </FormattedMessage>
-            </button>
-          </PlainButton>
-        </dd>
-      </ClassificationProperty>
-    </dl>
-  </ItemProperties>
+                <button
+                  className="btn-plain lnk"
+                  onClick={[MockFunction]}
+                  type="submit"
+                >
+                  <FormattedMessage
+                    defaultMessage="Add Classification"
+                    id="boxui.classification.addClassification"
+                  >
+                    <div />
+                  </FormattedMessage>
+                </button>
+              </PlainButton>
+            </dd>
+          </ClassificationProperty>
+        </dl>
+      </ItemProperties>
+    </div>
+  </LoadingIndicatorWrapper>
 </SidebarFileProperties>
 `;
 
@@ -113,6 +119,171 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should not ren
   }
   onDescriptionChange={[MockFunction]}
 >
+  <LoadingIndicatorWrapper>
+    <div
+      className="loading-indicator-wrapper "
+    >
+      <ItemProperties
+        classificationProps={Object {}}
+        createdAt="2018-04-18T16:56:05.352Z"
+        description="foo"
+        descriptionTextareaProps={
+          Object {
+            "data-resin-target": "description",
+          }
+        }
+        modifiedAt="2018-04-18T16:56:05.352Z"
+        onDescriptionChange={[MockFunction]}
+        owner="foo"
+        retentionPolicyProps={Object {}}
+        size="1 B"
+        uploader="foo"
+      >
+        <dl
+          className="item-properties"
+        >
+          <FormattedMessage
+            defaultMessage="Description"
+            id="boxui.itemDetails.description"
+            tagName="dt"
+          >
+            <div />
+          </FormattedMessage>
+          <dd>
+            <EditableDescription
+              onDescriptionChange={[MockFunction]}
+              textAreaProps={
+                Object {
+                  "data-resin-target": "description",
+                }
+              }
+              value="foo"
+            >
+              <EditableDescription
+                intl={
+                  Object {
+                    "formatDate": [Function],
+                    "formatMessage": [Function],
+                  }
+                }
+                onDescriptionChange={[MockFunction]}
+                textAreaProps={
+                  Object {
+                    "data-resin-target": "description",
+                  }
+                }
+                value="foo"
+              >
+                <TextareaAutosize
+                  className="description-textarea"
+                  data-resin-target="description"
+                  inputRef={[Function]}
+                  maxLength="255"
+                  maxRows={6}
+                  onBlur={[Function]}
+                  onChange={[Function]}
+                  onHeightChange={[Function]}
+                  placeholder="Enter a description"
+                  useCacheForDOMMeasurements={false}
+                  value="foo"
+                >
+                  <textarea
+                    className="description-textarea"
+                    data-resin-target="description"
+                    maxLength="255"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    placeholder="Enter a description"
+                    style={
+                      Object {
+                        "height": 0,
+                      }
+                    }
+                    value="foo"
+                  />
+                </TextareaAutosize>
+              </EditableDescription>
+            </EditableDescription>
+          </dd>
+          <FormattedMessage
+            defaultMessage="Owner"
+            id="boxui.itemDetails.owner"
+            tagName="dt"
+          >
+            <div />
+          </FormattedMessage>
+          <dd>
+            foo
+          </dd>
+          <FormattedMessage
+            defaultMessage="Uploader"
+            id="boxui.itemDetails.uploader"
+            tagName="dt"
+          >
+            <div />
+          </FormattedMessage>
+          <dd>
+            foo
+          </dd>
+          <FormattedMessage
+            defaultMessage="Created"
+            id="boxui.itemDetails.created"
+            tagName="dt"
+          >
+            <div />
+          </FormattedMessage>
+          <dd>
+            <FormattedDate
+              day="numeric"
+              hour="numeric"
+              minute="numeric"
+              month="short"
+              value={2018-04-18T16:56:05.352Z}
+              year="numeric"
+            >
+              <div />
+            </FormattedDate>
+          </dd>
+          <FormattedMessage
+            defaultMessage="Modified"
+            id="boxui.itemDetails.modified"
+            tagName="dt"
+          >
+            <div />
+          </FormattedMessage>
+          <dd>
+            <FormattedDate
+              day="numeric"
+              hour="numeric"
+              minute="numeric"
+              month="short"
+              value={2018-04-18T16:56:05.352Z}
+              year="numeric"
+            >
+              <div />
+            </FormattedDate>
+          </dd>
+          <FormattedMessage
+            defaultMessage="Size"
+            id="boxui.itemDetails.size"
+            tagName="dt"
+          >
+            <div />
+          </FormattedMessage>
+          <dd>
+            1 B
+          </dd>
+          <RetentionPolicy />
+          <ClassificationProperty />
+        </dl>
+      </ItemProperties>
+    </div>
+  </LoadingIndicatorWrapper>
+</SidebarFileProperties>
+`;
+
+exports[`components/ContentSidebar/SidebarFileProperties render() should render ItemProperties 1`] = `
+<LoadingIndicatorWrapper>
   <ItemProperties
     classificationProps={Object {}}
     createdAt="2018-04-18T16:56:05.352Z"
@@ -128,165 +299,8 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should not ren
     retentionPolicyProps={Object {}}
     size="1 B"
     uploader="foo"
-  >
-    <dl
-      className="item-properties"
-    >
-      <FormattedMessage
-        defaultMessage="Description"
-        id="boxui.itemDetails.description"
-        tagName="dt"
-      >
-        <div />
-      </FormattedMessage>
-      <dd>
-        <EditableDescription
-          onDescriptionChange={[MockFunction]}
-          textAreaProps={
-            Object {
-              "data-resin-target": "description",
-            }
-          }
-          value="foo"
-        >
-          <EditableDescription
-            intl={
-              Object {
-                "formatDate": [Function],
-                "formatMessage": [Function],
-              }
-            }
-            onDescriptionChange={[MockFunction]}
-            textAreaProps={
-              Object {
-                "data-resin-target": "description",
-              }
-            }
-            value="foo"
-          >
-            <TextareaAutosize
-              className="description-textarea"
-              data-resin-target="description"
-              inputRef={[Function]}
-              maxLength="255"
-              maxRows={6}
-              onBlur={[Function]}
-              onChange={[Function]}
-              onHeightChange={[Function]}
-              placeholder="Enter a description"
-              useCacheForDOMMeasurements={false}
-              value="foo"
-            >
-              <textarea
-                className="description-textarea"
-                data-resin-target="description"
-                maxLength="255"
-                onBlur={[Function]}
-                onChange={[Function]}
-                placeholder="Enter a description"
-                style={
-                  Object {
-                    "height": 0,
-                  }
-                }
-                value="foo"
-              />
-            </TextareaAutosize>
-          </EditableDescription>
-        </EditableDescription>
-      </dd>
-      <FormattedMessage
-        defaultMessage="Owner"
-        id="boxui.itemDetails.owner"
-        tagName="dt"
-      >
-        <div />
-      </FormattedMessage>
-      <dd>
-        foo
-      </dd>
-      <FormattedMessage
-        defaultMessage="Uploader"
-        id="boxui.itemDetails.uploader"
-        tagName="dt"
-      >
-        <div />
-      </FormattedMessage>
-      <dd>
-        foo
-      </dd>
-      <FormattedMessage
-        defaultMessage="Created"
-        id="boxui.itemDetails.created"
-        tagName="dt"
-      >
-        <div />
-      </FormattedMessage>
-      <dd>
-        <FormattedDate
-          day="numeric"
-          hour="numeric"
-          minute="numeric"
-          month="short"
-          value={2018-04-18T16:56:05.352Z}
-          year="numeric"
-        >
-          <div />
-        </FormattedDate>
-      </dd>
-      <FormattedMessage
-        defaultMessage="Modified"
-        id="boxui.itemDetails.modified"
-        tagName="dt"
-      >
-        <div />
-      </FormattedMessage>
-      <dd>
-        <FormattedDate
-          day="numeric"
-          hour="numeric"
-          minute="numeric"
-          month="short"
-          value={2018-04-18T16:56:05.352Z}
-          year="numeric"
-        >
-          <div />
-        </FormattedDate>
-      </dd>
-      <FormattedMessage
-        defaultMessage="Size"
-        id="boxui.itemDetails.size"
-        tagName="dt"
-      >
-        <div />
-      </FormattedMessage>
-      <dd>
-        1 B
-      </dd>
-      <RetentionPolicy />
-      <ClassificationProperty />
-    </dl>
-  </ItemProperties>
-</SidebarFileProperties>
-`;
-
-exports[`components/ContentSidebar/SidebarFileProperties render() should render ItemProperties 1`] = `
-<ItemProperties
-  classificationProps={Object {}}
-  createdAt="2018-04-18T16:56:05.352Z"
-  description="foo"
-  descriptionTextareaProps={
-    Object {
-      "data-resin-target": "description",
-    }
-  }
-  modifiedAt="2018-04-18T16:56:05.352Z"
-  onDescriptionChange={[MockFunction]}
-  owner="foo"
-  retentionPolicyProps={Object {}}
-  size="1 B"
-  uploader="foo"
-/>
+  />
+</LoadingIndicatorWrapper>
 `;
 
 exports[`components/ContentSidebar/SidebarFileProperties render() should render an error 1`] = `
@@ -347,119 +361,125 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
   }
   onClassificationClick={[MockFunction]}
 >
-  <ItemProperties
-    classificationProps={
-      Object {
-        "data-resin-target": "editclassification",
-        "openModal": undefined,
-        "tooltip": "tooltip value",
-        "value": "Public",
-      }
-    }
-    descriptionTextareaProps={
-      Object {
-        "data-resin-target": "description",
-      }
-    }
-    retentionPolicyProps={Object {}}
-    size="1 B"
-  >
-    <dl
-      className="item-properties"
+  <LoadingIndicatorWrapper>
+    <div
+      className="loading-indicator-wrapper "
     >
-      <FormattedMessage
-        defaultMessage="Size"
-        id="boxui.itemDetails.size"
-        tagName="dt"
+      <ItemProperties
+        classificationProps={
+          Object {
+            "data-resin-target": "editclassification",
+            "openModal": undefined,
+            "tooltip": "tooltip value",
+            "value": "Public",
+          }
+        }
+        descriptionTextareaProps={
+          Object {
+            "data-resin-target": "description",
+          }
+        }
+        retentionPolicyProps={Object {}}
+        size="1 B"
       >
-        <div />
-      </FormattedMessage>
-      <dd>
-        1 B
-      </dd>
-      <RetentionPolicy />
-      <ClassificationProperty
-        data-resin-target="editclassification"
-        tooltip="tooltip value"
-        value="Public"
-      >
-        <FormattedMessage
-          defaultMessage="Classification"
-          id="boxui.classification.classification"
-          tagName="dt"
+        <dl
+          className="item-properties"
         >
-          <div />
-        </FormattedMessage>
-        <dd>
-          <div
-            className="mbs"
+          <FormattedMessage
+            defaultMessage="Size"
+            id="boxui.itemDetails.size"
+            tagName="dt"
           >
-            <ClassificationBadge
-              tooltip="tooltip value"
-              tooltipPosition="middle-left"
-              value="Public"
+            <div />
+          </FormattedMessage>
+          <dd>
+            1 B
+          </dd>
+          <RetentionPolicy />
+          <ClassificationProperty
+            data-resin-target="editclassification"
+            tooltip="tooltip value"
+            value="Public"
+          >
+            <FormattedMessage
+              defaultMessage="Classification"
+              id="boxui.classification.classification"
+              tagName="dt"
             >
-              <Tooltip
-                constrainToScrollParent={false}
-                constrainToWindow={true}
-                position="middle-left"
-                text="tooltip value"
-                theme="default"
+              <div />
+            </FormattedMessage>
+            <dd>
+              <div
+                className="mbs"
               >
-                <TetherComponent
-                  attachment="middle right"
-                  bodyElement={
-                    <body>
-                      <textarea
-                        style="min-height: 0 !important; max-height: none !important; height: 0px !important; visibility: hidden !important; overflow: hidden !important; position: absolute !important; z-index: -1000 !important; top: 0px !important; right: 0px;"
-                      />
-                    </body>
-                  }
-                  classPrefix="tooltip"
-                  constraints={
-                    Array [
-                      Object {
-                        "attachment": "together",
-                        "to": "window",
-                      },
-                    ]
-                  }
-                  enabled={false}
-                  renderElementTag="div"
-                  renderElementTo={null}
-                  targetAttachment="middle left"
+                <ClassificationBadge
+                  tooltip="tooltip value"
+                  tooltipPosition="middle-left"
+                  value="Public"
                 >
-                  <Badge
-                    className="classification-badge"
-                    key=".0"
-                    onBlur={[Function]}
-                    onFocus={[Function]}
-                    onKeyDown={[Function]}
-                    onMouseEnter={[Function]}
-                    onMouseLeave={[Function]}
-                    tabIndex="0"
-                    type="warning"
+                  <Tooltip
+                    constrainToScrollParent={false}
+                    constrainToWindow={true}
+                    position="middle-left"
+                    text="tooltip value"
+                    theme="default"
                   >
-                    <span
-                      className="badge badge-warning classification-badge"
-                      onBlur={[Function]}
-                      onFocus={[Function]}
-                      onKeyDown={[Function]}
-                      onMouseEnter={[Function]}
-                      onMouseLeave={[Function]}
-                      tabIndex="0"
+                    <TetherComponent
+                      attachment="middle right"
+                      bodyElement={
+                        <body>
+                          <textarea
+                            style="min-height: 0 !important; max-height: none !important; height: 0px !important; visibility: hidden !important; overflow: hidden !important; position: absolute !important; z-index: -1000 !important; top: 0px !important; right: 0px;"
+                          />
+                        </body>
+                      }
+                      classPrefix="tooltip"
+                      constraints={
+                        Array [
+                          Object {
+                            "attachment": "together",
+                            "to": "window",
+                          },
+                        ]
+                      }
+                      enabled={false}
+                      renderElementTag="div"
+                      renderElementTo={null}
+                      targetAttachment="middle left"
                     >
-                      Public
-                    </span>
-                  </Badge>
-                </TetherComponent>
-              </Tooltip>
-            </ClassificationBadge>
-          </div>
-        </dd>
-      </ClassificationProperty>
-    </dl>
-  </ItemProperties>
+                      <Badge
+                        className="classification-badge"
+                        key=".0"
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                        tabIndex="0"
+                        type="warning"
+                      >
+                        <span
+                          className="badge badge-warning classification-badge"
+                          onBlur={[Function]}
+                          onFocus={[Function]}
+                          onKeyDown={[Function]}
+                          onMouseEnter={[Function]}
+                          onMouseLeave={[Function]}
+                          tabIndex="0"
+                        >
+                          Public
+                        </span>
+                      </Badge>
+                    </TetherComponent>
+                  </Tooltip>
+                </ClassificationBadge>
+              </div>
+            </dd>
+          </ClassificationProperty>
+        </dl>
+      </ItemProperties>
+    </div>
+  </LoadingIndicatorWrapper>
 </SidebarFileProperties>
 `;
 
@@ -487,71 +507,77 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
   }
   onClassificationClick={[MockFunction]}
 >
-  <ItemProperties
-    classificationProps={
-      Object {
-        "data-resin-target": "addclassification",
-        "openModal": [MockFunction],
-        "tooltip": "tooltip value",
-        "value": undefined,
-      }
-    }
-    descriptionTextareaProps={
-      Object {
-        "data-resin-target": "description",
-      }
-    }
-    retentionPolicyProps={Object {}}
-    size="1 B"
-  >
-    <dl
-      className="item-properties"
+  <LoadingIndicatorWrapper>
+    <div
+      className="loading-indicator-wrapper "
     >
-      <FormattedMessage
-        defaultMessage="Size"
-        id="boxui.itemDetails.size"
-        tagName="dt"
+      <ItemProperties
+        classificationProps={
+          Object {
+            "data-resin-target": "addclassification",
+            "openModal": [MockFunction],
+            "tooltip": "tooltip value",
+            "value": undefined,
+          }
+        }
+        descriptionTextareaProps={
+          Object {
+            "data-resin-target": "description",
+          }
+        }
+        retentionPolicyProps={Object {}}
+        size="1 B"
       >
-        <div />
-      </FormattedMessage>
-      <dd>
-        1 B
-      </dd>
-      <RetentionPolicy />
-      <ClassificationProperty
-        data-resin-target="addclassification"
-        openModal={[MockFunction]}
-        tooltip="tooltip value"
-      >
-        <FormattedMessage
-          defaultMessage="Classification"
-          id="boxui.classification.classification"
-          tagName="dt"
+        <dl
+          className="item-properties"
         >
-          <div />
-        </FormattedMessage>
-        <dd>
-          <PlainButton
-            className="lnk"
-            onClick={[MockFunction]}
+          <FormattedMessage
+            defaultMessage="Size"
+            id="boxui.itemDetails.size"
+            tagName="dt"
           >
-            <button
-              className="btn-plain lnk"
-              onClick={[MockFunction]}
-              type="submit"
+            <div />
+          </FormattedMessage>
+          <dd>
+            1 B
+          </dd>
+          <RetentionPolicy />
+          <ClassificationProperty
+            data-resin-target="addclassification"
+            openModal={[MockFunction]}
+            tooltip="tooltip value"
+          >
+            <FormattedMessage
+              defaultMessage="Classification"
+              id="boxui.classification.classification"
+              tagName="dt"
             >
-              <FormattedMessage
-                defaultMessage="Add Classification"
-                id="boxui.classification.addClassification"
+              <div />
+            </FormattedMessage>
+            <dd>
+              <PlainButton
+                className="lnk"
+                onClick={[MockFunction]}
               >
-                <div />
-              </FormattedMessage>
-            </button>
-          </PlainButton>
-        </dd>
-      </ClassificationProperty>
-    </dl>
-  </ItemProperties>
+                <button
+                  className="btn-plain lnk"
+                  onClick={[MockFunction]}
+                  type="submit"
+                >
+                  <FormattedMessage
+                    defaultMessage="Add Classification"
+                    id="boxui.classification.addClassification"
+                  >
+                    <div />
+                  </FormattedMessage>
+                </button>
+              </PlainButton>
+            </dd>
+          </ClassificationProperty>
+        </dl>
+      </ItemProperties>
+    </div>
+  </LoadingIndicatorWrapper>
 </SidebarFileProperties>
 `;
 
@@ -578,91 +604,97 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
     }
   }
 >
-  <ItemProperties
-    classificationProps={Object {}}
-    descriptionTextareaProps={
-      Object {
-        "data-resin-target": "description",
-      }
-    }
-    retentionPolicyProps={
-      Object {
-        "dispositionTime": 1556317461,
-        "openModal": [MockFunction],
-        "policyName": "test policy",
-        "policyType": "finite",
-        "retentionPolicyDescription": "test policy (1 year retention & auto-deletion",
-      }
-    }
-    size="1 B"
-  >
-    <dl
-      className="item-properties"
+  <LoadingIndicatorWrapper>
+    <div
+      className="loading-indicator-wrapper "
     >
-      <FormattedMessage
-        defaultMessage="Size"
-        id="boxui.itemDetails.size"
-        tagName="dt"
+      <ItemProperties
+        classificationProps={Object {}}
+        descriptionTextareaProps={
+          Object {
+            "data-resin-target": "description",
+          }
+        }
+        retentionPolicyProps={
+          Object {
+            "dispositionTime": 1556317461,
+            "openModal": [MockFunction],
+            "policyName": "test policy",
+            "policyType": "finite",
+            "retentionPolicyDescription": "test policy (1 year retention & auto-deletion",
+          }
+        }
+        size="1 B"
       >
-        <div />
-      </FormattedMessage>
-      <dd>
-        1 B
-      </dd>
-      <RetentionPolicy
-        dispositionTime={1556317461}
-        openModal={[MockFunction]}
-        policyName="test policy"
-        policyType="finite"
-        retentionPolicyDescription="test policy (1 year retention & auto-deletion"
-      >
-        <FormattedMessage
-          defaultMessage="Policy"
-          id="boxui.itemDetails.retentionPolicyDescription"
-          tagName="dt"
+        <dl
+          className="item-properties"
         >
-          <div />
-        </FormattedMessage>
-        <dd>
-          test policy (1 year retention & auto-deletion
-        </dd>
-        <FormattedMessage
-          defaultMessage="Policy Expiration"
-          id="boxui.itemDetails.retentionPolicyExpiration"
-          tagName="dt"
-        >
-          <div />
-        </FormattedMessage>
-        <dd>
-          <FormattedDate
-            day="numeric"
-            month="short"
-            value={1970-01-19T00:18:37.461Z}
-            year="numeric"
+          <FormattedMessage
+            defaultMessage="Size"
+            id="boxui.itemDetails.size"
+            tagName="dt"
           >
             <div />
-          </FormattedDate>
-          <PlainButton
-            className="lnk"
-            onClick={[MockFunction]}
+          </FormattedMessage>
+          <dd>
+            1 B
+          </dd>
+          <RetentionPolicy
+            dispositionTime={1556317461}
+            openModal={[MockFunction]}
+            policyName="test policy"
+            policyType="finite"
+            retentionPolicyDescription="test policy (1 year retention & auto-deletion"
           >
-            <button
-              className="btn-plain lnk"
-              onClick={[MockFunction]}
-              type="submit"
+            <FormattedMessage
+              defaultMessage="Policy"
+              id="boxui.itemDetails.retentionPolicyDescription"
+              tagName="dt"
             >
-              <FormattedMessage
-                defaultMessage="Extend"
-                id="boxui.itemDetails.retentionPolicyExtend"
+              <div />
+            </FormattedMessage>
+            <dd>
+              test policy (1 year retention & auto-deletion
+            </dd>
+            <FormattedMessage
+              defaultMessage="Policy Expiration"
+              id="boxui.itemDetails.retentionPolicyExpiration"
+              tagName="dt"
+            >
+              <div />
+            </FormattedMessage>
+            <dd>
+              <FormattedDate
+                day="numeric"
+                month="short"
+                value={1970-01-19T00:18:37.461Z}
+                year="numeric"
               >
                 <div />
-              </FormattedMessage>
-            </button>
-          </PlainButton>
-        </dd>
-      </RetentionPolicy>
-      <ClassificationProperty />
-    </dl>
-  </ItemProperties>
+              </FormattedDate>
+              <PlainButton
+                className="lnk"
+                onClick={[MockFunction]}
+              >
+                <button
+                  className="btn-plain lnk"
+                  onClick={[MockFunction]}
+                  type="submit"
+                >
+                  <FormattedMessage
+                    defaultMessage="Extend"
+                    id="boxui.itemDetails.retentionPolicyExtend"
+                  >
+                    <div />
+                  </FormattedMessage>
+                </button>
+              </PlainButton>
+            </dd>
+          </RetentionPolicy>
+          <ClassificationProperty />
+        </dl>
+      </ItemProperties>
+    </div>
+  </LoadingIndicatorWrapper>
 </SidebarFileProperties>
 `;
