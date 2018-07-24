@@ -1506,9 +1506,9 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     accessStatsError,
                                     fileError,
                                     isFileLoading,
-                                    onClassificationChange: this.onClassificationChange,
                                     onDescriptionChange: this.onDescriptionChange,
-                                    ...detailsSidebarProps
+                                    ...detailsSidebarProps,
+                                    onClassificationClick: this.onClassificationClick
                                 }}
                                 activitySidebarProps={{
                                     ...activitySidebarProps,
