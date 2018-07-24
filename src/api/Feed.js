@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Helper for the box versions API
+ * @file Helper for activity feed API's
  * @author Box
  */
 import type { $AxiosXHR } from 'axios';
@@ -268,7 +268,7 @@ class Feed extends Base {
         successCallback: Function,
         errorCallback: Function
     ): void => {
-        if (!file || !file.id) {
+        if (!file.id) {
             throw getBadItemError();
         }
 
@@ -355,7 +355,7 @@ class Feed extends Base {
         errorCallback: (e: $AxiosXHR<any>) => void = noop,
         dueAt?: string
     ) => {
-        if (!file || !file.id) {
+        if (!file.id) {
             throw getBadItemError();
         }
 
@@ -406,7 +406,7 @@ class Feed extends Base {
         errorCallback: Function
     ): void => {
         this.commentsAPI = new CommentsAPI(this.options);
-        if (!file || !file.id) {
+        if (!file.id) {
             throw getBadItemError();
         }
 
@@ -508,7 +508,7 @@ class Feed extends Base {
         successCallback: Function,
         errorCallback: Function
     ): void => {
-        if (!file || !file.id) {
+        if (!file.id) {
             throw getBadItemError();
         }
 
@@ -570,7 +570,7 @@ class Feed extends Base {
         assignee: SelectorItem,
         errorCallback: Function
     ): Promise<TaskAssignment> {
-        if (!file || !file.id) {
+        if (!file.id) {
             throw getBadItemError();
         }
 
@@ -627,7 +627,7 @@ class Feed extends Base {
         successCallback: (taskId: string) => void = noop,
         errorCallback: (e: $AxiosXHR<any>, taskId: string) => void = noop
     ) => {
-        if (!file || !file.id) {
+        if (!file.id) {
             throw getBadItemError();
         }
 
@@ -881,7 +881,7 @@ class Feed extends Base {
             type: 'comment'
         };
 
-        if (!file || !file.id) {
+        if (!file.id) {
             throw getBadItemError();
         }
 

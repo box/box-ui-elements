@@ -3,8 +3,9 @@ import { shallow } from 'enzyme';
 import Sidebar from '../Sidebar';
 import DetailsSidebar from '../DetailsSidebar';
 import SkillsSidebar from '../SkillsSidebar';
-import ActivitySidebar from '../ActivitySidebar';
 import SidebarNav from '../SidebarNav';
+
+jest.mock('../ActivitySidebar', () => 'ActivitySidebar')
 
 describe('components/ContentSidebar/Skills/Sidebar', () => {
     const getWrapper = (props) => shallow(<Sidebar {...props} />);
@@ -25,7 +26,7 @@ describe('components/ContentSidebar/Skills/Sidebar', () => {
     test('should render activity sidebar', () => {
         const wrapper = getWrapper({ hasActivityFeed: true, view: 'activity' });
         expect(wrapper.find(SidebarNav)).toHaveLength(1);
-        expect(wrapper.find(ActivitySidebar)).toHaveLength(1);
+        expect(wrapper.find('ActivitySidebar')).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 

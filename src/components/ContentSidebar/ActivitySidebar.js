@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import debounce from 'lodash/debounce';
+import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import type { $AxiosXHR } from 'axios';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
@@ -100,8 +101,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Object} args - A subset of the task
      */
     deleteTask = ({ id }: { id: string }): void => {
-        const { file, api } = this.props;
-        api.getFeedAPI(false).deleteTask(file, id, this.feedSuccessCallback, this.feedErrorCallback);
+        const { file, api, onTaskDelete = noop } = this.props;
+        api.getFeedAPI(false).deleteTask(
+            file,
+            id,
+            (task: Task) => {
+                this.feedSuccessCallback();
+                onTaskDelete(task);
+            },
+            this.feedErrorCallback
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -156,9 +165,18 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return void
      */
     deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
-        const { file, api } = this.props;
+        const { file, api, onCommentDelete = noop } = this.props;
 
-        api.getFeedAPI(false).deleteComment(file, id, permissions, this.feedSuccessCallback, this.feedErrorCallback);
+        api.getFeedAPI(false).deleteComment(
+            file,
+            id,
+            permissions,
+            (comment: Comment) => {
+                this.feedSuccessCallback();
+                onCommentDelete(comment);
+            },
+            this.feedErrorCallback
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -172,16 +190,24 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     createComment = (text: string, hasMention: boolean): void => {
-        const { file, api } = this.props;
+        const { file, api, onCommentCreate = noop } = this.props;
         const { currentUser } = this.state;
 
         if (!currentUser) {
             throw getBadUserError();
         }
 
-        api
-            .getFeedAPI(false)
-            .createComment(file, currentUser, text, hasMention, this.feedSuccessCallback, this.feedErrorCallback);
+        api.getFeedAPI(false).createComment(
+            file,
+            currentUser,
+            text,
+            hasMention,
+            (comment: Comment) => {
+                onCommentCreate(comment);
+                this.feedSuccessCallback();
+            },
+            this.feedErrorCallback
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -418,6 +444,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 }
 
 export type ActivitySidebarProps = ExternalProps;
+export { ActivitySidebar as ActivitySidebarComponent };
 export default (props) => (
     <APIContext.Consumer>{(api) => <ActivitySidebar {...props} api={api} />}</APIContext.Consumer>
 );

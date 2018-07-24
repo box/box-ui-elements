@@ -124,7 +124,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-items-container"
   >
     <EmptyState
-      isLoading={false}
+      isLoading={true}
       showCommentMessage={false}
     />
   </div>
@@ -173,24 +173,8 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
   >
     <EmptyState
       isLoading={true}
-      showCommentMessage={true}
+      showCommentMessage={false}
     />
   </div>
-  <ApprovalCommentForm
-    className="bcs-activity-feed-comment-input"
-    createComment={[Function]}
-    createTask={[Function]}
-    isOpen={false}
-    onCancel={[Function]}
-    onFocus={[Function]}
-    onSubmit={[Function]}
-    updateTask={[Function]}
-    user={
-      Object {
-        "id": 10,
-        "name": "Kanye West",
-      }
-    }
-  />
 </div>
 `;
