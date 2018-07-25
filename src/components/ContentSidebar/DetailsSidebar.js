@@ -37,7 +37,7 @@ export type Props = {
     file: BoxItem,
     onDescriptionChange: Function,
     versions?: FileVersions,
-    accessStatsError?: Errors,
+    accessStatsError?: Errors | MessageDescriptor,
     fileError?: Errors,
     onVersionHistoryClick?: Function,
     isFileLoading?: boolean

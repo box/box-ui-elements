@@ -834,6 +834,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'File access stats error message',
         defaultMessage: 'Something went wrong when fetching the access stats.'
     },
+    fileAccessStatsPermissionsError: {
+        id: 'be.accessStatsPermissionsError',
+        description: 'The text for when the user does not have permissions to see access stats.',
+        defaultMessage: 'Sorry, you do not have permission to see the access stats for this file.'
+    },
     currentUserErrorHeaderMessage: {
         id: 'be.currentUserErrorHeaderMessage',
         description: 'Current user error message',

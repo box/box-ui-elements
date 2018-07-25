@@ -14,6 +14,7 @@ import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import type { $AxiosXHR } from 'axios';
+import type { MessageDescriptor } from 'react-intl';
 import Sidebar from './Sidebar';
 import API from '../../api';
 import Internationalize from '../Internationalize';
@@ -39,6 +40,7 @@ import { getBadItemError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -427,7 +429,11 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchFileAccessStatsErrorCallback = (e: $AxiosXHR<any>) => {
         let accessStatsError;
 
-        if (getProp(e, 'status') !== UNAUTHORIZED_CODE) {
+        if (getProp(e, 'status') === UNAUTHORIZED_CODE) {
+            accessStatsError = {
+                error: messages.fileAccessStatsPermissionsError
+            };
+        } else {
             accessStatsError = {
                 maskError: {
                     errorHeader: messages.fileAccessStatsErrorHeaderMessage,
