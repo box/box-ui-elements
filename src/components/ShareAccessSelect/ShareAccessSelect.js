@@ -8,6 +8,7 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import messages from '../messages';
 import { ACCESS_NONE, ACCESS_OPEN, ACCESS_COLLAB, ACCESS_COMPANY } from '../../constants';
+import './ShareAccessSelect.scss';
 
 type Props = {
     canSetShareAccess: boolean,
@@ -39,7 +40,7 @@ const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl 
     }
 
     return (
-        <select className={className} value={access} onChange={changeHandler}>
+        <select className={`be-share-access-select ${className}`} value={access} onChange={changeHandler}>
             {allowOpen ? <option value={ACCESS_OPEN}>{intl.formatMessage(messages.shareAccessOpen)}</option> : null}
             {allowCollab ? (
                 <option value={ACCESS_COLLAB}>{intl.formatMessage(messages.shareAccessCollab)}</option>

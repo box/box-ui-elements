@@ -1,6 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentSidebar/Skills/SkillsSidebar should render skills sidebar component 1`] = `
+exports[`components/ContentSidebar/Skills/SkillsSidebar should render loading indicator component when cards are not available 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Skills"
+      id="be.sidebarSkillsTitle"
+    />
+  }
+>
+  <LoadingIndicator />
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/Skills/SkillsSidebar should render skills sidebar component when cards are available 1`] = `
 <SidebarContent
   title={
     <FormattedMessage
@@ -10,9 +23,11 @@ exports[`components/ContentSidebar/Skills/SkillsSidebar should render skills sid
   }
 >
   <SidebarSkills
+    cards={Array []}
+    errors={Object {}}
     file={Object {}}
     getPreviewer={[MockFunction]}
-    onSkillChange={[MockFunction]}
+    onSkillChange={[Function]}
   />
 </SidebarContent>
 `;

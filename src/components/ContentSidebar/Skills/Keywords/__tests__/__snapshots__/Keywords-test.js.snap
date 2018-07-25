@@ -2,154 +2,136 @@
 
 exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render edit button when editable 1`] = `
 <LoadingIndicatorWrapper
+  className="be-keywords"
   isLoading={false}
 >
-  <div
-    className="be-keywords"
+  <PlainButton
+    className="be-keyword-edit"
+    data-resin-target="skill-keywordedit"
+    onClick={[Function]}
+    type="button"
   >
-    <PlainButton
-      className="be-keyword-edit"
-      data-resin-target="skill-keywordedit"
-      onClick={[Function]}
-      type="button"
-    >
-      <IconEdit />
-    </PlainButton>
-    <ReadOnlyselecteds
-      duration={100}
-      keywords={
-        Array [
-          Object {
-            "text": "foo",
-          },
-          Object {
-            "text": "bar",
-          },
-        ]
-      }
-    />
-  </div>
+    <IconEdit />
+  </PlainButton>
+  <ReadOnlyselecteds
+    duration={100}
+    keywords={
+      Array [
+        Object {
+          "text": "foo",
+        },
+        Object {
+          "text": "bar",
+        },
+      ]
+    }
+  />
 </LoadingIndicatorWrapper>
 `;
 
 exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render editable keywords when editable and editmode 1`] = `
 <LoadingIndicatorWrapper
+  className="be-keywords"
   isLoading={false}
 >
-  <div
-    className="be-keywords"
+  <PlainButton
+    className="be-keyword-edit be-keyword-is-editing"
+    data-resin-target="skill-keywordedit"
+    onClick={[Function]}
+    type="button"
   >
-    <PlainButton
-      className="be-keyword-edit be-keyword-is-editing"
-      data-resin-target="skill-keywordedit"
-      onClick={[Function]}
-      type="button"
-    >
-      <IconEdit />
-    </PlainButton>
-    <EditableKeywords
-      keywords={
-        Array [
-          Object {
-            "text": "foo",
-          },
-          Object {
-            "text": "bar",
-          },
-        ]
-      }
-      onAdd={[Function]}
-      onCancel={[Function]}
-      onDelete={[Function]}
-      onSave={[Function]}
-    />
-  </div>
+    <IconEdit />
+  </PlainButton>
+  <EditableKeywords
+    keywords={
+      Array [
+        Object {
+          "text": "foo",
+        },
+        Object {
+          "text": "bar",
+        },
+      ]
+    }
+    onAdd={[Function]}
+    onCancel={[Function]}
+    onDelete={[Function]}
+    onSave={[Function]}
+  />
 </LoadingIndicatorWrapper>
 `;
 
 exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render error mask when no keywords 1`] = `
 <LoadingIndicatorWrapper
+  className="be-keywords"
   isLoading={false}
 >
-  <div
-    className="be-keywords"
-  >
-    <FormattedMessage
-      defaultMessage="We’re sorry, no skills information was found."
-      id="be.skillNoInfoFoundError"
-    />
-  </div>
+  <FormattedMessage
+    defaultMessage="We’re sorry, no skills information was found."
+    id="be.skillNoInfoFoundError"
+  />
 </LoadingIndicatorWrapper>
 `;
 
 exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render keywords which are added but not the ones removed 1`] = `
 <LoadingIndicatorWrapper
+  className="be-keywords"
   isLoading={false}
 >
-  <div
-    className="be-keywords"
-  >
-    <ReadOnlyselecteds
-      duration={100}
-      keywords={
-        Array [
-          Object {
-            "text": "bar",
-          },
-          Object {
-            "text": "baz",
-          },
-        ]
-      }
-    />
-  </div>
+  <ReadOnlyselecteds
+    duration={100}
+    keywords={
+      Array [
+        Object {
+          "text": "bar",
+        },
+        Object {
+          "text": "baz",
+        },
+      ]
+    }
+  />
 </LoadingIndicatorWrapper>
 `;
 
 exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render read only keywords when not editable 1`] = `
 <LoadingIndicatorWrapper
+  className="be-keywords"
   isLoading={false}
 >
-  <div
-    className="be-keywords"
-  >
-    <ReadOnlyselecteds
-      duration={100}
-      keywords={
-        Array [
-          Object {
-            "text": "foo",
-          },
-          Object {
-            "text": "bar",
-          },
-        ]
-      }
-    />
-  </div>
+  <ReadOnlyselecteds
+    duration={100}
+    keywords={
+      Array [
+        Object {
+          "text": "foo",
+        },
+        Object {
+          "text": "bar",
+        },
+      ]
+    }
+  />
 </LoadingIndicatorWrapper>
 `;
 
 exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly render when isLoading is true 1`] = `
 <LoadingIndicatorWrapper
+  className="be-keywords"
   isLoading={true}
 >
-  <div
-    className="be-keywords"
-  >
-    <ReadOnlyselecteds
-      duration={100}
-      keywords={
-        Array [
-          Object {
-            "text": "foo",
-          },
-          Object {
-            "text": "bar",
-          },
-        ]
-      }
-    />
-  </div>
+  <ReadOnlyselecteds
+    duration={100}
+    keywords={
+      Array [
+        Object {
+          "text": "foo",
+        },
+        Object {
+          "text": "bar",
+        },
+      ]
+    }
+  />
 </LoadingIndicatorWrapper>
 `;
