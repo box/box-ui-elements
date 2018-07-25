@@ -24,7 +24,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should have no editable 
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getPreviewer={
+    [MockFunction] {
+      "calls": Array [
+        Array [],
+      ],
+      "results": Array [
+        Object {
+          "isThrow": false,
+          "value": undefined,
+        },
+      ],
+    }
+  }
 >
   <sidebar-section
     interactionTarget=""
@@ -58,7 +70,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should have no editable 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getPreviewer={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
       isEditable={false}
       onSkillChange={[Function]}
     />
@@ -91,7 +115,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render only the v
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getPreviewer={
+    [MockFunction] {
+      "calls": Array [
+        Array [],
+      ],
+      "results": Array [
+        Object {
+          "isThrow": false,
+          "value": undefined,
+        },
+      ],
+    }
+  }
 >
   <sidebar-section
     interactionTarget=""
@@ -126,7 +162,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render only the v
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getPreviewer={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -193,7 +241,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getPreviewer={
+    [MockFunction] {
+      "calls": Array [
+        Array [],
+      ],
+      "results": Array [
+        Object {
+          "isThrow": false,
+          "value": undefined,
+        },
+      ],
+    }
+  }
 >
   <sidebar-section
     interactionTarget=""
@@ -263,7 +323,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getPreviewer={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -334,7 +406,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getPreviewer={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -405,7 +489,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getPreviewer={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -478,7 +574,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getPreviewer={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -549,7 +657,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getPreviewer={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -617,7 +737,19 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getPreviewer={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "isThrow": false,
+              "value": undefined,
+            },
+          ],
+        }
+      }
       isEditable={true}
       onSkillChange={[Function]}
     />
