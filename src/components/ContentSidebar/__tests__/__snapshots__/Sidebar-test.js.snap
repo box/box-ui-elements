@@ -20,6 +20,16 @@ exports[`components/ContentSidebar/Skills/Sidebar should render details sidebar 
 </React.Fragment>
 `;
 
+exports[`components/ContentSidebar/Skills/Sidebar should render metadata sidebar 1`] = `
+<React.Fragment>
+  <SidebarNav
+    hasMetadata={true}
+    selectedView="metadata"
+  />
+  <Component />
+</React.Fragment>
+`;
+
 exports[`components/ContentSidebar/Skills/Sidebar should render no sidebar 1`] = `
 <React.Fragment>
   <SidebarNav />
