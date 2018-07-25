@@ -716,16 +716,17 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     describe('updateTaskSuccessCallback()', () => {
-        test('should update the task with the new data, not be pending', () => {
+        test('should update the task with the new data not including the assignment collection, not be pending', () => {
             const wrapper = getWrapper();
             wrapper.instance().updateFeedItem = jest.fn();
             wrapper.update();
             const task = tasks.entries[0];
+            const { task_assignment_collection, ...rest } = task;
             wrapper.instance().updateTaskSuccessCallback(task);
 
             expect(wrapper.instance().updateFeedItem).toBeCalledWith(
                 {
-                    ...task,
+                    ...rest,
                     isPending: false
                 },
                 task.id

@@ -18,6 +18,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/InlineDelete should corr
   >
     <PlainButton
       className="bcs-comment-delete"
+      data-resin-target="inlinedelete"
     >
       <IconTrash />
     </PlainButton>

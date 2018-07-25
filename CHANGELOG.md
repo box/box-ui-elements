@@ -1,5 +1,18 @@
+## 5.5.0 (2018-07-24)
+
+* Fix: flow error (#465) ([f5c887e](https://github.com/box/box-ui-elements/commit/f5c887e)), closes [#465](https://github.com/box/box-ui-elements/issues/465)
+* Fix: Prevent editing tasks from wiping assignees on the client (#461) ([ad3613d](https://github.com/box/box-ui-elements/commit/ad3613d)), closes [#461](https://github.com/box/box-ui-elements/issues/461)
+* Fix: UploadsManager should show correct message (#462) ([220fa25](https://github.com/box/box-ui-elements/commit/220fa25)), closes [#462](https://github.com/box/box-ui-elements/issues/462)
+* Fix: Use internal onClassificationClick prop to fix refreshes (#463) ([f974f6e](https://github.com/box/box-ui-elements/commit/f974f6e)), closes [#463](https://github.com/box/box-ui-elements/issues/463)
+* Chore: Adding more resin targets (#457) ([ae3ff02](https://github.com/box/box-ui-elements/commit/ae3ff02)), closes [#457](https://github.com/box/box-ui-elements/issues/457)
+* Chore: Allow buttons to have outline on focus (#452) ([8d4fa80](https://github.com/box/box-ui-elements/commit/8d4fa80)), closes [#452](https://github.com/box/box-ui-elements/issues/452)
+* Mojito: Update translations (#458) ([0bac191](https://github.com/box/box-ui-elements/commit/0bac191)), closes [#458](https://github.com/box/box-ui-elements/issues/458)
+
+
+
 ## <small>5.4.1 (2018-07-13)</small>
 
+* Release: 5.4.1 ([4cd4fed](https://github.com/box/box-ui-elements/commit/4cd4fed))
 * Update: BRUI to v27.17.0 (#456) ([73d1659](https://github.com/box/box-ui-elements/commit/73d1659)), closes [#456](https://github.com/box/box-ui-elements/issues/456)
 
 

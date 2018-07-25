@@ -37,6 +37,7 @@ export const CACHE_PREFIX_FILE = TYPED_ID_FILE_PREFIX;
 export const CACHE_PREFIX_WEBLINK = TYPED_ID_WEBLINK_PREFIX;
 export const CACHE_PREFIX_SEARCH = 'search_';
 export const CACHE_PREFIX_RECENTS = 'recents_';
+export const CACHE_PREFIX_METADATA = 'metadata_';
 
 /* ----------------------- Sorts ---------------------------- */
 export const SORT_ASC: 'ASC' = 'ASC';
@@ -57,9 +58,13 @@ export const HEADER_CONTENT_TYPE = 'Content-Type';
 export const HEADER_CLIENT_NAME = 'X-Box-Client-Name';
 export const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 
-/* ------------------ Metadata  ---------------------- */
-export const KEY_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
+/* ------------------ Metadata ---------------------- */
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
+export const METADATA_TEMPLATE_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
+export const METADATA_TEMPLATE_SKILLS = 'boxSkillsCards';
+export const METADATA_TEMPLATE_PROPERTIES = 'properties';
+export const METADATA_SCOPE_GLOBAL = 'global';
+export const METADATA_SCOPE_ENTERPRISE = 'enterprise';
 
 /* ----------------------- Fields --------------------------- */
 export const FIELD_ID = 'id';
@@ -96,8 +101,10 @@ export const FIELD_AUTHENTICATED_DOWNLOAD_URL = 'authenticated_download_url';
 export const FIELD_FILE_VERSION = 'file_version';
 export const FIELD_IS_DOWNLOAD_AVAILABLE = 'is_download_available';
 export const FIELD_VERSION_NUMBER = 'version_number';
-export const FIELD_METADATA_SKILLS = 'metadata.global.boxSkillsCards';
-export const FIELD_METADATA_CLASSIFICATION = `metadata.enterprise.${KEY_CLASSIFICATION}`;
+export const FIELD_METADATA = 'metadata';
+export const FIELD_METADATA_SKILLS = `${FIELD_METADATA}.${METADATA_SCOPE_GLOBAL}.${METADATA_TEMPLATE_SKILLS}`;
+export const FIELD_METADATA_PROPERTIES = `${FIELD_METADATA}.${METADATA_SCOPE_GLOBAL}.${METADATA_TEMPLATE_PROPERTIES}`;
+export const FIELD_METADATA_CLASSIFICATION = `${FIELD_METADATA}.${METADATA_SCOPE_ENTERPRISE}.${METADATA_TEMPLATE_CLASSIFICATION}`; // eslint-disable-line
 export const FIELD_DUE_AT = 'due_at';
 export const FIELD_TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
 export const FIELD_IS_COMPLETED = 'is_completed';
@@ -106,8 +113,6 @@ export const FIELD_TAGGED_MESSAGE = 'tagged_message';
 export const FIELD_TRASHED_AT = 'trashed_at';
 export const FIELD_ASSIGNED_TO = 'assigned_to';
 export const FIELD_RESOLUTION_STATE = 'resolution_state';
-export const METADATA_SKILLS = 'metadata.global.boxSkillsCards';
-export const METADATA_CLASSIFICATION = 'metadata.enterprise.securityClassification-6VMVochwUWo';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -149,7 +154,7 @@ export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
 export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
 export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
 
-/* ---------------------- Statuses  -------------------------- */
+/* ---------------------- Statuses -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';
 export const STATUS_IN_PROGRESS: 'inprogress' = 'inprogress';
 export const STATUS_COMPLETE: 'complete' = 'complete';
@@ -164,13 +169,13 @@ export const CLASS_IS_MEDIUM = 'be-is-medium';
 export const CLASS_IS_TOUCH = 'be-is-touch';
 export const CLASS_MODAL = 'be-modal';
 
-/* ------------------ Error Codes  ---------------------- */
+/* ------------------ Error Codes ---------------------- */
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
 export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
 
-/* ------------- Representation Hints  ------------------- */
+/* ------------- Representation Hints ------------------- */
 const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';
 const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';
 const X_REP_HINT_IMAGE = '[jpg?dimensions=2048x2048,png?dimensions=2048x2048]';
@@ -179,38 +184,40 @@ const X_REP_HINT_VIDEO_MP4 = '[mp4]';
 const videoHint = Browser.canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
 export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;
 
-/* ------------------ Uploader  ---------------------- */
+/* ------------------ Uploader ---------------------- */
 export const DEFAULT_RETRY_DELAY_MS = 3000;
 export const MS_IN_S = 1000;
 
-/* ------------------ Colors  ---------------------- */
+/* ------------------ Colors ---------------------- */
 export const COLOR_RED = '#c82341';
 export const COLOR_999 = '#999';
 export const COLOR_WHITE = '#fff';
 
-/* ------------------ Skills  ---------------------- */
+/* ------------------ Skills ---------------------- */
 export const SKILLS_TRANSCRIPT: 'transcript' = 'transcript';
 export const SKILLS_KEYWORD: 'keyword' = 'keyword';
 export const SKILLS_TIMELINE: 'timeline' = 'timeline';
 export const SKILLS_FACE: 'face' = 'face';
 export const SKILLS_STATUS: 'status' = 'status';
-export const SKILLS_INTERNAL_SERVER_ERROR = 'skills_internal_server_error';
-export const SKILLS_UNKNOWN_ERROR = 'skills_unknown_error';
-export const SKILLS_INVALID_FILE_SIZE = 'skills_invalid_file_size_error';
-export const SKILLS_INVALID_FILE_FORMAT = 'skills_invalid_file_format_error';
-export const SKILLS_NO_INFO_FOUND = 'skills_no_info_found_error';
+export const SKILLS_ERROR_INVOCATIONS = 'skills_invocations_error';
+export const SKILLS_ERROR_BILLING = 'skills_billing_error';
+export const SKILLS_ERROR_EXTERNAL_AUTH = 'skills_external_auth_error';
+export const SKILLS_ERROR_UNKNOWN = 'skills_unknown_error';
+export const SKILLS_ERROR_INVALID_FILE_SIZE = 'skills_invalid_file_size_error';
+export const SKILLS_ERROR_INVALID_FILE_FORMAT = 'skills_invalid_file_format_error';
+export const SKILLS_ERROR_FILE_PROCESSING = 'skills_file_processing_error';
 export const SKILLS_PENDING = 'skills_pending_status';
 
-/* ------------------ File Extensions  ---------------------- */
+/* ------------------ File Extensions ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
 
-/* ------------------ Sidebar View  ---------------------- */
+/* ------------------ Sidebar View ---------------------- */
 export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
 export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
 export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
 
-/* ------------------ HTTP Requests  ---------------------- */
+/* ------------------ HTTP Requests ---------------------- */
 export const HTTP_GET: 'get' = 'get';
 export const HTTP_POST: 'post' = 'post';
 export const HTTP_PUT: 'put' = 'put';

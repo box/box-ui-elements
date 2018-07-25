@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
+import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import Face from './Face';
@@ -21,6 +22,7 @@ import './Faces.scss';
 type Props = {
     card: SkillCard,
     isEditable: boolean,
+    hasError: boolean,
     getPreviewer?: Function,
     onSkillChange: Function
 };
@@ -30,7 +32,8 @@ type State = {
     isEditing: boolean,
     isLoading: boolean,
     faces: Array<SkillCardEntry>,
-    removes: Array<SkillCardEntry>
+    removes: Array<SkillCardEntry>,
+    hasError: boolean
 };
 
 class Faces extends React.PureComponent<Props, State> {
@@ -48,7 +51,8 @@ class Faces extends React.PureComponent<Props, State> {
         this.state = {
             faces: props.card.entries,
             removes: [],
-            isEditing: false,
+            isEditing: props.hasError,
+            hasError: props.hasError,
             isLoading: false
         };
     }
@@ -66,19 +70,9 @@ class Faces extends React.PureComponent<Props, State> {
             removes: [],
             isEditing: false,
             selected: undefined,
+            hasError: false,
             isLoading: false
         });
-    }
-
-    /**
-     * Called when faces gets new properties
-     *
-     * @private
-     * @param {Object} nextProps - component props
-     * @return {void}
-     */
-    componentWillReceiveProps(nextProps: Props): void {
-        this.resetState(nextProps);
     }
 
     /**
@@ -152,7 +146,7 @@ class Faces extends React.PureComponent<Props, State> {
      */
     render() {
         const { card, isEditable, getPreviewer }: Props = this.props;
-        const { selected, faces, removes, isEditing, isLoading }: State = this.state;
+        const { selected, faces, removes, isEditing, hasError, isLoading }: State = this.state;
         const { duration }: SkillCard = card;
         const hasFaces = faces.length > 0;
         const entries = faces.filter((face: SkillCardEntry) => !removes.includes(face));
@@ -161,66 +155,69 @@ class Faces extends React.PureComponent<Props, State> {
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading}>
-                <div className={editClassName}>
-                    {hasFaces &&
-                        isEditable &&
-                        !isLoading && (
-                            <PlainButton
-                                type='button'
-                                className='be-face-edit'
-                                onClick={this.toggleIsEditing}
-                                data-resin-target={SKILLS_TARGETS.FACES.EDIT}
-                            >
-                                <IconEdit />
-                            </PlainButton>
-                        )}
-                    {hasFaces ? (
-                        entries.map((face: SkillCardEntry, index: number) => (
-                            /* eslint-disable react/no-array-index-key */
-                            <Face
-                                key={index}
-                                face={face}
-                                selected={selected}
-                                isEditing={isEditing}
-                                onDelete={this.onDelete}
-                                onSelect={this.onSelect}
-                            />
-                            /* eslint-enable react/no-array-index-key */
-                        ))
-                    ) : (
-                        <FormattedMessage {...messages.skillNoInfoFoundError} />
+            <LoadingIndicatorWrapper isLoading={isLoading} className={editClassName}>
+                {hasFaces &&
+                    isEditable &&
+                    !isLoading && (
+                        <PlainButton
+                            type='button'
+                            className='be-face-edit'
+                            onClick={this.toggleIsEditing}
+                            data-resin-target={SKILLS_TARGETS.FACES.EDIT}
+                        >
+                            <IconEdit />
+                        </PlainButton>
                     )}
-                    {!!selected &&
-                        !isEditing &&
-                        Array.isArray(selected.appears) &&
-                        selected.appears.length > 0 && (
-                            <Timeline
-                                timeslices={selected.appears}
-                                duration={duration}
-                                getPreviewer={getPreviewer}
-                                interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
-                            />
-                        )}
-                    {isEditing && (
-                        <div className='be-faces-buttons'>
-                            <Button
-                                type='button'
-                                onClick={this.onCancel}
-                                data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}
-                            >
-                                <FormattedMessage {...messages.cancel} />
-                            </Button>
-                            <PrimaryButton
-                                type='button'
-                                onClick={this.onSave}
-                                data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}
-                            >
-                                <FormattedMessage {...messages.save} />
-                            </PrimaryButton>
-                        </div>
+                {hasError && (
+                    <InlineError title={<FormattedMessage {...messages.sidebarSkillsErrorTitle} />}>
+                        <FormattedMessage {...messages.sidebarSkillsErrorContent} />
+                    </InlineError>
+                )}
+                {hasFaces ? (
+                    entries.map((face: SkillCardEntry, index: number) => (
+                        /* eslint-disable react/no-array-index-key */
+                        <Face
+                            key={index}
+                            face={face}
+                            selected={selected}
+                            isEditing={isEditing}
+                            onDelete={this.onDelete}
+                            onSelect={this.onSelect}
+                        />
+                        /* eslint-enable react/no-array-index-key */
+                    ))
+                ) : (
+                    <FormattedMessage {...messages.skillNoInfoFoundError} />
+                )}
+                {!!selected &&
+                    !isEditing &&
+                    Array.isArray(selected.appears) &&
+                    selected.appears.length > 0 && (
+                        <Timeline
+                            timeslices={selected.appears}
+                            duration={duration}
+                            getPreviewer={getPreviewer}
+                            interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
+                        />
                     )}
-                </div>
+                {isEditing && (
+                    <div className='be-faces-buttons'>
+                        <Button
+                            type='button'
+                            onClick={this.onCancel}
+                            data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}
+                        >
+                            <FormattedMessage {...messages.cancel} />
+                        </Button>
+                        <PrimaryButton
+                            type='button'
+                            onClick={this.onSave}
+                            data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}
+                        >
+                            <FormattedMessage {...messages.save} />
+                        </PrimaryButton>
+                    </div>
+                )}
             </LoadingIndicatorWrapper>
         );
     }

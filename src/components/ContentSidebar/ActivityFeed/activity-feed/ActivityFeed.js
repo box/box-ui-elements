@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import getProp from 'lodash/get';
+import omit from 'lodash/omit';
 import noop from 'lodash/noop';
 import uniqueId from 'lodash/uniqueId';
 import classNames from 'classnames';
@@ -18,6 +19,7 @@ import './ActivityFeed.scss';
 
 const VERSION_RESTORE_ACTION = 'restore';
 const TASK_INCOMPLETE = 'incomplete';
+const TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
 
 type Props = {
     file: BoxItem,
@@ -266,7 +268,9 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     updateTaskSuccessCallback = (task: Task) => {
         const { id } = task;
-        this.updateFeedItem({ ...task, isPending: false }, id);
+        // Omit the task assignment collection as it does not have the resolution_status
+        const updates = omit(task, TASK_ASSIGNMENT_COLLECTION);
+        this.updateFeedItem({ ...updates, isPending: false }, id);
     };
 
     /**

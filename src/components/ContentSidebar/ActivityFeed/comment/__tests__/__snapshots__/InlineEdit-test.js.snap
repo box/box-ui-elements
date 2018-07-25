@@ -6,6 +6,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/InlineEdit should correc
 >
   <PlainButton
     className="bcs-comment-edit"
+    data-resin-target="inlineedit"
     onClick={[Function]}
     type="button"
   >

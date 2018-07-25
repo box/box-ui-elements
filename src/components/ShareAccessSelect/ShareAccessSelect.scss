@@ -1,0 +1,47 @@
+@import '../variables';
+
+.be {
+    select.be-share-access-select {
+        appearance: none;
+        background: none;
+        background-image: linear-gradient(45deg, transparent 50%, $sevens 50%), linear-gradient(135deg, $sevens 50%, transparent 50%);
+        background-position: calc(100% - 14px) 10px, calc(100% - 10px) 10px;
+        background-repeat: no-repeat;
+        background-size: 4px 4px, 4px 4px;
+        border: 1px solid $grey;
+        border-radius: 2px;
+        color: inherit;
+        cursor: pointer;
+        padding: 5px 25px 5px 10px;
+
+        &:hover {
+            border-color: $blue;
+        }
+
+        &:focus,
+        &:active {
+            background-image: linear-gradient(45deg, transparent 50%, $blue 50%), linear-gradient(135deg, $blue 50%, transparent 50%);
+            border-color: $blue;
+            color: $blue;
+            outline: none;
+        }
+
+        &:disabled {
+            background-image: linear-gradient(45deg, transparent 50%, $off-white 50%), linear-gradient(135deg, $off-white 50%, transparent 50%);
+            border-color: $off-white;
+            color: $off-white;
+        }
+
+        /* stylelint-disable */
+        &:-moz-focusring,
+        &::-moz-focus-inner {
+            color: transparent !important;
+            text-shadow: 0 0 0 $twos !important;
+        }
+
+        &::-ms-expand {
+            display: none !important;
+        }
+        /* stylelint-enable */
+    }
+}

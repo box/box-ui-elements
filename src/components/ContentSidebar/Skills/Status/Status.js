@@ -8,10 +8,13 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../../../messages';
 import {
-    SKILLS_INTERNAL_SERVER_ERROR,
-    SKILLS_UNKNOWN_ERROR,
-    SKILLS_INVALID_FILE_SIZE,
-    SKILLS_INVALID_FILE_FORMAT,
+    SKILLS_ERROR_EXTERNAL_AUTH,
+    SKILLS_ERROR_BILLING,
+    SKILLS_ERROR_UNKNOWN,
+    SKILLS_ERROR_INVOCATIONS,
+    SKILLS_ERROR_FILE_PROCESSING,
+    SKILLS_ERROR_INVALID_FILE_SIZE,
+    SKILLS_ERROR_INVALID_FILE_FORMAT,
     SKILLS_PENDING
 } from '../../../../constants';
 
@@ -25,15 +28,20 @@ const Status = ({ card }: Props) => {
     let localizedMessage = messages.skillUnknownError;
 
     switch (code) {
-        case SKILLS_INVALID_FILE_SIZE:
+        case SKILLS_ERROR_INVALID_FILE_SIZE:
             localizedMessage = messages.skillInvalidFileSizeError;
             break;
-        case SKILLS_INVALID_FILE_FORMAT:
+        case SKILLS_ERROR_INVALID_FILE_FORMAT:
             localizedMessage = messages.skillInvalidFileExtensionError;
             break;
-        case SKILLS_INTERNAL_SERVER_ERROR:
-        case SKILLS_UNKNOWN_ERROR:
+        case SKILLS_ERROR_EXTERNAL_AUTH:
+        case SKILLS_ERROR_BILLING:
+        case SKILLS_ERROR_INVOCATIONS:
+        case SKILLS_ERROR_UNKNOWN:
             localizedMessage = messages.skillUnknownError;
+            break;
+        case SKILLS_ERROR_FILE_PROCESSING:
+            localizedMessage = messages.skillFileProcessingError;
             break;
         case SKILLS_PENDING:
             localizedMessage = messages.skillPendingStatus;

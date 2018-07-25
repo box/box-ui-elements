@@ -11,7 +11,6 @@ import ItemProperties from 'box-react-ui/lib/features/item-details/ItemPropertie
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
-
 import { FIELD_METADATA_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
