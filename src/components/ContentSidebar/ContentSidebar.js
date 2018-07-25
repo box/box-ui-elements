@@ -13,14 +13,13 @@ import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import type { $AxiosXHR } from 'axios';
 import Sidebar from './Sidebar';
 import API from '../../api';
+import APIContext from '../APIContext';
 import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
-    FIELD_METADATA_SKILLS,
     DEFAULT_COLLAB_DEBOUNCE,
     DEFAULT_MAX_COLLABORATORS,
     SIDEBAR_VIEW_SKILLS,
@@ -39,6 +38,8 @@ import { getBadItemError } from '../../util/error';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { $AxiosXHR } from 'axios'; // eslint-disable-line
 import '../fonts.scss';
 import '../base.scss';
 import '../modal.scss';
@@ -56,6 +57,7 @@ type Props = {
     hasSkills: boolean,
     activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
+    metadataSidebarProps: MetadataSidebarProps,
     hasMetadata: boolean,
     hasActivityFeed: boolean,
     language?: string,
@@ -113,7 +115,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasMetadata: false,
         hasActivityFeed: false,
         activitySidebarProps: {},
-        detailsSidebarProps: {}
+        detailsSidebarProps: {},
+        metadataSidebarProps: {}
     };
 
     initialState: State = {
@@ -215,6 +218,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         const hasFileIdChanged = nextProps.fileId !== fileId;
 
         if (hasFileIdChanged) {
+            // Clear out existing state
+            this.setState(cloneDeep(this.initialState));
             this.fetchData(nextProps);
         } else if (hasVisibilityChanged) {
             this.setState({
@@ -262,9 +267,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (!fileId) {
             return;
         }
-
-        // Clear out existing state
-        this.setState(cloneDeep(this.initialState));
 
         // Fetch the new file
         this.fetchFile(fileId);
@@ -1277,97 +1279,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * Patches skill metadata
-     *
-     * @private
-     * @param {string} id - File id
-     * @return {void}
-     */
-    onSkillChange = (
-        index: number,
-        removes: Array<SkillCardEntry> = [],
-        adds: Array<SkillCardEntry> = [],
-        replaces: Array<{ replaced: SkillCardEntry, replacement: SkillCardEntry }> = []
-    ): void => {
-        const { hasSkills }: Props = this.props;
-        const { file }: State = this.state;
-        if (!hasSkills || !file) {
-            return;
-        }
-
-        const { metadata, permissions }: BoxItem = file;
-        if (!metadata || !permissions || !permissions.can_upload) {
-            return;
-        }
-
-        const cards: Array<SkillCard> = getProp(file, 'metadata.global.boxSkillsCards.cards');
-        if (!cards || cards.length === 0 || !cards[index]) {
-            return;
-        }
-
-        const card = cards[index];
-        const path = `/cards/${index}`;
-        const ops: JsonPatchData = [];
-
-        if (Array.isArray(replaces)) {
-            replaces.forEach(({ replaced, replacement }) => {
-                const idx = card.entries.findIndex((entry) => entry === replaced);
-                if (idx > -1) {
-                    ops.push({
-                        op: 'replace',
-                        path: `${path}/entries/${idx}`,
-                        value: replacement
-                    });
-                }
-            });
-        }
-
-        if (Array.isArray(removes)) {
-            removes.forEach((removed) => {
-                const idx = card.entries.findIndex((entry) => entry === removed);
-                if (idx > -1) {
-                    ops.push({
-                        op: 'remove',
-                        path: `${path}/entries/${idx}`
-                    });
-                }
-            });
-        }
-
-        if (Array.isArray(adds)) {
-            adds.forEach((added) => {
-                ops.push({
-                    op: 'add',
-                    path: `${path}/entries/-`,
-                    value: added
-                });
-            });
-        }
-
-        // If no ops, don't proceed
-        if (ops.length === 0) {
-            return;
-        }
-
-        // Add test ops before any other ops
-        ops.splice(0, 0, {
-            op: 'test',
-            path,
-            value: card
-        });
-
-        this.api.getMetadataAPI(false).patch(
-            file,
-            FIELD_METADATA_SKILLS,
-            ops,
-            (updatedFile) => {
-                this.setState({ file: updatedFile });
-            },
-            this.errorCallback
-        );
-    };
-
-    /**
      * File @mention contacts fetch success callback
      *
      * @private
@@ -1458,11 +1369,11 @@ class ContentSidebar extends PureComponent<Props, State> {
             language,
             messages: intlMessages,
             getPreviewer,
-            hasMetadata,
             hasActivityFeed,
             className,
             activitySidebarProps,
             detailsSidebarProps,
+            metadataSidebarProps,
             onVersionHistoryClick,
             isCollapsed
         }: Props = this.props;
@@ -1494,56 +1405,62 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.shouldRenderDetailsSidebar(this.props);
+        const hasMetadata = SidebarUtils.canHaveMetadataSidebar(this.props);
 
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <aside id={this.id} className={styleClassName} data-resin-component={RESIN_INFOPANE_TAG}>
                     <div className='be-app-element'>
                         {SidebarUtils.shouldRenderSidebar(this.props, file) ? (
-                            <Sidebar
-                                file={((file: any): BoxItem)}
-                                view={view}
-                                detailsSidebarProps={{
-                                    accessStats,
-                                    accessStatsError,
-                                    fileError,
-                                    isFileLoading,
-                                    onClassificationChange: this.onClassificationChange,
-                                    onDescriptionChange: this.onDescriptionChange,
-                                    ...detailsSidebarProps
-                                }}
-                                activitySidebarProps={{
-                                    ...activitySidebarProps,
-                                    onCommentCreate: this.createComment,
-                                    onCommentDelete: this.deleteComment,
-                                    onTaskCreate: this.createTask,
-                                    onTaskDelete: this.deleteTask,
-                                    onTaskUpdate: this.updateTask,
-                                    onTaskAssignmentUpdate: this.updateTaskAssignment
-                                }}
-                                versions={versions}
-                                getPreviewer={getPreviewer}
-                                hasSkills={hasSkills}
-                                hasDetails={hasDetails}
-                                hasMetadata={hasMetadata}
-                                hasActivityFeed={hasActivityFeed}
-                                accessStats={accessStats}
-                                onSkillChange={this.onSkillChange}
-                                accessStatsError={accessStatsError}
-                                fileError={fileError}
-                                tasks={tasks}
-                                comments={comments}
-                                activityFeedError={activityFeedError}
-                                currentUser={currentUser}
-                                currentUserError={currentUserError}
-                                getApproverWithQuery={this.getApproverWithQuery}
-                                getMentionWithQuery={this.getMentionWithQuery}
-                                approverSelectorContacts={approverSelectorContacts}
-                                mentionSelectorContacts={mentionSelectorContacts}
-                                getAvatarUrl={this.getAvatarUrl}
-                                onToggle={this.onToggle}
-                                onVersionHistoryClick={onVersionHistoryClick}
-                            />
+                            // $FlowFixMe
+                            <APIContext.Provider value={this.api}>
+                                <Sidebar
+                                    file={((file: any): BoxItem)}
+                                    view={view}
+                                    detailsSidebarProps={{
+                                        accessStats,
+                                        accessStatsError,
+                                        fileError,
+                                        isFileLoading,
+                                        onDescriptionChange: this.onDescriptionChange,
+                                        ...detailsSidebarProps,
+                                        onClassificationClick: this.onClassificationClick
+                                    }}
+                                    activitySidebarProps={{
+                                        ...activitySidebarProps,
+                                        onCommentCreate: this.createComment,
+                                        onCommentDelete: this.deleteComment,
+                                        onTaskCreate: this.createTask,
+                                        onTaskDelete: this.deleteTask,
+                                        onTaskUpdate: this.updateTask,
+                                        onTaskAssignmentUpdate: this.updateTaskAssignment
+                                    }}
+                                    metadataSidebarProps={{
+                                        ...metadataSidebarProps
+                                    }}
+                                    versions={versions}
+                                    getPreviewer={getPreviewer}
+                                    hasSkills={hasSkills}
+                                    hasDetails={hasDetails}
+                                    hasMetadata={hasMetadata}
+                                    hasActivityFeed={hasActivityFeed}
+                                    accessStats={accessStats}
+                                    accessStatsError={accessStatsError}
+                                    fileError={fileError}
+                                    tasks={tasks}
+                                    comments={comments}
+                                    activityFeedError={activityFeedError}
+                                    currentUser={currentUser}
+                                    currentUserError={currentUserError}
+                                    getApproverWithQuery={this.getApproverWithQuery}
+                                    getMentionWithQuery={this.getMentionWithQuery}
+                                    approverSelectorContacts={approverSelectorContacts}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    getAvatarUrl={this.getAvatarUrl}
+                                    onToggle={this.onToggle}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                />
+                            </APIContext.Provider>
                         ) : (
                             <div className='bcs-loading'>
                                 <LoadingIndicator />

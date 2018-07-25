@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/ContentSidebar/Skills/Status should render billing error 1`] = `
+<FormattedMessage
+  defaultMessage="Something went wrong with running this skill or fetching its data."
+  id="be.skillUnknownError"
+/>
+`;
+
 exports[`components/ContentSidebar/Skills/Status should render default status 1`] = `
 <FormattedMessage
   defaultMessage="Something went wrong with running this skill or fetching its data."
@@ -9,10 +16,24 @@ exports[`components/ContentSidebar/Skills/Status should render default status 1`
 
 exports[`components/ContentSidebar/Skills/Status should render default status with message 1`] = `"error"`;
 
+exports[`components/ContentSidebar/Skills/Status should render external auth error 1`] = `
+<FormattedMessage
+  defaultMessage="Something went wrong with running this skill or fetching its data."
+  id="be.skillUnknownError"
+/>
+`;
+
 exports[`components/ContentSidebar/Skills/Status should render file ext error 1`] = `
 <FormattedMessage
   defaultMessage="We’re sorry, no skills information was found. This file extension is currently not supported."
   id="be.skillInvalidFileExtensionError"
+/>
+`;
+
+exports[`components/ContentSidebar/Skills/Status should render file processing error 1`] = `
+<FormattedMessage
+  defaultMessage="We’re sorry, something went wrong with processing the file."
+  id="be.skillFileProcessingError"
 />
 `;
 
@@ -23,7 +44,7 @@ exports[`components/ContentSidebar/Skills/Status should render file size error 1
 />
 `;
 
-exports[`components/ContentSidebar/Skills/Status should render internal server error 1`] = `
+exports[`components/ContentSidebar/Skills/Status should render invocations error 1`] = `
 <FormattedMessage
   defaultMessage="Something went wrong with running this skill or fetching its data."
   id="be.skillUnknownError"
@@ -32,7 +53,7 @@ exports[`components/ContentSidebar/Skills/Status should render internal server e
 
 exports[`components/ContentSidebar/Skills/Status should render pending status 1`] = `
 <FormattedMessage
-  defaultMessage="The skill hasn’t finished running. Please try reloading the page later."
+  defaultMessage="We’re working on processing your file - please hold!"
   id="be.skillPendingStatus"
 />
 `;

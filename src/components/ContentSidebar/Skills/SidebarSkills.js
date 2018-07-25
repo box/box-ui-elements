@@ -6,7 +6,6 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 import messages from '../../messages';
 import SidebarSection from '../SidebarSection';
@@ -19,11 +18,13 @@ import {
     SKILLS_TIMELINE,
     SKILLS_FACE,
     SKILLS_STATUS,
-    SKILLS_UNKNOWN_ERROR
+    SKILLS_ERROR_UNKNOWN
 } from '../../../constants';
 
 type Props = {
     file: BoxItem,
+    cards: Array<SkillCard>,
+    errors: NumberBooleanMap,
     getPreviewer: Function,
     onSkillChange: Function
 };
@@ -65,7 +66,7 @@ const getCardTitle = ({ skill_card_type, skill_card_title = {} }: SkillCard): st
         case 'skills_transcript':
             return <FormattedMessage {...messages.transcriptSkill} />;
         case 'skills_topics':
-            return <FormattedMessage {...messages.keywordSkill} />;
+            return <FormattedMessage {...messages.topicsSkill} />;
         case 'skills_status':
             return <FormattedMessage {...messages.statusSkill} />;
         case 'skills_error':
@@ -75,8 +76,7 @@ const getCardTitle = ({ skill_card_type, skill_card_title = {} }: SkillCard): st
     }
 };
 
-const SidebarSkills = ({ file, getPreviewer, onSkillChange }: Props): Array<React.Node> => {
-    const { cards }: SkillCards = getProp(file, 'metadata.global.boxSkillsCards', []);
+const SidebarSkills = ({ file, cards, errors, getPreviewer, onSkillChange }: Props): Array<React.Node> => {
     const { permissions = {} }: BoxItem = file;
     const isSkillEditable = !!permissions.can_upload;
 
@@ -84,7 +84,7 @@ const SidebarSkills = ({ file, getPreviewer, onSkillChange }: Props): Array<Reac
         if (card.error && !card.status) {
             card.skill_card_type = SKILLS_STATUS;
             card.status = {
-                code: SKILLS_UNKNOWN_ERROR
+                code: SKILLS_ERROR_UNKNOWN
             };
             delete card.error;
         }
@@ -101,6 +101,7 @@ const SidebarSkills = ({ file, getPreviewer, onSkillChange }: Props): Array<Reac
                 <SidebarSkillsCard
                     card={card}
                     cards={cards}
+                    hasError={!!errors[index]}
                     isEditable={isSkillEditable}
                     getPreviewer={getPreviewer}
                     onSkillChange={(...args) => onSkillChange(index, ...args)}

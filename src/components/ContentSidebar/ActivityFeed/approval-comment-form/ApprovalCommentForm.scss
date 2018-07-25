@@ -1,14 +1,10 @@
 @import '../../../variables';
 
 .be .bcs-comment-input-container {
-    @import '~box-react-ui/lib/styles/common/overlay';
-
     border-top: solid 1px $off-white;
     display: flex;
 
     .bcs-comment-input {
-        @import '~box-react-ui/lib/styles/common/forms';
-
         div[contentEditable="true"].public-DraftEditor-content {
             width: auto;
         }
