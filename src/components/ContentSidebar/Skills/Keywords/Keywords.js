@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
+import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
 import messages from '../../../messages';
@@ -19,6 +20,7 @@ import './Keywords.scss';
 
 type Props = {
     card: SkillCard,
+    hasError: boolean,
     transcript?: SkillCard,
     isEditable: boolean,
     getPreviewer?: Function,
@@ -28,6 +30,7 @@ type Props = {
 type State = {
     isEditing: boolean,
     isLoading: boolean,
+    hasError: boolean,
     keywords: Array<SkillCardEntry>,
     adds: Array<SkillCardEntry>,
     removes: Array<SkillCardEntry>
@@ -49,7 +52,8 @@ class Keywords extends PureComponent<Props, State> {
             keywords: props.card.entries,
             adds: [],
             removes: [],
-            isEditing: false,
+            isEditing: props.hasError,
+            hasError: props.hasError,
             isLoading: false
         };
     }
@@ -67,19 +71,9 @@ class Keywords extends PureComponent<Props, State> {
             adds: [],
             removes: [],
             isEditing: false,
+            hasError: false,
             isLoading: false
         });
-    }
-
-    /**
-     * Called when keywords gets new properties
-     *
-     * @private
-     * @param {Object} nextProps - component props
-     * @return {void}
-     */
-    componentWillReceiveProps(nextProps: Props): void {
-        this.resetState(nextProps);
     }
 
     /**
@@ -173,7 +167,7 @@ class Keywords extends PureComponent<Props, State> {
     render() {
         const { card, getPreviewer, isEditable }: Props = this.props;
         const { duration }: SkillCard = card;
-        const { isEditing, isLoading, keywords, removes, adds }: State = this.state;
+        const { isEditing, isLoading, hasError, keywords, removes, adds }: State = this.state;
         const hasKeywords = keywords.length > 0;
         const entries = keywords.filter((face: SkillCardEntry) => !removes.includes(face)).concat(adds);
         const editClassName = classNames('be-keyword-edit', {
@@ -181,35 +175,38 @@ class Keywords extends PureComponent<Props, State> {
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading}>
-                <div className='be-keywords'>
-                    {hasKeywords &&
-                        isEditable &&
-                        !isLoading && (
-                            <PlainButton
-                                type='button'
-                                className={editClassName}
-                                onClick={this.toggleIsEditing}
-                                data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
-                            >
-                                <IconEdit />
-                            </PlainButton>
-                        )}
-                    {isEditing && (
-                        <EditableKeywords
-                            keywords={entries}
-                            onSave={this.onSave}
-                            onAdd={this.onAdd}
-                            onDelete={this.onDelete}
-                            onCancel={this.onCancel}
-                        />
+            <LoadingIndicatorWrapper isLoading={isLoading} className='be-keywords'>
+                {hasKeywords &&
+                    isEditable &&
+                    !isLoading && (
+                        <PlainButton
+                            type='button'
+                            className={editClassName}
+                            onClick={this.toggleIsEditing}
+                            data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
+                        >
+                            <IconEdit />
+                        </PlainButton>
                     )}
-                    {!isEditing &&
-                        hasKeywords && (
-                            <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
-                        )}
-                    {!isEditing && !hasKeywords && <FormattedMessage {...messages.skillNoInfoFoundError} />}
-                </div>
+                {hasError && (
+                    <InlineError title={<FormattedMessage {...messages.sidebarSkillsErrorTitle} />}>
+                        <FormattedMessage {...messages.sidebarSkillsErrorContent} />
+                    </InlineError>
+                )}
+                {isEditing && (
+                    <EditableKeywords
+                        keywords={entries}
+                        onSave={this.onSave}
+                        onAdd={this.onAdd}
+                        onDelete={this.onDelete}
+                        onCancel={this.onCancel}
+                    />
+                )}
+                {!isEditing &&
+                    hasKeywords && (
+                        <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
+                    )}
+                {!isEditing && !hasKeywords && <FormattedMessage {...messages.skillNoInfoFoundError} />}
             </LoadingIndicatorWrapper>
         );
     }

@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentSidebar/Metadata/MetadataSidebar should render Metadata sidebar component when instances and templates are available 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Metadata"
+      id="be.sidebarMetadataTitle"
+    />
+  }
+>
+  <LoadingIndicatorWrapper
+    isLoading={false}
+  >
+    <MetadataInstanceEditor
+      canAdd={false}
+      editors={Array []}
+      onAdd={[Function]}
+      onModification={[Function]}
+      onRemove={[Function]}
+      onSave={[Function]}
+      templates={Array []}
+    />
+  </LoadingIndicatorWrapper>
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/Metadata/MetadataSidebar should render error when there was an error 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Metadata"
+      id="be.sidebarMetadataTitle"
+    />
+  }
+>
+  <InlineError
+    title={
+      <FormattedMessage
+        defaultMessage="Metadata Error"
+        id="be.sidebarMetadataErrorTitle"
+      />
+    }
+  >
+    <FormattedMessage
+      defaultMessage="An error has occured while editing metadata. Please refresh the page and try again."
+      id="be.sidebarMetadataErrorContent"
+    />
+  </InlineError>
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/Metadata/MetadataSidebar should render loading indicator component when instances are not available 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Metadata"
+      id="be.sidebarMetadataTitle"
+    />
+  }
+>
+  <LoadingIndicator />
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/Metadata/MetadataSidebar should render loading indicator component when templates are not available 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Metadata"
+      id="be.sidebarMetadataTitle"
+    />
+  }
+>
+  <LoadingIndicator />
+</SidebarContent>
+`;
