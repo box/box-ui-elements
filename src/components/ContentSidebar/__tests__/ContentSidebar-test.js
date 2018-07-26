@@ -1341,4 +1341,29 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(errorCallback).toBeCalledWith(err);
         });
     });
+
+    describe('getActivityFeedError()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper({
+                file
+            });
+            instance = wrapper.instance();
+        });
+
+        test('should not return an error if forbidden', () => {
+            const error = instance.getActivityFeedError({
+                status: 403
+            });
+            expect(error).toBeUndefined();
+        });
+
+        test('should return an inlineError object if not forbidden', () => {
+            const error = instance.getActivityFeedError({
+                status: 500
+            });
+            expect(typeof error.inlineError).toBe('object');
+        });
+    });
 });
