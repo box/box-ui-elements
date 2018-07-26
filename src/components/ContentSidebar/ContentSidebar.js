@@ -93,6 +93,9 @@ const activityFeedInlineError: Errors = {
         content: messages.activityFeedItemApiError
     }
 };
+
+const RESIN_INFOPANE_TAG = 'infopane';
+
 class ContentSidebar extends PureComponent<Props, State> {
     id: string;
     props: Props;
@@ -1406,7 +1409,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={intlMessages}>
-                <aside id={this.id} className={styleClassName}>
+                <aside id={this.id} className={styleClassName} data-resin-component={RESIN_INFOPANE_TAG}>
                     <div className='be-app-element'>
                         {SidebarUtils.shouldRenderSidebar(this.props, file) ? (
                             // $FlowFixMe
