@@ -528,7 +528,8 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {Viewer} current instance of the preview viewer
      */
     getViewer = (): any => {
-        const { viewer = null } = this.getPreview();
+        const preview = this.getPreview();
+        const viewer = preview ? preview.getCurrentViewer() : null;
         return viewer && viewer.isLoaded() && !viewer.isDestroyed() ? viewer : null;
     };
 
