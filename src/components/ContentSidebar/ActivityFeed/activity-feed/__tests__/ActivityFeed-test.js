@@ -120,7 +120,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         const wrapper = shallow(
             <ActivityFeed file={file} currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
-        console.log(wrapper.instance().state);
         expect(wrapper).toMatchSnapshot();
     });
 
