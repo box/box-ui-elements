@@ -25,7 +25,7 @@ import './Transcript.scss';
 type Props = {
     card: SkillCard,
     isEditable: boolean,
-    getPreviewer?: Function,
+    getViewer?: Function,
     onSkillChange: Function
 };
 
@@ -122,14 +122,14 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     previewSegment(index: number) {
-        const { card: { entries }, getPreviewer }: Props = this.props;
+        const { card: { entries }, getViewer }: Props = this.props;
         const { appears } = entries[index];
-        const viewer = getPreviewer ? getPreviewer() : null;
+        const viewer = getViewer ? getViewer() : null;
         const isValid = isValidTimeSlice(appears) && Array.isArray(appears) && appears.length === 1;
         const timeSlice = ((appears: any): Array<SkillCardEntryTimeSlice>);
         const start = isValid ? timeSlice[0].start : 0;
 
-        if (isValid && viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
+        if (isValid && viewer && typeof viewer.play === 'function') {
             viewer.play(start);
         }
     }

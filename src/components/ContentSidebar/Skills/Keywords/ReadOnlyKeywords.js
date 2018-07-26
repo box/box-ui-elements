@@ -15,7 +15,7 @@ import './ReadOnlyKeywords.scss';
 type Props = {
     duration?: number,
     keywords: Array<SkillCardEntry>,
-    getPreviewer?: Function
+    getViewer?: Function
 };
 
 type State = {
@@ -48,7 +48,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
      * @return {void}
      */
     render() {
-        const { keywords, getPreviewer, duration }: Props = this.props;
+        const { keywords, getViewer, duration }: Props = this.props;
         const { selectedIndex }: State = this.state;
         const options: Pills = getPills(keywords);
         const selected = keywords[selectedIndex];
@@ -64,7 +64,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
                             text={selected.text}
                             timeslices={selected.appears}
                             duration={duration}
-                            getPreviewer={getPreviewer}
+                            getViewer={getViewer}
                             interactionTarget={SKILLS_TARGETS.KEYWORDS.TIMELINE}
                         />
                     )}

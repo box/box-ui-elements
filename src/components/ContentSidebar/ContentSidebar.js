@@ -53,7 +53,8 @@ type Props = {
     token: Token,
     className: string,
     currentUser?: User,
-    getPreviewer: Function,
+    getPreview: Function,
+    getViewer: Function,
     hasSkills: boolean,
     activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
@@ -106,7 +107,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         isCollapsed: false,
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         apiHost: DEFAULT_HOSTNAME_API,
-        getPreviewer: noop,
+        getPreview: noop,
+        getViewer: noop,
         currentUser: undefined,
         hasSkills: false,
         hasMetadata: false,
@@ -1380,7 +1382,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         const {
             language,
             messages: intlMessages,
-            getPreviewer,
+            getPreview,
+            getViewer,
             hasActivityFeed,
             className,
             activitySidebarProps,
@@ -1451,7 +1454,8 @@ class ContentSidebar extends PureComponent<Props, State> {
                                         ...metadataSidebarProps
                                     }}
                                     versions={versions}
-                                    getPreviewer={getPreviewer}
+                                    getPreview={getPreview}
+                                    getViewer={getViewer}
                                     hasSkills={hasSkills}
                                     hasDetails={hasDetails}
                                     hasMetadata={hasMetadata}

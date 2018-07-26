@@ -23,7 +23,7 @@ type Props = {
     card: SkillCard,
     isEditable: boolean,
     hasError: boolean,
-    getPreviewer?: Function,
+    getViewer?: Function,
     onSkillChange: Function
 };
 
@@ -145,7 +145,7 @@ class Faces extends React.PureComponent<Props, State> {
      * @return {void}
      */
     render() {
-        const { card, isEditable, getPreviewer }: Props = this.props;
+        const { card, isEditable, getViewer }: Props = this.props;
         const { selected, faces, removes, isEditing, hasError, isLoading }: State = this.state;
         const { duration }: SkillCard = card;
         const hasFaces = faces.length > 0;
@@ -196,7 +196,7 @@ class Faces extends React.PureComponent<Props, State> {
                         <Timeline
                             timeslices={selected.appears}
                             duration={duration}
-                            getPreviewer={getPreviewer}
+                            getViewer={getViewer}
                             interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
                         />
                     )}

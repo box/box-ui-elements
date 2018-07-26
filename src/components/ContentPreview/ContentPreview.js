@@ -508,24 +508,28 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
-     * Returns the viewer instance being used by preview.
-     * This will let child components access the viewers.
+     * Returns the preview instance
      *
      * @return {Preview} current instance of preview
      */
-    getPreviewer = (): any => {
+    getPreview = (): any => {
         const { file }: State = this.state;
         if (!this.preview || !file) {
             return null;
         }
 
-        const viewer = this.preview.getCurrentViewer();
-        const previewingFile = this.preview.getCurrentFile();
-        if (!previewingFile || !viewer || previewingFile.id !== file.id) {
-            return null;
-        }
+        return this.preview;
+    };
 
-        return viewer;
+    /**
+     * Returns the viewer instance being used by preview.
+     * This will let child components access the viewers.
+     *
+     * @return {Viewer} current instance of the preview viewer
+     */
+    getViewer = (): any => {
+        const { viewer = null } = this.getPreview();
+        return viewer && viewer.isLoaded() && !viewer.isDestroyed() ? viewer : null;
     };
 
     /**
@@ -639,8 +643,9 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     onMouseMove = throttle(
         () => {
-            const viewer = this.getPreviewer();
-            const isPreviewing = !!viewer;
+            const preview = this.getPreview();
+            const { viewer } = preview;
+            const isPreviewing = preview && !!preview.viewer;
             const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
 
             clearTimeout(this.mouseMoveTimeoutID);
@@ -683,7 +688,8 @@ class ContentPreview extends PureComponent<Props, State> {
 
         let consumed = false;
         const key = decode(event);
-        const viewer = this.getPreviewer();
+        const preview = this.getPreview();
+        const { viewer } = preview;
 
         // If focus was on an input or if the viewer doesn't exist
         // then don't bother doing anything further
@@ -801,7 +807,8 @@ class ContentPreview extends PureComponent<Props, State> {
                                 token={token}
                                 cache={this.api.getCache()}
                                 fileId={this.getFileId(file)}
-                                getPreviewer={this.getPreviewer}
+                                getPreview={this.getPreview}
+                                getViewer={this.getViewer}
                                 sharedLink={sharedLink}
                                 sharedLinkPassword={sharedLinkPassword}
                                 requestInterceptor={requestInterceptor}
