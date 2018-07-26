@@ -434,9 +434,8 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (file_version) {
             if (restored_from) {
-                return {
-                    ...versions,
-                    entries: versions.entries.map((version: BoxItemVersion): BoxItemVersion => {
+                const entriesWithRestore: Array<BoxItemVersion> = versions.entries.map(
+                    (version: BoxItemVersion): BoxItemVersion => {
                         if (version.id === restored_from.id) {
                             return {
                                 ...version,
@@ -446,7 +445,12 @@ class ActivityFeed extends React.Component<Props, State> {
                         }
 
                         return version;
-                    })
+                    }
+                );
+
+                return {
+                    ...versions,
+                    entries: entriesWithRestore
                 };
             }
 
