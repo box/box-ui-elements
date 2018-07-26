@@ -16,8 +16,8 @@ import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import messages from '../../../messages';
 import './ActivityFeed.scss';
+import { VERSION_UPLOAD_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
 
-const VERSION_RESTORE_ACTION = 'restore';
 const TASK_INCOMPLETE = 'incomplete';
 const TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
 
@@ -424,30 +424,44 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
-     * Adds a versions entry if the current file version was restored from a previous version
+     * Adds the current version from the file object, which may be a restore
      *
      * @param {FileVersions} versions - API returned file versions for this file
-     * @return {FileVersions} modified versions array including the version restore
+     * @return {FileVersions} modified versions array including the current/restored version
      */
-    addRestoredVersion(versions: FileVersions) {
-        const { file } = this.props;
+    addCurrentVersion(versions: FileVersions, file: BoxItem) {
         const { restored_from, modified_at, file_version } = file;
 
-        // Ensures restored version is only added on first feed loads
-        const lastVersion = versions.total_count ? versions.entries[versions.total_count - 1] : {};
-        if (restored_from && lastVersion.action !== VERSION_RESTORE_ACTION) {
-            const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
+        if (file_version) {
+            if (restored_from) {
+                return {
+                    ...versions,
+                    entries: versions.entries.map((version: BoxItemVersion): BoxItemVersion => {
+                        if (version.id === restored_from.id) {
+                            return {
+                                ...version,
+                                created_at: modified_at,
+                                action: VERSION_RESTORE_ACTION
+                            };
+                        }
 
-            if (restoredVersion) {
-                versions.entries.push({
-                    ...restoredVersion,
-                    // $FlowFixMe
-                    id: file_version.id,
-                    created_at: modified_at,
-                    action: VERSION_RESTORE_ACTION
-                });
-                versions.total_count += 1;
+                        return version;
+                    })
+                };
             }
+
+            const { modified_by, version_number } = file;
+            const currentFileVersion: BoxItemVersion = {
+                ...file_version,
+                action: VERSION_UPLOAD_ACTION,
+                modified_by,
+                created_at: modified_at,
+                version_number: parseInt(version_number, 10)
+            };
+            return {
+                total_count: versions.total_count + 1,
+                entries: [...versions.entries, currentFileVersion]
+            };
         }
 
         return versions;
@@ -469,7 +483,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (shouldSort && (isFeedEmpty || !feedItems.length)) {
             // $FlowFixMe
-            this.sortFeedItems(comments, tasks, this.addRestoredVersion(versions));
+            this.sortFeedItems(comments, tasks, this.addCurrentVersion(versions, file));
         }
     }
 

@@ -59,7 +59,7 @@ const deleted_version = {
 };
 
 const versions = {
-    total_count: 1,
+    total_count: 2,
     entries: [first_version, deleted_version]
 };
 
@@ -68,7 +68,7 @@ const file = {
     permissions: {
         can_comment: true
     },
-    modified_at: 1234567891,
+    modified_at: 2234567891,
     file_version: {
         id: 987
     },
@@ -117,10 +117,10 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should correctly render active state', () => {
-        versions.entries = [first_version, deleted_version];
         const wrapper = shallow(
             <ActivityFeed file={file} currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
+        console.log(wrapper.instance().state);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -209,6 +209,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
             instance = wrapper.instance();
             instance.sortFeedItems = jest.fn();
+            instance.addCurrentVersion = jest.fn().mockImplementation((versionsArr) => versionsArr);
         });
 
         it('should not invoke sortFeedItems() if the feed item types required are missing', () => {
@@ -314,10 +315,15 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     describe('componentWillReceiveProps()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
+            instance = wrapper.instance();
+            instance.addCurrentVersion = jest.fn().mockImplementation((versionsArr) => versionsArr);
+        });
         test('should invoke sortFeedItems() with new props', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
-            const instance = wrapper.instance();
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
             instance.componentWillReceiveProps(props);
@@ -327,8 +333,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() once feedItems has already been set', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
-            const instance = wrapper.instance();
             instance.componentWillReceiveProps(props);
 
             instance.sortFeedItems = jest.fn();
@@ -339,8 +343,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() if all feed items are not present', () => {
             const props = { comments, tasks };
-            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
-            const instance = wrapper.instance();
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
             instance.componentWillReceiveProps(props);
@@ -759,6 +761,32 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                     done();
                 }
             );
+        });
+    });
+
+    describe('addCurrentVersion()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+        test('should append the current version', () => {
+            const fileWithoutRestoredVersion = {
+                ...file,
+                restored_from: null
+            };
+            const versionsWithCurrent = instance.addCurrentVersion(versions, fileWithoutRestoredVersion);
+            expect(versionsWithCurrent.entries.length).toBe(versions.entries.length + 1);
+            expect(versionsWithCurrent.entries.pop().id).toBe(file.file_version.id);
+        });
+
+        test('should edit the version with restored type', () => {
+            const versionsWithRestore = instance.addCurrentVersion(versions, file);
+            expect(versionsWithRestore.entries.length).toBe(versions.entries.length);
+            const restoredVersion = versionsWithRestore.entries[0];
+            expect(restoredVersion.action).toBe('restore');
+            expect(restoredVersion.created_at).toBe(file.modified_at);
         });
     });
 });

@@ -227,3 +227,8 @@ export const HTTP_HEAD: 'head' = 'head';
 
 /* ------------------ HTTP Codes  ---------------------- */
 export const UNAUTHORIZED_CODE = 403;
+
+/* ------------------ Version Action Types  ---------------------- */
+export const VERSION_RESTORE_ACTION = 'restore';
+export const VERSION_DELETE_ACTION = 'delete';
+export const VERSION_UPLOAD_ACTION = 'upload';
