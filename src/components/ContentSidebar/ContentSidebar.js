@@ -443,7 +443,11 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchFileAccessStatsErrorCallback = (e: $AxiosXHR<any>) => {
         let accessStatsError;
 
-        if (getProp(e, 'status') !== UNAUTHORIZED_CODE) {
+        if (getProp(e, 'status') === UNAUTHORIZED_CODE) {
+            accessStatsError = {
+                error: messages.fileAccessStatsPermissionsError
+            };
+        } else {
             accessStatsError = {
                 maskError: {
                     errorHeader: messages.fileAccessStatsErrorHeaderMessage,

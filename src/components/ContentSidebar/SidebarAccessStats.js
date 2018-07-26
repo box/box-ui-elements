@@ -6,9 +6,8 @@
 
 import React from 'react';
 import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
-
 import messages from '../messages';
 import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
@@ -17,7 +16,9 @@ import withErrorHandling from './withErrorHandling';
 type Props = {
     onAccessStatsClick?: Function,
     accessStats?: FileAccessStats,
-    file: BoxItem
+    file: BoxItem,
+    error: MessageDescriptor,
+    intl: any
 };
 
 const SidebarAccessStats = ({
@@ -29,20 +30,24 @@ const SidebarAccessStats = ({
         edit_count: 0,
         has_count_overflowed: false
     },
-    file
+    file,
+    error,
+    intl
 }: Props) => {
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
-    if (!preview_count && !comment_count && !download_count && !edit_count) {
+    if (!preview_count && !comment_count && !download_count && !edit_count && !error) {
         return null;
     }
 
+    const errorMessage = error ? intl.formatMessage(error) : undefined;
     return (
         <SidebarSection
             interactionTarget={SECTION_TARGETS.ACCESS_STATS}
             title={<FormattedMessage {...messages.sidebarAccessStats} />}
         >
             <AccessStats
+                errorMessage={errorMessage}
                 commentCount={comment_count}
                 commentStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.COMMENTS }}
                 downloadCount={download_count}
@@ -61,4 +66,4 @@ const SidebarAccessStats = ({
 };
 
 export { SidebarAccessStats as SidebarAccessStatsComponent };
-export default withErrorHandling(SidebarAccessStats);
+export default withErrorHandling(injectIntl(SidebarAccessStats));
