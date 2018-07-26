@@ -11,7 +11,8 @@ const {
     fileAccessStatsErrorHeaderMessage,
     currentUserErrorHeaderMessage,
     errorOccured,
-    activityFeedItemApiError
+    activityFeedItemApiError,
+    fileAccessStatsPermissionsError
 } = messages;
 
 jest.mock('../SidebarUtils');
@@ -199,12 +200,14 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
         });
 
-        test('should not set a maskError if the error if forbidden', () => {
+        test('should set error if forbidden', () => {
             instance.fetchFileAccessStatsErrorCallback({
                 status: 403
             });
             const { accessStatsError } = wrapper.state();
-            expect(accessStatsError).toBeUndefined();
+            expect(accessStatsError).toEqual({
+                error: fileAccessStatsPermissionsError
+            });
         });
     });
 
