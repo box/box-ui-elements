@@ -643,9 +643,8 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     onMouseMove = throttle(
         () => {
-            const preview = this.getPreview();
-            const { viewer } = preview;
-            const isPreviewing = preview && !!preview.viewer;
+            const viewer = this.getViewer();
+            const isPreviewing = !!viewer;
             const CLASS_NAVIGATION_VISIBILITY = 'bcpr-nav-is-visible';
 
             clearTimeout(this.mouseMoveTimeoutID);
@@ -688,8 +687,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         let consumed = false;
         const key = decode(event);
-        const preview = this.getPreview();
-        const { viewer } = preview;
+        const viewer = this.getViewer();
 
         // If focus was on an input or if the viewer doesn't exist
         // then don't bother doing anything further
