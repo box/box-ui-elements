@@ -42,7 +42,7 @@ type Props = {
     tasks?: Tasks,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
-    activityFeedError?: Errors,
+    activityFeedError: ?Errors,
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
     onToggle: Function,
