@@ -31,6 +31,28 @@ class SidebarUtils {
     }
 
     /**
+     * Determines if we can render the activity sidebar.
+     * Only relies on props.
+     *
+     * @param {ContentSidebarProps} props - User passed in props
+     * @return {Boolean} true if we should render
+     */
+    static canHaveActivitySidebar(props: ContentSidebarProps): boolean {
+        return !!props.hasActivityFeed;
+    }
+
+    /**
+     * Determines if we can render the skills sidebar.
+     * Only relies on props.
+     *
+     * @param {ContentSidebarProps} props - User passed in props
+     * @return {Boolean} true if we should render
+     */
+    static canHaveSkillsSidebar(props: ContentSidebarProps): boolean {
+        return !!props.hasSkills;
+    }
+
+    /**
      * Determines if we can render the sidebar.
      * Only relies on props.
      *
@@ -38,11 +60,10 @@ class SidebarUtils {
      * @return {Boolean} true if we should have a sidebar
      */
     static canHaveSidebar(props: ContentSidebarProps): boolean {
-        const { hasActivityFeed, hasSkills } = props;
         return (
             SidebarUtils.canHaveDetailsSidebar(props) ||
-            !!hasActivityFeed ||
-            !!hasSkills ||
+            SidebarUtils.canHaveActivitySidebar(props) ||
+            SidebarUtils.canHaveSkillsSidebar(props) ||
             SidebarUtils.canHaveMetadataSidebar(props)
         );
     }
@@ -61,41 +82,6 @@ class SidebarUtils {
     }
 
     /**
-     * Determines if we should bother rendering the skills sidebar.
-     * Relies on props and file data.
-     *
-     * @param {ContentSidebarProps} props - User passed in props
-     * @param {BoxItem} file - box file
-     * @return {Boolean} true if we should render
-     */
-    static shouldRenderDetailsSidebar(props: ContentSidebarProps): boolean {
-        return SidebarUtils.canHaveDetailsSidebar(props);
-    }
-
-    /**
-     * Determines if we should bother rednering the metadata sidebar.
-     * Relies on props and file data.
-     *
-     * @param {ContentSidebarProps} props - User passed in props
-     * @param {BoxItem} file - box file
-     * @return {Boolean} true if we should render
-     */
-    static shouldRenderMetadataSidebar(props: ContentSidebarProps): boolean {
-        return !!props.hasMetadata;
-    }
-
-    /**
-     * Determines if we should bother rendering the activity sidebar.
-     * Relies on props and file data.
-     *
-     * @param {ContentSidebarProps} props - User passed in props
-     * @return {Boolean} true if we should render
-     */
-    static shouldRenderActivitySidebar(props: ContentSidebarProps): boolean {
-        return !!props.hasActivityFeed;
-    }
-
-    /**
      * Determines if we should bother rendering the sidebar.
      * Relies on props and file data.
      *
@@ -106,10 +92,10 @@ class SidebarUtils {
     static shouldRenderSidebar(props: ContentSidebarProps, file?: BoxItem): boolean {
         return (
             !!file &&
-            (SidebarUtils.shouldRenderDetailsSidebar(props) ||
+            (SidebarUtils.canHaveDetailsSidebar(props) ||
                 SidebarUtils.shouldRenderSkillsSidebar(props, file) ||
-                SidebarUtils.shouldRenderActivitySidebar(props) ||
-                SidebarUtils.shouldRenderMetadataSidebar(props))
+                SidebarUtils.canHaveActivitySidebar(props) ||
+                SidebarUtils.canHaveMetadataSidebar(props))
         );
     }
 }
