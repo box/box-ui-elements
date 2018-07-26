@@ -81,7 +81,7 @@ type State = {
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     fileError?: Errors,
-    activityFeedError?: Errors,
+    activityFeedError: ?Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors,
     isFileLoading?: boolean
@@ -363,7 +363,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: activityFeedInlineError
+            activityFeedError: this.getActivityFeedError(e)
         });
         this.errorCallback(e);
     };
@@ -381,7 +381,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: activityFeedInlineError
+            activityFeedError: this.getActivityFeedError(e)
         });
         this.errorCallback(e);
     };
@@ -399,7 +399,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 total_count: 0,
                 entries: []
             },
-            activityFeedError: activityFeedInlineError
+            activityFeedError: this.getActivityFeedError(e)
         });
         this.errorCallback(e);
     };
@@ -413,10 +413,25 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTaskAssignmentsErrorCallback = (e: $AxiosXHR<any>): void => {
         this.setState({
-            activityFeedError: activityFeedInlineError
+            activityFeedError: this.getActivityFeedError(e)
         });
         this.errorCallback(e);
     };
+
+    /**
+     * Gets the error for the activity feed if a fetch fails
+     *
+     * @param {Error} e - API error
+     * @return {Object | undefined} - the error object
+     */
+    getActivityFeedError(e: $AxiosXHR<any>): ?Errors {
+        // Don't show an error if its a permissions error
+        if (getProp(e, 'status') === UNAUTHORIZED_CODE) {
+            return undefined;
+        }
+
+        return activityFeedInlineError;
+    }
 
     /**
      * Handles a failed file access stats fetch
@@ -428,7 +443,11 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchFileAccessStatsErrorCallback = (e: $AxiosXHR<any>) => {
         let accessStatsError;
 
-        if (getProp(e, 'status') !== UNAUTHORIZED_CODE) {
+        if (getProp(e, 'status') === UNAUTHORIZED_CODE) {
+            accessStatsError = {
+                error: messages.fileAccessStatsPermissionsError
+            };
+        } else {
             accessStatsError = {
                 maskError: {
                     errorHeader: messages.fileAccessStatsErrorHeaderMessage,

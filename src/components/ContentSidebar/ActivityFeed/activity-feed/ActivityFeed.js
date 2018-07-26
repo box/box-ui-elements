@@ -26,7 +26,7 @@ type Props = {
     versions?: FileVersions,
     comments?: Comments,
     tasks?: Tasks,
-    activityFeedError?: Errors,
+    activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     currentUser?: User,

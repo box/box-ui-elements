@@ -474,7 +474,8 @@ type InlineError = {
 
 type Errors = {
     maskError?: MaskError,
-    inlineError?: InlineError
+    inlineError?: InlineError,
+    error?: MessageDescriptor
 };
 
 type FileAccessStats = {

@@ -11,7 +11,8 @@ const {
     fileAccessStatsErrorHeaderMessage,
     currentUserErrorHeaderMessage,
     errorOccured,
-    activityFeedItemApiError
+    activityFeedItemApiError,
+    fileAccessStatsPermissionsError
 } = messages;
 
 jest.mock('../SidebarUtils');
@@ -199,12 +200,14 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
         });
 
-        test('should not set a maskError if the error if forbidden', () => {
+        test('should set error if forbidden', () => {
             instance.fetchFileAccessStatsErrorCallback({
                 status: 403
             });
             const { accessStatsError } = wrapper.state();
-            expect(accessStatsError).toBeUndefined();
+            expect(accessStatsError).toEqual({
+                error: fileAccessStatsPermissionsError
+            });
         });
     });
 
@@ -1339,6 +1342,31 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 isFileLoading: false
             });
             expect(errorCallback).toBeCalledWith(err);
+        });
+    });
+
+    describe('getActivityFeedError()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper({
+                file
+            });
+            instance = wrapper.instance();
+        });
+
+        test('should not return an error if forbidden', () => {
+            const error = instance.getActivityFeedError({
+                status: 403
+            });
+            expect(error).toBeUndefined();
+        });
+
+        test('should return an inlineError object if not forbidden', () => {
+            const error = instance.getActivityFeedError({
+                status: 500
+            });
+            expect(typeof error.inlineError).toBe('object');
         });
     });
 });
