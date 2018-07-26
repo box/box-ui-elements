@@ -5,7 +5,10 @@ import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import SidebarAccessStats, { SidebarAccessStatsComponent } from '../SidebarAccessStats';
 
 describe('components/ContentSidebar/SidebarAccessStats', () => {
-    const getWrapper = (props) => shallow(<SidebarAccessStatsComponent {...props} />);
+    const intl = {
+        formatMessage: jest.fn()
+    };
+    const getWrapper = (props) => shallow(<SidebarAccessStatsComponent intl={intl} {...props} />);
 
     test('should not render the component when there are no access stats', () => {
         const props = {
@@ -23,6 +26,24 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
 
         expect(wrapper.find(AccessStats)).toHaveLength(0);
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render the component if there is an error', () => {
+        const props = {
+            accessStats: {
+                preview_count: 1,
+                comment_count: 0,
+                download_count: 0,
+                edit_count: 0
+            },
+            error: 'foo',
+            file: {
+                extension: 'foo'
+            }
+        };
+        const wrapper = getWrapper(props);
+
+        expect(wrapper.find(AccessStats)).toHaveLength(1);
     });
 
     test('should render the component when there is at least one type of access stat', () => {
