@@ -12,7 +12,7 @@ import Faces from './Faces';
 import { SKILLS_TRANSCRIPT, SKILLS_KEYWORD, SKILLS_TIMELINE, SKILLS_FACE, SKILLS_STATUS } from '../../../constants';
 
 type Props = {
-    getPreviewer: Function,
+    getViewer: Function,
     onSkillChange: Function,
     card: SkillCard,
     hasError: boolean,
@@ -20,7 +20,7 @@ type Props = {
     isEditable: boolean
 };
 
-const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, getPreviewer }: Props) => {
+const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, getViewer }: Props) => {
     switch (card.skill_card_type) {
         case SKILLS_KEYWORD:
             return (
@@ -33,7 +33,7 @@ const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, g
                             : undefined
                     }
                     isEditable={isEditable}
-                    getPreviewer={getPreviewer}
+                    getViewer={getViewer}
                     onSkillChange={onSkillChange}
                 />
             );
@@ -44,7 +44,7 @@ const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, g
                     card={card}
                     hasError={hasError}
                     isEditable={isEditable}
-                    getPreviewer={getPreviewer}
+                    getViewer={getViewer}
                     onSkillChange={onSkillChange}
                 />
             );
@@ -53,7 +53,7 @@ const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, g
                 <Transcript
                     card={card}
                     hasError={hasError}
-                    getPreviewer={getPreviewer}
+                    getViewer={getViewer}
                     isEditable={isEditable}
                     onSkillChange={onSkillChange}
                 />

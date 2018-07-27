@@ -25,7 +25,8 @@ type Props = {
     view?: SidebarView,
     currentUser?: User,
     file: BoxItem,
-    getPreviewer: Function,
+    getPreview: Function,
+    getViewer: Function,
     activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
     metadataSidebarProps: MetadataSidebarProps,
@@ -53,7 +54,8 @@ const Sidebar = ({
     view,
     currentUser,
     file,
-    getPreviewer,
+    getPreview,
+    getViewer,
     hasMetadata,
     hasActivityFeed,
     hasSkills,
@@ -91,7 +93,8 @@ const Sidebar = ({
                     {...detailsSidebarProps}
                 />
             )}
-        {view === SIDEBAR_VIEW_SKILLS && hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} />}
+        {view === SIDEBAR_VIEW_SKILLS &&
+            hasSkills && <SkillsSidebar file={file} getPreview={getPreview} getViewer={getViewer} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&
             hasActivityFeed && (
                 <ActivitySidebar

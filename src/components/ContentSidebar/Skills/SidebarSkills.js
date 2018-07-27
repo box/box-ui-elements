@@ -25,7 +25,7 @@ type Props = {
     file: BoxItem,
     cards: Array<SkillCard>,
     errors: NumberBooleanMap,
-    getPreviewer: Function,
+    getViewer: Function,
     onSkillChange: Function
 };
 
@@ -76,7 +76,7 @@ const getCardTitle = ({ skill_card_type, skill_card_title = {} }: SkillCard): st
     }
 };
 
-const SidebarSkills = ({ file, cards, errors, getPreviewer, onSkillChange }: Props): Array<React.Node> => {
+const SidebarSkills = ({ file, cards, errors, getViewer, onSkillChange }: Props): Array<React.Node> => {
     const { permissions = {} }: BoxItem = file;
     const isSkillEditable = !!permissions.can_upload;
 
@@ -103,7 +103,7 @@ const SidebarSkills = ({ file, cards, errors, getPreviewer, onSkillChange }: Pro
                     cards={cards}
                     hasError={!!errors[index]}
                     isEditable={isSkillEditable}
-                    getPreviewer={getPreviewer}
+                    getViewer={getViewer}
                     onSkillChange={(...args) => onSkillChange(index, ...args)}
                 />
             </SidebarSection>
