@@ -45,7 +45,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     activityFeedError: ?Errors,
     currentUserError?: Errors,
-    getAvatarUrl: (string) => Promise<?string>,
+    getAvatarUrl: string => Promise<?string>,
     onToggle: Function,
     onVersionHistoryClick?: Function
 };
@@ -87,6 +87,7 @@ const Sidebar = ({
         {view === SIDEBAR_VIEW_DETAILS &&
             hasDetails && (
                 <DetailsSidebar
+                    key={file.id}
                     file={file}
                     versions={versions}
                     onVersionHistoryClick={onVersionHistoryClick}
@@ -94,10 +95,11 @@ const Sidebar = ({
                 />
             )}
         {view === SIDEBAR_VIEW_SKILLS &&
-            hasSkills && <SkillsSidebar file={file} getPreview={getPreview} getViewer={getViewer} />}
+            hasSkills && <SkillsSidebar key={file.id} file={file} getPreview={getPreview} getViewer={getViewer} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&
             hasActivityFeed && (
                 <ActivitySidebar
+                    key={file.id}
                     currentUser={currentUser}
                     file={file}
                     tasks={tasks}
@@ -113,7 +115,8 @@ const Sidebar = ({
                     {...activitySidebarProps}
                 />
             )}
-        {view === SIDEBAR_VIEW_METADATA && hasMetadata && <MetadataSidebar file={file} {...metadataSidebarProps} />}
+        {view === SIDEBAR_VIEW_METADATA &&
+            hasMetadata && <MetadataSidebar key={file.id} file={file} {...metadataSidebarProps} />}
     </React.Fragment>
 );
 

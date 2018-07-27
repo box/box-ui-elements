@@ -14,9 +14,9 @@ import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
+import { nines } from 'box-react-ui/lib/styles/variables';
 import TranscriptRow from './TranscriptRow';
 import { isValidTimeSlice } from './timeSliceUtils';
-import { COLOR_999 } from '../../../../constants';
 import { copy } from '../../../../util/download';
 import { SKILLS_TARGETS } from '../../../../interactionTargets';
 import messages from '../../../messages';
@@ -69,8 +69,8 @@ class Transcript extends React.PureComponent<Props, State> {
      */
     transcriptReducer = (accumulator: string, { appears, text }: SkillCardEntry): string => {
         const start: string =
-            isValidTimeSlice(appears) && Array.isArray(appears) ? formatTime(appears[0].start) : '0:00';
-        return `${accumulator}${start}: ${text || ''}\r\n`;
+            isValidTimeSlice(appears) && Array.isArray(appears) ? `${formatTime(appears[0].start)}:` : '';
+        return `${accumulator}${start} ${text || ''}\r\n`;
     };
 
     /**
@@ -83,7 +83,7 @@ class Transcript extends React.PureComponent<Props, State> {
     transcriptMapper = ({ appears, text }: SkillCardEntry, index: number): React.Node => {
         const { isEditingIndex, newTranscriptText }: State = this.state;
         const isEditingRow = isEditingIndex === index;
-        const transcriptText = isEditingRow ? newTranscriptText || text : text;
+        const transcriptText = isEditingRow ? newTranscriptText : text;
         const interactionTarget = isEditingRow
             ? SKILLS_TARGETS.TRANSCRIPTS.EDIT_TEXT
             : SKILLS_TARGETS.TRANSCRIPTS.TRANSCRIPT;
@@ -283,7 +283,7 @@ class Transcript extends React.PureComponent<Props, State> {
                                     getDOMRef={this.copyBtnRef}
                                     onClick={this.copyTranscript}
                                 >
-                                    <IconCopy color={COLOR_999} />
+                                    <IconCopy color={nines} />
                                 </PlainButton>
                                 {hasManyEntries && (
                                     <PlainButton
@@ -291,11 +291,7 @@ class Transcript extends React.PureComponent<Props, State> {
                                         className='be-transcript-expand'
                                         onClick={this.toggleExpandCollapse}
                                     >
-                                        {isCollapsed ? (
-                                            <IconExpand color={COLOR_999} />
-                                        ) : (
-                                            <IconCollapse color={COLOR_999} />
-                                        )}
+                                        {isCollapsed ? <IconExpand color={nines} /> : <IconCollapse color={nines} />}
                                     </PlainButton>
                                 )}
                                 {isEditable && (
