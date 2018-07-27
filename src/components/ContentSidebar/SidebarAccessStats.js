@@ -17,7 +17,7 @@ type Props = {
     onAccessStatsClick?: Function,
     accessStats?: FileAccessStats,
     file: BoxItem,
-    error: MessageDescriptor,
+    error?: MessageDescriptor,
     intl: any
 };
 
