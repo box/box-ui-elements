@@ -281,6 +281,8 @@ class Transcript extends React.PureComponent<Props, State> {
                                 className='be-transcript-copy'
                                 getDOMRef={this.copyBtnRef}
                                 onClick={this.copyTranscript}
+                                data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.COPY}
+
                             >
                                 <IconCopy color={nines} />
                             </PlainButton>
@@ -289,20 +291,34 @@ class Transcript extends React.PureComponent<Props, State> {
                                     type='button'
                                     className='be-transcript-expand'
                                     onClick={this.toggleExpandCollapse}
+                                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EXPAND}
                                 >
-                                    {isCollapsed ? <IconExpand color={nines} /> : <IconCollapse color={nines} />}
+                                    <IconCopy color={nines} />
                                 </PlainButton>
-                            )}
-                            {isEditable && (
-                                <PlainButton
-                                    type='button'
-                                    className={editBtnClassName}
-                                    onClick={this.toggleIsEditing}
-                                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
-                                >
-                                    <IconEdit />
-                                </PlainButton>
-                            )}
+                                {hasManyEntries && (
+                                    <PlainButton
+                                        type='button'
+                                        className='be-transcript-expand'
+                                        onClick={this.toggleExpandCollapse}
+                                    >
+                                        {isCollapsed ? <IconExpand color={nines} /> : <IconCollapse color={nines} />}
+                                    </PlainButton>
+                                )}
+                                {isEditable && (
+                                    <PlainButton
+                                        type='button'
+                                        className={editBtnClassName}
+                                        onClick={this.toggleIsEditing}
+                                        data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
+                                    >
+                                        <IconEdit />
+                                    </PlainButton>
+                                )}
+                            </div>
+                        )}
+                    {isEditing ? (
+                        <div className='be-transcript-edit-message'>
+                            <FormattedMessage {...messages.transcriptEdit} />
                         </div>
                     )}
                 {isEditing ? (
