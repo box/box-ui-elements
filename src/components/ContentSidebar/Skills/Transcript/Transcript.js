@@ -272,51 +272,49 @@ class Transcript extends React.PureComponent<Props, State> {
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading}>
-                <div className='be-transcript'>
-                    {hasEntries &&
-                        !isLoading && (
-                            <div className='be-transcript-actions'>
+            <LoadingIndicatorWrapper isLoading={isLoading} className='be-transcript'>
+                {hasEntries &&
+                    !isLoading && (
+                        <div className='be-transcript-actions'>
+                            <PlainButton
+                                type='button'
+                                className='be-transcript-copy'
+                                getDOMRef={this.copyBtnRef}
+                                onClick={this.copyTranscript}
+                            >
+                                <IconCopy color={nines} />
+                            </PlainButton>
+                            {hasManyEntries && (
                                 <PlainButton
                                     type='button'
-                                    className='be-transcript-copy'
-                                    getDOMRef={this.copyBtnRef}
-                                    onClick={this.copyTranscript}
+                                    className='be-transcript-expand'
+                                    onClick={this.toggleExpandCollapse}
                                 >
-                                    <IconCopy color={nines} />
+                                    {isCollapsed ? <IconExpand color={nines} /> : <IconCollapse color={nines} />}
                                 </PlainButton>
-                                {hasManyEntries && (
-                                    <PlainButton
-                                        type='button'
-                                        className='be-transcript-expand'
-                                        onClick={this.toggleExpandCollapse}
-                                    >
-                                        {isCollapsed ? <IconExpand color={nines} /> : <IconCollapse color={nines} />}
-                                    </PlainButton>
-                                )}
-                                {isEditable && (
-                                    <PlainButton
-                                        type='button'
-                                        className={editBtnClassName}
-                                        onClick={this.toggleIsEditing}
-                                        data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
-                                    >
-                                        <IconEdit />
-                                    </PlainButton>
-                                )}
-                            </div>
-                        )}
-                    {isEditing ? (
-                        <div className='be-transcript-edit-message'>
-                            <FormattedMessage {...messages.transcriptEdit} />
+                            )}
+                            {isEditable && (
+                                <PlainButton
+                                    type='button'
+                                    className={editBtnClassName}
+                                    onClick={this.toggleIsEditing}
+                                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
+                                >
+                                    <IconEdit />
+                                </PlainButton>
+                            )}
                         </div>
-                    ) : null}
-                    {hasEntries ? (
-                        <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
-                    ) : (
-                        <FormattedMessage {...messages.skillNoInfoFoundError} />
                     )}
-                </div>
+                {isEditing ? (
+                    <div className='be-transcript-edit-message'>
+                        <FormattedMessage {...messages.transcriptEdit} />
+                    </div>
+                ) : null}
+                {hasEntries ? (
+                    <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
+                ) : (
+                    <FormattedMessage {...messages.skillNoInfoFoundError} />
+                )}
             </LoadingIndicatorWrapper>
         );
     }

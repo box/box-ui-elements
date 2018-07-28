@@ -470,7 +470,7 @@ class Metadata extends File {
                 let template = templates.find((t) => t.templateKey === templateKey && t.scope === scope);
 
                 if (!template && legacyInstances && legacyInstances.entries && legacyInstances.entries.length > 0) {
-                    template = this.createTemplateFromLegacy(legacyInstances, templateKey, scope);
+                    template = this.createTemplateFromLegacy(legacyInstances.entries, templateKey, scope);
                 }
 
                 if (template && !template.hidden) {
