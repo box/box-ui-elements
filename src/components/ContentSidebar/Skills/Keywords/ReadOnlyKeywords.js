@@ -56,7 +56,12 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
 
         return (
             <React.Fragment>
-                <PillCloud options={options} onSelect={this.onSelect} {...pillCloudProps} />
+                <PillCloud
+                    options={options}
+                    onSelect={this.onSelect}
+                    {...pillCloudProps}
+                    buttonProps={{ 'data-resin-target': SKILLS_TARGETS.KEYWORDS.SELECT }}
+                />
                 {!!selected &&
                     Array.isArray(selected.appears) &&
                     selected.appears.length > 0 && (
