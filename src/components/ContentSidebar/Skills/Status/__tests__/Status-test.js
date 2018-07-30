@@ -35,8 +35,23 @@ describe('components/ContentSidebar/Skills/Status', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should render internal server error', () => {
-        const wrapper = getWrapper({ card: { status: { code: 'skills_internal_server_error' } } });
+    test('should render invocations error', () => {
+        const wrapper = getWrapper({ card: { status: { code: 'skills_invocations_error' } } });
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render billing error', () => {
+        const wrapper = getWrapper({ card: { status: { code: 'skills_billing_error' } } });
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render external auth error', () => {
+        const wrapper = getWrapper({ card: { status: { code: 'skills_external_auth_error' } } });
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render file processing error', () => {
+        const wrapper = getWrapper({ card: { status: { code: 'skills_file_processing_error' } } });
         expect(wrapper).toMatchSnapshot();
     });
 });

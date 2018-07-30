@@ -10,7 +10,8 @@ const {
     defaultErrorMaskSubHeaderMessage,
     fileAccessStatsErrorHeaderMessage,
     errorOccured,
-    activityFeedItemApiError
+    activityFeedItemApiError,
+    fileAccessStatsPermissionsError
 } = messages;
 
 jest.mock('../SidebarUtils');
@@ -73,7 +74,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).toBeCalledWith(true, file);
-            expect(instance.setState).toBeCalledWith({ view: 'view' });
+            expect(instance.setState).toBeCalledWith({ isCollapsed: true, view: 'view' });
         });
     });
 
@@ -114,12 +115,877 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
         });
 
-        test('should not set a maskError if the error if forbidden', () => {
+        test('should set error if forbidden', () => {
             instance.fetchFileAccessStatsErrorCallback({
                 status: 403
             });
             const { accessStatsError } = wrapper.state();
-            expect(accessStatsError).toBeUndefined();
+            expect(accessStatsError).toEqual({
+                error: fileAccessStatsPermissionsError
+            });
+        });
+    });
+
+    describe('fetchCurrentUserErrorCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            const props = {};
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+        });
+
+        test('should set a maskError if there is an error in fetching the access stats', () => {
+            instance.fetchCurrentUserErrorCallback();
+            const inlineErrorState = wrapper.state().currentUserError.maskError;
+            expect(typeof currentUserErrorHeaderMessage).toBe('object');
+            expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
+            expect(inlineErrorState.errorHeader).toEqual(currentUserErrorHeaderMessage);
+            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+        });
+    });
+
+    describe('onToggle()', () => {
+        test('should set new view state', () => {
+            const wrapper = getWrapper({ isCollapsed: true });
+            const instance = wrapper.instance();
+
+            wrapper.setState({ view: 'activity' });
+            instance.setState = jest.fn();
+            instance.onToggle('skills');
+
+            expect(instance.setState).toBeCalledWith({ isCollapsed: false, view: 'skills' });
+        });
+
+        test('should remove view state', () => {
+            const wrapper = getWrapper({ isCollapsed: true });
+            const instance = wrapper.instance();
+
+            wrapper.setState({ view: 'activity' });
+            instance.setState = jest.fn();
+            instance.onToggle('activity');
+
+            expect(instance.setState).toBeCalledWith({ isCollapsed: true, view: undefined });
+        });
+    });
+
+    describe('fetchCurrentUser()', () => {
+        let instance;
+        let wrapper;
+        test('should invoke setState() directly if user parameter is not missing', () => {
+            const currentUser = {
+                id: '1234',
+                login: 'wile@acmetesting.com'
+            };
+
+            const props = { hasProperties: true }; // to force render
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.errorCallback = jest.fn();
+
+            instance.setState = jest.fn();
+
+            instance.fetchCurrentUser(currentUser);
+            expect(instance.setState).toBeCalledWith({ currentUser, currentUserError: undefined });
+        });
+    });
+
+    describe('createCommentSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should not add to the comment entries state if there is none', () => {
+            instance.setState({ comments: undefined });
+            instance.setState = jest.fn();
+
+            instance.createCommentSuccessCallback({});
+
+            expect(instance.setState).not.toBeCalled();
+        });
+
+        test('should add the comment to the comment entries state', () => {
+            instance.setState({
+                comments: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.createCommentSuccessCallback({
+                type: 'comment'
+            });
+
+            const { comments } = instance.state;
+            expect(comments.entries.length).toBe(1);
+        });
+
+        test('should increase total_count of the comment state', () => {
+            instance.setState({
+                comments: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+
+            instance.createCommentSuccessCallback({
+                type: 'comment'
+            });
+
+            const { comments } = instance.state;
+            expect(comments.total_count).toBe(1);
+        });
+    });
+
+    describe('createComment()', () => {
+        let instance;
+        let wrapper;
+        let commentsAPI;
+
+        const api = {
+            getCommentsAPI: () => commentsAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.createComment).toThrow('Bad box item!');
+        });
+
+        test('should have "message" data if comment does not contain mentions', (done) => {
+            const text = 'My tagged_message';
+            commentsAPI = {
+                createComment: ({ message }) => {
+                    expect(message).toEqual(text);
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createComment(text, false);
+        });
+
+        test('should have "tagged_message" data if comment contains mentions', (done) => {
+            const text = 'My tagged_message';
+            commentsAPI = {
+                createComment: ({ taggedMessage }) => {
+                    expect(taggedMessage).toEqual(text);
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createComment(text, true);
+        });
+
+        test('should invoke createCommentSuccessCallback() with a new comment if api was successful', (done) => {
+            instance.createCommentSuccessCallback = jest.fn();
+            commentsAPI = {
+                createComment: ({ successCallback }) => {
+                    successCallback();
+                    expect(instance.createCommentSuccessCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createComment('text');
+        });
+
+        test('should invoke provided successCallback with a new comment if api was successful', (done) => {
+            const onSuccess = jest.fn();
+            commentsAPI = {
+                createComment: ({ successCallback }) => {
+                    successCallback();
+                    expect(onSuccess).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createComment('text', false, onSuccess);
+        });
+
+        test('should invoke errorCallback() if it failed to create a comment', (done) => {
+            instance.errorCallback = jest.fn();
+            commentsAPI = {
+                createComment: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createComment('text');
+        });
+
+        test('should invoke provided errorCallback if it failed to create a comment', (done) => {
+            const testErrorCallback = jest.fn();
+            instance.errorCallback = jest.fn();
+
+            commentsAPI = {
+                createComment: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(testErrorCallback).toBeCalled();
+                    done();
+                }
+            };
+            instance.setState({ file });
+
+            instance.createComment('text', false, jest.fn(), testErrorCallback);
+        });
+    });
+
+    describe('createTask()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+
+        const api = {
+            getTaskAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.createTask).toThrow('Bad box item!');
+        });
+    });
+
+    describe('updateTask()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+
+        const api = {
+            getTasksAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.updateTask).toThrow('Bad box item!');
+        });
+
+        test('should execute success callback', (done) => {
+            const onTaskUpdate = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                activitySidebarProps: {
+                    onTaskUpdate
+                }
+            });
+            instance.updateTaskSuccessCallback = jest.fn();
+
+            tasksAPI = {
+                updateTask: ({ successCallback }) => {
+                    successCallback();
+
+                    expect(instance.updateTaskSuccessCallback).toBeCalled();
+                    expect(onTaskUpdate).toBeCalled();
+                    expect(successCb).toBeCalled();
+                    expect(errorCb).not.toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file });
+            instance.updateTask('1', 'foo', successCb, errorCb);
+        });
+
+        test('should execute error callback', (done) => {
+            const onTaskUpdate = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                activitySidebarProps: {
+                    onTaskUpdate
+                }
+            });
+            instance.updateTaskSuccessCallback = jest.fn();
+            instance.errorCallback = jest.fn();
+
+            tasksAPI = {
+                updateTask: ({ errorCallback }) => {
+                    errorCallback();
+
+                    expect(instance.updateTaskSuccessCallback).not.toBeCalled();
+                    expect(onTaskUpdate).not.toBeCalled();
+                    expect(successCb).not.toBeCalled();
+                    expect(errorCb).toBeCalled();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file }, () => {
+                instance.updateTask('1', 'foo', successCb, errorCb);
+            });
+        });
+    });
+
+    describe('updateTaskSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should update the task', () => {
+            const id = '1';
+            const message = 'foo';
+
+            wrapper.setState({
+                tasks: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id,
+                            message: 'bar'
+                        }
+                    ]
+                }
+            });
+
+            instance.updateTaskSuccessCallback({
+                id,
+                type: 'task',
+                message
+            });
+
+            const { tasks } = instance.state;
+            expect(tasks.entries.length).toBe(1);
+            expect(tasks.entries[0].message).toBe(message);
+        });
+
+        test('should not update if invalid id', () => {
+            const id = '1';
+            const message = 'foo';
+
+            wrapper.setState({
+                tasks: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id,
+                            message
+                        }
+                    ]
+                }
+            });
+
+            instance.updateTaskSuccessCallback({
+                id: '2',
+                type: 'task',
+                message: 'bar'
+            });
+
+            const { tasks } = instance.state;
+            expect(tasks.entries.length).toBe(1);
+            expect(tasks.entries[0].message).toBe(message);
+        });
+    });
+
+    describe('deleteTaskSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should not delete the task entries state if invalid task id', () => {
+            wrapper.setState({
+                tasks: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id: '1'
+                        }
+                    ]
+                }
+            });
+
+            instance.deleteTaskSuccessCallback('2');
+            expect(wrapper.state('tasks').total_count).toBe(1);
+        });
+
+        test('should delete the task entry', () => {
+            const id = '1';
+
+            wrapper.setState({
+                tasks: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id
+                        }
+                    ]
+                }
+            });
+
+            instance.deleteTaskSuccessCallback(id);
+
+            const tasks = wrapper.state('tasks');
+            expect(tasks.total_count).toBe(0);
+            expect(tasks.entries.length).toBe(0);
+        });
+    });
+
+    describe('deleteTask()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+
+        const api = {
+            getTasksAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.updateTask).toThrow('Bad box item!');
+        });
+
+        test('should execute success callback', (done) => {
+            const onTaskUpdate = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                activitySidebarProps: {
+                    onTaskUpdate
+                }
+            });
+            instance.updateTaskSuccessCallback = jest.fn();
+
+            tasksAPI = {
+                updateTask: ({ successCallback }) => {
+                    successCallback();
+
+                    expect(instance.updateTaskSuccessCallback).toBeCalled();
+                    expect(onTaskUpdate).toBeCalled();
+                    expect(successCb).toBeCalled();
+                    expect(errorCb).not.toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file });
+            instance.updateTask('1', 'foo', successCb, errorCb);
+        });
+
+        test('should execute error callback', (done) => {
+            const onTaskUpdate = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                onTaskUpdate
+            });
+            instance.updateTaskSuccessCallback = jest.fn();
+            instance.errorCallback = jest.fn();
+
+            tasksAPI = {
+                updateTask: ({ errorCallback }) => {
+                    errorCallback();
+
+                    expect(instance.updateTaskSuccessCallback).not.toBeCalled();
+                    expect(onTaskUpdate).not.toBeCalled();
+                    expect(successCb).not.toBeCalled();
+                    expect(errorCb).toBeCalled();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file }, () => {
+                instance.updateTask('1', 'foo', successCb, errorCb);
+            });
+        });
+    });
+
+    describe('deleteComment()', () => {
+        let instance;
+        let wrapper;
+        let commentsAPI;
+
+        const api = {
+            getCommentsAPI: () => commentsAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should execute success callback', (done) => {
+            const onCommentDelete = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                activitySidebarProps: {
+                    onCommentDelete
+                }
+            });
+            instance.deleteCommentSuccessCallback = jest.fn();
+
+            commentsAPI = {
+                deleteComment: ({ successCallback }) => {
+                    successCallback();
+
+                    expect(instance.deleteCommentSuccessCallback).toBeCalled();
+                    expect(onCommentDelete).toBeCalled();
+                    expect(successCb).toBeCalled();
+                    expect(errorCb).not.toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file });
+            instance.deleteComment('1', {}, successCb, errorCb);
+        });
+
+        test('should execute error callback', (done) => {
+            const onCommentDelete = jest.fn();
+            const successCb = jest.fn();
+            const errorCb = jest.fn();
+
+            wrapper.setProps({
+                onCommentDelete
+            });
+            instance.deleteCommentSuccessCallback = jest.fn();
+            instance.errorCallback = jest.fn();
+
+            commentsAPI = {
+                deleteComment: ({ errorCallback }) => {
+                    errorCallback();
+
+                    expect(instance.deleteCommentSuccessCallback).not.toBeCalled();
+                    expect(onCommentDelete).not.toBeCalled();
+                    expect(successCb).not.toBeCalled();
+                    expect(errorCb).toBeCalled();
+                    expect(instance.errorCallback).toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file }, () => {
+                instance.deleteComment('1', {}, successCb, errorCb);
+            });
+        });
+    });
+
+    describe('deleteCommentSuccessCallback', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should not delete the comment entries state if invalid comment id', () => {
+            wrapper.setState({
+                comments: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id: '1'
+                        }
+                    ]
+                }
+            });
+            instance.setState = jest.fn();
+
+            instance.deleteCommentSuccessCallback('2');
+            expect(wrapper.state('comments').total_count).toBe(1);
+        });
+
+        test('should delete the comments entry', () => {
+            const id = '1';
+
+            wrapper.setState({
+                comments: {
+                    total_count: 1,
+                    entries: [
+                        {
+                            id
+                        }
+                    ]
+                }
+            });
+
+            instance.deleteCommentSuccessCallback(id);
+
+            const comments = wrapper.state('comments');
+            expect(comments.total_count).toBe(0);
+            expect(comments.entries.length).toBe(0);
+        });
+    });
+
+    describe('appendAssignmentsToTask', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should correctly format a task with assignment with a message, increment assignment count', () => {
+            const task = {
+                task_assignment_collection: {
+                    entries: [],
+                    total_count: 0
+                }
+            };
+
+            const assignments = [
+                { id: '1', assigned_to: { id: '1234' }, message: 'completed', resolution_state: 'completed' }
+            ];
+            const expectedResult = {
+                task_assignment_collection: {
+                    entries: [{ ...assignments[0], type: 'task_assignment' }],
+                    total_count: 1
+                }
+            };
+
+            const result = instance.appendAssignmentsToTask(task, assignments);
+            expect(result.task_assignment_collection.total_count).toBe(1);
+            expect(result).toEqual(expectedResult);
+        });
+
+        test('should correctly format a task with assignment, increment assignment count', () => {
+            const task = {
+                task_assignment_collection: {
+                    entries: [],
+                    total_count: 0
+                }
+            };
+
+            const assignments = [{ id: '1', assigned_to: { id: '1234' }, resolution_state: 'completed' }];
+            const expectedResult = {
+                task_assignment_collection: {
+                    entries: [{ ...assignments[0], type: 'task_assignment' }],
+                    total_count: 1
+                }
+            };
+
+            const result = instance.appendAssignmentsToTask(task, assignments);
+            expect(result.task_assignment_collection.total_count).toBe(1);
+            expect(result).toEqual(expectedResult);
+        });
+    });
+
+    describe('createTaskAssignmentErrorCallback', () => {
+        let instance;
+        let wrapper;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+
+        test('should call error callbacks and attempt to delete bad task', () => {
+            instance.deleteTask = jest.fn();
+            instance.errorCallback = jest.fn();
+            const localErrorCallback = jest.fn();
+            const task = { id: 'foo' };
+            const e = new Error();
+
+            instance.createTaskAssignmentErrorCallback(e, task, localErrorCallback);
+
+            expect(instance.deleteTask).toBeCalledWith(task.id);
+            expect(instance.errorCallback).toBeCalled();
+            expect(localErrorCallback).toBeCalled();
+        });
+    });
+
+    describe('createTaskAssignment', () => {
+        let instance;
+        let wrapper;
+        let taskAssignmentsAPI;
+        const task = {
+            type: 'task',
+            id: '1234',
+            created_at: '1',
+            message: 'test',
+            task_assignment_collection: []
+        };
+        const api = {
+            getTaskAssignmentsAPI: () => taskAssignmentsAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should resolve on a successful task assignment create', () => {
+            taskAssignmentsAPI = {
+                createTaskAssignment: jest.fn().mockReturnValue('foo')
+            };
+
+            const promise = instance.createTaskAssignment({ id: '1' }, task, { id: '1234' }, () => {});
+            expect(taskAssignmentsAPI.createTaskAssignment).toBeCalled();
+
+            promise.then((data) => {
+                expect(data).toBe('foo');
+            });
+        });
+
+        test('should call the error callback on a task assignment failure', () => {
+            taskAssignmentsAPI = {
+                createTaskAssignment: jest.fn().mockReturnValue(Promise.reject())
+            };
+            instance.createTaskAssignmentErrorCallback = jest.fn();
+
+            const promise = instance.createTaskAssignment({ id: '1' }, task, { id: '1234' }, () => {});
+            expect(taskAssignmentsAPI.createTaskAssignment).toBeCalled();
+
+            promise.catch(() => {
+                expect(instance.createTaskAssignmentErrorCallback).toBeCalled();
+            });
+        });
+    });
+
+    describe('createTaskSuccessCallback()', () => {
+        let instance;
+        let wrapper;
+        let taskAssignmentsAPI;
+        let assignees;
+        let task;
+        const api = {
+            getTaskAssignmentsAPI: () => taskAssignmentsAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.setState({ file });
+            instance.api = api;
+            instance.createTaskAssignment = jest.fn();
+            instance.appendAssignmentsToTask = jest.fn();
+            assignees = [{ id: '1', name: 'A. User' }, { id: '2', name: 'B. User' }];
+            task = {
+                type: 'task',
+                id: '1234',
+                created_at: '1',
+                message: 'test',
+                task_assignment_collection: []
+            };
+
+            instance.setState({
+                tasks: {
+                    total_count: 0,
+                    entries: []
+                }
+            });
+        });
+
+        test('should not add to the task entries state if there is none', () => {
+            instance.setState({ tasks: undefined });
+            instance.setState = jest.fn();
+
+            instance.createTaskSuccessCallback();
+
+            expect(instance.createTaskAssignment).not.toBeCalled();
+        });
+
+        test('should create a TaskAssignment for each assignment', () => {
+            instance.createTaskAssignment.mockReturnValue(Promise.resolve());
+            instance.createTaskSuccessCallback(task, assignees, () => {}, () => {});
+            expect(instance.createTaskAssignment).toBeCalledTimes(2);
+        });
+
+        test('should call the success callback and update the state once all assignments have been created', () => {
+            instance.appendAssignmentsToTask = jest.fn();
+            instance.setState = jest.fn();
+            instance.createTaskAssignment.mockReturnValue(Promise.resolve());
+            const successCallback = jest.fn();
+
+            return instance.createTaskSuccessCallback(task, assignees, successCallback, () => {}).then(() => {
+                expect(instance.appendAssignmentsToTask).toBeCalled();
+                expect(instance.setState).toBeCalled();
+                expect(successCallback).toBeCalled();
+            });
+        });
+    });
+
+    describe('createTask()', () => {
+        let instance;
+        let wrapper;
+        let tasksAPI;
+        const api = {
+            getTasksAPI: () => tasksAPI
+        };
+
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+            instance.api = api;
+        });
+
+        test('should throw an error if there is no file in the state', () => {
+            expect(instance.createTask).toThrow('Bad box item!');
+        });
+
+        test('should invoke createTaskSuccessCallback() with a new task if api was successful', (done) => {
+            instance.createTaskSuccessCallback = jest.fn();
+            tasksAPI = {
+                createTask: ({ successCallback }) => {
+                    successCallback();
+                    expect(instance.createTaskSuccessCallback).toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file });
+            instance.createTask('text');
+        });
+
+        test('should invoke errorCallback() if the API failed to create a task', (done) => {
+            instance.errorCallback = jest.fn();
+            const testErrorCallback = jest.fn();
+            tasksAPI = {
+                createTask: ({ errorCallback }) => {
+                    errorCallback();
+                    expect(instance.errorCallback).toBeCalled();
+                    expect(testErrorCallback).toBeCalled();
+                    done();
+                }
+            };
+
+            instance.setState({ file });
+            instance.errorCallback = jest.fn();
+
+            instance.createTask('text', undefined, undefined, undefined, testErrorCallback);
         });
     });
 
@@ -142,9 +1008,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
         });
@@ -155,9 +1021,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'activity' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
         });
@@ -168,9 +1034,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'details' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('details');
         });
@@ -179,9 +1045,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
         });
@@ -190,9 +1056,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
         });
@@ -201,9 +1067,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('details');
         });
@@ -214,9 +1080,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
         });
@@ -227,9 +1093,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('details');
         });
@@ -240,9 +1106,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'details' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
         });
@@ -415,6 +1281,31 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 isFileLoading: false
             });
             expect(errorCallback).toBeCalledWith(err);
+        });
+    });
+
+    describe('getActivityFeedError()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper({
+                file
+            });
+            instance = wrapper.instance();
+        });
+
+        test('should not return an error if forbidden', () => {
+            const error = instance.getActivityFeedError({
+                status: 403
+            });
+            expect(error).toBeUndefined();
+        });
+
+        test('should return an inlineError object if not forbidden', () => {
+            const error = instance.getActivityFeedError({
+                status: 500
+            });
+            expect(typeof error.inlineError).toBe('object');
         });
     });
 });

@@ -27,10 +27,14 @@
                 const explorer = new ContentExplorer();
                 explorer.show(FOLDER_ID, ACCESS_TOKEN, {
                     sharedLink: 'https://app.box.com/s/sdfsdf',
+                    currentFolderId: '49630563868',
                     contentPreviewProps: {
                         contentSidebarProps: {
                             hasSkills: true,
-                            hasProperties: true,
+                            hasMetadata: true,
+                            detailsSidebarProps: {
+                                hasProperties: true
+                            },
                             hasActivityFeed: true,
                             getUserProfileUrl: (id) => { return Promise.resolve('#'); }
                         },

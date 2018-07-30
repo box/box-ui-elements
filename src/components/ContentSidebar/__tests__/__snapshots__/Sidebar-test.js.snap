@@ -6,7 +6,14 @@ exports[`components/ContentSidebar/Skills/Sidebar should render activity sidebar
     hasActivityFeed={true}
     selectedView="activity"
   />
-  <ActivitySidebar />
+  <ActivitySidebar
+    file={
+      Object {
+        "id": "id",
+      }
+    }
+    key="id"
+  />
 </React.Fragment>
 `;
 
@@ -16,7 +23,31 @@ exports[`components/ContentSidebar/Skills/Sidebar should render details sidebar 
     hasDetails={true}
     selectedView="details"
   />
-  <DetailsSidebar />
+  <DetailsSidebar
+    file={
+      Object {
+        "id": "id",
+      }
+    }
+    key="id"
+  />
+</React.Fragment>
+`;
+
+exports[`components/ContentSidebar/Skills/Sidebar should render metadata sidebar 1`] = `
+<React.Fragment>
+  <SidebarNav
+    hasMetadata={true}
+    selectedView="metadata"
+  />
+  <Component
+    file={
+      Object {
+        "id": "id",
+      }
+    }
+    key="id"
+  />
 </React.Fragment>
 `;
 
@@ -32,6 +63,13 @@ exports[`components/ContentSidebar/Skills/Sidebar should render skills sidebar 1
     hasSkills={true}
     selectedView="skills"
   />
-  <SkillsSidebar />
+  <Component
+    file={
+      Object {
+        "id": "id",
+      }
+    }
+    key="id"
+  />
 </React.Fragment>
 `;

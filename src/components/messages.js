@@ -328,6 +328,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Title for the preview details skills.',
         defaultMessage: 'Skills'
     },
+    sidebarSkillsErrorTitle: {
+        id: 'be.sidebarSkillsErrorTitle',
+        description: 'Generic error title for skills editing.',
+        defaultMessage: 'Skills Error'
+    },
+    sidebarSkillsErrorContent: {
+        id: 'be.sidebarSkillsErrorContent',
+        description: 'Generic error content for skills editing.',
+        defaultMessage: 'An error has occured while updating skills. Please refresh the page and try again.'
+    },
     sidebarActivityTitle: {
         id: 'be.sidebarActivityTitle',
         description: 'Title for the preview activity feed.',
@@ -337,6 +347,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.sidebarMetadataTitle',
         description: 'Title for the preview metadata.',
         defaultMessage: 'Metadata'
+    },
+    sidebarMetadataErrorTitle: {
+        id: 'be.sidebarMetadataErrorTitle',
+        description: 'Generic error title for metadata editing.',
+        defaultMessage: 'Metadata Error'
+    },
+    sidebarMetadataErrorContent: {
+        id: 'be.sidebarMetadataErrorContent',
+        description: 'Generic error content for metadata editing.',
+        defaultMessage: 'An error has occured while editing metadata. Please refresh the page and try again.'
     },
     sidebarProperties: {
         id: 'be.sidebarProperties',
@@ -358,18 +378,13 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for error skill card in the preview sidebar',
         defaultMessage: 'Error'
     },
-    keywordSkill: {
-        id: 'be.keywordSkill',
-        description: 'Label for keywords skill section in the preview sidebar',
-        defaultMessage: 'Keywords'
+    topicsSkill: {
+        id: 'be.topicsSkill',
+        description: 'Label for keywords/topics skill section in the preview sidebar',
+        defaultMessage: 'Topics'
     },
     faceSkill: {
         id: 'be.faceSkill',
-        description: 'Label for face skill section in the preview sidebar',
-        defaultMessage: 'Faces'
-    },
-    timelineSkill: {
-        id: 'be.timelineSkill',
         description: 'Label for face skill section in the preview sidebar',
         defaultMessage: 'Faces'
     },
@@ -381,7 +396,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     skillPendingStatus: {
         id: 'be.skillPendingStatus',
         description: 'Default message when skills are still running',
-        defaultMessage: 'The skill hasn’t finished running. Please try reloading the page later.'
+        defaultMessage: 'We’re working on processing your file - please hold!'
     },
     skillUnknownError: {
         id: 'be.skillUnknownError',
@@ -402,6 +417,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.skillNoInfoFoundError',
         description: 'Error message when a skill has no data',
         defaultMessage: 'We’re sorry, no skills information was found.'
+    },
+    skillFileProcessingError: {
+        id: 'be.skillFileProcessingError',
+        description: 'Error message when a skill processing failed',
+        defaultMessage: 'We’re sorry, something went wrong with processing the file.'
     },
     uploadErrorTooManyFiles: {
         id: 'be.uploadErrorTooManyFiles',
@@ -833,6 +853,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.fileAccessStatsErrorHeaderMessage',
         description: 'File access stats error message',
         defaultMessage: 'Something went wrong when fetching the access stats.'
+    },
+    fileAccessStatsPermissionsError: {
+        id: 'be.accessStatsPermissionsError',
+        description: 'The text for when the user does not have permissions to see access stats.',
+        defaultMessage: 'Sorry, you do not have permission to see the access stats for this file.'
     },
     currentUserErrorHeaderMessage: {
         id: 'be.currentUserErrorHeaderMessage',

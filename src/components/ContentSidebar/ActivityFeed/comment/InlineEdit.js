@@ -10,6 +10,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconPencil from 'box-react-ui/lib/icons/general/IconPencil';
 
 import messages from '../../../messages';
+import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 type Props = {
     toEdit: Function,
@@ -32,6 +33,7 @@ class InlineEdit extends React.Component<Props> {
                     className='bcs-comment-edit'
                     onClick={onEdit}
                     type='button'
+                    data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                 >
                     <IconPencil />
                 </PlainButton>

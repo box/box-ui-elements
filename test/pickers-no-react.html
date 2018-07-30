@@ -73,8 +73,8 @@
             <h1>Folder Picker (max 3 items / token generator / cannot upload)</h1>
             <div class="folderPicker2"></div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.2.0/umd/react.development.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.2.0/umd/react-dom.development.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.1/umd/react.development.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.1/umd/react-dom.development.js"></script>
         <script src="../dev/en-US/picker.no.react.js"></script>
         <script>
             function load() {
@@ -90,13 +90,6 @@
                 const tokenGenerator1 = (id) => {
                     if (id === `folder_${folderId}`) {
                         return Promise.resolve(token);
-                    } else {
-                        return Promise.reject()
-                    }
-                };
-                const tokenGenerator2 = (id) => {
-                    if (id === `folder_${folderId}`) {
-                        return Promise.resolve({ [`folder_${folderId}`]: token });
                     } else {
                         return Promise.reject()
                     }
@@ -178,7 +171,7 @@
                     alert('Cancel pressed on Folder Picker');
                     document.querySelector('.folderPicker2').innerHTML = '';
                 });
-                folderPicker2.show(folderId, tokenGenerator2, {
+                folderPicker2.show(folderId, tokenGenerator1, {
                     container: '.folderPicker2',
                     logoUrl: 'https://d30y9cdsu7xlg0.cloudfront.net/png/12458-200.png',
                     maxSelectable: 3,

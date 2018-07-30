@@ -26,6 +26,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
       >
         <UserLink
           className="bcs-comment-user-name"
+          data-resin-target="profile"
           id={10}
           name="50 Cent"
         />
@@ -93,6 +94,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should correctly
       >
         <UserLink
           className="bcs-comment-user-name"
+          data-resin-target="profile"
           id={10}
           name="50 Cent"
         />
@@ -161,6 +163,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render an
       >
         <UserLink
           className="bcs-comment-user-name"
+          data-resin-target="profile"
           id={10}
           name="50 Cent"
         />
@@ -232,6 +235,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/Comment should render co
       >
         <UserLink
           className="bcs-comment-user-name"
+          data-resin-target="profile"
           id={10}
           name="50 Cent"
         />

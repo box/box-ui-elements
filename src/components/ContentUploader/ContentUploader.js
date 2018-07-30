@@ -76,7 +76,7 @@ type Props = {
     uploadHost: string,
     useUploadsManager?: boolean,
     dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
-    isUploadsManagerVisible?: boolean
+    isDraggingItemsToUploadsManager?: boolean
 };
 
 type State = {
@@ -120,7 +120,7 @@ class ContentUploader extends Component<Props, State> {
         onCancel: noop,
         isFolderUploadEnabled: false,
         dataTransferItems: [],
-        isUploadsManagerVisible: false
+        isDraggingItemsToUploadsManager: false
     };
 
     /**
@@ -152,6 +152,17 @@ class ContentUploader extends Component<Props, State> {
     componentDidMount() {
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = this.rootElement;
+    }
+
+    /**
+     * Cancels pending uploads
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    componentWillUnmount() {
+        this.cancel();
     }
 
     /**
@@ -984,11 +995,11 @@ class ContentUploader extends Component<Props, State> {
             fileLimit,
             useUploadsManager,
             isFolderUploadEnabled,
-            isUploadsManagerVisible
+            isDraggingItemsToUploadsManager = false
         }: Props = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
         const isEmpty = items.length === 0;
-        const isVisible = !isEmpty || !!isUploadsManagerVisible;
+        const isVisible = !isEmpty || !!isDraggingItemsToUploadsManager;
 
         const hasFiles = items.length !== 0;
         const isLoading = items.some((item) => item.status === STATUS_IN_PROGRESS);
@@ -1009,6 +1020,7 @@ class ContentUploader extends Component<Props, State> {
                             onItemActionClick={this.onClick}
                             toggleUploadsManager={this.toggleUploadsManager}
                             view={view}
+                            isDragging={isDraggingItemsToUploadsManager}
                         />
                     </div>
                 ) : (

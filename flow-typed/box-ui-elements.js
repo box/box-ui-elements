@@ -48,10 +48,11 @@ import {
     FIELD_SIZE,
     DEFAULT_VIEW_RECENTS,
     DEFAULT_VIEW_FILES,
-    SKILL_KEYWORD,
-    SKILL_TIMELINE,
-    SKILL_TRANSCRIPT,
-    SKILL_KEYVALUE,
+    SKILLS_KEYWORD,
+    SKILLS_TIMELINE,
+    SKILLS_TRANSCRIPT,
+    SKILLS_FACE,
+    SKILLS_STATUS,
     SIZE_MEDIUM,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
@@ -62,9 +63,7 @@ import {
     HTTP_PUT,
     HTTP_DELETE,
     HTTP_OPTIONS,
-    HTTP_HEAD,
-    SKILL_FACE,
-    SKILL_STATUS
+    HTTP_HEAD
 } from '../src/constants';
 
 type Method =
@@ -81,6 +80,7 @@ type ClassComponent<P, S> = Class<React$Component<P, S>>;
 type StringMap = { [string]: string };
 type StringAnyMap = { [string]: any };
 type StringBooleanMap = { [string]: boolean };
+type NumberBooleanMap = { [number]: boolean };
 type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 type Access = typeof ACCESS_COLLAB | typeof ACCESS_COMPANY | typeof ACCESS_OPEN;
 type DefaultView = typeof DEFAULT_VIEW_RECENTS | typeof DEFAULT_VIEW_FILES;
@@ -170,11 +170,11 @@ type OptionItem = {
 type OptionItems = Array<OptionItem>;
 
 type SkillCardType =
-    | typeof SKILL_KEYWORD
-    | typeof SKILL_TIMELINE
-    | typeof SKILL_TRANSCRIPT
-    | typeof SKILL_FACE
-    | typeof SKILL_STATUS;
+    | typeof SKILLS_KEYWORD
+    | typeof SKILLS_TIMELINE
+    | typeof SKILLS_TRANSCRIPT
+    | typeof SKILLS_FACE
+    | typeof SKILLS_STATUS;
 
 type SkillCardEntryType = 'text' | 'image';
 
@@ -213,12 +213,39 @@ type SkillCards = {
     cards: Array<SkillCard>
 };
 
-type MetadataTemplate = {
+type MetadataSkillsTemplate = {
     boxSkillsCards?: SkillCards
 };
 
 type MetadataType = {
-    global?: MetadataTemplate
+    global?: MetadataSkillsTemplate
+};
+
+type MetadataEditorTemplate = {
+    id: string,
+    scope: string,
+    templateKey: string,
+    hidden: boolean
+};
+
+type MetadataEditorInstance = {
+    id: string,
+    data: Object,
+    canEdit: boolean
+};
+
+type MetadataInstance = {
+    $id: string,
+    $template: string,
+    $canEdit: boolean,
+    $scope: string
+};
+
+type MetadataEditor = {
+    hasError?: boolean,
+    instance: MetadataEditorInstance,
+    isDirty?: boolean,
+    template: MetadataEditorTemplate,
 };
 
 type BoxItemVersion = {
@@ -447,7 +474,8 @@ type InlineError = {
 
 type Errors = {
     maskError?: MaskError,
-    inlineError?: InlineError
+    inlineError?: InlineError,
+    error?: MessageDescriptor
 };
 
 type FileAccessStats = {

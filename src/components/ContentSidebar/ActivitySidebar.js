@@ -31,7 +31,7 @@ type Props = {
     api: Object,
     file: BoxItem,
     translations?: Translations,
-    activityFeedError?: Errors,
+    activityFeedError: ?Errors,
     isDisabled?: boolean,
     onVersionHistoryClick?: Function
 } & ExternalProps;

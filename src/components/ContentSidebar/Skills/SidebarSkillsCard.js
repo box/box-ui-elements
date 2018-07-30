@@ -12,39 +12,48 @@ import Faces from './Faces';
 import { SKILLS_TRANSCRIPT, SKILLS_KEYWORD, SKILLS_TIMELINE, SKILLS_FACE, SKILLS_STATUS } from '../../../constants';
 
 type Props = {
-    getPreviewer: Function,
+    getViewer: Function,
     onSkillChange: Function,
     card: SkillCard,
+    hasError: boolean,
     cards: Array<SkillCard>,
     isEditable: boolean
 };
 
-const SidebarSkillsCard = ({ card, cards, isEditable, onSkillChange, getPreviewer }: Props) => {
+const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, getViewer }: Props) => {
     switch (card.skill_card_type) {
         case SKILLS_KEYWORD:
             return (
                 <Keywords
                     card={card}
+                    hasError={hasError}
                     transcript={
                         isEditable
                             ? cards.find(({ skill_card_type }) => skill_card_type === SKILLS_TRANSCRIPT)
                             : undefined
                     }
                     isEditable={isEditable}
-                    getPreviewer={getPreviewer}
+                    getViewer={getViewer}
                     onSkillChange={onSkillChange}
                 />
             );
         case SKILLS_TIMELINE:
         case SKILLS_FACE:
             return (
-                <Faces card={card} isEditable={isEditable} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />
+                <Faces
+                    card={card}
+                    hasError={hasError}
+                    isEditable={isEditable}
+                    getViewer={getViewer}
+                    onSkillChange={onSkillChange}
+                />
             );
         case SKILLS_TRANSCRIPT:
             return (
                 <Transcript
                     card={card}
-                    getPreviewer={getPreviewer}
+                    hasError={hasError}
+                    getViewer={getViewer}
                     isEditable={isEditable}
                     onSkillChange={onSkillChange}
                 />

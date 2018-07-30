@@ -1,6 +1,6 @@
 @import '../variables';
 
-.be-header {
+.be .be-header {
     align-items: center;
     background: $almost-white;
     border-bottom: 1px solid $off-white;
@@ -15,5 +15,10 @@
     .be-search {
         flex: 1;
         padding-left: 20px;
+    }
+
+    input[type="search"] {
+        font: inherit;
+        width: 100%;
     }
 }

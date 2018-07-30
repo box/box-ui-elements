@@ -6,6 +6,7 @@
 import * as React from 'react';
 import { Link } from 'box-react-ui/lib/components/link';
 import UserLink from '../comment/UserLink';
+import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 // this regex matches one of the following regular expressions:
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])
@@ -45,6 +46,7 @@ const formatTaggedMessage = (
                 <UserLink
                     id={id}
                     name={`${trigger}${name}`}
+                    data-resin-target={ACTIVITY_TARGETS.MENTION}
                     className='bcs-comment-mention'
                     getUserProfileUrl={getUserProfileUrl}
                     key={contentKey}

@@ -2,29 +2,26 @@
 
 exports[`components/ContentSidebar/Skills/SidebarSkills should have no editable permission if can_upload is false 1`] = `
 <SidebarSkills
+  cards={
+    Array [
+      Object {
+        "entries": Array [
+          Object {
+            "title": "bar",
+          },
+        ],
+      },
+    ]
+  }
+  errors={Object {}}
   file={
     Object {
-      "metadata": Object {
-        "global": Object {
-          "boxSkillsCards": Object {
-            "cards": Array [
-              Object {
-                "entries": Array [
-                  Object {
-                    "title": "bar",
-                  },
-                ],
-              },
-            ],
-          },
-        },
-      },
       "permissions": Object {
         "can_upload": false,
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 >
   <sidebar-section
     interactionTarget=""
@@ -58,7 +55,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should have no editable 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
+      hasError={false}
       isEditable={false}
       onSkillChange={[Function]}
     />
@@ -68,30 +66,31 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should have no editable 
 
 exports[`components/ContentSidebar/Skills/SidebarSkills should render only the valid cards 1`] = `
 <SidebarSkills
+  cards={
+    Array [
+      Object {},
+      Object {
+        "entries": Array [
+          Object {
+            "title": "bar",
+          },
+        ],
+      },
+    ]
+  }
+  errors={
+    Object {
+      "1": true,
+    }
+  }
   file={
     Object {
-      "metadata": Object {
-        "global": Object {
-          "boxSkillsCards": Object {
-            "cards": Array [
-              Object {},
-              Object {
-                "entries": Array [
-                  Object {
-                    "title": "bar",
-                  },
-                ],
-              },
-            ],
-          },
-        },
-      },
       "permissions": Object {
         "can_upload": true,
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 >
   <sidebar-section
     interactionTarget=""
@@ -126,7 +125,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render only the v
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
+      hasError={true}
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -136,64 +136,66 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render only the v
 
 exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards when there are valid skills 1`] = `
 <SidebarSkills
-  file={
-    Object {
-      "metadata": Object {
-        "global": Object {
-          "boxSkillsCards": Object {
-            "cards": Array [
-              Object {
-                "entries": Array [
-                  Object {},
-                ],
-                "skill_card_title": Object {
-                  "code": "skills_faces",
-                },
-              },
-              Object {
-                "entries": Array [],
-                "skill_card_title": Object {
-                  "code": "skills_transcript",
-                },
-              },
-              Object {
-                "entries": Array [],
-                "skill_card_title": Object {
-                  "code": "skills_topics",
-                },
-              },
-              Object {
-                "entries": Array [
-                  Object {},
-                ],
-                "skill_card_title": Object {
-                  "code": "skills_status",
-                },
-              },
-              Object {
-                "entries": Array [],
-                "skill_card_title": Object {
-                  "code": "skills_error",
-                },
-              },
-              Object {
-                "entries": Array [
-                  Object {},
-                ],
-                "skill_card_title": Object {
-                  "message": "title",
-                },
-              },
-            ],
-          },
+  cards={
+    Array [
+      Object {
+        "entries": Array [
+          Object {},
+        ],
+        "skill_card_title": Object {
+          "code": "skills_faces",
         },
       },
+      Object {
+        "entries": Array [],
+        "skill_card_title": Object {
+          "code": "skills_transcript",
+        },
+      },
+      Object {
+        "entries": Array [],
+        "skill_card_title": Object {
+          "code": "skills_topics",
+        },
+      },
+      Object {
+        "entries": Array [
+          Object {},
+        ],
+        "skill_card_title": Object {
+          "code": "skills_status",
+        },
+      },
+      Object {
+        "entries": Array [],
+        "skill_card_title": Object {
+          "code": "skills_error",
+        },
+      },
+      Object {
+        "entries": Array [
+          Object {},
+        ],
+        "skill_card_title": Object {
+          "message": "title",
+        },
+      },
+    ]
+  }
+  errors={
+    Object {
+      "3": true,
+      "5": true,
+    }
+  }
+  file={
+    Object {
       "permissions": Object {
         "can_upload": true,
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 >
   <sidebar-section
     interactionTarget=""
@@ -263,7 +265,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
+      hasError={false}
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -334,7 +337,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
+      hasError={false}
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -345,8 +349,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
     key="card_3"
     title={
       <FormattedMessage
-        defaultMessage="Keywords"
-        id="be.keywordSkill"
+        defaultMessage="Topics"
+        id="be.topicsSkill"
       />
     }
   >
@@ -405,7 +409,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
+      hasError={false}
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -478,7 +483,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
+      hasError={true}
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -549,7 +555,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
+      hasError={false}
       isEditable={true}
       onSkillChange={[Function]}
     />
@@ -617,7 +624,8 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
+      hasError={true}
       isEditable={true}
       onSkillChange={[Function]}
     />

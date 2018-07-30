@@ -5,6 +5,7 @@
 
 import * as React from 'react';
 import getProp from 'lodash/get';
+import omit from 'lodash/omit';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 
@@ -16,7 +17,7 @@ import './ActivityFeed.scss';
 
 type Props = {
     file: BoxItem,
-    activityFeedError?: Errors,
+    activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     currentUser?: User,

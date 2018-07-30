@@ -7,6 +7,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
   How u doing 
   <UserLink
     className="bcs-comment-mention"
+    data-resin-target="mention"
     id="2030326577"
     key="1-123"
     name="@Young Jeezy"
@@ -22,6 +23,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
   Hi 
   <UserLink
     className="bcs-comment-mention"
+    data-resin-target="mention"
     id="123"
     key="1-123"
     name="﹫Half"
@@ -29,6 +31,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
    
   <UserLink
     className="bcs-comment-mention"
+    data-resin-target="mention"
     id="222"
     key="3-123"
     name="＠Full"
@@ -36,6 +39,7 @@ exports[`components/ContentSidebar/ActivityFeed/comment/CommentText should prope
    
   <UserLink
     className="bcs-comment-mention"
+    data-resin-target="mention"
     id="432"
     key="5-123"
     name="@Latin"

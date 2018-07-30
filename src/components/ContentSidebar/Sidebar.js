@@ -8,19 +8,28 @@ import * as React from 'react';
 import DetailsSidebar from './DetailsSidebar';
 import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
+import MetadataSidebar from './MetadataSidebar';
 import SidebarNav from './SidebarNav';
-import { SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS } from '../../constants';
+import {
+    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_METADATA
+} from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { MetadataSidebarProps } from './MetadataSidebar';
 import './Sidebar.scss';
 
 type Props = {
     view?: SidebarView,
     currentUser?: User,
     file: BoxItem,
-    getPreviewer: Function,
+    getPreview: Function,
+    getViewer: Function,
     activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
+    metadataSidebarProps: MetadataSidebarProps,
     hasSkills: boolean,
     hasMetadata: boolean,
     hasActivityFeed: boolean,
@@ -36,7 +45,8 @@ const Sidebar = ({
     view,
     currentUser,
     file,
-    getPreviewer,
+    getPreview,
+    getViewer,
     hasMetadata,
     hasActivityFeed,
     hasSkills,
@@ -44,6 +54,7 @@ const Sidebar = ({
     activitySidebarProps,
     detailsSidebarProps,
     onSkillChange,
+    metadataSidebarProps,
     onToggle,
     onVersionHistoryClick
 }: Props) => (
@@ -59,22 +70,26 @@ const Sidebar = ({
         {view === SIDEBAR_VIEW_DETAILS &&
             hasDetails && (
                 <DetailsSidebar
+                    key={file.id}
                     file={file}
                     onVersionHistoryClick={onVersionHistoryClick}
                     {...detailsSidebarProps}
                 />
             )}
         {view === SIDEBAR_VIEW_SKILLS &&
-            hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} onSkillChange={onSkillChange} />}
+            hasSkills && <SkillsSidebar key={file.id} file={file} getPreview={getPreview} getViewer={getViewer} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&
             hasActivityFeed && (
                 <ActivitySidebar
+                    key={file.id}
                     currentUser={currentUser}
                     file={file}
                     onVersionHistoryClick={onVersionHistoryClick}
                     {...activitySidebarProps}
                 />
             )}
+        {view === SIDEBAR_VIEW_METADATA &&
+            hasMetadata && <MetadataSidebar key={file.id} file={file} {...metadataSidebarProps} />}
     </React.Fragment>
 );
 
