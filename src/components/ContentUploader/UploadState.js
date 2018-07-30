@@ -7,7 +7,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import ErrorEmptyState from 'box-react-ui/lib/icons/states/ErrorEmptyState';
-import UploadStartState from 'box-react-ui/lib/icons/states/UploadStartState';
+import UploadEmptyState from 'box-react-ui/lib/icons/states/UploadEmptyState';
 import UploadSuccessState from 'box-react-ui/lib/icons/states/UploadSuccessState';
 import messages from '../messages';
 import UploadStateContent from './UploadStateContent';
@@ -35,7 +35,7 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadError} />} />;
             break;
         case VIEW_UPLOAD_EMPTY:
-            icon = <UploadStartState />;
+            icon = <UploadEmptyState />;
             /* eslint-disable no-nested-ternary */
             content =
                 canDrop && hasItems ? (
@@ -65,7 +65,7 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
             /* eslint-enable no-nested-ternary */
             break;
         case VIEW_UPLOAD_IN_PROGRESS:
-            icon = <UploadStartState />;
+            icon = <UploadEmptyState />;
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />;
             break;
         case VIEW_UPLOAD_SUCCESS:
