@@ -21,20 +21,20 @@ type Props = {
     url?: string,
     timeslices?: SkillCardEntryTimeSlice[],
     duration?: number,
-    getPreviewer?: Function,
+    getViewer?: Function,
     interactionTarget: string
 };
 
-const Timeline = ({ text = '', duration = 0, timeslices = [], getPreviewer, interactionTarget }: Props) => {
+const Timeline = ({ text = '', duration = 0, timeslices = [], getViewer, interactionTarget }: Props) => {
     let timeSliceIndex = -1;
 
     const playSegment = (index: number, incr: number = 0) => {
         const newIndex = incr > 0 ? Math.min(timeslices.length - 1, index + incr) : Math.max(0, index + incr);
-        const viewer = getPreviewer ? getPreviewer() : null;
+        const viewer = getViewer ? getViewer() : null;
         const timeslice = timeslices[newIndex];
         const validTime = isValidStartTime(timeslice);
 
-        if (validTime && viewer && viewer.isLoaded() && !viewer.isDestroyed() && typeof viewer.play === 'function') {
+        if (validTime && viewer && typeof viewer.play === 'function') {
             viewer.play(timeslice.start);
             timeSliceIndex = newIndex;
         }

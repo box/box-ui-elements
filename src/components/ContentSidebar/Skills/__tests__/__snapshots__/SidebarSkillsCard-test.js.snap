@@ -17,7 +17,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render face c
       "skill_card_type": "face",
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 />
 `;
 
@@ -28,7 +28,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render keywor
       "skill_card_type": "keyword",
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 />
 `;
 
@@ -41,7 +41,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render timeli
       "skill_card_type": "timeline",
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 />
 `;
 
@@ -52,6 +52,6 @@ exports[`components/ContentSidebar/Skills/SidebarSkillsCard should render transc
       "skill_card_type": "transcript",
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 />
 `;

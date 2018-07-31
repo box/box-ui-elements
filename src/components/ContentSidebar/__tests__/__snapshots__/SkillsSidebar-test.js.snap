@@ -26,7 +26,6 @@ exports[`components/ContentSidebar/Skills/SkillsSidebar should render skills sid
     cards={Array []}
     errors={Object {}}
     file={Object {}}
-    getPreviewer={[MockFunction]}
     onSkillChange={[Function]}
   />
 </SidebarContent>

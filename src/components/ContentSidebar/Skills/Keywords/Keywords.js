@@ -23,7 +23,7 @@ type Props = {
     hasError: boolean,
     transcript?: SkillCard,
     isEditable: boolean,
-    getPreviewer?: Function,
+    getViewer?: Function,
     onSkillChange: Function
 };
 
@@ -165,7 +165,7 @@ class Keywords extends PureComponent<Props, State> {
      * @return {void}
      */
     render() {
-        const { card, getPreviewer, isEditable }: Props = this.props;
+        const { card, getViewer, isEditable }: Props = this.props;
         const { duration }: SkillCard = card;
         const { isEditing, isLoading, hasError, keywords, removes, adds }: State = this.state;
         const hasKeywords = keywords.length > 0;
@@ -203,9 +203,7 @@ class Keywords extends PureComponent<Props, State> {
                     />
                 )}
                 {!isEditing &&
-                    hasKeywords && (
-                        <ReadOnlyKeywords keywords={entries} duration={duration} getPreviewer={getPreviewer} />
-                    )}
+                    hasKeywords && <ReadOnlyKeywords keywords={entries} duration={duration} getViewer={getViewer} />}
                 {!isEditing && !hasKeywords && <FormattedMessage {...messages.skillNoInfoFoundError} />}
             </LoadingIndicatorWrapper>
         );

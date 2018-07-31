@@ -11,7 +11,6 @@ import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
-import cloneDeep from 'lodash/cloneDeep';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
@@ -25,6 +24,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_METADATA,
     UNAUTHORIZED_CODE
 } from '../../constants';
 import {
@@ -53,7 +53,8 @@ type Props = {
     token: Token,
     className: string,
     currentUser?: User,
-    getPreviewer: Function,
+    getPreview: Function,
+    getViewer: Function,
     hasSkills: boolean,
     activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
@@ -72,6 +73,7 @@ type Props = {
 
 type State = {
     view: SidebarView,
+    isCollapsed?: boolean,
     file?: BoxItem,
     accessStats?: FileAccessStats,
     versions?: FileVersions,
@@ -103,10 +105,10 @@ class ContentSidebar extends PureComponent<Props, State> {
 
     static defaultProps = {
         className: '',
-        isCollapsed: false,
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         apiHost: DEFAULT_HOSTNAME_API,
-        getPreviewer: noop,
+        getPreview: noop,
+        getViewer: noop,
         currentUser: undefined,
         hasSkills: false,
         hasMetadata: false,
@@ -164,7 +166,10 @@ class ContentSidebar extends PureComponent<Props, State> {
         });
 
         // Clone initial state to allow for state reset on new files
-        this.state = cloneDeep(this.initialState);
+        this.state = {
+            ...this.initialState,
+            isCollapsed: !!props.isCollapsed
+        };
     }
 
     /**
@@ -216,10 +221,11 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         if (hasFileIdChanged) {
             // Clear out existing state
-            this.setState(cloneDeep(this.initialState));
+            this.setState({ ...this.initialState });
             this.fetchData(nextProps);
         } else if (hasVisibilityChanged) {
             this.setState({
+                isCollapsed: !!nextProps.isCollapsed,
                 view: this.getDefaultSidebarView(nextProps.isCollapsed, file)
             });
         }
@@ -232,7 +238,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     onToggle = (view: SidebarView): void => {
-        this.setState({ view: view === this.state.view ? undefined : view });
+        const { view: stateView, isCollapsed }: State = this.state;
+        const togglingOff = view === stateView;
+        this.setState({
+            view: togglingOff ? undefined : view,
+            isCollapsed: togglingOff ? isCollapsed : false
+        });
     };
 
     /**
@@ -259,7 +270,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, hasActivityFeed, detailsSidebarProps, currentUser }: Props) {
+    fetchData(props: Props) {
+        const { fileId, detailsSidebarProps, currentUser }: Props = props;
         const { hasAccessStats = false } = detailsSidebarProps;
         if (!fileId) {
             return;
@@ -272,7 +284,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.fetchFileAccessStats(fileId);
         }
 
-        if (hasActivityFeed) {
+        if (SidebarUtils.canHaveActivitySidebar(props)) {
             this.fetchComments({
                 id: fileId,
                 fields: COMMENTS_FIELDS_TO_FETCH
@@ -514,20 +526,23 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File fetch success callback that sets the file and view
      *
      * @private
+     * @param {boolean} isCollapsed - Box file
      * @param {Object} file - Box file
      * @return {string} Sidebar view to use
      */
     getDefaultSidebarView(isCollapsed?: boolean, file?: BoxItem): SidebarView {
+        const { view }: State = this.state;
+
         // If collapsed no need to return any view
         if (isCollapsed || !file) {
             return undefined;
         }
 
         let defaultView;
-        const { view }: State = this.state;
         const canDefaultToSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const canDefaultToDetails = SidebarUtils.shouldRenderDetailsSidebar(this.props);
-        const canDefaultToActivity = SidebarUtils.shouldRenderActivitySidebar(this.props);
+        const canDefaultToDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
+        const canDefaultToActivity = SidebarUtils.canHaveActivitySidebar(this.props);
+        const canDefaultToMetadata = SidebarUtils.canHaveMetadataSidebar(this.props);
 
         // Calculate the default view with latest props
         if (canDefaultToSkills) {
@@ -543,7 +558,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             !view ||
             (view === SIDEBAR_VIEW_SKILLS && !canDefaultToSkills) ||
             (view === SIDEBAR_VIEW_ACTIVITY && !canDefaultToActivity) ||
-            (view === SIDEBAR_VIEW_DETAILS && !canDefaultToDetails)
+            (view === SIDEBAR_VIEW_DETAILS && !canDefaultToDetails) ||
+            (view === SIDEBAR_VIEW_METADATA && !canDefaultToMetadata)
         ) {
             return defaultView;
         }
@@ -559,7 +575,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        this.setState({ file, view: this.getDefaultSidebarView(this.props.isCollapsed, file), isFileLoading: false });
+        this.setState({ file, view: this.getDefaultSidebarView(this.state.isCollapsed, file), isFileLoading: false });
     };
 
     /**
@@ -1384,14 +1400,14 @@ class ContentSidebar extends PureComponent<Props, State> {
         const {
             language,
             messages: intlMessages,
-            getPreviewer,
+            getPreview,
+            getViewer,
             hasActivityFeed,
             className,
             activitySidebarProps,
             detailsSidebarProps,
             metadataSidebarProps,
-            onVersionHistoryClick,
-            isCollapsed
+            onVersionHistoryClick
         }: Props = this.props;
         const {
             file,
@@ -1407,7 +1423,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             currentUserError,
-            isFileLoading
+            isFileLoading,
+            isCollapsed
         }: State = this.state;
 
         const styleClassName = classNames(
@@ -1420,7 +1437,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         );
 
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const hasDetails = SidebarUtils.shouldRenderDetailsSidebar(this.props);
+        const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.canHaveMetadataSidebar(this.props);
 
         return (
@@ -1455,13 +1472,12 @@ class ContentSidebar extends PureComponent<Props, State> {
                                         ...metadataSidebarProps
                                     }}
                                     versions={versions}
-                                    getPreviewer={getPreviewer}
+                                    getPreview={getPreview}
+                                    getViewer={getViewer}
                                     hasSkills={hasSkills}
                                     hasDetails={hasDetails}
                                     hasMetadata={hasMetadata}
                                     hasActivityFeed={hasActivityFeed}
-                                    accessStats={accessStats}
-                                    accessStatsError={accessStatsError}
                                     fileError={fileError}
                                     tasks={tasks}
                                     comments={comments}

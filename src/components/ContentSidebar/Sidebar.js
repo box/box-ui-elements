@@ -25,7 +25,8 @@ type Props = {
     view?: SidebarView,
     currentUser?: User,
     file: BoxItem,
-    getPreviewer: Function,
+    getPreview: Function,
+    getViewer: Function,
     activitySidebarProps: ActivitySidebarProps,
     detailsSidebarProps: DetailsSidebarProps,
     metadataSidebarProps: MetadataSidebarProps,
@@ -44,7 +45,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     activityFeedError: ?Errors,
     currentUserError?: Errors,
-    getAvatarUrl: (string) => Promise<?string>,
+    getAvatarUrl: string => Promise<?string>,
     onToggle: Function,
     onVersionHistoryClick?: Function
 };
@@ -53,7 +54,8 @@ const Sidebar = ({
     view,
     currentUser,
     file,
-    getPreviewer,
+    getPreview,
+    getViewer,
     hasMetadata,
     hasActivityFeed,
     hasSkills,
@@ -85,16 +87,19 @@ const Sidebar = ({
         {view === SIDEBAR_VIEW_DETAILS &&
             hasDetails && (
                 <DetailsSidebar
+                    key={file.id}
                     file={file}
                     versions={versions}
                     onVersionHistoryClick={onVersionHistoryClick}
                     {...detailsSidebarProps}
                 />
             )}
-        {view === SIDEBAR_VIEW_SKILLS && hasSkills && <SkillsSidebar file={file} getPreviewer={getPreviewer} />}
+        {view === SIDEBAR_VIEW_SKILLS &&
+            hasSkills && <SkillsSidebar key={file.id} file={file} getPreview={getPreview} getViewer={getViewer} />}
         {view === SIDEBAR_VIEW_ACTIVITY &&
             hasActivityFeed && (
                 <ActivitySidebar
+                    key={file.id}
                     currentUser={currentUser}
                     file={file}
                     tasks={tasks}
@@ -110,7 +115,8 @@ const Sidebar = ({
                     {...activitySidebarProps}
                 />
             )}
-        {view === SIDEBAR_VIEW_METADATA && hasMetadata && <MetadataSidebar file={file} {...metadataSidebarProps} />}
+        {view === SIDEBAR_VIEW_METADATA &&
+            hasMetadata && <MetadataSidebar key={file.id} file={file} {...metadataSidebarProps} />}
     </React.Fragment>
 );
 

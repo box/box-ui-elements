@@ -8,7 +8,8 @@ import MetadataSidebar from '../MetadataSidebar';
 import SidebarNav from '../SidebarNav';
 
 describe('components/ContentSidebar/Skills/Sidebar', () => {
-    const getWrapper = (props) => shallow(<Sidebar {...props} />);
+    const file = { id: 'id' };
+    const getWrapper = (props) => shallow(<Sidebar file={file} {...props} />);
 
     test('should render no sidebar', () => {
         const wrapper = getWrapper();
