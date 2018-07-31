@@ -8,7 +8,7 @@ import * as React from 'react';
 import PillCloud from 'box-react-ui/lib/components/pill-cloud/PillCloud';
 import Timeline from '../Timeline';
 import getPills from './keywordUtils';
-import { SKILLS_TARGETS } from '../../../../interactionTargets';
+import { SKILLS_TARGETS, INTERACTION_TARGET } from '../../../../interactionTargets';
 import type { Pill, Pills } from './flowTypes';
 import './ReadOnlyKeywords.scss';
 
@@ -60,7 +60,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
                     options={options}
                     onSelect={this.onSelect}
                     {...pillCloudProps}
-                    buttonProps={{ 'data-resin-target': SKILLS_TARGETS.KEYWORDS.SELECT }}
+                    buttonProps={{ [INTERACTION_TARGET]: SKILLS_TARGETS.KEYWORDS.SELECT }}
                 />
                 {!!selected &&
                     Array.isArray(selected.appears) &&

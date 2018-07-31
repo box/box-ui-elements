@@ -13,11 +13,6 @@ exports[`components/ContentSidebar/Skills/Keywords/EditableKeywords should corre
     onKeyDown={[Function]}
     onPaste={[Function]}
     onRemove={[Function]}
-    pillProps={
-      Object {
-        "data-resin-target": "foo",
-      }
-    }
     placeholder=""
     selectedOptions={
       Array [

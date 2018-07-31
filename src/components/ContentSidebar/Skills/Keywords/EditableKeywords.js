@@ -133,7 +133,6 @@ class EditableKeywords extends React.PureComponent<Props, State> {
                     onRemove={this.onRemove}
                     selectedOptions={pills}
                     value={keyword}
-                    pillProps={{ 'data-resin-target': 'foo' }}
                 />
                 <div className='be-keywords-buttons'>
                     <Button type='button' onClick={onCancel} data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_CANCEL}>

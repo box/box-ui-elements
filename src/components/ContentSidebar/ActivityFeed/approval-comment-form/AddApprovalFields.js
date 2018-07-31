@@ -11,7 +11,7 @@ import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
 import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelectorDropdown';
 
 import messages from '../../../messages';
-import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
+import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../../interactionTargets';
 
 type Props = {
     approvalDate: ?Date,
@@ -71,7 +71,7 @@ const AddApprovalFields = ({
                 onChange={onApprovalDateChange}
                 value={approvalDate}
                 inputProps={{
-                    'data-resin-target': ACTIVITY_TARGETS.TASK_DATE_PICKER
+                    [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER
                 }}
             />
         </div>
