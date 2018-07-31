@@ -145,7 +145,7 @@ publish_examples() {
     # Publish gh-pages
     if ! push_to_gh_pages; then
         echo "----------------------------------------------------"
-        echo "Error in push_to_npm!"
+        echo "Error in push_to_gh_pages!"
         echo "----------------------------------------------------"
         exit 1
     fi
