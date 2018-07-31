@@ -38,4 +38,5 @@ flow-typed
 .github
 .prettierignore
 .eslintignore
-
+examples
+styleguide
