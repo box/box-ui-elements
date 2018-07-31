@@ -35,7 +35,6 @@ type Props = {
     hasActivityFeed: boolean,
     hasSkills: boolean,
     hasDetails: boolean,
-    onSkillChange: Function,
     translations?: Translations,
     onToggle: Function,
     onVersionHistoryClick?: Function
@@ -53,7 +52,6 @@ const Sidebar = ({
     hasDetails,
     activitySidebarProps,
     detailsSidebarProps,
-    onSkillChange,
     metadataSidebarProps,
     onToggle,
     onVersionHistoryClick

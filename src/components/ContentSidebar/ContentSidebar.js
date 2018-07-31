@@ -68,7 +68,6 @@ type State = {
     file?: BoxItem,
     accessStats?: FileAccessStats,
     fileError?: Errors,
-    activityFeedError: ?Errors,
     accessStatsError?: Errors,
     isFileLoading?: boolean,
     feedItems?: FeedItems
@@ -101,8 +100,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         file: undefined,
         accessStats: undefined,
         fileError: undefined,
-        accessStatsError: undefined,
-        activityFeedError: undefined
+        accessStatsError: undefined
     };
 
     /**
@@ -463,97 +461,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * Patches skill metadata
-     *
-     * @private
-     * @param {string} id - File id
-     * @return {void}
-     */
-    onSkillChange = (
-        index: number,
-        removes: Array<SkillCardEntry> = [],
-        adds: Array<SkillCardEntry> = [],
-        replaces: Array<{ replaced: SkillCardEntry, replacement: SkillCardEntry }> = []
-    ): void => {
-        const { hasSkills }: Props = this.props;
-        const { file }: State = this.state;
-        if (!hasSkills || !file) {
-            return;
-        }
-
-        const { metadata, permissions }: BoxItem = file;
-        if (!metadata || !permissions || !permissions.can_upload) {
-            return;
-        }
-
-        const cards: Array<SkillCard> = getProp(file, 'metadata.global.boxSkillsCards.cards');
-        if (!cards || cards.length === 0 || !cards[index]) {
-            return;
-        }
-
-        const card = cards[index];
-        const path = `/cards/${index}`;
-        const ops: JsonPatchData = [];
-
-        if (Array.isArray(replaces)) {
-            replaces.forEach(({ replaced, replacement }) => {
-                const idx = card.entries.findIndex((entry) => entry === replaced);
-                if (idx > -1) {
-                    ops.push({
-                        op: 'replace',
-                        path: `${path}/entries/${idx}`,
-                        value: replacement
-                    });
-                }
-            });
-        }
-
-        if (Array.isArray(removes)) {
-            removes.forEach((removed) => {
-                const idx = card.entries.findIndex((entry) => entry === removed);
-                if (idx > -1) {
-                    ops.push({
-                        op: 'remove',
-                        path: `${path}/entries/${idx}`
-                    });
-                }
-            });
-        }
-
-        if (Array.isArray(adds)) {
-            adds.forEach((added) => {
-                ops.push({
-                    op: 'add',
-                    path: `${path}/entries/-`,
-                    value: added
-                });
-            });
-        }
-
-        // If no ops, don't proceed
-        if (ops.length === 0) {
-            return;
-        }
-
-        // Add test ops before any other ops
-        ops.splice(0, 0, {
-            op: 'test',
-            path,
-            value: card
-        });
-
-        this.api.getMetadataAPI(false).patch(
-            file,
-            FIELD_METADATA_SKILLS,
-            ops,
-            (updatedFile) => {
-                this.setState({ file: updatedFile });
-            },
-            this.errorCallback
-        );
-    };
-
-    /**
      * Refreshes sidebar when classification is changed
      *
      * @private
@@ -654,7 +561,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     hasMetadata={hasMetadata}
                                     hasActivityFeed={hasActivityFeed}
                                     accessStats={accessStats}
-                                    onSkillChange={this.onSkillChange}
                                     accessStatsError={accessStatsError}
                                     fileError={fileError}
                                     onToggle={this.onToggle}
