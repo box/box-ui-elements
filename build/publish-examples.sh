@@ -3,22 +3,6 @@
 # Temp version
 VERSION="XXX"
 
-clean_assets() {
-    echo "----------------------------------------------------"
-    echo "Running clean for version" $VERSION
-    echo "----------------------------------------------------"
-    if yarn clean-styleguide; then
-        echo "----------------------------------------------------"
-        echo "Done cleaning for version" $VERSION
-        echo "----------------------------------------------------"
-    else
-        echo "----------------------------------------------------"
-        echo "Failed cleaning!"
-        echo "----------------------------------------------------"
-        exit 1;
-    fi
-}
-
 pre_build() {
     echo "-------------------------------------------------------------"
     echo "Starting install, clean and pre build for version" $VERSION
@@ -55,15 +39,15 @@ push_to_gh_pages() {
     echo "---------------------------------------------------------"
     echo "Running copying styleguide over to gh-pages" $VERSION
     echo "---------------------------------------------------------"
-    git fetch origin || exit 1
+    git fetch release || exit 1
     if ! git checkout gh-pages; then
-        git checkout -b gh-pages origin/gh-pages || exit 1
+        git checkout -b gh-pages || exit 1
     fi
-    git rebase origin/gh-pages || exit 1
+    git rebase release/gh-pages || exit 1
     cp -R styleguide/. ./ || exit 1
     git add -A || exit 1
-    git commit -am $VERSION || exit 1
-    git push || exit 1
+    git commit -am "Docs: v$VERSION" || exit 1
+    git push release gh-pages --no-verify || exit 1
 }
 
 add_remote() {
@@ -117,14 +101,6 @@ publish_examples() {
     echo "----------------------------------------------------"
     # Check out the version we want to build (version tags are prefixed with a v)
     git checkout v$VERSION || exit 1
-
-    # Do testing and linting
-    if ! clean_assets; then
-        echo "----------------------------------------------------"
-        echo "Error in clean_assets!"
-        echo "----------------------------------------------------"
-        exit 1
-    fi
 
     # Do pre build
     if ! pre_build; then
