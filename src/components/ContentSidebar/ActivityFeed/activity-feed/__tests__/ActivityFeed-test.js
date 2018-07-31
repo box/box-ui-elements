@@ -45,7 +45,8 @@ const first_version = {
     created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
     trashed_at: 1234567891,
     modified_at: 1234567891,
-    modified_by: { name: 'Akon', id: 11 }
+    modified_by: { name: 'Akon', id: 11 },
+    version_number: '1'
 };
 
 const deleted_version = {
@@ -55,7 +56,8 @@ const deleted_version = {
     created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
     trashed_at: 1234567891,
     modified_at: 1234567891,
-    modified_by: { name: 'Akon', id: 11 }
+    modified_by: { name: 'Akon', id: 11 },
+    version_number: '2'
 };
 
 const versions = {
@@ -70,12 +72,14 @@ const file = {
     },
     modified_at: 2234567891,
     file_version: {
-        id: 987
+        id: 987,
+        type: 'file_version'
     },
     restored_from: {
         id: first_version.id,
         type: first_version.type
-    }
+    },
+    version_number: '3'
 };
 
 const currentUser = { name: 'Kanye West', id: 10 };
@@ -780,10 +784,10 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(versionsWithCurrent.entries.pop().id).toBe(file.file_version.id);
         });
 
-        test('should edit the version with restored type', () => {
+        test('should append the current version as restored type', () => {
             const versionsWithRestore = instance.addCurrentVersion(versions, file);
-            expect(versionsWithRestore.entries.length).toBe(versions.entries.length);
-            const restoredVersion = versionsWithRestore.entries[0];
+            expect(versionsWithRestore.entries.length).toBe(versions.entries.length + 1);
+            const restoredVersion = versionsWithRestore.entries.pop();
             expect(restoredVersion.action).toBe('restore');
             expect(restoredVersion.created_at).toBe(file.modified_at);
         });

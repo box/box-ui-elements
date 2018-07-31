@@ -433,34 +433,31 @@ class ActivityFeed extends React.Component<Props, State> {
         const { restored_from, modified_at, file_version } = file;
 
         if (file_version) {
+            const { modified_by, version_number } = file;
+            let currentVersion = file_version;
+            let action = VERSION_UPLOAD_ACTION;
+            let versionNumber = version_number;
             if (restored_from) {
-                const entriesWithRestore: Array<BoxItemVersion> = versions.entries.map(
-                    (version: BoxItemVersion): BoxItemVersion => {
-                        if (version.id === restored_from.id) {
-                            return {
-                                ...version,
-                                created_at: modified_at,
-                                action: VERSION_RESTORE_ACTION
-                            };
-                        }
-
-                        return version;
-                    }
+                const { id: restoredFromId } = restored_from;
+                const restoredVersion = versions.entries.find(
+                    (version: BoxItemVersion) => version.id === restoredFromId
                 );
-
-                return {
-                    ...versions,
-                    entries: entriesWithRestore
-                };
+                if (restoredVersion) {
+                    versionNumber = restoredVersion.version_number;
+                    action = VERSION_RESTORE_ACTION;
+                    currentVersion = {
+                        ...restoredVersion,
+                        ...currentVersion
+                    };
+                }
             }
 
-            const { modified_by, version_number } = file;
             const currentFileVersion: BoxItemVersion = {
-                ...file_version,
-                action: VERSION_UPLOAD_ACTION,
+                ...currentVersion,
+                action,
                 modified_by,
                 created_at: modified_at,
-                version_number: parseInt(version_number, 10)
+                version_number: versionNumber
             };
             return {
                 total_count: versions.total_count + 1,

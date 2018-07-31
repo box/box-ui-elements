@@ -37,10 +37,9 @@ class Versions extends OffsetBasedAPI {
         }
 
         const { entries } = data;
-        const versions = entries.reverse().map((version: BoxItemVersion, index) => ({
+        const versions = entries.map((version: BoxItemVersion) => ({
             ...version,
-            action: version.trashed_at ? ACTION.delete : ACTION.upload,
-            version_number: index + 1 // adjust for offset
+            action: version.trashed_at ? ACTION.delete : ACTION.upload
         }));
 
         this.successCallback({ ...data, entries: versions });

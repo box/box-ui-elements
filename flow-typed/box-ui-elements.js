@@ -260,7 +260,7 @@ type BoxItemVersion = {
     trashed_at: ?string,
     action: 'upload' | 'delete' | 'restore',
     versions?: Array<BoxItemVersion>,
-    version_number: number,
+    version_number: string,
     version_start?: number,
     version_end?: number,
     collaborators?: Object

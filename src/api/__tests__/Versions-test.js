@@ -43,14 +43,12 @@ describe('api/Versions', () => {
                 total_count: 2,
                 entries: [
                     {
-                        ...deleteVersion,
-                        action: 'delete',
-                        version_number: 1
+                        ...uploadVersion,
+                        action: 'upload'
                     },
                     {
-                        ...uploadVersion,
-                        action: 'upload',
-                        version_number: 2
+                        ...deleteVersion,
+                        action: 'delete'
                     }
                 ]
             };

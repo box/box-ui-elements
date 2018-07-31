@@ -52,8 +52,8 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             "type": "task",
           },
           Object {
-            "action": "restore",
-            "created_at": 2234567891,
+            "action": "upload",
+            "created_at": "Thu Sep 20 33658 19:45:39 GMT-0600 (CST)",
             "id": 123,
             "modified_at": 1234567891,
             "modified_by": Object {
@@ -62,6 +62,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             },
             "trashed_at": 1234567891,
             "type": "file_version",
+            "version_number": "1",
           },
           Object {
             "action": "delete",
@@ -74,6 +75,17 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             },
             "trashed_at": 1234567891,
             "type": "file_version",
+            "version_number": "2",
+          },
+          Object {
+            "action": "restore",
+            "created_at": 2234567891,
+            "id": 987,
+            "modified_at": 1234567891,
+            "modified_by": undefined,
+            "trashed_at": 1234567891,
+            "type": "file_version",
+            "version_number": "1",
           },
         ]
       }
