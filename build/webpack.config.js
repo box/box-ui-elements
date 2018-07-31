@@ -15,6 +15,9 @@ const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'dev';
 const language = process.env.LANGUAGE;
 const react = process.env.REACT === 'true';
+const token = process.env.TOKEN; // used for examples only
+const folderId = process.env.FOLDERID; // used for examples only
+const fileId = process.env.FILEID; // used for examples only
 const outputDir = process.env.OUTPUT;
 const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
@@ -46,6 +49,7 @@ function getConfig(isReactExternalized) {
         resolve: {
             modules: ['src', 'node_modules'],
             alias: {
+                'examples':  path.join(__dirname, '../examples/src'),
                 'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
                 'box-react-ui-locale-data': path.resolve(`node_modules/box-react-ui/i18n/${language}`),
@@ -75,6 +79,9 @@ function getConfig(isReactExternalized) {
             new DefinePlugin({
                 __LANGUAGE__: JSON.stringify(language),
                 __VERSION__: JSON.stringify(version),
+                __TOKEN__: JSON.stringify(token), // used for examples only
+                __FOLDERID__: JSON.stringify(folderId), // used for examples only
+                __FILEID__: JSON.stringify(fileId), // used for examples only
                 'process.env': {
                     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                     BABEL_ENV: JSON.stringify(process.env.BABEL_ENV)
@@ -136,4 +143,4 @@ function getConfig(isReactExternalized) {
     return config;
 }
 
-module.exports = isDev ? [getConfig(true), getConfig(false)] : getConfig(!react);
+module.exports = isDev ? [getConfig(false), getConfig(true)] : getConfig(!react);
