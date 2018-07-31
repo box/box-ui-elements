@@ -32,21 +32,21 @@ exports[`components/ContentSidebar/Skills/Keywords/EditableKeywords should corre
     className="be-keywords-buttons"
   >
     <Button
+      data-resin-target="skill-keywordeditcancel"
       onClick={[MockFunction]}
       type="button"
     >
       <FormattedMessage
-        data-resin-target="skill-keywordeditcancel"
         defaultMessage="Cancel"
         id="be.cancel"
       />
     </Button>
     <PrimaryButton
+      data-resin-target="skill-keywordeditsave"
       onClick={[MockFunction]}
       type="button"
     >
       <FormattedMessage
-        data-resin-target="skill-keywordeditsave"
         defaultMessage="Save"
         id="be.save"
       />
