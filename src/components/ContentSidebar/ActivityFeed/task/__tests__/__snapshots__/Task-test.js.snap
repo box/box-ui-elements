@@ -239,6 +239,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show tooltips w
     >
       <PlainButton
         className="bcs-task-check-btn"
+        data-resin-target="activityfeed-taskapprove"
         onClick={[Function]}
       >
         <IconCheck
@@ -262,6 +263,7 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show tooltips w
     >
       <PlainButton
         className="bcs-task-x-btn"
+        data-resin-target="activityfeed-taskreject"
         onClick={[Function]}
       >
         <IconClose
