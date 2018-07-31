@@ -75,7 +75,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).toBeCalledWith(true, file);
-            expect(instance.setState).toBeCalledWith({ view: 'view' });
+            expect(instance.setState).toBeCalledWith({ isCollapsed: true, view: 'view' });
         });
     });
 
@@ -228,6 +228,30 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
             expect(inlineErrorState.errorHeader).toEqual(currentUserErrorHeaderMessage);
             expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+        });
+    });
+
+    describe('onToggle()', () => {
+        test('should set new view state', () => {
+            const wrapper = getWrapper({ isCollapsed: true });
+            const instance = wrapper.instance();
+
+            wrapper.setState({ view: 'activity' });
+            instance.setState = jest.fn();
+            instance.onToggle('skills');
+
+            expect(instance.setState).toBeCalledWith({ isCollapsed: false, view: 'skills' });
+        });
+
+        test('should remove view state', () => {
+            const wrapper = getWrapper({ isCollapsed: true });
+            const instance = wrapper.instance();
+
+            wrapper.setState({ view: 'activity' });
+            instance.setState = jest.fn();
+            instance.onToggle('activity');
+
+            expect(instance.setState).toBeCalledWith({ isCollapsed: true, view: undefined });
         });
     });
 
@@ -1069,9 +1093,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
         });
@@ -1082,9 +1106,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'activity' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
         });
@@ -1095,9 +1119,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'details' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('details');
         });
@@ -1106,9 +1130,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
         });
@@ -1117,9 +1141,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
         });
@@ -1128,9 +1152,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('details');
         });
@@ -1141,9 +1165,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('activity');
         });
@@ -1154,9 +1178,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('details');
         });
@@ -1167,9 +1191,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'details' });
 
-            SidebarUtils.shouldRenderDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
 
             expect(instance.getDefaultSidebarView(false, file)).toBe('skills');
         });

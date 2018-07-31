@@ -21,7 +21,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should have no editable 
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 >
   <sidebar-section
     interactionTarget=""
@@ -55,7 +55,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should have no editable 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
       hasError={false}
       isEditable={false}
       onSkillChange={[Function]}
@@ -90,7 +90,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render only the v
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 >
   <sidebar-section
     interactionTarget=""
@@ -125,7 +125,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render only the v
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
       hasError={true}
       isEditable={true}
       onSkillChange={[Function]}
@@ -195,7 +195,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
       },
     }
   }
-  getPreviewer={[MockFunction]}
+  getViewer={[MockFunction]}
 >
   <sidebar-section
     interactionTarget=""
@@ -265,7 +265,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
       hasError={false}
       isEditable={true}
       onSkillChange={[Function]}
@@ -337,7 +337,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
       hasError={false}
       isEditable={true}
       onSkillChange={[Function]}
@@ -409,7 +409,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
       hasError={false}
       isEditable={true}
       onSkillChange={[Function]}
@@ -483,7 +483,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
       hasError={true}
       isEditable={true}
       onSkillChange={[Function]}
@@ -555,7 +555,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
       hasError={false}
       isEditable={true}
       onSkillChange={[Function]}
@@ -624,7 +624,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
           },
         ]
       }
-      getPreviewer={[MockFunction]}
+      getViewer={[MockFunction]}
       hasError={true}
       isEditable={true}
       onSkillChange={[Function]}

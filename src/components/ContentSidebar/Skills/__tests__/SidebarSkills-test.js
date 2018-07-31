@@ -46,7 +46,7 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                     entries: [{}]
                 }
             ],
-            getPreviewer: jest.fn()
+            getViewer: jest.fn()
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
@@ -69,7 +69,7 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                     entries: [{ title: 'bar' }]
                 }
             ],
-            getPreviewer: jest.fn()
+            getViewer: jest.fn()
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
@@ -89,7 +89,7 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
                     entries: [{ title: 'bar' }]
                 }
             ],
-            getPreviewer: jest.fn()
+            getViewer: jest.fn()
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();

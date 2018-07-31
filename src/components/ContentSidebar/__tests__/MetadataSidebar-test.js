@@ -18,7 +18,6 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         };
         const wrapper = getWrapper({
             file: {},
-            getPreviewer: jest.fn(),
             api
         });
         wrapper.setState({ templates: [], editors: [] });
@@ -40,7 +39,6 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         };
         const wrapper = getWrapper({
             file: {},
-            getPreviewer: jest.fn(),
             api
         });
         wrapper.setState({ editors: [] });
@@ -62,7 +60,6 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         };
         const wrapper = getWrapper({
             file: {},
-            getPreviewer: jest.fn(),
             api
         });
         wrapper.setState({ templates: [] });
@@ -84,7 +81,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         };
         const wrapper = getWrapper({
             file: {},
-            getPreviewer: jest.fn(),
+            getViewer: jest.fn(),
             api
         });
         wrapper.setState({ hasError: true });
