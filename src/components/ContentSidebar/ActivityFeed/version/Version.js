@@ -10,6 +10,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
 import messages from '../../../messages';
+import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 import './Version.scss';
 import { VERSION_UPLOAD_ACTION, VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
@@ -72,6 +73,7 @@ const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Prop
                         onInfo({ id, version_number });
                     }}
                     type='button'
+                    data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                 >
                     <IconInfoInverted height={16} width={16} />
                 </PlainButton>
