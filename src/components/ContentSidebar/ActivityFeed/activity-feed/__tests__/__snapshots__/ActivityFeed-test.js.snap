@@ -62,6 +62,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             },
             "trashed_at": 1234567891,
             "type": "file_version",
+            "version_number": "1",
           },
           Object {
             "action": "delete",
@@ -74,18 +75,17 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
             },
             "trashed_at": 1234567891,
             "type": "file_version",
+            "version_number": "2",
           },
           Object {
             "action": "restore",
-            "created_at": 1234567891,
+            "created_at": 2234567891,
             "id": 987,
             "modified_at": 1234567891,
-            "modified_by": Object {
-              "id": 11,
-              "name": "Akon",
-            },
+            "modified_by": undefined,
             "trashed_at": 1234567891,
             "type": "file_version",
+            "version_number": "1",
           },
         ]
       }

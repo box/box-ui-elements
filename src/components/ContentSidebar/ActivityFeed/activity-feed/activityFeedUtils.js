@@ -25,10 +25,11 @@ export function collapseFeedState(feedState: FeedItems): FeedItems {
             const {
                 modified_by: prevModifiedBy,
                 versions = [previousFeedItem],
-                version_start = previousFeedItem.version_number,
-                version_end = previousFeedItem.version_number
+                version_start = parseInt(previousFeedItem.version_number, 10),
+                version_end = parseInt(previousFeedItem.version_number, 10)
             } = previousFeedItem;
             const { action, modified_by, created_at, trashed_at, id, version_number } = feedItem;
+            const parsedVersionNumber = parseInt(version_number, 10);
             const collaborators = previousFeedItem.collaborators || {
                 [prevModifiedBy.id]: { ...prevModifiedBy }
             };
@@ -47,8 +48,8 @@ export function collapseFeedState(feedState: FeedItems): FeedItems {
                     type: ItemTypes.fileVersion,
                     version_number,
                     versions: versions.concat([feedItem]),
-                    version_start: Math.min(version_start, version_number),
-                    version_end: Math.max(version_end, version_number)
+                    version_start: Math.min(version_start, parsedVersionNumber),
+                    version_end: Math.max(version_end, parsedVersionNumber)
                 }
             ]);
         }

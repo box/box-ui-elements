@@ -13,10 +13,11 @@ import messages from '../../../messages';
 import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 import './Version.scss';
+import { VERSION_UPLOAD_ACTION, VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
 
 function getMessageForAction(name: React.Node, action: string, version_number: number): React.Node {
     switch (action) {
-        case 'upload':
+        case VERSION_UPLOAD_ACTION:
             return (
                 <FormattedMessage
                     {...messages.versionUploaded}
@@ -26,7 +27,7 @@ function getMessageForAction(name: React.Node, action: string, version_number: n
                     }}
                 />
             );
-        case 'delete':
+        case VERSION_DELETE_ACTION:
             return (
                 <FormattedMessage
                     {...messages.versionDeleted}
@@ -36,7 +37,7 @@ function getMessageForAction(name: React.Node, action: string, version_number: n
                     }}
                 />
             );
-        case 'restore':
+        case VERSION_RESTORE_ACTION:
             return (
                 <FormattedMessage
                     {...messages.versionRestored}

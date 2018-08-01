@@ -16,8 +16,8 @@ import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import messages from '../../../messages';
 import './ActivityFeed.scss';
+import { VERSION_UPLOAD_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
 
-const VERSION_RESTORE_ACTION = 'restore';
 const TASK_INCOMPLETE = 'incomplete';
 const TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
 
@@ -424,33 +424,47 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     /**
-     * Adds a versions entry if the current file version was restored from a previous version
+     * Adds the current version from the file object, which may be a restore
      *
      * @param {FileVersions} versions - API returned file versions for this file
-     * @return {FileVersions} modified versions array including the version restore
+     * @return {FileVersions} modified versions array including the current/restored version
      */
-    addRestoredVersion(versions: FileVersions) {
-        const { file } = this.props;
+    addCurrentVersion(versions: FileVersions, file: BoxItem) {
         const { restored_from, modified_at, file_version } = file;
 
-        // Ensures restored version is only added on first feed loads
-        const lastVersion = versions.total_count ? versions.entries[versions.total_count - 1] : {};
-        if (restored_from && lastVersion.action !== VERSION_RESTORE_ACTION) {
-            const restoredVersion = versions.entries.find((version) => version.id === restored_from.id);
+        if (!file_version) {
+            return versions;
+        }
 
+        const { modified_by, version_number } = file;
+        let currentVersion = file_version;
+        let action = VERSION_UPLOAD_ACTION;
+        let versionNumber = version_number;
+
+        if (restored_from) {
+            const { id: restoredFromId } = restored_from;
+            const restoredVersion = versions.entries.find((version: BoxItemVersion) => version.id === restoredFromId);
             if (restoredVersion) {
-                versions.entries.push({
+                versionNumber = restoredVersion.version_number;
+                action = VERSION_RESTORE_ACTION;
+                currentVersion = {
                     ...restoredVersion,
-                    // $FlowFixMe
-                    id: file_version.id,
-                    created_at: modified_at,
-                    action: VERSION_RESTORE_ACTION
-                });
-                versions.total_count += 1;
+                    ...currentVersion
+                };
             }
         }
 
-        return versions;
+        const currentFileVersion: BoxItemVersion = {
+            ...currentVersion,
+            action,
+            modified_by,
+            created_at: modified_at,
+            version_number: versionNumber
+        };
+        return {
+            total_count: versions.total_count + 1,
+            entries: [...versions.entries, currentFileVersion]
+        };
     }
 
     /**
@@ -469,7 +483,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (shouldSort && (isFeedEmpty || !feedItems.length)) {
             // $FlowFixMe
-            this.sortFeedItems(comments, tasks, this.addRestoredVersion(versions));
+            this.sortFeedItems(comments, tasks, this.addCurrentVersion(versions, file));
         }
     }
 
