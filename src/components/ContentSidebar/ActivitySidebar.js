@@ -8,13 +8,14 @@ import * as React from 'react';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import type { $AxiosXHR } from 'axios';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
 import APIContext from '../APIContext';
-import { getBadUserError } from '../../util/error';
+import { getBadUserError, getBadItemError } from '../../util/error';
 import { DEFAULT_COLLAB_DEBOUNCE, DEFAULT_MAX_COLLABORATORS } from '../../constants';
+import API from '../../api';
+import type { $AxiosXHR } from 'axios'; // eslint-disable-line
 
 type ExternalProps = {
     onCommentCreate?: Function,
@@ -27,14 +28,16 @@ type ExternalProps = {
     currentUser?: User
 };
 
-type Props = {
-    api: Object,
+type PropsWithoutContext = {
     file: BoxItem,
     translations?: Translations,
-    activityFeedError: ?Errors,
     isDisabled?: boolean,
     onVersionHistoryClick?: Function
 } & ExternalProps;
+
+type Props = {
+    api: API
+} & PropsWithoutContext;
 
 type State = {
     currentUser?: User,
@@ -45,13 +48,12 @@ type State = {
     feedItems?: FeedItems
 };
 
-const activityFeedInlineError: Errors = {
+export const activityFeedInlineError: Errors = {
     inlineError: {
         title: messages.errorOccured,
         content: messages.activityFeedItemApiError
     }
 };
-
 class ActivitySidebar extends React.PureComponent<Props, State> {
     state = {};
 
@@ -69,6 +71,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchCurrentUser(user?: User, shouldDestroy?: boolean = false): void {
         const { api, file } = this.props;
+
+        if (!file) {
+            throw getBadItemError();
+        }
+
         if (typeof user === 'undefined') {
             api.getUsersAPI(shouldDestroy).get({
                 id: file.id,
@@ -105,9 +112,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         api.getFeedAPI(false).deleteTask(
             file,
             id,
-            (task: Task) => {
+            (taskId: string) => {
                 this.feedSuccessCallback();
-                onTaskDelete(task);
+                onTaskDelete(taskId);
             },
             this.feedErrorCallback
         );
@@ -267,12 +274,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchFeedItemsErrorCallback = (e: $AxiosXHR<any>) => {
+    fetchFeedItemsErrorCallback = (feedItems: FeedItems): void => {
         this.setState({
-            feedItems: [],
+            feedItems,
             activityFeedError: activityFeedInlineError
         });
-        this.errorCallback(e);
     };
 
     /**
@@ -414,7 +420,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             feedItems,
-            activityFeedError
+            activityFeedError,
+            currentUserError
         } = this.state;
         return (
             <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
@@ -437,6 +444,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getAvatarUrl={this.getAvatarUrl}
                     getUserProfileUrl={getUserProfileUrl}
                     feedItems={feedItems}
+                    currentUserError={currentUserError}
                 />
             </SidebarContent>
         );
@@ -445,6 +453,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default (props) => (
+export default (props: PropsWithoutContext) => (
     <APIContext.Consumer>{(api) => <ActivitySidebar {...props} api={api} />}</APIContext.Consumer>
 );

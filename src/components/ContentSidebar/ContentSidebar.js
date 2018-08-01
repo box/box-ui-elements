@@ -18,7 +18,6 @@ import Internationalize from '../Internationalize';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
-    FIELD_METADATA_SKILLS,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,

@@ -630,7 +630,6 @@ class Feed extends Base {
     /**
      * Handles a failed task assignment create
      *
-     * @private
      * @param {Object} e - The axios error
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {Task} task - The task for which the assignment create failed
@@ -647,7 +646,6 @@ class Feed extends Base {
     /**
      * Deletes a task
      *
-     * @private
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {string} taskId - The task's id
      * @param {Function} successCallback - the function which will be called on success
@@ -704,7 +702,6 @@ class Feed extends Base {
     /**
      * Network error callback
      *
-     * @private
      * @param {Error} error - Axios error object
      * @return {void}
      */
@@ -749,23 +746,20 @@ class Feed extends Base {
         );
 
         const formattedTasks: Tasks = { total_count: 0, entries: [] };
-        return Promise.all(assignmentPromises).then(
-            (assignments) => {
-                assignments.forEach((task) => {
-                    if (task) {
-                        formattedTasks.entries.push(task);
-                        formattedTasks.total_count += 1;
-                    }
-                });
-                return formattedTasks;
-            },
-            () => formattedTasks
-        );
+        return Promise.all(assignmentPromises).then((assignments) => {
+            assignments.forEach((task) => {
+                if (task) {
+                    formattedTasks.entries.push(task);
+                    formattedTasks.total_count += 1;
+                }
+            });
+            return formattedTasks;
+        }, () => formattedTasks);
     }
 
     /**
      * Formats assignments, and then adds them to their task.
-     * @private
+     *
      * @param {Task} task - Task to which the assignments belong
      * @param {Task} assignments - List of task assignments
      * @return {Task}
@@ -793,13 +787,13 @@ class Feed extends Base {
 
     /**
      * Add a placeholder pending feed item.
-     * @private
-     * @param {string} id - the feed item's id
+     *
+     * @param {string} id - the file id
      * @param {Object} currentUser - the user who performed the action
      * @param {Object} itemBase - Base properties for item to be added to the feed as pending.
      * @return {void}
      */
-    addPendingItem = (id: string, currentUser: User, itemBase: Object): void => {
+    addPendingItem = (id: string, currentUser: User, itemBase: Object): Comment | Task | BoxItemVersion => {
         if (!currentUser) {
             throw getBadUserError();
         }
@@ -816,16 +810,18 @@ class Feed extends Base {
         const feedItems = cachedItems ? cachedItems.items : [];
         const feedItemsWithPendingItem = [pendingFeedItem, ...feedItems];
         this.setCachedItems(id, feedItemsWithPendingItem);
+
+        return pendingFeedItem;
     };
 
     /**
      * Callback for successful creation of a Comment.
-     * @private
+     *
      * @param {Comment} commentData - API returned Comment
      * @param {string} id - ID of the feed item to update with the new comment data
      * @return {void}
      */
-    createCommentSuccessCallback = (commentData: Comment, id: string): void => {
+    createCommentSuccessCallback = (commentData: Comment, id: string, successCallback: Function): void => {
         const { message = '', tagged_message = '' } = commentData;
         // Comment component uses tagged_message only
         commentData.tagged_message = tagged_message || message;
@@ -837,11 +833,32 @@ class Feed extends Base {
             },
             id
         );
+
+        if (!this.isDestroyed()) {
+            successCallback(commentData);
+        }
+    };
+
+    /**
+     * Callback for successful creation of a Comment.
+     *
+     * @param {Object} e - The axios error
+     * @param {string} id - ID of the feed item to update
+     * @param {Function} errorCallback - the error callback
+     * @return {void}
+     */
+    createCommentErrorCallback = (e: $AxiosXHR<any>, id: string, errorCallback: Function) => {
+        const errorMessage =
+            e.status === 409 ? messages.commentCreateConflictMessage : messages.commentCreateErrorMessage;
+        this.updateFeedItem(this.createFeedError(errorMessage), id);
+        if (!this.isDestroyed()) {
+            errorCallback(e);
+        }
     };
 
     /**
      * Constructs an error object that renders to an inline feed error
-     * @private
+     *
      * @param {string} message - The error message body.
      * @param {string} title - The error message title.
      * @return {Object} An error message object
@@ -854,14 +871,14 @@ class Feed extends Base {
 
     /**
      * Replace a feed item with new feed item data.
-     * @private
+     *
      * @param {Object} updates - The new data to be applied to the feed item.
      * @param {string} id - ID of the feed item to replace.
      * @return {void}
      */
-    updateFeedItem = (updates: Object, id: string): void => {
+    updateFeedItem = (updates: Object, id: string): ?FeedItems => {
         if (!this.id) {
-            throw new Error('Missing file id');
+            throw getBadItemError();
         }
 
         const cachedItems = this.getCachedItems(this.id);
@@ -878,7 +895,10 @@ class Feed extends Base {
             });
 
             this.setCachedItems(this.id, updatedFeedItems);
+            return updatedFeedItems;
         }
+
+        return null;
     };
 
     /**
@@ -927,18 +947,10 @@ class Feed extends Base {
             file,
             ...message,
             successCallback: (comment: Comment) => {
-                this.createCommentSuccessCallback(comment, uuid);
-                if (!this.isDestroyed()) {
-                    successCallback(comment);
-                }
+                this.createCommentSuccessCallback(comment, uuid, successCallback);
             },
             errorCallback: (e: $AxiosXHR<any>) => {
-                const errorMessage =
-                    e.status === 409 ? messages.commentCreateConflictMessage : messages.commentCreateErrorMessage;
-                this.updateFeedItem(this.createFeedError(errorMessage), uuid);
-                if (!this.isDestroyed()) {
-                    errorCallback(e);
-                }
+                this.createCommentErrorCallback(e, uuid, errorCallback);
             }
         });
     };

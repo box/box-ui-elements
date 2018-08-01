@@ -5,14 +5,12 @@
 
 import * as React from 'react';
 import getProp from 'lodash/get';
-import omit from 'lodash/omit';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
-
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
-import { collapseFeedState } from './activityFeedUtils';
+import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import './ActivityFeed.scss';
 
 type Props = {
@@ -122,8 +120,8 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className='bcs-activity-feed-items-container'
                 >
-                    {!feedItems || !currentUser ? (
-                        <EmptyState isLoading showCommentMessage={showApprovalCommentForm} />
+                    {shouldShowEmptyState(feedItems) || !currentUser ? (
+                        <EmptyState isLoading={!feedItems} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
                             {...activityFeedError}

@@ -267,7 +267,7 @@ type BoxItemVersion = {
 };
 
 type BoxItem = {
-    id?: string,
+    id: string,
     name?: string,
     size?: number,
     type?: ItemType,

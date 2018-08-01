@@ -9,8 +9,6 @@ const {
     defaultInlineErrorContentMessage,
     defaultErrorMaskSubHeaderMessage,
     fileAccessStatsErrorHeaderMessage,
-    errorOccured,
-    activityFeedItemApiError,
     fileAccessStatsPermissionsError
 } = messages;
 
@@ -19,16 +17,6 @@ jest.mock('../Sidebar', () => 'sidebar');
 
 const file = {
     id: 'I_AM_A_FILE'
-};
-
-const defaultResponse = {
-    total_count: 0,
-    entries: []
-};
-
-const activityFeedError = {
-    title: errorOccured,
-    content: activityFeedItemApiError
 };
 
 describe('components/ContentSidebar/ContentSidebar', () => {

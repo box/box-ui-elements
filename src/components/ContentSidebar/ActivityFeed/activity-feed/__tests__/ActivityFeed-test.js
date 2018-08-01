@@ -20,25 +20,6 @@ const comments = {
     ]
 };
 
-const tasks = {
-    total_count: 1,
-    entries: [
-        {
-            type: 'task',
-            id: '1234',
-            created_at: 'Thu Sep 25 33658 19:45:39 GMT-0600 (CST)',
-            modified_at: 'Thu Sep 25 33658 19:46:39 GMT-0600 (CST)',
-            tagged_message: 'test',
-            modified_by: { name: 'Jay-Z', id: 10 },
-            dueAt: 1234567891,
-            task_assignment_collection: {
-                entries: [{ assigned_to: { name: 'Akon', id: 11 }, resolution_state: 'incomplete' }],
-                total_count: 1
-            }
-        }
-    ]
-};
-
 const first_version = {
     action: 'upload',
     type: 'file_version',
@@ -47,21 +28,6 @@ const first_version = {
     trashed_at: 1234567891,
     modified_at: 1234567891,
     modified_by: { name: 'Akon', id: 11 }
-};
-
-const deleted_version = {
-    action: 'delete',
-    type: 'file_version',
-    id: 234,
-    created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
-    trashed_at: 1234567891,
-    modified_at: 1234567891,
-    modified_by: { name: 'Akon', id: 11 }
-};
-
-const versions = {
-    total_count: 1,
-    entries: [first_version, deleted_version]
 };
 
 const file = {
@@ -102,7 +68,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should render approval comment form if comment submit handler is passed in and comment permissions', () => {
         const wrapper = getWrapper({
-            onCommentCreate:jest.fn()
+            onCommentCreate: jest.fn()
         });
         expect(wrapper).toMatchSnapshot();
     });
