@@ -45,7 +45,8 @@ const first_version = {
     created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
     trashed_at: 1234567891,
     modified_at: 1234567891,
-    modified_by: { name: 'Akon', id: 11 }
+    modified_by: { name: 'Akon', id: 11 },
+    version_number: '1'
 };
 
 const deleted_version = {
@@ -55,11 +56,12 @@ const deleted_version = {
     created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
     trashed_at: 1234567891,
     modified_at: 1234567891,
-    modified_by: { name: 'Akon', id: 11 }
+    modified_by: { name: 'Akon', id: 11 },
+    version_number: '2'
 };
 
 const versions = {
-    total_count: 1,
+    total_count: 2,
     entries: [first_version, deleted_version]
 };
 
@@ -68,14 +70,16 @@ const file = {
     permissions: {
         can_comment: true
     },
-    modified_at: 1234567891,
+    modified_at: 2234567891,
     file_version: {
-        id: 987
+        id: 987,
+        type: 'file_version'
     },
     restored_from: {
         id: first_version.id,
         type: first_version.type
-    }
+    },
+    version_number: '3'
 };
 
 const currentUser = { name: 'Kanye West', id: 10 };
@@ -98,6 +102,18 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render empty state when there is 1 version (current version from file)', () => {
+        const oneVersion = {
+            total_count: 1,
+            entries: [first_version]
+        };
+
+        const wrapper = getWrapper({
+            versions: oneVersion
+        });
+        expect(wrapper.find('EmptyState').exists()).toBe(true);
+    });
+
     test('should render approval comment form if comment submit handler is passed in and comment permissions', () => {
         file.permissions.can_comment = true;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
@@ -117,7 +133,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should correctly render active state', () => {
-        versions.entries = [first_version, deleted_version];
         const wrapper = shallow(
             <ActivityFeed file={file} currentUser={currentUser} comments={comments} tasks={tasks} versions={versions} />
         );
@@ -209,6 +224,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             wrapper = shallow(<ActivityFeed currentUser={currentUser} file={file} />);
             instance = wrapper.instance();
             instance.sortFeedItems = jest.fn();
+            instance.addCurrentVersion = jest.fn().mockImplementation((versionsArr) => versionsArr);
         });
 
         it('should not invoke sortFeedItems() if the feed item types required are missing', () => {
@@ -314,10 +330,15 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     describe('componentWillReceiveProps()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
+            instance = wrapper.instance();
+            instance.addCurrentVersion = jest.fn().mockImplementation((versionsArr) => versionsArr);
+        });
         test('should invoke sortFeedItems() with new props', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
-            const instance = wrapper.instance();
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
             instance.componentWillReceiveProps(props);
@@ -327,8 +348,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() once feedItems has already been set', () => {
             const props = { comments, tasks, versions };
-            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
-            const instance = wrapper.instance();
             instance.componentWillReceiveProps(props);
 
             instance.sortFeedItems = jest.fn();
@@ -339,8 +358,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should not invoke sortFeedItems() if all feed items are not present', () => {
             const props = { comments, tasks };
-            const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
-            const instance = wrapper.instance();
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
             instance.componentWillReceiveProps(props);
@@ -759,6 +776,32 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                     done();
                 }
             );
+        });
+    });
+
+    describe('addCurrentVersion()', () => {
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper();
+            instance = wrapper.instance();
+        });
+        test('should append the current version', () => {
+            const fileWithoutRestoredVersion = {
+                ...file,
+                restored_from: null
+            };
+            const versionsWithCurrent = instance.addCurrentVersion(versions, fileWithoutRestoredVersion);
+            expect(versionsWithCurrent.entries.length).toBe(versions.entries.length + 1);
+            expect(versionsWithCurrent.entries.pop().id).toBe(file.file_version.id);
+        });
+
+        test('should append the current version as restored type', () => {
+            const versionsWithRestore = instance.addCurrentVersion(versions, file);
+            expect(versionsWithRestore.entries.length).toBe(versions.entries.length + 1);
+            const restoredVersion = versionsWithRestore.entries.pop();
+            expect(restoredVersion.action).toBe('restore');
+            expect(restoredVersion.created_at).toBe(file.modified_at);
         });
     });
 });
