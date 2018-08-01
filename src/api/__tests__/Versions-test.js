@@ -24,13 +24,15 @@ describe('api/Versions', () => {
                 id: 123,
                 trashed_at: null,
                 modified_at: 1234567892,
-                modified_by: { name: 'Jay-Z', id: 10 }
+                modified_by: { name: 'Jay-Z', id: 10 },
+                version_number: '1'
             };
             const deleteVersion = {
                 id: 456,
                 trashed_at: 1234567891,
                 modified_at: 1234567891,
-                modified_by: { name: 'Akon', id: 11 }
+                modified_by: { name: 'Akon', id: 11 },
+                version_number: '2'
             };
             const response = {
                 total_count: 2,

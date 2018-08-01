@@ -102,6 +102,18 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render empty state when there is 1 version (current version from file)', () => {
+        const oneVersion = {
+            total_count: 1,
+            entries: [first_version]
+        };
+
+        const wrapper = getWrapper({
+            versions: oneVersion
+        });
+        expect(wrapper.find('EmptyState').exists()).toBe(true);
+    });
+
     test('should render approval comment form if comment submit handler is passed in and comment permissions', () => {
         file.permissions.can_comment = true;
         const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);

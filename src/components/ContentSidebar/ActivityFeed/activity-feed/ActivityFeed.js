@@ -432,40 +432,39 @@ class ActivityFeed extends React.Component<Props, State> {
     addCurrentVersion(versions: FileVersions, file: BoxItem) {
         const { restored_from, modified_at, file_version } = file;
 
-        if (file_version) {
-            const { modified_by, version_number } = file;
-            let currentVersion = file_version;
-            let action = VERSION_UPLOAD_ACTION;
-            let versionNumber = version_number;
-            if (restored_from) {
-                const { id: restoredFromId } = restored_from;
-                const restoredVersion = versions.entries.find(
-                    (version: BoxItemVersion) => version.id === restoredFromId
-                );
-                if (restoredVersion) {
-                    versionNumber = restoredVersion.version_number;
-                    action = VERSION_RESTORE_ACTION;
-                    currentVersion = {
-                        ...restoredVersion,
-                        ...currentVersion
-                    };
-                }
-            }
-
-            const currentFileVersion: BoxItemVersion = {
-                ...currentVersion,
-                action,
-                modified_by,
-                created_at: modified_at,
-                version_number: versionNumber
-            };
-            return {
-                total_count: versions.total_count + 1,
-                entries: [...versions.entries, currentFileVersion]
-            };
+        if (!file_version) {
+            return versions;
         }
 
-        return versions;
+        const { modified_by, version_number } = file;
+        let currentVersion = file_version;
+        let action = VERSION_UPLOAD_ACTION;
+        let versionNumber = version_number;
+
+        if (restored_from) {
+            const { id: restoredFromId } = restored_from;
+            const restoredVersion = versions.entries.find((version: BoxItemVersion) => version.id === restoredFromId);
+            if (restoredVersion) {
+                versionNumber = restoredVersion.version_number;
+                action = VERSION_RESTORE_ACTION;
+                currentVersion = {
+                    ...restoredVersion,
+                    ...currentVersion
+                };
+            }
+        }
+
+        const currentFileVersion: BoxItemVersion = {
+            ...currentVersion,
+            action,
+            modified_by,
+            created_at: modified_at,
+            version_number: versionNumber
+        };
+        return {
+            total_count: versions.total_count + 1,
+            entries: [...versions.entries, currentFileVersion]
+        };
     }
 
     /**
