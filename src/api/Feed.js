@@ -81,7 +81,6 @@ class Feed extends Base {
     /**
      * Gets the items from the cache
      *
-     * @private
      * @param {string} id the cache id
      */
     getCachedItems(id: string): ?FeedItemsCache {
@@ -93,7 +92,6 @@ class Feed extends Base {
     /**
      * Sets the items in the cache
      *
-     * @private
      * @param {string} id - the cache id
      * @param {Array} items - the feed items to cache
      */
@@ -109,7 +107,6 @@ class Feed extends Base {
     /**
      * Gets the feed items
      *
-     * @private
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
@@ -158,7 +155,6 @@ class Feed extends Base {
     /**
      * Sort valid feed items, descending by created_at time.
      *
-     * @private
      * @param {Array<?Comments | ?Tasks | ?FileVersions>} args - Arguments list of each item container
      * type that is allowed in the feed.
      * @return {Array<?Comments | ?Tasks | ?FileVersions>} the sorted feed items
@@ -176,14 +172,9 @@ class Feed extends Base {
     /**
      * Fetches the comments for a file
      *
-     * @private
      * @return {Promise} - the file comments
      */
     fetchComments(): Promise<?Comments> {
-        if (this.commentsAPI) {
-            this.commentsAPI.destroy();
-        }
-
         this.commentsAPI = new CommentsAPI(this.options);
         return new Promise((resolve) => {
             this.commentsAPI.offsetGet(
@@ -204,14 +195,9 @@ class Feed extends Base {
     /**
      * Fetches the versions for a file
      *
-     * @private
      * @return {Promise} - the file versions
      */
     fetchVersions(): Promise<?FileVersions> {
-        if (this.versionsAPI) {
-            this.versionsAPI.destroy();
-        }
-
         this.versionsAPI = new VersionsAPI(this.options);
         return new Promise((resolve) => {
             this.versionsAPI.offsetGet(
@@ -232,14 +218,9 @@ class Feed extends Base {
     /**
      * Fetches the tasks for a file
      *
-     * @private
      * @return {Promise} - the feed items
      */
     fetchTasks(): Promise<?Tasks> {
-        if (this.tasksAPI) {
-            this.tasksAPI.destroy();
-        }
-
         this.tasksAPI = new TasksAPI(this.options);
         const requestData = {
             params: {
@@ -269,7 +250,7 @@ class Feed extends Base {
      * @param {string} taskId - ID of task to be updated
      * @param {string} taskAssignmentId - Task assignment ID
      * @param {string} resolutionState - New task assignment status
-     * @param {string} message - the message to the assignee
+     * @param {string} message - optional the message to the assignee
      * @param {Function} successCallback - the function which will be called on success
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
@@ -360,7 +341,7 @@ class Feed extends Base {
      * @param {Array} message - The task's text
      * @param {Function} successCallback - the function which will be called on success
      * @param {Function} errorCallback - the function which will be called on error
-     * @param {string} dueAt - The date the task is due
+     * @param {string} dueAt - The optional date the task is due
      * @return {void}
      */
     updateTask = (
@@ -394,6 +375,7 @@ class Feed extends Base {
 
     /**
      * Update task error callback
+     *
      * @param {Object} e - Axios error
      * @param {Function} errorCallback - The error callback
      * @return {void}
@@ -407,6 +389,7 @@ class Feed extends Base {
 
     /**
      * Update task success callback
+     *
      * @param {Object} task - The updated task
      * @param {Function} successCallback - The success callback
      * @return {void}
@@ -480,7 +463,6 @@ class Feed extends Base {
     /**
      * Callback for successful creation of a Task. Creates a task assignment
      *
-     * @private
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {string} id - ID of the feed item to update with the new task data
      * @param {Task} task - API returned task
@@ -713,7 +695,6 @@ class Feed extends Base {
     /**
      * Fetches the task assignments for each task
      *
-     * @private
      * @param {Array} tasksWithoutAssignments - Box tasks
      * @return {Promise}
      */
@@ -1002,7 +983,6 @@ class Feed extends Base {
     /**
      * Destroys all the task assignment API's
      *
-     * @private
      * @return {void}
      */
     destroyTaskAssignments() {
@@ -1015,7 +995,6 @@ class Feed extends Base {
     /**
      * Destroys all the task feed API's
      *
-     * @private
      * @return {void}
      */
     destroy() {
