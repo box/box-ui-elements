@@ -26,13 +26,17 @@ export const DETAILS_TARGETS = {
 };
 
 export const ACTIVITY_TARGETS = {
-    INLINE_EDIT: 'inlineedit',
-    INLINE_DELETE: 'inlinedelete',
-    APPROVAL_FORM_ADD_TASK: 'apporvalformaddtask',
-    APPROVAL_FORM_CANCEL: 'approvalformcancel',
-    APPROVAL_FORM_POST: 'approvalformpost',
-    PROFILE: 'profile',
-    MENTION: 'mention'
+    INLINE_EDIT: 'activityfeed-inlineedit',
+    INLINE_DELETE: 'activityfeed-inlinedelete',
+    APPROVAL_FORM_ADD_TASK: 'activityfeed-apporvalformaddtask',
+    APPROVAL_FORM_CANCEL: 'activityfeed-approvalformcancel',
+    APPROVAL_FORM_POST: 'activityfeed-approvalformpost',
+    PROFILE: 'activityfeed-profilelink',
+    MENTION: 'activityfeed-mentionlink',
+    VERSION_CARD: 'activityfeed-versioninfo',
+    TASK_DATE_PICKER: 'activityfeed-taskdatepicker',
+    TASK_APPROVE: 'activityfeed-taskapprove',
+    TASK_REJECT: 'activityfeed-taskreject'
 };
 
 export const SKILLS_TARGETS = {
@@ -50,16 +54,22 @@ export const SKILLS_TARGETS = {
         EDIT: 'skill-keywordedit',
         EDIT_SAVE: 'skill-keywordeditsave',
         EDIT_CANCEL: 'skill-keywordeditcancel',
-        TIMELINE: 'skill-keywordtimeslice'
+        TIMELINE: 'skill-keywordtimeslice',
+        SELECT: 'skill-keywordselect'
     },
     TRANSCRIPTS: {
         CARD: 'skill-transcriptcard',
         COPY: 'skill-transcriptcopy',
         EDIT: 'skill-transcriptedit',
+        EXPAND: 'skill-transcriptexpand',
         EDIT_SAVE: 'skill-transcripteditsave',
         EDIT_CANCEL: 'skill-transcripteditcancel',
         TRANSCRIPT: 'skill-transcript',
         EDIT_TEXT: 'skill-transcriptedittext'
+    },
+    TIMELINE: {
+        NEXT: 'skill-timelimelinenext',
+        PREVIOUS: 'skill-timelineprevious'
     }
 };
 

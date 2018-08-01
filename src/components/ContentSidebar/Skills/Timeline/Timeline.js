@@ -12,6 +12,7 @@ import IconTrackPrevious from 'box-react-ui/lib/icons/general/IconTrackPrevious'
 import Timeslice from './Timeslice';
 import { isValidStartTime } from '../Transcript/timeSliceUtils';
 import messages from '../../../messages';
+import { SKILLS_TARGETS } from '../../../../interactionTargets';
 
 import './Timeline.scss';
 
@@ -62,10 +63,18 @@ const Timeline = ({ text = '', duration = 0, timeslices = [], getViewer, interac
                 )}
             </div>
             <div className='be-timeline-btns'>
-                <PlainButton type='button' onClick={() => playSegment(timeSliceIndex, -1)}>
+                <PlainButton
+                    type='button'
+                    onClick={() => playSegment(timeSliceIndex, -1)}
+                    data-resin-target={SKILLS_TARGETS.TIMELINE.PREVIOUS}
+                >
                     <IconTrackPrevious title={<FormattedMessage {...messages.previousSegment} />} />
                 </PlainButton>
-                <PlainButton type='button' onClick={() => playSegment(timeSliceIndex, 1)}>
+                <PlainButton
+                    type='button'
+                    onClick={() => playSegment(timeSliceIndex, 1)}
+                    data-resin-target={SKILLS_TARGETS.TIMELINE.NEXT}
+                >
                     <IconTrackNext title={<FormattedMessage {...messages.nextSegment} />} />
                 </PlainButton>
             </div>

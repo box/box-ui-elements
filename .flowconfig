@@ -10,6 +10,7 @@
 .*/node_modules/stylelint.*
 .*/node_modules/webpack*
 .*/node_modules/draft-js*
+.*/node_modules/findup*
 
 [untyped]
 .*/node_modules/box-react-ui/*
