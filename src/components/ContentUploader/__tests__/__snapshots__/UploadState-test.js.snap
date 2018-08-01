@@ -26,7 +26,7 @@ exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_EMPTY 
   className="bcu-upload-state"
 >
   <div>
-    <UploadStartState />
+    <UploadEmptyState />
     <UploadStateContent
       fileInputLabel={
         <FormattedMessage
@@ -55,7 +55,7 @@ exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_EMPTY 
   className="bcu-upload-state"
 >
   <div>
-    <UploadStartState />
+    <UploadEmptyState />
     <UploadStateContent
       fileInputLabel={
         <FormattedMessage
@@ -89,7 +89,7 @@ exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_IN_PRO
   className="bcu-upload-state"
 >
   <div>
-    <UploadStartState />
+    <UploadEmptyState />
     <UploadStateContent
       message={
         <FormattedMessage

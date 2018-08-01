@@ -12,14 +12,25 @@ exports[`components/ContentSidebar/DetailsSidebar should render DetailsSidebar w
   <div
     className="bcs-details-content"
   >
-    <SidebarVersions
+    <SidebarNotices
       file={
         Object {
           "id": "foo",
         }
       }
     />
-    <SidebarNotices
+  </div>
+  <SidebarAccessStats
+    file={
+      Object {
+        "id": "foo",
+      }
+    }
+  />
+  <div
+    className="bcs-details-content"
+  >
+    <SidebarVersions
       file={
         Object {
           "id": "foo",
@@ -48,12 +59,5 @@ exports[`components/ContentSidebar/DetailsSidebar should render DetailsSidebar w
       hasRetentionPolicy={true}
     />
   </SidebarSection>
-  <SidebarAccessStats
-    file={
-      Object {
-        "id": "foo",
-      }
-    }
-  />
 </SidebarContent>
 `;

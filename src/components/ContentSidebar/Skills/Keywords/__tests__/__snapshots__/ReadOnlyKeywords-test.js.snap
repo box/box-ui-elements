@@ -3,6 +3,11 @@
 exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should correctly render timeline with keyword selected 1`] = `
 <React.Fragment>
   <PillCloud
+    buttonProps={
+      Object {
+        "data-resin-target": "skill-keywordselect",
+      }
+    }
     onSelect={[Function]}
     options={
       Array [
@@ -23,6 +28,11 @@ exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should corre
 exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should correctly render with no keyword selected 1`] = `
 <React.Fragment>
   <PillCloud
+    buttonProps={
+      Object {
+        "data-resin-target": "skill-keywordselect",
+      }
+    }
     onSelect={[Function]}
     options={
       Array [

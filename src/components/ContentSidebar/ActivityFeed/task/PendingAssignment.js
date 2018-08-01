@@ -11,6 +11,7 @@ import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
+import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 import messages from '../../../messages';
 
 type Props = {
@@ -26,12 +27,20 @@ const PendingAssignment = ({ name, onTaskApproval, onTaskReject, shouldShowActio
         {shouldShowActions ? (
             <div className='bcs-task-assignment-actions'>
                 <Tooltip position='bottom-center' text={<FormattedMessage {...messages.taskApprove} />}>
-                    <PlainButton className='bcs-task-check-btn' onClick={onTaskApproval}>
+                    <PlainButton
+                        className='bcs-task-check-btn'
+                        onClick={onTaskApproval}
+                        data-resin-target={ACTIVITY_TARGETS.TASK_APPROVE}
+                    >
                         <IconCheck className='bcs-task-check-icon' height={18} width={18} />
                     </PlainButton>
                 </Tooltip>
                 <Tooltip position='bottom-center' text={<FormattedMessage {...messages.taskReject} />}>
-                    <PlainButton className='bcs-task-x-btn' onClick={onTaskReject}>
+                    <PlainButton
+                        className='bcs-task-x-btn'
+                        onClick={onTaskReject}
+                        data-resin-target={ACTIVITY_TARGETS.TASK_REJECT}
+                    >
                         <IconClose className='bcs-task-x-icon' height={18} width={18} />
                     </PlainButton>
                 </Tooltip>

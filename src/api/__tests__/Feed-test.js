@@ -253,7 +253,7 @@ describe('api/Feed', () => {
             feed.fetchVersions = jest.fn().mockResolvedValue(versions);
             feed.fetchTasks = jest.fn().mockResolvedValue(tasks);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
-            feed.addRestoredVersion = jest.fn().mockReturnValue(versions);
+            feed.addCurrentVersion = jest.fn().mockReturnValue(versions);
             feed.sortFeedItems = jest.fn().mockReturnValue(sortedItems);
             feed.setCachedItems = jest.fn();
             successCb = jest.fn();
@@ -988,6 +988,26 @@ describe('api/Feed', () => {
             expect(versionFn).toBeCalled();
             expect(commentFn).toBeCalled();
             expect(taskFn).toBeCalled();
+        });
+    });
+
+    describe('addCurrentVersion()', () => {
+        test('should append the current version', () => {
+            const fileWithoutRestoredVersion = {
+                ...file,
+                restored_from: null
+            };
+            const versionsWithCurrent = feed.addCurrentVersion(versions, fileWithoutRestoredVersion);
+            expect(versionsWithCurrent.entries.length).toBe(versions.entries.length + 1);
+            expect(versionsWithCurrent.entries.pop().id).toBe(file.file_version.id);
+        });
+
+        test('should append the current version as restored type', () => {
+            const versionsWithRestore = feed.addCurrentVersion(versions, file);
+            expect(versionsWithRestore.entries.length).toBe(versions.entries.length + 1);
+            const restoredVersion = versionsWithRestore.entries.pop();
+            expect(restoredVersion.action).toBe('restore');
+            expect(restoredVersion.created_at).toBe(file.modified_at);
         });
     });
 });

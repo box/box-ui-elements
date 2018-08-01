@@ -10,12 +10,14 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
 import messages from '../../../messages';
+import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 import './Version.scss';
+import { VERSION_UPLOAD_ACTION, VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
 
 function getMessageForAction(name: React.Node, action: string, version_number: number): React.Node {
     switch (action) {
-        case 'upload':
+        case VERSION_UPLOAD_ACTION:
             return (
                 <FormattedMessage
                     {...messages.versionUploaded}
@@ -25,7 +27,7 @@ function getMessageForAction(name: React.Node, action: string, version_number: n
                     }}
                 />
             );
-        case 'delete':
+        case VERSION_DELETE_ACTION:
             return (
                 <FormattedMessage
                     {...messages.versionDeleted}
@@ -35,7 +37,7 @@ function getMessageForAction(name: React.Node, action: string, version_number: n
                     }}
                 />
             );
-        case 'restore':
+        case VERSION_RESTORE_ACTION:
             return (
                 <FormattedMessage
                     {...messages.versionRestored}
@@ -71,6 +73,7 @@ const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Prop
                         onInfo({ id, version_number });
                     }}
                     type='button'
+                    data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                 >
                     <IconInfoInverted height={16} width={16} />
                 </PlainButton>

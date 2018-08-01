@@ -12,6 +12,7 @@ import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
 import './ActivityFeed.scss';
+import { VERSION_UPLOAD_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
 
 type Props = {
     file: BoxItem,

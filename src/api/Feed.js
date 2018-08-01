@@ -20,11 +20,11 @@ import TasksAPI from './Tasks';
 import TaskAssignmentsAPI from './TaskAssignments';
 import { getBadItemError, getBadUserError } from '../util/error';
 import messages from '../components/messages';
+import { VERSION_UPLOAD_ACTION, VERSION_RESTORE_ACTION } from '../constants';
 
 const DEFAULT_START = 0;
 const DEFAULT_END = 1000;
 const TASK_INCOMPLETE = 'incomplete';
-const VERSION_RESTORE_ACTION = 'restore';
 const TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
 
 type FeedItemsCache = {
@@ -141,7 +141,7 @@ class Feed extends Base {
 
         Promise.all([versionsPromise, commentsPromise, tasksPromise]).then((feedItems) => {
             const versions: ?FileVersions = feedItems[0];
-            const versionsWithRestoredVersion = this.addRestoredVersion(file, versions);
+            const versionsWithRestoredVersion = this.addCurrentVersion(versions, file);
             const unsortedFeedItems = [versionsWithRestoredVersion, ...feedItems.slice(1)];
             const sortedFeedItems = this.sortFeedItems.apply(null, unsortedFeedItems);
             this.setCachedItems(id, sortedFeedItems);
@@ -956,35 +956,47 @@ class Feed extends Base {
     };
 
     /**
-     * Adds a versions entry if the current file version was restored from a previous version
+     * Adds the current version from the file object, which may be a restore
      *
-     * @param {BoxItem} file - The file to which the task is assigned
      * @param {FileVersions} versions - API returned file versions for this file
-     * @return {FileVersions} modified versions array including the version restore
+     * @return {FileVersions} modified versions array including the current/restored version
      */
-    addRestoredVersion(file: BoxItem, versions: ?FileVersions): ?FileVersions {
-        if (!versions) {
-            return undefined;
+    addCurrentVersion(versions: ?FileVersions, file: BoxItem): ?FileVersions {
+        const { restored_from, modified_at, file_version } = file;
+
+        if (!file_version || !versions) {
+            return versions;
         }
 
-        const { restored_from, modified_at, file_version } = file;
-        if (restored_from && file_version) {
-            const restoredVersion: ?BoxItemVersion = versions.entries.find(
-                (version) => version.id === restored_from.id
-            );
+        const { modified_by, version_number } = file;
+        let currentVersion = file_version;
+        let action = VERSION_UPLOAD_ACTION;
+        let versionNumber = version_number;
 
+        if (restored_from) {
+            const { id: restoredFromId } = restored_from;
+            const restoredVersion = versions.entries.find((version: BoxItemVersion) => version.id === restoredFromId);
             if (restoredVersion) {
-                versions.entries.push({
+                versionNumber = restoredVersion.version_number;
+                action = VERSION_RESTORE_ACTION;
+                currentVersion = {
                     ...restoredVersion,
-                    id: file_version.id,
-                    created_at: modified_at,
-                    action: VERSION_RESTORE_ACTION
-                });
-                versions.total_count += 1;
+                    ...currentVersion
+                };
             }
         }
 
-        return versions;
+        const currentFileVersion: BoxItemVersion = {
+            ...currentVersion,
+            action,
+            modified_by,
+            created_at: modified_at,
+            version_number: versionNumber
+        };
+        return {
+            total_count: versions.total_count + 1,
+            entries: [...versions.entries, currentFileVersion]
+        };
     }
 
     /**

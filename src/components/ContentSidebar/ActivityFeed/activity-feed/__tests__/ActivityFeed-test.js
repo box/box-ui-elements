@@ -27,7 +27,8 @@ const first_version = {
     created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
     trashed_at: 1234567891,
     modified_at: 1234567891,
-    modified_by: { name: 'Akon', id: 11 }
+    modified_by: { name: 'Akon', id: 11 },
+    version_number: '1'
 };
 
 const file = {
@@ -35,14 +36,16 @@ const file = {
     permissions: {
         can_comment: true
     },
-    modified_at: 1234567891,
+    modified_at: 2234567891,
     file_version: {
-        id: 987
+        id: 987,
+        type: 'file_version'
     },
     restored_from: {
         id: first_version.id,
         type: first_version.type
-    }
+    },
+    version_number: '3'
 };
 
 const feedItems = [...comments.entries];
@@ -64,6 +67,18 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             <ActivityFeed file={file} currentUser={currentUser} comments={items} tasks={items} versions={items} />
         );
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render empty state when there is 1 version (current version from file)', () => {
+        const oneVersion = {
+            total_count: 1,
+            entries: [first_version]
+        };
+
+        const wrapper = getWrapper({
+            versions: oneVersion
+        });
+        expect(wrapper.find('EmptyState').exists()).toBe(true);
     });
 
     test('should render approval comment form if comment submit handler is passed in and comment permissions', () => {
