@@ -24,7 +24,11 @@ const EmptyState = ({ isLoading, showCommentMessage }: Props): React.Node => (
         ) : (
             <div className='bcs-empty-state-cta'>
                 <FormattedMessage {...messages.noActivity} />
-                {showCommentMessage ? <FormattedMessage {...messages.noActivityCommentPrompt} /> : null}
+                {showCommentMessage ? (
+                    <aside>
+                        <FormattedMessage {...messages.noActivityCommentPrompt} />
+                    </aside>
+                ) : null}
             </div>
         )}
     </div>
