@@ -47,11 +47,12 @@ import './ContentSidebar.scss';
 
 type Props = {
     fileId?: string,
-    isCollapsed: boolean,
+    isLarge?: boolean,
     clientName: string,
     apiHost: string,
     token: Token,
     className: string,
+    defaultView?: SidebarView,
     currentUser?: User,
     getPreview: Function,
     getViewer: Function,
@@ -72,8 +73,7 @@ type Props = {
 };
 
 type State = {
-    view: SidebarView,
-    isCollapsed?: boolean,
+    view?: SidebarView,
     file?: BoxItem,
     accessStats?: FileAccessStats,
     versions?: FileVersions,
@@ -86,7 +86,8 @@ type State = {
     activityFeedError: ?Errors,
     accessStatsError?: Errors,
     currentUserError?: Errors,
-    isFileLoading?: boolean
+    isFileLoading?: boolean,
+    hasBeenToggled?: boolean
 };
 
 const activityFeedInlineError: Errors = {
@@ -109,7 +110,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         apiHost: DEFAULT_HOSTNAME_API,
         getPreview: noop,
         getViewer: noop,
-        currentUser: undefined,
+        isLarge: true,
         hasSkills: false,
         hasMetadata: false,
         hasActivityFeed: false,
@@ -119,7 +120,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     initialState: State = {
-        view: undefined,
         file: undefined,
         accessStats: undefined,
         versions: undefined,
@@ -166,14 +166,11 @@ class ContentSidebar extends PureComponent<Props, State> {
         });
 
         // Clone initial state to allow for state reset on new files
-        this.state = {
-            ...this.initialState,
-            isCollapsed: !!props.isCollapsed
-        };
+        this.state = { ...this.initialState };
     }
 
     /**
-     * Destroys api instances
+     * Destroys api instances with caches
      *
      * @private
      * @return {void}
@@ -190,7 +187,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillUnmount() {
-        this.clearCache();
+        // Don't destroy the cache while unmounting
+        this.api.destroy(false);
     }
 
     /**
@@ -214,19 +212,18 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillReceiveProps(nextProps: Props): void {
-        const { fileId, isCollapsed }: Props = this.props;
-        const { file }: State = this.state;
-        const hasVisibilityChanged = nextProps.isCollapsed !== isCollapsed;
+        const { fileId, isLarge }: Props = this.props;
+        const { file, hasBeenToggled }: State = this.state;
+        const hasVisibilityChanged = nextProps.isLarge !== isLarge;
         const hasFileIdChanged = nextProps.fileId !== fileId;
 
         if (hasFileIdChanged) {
             // Clear out existing state
             this.setState({ ...this.initialState });
             this.fetchData(nextProps);
-        } else if (hasVisibilityChanged) {
+        } else if (!hasBeenToggled && hasVisibilityChanged) {
             this.setState({
-                isCollapsed: !!nextProps.isCollapsed,
-                view: this.getDefaultSidebarView(nextProps.isCollapsed, file)
+                view: this.getDefaultSidebarView(file, nextProps)
             });
         }
     }
@@ -238,11 +235,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     onToggle = (view: SidebarView): void => {
-        const { view: stateView, isCollapsed }: State = this.state;
-        const togglingOff = view === stateView;
+        const { view: stateView }: State = this.state;
+        const isTogglingOff = view === stateView;
+        const isTogglingOn = !stateView && !!view;
+        const isToggling = isTogglingOff || isTogglingOn;
         this.setState({
-            view: togglingOff ? undefined : view,
-            isCollapsed: togglingOff ? isCollapsed : false
+            view: isTogglingOff ? undefined : view,
+            hasBeenToggled: isToggling
         });
     };
 
@@ -526,19 +525,31 @@ class ContentSidebar extends PureComponent<Props, State> {
      * File fetch success callback that sets the file and view
      *
      * @private
-     * @param {boolean} isCollapsed - Box file
+     * @param {Object} props - component props
      * @param {Object} file - Box file
      * @return {string} Sidebar view to use
      */
-    getDefaultSidebarView(isCollapsed?: boolean, file?: BoxItem): SidebarView {
-        const { view }: State = this.state;
+    getDefaultSidebarView(file?: BoxItem, props: Props): SidebarView {
+        const { view, hasBeenToggled }: State = this.state;
+        const { isLarge, defaultView }: Props = props;
 
-        // If collapsed no need to return any view
-        if (isCollapsed || !file) {
+        // If no file we don't have a view
+        if (!file) {
             return undefined;
         }
 
-        let defaultView;
+        // If there was a default view provided, force use that
+        if (defaultView) {
+            return defaultView;
+        }
+
+        // If the user manually toggled the sidebar, respect that.
+        // Otherwise use responsiveness to determine default view.
+        if (!hasBeenToggled && !isLarge) {
+            return undefined;
+        }
+
+        let newView;
         const canDefaultToSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const canDefaultToDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const canDefaultToActivity = SidebarUtils.canHaveActivitySidebar(this.props);
@@ -546,11 +557,13 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         // Calculate the default view with latest props
         if (canDefaultToSkills) {
-            defaultView = SIDEBAR_VIEW_SKILLS;
+            newView = SIDEBAR_VIEW_SKILLS;
         } else if (canDefaultToActivity) {
-            defaultView = SIDEBAR_VIEW_ACTIVITY;
+            newView = SIDEBAR_VIEW_ACTIVITY;
         } else if (canDefaultToDetails) {
-            defaultView = SIDEBAR_VIEW_DETAILS;
+            newView = SIDEBAR_VIEW_DETAILS;
+        } else if (canDefaultToMetadata) {
+            newView = SIDEBAR_VIEW_METADATA;
         }
 
         // Only reset the view if prior view is no longer applicable
@@ -561,7 +574,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             (view === SIDEBAR_VIEW_DETAILS && !canDefaultToDetails) ||
             (view === SIDEBAR_VIEW_METADATA && !canDefaultToMetadata)
         ) {
-            return defaultView;
+            return newView;
         }
 
         return view;
@@ -575,7 +588,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        this.setState({ file, view: this.getDefaultSidebarView(this.state.isCollapsed, file), isFileLoading: false });
+        this.setState({ file, view: this.getDefaultSidebarView(file, this.props), isFileLoading: false });
     };
 
     /**
@@ -1423,15 +1436,14 @@ class ContentSidebar extends PureComponent<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             currentUserError,
-            isFileLoading,
-            isCollapsed
+            isFileLoading
         }: State = this.state;
 
         const styleClassName = classNames(
             'be bcs',
             {
-                [`bcs-${view}`]: !!view,
-                'bcs-is-open': !!view || !isCollapsed
+                [`bcs-${((view: any): string)}`]: !!view,
+                'bcs-is-open': !!view
             },
             className
         );
