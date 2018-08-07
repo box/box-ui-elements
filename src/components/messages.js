@@ -383,6 +383,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for keywords/topics skill section in the preview sidebar',
         defaultMessage: 'Topics'
     },
+    keywordSkill: {
+        id: 'be.keywordSkill',
+        description: 'Label for keywords/topics skill section in the preview sidebar',
+        defaultMessage: 'Topics'
+    },
     faceSkill: {
         id: 'be.faceSkill',
         description: 'Label for face skill section in the preview sidebar',

@@ -1,12 +1,13 @@
+@import '../variables';
+
 .be.bcs.bcs-metadata {
     .metadata-instance-editor {
         min-height: 400px;
         padding: 0 10px 20px 25px;
     }
 
-    .metadata-instance-editor-title {
-        line-height: 20px;
-        margin: 8px 0;
+    .metadata-instance-editor-header {
+        display: none;
     }
 
     .metadata-instance-editor-field-read-only dd {
@@ -26,9 +27,5 @@
 
     .inline-alert {
         margin: 0 10px 10px 25px;
-    }
-
-    .metadata-instance-confim-container {
-        width: 100%;
     }
 }
