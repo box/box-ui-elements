@@ -76,7 +76,8 @@ type Props = {
 };
 
 type State = {
-    file?: BoxItem
+    file?: BoxItem,
+    fileError?: boolean
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -215,16 +216,19 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {boolean}
      */
     shouldLoadPreview(prevProps: Props, prevState: State): boolean {
-        const { file }: State = this.state;
+        const { file, fileError }: State = this.state;
         const { file: prevFile }: State = prevState;
         let loadPreview = false;
 
         // Load preview if file version ID has changed
         if (file && file.file_version && prevFile && prevFile.file_version) {
             loadPreview = file.file_version.id !== prevFile.file_version.id;
-        } else {
+        } else if (file) {
             // Load preview if file object has newly been popuplated in state
             loadPreview = !prevFile && !!file;
+        } else {
+            // Load preview if there was a problem with the Elements files call
+            loadPreview = !!fileError;
         }
 
         return loadPreview;
@@ -423,11 +427,13 @@ class ContentPreview extends PureComponent<Props, State> {
         const { token: tokenOrTokenFunction, collection, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
-        if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
+        const fileId = file ? this.getFileId(file) : rest.fileId;
+
+        if (!this.isPreviewLibraryLoaded() || !tokenOrTokenFunction) {
             return;
         }
 
-        const typedId: string = getTypedFileId(this.getFileId(file));
+        const typedId: string = getTypedFileId(fileId);
         const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
 
         const previewOptions = {
@@ -443,8 +449,11 @@ class ContentPreview extends PureComponent<Props, State> {
             this.setPreviewInstance(new Preview());
         }
 
-        this.preview.updateFileCache([file]);
-        this.preview.show(file.id, token, {
+        if (file) {
+            this.preview.updateFileCache([file]);
+        }
+
+        this.preview.show(fileId, token, {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions))
         });
@@ -480,7 +489,17 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        this.setState({ file });
+        this.setState({ file, fileError: false });
+    };
+
+    /**
+     * File fetch success callback
+     *
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchFileErrorCallback = (): void => {
+        this.setState({ fileError: true });
     };
 
     /**
@@ -501,7 +520,7 @@ class ContentPreview extends PureComponent<Props, State> {
             .file(
                 id,
                 successCallback || this.fetchFileSuccessCallback,
-                errorCallback || this.errorCallback,
+                errorCallback || this.fetchFileErrorCallback,
                 false,
                 SidebarUtils.canHaveSidebar(this.props.contentSidebarProps)
             );
