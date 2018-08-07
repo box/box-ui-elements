@@ -6,14 +6,21 @@
     position: relative;
     width: 341px; // 1px extra to account for the margin left
 
-    .bcs-title {
+    .bcs-content-header {
+        align-items: center;
         border-bottom: 1px solid $off-white;
-        font-size: 16px;
-        font-weight: 200;
-        height: 60px; // Same as section top below
-        line-height: 60px;
+        display: flex;
+        height: 60px;
+        justify-content: space-between;
         margin: 0 25px;
         padding: 0;
+
+        .bcs-title {
+            font-size: 16px;
+            font-weight: 200;
+            margin: 0;
+            padding: 0;
+        }
     }
 
     .bcs-scroll-content-wrapper {

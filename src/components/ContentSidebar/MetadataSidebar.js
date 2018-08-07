@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import MetadataInstanceEditor from 'box-react-ui/lib/features/metadata-instance-editor/MetadataInstanceEditor';
+import TemplateDropdown from 'box-react-ui/lib/features/metadata-instance-editor/TemplateDropdown';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
@@ -157,9 +158,24 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
         const { editors, templates, isLoading, hasError }: State = this.state;
         const showEditor = !!templates && !!editors;
         const showLoadingIndicator = !hasError && !showEditor;
+        const canEdit = this.canEdit();
+        const showTemplateDropdown = showEditor && canEdit;
 
         return (
-            <SidebarContent title={<FormattedMessage {...messages.sidebarMetadataTitle} />}>
+            <SidebarContent
+                title={<FormattedMessage {...messages.sidebarMetadataTitle} />}
+                actions={
+                    showTemplateDropdown ? (
+                        <TemplateDropdown
+                            hasTemplates={templates && templates.length !== 0}
+                            isDropdownBusy={false}
+                            onAdd={this.onAdd}
+                            templates={templates}
+                            usedTemplates={editors && editors.map((editor) => editor.template)}
+                        />
+                    ) : null
+                }
+            >
                 {hasError && (
                     <InlineError title={<FormattedMessage {...messages.sidebarMetadataErrorTitle} />}>
                         <FormattedMessage {...messages.sidebarMetadataErrorContent} />
@@ -169,7 +185,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                 {showEditor && (
                     <LoadingIndicatorWrapper isLoading={isLoading}>
                         <MetadataInstanceEditor
-                            canAdd={this.canEdit()}
+                            canAdd={canEdit}
                             editors={editors}
                             onSave={this.onSave}
                             onModification={this.onModification}

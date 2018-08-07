@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+import debounce from 'lodash/debounce';
 import Measure from 'react-measure';
 import classNames from 'classnames';
 import { SIZE_LARGE, SIZE_MEDIUM, SIZE_SMALL, CLASS_IS_SMALL, CLASS_IS_TOUCH, CLASS_IS_MEDIUM } from '../constants';
@@ -72,9 +73,9 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
          * @param {Component} react component
          * @return {void}
          */
-        onResize = ({ bounds: { width } }: { bounds: ClientRect }) => {
+        onResize = debounce(({ bounds: { width } }: { bounds: ClientRect }) => {
             this.setState({ size: this.getSize(width) });
-        };
+        }, 500);
 
         /**
          * Renders the Box UI Element
