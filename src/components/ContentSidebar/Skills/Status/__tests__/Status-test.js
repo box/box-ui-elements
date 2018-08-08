@@ -35,6 +35,11 @@ describe('components/ContentSidebar/Skills/Status', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render invoked status', () => {
+        const wrapper = getWrapper({ card: { status: { code: 'skills_invoked_status' } } });
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should render invocations error', () => {
         const wrapper = getWrapper({ card: { status: { code: 'skills_invocations_error' } } });
         expect(wrapper).toMatchSnapshot();

@@ -403,6 +403,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Default message when skills are still running',
         defaultMessage: 'We’re working on processing your file - please hold!'
     },
+    skillInvokedStatus: {
+        id: 'be.skillInvokedStatus',
+        description: 'Default message when skills are waiting to run',
+        defaultMessage: 'We’re preparing to process your file - please hold!'
+    },
     skillUnknownError: {
         id: 'be.skillUnknownError',
         description: 'Default error message when skills fail to run',
