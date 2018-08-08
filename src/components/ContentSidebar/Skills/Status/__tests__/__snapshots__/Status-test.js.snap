@@ -51,6 +51,13 @@ exports[`components/ContentSidebar/Skills/Status should render invocations error
 />
 `;
 
+exports[`components/ContentSidebar/Skills/Status should render invoked status 1`] = `
+<FormattedMessage
+  defaultMessage="We’re preparing to process your file - please hold!"
+  id="be.skillInvokedStatus"
+/>
+`;
+
 exports[`components/ContentSidebar/Skills/Status should render pending status 1`] = `
 <FormattedMessage
   defaultMessage="We’re working on processing your file - please hold!"
