@@ -2,6 +2,7 @@
 
 exports[`components/ContentSidebar/Metadata/MetadataSidebar should render Metadata sidebar component when instances and templates are available 1`] = `
 <SidebarContent
+  actions={null}
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -27,6 +28,7 @@ exports[`components/ContentSidebar/Metadata/MetadataSidebar should render Metada
 
 exports[`components/ContentSidebar/Metadata/MetadataSidebar should render error when there was an error 1`] = `
 <SidebarContent
+  actions={null}
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -52,6 +54,7 @@ exports[`components/ContentSidebar/Metadata/MetadataSidebar should render error 
 
 exports[`components/ContentSidebar/Metadata/MetadataSidebar should render loading indicator component when instances are not available 1`] = `
 <SidebarContent
+  actions={null}
   title={
     <FormattedMessage
       defaultMessage="Metadata"
@@ -65,6 +68,7 @@ exports[`components/ContentSidebar/Metadata/MetadataSidebar should render loadin
 
 exports[`components/ContentSidebar/Metadata/MetadataSidebar should render loading indicator component when templates are not available 1`] = `
 <SidebarContent
+  actions={null}
   title={
     <FormattedMessage
       defaultMessage="Metadata"

@@ -173,6 +173,19 @@ class ContentPreview extends PureComponent<Props, State> {
             this.preview.destroy();
             this.preview = undefined;
         }
+
+        // Don't destroy the cache while unmounting
+        this.api.destroy(false);
+    }
+
+    /**
+     * Destroys api instances with caches
+     *
+     * @private
+     * @return {void}
+     */
+    clearCache(): void {
+        this.api.destroy(true);
     }
 
     /**
@@ -878,7 +891,7 @@ class ContentPreview extends PureComponent<Props, State> {
                         {isSidebarVisible && (
                             <ContentSidebar
                                 {...contentSidebarProps}
-                                isCollapsed={!isLarge}
+                                isLarge={isLarge}
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}
