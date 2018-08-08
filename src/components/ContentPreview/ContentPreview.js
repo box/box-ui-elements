@@ -76,8 +76,7 @@ type Props = {
 };
 
 type State = {
-    file?: BoxItem,
-    fileError?: boolean
+    file?: BoxItem
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -93,6 +92,7 @@ class ContentPreview extends PureComponent<Props, State> {
     rootElement: HTMLElement;
     onError: ?Function;
     onMetric: ?Function;
+    fileError: boolean;
 
     static defaultProps = {
         className: '',
@@ -216,19 +216,18 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {boolean}
      */
     shouldLoadPreview(prevProps: Props, prevState: State): boolean {
-        const { file, fileError }: State = this.state;
+        const { file }: State = this.state;
         const { file: prevFile }: State = prevState;
         let loadPreview = false;
 
-        // Load preview if file version ID has changed
-        if (file && file.file_version && prevFile && prevFile.file_version) {
+        if (!file) {
+            loadPreview = !!this.fileError;
+            // Load preview if file version ID has changed
+        } else if (file.file_version && prevFile && prevFile.file_version) {
             loadPreview = file.file_version.id !== prevFile.file_version.id;
-        } else if (file) {
+        } else {
             // Load preview if file object has newly been popuplated in state
             loadPreview = !prevFile && !!file;
-        } else {
-            // Load preview if there was a problem with the Elements files call
-            loadPreview = !!fileError;
         }
 
         return loadPreview;
@@ -489,7 +488,8 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        this.setState({ file, fileError: false });
+        this.setState({ file });
+        this.fileError = false;
     };
 
     /**
@@ -499,7 +499,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileErrorCallback = (): void => {
-        this.setState({ fileError: true });
+        this.fileError = true;
     };
 
     /**
