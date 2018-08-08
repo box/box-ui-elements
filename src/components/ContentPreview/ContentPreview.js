@@ -82,7 +82,8 @@ type State = {
 type PreviewTimeMetrics = {
     conversion: number,
     rendering: number,
-    total: number
+    total: number,
+    preload?: number
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -384,23 +385,30 @@ class ContentPreview extends PureComponent<Props, State> {
         }
 
         const totalFetchFileTime = Math.round(this.fetchFileEndTime - this.fetchFileStartTime);
-        const { rendering, conversion } = previewTimeMetrics;
+        const { rendering, conversion, preload } = previewTimeMetrics;
 
         // We need to add in the total file fetch time to the rendering and total as preview
         // does not do the files call. In the case the file is in the process of
         // being converted, we need to add to conversion instead of the render
         let totalConversion = conversion;
         let totalRendering = rendering;
+        let totalPreload = preload;
         if (conversion) {
             totalConversion += totalFetchFileTime;
         } else {
             totalRendering += totalFetchFileTime;
         }
 
+        if (totalPreload) {
+            // Preload is optional, depending on file type
+            totalPreload += totalFetchFileTime;
+        }
+
         const previewMetrics = {
             conversion: totalConversion,
             rendering: totalRendering,
-            total: totalRendering + totalConversion
+            total: totalRendering + totalConversion,
+            preload: totalPreload
         };
 
         return previewMetrics;

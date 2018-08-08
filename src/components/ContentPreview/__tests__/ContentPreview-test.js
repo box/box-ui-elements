@@ -233,7 +233,8 @@ describe('components/ContentPreview/ContentPreview', () => {
             expect(totalMetrics).toEqual({
                 conversion,
                 rendering: totalRendering,
-                total: conversion + totalRendering
+                total: conversion + totalRendering,
+                preload: undefined
             });
         });
 
@@ -250,7 +251,8 @@ describe('components/ContentPreview/ContentPreview', () => {
             expect(totalMetrics).toEqual({
                 conversion: totalConversion,
                 rendering,
-                total: rendering + totalConversion
+                total: rendering + totalConversion,
+                preload: undefined
             });
         });
 
@@ -264,6 +266,23 @@ describe('components/ContentPreview/ContentPreview', () => {
             instance.fetchFileStartTime = null;
             const totalMetrics = instance.addFetchFileTimeToPreviewMetrics(metrics);
             expect(totalMetrics).toEqual(metrics);
+        });
+
+        test('should add the total file fetching time to preload if it exists', () => {
+            const PRELOAD_TIME = 20;
+            const totalMetrics = instance.addFetchFileTimeToPreviewMetrics({
+                ...metrics,
+                preload: PRELOAD_TIME
+            });
+            const { conversion, rendering } = metrics;
+            const totalRendering = rendering + totalTime;
+
+            expect(totalMetrics).toEqual({
+                conversion,
+                rendering: totalRendering,
+                total: conversion + totalRendering,
+                preload: PRELOAD_TIME + totalTime
+            });
         });
     });
 
