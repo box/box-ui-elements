@@ -126,7 +126,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             wrapper.setState({ file });
             const instance = wrapper.instance();
             await instance.loadPreview();
-            expect(instance.preview.addListener).toHaveBeenCalledWith('preview_metric', props.onMetric);
+            expect(instance.preview.addListener).toHaveBeenCalledWith('preview_metric', instance.onPreviewMetric);
         });
 
         test('should bind onPreviewLoad method to preview "load" event', async () => {
@@ -200,12 +200,10 @@ describe('components/ContentPreview/ContentPreview', () => {
         });
     });
 
-    describe('addFetchFileTimeToPreviewMetrics()', () => {
-        const startTime = 1;
-        const endTime = 5;
-        const totalTime = endTime - startTime;
+    describe('getTotalFileFetchTime()', () => {
         let instance;
-        let metrics;
+        const startTime = 1.23;
+        const endTime = 5.46;
 
         beforeEach(() => {
             const preview = new global.Box.Preview();
@@ -218,18 +216,53 @@ describe('components/ContentPreview/ContentPreview', () => {
             instance = wrapper.instance();
             instance.fetchFileStartTime = startTime;
             instance.fetchFileEndTime = endTime;
-            metrics = {
-                conversion: 0,
-                rendering: 100,
-                total: 100
+        });
+
+        test('should return the default if no start time', () => {
+            instance.fetchFileStartTime = null;
+            const totalMetrics = instance.getTotalFileFetchTime();
+            expect(totalMetrics).toEqual(0);
+        });
+
+        test('should return the default if no end time', () => {
+            instance.fetchFileEndTime = null;
+            const totalMetrics = instance.getTotalFileFetchTime();
+            expect(totalMetrics).toEqual(0);
+        });
+
+        test('should return the total fetching time', () => {
+            const total = instance.getTotalFileFetchTime();
+            expect(total).toEqual(4);
+        });
+    });
+
+    describe('addFetchFileTimeToPreviewMetrics()', () => {
+        let instance;
+        const metrics = {
+            conversion: 0,
+            rendering: 100,
+            total: 100
+        };
+        const FETCHING_TIME = 200;
+
+        beforeEach(() => {
+            const preview = new global.Box.Preview();
+            props = {
+                token: 'token',
+                fileId: file.id,
+                previewInstance: preview
             };
+            const wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.getTotalFileFetchTime = jest.fn().mockReturnValue(FETCHING_TIME);
         });
 
         test('should add the total file fetching time to rendering if the file was converted', () => {
             const totalMetrics = instance.addFetchFileTimeToPreviewMetrics(metrics);
             const { conversion, rendering } = metrics;
-            const totalRendering = rendering + totalTime;
+            const totalRendering = rendering + FETCHING_TIME;
 
+            expect(instance.getTotalFileFetchTime).toBeCalled();
             expect(totalMetrics).toEqual({
                 conversion,
                 rendering: totalRendering,
@@ -246,26 +279,15 @@ describe('components/ContentPreview/ContentPreview', () => {
             });
 
             const { rendering } = metrics;
-            const totalConversion = CONVERSION_TIME + totalTime;
+            const totalConversion = CONVERSION_TIME + FETCHING_TIME;
 
+            expect(instance.getTotalFileFetchTime).toBeCalled();
             expect(totalMetrics).toEqual({
                 conversion: totalConversion,
                 rendering,
                 total: rendering + totalConversion,
                 preload: undefined
             });
-        });
-
-        test('should return the original metrics object if no start time', () => {
-            instance.fetchFileStartTime = null;
-            const totalMetrics = instance.addFetchFileTimeToPreviewMetrics(metrics);
-            expect(totalMetrics).toEqual(metrics);
-        });
-
-        test('should return the original metrics object if no end time', () => {
-            instance.fetchFileStartTime = null;
-            const totalMetrics = instance.addFetchFileTimeToPreviewMetrics(metrics);
-            expect(totalMetrics).toEqual(metrics);
         });
 
         test('should add the total file fetching time to preload if it exists', () => {
@@ -275,13 +297,14 @@ describe('components/ContentPreview/ContentPreview', () => {
                 preload: PRELOAD_TIME
             });
             const { conversion, rendering } = metrics;
-            const totalRendering = rendering + totalTime;
+            const totalRendering = rendering + FETCHING_TIME;
 
+            expect(instance.getTotalFileFetchTime).toBeCalled();
             expect(totalMetrics).toEqual({
                 conversion,
                 rendering: totalRendering,
                 total: conversion + totalRendering,
-                preload: PRELOAD_TIME + totalTime
+                preload: PRELOAD_TIME + FETCHING_TIME
             });
         });
     });
@@ -328,6 +351,43 @@ describe('components/ContentPreview/ContentPreview', () => {
                 metrics: {
                     time: totalTimeMetrics
                 }
+            });
+        });
+    });
+
+    describe('onPreviewMetric()', () => {
+        let instance;
+        let onMetric;
+        const data = {
+            foo: 'bar',
+            file_info_time: 0,
+            convert_time: 0,
+            download_response_time: 20,
+            full_document_load_time: 20,
+            value: 40
+        };
+        const FETCHING_TIME = 20;
+
+        beforeEach(() => {
+            const preview = new global.Box.Preview();
+            onMetric = jest.fn();
+            props = {
+                token: 'token',
+                fileId: file.id,
+                previewInstance: preview,
+                onMetric
+            };
+            const wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.getTotalFileFetchTime = jest.fn().mockReturnValue(FETCHING_TIME);
+        });
+
+        test('should add in the total file fetching time', () => {
+            instance.onPreviewMetric(data);
+            expect(onMetric).toBeCalledWith({
+                ...data,
+                file_info_time: FETCHING_TIME,
+                value: data.value + FETCHING_TIME
             });
         });
     });

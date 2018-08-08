@@ -69,7 +69,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     onError?: Function,
-    onMetric?: Function,
+    onMetric: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     previewInstance?: any
@@ -79,11 +79,21 @@ type State = {
     file?: BoxItem
 };
 
+// Emitted by preview's 'load' event
 type PreviewTimeMetrics = {
     conversion: number,
     rendering: number,
     total: number,
     preload?: number
+};
+
+// Emitted by preview's 'preview_metric' event
+type PreviewLoadMetrics = {
+    value: number, // Sum of all available load times.
+    file_info_time: number,
+    convert_time: number,
+    download_response_time: number,
+    full_document_load_time: number
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -97,8 +107,6 @@ class ContentPreview extends PureComponent<Props, State> {
     previewContainer: ?HTMLDivElement;
     mouseMoveTimeoutID: TimeoutID;
     rootElement: HTMLElement;
-    onError: ?Function;
-    onMetric: ?Function;
 
     static defaultProps = {
         className: '',
@@ -387,17 +395,46 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Calculates the total file fetch time
+     *
+     * @return {number} the total fetch time
+     */
+    getTotalFileFetchTime(): number {
+        if (!this.fetchFileStartTime || !this.fetchFileEndTime) {
+            return 0;
+        }
+
+        const totalFetchFileTime = Math.round(this.fetchFileEndTime - this.fetchFileStartTime);
+        return totalFetchFileTime;
+    }
+
+    /**
+     * Event handler 'preview_metric' which adds in the file fetch time
+     *
+     * @param {Object} previewLoadMetrics - the object emitted by 'preview_metric'
+     * @return {void}
+     */
+    onPreviewMetric = (previewLoadMetrics: PreviewLoadMetrics): void => {
+        const { onMetric }: Props = this.props;
+        const totalFetchFileTime = this.getTotalFileFetchTime();
+
+        // We need to add in the total file fetch time to the file_info_time and value (total)
+        // as preview does not do the files call
+        onMetric({
+            ...previewLoadMetrics,
+            file_info_time: totalFetchFileTime,
+            value: (previewLoadMetrics.value || 0) + totalFetchFileTime
+        });
+    };
+
+    /**
      * Adds in the file fetch time to the preview metrics
      *
      * @param {Object} previewTimeMetrics - the preview time metrics
      * @return {Object} the preview time metrics merged with the files call time
      */
     addFetchFileTimeToPreviewMetrics(previewTimeMetrics: PreviewTimeMetrics): PreviewTimeMetrics {
-        if (!this.fetchFileStartTime || !this.fetchFileEndTime) {
-            return previewTimeMetrics;
-        }
-
-        const totalFetchFileTime = Math.round(this.fetchFileEndTime - this.fetchFileStartTime);
+        const totalFetchFileTime = this.getTotalFileFetchTime();
         const { rendering, conversion, preload } = previewTimeMetrics;
 
         // We need to add in the total file fetch time to the rendering and total as preview
@@ -492,11 +529,11 @@ class ContentPreview extends PureComponent<Props, State> {
             return;
         }
 
-        const { onError, onMetric } = this.props;
+        const { onError } = this.props;
 
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preview_error', onError);
-        this.preview.addListener('preview_metric', onMetric);
+        this.preview.addListener('preview_metric', this.onPreviewMetric);
     }
 
     /**
