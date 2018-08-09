@@ -15,7 +15,7 @@ type Props = {
 };
 
 const ShowOriginalButton = ({ handleShowOriginal }: Props): React.Node => (
-    <PlainButton className='bcs-comment-translate' onClick={handleShowOriginal}>
+    <PlainButton className="bcs-comment-translate" onClick={handleShowOriginal}>
         <FormattedMessage {...messages.commentShowOriginal} />
     </PlainButton>
 );

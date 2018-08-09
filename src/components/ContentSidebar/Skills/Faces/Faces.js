@@ -160,8 +160,8 @@ class Faces extends React.PureComponent<Props, State> {
                     isEditable &&
                     !isLoading && (
                         <PlainButton
-                            type='button'
-                            className='be-face-edit'
+                            type="button"
+                            className="be-face-edit"
                             onClick={this.toggleIsEditing}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT}
                         >
@@ -201,16 +201,16 @@ class Faces extends React.PureComponent<Props, State> {
                         />
                     )}
                 {isEditing && (
-                    <div className='be-faces-buttons'>
+                    <div className="be-faces-buttons">
                         <Button
-                            type='button'
+                            type="button"
                             onClick={this.onCancel}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}
                         >
                             <FormattedMessage {...messages.cancel} />
                         </Button>
                         <PrimaryButton
-                            type='button'
+                            type="button"
                             onClick={this.onSave}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}
                         >

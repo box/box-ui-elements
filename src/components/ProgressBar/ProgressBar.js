@@ -49,7 +49,7 @@ class ProgressBar extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         this.clearTimeoutAndInterval();
         const { percent }: Props = nextProps;
         this.setState({ percent }, this.startProgress);
@@ -113,8 +113,8 @@ class ProgressBar extends PureComponent<Props, State> {
             transitionDelay: percent > 0 && percent < 100 ? '0' : '0.4s'
         };
         return (
-            <div className='be-progress-container' style={containerStyle}>
-                <div className='be-progress' style={{ width: `${percent}%` }} />
+            <div className="be-progress-container" style={containerStyle}>
+                <div className="be-progress" style={{ width: `${percent}%` }} />
             </div>
         );
     }

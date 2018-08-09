@@ -65,7 +65,7 @@ const DetailsSidebar = ({
     isFileLoading
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-        {hasNotices && <div className='bcs-details-content'>{hasNotices && <SidebarNotices file={file} />}</div>}
+        {hasNotices && <div className="bcs-details-content">{hasNotices && <SidebarNotices file={file} />}</div>}
         {hasAccessStats && (
             <SidebarAccessStats
                 accessStats={accessStats}
@@ -75,7 +75,7 @@ const DetailsSidebar = ({
             />
         )}
         {hasVersions && (
-            <div className='bcs-details-content'>
+            <div className="bcs-details-content">
                 {hasVersions && (
                     <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} file={file} />
                 )}

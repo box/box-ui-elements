@@ -201,7 +201,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { fileId, token, isLarge }: Props = this.props;
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
@@ -909,18 +909,18 @@ class ContentPreview extends PureComponent<Props, State> {
                             onDownload={this.download}
                         />
                     )}
-                    <div className='bcpr-body'>
-                        <div className='bcpr-container' onMouseMove={this.onMouseMove} ref={this.containerRef}>
+                    <div className="bcpr-body">
+                        <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
                             <Measure bounds onResize={this.onResize}>
-                                {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
+                                {({ measureRef: previewRef }) => <div ref={previewRef} className="bcpr-content" />}
                             </Measure>
                             {hasLeftNavigation && (
-                                <PlainButton type='button' className='bcpr-navigate-left' onClick={this.navigateLeft}>
+                                <PlainButton type="button" className="bcpr-navigate-left" onClick={this.navigateLeft}>
                                     <IconNavigateLeft />
                                 </PlainButton>
                             )}
                             {hasRightNavigation && (
-                                <PlainButton type='button' className='bcpr-navigate-right' onClick={this.navigateRight}>
+                                <PlainButton type="button" className="bcpr-navigate-right" onClick={this.navigateRight}>
                                     <IconNavigateRight />
                                 </PlainButton>
                             )}

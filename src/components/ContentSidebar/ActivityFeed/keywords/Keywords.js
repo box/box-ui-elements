@@ -26,8 +26,8 @@ type Props = {
 };
 
 const Keywords = ({ action, words }: Props): React.Node => (
-    <div className='bcs-keywords'>
-        <span className='bcs-keywords-message'>{getMessageForAction(action)}</span>
+    <div className="bcs-keywords">
+        <span className="bcs-keywords-message">{getMessageForAction(action)}</span>
         {words ? <Info words={words} /> : null}
     </div>
 );

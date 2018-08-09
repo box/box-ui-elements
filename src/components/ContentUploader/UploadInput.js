@@ -27,7 +27,7 @@ const UploadInput = ({
             {inputLabel}
             <input
                 multiple={isMultiple}
-                type='file'
+                type="file"
                 onChange={handleChange}
                 directory={isFolderUpload ? '' : undefined}
                 webkitdirectory={isFolderUpload ? '' : undefined}

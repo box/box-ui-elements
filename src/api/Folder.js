@@ -131,7 +131,7 @@ class Folder extends Item {
         // on it on its own. Good for calculating percentatge, but not good for
         // figuring our when the collection is done loading.
         const percentLoaded: number =
-            !!item_collection.isLoaded || total_count === 0 ? 100 : entries.length * 100 / total_count;
+            !!item_collection.isLoaded || total_count === 0 ? 100 : (entries.length * 100) / total_count;
 
         const collection: Collection = {
             id,

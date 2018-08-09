@@ -27,19 +27,19 @@ export default (onExpanderClick: Function, onItemClick: Function, isSmall: boole
     const onClick: Function = (): void => onExpanderClick(rowData);
 
     return (
-        <div className='bft-cell-node' style={{ paddingLeft }}>
+        <div className="bft-cell-node" style={{ paddingLeft }}>
             {rowData.type === TYPE_FOLDER ? (
-                <Button type='button' onClick={onClick} className='bft-cell-node-btn' isDisabled={isLoading}>
+                <Button type="button" onClick={onClick} className="bft-cell-node-btn" isDisabled={isLoading}>
                     {selected ? '-' : '+'}
                 </Button>
             ) : (
-                <div className='bft-cell-node-btn' />
+                <div className="bft-cell-node-btn" />
             )}
             {iconCellRenderer(isSmall ? 24 : 32)({ rowData })}
-            <div className='be-item-name'>
+            <div className="be-item-name">
                 <ItemName isTouch={false} item={rowData} canPreview onClick={onItemClick} />
                 {isSmall ? null : (
-                    <div className='be-item-details'>
+                    <div className="be-item-details">
                         <ItemSubDetails view={VIEW_FOLDER} item={rowData} />
                     </div>
                 )}

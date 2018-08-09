@@ -81,16 +81,16 @@ class SidebarSection extends React.PureComponent<Props, State> {
             <div className={sectionClassName}>
                 {title && (
                     <PlainButton
-                        type='button'
+                        type="button"
                         onClick={this.toggleVisibility}
-                        className='bcs-section-title'
+                        className="bcs-section-title"
                         data-resin-target={interactionTarget}
                     >
                         {title}
                         <IconCaretDown color={COLOR_999} width={8} />
                     </PlainButton>
                 )}
-                {(isOpen || !title) && <div className='bcs-section-content'>{children}</div>}
+                {(isOpen || !title) && <div className="bcs-section-content">{children}</div>}
             </div>
         );
     }

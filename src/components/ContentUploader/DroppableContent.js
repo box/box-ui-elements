@@ -36,7 +36,9 @@ const dropDefinition = {
      * Determines what happens after a file is dropped
      */
     onDrop: (event, { addDataTransferItemsToUploadQueue }: Props) => {
-        const { dataTransfer: { items } } = event;
+        const {
+            dataTransfer: { items }
+        } = event;
 
         addDataTransferItemsToUploadQueue(items);
     }
@@ -48,7 +50,7 @@ const DroppableContent = makeDroppable(dropDefinition)(
         const hasItems = items.length > 0;
 
         return (
-            <div className='bcu-droppable-content'>
+            <div className="bcu-droppable-content">
                 <ItemList items={items} view={view} onClick={onClick} />
                 <UploadState
                     canDrop={canDrop}

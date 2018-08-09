@@ -611,7 +611,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     uploadsFileSizeLimitExceededErrorMessage: {
         id: 'be.uploadsFileSizeLimitExceededErrorMessage',
         description: 'Error message shown when file size exceeds the limit',
-        defaultMessage: 'File size exceeds the folder owner\'s file size limit'
+        defaultMessage: "File size exceeds the folder owner's file size limit"
     },
     uploadsStorageLimitErrorMessage: {
         id: 'be.uploadsStorageLimitErrorMessage',
@@ -767,7 +767,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     getVersionInfo: {
         id: 'be.getVersionInfo',
         defaultMessage: 'Get version information',
-        description: 'Aria label for button to get information about a file\'s versions'
+        description: "Aria label for button to get information about a file's versions"
     },
     keywordsApplied: {
         id: 'be.keywordsAppliedList',

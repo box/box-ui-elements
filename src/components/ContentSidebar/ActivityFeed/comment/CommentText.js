@@ -37,7 +37,7 @@ class CommentText extends React.Component<Props, State> {
         isTranslation: false
     };
 
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { translatedTaggedMessage, translationFailed } = nextProps;
         if (translatedTaggedMessage || translationFailed) {
             this.setState({ isLoading: false });
@@ -77,11 +77,11 @@ class CommentText extends React.Component<Props, State> {
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
         return isLoading ? (
-            <div className='bcs-comment-text-loading'>
-                <LoadingIndicator size='small' />
+            <div className="bcs-comment-text-loading">
+                <LoadingIndicator size="small" />
             </div>
         ) : (
-            <div className='bcs-comment-text'>
+            <div className="bcs-comment-text">
                 {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>

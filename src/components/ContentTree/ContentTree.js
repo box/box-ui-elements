@@ -230,7 +230,9 @@ class ContentTree extends Component<Props, State> {
      */
     finishNavigation() {
         const { autoFocus }: Props = this.props;
-        const { currentCollection: { percentLoaded } }: State = this.state;
+        const {
+            currentCollection: { percentLoaded }
+        }: State = this.state;
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
         if (

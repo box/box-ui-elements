@@ -55,10 +55,10 @@ const UploadsManager = ({
         (updatedSize, item) =>
             item.status === STATUS_ERROR || item.isFolder
                 ? updatedSize
-                : updatedSize + item.size * item.progress / 100.0,
+                : updatedSize + (item.size * item.progress) / 100.0,
         0
     );
-    const percent = totalUploaded / totalSize * 100;
+    const percent = (totalUploaded / totalSize) * 100;
 
     return (
         <div
@@ -75,7 +75,7 @@ const UploadsManager = ({
                 onKeyDown={handleProgressBarKeyDown}
                 view={view}
             />
-            <div className='bcu-uploads-manager-item-list'>
+            <div className="bcu-uploads-manager-item-list">
                 <ItemList items={items} view={view} onClick={onItemActionClick} />
             </div>
         </div>

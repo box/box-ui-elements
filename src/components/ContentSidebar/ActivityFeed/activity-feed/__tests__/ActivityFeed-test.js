@@ -341,17 +341,17 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const props = { comments, tasks, versions };
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
-            instance.componentWillReceiveProps(props);
+            instance.UNSAFE_componentWillReceiveProps(props);
 
             expect(instance.sortFeedItems).toBeCalledWith(comments, tasks, versions);
         });
 
         test('should not invoke sortFeedItems() once feedItems has already been set', () => {
             const props = { comments, tasks, versions };
-            instance.componentWillReceiveProps(props);
+            instance.UNSAFE_componentWillReceiveProps(props);
 
             instance.sortFeedItems = jest.fn();
-            instance.componentWillReceiveProps(props);
+            instance.UNSAFE_componentWillReceiveProps(props);
 
             expect(instance.sortFeedItems).not.toBeCalled();
         });
@@ -360,7 +360,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const props = { comments, tasks };
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
-            instance.componentWillReceiveProps(props);
+            instance.UNSAFE_componentWillReceiveProps(props);
 
             expect(instance.sortFeedItems).not.toBeCalled();
         });
@@ -450,7 +450,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(feedItems[0].message).toBe(message);
         });
 
-        test('should do nothing if it can\'t find an item with matching uuid', () => {
+        test("should do nothing if it can't find an item with matching uuid", () => {
             const uuid = 'a1b2c3d4e5f6';
             const message = 'This is missing in the pending item';
             const oldFeedItems = [

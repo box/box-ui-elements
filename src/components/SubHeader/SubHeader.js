@@ -37,7 +37,7 @@ const SubHeader = ({
     view,
     isSmall
 }: Props) => (
-    <div className='be-sub-header'>
+    <div className="be-sub-header">
         <SubHeaderLeft
             rootId={rootId}
             rootName={rootName}

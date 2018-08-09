@@ -27,12 +27,12 @@ class InlineEdit extends React.Component<Props> {
     render(): React.Node {
         const { onEdit } = this;
         return (
-            <div className='bcs-comment-edit-container'>
+            <div className="bcs-comment-edit-container">
                 <PlainButton
                     aria-label={this.props.intl.formatMessage(messages.editLabel)}
-                    className='bcs-comment-edit'
+                    className="bcs-comment-edit"
                     onClick={onEdit}
-                    type='button'
+                    type="button"
                     data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                 >
                     <IconPencil />

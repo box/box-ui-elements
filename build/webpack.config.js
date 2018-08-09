@@ -5,6 +5,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
+const safeParser = require('postcss-safe-parser');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const license = require('./license');
 
@@ -33,8 +34,8 @@ const entries = {
 const entriesToBuild =
     typeof process.env.ENTRY === 'string'
         ? {
-            [process.env.ENTRY]: entries[process.env.ENTRY]
-        }
+              [process.env.ENTRY]: entries[process.env.ENTRY]
+          }
         : entries;
 
 function getConfig(isReactExternalized) {
@@ -49,7 +50,7 @@ function getConfig(isReactExternalized) {
         resolve: {
             modules: ['src', 'node_modules'],
             alias: {
-                'examples':  path.join(__dirname, '../examples/src'),
+                examples: path.join(__dirname, '../examples/src'),
                 'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
                 'box-react-ui-locale-data': path.resolve(`node_modules/box-react-ui/i18n/${language}`),
@@ -93,7 +94,7 @@ function getConfig(isReactExternalized) {
             new OptimizeCssAssetsPlugin({
                 cssProcessorOptions: {
                     discardComments: { removeAll: true },
-                    safe: true
+                    parser: safeParser
                 }
             }),
             new BannerPlugin(license)

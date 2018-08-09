@@ -115,7 +115,7 @@ class Comment extends React.Component<Props, State> {
         const canEdit = getProp(permissions, 'can_edit', false);
 
         return (
-            <div className='bcs-comment-container'>
+            <div className="bcs-comment-container">
                 <div
                     className={classNames('bcs-comment', {
                         'bcs-is-pending': isPending || error,
@@ -124,11 +124,11 @@ class Comment extends React.Component<Props, State> {
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={created_by} />
-                    <div className='bcs-comment-content'>
-                        <div className='bcs-comment-headline'>
+                    <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={created_by} />
+                    <div className="bcs-comment-content">
+                        <div className="bcs-comment-headline">
                             <UserLink
-                                className='bcs-comment-user-name'
+                                className="bcs-comment-user-name"
                                 data-resin-target={ACTIVITY_TARGETS.PROFILE}
                                 id={created_by.id}
                                 name={created_by.name}
@@ -142,7 +142,7 @@ class Comment extends React.Component<Props, State> {
                                     />
                                 }
                             >
-                                <small className='bcs-comment-created-at'>
+                                <small className="bcs-comment-created-at">
                                     <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>

@@ -35,8 +35,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         shallow(
             <Comment
                 created_by={{ name: '50 Cent', id: 10 }}
-                id='123'
-                tagged_message='test'
+                id="123"
+                tagged_message="test"
                 handlers={allHandlers}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -55,7 +55,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -94,7 +94,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -116,7 +116,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -139,7 +139,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -164,7 +164,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -188,7 +188,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...task}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -210,7 +210,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         };
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -251,7 +251,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -274,7 +274,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -296,7 +296,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -316,7 +316,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -337,7 +337,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -364,7 +364,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -398,7 +398,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         };
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}

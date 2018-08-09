@@ -26,9 +26,9 @@ const Timeslice = ({ start, end, duration, onClick, index, interactionTarget }: 
     }
 
     const barLength = LENGTH_TEXT_ITEMLINE;
-    let startLeft = Math.round(start * barLength / duration);
+    let startLeft = Math.round((start * barLength) / duration);
     const minEnding = startLeft + MIN_WIDTH; // Need at least some width to be clickable
-    const ending = typeof end === 'number' ? Math.max(minEnding, end * barLength / duration) : minEnding;
+    const ending = typeof end === 'number' ? Math.max(minEnding, (end * barLength) / duration) : minEnding;
     const endLeft = Math.round(Math.min(barLength, ending));
     let width = endLeft - startLeft;
 
@@ -41,8 +41,8 @@ const Timeslice = ({ start, end, duration, onClick, index, interactionTarget }: 
 
     return (
         <PlainButton
-            type='button'
-            className='be-timeline-time'
+            type="button"
+            className="be-timeline-time"
             style={{
                 left: `${startLeft}px`,
                 width: `${width}px`

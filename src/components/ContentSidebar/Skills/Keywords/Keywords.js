@@ -102,11 +102,13 @@ class Keywords extends PureComponent<Props, State> {
         const regex = new RegExp(`\\b${((keyword.text: any): string)}\\b`, 'i');
 
         if (transcript && Array.isArray(transcript.entries)) {
-            transcript.entries.forEach(({ text, appears }: SkillCardEntry): void => {
-                if (text && regex.test(text) && Array.isArray(appears) && appears.length > 0) {
-                    locations.push(appears[0]);
+            transcript.entries.forEach(
+                ({ text, appears }: SkillCardEntry): void => {
+                    if (text && regex.test(text) && Array.isArray(appears) && appears.length > 0) {
+                        locations.push(appears[0]);
+                    }
                 }
-            });
+            );
         }
 
         keyword.appears = locations;
@@ -175,12 +177,12 @@ class Keywords extends PureComponent<Props, State> {
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading} className='be-keywords'>
+            <LoadingIndicatorWrapper isLoading={isLoading} className="be-keywords">
                 {hasKeywords &&
                     isEditable &&
                     !isLoading && (
                         <PlainButton
-                            type='button'
+                            type="button"
                             className={editClassName}
                             onClick={this.toggleIsEditing}
                             data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}

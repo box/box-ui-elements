@@ -14,9 +14,11 @@ import type { Pill } from './flowTypes';
  * @return {Array<Object>} pills
  */
 const getPills = (keywords: Array<SkillCardEntry> = []): Array<Pill> =>
-    keywords.map((keyword: SkillCardEntry, index: number): Pill => ({
-        value: index,
-        text: ((keyword.text: any): string)
-    }));
+    keywords.map(
+        (keyword: SkillCardEntry, index: number): Pill => ({
+            value: index,
+            text: ((keyword.text: any): string)
+        })
+    );
 
 export default getPills;

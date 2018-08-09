@@ -17,7 +17,7 @@ type Props = {
 };
 
 const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChange, useButton = false }: Props) => {
-    const messageContent = message ? <div className='bcu-upload-state-message'>{message}</div> : null;
+    const messageContent = message ? <div className="bcu-upload-state-message">{message}</div> : null;
     const inputLabelClass = useButton ? 'btn btn-primary be-input-btn' : 'be-input-link';
     const shouldShowFolderUploadInput = !useButton && !!folderInputLabel;
 
@@ -60,7 +60,7 @@ const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChang
     return (
         <div>
             {messageContent}
-            {inputsContent && <div className='bcu-upload-input-container'>{inputsContent}</div>}
+            {inputsContent && <div className="bcu-upload-input-container">{inputsContent}</div>}
         </div>
     );
 };

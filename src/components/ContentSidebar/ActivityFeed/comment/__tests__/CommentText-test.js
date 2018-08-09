@@ -9,7 +9,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             tagged_message: 'How u doing @[2030326577:Young Jeezy]?'
         };
 
-        const wrapper = shallow(<CommentText id='123' {...commentText} />);
+        const wrapper = shallow(<CommentText id="123" {...commentText} />);
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -19,7 +19,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             tagged_message: 'Hi ﹫[123:Half] ＠[222:Full] @[432:Latin]'
         };
 
-        const wrapper = shallow(<CommentText id='123' {...commentText} />);
+        const wrapper = shallow(<CommentText id="123" {...commentText} />);
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -27,7 +27,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
     test('should not show translate button by default, translation should be disabled', () => {
         const commentText = { tagged_message: 'test' };
 
-        const wrapper = mount(<CommentText id='123' {...commentText} />);
+        const wrapper = mount(<CommentText id="123" {...commentText} />);
         expect(wrapper.find('.bcs-comment-text').text()).toEqual(commentText.tagged_message);
         expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(0);
         expect(wrapper.prop('translationEnabled')).toBe(false);
@@ -38,7 +38,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
         const translations = { translationEnabled: true };
         const commentText = { tagged_message: 'test' };
 
-        const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
+        const wrapper = mount(<CommentText id="123" {...commentText} {...translations} />);
 
         expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
@@ -52,7 +52,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             translatedTaggedMessage: 'translated'
         };
 
-        const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
+        const wrapper = mount(<CommentText id="123" {...commentText} {...translations} />);
         wrapper.setState({ isTranslation: true });
 
         expect(wrapper.find('PlainButton.bcs-comment-translate').length).toEqual(1);
@@ -66,7 +66,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             translatedTaggedMessage: 'translated'
         };
 
-        const wrapper = shallow(<CommentText id='123' {...commentText} {...translations} />);
+        const wrapper = shallow(<CommentText id="123" {...commentText} {...translations} />);
         wrapper.setState({ isTranslation: false, isLoading: true });
 
         expect(wrapper.find('LoadingIndicator').length).toEqual(1);
@@ -80,7 +80,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
         };
         const commentText = { tagged_message: 'test' };
 
-        const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
+        const wrapper = mount(<CommentText id="123" {...commentText} {...translations} />);
 
         const translateBtn = wrapper.find('PlainButton.bcs-comment-translate');
         translateBtn.simulate('click');
@@ -102,7 +102,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             translatedTaggedMessage: 'translated'
         };
 
-        const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
+        const wrapper = mount(<CommentText id="123" {...commentText} {...translations} />);
         wrapper.setState({ isTranslation: false });
 
         const translateBtn = wrapper.find('PlainButton.bcs-comment-translate');
@@ -125,7 +125,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/CommentText', () => {
             translatedTaggedMessage: 'translated'
         };
 
-        const wrapper = mount(<CommentText id='123' {...commentText} {...translations} />);
+        const wrapper = mount(<CommentText id="123" {...commentText} {...translations} />);
         wrapper.setState({ isTranslation: true });
 
         const showOriginalBtn = wrapper.find('PlainButton.bcs-comment-translate');

@@ -101,18 +101,18 @@ const CreateFolderDialog = ({
         >
             <label>
                 {error ? (
-                    <div className='be-modal-error'>
+                    <div className="be-modal-error">
                         <FormattedMessage {...error} />
                     </div>
                 ) : null}
-                <FormattedMessage tagName='div' {...messages.createDialogText} />
-                <input type='text' required ref={ref} onKeyDown={onKeyDown} />
+                <FormattedMessage tagName="div" {...messages.createDialogText} />
+                <input type="text" required ref={ref} onKeyDown={onKeyDown} />
             </label>
-            <div className='be-modal-btns'>
-                <PrimaryButton type='button' onClick={create} isLoading={isLoading}>
+            <div className="be-modal-btns">
+                <PrimaryButton type="button" onClick={create} isLoading={isLoading}>
                     <FormattedMessage {...messages.create} />
                 </PrimaryButton>
-                <Button type='button' onClick={onCancel} isDisabled={isLoading}>
+                <Button type="button" onClick={onCancel} isDisabled={isLoading}>
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

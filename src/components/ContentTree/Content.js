@@ -34,14 +34,14 @@ function isEmpty(view: View, currentCollection: Collection): boolean {
 }
 
 const Content = ({ view, isSmall, currentCollection, tableRef, onItemClick, onExpanderClick }: Props) => (
-    <div className='bct-content'>
+    <div className="bct-content">
         {isEmpty(view, currentCollection) ? (
-            <div className='be-empty'>
+            <div className="be-empty">
                 <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
                 <ProgressBar percent={currentCollection.percentLoaded} />
             </div>
         ) : (
-            <div className='bct-item-list'>
+            <div className="bct-item-list">
                 <ItemList
                     isSmall={isSmall}
                     items={currentCollection.items}

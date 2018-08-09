@@ -21,7 +21,7 @@ const InlineBreadcrumbs = ({ rootId, item, onItemClick }: Props) => {
     const { path_collection }: BoxItem = item;
     const { entries: breadcrumbs = [] } = path_collection || {};
     return (
-        <span className='be-inline-breadcrumbs'>
+        <span className="be-inline-breadcrumbs">
             <FormattedMessage {...messages.in} />
             &nbsp;
             <Breadcrumbs rootId={rootId} crumbs={breadcrumbs} onCrumbClick={onItemClick} delimiter={DELIMITER_SLASH} />

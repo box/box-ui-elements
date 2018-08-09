@@ -16,13 +16,13 @@ type Props = {
 };
 
 const Info = ({ words }: Props): React.Node => (
-    <span className='bcs-keywords-actions'>
+    <span className="bcs-keywords-actions">
         <Tooltip
-            className='bcs-keywords-actions-tooltip'
-            position='bottom-left'
+            className="bcs-keywords-actions-tooltip"
+            position="bottom-left"
             text={<FormattedMessage {...messages.keywordsList} values={{ words }} />}
         >
-            <div className='bcs-keywords-info'>
+            <div className="bcs-keywords-info">
                 <IconInfoInverted height={16} width={16} />
             </div>
         </Tooltip>
