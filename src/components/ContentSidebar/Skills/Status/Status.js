@@ -15,7 +15,8 @@ import {
     SKILLS_ERROR_FILE_PROCESSING,
     SKILLS_ERROR_INVALID_FILE_SIZE,
     SKILLS_ERROR_INVALID_FILE_FORMAT,
-    SKILLS_PENDING
+    SKILLS_STATUS_PENDING,
+    SKILLS_STATUS_INVOKED
 } from '../../../../constants';
 
 type Props = {
@@ -43,8 +44,11 @@ const Status = ({ card }: Props) => {
         case SKILLS_ERROR_FILE_PROCESSING:
             localizedMessage = messages.skillFileProcessingError;
             break;
-        case SKILLS_PENDING:
+        case SKILLS_STATUS_PENDING:
             localizedMessage = messages.skillPendingStatus;
+            break;
+        case SKILLS_STATUS_INVOKED:
+            localizedMessage = messages.skillInvokedStatus;
             break;
         default:
             if (message) {

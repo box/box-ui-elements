@@ -69,7 +69,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     onError?: Function,
-    onMetric?: Function,
+    onMetric: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     previewInstance?: any
@@ -77,6 +77,23 @@ type Props = {
 
 type State = {
     file?: BoxItem
+};
+
+// Emitted by preview's 'load' event
+type PreviewTimeMetrics = {
+    conversion: number,
+    rendering: number,
+    total: number,
+    preload?: number
+};
+
+// Emitted by preview's 'preview_metric' event
+type PreviewLoadMetrics = {
+    value: number, // Sum of all available load times.
+    file_info_time: number,
+    convert_time: number,
+    download_response_time: number,
+    full_document_load_time: number
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -90,8 +107,6 @@ class ContentPreview extends PureComponent<Props, State> {
     previewContainer: ?HTMLDivElement;
     mouseMoveTimeoutID: TimeoutID;
     rootElement: HTMLElement;
-    onError: ?Function;
-    onMetric: ?Function;
 
     static defaultProps = {
         className: '',
@@ -114,6 +129,16 @@ class ContentPreview extends PureComponent<Props, State> {
         collection: [],
         contentSidebarProps: {}
     };
+
+    /**
+     * @property {number}
+     */
+    fetchFileEndTime: ?number;
+
+    /**
+     * @property {number}
+     */
+    fetchFileStartTime: ?number;
 
     /**
      * [constructor]
@@ -156,6 +181,19 @@ class ContentPreview extends PureComponent<Props, State> {
             this.preview.destroy();
             this.preview = undefined;
         }
+
+        // Don't destroy the cache while unmounting
+        this.api.destroy(false);
+    }
+
+    /**
+     * Destroys api instances with caches
+     *
+     * @private
+     * @return {void}
+     */
+    clearCache(): void {
+        this.api.destroy(true);
     }
 
     /**
@@ -310,7 +348,7 @@ class ContentPreview extends PureComponent<Props, State> {
     /**
      * Updates preview cache and prefetches a file
      *
-     * @param {BoxItem>} file - file to prefetch
+     * @param {BoxItem} file - file to prefetch
      * @return {void}
      */
     updatePreviewCacheAndPrefetch(file: BoxItem, token: Token): void {
@@ -357,6 +395,76 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Calculates the total file fetch time
+     *
+     * @return {number} the total fetch time
+     */
+    getTotalFileFetchTime(): number {
+        if (!this.fetchFileStartTime || !this.fetchFileEndTime) {
+            return 0;
+        }
+
+        const totalFetchFileTime = Math.round(this.fetchFileEndTime - this.fetchFileStartTime);
+        return totalFetchFileTime;
+    }
+
+    /**
+     * Event handler 'preview_metric' which adds in the file fetch time
+     *
+     * @param {Object} previewLoadMetrics - the object emitted by 'preview_metric'
+     * @return {void}
+     */
+    onPreviewMetric = (previewLoadMetrics: PreviewLoadMetrics): void => {
+        const { onMetric }: Props = this.props;
+        const totalFetchFileTime = this.getTotalFileFetchTime();
+
+        // We need to add in the total file fetch time to the file_info_time and value (total)
+        // as preview does not do the files call
+        onMetric({
+            ...previewLoadMetrics,
+            file_info_time: totalFetchFileTime,
+            value: (previewLoadMetrics.value || 0) + totalFetchFileTime
+        });
+    };
+
+    /**
+     * Adds in the file fetch time to the preview metrics
+     *
+     * @param {Object} previewTimeMetrics - the preview time metrics
+     * @return {Object} the preview time metrics merged with the files call time
+     */
+    addFetchFileTimeToPreviewMetrics(previewTimeMetrics: PreviewTimeMetrics): PreviewTimeMetrics {
+        const totalFetchFileTime = this.getTotalFileFetchTime();
+        const { rendering, conversion, preload } = previewTimeMetrics;
+
+        // We need to add in the total file fetch time to the rendering and total as preview
+        // does not do the files call. In the case the file is in the process of
+        // being converted, we need to add to conversion instead of the render
+        let totalConversion = conversion;
+        let totalRendering = rendering;
+        let totalPreload = preload;
+        if (conversion) {
+            totalConversion += totalFetchFileTime;
+        } else {
+            totalRendering += totalFetchFileTime;
+        }
+
+        if (totalPreload) {
+            // Preload is optional, depending on file type
+            totalPreload += totalFetchFileTime;
+        }
+
+        const previewMetrics = {
+            conversion: totalConversion,
+            rendering: totalRendering,
+            total: totalRendering + totalConversion,
+            preload: totalPreload
+        };
+
+        return previewMetrics;
+    }
+
+    /**
      * onLoad function for preview
      *
      * @return {void}
@@ -365,7 +473,21 @@ class ContentPreview extends PureComponent<Props, State> {
         const { onLoad, collection }: Props = this.props;
         const currentIndex = this.getFileIndex();
         const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
-        onLoad(data);
+        const previewTimeMetrics = getProp(data, 'metrics.time');
+        let loadData = data;
+
+        if (previewTimeMetrics) {
+            const totalPreviewMetrics = this.addFetchFileTimeToPreviewMetrics(previewTimeMetrics);
+            loadData = {
+                ...loadData,
+                metrics: {
+                    ...loadData.metrics,
+                    time: totalPreviewMetrics
+                }
+            };
+        }
+
+        onLoad(loadData);
         this.focusPreview();
         if (this.preview && filesToPrefetch.length > 1) {
             this.prefetch(filesToPrefetch);
@@ -407,11 +529,11 @@ class ContentPreview extends PureComponent<Props, State> {
             return;
         }
 
-        const { onError, onMetric } = this.props;
+        const { onError } = this.props;
 
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preview_error', onError);
-        this.preview.addListener('preview_metric', onMetric);
+        this.preview.addListener('preview_metric', this.onPreviewMetric);
     }
 
     /**
@@ -468,6 +590,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     errorCallback = (error: Error): void => {
+        this.fetchFileEndTime = performance.now();
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
@@ -480,6 +603,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
+        this.fetchFileEndTime = performance.now();
         this.setState({ file });
     };
 
@@ -495,6 +619,9 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!id) {
             throw InvalidIdError;
         }
+
+        this.fetchFileStartTime = performance.now();
+        this.fetchFileEndTime = null;
 
         this.api
             .getFileAPI()
@@ -637,7 +764,7 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
-     * Mouse move handler thati s throttled and show
+     * Mouse move handler that is throttled and show
      * the navigation arrows if applicable.
      *
      * @return {void}
@@ -801,7 +928,7 @@ class ContentPreview extends PureComponent<Props, State> {
                         {isSidebarVisible && (
                             <ContentSidebar
                                 {...contentSidebarProps}
-                                isCollapsed={!isLarge}
+                                isLarge={isLarge}
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}

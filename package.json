@@ -126,7 +126,7 @@
     "babel-template": "^6.25.0",
     "babel-types": "^6.25.0",
     "box-locales": "^0.0.1",
-    "box-react-ui": "^24.5.2",
+    "box-react-ui": "^25.1.2",
     "circular-dependency-plugin": "^5.0.2",
     "classnames": "^2.2.6",
     "color": "^3.0.0",
@@ -203,7 +203,7 @@
   },
   "peerDependencies": {
     "axios": "^0.18.0",
-    "box-react-ui": "^24.5.2",
+    "box-react-ui": "^25.1.2",
     "classnames": "^2.2.5",
     "draft-js": "^0.10.1",
     "filesize": "^3.6.0",

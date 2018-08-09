@@ -206,7 +206,8 @@ export const SKILLS_ERROR_UNKNOWN = 'skills_unknown_error';
 export const SKILLS_ERROR_INVALID_FILE_SIZE = 'skills_invalid_file_size_error';
 export const SKILLS_ERROR_INVALID_FILE_FORMAT = 'skills_invalid_file_format_error';
 export const SKILLS_ERROR_FILE_PROCESSING = 'skills_file_processing_error';
-export const SKILLS_PENDING = 'skills_pending_status';
+export const SKILLS_STATUS_PENDING = 'skills_pending_status';
+export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
 
 /* ------------------ File Extensions ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';

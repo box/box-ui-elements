@@ -4,11 +4,15 @@ exports[`components/ContentSidebar/SidebarContent should render sidebar content 
 <div
   className="bcs-content"
 >
-  <h3
-    className="bcs-title"
+  <div
+    className="bcs-content-header"
   >
-    title
-  </h3>
+    <h3
+      className="bcs-title"
+    >
+      title
+    </h3>
+  </div>
   <div
     className="bcs-scroll-content-wrapper"
   >
