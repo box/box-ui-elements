@@ -20,4 +20,5 @@ const PreviewLoading = () => (
     </div>
 );
 
+export { PreviewLoading as PreviewLoadingComponent };
 export default makeLoadable(PreviewLoading);
