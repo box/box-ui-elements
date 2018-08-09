@@ -17,6 +17,7 @@ import { decode } from 'box-react-ui/lib/utils/keys';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconNavigateLeft from 'box-react-ui/lib/icons/general/IconNavigateLeft';
 import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight';
+import PreviewLoading from './PreviewLoading';
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
@@ -76,7 +77,8 @@ type Props = {
 };
 
 type State = {
-    file?: BoxItem
+    file?: BoxItem,
+    isFileError?: boolean
 };
 
 // Emitted by preview's 'load' event
@@ -97,6 +99,8 @@ type PreviewLoadMetrics = {
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
+const RETRY_COUNT = 3; // number of times to retry network request for a file
+const MS_IN_S = 1000; // ms in a sec
 
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
@@ -107,6 +111,10 @@ class ContentPreview extends PureComponent<Props, State> {
     previewContainer: ?HTMLDivElement;
     mouseMoveTimeoutID: TimeoutID;
     rootElement: HTMLElement;
+    onError: ?Function;
+    onMetric: ?Function;
+    retryCount: number = 0;
+    retryTimeout: TimeoutID;
 
     static defaultProps = {
         className: '',
@@ -604,7 +612,39 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
         this.fetchFileEndTime = performance.now();
-        this.setState({ file });
+        this.retryCount = 0;
+        this.setState({ file, isFileError: false });
+    };
+
+    /**
+     * File fetch error callback
+     *
+     * @return {void}
+     */
+    /* eslint-disable no-unused-vars */
+    fetchFileErrorCallback = (e: Error): void => {
+        /* eslint-enable no-unused-vars */
+        const { fileId }: Props = this.props;
+        if (this.retryCount >= RETRY_COUNT) {
+            this.setState({ isFileError: true });
+        } else {
+            this.retryCount += 1;
+            clearTimeout(this.retryTimeout);
+
+            // Respect 'Retry-After' header if present, otherwise retry full jitter
+            let timeoutMs = Math.random() * (2 ** this.retryCount * MS_IN_S);
+            const retryAfter = getProp('e.response.headers[Retry-After]');
+            if (retryAfter) {
+                const retryAfterS = parseInt(retryAfter, 10);
+                if (!Number.isNaN(retryAfterS)) {
+                    timeoutMs = retryAfterS * MS_IN_S;
+                }
+            }
+
+            this.retryTimeout = setTimeout(() => {
+                this.fetchFile(fileId);
+            }, timeoutMs);
+        }
     };
 
     /**
@@ -628,7 +668,7 @@ class ContentPreview extends PureComponent<Props, State> {
             .file(
                 id,
                 successCallback || this.fetchFileSuccessCallback,
-                errorCallback || this.errorCallback,
+                errorCallback || this.fetchFileErrorCallback,
                 false,
                 SidebarUtils.canHaveSidebar(this.props.contentSidebarProps)
             );
@@ -881,7 +921,7 @@ class ContentPreview extends PureComponent<Props, State> {
             responseInterceptor
         }: Props = this.props;
 
-        const { file }: State = this.state;
+        const { file, isFileError }: State = this.state;
         const { collection }: Props = this.props;
         const fileIndex = this.getFileIndex();
         const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
@@ -911,9 +951,14 @@ class ContentPreview extends PureComponent<Props, State> {
                     )}
                     <div className='bcpr-body'>
                         <div className='bcpr-container' onMouseMove={this.onMouseMove} ref={this.containerRef}>
-                            <Measure bounds onResize={this.onResize}>
-                                {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
-                            </Measure>
+                            {!file ? (
+                                <PreviewLoading isError={!!isFileError} />
+                            ) : (
+                                <Measure bounds onResize={this.onResize}>
+                                    {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
+                                </Measure>
+                            )}
+
                             {hasLeftNavigation && (
                                 <PlainButton type='button' className='bcpr-navigate-left' onClick={this.navigateLeft}>
                                     <IconNavigateLeft />
