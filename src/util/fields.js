@@ -111,7 +111,7 @@ export const VERSIONS_FIELDS_TO_FETCH = [
 ];
 
 // Fields needed to get task assignments data
-export const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE];
+export const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE].toString();
 
 // Fields needed to get tasks data
 export const COMMENTS_FIELDS_TO_FETCH = [

@@ -73,12 +73,6 @@ type State = {
     hasBeenToggled?: boolean
 };
 
-const activityFeedInlineError: Errors = {
-    inlineError: {
-        title: messages.errorOccured,
-        content: messages.activityFeedItemApiError
-    }
-};
 class ContentSidebar extends PureComponent<Props, State> {
     id: string;
     props: Props;

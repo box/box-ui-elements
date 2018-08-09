@@ -1,5 +1,5 @@
 import Cache from '../Cache';
-import sort from '../sorter';
+import sort, { sortFeedItems } from '../sorter';
 import { SORT_ASC, SORT_DESC } from '../../constants';
 
 let cache;
@@ -190,5 +190,44 @@ describe('util/sorter', () => {
     test('should throw with a bad item when no entries', () => {
         item.item_collection.entries = null;
         expect(sort.bind(sort, item, 'name', SORT_ASC, cache)).toThrow(Error, /Bad box item/);
+    });
+
+    describe('sortFeedItems()', () => {
+        const comments = {
+            total_count: 1,
+            entries: [
+                {
+                    type: 'comment',
+                    id: '123',
+                    created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
+                    tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
+                    created_by: { name: 'Akon', id: 11 }
+                }
+            ]
+        };
+        const tasks = {
+            total_count: 1,
+            entries: [
+                {
+                    type: 'task',
+                    id: '1234',
+                    created_at: 'Thu Sep 25 33658 19:45:39 GMT-0600 (CST)',
+                    modified_at: 'Thu Sep 25 33658 19:46:39 GMT-0600 (CST)',
+                    tagged_message: 'test',
+                    modified_by: { name: 'Jay-Z', id: 10 },
+                    dueAt: 1234567891,
+                    task_assignment_collection: {
+                        entries: [{ assigned_to: { name: 'Akon', id: 11 } }],
+                        total_count: 1
+                    }
+                }
+            ]
+        };
+
+        test('should sort items based on date', () => {
+            const sorted = sortFeedItems(comments, tasks);
+            expect(sorted[0].id).toEqual(comments.entries[0].id);
+            expect(sorted[1].id).toEqual(tasks.entries[0].id);
+        });
     });
 });

@@ -1,5 +1,6 @@
 import Feed from '../Feed';
 import messages from '../../components/messages';
+import * as sorter from '../../util/sorter';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
@@ -254,17 +255,17 @@ describe('api/Feed', () => {
             feed.fetchTasks = jest.fn().mockResolvedValue(tasks);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.addCurrentVersion = jest.fn().mockReturnValue(versions);
-            feed.sortFeedItems = jest.fn().mockReturnValue(sortedItems);
             feed.setCachedItems = jest.fn();
             successCb = jest.fn();
             errorCb = jest.fn();
             feed.isDestroyed = jest.fn().mockReturnValue(false);
+            sorter.sortFeedItems = jest.fn().mockReturnValue(sortedItems);
         });
 
         test('should get feed items, sort, save to cache, and call the success callback', (done) => {
             feed.feedItems(file, successCb, errorCb);
             setImmediate(() => {
-                expect(feed.sortFeedItems).toHaveBeenCalledWith(versions, comments, tasks);
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versions, comments, tasks);
                 expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
                 done();
@@ -294,10 +295,6 @@ describe('api/Feed', () => {
             });
         });
 
-        test('should throw if no file id', () => {
-            expect(() => feed.feedItems({}, successCb, errorCb)).toThrow(fileError);
-        });
-
         test('should return the cached items', () => {
             feed.getCachedItems = jest.fn().mockReturnValue({
                 hasError: false,
@@ -306,14 +303,6 @@ describe('api/Feed', () => {
             feed.feedItems(file, successCb, errorCb);
             expect(feed.getCachedItems).toHaveBeenCalledWith(file.id);
             expect(successCb).toHaveBeenCalledWith(feedItems);
-        });
-    });
-
-    describe('sortFeedItems()', () => {
-        test('should sort items based on date', () => {
-            const sorted = feed.sortFeedItems(comments, tasks);
-            expect(sorted[0].id).toEqual(comments.entries[0].id);
-            expect(sorted[1].id).toEqual(tasks.entries[0].id);
         });
     });
 
