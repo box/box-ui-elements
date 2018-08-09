@@ -45,7 +45,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     activityFeedError: ?Errors,
     currentUserError?: Errors,
-    getAvatarUrl: string => Promise<?string>,
+    getAvatarUrl: (string) => Promise<?string>,
     onToggle: Function,
     onVersionHistoryClick?: Function
 };

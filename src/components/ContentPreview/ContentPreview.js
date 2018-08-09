@@ -112,8 +112,6 @@ class ContentPreview extends PureComponent<Props, State> {
     previewContainer: ?HTMLDivElement;
     mouseMoveTimeoutID: TimeoutID;
     rootElement: HTMLElement;
-    onError: ?Function;
-    onMetric: ?Function;
     retryCount: number = 0;
     retryTimeout: TimeoutID;
 
