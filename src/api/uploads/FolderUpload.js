@@ -10,7 +10,7 @@ import {
     getFile,
     getFileAPIOptions,
     getDataTransferItem,
-    getDataTransferItemAPIOptions
+    getDataTransferItemAPIOptions,
 } from '../../util/uploads';
 
 const PATH_DELIMITER = '/';
@@ -131,7 +131,7 @@ class FolderUpload {
             apiOptions,
             {
                 ...this.baseAPIOptions,
-                ...apiOptions
+                ...apiOptions,
             },
             entry
         );
@@ -147,17 +147,17 @@ class FolderUpload {
      */
     async upload({
         errorCallback,
-        successCallback
+        successCallback,
     }: {
         errorCallback: Function,
-        successCallback: Function
+        successCallback: Function,
     }): Promise<any> {
         await this.folder.upload(this.destinationFolderId, errorCallback, true);
         // Simulate BoxItem
         successCallback([
             {
-                id: this.folder.folderId
-            }
+                id: this.folder.folderId,
+            },
         ]);
     }
 

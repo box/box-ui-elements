@@ -12,7 +12,7 @@ const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     parallelism: 5, // Maximum number of parts to upload at a time
     requestTimeoutMs: 120000, // Idle timeout on part upload, overall request timeout on other requests
     // eslint-disable-next-line max-len
-    retries: 5 // How many times to retry requests such as upload part or commit. Note that total number of attempts will be retries + 1 in worst case where all attempts fail.
+    retries: 5, // How many times to retry requests such as upload part or commit. Note that total number of attempts will be retries + 1 in worst case where all attempts fail.
 };
 
 class BaseMultiput extends BaseUpload {
@@ -44,9 +44,9 @@ class BaseMultiput extends BaseUpload {
     logEvent = (eventType: string, eventInfo?: string) => {
         const data: {
             event_type: string,
-            event_info?: string
+            event_info?: string,
         } = {
-            event_type: eventType
+            event_type: eventType,
         };
 
         if (eventInfo) {
@@ -55,7 +55,7 @@ class BaseMultiput extends BaseUpload {
 
         return this.xhr.post({
             url: this.sessionEndpoints.logEvent,
-            data
+            data,
         });
     };
 }

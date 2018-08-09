@@ -5,7 +5,7 @@ import IconActivityFeedEmptyState from '../IconActivityFeedEmptyState';
 
 describe('components/ContentSidebar/ActivityFeed/icons/IconActivityFeedEmptyState', () => {
     test('should correctly add class if passed', () => {
-        const wrapper = shallow(<IconActivityFeedEmptyState className='test' />);
+        const wrapper = shallow(<IconActivityFeedEmptyState className="test" />);
 
         expect(wrapper).toMatchSnapshot();
     });

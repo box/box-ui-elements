@@ -18,28 +18,28 @@ import API from '../../api';
 import './MetadataSidebar.scss';
 
 type ExternalProps = {
-    getMetadata?: Function
+    getMetadata?: Function,
 };
 
 type PropsWithoutContext = {
-    file: BoxItem
+    file: BoxItem,
 } & ExternalProps;
 
 type Props = {
-    api: API
+    api: API,
 } & PropsWithoutContext;
 
 type State = {
     editors?: Array<MetadataEditor>,
     templates?: Array<MetadataEditorTemplate>,
     isLoading: boolean,
-    hasError: boolean
+    hasError: boolean,
 };
 
 class MetadataSidebar extends React.PureComponent<Props, State> {
     state = {
         isLoading: false,
-        hasError: false
+        hasError: false,
     };
 
     componentDidMount() {
@@ -128,9 +128,13 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             return;
         }
 
-        api
-            .getMetadataAPI(false)
-            .updateMetadata(file, editor.template, ops, this.getMetadataEditors, this.errorCallback);
+        api.getMetadataAPI(false).updateMetadata(
+            file,
+            editor.template,
+            ops,
+            this.getMetadataEditors,
+            this.errorCallback
+        );
     };
 
     /**

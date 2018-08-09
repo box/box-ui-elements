@@ -18,7 +18,7 @@ import {
     SKILLS_TIMELINE,
     SKILLS_FACE,
     SKILLS_STATUS,
-    SKILLS_ERROR_UNKNOWN
+    SKILLS_ERROR_UNKNOWN,
 } from '../../../constants';
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
     cards: Array<SkillCard>,
     errors: NumberBooleanMap,
     getViewer: Function,
-    onSkillChange: Function
+    onSkillChange: Function,
 };
 
 /**
@@ -84,7 +84,7 @@ const SidebarSkills = ({ file, cards, errors, getViewer, onSkillChange }: Props)
         if (card.error && !card.status) {
             card.skill_card_type = SKILLS_STATUS;
             card.status = {
-                code: SKILLS_ERROR_UNKNOWN
+                code: SKILLS_ERROR_UNKNOWN,
             };
             delete card.error;
         }

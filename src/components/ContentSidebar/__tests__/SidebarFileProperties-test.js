@@ -4,7 +4,7 @@ import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
 import SidebarFileProperties, {
     SidebarFilePropertiesComponent,
-    getClassificationModal
+    getClassificationModal,
 } from '../SidebarFileProperties';
 import { METADATA_TEMPLATE_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../../constants';
 
@@ -17,49 +17,49 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
             description: 'foo',
             modified_at: '2018-04-18T16:56:05.352Z',
             owned_by: {
-                name: 'foo'
+                name: 'foo',
             },
             created_by: {
-                name: 'foo'
+                name: 'foo',
             },
             size: '1',
             permissions: {
-                can_rename: true
-            }
+                can_rename: true,
+            },
         },
         onDescriptionChange: jest.fn(),
         intl: {
-            locale: 'en'
-        }
+            locale: 'en',
+        },
     };
 
     const classificationProps = {
         hasClassification: true,
         onClassificationClick: jest.fn(),
         bannerPolicy: {
-            body: 'tooltip value'
+            body: 'tooltip value',
         },
         file: {
             size: '1',
             metadata: {
                 enterprise: {
                     [METADATA_TEMPLATE_CLASSIFICATION]: {
-                        [KEY_CLASSIFICATION_TYPE]: 'Public'
-                    }
-                }
+                        [KEY_CLASSIFICATION_TYPE]: 'Public',
+                    },
+                },
             },
             permissions: {
-                can_upload: false
-            }
+                can_upload: false,
+            },
         },
         intl: {
-            locale: 'en'
-        }
+            locale: 'en',
+        },
     };
 
     const retentionPolicyProps = {
         file: {
-            size: '1'
+            size: '1',
         },
         hasRetentionPolicy: true,
         onRetentionPolicyExtendClick: jest.fn(),
@@ -67,11 +67,11 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
             dispositionTime: 1556317461,
             policyName: 'test policy',
             policyType: 'finite',
-            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion'
+            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion',
         },
         intl: {
-            locale: 'en'
-        }
+            locale: 'en',
+        },
     };
 
     describe('render()', () => {
@@ -86,14 +86,14 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
             const fakeError = {
                 id: 'foo',
                 description: 'bar',
-                defaultMessage: 'baz'
+                defaultMessage: 'baz',
             };
 
             const errorProps = {
                 inlineError: {
                     title: fakeError,
-                    content: fakeError
-                }
+                    content: fakeError,
+                },
             };
             const wrapper = shallow(<SidebarFileProperties {...errorProps} />).dive();
 
@@ -104,7 +104,7 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
         test('should not render classification information if hasClassification is false', () => {
             const wrapper = getMountWrapper({
                 ...props,
-                hasClassification: false
+                hasClassification: false,
             });
             expect(wrapper).toMatchSnapshot();
         });
@@ -121,10 +121,10 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
                 file: {
                     ...classificationProps.file,
                     permissions: {
-                        can_upload: true
+                        can_upload: true,
                     },
-                    metadata: null
-                }
+                    metadata: null,
+                },
             });
             expect(wrapper).toMatchSnapshot();
         });
@@ -136,10 +136,10 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
                 file: {
                     ...classificationProps.file,
                     permissions: {
-                        can_upload: true
+                        can_upload: true,
                     },
-                    metadata: null
-                }
+                    metadata: null,
+                },
             });
             expect(wrapper).toMatchSnapshot();
         });
@@ -163,8 +163,8 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
                     {
                         ...classificationProps.file,
                         permissions: {
-                            can_upload: true
-                        }
+                            can_upload: true,
+                        },
                     },
                     classificationProps.onClassificationClick
                 )

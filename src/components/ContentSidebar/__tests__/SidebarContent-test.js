@@ -8,7 +8,7 @@ describe('components/ContentSidebar/SidebarContent', () => {
     test('should render sidebar content component', () => {
         const wrapper = getWrapper({
             title: 'title',
-            children: 'children'
+            children: 'children',
         });
 
         expect(wrapper).toMatchSnapshot();

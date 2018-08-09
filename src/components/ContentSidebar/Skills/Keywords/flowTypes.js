@@ -6,7 +6,7 @@
 
 export type Pill = {
     text: string,
-    value: number
+    value: number,
 };
 
 export type Pills = Array<Pill>;

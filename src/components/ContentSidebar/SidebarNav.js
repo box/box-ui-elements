@@ -17,7 +17,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
-    SIDEBAR_VIEW_METADATA
+    SIDEBAR_VIEW_METADATA,
 } from '../../constants';
 import './SidebarNav.scss';
 
@@ -27,7 +27,7 @@ type Props = {
     hasActivityFeed: boolean,
     hasDetails: boolean,
     onToggle: Function,
-    selectedView?: SidebarView
+    selectedView?: SidebarView,
 };
 
 const SidebarNav = ({ hasSkills, hasMetadata, hasActivityFeed, hasDetails, onToggle, selectedView }: Props) => (

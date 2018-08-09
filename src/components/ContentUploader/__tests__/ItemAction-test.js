@@ -17,7 +17,7 @@ describe('components/ContentUploader/ItemAction', () => {
 
     test('should render correctly with STATUS_COMPLETE', () => {
         const wrapper = getWrapper({
-            status: STATUS_COMPLETE
+            status: STATUS_COMPLETE,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -25,7 +25,7 @@ describe('components/ContentUploader/ItemAction', () => {
 
     test('should render correctly with STATUS_IN_PROGRESS', () => {
         const wrapper = getWrapper({
-            status: STATUS_IN_PROGRESS
+            status: STATUS_IN_PROGRESS,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -33,7 +33,7 @@ describe('components/ContentUploader/ItemAction', () => {
 
     test('should render correctly with STATUS_ERROR', () => {
         const wrapper = getWrapper({
-            status: STATUS_ERROR
+            status: STATUS_ERROR,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -41,7 +41,7 @@ describe('components/ContentUploader/ItemAction', () => {
 
     test('should render correctly with STATUS_PENDING', () => {
         const wrapper = getWrapper({
-            status: STATUS_PENDING
+            status: STATUS_PENDING,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -50,7 +50,7 @@ describe('components/ContentUploader/ItemAction', () => {
     test('should render correctly with STATUS_ERROR and item is folder', () => {
         const wrapper = getWrapper({
             status: STATUS_ERROR,
-            isFolder: true
+            isFolder: true,
         });
 
         expect(wrapper).toMatchSnapshot();

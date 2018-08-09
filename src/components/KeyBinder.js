@@ -23,13 +23,13 @@ type Props = {
     onSelect: Function,
     onDelete: Function,
     items: BoxItem[],
-    id: string | void
+    id: string | void,
 };
 
 type State = {
     scrollToColumn: number,
     scrollToRow: number,
-    focusOnRender: boolean
+    focusOnRender: boolean,
 };
 
 class KeyBinder extends PureComponent<Props, State> {
@@ -48,7 +48,7 @@ class KeyBinder extends PureComponent<Props, State> {
         onDownload: noop,
         onOpen: noop,
         onSelect: noop,
-        onDelete: noop
+        onDelete: noop,
     };
 
     /**
@@ -63,7 +63,7 @@ class KeyBinder extends PureComponent<Props, State> {
         this.state = {
             scrollToColumn: props.scrollToColumn,
             scrollToRow: props.scrollToRow,
-            focusOnRender: false
+            focusOnRender: false,
         };
 
         this.columnStartIndex = 0;
@@ -80,7 +80,7 @@ class KeyBinder extends PureComponent<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { id, scrollToColumn, scrollToRow }: Props = nextProps;
         const { id: prevId }: Props = this.props;
         const { scrollToColumn: prevScrollToColumn, scrollToRow: prevScrollToRow }: State = this.state;
@@ -128,7 +128,7 @@ class KeyBinder extends PureComponent<Props, State> {
             onShare,
             onDelete,
             onOpen,
-            items
+            items,
         }: Props = this.props;
         const { scrollToColumn: scrollToColumnPrevious, scrollToRow: scrollToRowPrevious }: State = this.state;
         let { scrollToColumn, scrollToRow }: State = this.state;
@@ -196,12 +196,12 @@ class KeyBinder extends PureComponent<Props, State> {
         columnStartIndex,
         columnStopIndex,
         rowStartIndex,
-        rowStopIndex
+        rowStopIndex,
     }: {
         columnStartIndex: number,
         columnStopIndex: number,
         rowStartIndex: number,
-        rowStopIndex: number
+        rowStopIndex: number,
     }): void => {
         this.columnStartIndex = columnStartIndex;
         this.columnStopIndex = columnStopIndex;
@@ -240,7 +240,7 @@ class KeyBinder extends PureComponent<Props, State> {
                     onSectionRendered: this.onSectionRendered,
                     scrollToColumn,
                     scrollToRow,
-                    focusOnRender
+                    focusOnRender,
                 })}
             </div>
         );

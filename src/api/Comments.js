@@ -43,7 +43,7 @@ class Comments extends OffsetBasedAPI {
     format(comment: Object): Comment {
         return {
             ...comment,
-            tagged_message: comment.tagged_message !== '' ? comment.tagged_message : comment.message
+            tagged_message: comment.tagged_message !== '' ? comment.tagged_message : comment.message,
         };
     }
 
@@ -87,13 +87,13 @@ class Comments extends OffsetBasedAPI {
         message,
         taggedMessage,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         message?: string,
         taggedMessage?: string,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): void {
         const { id = '', permissions } = file;
 
@@ -108,14 +108,14 @@ class Comments extends OffsetBasedAPI {
             data: {
                 item: {
                     id,
-                    type: 'file'
+                    type: 'file',
                 },
                 message,
-                tagged_message: taggedMessage
+                tagged_message: taggedMessage,
             },
             params: {
-                fields: COMMENTS_FIELDS_TO_FETCH.toString()
-            }
+                fields: COMMENTS_FIELDS_TO_FETCH.toString(),
+            },
         };
 
         this.post({
@@ -123,7 +123,7 @@ class Comments extends OffsetBasedAPI {
             url: this.commentsUrl(),
             data: requestData,
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 
@@ -144,14 +144,14 @@ class Comments extends OffsetBasedAPI {
         message,
         permissions,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         commentId: string,
         message: string,
         permissions: BoxItemPermission,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): void {
         const { id = '' } = file;
 
@@ -163,7 +163,7 @@ class Comments extends OffsetBasedAPI {
         }
 
         const requestData = {
-            data: { message }
+            data: { message },
         };
 
         this.put({
@@ -171,7 +171,7 @@ class Comments extends OffsetBasedAPI {
             url: this.commentsUrl(commentId),
             data: requestData,
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 
@@ -190,13 +190,13 @@ class Comments extends OffsetBasedAPI {
         commentId,
         permissions,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         commentId: string,
         permissions: BoxItemPermission,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): void {
         const { id = '' } = file;
 
@@ -211,7 +211,7 @@ class Comments extends OffsetBasedAPI {
             id,
             url: this.commentsUrl(commentId),
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 }

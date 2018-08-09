@@ -14,7 +14,7 @@ describe('components/ContentPreview/ContentPreview', () => {
     const PERFORMANCE_TIME = 100;
     beforeEach(() => {
         global.performance = {
-            now: jest.fn().mockReturnValue(PERFORMANCE_TIME)
+            now: jest.fn().mockReturnValue(PERFORMANCE_TIME),
         };
     });
 
@@ -31,7 +31,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 hasSidebar: true,
                 token: 'token',
-                fileId: file.id
+                fileId: file.id,
             };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -40,7 +40,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             instance.loadPreview = jest.fn();
 
             wrapper.setProps({
-                hasSidebar: false
+                hasSidebar: false,
             });
 
             expect(instance.loadPreview).toHaveBeenCalledTimes(0);
@@ -92,7 +92,7 @@ describe('components/ContentPreview/ContentPreview', () => {
         test('should get read token for preview', async () => {
             props = {
                 token: 'token',
-                fileId: file.id
+                fileId: file.id,
             };
             const origGetReadToken = TokenService.default.getReadToken;
             TokenService.default.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
@@ -108,7 +108,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 onError: jest.fn(),
                 token: 'token',
-                fileId: file.id
+                fileId: file.id,
             };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -121,7 +121,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 onMetric: jest.fn(),
                 token: 'token',
-                fileId: file.id
+                fileId: file.id,
             };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -134,7 +134,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 onMetric: jest.fn(),
                 token: 'token',
-                fileId: file.id
+                fileId: file.id,
             };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -147,7 +147,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 onMetric: jest.fn(),
                 token: 'token',
-                fileId: file.id
+                fileId: file.id,
             };
             TokenService.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
             const wrapper = getWrapper(props);
@@ -162,7 +162,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                     skipServerUpdate: true,
                     header: 'none',
                     useHotkeys: false,
-                    container: expect.stringContaining('.bcpr-content')
+                    container: expect.stringContaining('.bcpr-content'),
                 })
             );
         });
@@ -172,7 +172,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 token: 'token',
                 fileId: file.id,
-                previewInstance: preview
+                previewInstance: preview,
             };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -188,7 +188,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 token: 'token',
                 fileId: file.id,
-                previewInstance: preview
+                previewInstance: preview,
             };
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
@@ -256,7 +256,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 token: 'token',
                 fileId: file.id,
-                previewInstance: preview
+                previewInstance: preview,
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
@@ -287,7 +287,7 @@ describe('components/ContentPreview/ContentPreview', () => {
         const metrics = {
             conversion: 0,
             rendering: 100,
-            total: 100
+            total: 100,
         };
         const FETCHING_TIME = 200;
 
@@ -296,7 +296,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             props = {
                 token: 'token',
                 fileId: file.id,
-                previewInstance: preview
+                previewInstance: preview,
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
@@ -313,7 +313,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                 conversion,
                 rendering: totalRendering,
                 total: conversion + totalRendering,
-                preload: undefined
+                preload: undefined,
             });
         });
 
@@ -321,7 +321,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             const CONVERSION_TIME = 50;
             const totalMetrics = instance.addFetchFileTimeToPreviewMetrics({
                 ...metrics,
-                conversion: CONVERSION_TIME
+                conversion: CONVERSION_TIME,
             });
 
             const { rendering } = metrics;
@@ -332,7 +332,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                 conversion: totalConversion,
                 rendering,
                 total: rendering + totalConversion,
-                preload: undefined
+                preload: undefined,
             });
         });
 
@@ -340,7 +340,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             const PRELOAD_TIME = 20;
             const totalMetrics = instance.addFetchFileTimeToPreviewMetrics({
                 ...metrics,
-                preload: PRELOAD_TIME
+                preload: PRELOAD_TIME,
             });
             const { conversion, rendering } = metrics;
             const totalRendering = rendering + FETCHING_TIME;
@@ -350,7 +350,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                 conversion,
                 rendering: totalRendering,
                 total: conversion + totalRendering,
-                preload: PRELOAD_TIME + FETCHING_TIME
+                preload: PRELOAD_TIME + FETCHING_TIME,
             });
         });
     });
@@ -363,14 +363,14 @@ describe('components/ContentPreview/ContentPreview', () => {
                 time: {
                     conversion: 5,
                     rendering: 50,
-                    total: 150
-                }
-            }
+                    total: 150,
+                },
+            },
         };
         const totalTimeMetrics = {
             conversion: 100,
             rendering: 50,
-            total: 150
+            total: 150,
         };
 
         beforeEach(() => {
@@ -379,7 +379,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                 token: 'token',
                 fileId: file.id,
                 previewInstance: preview,
-                onLoad: jest.fn()
+                onLoad: jest.fn(),
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
@@ -395,8 +395,8 @@ describe('components/ContentPreview/ContentPreview', () => {
             expect(props.onLoad).toBeCalledWith({
                 ...data,
                 metrics: {
-                    time: totalTimeMetrics
-                }
+                    time: totalTimeMetrics,
+                },
             });
         });
     });
@@ -410,7 +410,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             convert_time: 0,
             download_response_time: 20,
             full_document_load_time: 20,
-            value: 40
+            value: 40,
         };
         const FETCHING_TIME = 20;
 
@@ -421,7 +421,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                 token: 'token',
                 fileId: file.id,
                 previewInstance: preview,
-                onMetric
+                onMetric,
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
@@ -433,7 +433,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             expect(onMetric).toBeCalledWith({
                 ...data,
                 file_info_time: FETCHING_TIME,
-                value: data.value + FETCHING_TIME
+                value: data.value + FETCHING_TIME,
             });
         });
     });

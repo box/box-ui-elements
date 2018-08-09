@@ -225,7 +225,7 @@ async function getFileFromDataTransferItem(
     if (doesDataTransferItemContainAPIOptions(itemData)) {
         return {
             file: ((file: any): UploadFile),
-            options: getDataTransferItemAPIOptions(itemData)
+            options: getDataTransferItemAPIOptions(itemData),
         };
     }
 
@@ -291,5 +291,5 @@ export {
     getFileLastModifiedAsISONoMSIfPossible,
     isDataTransferItemAFolder,
     toISOStringNoMS,
-    tryParseJson
+    tryParseJson,
 };

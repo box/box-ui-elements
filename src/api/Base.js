@@ -15,7 +15,7 @@ import {
     HTTP_GET,
     HTTP_POST,
     HTTP_PUT,
-    HTTP_DELETE
+    HTTP_DELETE,
 } from '../constants';
 
 class Base {
@@ -88,7 +88,7 @@ class Base {
         this.options = Object.assign({}, options, {
             apiHost: this.apiHost,
             uploadHost: this.uploadHost,
-            cache: this.cache
+            cache: this.cache,
         });
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
@@ -227,13 +227,13 @@ class Base {
         successCallback,
         errorCallback,
         params,
-        url
+        url,
     }: {
         id: string,
         successCallback: Function,
         errorCallback: Function,
         params?: Object,
-        url?: string
+        url?: string,
     }): Promise<any> {
         const apiUrl = url || this.getUrl(id);
         return this.makeRequest(HTTP_GET, id, apiUrl, successCallback, errorCallback, params);
@@ -253,13 +253,13 @@ class Base {
         url,
         data,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         id: string,
         url: string,
         data: Object,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): Promise<any> {
         return this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
     }
@@ -278,13 +278,13 @@ class Base {
         url,
         data,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         id: string,
         url: string,
         data: Object,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): Promise<any> {
         return this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
     }
@@ -303,13 +303,13 @@ class Base {
         url,
         data,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         id: string,
         url: string,
         data?: Object,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): Promise<any> {
         return this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
     }

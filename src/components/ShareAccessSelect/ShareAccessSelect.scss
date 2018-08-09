@@ -5,13 +5,14 @@
         appearance: none;
         background: none;
         background-image: linear-gradient(45deg, transparent 50%, $sevens 50%), linear-gradient(135deg, $sevens 50%, transparent 50%);
-        background-position: calc(100% - 14px) 10px, calc(100% - 10px) 10px;
+        background-position: calc(100% - 14px) 14px, calc(100% - 10px) 14px;
         background-repeat: no-repeat;
         background-size: 4px 4px, 4px 4px;
         border: 1px solid $grey;
         border-radius: 2px;
         color: inherit;
         cursor: pointer;
+        font-size: 12px;
         padding: 5px 25px 5px 10px;
 
         &:hover {

@@ -27,5 +27,5 @@ export function getIcon(dimension: number, rowData: BoxItem) {
 }
 
 export default (dimension: number = 32): Function => ({ rowData }: { rowData: BoxItem }) => (
-    <div className='be-item-icon'>{getIcon(dimension, rowData)}</div>
+    <div className="be-item-icon">{getIcon(dimension, rowData)}</div>
 );

@@ -22,12 +22,12 @@ function getMessageForAction(action: string): React.Node {
 
 type Props = {
     action: string | 'applied',
-    words: string
+    words: string,
 };
 
 const Keywords = ({ action, words }: Props): React.Node => (
-    <div className='bcs-keywords'>
-        <span className='bcs-keywords-message'>{getMessageForAction(action)}</span>
+    <div className="bcs-keywords">
+        <span className="bcs-keywords-message">{getMessageForAction(action)}</span>
         {words ? <Info words={words} /> : null}
     </div>
 );

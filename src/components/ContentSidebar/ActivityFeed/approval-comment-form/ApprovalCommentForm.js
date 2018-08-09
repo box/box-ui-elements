@@ -11,7 +11,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Form from 'box-react-ui/lib/components/form-elements/form/Form';
 import DraftJSMentionSelector, {
-    DraftMentionDecorator
+    DraftMentionDecorator,
 } from 'box-react-ui/lib/components/form-elements/draft-js-mention-selector';
 import commonMessages from 'box-react-ui/lib/common/messages';
 
@@ -41,7 +41,7 @@ type Props = {
     isEditing?: boolean,
     entityId?: string,
     tagged_message?: string,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
 };
 
 type State = {
@@ -49,12 +49,12 @@ type State = {
     approvers: SelectorItems,
     approverSelectorError: string,
     commentEditorState: any,
-    isAddApprovalVisible: boolean
+    isAddApprovalVisible: boolean,
 };
 
 class ApprovalCommentForm extends React.Component<Props, State> {
     static defaultProps = {
-        isOpen: false
+        isOpen: false,
     };
 
     state = {
@@ -62,16 +62,16 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         approvers: [],
         approverSelectorError: '',
         commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
-        isAddApprovalVisible: false
+        isAddApprovalVisible: false,
     };
 
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { isOpen } = nextProps;
 
         if (isOpen !== this.props.isOpen && !isOpen) {
             this.setState({
                 commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
-                isAddApprovalVisible: false
+                isAddApprovalVisible: false,
             });
         }
     }
@@ -91,7 +91,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             const { approvers, approvalDate } = this.state;
             if (approvers.length === 0) {
                 this.setState({
-                    approverSelectorError: intl.formatMessage(commonMessages.requiredFieldError)
+                    approverSelectorError: intl.formatMessage(commonMessages.requiredFieldError),
                 });
                 return;
             }
@@ -99,7 +99,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             createTask({
                 text,
                 assignees: approvers,
-                dueAt: approvalDate
+                dueAt: approvalDate,
             });
         } else if (entityId) {
             updateTask({ text, id: entityId });
@@ -115,7 +115,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
             isAddApprovalVisible: false,
             approvalDate: null,
-            approvers: []
+            approvers: [],
         });
     };
 
@@ -203,31 +203,31 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             user,
             isEditing,
             tagged_message,
-            getAvatarUrl
+            getAvatarUrl,
         } = this.props;
         const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
         const inputContainerClassNames = classNames('bcs-comment-input-container', className, {
-            'bcs-comment-input-is-open': isOpen
+            'bcs-comment-input-is-open': isOpen,
         });
 
         return (
             <div className={inputContainerClassNames}>
                 {!isEditing && (
-                    <div className='bcs-avatar-container'>
+                    <div className="bcs-avatar-container">
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </div>
                 )}
-                <div className='bcs-comment-input-form-container'>
+                <div className="bcs-comment-input-form-container">
                     <Form onChange={this.onFormChangeHandler} onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
-                            className='bcs-comment-input'
+                            className="bcs-comment-input"
                             contacts={isOpen ? mentionSelectorContacts : []}
                             editorState={commentEditorState}
                             hideLabel
                             isDisabled={isDisabled}
                             isRequired={isOpen}
-                            name='commentText'
-                            label='Comment'
+                            name="commentText"
+                            label="Comment"
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}
@@ -236,7 +236,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                         />
                         <aside
                             className={classNames('bcs-at-mention-tip', {
-                                'accessibility-hidden': isOpen
+                                'accessibility-hidden': isOpen,
                             })}
                         >
                             <FormattedMessage {...messages.atMentionTip} />

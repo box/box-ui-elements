@@ -131,7 +131,7 @@ class Folder extends Item {
         // on it on its own. Good for calculating percentatge, but not good for
         // figuring our when the collection is done loading.
         const percentLoaded: number =
-            !!item_collection.isLoaded || total_count === 0 ? 100 : entries.length * 100 / total_count;
+            !!item_collection.isLoaded || total_count === 0 ? 100 : (entries.length * 100) / total_count;
 
         const collection: Collection = {
             id,
@@ -142,7 +142,7 @@ class Folder extends Item {
             breadcrumbs: path_collection.entries,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => cache.get(key))
+            items: entries.map((key: string) => cache.get(key)),
         };
         this.successCallback(collection);
     }
@@ -191,8 +191,8 @@ class Folder extends Item {
             Object.assign({}, data, {
                 item_collection: Object.assign({}, item_collection, {
                     isLoaded,
-                    entries: this.itemCache
-                })
+                    entries: this.itemCache,
+                }),
             })
         );
 
@@ -220,9 +220,9 @@ class Folder extends Item {
                 params: {
                     offset: this.offset,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
+                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields),
                 },
-                headers: { 'X-Rep-Hints': X_REP_HINTS }
+                headers: { 'X-Rep-Hints': X_REP_HINTS },
             })
             .then(this.folderSuccessHandler)
             .catch(this.errorHandler);
@@ -338,9 +338,9 @@ class Folder extends Item {
                 data: {
                     name,
                     parent: {
-                        id: this.id
-                    }
-                }
+                        id: this.id,
+                    },
+                },
             })
             .then(this.createSuccessHandler)
             .catch(this.errorHandler);

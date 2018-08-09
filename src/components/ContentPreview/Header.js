@@ -22,7 +22,7 @@ type Props = {
     canDownload: boolean,
     onDownload: Function,
     onClose?: Function,
-    intl: any
+    intl: any,
 };
 
 const Header = ({ file, onClose, onPrint, canDownload, onDownload, intl }: Props) => {
@@ -32,16 +32,16 @@ const Header = ({ file, onClose, onPrint, canDownload, onDownload, intl }: Props
     const downloadMsg = intl.formatMessage(messages.download);
 
     return (
-        <div className='bcpr-header'>
-            <div className='bcpr-name'>
+        <div className="bcpr-header">
+            <div className="bcpr-name">
                 {file ? getIcon(24, file) : null}
                 <span>{name}</span>
             </div>
-            <div className='bcpr-btns'>
+            <div className="bcpr-btns">
                 {canDownload && (
                     <PlainButton
-                        type='button'
-                        className='bcpr-btn'
+                        type="button"
+                        className="bcpr-btn"
                         onClick={onPrint}
                         title={printMsg}
                         aria-label={printMsg}
@@ -51,8 +51,8 @@ const Header = ({ file, onClose, onPrint, canDownload, onDownload, intl }: Props
                 )}
                 {canDownload && (
                     <PlainButton
-                        type='button'
-                        className='bcpr-btn'
+                        type="button"
+                        className="bcpr-btn"
                         onClick={onDownload}
                         title={downloadMsg}
                         aria-label={downloadMsg}
@@ -62,8 +62,8 @@ const Header = ({ file, onClose, onPrint, canDownload, onDownload, intl }: Props
                 )}
                 {onClose && (
                     <PlainButton
-                        type='button'
-                        className='bcpr-btn'
+                        type="button"
+                        className="bcpr-btn"
                         onClick={onClose}
                         title={closeMsg}
                         aria-label={closeMsg}

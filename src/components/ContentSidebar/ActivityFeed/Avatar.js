@@ -9,16 +9,16 @@ import AvatarComponent from 'box-react-ui/lib/components/avatar';
 type Props = {
     user: User,
     className?: string,
-    getAvatarUrl: (string) => Promise<?string>
+    getAvatarUrl: (string) => Promise<?string>,
 };
 
 type State = {
-    avatarUrl: ?string
+    avatarUrl: ?string,
 };
 
 class Avatar extends React.PureComponent<Props, State> {
     state = {
-        avatarUrl: null
+        avatarUrl: null,
     };
 
     /**
@@ -28,7 +28,7 @@ class Avatar extends React.PureComponent<Props, State> {
      */
     getAvatarUrlHandler = (avatarUrl: ?string) => {
         this.setState({
-            avatarUrl
+            avatarUrl,
         });
     };
 

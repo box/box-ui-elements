@@ -7,11 +7,11 @@ import React, { PureComponent } from 'react';
 import './ProgressBar.scss';
 
 type Props = {
-    percent: number
+    percent: number,
 };
 
 type State = {
-    percent: number
+    percent: number,
 };
 
 class ProgressBar extends PureComponent<Props, State> {
@@ -19,7 +19,7 @@ class ProgressBar extends PureComponent<Props, State> {
     state: State;
 
     static defaultProps = {
-        percent: 0
+        percent: 0,
     };
 
     /**
@@ -38,7 +38,7 @@ class ProgressBar extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { percent } = nextProps;
         this.setState({ percent });
     }
@@ -51,11 +51,11 @@ class ProgressBar extends PureComponent<Props, State> {
     render() {
         const { percent } = this.state;
         const containerStyle = {
-            transitionDelay: percent > 0 && percent < 100 ? '0' : '0.4s'
+            transitionDelay: percent > 0 && percent < 100 ? '0' : '0.4s',
         };
         return (
-            <div className='bcu-progress-container' style={containerStyle}>
-                <div className='bcu-progress' style={{ width: `${percent}%` }} />
+            <div className="bcu-progress-container" style={containerStyle}>
+                <div className="bcu-progress" style={{ width: `${percent}%` }} />
             </div>
         );
     }

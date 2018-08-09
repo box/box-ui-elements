@@ -11,7 +11,7 @@ import { STATUS_ERROR, STATUS_IN_PROGRESS } from '../../constants';
 import messages from '../messages';
 
 type Props = {
-    rowData: UploadItem
+    rowData: UploadItem,
 };
 
 /**

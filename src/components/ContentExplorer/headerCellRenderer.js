@@ -14,7 +14,7 @@ type Props = {
     dataKey: SortBy,
     label: string,
     sortBy: SortBy,
-    sortDirection: SortDirection
+    sortDirection: SortDirection,
 };
 
 export default ({ dataKey, label, sortBy, sortDirection }: Props) => {
@@ -24,7 +24,7 @@ export default ({ dataKey, label, sortBy, sortDirection }: Props) => {
         <div>
             {label}
             &nbsp;&nbsp;
-            {by === dataKey && <IconChevron size='6px' thickness='1px' color={COLOR_999} direction={direction} />}
+            {by === dataKey && <IconChevron size="6px" thickness="1px" color={COLOR_999} direction={direction} />}
         </div>
     );
 };

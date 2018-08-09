@@ -30,7 +30,7 @@ describe('util/Tokenservice', () => {
         test('should return proper token with generator function that returns a token map', () =>
             expect(Tokenservice.getToken('file_123', readWriteTokenGenerator)).resolves.toEqual({
                 read: 'read_token',
-                write: 'write_token'
+                write: 'write_token',
             }));
 
         test('should reject when not given a typed id', () =>

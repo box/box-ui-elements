@@ -16,7 +16,7 @@ type Props = {
     onCrumbClick: Function,
     crumbs: Crumb[],
     delimiter: Delimiter,
-    isSmall?: boolean
+    isSmall?: boolean,
 };
 
 /**
@@ -45,7 +45,7 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (
-            <span className='be-breadcrumb-more'>
+            <span className="be-breadcrumb-more">
                 <BreadcrumbDropdown
                     onCrumbClick={onCrumbClick}
                     crumbs={crumbs}
@@ -86,7 +86,7 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
     const firstBreadcrumb = length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter) : null;
 
     return (
-        <div className='be-breadcrumbs'>
+        <div className="be-breadcrumbs">
             {isSmall ? null : firstBreadcrumb}
             {isSmall ? null : moreBreadcrumbs}
             {secondLastBreadcrumb}

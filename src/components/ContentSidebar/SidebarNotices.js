@@ -17,11 +17,11 @@ const ONE_MINUTE_IN_MS = 60000;
 const NOTICE_DATE_FORMAT = {
     month: 'short',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
 };
 
 type Props = {
-    file: BoxItem
+    file: BoxItem,
 };
 
 const SidebarNotices = ({ file }: Props) => {
@@ -43,7 +43,7 @@ const SidebarNotices = ({ file }: Props) => {
                             relative={false}
                         />
                     }
-                    itemType='file'
+                    itemType="file"
                 />
             )}
             {!!sharedLinkExpiration && (

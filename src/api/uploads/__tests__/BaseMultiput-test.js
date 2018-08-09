@@ -7,7 +7,7 @@ describe('api/uploads/BaseMultiput', () => {
     beforeEach(() => {
         BaseMultiputTest = new BaseMultiput(
             {
-                consoleLog: true
+                consoleLog: true,
             },
             {},
             {}
@@ -23,16 +23,16 @@ describe('api/uploads/BaseMultiput', () => {
                 [
                     null,
                     {
-                        event_type
-                    }
+                        event_type,
+                    },
                 ],
                 [
                     event_info,
                     {
                         event_type,
-                        event_info
-                    }
-                ]
+                        event_info,
+                    },
+                ],
             ],
             (eventInfo, expectedData) => {
                 test('should POST to the correct endpoint', async () => {
@@ -42,7 +42,7 @@ describe('api/uploads/BaseMultiput', () => {
                     expect(await BaseMultiputTest.logEvent(event_type, eventInfo)).toBe('expected');
                     expect(BaseMultiputTest.xhr.post).toHaveBeenCalledWith({
                         url: 'logEvent',
-                        data: expectedData
+                        data: expectedData,
                     });
                 });
             }

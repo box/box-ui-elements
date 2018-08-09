@@ -9,12 +9,12 @@ import Base from './Base';
 type Params = {
     offset: number,
     limit: number,
-    fields?: string
+    fields?: string,
 };
 
 type Data = {
     entries: Array<any>,
-    total_count: number
+    total_count: number,
 };
 
 class OffsetBasedApi extends Base {
@@ -34,7 +34,7 @@ class OffsetBasedApi extends Base {
     getQueryParameters(offset: number, limit: number, fields?: Array<string>): Object {
         const queryParams: Params = {
             offset,
-            limit
+            limit,
         };
 
         if (fields && fields.length > 0) {
@@ -86,7 +86,7 @@ class OffsetBasedApi extends Base {
             const entries = this.data ? this.data.entries : [];
             this.data = {
                 ...data,
-                entries: entries.concat(data.entries)
+                entries: entries.concat(data.entries),
             };
             const totalCount = data.total_count;
             const nextOffset = offset + limit;

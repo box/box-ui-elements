@@ -17,7 +17,7 @@ type Props = {
     card: SkillCard,
     hasError: boolean,
     cards: Array<SkillCard>,
-    isEditable: boolean
+    isEditable: boolean,
 };
 
 const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, getViewer }: Props) => {

@@ -136,7 +136,7 @@ class Item extends Base {
             'item_collection',
             Object.assign(item_collection, {
                 entries: newEntries,
-                total_count: total_count - (oldCount - newCount)
+                total_count: total_count - (oldCount - newCount),
             })
         );
 
@@ -282,8 +282,8 @@ class Item extends Base {
             .put({
                 url: this.getUrl(this.id),
                 data: {
-                    shared_link: access === ACCESS_NONE ? null : { access }
-                }
+                    shared_link: access === ACCESS_NONE ? null : { access },
+                },
             })
             .then(this.shareSuccessHandler)
             .catch(this.errorHandler);

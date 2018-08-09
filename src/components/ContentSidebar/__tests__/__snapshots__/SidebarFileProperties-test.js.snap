@@ -304,7 +304,7 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
 `;
 
 exports[`components/ContentSidebar/SidebarFileProperties render() should render an error 1`] = `
-<React.Fragment>
+<Fragment>
   <InlineError
     title={
       <FormattedMessage
@@ -328,7 +328,7 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
       }
     }
   />
-</React.Fragment>
+</Fragment>
 `;
 
 exports[`components/ContentSidebar/SidebarFileProperties render() should render classification information and not link when given proper metadata 1`] = `

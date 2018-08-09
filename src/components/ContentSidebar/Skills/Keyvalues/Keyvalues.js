@@ -9,18 +9,18 @@ import React from 'react';
 import './Keyvalues.scss';
 
 type Props = {
-    card: SkillCard
+    card: SkillCard,
 };
 
 const Keyvalues = ({ card: { entries } }: Props) => (
-    <div className='be-keyvalues'>
+    <div className="be-keyvalues">
         {Array.isArray(entries) &&
             entries.map(
                 ({ label, text }: SkillCardEntry, index) =>
                     !!label &&
                     !!text && (
                         /* eslint-disable react/no-array-index-key */
-                        <dl className='be-keyvalue' key={index}>
+                        <dl className="be-keyvalue" key={index}>
                             <dt>{label}</dt>
                             <dd>{text}</dd>
                         </dl>

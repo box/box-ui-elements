@@ -6,7 +6,7 @@ describe('util/Xhr', () => {
 
     beforeEach(() => {
         xhrInstance = new Xhr({
-            token: '123'
+            token: '123',
         });
     });
 
@@ -16,20 +16,20 @@ describe('util/Xhr', () => {
             xhrInstance.getParsedUrl = jest.fn().mockReturnValue(url);
             xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
             xhrInstance.axios = {
-                get: jest.fn().mockReturnValue({})
+                get: jest.fn().mockReturnValue({}),
             };
 
             return xhrInstance
                 .get({
                     url: 'url',
-                    data: {}
+                    data: {},
                 })
                 .then(() => {
                     expect(xhrInstance.axios.get).toHaveBeenCalledWith('url', {
                         cancelToken: xhrInstance.axiosSource.token,
                         params: {},
                         headers: {},
-                        parsedUrl: url
+                        parsedUrl: url,
                     });
                 });
         });
@@ -45,7 +45,7 @@ describe('util/Xhr', () => {
             return xhrInstance
                 .post({
                     url: 'url',
-                    data: {}
+                    data: {},
                 })
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
@@ -53,7 +53,7 @@ describe('util/Xhr', () => {
                         method: 'post',
                         parsedUrl: url,
                         data: {},
-                        headers: {}
+                        headers: {},
                     });
                 });
         });
@@ -65,7 +65,7 @@ describe('util/Xhr', () => {
             xhrInstance.put({
                 id: '123',
                 url: 'url',
-                data: {}
+                data: {},
             });
 
             expect(xhrInstance.post).toHaveBeenCalledWith({
@@ -73,7 +73,7 @@ describe('util/Xhr', () => {
                 url: 'url',
                 data: {},
                 method: 'put',
-                headers: {}
+                headers: {},
             });
         });
     });
@@ -84,7 +84,7 @@ describe('util/Xhr', () => {
             xhrInstance.delete({
                 id: '123',
                 url: 'url',
-                data: {}
+                data: {},
             });
 
             expect(xhrInstance.post).toHaveBeenCalledWith({
@@ -92,7 +92,7 @@ describe('util/Xhr', () => {
                 url: 'url',
                 data: {},
                 method: 'delete',
-                headers: {}
+                headers: {},
             });
         });
     });
@@ -107,12 +107,12 @@ describe('util/Xhr', () => {
             return xhrInstance
                 .options({
                     successHandler,
-                    errorHandler: noop
+                    errorHandler: noop,
                 })
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
                         method: 'options',
-                        headers: {}
+                        headers: {},
                     });
                     expect(successHandler).toHaveBeenCalledWith(response);
                 });
@@ -127,12 +127,12 @@ describe('util/Xhr', () => {
             return xhrInstance
                 .options({
                     successHandler: noop,
-                    errorHandler
+                    errorHandler,
                 })
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
                         method: 'options',
-                        headers: {}
+                        headers: {},
                     });
                     expect(errorHandler).toHaveBeenCalledWith(error);
                 });
@@ -146,7 +146,7 @@ describe('util/Xhr', () => {
             return xhrInstance
                 .options({
                     successHandler: noop,
-                    errorHandler
+                    errorHandler,
                 })
                 .then(() => {
                     expect(errorHandler).toHaveBeenCalledWith(error);
@@ -176,7 +176,7 @@ describe('util/Xhr', () => {
                     progressHandler: noop,
                     withIdleTimeout: true,
                     idleTimeoutDuration: 100,
-                    idleTimeoutHandler: idleTimoutHandler
+                    idleTimeoutHandler: idleTimoutHandler,
                 })
                 .then(() => {
                     jest.advanceTimersByTime(101); // 101ms should trigger idle timeout func that calls abort
@@ -201,7 +201,7 @@ describe('util/Xhr', () => {
                     errorHandler: noop,
                     progressHandler: uploadHandler,
                     withIdleTimeout: true,
-                    idleTimeoutDuration: 100
+                    idleTimeoutDuration: 100,
                 })
                 .then(() => {
                     jest.advanceTimersByTime(51); // 50 + 51ms will original idle timeout func unless cancelled
@@ -225,7 +225,7 @@ describe('util/Xhr', () => {
                     errorHandler: noop,
                     progressHandler: noop,
                     withIdleTimeout: true,
-                    idleTimeoutDuration: 100
+                    idleTimeoutDuration: 100,
                 })
                 .then(() => {
                     jest.advanceTimersByTime(101);
@@ -249,7 +249,7 @@ describe('util/Xhr', () => {
                     errorHandler,
                     progressHandler: noop,
                     withIdleTimeout: true,
-                    idleTimeoutDuration: 100
+                    idleTimeoutDuration: 100,
                 })
                 .then(() => {
                     jest.advanceTimersByTime(101);
@@ -269,7 +269,7 @@ describe('util/Xhr', () => {
                 .uploadFile({
                     successHandler: noop,
                     errorHandler,
-                    progressHandler: noop
+                    progressHandler: noop,
                 })
                 .then(() => {
                     expect(errorHandler).toHaveBeenCalledWith(error);
@@ -280,7 +280,7 @@ describe('util/Xhr', () => {
     describe('abort()', () => {
         test('should cancel axios request', () => {
             xhrInstance.axiosSource = {
-                cancel: jest.fn()
+                cancel: jest.fn(),
             };
 
             xhrInstance.abort();

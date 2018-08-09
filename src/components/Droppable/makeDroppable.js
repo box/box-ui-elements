@@ -9,13 +9,13 @@ import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 
 type Props = {
-    className: string
+    className: string,
 };
 
 type State = {
     canDrop: boolean,
     isDragging: boolean,
-    isOver: boolean
+    isOver: boolean,
 };
 
 /* eslint-disable no-plusplus */
@@ -29,7 +29,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
         droppableEl: Element;
 
         static defaultProps = {
-            className: ''
+            className: '',
         };
 
         /**
@@ -44,7 +44,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             this.state = {
                 canDrop: false,
                 isDragging: false,
-                isOver: false
+                isOver: false,
             };
         }
 
@@ -115,7 +115,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
 
                 this.setState({
                     isOver: true,
-                    canDrop
+                    canDrop,
                 });
             }
         };
@@ -162,7 +162,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             this.setState({
                 canDrop: false,
                 isDragging: false,
-                isOver: false
+                isOver: false,
             });
 
             if (canDrop && onDrop) {
@@ -187,7 +187,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             this.setState({
                 canDrop: false,
                 isDragging: false,
-                isOver: false
+                isOver: false,
             });
         };
 
@@ -204,13 +204,13 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
 
             const classes = classNames(className, {
                 'is-droppable': canDrop,
-                'is-over': isOver
+                'is-over': isOver,
             });
 
             const mergedProps = {
                 ...rest,
                 ...this.state,
-                className: classes
+                className: classes,
             };
 
             return <Wrapped {...mergedProps} />;

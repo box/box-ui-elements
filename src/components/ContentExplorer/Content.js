@@ -45,7 +45,7 @@ type Props = {
     isMedium: boolean,
     isTouch: boolean,
     focusedRow: number,
-    currentCollection: Collection
+    currentCollection: Collection,
 };
 
 const Content = ({
@@ -70,9 +70,9 @@ const Content = ({
     onItemRename,
     onItemShare,
     onItemPreview,
-    onSortChange
+    onSortChange,
 }: Props) => (
-    <div className='bce-content'>
+    <div className="bce-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}

@@ -15,7 +15,7 @@ import {
     HTTP_POST,
     HTTP_PUT,
     HTTP_DELETE,
-    HTTP_OPTIONS
+    HTTP_OPTIONS,
 } from '../constants';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
@@ -57,7 +57,7 @@ class Xhr {
         sharedLink,
         sharedLinkPassword,
         responseInterceptor,
-        requestInterceptor
+        requestInterceptor,
     }: Options = {}) {
         this.id = id;
         this.token = token;
@@ -111,7 +111,7 @@ class Xhr {
             origin: a.origin,
             protocol: a.protocol,
             hash: a.hash,
-            port: a.port
+            port: a.port,
         };
     }
 
@@ -126,7 +126,7 @@ class Xhr {
         const headers: StringMap = Object.assign(
             {
                 Accept: 'application/json',
-                [HEADER_CONTENT_TYPE]: 'application/json'
+                [HEADER_CONTENT_TYPE]: 'application/json',
             },
             args
         );
@@ -171,19 +171,19 @@ class Xhr {
         url,
         id,
         params = {},
-        headers = {}
+        headers = {},
     }: {
         url: string,
         id?: string,
         params?: StringAnyMap,
-        headers?: StringMap
+        headers?: StringMap,
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then((hdrs) =>
             this.axios.get(url, {
                 cancelToken: this.axiosSource.token,
                 params,
                 headers: hdrs,
-                parsedUrl: this.getParsedUrl(url)
+                parsedUrl: this.getParsedUrl(url),
             })
         );
     }
@@ -205,14 +205,14 @@ class Xhr {
         data,
         params,
         headers = {},
-        method = HTTP_POST
+        method = HTTP_POST,
     }: {
         url: string,
         id?: string,
         data: PayloadType,
         params?: StringAnyMap,
         headers?: StringMap,
-        method?: Method
+        method?: Method,
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then((hdrs) =>
             this.axios({
@@ -221,7 +221,7 @@ class Xhr {
                 params,
                 method,
                 parsedUrl: this.getParsedUrl(url),
-                headers: hdrs
+                headers: hdrs,
             })
         );
     }
@@ -241,13 +241,13 @@ class Xhr {
         id,
         data,
         params,
-        headers = {}
+        headers = {},
     }: {
         url: string,
         id?: string,
         data: PayloadType,
         params?: StringAnyMap,
-        headers?: StringMap
+        headers?: StringMap,
     }): Promise<StringAnyMap> {
         return this.post({ id, url, data, params, headers, method: HTTP_PUT });
     }
@@ -265,12 +265,12 @@ class Xhr {
         url,
         id,
         data = {},
-        headers = {}
+        headers = {},
     }: {
         url: string,
         id?: string,
         data?: StringAnyMap,
-        headers?: StringMap
+        headers?: StringMap,
     }): Promise<StringAnyMap> {
         return this.post({ id, url, data, headers, method: HTTP_DELETE });
     }
@@ -292,7 +292,7 @@ class Xhr {
         data,
         headers = {},
         successHandler,
-        errorHandler
+        errorHandler,
     }: {
         url: string,
         data: StringAnyMap,
@@ -300,7 +300,7 @@ class Xhr {
         headers?: StringMap,
         successHandler: Function,
         errorHandler: Function,
-        progressHandler?: Function
+        progressHandler?: Function,
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers)
             .then((hdrs) =>
@@ -308,7 +308,7 @@ class Xhr {
                     url,
                     data,
                     method: HTTP_OPTIONS,
-                    headers: hdrs
+                    headers: hdrs,
                 })
                     .then(successHandler)
                     .catch(errorHandler)
@@ -343,7 +343,7 @@ class Xhr {
         progressHandler,
         withIdleTimeout = false,
         idleTimeoutDuration = DEFAULT_UPLOAD_TIMEOUT_MS,
-        idleTimeoutHandler
+        idleTimeoutHandler,
     }: {
         url: string,
         id?: string,
@@ -355,7 +355,7 @@ class Xhr {
         progressHandler: Function,
         withIdleTimeout?: boolean,
         idleTimeoutDuration?: number,
-        idleTimeoutHandler?: Function
+        idleTimeoutHandler?: Function,
     }): Promise<any> {
         return this.getHeaders(id, headers)
             .then((hdrs) => {
@@ -409,7 +409,7 @@ class Xhr {
                     method,
                     headers: hdrs,
                     onUploadProgress: progressHandlerToUse,
-                    cancelToken: this.axiosSource.token
+                    cancelToken: this.axiosSource.token,
                 })
                     .then((response) => {
                         clearTimeout(idleTimeout);

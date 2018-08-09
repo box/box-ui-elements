@@ -37,7 +37,7 @@ class FileCollaborators extends MarkerBasedAPI {
             return {
                 id,
                 name,
-                item: { id, name, email: login }
+                item: { id, name, email: login },
             };
         });
 

@@ -7,12 +7,12 @@ jest.mock('../../comment/Comment', () => 'mock-comment');
 
 const allHandlers = {
     tasks: {
-        edit: jest.fn()
+        edit: jest.fn(),
     },
     contacts: {
         getApproverWithQuery: jest.fn(),
-        getMentionWithQuery: jest.fn()
-    }
+        getMentionWithQuery: jest.fn(),
+    },
 };
 
 const approverSelectorContacts = [];
@@ -31,19 +31,19 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                 {
                     id: 0,
                     assigned_to: { name: 'Jake Thomas', id: 1 },
-                    resolution_state: 'incomplete'
+                    resolution_state: 'incomplete',
                 },
                 {
                     id: 1,
                     assigned_to: { name: 'Peter Pan', id: 2 },
-                    resolution_state: 'completed'
-                }
-            ]
+                    resolution_state: 'completed',
+                },
+            ],
         },
         permissions: {
             can_delete: true,
-            can_edit: true
-        }
+            can_edit: true,
+        },
     };
     const currentUser = { name: 'Jake Thomas', id: 1 };
 
@@ -77,16 +77,16 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                     {
                         id: 0,
                         assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete'
+                        resolution_state: 'incomplete',
                     },
                     {
                         id: 1,
                         assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed'
-                    }
-                ]
+                        resolution_state: 'completed',
+                    },
+                ],
             },
-            isPending: true
+            isPending: true,
         };
 
         const wrapper = shallow(<Task currentUser={currentUser} {...myTask} />);
@@ -186,15 +186,15 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                     {
                         id: 0,
                         assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete'
+                        resolution_state: 'incomplete',
                     },
                     {
                         id: 1,
                         assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed'
-                    }
-                ]
-            }
+                        resolution_state: 'completed',
+                    },
+                ],
+            },
         };
 
         const wrapper = shallow(
@@ -225,15 +225,15 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                     {
                         id: 0,
                         assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete'
+                        resolution_state: 'incomplete',
                     },
                     {
                         id: 1,
                         assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed'
-                    }
-                ]
-            }
+                        resolution_state: 'completed',
+                    },
+                ],
+            },
         };
 
         const wrapper = mount(
@@ -264,15 +264,15 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                     {
                         id: 0,
                         assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete'
+                        resolution_state: 'incomplete',
                     },
                     {
                         id: 1,
                         assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed'
-                    }
-                ]
-            }
+                        resolution_state: 'completed',
+                    },
+                ],
+            },
         };
 
         const wrapper = shallow(
@@ -301,15 +301,15 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                     {
                         id: 0,
                         assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete'
+                        resolution_state: 'incomplete',
                     },
                     {
                         id: 1,
                         assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed'
-                    }
-                ]
-            }
+                        resolution_state: 'completed',
+                    },
+                ],
+            },
         };
 
         const wrapper = shallow(
@@ -328,7 +328,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     test('should not render due date when not passed in', () => {
         const taskWithNoDueDate = {
             ...task,
-            due_at: null
+            due_at: null,
         };
 
         const wrapper = shallow(<Task currentUser={currentUser} {...taskWithNoDueDate} />);

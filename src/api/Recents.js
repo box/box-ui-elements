@@ -102,7 +102,7 @@ class Recents extends Base {
             id: this.id,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => cache.get(key))
+            items: entries.map((key: string) => cache.get(key)),
         };
         this.successCallback(collection);
     }
@@ -118,7 +118,10 @@ class Recents extends Base {
             return;
         }
 
-        const { entries, order: { by, direction } }: RecentCollection = data;
+        const {
+            entries,
+            order: { by, direction },
+        }: RecentCollection = data;
         const items: BoxItem[] = [];
 
         entries.forEach(({ item, interacted_at }: Recent) => {
@@ -145,10 +148,10 @@ class Recents extends Base {
                 order: [
                     {
                         by,
-                        direction
-                    }
-                ]
-            }
+                        direction,
+                    },
+                ],
+            },
         });
         this.finish();
     };
@@ -181,9 +184,9 @@ class Recents extends Base {
             .get({
                 url: this.getUrl(),
                 params: {
-                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
+                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields),
                 },
-                headers: { 'X-Rep-Hints': X_REP_HINTS }
+                headers: { 'X-Rep-Hints': X_REP_HINTS },
             })
             .then(this.recentsSuccessHandler)
             .catch(this.recentsErrorHandler);

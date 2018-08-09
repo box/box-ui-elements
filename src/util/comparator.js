@@ -11,7 +11,7 @@ import {
     FIELD_MODIFIED_AT,
     FIELD_INTERACTED_AT,
     FIELD_NAME,
-    FIELD_SIZE
+    FIELD_SIZE,
 } from '../constants';
 
 /**

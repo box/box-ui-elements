@@ -18,7 +18,7 @@ type Props = {
     accessStats?: FileAccessStats,
     file: BoxItem,
     error?: MessageDescriptor,
-    intl: any
+    intl: any,
 };
 
 const SidebarAccessStats = ({
@@ -28,11 +28,11 @@ const SidebarAccessStats = ({
         comment_count: 0,
         download_count: 0,
         edit_count: 0,
-        has_count_overflowed: false
+        has_count_overflowed: false,
     },
     file,
     error,
-    intl
+    intl,
 }: Props) => {
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 

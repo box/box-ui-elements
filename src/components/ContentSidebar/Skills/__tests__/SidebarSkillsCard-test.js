@@ -14,7 +14,7 @@ describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
     beforeEach(() => {
         cardProps = {
             card: {},
-            getViewer: jest.fn()
+            getViewer: jest.fn(),
         };
     });
 

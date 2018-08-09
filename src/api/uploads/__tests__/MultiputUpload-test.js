@@ -8,11 +8,11 @@ import MultiputPart, {
     PART_STATE_UPLOADED,
     PART_STATE_COMPUTING_DIGEST,
     PART_STATE_DIGEST_READY,
-    PART_STATE_NOT_STARTED
+    PART_STATE_NOT_STARTED,
 } from '../MultiputPart';
 
 const config = {
-    a: 1
+    a: 1,
 };
 let file;
 const createSessionUrl = 'https://test.box.com/createSession';
@@ -24,7 +24,7 @@ describe('api/uploads/MultiputUpload', () => {
         file = {
             size: 1000000,
             name: 'test.txt',
-            slice() {}
+            slice() {},
         };
         multiputUploadTest = new MultiputUpload(config);
         multiputUploadTest.file = file;
@@ -69,7 +69,7 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.parts = [
                 new MultiputPart(config, 0, 0, 1024, 1, { upload_part: 'www.box.com' }),
                 new MultiputPart(config, 1, 1024, 1024, 1, { upload_part: 'www.box.com' }),
-                new MultiputPart(config, 2, 2048, 1024, 1, { upload_part: 'www.box.com' })
+                new MultiputPart(config, 2, 2048, 1024, 1, { upload_part: 'www.box.com' }),
             ];
         });
 
@@ -122,7 +122,7 @@ describe('api/uploads/MultiputUpload', () => {
                 'ended is true': [false, true, 1],
                 'upload pipeline full': [false, false, 2, 1],
                 'upload pipeline not full and not ended': [true, false, 1, 1],
-                'upload pipeline not full and not ended but no digest is ready': [false, false, 1, 0]
+                'upload pipeline not full and not ended but no digest is ready': [false, false, 1, 0],
             },
             (expected, ended, numPartsUploading, numPartsDigestReady) => {
                 it('should return correct value:', () => {
@@ -145,7 +145,7 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.parts = [
                 new MultiputPart(config, 0, 0, 1024, 1, { upload_part: 'www.box.com' }),
                 new MultiputPart(config, 1, 1024, 1024, 1, { upload_part: 'www.box.com' }),
-                new MultiputPart(config, 2, 2048, 1024, 1, { upload_part: 'www.box.com' })
+                new MultiputPart(config, 2, 2048, 1024, 1, { upload_part: 'www.box.com' }),
             ];
         });
 
@@ -165,7 +165,7 @@ describe('api/uploads/MultiputUpload', () => {
             {
                 'firstUnuploadedPartIndex is 0': [0],
                 'firstUnuploadedPartIndex is 1': [1],
-                'firstUnuploadedPartIndex is 2': [2]
+                'firstUnuploadedPartIndex is 2': [2],
             },
             (firstUnuploadedPart) => {
                 it('should update firstUnuploadedPartIndex correctly when some parts done', () => {
@@ -188,7 +188,7 @@ describe('api/uploads/MultiputUpload', () => {
             {
                 'firstUnuploadedPartIndex is 0': [0],
                 'firstUnuploadedPartIndex is 1': [1],
-                'firstUnuploadedPartIndex is 2': [2]
+                'firstUnuploadedPartIndex is 2': [2],
             },
             (firstUnuploadedPart) => {
                 it('should update firstUnuploadedPartIndex correctly when all parts done', () => {
@@ -217,7 +217,7 @@ describe('api/uploads/MultiputUpload', () => {
             const expectedParts = [
                 new MultiputPart(config, 0, 0, 400000, 1, { upload_part: 'www.box.com' }),
                 new MultiputPart(config, 1, 400000, 400000, 1, { upload_part: 'www.box.com' }),
-                new MultiputPart(config, 2, 800000, 200000, 1, { upload_part: 'www.box.com' })
+                new MultiputPart(config, 2, 800000, 200000, 1, { upload_part: 'www.box.com' }),
             ];
 
             // Execute
@@ -242,8 +242,8 @@ describe('api/uploads/MultiputUpload', () => {
                 list_parts: 'list_parts',
                 commit: 'commit',
                 abort: 'abort',
-                log_event: 'log_event'
-            }
+                log_event: 'log_event',
+            },
         };
 
         it('should noop when destroyed', () => {
@@ -280,7 +280,7 @@ describe('api/uploads/MultiputUpload', () => {
                 listParts: 'list_parts',
                 commit: 'commit',
                 abort: 'abort',
-                logEvent: 'log_event'
+                logEvent: 'log_event',
             });
             expect(multiputUploadTest.populateParts).toHaveBeenCalled();
             expect(multiputUploadTest.processNextParts).toHaveBeenCalled();
@@ -315,9 +315,9 @@ describe('api/uploads/MultiputUpload', () => {
             const error = {
                 response: {
                     data: {
-                        status: 500
-                    }
-                }
+                        status: 500,
+                    },
+                },
             };
 
             multiputUploadTest.destroyed = false;
@@ -333,15 +333,15 @@ describe('api/uploads/MultiputUpload', () => {
         withData(
             {
                 'storage limit exceeded': [{ code: 'storage_limit_exceeded', status: 403 }],
-                'insufficient permissions': [{ code: 'access_denied_insufficient_permissions', status: 403 }]
+                'insufficient permissions': [{ code: 'access_denied_insufficient_permissions', status: 403 }],
             },
             (data) => {
                 it('should invoke errorCallback but not sessionErrorHandler on expected failure', async () => {
                     // Setup
                     const error = {
                         response: {
-                            data
-                        }
+                            data,
+                        },
                     };
 
                     multiputUploadTest.errorCallback = jest.fn();
@@ -363,14 +363,14 @@ describe('api/uploads/MultiputUpload', () => {
             {
                 'maybeResponse null': [{ status: 403 }],
                 'no code': [{ status: 403, a: 1 }],
-                '403 with code that is not storage_limit_exceeded': [{ status: '403', code: 'foo' }]
+                '403 with code that is not storage_limit_exceeded': [{ status: '403', code: 'foo' }],
             },
             (data) => {
                 it('should invoke sessionErrorHandler on other non-201 status code', async () => {
                     const error = {
                         response: {
-                            data
-                        }
+                            data,
+                        },
                     };
 
                     multiputUploadTest.getErrorResponse = jest.fn().mockReturnValueOnce(data);
@@ -468,7 +468,7 @@ describe('api/uploads/MultiputUpload', () => {
     describe('abortSession()', () => {
         it('should terminate the worker and abort session', () => {
             multiputUploadTest.sha1Worker = {
-                terminate: jest.fn()
+                terminate: jest.fn(),
             };
             multiputUploadTest.xhr.delete = jest.fn();
             multiputUploadTest.sessionEndpoints.abort = 'foo';
@@ -483,7 +483,7 @@ describe('api/uploads/MultiputUpload', () => {
         it('should update the part uploading progress and upload next parts', () => {
             const part = {
                 uploadedBytes: 1,
-                size: 1
+                size: 1,
             };
             multiputUploadTest.numPartsUploading = 10;
             multiputUploadTest.numPartsUploaded = 10;
@@ -507,7 +507,7 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.updateProgress(prevUploadedBytes, newUploadedBytes);
             expect(multiputUploadTest.progressCallback).toHaveBeenCalledWith({
                 loaded: 110,
-                total: file.size
+                total: file.size,
             });
         });
     });
@@ -523,7 +523,7 @@ describe('api/uploads/MultiputUpload', () => {
                 'a part is already computing': [false, false, 1],
                 'all parts started': [false, false, 0, 0],
                 'readahead is full': [false, false, 0, 1, 2],
-                'no part computing, there is a part not started, and readahead not full': [true, false, 0, 1, 1]
+                'no part computing, there is a part not started, and readahead not full': [true, false, 0, 1, 1],
             },
             (expected, ended, numPartsDigestComputing, numPartsNotStarted, numPartsDigestReady) => {
                 it('should return correct value', () => {
@@ -550,7 +550,7 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.parts = [
                 new MultiputPart({}, 0, 0, 1024, 1, { upload_part: 'www.box.com' }),
                 new MultiputPart({}, 1, 1024, 1024, 1, { upload_part: 'www.box.com' }),
-                new MultiputPart({}, 2, 2048, 1024, 1, { upload_part: 'www.box.com' })
+                new MultiputPart({}, 2, 2048, 1024, 1, { upload_part: 'www.box.com' }),
             ];
         });
 
@@ -594,13 +594,13 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.sendPartToWorker = jest.fn();
             multiputUploadTest.readFile = jest.fn().mockReturnValueOnce({
                 buffer: new ArrayBuffer(),
-                readCompleteTimestamp: 123
+                readCompleteTimestamp: 123,
             });
             multiputUploadTest.processNextParts = jest.fn();
 
             await multiputUploadTest.computeDigestForPart({
                 offset: 1,
-                size: 2
+                size: 2,
             });
             expect(multiputUploadTest.sendPartToWorker).toHaveBeenCalled();
             expect(multiputUploadTest.processNextParts).toHaveBeenCalled();

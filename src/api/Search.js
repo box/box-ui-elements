@@ -146,14 +146,14 @@ class Search extends Base {
         // on it on its own. Good for calculating percentatge, but not good for
         // figuring our when the collection is done loading.
         const percentLoaded: number =
-            !!item_collection.isLoaded || total_count === 0 ? 100 : entries.length * 100 / total_count;
+            !!item_collection.isLoaded || total_count === 0 ? 100 : (entries.length * 100) / total_count;
 
         const collection: Collection = {
             percentLoaded,
             id: this.id,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => cache.get(key))
+            items: entries.map((key: string) => cache.get(key)),
         };
         this.successCallback(collection);
     }
@@ -195,8 +195,8 @@ class Search extends Base {
         this.getCache().set(this.key, {
             item_collection: Object.assign({}, data, {
                 isLoaded,
-                entries: this.itemCache
-            })
+                entries: this.itemCache,
+            }),
         });
 
         if (!isLoaded) {
@@ -239,9 +239,9 @@ class Search extends Base {
                     query: this.query,
                     ancestor_folder_ids: this.id,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
+                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields),
                 },
-                headers: { 'X-Rep-Hints': X_REP_HINTS }
+                headers: { 'X-Rep-Hints': X_REP_HINTS },
             })
             .then(this.searchSuccessHandler)
             .catch(this.searchErrorHandler);

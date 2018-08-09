@@ -12,13 +12,13 @@ import './IconName.scss';
 type Props = {
     name: string,
     extension: string,
-    isFolder?: boolean
+    isFolder?: boolean,
 };
 
 const IconName = ({ name, extension, isFolder = false }: Props) => (
-    <div className='bcu-item-icon-name'>
-        <div className='bcu-item-icon'>{isFolder ? <IconFolderPersonal /> : <FileIcon extension={extension} />}</div>
-        <div className='bcu-item-name'>
+    <div className="bcu-item-icon-name">
+        <div className="bcu-item-icon">{isFolder ? <IconFolderPersonal /> : <FileIcon extension={extension} />}</div>
+        <div className="bcu-item-name">
             <ItemName name={name} />
         </div>
     </div>

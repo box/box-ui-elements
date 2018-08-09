@@ -8,7 +8,7 @@ describe('components/ContentSidebar/Skills/Face/Face', () => {
             face: { text: 'foo', image_url: 'bar' },
             isEditing: false,
             onDelete: jest.fn(),
-            onSelect: jest.fn()
+            onSelect: jest.fn(),
         };
 
         const wrapper = shallow(<Face {...props} />);
@@ -20,7 +20,7 @@ describe('components/ContentSidebar/Skills/Face/Face', () => {
             face: { text: 'foo', image_url: 'bar' },
             isEditing: true,
             onDelete: jest.fn(),
-            onSelect: jest.fn()
+            onSelect: jest.fn(),
         };
 
         const wrapper = shallow(<Face {...props} />);
@@ -34,7 +34,7 @@ describe('components/ContentSidebar/Skills/Face/Face', () => {
             selected: face,
             isEditing: false,
             onDelete: jest.fn(),
-            onSelect: jest.fn()
+            onSelect: jest.fn(),
         };
 
         const wrapper = shallow(<Face {...props} />);
@@ -48,7 +48,7 @@ describe('components/ContentSidebar/Skills/Face/Face', () => {
             selected: { text: 'baz', image_url: 'buz' },
             isEditing: false,
             onDelete: jest.fn(),
-            onSelect: jest.fn()
+            onSelect: jest.fn(),
         };
 
         const wrapper = shallow(<Face {...props} />);

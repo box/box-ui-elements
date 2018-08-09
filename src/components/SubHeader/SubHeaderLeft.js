@@ -17,7 +17,7 @@ type Props = {
     currentCollection: Collection,
     view: View,
     isSmall: boolean,
-    intl: any
+    intl: any,
 };
 
 const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick, intl }: Props) => {
@@ -32,21 +32,21 @@ const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onI
         if (view === VIEW_SEARCH) {
             crumbs = crumbs.concat({
                 id: undefined,
-                name: intl.formatMessage(messages.searchBreadcrumb)
+                name: intl.formatMessage(messages.searchBreadcrumb),
             });
         }
     } else {
         crumbs = [
             {
                 id: undefined,
-                name: intl.formatMessage(messages[`${view}Breadcrumb`])
-            }
+                name: intl.formatMessage(messages[`${view}Breadcrumb`]),
+            },
         ];
 
         if (view !== VIEW_RECENTS) {
             crumbs.unshift({
                 id: rootId,
-                name: rootName || intl.formatMessage(messages.rootBreadcrumb)
+                name: rootName || intl.formatMessage(messages.rootBreadcrumb),
             });
         }
     }

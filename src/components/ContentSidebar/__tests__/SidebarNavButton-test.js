@@ -8,7 +8,7 @@ describe('components/ContentSidebar/SidebarNavButton', () => {
 
     test('should render nav button properly', () => {
         const props = {
-            tooltip: 'foo'
+            tooltip: 'foo',
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(Tooltip).prop('text')).toBe('foo');
@@ -18,7 +18,7 @@ describe('components/ContentSidebar/SidebarNavButton', () => {
     test('should render nav button properly when selected', () => {
         const props = {
             tooltip: 'foo',
-            isSelected: true
+            isSelected: true,
         };
         const wrapper = getWrapper(props);
         expect(wrapper.childAt(0).prop('className')).toBe('bcs-nav-btn bcs-nav-btn-is-selected');

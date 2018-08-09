@@ -9,7 +9,7 @@ describe('components/ContentUploader/UploadInput', () => {
     test('should render correctly when inputLabel is available', () => {
         const wrapper = getWrapper({
             inputLabelClass: 'inputLabelClass',
-            inputLabel: 'yo'
+            inputLabel: 'yo',
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -24,7 +24,7 @@ describe('components/ContentUploader/UploadInput', () => {
     test('should render correctly when isFolderUpload is true', () => {
         const wrapper = getWrapper({
             inputLabel: 'yo',
-            isFolderUpload: true
+            isFolderUpload: true,
         });
 
         expect(wrapper).toMatchSnapshot();

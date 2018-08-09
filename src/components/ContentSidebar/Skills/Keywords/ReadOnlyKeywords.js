@@ -15,17 +15,17 @@ import './ReadOnlyKeywords.scss';
 type Props = {
     duration?: number,
     keywords: Array<SkillCardEntry>,
-    getViewer?: Function
+    getViewer?: Function,
 };
 
 type State = {
-    selectedIndex: number
+    selectedIndex: number,
 };
 
 class ReadOnlyselecteds extends React.PureComponent<Props, State> {
     props: Props;
     state: State = {
-        selectedIndex: -1
+        selectedIndex: -1,
     };
 
     /**

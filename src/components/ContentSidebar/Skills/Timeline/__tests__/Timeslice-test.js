@@ -7,7 +7,7 @@ describe('components/ContentSidebar/Skills/Timeline/Timeslice', () => {
         const props = {
             start: 10,
             duration: 100,
-            interactionTarget: 'foobar'
+            interactionTarget: 'foobar',
         };
 
         const wrapper = shallow(<Timeslice {...props} />);
@@ -19,7 +19,7 @@ describe('components/ContentSidebar/Skills/Timeline/Timeslice', () => {
             start: 10,
             end: 20,
             duration: 100,
-            interactionTarget: 'foobar'
+            interactionTarget: 'foobar',
         };
 
         const wrapper = shallow(<Timeslice {...props} />);
@@ -31,7 +31,7 @@ describe('components/ContentSidebar/Skills/Timeline/Timeslice', () => {
             start: 99,
             end: 100,
             duration: 100,
-            interactionTarget: 'foobar'
+            interactionTarget: 'foobar',
         };
 
         const wrapper = shallow(<Timeslice {...props} />);

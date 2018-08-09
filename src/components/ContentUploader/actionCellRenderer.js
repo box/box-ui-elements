@@ -7,7 +7,7 @@ import React from 'react';
 import ItemAction from './ItemAction';
 
 type Props = {
-    rowData: UploadItem
+    rowData: UploadItem,
 };
 
 export default (onClick: Function) => ({ rowData }: Props) => (

@@ -14,7 +14,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
-    SIDEBAR_VIEW_METADATA
+    SIDEBAR_VIEW_METADATA,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -47,7 +47,7 @@ type Props = {
     currentUserError?: Errors,
     getAvatarUrl: (string) => Promise<?string>,
     onToggle: Function,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
 };
 
 const Sidebar = ({
@@ -73,7 +73,7 @@ const Sidebar = ({
     mentionSelectorContacts,
     getAvatarUrl,
     onToggle,
-    onVersionHistoryClick
+    onVersionHistoryClick,
 }: Props) => (
     <React.Fragment>
         <SidebarNav

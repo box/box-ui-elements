@@ -73,26 +73,26 @@ class PlainUpload extends BaseUpload {
 
         const attributes = JSON.stringify({
             name: this.file.name,
-            parent: { id: this.folderId }
+            parent: { id: this.folderId },
         });
 
         const options = {
             url: uploadUrl,
             data: {
                 attributes,
-                file: this.file
+                file: this.file,
             },
             headers: {},
             successHandler: this.uploadSuccessHandler,
             errorHandler: this.preflightErrorHandler,
-            progressHandler: this.uploadProgressHandler
+            progressHandler: this.uploadProgressHandler,
         };
 
         // Calculate SHA1 for file consistency check
         const sha1 = await this.computeSHA1(this.file);
         if (sha1) {
             options.headers = {
-                [CONTENT_MD5_HEADER]: sha1
+                [CONTENT_MD5_HEADER]: sha1,
             };
         }
 
@@ -120,7 +120,7 @@ class PlainUpload extends BaseUpload {
         successCallback = noop,
         errorCallback = noop,
         progressCallback = noop,
-        overwrite = true
+        overwrite = true,
     }: {
         folderId: string,
         fileId: ?string,
@@ -128,7 +128,7 @@ class PlainUpload extends BaseUpload {
         successCallback: Function,
         errorCallback: Function,
         progressCallback: Function,
-        overwrite: boolean
+        overwrite: boolean,
     }): void {
         if (this.isDestroyed()) {
             return;

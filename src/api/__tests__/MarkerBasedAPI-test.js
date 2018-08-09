@@ -35,14 +35,14 @@ describe('api/MarkerBasedAPI', () => {
                     .fn()
                     .mockReturnValueOnce(
                         Promise.resolve({
-                            data: { next_marker: 'next_marker', limit: LIMIT, entries: [] }
+                            data: { next_marker: 'next_marker', limit: LIMIT, entries: [] },
                         })
                     )
                     .mockReturnValueOnce(
                         Promise.resolve({
-                            data: markerBasedAPIResponse
+                            data: markerBasedAPIResponse,
                         })
-                    )
+                    ),
             };
 
             return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
@@ -56,9 +56,9 @@ describe('api/MarkerBasedAPI', () => {
             markerBasedAPI.xhr = {
                 get: jest.fn().mockReturnValue(
                     Promise.resolve({
-                        data: markerBasedAPIResponse
+                        data: markerBasedAPIResponse,
                     })
-                )
+                ),
             };
 
             return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
@@ -85,7 +85,7 @@ describe('api/MarkerBasedAPI', () => {
                 .markerGet({
                     id: 'id',
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 })
                 .catch(() => {
                     expect(successCallback).not.toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe('api/MarkerBasedAPI', () => {
 
         test('should make xhr to get markerBasedAPI and call success callback', () => {
             markerBasedAPI.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse }))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse })),
             };
             markerBasedAPI.marker = '';
 
@@ -106,7 +106,7 @@ describe('api/MarkerBasedAPI', () => {
                     errorCallback,
                     marker: 'next_marker',
                     limit: LIMIT,
-                    shouldFetchAll: true
+                    shouldFetchAll: true,
                 })
                 .then(() => {
                     expect(successCallback).toHaveBeenCalledWith(markerBasedAPIResponse);
@@ -117,8 +117,8 @@ describe('api/MarkerBasedAPI', () => {
                         url,
                         params: {
                             marker: 'next_marker',
-                            limit: LIMIT
-                        }
+                            limit: LIMIT,
+                        },
                     });
                 });
         });
@@ -126,7 +126,7 @@ describe('api/MarkerBasedAPI', () => {
         test('should call error callback when xhr fails', () => {
             const error = new Error('error');
             markerBasedAPI.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
 
             return markerBasedAPI
@@ -136,7 +136,7 @@ describe('api/MarkerBasedAPI', () => {
                     errorCallback,
                     marker: '',
                     limit: LIMIT,
-                    shouldFetchAll: true
+                    shouldFetchAll: true,
                 })
                 .then(() => {
                     expect(successCallback).not.toHaveBeenCalled();
@@ -146,8 +146,8 @@ describe('api/MarkerBasedAPI', () => {
                         url,
                         params: {
                             marker: '',
-                            limit: LIMIT
-                        }
+                            limit: LIMIT,
+                        },
                     });
                 });
         });

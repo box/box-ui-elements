@@ -119,7 +119,7 @@ class APIFactory {
         this.options = Object.assign({}, options, {
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
-            cache: options.cache || new Cache()
+            cache: options.cache || new Cache(),
         });
     }
 

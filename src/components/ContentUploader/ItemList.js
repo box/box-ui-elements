@@ -13,7 +13,7 @@ import './ItemList.scss';
 
 type Props = {
     items: UploadItem[],
-    onClick: Function
+    onClick: Function,
 };
 
 const ItemList = ({ items, onClick }: Props) => (
@@ -25,20 +25,20 @@ const ItemList = ({ items, onClick }: Props) => (
 
             return (
                 <Table
-                    className='bcu-item-list'
+                    className="bcu-item-list"
                     disableHeader
                     headerHeight={0}
                     height={height}
-                    rowClassName='bcu-item-row'
+                    rowClassName="bcu-item-row"
                     rowCount={items.length}
                     rowGetter={({ index }) => items[index]}
                     rowHeight={50}
                     width={width}
                 >
-                    <Column cellRenderer={nameCell} dataKey='name' flexGrow={1} flexShrink={1} width={300} />
+                    <Column cellRenderer={nameCell} dataKey="name" flexGrow={1} flexShrink={1} width={300} />
                     <Column
                         cellRenderer={progressCell}
-                        dataKey='progress'
+                        dataKey="progress"
                         flexGrow={1}
                         flexShrink={1}
                         width={300}
@@ -46,7 +46,7 @@ const ItemList = ({ items, onClick }: Props) => (
                     />
                     <Column
                         cellRenderer={actionCell}
-                        dataKey='status'
+                        dataKey="status"
                         flexShrink={0}
                         width={25}
                         style={{ marginRight: 18 }}

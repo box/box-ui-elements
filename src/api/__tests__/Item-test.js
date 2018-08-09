@@ -55,7 +55,7 @@ describe('api/Item', () => {
     describe('merge()', () => {
         test('should merge new value', () => {
             cache.set('key', {
-                foo: 'foo'
+                foo: 'foo',
             });
             item.getCache = jest.fn().mockReturnValueOnce(cache);
             const result = item.merge('key', 'foo', 'bar');
@@ -73,11 +73,11 @@ describe('api/Item', () => {
         test('should unset cache and call success callback', () => {
             const unsetAllMock = jest.fn();
             cache.set('key', {
-                foo: 'foo'
+                foo: 'foo',
             });
             item.successCallback = jest.fn();
             item.getCache = () => ({
-                unsetAll: unsetAllMock
+                unsetAll: unsetAllMock,
             });
             item.postDeleteCleanup();
             expect(item.successCallback).toHaveBeenCalled();
@@ -91,15 +91,15 @@ describe('api/Item', () => {
             const unsetAllMock = jest.fn();
             item.id = 'id';
             item.getCache = () => ({
-                unsetAll: unsetAllMock
+                unsetAll: unsetAllMock,
             });
             item.getCacheKey = jest.fn();
             item.merge = jest.fn();
             item.successCallback = jest.fn();
             item.renameSuccessHandler({
                 data: {
-                    name: 'name'
-                }
+                    name: 'name',
+                },
             });
             expect(unsetAllMock).not.toHaveBeenCalled();
             expect(item.getCacheKey).not.toHaveBeenCalled();
@@ -109,15 +109,15 @@ describe('api/Item', () => {
             const unsetAllMock = jest.fn();
             item.id = 'id';
             item.getCache = () => ({
-                unsetAll: unsetAllMock
+                unsetAll: unsetAllMock,
             });
             item.getCacheKey = jest.fn().mockReturnValueOnce('key');
             item.merge = jest.fn();
             item.successCallback = jest.fn();
             item.renameSuccessHandler({
                 data: {
-                    name: 'name'
-                }
+                    name: 'name',
+                },
             });
             expect(unsetAllMock).toHaveBeenCalledWith('search_');
             expect(item.getCacheKey).toHaveBeenCalledWith('id');
@@ -134,8 +134,8 @@ describe('api/Item', () => {
             item.successCallback = jest.fn();
             item.shareSuccessHandler({
                 data: {
-                    shared_link: 'link'
-                }
+                    shared_link: 'link',
+                },
             });
             expect(item.getCacheKey).not.toHaveBeenCalled();
             expect(item.merge).not.toHaveBeenCalled();
@@ -147,8 +147,8 @@ describe('api/Item', () => {
             item.successCallback = jest.fn();
             item.shareSuccessHandler({
                 data: {
-                    shared_link: 'link'
-                }
+                    shared_link: 'link',
+                },
             });
             expect(item.getCacheKey).toHaveBeenCalledWith('id');
             expect(item.merge).toHaveBeenCalledWith('key', 'shared_link', 'link');
@@ -160,8 +160,8 @@ describe('api/Item', () => {
             file = {
                 id: 'id',
                 permissions: {
-                    can_rename: true
-                }
+                    can_rename: true,
+                },
             };
         });
 
@@ -194,7 +194,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return item.rename(file, 'name', 'success', 'error').then(() => {
                 expect(item.renameSuccessHandler).toHaveBeenCalledWith('success');
@@ -213,7 +213,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                put: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
             return item.rename(file, 'name', 'success', 'error').then(() => {
                 expect(item.errorHandler).toHaveBeenCalledWith(error);
@@ -228,7 +228,7 @@ describe('api/Item', () => {
 
         test('should default to noop error callback', () => {
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return item.rename(file, 'name', 'success').catch(() => {
                 expect(item.errorCallback).toBe(noop);
@@ -242,8 +242,8 @@ describe('api/Item', () => {
                 id: 'id',
                 permissions: {
                     can_share: true,
-                    can_set_share_access: true
-                }
+                    can_set_share_access: true,
+                },
             };
         });
 
@@ -282,7 +282,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return item.share(file, 'access', 'success', 'error').then(() => {
                 expect(item.shareSuccessHandler).toHaveBeenCalledWith('success');
@@ -300,7 +300,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return item.share(file, 'none', 'success', 'error').then(() => {
                 expect(item.shareSuccessHandler).toHaveBeenCalledWith('success');
@@ -319,7 +319,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                put: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
             return item.share(file, 'access', 'success', 'error').then(() => {
                 expect(item.errorHandler).toHaveBeenCalledWith(error);
@@ -334,7 +334,7 @@ describe('api/Item', () => {
 
         test('should default to noop error callback', () => {
             item.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return item.share(file, 'access', 'success').catch(() => {
                 expect(item.errorCallback).toBe(noop);
@@ -347,12 +347,12 @@ describe('api/Item', () => {
             file = {
                 id: 'id',
                 parent: {
-                    id: 'parentId'
+                    id: 'parentId',
                 },
                 type: 'file',
                 permissions: {
-                    can_delete: true
-                }
+                    can_delete: true,
+                },
             };
         });
 
@@ -403,7 +403,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return item.deleteItem(file, 'success', 'error').then(() => {
                 expect(item.deleteSuccessHandler).toHaveBeenCalledWith('success');
@@ -423,7 +423,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return item.deleteItem(file, 'success', 'error').then(() => {
                 expect(item.deleteSuccessHandler).toHaveBeenCalledWith('success');
@@ -443,7 +443,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                delete: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                delete: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
             return item.deleteItem(file, 'success', 'error').then(() => {
                 expect(item.errorHandler).toHaveBeenCalledWith(error);
@@ -458,7 +458,7 @@ describe('api/Item', () => {
         });
         test('should default to noop error callback', () => {
             item.xhr = {
-                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                delete: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return item.deleteItem(file, 'success').catch(() => {
                 expect(item.errorCallback).toBe(noop);
@@ -472,8 +472,8 @@ describe('api/Item', () => {
                 id: 'parentId',
                 item_collection: {
                     total_count: 4,
-                    entries: ['file_item1', 'child', 'file_item2', 'file_item3']
-                }
+                    entries: ['file_item1', 'child', 'file_item2', 'file_item3'],
+                },
             };
         });
 
@@ -500,8 +500,8 @@ describe('api/Item', () => {
                 id: 'parentId',
                 item_collection: {
                     total_count: 3,
-                    entries: ['file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['file_item1', 'file_item2', 'file_item3'],
+                },
             });
             expect(cache.get('child')).toBe(undefined);
             expect(item.getCacheKey).toHaveBeenCalledWith('id');
@@ -509,7 +509,7 @@ describe('api/Item', () => {
             expect(item.getParentCacheKey).toHaveBeenCalledWith('parentId');
             expect(item.merge).toHaveBeenCalledWith('parent', 'item_collection', {
                 total_count: 3,
-                entries: ['file_item1', 'file_item2', 'file_item3']
+                entries: ['file_item1', 'file_item2', 'file_item3'],
             });
         });
 

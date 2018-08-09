@@ -100,7 +100,7 @@ describe('api/Recents', () => {
             recents.recentsErrorHandler = jest.fn();
             recents.includePreviewFields = true;
             recents.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return recents.recentsRequest().then(() => {
                 expect(recents.recentsSuccessHandler).toHaveBeenCalledWith('success');
@@ -108,7 +108,7 @@ describe('api/Recents', () => {
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
                     params: { fields: getFieldsAsString(true) },
-                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    headers: { 'X-Rep-Hints': X_REP_HINTS },
                 });
             });
         });
@@ -119,7 +119,7 @@ describe('api/Recents', () => {
             recents.includePreviewFields = true;
             recents.includePreviewSidebarFields = true;
             recents.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve(error))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve(error)),
             };
 
             return recents.recentsRequest().then(() => {
@@ -128,7 +128,7 @@ describe('api/Recents', () => {
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
                     params: { fields: getFieldsAsString(true, true) },
-                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    headers: { 'X-Rep-Hints': X_REP_HINTS },
                 });
             });
         });
@@ -160,44 +160,44 @@ describe('api/Recents', () => {
                 id: 'item1',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }],
+                },
             };
             const item2 = {
                 id: 'item2',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }]
-                }
+                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }],
+                },
             };
             const item3 = {
                 id: 'item3',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }],
+                },
             };
             const response = {
                 data: {
                     order: {
                         by: 'by',
-                        direction: 'direction'
+                        direction: 'direction',
                     },
                     entries: [
                         {
                             interacted_at: 'interacted_at1',
-                            item: item1
+                            item: item1,
                         },
                         {
                             interacted_at: 'interacted_at2',
-                            item: item2
+                            item: item2,
                         },
                         {
                             interacted_at: 'interacted_at3',
-                            item: item3
-                        }
-                    ]
-                }
+                            item: item3,
+                        },
+                    ],
+                },
             };
 
             recents.options = { cache };
@@ -214,10 +214,10 @@ describe('api/Recents', () => {
                     order: [
                         {
                             by: 'by',
-                            direction: 'direction'
-                        }
-                    ]
-                }
+                            direction: 'direction',
+                        },
+                    ],
+                },
             });
             expect(cache.get('file_item1')).toEqual(Object.assign({}, item1, { interacted_at: 'interacted_at1' }));
             expect(cache.get('file_item3')).toEqual(Object.assign({}, item3, { interacted_at: 'interacted_at3' }));
@@ -231,24 +231,24 @@ describe('api/Recents', () => {
             name: 'item1',
             type: 'file',
             path_collection: {
-                entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }]
-            }
+                entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }],
+            },
         };
         const item2 = {
             id: 'item2',
             name: 'item2',
             type: 'file',
             path_collection: {
-                entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }]
-            }
+                entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }],
+            },
         };
         const item3 = {
             id: 'item3',
             name: 'item3',
             type: 'file',
             path_collection: {
-                entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }]
-            }
+                entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }],
+            },
         };
         const recent = {
             item_collection: {
@@ -257,10 +257,10 @@ describe('api/Recents', () => {
                 order: [
                     {
                         by: 'by',
-                        direction: 'direction'
-                    }
-                ]
-            }
+                        direction: 'direction',
+                    },
+                ],
+            },
         };
 
         beforeEach(() => {
@@ -290,7 +290,7 @@ describe('api/Recents', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item3, item2, item1]
+                items: [item3, item2, item1],
             });
         });
 

@@ -19,16 +19,16 @@ type Props = {
     permissions: BoxItemPermission,
     id: string,
     intl: any,
-    message: React.Node
+    message: React.Node,
 };
 
 type State = {
-    isConfirming?: boolean
+    isConfirming?: boolean,
 };
 
 class InlineDelete extends React.Component<Props, State> {
     state = {
-        isConfirming: false
+        isConfirming: false,
     };
 
     onDeleteConfirmedHandler = (): void => {
@@ -49,13 +49,13 @@ class InlineDelete extends React.Component<Props, State> {
         return (
             <div
                 className={classNames('bcs-comment-delete-container', {
-                    'bcs-is-confirming': this.state.isConfirming
+                    'bcs-is-confirming': this.state.isConfirming,
                 })}
             >
-                <Flyout onClose={this.handleFlyoutClose} onOpen={this.handleFlyoutOpen} position='middle-left'>
+                <Flyout onClose={this.handleFlyoutClose} onOpen={this.handleFlyoutOpen} position="middle-left">
                     <PlainButton
                         aria-label={intl.formatMessage(messages.deleteLabel)}
-                        className='bcs-comment-delete'
+                        className="bcs-comment-delete"
                         data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE}
                     >
                         <IconTrash />
@@ -64,14 +64,14 @@ class InlineDelete extends React.Component<Props, State> {
                         <b>{message}</b>
                         <div>
                             <PlainButton
-                                className='lnk bcs-comment-delete-yes'
+                                className="lnk bcs-comment-delete-yes"
                                 onClick={this.onDeleteConfirmedHandler}
-                                type='button'
+                                type="button"
                             >
                                 <FormattedMessage {...messages.commentDeleteConfirm} />
                             </PlainButton>
                             {' / '}
-                            <PlainButton className='lnk bcs-comment-delete-no' type='button'>
+                            <PlainButton className="lnk bcs-comment-delete-no" type="button">
                                 <FormattedMessage {...messages.commentDeleteCancel} />
                             </PlainButton>
                         </div>

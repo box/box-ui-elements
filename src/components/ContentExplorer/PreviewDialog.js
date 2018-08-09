@@ -33,7 +33,7 @@ type Props = {
     contentPreviewProps: ContentPreviewProps,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    intl: any
+    intl: any,
 };
 
 const PreviewDialog = ({
@@ -56,7 +56,7 @@ const PreviewDialog = ({
     contentPreviewProps,
     requestInterceptor,
     responseInterceptor,
-    intl
+    intl,
 }: Props) => {
     const { items }: Collection = currentCollection;
     const onLoad = (data: any): void => {
@@ -88,7 +88,6 @@ const PreviewDialog = ({
                 cache={cache}
                 token={token}
                 hasHeader
-                autoFocus
                 collection={files}
                 onLoad={onLoad}
                 onClose={onCancel}

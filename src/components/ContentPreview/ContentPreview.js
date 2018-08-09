@@ -36,7 +36,7 @@ import {
     DEFAULT_PREVIEW_LOCALE,
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW,
-    HEADER_RETRY_AFTER
+    HEADER_RETRY_AFTER,
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -74,12 +74,12 @@ type Props = {
     onMetric: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    previewInstance?: any
+    previewInstance?: any,
 };
 
 type State = {
     file?: BoxItem,
-    isFileError?: boolean
+    isFileError?: boolean,
 };
 
 // Emitted by preview's 'load' event
@@ -87,7 +87,7 @@ type PreviewTimeMetrics = {
     conversion: number,
     rendering: number,
     total: number,
-    preload?: number
+    preload?: number,
 };
 
 // Emitted by preview's 'preview_metric' event
@@ -96,7 +96,7 @@ type PreviewLoadMetrics = {
     file_info_time: number,
     convert_time: number,
     download_response_time: number,
-    full_document_load_time: number
+    full_document_load_time: number,
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -134,7 +134,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onMetric: noop,
         onNavigate: noop,
         collection: [],
-        contentSidebarProps: {}
+        contentSidebarProps: {},
     };
 
     /**
@@ -161,7 +161,7 @@ class ContentPreview extends PureComponent<Props, State> {
             sharedLinkPassword,
             apiHost,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         } = props;
 
         this.id = uniqueid('bcpr_');
@@ -173,7 +173,7 @@ class ContentPreview extends PureComponent<Props, State> {
             apiHost,
             clientName: CLIENT_NAME_CONTENT_PREVIEW,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         });
     }
 
@@ -208,7 +208,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { fileId, token, isLarge }: Props = this.props;
         const hasTokenChanged = nextProps.token !== token;
         const hasFileIdChanged = nextProps.fileId !== fileId;
@@ -430,7 +430,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onMetric({
             ...previewLoadMetrics,
             file_info_time: totalFetchFileTime,
-            value: (previewLoadMetrics.value || 0) + totalFetchFileTime
+            value: (previewLoadMetrics.value || 0) + totalFetchFileTime,
         });
     };
 
@@ -465,7 +465,7 @@ class ContentPreview extends PureComponent<Props, State> {
             conversion: totalConversion,
             rendering: totalRendering,
             total: totalRendering + totalConversion,
-            preload: totalPreload
+            preload: totalPreload,
         };
 
         return previewMetrics;
@@ -489,8 +489,8 @@ class ContentPreview extends PureComponent<Props, State> {
                 ...loadData,
                 metrics: {
                     ...loadData.metrics,
-                    time: totalPreviewMetrics
-                }
+                    time: totalPreviewMetrics,
+                },
             };
         }
 
@@ -564,7 +564,7 @@ class ContentPreview extends PureComponent<Props, State> {
             skipServerUpdate: true,
             header: 'none',
             container: `#${this.id} .bcpr-content`,
-            useHotkeys: false
+            useHotkeys: false,
         };
 
         if (!this.preview) {
@@ -575,7 +575,7 @@ class ContentPreview extends PureComponent<Props, State> {
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
-            ...omit(rest, Object.keys(previewOptions))
+            ...omit(rest, Object.keys(previewOptions)),
         });
     };
 
@@ -917,7 +917,7 @@ class ContentPreview extends PureComponent<Props, State> {
             sharedLink,
             sharedLinkPassword,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         }: Props = this.props;
 
         const { file, isFileError }: State = this.state;
@@ -948,10 +948,10 @@ class ContentPreview extends PureComponent<Props, State> {
                             onDownload={this.download}
                         />
                     )}
-                    <div className='bcpr-body'>
-                        <div className='bcpr-container' onMouseMove={this.onMouseMove} ref={this.containerRef}>
+                    <div className="bcpr-body">
+                        <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
                             {!file ? (
-                                <div className='bcpr-loading-wrapper'>
+                                <div className="bcpr-loading-wrapper">
                                     <PreviewLoading
                                         isLoading={!isFileError}
                                         loadingIndicatorProps={{ size: 'large' }}
@@ -959,17 +959,17 @@ class ContentPreview extends PureComponent<Props, State> {
                                 </div>
                             ) : (
                                 <Measure bounds onResize={this.onResize}>
-                                    {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
+                                    {({ measureRef: previewRef }) => <div ref={previewRef} className="bcpr-content" />}
                                 </Measure>
                             )}
 
                             {hasLeftNavigation && (
-                                <PlainButton type='button' className='bcpr-navigate-left' onClick={this.navigateLeft}>
+                                <PlainButton type="button" className="bcpr-navigate-left" onClick={this.navigateLeft}>
                                     <IconNavigateLeft />
                                 </PlainButton>
                             )}
                             {hasRightNavigation && (
-                                <PlainButton type='button' className='bcpr-navigate-right' onClick={this.navigateRight}>
+                                <PlainButton type="button" className="bcpr-navigate-right" onClick={this.navigateRight}>
                                     <IconNavigateRight />
                                 </PlainButton>
                             )}

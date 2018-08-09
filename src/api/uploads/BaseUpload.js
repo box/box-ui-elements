@@ -41,14 +41,14 @@ class BaseUpload extends Base {
         const attributes = {
             name: this.fileName || name,
             parent: { id: this.folderId },
-            size
+            size,
         };
 
         this.xhr.options({
             url,
             data: attributes,
             successHandler: this.preflightSuccessHandler,
-            errorHandler: this.preflightErrorHandler
+            errorHandler: this.preflightErrorHandler,
         });
     };
 
@@ -138,7 +138,7 @@ class BaseUpload extends Base {
             reader.onload = () => {
                 resolve({
                     buffer: reader.result,
-                    readCompleteTimestamp: Date.now()
+                    readCompleteTimestamp: Date.now(),
                 });
             };
 

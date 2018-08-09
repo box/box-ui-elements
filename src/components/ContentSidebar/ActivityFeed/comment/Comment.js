@@ -47,20 +47,20 @@ type Props = {
     mentionSelectorContacts?: SelectorItems,
     getMentionWithQuery?: Function,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>
+    getUserProfileUrl?: (string) => Promise<string>,
 };
 
 type State = {
     isEditing?: boolean,
     isFocused?: boolean,
-    isInputOpen?: boolean
+    isInputOpen?: boolean,
 };
 
 class Comment extends React.Component<Props, State> {
     state = {
         isEditing: false,
         isFocused: false,
-        isInputOpen: false
+        isInputOpen: false,
     };
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
@@ -106,7 +106,7 @@ class Comment extends React.Component<Props, State> {
             getAvatarUrl,
             getUserProfileUrl,
             getMentionWithQuery,
-            mentionSelectorContacts
+            mentionSelectorContacts,
         } = this.props;
         const { toEdit } = this;
         const { isEditing, isFocused, isInputOpen } = this.state;
@@ -115,20 +115,20 @@ class Comment extends React.Component<Props, State> {
         const canEdit = getProp(permissions, 'can_edit', false);
 
         return (
-            <div className='bcs-comment-container'>
+            <div className="bcs-comment-container">
                 <div
                     className={classNames('bcs-comment', {
                         'bcs-is-pending': isPending || error,
-                        'bcs-is-focused': isFocused
+                        'bcs-is-focused': isFocused,
                     })}
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar className='bcs-comment-avatar' getAvatarUrl={getAvatarUrl} user={created_by} />
-                    <div className='bcs-comment-content'>
-                        <div className='bcs-comment-headline'>
+                    <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={created_by} />
+                    <div className="bcs-comment-content">
+                        <div className="bcs-comment-headline">
                             <UserLink
-                                className='bcs-comment-user-name'
+                                className="bcs-comment-user-name"
                                 data-resin-target={ACTIVITY_TARGETS.PROFILE}
                                 id={created_by.id}
                                 name={created_by.name}
@@ -142,7 +142,7 @@ class Comment extends React.Component<Props, State> {
                                     />
                                 }
                             >
-                                <small className='bcs-comment-created-at'>
+                                <small className="bcs-comment-created-at">
                                     <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
@@ -161,7 +161,7 @@ class Comment extends React.Component<Props, State> {
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}
                                 className={classNames('bcs-activity-feed-comment-input', {
-                                    'bcs-is-disabled': isDisabled
+                                    'bcs-is-disabled': isDisabled,
                                 })}
                                 updateTask={this.updateTaskHandler}
                                 isOpen={isInputOpen}

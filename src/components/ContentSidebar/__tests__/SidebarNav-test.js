@@ -12,7 +12,7 @@ describe('components/ContentSidebar/SidebarNav', () => {
 
     test('should render skills tab', () => {
         const props = {
-            hasSkills: true
+            hasSkills: true,
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(IconMagicWand)).toHaveLength(1);
@@ -24,7 +24,7 @@ describe('components/ContentSidebar/SidebarNav', () => {
 
     test('should render details tab', () => {
         const props = {
-            hasDetails: true
+            hasDetails: true,
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
@@ -36,7 +36,7 @@ describe('components/ContentSidebar/SidebarNav', () => {
 
     test('should render activity tab', () => {
         const props = {
-            hasActivityFeed: true
+            hasActivityFeed: true,
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
@@ -48,7 +48,7 @@ describe('components/ContentSidebar/SidebarNav', () => {
 
     test('should render metadata tab', () => {
         const props = {
-            hasMetadata: true
+            hasMetadata: true,
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
@@ -63,7 +63,7 @@ describe('components/ContentSidebar/SidebarNav', () => {
             hasSkills: true,
             hasActivityFeed: true,
             hasMetadata: true,
-            selectedView: 'activity'
+            selectedView: 'activity',
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(IconMagicWand)).toHaveLength(1);

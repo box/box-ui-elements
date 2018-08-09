@@ -7,7 +7,7 @@ exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should 
 `;
 
 exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should correctly render with an inline error if some feed items fail to fetch 1`] = `
-<React.Fragment>
+<Fragment>
   <InlineError
     title={
       <FormattedMessage
@@ -22,7 +22,7 @@ exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should 
   <ActiveState
     items={Array []}
   />
-</React.Fragment>
+</Fragment>
 `;
 
 exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should correctly render with comments, tasks, versions 1`] = `

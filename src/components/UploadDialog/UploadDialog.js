@@ -25,7 +25,7 @@ type Props = {
     onUpload?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    intl: any
+    intl: any,
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -43,7 +43,7 @@ const UploadDialog = ({
     onUpload,
     requestInterceptor,
     responseInterceptor,
-    intl
+    intl,
 }: Props) => (
     <Modal
         isOpen={isOpen}

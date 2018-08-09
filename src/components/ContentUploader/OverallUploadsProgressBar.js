@@ -56,7 +56,7 @@ type Props = {
     percent: number,
     onClick: Function,
     onKeyDown: Function,
-    view: View
+    view: View,
 };
 
 const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDragging, isVisible }: Props) => {
@@ -72,15 +72,15 @@ const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDraggi
 
     return (
         <div
-            className='bcu-overall-progress-bar'
+            className="bcu-overall-progress-bar"
             onClick={onClick}
             onKeyDown={onKeyDown}
-            role='button'
+            role="button"
             tabIndex={isVisible ? '0' : '-1'}
         >
-            <span className='bcu-upload-status'>{status}</span>
+            <span className="bcu-upload-status">{status}</span>
             <ProgressBar percent={updatedPercent} />
-            <span className='bcu-uploads-manager-toggle' />
+            <span className="bcu-uploads-manager-toggle" />
         </div>
     );
 };

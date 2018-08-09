@@ -26,7 +26,7 @@ export default () => ({ dataKey, rowData }: { dataKey: string, rowData: BoxItem 
             {...messages.nameDate}
             values={{
                 date: DateValue,
-                name: modifiedBy
+                name: modifiedBy,
             }}
         />
     );

@@ -7,7 +7,7 @@ let file;
 describe('api/uploads/BaseUpload', () => {
     beforeEach(() => {
         upload = new BaseUpload({
-            token: '123'
+            token: '123',
         });
     });
 
@@ -16,11 +16,11 @@ describe('api/uploads/BaseUpload', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.getBaseUploadUrl = jest.fn();
             upload.xhr = {
-                options: jest.fn()
+                options: jest.fn(),
             };
             upload.makePreflightRequest({
                 fileId: '123',
-                fileName: 'cayde'
+                fileName: 'cayde',
             });
             expect(upload.getBaseUploadUrl).not.toHaveBeenCalled();
             expect(upload.xhr.options).not.toHaveBeenCalled();
@@ -33,11 +33,11 @@ describe('api/uploads/BaseUpload', () => {
             upload.getBaseApiUrl = jest.fn().mockReturnValueOnce(baseUrl);
             upload.file = {
                 size: 1,
-                name: 'zavala'
+                name: 'zavala',
             };
             upload.folderId = '123';
             upload.xhr = {
-                options: jest.fn()
+                options: jest.fn(),
             };
 
             upload.makePreflightRequest();
@@ -46,12 +46,12 @@ describe('api/uploads/BaseUpload', () => {
                 data: {
                     name: upload.file.name,
                     parent: {
-                        id: upload.folderId
+                        id: upload.folderId,
                     },
-                    size: upload.file.size
+                    size: upload.file.size,
                 },
                 successHandler: upload.preflightSuccessHandler,
-                errorHandler: upload.preflightErrorHandler
+                errorHandler: upload.preflightErrorHandler,
             });
         });
 
@@ -62,12 +62,12 @@ describe('api/uploads/BaseUpload', () => {
             upload.getBaseApiUrl = jest.fn().mockReturnValueOnce(baseUrl);
             upload.file = {
                 size: 1,
-                name: 'zavala'
+                name: 'zavala',
             };
             upload.folderId = '123';
 
             upload.xhr = {
-                options: jest.fn()
+                options: jest.fn(),
             };
 
             upload.makePreflightRequest();
@@ -75,7 +75,7 @@ describe('api/uploads/BaseUpload', () => {
                 url: `${baseUrl}/files/${upload.fileId}/content`,
                 data: expect.any(Object),
                 successHandler: upload.preflightSuccessHandler,
-                errorHandler: upload.preflightErrorHandler
+                errorHandler: upload.preflightErrorHandler,
             });
         });
     });
@@ -84,7 +84,7 @@ describe('api/uploads/BaseUpload', () => {
         beforeEach(() => {
             clock = jest.useFakeTimers();
             file = {
-                name: 'foo'
+                name: 'foo',
             };
             upload.file = file;
         });
@@ -109,9 +109,9 @@ describe('api/uploads/BaseUpload', () => {
                 status: 409,
                 context_info: {
                     conflicts: {
-                        id: upload.fileId
-                    }
-                }
+                        id: upload.fileId,
+                    },
+                },
             });
 
             expect(upload.makePreflightRequest).toHaveBeenCalled();
@@ -125,7 +125,7 @@ describe('api/uploads/BaseUpload', () => {
             upload.makePreflightRequest = jest.fn();
 
             upload.preflightErrorHandler({
-                status: 409
+                status: 409,
             });
 
             expect(upload.fileName).toEqual('foo-1969-07-16.bar');
@@ -137,7 +137,7 @@ describe('api/uploads/BaseUpload', () => {
 
             upload.makePreflightRequest = jest.fn();
             upload.preflightErrorHandler({
-                status: 429
+                status: 429,
             });
             clock.runTimersToTime(retryAfterMs + 1);
 
@@ -150,7 +150,7 @@ describe('api/uploads/BaseUpload', () => {
             upload.makePreflightRequest = jest.fn();
 
             upload.preflightErrorHandler({
-                code: 'too_many_requests'
+                code: 'too_many_requests',
             });
             clock.runTimersToTime(retryAfterMs + 1);
 
@@ -166,8 +166,8 @@ describe('api/uploads/BaseUpload', () => {
             upload.preflightErrorHandler({
                 code: 'too_many_requests',
                 headers: {
-                    get: getMock
-                }
+                    get: getMock,
+                },
             });
             clock.runTimersToTime(retryAfterMs + 1);
 

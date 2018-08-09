@@ -101,8 +101,8 @@ describe('api/uploads/MultiputPart', () => {
             MultiputPartTest.xhr = {
                 xhr: {
                     readyState: 'readyState',
-                    statusText: 'statusText'
-                }
+                    statusText: 'statusText',
+                },
             };
         });
         test('should noop if destroyed', () => {
@@ -164,7 +164,7 @@ describe('api/uploads/MultiputPart', () => {
         test('should call uploadSuccessHandler when upload is already available on the server', async () => {
             const part = {
                 offset: 1,
-                part_id: 1
+                part_id: 1,
             };
             const parts = [part];
 
@@ -187,24 +187,24 @@ describe('api/uploads/MultiputPart', () => {
                 [
                     {
                         offset: 1,
-                        part_id: 1
+                        part_id: 1,
                     },
                     {
                         offset: 1,
-                        part_id: 1
-                    }
+                        part_id: 1,
+                    },
                 ],
                 [
                     {
-                        offset: 1
-                    }
+                        offset: 1,
+                    },
                 ],
                 [
                     {
                         offset: 2,
-                        part_id: 1
-                    }
-                ]
+                        part_id: 1,
+                    },
+                ],
             ],
             (parts) => {
                 test('should call upload when upload is not available on the server', async () => {
@@ -227,7 +227,7 @@ describe('api/uploads/MultiputPart', () => {
     describe('cancel()', () => {
         test('should tear down properly', () => {
             MultiputPartTest.xhr = {
-                abort: jest.fn()
+                abort: jest.fn(),
             };
             MultiputPartTest.blob = new Blob();
             MultiputPartTest.data = { hi: 1 };
@@ -247,7 +247,7 @@ describe('api/uploads/MultiputPart', () => {
             const entries = [1];
             MultiputPart.updateQueryParameters = jest.fn().mockReturnValueOnce(endpoint);
             MultiputPartTest.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ entries }))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ entries })),
             };
 
             const res = await MultiputPartTest.listParts(1, 1);

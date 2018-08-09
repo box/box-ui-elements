@@ -12,7 +12,7 @@ import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 
 type Props = {
-    errorCode?: string
+    errorCode?: string,
 } & Errors;
 
 const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({

@@ -14,12 +14,12 @@ import './BreadcrumbDropdown.scss';
 type Props = {
     className: string,
     onCrumbClick: Function,
-    crumbs: Crumb[]
+    crumbs: Crumb[],
 };
 
 const BreadcrumbDropdown = ({ crumbs, onCrumbClick, className = '' }: Props) => (
     <DropdownMenu constrainToScrollParent>
-        <PlainButton type='button' className={`be-breadcrumbs-drop-down ${className}`}>
+        <PlainButton type="button" className={`be-breadcrumbs-drop-down ${className}`}>
             ···
         </PlainButton>
         <Menu>

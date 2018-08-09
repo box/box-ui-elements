@@ -24,7 +24,7 @@ import {
     FIELD_MODIFIED_AT,
     FIELD_INTERACTED_AT,
     FIELD_SIZE,
-    VIEW_RECENTS
+    VIEW_RECENTS,
 } from '../../constants';
 import './ItemList.scss';
 
@@ -50,7 +50,7 @@ type Props = {
     onItemPreview: Function,
     onSortChange: Function,
     tableRef: Function,
-    currentCollection: Collection
+    currentCollection: Collection,
 } & InjectIntlProvidedProps;
 
 const ItemList = ({
@@ -76,7 +76,7 @@ const ItemList = ({
     currentCollection,
     tableRef,
     focusedRow,
-    intl
+    intl,
 }: Props) => {
     const nameCell = nameCellRenderer(
         rootId,
@@ -114,7 +114,7 @@ const ItemList = ({
 
         const { selected } = items[index];
         return classNames(`bce-item-row bce-item-row-${index}`, {
-            'bce-item-row-selected': selected
+            'bce-item-row-selected': selected,
         });
     };
 
@@ -128,7 +128,7 @@ const ItemList = ({
             items={items}
             columnCount={1}
             rowCount={rowCount}
-            className='bce-item-grid'
+            className="bce-item-grid"
             onRename={onItemRename}
             onShare={onItemShare}
             onDownload={onItemDownload}
@@ -179,7 +179,7 @@ const ItemList = ({
                             />
                             {isSmall ? null : (
                                 <Column
-                                    className='bce-item-coloumn'
+                                    className="bce-item-coloumn"
                                     label={
                                         isRecents
                                             ? intl.formatMessage(messages.interacted)
@@ -194,7 +194,7 @@ const ItemList = ({
                             )}
                             {isSmall || isMedium ? null : (
                                 <Column
-                                    className='bce-item-coloumn'
+                                    className="bce-item-coloumn"
                                     label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}

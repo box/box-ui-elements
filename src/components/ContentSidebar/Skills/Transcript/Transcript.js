@@ -26,14 +26,14 @@ type Props = {
     card: SkillCard,
     isEditable: boolean,
     getViewer?: Function,
-    onSkillChange: Function
+    onSkillChange: Function,
 };
 
 type State = {
     isEditingIndex?: number,
     isLoading: boolean,
     newTranscriptText: string,
-    isCollapsed: boolean
+    isCollapsed: boolean,
 };
 
 class Transcript extends React.PureComponent<Props, State> {
@@ -42,7 +42,7 @@ class Transcript extends React.PureComponent<Props, State> {
         isEditingIndex: undefined,
         newTranscriptText: '',
         isCollapsed: true,
-        isLoading: false
+        isLoading: false,
     };
     copyBtn: HTMLButtonElement;
 
@@ -52,12 +52,12 @@ class Transcript extends React.PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    componentWillReceiveProps(): void {
+    UNSAFE_componentWillReceiveProps(): void {
         const wasEditing = typeof this.state.isEditingIndex === 'number';
         this.setState({
             isEditingIndex: wasEditing ? -1 : undefined,
             newTranscriptText: '',
-            isLoading: false
+            isLoading: false,
         });
     }
 
@@ -110,7 +110,7 @@ class Transcript extends React.PureComponent<Props, State> {
      */
     toggleIsEditing = (): void => {
         this.setState((prevState) => ({
-            isEditingIndex: typeof prevState.isEditingIndex === 'number' ? undefined : -1
+            isEditingIndex: typeof prevState.isEditingIndex === 'number' ? undefined : -1,
         }));
     };
 
@@ -122,7 +122,10 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     previewSegment(index: number) {
-        const { card: { entries }, getViewer }: Props = this.props;
+        const {
+            card: { entries },
+            getViewer,
+        }: Props = this.props;
         const { appears } = entries[index];
         const viewer = getViewer ? getViewer() : null;
         const isValid = isValidTimeSlice(appears) && Array.isArray(appears) && appears.length === 1;
@@ -141,7 +144,10 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onSave = (): void => {
-        const { card: { entries }, onSkillChange }: Props = this.props;
+        const {
+            card: { entries },
+            onSkillChange,
+        }: Props = this.props;
         const { isEditingIndex, newTranscriptText }: State = this.state;
 
         if (typeof isEditingIndex !== 'number') {
@@ -156,8 +162,8 @@ class Transcript extends React.PureComponent<Props, State> {
             onSkillChange(null, null, [
                 {
                     replacement: { ...entry, text: newTranscriptText },
-                    replaced: entry
-                }
+                    replaced: entry,
+                },
             ]);
         }
     };
@@ -182,7 +188,7 @@ class Transcript extends React.PureComponent<Props, State> {
     onChange = (event: SyntheticKeyboardEvent<HTMLTextAreaElement>): void => {
         const currentTarget = (event.currentTarget: HTMLTextAreaElement);
         this.setState({
-            newTranscriptText: currentTarget.value
+            newTranscriptText: currentTarget.value,
         });
     };
 
@@ -193,12 +199,14 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onClick = (index: number): void => {
-        const { card: { entries } }: Props = this.props;
+        const {
+            card: { entries },
+        }: Props = this.props;
         const { isEditingIndex }: State = this.state;
         if (typeof isEditingIndex === 'number') {
             this.setState({
                 isEditingIndex: index,
-                newTranscriptText: entries[index].text
+                newTranscriptText: entries[index].text,
             });
         } else {
             this.previewSegment(index);
@@ -213,7 +221,9 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     copyTranscript = () => {
-        const { card: { entries } }: Props = this.props;
+        const {
+            card: { entries },
+        }: Props = this.props;
         const copiedClass = 'be-transcript-copied';
         copy(entries.reduce(this.transcriptReducer, ''));
 
@@ -248,7 +258,7 @@ class Transcript extends React.PureComponent<Props, State> {
      */
     toggleExpandCollapse = (): void => {
         this.setState((prevState) => ({
-            isCollapsed: !prevState.isCollapsed
+            isCollapsed: !prevState.isCollapsed,
         }));
     };
 
@@ -259,26 +269,29 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {Object}
      */
     render() {
-        const { card: { entries }, isEditable }: Props = this.props;
+        const {
+            card: { entries },
+            isEditable,
+        }: Props = this.props;
         const { isEditingIndex, isCollapsed, isLoading }: State = this.state;
         const hasEntries = entries.length > 0;
         const hasManyEntries = entries.length > 5;
         const isEditing = typeof isEditingIndex === 'number';
         const editBtnClassName = classNames('be-transcript-edit', {
-            'be-transcript-is-editing': isEditing
+            'be-transcript-is-editing': isEditing,
         });
         const contentClassName = classNames({
-            'be-transcript-content-collapsed': isCollapsed
+            'be-transcript-content-collapsed': isCollapsed,
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading} className='be-transcript'>
+            <LoadingIndicatorWrapper isLoading={isLoading} className="be-transcript">
                 {hasEntries &&
                     !isLoading && (
-                        <div className='be-transcript-actions'>
+                        <div className="be-transcript-actions">
                             <PlainButton
-                                type='button'
-                                className='be-transcript-copy'
+                                type="button"
+                                className="be-transcript-copy"
                                 getDOMRef={this.copyBtnRef}
                                 onClick={this.copyTranscript}
                                 data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.COPY}
@@ -287,8 +300,8 @@ class Transcript extends React.PureComponent<Props, State> {
                             </PlainButton>
                             {hasManyEntries && (
                                 <PlainButton
-                                    type='button'
-                                    className='be-transcript-expand'
+                                    type="button"
+                                    className="be-transcript-expand"
                                     onClick={this.toggleExpandCollapse}
                                     data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EXPAND}
                                 >
@@ -297,7 +310,7 @@ class Transcript extends React.PureComponent<Props, State> {
                             )}
                             {isEditable && (
                                 <PlainButton
-                                    type='button'
+                                    type="button"
                                     className={editBtnClassName}
                                     onClick={this.toggleIsEditing}
                                     data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
@@ -308,7 +321,7 @@ class Transcript extends React.PureComponent<Props, State> {
                         </div>
                     )}
                 {isEditing ? (
-                    <div className='be-transcript-edit-message'>
+                    <div className="be-transcript-edit-message">
                         <FormattedMessage {...messages.transcriptEdit} />
                     </div>
                 ) : null}
