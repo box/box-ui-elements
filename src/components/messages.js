@@ -31,7 +31,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     previewError: {
         id: 'be.previewError',
         description: 'Error message when Preview fails due to the files call.',
-        defaultMessage: 'We\'re sorry, the preview didn\'t load. Please refresh the page.'
+        defaultMessage: 'We’re sorry, the preview didn’t load. Please refresh the page.'
     },
     open: {
         id: 'be.open',

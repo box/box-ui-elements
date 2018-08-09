@@ -623,7 +623,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     /* eslint-disable no-unused-vars */
-    fetchFileErrorCallback = (e: Error): void => {
+    fetchFileErrorCallback = (fileError: Error): void => {
         /* eslint-enable no-unused-vars */
         const { fileId }: Props = this.props;
         if (this.retryCount >= RETRY_COUNT) {
@@ -634,7 +634,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
             // Respect 'Retry-After' header if present, otherwise retry with exponential back-off
             let timeoutMs = 2 ** this.retryCount * MS_IN_S;
-            const retryAfter = getProp(`e.response.headers[${HEADER_RETRY_AFTER}]`);
+            const retryAfter = getProp(`fileError.response.headers[${HEADER_RETRY_AFTER}]`);
             if (retryAfter) {
                 const retryAfterS = parseInt(retryAfter, 10);
                 if (!Number.isNaN(retryAfterS)) {
@@ -953,7 +953,12 @@ class ContentPreview extends PureComponent<Props, State> {
                     <div className='bcpr-body'>
                         <div className='bcpr-container' onMouseMove={this.onMouseMove} ref={this.containerRef}>
                             {!file ? (
-                                <PreviewLoading isError={!!isFileError} />
+                                <div className='bcpr-loading-wrapper'>
+                                    <PreviewLoading
+                                        isLoading={!isFileError}
+                                        loadingIndicatorProps={{ size: 'large' }}
+                                    />
+                                </div>
                             ) : (
                                 <Measure bounds onResize={this.onResize}>
                                     {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}

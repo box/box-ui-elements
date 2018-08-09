@@ -1,24 +1,14 @@
 @import '../variables';
 
-.bcp-loading-wrapper {
-    background-color: $ffive;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-
-    .bcp-loaded & {
-        display: none;
-    }
-}
-
-.bcp-loading {
-    color: $twos;
-    position: relative;
-    text-align: center;
-    z-index: 1;
-
-    .bcp-loading-text {
-        font-size: 14px;
+.bcpr {
+    .bcpr-loading {
+        color: $twos;
+        position: relative;
+        text-align: center;
+        z-index: 1;
+    
+        .bcpr-loading-text {
+            font-size: 14px;
+        }
     }
 }

@@ -66,4 +66,17 @@
             right: 0;
         }
     }
+
+    .bcpr-loading-wrapper {
+        background-color: $ffive;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+    
+        .bcpr-loaded & {
+            display: none;
+        }
+    }
+
 }
