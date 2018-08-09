@@ -631,8 +631,8 @@ class ContentPreview extends PureComponent<Props, State> {
             this.retryCount += 1;
             clearTimeout(this.retryTimeout);
 
-            // Respect 'Retry-After' header if present, otherwise retry full jitter
-            let timeoutMs = Math.random() * (2 ** this.retryCount * MS_IN_S);
+            // Respect 'Retry-After' header if present, otherwise retry with exponential back-off
+            let timeoutMs = 2 ** this.retryCount * MS_IN_S;
             const retryAfter = getProp('e.response.headers[Retry-After]');
             if (retryAfter) {
                 const retryAfterS = parseInt(retryAfter, 10);
