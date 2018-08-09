@@ -35,7 +35,8 @@ import {
     DEFAULT_PREVIEW_VERSION,
     DEFAULT_PREVIEW_LOCALE,
     DEFAULT_PATH_STATIC_PREVIEW,
-    CLIENT_NAME_CONTENT_PREVIEW
+    CLIENT_NAME_CONTENT_PREVIEW,
+    HEADER_RETRY_AFTER
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -633,7 +634,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
             // Respect 'Retry-After' header if present, otherwise retry with exponential back-off
             let timeoutMs = 2 ** this.retryCount * MS_IN_S;
-            const retryAfter = getProp('e.response.headers[Retry-After]');
+            const retryAfter = getProp(`e.response.headers[${HEADER_RETRY_AFTER}]`);
             if (retryAfter) {
                 const retryAfterS = parseInt(retryAfter, 10);
                 if (!Number.isNaN(retryAfterS)) {
