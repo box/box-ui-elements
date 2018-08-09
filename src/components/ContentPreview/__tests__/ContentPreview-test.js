@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
+import PreviewLoading from '../PreviewLoading';
 import * as TokenService from '../../../util/TokenService';
 
 jest.mock('../../Internationalize', () => 'mock-internationalize');
@@ -200,6 +201,51 @@ describe('components/ContentPreview/ContentPreview', () => {
         });
     });
 
+    describe('fetchFileSuccessCallback()', () => {
+        let instance;
+
+        beforeEach(() => {
+            const wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.retryCount = 5;
+        });
+
+        test('should reset the retry count and set state', () => {
+            instance.fetchFileSuccessCallback(file);
+
+            expect(instance.retryCount).toEqual(0);
+            expect(instance.state.file).toEqual(file);
+            expect(instance.state.isFileError).toEqual(false);
+        });
+    });
+
+    describe('fetchFileErrorCallback()', () => {
+        let instance;
+
+        beforeEach(() => {
+            const wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.fetchFile = jest.fn();
+            instance.retryCount = 5;
+        });
+
+        test('should set the file error state if we have surpassed our retry count', () => {
+            instance.fetchFileErrorCallback();
+            expect(instance.state.isFileError).toEqual(true);
+            expect(instance.fetchFile).not.toBeCalled();
+        });
+
+        jest.useFakeTimers();
+
+        test('should try to fetch the file again after the timeout', () => {
+            instance.retryCount = 0;
+            instance.fetchFileErrorCallback();
+            jest.runAllTimers();
+
+            expect(instance.fetchFile).toBeCalled();
+        });
+    });
+
     describe('getTotalFileFetchTime()', () => {
         let instance;
         const startTime = 1.23;
@@ -389,6 +435,13 @@ describe('components/ContentPreview/ContentPreview', () => {
                 file_info_time: FETCHING_TIME,
                 value: data.value + FETCHING_TIME
             });
+        });
+    });
+
+    describe('render()', () => {
+        test('should render PreviewLoading if there is no file', () => {
+            const wrapper = getWrapper(props);
+            expect(wrapper.find(PreviewLoading).exists()).toBe(true);
         });
     });
 });
