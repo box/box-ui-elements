@@ -137,7 +137,7 @@ const makePopup = (kit: string) => (Wrapped: any) =>
 
             return (
                 <div>
-                    <button type='button' onClick={this.onButtonClick} className={buttonClassName}>
+                    <button type="button" onClick={this.onButtonClick} className={buttonClassName}>
                         {buttonLabel}
                     </button>
                     <Modal

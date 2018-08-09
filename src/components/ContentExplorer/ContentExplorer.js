@@ -264,9 +264,11 @@ class ContentExplorer extends Component<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { currentFolderId }: Props = nextProps;
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id }
+        }: State = this.state;
 
         if (typeof currentFolderId === 'string' && id !== currentFolderId) {
             this.fetchFolder(currentFolderId);
@@ -312,7 +314,9 @@ class ContentExplorer extends Component<Props, State> {
      */
     finishNavigation() {
         const { autoFocus }: Props = this.props;
-        const { currentCollection: { percentLoaded } }: State = this.state;
+        const {
+            currentCollection: { percentLoaded }
+        }: State = this.state;
 
         // If loading for the very first time, only allow focus if autoFocus is true
         if (this.firstLoad && !autoFocus) {
@@ -338,7 +342,11 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     refreshCollection = () => {
-        const { currentCollection: { id }, view, searchQuery }: State = this.state;
+        const {
+            currentCollection: { id },
+            view,
+            searchQuery
+        }: State = this.state;
         if (view === VIEW_FOLDER && id) {
             this.fetchFolder(id, false);
         } else if (view === VIEW_RECENTS) {
@@ -518,7 +526,9 @@ class ContentExplorer extends Component<Props, State> {
      */
     search = (query: string, forceFetch: boolean = false) => {
         const { rootFolderId }: Props = this.props;
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id }
+        }: State = this.state;
         const folderId = typeof id === 'string' ? id : rootFolderId;
         const trimmedQuery: string = query.trim();
 
@@ -617,7 +627,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     upload = () => {
-        const { currentCollection: { id, permissions } }: State = this.state;
+        const {
+            currentCollection: { id, permissions }
+        }: State = this.state;
         const { canUpload }: Props = this.props;
         if (!canUpload || !id || !permissions) {
             return;
@@ -641,7 +653,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     uploadSuccessHandler = () => {
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id }
+        }: State = this.state;
         this.fetchFolder(id, false, true);
     };
 
@@ -686,7 +700,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id }
+        }: State = this.state;
         if (id) {
             this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
@@ -716,7 +732,10 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
-        const { selected, currentCollection: { items = [] } }: State = this.state;
+        const {
+            selected,
+            currentCollection: { items = [] }
+        }: State = this.state;
         const { onSelect }: Props = this.props;
 
         if (item === selected) {
@@ -1068,7 +1087,10 @@ class ContentExplorer extends Component<Props, State> {
             isPreviewModalOpen: false
         });
 
-        const { selected, currentCollection: { items = [] } }: State = this.state;
+        const {
+            selected,
+            currentCollection: { items = [] }
+        }: State = this.state;
         if (selected && items.length > 0) {
             focus(this.rootElement, `.bce-item-row-${focusedRow}`);
         }
@@ -1212,7 +1234,7 @@ class ContentExplorer extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef}>
-                    <div className='be-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                    <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
                             isSmall={isSmall}

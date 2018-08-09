@@ -46,7 +46,7 @@ function getMenuItem(
     const isSame = by === sortBy && direction === sortDirection;
     return (
         <MenuItem onClick={() => onSortChange(by, direction)}>
-            <div className='be-sort-selected'>{isSame ? <IconCheck width={16} height={16} /> : null}</div>
+            <div className="be-sort-selected">{isSame ? <IconCheck width={16} height={16} /> : null}</div>
             <FormattedMessage {...messages[`${sort}${direction}`]} />
         </MenuItem>
     );
@@ -54,10 +54,10 @@ function getMenuItem(
 
 const Sort = ({ isRecents, isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
     <DropdownMenu isRightAligned constrainToScrollParent>
-        <Button type='button' isDisabled={!isLoaded} className='be-btn-sort'>
+        <Button type="button" isDisabled={!isLoaded} className="be-btn-sort">
             <IconSort />
         </Button>
-        <Menu className='be-menu-sort'>
+        <Menu className="be-menu-sort">
             {getMenuItem(SORT_NAME, FIELD_NAME, SORT_ASC, sortBy, sortDirection, onSortChange)}
             {getMenuItem(SORT_NAME, FIELD_NAME, SORT_DESC, sortBy, sortDirection, onSortChange)}
             {getMenuItem(

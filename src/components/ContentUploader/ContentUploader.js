@@ -171,7 +171,7 @@ class ContentUploader extends Component<Props, State> {
      * @param {Props} nextProps
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { files, dataTransferItems, useUploadsManager } = nextProps;
 
         const hasFiles = Array.isArray(files) && files.length > 0;
@@ -813,13 +813,13 @@ class ContentUploader extends Component<Props, State> {
         // Broadcast that there was an error uploading a file
         const errorData = useUploadsManager
             ? {
-                item,
-                error
-            }
+                  item,
+                  error
+              }
             : {
-                file,
-                error
-            };
+                  file,
+                  error
+              };
 
         onError(errorData);
 
@@ -845,7 +845,7 @@ class ContentUploader extends Component<Props, State> {
             return;
         }
 
-        item.progress = Math.min(Math.round(event.loaded / event.total * 100), 100);
+        item.progress = Math.min(Math.round((event.loaded / event.total) * 100), 100);
         item.status = STATUS_IN_PROGRESS;
 
         const { items } = this.state;

@@ -59,7 +59,7 @@ const Content = ({
     onFocusChange,
     extensionsWhitelist
 }: Props) => (
-    <div className='bcp-content'>
+    <div className="bcp-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}

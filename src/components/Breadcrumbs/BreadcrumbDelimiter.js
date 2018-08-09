@@ -14,7 +14,7 @@ type Props = {
 
 const BreadcrumbDelimiter = ({ delimiter }: Props) =>
     delimiter === DELIMITER_CARET ? (
-        <IconChevron className='be-breadcrumb-seperator' color={COLOR_999} direction='right' size='7px' />
+        <IconChevron className="be-breadcrumb-seperator" color={COLOR_999} direction="right" size="7px" />
     ) : (
         <span>/</span>
     );

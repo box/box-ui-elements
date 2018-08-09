@@ -12,9 +12,9 @@ type Props = {
 };
 
 const ItemProgress = ({ progress }: Props) => (
-    <div className='bcu-item-progress'>
+    <div className="bcu-item-progress">
         <ProgressBar percent={progress} />
-        <div className='bcu-progress-label'>{progress}%</div>
+        <div className="bcu-progress-label">{progress}%</div>
     </div>
 );
 

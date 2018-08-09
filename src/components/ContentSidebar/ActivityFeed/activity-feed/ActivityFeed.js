@@ -418,7 +418,7 @@ class ActivityFeed extends React.Component<Props, State> {
         this.updateFeedItems(comments, tasks, versions, file);
     }
 
-    componentWillReceiveProps(nextProps: any): void {
+    UNSAFE_componentWillReceiveProps(nextProps: any): void {
         const { comments, tasks, versions, file } = nextProps;
         this.updateFeedItems(comments, tasks, versions, file);
     }
@@ -536,7 +536,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     ref={(ref) => {
                         this.feedContainer = ref;
                     }}
-                    className='bcs-activity-feed-items-container'
+                    className="bcs-activity-feed-items-container"
                 >
                     {shouldShowEmptyState(feedItems) ? (
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />

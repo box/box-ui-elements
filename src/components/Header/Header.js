@@ -26,11 +26,11 @@ const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) 
     const isFolder = view === VIEW_FOLDER;
     const isSearch = view === VIEW_SEARCH;
     return (
-        <div className='be-header'>
+        <div className="be-header">
             <Logo url={logoUrl} isSmall={isSmall} />
-            <div className='be-search'>
+            <div className="be-search">
                 <input
-                    type='search'
+                    type="search"
                     disabled={!isFolder && !isSearch}
                     placeholder={intl.formatMessage(messages.searchPlaceholder)}
                     value={searchQuery}

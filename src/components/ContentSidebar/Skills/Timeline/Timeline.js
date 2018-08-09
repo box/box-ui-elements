@@ -42,10 +42,10 @@ const Timeline = ({ text = '', duration = 0, timeslices = [], getViewer, interac
     };
 
     return (
-        <div className='be-timeline'>
-            {text && <div className='be-timeline-label'>{text}</div>}
-            <div className='be-timeline-line-wrapper'>
-                <div className='be-timeline-line' />
+        <div className="be-timeline">
+            {text && <div className="be-timeline-label">{text}</div>}
+            <div className="be-timeline-line-wrapper">
+                <div className="be-timeline-line" />
                 {timeslices.map(
                     ({ start, end }: SkillCardEntryTimeSlice, index) => (
                         /* eslint-disable react/no-array-index-key */
@@ -62,16 +62,16 @@ const Timeline = ({ text = '', duration = 0, timeslices = [], getViewer, interac
                     /* eslint-enable react/no-array-index-key */
                 )}
             </div>
-            <div className='be-timeline-btns'>
+            <div className="be-timeline-btns">
                 <PlainButton
-                    type='button'
+                    type="button"
                     onClick={() => playSegment(timeSliceIndex, -1)}
                     data-resin-target={SKILLS_TARGETS.TIMELINE.PREVIOUS}
                 >
                     <IconTrackPrevious title={<FormattedMessage {...messages.previousSegment} />} />
                 </PlainButton>
                 <PlainButton
-                    type='button'
+                    type="button"
                     onClick={() => playSegment(timeSliceIndex, 1)}
                     data-resin-target={SKILLS_TARGETS.TIMELINE.NEXT}
                 >

@@ -128,7 +128,7 @@ const ItemList = ({
             items={items}
             columnCount={1}
             rowCount={rowCount}
-            className='bce-item-grid'
+            className="bce-item-grid"
             onRename={onItemRename}
             onShare={onItemShare}
             onDownload={onItemDownload}
@@ -179,7 +179,7 @@ const ItemList = ({
                             />
                             {isSmall ? null : (
                                 <Column
-                                    className='bce-item-coloumn'
+                                    className="bce-item-coloumn"
                                     label={
                                         isRecents
                                             ? intl.formatMessage(messages.interacted)
@@ -194,7 +194,7 @@ const ItemList = ({
                             )}
                             {isSmall || isMedium ? null : (
                                 <Column
-                                    className='bce-item-coloumn'
+                                    className="bce-item-coloumn"
                                     label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}

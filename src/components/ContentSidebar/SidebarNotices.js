@@ -43,7 +43,7 @@ const SidebarNotices = ({ file }: Props) => {
                             relative={false}
                         />
                     }
-                    itemType='file'
+                    itemType="file"
                 />
             )}
             {!!sharedLinkExpiration && (

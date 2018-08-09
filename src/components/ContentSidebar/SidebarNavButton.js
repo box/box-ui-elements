@@ -24,8 +24,8 @@ const SidebarNavButton = ({ tooltip, isSelected, onClick, interactionTarget, chi
     });
 
     return (
-        <Tooltip text={tooltip} position='middle-left'>
-            <PlainButton className={buttonClass} type='button' onClick={onClick} data-resin-target={interactionTarget}>
+        <Tooltip text={tooltip} position="middle-left">
+            <PlainButton className={buttonClass} type="button" onClick={onClick} data-resin-target={interactionTarget}>
                 {children}
             </PlainButton>
         </Tooltip>

@@ -40,6 +40,7 @@ const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl 
     }
 
     return (
+        // eslint-disable-next-line jsx-a11y/no-onchange
         <select className={`be-share-access-select ${className}`} value={access} onChange={changeHandler}>
             {allowOpen ? <option value={ACCESS_OPEN}>{intl.formatMessage(messages.shareAccessOpen)}</option> : null}
             {allowCollab ? (

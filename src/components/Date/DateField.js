@@ -40,7 +40,7 @@ const DateField = ({
         }
 
         if (capitalize) {
-            return <span className='be-date-capitalize'>{Message}</span>;
+            return <span className="be-date-capitalize">{Message}</span>;
         }
 
         return Message;

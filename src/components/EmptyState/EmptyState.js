@@ -45,7 +45,7 @@ const EmptyState = ({ view, isLoading }: Props) => {
     }
 
     return (
-        <div className='be-empty'>
+        <div className="be-empty">
             {type}
             <div>{message}</div>
         </div>

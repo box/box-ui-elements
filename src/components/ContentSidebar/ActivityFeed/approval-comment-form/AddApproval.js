@@ -37,12 +37,12 @@ const AddApproval = ({
     onApproverSelectorSelect,
     intl
 }: Props): React.Node => (
-    <div className='bcs-comment-add-approver'>
+    <div className="bcs-comment-add-approver">
         <Checkbox
-            className='bcs-comment-add-approver-checkbox'
+            className="bcs-comment-add-approver-checkbox"
             data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_ADD_TASK}
             label={intl.formatMessage(messages.approvalAddTask)}
-            name='addApproval'
+            name="addApproval"
             isChecked={isAddApprovalVisible}
             tooltip={intl.formatMessage(messages.approvalAddTaskTooltip)}
         />

@@ -39,7 +39,7 @@ const SubHeaderRight = ({
     const isLoaded: boolean = percentLoaded === 100;
 
     return (
-        <div className='be-sub-header-right'>
+        <div className="be-sub-header-right">
             {showSort &&
                 !!sortBy &&
                 !!sortDirection && (

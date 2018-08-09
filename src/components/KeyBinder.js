@@ -80,7 +80,7 @@ class KeyBinder extends PureComponent<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { id, scrollToColumn, scrollToRow }: Props = nextProps;
         const { id: prevId }: Props = this.props;
         const { scrollToColumn: prevScrollToColumn, scrollToRow: prevScrollToRow }: State = this.state;

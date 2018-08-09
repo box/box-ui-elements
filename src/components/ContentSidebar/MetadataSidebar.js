@@ -128,9 +128,13 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             return;
         }
 
-        api
-            .getMetadataAPI(false)
-            .updateMetadata(file, editor.template, ops, this.getMetadataEditors, this.errorCallback);
+        api.getMetadataAPI(false).updateMetadata(
+            file,
+            editor.template,
+            ops,
+            this.getMetadataEditors,
+            this.errorCallback
+        );
     };
 
     /**

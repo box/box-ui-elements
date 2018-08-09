@@ -57,7 +57,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 fileId: 'abcdefg'
             };
             instance.fetchData = jest.fn();
-            instance.componentWillReceiveProps(newProps);
+            instance.UNSAFE_componentWillReceiveProps(newProps);
 
             expect(instance.fetchData).toBeCalledWith(newProps);
         });
@@ -72,7 +72,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState = jest.fn();
             instance.getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
-            instance.componentWillReceiveProps(newProps);
+            instance.UNSAFE_componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).toBeCalledWith(file, newProps);
             expect(instance.setState).toBeCalledWith({ view: 'view' });
@@ -87,7 +87,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState({ file, hasBeenToggled: true });
             instance.setState = jest.fn();
             instance.getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
-            instance.componentWillReceiveProps(newProps);
+            instance.UNSAFE_componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).not.toBeCalled();
             expect(instance.setState).not.toBeCalled();

@@ -65,32 +65,32 @@ const ShareDialog = ({
             contentLabel={intl.formatMessage(messages.shareDialogLabel)}
             appElement={appElement}
         >
-            <div className='be-modal-content'>
+            <div className="be-modal-content">
                 <label>
-                    <FormattedMessage tagName='div' {...messages.shareDialogText} />
+                    <FormattedMessage tagName="div" {...messages.shareDialogText} />
                     <span>
                         <input
-                            type='text'
+                            type="text"
                             onChange={noop}
                             ref={(input) => {
                                 textInput = input;
                             }}
                             value={url}
                         />
-                        <PrimaryButton type='button' className='be-modal-button-copy' onClick={copy} autoFocus>
+                        <PrimaryButton type="button" className="be-modal-button-copy" onClick={copy}>
                             <FormattedMessage {...messages.copy} />
                         </PrimaryButton>
                     </span>
                 </label>
             </div>
-            <div className='be-modal-btns'>
+            <div className="be-modal-btns">
                 <ShareAccessSelect
-                    className='bce-shared-access-select'
+                    className="bce-shared-access-select"
                     canSetShareAccess={canSetShareAccess}
                     onChange={onShareAccessChange}
                     item={item}
                 />
-                <Button type='button' onClick={onCancel} isLoading={isLoading}>
+                <Button type="button" onClick={onCancel} isLoading={isLoading}>
                     <FormattedMessage {...messages.close} />
                 </Button>
             </div>

@@ -99,7 +99,7 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
                 {icon}
                 {content}
             </div>
-            <div className='bcu-drag-drop-overlay' />
+            <div className="bcu-drag-drop-overlay" />
         </div>
     );
 };

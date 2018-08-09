@@ -65,7 +65,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         isAddApprovalVisible: false
     };
 
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { isOpen } = nextProps;
 
         if (isOpen !== this.props.isOpen && !isOpen) {
@@ -213,21 +213,21 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         return (
             <div className={inputContainerClassNames}>
                 {!isEditing && (
-                    <div className='bcs-avatar-container'>
+                    <div className="bcs-avatar-container">
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </div>
                 )}
-                <div className='bcs-comment-input-form-container'>
+                <div className="bcs-comment-input-form-container">
                     <Form onChange={this.onFormChangeHandler} onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
-                            className='bcs-comment-input'
+                            className="bcs-comment-input"
                             contacts={isOpen ? mentionSelectorContacts : []}
                             editorState={commentEditorState}
                             hideLabel
                             isDisabled={isDisabled}
                             isRequired={isOpen}
-                            name='commentText'
-                            label='Comment'
+                            name="commentText"
+                            label="Comment"
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}

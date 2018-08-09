@@ -88,7 +88,6 @@ const PreviewDialog = ({
                 cache={cache}
                 token={token}
                 hasHeader
-                autoFocus
                 collection={files}
                 onLoad={onLoad}
                 onClose={onCancel}

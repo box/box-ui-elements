@@ -211,7 +211,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { fileId, isLarge }: Props = this.props;
         const { file, hasBeenToggled }: State = this.state;
         const hasVisibilityChanged = nextProps.isLarge !== isLarge;
@@ -1455,7 +1455,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <aside id={this.id} className={styleClassName}>
-                    <div className='be-app-element'>
+                    <div className="be-app-element">
                         {SidebarUtils.shouldRenderSidebar(this.props, file) ? (
                             // $FlowFixMe
                             <APIContext.Provider value={this.api}>
@@ -1506,7 +1506,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 />
                             </APIContext.Provider>
                         ) : (
-                            <div className='bcs-loading'>
+                            <div className="bcs-loading">
                                 <LoadingIndicator />
                             </div>
                         )}

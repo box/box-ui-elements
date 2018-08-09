@@ -104,7 +104,7 @@ const ItemList = ({
         <KeyBinder
             columnCount={1}
             rowCount={rowCount}
-            className='bcp-item-grid'
+            className="bcp-item-grid"
             id={id}
             items={items}
             onSelect={onItemSelect}
