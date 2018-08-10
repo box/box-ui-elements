@@ -14,11 +14,11 @@ type Props = {
     isTouch: boolean,
     size?: Size,
     className: string,
-    componentRef?: Function
+    componentRef?: Function,
 };
 
 type State = {
-    size: Size
+    size: Size,
 };
 
 const CROSS_OVER_WIDTH_SMALL = 700;
@@ -32,7 +32,7 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
 
         static defaultProps = {
             className: '',
-            isTouch: HAS_TOUCH
+            isTouch: HAS_TOUCH,
         };
 
         /**
@@ -44,7 +44,7 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
         constructor(props: Props) {
             super(props);
             this.state = {
-                size: props.size || this.getSize(window.innerWidth)
+                size: props.size || this.getSize(window.innerWidth),
             };
         }
 
@@ -117,7 +117,7 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
                 {
                     [CLASS_IS_SMALL]: isSmall,
                     [CLASS_IS_MEDIUM]: isMedium,
-                    [CLASS_IS_TOUCH]: isTouch
+                    [CLASS_IS_TOUCH]: isTouch,
                 },
                 className
             );

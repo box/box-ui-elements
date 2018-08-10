@@ -24,7 +24,7 @@ type Props = {
     bannerPolicy?: Object,
     onRetentionPolicyExtendClick?: Function,
     intl: any,
-    isLoading: boolean
+    isLoading: boolean,
 };
 
 /**
@@ -53,7 +53,7 @@ const SidebarFileProperties = ({
     bannerPolicy,
     onRetentionPolicyExtendClick,
     isLoading,
-    intl
+    intl,
 }: Props) => {
     const value = getProp(file, `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
 
@@ -71,21 +71,21 @@ const SidebarFileProperties = ({
                 classificationProps={
                     hasClassification
                         ? {
-                            openModal: getClassificationModal(file, onClassificationClick),
-                            tooltip: getProp(bannerPolicy, 'body'),
-                            value,
-                            [INTERACTION_TARGET]: value
-                                ? DETAILS_TARGETS.CLASSIFICATION_EDIT
-                                : DETAILS_TARGETS.CLASSIFICATION_ADD
-                        }
+                              openModal: getClassificationModal(file, onClassificationClick),
+                              tooltip: getProp(bannerPolicy, 'body'),
+                              value,
+                              [INTERACTION_TARGET]: value
+                                  ? DETAILS_TARGETS.CLASSIFICATION_EDIT
+                                  : DETAILS_TARGETS.CLASSIFICATION_ADD,
+                          }
                         : {}
                 }
                 retentionPolicyProps={
                     hasRetentionPolicy
                         ? {
-                            ...retentionPolicy,
-                            openModal: onRetentionPolicyExtendClick
-                        }
+                              ...retentionPolicy,
+                              openModal: onRetentionPolicyExtendClick,
+                          }
                         : {}
                 }
             />

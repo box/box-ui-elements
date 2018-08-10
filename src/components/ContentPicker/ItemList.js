@@ -34,7 +34,7 @@ type Props = {
     extensionsWhitelist: string[],
     currentCollection: Collection,
     isSmall: boolean,
-    view: View
+    view: View,
 };
 
 const ItemList = ({
@@ -52,7 +52,7 @@ const ItemList = ({
     onShareAccessChange,
     onFocusChange,
     currentCollection,
-    tableRef
+    tableRef,
 }: Props) => {
     const iconCell = iconCellRenderer();
     const nameCell = nameCellRenderer(rootId, view, onItemClick);
@@ -76,18 +76,18 @@ const ItemList = ({
         const isSelectable = isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, items[index]);
         return classNames(`bcp-item-row bcp-item-row-${index}`, {
             'bcp-item-row-selected': selected && view !== VIEW_SELECTED,
-            'bcp-item-row-unselectable': type !== TYPE_FOLDER && !isSelectable // folder row should never dim
+            'bcp-item-row-unselectable': type !== TYPE_FOLDER && !isSelectable, // folder row should never dim
         });
     };
 
     const onRowClick = ({
         event,
         rowData,
-        index
+        index,
     }: {
         event: Event & { target: HTMLElement },
         rowData: BoxItem,
-        index: number
+        index: number,
     }) => {
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (
@@ -104,7 +104,7 @@ const ItemList = ({
         <KeyBinder
             columnCount={1}
             rowCount={rowCount}
-            className='bcp-item-grid'
+            className="bcp-item-grid"
             id={id}
             items={items}
             onSelect={onItemSelect}

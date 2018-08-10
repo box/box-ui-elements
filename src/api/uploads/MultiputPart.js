@@ -107,7 +107,7 @@ class MultiputPart extends BaseMultiput {
             numUploadRetriesPerformed: this.numUploadRetriesPerformed,
             numDigestRetriesPerformed: this.numDigestRetriesPerformed,
             sha256: this.sha256,
-            timing: this.timing
+            timing: this.timing,
         });
 
     /**
@@ -139,14 +139,14 @@ class MultiputPart extends BaseMultiput {
             documentHidden: document.hidden,
             digest_retries: this.numDigestRetriesPerformed,
             timing: this.timing,
-            parts_uploading: this.getNumPartsUploading()
+            parts_uploading: this.getNumPartsUploading(),
         };
 
         const headers = {
             'Content-Type': 'application/octet-stream',
             Digest: `sha-256=${this.sha256}`,
             'Content-Range': `bytes ${this.offset}-${this.rangeEnd}/${this.fileSize}`,
-            'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo)
+            'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo),
         };
 
         this.state = PART_STATE_UPLOADING;
@@ -162,7 +162,7 @@ class MultiputPart extends BaseMultiput {
             errorHandler: this.uploadErrorHandler,
             progressHandler: this.uploadProgressHandler,
             withIdleTimeout: true,
-            idleTimeoutDuration: this.config.requestTimeoutMs
+            idleTimeoutDuration: this.config.requestTimeoutMs,
         });
     };
 
@@ -226,10 +226,10 @@ class MultiputPart extends BaseMultiput {
                 uploadedBytes: this.uploadedBytes,
                 id: this.id,
                 index: this.index,
-                offset: this.offset
+                offset: this.offset,
             },
             xhr_ready_state: this.xhr.xhr.readyState,
-            xhr_status_text: this.xhr.xhr.statusText
+            xhr_status_text: this.xhr.xhr.statusText,
         };
         const eventInfoString = JSON.stringify(eventInfo);
         this.logEvent('part_failure', eventInfoString);
@@ -273,8 +273,8 @@ class MultiputPart extends BaseMultiput {
                 this.id = parts[0].part_id;
                 this.uploadSuccessHandler({
                     data: {
-                        part: parts[0]
-                    }
+                        part: parts[0],
+                    },
                 });
                 return;
             }
@@ -318,12 +318,12 @@ class MultiputPart extends BaseMultiput {
     listParts = async (partIndex: number, limit: number): Promise<Array<Object>> => {
         const params = {
             offset: partIndex,
-            limit
+            limit,
         };
 
         const endpoint = updateQueryParameters(this.sessionEndpoints.listParts, params);
         const response = await this.xhr.get({
-            url: endpoint
+            url: endpoint,
         });
 
         return response.entries;
@@ -336,5 +336,5 @@ export {
     PART_STATE_COMPUTING_DIGEST,
     PART_STATE_DIGEST_READY,
     PART_STATE_UPLOADING,
-    PART_STATE_UPLOADED
+    PART_STATE_UPLOADED,
 };

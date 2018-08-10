@@ -19,25 +19,25 @@ type Props = {
     translationEnabled?: boolean,
     onTranslate?: Function,
     translationFailed?: ?boolean,
-    getUserProfileUrl?: (string) => Promise<string>
+    getUserProfileUrl?: (string) => Promise<string>,
 };
 
 type State = {
     isLoading?: boolean,
-    isTranslation?: boolean
+    isTranslation?: boolean,
 };
 
 class CommentText extends React.Component<Props, State> {
     static defaultProps = {
-        translationEnabled: false
+        translationEnabled: false,
     };
 
     state = {
         isLoading: false,
-        isTranslation: false
+        isTranslation: false,
     };
 
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { translatedTaggedMessage, translationFailed } = nextProps;
         if (translatedTaggedMessage || translationFailed) {
             this.setState({ isLoading: false });
@@ -77,11 +77,11 @@ class CommentText extends React.Component<Props, State> {
         const commentToDisplay =
             translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
         return isLoading ? (
-            <div className='bcs-comment-text-loading'>
-                <LoadingIndicator size='small' />
+            <div className="bcs-comment-text-loading">
+                <LoadingIndicator size="small" />
             </div>
         ) : (
-            <div className='bcs-comment-text'>
+            <div className="bcs-comment-text">
                 {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>

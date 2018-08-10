@@ -16,7 +16,7 @@ type Props = {
     omitCommas?: boolean,
     relative?: boolean,
     capitalize?: boolean,
-    intl: any
+    intl: any,
 };
 
 const DEFAULT_DATE_FORMAT = { weekday: 'short', month: 'short', year: 'numeric', day: 'numeric' };
@@ -27,7 +27,7 @@ const DateField = ({
     omitCommas = false,
     intl,
     relative = true,
-    capitalize = false
+    capitalize = false,
 }: Props) => {
     const d = new Date(date);
     const isTodaysDate = isToday(d);
@@ -40,7 +40,7 @@ const DateField = ({
         }
 
         if (capitalize) {
-            return <span className='be-date-capitalize'>{Message}</span>;
+            return <span className="be-date-capitalize">{Message}</span>;
         }
 
         return Message;

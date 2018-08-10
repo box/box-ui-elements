@@ -20,7 +20,7 @@ type Props = {
     isLoading: boolean,
     parentElement: HTMLElement,
     appElement: HTMLElement,
-    intl: any
+    intl: any,
 };
 
 const DeleteConfirmationDialog = ({
@@ -31,7 +31,7 @@ const DeleteConfirmationDialog = ({
     isLoading,
     parentElement,
     appElement,
-    intl
+    intl,
 }: Props) => {
     const message = item.type === TYPE_FOLDER ? messages.deleteDialogFolderText : messages.deleteDialogFileText;
     return (
@@ -46,11 +46,11 @@ const DeleteConfirmationDialog = ({
             appElement={appElement}
         >
             <FormattedMessage {...message} values={{ name: item.name }} />
-            <div className='be-modal-btns'>
-                <PrimaryButton type='button' onClick={onDelete} isLoading={isLoading}>
+            <div className="be-modal-btns">
+                <PrimaryButton type="button" onClick={onDelete} isLoading={isLoading}>
                     <FormattedMessage {...messages.delete} />
                 </PrimaryButton>
-                <Button type='button' onClick={onCancel} isDisabled={isLoading} autoFocus>
+                <Button type="button" onClick={onCancel} isDisabled={isLoading}>
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

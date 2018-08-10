@@ -16,7 +16,7 @@ import {
     METADATA_TEMPLATE_PROPERTIES,
     METADATA_TEMPLATE_SKILLS,
     FIELD_METADATA_SKILLS,
-    CACHE_PREFIX_METADATA
+    CACHE_PREFIX_METADATA,
 } from '../constants';
 
 class Metadata extends File {
@@ -87,8 +87,8 @@ class Metadata extends File {
             instance: {
                 id: instance.$id,
                 canEdit: instance.$canEdit && canEdit,
-                data
-            }
+                data,
+            },
         };
     }
 
@@ -103,7 +103,7 @@ class Metadata extends File {
         return getProp(
             await this.xhr.get({
                 url: this.getMetadataTemplateUrl(scope),
-                id: getTypedFileId(id)
+                id: getTypedFileId(id),
             }),
             'data.entries',
             []
@@ -120,7 +120,7 @@ class Metadata extends File {
         return getProp(
             await this.xhr.get({
                 url: this.getMetadataUrl(id),
-                id: getTypedFileId(id)
+                id: getTypedFileId(id),
             }),
             'data.entries',
             []
@@ -163,14 +163,14 @@ class Metadata extends File {
 
         // The file object may already have skills in it
         let skills = {
-            data: getProp(file, FIELD_METADATA_SKILLS)
+            data: getProp(file, FIELD_METADATA_SKILLS),
         };
 
         try {
             if (!skills.data) {
                 skills = await this.xhr.get({
                     url: this.getMetadataUrl(id, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_SKILLS),
-                    id: getTypedFileId(id)
+                    id: getTypedFileId(id),
                 });
             }
 
@@ -219,7 +219,7 @@ class Metadata extends File {
                 url: this.getMetadataUrl(id, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_SKILLS),
                 headers: { [HEADER_CONTENT_TYPE]: 'application/json-patch+json' },
                 id: getTypedFileId(id),
-                data: operations
+                data: operations,
             });
             if (!this.isDestroyed()) {
                 const cards = metadata.data.cards || [];
@@ -270,7 +270,7 @@ class Metadata extends File {
                 url: this.getMetadataUrl(id, template.scope, template.templateKey),
                 headers: { [HEADER_CONTENT_TYPE]: 'application/json-patch+json' },
                 id: getTypedFileId(id),
-                data: operations
+                data: operations,
             });
             if (!this.isDestroyed()) {
                 const cache: APICache = this.getCache();
@@ -332,7 +332,7 @@ class Metadata extends File {
             const metadata = await this.xhr.post({
                 url: this.getMetadataUrl(id, template.scope, template.templateKey),
                 id: getTypedFileId(id),
-                data: {}
+                data: {},
             });
             if (!this.isDestroyed()) {
                 const cache: APICache = this.getCache();
@@ -388,7 +388,7 @@ class Metadata extends File {
         try {
             await this.xhr.delete({
                 url: this.getMetadataUrl(id, scope, templateKey),
-                id: getTypedFileId(id)
+                id: getTypedFileId(id),
             });
             if (!this.isDestroyed()) {
                 const cache: APICache = this.getCache();
@@ -453,8 +453,8 @@ class Metadata extends File {
                     id: uniqueId('metadata_template_'),
                     scope: METADATA_SCOPE_GLOBAL,
                     templateKey: METADATA_TEMPLATE_PROPERTIES,
-                    hidden: false
-                }
+                    hidden: false,
+                },
             ];
             const templates: Array<MetadataEditorTemplate> = customPropertiesTemplate
                 .concat(await this.getTemplates(id, METADATA_SCOPE_ENTERPRISE))
@@ -504,7 +504,7 @@ class Metadata extends File {
                 key,
                 displayName,
                 description,
-                options: Array.isArray(options) ? options.map((option) => ({ key: option.value })) : undefined
+                options: Array.isArray(options) ? options.map((option) => ({ key: option.value })) : undefined,
             });
         });
 
@@ -514,7 +514,7 @@ class Metadata extends File {
             templateKey,
             displayName: legacyInstance.displayName,
             fields,
-            hidden: legacyInstance.hidden
+            hidden: legacyInstance.hidden,
         };
     }
 }

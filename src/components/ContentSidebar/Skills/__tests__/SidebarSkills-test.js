@@ -13,40 +13,40 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
         const props = {
             file: {
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             },
             errors: {
                 3: true,
-                5: true
+                5: true,
             },
             cards: [
                 {
                     skill_card_title: { code: 'skills_faces' },
-                    entries: [{}]
+                    entries: [{}],
                 },
                 {
                     skill_card_title: { code: 'skills_transcript' },
-                    entries: []
+                    entries: [],
                 },
                 {
                     skill_card_title: { code: 'skills_topics' },
-                    entries: []
+                    entries: [],
                 },
                 {
                     skill_card_title: { code: 'skills_status' },
-                    entries: [{}]
+                    entries: [{}],
                 },
                 {
                     skill_card_title: { code: 'skills_error' },
-                    entries: []
+                    entries: [],
                 },
                 {
                     skill_card_title: { message: 'title' },
-                    entries: [{}]
-                }
+                    entries: [{}],
+                },
             ],
-            getViewer: jest.fn()
+            getViewer: jest.fn(),
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
@@ -57,19 +57,19 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
         const props = {
             file: {
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             },
             errors: {
-                1: true
+                1: true,
             },
             cards: [
                 {},
                 {
-                    entries: [{ title: 'bar' }]
-                }
+                    entries: [{ title: 'bar' }],
+                },
             ],
-            getViewer: jest.fn()
+            getViewer: jest.fn(),
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
@@ -80,16 +80,16 @@ describe('components/ContentSidebar/Skills/SidebarSkills', () => {
         const props = {
             file: {
                 permissions: {
-                    can_upload: false
-                }
+                    can_upload: false,
+                },
             },
             errors: {},
             cards: [
                 {
-                    entries: [{ title: 'bar' }]
-                }
+                    entries: [{ title: 'bar' }],
+                },
             ],
-            getViewer: jest.fn()
+            getViewer: jest.fn(),
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();

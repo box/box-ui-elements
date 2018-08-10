@@ -22,7 +22,7 @@ type Props = {
     onApproverSelectorInput: Function,
     onApproverSelectorRemove: Function,
     onApproverSelectorSelect: Function,
-    intl: any
+    intl: any,
 };
 
 const AddApprovalFields = ({
@@ -34,7 +34,7 @@ const AddApprovalFields = ({
     onApproverSelectorInput,
     onApproverSelectorRemove,
     onApproverSelectorSelect,
-    intl
+    intl,
 }: Props): React.Node => {
     const approverOptions = approverSelectorContacts
         // filter selected approvers
@@ -43,11 +43,11 @@ const AddApprovalFields = ({
         .map(({ id, item }) => ({
             ...item,
             text: item.name,
-            value: id
+            value: id,
         }));
 
     return (
-        <div className='bcs-comment-add-approver-fields-container'>
+        <div className="bcs-comment-add-approver-fields-container">
             <PillSelectorDropdown
                 error={approverSelectorError}
                 label={<FormattedMessage {...messages.approvalAssignees} />}
@@ -63,15 +63,15 @@ const AddApprovalFields = ({
                 ))}
             </PillSelectorDropdown>
             <DatePicker
-                className='bcs-comment-add-approver-date-input'
+                className="bcs-comment-add-approver-date-input"
                 label={<FormattedMessage {...messages.approvalDueDate} />}
                 minDate={new Date()}
-                name='approverDateInput'
+                name="approverDateInput"
                 placeholder={intl.formatMessage(messages.approvalSelectDate)}
                 onChange={onApprovalDateChange}
                 value={approvalDate}
                 inputProps={{
-                    [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER
+                    [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                 }}
             />
         </div>

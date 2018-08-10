@@ -8,7 +8,7 @@ let item;
 describe('util/sorter', () => {
     beforeEach(() => {
         item = {
-            item_collection: {}
+            item_collection: {},
         };
 
         cache = new Cache();
@@ -67,7 +67,7 @@ describe('util/sorter', () => {
             'f3',
             'w1',
             'w2',
-            'w3'
+            'w3',
         ]);
     });
 
@@ -93,7 +93,7 @@ describe('util/sorter', () => {
             'w3',
             'w2',
             'w4',
-            'w1'
+            'w1',
         ]);
     });
 
@@ -119,7 +119,7 @@ describe('util/sorter', () => {
             'w2',
             'w1',
             'w3',
-            'w4'
+            'w4',
         ]);
     });
 
@@ -166,7 +166,7 @@ describe('util/sorter', () => {
             'w1',
             'w4',
             'w2',
-            'w3'
+            'w3',
         ]);
     });
 

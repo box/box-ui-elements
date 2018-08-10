@@ -41,8 +41,8 @@ export default function(
         item_collection.order = [
             {
                 by: sortBy,
-                direction: sortDirection
-            }
+                direction: sortDirection,
+            },
         ];
     }
 

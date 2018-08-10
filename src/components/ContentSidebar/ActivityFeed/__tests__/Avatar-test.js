@@ -7,7 +7,7 @@ describe('components/ContentSidebar/ActivityFeed/Avatar', () => {
         id: 'foo',
         login: 'foo@bar.com',
         name: 'foo bar',
-        type: 'user'
+        type: 'user',
     };
     const getAvatarUrl = jest.fn().mockReturnValue(Promise.resolve('foo'));
 

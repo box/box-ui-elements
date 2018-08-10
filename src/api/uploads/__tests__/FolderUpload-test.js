@@ -7,7 +7,7 @@ jest.mock('../../../util/uploads', () => ({
     ...require.requireActual('../../../util/uploads'),
     getDataTransferItem: jest.fn((item) => item.item || item),
     getEntryFromDataTransferItem: jest.fn((item) => item),
-    getDataTransferItemAPIOptions: jest.fn((item) => item.options || {})
+    getDataTransferItemAPIOptions: jest.fn((item) => item.options || {}),
 }));
 
 describe('api/uploads/FolderUpload', () => {
@@ -34,7 +34,7 @@ describe('api/uploads/FolderUpload', () => {
                 { file: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} },
                 { file: { name: 'f2', webkitRelativePath: 'a/f2' }, options: {} },
                 { file: { name: 'f3', webkitRelativePath: 'a/b/f3' }, options: {} },
-                { file: { name: 'f4', webkitRelativePath: 'a/c/f4' }, options: {} }
+                { file: { name: 'f4', webkitRelativePath: 'a/c/f4' }, options: {} },
             ]);
 
             // /
@@ -71,7 +71,7 @@ describe('api/uploads/FolderUpload', () => {
                 { name: 'f1', webkitRelativePath: 'a/f1' },
                 { name: 'f2', webkitRelativePath: 'a/f2' },
                 { name: 'f3', webkitRelativePath: 'a/b/f3' },
-                { name: 'f4', webkitRelativePath: 'a/c/f4' }
+                { name: 'f4', webkitRelativePath: 'a/c/f4' },
             ]);
 
             // /
@@ -108,7 +108,7 @@ describe('api/uploads/FolderUpload', () => {
             folderUploadInstance.createFolderUploadNode = createFolderUploadNodeMock;
 
             await folderUploadInstance.buildFolderTreeFromDataTransferItem([
-                { item: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} }
+                { item: { name: 'f1', webkitRelativePath: 'a/f1' }, options: {} },
             ]);
 
             expect(createFolderUploadNodeMock).toHaveBeenCalledTimes(1);

@@ -16,16 +16,16 @@ describe('components/ContentUploader/UploadState', () => {
                         isTouch: false,
                         view: VIEW_ERROR,
                         onSelect: noop,
-                        isFolderUploadEnabled: false
+                        isFolderUploadEnabled: false,
                     },
-                    ...props
+                    ...props,
                 }}
             />
         );
 
     test('should render VIEW_ERROR correctly', () => {
         const wrapper = getWrapper({
-            view: VIEW_ERROR
+            view: VIEW_ERROR,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -33,7 +33,7 @@ describe('components/ContentUploader/UploadState', () => {
 
     test('should render VIEW_UPLOAD_EMPTY correctly', () => {
         const wrapper = getWrapper({
-            view: VIEW_UPLOAD_EMPTY
+            view: VIEW_UPLOAD_EMPTY,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -42,7 +42,7 @@ describe('components/ContentUploader/UploadState', () => {
     test('should render VIEW_UPLOAD_EMPTY correctly when folder upload is enabled', () => {
         const wrapper = getWrapper({
             view: VIEW_UPLOAD_EMPTY,
-            isFolderUploadEnabled: true
+            isFolderUploadEnabled: true,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -50,7 +50,7 @@ describe('components/ContentUploader/UploadState', () => {
 
     test('should render VIEW_UPLOAD_IN_PROGRESS correctly', () => {
         const wrapper = getWrapper({
-            view: VIEW_UPLOAD_IN_PROGRESS
+            view: VIEW_UPLOAD_IN_PROGRESS,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -58,7 +58,7 @@ describe('components/ContentUploader/UploadState', () => {
 
     test('should render VIEW_UPLOAD_SUCCESS correctly', () => {
         const wrapper = getWrapper({
-            view: VIEW_UPLOAD_SUCCESS
+            view: VIEW_UPLOAD_SUCCESS,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -67,7 +67,7 @@ describe('components/ContentUploader/UploadState', () => {
     test('should render VIEW_UPLOAD_SUCCESS correctly  when folder upload is enabled', () => {
         const wrapper = getWrapper({
             view: VIEW_UPLOAD_SUCCESS,
-            isFolderUploadEnabled: true
+            isFolderUploadEnabled: true,
         });
 
         expect(wrapper).toMatchSnapshot();

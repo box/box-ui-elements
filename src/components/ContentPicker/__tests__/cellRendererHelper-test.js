@@ -9,7 +9,7 @@ describe('picker/components/cellRendererHelper/isRowSelectable()', () => {
         expect(
             isRowSelectable('folder', [], false, {
                 type: 'file',
-                extension: 'doc'
+                extension: 'doc',
             })
         ).toBeFalsy();
     });
@@ -17,7 +17,7 @@ describe('picker/components/cellRendererHelper/isRowSelectable()', () => {
         expect(
             isRowSelectable('file', [], false, {
                 type: 'file',
-                extension: 'doc'
+                extension: 'doc',
             })
         ).toBeTruthy();
     });
@@ -28,7 +28,7 @@ describe('picker/components/cellRendererHelper/isRowSelectable()', () => {
         expect(
             isRowSelectable('file', ['doc'], false, {
                 type: 'file',
-                extension: 'doc'
+                extension: 'doc',
             })
         ).toBeTruthy();
     });
@@ -36,7 +36,7 @@ describe('picker/components/cellRendererHelper/isRowSelectable()', () => {
         expect(
             isRowSelectable('file', ['ppt'], false, {
                 type: 'file',
-                extension: 'doc'
+                extension: 'doc',
             })
         ).toBeFalsy();
     });

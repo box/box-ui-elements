@@ -10,7 +10,7 @@ import { IntlProvider } from 'react-intl';
 type Props = {
     language?: string,
     messages?: StringMap,
-    children?: any
+    children?: any,
 };
 
 const Internationalize = ({ language, messages, children }: Props) => {

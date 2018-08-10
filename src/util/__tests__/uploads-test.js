@@ -13,7 +13,7 @@ import {
     getDataTransferItemAPIOptions,
     DEFAULT_API_OPTIONS,
     getFileId,
-    getDataTransferItemId
+    getDataTransferItemId,
 } from '../uploads';
 
 const mockFile = { name: 'hi' };
@@ -21,7 +21,7 @@ const entry = {
     name: 'hi',
     file: (fn) => {
         fn(mockFile);
-    }
+    },
 };
 const mockItem = { kind: 'file', webkitGetAsEntry: () => entry };
 const options = { options: true };
@@ -40,32 +40,32 @@ describe('util/uploads', () => {
             {
                 'file with valid lastModified': [
                     {
-                        lastModified: 1483326245678
+                        lastModified: 1483326245678,
                     },
-                    '2017-01-02T03:04:05Z'
+                    '2017-01-02T03:04:05Z',
                 ],
                 'file with non-numeric lastModified (string)': [
                     {
-                        lastModified: 'not a number'
+                        lastModified: 'not a number',
                     },
-                    null
+                    null,
                 ],
                 // I don't know of a browser that has lastModified as a Date object, but I just added
                 // these two test cases to confirm that our code does something reasonable (i.e. return
                 // a string or null, but not crash).
                 'file with non-numeric lastModified (valid Date)': [
                     {
-                        lastModified: new Date('2017-01-02T03:04:05.678Z')
+                        lastModified: new Date('2017-01-02T03:04:05.678Z'),
                     },
-                    '2017-01-02T03:04:05Z'
+                    '2017-01-02T03:04:05Z',
                 ],
                 'file with non-numeric lastModified (invalid Date)': [
                     {
-                        lastModified: new Date('not valid')
+                        lastModified: new Date('not valid'),
                     },
-                    null
+                    null,
                 ],
-                'file no lastModified': [{}, null]
+                'file no lastModified': [{}, null],
             },
             (file, expectedResult) => {
                 test('should return the properly formatted date when possible and return null otherwise', () => {
@@ -85,7 +85,7 @@ describe('util/uploads', () => {
                 ['"a"', 'a'],
                 ['{}', {}],
                 ['[1,2,3]', [1, 2, 3]],
-                ['{"a": 1}', { a: 1 }]
+                ['{"a": 1}', { a: 1 }],
             ],
             (str, expectedResult) => {
                 test('should return correct results', () => {
@@ -100,7 +100,7 @@ describe('util/uploads', () => {
             expect(
                 doesFileContainAPIOptions({
                     file: mockFile,
-                    options
+                    options,
                 })
             ).toBeTruthy();
         });
@@ -115,7 +115,7 @@ describe('util/uploads', () => {
             expect(
                 doesDataTransferItemContainAPIOptions({
                     item: mockItem,
-                    options
+                    options,
                 })
             ).toBeTruthy();
         });
@@ -130,7 +130,7 @@ describe('util/uploads', () => {
             expect(
                 getFile({
                     file: mockFile,
-                    options
+                    options,
                 })
             ).toEqual(mockFile);
         });
@@ -145,7 +145,7 @@ describe('util/uploads', () => {
             expect(
                 getDataTransferItem({
                     item: mockItem,
-                    options
+                    options,
                 })
             ).toEqual(mockItem);
         });
@@ -160,7 +160,7 @@ describe('util/uploads', () => {
             expect(
                 getFileAPIOptions({
                     file: mockFile,
-                    options
+                    options,
                 })
             ).toEqual(options);
         });
@@ -175,7 +175,7 @@ describe('util/uploads', () => {
             expect(
                 getDataTransferItemAPIOptions({
                     item: mockItem,
-                    options
+                    options,
                 })
             ).toEqual(options);
         });
@@ -190,12 +190,12 @@ describe('util/uploads', () => {
         test('should return file of UploadFileWithAPIOptions type when itemData is UploadDataTransferItemWithAPIOptions type', async () => {
             const itemData = {
                 item: mockItem,
-                options
+                options,
             };
 
             expect(await getFileFromDataTransferItem(itemData)).toEqual({
                 file: mockFile,
-                options
+                options,
             });
         });
     });
@@ -203,13 +203,13 @@ describe('util/uploads', () => {
     describe('isDataTransferItemAFolder()', () => {
         test('should return true if item is a folder', () => {
             const folderEntry = {
-                isDirectory: true
+                isDirectory: true,
             };
             const folderItem = { kind: '', webkitGetAsEntry: () => folderEntry };
 
             const itemData = {
                 item: folderItem,
-                options
+                options,
             };
 
             expect(isDataTransferItemAFolder(itemData)).toBeTruthy();
@@ -217,13 +217,13 @@ describe('util/uploads', () => {
 
         test('should return false if item is not a folder', () => {
             const fileEntry = {
-                isDirectory: false
+                isDirectory: false,
             };
             const fileItem = { kind: '', webkitGetAsEntry: () => fileEntry };
 
             const itemData = {
                 item: fileItem,
-                options
+                options,
             };
 
             expect(isDataTransferItemAFolder(itemData)).toBeFalsy();
@@ -239,7 +239,7 @@ describe('util/uploads', () => {
     describe('getFileId()', () => {
         test('should return file id correctly when file does not contain API options', () => {
             const file = {
-                name: 'hi'
+                name: 'hi',
             };
 
             expect(getFileId(file)).toBe('hi');
@@ -248,12 +248,12 @@ describe('util/uploads', () => {
         test('should return file id correctly when file does contain API options', () => {
             const file = {
                 file: {
-                    name: 'hi'
+                    name: 'hi',
                 },
                 options: {
                     folderId: '0',
-                    uploadInitTimestamp: 123123
-                }
+                    uploadInitTimestamp: 123123,
+                },
             };
 
             expect(getFileId(file)).toBe('hi_0_123123');
@@ -263,7 +263,7 @@ describe('util/uploads', () => {
     describe('getFileId()', () => {
         test('should return file id correctly when file does not contain API options', () => {
             const file = {
-                name: 'hi'
+                name: 'hi',
             };
 
             expect(getFileId(file)).toBe('hi');
@@ -272,12 +272,12 @@ describe('util/uploads', () => {
         test('should return file id correctly when file does contain API options', () => {
             const file = {
                 file: {
-                    name: 'hi'
+                    name: 'hi',
                 },
                 options: {
                     folderId: '0',
-                    uploadInitTimestamp: 123123
-                }
+                    uploadInitTimestamp: 123123,
+                },
             };
 
             expect(getFileId(file)).toBe('hi_0_123123');
@@ -298,8 +298,8 @@ describe('util/uploads', () => {
                 item: mockItem,
                 options: {
                     folderId: '0',
-                    uploadInitTimestamp: 123123
-                }
+                    uploadInitTimestamp: 123123,
+                },
             };
 
             expect(getDataTransferItemId(item, rootFolderId)).toBe('hi_0_123123');

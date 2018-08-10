@@ -11,13 +11,13 @@ describe('components/ContentSidebar/Skills/SkillsSidebar', () => {
         const getSkills = jest.fn();
         const api = {
             getMetadataAPI: jest.fn().mockReturnValueOnce({
-                getSkills
-            })
+                getSkills,
+            }),
         };
         const wrapper = getWrapper({
             file: {},
             getPreviewer: jest.fn(),
-            api
+            api,
         });
         wrapper.setState({ cards: [] });
         expect(wrapper.find(SidebarSkills)).toHaveLength(1);
@@ -31,13 +31,13 @@ describe('components/ContentSidebar/Skills/SkillsSidebar', () => {
         const getSkills = jest.fn();
         const api = {
             getMetadataAPI: jest.fn().mockReturnValueOnce({
-                getSkills
-            })
+                getSkills,
+            }),
         };
         const wrapper = getWrapper({
             file: {},
             getPreviewer: jest.fn(),
-            api
+            api,
         });
         expect(wrapper.find(LoadingIndicator)).toHaveLength(1);
         expect(wrapper.find(SidebarSkills)).toHaveLength(0);

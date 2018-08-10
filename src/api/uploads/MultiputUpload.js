@@ -70,7 +70,7 @@ class MultiputUpload extends BaseMultiput {
                 listParts: null,
                 commit: null,
                 abort: null,
-                logEvent: null
+                logEvent: null,
             },
             config
         );
@@ -110,7 +110,7 @@ class MultiputUpload extends BaseMultiput {
         progressCallback,
         successCallback,
         overwrite = true,
-        fileId
+        fileId,
     }: {
         file: File,
         folderId: string,
@@ -118,7 +118,7 @@ class MultiputUpload extends BaseMultiput {
         progressCallback?: Function,
         successCallback?: Function,
         overwrite?: boolean,
-        fileId: ?string
+        fileId: ?string,
     }): void {
         this.file = file;
         this.fileName = this.file.name;
@@ -177,7 +177,7 @@ class MultiputUpload extends BaseMultiput {
         // Set up post body
         const postData: StringAnyMap = {
             file_size: this.file.size,
-            file_name: this.fileName
+            file_name: this.fileName,
         };
 
         if (this.fileId) {
@@ -285,7 +285,7 @@ class MultiputUpload extends BaseMultiput {
             listParts: session_endpoints.list_parts,
             commit: session_endpoints.commit,
             abort: session_endpoints.abort,
-            logEvent: session_endpoints.log_event
+            logEvent: session_endpoints.log_event,
         };
 
         this.populateParts();
@@ -341,7 +341,7 @@ class MultiputUpload extends BaseMultiput {
 
         if (this.sessionEndpoints.abort) {
             this.xhr.delete({
-                url: this.sessionEndpoints.abort
+                url: this.sessionEndpoints.abort,
             });
         }
     }
@@ -388,7 +388,7 @@ class MultiputUpload extends BaseMultiput {
         this.totalUploadedBytes += newUploadedBytes - prevUploadedBytes;
         this.progressCallback({
             loaded: this.totalUploadedBytes,
-            total: this.file.size
+            total: this.file.size,
         });
     };
 
@@ -471,7 +471,7 @@ class MultiputUpload extends BaseMultiput {
         try {
             const {
                 buffer,
-                readCompleteTimestamp
+                readCompleteTimestamp,
             }: { buffer: ArrayBuffer, readCompleteTimestamp: number } = await this.readFile(reader, blob);
             const sha256ArrayBuffer = await digest('SHA-256', buffer);
             const sha256 = btoa(
@@ -489,7 +489,7 @@ class MultiputUpload extends BaseMultiput {
             part.timing = {
                 partDigestTime: digestCompleteTimestamp - startTimestamp,
                 readTime: readCompleteTimestamp - startTimestamp,
-                subtleCryptoTime: digestCompleteTimestamp - readCompleteTimestamp
+                subtleCryptoTime: digestCompleteTimestamp - readCompleteTimestamp,
             };
 
             this.processNextParts();
@@ -606,7 +606,7 @@ class MultiputUpload extends BaseMultiput {
             totalPartReadTime: 0,
             totalPartDigestTime: 0,
             totalFileDigestTime: 0,
-            totalPartUploadTime: 0
+            totalPartUploadTime: 0,
         };
 
         const data = {
@@ -619,7 +619,7 @@ class MultiputUpload extends BaseMultiput {
                     return part.getPart();
                 })
                 .sort((part1, part2) => part1.offset - part2.offset),
-            attributes: {}
+            attributes: {},
         };
 
         const fileLastModified = getFileLastModifiedAsISONoMSIfPossible(this.file);
@@ -631,14 +631,14 @@ class MultiputUpload extends BaseMultiput {
             avg_part_read_time: Math.round(stats.totalPartReadTime / this.parts.length),
             avg_part_digest_time: Math.round(stats.totalPartDigestTime / this.parts.length),
             avg_file_digest_time: Math.round(stats.totalFileDigestTime / this.parts.length),
-            avg_part_upload_time: Math.round(stats.totalPartUploadTime / this.parts.length)
+            avg_part_upload_time: Math.round(stats.totalPartUploadTime / this.parts.length),
         };
 
         // To make flow stop complaining about this.fileSha1 could potentially be undefined/null
         const fileSha1: string = (this.fileSha1: any);
         const headers = {
             Digest: `sha=${fileSha1}`,
-            'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo)
+            'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo),
         };
 
         this.xhr
@@ -866,7 +866,7 @@ class MultiputUpload extends BaseMultiput {
                     oldSize: this.initialFileSize,
                     newSize: currentFileSize,
                     oldLastModified: this.initialFileLastModified,
-                    newLastModified: currentFileLastModified
+                    newLastModified: currentFileLastModified,
                 })
             );
             return true;

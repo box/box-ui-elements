@@ -52,7 +52,7 @@ describe('api/Metadata', () => {
                         $id: 'id',
                         $foo: 'bar',
                         foo: 'bar',
-                        $canEdit: true
+                        $canEdit: true,
                     },
                     'template',
                     false
@@ -63,9 +63,9 @@ describe('api/Metadata', () => {
                     id: 'id',
                     canEdit: false,
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             });
         });
 
@@ -76,7 +76,7 @@ describe('api/Metadata', () => {
                         $id: 'id',
                         $foo: 'bar',
                         foo: 'bar',
-                        $canEdit: true
+                        $canEdit: true,
                     },
                     'template',
                     true
@@ -87,9 +87,9 @@ describe('api/Metadata', () => {
                     id: 'id',
                     canEdit: true,
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             });
         });
     });
@@ -103,16 +103,16 @@ describe('api/Metadata', () => {
                         { id: 1, hidden: false },
                         { id: 2, hidden: true },
                         { id: 3, hidden: false },
-                        { id: 4, hidden: false }
-                    ]
-                }
+                        { id: 4, hidden: false },
+                    ],
+                },
             });
             const templates = await metadata.getTemplates('id', 'scope');
             expect(templates).toEqual([{ id: 1, hidden: false }, { id: 3, hidden: false }, { id: 4, hidden: false }]);
             expect(metadata.getMetadataTemplateUrl).toHaveBeenCalledWith('scope');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
-                id: 'file_id'
+                id: 'file_id',
             });
         });
     });
@@ -122,15 +122,15 @@ describe('api/Metadata', () => {
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('instance_url');
             metadata.xhr.get = jest.fn().mockReturnValueOnce({
                 data: {
-                    entries: [{ id: 1 }, { id: 2 }]
-                }
+                    entries: [{ id: 1 }, { id: 2 }],
+                },
             });
             const templates = await metadata.getInstances('id');
             expect(templates).toEqual([{ id: 1 }, { id: 2 }]);
             expect(metadata.getMetadataUrl).toHaveBeenCalledWith('id');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'instance_url',
-                id: 'file_id'
+                id: 'file_id',
             });
         });
     });
@@ -151,15 +151,15 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
+                    can_upload: true,
                 },
                 metadata: {
                     global: {
                         boxSkillsCards: {
-                            cards: []
-                        }
-                    }
-                }
+                            cards: [],
+                        },
+                    },
+                },
             };
             const cache = new Cache();
             cache.set('cache_id_skills', ['card1', 'card2']);
@@ -190,15 +190,15 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
+                    can_upload: true,
                 },
                 metadata: {
                     global: {
                         boxSkillsCards: {
-                            cards: ['card3', 'card4']
-                        }
-                    }
-                }
+                            cards: ['card3', 'card4'],
+                        },
+                    },
+                },
             };
             const cache = new Cache();
             cache.set('cache_id_skills', ['card1', 'card2']);
@@ -230,8 +230,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             cache.set('cache_id_skills', ['card1', 'card2']);
@@ -251,7 +251,7 @@ describe('api/Metadata', () => {
             expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'global', 'boxSkillsCards');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'url',
-                id: 'file_id'
+                id: 'file_id',
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
@@ -266,8 +266,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             cache.set('cache_id_skills', ['card1', 'card2']);
@@ -287,7 +287,7 @@ describe('api/Metadata', () => {
             expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'global', 'boxSkillsCards');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'url',
-                id: 'file_id'
+                id: 'file_id',
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getSkillsCacheKey).toHaveBeenCalledWith(file.id);
@@ -301,8 +301,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             cache.set('cache_id_skills', ['card1', 'card2']);
@@ -323,7 +323,7 @@ describe('api/Metadata', () => {
             expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'global', 'boxSkillsCards');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'url',
-                id: 'file_id'
+                id: 'file_id',
             });
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
             expect(metadata.getSkillsCacheKey).toHaveBeenCalledWith(file.id);
@@ -367,8 +367,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cacheSet = jest.fn();
@@ -392,7 +392,7 @@ describe('api/Metadata', () => {
                 url: 'url',
                 headers: { 'Content-Type': 'application/json-patch+json' },
                 id: 'file_id',
-                data: ops
+                data: ops,
             });
             expect(cacheSet).toHaveBeenCalledWith('cache_id_skills', 'cards');
             expect(metadata.isDestroyed).toHaveBeenCalled();
@@ -401,7 +401,7 @@ describe('api/Metadata', () => {
 
             expect(metadata.getSkillsCacheKey).toHaveBeenCalledWith(file.id);
             expect(metadata.merge).toHaveBeenCalledWith('cache_id', 'metadata.global.boxSkillsCards', {
-                cards: 'cards'
+                cards: 'cards',
             });
             expect(metadata.successHandler).toHaveBeenCalledWith('cards');
             expect(metadata.errorHandler).not.toHaveBeenCalled();
@@ -412,8 +412,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cacheSet = jest.fn();
@@ -437,7 +437,7 @@ describe('api/Metadata', () => {
                 url: 'url',
                 headers: { 'Content-Type': 'application/json-patch+json' },
                 id: 'file_id',
-                data: ops
+                data: ops,
             });
             expect(cacheSet).not.toHaveBeenCalled();
             expect(metadata.isDestroyed).toHaveBeenCalled();
@@ -455,8 +455,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cacheSet = jest.fn();
@@ -481,7 +481,7 @@ describe('api/Metadata', () => {
                 url: 'url',
                 headers: { 'Content-Type': 'application/json-patch+json' },
                 id: 'file_id',
-                data: ops
+                data: ops,
             });
             expect(cacheSet).not.toHaveBeenCalled();
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
@@ -544,8 +544,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cache = new Cache();
@@ -555,22 +555,22 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             const updatedMetadata = {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'baz'
-                    }
-                }
+                        foo: 'baz',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -593,7 +593,7 @@ describe('api/Metadata', () => {
                 url: 'url',
                 headers: { 'Content-Type': 'application/json-patch+json' },
                 id: 'file_id',
-                data: ops
+                data: ops,
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.createEditor).toHaveBeenCalledWith('foo', template, true);
@@ -602,7 +602,7 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).toHaveBeenCalled();
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: [updatedMetadata]
+                editors: [updatedMetadata],
             });
         });
         test('should make request but not update cache or call success handler when destroyed', async () => {
@@ -611,8 +611,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cache = new Cache();
@@ -622,22 +622,22 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             const updatedMetadata = {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'baz'
-                    }
-                }
+                        foo: 'baz',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -659,7 +659,7 @@ describe('api/Metadata', () => {
                 url: 'url',
                 headers: { 'Content-Type': 'application/json-patch+json' },
                 id: 'file_id',
-                data: ops
+                data: ops,
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.createEditor).not.toHaveBeenCalled();
@@ -668,7 +668,7 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
         });
         test('should make request and call error handler for error', async () => {
@@ -677,8 +677,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const ops = [{ op: 'add' }, { op: 'test' }];
             const cache = new Cache();
@@ -689,22 +689,22 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             const updatedMetadata = {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'baz'
-                    }
-                }
+                        foo: 'baz',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -726,7 +726,7 @@ describe('api/Metadata', () => {
                 url: 'url',
                 headers: { 'Content-Type': 'application/json-patch+json' },
                 id: 'file_id',
-                data: ops
+                data: ops,
             });
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
             expect(metadata.createEditor).not.toHaveBeenCalled();
@@ -734,7 +734,7 @@ describe('api/Metadata', () => {
             expect(metadata.getMetadataCacheKey).not.toHaveBeenCalled();
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
             expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
         });
@@ -816,8 +816,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             const template = { scope: 'scope', templateKey: 'templateKey' };
@@ -826,22 +826,22 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             const updatedMetadata = {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'baz'
-                    }
-                }
+                        foo: 'baz',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -863,7 +863,7 @@ describe('api/Metadata', () => {
             expect(metadata.xhr.post).toHaveBeenCalledWith({
                 url: 'url',
                 id: 'file_id',
-                data: {}
+                data: {},
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.createEditor).toHaveBeenCalledWith('foo', template, true);
@@ -872,7 +872,7 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).toHaveBeenCalled();
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: [priorMetadata, updatedMetadata]
+                editors: [priorMetadata, updatedMetadata],
             });
         });
         test('should make request but not update cache or call success handler when destroyed', async () => {
@@ -881,8 +881,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             const template = { scope: 'scope', templateKey: 'templateKey' };
@@ -891,22 +891,22 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             const updatedMetadata = {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'baz'
-                    }
-                }
+                        foo: 'baz',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -928,7 +928,7 @@ describe('api/Metadata', () => {
             expect(metadata.xhr.post).toHaveBeenCalledWith({
                 url: 'url',
                 id: 'file_id',
-                data: {}
+                data: {},
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.createEditor).not.toHaveBeenCalled();
@@ -937,7 +937,7 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
         });
         test('should make request and call error handler for error', async () => {
@@ -946,8 +946,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             const template = { scope: 'scope', templateKey: 'templateKey' };
@@ -956,22 +956,22 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             const updatedMetadata = {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'baz'
-                    }
-                }
+                        foo: 'baz',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -993,7 +993,7 @@ describe('api/Metadata', () => {
             expect(metadata.xhr.post).toHaveBeenCalledWith({
                 url: 'url',
                 id: 'file_id',
-                data: {}
+                data: {},
             });
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
             expect(metadata.createEditor).not.toHaveBeenCalled();
@@ -1001,7 +1001,7 @@ describe('api/Metadata', () => {
             expect(metadata.getMetadataCacheKey).not.toHaveBeenCalled();
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
             expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
         });
@@ -1057,7 +1057,7 @@ describe('api/Metadata', () => {
                 { id: 'id', permissions: { can_upload: true }, is_externally_owned: true },
                 {
                     scope: 'global',
-                    templateKey: 'template'
+                    templateKey: 'template',
                 },
                 successCallback,
                 errorCallback
@@ -1074,7 +1074,7 @@ describe('api/Metadata', () => {
                 { id: 'id', permissions: { can_upload: true }, is_externally_owned: true },
                 {
                     scope: 'scope',
-                    templateKey: 'properties'
+                    templateKey: 'properties',
                 },
                 successCallback,
                 errorCallback
@@ -1089,8 +1089,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             const template = { scope: 'scope', templateKey: 'templateKey' };
@@ -1100,13 +1100,13 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -1126,7 +1126,7 @@ describe('api/Metadata', () => {
             expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'scope', 'templateKey');
             expect(metadata.xhr.delete).toHaveBeenCalledWith({
                 url: 'url',
-                id: 'file_id'
+                id: 'file_id',
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
@@ -1134,7 +1134,7 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).toHaveBeenCalled();
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: []
+                editors: [],
             });
         });
         test('should make request but not update cache or call success handler when destroyed', async () => {
@@ -1143,8 +1143,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             const template = { scope: 'scope', templateKey: 'templateKey' };
@@ -1154,13 +1154,13 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -1180,7 +1180,7 @@ describe('api/Metadata', () => {
             expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'scope', 'templateKey');
             expect(metadata.xhr.delete).toHaveBeenCalledWith({
                 url: 'url',
-                id: 'file_id'
+                id: 'file_id',
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).not.toHaveBeenCalled();
@@ -1188,7 +1188,7 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
         });
         test('should make request and call error handler for error', async () => {
@@ -1197,8 +1197,8 @@ describe('api/Metadata', () => {
             const file = {
                 id: 'id',
                 permissions: {
-                    can_upload: true
-                }
+                    can_upload: true,
+                },
             };
             const cache = new Cache();
             const template = { scope: 'scope', templateKey: 'templateKey' };
@@ -1208,13 +1208,13 @@ describe('api/Metadata', () => {
                 instance: {
                     id: 'instance_id',
                     data: {
-                        foo: 'bar'
-                    }
-                }
+                        foo: 'bar',
+                    },
+                },
             };
 
             cache.set('metadata_id', {
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -1234,14 +1234,14 @@ describe('api/Metadata', () => {
             expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'scope', 'templateKey');
             expect(metadata.xhr.delete).toHaveBeenCalledWith({
                 url: 'url',
-                id: 'file_id'
+                id: 'file_id',
             });
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
             expect(metadata.getCache).not.toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).not.toHaveBeenCalled();
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
-                editors: [priorMetadata]
+                editors: [priorMetadata],
             });
             expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
         });

@@ -57,12 +57,12 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        entries: []
-                                    }
-                                ]
-                            }
-                        }
-                    }
+                                        entries: [],
+                                    },
+                                ],
+                            },
+                        },
+                    },
                 })
             ).toBeTruthy();
         });
@@ -75,12 +75,12 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        status: 'error'
-                                    }
-                                ]
-                            }
-                        }
-                    }
+                                        status: 'error',
+                                    },
+                                ],
+                            },
+                        },
+                    },
                 })
             ).toBeTruthy();
         });
@@ -93,12 +93,12 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        entries: [{}]
-                                    }
-                                ]
-                            }
-                        }
-                    }
+                                        entries: [{}],
+                                    },
+                                ],
+                            },
+                        },
+                    },
                 })
             ).toBeTruthy();
         });
@@ -111,15 +111,15 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        entries: []
+                                        entries: [],
                                     },
                                     {
-                                        entries: [{}]
-                                    }
-                                ]
-                            }
-                        }
-                    }
+                                        entries: [{}],
+                                    },
+                                ],
+                            },
+                        },
+                    },
                 })
             ).toBeTruthy();
         });
@@ -132,15 +132,15 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        entries: []
+                                        entries: [],
                                     },
                                     {
-                                        error: {}
-                                    }
-                                ]
-                            }
-                        }
-                    }
+                                        error: {},
+                                    },
+                                ],
+                            },
+                        },
+                    },
                 })
             ).toBeTruthy();
         });

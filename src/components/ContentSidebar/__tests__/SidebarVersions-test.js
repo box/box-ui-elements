@@ -10,8 +10,8 @@ describe('components/ContentSidebar/SidebarVersions', () => {
         const props = {
             file: {
                 extension: 'foo',
-                version_number: 2
-            }
+                version_number: 2,
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -23,8 +23,8 @@ describe('components/ContentSidebar/SidebarVersions', () => {
         const props = {
             file: {
                 extension: 'foo',
-                version_number: 1
-            }
+                version_number: 1,
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -36,8 +36,8 @@ describe('components/ContentSidebar/SidebarVersions', () => {
         const props = {
             file: {
                 extension: 'foo',
-                version: null
-            }
+                version: null,
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -48,8 +48,8 @@ describe('components/ContentSidebar/SidebarVersions', () => {
     test('should not render the versions when version_number is undefined', () => {
         const props = {
             file: {
-                extension: 'foo'
-            }
+                extension: 'foo',
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -61,8 +61,8 @@ describe('components/ContentSidebar/SidebarVersions', () => {
         const props = {
             file: {
                 version_number: 1,
-                extension: 'boxnote'
-            }
+                extension: 'boxnote',
+            },
         };
         const wrapper = getWrapper(props);
 

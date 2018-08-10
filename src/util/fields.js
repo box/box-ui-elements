@@ -43,7 +43,7 @@ import {
     FIELD_TRASHED_AT,
     FIELD_ASSIGNED_TO,
     FIELD_RESOLUTION_STATE,
-    FIELD_RESTORED_FROM
+    FIELD_RESTORED_FROM,
 } from '../constants';
 
 // Optional Box file fields
@@ -66,7 +66,7 @@ const BASE_FIELDS_TO_FETCH = [
     FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
     FIELD_HAS_COLLABORATIONS,
     FIELD_IS_EXTERNALLY_OWNED,
-    FIELD_ITEM_COLLECTION
+    FIELD_ITEM_COLLECTION,
 ];
 
 // Additional fields needed for the sidebar
@@ -78,7 +78,7 @@ const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_ITEM_EXPIRATION,
     FIELD_METADATA_CLASSIFICATION,
     FIELD_VERSION_NUMBER,
-    FIELD_RESTORED_FROM
+    FIELD_RESTORED_FROM,
 ];
 
 // Additional fields needed for preview
@@ -88,7 +88,7 @@ const PREVIEW_FIELDS_TO_FETCH = [
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_FILE_VERSION,
-    FIELD_IS_DOWNLOAD_AVAILABLE
+    FIELD_IS_DOWNLOAD_AVAILABLE,
 ];
 
 // Fields needed to get tasks data
@@ -98,7 +98,7 @@ export const TASKS_FIELDS_TO_FETCH = [
     FIELD_CREATED_AT,
     FIELD_CREATED_BY,
     FIELD_DUE_AT,
-    FIELD_MESSAGE
+    FIELD_MESSAGE,
 ];
 
 // Fields needed to get tasks data
@@ -107,7 +107,7 @@ export const VERSIONS_FIELDS_TO_FETCH = [
     FIELD_CREATED_AT,
     FIELD_MODIFIED_AT,
     FIELD_MODIFIED_BY,
-    FIELD_VERSION_NUMBER
+    FIELD_VERSION_NUMBER,
 ];
 
 // Fields needed to get task assignments data
@@ -120,7 +120,7 @@ export const COMMENTS_FIELDS_TO_FETCH = [
     FIELD_CREATED_AT,
     FIELD_CREATED_BY,
     FIELD_MODIFIED_AT,
-    FIELD_PERMISSIONS
+    FIELD_PERMISSIONS,
 ];
 
 /**

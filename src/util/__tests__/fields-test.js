@@ -29,7 +29,7 @@ import {
     FIELD_VERSION_NUMBER,
     FIELD_METADATA_SKILLS,
     FIELD_ITEM_EXPIRATION,
-    FIELD_METADATA_CLASSIFICATION
+    FIELD_METADATA_CLASSIFICATION,
 } from '../../constants';
 
 describe('util/fields/getFieldsAsString()', () => {
@@ -52,7 +52,7 @@ describe('util/fields/getFieldsAsString()', () => {
                     FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
                     FIELD_HAS_COLLABORATIONS,
                     FIELD_IS_EXTERNALLY_OWNED,
-                    FIELD_ITEM_COLLECTION
+                    FIELD_ITEM_COLLECTION,
                 ].join(',')
             );
         });
@@ -80,7 +80,7 @@ describe('util/fields/getFieldsAsString()', () => {
                     FIELD_WATERMARK_INFO,
                     FIELD_AUTHENTICATED_DOWNLOAD_URL,
                     FIELD_FILE_VERSION,
-                    FIELD_IS_DOWNLOAD_AVAILABLE
+                    FIELD_IS_DOWNLOAD_AVAILABLE,
                 ].join(',')
             );
         });
@@ -116,7 +116,7 @@ describe('util/fields/getFieldsAsString()', () => {
                     FIELD_WATERMARK_INFO,
                     FIELD_AUTHENTICATED_DOWNLOAD_URL,
                     FIELD_FILE_VERSION,
-                    FIELD_IS_DOWNLOAD_AVAILABLE
+                    FIELD_IS_DOWNLOAD_AVAILABLE,
                 ].join(',')
             );
         });
@@ -152,7 +152,7 @@ describe('util/fields/getFieldsAsString()', () => {
                     watermark_info: {},
                     authenticated_download_url: '',
                     file_version: {},
-                    is_download_available: true
+                    is_download_available: true,
                 })
             ).toBeTruthy();
         });

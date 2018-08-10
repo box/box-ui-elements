@@ -7,7 +7,7 @@ import React from 'react';
 import IconName from './IconName';
 
 type Props = {
-    rowData: UploadItem
+    rowData: UploadItem,
 };
 
 export default () => ({ rowData }: Props) => <IconName {...rowData} />;

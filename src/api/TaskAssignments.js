@@ -36,13 +36,13 @@ class TaskAssignments extends Base {
         taskId,
         assignTo,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         taskId: string,
         assignTo: { id: string },
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): void {
         const { id = '', permissions } = file;
 
@@ -57,10 +57,10 @@ class TaskAssignments extends Base {
             data: {
                 task: {
                     type: 'task',
-                    id: taskId
+                    id: taskId,
                 },
-                assign_to: assignTo
-            }
+                assign_to: assignTo,
+            },
         };
 
         this.post({
@@ -68,7 +68,7 @@ class TaskAssignments extends Base {
             url: this.getUrl(),
             data: requestData,
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 
@@ -89,14 +89,14 @@ class TaskAssignments extends Base {
         resolutionState,
         message,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         taskAssignmentId: string,
         resolutionState: string,
         successCallback: Function,
         errorCallback: Function,
-        message?: string
+        message?: string,
     }): void {
         const { id = '', permissions } = file;
 
@@ -109,7 +109,7 @@ class TaskAssignments extends Base {
         }
 
         const requestData = {
-            data: { resolution_state: resolutionState, message }
+            data: { resolution_state: resolutionState, message },
         };
 
         this.put({
@@ -117,7 +117,7 @@ class TaskAssignments extends Base {
             url: this.getUrl(taskAssignmentId),
             data: requestData,
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 
@@ -134,12 +134,12 @@ class TaskAssignments extends Base {
         file,
         taskAssignmentId,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         taskAssignmentId: string,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): void {
         const { id = '', permissions } = file;
 
@@ -155,7 +155,7 @@ class TaskAssignments extends Base {
             id,
             url: this.getUrl(taskAssignmentId),
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 }

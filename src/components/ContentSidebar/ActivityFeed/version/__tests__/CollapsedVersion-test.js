@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { CollapsedVersionBase as CollapsedVersion } from '../CollapsedVersion';
 
 const translationProps = {
-    intl: { formatMessage: () => {} }
+    intl: { formatMessage: () => {} },
 };
 
 describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () => {
@@ -17,7 +17,7 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
             action: 'upload',
             collaborators: { 1: { name: 'Person one', id: 1 } },
             version_start,
-            version_end
+            version_end,
         };
 
         const wrapper = render(item);
@@ -35,10 +35,10 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
             action: 'upload',
             collaborators: {
                 1: { name: 'Person one', id: 1 },
-                2: { name: 'Person two', id: 2 }
+                2: { name: 'Person two', id: 2 },
             },
             version_start,
-            version_end
+            version_end,
         };
 
         const wrapper = render(item);
@@ -57,10 +57,10 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
             onInfo: () => {},
             collaborators: {
                 1: { name: 'Person one', id: 1 },
-                2: { name: 'Person two', id: 2 }
+                2: { name: 'Person two', id: 2 },
             },
             version_start: 1,
-            version_end: 10
+            version_end: 10,
         };
 
         const wrapper = render(item);
@@ -73,7 +73,7 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
             action: 'delete',
             collaborators: { 1: { name: 'Person one', id: 1 } },
             version_start: 1,
-            version_end: 10
+            version_end: 10,
         };
 
         const wrapper = render(item);

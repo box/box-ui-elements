@@ -47,8 +47,8 @@ class File extends Item {
             .get({
                 url: this.getUrl(id),
                 params: {
-                    fields: FIELD_DOWNLOAD_URL
-                }
+                    fields: FIELD_DOWNLOAD_URL,
+                },
             })
             .then(({ data }: { data: BoxItem }) => {
                 this.successHandler(data[FIELD_DOWNLOAD_URL]);
@@ -87,7 +87,7 @@ class File extends Item {
             .put({
                 id: getTypedFileId(id),
                 url: this.getUrl(id),
-                data: { description }
+                data: { description },
             })
             .then(({ data }: { data: BoxItem }) => {
                 if (!this.isDestroyed()) {
@@ -146,9 +146,9 @@ class File extends Item {
                 id: getTypedFileId(id),
                 url: this.getUrl(id),
                 params: {
-                    fields: getFieldsAsString(true, includePreviewSidebarFields)
+                    fields: getFieldsAsString(true, includePreviewSidebarFields),
                 },
-                headers: { 'X-Rep-Hints': X_REP_HINTS }
+                headers: { 'X-Rep-Hints': X_REP_HINTS },
             })
             .then(({ data }: { data: BoxItem }) => {
                 if (!this.isDestroyed()) {

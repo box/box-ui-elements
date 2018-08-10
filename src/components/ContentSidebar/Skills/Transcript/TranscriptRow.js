@@ -20,7 +20,7 @@ type Props = {
     onChange: Function,
     text?: string,
     appears?: Array<SkillCardEntryTimeSlice>,
-    interactionTarget: string
+    interactionTarget: string,
 };
 
 const TranscriptRow = ({ appears, text, isEditing, onClick, onSave, onCancel, onChange, interactionTarget }: Props) => {

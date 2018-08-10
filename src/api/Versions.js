@@ -9,7 +9,7 @@ import OffsetBasedAPI from './OffsetBasedAPI';
 const ACTION = {
     upload: 'upload',
     delete: 'delete',
-    restore: 'restore'
+    restore: 'restore',
 };
 
 class Versions extends OffsetBasedAPI {
@@ -39,7 +39,7 @@ class Versions extends OffsetBasedAPI {
         const { entries } = data;
         const versions = entries.map((version: BoxItemVersion) => ({
             ...version,
-            action: version.trashed_at ? ACTION.delete : ACTION.upload
+            action: version.trashed_at ? ACTION.delete : ACTION.upload,
         }));
 
         this.successCallback({ ...data, entries: versions });

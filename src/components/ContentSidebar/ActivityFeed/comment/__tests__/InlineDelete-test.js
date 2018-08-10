@@ -5,13 +5,13 @@ import { InlineDeleteBase as InlineDelete } from '../InlineDelete';
 
 const intl = { formatMessage: () => {} };
 const translationProps = {
-    intl
+    intl,
 };
 
 describe('components/ContentSidebar/ActivityFeed/comment/InlineDelete', () => {
     const id = '123';
     const render = (props = {}) =>
-        shallow(<InlineDelete {...translationProps} id={id} message='test' onDelete={() => {}} {...props} />);
+        shallow(<InlineDelete {...translationProps} id={id} message="test" onDelete={() => {}} {...props} />);
 
     test('should correctly render comment', () => {
         const wrapper = render();
@@ -34,7 +34,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/InlineDelete', () => {
         const onDeleteSpy = jest.fn();
         const permissions = {
             can_edit: true,
-            can_delete: false
+            can_delete: false,
         };
         const wrapper = render({ onDelete: onDeleteSpy, permissions });
 

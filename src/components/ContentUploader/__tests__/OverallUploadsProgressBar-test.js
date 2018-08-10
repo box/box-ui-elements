@@ -26,7 +26,7 @@ describe('components/ContentUploader/OverallUploadsProgressBar', () => {
 
     test('should render correctly when view is VIEW_UPLOAD_SUCCESS', () => {
         const wrapper = getWrapper({
-            view: VIEW_UPLOAD_SUCCESS
+            view: VIEW_UPLOAD_SUCCESS,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -34,7 +34,7 @@ describe('components/ContentUploader/OverallUploadsProgressBar', () => {
 
     test('should render correctly when view is VIEW_ERROR', () => {
         const wrapper = getWrapper({
-            view: VIEW_ERROR
+            view: VIEW_ERROR,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -42,7 +42,7 @@ describe('components/ContentUploader/OverallUploadsProgressBar', () => {
 
     test('should render correctly when view is VIEW_UPLOAD_IN_PROGRESS', () => {
         const wrapper = getWrapper({
-            view: VIEW_UPLOAD_IN_PROGRESS
+            view: VIEW_UPLOAD_IN_PROGRESS,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -51,7 +51,7 @@ describe('components/ContentUploader/OverallUploadsProgressBar', () => {
     test('should render correctly when isVisible is false', () => {
         const wrapper = getWrapper({
             isVisible: false,
-            view: VIEW_UPLOAD_SUCCESS
+            view: VIEW_UPLOAD_SUCCESS,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -60,7 +60,7 @@ describe('components/ContentUploader/OverallUploadsProgressBar', () => {
     test('should render correctly when isDragging is true', () => {
         const wrapper = getWrapper({
             view: VIEW_UPLOAD_SUCCESS,
-            isDragging: true
+            isDragging: true,
         });
 
         expect(wrapper).toMatchSnapshot();

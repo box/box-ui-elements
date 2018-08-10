@@ -18,7 +18,7 @@ type Props = {
     onCreate: Function,
     canUpload: boolean,
     canCreateNewFolder: boolean,
-    view: View
+    view: View,
 };
 
 const SubHeaderRight = ({
@@ -28,7 +28,7 @@ const SubHeaderRight = ({
     canUpload,
     canCreateNewFolder,
     currentCollection,
-    onSortChange
+    onSortChange,
 }: Props) => {
     const { sortBy, sortDirection, percentLoaded, items = [] }: Collection = currentCollection;
     const isRecents: boolean = view === VIEW_RECENTS;
@@ -39,7 +39,7 @@ const SubHeaderRight = ({
     const isLoaded: boolean = percentLoaded === 100;
 
     return (
-        <div className='be-sub-header-right'>
+        <div className="be-sub-header-right">
             {showSort &&
                 !!sortBy &&
                 !!sortDirection && (

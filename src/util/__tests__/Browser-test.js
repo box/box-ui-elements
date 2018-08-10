@@ -16,7 +16,7 @@ describe('util/Browser/isMobile()', () => {
             bb10: 'bb10',
             mini: 'mini',
             'window ce': 'windows ce',
-            palm: 'palm'
+            palm: 'palm',
         },
         (device) => {
             test(`should return true for ${device}`, () => {
@@ -55,7 +55,7 @@ describe('util/Browser/canPlayDash()', () => {
     test('should return true when h264 is supported', () => {
         const isTypeSupportedMock = jest.fn();
         global.MediaSource = {
-            isTypeSupported: isTypeSupportedMock.mockReturnValueOnce(true)
+            isTypeSupported: isTypeSupportedMock.mockReturnValueOnce(true),
         };
 
         expect(browser.canPlayDash(true)).toBeTruthy();

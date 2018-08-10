@@ -47,7 +47,7 @@ const formatTaggedMessage = (
                     id={id}
                     name={`${trigger}${name}`}
                     data-resin-target={ACTIVITY_TARGETS.MENTION}
-                    className='bcs-comment-mention'
+                    className="bcs-comment-mention"
                     getUserProfileUrl={getUserProfileUrl}
                     key={contentKey}
                 />

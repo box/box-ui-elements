@@ -25,18 +25,18 @@ describe('api/Versions', () => {
                 trashed_at: null,
                 modified_at: 1234567892,
                 modified_by: { name: 'Jay-Z', id: 10 },
-                version_number: '1'
+                version_number: '1',
             };
             const deleteVersion = {
                 id: 456,
                 trashed_at: 1234567891,
                 modified_at: 1234567891,
                 modified_by: { name: 'Akon', id: 11 },
-                version_number: '2'
+                version_number: '2',
             };
             const response = {
                 total_count: 2,
-                entries: [uploadVersion, deleteVersion]
+                entries: [uploadVersion, deleteVersion],
             };
 
             versions.successCallback = jest.fn();
@@ -46,13 +46,13 @@ describe('api/Versions', () => {
                 entries: [
                     {
                         ...uploadVersion,
-                        action: 'upload'
+                        action: 'upload',
                     },
                     {
                         ...deleteVersion,
-                        action: 'delete'
-                    }
-                ]
+                        action: 'delete',
+                    },
+                ],
             };
 
             versions.successHandler(response);

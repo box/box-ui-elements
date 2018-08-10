@@ -18,21 +18,21 @@ import API from '../../api';
 type PropsWithoutContext = {
     file: BoxItem,
     getPreview: Function,
-    getViewer: Function
+    getViewer: Function,
 };
 
 type Props = {
-    api: API
+    api: API,
 } & PropsWithoutContext;
 
 type State = {
     cards?: Array<SkillCard>,
-    errors: NumberBooleanMap
+    errors: NumberBooleanMap,
 };
 
 class SkillsSidebar extends React.PureComponent<Props, State> {
     state: State = {
-        errors: {}
+        errors: {},
     };
 
     componentDidMount() {
@@ -105,7 +105,7 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
                     ops.push({
                         op: 'replace',
                         path: `${path}/entries/${idx}`,
-                        value: replacement
+                        value: replacement,
                     });
                 }
             });
@@ -125,7 +125,7 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
                 .forEach((idx) => {
                     ops.push({
                         op: 'remove',
-                        path: `${path}/entries/${idx}`
+                        path: `${path}/entries/${idx}`,
                     });
                 });
         }
@@ -135,7 +135,7 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
                 ops.push({
                     op: 'add',
                     path: `${path}/entries/-`,
-                    value: added
+                    value: added,
                 });
             });
         }
@@ -149,7 +149,7 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
         ops.splice(0, 0, {
             op: 'test',
             path,
-            value: card
+            value: card,
         });
 
         api.getMetadataAPI(false).updateSkills(

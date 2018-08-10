@@ -12,9 +12,9 @@ import messages from '../messages';
 import './PreviewLoading.scss';
 
 const PreviewLoading = () => (
-    <div className='bcpr-loading'>
+    <div className="bcpr-loading">
         <IconFileDefault height={160} width={160} />
-        <div className='bcpr-loading-text'>
+        <div className="bcpr-loading-text">
             <FormattedMessage {...messages.previewError} />
         </div>
     </div>

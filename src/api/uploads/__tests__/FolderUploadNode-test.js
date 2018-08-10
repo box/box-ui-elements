@@ -6,7 +6,7 @@ import { ERROR_CODE_ITEM_NAME_IN_USE, STATUS_COMPLETE } from '../../../constants
 jest.mock('../../../api/Folder');
 jest.mock('../../../util/uploads', () => ({
     ...require.requireActual('../../../util/uploads'),
-    getFileFromEntry: jest.fn((entry) => entry)
+    getFileFromEntry: jest.fn((entry) => entry),
 }));
 
 let folderUploadNodeInstance;
@@ -22,7 +22,7 @@ describe('api/uploads/FolderUploadNode', () => {
         });
         FolderAPI.mockClear();
         FolderAPI.mockImplementation(() => ({
-            create: folderCreateMock
+            create: folderCreateMock,
         }));
     });
 
@@ -56,11 +56,11 @@ describe('api/uploads/FolderUploadNode', () => {
             const upload2 = jest.fn();
             folderUploadNodeInstance.folders = {
                 a: {
-                    upload: upload1
+                    upload: upload1,
                 },
                 b: {
-                    upload: upload2
-                }
+                    upload: upload2,
+                },
             };
             folderUploadNodeInstance.folderId = '123';
 
@@ -127,8 +127,8 @@ describe('api/uploads/FolderUploadNode', () => {
                     status: STATUS_COMPLETE,
                     isFolder: true,
                     size: 1,
-                    progress: 100
-                }
+                    progress: 100,
+                },
             ]);
         });
 
@@ -165,17 +165,17 @@ describe('api/uploads/FolderUploadNode', () => {
                     options: {
                         ...folderUploadNodeInstance.fileAPIOptions,
                         folderId: folderUploadNodeInstance.folderId,
-                        uploadInitTimestamp: now
-                    }
+                        uploadInitTimestamp: now,
+                    },
                 },
                 {
                     file: file2,
                     options: {
                         ...folderUploadNodeInstance.fileAPIOptions,
                         folderId: folderUploadNodeInstance.folderId,
-                        uploadInitTimestamp: now
-                    }
-                }
+                        uploadInitTimestamp: now,
+                    },
+                },
             ]);
         });
     });
@@ -213,7 +213,7 @@ describe('api/uploads/FolderUploadNode', () => {
             };
 
             folderUploadNodeInstance.entry = {
-                createReader: () => reader
+                createReader: () => reader,
             };
 
             await folderUploadNodeInstance.buildCurrentFolderFromEntry();

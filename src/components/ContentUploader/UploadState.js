@@ -22,7 +22,7 @@ type Props = {
     isTouch: boolean,
     view: View,
     onSelect: Function,
-    isFolderUploadEnabled: boolean
+    isFolderUploadEnabled: boolean,
 };
 
 const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFolderUploadEnabled }: Props) => {
@@ -90,7 +90,7 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
     const className = classNames('bcu-upload-state', {
         'bcu-is-droppable': isOver && canDrop,
         'bcu-is-not-droppable': isOver && !canDrop,
-        'bcu-has-items': hasItems
+        'bcu-has-items': hasItems,
     });
 
     return (
@@ -99,7 +99,7 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
                 {icon}
                 {content}
             </div>
-            <div className='bcu-drag-drop-overlay' />
+            <div className="bcu-drag-drop-overlay" />
         </div>
     );
 };

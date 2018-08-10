@@ -7,13 +7,13 @@ import flatten from '../flatten';
 const list = [
     { id: '1', type: 'folder', name: 'folderName' },
     { id: '2', type: 'file', name: 'fileName' },
-    { id: '3', type: 'web_link', name: 'weblinkName' }
+    { id: '3', type: 'web_link', name: 'weblinkName' },
 ];
 
 const newList = [
     { id: '1', type: 'folder', name: 'folderNameNew' },
     { id: '2', type: 'file', name: 'fileNameNew' },
-    { id: '3', type: 'web_link', name: 'weblinkNameNew' }
+    { id: '3', type: 'web_link', name: 'weblinkNameNew' },
 ];
 
 const cache = new Cache();

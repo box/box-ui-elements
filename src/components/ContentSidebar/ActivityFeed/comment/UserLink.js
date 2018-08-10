@@ -11,11 +11,11 @@ type Props = {
     id: string,
     name: string,
     mentionTrigger?: any,
-    getUserProfileUrl?: (string) => Promise<string>
+    getUserProfileUrl?: (string) => Promise<string>,
 };
 
 type State = {
-    profileUrl?: string
+    profileUrl?: string,
 };
 
 class UserLink extends React.PureComponent<Props, State> {
@@ -28,7 +28,7 @@ class UserLink extends React.PureComponent<Props, State> {
      */
     getProfileUrlHandler = (profileUrl?: string) => {
         this.setState({
-            profileUrl
+            profileUrl,
         });
     };
 

@@ -27,7 +27,7 @@ describe('api/Base', () => {
         const options = {
             cache: 'cache',
             apiHost: 'apiHost',
-            uploadHost: 'uploadHost'
+            uploadHost: 'uploadHost',
         };
         base = new Base(options);
         expect(base.options).toEqual(options);
@@ -82,13 +82,13 @@ describe('api/Base', () => {
     describe('getBaseApiUrl()', () => {
         test('should return correct api url', () => {
             base = new Base({
-                apiHost: 'apiHost'
+                apiHost: 'apiHost',
             });
             expect(base.getBaseApiUrl()).toBe('apiHost/2.0');
         });
         test('should return correct api url with trailing /', () => {
             base = new Base({
-                apiHost: 'apiHost/'
+                apiHost: 'apiHost/',
             });
             expect(base.getBaseApiUrl()).toBe('apiHost/2.0');
         });
@@ -97,13 +97,13 @@ describe('api/Base', () => {
     describe('getBaseUploadUrl()', () => {
         test('should return correct api upload url', () => {
             base = new Base({
-                uploadHost: 'uploadHost'
+                uploadHost: 'uploadHost',
             });
             expect(base.getBaseUploadUrl()).toBe('uploadHost/api/2.0');
         });
         test('should return correct api upload url with trailing /', () => {
             base = new Base({
-                uploadHost: 'uploadHost/'
+                uploadHost: 'uploadHost/',
             });
             expect(base.getBaseUploadUrl()).toBe('uploadHost/api/2.0');
         });
@@ -123,7 +123,7 @@ describe('api/Base', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             const params = {
-                fields: 'start=0'
+                fields: 'start=0',
             };
             base.makeRequest = jest.fn();
             base.getUrl = jest.fn(() => url);
@@ -150,7 +150,7 @@ describe('api/Base', () => {
 
         test('should make xhr to get base and call success callback', () => {
             base.xhr = {
-                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse }))
+                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse })),
             };
 
             const successCb = jest.fn();
@@ -160,7 +160,7 @@ describe('api/Base', () => {
                 expect(successCb).toHaveBeenCalledWith(baseResponse);
                 expect(base.xhr.post).toHaveBeenCalledWith({
                     id: 'file_id',
-                    url
+                    url,
                 });
             });
         });
@@ -168,7 +168,7 @@ describe('api/Base', () => {
         test('should call error callback when xhr fails', () => {
             const error = new Error('error');
             base.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                put: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
 
             const successCb = jest.fn();
@@ -179,7 +179,7 @@ describe('api/Base', () => {
                 expect(errorCb).toHaveBeenCalledWith(error);
                 expect(base.xhr.put).toHaveBeenCalledWith({
                     id: 'file_id',
-                    url
+                    url,
                 });
             });
         });
@@ -189,13 +189,13 @@ describe('api/Base', () => {
                 data: {
                     item: {
                         id: 'id',
-                        type: 'file'
+                        type: 'file',
                     },
-                    message: 'hello world'
-                }
+                    message: 'hello world',
+                },
             };
             base.xhr = {
-                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse }))
+                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse })),
             };
 
             const successCb = jest.fn();
@@ -206,7 +206,7 @@ describe('api/Base', () => {
                 expect(base.xhr.post).toHaveBeenCalledWith({
                     id: 'file_id',
                     url,
-                    data: requestData.data
+                    data: requestData.data,
                 });
             });
         });

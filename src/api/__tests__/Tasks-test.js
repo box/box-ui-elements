@@ -28,7 +28,7 @@ describe('api/Tasks', () => {
     describe('CRUD operations', () => {
         const file = {
             id: 'foo',
-            permissions: {}
+            permissions: {},
         };
 
         const taskId = '123';
@@ -59,11 +59,11 @@ describe('api/Tasks', () => {
                     data: {
                         item: {
                             id: file.id,
-                            type: 'file'
+                            type: 'file',
                         },
                         message,
-                        due_at: dueAt
-                    }
+                        due_at: dueAt,
+                    },
                 };
 
                 tasks.createTask({ file, message, dueAt, successCallback, errorCallback });
@@ -72,7 +72,7 @@ describe('api/Tasks', () => {
                     url: tasks.tasksUrl(),
                     data: requestData,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });
@@ -85,7 +85,7 @@ describe('api/Tasks', () => {
 
             test('should put a well formed task update to the tasks endpoint', () => {
                 const requestData = {
-                    data: { message }
+                    data: { message },
                 };
 
                 tasks.updateTask({
@@ -93,20 +93,20 @@ describe('api/Tasks', () => {
                     taskId,
                     message,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
                 expect(tasks.put).toBeCalledWith({
                     id: 'foo',
                     url: tasks.tasksUrl(taskId),
                     data: requestData,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
 
             test('should put a well formed task update to the tasks endpoint when due_at is included', () => {
                 const requestData = {
-                    data: { message, due_at: dueAt }
+                    data: { message, due_at: dueAt },
                 };
 
                 tasks.updateTask({
@@ -115,14 +115,14 @@ describe('api/Tasks', () => {
                     message,
                     dueAt,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
                 expect(tasks.put).toBeCalledWith({
                     id: 'foo',
                     url: tasks.tasksUrl(taskId),
                     data: requestData,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });
@@ -139,7 +139,7 @@ describe('api/Tasks', () => {
                     id: 'foo',
                     url: tasks.tasksUrl(taskId),
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });
@@ -149,7 +149,7 @@ describe('api/Tasks', () => {
                 const id = 'id';
                 const url = `${tasks.tasksUrl(taskId)}/assignments`;
                 const params = {
-                    fields: 'start=0'
+                    fields: 'start=0',
                 };
                 tasks.get = jest.fn();
 

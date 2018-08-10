@@ -9,7 +9,7 @@ jest.mock('../../Avatar', () => () => 'Avatar');
 
 const currentUser = {
     name: 'testuser',
-    id: 11
+    id: 11,
 };
 const approverSelectorContacts = [];
 const mentionSelectorContacts = [];
@@ -17,12 +17,12 @@ const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
 
 const allHandlers = {
     tasks: {
-        edit: jest.fn()
+        edit: jest.fn(),
     },
     contacts: {
         getApproverWithQuery: jest.fn(),
-        getMentionWithQuery: jest.fn()
-    }
+        getMentionWithQuery: jest.fn(),
+    },
 };
 
 describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
@@ -35,8 +35,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         shallow(
             <Comment
                 created_by={{ name: '50 Cent', id: 10 }}
-                id='123'
-                tagged_message='test'
+                id="123"
+                tagged_message="test"
                 handlers={allHandlers}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -50,12 +50,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -84,17 +84,17 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
     test('should correctly render comment when translation is enabled', () => {
         const translations = {
             translationEnabled: true,
-            onTranslate: jest.fn()
+            onTranslate: jest.fn(),
         };
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -111,12 +111,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -134,12 +134,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
             permissions: { can_delete: true },
-            isPending: true
+            isPending: true,
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -159,12 +159,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_delete: true }
+            permissions: { can_delete: true },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -183,12 +183,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_delete: true }
+            permissions: { can_delete: true },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...task}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -206,11 +206,11 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true }
+            permissions: { can_edit: true },
         };
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -246,12 +246,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: {}
+            permissions: {},
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -269,12 +269,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: {}
+            permissions: {},
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -291,12 +291,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 11 }
+            created_by: { name: '50 Cent', id: 11 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -311,12 +311,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 11 }
+            created_by: { name: '50 Cent', id: 11 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -332,12 +332,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -346,7 +346,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 onDelete={jest.fn()}
                 error={{
                     title: 'error',
-                    message: 'errorrrrr'
+                    message: 'errorrrrr',
                 }}
             />
         );
@@ -358,13 +358,13 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
         const onActionSpy = jest.fn();
 
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -376,8 +376,8 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                     message: 'errorrrrr',
                     action: {
                         text: 'click',
-                        onAction: onActionSpy
-                    }
+                        onAction: onActionSpy,
+                    },
                 }}
             />
         );
@@ -394,11 +394,11 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: '2016-11-02T11:35:14-07:00',
             tagged_message: 'test @[3203255873:test user] ',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true }
+            permissions: { can_edit: true },
         };
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}

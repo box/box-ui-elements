@@ -20,12 +20,12 @@ type Props = {
     onAdd: Function,
     onDelete: Function,
     onSave: Function,
-    onCancel: Function
+    onCancel: Function,
 };
 
 type State = {
     keyword: string,
-    pills: Pills
+    pills: Pills,
 };
 
 class EditableKeywords extends React.PureComponent<Props, State> {
@@ -51,7 +51,7 @@ class EditableKeywords extends React.PureComponent<Props, State> {
      * @param {Object} nextProps - component props
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         this.setState({ pills: getPills(nextProps.keywords), keyword: '' });
     }
 
@@ -96,7 +96,7 @@ class EditableKeywords extends React.PureComponent<Props, State> {
         if (keyword) {
             onAdd({
                 type: 'text',
-                text: keyword
+                text: keyword,
             });
         }
     };
@@ -110,7 +110,7 @@ class EditableKeywords extends React.PureComponent<Props, State> {
     onInput = (event: SyntheticKeyboardEvent<HTMLInputElement>) => {
         const currentTarget = (event.currentTarget: HTMLInputElement);
         this.setState({
-            keyword: currentTarget.value
+            keyword: currentTarget.value,
         });
     };
 
@@ -124,7 +124,7 @@ class EditableKeywords extends React.PureComponent<Props, State> {
         const { onSave, onCancel }: Props = this.props;
         const { pills, keyword }: State = this.state;
         return (
-            <span className='pill-selector-wrapper'>
+            <span className="pill-selector-wrapper">
                 <PillSelector
                     onBlur={this.onBlur}
                     onInput={this.onInput}
@@ -134,11 +134,11 @@ class EditableKeywords extends React.PureComponent<Props, State> {
                     selectedOptions={pills}
                     value={keyword}
                 />
-                <div className='be-keywords-buttons'>
-                    <Button type='button' onClick={onCancel} data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_CANCEL}>
+                <div className="be-keywords-buttons">
+                    <Button type="button" onClick={onCancel} data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_CANCEL}>
                         <FormattedMessage {...messages.cancel} />
                     </Button>
-                    <PrimaryButton type='button' onClick={onSave} data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_SAVE}>
+                    <PrimaryButton type="button" onClick={onSave} data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT_SAVE}>
                         <FormattedMessage {...messages.save} />
                     </PrimaryButton>
                 </div>

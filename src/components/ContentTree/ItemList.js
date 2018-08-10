@@ -17,7 +17,7 @@ type Props = {
     tableRef: Function,
     items?: BoxItem[],
     isSmall: boolean,
-    isLoading: boolean
+    isLoading: boolean,
 };
 
 const ItemList = ({ isSmall, isLoading, onItemClick, onExpanderClick, items = [], tableRef }: Props) => (

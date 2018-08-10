@@ -13,12 +13,12 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         const getEditors = jest.fn();
         const api = {
             getMetadataAPI: jest.fn().mockReturnValueOnce({
-                getEditors
-            })
+                getEditors,
+            }),
         };
         const wrapper = getWrapper({
             file: {},
-            api
+            api,
         });
         wrapper.setState({ templates: [], editors: [] });
         expect(wrapper.find(LoadingIndicatorWrapper)).toHaveLength(1);
@@ -34,12 +34,12 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         const getEditors = jest.fn();
         const api = {
             getMetadataAPI: jest.fn().mockReturnValueOnce({
-                getEditors
-            })
+                getEditors,
+            }),
         };
         const wrapper = getWrapper({
             file: {},
-            api
+            api,
         });
         wrapper.setState({ editors: [] });
         expect(wrapper.find(LoadingIndicatorWrapper)).toHaveLength(0);
@@ -55,12 +55,12 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         const getEditors = jest.fn();
         const api = {
             getMetadataAPI: jest.fn().mockReturnValueOnce({
-                getEditors
-            })
+                getEditors,
+            }),
         };
         const wrapper = getWrapper({
             file: {},
-            api
+            api,
         });
         wrapper.setState({ templates: [] });
         expect(wrapper.find(LoadingIndicatorWrapper)).toHaveLength(0);
@@ -76,13 +76,13 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         const getEditors = jest.fn();
         const api = {
             getMetadataAPI: jest.fn().mockReturnValueOnce({
-                getEditors
-            })
+                getEditors,
+            }),
         };
         const wrapper = getWrapper({
             file: {},
             getViewer: jest.fn(),
-            api
+            api,
         });
         wrapper.setState({ hasError: true });
         expect(wrapper.find(LoadingIndicatorWrapper)).toHaveLength(0);

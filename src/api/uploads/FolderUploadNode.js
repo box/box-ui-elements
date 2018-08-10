@@ -112,8 +112,8 @@ class FolderUploadNode {
                 status: STATUS_COMPLETE,
                 isFolder: true,
                 size: 1,
-                progress: 100
-            }
+                progress: 100,
+            },
         ]);
     };
 
@@ -129,8 +129,8 @@ class FolderUploadNode {
             options: {
                 ...this.fileAPIOptions,
                 folderId: this.folderId,
-                uploadInitTimestamp: Date.now()
-            }
+                uploadInitTimestamp: Date.now(),
+            },
         }));
 
     /**
@@ -142,7 +142,7 @@ class FolderUploadNode {
     createFolder(): Promise<any> {
         const folderAPI = new FolderAPI({
             ...this.baseAPIOptions,
-            id: `folder_${this.parentFolderId}`
+            id: `folder_${this.parentFolderId}`,
         });
         return new Promise((resolve, reject) => {
             folderAPI.create(this.parentFolderId, this.name, resolve, reject);
@@ -174,7 +174,7 @@ class FolderUploadNode {
                     this.fileAPIOptions,
                     {
                         ...this.baseAPIOptions,
-                        ...this.fileAPIOptions
+                        ...this.fileAPIOptions,
                     },
                     entry
                 );

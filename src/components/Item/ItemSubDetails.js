@@ -13,7 +13,7 @@ import { VIEW_RECENTS } from '../../constants';
 
 type Props = {
     item: BoxItem,
-    view: View
+    view: View,
 };
 
 const ItemSubDetails = ({ view, item }: Props) => {
@@ -37,10 +37,13 @@ const ItemSubDetails = ({ view, item }: Props) => {
                 {...message}
                 values={{
                     date: DateValue,
-                    name: modifiedBy
+                    name: modifiedBy,
                 }}
             />
-            <span>&nbsp;-&nbsp;{getSize(size)}</span>
+            <span>
+                &nbsp;-&nbsp;
+                {getSize(size)}
+            </span>
         </span>
     );
 };

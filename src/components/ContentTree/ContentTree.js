@@ -26,7 +26,7 @@ import {
     CLIENT_NAME_CONTENT_TREE,
     SORT_NAME,
     SORT_ASC,
-    TYPED_ID_FOLDER_PREFIX
+    TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 
 import '../fonts.scss';
@@ -50,12 +50,12 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
-    responseInterceptor?: Function
+    responseInterceptor?: Function,
 };
 
 type State = {
     currentCollection: Collection,
-    view: View
+    view: View,
 };
 
 class ContentTree extends Component<Props, State> {
@@ -72,7 +72,7 @@ class ContentTree extends Component<Props, State> {
         className: '',
         autoFocus: false,
         apiHost: DEFAULT_HOSTNAME_API,
-        clientName: CLIENT_NAME_CONTENT_TREE
+        clientName: CLIENT_NAME_CONTENT_TREE,
     };
 
     /**
@@ -92,7 +92,7 @@ class ContentTree extends Component<Props, State> {
             apiHost,
             clientName,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         } = props;
 
         this.api = new API({
@@ -103,14 +103,14 @@ class ContentTree extends Component<Props, State> {
             clientName,
             requestInterceptor,
             responseInterceptor,
-            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
+            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`,
         });
 
         this.id = uniqueid('bct_');
 
         this.state = {
             currentCollection: {},
-            view: VIEW_FOLDER
+            view: VIEW_FOLDER,
         };
     }
 
@@ -170,7 +170,7 @@ class ContentTree extends Component<Props, State> {
     currentUnloadedCollection(): Collection {
         const { currentCollection }: State = this.state;
         return Object.assign(currentCollection, {
-            percentLoaded: 0
+            percentLoaded: 0,
         });
     }
 
@@ -183,7 +183,7 @@ class ContentTree extends Component<Props, State> {
      */
     errorCallback = (error: Error): void => {
         this.setState({
-            view: VIEW_ERROR
+            view: VIEW_ERROR,
         });
         /* eslint-disable no-console */
         console.error(error);
@@ -230,7 +230,9 @@ class ContentTree extends Component<Props, State> {
      */
     finishNavigation() {
         const { autoFocus }: Props = this.props;
-        const { currentCollection: { percentLoaded } }: State = this.state;
+        const {
+            currentCollection: { percentLoaded },
+        }: State = this.state;
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
         if (
@@ -297,7 +299,7 @@ class ContentTree extends Component<Props, State> {
         // Reset the view and show busy indicator
         this.setState({
             view: VIEW_FOLDER,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         // Fetch the folder using folder API
@@ -333,7 +335,7 @@ class ContentTree extends Component<Props, State> {
             type,
             isSmall,
             className,
-            measureRef
+            measureRef,
         }: Props = this.props;
         const { view, currentCollection }: State = this.state;
         const styleClassName = classNames('be bct be-app-element', className);

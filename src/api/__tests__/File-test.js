@@ -4,7 +4,7 @@ import { getFieldsAsString } from '../../util/fields';
 import { X_REP_HINTS } from '../../constants';
 
 jest.mock('../../util/file', () => ({
-    getTypedFileId: jest.fn().mockReturnValue('file_id')
+    getTypedFileId: jest.fn().mockReturnValue('file_id'),
 }));
 
 let file;
@@ -40,7 +40,7 @@ describe('api/File', () => {
                 expect(success).toHaveBeenCalledWith('bar');
                 expect(get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/files/foo',
-                    params: { fields: 'download_url' }
+                    params: { fields: 'download_url' },
                 });
             });
         });
@@ -54,7 +54,7 @@ describe('api/File', () => {
                 expect(success).not.toHaveBeenCalled();
                 expect(get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/files/foo',
-                    params: { fields: 'download_url' }
+                    params: { fields: 'download_url' },
                 });
             });
         });
@@ -70,7 +70,7 @@ describe('api/File', () => {
                 expect(errorCb).toHaveBeenCalledWith(error);
                 expect(get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/files/foo',
-                    params: { fields: 'download_url' }
+                    params: { fields: 'download_url' },
                 });
             });
         });
@@ -87,7 +87,7 @@ describe('api/File', () => {
                 expect(errorCb).not.toHaveBeenCalled();
                 expect(get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/files/foo',
-                    params: { fields: 'download_url' }
+                    params: { fields: 'download_url' },
                 });
             });
         });
@@ -111,8 +111,8 @@ describe('api/File', () => {
             const mockFile = {
                 id: '1',
                 permissions: {
-                    can_rename: false
-                }
+                    can_rename: false,
+                },
             };
 
             return file.setFileDescription(mockFile, 'foo', success, error).catch(() => {
@@ -129,12 +129,12 @@ describe('api/File', () => {
             const mockFile = {
                 id: '1',
                 permissions: {
-                    can_rename: true
+                    can_rename: true,
                 },
-                description: 'foo'
+                description: 'foo',
             };
             file.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve(mockFile))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve(mockFile)),
             };
 
             return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
@@ -142,8 +142,8 @@ describe('api/File', () => {
                     id: 'file_id',
                     url: 'url',
                     data: {
-                        description: 'foo'
-                    }
+                        description: 'foo',
+                    },
                 });
             });
         });
@@ -155,16 +155,16 @@ describe('api/File', () => {
             const mockFile = {
                 id: '1',
                 permissions: {
-                    can_rename: true
+                    can_rename: true,
                 },
-                description: 'foo'
+                description: 'foo',
             };
 
             const mockFileResponse = mockFile;
             mockFileResponse.description = 'fo';
 
             file.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve({ data: mockFileResponse }))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve({ data: mockFileResponse })),
             };
 
             return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
@@ -181,9 +181,9 @@ describe('api/File', () => {
             const mockFile = {
                 id: '1',
                 permissions: {
-                    can_rename: true
+                    can_rename: true,
                 },
-                description: 'foo'
+                description: 'foo',
             };
 
             const mockFileResponse = mockFile;
@@ -191,7 +191,7 @@ describe('api/File', () => {
             file.isDestroyed = jest.fn().mockReturnValueOnce(true);
 
             file.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.resolve({ data: mockFileResponse }))
+                put: jest.fn().mockReturnValueOnce(Promise.resolve({ data: mockFileResponse })),
             };
 
             return file.setFileDescription(mockFile, 'foo', success, error).then(() => {
@@ -207,14 +207,14 @@ describe('api/File', () => {
             const mockFile = {
                 id: '1',
                 permissions: {
-                    can_rename: true
+                    can_rename: true,
                 },
-                description: 'foo'
+                description: 'foo',
             };
             const mockError = new Error();
 
             file.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.reject(mockError))
+                put: jest.fn().mockReturnValueOnce(Promise.reject(mockError)),
             };
 
             return file.setFileDescription(mockFile, 'bar', success, error).then(() => {
@@ -229,14 +229,14 @@ describe('api/File', () => {
             const mockFile = {
                 id: '1',
                 permissions: {
-                    can_rename: true
+                    can_rename: true,
                 },
-                description: 'foo'
+                description: 'foo',
             };
             const mockError = new Error();
 
             file.xhr = {
-                put: jest.fn().mockReturnValueOnce(Promise.reject(mockError))
+                put: jest.fn().mockReturnValueOnce(Promise.reject(mockError)),
             };
 
             return file.setFileDescription(mockFile, 'bar', success, error).then(() => {
@@ -278,7 +278,7 @@ describe('api/File', () => {
 
         test('should make xhr to get file and call success callback', () => {
             file.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } }))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } })),
             };
 
             const success = jest.fn();
@@ -289,11 +289,11 @@ describe('api/File', () => {
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
                     params: {
-                        fields: getFieldsAsString(true)
+                        fields: getFieldsAsString(true),
                     },
                     headers: {
-                        'X-Rep-Hints': X_REP_HINTS
-                    }
+                        'X-Rep-Hints': X_REP_HINTS,
+                    },
                 });
             });
         });
@@ -304,7 +304,7 @@ describe('api/File', () => {
                 .mockReturnValueOnce(false)
                 .mockReturnValueOnce(true);
             file.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } }))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } })),
             };
 
             const success = jest.fn();
@@ -315,11 +315,11 @@ describe('api/File', () => {
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
                     params: {
-                        fields: getFieldsAsString(true)
+                        fields: getFieldsAsString(true),
                     },
                     headers: {
-                        'X-Rep-Hints': X_REP_HINTS
-                    }
+                        'X-Rep-Hints': X_REP_HINTS,
+                    },
                 });
             });
         });
@@ -327,7 +327,7 @@ describe('api/File', () => {
         test('should call error callback when xhr fails', () => {
             const error = new Error('error');
             file.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
 
             const successCb = jest.fn();
@@ -340,11 +340,11 @@ describe('api/File', () => {
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
                     params: {
-                        fields: getFieldsAsString(true, true)
+                        fields: getFieldsAsString(true, true),
                     },
                     headers: {
-                        'X-Rep-Hints': X_REP_HINTS
-                    }
+                        'X-Rep-Hints': X_REP_HINTS,
+                    },
                 });
             });
         });
@@ -356,7 +356,7 @@ describe('api/File', () => {
             file.getCache = jest.fn().mockReturnValueOnce(cache);
             file.getCacheKey = jest.fn().mockReturnValueOnce('key');
             file.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } }))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } })),
             };
 
             const success = jest.fn();
@@ -368,11 +368,11 @@ describe('api/File', () => {
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
                     params: {
-                        fields: getFieldsAsString(true)
+                        fields: getFieldsAsString(true),
                     },
                     headers: {
-                        'X-Rep-Hints': X_REP_HINTS
-                    }
+                        'X-Rep-Hints': X_REP_HINTS,
+                    },
                 });
             });
         });

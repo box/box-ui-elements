@@ -23,11 +23,11 @@ describe('api/FileCollaborators', () => {
             const collaborator = {
                 id: 123,
                 name: 'Kanye West',
-                login: 'kwest@box.com'
+                login: 'kwest@box.com',
             };
             const response = {
                 next_marker: null,
-                entries: [collaborator]
+                entries: [collaborator],
             };
 
             fileCollaborators.successCallback = jest.fn();
@@ -41,10 +41,10 @@ describe('api/FileCollaborators', () => {
                         item: {
                             id: 123,
                             name: 'Kanye West',
-                            email: 'kwest@box.com'
-                        }
-                    }
-                ]
+                            email: 'kwest@box.com',
+                        },
+                    },
+                ],
             };
 
             fileCollaborators.successHandler(response);

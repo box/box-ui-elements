@@ -42,18 +42,18 @@ type Props = {
     onVersionHistoryClick?: Function,
     translations?: Translations,
     getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>
+    getUserProfileUrl?: (string) => Promise<string>,
 };
 
 type State = {
     isInputOpen: boolean,
-    feedItems: Array<Comment | Task | BoxItemVersion>
+    feedItems: Array<Comment | Task | BoxItemVersion>,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
         isInputOpen: false,
-        feedItems: []
+        feedItems: [],
     };
 
     feedContainer: null | HTMLElement;
@@ -81,7 +81,7 @@ class ActivityFeed extends React.Component<Props, State> {
             created_by: currentUser,
             modified_at: date,
             isPending: true,
-            ...itemBase
+            ...itemBase,
         };
 
         const { feedItems } = this.state;
@@ -101,12 +101,12 @@ class ActivityFeed extends React.Component<Props, State> {
                     // $FlowFixMe
                     return {
                         ...item,
-                        ...updates
+                        ...updates,
                     };
                 }
 
                 return item;
-            })
+            }),
         });
     };
 
@@ -125,7 +125,7 @@ class ActivityFeed extends React.Component<Props, State> {
         this.updateFeedItem(
             {
                 ...commentData,
-                isPending: false
+                isPending: false,
             },
             id
         );
@@ -142,7 +142,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const comment = {
             id: uuid,
             tagged_message: text,
-            type: 'comment'
+            type: 'comment',
         };
 
         this.addPendingItem(comment);
@@ -191,7 +191,7 @@ class ActivityFeed extends React.Component<Props, State> {
         this.updateFeedItem(
             {
                 ...task,
-                isPending: false
+                isPending: false,
             },
             id
         );
@@ -216,9 +216,9 @@ class ActivityFeed extends React.Component<Props, State> {
         const pendingAssignees = assignees.map((assignee: SelectorItem) => ({
             assigned_to: {
                 id: assignee.id,
-                name: assignee.name
+                name: assignee.name,
             },
-            resolution_state: TASK_INCOMPLETE
+            resolution_state: TASK_INCOMPLETE,
         }));
 
         const task = {
@@ -228,9 +228,9 @@ class ActivityFeed extends React.Component<Props, State> {
             message: text,
             task_assignment_collection: {
                 entries: pendingAssignees,
-                total_count: pendingAssignees.length
+                total_count: pendingAssignees.length,
             },
-            type: 'task'
+            type: 'task',
         };
 
         this.addPendingItem(task);
@@ -257,7 +257,7 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     deleteFeedItem = (id: string) => {
         this.setState({
-            feedItems: this.state.feedItems.filter((feedItem) => feedItem.id !== id)
+            feedItems: this.state.feedItems.filter((feedItem) => feedItem.id !== id),
         });
     };
 
@@ -314,7 +314,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 return {
                     ...item,
                     ...updatedAssignment,
-                    resolution_state: updatedAssignment.message.toLowerCase()
+                    resolution_state: updatedAssignment.message.toLowerCase(),
                 };
             }
 
@@ -325,8 +325,8 @@ class ActivityFeed extends React.Component<Props, State> {
             {
                 task_assignment_collection: {
                     entries: assignments,
-                    total_count
-                }
+                    total_count,
+                },
             },
             task.id
         );
@@ -409,7 +409,7 @@ class ActivityFeed extends React.Component<Props, State> {
      */
     createFeedError(message: string, title?: string = messages.errorOccured) {
         return {
-            error: { message, title }
+            error: { message, title },
         };
     }
 
@@ -418,7 +418,7 @@ class ActivityFeed extends React.Component<Props, State> {
         this.updateFeedItems(comments, tasks, versions, file);
     }
 
-    componentWillReceiveProps(nextProps: any): void {
+    UNSAFE_componentWillReceiveProps(nextProps: any): void {
         const { comments, tasks, versions, file } = nextProps;
         this.updateFeedItems(comments, tasks, versions, file);
     }
@@ -449,7 +449,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 action = VERSION_RESTORE_ACTION;
                 currentVersion = {
                     ...restoredVersion,
-                    ...currentVersion
+                    ...currentVersion,
                 };
             }
         }
@@ -459,11 +459,11 @@ class ActivityFeed extends React.Component<Props, State> {
             action,
             modified_by,
             created_at: modified_at,
-            version_number: versionNumber
+            version_number: versionNumber,
         };
         return {
             total_count: versions.total_count + 1,
-            entries: [...versions.entries, currentFileVersion]
+            entries: [...versions.entries, currentFileVersion],
         };
     }
 
@@ -522,7 +522,7 @@ class ActivityFeed extends React.Component<Props, State> {
             tasks,
             versions,
             activityFeedError,
-            onVersionHistoryClick
+            onVersionHistoryClick,
         } = this.props;
         const { isInputOpen, feedItems } = this.state;
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
@@ -536,7 +536,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     ref={(ref) => {
                         this.feedContainer = ref;
                     }}
-                    className='bcs-activity-feed-items-container'
+                    className="bcs-activity-feed-items-container"
                 >
                     {shouldShowEmptyState(feedItems) ? (
                         <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
@@ -572,7 +572,7 @@ class ActivityFeed extends React.Component<Props, State> {
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
                         className={classNames('bcs-activity-feed-comment-input', {
-                            'bcs-is-disabled': isDisabled
+                            'bcs-is-disabled': isDisabled,
                         })}
                         createComment={hasCommentPermission ? this.createComment : noop}
                         createTask={hasCommentPermission ? this.createTask : noop}

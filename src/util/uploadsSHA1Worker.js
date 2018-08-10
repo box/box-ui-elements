@@ -168,7 +168,7 @@ const createWorker = () => {
         // self inside a worker refers to a DedicatedWorkerGlobalScope
         // https://developer.mozilla.org/en-US/docs/Web/API/DedicatedWorkerGlobalScope
         // eslint-disable-next-line
-        self.onmessage = (event) => {
+        self.onmessage = event => {
             const { data } = event;
             const { part, fileSize, partContents } = data;
 
@@ -190,9 +190,9 @@ const createWorker = () => {
                         type: 'partDone',
                         part: data.part,
                         duration: Date.now() - startTimestamp,
-                        partContents
+                        partContents,
                     },
-                    [partContents]
+                    [partContents],
                 );
                 expectedOffset += part.size;
                 if (part.offset + part.size === fileSize) {
@@ -204,7 +204,7 @@ const createWorker = () => {
                     type: 'error',
                     name: err.name,
                     message: err.message,
-                    part
+                    part,
                 };
                 self.postMessage(message); // eslint-disable-line no-restricted-globals
             }
@@ -222,7 +222,7 @@ const createWorker = () => {
             'var setupWorker = ',
             workerBase.toString(),
             ';\n',
-            'setupWorker();' // This explicit reassigned name is necessary because workerBase
+            'setupWorker();', // This explicit reassigned name is necessary because workerBase
             // gets renamed during JS minification.
         ],
         { type: 'text/javascript' }

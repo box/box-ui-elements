@@ -156,7 +156,7 @@ describe('api/Search', () => {
             search.searchErrorHandler = jest.fn();
             search.includePreviewFields = true;
             search.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return search.searchRequest().then(() => {
                 expect(search.searchSuccessHandler).toHaveBeenCalledWith('success');
@@ -168,9 +168,9 @@ describe('api/Search', () => {
                         query: 'query',
                         ancestor_folder_ids: 'id',
                         limit: 200,
-                        fields: getFieldsAsString(true)
+                        fields: getFieldsAsString(true),
                     },
-                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    headers: { 'X-Rep-Hints': X_REP_HINTS },
                 });
             });
         });
@@ -182,7 +182,7 @@ describe('api/Search', () => {
             search.includePreviewFields = true;
             search.includePreviewSidebarFields = true;
             search.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
             return search.searchRequest().then(() => {
                 expect(search.searchErrorHandler).toHaveBeenCalledWith(error);
@@ -194,9 +194,9 @@ describe('api/Search', () => {
                         query: 'query',
                         ancestor_folder_ids: 'id',
                         limit: 200,
-                        fields: getFieldsAsString(true, true)
+                        fields: getFieldsAsString(true, true),
                     },
-                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    headers: { 'X-Rep-Hints': X_REP_HINTS },
                 });
             });
         });
@@ -223,32 +223,32 @@ describe('api/Search', () => {
                 name: 'item1',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }],
+                },
             };
             item2 = {
                 id: 'item2',
                 name: 'item2',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }]
-                }
+                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }],
+                },
             };
             item3 = {
                 id: 'item3',
                 name: 'item3',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }],
+                },
             };
             response = {
                 data: {
                     limit: 200,
                     offset: 0,
                     total_count: 3,
-                    entries: [item1, item2, item3]
-                }
+                    entries: [item1, item2, item3],
+                },
             };
         });
 
@@ -273,8 +273,8 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 3,
-                    entries: ['file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['file_item1', 'file_item2', 'file_item3'],
+                },
             });
             expect(cache.get('file_item1')).toBe(item1);
             expect(cache.get('file_item2')).toBe(item2);
@@ -298,8 +298,8 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 5,
-                    entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3'],
+                },
             });
             expect(cache.get('file_item1')).toBe(item1);
             expect(cache.get('file_item2')).toBe(item2);
@@ -321,8 +321,8 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 2000,
-                    entries: ['file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['file_item1', 'file_item2', 'file_item3'],
+                },
             });
             expect(search.offset).toBe(200);
         });
@@ -343,8 +343,8 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 2000,
-                    entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3'],
+                },
             });
             expect(search.offset).toBe(200);
         });
@@ -373,7 +373,7 @@ describe('api/Search', () => {
                 search.searchSuccessHandler.bind(search, {
                     entries: [],
                     total_count: 0,
-                    limit: 100
+                    limit: 100,
                 })
             ).toThrow(Error, /Bad box item/);
             expect(search.finish).not.toHaveBeenCalled();
@@ -385,7 +385,7 @@ describe('api/Search', () => {
                 search.searchSuccessHandler.bind(search, {
                     entries: [],
                     total_count: 0,
-                    offset: 100
+                    offset: 100,
                 })
             ).toThrow(Error, /Bad box item/);
             expect(search.finish).not.toHaveBeenCalled();
@@ -399,24 +399,24 @@ describe('api/Search', () => {
                 name: 'item1',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }],
+                },
             };
             item2 = {
                 id: 'item2',
                 name: 'item2',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }]
-                }
+                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }],
+                },
             };
             item3 = {
                 id: 'item3',
                 name: 'item3',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }],
+                },
             };
             searchResults = {
                 item_collection: {
@@ -424,8 +424,8 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 3,
-                    entries: ['file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['file_item1', 'file_item2', 'file_item3'],
+                },
             };
 
             cache.set('file_item1', item1);
@@ -454,7 +454,7 @@ describe('api/Search', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item3, item2, item1]
+                items: [item3, item2, item1],
             });
         });
 
@@ -474,7 +474,7 @@ describe('api/Search', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item2, item1]
+                items: [item2, item1],
             });
         });
 
@@ -495,7 +495,7 @@ describe('api/Search', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item2, item1]
+                items: [item2, item1],
             });
         });
 
@@ -516,7 +516,7 @@ describe('api/Search', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item2, item1]
+                items: [item2, item1],
             });
         });
 

@@ -17,7 +17,7 @@ type ExternalProps = {
     onTaskDelete?: Function,
     onTaskUpdate?: Function,
     onTaskAssignmentUpdate?: Function,
-    getUserProfileUrl?: (string) => Promise<string>
+    getUserProfileUrl?: (string) => Promise<string>,
 };
 
 type Props = {
@@ -34,7 +34,7 @@ type Props = {
     approverSelectorContacts?: SelectorItems,
     mentionSelectorContacts?: SelectorItems,
     getAvatarUrl: (string) => Promise<?string>,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
 } & ExternalProps;
 
 const ActivitySidebar = ({
@@ -57,7 +57,7 @@ const ActivitySidebar = ({
     onVersionHistoryClick,
     getAvatarUrl,
     getUserProfileUrl,
-    activityFeedError
+    activityFeedError,
 }: Props) => (
     <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
         <ActivityFeed

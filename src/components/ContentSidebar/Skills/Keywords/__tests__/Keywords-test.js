@@ -7,11 +7,11 @@ describe('components/ContentSidebar/Skills/Keywords/Keywords', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             transcript: { duration: 100 },
             isEditable: false,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Keywords {...props} />);
@@ -22,11 +22,11 @@ describe('components/ContentSidebar/Skills/Keywords/Keywords', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             transcript: { duration: 100 },
             isEditable: false,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Keywords {...props} />);
@@ -39,11 +39,11 @@ describe('components/ContentSidebar/Skills/Keywords/Keywords', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             transcript: { duration: 100 },
             isEditable: true,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Keywords {...props} />);
@@ -54,11 +54,11 @@ describe('components/ContentSidebar/Skills/Keywords/Keywords', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             transcript: { duration: 100 },
             isEditable: true,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Keywords {...props} />);
@@ -71,11 +71,11 @@ describe('components/ContentSidebar/Skills/Keywords/Keywords', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: []
+                entries: [],
             },
             transcript: { duration: 100 },
             isEditable: true,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Keywords {...props} />);
@@ -86,11 +86,11 @@ describe('components/ContentSidebar/Skills/Keywords/Keywords', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             transcript: { duration: 100 },
             isEditable: true,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Keywords {...props} />);

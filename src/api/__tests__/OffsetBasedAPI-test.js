@@ -15,7 +15,7 @@ describe('api/OffsetBasedAPI', () => {
         test('should return query parameters with no fields', () => {
             expect(offsetBasedAPI.getQueryParameters(0, LIMIT)).toEqual({
                 offset: 0,
-                limit: LIMIT
+                limit: LIMIT,
             });
         });
 
@@ -23,7 +23,7 @@ describe('api/OffsetBasedAPI', () => {
             expect(offsetBasedAPI.getQueryParameters(0, LIMIT, ['foo', 'bar'])).toEqual({
                 offset: 0,
                 limit: LIMIT,
-                fields: 'foo,bar'
+                fields: 'foo,bar',
             });
         });
     });
@@ -55,10 +55,10 @@ describe('api/OffsetBasedAPI', () => {
                     Promise.resolve({
                         data: {
                             ...offsetBasedAPIResponse,
-                            total_count: 1500
-                        }
+                            total_count: 1500,
+                        },
                     })
-                )
+                ),
             };
 
             return offsetBasedAPI.offsetGetRequest('id', 0, 1000, true).then(() => {
@@ -72,9 +72,9 @@ describe('api/OffsetBasedAPI', () => {
             offsetBasedAPI.xhr = {
                 get: jest.fn().mockReturnValue(
                     Promise.resolve({
-                        data: offsetBasedAPIResponse
+                        data: offsetBasedAPIResponse,
                     })
-                )
+                ),
             };
 
             return offsetBasedAPI.offsetGetRequest('id', 0, 1000, true).then(() => {
@@ -105,7 +105,7 @@ describe('api/OffsetBasedAPI', () => {
 
         test('should make xhr to get offsetBasedAPI and call success callback', () => {
             offsetBasedAPI.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: offsetBasedAPIResponse }))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: offsetBasedAPIResponse })),
             };
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
@@ -116,8 +116,8 @@ describe('api/OffsetBasedAPI', () => {
                     url,
                     params: {
                         offset: 0,
-                        limit: LIMIT
-                    }
+                        limit: LIMIT,
+                    },
                 });
             });
         });
@@ -125,14 +125,14 @@ describe('api/OffsetBasedAPI', () => {
         test('should immediately reject if offset >= total_count', () => {
             const pagedCommentsResponse = {
                 total_count: 50,
-                entries: []
+                entries: [],
             };
             offsetBasedAPI.xhr = {
                 get: jest.fn().mockReturnValue(
                     Promise.resolve({
-                        data: pagedCommentsResponse
+                        data: pagedCommentsResponse,
                     })
-                )
+                ),
             };
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb, 50).catch(() => {
@@ -145,7 +145,7 @@ describe('api/OffsetBasedAPI', () => {
         test('should call error callback when xhr fails', () => {
             const error = new Error('error');
             offsetBasedAPI.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
@@ -156,8 +156,8 @@ describe('api/OffsetBasedAPI', () => {
                     url,
                     params: {
                         offset: 0,
-                        limit: LIMIT
-                    }
+                        limit: LIMIT,
+                    },
                 });
             });
         });

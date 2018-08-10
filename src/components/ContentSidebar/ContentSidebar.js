@@ -25,13 +25,13 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
-    UNAUTHORIZED_CODE
+    UNAUTHORIZED_CODE,
 } from '../../constants';
 import {
     COMMENTS_FIELDS_TO_FETCH,
     TASKS_FIELDS_TO_FETCH,
     VERSIONS_FIELDS_TO_FETCH,
-    TASK_ASSIGNMENTS_FIELDS_TO_FETCH
+    TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
 } from '../../util/fields';
 import messages from '../messages';
 import { getBadItemError } from '../../util/error';
@@ -69,7 +69,7 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
 };
 
 type State = {
@@ -87,14 +87,14 @@ type State = {
     accessStatsError?: Errors,
     currentUserError?: Errors,
     isFileLoading?: boolean,
-    hasBeenToggled?: boolean
+    hasBeenToggled?: boolean,
 };
 
 const activityFeedInlineError: Errors = {
     inlineError: {
         title: messages.errorOccured,
-        content: messages.activityFeedItemApiError
-    }
+        content: messages.activityFeedItemApiError,
+    },
 };
 class ContentSidebar extends PureComponent<Props, State> {
     id: string;
@@ -116,7 +116,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasActivityFeed: false,
         activitySidebarProps: {},
         detailsSidebarProps: {},
-        metadataSidebarProps: {}
+        metadataSidebarProps: {},
     };
 
     initialState: State = {
@@ -131,7 +131,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         fileError: undefined,
         activityFeedError: undefined,
         accessStatsError: undefined,
-        currentUserError: undefined
+        currentUserError: undefined,
     };
 
     /**
@@ -150,7 +150,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             apiHost,
             clientName,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         } = props;
 
         this.id = uniqueid('bcs_');
@@ -162,7 +162,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             apiHost,
             clientName,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         });
 
         // Clone initial state to allow for state reset on new files
@@ -211,7 +211,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
+    UNSAFE_componentWillReceiveProps(nextProps: Props): void {
         const { fileId, isLarge }: Props = this.props;
         const { file, hasBeenToggled }: State = this.state;
         const hasVisibilityChanged = nextProps.isLarge !== isLarge;
@@ -223,7 +223,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.fetchData(nextProps);
         } else if (!hasBeenToggled && hasVisibilityChanged) {
             this.setState({
-                view: this.getDefaultSidebarView(file, nextProps)
+                view: this.getDefaultSidebarView(file, nextProps),
             });
         }
     }
@@ -241,7 +241,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         const isToggling = isTogglingOff || isTogglingOn;
         this.setState({
             view: isTogglingOff ? undefined : view,
-            hasBeenToggled: isToggling
+            hasBeenToggled: isToggling,
         });
     };
 
@@ -286,12 +286,12 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (SidebarUtils.canHaveActivitySidebar(props)) {
             this.fetchComments({
                 id: fileId,
-                fields: COMMENTS_FIELDS_TO_FETCH
+                fields: COMMENTS_FIELDS_TO_FETCH,
             });
             this.fetchTasks(fileId);
             this.fetchVersions({
                 id: fileId,
-                fields: VERSIONS_FIELDS_TO_FETCH
+                fields: VERSIONS_FIELDS_TO_FETCH,
             });
             this.fetchCurrentUser(currentUser);
         }
@@ -354,9 +354,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             fileError: {
                 inlineError: {
                     title: messages.fileDescriptionInlineErrorTitleMessage,
-                    content: messages.defaultInlineErrorContentMessage
-                }
-            }
+                    content: messages.defaultInlineErrorContentMessage,
+                },
+            },
         });
         this.errorCallback(e);
     };
@@ -372,9 +372,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.setState({
             versions: {
                 total_count: 0,
-                entries: []
+                entries: [],
             },
-            activityFeedError: this.getActivityFeedError(e)
+            activityFeedError: this.getActivityFeedError(e),
         });
         this.errorCallback(e);
     };
@@ -390,9 +390,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.setState({
             comments: {
                 total_count: 0,
-                entries: []
+                entries: [],
             },
-            activityFeedError: this.getActivityFeedError(e)
+            activityFeedError: this.getActivityFeedError(e),
         });
         this.errorCallback(e);
     };
@@ -408,9 +408,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         this.setState({
             tasks: {
                 total_count: 0,
-                entries: []
+                entries: [],
             },
-            activityFeedError: this.getActivityFeedError(e)
+            activityFeedError: this.getActivityFeedError(e),
         });
         this.errorCallback(e);
     };
@@ -424,7 +424,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchTaskAssignmentsErrorCallback = (e: $AxiosXHR<any>): void => {
         this.setState({
-            activityFeedError: this.getActivityFeedError(e)
+            activityFeedError: this.getActivityFeedError(e),
         });
         this.errorCallback(e);
     };
@@ -456,20 +456,20 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         if (getProp(e, 'status') === UNAUTHORIZED_CODE) {
             accessStatsError = {
-                error: messages.fileAccessStatsPermissionsError
+                error: messages.fileAccessStatsPermissionsError,
             };
         } else {
             accessStatsError = {
                 maskError: {
                     errorHeader: messages.fileAccessStatsErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
-                }
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
+                },
             };
         }
 
         this.setState({
             accessStats: undefined,
-            accessStatsError
+            accessStatsError,
         });
         this.errorCallback(e);
     };
@@ -487,9 +487,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             currentUserError: {
                 maskError: {
                     errorHeader: messages.currentUserErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
-                }
-            }
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
+                },
+            },
         });
         this.errorCallback(e);
     };
@@ -503,7 +503,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFileErrorCallback = (e: $AxiosXHR<any>) => {
         this.setState({
-            isFileLoading: false
+            isFileLoading: false,
         });
         this.errorCallback(e);
     };
@@ -670,7 +670,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchFile(id: string, forceFetch: boolean = false): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
             this.setState({
-                isFileLoading: true
+                isFileLoading: true,
             });
 
             this.api
@@ -697,14 +697,14 @@ class ContentSidebar extends PureComponent<Props, State> {
         offset = 0,
         limit = 1000,
         fields,
-        shouldFetchAll = true
+        shouldFetchAll = true,
     }: {
         id: string,
         shouldDestroy?: boolean,
         offset?: number,
         limit?: number,
         fields?: Array<string>,
-        shouldFetchAll?: boolean
+        shouldFetchAll?: boolean,
     }): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
             this.api
@@ -739,14 +739,14 @@ class ContentSidebar extends PureComponent<Props, State> {
         offset = 0,
         limit = 1000,
         fields,
-        shouldFetchAll = true
+        shouldFetchAll = true,
     }: {
         id: string,
         shouldDestroy?: boolean,
         offset?: number,
         limit?: number,
         fields?: Array<string>,
-        shouldFetchAll?: boolean
+        shouldFetchAll?: boolean,
     }): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
             this.api
@@ -775,8 +775,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.setState({
                 comments: {
                     entries: [...comments.entries, comment],
-                    total_count: comments.total_count + 1
-                }
+                    total_count: comments.total_count + 1,
+                },
             });
         }
     }
@@ -821,7 +821,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             errorCallback: (e: $AxiosXHR<any>) => {
                 this.errorCallback(e);
                 errorCallback(e);
-            }
+            },
         });
     };
 
@@ -845,7 +845,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 id,
                 assigned_to,
                 message,
-                resolution_state: message ? message.toLowerCase() : resolution_state
+                resolution_state: message ? message.toLowerCase() : resolution_state,
             };
         });
 
@@ -890,7 +890,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 errorCallback: (e) => {
                     this.createTaskAssignmentErrorCallback(e, task, errorCallback);
                     reject();
-                }
+                },
             });
         });
     }
@@ -934,8 +934,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.setState({
                 tasks: {
                     entries: [...tasks.entries, formattedTask],
-                    total_count: tasks.total_count + 1
-                }
+                    total_count: tasks.total_count + 1,
+                },
             });
 
             successCallback(task);
@@ -976,7 +976,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             errorCallback: (e: $AxiosXHR<any>) => {
                 this.errorCallback(e);
                 errorCallback(e);
-            }
+            },
         });
     };
 
@@ -1018,7 +1018,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             errorCallback: (e: $AxiosXHR<any>) => {
                 errorCallback(e);
                 this.errorCallback(e);
-            }
+            },
         });
     };
 
@@ -1041,14 +1041,14 @@ class ContentSidebar extends PureComponent<Props, State> {
                     entries: entries.map((item) => {
                         if (item.id === id) {
                             return {
-                                ...task
+                                ...task,
                             };
                         }
 
                         return item;
                     }),
-                    total_count
-                }
+                    total_count,
+                },
             });
         }
     }
@@ -1085,7 +1085,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             errorCallback: (e: $AxiosXHR<any>) => {
                 errorCallback(e);
                 this.errorCallback(e);
-            }
+            },
         });
     };
 
@@ -1121,7 +1121,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             errorCallback: (e: $AxiosXHR<any>) => {
                 errorCallback(e, taskId);
                 this.errorCallback(e);
-            }
+            },
         });
     };
 
@@ -1143,8 +1143,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.setState({
                 tasks: {
                     entries: newEntries,
-                    total_count: newEntries.length
-                }
+                    total_count: newEntries.length,
+                },
             });
         }
     };
@@ -1184,7 +1184,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             errorCallback: (e: $AxiosXHR<any>) => {
                 errorCallback(e, commentId);
                 this.errorCallback(e);
-            }
+            },
         });
     };
 
@@ -1206,8 +1206,8 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.setState({
                 comments: {
                     entries: newEntries,
-                    total_count: newEntries.length
-                }
+                    total_count: newEntries.length,
+                },
             });
         }
     };
@@ -1222,8 +1222,8 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchTasks(id: string, shouldDestroy?: boolean = false): void {
         const requestData = {
             params: {
-                fields: TASKS_FIELDS_TO_FETCH.toString()
-            }
+                fields: TASKS_FIELDS_TO_FETCH.toString(),
+            },
         };
 
         if (SidebarUtils.canHaveSidebar(this.props)) {
@@ -1231,7 +1231,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 id,
                 successCallback: this.fetchTaskAssignments,
                 errorCallback: this.fetchTasksErrorCallback,
-                params: requestData
+                params: requestData,
             });
         }
     }
@@ -1251,8 +1251,8 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         const requestData = {
             params: {
-                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH.toString()
-            }
+                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH.toString(),
+            },
         };
 
         const { entries } = tasksWithoutAssignments;
@@ -1296,7 +1296,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.api.getFileAccessStatsAPI(shouldDestroy).get({
                 id,
                 successCallback: this.fetchFileAccessStatsSuccessCallback,
-                errorCallback: this.fetchFileAccessStatsErrorCallback
+                errorCallback: this.fetchFileAccessStatsErrorCallback,
             });
         }
     }
@@ -1315,7 +1315,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 this.api.getUsersAPI(shouldDestroy).get({
                     id: fileId,
                     successCallback: this.fetchCurrentUserSuccessCallback,
-                    errorCallback: this.fetchCurrentUserErrorCallback
+                    errorCallback: this.fetchCurrentUserErrorCallback,
                 });
             } else {
                 this.setState({ currentUser: user, currentUserError: undefined });
@@ -1343,10 +1343,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             id: fileId,
             limit: DEFAULT_MAX_COLLABORATORS,
             params: {
-                filter_term: searchStr
+                filter_term: searchStr,
             },
             successCallback: this.getApproverContactsSuccessCallback,
-            errorCallback: this.errorCallback
+            errorCallback: this.errorCallback,
         });
     }, DEFAULT_COLLAB_DEBOUNCE);
 
@@ -1368,10 +1368,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             id: fileId,
             limit: DEFAULT_MAX_COLLABORATORS,
             params: {
-                filter_term: searchStr
+                filter_term: searchStr,
             },
             successCallback: this.getMentionContactsSuccessCallback,
-            errorCallback: this.errorCallback
+            errorCallback: this.errorCallback,
         });
     }, DEFAULT_COLLAB_DEBOUNCE);
 
@@ -1420,7 +1420,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             activitySidebarProps,
             detailsSidebarProps,
             metadataSidebarProps,
-            onVersionHistoryClick
+            onVersionHistoryClick,
         }: Props = this.props;
         const {
             file,
@@ -1436,14 +1436,14 @@ class ContentSidebar extends PureComponent<Props, State> {
             approverSelectorContacts,
             mentionSelectorContacts,
             currentUserError,
-            isFileLoading
+            isFileLoading,
         }: State = this.state;
 
         const styleClassName = classNames(
             'be bcs',
             {
                 [`bcs-${((view: any): string)}`]: !!view,
-                'bcs-is-open': !!view
+                'bcs-is-open': !!view,
             },
             className
         );
@@ -1455,7 +1455,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <aside id={this.id} className={styleClassName}>
-                    <div className='be-app-element'>
+                    <div className="be-app-element">
                         {SidebarUtils.shouldRenderSidebar(this.props, file) ? (
                             // $FlowFixMe
                             <APIContext.Provider value={this.api}>
@@ -1469,7 +1469,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                         isFileLoading,
                                         onDescriptionChange: this.onDescriptionChange,
                                         ...detailsSidebarProps,
-                                        onClassificationClick: this.onClassificationClick
+                                        onClassificationClick: this.onClassificationClick,
                                     }}
                                     activitySidebarProps={{
                                         ...activitySidebarProps,
@@ -1478,10 +1478,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                                         onTaskCreate: this.createTask,
                                         onTaskDelete: this.deleteTask,
                                         onTaskUpdate: this.updateTask,
-                                        onTaskAssignmentUpdate: this.updateTaskAssignment
+                                        onTaskAssignmentUpdate: this.updateTaskAssignment,
                                     }}
                                     metadataSidebarProps={{
-                                        ...metadataSidebarProps
+                                        ...metadataSidebarProps,
                                     }}
                                     versions={versions}
                                     getPreview={getPreview}
@@ -1506,7 +1506,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 />
                             </APIContext.Provider>
                         ) : (
-                            <div className='bcs-loading'>
+                            <div className="bcs-loading">
                                 <LoadingIndicator />
                             </div>
                         )}

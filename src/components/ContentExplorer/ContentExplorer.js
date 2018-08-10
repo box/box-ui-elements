@@ -49,7 +49,7 @@ import {
     DEFAULT_VIEW_RECENTS,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
-    TYPED_ID_FOLDER_PREFIX
+    TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -96,7 +96,7 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    contentPreviewProps: ContentPreviewProps
+    contentPreviewProps: ContentPreviewProps,
 };
 
 type State = {
@@ -115,7 +115,7 @@ type State = {
     isPreviewModalOpen: boolean,
     isLoading: boolean,
     errorCode: string,
-    focusedRow: number
+    focusedRow: number,
 };
 
 class ContentExplorer extends Component<Props, State> {
@@ -157,8 +157,8 @@ class ContentExplorer extends Component<Props, State> {
         onNavigate: noop,
         defaultView: DEFAULT_VIEW_FILES,
         contentPreviewProps: {
-            contentSidebarProps: {}
-        }
+            contentSidebarProps: {},
+        },
     };
 
     /**
@@ -180,7 +180,7 @@ class ContentExplorer extends Component<Props, State> {
             sortDirection,
             requestInterceptor,
             responseInterceptor,
-            rootFolderId
+            rootFolderId,
         }: Props = props;
 
         this.api = new API({
@@ -192,7 +192,7 @@ class ContentExplorer extends Component<Props, State> {
             requestInterceptor,
             responseInterceptor,
             clientName: CLIENT_NAME_CONTENT_EXPLORER,
-            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
+            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`,
         });
 
         this.id = uniqueid('bce_');
@@ -212,7 +212,7 @@ class ContentExplorer extends Component<Props, State> {
             isPreviewModalOpen: false,
             isLoading: false,
             errorCode: '',
-            focusedRow: 0
+            focusedRow: 0,
         };
     }
 
@@ -264,9 +264,11 @@ class ContentExplorer extends Component<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props) {
+    UNSAFE_componentWillReceiveProps(nextProps: Props) {
         const { currentFolderId }: Props = nextProps;
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id },
+        }: State = this.state;
 
         if (typeof currentFolderId === 'string' && id !== currentFolderId) {
             this.fetchFolder(currentFolderId);
@@ -284,7 +286,7 @@ class ContentExplorer extends Component<Props, State> {
     currentUnloadedCollection(): Collection {
         const { currentCollection }: State = this.state;
         return Object.assign(currentCollection, {
-            percentLoaded: 0
+            percentLoaded: 0,
         });
     }
 
@@ -297,7 +299,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     errorCallback = (error: any) => {
         this.setState({
-            view: VIEW_ERROR
+            view: VIEW_ERROR,
         });
         /* eslint-disable no-console */
         console.error(error);
@@ -312,7 +314,9 @@ class ContentExplorer extends Component<Props, State> {
      */
     finishNavigation() {
         const { autoFocus }: Props = this.props;
-        const { currentCollection: { percentLoaded } }: State = this.state;
+        const {
+            currentCollection: { percentLoaded },
+        }: State = this.state;
 
         // If loading for the very first time, only allow focus if autoFocus is true
         if (this.firstLoad && !autoFocus) {
@@ -338,7 +342,11 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     refreshCollection = () => {
-        const { currentCollection: { id }, view, searchQuery }: State = this.state;
+        const {
+            currentCollection: { id },
+            view,
+            searchQuery,
+        }: State = this.state;
         if (view === VIEW_FOLDER && id) {
             this.fetchFolder(id, false);
         } else if (view === VIEW_RECENTS) {
@@ -366,7 +374,7 @@ class ContentExplorer extends Component<Props, State> {
         const newState = {
             selected: undefined,
             currentCollection: collection,
-            rootName: id === rootFolderId ? name : ''
+            rootName: id === rootFolderId ? name : '',
         };
 
         // Unselect any rows that were selected
@@ -412,7 +420,7 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({
             searchQuery: '',
             view: VIEW_FOLDER,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         // Fetch the folder using folder API
@@ -477,7 +485,7 @@ class ContentExplorer extends Component<Props, State> {
 
         this.setState({
             selected: undefined,
-            currentCollection: Object.assign(currentCollection, collection)
+            currentCollection: Object.assign(currentCollection, collection),
         });
     };
 
@@ -518,7 +526,9 @@ class ContentExplorer extends Component<Props, State> {
      */
     search = (query: string, forceFetch: boolean = false) => {
         const { rootFolderId }: Props = this.props;
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id },
+        }: State = this.state;
         const folderId = typeof id === 'string' ? id : rootFolderId;
         const trimmedQuery: string = query.trim();
 
@@ -535,7 +545,7 @@ class ContentExplorer extends Component<Props, State> {
             // Query now only has bunch of spaces
             // do nothing and but update prior state
             this.setState({
-                searchQuery: query
+                searchQuery: query,
             });
             return;
         }
@@ -544,7 +554,7 @@ class ContentExplorer extends Component<Props, State> {
             selected: undefined,
             searchQuery: query,
             view: VIEW_SEARCH,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         this.debouncedSearch(folderId, query, forceFetch);
@@ -591,7 +601,7 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({
             searchQuery: '',
             view: VIEW_RECENTS,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         // Fetch the folder using folder API
@@ -617,7 +627,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     upload = () => {
-        const { currentCollection: { id, permissions } }: State = this.state;
+        const {
+            currentCollection: { id, permissions },
+        }: State = this.state;
         const { canUpload }: Props = this.props;
         if (!canUpload || !id || !permissions) {
             return;
@@ -629,7 +641,7 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.setState({
-            isUploadModalOpen: true
+            isUploadModalOpen: true,
         });
     };
 
@@ -641,7 +653,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     uploadSuccessHandler = () => {
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id },
+        }: State = this.state;
         this.fetchFolder(id, false, true);
     };
 
@@ -686,7 +700,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id },
+        }: State = this.state;
         if (id) {
             this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
@@ -716,7 +732,10 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
-        const { selected, currentCollection: { items = [] } }: State = this.state;
+        const {
+            selected,
+            currentCollection: { items = [] },
+        }: State = this.state;
         const { onSelect }: Props = this.props;
 
         if (item === selected) {
@@ -994,7 +1013,7 @@ class ContentExplorer extends Component<Props, State> {
             ({ code }) => {
                 this.setState({
                     errorCode: code,
-                    isLoading: false
+                    isLoading: false,
                 });
             }
         );
@@ -1065,10 +1084,13 @@ class ContentExplorer extends Component<Props, State> {
             isCreateFolderModalOpen: false,
             isShareModalOpen: false,
             isUploadModalOpen: false,
-            isPreviewModalOpen: false
+            isPreviewModalOpen: false,
         });
 
-        const { selected, currentCollection: { items = [] } }: State = this.state;
+        const {
+            selected,
+            currentCollection: { items = [] },
+        }: State = this.state;
         if (selected && items.length > 0) {
             focus(this.rootElement, `.bce-item-row-${focusedRow}`);
         }
@@ -1181,7 +1203,7 @@ class ContentExplorer extends Component<Props, State> {
             onUpload,
             requestInterceptor,
             responseInterceptor,
-            contentPreviewProps
+            contentPreviewProps,
         }: Props = this.props;
 
         const {
@@ -1198,7 +1220,7 @@ class ContentExplorer extends Component<Props, State> {
             selected,
             isLoading,
             errorCode,
-            focusedRow
+            focusedRow,
         }: State = this.state;
 
         const { id, permissions }: Collection = currentCollection;
@@ -1212,7 +1234,7 @@ class ContentExplorer extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef}>
-                    <div className='be-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                    <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
                             isSmall={isSmall}

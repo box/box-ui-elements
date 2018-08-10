@@ -17,7 +17,7 @@ import './EmptyState.scss';
 
 type Props = {
     view: View,
-    isLoading: boolean
+    isLoading: boolean,
 };
 
 const EmptyState = ({ view, isLoading }: Props) => {
@@ -45,7 +45,7 @@ const EmptyState = ({ view, isLoading }: Props) => {
     }
 
     return (
-        <div className='be-empty'>
+        <div className="be-empty">
             {type}
             <div>{message}</div>
         </div>

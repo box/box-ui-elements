@@ -12,24 +12,24 @@ const {
     currentUserErrorHeaderMessage,
     errorOccured,
     activityFeedItemApiError,
-    fileAccessStatsPermissionsError
+    fileAccessStatsPermissionsError,
 } = messages;
 
 jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
 
 const file = {
-    id: 'I_AM_A_FILE'
+    id: 'I_AM_A_FILE',
 };
 
 const defaultResponse = {
     total_count: 0,
-    entries: []
+    entries: [],
 };
 
 const activityFeedError = {
     title: errorOccured,
-    content: activityFeedItemApiError
+    content: activityFeedItemApiError,
 };
 
 describe('components/ContentSidebar/ContentSidebar', () => {
@@ -49,15 +49,15 @@ describe('components/ContentSidebar/ContentSidebar', () => {
     describe('componentWillReceiveProps()', () => {
         test('should fetch data when file id has changed', () => {
             const props = {
-                fileId: '123456'
+                fileId: '123456',
             };
             const wrapper = getWrapper(props);
             const instance = wrapper.instance();
             const newProps = {
-                fileId: 'abcdefg'
+                fileId: 'abcdefg',
             };
             instance.fetchData = jest.fn();
-            instance.componentWillReceiveProps(newProps);
+            instance.UNSAFE_componentWillReceiveProps(newProps);
 
             expect(instance.fetchData).toBeCalledWith(newProps);
         });
@@ -66,13 +66,13 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             const newProps = {
-                isLarge: false
+                isLarge: false,
             };
             instance.setState({ file });
 
             instance.setState = jest.fn();
             instance.getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
-            instance.componentWillReceiveProps(newProps);
+            instance.UNSAFE_componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).toBeCalledWith(file, newProps);
             expect(instance.setState).toBeCalledWith({ view: 'view' });
@@ -82,12 +82,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             const newProps = {
-                isLarge: false
+                isLarge: false,
             };
             instance.setState({ file, hasBeenToggled: true });
             instance.setState = jest.fn();
             instance.getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
-            instance.componentWillReceiveProps(newProps);
+            instance.UNSAFE_componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).not.toBeCalled();
             expect(instance.setState).not.toBeCalled();
@@ -217,11 +217,11 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should set error if forbidden', () => {
             instance.fetchFileAccessStatsErrorCallback({
-                status: 403
+                status: 403,
             });
             const { accessStatsError } = wrapper.state();
             expect(accessStatsError).toEqual({
-                error: fileAccessStatsPermissionsError
+                error: fileAccessStatsPermissionsError,
             });
         });
     });
@@ -286,7 +286,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         test('should invoke setState() directly if user parameter is not missing', () => {
             const currentUser = {
                 id: '1234',
-                login: 'wile@acmetesting.com'
+                login: 'wile@acmetesting.com',
             };
 
             const props = { hasProperties: true }; // to force render
@@ -322,12 +322,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState({
                 comments: {
                     total_count: 0,
-                    entries: []
-                }
+                    entries: [],
+                },
             });
 
             instance.createCommentSuccessCallback({
-                type: 'comment'
+                type: 'comment',
             });
 
             const { comments } = instance.state;
@@ -338,12 +338,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState({
                 comments: {
                     total_count: 0,
-                    entries: []
-                }
+                    entries: [],
+                },
             });
 
             instance.createCommentSuccessCallback({
-                type: 'comment'
+                type: 'comment',
             });
 
             const { comments } = instance.state;
@@ -357,7 +357,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let commentsAPI;
 
         const api = {
-            getCommentsAPI: () => commentsAPI
+            getCommentsAPI: () => commentsAPI,
         };
 
         beforeEach(() => {
@@ -376,7 +376,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 createComment: ({ message }) => {
                     expect(message).toEqual(text);
                     done();
-                }
+                },
             };
             instance.setState({ file });
 
@@ -389,7 +389,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 createComment: ({ taggedMessage }) => {
                     expect(taggedMessage).toEqual(text);
                     done();
-                }
+                },
             };
             instance.setState({ file });
 
@@ -403,7 +403,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     successCallback();
                     expect(instance.createCommentSuccessCallback).toBeCalled();
                     done();
-                }
+                },
             };
             instance.setState({ file });
 
@@ -417,7 +417,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     successCallback();
                     expect(onSuccess).toBeCalled();
                     done();
-                }
+                },
             };
             instance.setState({ file });
 
@@ -431,7 +431,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     errorCallback();
                     expect(instance.errorCallback).toBeCalled();
                     done();
-                }
+                },
             };
             instance.setState({ file });
 
@@ -447,7 +447,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     errorCallback();
                     expect(testErrorCallback).toBeCalled();
                     done();
-                }
+                },
             };
             instance.setState({ file });
 
@@ -461,7 +461,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let tasksAPI;
 
         const api = {
-            getTaskAPI: () => tasksAPI
+            getTaskAPI: () => tasksAPI,
         };
 
         beforeEach(() => {
@@ -481,7 +481,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let tasksAPI;
 
         const api = {
-            getTasksAPI: () => tasksAPI
+            getTasksAPI: () => tasksAPI,
         };
 
         beforeEach(() => {
@@ -501,8 +501,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             wrapper.setProps({
                 activitySidebarProps: {
-                    onTaskUpdate
-                }
+                    onTaskUpdate,
+                },
             });
             instance.updateTaskSuccessCallback = jest.fn();
 
@@ -515,7 +515,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     expect(successCb).toBeCalled();
                     expect(errorCb).not.toBeCalled();
                     done();
-                }
+                },
             };
 
             instance.setState({ file });
@@ -529,8 +529,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             wrapper.setProps({
                 activitySidebarProps: {
-                    onTaskUpdate
-                }
+                    onTaskUpdate,
+                },
             });
             instance.updateTaskSuccessCallback = jest.fn();
             instance.errorCallback = jest.fn();
@@ -545,7 +545,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     expect(errorCb).toBeCalled();
                     expect(instance.errorCallback).toBeCalled();
                     done();
-                }
+                },
             };
 
             instance.setState({ file }, () => {
@@ -572,16 +572,16 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     entries: [
                         {
                             id,
-                            message: 'bar'
-                        }
-                    ]
-                }
+                            message: 'bar',
+                        },
+                    ],
+                },
             });
 
             instance.updateTaskSuccessCallback({
                 id,
                 type: 'task',
-                message
+                message,
             });
 
             const { tasks } = instance.state;
@@ -599,16 +599,16 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     entries: [
                         {
                             id,
-                            message
-                        }
-                    ]
-                }
+                            message,
+                        },
+                    ],
+                },
             });
 
             instance.updateTaskSuccessCallback({
                 id: '2',
                 type: 'task',
-                message: 'bar'
+                message: 'bar',
             });
 
             const { tasks } = instance.state;
@@ -631,10 +631,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     total_count: 1,
                     entries: [
                         {
-                            id: '1'
-                        }
-                    ]
-                }
+                            id: '1',
+                        },
+                    ],
+                },
             });
 
             instance.deleteTaskSuccessCallback('2');
@@ -649,10 +649,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     total_count: 1,
                     entries: [
                         {
-                            id
-                        }
-                    ]
-                }
+                            id,
+                        },
+                    ],
+                },
             });
 
             instance.deleteTaskSuccessCallback(id);
@@ -669,7 +669,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let tasksAPI;
 
         const api = {
-            getTasksAPI: () => tasksAPI
+            getTasksAPI: () => tasksAPI,
         };
 
         beforeEach(() => {
@@ -689,8 +689,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             wrapper.setProps({
                 activitySidebarProps: {
-                    onTaskUpdate
-                }
+                    onTaskUpdate,
+                },
             });
             instance.updateTaskSuccessCallback = jest.fn();
 
@@ -703,7 +703,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     expect(successCb).toBeCalled();
                     expect(errorCb).not.toBeCalled();
                     done();
-                }
+                },
             };
 
             instance.setState({ file });
@@ -716,7 +716,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const errorCb = jest.fn();
 
             wrapper.setProps({
-                onTaskUpdate
+                onTaskUpdate,
             });
             instance.updateTaskSuccessCallback = jest.fn();
             instance.errorCallback = jest.fn();
@@ -731,7 +731,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     expect(errorCb).toBeCalled();
                     expect(instance.errorCallback).toBeCalled();
                     done();
-                }
+                },
             };
 
             instance.setState({ file }, () => {
@@ -746,7 +746,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let commentsAPI;
 
         const api = {
-            getCommentsAPI: () => commentsAPI
+            getCommentsAPI: () => commentsAPI,
         };
 
         beforeEach(() => {
@@ -762,8 +762,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             wrapper.setProps({
                 activitySidebarProps: {
-                    onCommentDelete
-                }
+                    onCommentDelete,
+                },
             });
             instance.deleteCommentSuccessCallback = jest.fn();
 
@@ -776,7 +776,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     expect(successCb).toBeCalled();
                     expect(errorCb).not.toBeCalled();
                     done();
-                }
+                },
             };
 
             instance.setState({ file });
@@ -789,7 +789,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const errorCb = jest.fn();
 
             wrapper.setProps({
-                onCommentDelete
+                onCommentDelete,
             });
             instance.deleteCommentSuccessCallback = jest.fn();
             instance.errorCallback = jest.fn();
@@ -804,7 +804,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     expect(errorCb).toBeCalled();
                     expect(instance.errorCallback).toBeCalled();
                     done();
-                }
+                },
             };
 
             instance.setState({ file }, () => {
@@ -827,10 +827,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     total_count: 1,
                     entries: [
                         {
-                            id: '1'
-                        }
-                    ]
-                }
+                            id: '1',
+                        },
+                    ],
+                },
             });
             instance.setState = jest.fn();
 
@@ -846,10 +846,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     total_count: 1,
                     entries: [
                         {
-                            id
-                        }
-                    ]
-                }
+                            id,
+                        },
+                    ],
+                },
             });
 
             instance.deleteCommentSuccessCallback(id);
@@ -872,18 +872,18 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const task = {
                 task_assignment_collection: {
                     entries: [],
-                    total_count: 0
-                }
+                    total_count: 0,
+                },
             };
 
             const assignments = [
-                { id: '1', assigned_to: { id: '1234' }, message: 'completed', resolution_state: 'completed' }
+                { id: '1', assigned_to: { id: '1234' }, message: 'completed', resolution_state: 'completed' },
             ];
             const expectedResult = {
                 task_assignment_collection: {
                     entries: [{ ...assignments[0], type: 'task_assignment' }],
-                    total_count: 1
-                }
+                    total_count: 1,
+                },
             };
 
             const result = instance.appendAssignmentsToTask(task, assignments);
@@ -895,16 +895,16 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const task = {
                 task_assignment_collection: {
                     entries: [],
-                    total_count: 0
-                }
+                    total_count: 0,
+                },
             };
 
             const assignments = [{ id: '1', assigned_to: { id: '1234' }, resolution_state: 'completed' }];
             const expectedResult = {
                 task_assignment_collection: {
                     entries: [{ ...assignments[0], type: 'task_assignment' }],
-                    total_count: 1
-                }
+                    total_count: 1,
+                },
             };
 
             const result = instance.appendAssignmentsToTask(task, assignments);
@@ -945,10 +945,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             id: '1234',
             created_at: '1',
             message: 'test',
-            task_assignment_collection: []
+            task_assignment_collection: [],
         };
         const api = {
-            getTaskAssignmentsAPI: () => taskAssignmentsAPI
+            getTaskAssignmentsAPI: () => taskAssignmentsAPI,
         };
 
         beforeEach(() => {
@@ -959,7 +959,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should resolve on a successful task assignment create', () => {
             taskAssignmentsAPI = {
-                createTaskAssignment: jest.fn().mockReturnValue('foo')
+                createTaskAssignment: jest.fn().mockReturnValue('foo'),
             };
 
             const promise = instance.createTaskAssignment({ id: '1' }, task, { id: '1234' }, () => {});
@@ -972,7 +972,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should call the error callback on a task assignment failure', () => {
             taskAssignmentsAPI = {
-                createTaskAssignment: jest.fn().mockReturnValue(Promise.reject())
+                createTaskAssignment: jest.fn().mockReturnValue(Promise.reject()),
             };
             instance.createTaskAssignmentErrorCallback = jest.fn();
 
@@ -992,7 +992,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let assignees;
         let task;
         const api = {
-            getTaskAssignmentsAPI: () => taskAssignmentsAPI
+            getTaskAssignmentsAPI: () => taskAssignmentsAPI,
         };
 
         beforeEach(() => {
@@ -1008,14 +1008,14 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 id: '1234',
                 created_at: '1',
                 message: 'test',
-                task_assignment_collection: []
+                task_assignment_collection: [],
             };
 
             instance.setState({
                 tasks: {
                     total_count: 0,
-                    entries: []
-                }
+                    entries: [],
+                },
             });
         });
 
@@ -1053,7 +1053,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let wrapper;
         let tasksAPI;
         const api = {
-            getTasksAPI: () => tasksAPI
+            getTasksAPI: () => tasksAPI,
         };
 
         beforeEach(() => {
@@ -1073,7 +1073,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     successCallback();
                     expect(instance.createTaskSuccessCallback).toBeCalled();
                     done();
-                }
+                },
             };
 
             instance.setState({ file });
@@ -1089,7 +1089,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                     expect(instance.errorCallback).toBeCalled();
                     expect(testErrorCallback).toBeCalled();
                     done();
-                }
+                },
             };
 
             instance.setState({ file });
@@ -1314,7 +1314,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should refetch the file', () => {
             wrapper.setProps({
-                fileId: file.id
+                fileId: file.id,
             });
             instance.onClassificationChange();
             expect(fetchFile).toBeCalledWith(file.id, true);
@@ -1322,7 +1322,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should not refetch the file there is no file id', () => {
             wrapper.setState({
-                file
+                file,
             });
 
             instance.onClassificationChange();
@@ -1339,8 +1339,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             onClassificationClick = jest.fn();
             wrapper = getWrapper({
                 detailsSidebarProps: {
-                    onClassificationClick
-                }
+                    onClassificationClick,
+                },
             });
             instance = wrapper.instance();
             instance.onClassificationChange = jest.fn();
@@ -1361,7 +1361,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         beforeEach(() => {
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
             fileStub = jest.fn();
@@ -1369,8 +1369,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             fetchFileErrorCallback = jest.fn();
             instance.api = {
                 getFileAPI: () => ({
-                    file: fileStub
-                })
+                    file: fileStub,
+                }),
             };
             instance.fetchFileSuccessCallback = fetchFileSuccessCallback;
             instance.fetchFileErrorCallback = fetchFileErrorCallback;
@@ -1397,7 +1397,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             setState = jest.fn();
             getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
             instance.getDefaultSidebarView = getDefaultSidebarView;
@@ -1411,7 +1411,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(setState).toBeCalledWith({
                 file,
                 view: 'view',
-                isFileLoading: false
+                isFileLoading: false,
             });
         });
     });
@@ -1425,7 +1425,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             setState = jest.fn();
             errorCallback = jest.fn();
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
             instance.setState = setState;
@@ -1437,7 +1437,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.fetchFileErrorCallback(err);
 
             expect(setState).toBeCalledWith({
-                isFileLoading: false
+                isFileLoading: false,
             });
             expect(errorCallback).toBeCalledWith(err);
         });
@@ -1448,21 +1448,21 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let instance;
         beforeEach(() => {
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
         });
 
         test('should not return an error if forbidden', () => {
             const error = instance.getActivityFeedError({
-                status: 403
+                status: 403,
             });
             expect(error).toBeUndefined();
         });
 
         test('should return an inlineError object if not forbidden', () => {
             const error = instance.getActivityFeedError({
-                status: 500
+                status: 500,
             });
             expect(typeof error.inlineError).toBe('object');
         });

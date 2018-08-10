@@ -14,9 +14,9 @@ const comments = {
             id: '123',
             created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
             tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
-            created_by: { name: 'Akon', id: 11 }
-        }
-    ]
+            created_by: { name: 'Akon', id: 11 },
+        },
+    ],
 };
 
 const tasks = {
@@ -32,10 +32,10 @@ const tasks = {
             dueAt: 1234567891,
             task_assignment_collection: {
                 entries: [{ assigned_to: { name: 'Akon', id: 11 }, resolution_state: 'incomplete' }],
-                total_count: 1
-            }
-        }
-    ]
+                total_count: 1,
+            },
+        },
+    ],
 };
 
 const first_version = {
@@ -46,7 +46,7 @@ const first_version = {
     trashed_at: 1234567891,
     modified_at: 1234567891,
     modified_by: { name: 'Akon', id: 11 },
-    version_number: '1'
+    version_number: '1',
 };
 
 const deleted_version = {
@@ -57,29 +57,29 @@ const deleted_version = {
     trashed_at: 1234567891,
     modified_at: 1234567891,
     modified_by: { name: 'Akon', id: 11 },
-    version_number: '2'
+    version_number: '2',
 };
 
 const versions = {
     total_count: 2,
-    entries: [first_version, deleted_version]
+    entries: [first_version, deleted_version],
 };
 
 const file = {
     id: '12345',
     permissions: {
-        can_comment: true
+        can_comment: true,
     },
     modified_at: 2234567891,
     file_version: {
         id: 987,
-        type: 'file_version'
+        type: 'file_version',
     },
     restored_from: {
         id: first_version.id,
-        type: first_version.type
+        type: first_version.type,
     },
-    version_number: '3'
+    version_number: '3',
 };
 
 const currentUser = { name: 'Kanye West', id: 10 };
@@ -94,7 +94,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     test('should correctly render empty state', () => {
         const items = {
             total_count: 0,
-            entries: []
+            entries: [],
         };
         const wrapper = shallow(
             <ActivityFeed file={file} currentUser={currentUser} comments={items} tasks={items} versions={items} />
@@ -105,11 +105,11 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     test('should render empty state when there is 1 version (current version from file)', () => {
         const oneVersion = {
             total_count: 1,
-            entries: [first_version]
+            entries: [first_version],
         };
 
         const wrapper = getWrapper({
-            versions: oneVersion
+            versions: oneVersion,
         });
         expect(wrapper.find('EmptyState').exists()).toBe(true);
     });
@@ -211,8 +211,8 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         const stopPropagationSpy = jest.fn();
         wrapper.find('.bcs-activity-feed').simulate('keydown', {
             nativeEvent: {
-                stopImmediatePropagation: stopPropagationSpy
-            }
+                stopImmediatePropagation: stopPropagationSpy,
+            },
         });
         expect(stopPropagationSpy).toHaveBeenCalled();
     });
@@ -341,17 +341,17 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const props = { comments, tasks, versions };
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
-            instance.componentWillReceiveProps(props);
+            instance.UNSAFE_componentWillReceiveProps(props);
 
             expect(instance.sortFeedItems).toBeCalledWith(comments, tasks, versions);
         });
 
         test('should not invoke sortFeedItems() once feedItems has already been set', () => {
             const props = { comments, tasks, versions };
-            instance.componentWillReceiveProps(props);
+            instance.UNSAFE_componentWillReceiveProps(props);
 
             instance.sortFeedItems = jest.fn();
-            instance.componentWillReceiveProps(props);
+            instance.UNSAFE_componentWillReceiveProps(props);
 
             expect(instance.sortFeedItems).not.toBeCalled();
         });
@@ -360,7 +360,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const props = { comments, tasks };
             instance.clearFeedItems = jest.fn().mockReturnValue(true);
             instance.sortFeedItems = jest.fn();
-            instance.componentWillReceiveProps(props);
+            instance.UNSAFE_componentWillReceiveProps(props);
 
             expect(instance.sortFeedItems).not.toBeCalled();
         });
@@ -389,7 +389,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should create an item and add it to the feed', () => {
             const itemBase = {
-                my_prop: 'yay'
+                my_prop: 'yay',
             };
 
             instance.addPendingItem(itemBase);
@@ -411,7 +411,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
         test('should add base properties into item added to feed', () => {
             const itemBase = {
-                my_prop: 'supercalifragilisticexpialidocious'
+                my_prop: 'supercalifragilisticexpialidocious',
             };
 
             instance.addPendingItem(itemBase);
@@ -435,11 +435,11 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const message = 'This is missing in the pending item';
             const oldFeedItems = [
                 {
-                    id: uuid
-                }
+                    id: uuid,
+                },
             ];
             const item = {
-                message
+                message,
             };
             instance.setState({ feedItems: oldFeedItems });
 
@@ -450,16 +450,16 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(feedItems[0].message).toBe(message);
         });
 
-        test('should do nothing if it can\'t find an item with matching uuid', () => {
+        test("should do nothing if it can't find an item with matching uuid", () => {
             const uuid = 'a1b2c3d4e5f6';
             const message = 'This is missing in the pending item';
             const oldFeedItems = [
                 {
-                    id: uuid
-                }
+                    id: uuid,
+                },
             ];
             const item = {
-                message
+                message,
             };
             instance.setState({ feedItems: oldFeedItems });
 
@@ -534,7 +534,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(instance.addPendingItem).toBeCalledWith({
                 id: 'uniqueId',
                 tagged_message: 'message',
-                type: 'comment'
+                type: 'comment',
             });
         });
 
@@ -549,7 +549,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const onCommentCreate = (text, hasMention, onSuccess) => {
                 const comment = {
                     message,
-                    hasMention
+                    hasMention,
                 };
                 onSuccess(comment);
             };
@@ -591,7 +591,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         it('should invoke updateFeedItem() with task and id to update', () => {
             const task = {
                 message: 'a message',
-                isPending: false
+                isPending: false,
             };
             const id = 'uniqueId';
             instance.updateFeedItem = jest.fn();
@@ -627,9 +627,9 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 message: text,
                 task_assignment_collection: {
                     entries: [{ assigned_to: { id: '1234', name: 'A. User' }, resolution_state: 'incomplete' }],
-                    total_count: 1
+                    total_count: 1,
                 },
-                type: 'task'
+                type: 'task',
             });
         });
 
@@ -652,7 +652,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 const task = {
                     assignees,
                     due_at: dueAt,
-                    message: textContent
+                    message: textContent,
                 };
                 onSuccess(task);
             };
@@ -669,7 +669,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 {
                     message: text,
                     assignees,
-                    due_at: new Date(dueAt).toISOString()
+                    due_at: new Date(dueAt).toISOString(),
                 },
                 'uniqueId'
             );
@@ -699,7 +699,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             const id = '1;';
             const permissions = {
                 can_edit: false,
-                can_delete: true
+                can_delete: true,
             };
             const onCommentDelete = jest.fn();
             const wrapper = getWrapper({ onCommentDelete });
@@ -744,7 +744,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             expect(wrapper.instance().updateFeedItem).toBeCalledWith(
                 {
                     ...rest,
-                    isPending: false
+                    isPending: false,
                 },
                 task.id
             );
@@ -763,9 +763,9 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
                 {
                     feedItems: [
                         {
-                            id
-                        }
-                    ]
+                            id,
+                        },
+                    ],
                 },
                 () => {
                     expect(wrapper.state('feedItems').length).toBe(1);
@@ -789,7 +789,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         test('should append the current version', () => {
             const fileWithoutRestoredVersion = {
                 ...file,
-                restored_from: null
+                restored_from: null,
             };
             const versionsWithCurrent = instance.addCurrentVersion(versions, fileWithoutRestoredVersion);
             expect(versionsWithCurrent.entries.length).toBe(versions.entries.length + 1);

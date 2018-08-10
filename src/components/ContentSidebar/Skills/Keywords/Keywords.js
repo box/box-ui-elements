@@ -24,7 +24,7 @@ type Props = {
     transcript?: SkillCard,
     isEditable: boolean,
     getViewer?: Function,
-    onSkillChange: Function
+    onSkillChange: Function,
 };
 
 type State = {
@@ -33,7 +33,7 @@ type State = {
     hasError: boolean,
     keywords: Array<SkillCardEntry>,
     adds: Array<SkillCardEntry>,
-    removes: Array<SkillCardEntry>
+    removes: Array<SkillCardEntry>,
 };
 
 class Keywords extends PureComponent<Props, State> {
@@ -54,7 +54,7 @@ class Keywords extends PureComponent<Props, State> {
             removes: [],
             isEditing: props.hasError,
             hasError: props.hasError,
-            isLoading: false
+            isLoading: false,
         };
     }
 
@@ -72,7 +72,7 @@ class Keywords extends PureComponent<Props, State> {
             removes: [],
             isEditing: false,
             hasError: false,
-            isLoading: false
+            isLoading: false,
         });
     }
 
@@ -84,7 +84,7 @@ class Keywords extends PureComponent<Props, State> {
      */
     toggleIsEditing = (): void => {
         this.setState((prevState) => ({
-            isEditing: !prevState.isEditing
+            isEditing: !prevState.isEditing,
         }));
     };
 
@@ -102,11 +102,13 @@ class Keywords extends PureComponent<Props, State> {
         const regex = new RegExp(`\\b${((keyword.text: any): string)}\\b`, 'i');
 
         if (transcript && Array.isArray(transcript.entries)) {
-            transcript.entries.forEach(({ text, appears }: SkillCardEntry): void => {
-                if (text && regex.test(text) && Array.isArray(appears) && appears.length > 0) {
-                    locations.push(appears[0]);
+            transcript.entries.forEach(
+                ({ text, appears }: SkillCardEntry): void => {
+                    if (text && regex.test(text) && Array.isArray(appears) && appears.length > 0) {
+                        locations.push(appears[0]);
+                    }
                 }
-            });
+            );
         }
 
         keyword.appears = locations;
@@ -171,16 +173,16 @@ class Keywords extends PureComponent<Props, State> {
         const hasKeywords = keywords.length > 0;
         const entries = keywords.filter((face: SkillCardEntry) => !removes.includes(face)).concat(adds);
         const editClassName = classNames('be-keyword-edit', {
-            'be-keyword-is-editing': isEditing
+            'be-keyword-is-editing': isEditing,
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading} className='be-keywords'>
+            <LoadingIndicatorWrapper isLoading={isLoading} className="be-keywords">
                 {hasKeywords &&
                     isEditable &&
                     !isLoading && (
                         <PlainButton
-                            type='button'
+                            type="button"
                             className={editClassName}
                             onClick={this.toggleIsEditing}
                             data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}

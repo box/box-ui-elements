@@ -69,13 +69,13 @@ class Tasks extends Base {
         message,
         dueAt,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         message: string,
         dueAt?: string,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): void {
         const { id = '', permissions } = file;
 
@@ -90,11 +90,11 @@ class Tasks extends Base {
             data: {
                 item: {
                     id,
-                    type: 'file'
+                    type: 'file',
                 },
                 message,
-                due_at: dueAt
-            }
+                due_at: dueAt,
+            },
         };
 
         this.post({
@@ -102,7 +102,7 @@ class Tasks extends Base {
             url: this.tasksUrl(),
             data: requestData,
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 
@@ -123,14 +123,14 @@ class Tasks extends Base {
         message,
         dueAt,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         taskId: string,
         message: string,
         dueAt?: string,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): void {
         const { id = '', permissions } = file;
 
@@ -154,7 +154,7 @@ class Tasks extends Base {
             url: this.tasksUrl(taskId),
             data: requestData,
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 
@@ -171,12 +171,12 @@ class Tasks extends Base {
         file,
         taskId,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         file: BoxItem,
         taskId: string,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): void {
         const { id = '', permissions } = file;
 
@@ -192,7 +192,7 @@ class Tasks extends Base {
             id,
             url: this.tasksUrl(taskId),
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 }
