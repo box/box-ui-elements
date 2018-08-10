@@ -1369,7 +1369,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             fetchFileErrorCallback = jest.fn();
             instance.api = {
                 getFileAPI: () => ({
-                    file: fileStub
+                    getFile: fileStub
                 })
             };
             instance.fetchFileSuccessCallback = fetchFileSuccessCallback;
@@ -1378,12 +1378,18 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should fetch the file with forceFetch', () => {
             instance.fetchFile(file.id);
-            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, false, true);
+            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, {
+                forceFetch: false,
+                includePreviewSidebarFields: true
+            });
         });
 
         test('should fetch the file with forceFetch', () => {
             instance.fetchFile(file.id);
-            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, false, true);
+            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, {
+                forceFetch: false,
+                includePreviewSidebarFields: true
+            });
         });
     });
 
