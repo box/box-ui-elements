@@ -450,9 +450,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                 isFileLoading: true
             });
 
-            this.api
-                .getFileAPI()
-                .file(id, this.fetchFileSuccessCallback, this.fetchFileErrorCallback, forceFetch, true);
+            this.api.getFileAPI().getFile(id, this.fetchFileSuccessCallback, this.fetchFileErrorCallback, {
+                forceFetch,
+                includePreviewSidebarFields: true
+            });
         }
     }
 
