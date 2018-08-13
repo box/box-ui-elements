@@ -20,6 +20,7 @@ import FileAccessStatsAPI from './FileAccessStats';
 import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
 import FileCollaboratorsAPI from './FileCollaborators';
+import FeedAPI from './Feed';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 
 class APIFactory {
@@ -102,6 +103,11 @@ class APIFactory {
      * @property {FileCollaboratorsAPI}
      */
     fileCollaboratorsAPI: FileCollaboratorsAPI;
+
+    /**
+     * @property {FeedAPI}
+     */
+    feedItemsAPI: FeedAPI;
 
     /**
      * [constructor]
@@ -393,7 +399,7 @@ class APIFactory {
         return this.taskAssignmentsAPI;
     }
 
-    /*
+    /**
      * API for file access stats
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
@@ -408,7 +414,7 @@ class APIFactory {
         return this.fileAccessStatsAPI;
     }
 
-    /*
+    /**
      * API for file collaborators
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
@@ -423,7 +429,7 @@ class APIFactory {
         return this.fileCollaboratorsAPI;
     }
 
-    /*
+    /**
      * API for Users
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
@@ -437,6 +443,23 @@ class APIFactory {
         this.usersAPI = new UsersAPI(this.options);
         return this.usersAPI;
     }
+
+    /**
+     * API for Feed Items
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {FeedAPI} FeedAPI instance
+     */
+    getFeedAPI(shouldDestroy: boolean): FeedAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.feedItemsAPI = new FeedAPI(this.options);
+        return this.feedItemsAPI;
+    }
+
+
 }
 
 export default APIFactory;

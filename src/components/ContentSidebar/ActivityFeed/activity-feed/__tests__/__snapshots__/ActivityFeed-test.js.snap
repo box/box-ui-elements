@@ -1,104 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should correctly render active state 1`] = `
-<div
-  className="bcs-activity-feed"
-  onKeyDown={[Function]}
->
-  <div
-    className="bcs-activity-feed-items-container"
-  >
-    <Component
-      currentUser={
-        Object {
-          "id": 10,
-          "name": "Kanye West",
-        }
-      }
-      items={
-        Array [
-          Object {
-            "created_at": "Thu Sep 26 33658 19:46:39 GMT-0600 (CST)",
-            "created_by": Object {
-              "id": 11,
-              "name": "Akon",
-            },
-            "id": "123",
-            "tagged_message": "test @[123:Jeezy] @[10:Kanye West]",
-            "type": "comment",
-          },
-          Object {
-            "created_at": "Thu Sep 25 33658 19:45:39 GMT-0600 (CST)",
-            "dueAt": 1234567891,
-            "id": "1234",
-            "modified_at": "Thu Sep 25 33658 19:46:39 GMT-0600 (CST)",
-            "modified_by": Object {
-              "id": 10,
-              "name": "Jay-Z",
-            },
-            "tagged_message": "test",
-            "task_assignment_collection": Object {
-              "entries": Array [
-                Object {
-                  "assigned_to": Object {
-                    "id": 11,
-                    "name": "Akon",
-                  },
-                  "resolution_state": "incomplete",
-                },
-              ],
-              "total_count": 1,
-            },
-            "type": "task",
-          },
-          Object {
-            "action": "upload",
-            "created_at": "Thu Sep 20 33658 19:45:39 GMT-0600 (CST)",
-            "id": 123,
-            "modified_at": 1234567891,
-            "modified_by": Object {
-              "id": 11,
-              "name": "Akon",
-            },
-            "trashed_at": 1234567891,
-            "type": "file_version",
-            "version_number": "1",
-          },
-          Object {
-            "action": "delete",
-            "created_at": "Thu Sep 20 33658 19:45:39 GMT-0600 (CST)",
-            "id": 234,
-            "modified_at": 1234567891,
-            "modified_by": Object {
-              "id": 11,
-              "name": "Akon",
-            },
-            "trashed_at": 1234567891,
-            "type": "file_version",
-            "version_number": "2",
-          },
-          Object {
-            "action": "restore",
-            "created_at": 2234567891,
-            "id": 987,
-            "modified_at": 1234567891,
-            "modified_by": undefined,
-            "trashed_at": 1234567891,
-            "type": "file_version",
-            "version_number": "1",
-          },
-        ]
-      }
-      onCommentDelete={[Function]}
-      onTaskAssignmentUpdate={[Function]}
-      onTaskDelete={[Function]}
-      onTaskEdit={[Function]}
-      onVersionInfo={null}
-    />
-  </div>
-</div>
-`;
-
 exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed should correctly render empty loading state 1`] = `
 <div
   className="bcs-activity-feed"
@@ -124,7 +25,7 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
     className="bcs-activity-feed-items-container"
   >
     <EmptyState
-      isLoading={false}
+      isLoading={true}
       showCommentMessage={false}
     />
   </div>
@@ -173,24 +74,8 @@ exports[`components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed shoul
   >
     <EmptyState
       isLoading={true}
-      showCommentMessage={true}
+      showCommentMessage={false}
     />
   </div>
-  <ApprovalCommentForm
-    className="bcs-activity-feed-comment-input"
-    createComment={[Function]}
-    createTask={[Function]}
-    isOpen={false}
-    onCancel={[Function]}
-    onFocus={[Function]}
-    onSubmit={[Function]}
-    updateTask={[Function]}
-    user={
-      Object {
-        "id": 10,
-        "name": "Kanye West",
-      }
-    }
-  />
 </div>
 `;

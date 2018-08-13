@@ -11,3 +11,7 @@ export function getBadItemError(): Error {
 export function getBadPermissionsError(): Error {
     return new Error('Insufficient Permissions!');
 }
+
+export function getBadUserError(): Error {
+    return new Error('Bad box user!');
+}

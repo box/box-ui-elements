@@ -48,3 +48,24 @@ export default function(
 
     return item;
 }
+
+/**
+ * Sort valid feed items, descending by created_at time.
+ *
+ * @param {Array<?Comments | ?Tasks | ?FileVersions>} args - Arguments list of each item container
+ * type that is allowed in the feed.
+ * @return {Array<?Comments | ?Tasks | ?FileVersions>} the sorted feed items
+ */
+export function sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): FeedItems {
+    const feedItems: FeedItems = args
+        .reduce((items, itemContainer) => {
+            if (itemContainer) {
+                return items.concat(itemContainer.entries);
+            }
+
+            return items;
+        }, [])
+        .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+
+    return feedItems;
+}

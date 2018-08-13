@@ -35,17 +35,7 @@ type Props = {
     hasActivityFeed: boolean,
     hasSkills: boolean,
     hasDetails: boolean,
-    getApproverWithQuery?: Function,
-    getMentionWithQuery?: Function,
     translations?: Translations,
-    versions?: FileVersions,
-    comments?: Comments,
-    tasks?: Tasks,
-    approverSelectorContacts?: SelectorItems,
-    mentionSelectorContacts?: SelectorItems,
-    activityFeedError: ?Errors,
-    currentUserError?: Errors,
-    getAvatarUrl: (string) => Promise<?string>,
     onToggle: Function,
     onVersionHistoryClick?: Function
 };
@@ -63,15 +53,6 @@ const Sidebar = ({
     activitySidebarProps,
     detailsSidebarProps,
     metadataSidebarProps,
-    getApproverWithQuery,
-    getMentionWithQuery,
-    tasks,
-    comments,
-    versions,
-    activityFeedError,
-    approverSelectorContacts,
-    mentionSelectorContacts,
-    getAvatarUrl,
     onToggle,
     onVersionHistoryClick
 }: Props) => (
@@ -89,7 +70,6 @@ const Sidebar = ({
                 <DetailsSidebar
                     key={file.id}
                     file={file}
-                    versions={versions}
                     onVersionHistoryClick={onVersionHistoryClick}
                     {...detailsSidebarProps}
                 />
@@ -102,15 +82,6 @@ const Sidebar = ({
                     key={file.id}
                     currentUser={currentUser}
                     file={file}
-                    tasks={tasks}
-                    comments={comments}
-                    versions={versions}
-                    activityFeedError={activityFeedError}
-                    approverSelectorContacts={approverSelectorContacts}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    getApproverWithQuery={getApproverWithQuery}
-                    getMentionWithQuery={getMentionWithQuery}
-                    getAvatarUrl={getAvatarUrl}
                     onVersionHistoryClick={onVersionHistoryClick}
                     {...activitySidebarProps}
                 />

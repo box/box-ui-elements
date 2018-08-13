@@ -15,7 +15,7 @@ import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 import './Version.scss';
 import { VERSION_UPLOAD_ACTION, VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
 
-function getMessageForAction(name: React.Node, action: string, version_number: number): React.Node {
+function getMessageForAction(name: React.Node, action: string, version_number: string): React.Node {
     switch (action) {
         case VERSION_UPLOAD_ACTION:
             return (
@@ -58,7 +58,7 @@ type Props = {
     id: string,
     intl: any,
     onInfo?: Function,
-    version_number: number
+    version_number: string
 };
 
 const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Props): React.Node => (
