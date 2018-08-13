@@ -109,17 +109,12 @@ class File extends Item {
      * @param {string} id - File id
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
-     * @param {boolean|void} [forceFetch] - Bypasses the cache
-     * @param {boolean|void} [includePreviewSidebar] - Optionally include preview sidebar fields
+     * @param {boolean|void} [options.forceFetch] - Bypasses the cache
+     * @param {boolean|void} [options.includePreviewSidebar] - Optionally include preview sidebar fields
+     * @param {boolean|void} [options.refreshCache] - Updates the cache
      * @return {Promise}
      */
-    file(
-        id: string,
-        successCallback: Function,
-        errorCallback: Function,
-        forceFetch: boolean = false,
-        includePreviewSidebarFields: boolean = false
-    ): Promise<void> {
+    getFile(id: string, successCallback: Function, errorCallback: Function, options: Object = {}): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
@@ -128,14 +123,16 @@ class File extends Item {
         const key = this.getCacheKey(id);
 
         // Clear the cache if needed
-        if (forceFetch) {
+        if (options.forceFetch) {
             cache.unset(key);
         }
 
         // Return the Cache value if it exists
         if (cache.has(key)) {
             successCallback(cache.get(key));
-            return Promise.resolve();
+            if (!options.refreshCache) {
+                return Promise.resolve();
+            }
         }
 
         // Make the XHR request
@@ -146,7 +143,7 @@ class File extends Item {
                 id: getTypedFileId(id),
                 url: this.getUrl(id),
                 params: {
-                    fields: getFieldsAsString(true, includePreviewSidebarFields)
+                    fields: getFieldsAsString(true, options.includePreviewSidebarFields)
                 },
                 headers: { 'X-Rep-Hints': X_REP_HINTS }
             })

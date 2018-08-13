@@ -1,0 +1,12 @@
+@import '../variables';
+
+.bcpr {
+    .bcpr-notification {
+        position: absolute;
+        width: 100%;
+
+        .notification > svg {
+            display: none;
+        }
+    }
+}
