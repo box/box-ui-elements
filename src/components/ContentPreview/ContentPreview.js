@@ -28,6 +28,7 @@ import { isValidBoxFile } from '../../util/fields';
 import { isInputElement, focus } from '../../util/dom';
 import { getTypedFileId } from '../../util/file';
 import SidebarUtils from '../ContentSidebar/SidebarUtils';
+import ReloadNotification from './ReloadNotification';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -79,7 +80,8 @@ type Props = {
 
 type State = {
     file?: BoxItem,
-    isFileError?: boolean
+    isFileError: boolean,
+    isReloadNotificationVisible: boolean
 };
 
 // Emitted by preview's 'load' event
@@ -106,7 +108,7 @@ const MS_IN_S = 1000; // ms in a sec
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
     props: Props;
-    state: State = {};
+    state: State;
     preview: any;
     api: API;
     previewContainer: ?HTMLDivElement;
@@ -114,6 +116,12 @@ class ContentPreview extends PureComponent<Props, State> {
     rootElement: HTMLElement;
     retryCount: number = 0;
     retryTimeout: TimeoutID;
+    updatedFile: ?BoxItem;
+
+    initialState: State = {
+        isFileError: false,
+        isReloadNotificationVisible: false
+    };
 
     static defaultProps = {
         className: '',
@@ -175,6 +183,7 @@ class ContentPreview extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor
         });
+        this.state = { ...this.initialState };
     }
 
     /**
@@ -580,6 +589,28 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
+     * Updates preview file.
+     *
+     * @return {void}
+     */
+    updateFile = () => {
+        if (this.updatedFile) {
+            this.setState({ ...this.initialState, file: this.updatedFile }, () => {
+                this.updatedFile = undefined;
+            });
+        }
+    };
+
+    /**
+     * Removes the reload notification
+     *
+     * @return {void}
+     */
+    closeReloadNotification = () => {
+        this.setState({ isReloadNotificationVisible: false });
+    };
+
+    /**
      * Tells the preview to resize
      *
      * @return {void}
@@ -591,19 +622,6 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
-     * Network error callback
-     *
-     * @param {Error} error error object
-     * @return {void}
-     */
-    errorCallback = (error: Error): void => {
-        this.fetchFileEndTime = performance.now();
-        /* eslint-disable no-console */
-        console.error(error);
-        /* eslint-enable no-console */
-    };
-
-    /**
      * File fetch success callback
      *
      * @param {Object} file - Box file
@@ -612,7 +630,22 @@ class ContentPreview extends PureComponent<Props, State> {
     fetchFileSuccessCallback = (file: BoxItem): void => {
         this.fetchFileEndTime = performance.now();
         this.retryCount = 0;
-        this.setState({ file, isFileError: false });
+
+        const { file: currentFile }: State = this.state;
+        const isExistingFile = currentFile ? currentFile.id === file.id : false;
+        const isWatermarked = getProp(file, 'watermark_info.is_watermarked', false);
+
+        // If the file is watermarked or if its a new file, then update the state
+        // In this case preview should reload without prompting the user
+        if (isWatermarked || !isExistingFile) {
+            this.setState({ ...this.initialState, file });
+            // $FlowFixMe file version and sha1 should exist at this point
+        } else if (currentFile.file_version.sha1 !== file.file_version.sha1) {
+            // If we are already prevewing the file that got updated then show the
+            // user a notification to reload the file only if its sha1 changed
+            this.updatedFile = file;
+            this.setState({ ...this.initialState, isReloadNotificationVisible: true });
+        }
     };
 
     /**
@@ -654,7 +687,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {Function|void} [errorCallback] - Callback after error
      * @return {void}
      */
-    fetchFile(id: string, successCallback: ?Function, errorCallback: ?Function): void {
+    fetchFile(id: string, successCallback?: Function, errorCallback?: Function): void {
         if (!id) {
             throw InvalidIdError;
         }
@@ -664,12 +697,15 @@ class ContentPreview extends PureComponent<Props, State> {
 
         this.api
             .getFileAPI()
-            .file(
+            .getFile(
                 id,
                 successCallback || this.fetchFileSuccessCallback,
                 errorCallback || this.fetchFileErrorCallback,
-                false,
-                SidebarUtils.canHaveSidebar(this.props.contentSidebarProps)
+                {
+                    forceFetch: false,
+                    refreshCache: true,
+                    includePreviewSidebarFields: SidebarUtils.canHaveSidebar(this.props.contentSidebarProps)
+                }
             );
     }
 
@@ -711,12 +747,13 @@ class ContentPreview extends PureComponent<Props, State> {
             return -1;
         }
 
-        const index = collection.indexOf(file);
-        if (index < 0) {
-            return collection.indexOf(file.id);
-        }
+        return collection.findIndex((item) => {
+            if (typeof item === 'string') {
+                return item === file.id;
+            }
 
-        return index;
+            return item.id === file.id;
+        });
     }
 
     /**
@@ -920,7 +957,7 @@ class ContentPreview extends PureComponent<Props, State> {
             responseInterceptor
         }: Props = this.props;
 
-        const { file, isFileError }: State = this.state;
+        const { file, isFileError, isReloadNotificationVisible }: State = this.state;
         const { collection }: Props = this.props;
         const fileIndex = this.getFileIndex();
         const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
@@ -950,19 +987,18 @@ class ContentPreview extends PureComponent<Props, State> {
                     )}
                     <div className='bcpr-body'>
                         <div className='bcpr-container' onMouseMove={this.onMouseMove} ref={this.containerRef}>
-                            {!file ? (
+                            {file ? (
+                                <Measure bounds onResize={this.onResize}>
+                                    {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
+                                </Measure>
+                            ) : (
                                 <div className='bcpr-loading-wrapper'>
                                     <PreviewLoading
                                         isLoading={!isFileError}
                                         loadingIndicatorProps={{ size: 'large' }}
                                     />
                                 </div>
-                            ) : (
-                                <Measure bounds onResize={this.onResize}>
-                                    {({ measureRef: previewRef }) => <div ref={previewRef} className='bcpr-content' />}
-                                </Measure>
                             )}
-
                             {hasLeftNavigation && (
                                 <PlainButton type='button' className='bcpr-navigate-left' onClick={this.navigateLeft}>
                                     <IconNavigateLeft />
@@ -991,6 +1027,9 @@ class ContentPreview extends PureComponent<Props, State> {
                             />
                         )}
                     </div>
+                    {isReloadNotificationVisible && (
+                        <ReloadNotification onClose={this.closeReloadNotification} onClick={this.updateFile} />
+                    )}
                 </div>
             </Internationalize>
         );

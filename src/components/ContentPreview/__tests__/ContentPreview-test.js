@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import PreviewLoading from '../PreviewLoading';
 import * as TokenService from '../../../util/TokenService';
+import SidebarUtils from '../../ContentSidebar/SidebarUtils';
 
 jest.mock('../../Internationalize', () => 'mock-internationalize');
 
@@ -201,6 +202,79 @@ describe('components/ContentPreview/ContentPreview', () => {
         });
     });
 
+    describe('fetchFile()', () => {
+        let getFileStub;
+        let instance;
+
+        beforeEach(() => {
+            file = { id: '123' };
+            props = {
+                token: 'token',
+                fileId: file.id,
+                contentSidebarProps: {
+                    hasSkills: true
+                }
+            };
+            const wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            getFileStub = jest.fn();
+            instance.api = {
+                getFileAPI: () => ({
+                    getFile: getFileStub
+                })
+            };
+        });
+
+        test('should fetch the file with provided success and error callbacks', () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
+            instance.fetchFile(file.id, success, error);
+            expect(getFileStub).toBeCalledWith(file.id, success, error, {
+                forceFetch: false,
+                refreshCache: true,
+                includePreviewSidebarFields: true
+            });
+            expect(SidebarUtils.canHaveSidebar).toHaveBeenCalledWith(props.contentSidebarProps);
+        });
+
+        test('should fetch the file with default success and error callback', () => {
+            instance.fetchFileSuccessCallback = jest.fn();
+            instance.fetchFileErrorCallback = jest.fn();
+            SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
+            instance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                instance.fetchFileSuccessCallback,
+                instance.fetchFileErrorCallback,
+                {
+                    forceFetch: false,
+                    refreshCache: true,
+                    includePreviewSidebarFields: true
+                }
+            );
+            expect(SidebarUtils.canHaveSidebar).toHaveBeenCalledWith(props.contentSidebarProps);
+        });
+
+        test('should fetch the file without sidebar fields', () => {
+            instance.fetchFileSuccessCallback = jest.fn();
+            instance.fetchFileErrorCallback = jest.fn();
+            SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(false);
+            instance.fetchFile(file.id);
+            expect(getFileStub).toBeCalledWith(
+                file.id,
+                instance.fetchFileSuccessCallback,
+                instance.fetchFileErrorCallback,
+                {
+                    forceFetch: false,
+                    refreshCache: true,
+                    includePreviewSidebarFields: false
+                }
+            );
+            expect(SidebarUtils.canHaveSidebar).toHaveBeenCalledWith(props.contentSidebarProps);
+        });
+    });
+
     describe('fetchFileSuccessCallback()', () => {
         let instance;
 
@@ -212,10 +286,53 @@ describe('components/ContentPreview/ContentPreview', () => {
 
         test('should reset the retry count and set state', () => {
             instance.fetchFileSuccessCallback(file);
-
             expect(instance.retryCount).toEqual(0);
             expect(instance.state.file).toEqual(file);
             expect(instance.state.isFileError).toEqual(false);
+            expect(instance.state.isReloadNotificationVisible).toEqual(false);
+        });
+
+        test('should set the state to new file if watermarked', () => {
+            const newFile = { ...file };
+            newFile.watermark_info = { is_watermarked: true };
+            instance.setState({ file });
+            instance.fetchFileSuccessCallback(newFile);
+
+            expect(instance.retryCount).toEqual(0);
+            expect(instance.state.file).toEqual(newFile);
+            expect(instance.state.isFileError).toEqual(false);
+            expect(instance.state.isReloadNotificationVisible).toEqual(false);
+        });
+
+        test('should not set new file in state if sha1 matches', () => {
+            const newFile = { ...file };
+            newFile.file_version = { sha1: 'sha' };
+            file.file_version = { sha1: 'sha' };
+            instance.setState({
+                file
+            });
+            instance.fetchFileSuccessCallback(newFile);
+
+            expect(instance.retryCount).toEqual(0);
+            expect(instance.state.file).toEqual(file);
+        });
+
+        test('should not set new file in state but show notification if sha1 changes', () => {
+            const newFile = { ...file };
+            newFile.file_version = { sha1: 'sha1' };
+            file.file_version = { sha1: 'sha2' };
+            instance.setState({
+                file,
+                isFileError: true,
+                isReloadNotificationVisible: true
+            });
+            instance.fetchFileSuccessCallback(newFile);
+
+            expect(instance.retryCount).toEqual(0);
+            expect(instance.updatedFile).toEqual(newFile);
+            expect(instance.state.file).toEqual(file);
+            expect(instance.state.isFileError).toBeFalsy();
+            expect(instance.state.isReloadNotificationVisible).toBeTruthy();
         });
     });
 
@@ -442,6 +559,36 @@ describe('components/ContentPreview/ContentPreview', () => {
         test('should render PreviewLoading if there is no file', () => {
             const wrapper = getWrapper(props);
             expect(wrapper.find(PreviewLoading).exists()).toBe(true);
+        });
+    });
+
+    describe('updateFile()', () => {
+        test('should set new file in state if it exists', () => {
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+            instance.setState({
+                isReloadNotificationVisible: true,
+                isFileError: true
+            });
+            file = { id: '123' };
+            instance.updatedFile = file;
+            instance.updateFile();
+            expect(instance.state.file).toEqual(file);
+            expect(instance.updatedFile).toBeUndefined();
+            expect(instance.state.isReloadNotificationVisible).toBeFalsy();
+            expect(instance.state.isFileError).toBeFalsy();
+        });
+    });
+
+    describe('closeReloadNotification()', () => {
+        test('should set new file in state if it exists', () => {
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+            instance.setState({
+                isReloadNotificationVisible: true
+            });
+            instance.closeReloadNotification();
+            expect(instance.state.isReloadNotificationVisible).toBeFalsy();
         });
     });
 });

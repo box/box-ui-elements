@@ -255,7 +255,7 @@ describe('api/File', () => {
             file.xhr = null;
             const success = jest.fn();
             const error = jest.fn();
-            return file.file('id', success, error).catch(() => {
+            return file.getFile('id', success, error).catch(() => {
                 expect(file.getCache).not.toHaveBeenCalled();
                 expect(file.getCacheKey).not.toHaveBeenCalled();
                 expect(success).not.toHaveBeenCalled();
@@ -270,7 +270,7 @@ describe('api/File', () => {
             file.getCache = jest.fn().mockReturnValueOnce(cache);
             file.getCacheKey = jest.fn().mockReturnValueOnce('key');
             const success = jest.fn();
-            return file.file('id', success).then(() => {
+            return file.getFile('id', success).then(() => {
                 expect(file.getCacheKey).toHaveBeenCalledWith('id');
                 expect(success).toHaveBeenCalledWith('file');
             });
@@ -278,13 +278,13 @@ describe('api/File', () => {
 
         test('should make xhr to get file and call success callback', () => {
             file.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } }))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: 'new file' }))
             };
 
             const success = jest.fn();
 
-            return file.file('id', success).then(() => {
-                expect(success).toHaveBeenCalledWith({ file: 'new file' });
+            return file.getFile('id', success).then(() => {
+                expect(success).toHaveBeenCalledWith('new file');
                 expect(file.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
@@ -309,7 +309,7 @@ describe('api/File', () => {
 
             const success = jest.fn();
 
-            return file.file('id', success).then(() => {
+            return file.getFile('id', success).then(() => {
                 expect(success).not.toHaveBeenCalled();
                 expect(file.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
@@ -333,14 +333,43 @@ describe('api/File', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return file.file('id', successCb, errorCb, false, true).then(() => {
-                expect(successCb).not.toHaveBeenCalled();
-                expect(errorCb).toHaveBeenCalledWith(error);
+            return file
+                .getFile('id', successCb, errorCb, { forceFetch: false, includePreviewSidebarFields: true })
+                .then(() => {
+                    expect(successCb).not.toHaveBeenCalled();
+                    expect(errorCb).toHaveBeenCalledWith(error);
+                    expect(file.xhr.get).toHaveBeenCalledWith({
+                        id: 'file_id',
+                        url: 'https://api.box.com/2.0/files/id',
+                        params: {
+                            fields: getFieldsAsString(true, true)
+                        },
+                        headers: {
+                            'X-Rep-Hints': X_REP_HINTS
+                        }
+                    });
+                });
+        });
+
+        test('should make xhr to get file when forced to clear cache', () => {
+            cache.set('key', 'file');
+            file.options = { cache };
+            file.getCache = jest.fn().mockReturnValueOnce(cache);
+            file.getCacheKey = jest.fn().mockReturnValueOnce('key');
+            file.xhr = {
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: 'new file' }))
+            };
+
+            const success = jest.fn();
+
+            return file.getFile('id', success, 'error', { forceFetch: true }).then(() => {
+                expect(file.getCacheKey).toHaveBeenCalledWith('id');
+                expect(success).toHaveBeenCalledWith('new file');
                 expect(file.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
                     params: {
-                        fields: getFieldsAsString(true, true)
+                        fields: getFieldsAsString(true)
                     },
                     headers: {
                         'X-Rep-Hints': X_REP_HINTS
@@ -349,21 +378,22 @@ describe('api/File', () => {
             });
         });
 
-        test('should make xhr to get file when forced to clear cache', () => {
+        test('should make xhr to get file even with cached file when asked to update cache', () => {
             cache.set('key', 'file');
-            file.xhr = null;
             file.options = { cache };
             file.getCache = jest.fn().mockReturnValueOnce(cache);
             file.getCacheKey = jest.fn().mockReturnValueOnce('key');
             file.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: { file: 'new file' } }))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: 'new file' }))
             };
 
             const success = jest.fn();
 
-            return file.file('id', success, 'error', true).then(() => {
+            return file.getFile('id', success, 'error', { forceFetch: false, refreshCache: true }).then(() => {
                 expect(file.getCacheKey).toHaveBeenCalledWith('id');
-                expect(success).toHaveBeenCalledWith({ file: 'new file' });
+                expect(success).toHaveBeenCalledTimes(2);
+                expect(success).toHaveBeenNthCalledWith(1, 'file');
+                expect(success).toHaveBeenNthCalledWith(2, 'new file');
                 expect(file.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
                     url: 'https://api.box.com/2.0/files/id',
