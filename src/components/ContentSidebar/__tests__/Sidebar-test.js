@@ -3,9 +3,10 @@ import { shallow } from 'enzyme';
 import Sidebar from '../Sidebar';
 import DetailsSidebar from '../DetailsSidebar';
 import SkillsSidebar from '../SkillsSidebar';
-import ActivitySidebar from '../ActivitySidebar';
 import MetadataSidebar from '../MetadataSidebar';
 import SidebarNav from '../SidebarNav';
+
+jest.mock('../ActivitySidebar', () => 'ActivitySidebar');
 
 describe('components/ContentSidebar/Skills/Sidebar', () => {
     const file = { id: 'id' };
@@ -27,7 +28,7 @@ describe('components/ContentSidebar/Skills/Sidebar', () => {
     test('should render activity sidebar', () => {
         const wrapper = getWrapper({ hasActivityFeed: true, view: 'activity' });
         expect(wrapper.find(SidebarNav)).toHaveLength(1);
-        expect(wrapper.find(ActivitySidebar)).toHaveLength(1);
+        expect(wrapper.find('ActivitySidebar')).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 

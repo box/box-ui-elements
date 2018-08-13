@@ -30,6 +30,7 @@ export const TYPE_WEBLINK: 'web_link' = 'web_link';
 export const TYPED_ID_FOLDER_PREFIX = 'folder_';
 export const TYPED_ID_FILE_PREFIX = 'file_';
 export const TYPED_ID_WEBLINK_PREFIX = 'web_link_';
+export const TYPED_ID_FEED_PREFIX = 'feedItems_';
 
 /* ----------------- Cache Key Prefix ----------------------- */
 export const CACHE_PREFIX_FOLDER = TYPED_ID_FOLDER_PREFIX;

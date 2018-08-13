@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentSidebar/ActivitySidebar should render the activity feed sidebar 1`] = `
+exports[`components/ContentSidebar/ActivitySidebar render() should render the activity feed sidebar 1`] = `
 <SidebarContent
   title={
     <FormattedMessage
@@ -10,7 +10,21 @@ exports[`components/ContentSidebar/ActivitySidebar should render the activity fe
   }
 >
   <ActivityFeed
+    file={
+      Object {
+        "id": "I_AM_A_FILE",
+      }
+    }
+    getApproverWithQuery={[Function]}
+    getAvatarUrl={[Function]}
+    getMentionWithQuery={[Function]}
     isDisabled={false}
+    onCommentCreate={[Function]}
+    onCommentDelete={[Function]}
+    onTaskAssignmentUpdate={[Function]}
+    onTaskCreate={[Function]}
+    onTaskDelete={[Function]}
+    onTaskUpdate={[Function]}
   />
 </SidebarContent>
 `;
