@@ -25,7 +25,6 @@ import makeResponsive from '../makeResponsive';
 import openUrlInsideIframe from '../../util/iframe';
 import { isFocusableElement, isInputElement, focus } from '../../util/dom';
 import Internationalize from '../Internationalize';
-import SidebarUtils from '../ContentSidebar/SidebarUtils';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -395,8 +394,8 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void the cache
      * @return {void}
      */
-    fetchFolder = (id?: string, triggerNavigationEvent: boolean = true, forceFetch: boolean = false) => {
-        const { rootFolderId, canPreview, contentPreviewProps }: Props = this.props;
+    fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true, fetchOptions?: FetchOptions) => {
+        const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
 
@@ -416,7 +415,7 @@ class ContentExplorer extends Component<Props, State> {
         });
 
         // Fetch the folder using folder API
-        this.api.getFolderAPI().folder(
+        this.api.getFolderAPI().getFolder(
             folderId,
             sortBy,
             sortDirection,
@@ -424,9 +423,7 @@ class ContentExplorer extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            forceFetch,
-            canPreview,
-            SidebarUtils.canHaveSidebar(contentPreviewProps.contentSidebarProps)
+            fetchOptions
         );
     };
 
@@ -491,21 +488,12 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     debouncedSearch = debounce((id: string, query: string, forceFetch?: boolean) => {
-        const { canPreview, contentPreviewProps }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         this.api
             .getSearchAPI()
-            .search(
-                id,
-                query,
-                sortBy,
-                sortDirection,
-                this.searchSuccessCallback,
-                this.errorCallback,
-                forceFetch,
-                canPreview,
-                SidebarUtils.canHaveSidebar(contentPreviewProps.contentSidebarProps)
-            );
+            .search(id, query, sortBy, sortDirection, this.searchSuccessCallback, this.errorCallback, {
+                forceFetch
+            });
     }, DEFAULT_SEARCH_DEBOUNCE);
 
     /**
@@ -581,7 +569,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
-        const { rootFolderId, canPreview, contentPreviewProps }: Props = this.props;
+        const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
         // Recents are sorted by a different date field than the rest
@@ -603,9 +591,9 @@ class ContentExplorer extends Component<Props, State> {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            forceFetch,
-            canPreview,
-            SidebarUtils.canHaveSidebar(contentPreviewProps.contentSidebarProps)
+            {
+                forceFetch
+            }
         );
     }
 
@@ -642,7 +630,9 @@ class ContentExplorer extends Component<Props, State> {
      */
     uploadSuccessHandler = () => {
         const { currentCollection: { id } }: State = this.state;
-        this.fetchFolder(id, false, true);
+        this.fetchFolder(id, false, {
+            forceFetch: true
+        });
     };
 
     /**
@@ -1354,4 +1344,5 @@ class ContentExplorer extends Component<Props, State> {
     }
 }
 
+export { ContentExplorer as ContentExplorerComponent };
 export default makeResponsive(ContentExplorer);

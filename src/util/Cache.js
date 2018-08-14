@@ -4,6 +4,8 @@
  * @author Box
  */
 
+import merge from 'lodash/merge';
+
 class Cache {
     /**
      * @property {*}
@@ -39,7 +41,7 @@ class Cache {
      */
     merge(key: string, value: any): void {
         if (this.has(key)) {
-            this.set(key, Object.assign({}, this.get(key), value));
+            this.set(key, merge({}, this.get(key), value));
         } else {
             throw new Error(`Key ${key} not in cache!`);
         }

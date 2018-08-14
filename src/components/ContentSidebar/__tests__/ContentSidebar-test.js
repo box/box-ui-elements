@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import ContentSidebar from '../ContentSidebar';
 import messages from '../../messages';
 import SidebarUtils from '../SidebarUtils';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../../util/fields';
 
 const {
     fileDescriptionInlineErrorTitleMessage,
@@ -381,7 +382,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 fileId: file.id
             });
             instance.onClassificationChange();
-            expect(fetchFile).toBeCalledWith(file.id, true);
+            expect(fetchFile).toBeCalledWith(file.id, { forceFetch: true });
         });
 
         test('should not refetch the file there is no file id', () => {
@@ -440,19 +441,31 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.fetchFileErrorCallback = fetchFileErrorCallback;
         });
 
-        test('should fetch the file with forceFetch', () => {
+        test('should not fetch the file when sidebar is not configured to show anything', () => {
+            SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(false);
             instance.fetchFile(file.id);
-            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, {
-                forceFetch: false,
-                includePreviewSidebarFields: true
-            });
+            expect(SidebarUtils.canHaveSidebar).toBeCalledWith(instance.props);
+            expect(fileStub).not.toBeCalled();
         });
 
         test('should fetch the file with forceFetch', () => {
-            instance.fetchFile(file.id);
+            SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
+            instance.fetchFile(file.id, {
+                forceFetch: true
+            });
+            expect(SidebarUtils.canHaveSidebar).toBeCalledWith(instance.props);
             expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, {
-                forceFetch: false,
-                includePreviewSidebarFields: true
+                forceFetch: true,
+                fields: SIDEBAR_FIELDS_TO_FETCH
+            });
+        });
+
+        test('should fetch the file without forceFetch', () => {
+            SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
+            instance.fetchFile(file.id);
+            expect(SidebarUtils.canHaveSidebar).toBeCalledWith(instance.props);
+            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, {
+                fields: SIDEBAR_FIELDS_TO_FETCH
             });
         });
     });
@@ -474,14 +487,28 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState = setState;
         });
 
+        test('should set visibility to false when no data to show', () => {
+            SidebarUtils.shouldRenderSidebar = jest.fn().mockReturnValueOnce(false);
+            instance.fetchFileSuccessCallback(file);
+
+            expect(getDefaultSidebarView).not.toBeCalled();
+            expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(instance.props, file);
+            expect(setState).toBeCalledWith({
+                isVisible: false
+            });
+        });
+
         test('should set the file state to be the file response', () => {
+            SidebarUtils.shouldRenderSidebar = jest.fn().mockReturnValueOnce(true);
             instance.fetchFileSuccessCallback(file);
 
             expect(getDefaultSidebarView).toBeCalledWith(file, instance.props);
+            expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(instance.props, file);
             expect(setState).toBeCalledWith({
                 file,
                 view: 'view',
-                isFileLoading: false
+                isFileLoading: false,
+                isVisible: true
             });
         });
     });

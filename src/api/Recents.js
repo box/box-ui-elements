@@ -11,8 +11,8 @@ import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import { getBadItemError } from '../util/error';
-import { getFieldsAsString } from '../util/fields';
-import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, SORT_DESC, FIELD_INTERACTED_AT, X_REP_HINTS } from '../constants';
+import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
+import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, SORT_DESC, FIELD_INTERACTED_AT } from '../constants';
 
 class Recents extends Base {
     /**
@@ -44,16 +44,6 @@ class Recents extends Base {
      * @property {string}
      */
     sortDirection: SortDirection;
-
-    /**
-     * @property {boolean}
-     */
-    includePreviewFields: boolean;
-
-    /**
-     * @property {boolean}
-     */
-    includePreviewSidebarFields: boolean;
 
     /**
      * Creates a key for the cache
@@ -181,9 +171,8 @@ class Recents extends Base {
             .get({
                 url: this.getUrl(),
                 params: {
-                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
-                },
-                headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    fields: FOLDER_FIELDS_TO_FETCH.toString()
+                }
             })
             .then(this.recentsSuccessHandler)
             .catch(this.recentsErrorHandler);
@@ -197,9 +186,7 @@ class Recents extends Base {
      * @param {string} sortDirection - sort direction
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
-     * @param {boolean|void} [forceFetch] - Bypasses the cache
-     * @param {boolean|void} [includePreview] - Optionally include preview fields
-     * @param {boolean|void} [includePreviewSidebar] - Optionally include preview sidebar fields
+     * @param {boolean|void} [options.forceFetch] - Bypasses the cache
      * @return {void}
      */
     recents(
@@ -208,9 +195,7 @@ class Recents extends Base {
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        forceFetch: boolean = false,
-        includePreviewFields: boolean = false,
-        includePreviewSidebarFields: boolean = false
+        options: Object = {}
     ): void {
         if (this.isDestroyed()) {
             return;
@@ -222,14 +207,12 @@ class Recents extends Base {
         this.errorCallback = errorCallback;
         this.sortBy = sortBy;
         this.sortDirection = sortDirection;
-        this.includePreviewFields = includePreviewFields;
-        this.includePreviewSidebarFields = includePreviewSidebarFields;
 
         const cache: APICache = this.getCache();
         this.key = this.getCacheKey(this.id);
 
         // Clear the cache if needed
-        if (forceFetch) {
+        if (options.forceFetch) {
             cache.unset(this.key);
         }
 
