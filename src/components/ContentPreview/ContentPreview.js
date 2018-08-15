@@ -93,12 +93,24 @@ type PreviewTimeMetrics = {
 };
 
 // Emitted by preview's 'preview_metric' event
-type PreviewLoadMetrics = {
+type PreviewMetrics = {
+    error?: Object,
+    event_name?: string,
     value: number, // Sum of all available load times.
     file_info_time: number,
     convert_time: number,
     download_response_time: number,
-    full_document_load_time: number
+    full_document_load_time: number,
+    timestamp: string,
+    file_id: string,
+    file_version_id: string,
+    content_type: string,
+    extension: string,
+    locale: string,
+    rep_type: string,
+    client_version: string,
+    browser_name: string,
+    logger_session_id: string
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -425,22 +437,37 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
-     * Event handler 'preview_metric' which adds in the file fetch time
+     * Event handler 'preview_metric' which also adds in the file fetch time if it's a load event
      *
-     * @param {Object} previewLoadMetrics - the object emitted by 'preview_metric'
+     * @param {Object} previewMetrics - the object emitted by 'preview_metric'
      * @return {void}
      */
-    onPreviewMetric = (previewLoadMetrics: PreviewLoadMetrics): void => {
+    onPreviewMetric = (previewMetrics: PreviewMetrics): void => {
         const { onMetric }: Props = this.props;
-        const totalFetchFileTime = this.getTotalFileFetchTime();
+        const { event_name } = previewMetrics;
+        let metrics = {
+            ...previewMetrics
+        };
 
         // We need to add in the total file fetch time to the file_info_time and value (total)
         // as preview does not do the files call
-        onMetric({
-            ...previewLoadMetrics,
-            file_info_time: totalFetchFileTime,
-            value: (previewLoadMetrics.value || 0) + totalFetchFileTime
-        });
+        if (event_name === 'load') {
+            const totalFetchFileTime = this.getTotalFileFetchTime();
+            const totalTime = (previewMetrics.value || 0) + totalFetchFileTime;
+
+            // If an unnatural fetch time occurs or is invalid, don't log the event
+            if (!totalFetchFileTime || !totalTime) {
+                return;
+            }
+
+            metrics = {
+                ...previewMetrics,
+                file_info_time: totalFetchFileTime,
+                value: totalTime
+            };
+        }
+
+        onMetric(metrics);
     };
 
     /**

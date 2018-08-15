@@ -545,13 +545,23 @@ describe('components/ContentPreview/ContentPreview', () => {
             instance.getTotalFileFetchTime = jest.fn().mockReturnValue(FETCHING_TIME);
         });
 
-        test('should add in the total file fetching time', () => {
+        test('should add in the total file fetching time to load events', () => {
+            data.event_name = 'load';
             instance.onPreviewMetric(data);
             expect(onMetric).toBeCalledWith({
                 ...data,
                 file_info_time: FETCHING_TIME,
                 value: data.value + FETCHING_TIME
             });
+        });
+
+        test('should not emit a load time related metric if invalid file info time is present', () => {
+            data.event_name = 'load';
+            data.download_response_time = 0;
+            data.full_document_load_time = 0;
+            instance.getTotalFileFetchTime = jest.fn().mockReturnValue(0);
+            instance.onPreviewMetric(data);
+            expect(onMetric).not.toBeCalled();
         });
     });
 
