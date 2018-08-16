@@ -226,9 +226,6 @@ describe('api/uploads/MultiputPart', () => {
 
     describe('cancel()', () => {
         test('should tear down properly', () => {
-            MultiputPartTest.xhr = {
-                abort: jest.fn()
-            };
             MultiputPartTest.blob = new Blob();
             MultiputPartTest.data = { hi: 1 };
             MultiputPartTest.destroy = jest.fn();
@@ -237,7 +234,6 @@ describe('api/uploads/MultiputPart', () => {
 
             expect(MultiputPartTest.blob).toBeNull();
             expect(MultiputPartTest.data).toEqual({});
-            expect(MultiputPartTest.xhr.abort).toHaveBeenCalled();
         });
     });
 
