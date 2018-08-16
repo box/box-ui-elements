@@ -255,20 +255,16 @@ describe('api/uploads/PlainUpload', () => {
     describe('cancel()', () => {
         test('should not do anything if API is destroyed', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
-            upload.xhr = {
-                abort: jest.fn()
-            };
+            upload.destroy = jest.fn();
             upload.cancel();
-            expect(upload.xhr.abort).not.toHaveBeenCalled();
+            expect(upload.destroy).not.toHaveBeenCalled();
         });
 
         test('should abort xhr', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.xhr = {
-                abort: jest.fn()
-            };
+            upload.destroy = jest.fn();
             upload.cancel();
-            expect(upload.xhr.abort).toHaveBeenCalled();
+            expect(upload.destroy).toHaveBeenCalled();
         });
     });
 
