@@ -116,6 +116,7 @@ type PreviewMetrics = {
 const InvalidIdError = new Error('Invalid id for Preview!');
 const RETRY_COUNT = 3; // number of times to retry network request for a file
 const MS_IN_S = 1000; // ms in a sec
+const PREVIEW_LOAD_METRIC_EVENT = 'load';
 
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
@@ -451,7 +452,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         // We need to add in the total file fetch time to the file_info_time and value (total)
         // as preview does not do the files call
-        if (event_name === 'load') {
+        if (event_name === PREVIEW_LOAD_METRIC_EVENT) {
             const totalFetchFileTime = this.getTotalFileFetchTime();
             const totalTime = (previewMetrics.value || 0) + totalFetchFileTime;
 
