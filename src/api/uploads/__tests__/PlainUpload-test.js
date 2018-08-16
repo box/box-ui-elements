@@ -264,11 +264,13 @@ describe('api/uploads/PlainUpload', () => {
 
         test('should abort xhr', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            upload.destroy = jest.fn();
             upload.xhr = {
                 abort: jest.fn()
             };
             upload.cancel();
             expect(upload.xhr.abort).toHaveBeenCalled();
+            expect(upload.destroy).toHaveBeenCalled();
         });
     });
 

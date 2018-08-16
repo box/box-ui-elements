@@ -161,6 +161,7 @@ class PlainUpload extends BaseUpload {
         }
 
         clearTimeout(this.retryTimeout);
+        this.destroy();
     }
 
     /**
