@@ -156,11 +156,8 @@ class PlainUpload extends BaseUpload {
             return;
         }
 
-        if (this.xhr && typeof this.xhr.abort === 'function') {
-            this.xhr.abort();
-        }
-
         clearTimeout(this.retryTimeout);
+        this.destroy();
     }
 
     /**
