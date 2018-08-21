@@ -1,19 +1,19 @@
 /**
  * @flow
- * @file Base class for the Content Preview ES6 wrapper
+ * @file Base class for the Open With ES6 wrapper
  * @author Box
  */
 
 import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
-import ContentPreviewResponsive from '../components/ContentPreview/ContentPreview';
+import OpenWithComponent from '../components/OpenWith/OpenWith';
 
-class ContentPreview extends ES6Wrapper {
+class OpenWith extends ES6Wrapper {
     /** @inheritdoc */
     render() {
         render(
-            <ContentPreviewResponsive
+            <OpenWithComponent
                 language={this.language}
                 messages={this.messages}
                 fileId={this.id}
@@ -28,5 +28,5 @@ class ContentPreview extends ES6Wrapper {
 }
 
 global.Box = global.Box || {};
-global.Box.ContentPreview = ContentPreview;
-export default ContentPreview;
+global.Box.OpenWith = OpenWith;
+export default OpenWith;

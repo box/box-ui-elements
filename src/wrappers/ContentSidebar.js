@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Base class for the content preview ES6 wrapper, only used for testing
+ * @file Base class for the Content Sidebar ES6 wrapper
  * @author Box
  */
 
