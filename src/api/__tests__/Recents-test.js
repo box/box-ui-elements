@@ -1,7 +1,6 @@
 import Recents from '../Recents';
 import Cache from '../../util/Cache';
-import { getFieldsAsString } from '../../util/fields';
-import { X_REP_HINTS } from '../../constants';
+import { FOLDER_FIELDS_TO_FETCH } from '../../util/fields';
 import * as sort from '../../util/sorter';
 
 let recents;
@@ -40,7 +39,7 @@ describe('api/Recents', () => {
             recents.recentsRequest = jest.fn();
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
+            recents.recents('id', 'by', 'direction', 'success', 'fail');
             expect(recents.getCacheKey).toHaveBeenCalledWith('id');
             expect(recents.id).toBe('id');
             expect(recents.successCallback).toBe('success');
@@ -48,15 +47,13 @@ describe('api/Recents', () => {
             expect(recents.sortBy).toBe('interacted_at');
             expect(recents.sortDirection).toBe('DESC');
             expect(recents.key).toBe('key');
-            expect(recents.includePreviewFields).toBe('preview');
-            expect(recents.includePreviewSidebarFields).toBe('sidebar');
         });
         test('should save args and not make recents request when cached', () => {
             cache.set('key', 'value');
             recents.finish = jest.fn();
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
+            recents.recents('id', 'by', 'direction', 'success', 'fail');
             expect(recents.getCacheKey).toHaveBeenCalledWith('id');
             expect(recents.id).toBe('id');
             expect(recents.successCallback).toBe('success');
@@ -64,15 +61,13 @@ describe('api/Recents', () => {
             expect(recents.sortBy).toBe('by');
             expect(recents.sortDirection).toBe('direction');
             expect(recents.key).toBe('key');
-            expect(recents.includePreviewFields).toBe('preview');
-            expect(recents.includePreviewSidebarFields).toBe('sidebar');
         });
         test('should save args and make recents request when cached but forced to fetch', () => {
             cache.set('key', 'value');
             recents.recentsRequest = jest.fn();
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail', true, 'preview', 'sidebar');
+            recents.recents('id', 'by', 'direction', 'success', 'fail', { forceFetch: true });
             expect(recents.getCacheKey).toHaveBeenCalledWith('id');
             expect(recents.id).toBe('id');
             expect(recents.successCallback).toBe('success');
@@ -80,8 +75,6 @@ describe('api/Recents', () => {
             expect(recents.sortBy).toBe('interacted_at');
             expect(recents.sortDirection).toBe('DESC');
             expect(recents.key).toBe('key');
-            expect(recents.includePreviewFields).toBe('preview');
-            expect(recents.includePreviewSidebarFields).toBe('sidebar');
         });
     });
 
@@ -107,8 +100,7 @@ describe('api/Recents', () => {
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
-                    params: { fields: getFieldsAsString(true) },
-                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    params: { fields: FOLDER_FIELDS_TO_FETCH.toString() }
                 });
             });
         });
@@ -127,8 +119,7 @@ describe('api/Recents', () => {
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
-                    params: { fields: getFieldsAsString(true, true) },
-                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    params: { fields: FOLDER_FIELDS_TO_FETCH.toString() }
                 });
             });
         });

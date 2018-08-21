@@ -1,7 +1,6 @@
 import Search from '../Search';
 import Cache from '../../util/Cache';
-import { getFieldsAsString } from '../../util/fields';
-import { X_REP_HINTS } from '../../constants';
+import { FOLDER_FIELDS_TO_FETCH } from '../../util/fields';
 import * as sort from '../../util/sorter';
 
 let search;
@@ -79,7 +78,7 @@ describe('api/Search', () => {
             search.searchRequest = jest.fn();
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(false);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
+            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail');
             expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
@@ -89,15 +88,13 @@ describe('api/Search', () => {
             expect(search.key).toBe('key');
             expect(search.offset).toBe(0);
             expect(search.query).toBe('foo query');
-            expect(search.includePreviewFields).toBe('preview');
-            expect(search.includePreviewSidebarFields).toBe('sidebar');
         });
         test('should save args and not make search request when cached', () => {
             search.searchRequest = jest.fn();
             search.finish = jest.fn();
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(true);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
+            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail');
             expect(search.searchRequest).not.toHaveBeenCalled();
             expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
             expect(search.id).toBe('id');
@@ -108,8 +105,6 @@ describe('api/Search', () => {
             expect(search.key).toBe('key');
             expect(search.offset).toBe(0);
             expect(search.query).toBe('foo query');
-            expect(search.includePreviewFields).toBe('preview');
-            expect(search.includePreviewSidebarFields).toBe('sidebar');
         });
         test('should save args and make search request when cached but forced to fetch', () => {
             const unsetMock = jest.fn();
@@ -117,7 +112,7 @@ describe('api/Search', () => {
             search.getCache = jest.fn().mockReturnValueOnce({ unset: unsetMock });
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(false);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', true, 'preview', 'sidebar');
+            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', { forceFetch: true });
             expect(unsetMock).toHaveBeenCalledWith('key');
             expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
             expect(search.id).toBe('id');
@@ -128,8 +123,6 @@ describe('api/Search', () => {
             expect(search.key).toBe('key');
             expect(search.offset).toBe(0);
             expect(search.query).toBe('foo query');
-            expect(search.includePreviewFields).toBe('preview');
-            expect(search.includePreviewSidebarFields).toBe('sidebar');
         });
     });
 
@@ -168,9 +161,8 @@ describe('api/Search', () => {
                         query: 'query',
                         ancestor_folder_ids: 'id',
                         limit: 200,
-                        fields: getFieldsAsString(true)
-                    },
-                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                        fields: FOLDER_FIELDS_TO_FETCH.toString()
+                    }
                 });
             });
         });
@@ -194,9 +186,8 @@ describe('api/Search', () => {
                         query: 'query',
                         ancestor_folder_ids: 'id',
                         limit: 200,
-                        fields: getFieldsAsString(true, true)
-                    },
-                    headers: { 'X-Rep-Hints': X_REP_HINTS }
+                        fields: FOLDER_FIELDS_TO_FETCH.toString()
+                    }
                 });
             });
         });

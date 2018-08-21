@@ -10,8 +10,8 @@ import FolderAPI from './Folder';
 import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
 import sort from '../util/sorter';
-import { getFieldsAsString } from '../util/fields';
-import { CACHE_PREFIX_SEARCH, X_REP_HINTS } from '../constants';
+import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
+import { CACHE_PREFIX_SEARCH } from '../constants';
 import { getBadItemError } from '../util/error';
 
 const LIMIT_ITEM_FETCH = 200;
@@ -61,16 +61,6 @@ class Search extends Base {
      * @property {Array}
      */
     itemCache: string[];
-
-    /**
-     * @property {boolean}
-     */
-    includePreviewFields: boolean;
-
-    /**
-     * @property {boolean}
-     */
-    includePreviewSidebarFields: boolean;
 
     /**
      * Creates a key for the cache
@@ -239,9 +229,8 @@ class Search extends Base {
                     query: this.query,
                     ancestor_folder_ids: this.id,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
-                },
-                headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    fields: FOLDER_FIELDS_TO_FETCH.toString()
+                }
             })
             .then(this.searchSuccessHandler)
             .catch(this.searchErrorHandler);
@@ -256,9 +245,7 @@ class Search extends Base {
      * @param {string} sortDirection - sort direction
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
-     * @param {boolean|void} [forceFetch] - Bypasses the cache
-     * @param {boolean|void} [includePreview] - Optionally include preview fields
-     * @param {boolean|void} [includePreviewSidebar] - Optionally include preview sidebar fields
+     * @param {boolean|void} [options.forceFetch] - Bypasses the cache
      * @return {void}
      */
     search(
@@ -268,9 +255,7 @@ class Search extends Base {
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        forceFetch: boolean = false,
-        includePreviewFields: boolean = false,
-        includePreviewSidebarFields: boolean = false
+        options: Object = {}
     ): void {
         if (this.isDestroyed()) {
             return;
@@ -285,11 +270,9 @@ class Search extends Base {
         this.errorCallback = errorCallback;
         this.sortBy = sortBy;
         this.sortDirection = sortDirection;
-        this.includePreviewFields = includePreviewFields;
-        this.includePreviewSidebarFields = includePreviewSidebarFields;
 
         // Clear the cache if needed
-        if (forceFetch) {
+        if (options.forceFetch) {
             this.getCache().unset(this.key);
         }
 
