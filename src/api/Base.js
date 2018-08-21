@@ -341,9 +341,8 @@ class Base {
 
         // $FlowFixMe
         const xhrMethod: Function = this.xhr[method].bind(this.xhr);
-
         try {
-            const { data } = await xhrMethod({ id: getTypedFileId(id), url, ...requestData });
+            const { data } = await xhrMethod({ ...requestData, id: getTypedFileId(id), url });
             this.successHandler(data);
         } catch (error) {
             this.errorHandler(error);
