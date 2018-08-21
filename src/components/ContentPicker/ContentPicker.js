@@ -418,7 +418,7 @@ class ContentPicker extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    fetchFolder = (id?: string, triggerNavigationEvent: boolean = true, forceFetch: boolean = false): void => {
+    fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true, fetchOptions?: FetchOptions): void => {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
@@ -439,7 +439,7 @@ class ContentPicker extends Component<Props, State> {
         });
 
         // Fetch the folder using folder API
-        this.api.getFolderAPI().folder(
+        this.api.getFolderAPI().getFolder(
             folderId,
             sortBy,
             sortDirection,
@@ -447,7 +447,7 @@ class ContentPicker extends Component<Props, State> {
                 this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            forceFetch
+            fetchOptions
         );
     };
 
@@ -500,7 +500,9 @@ class ContentPicker extends Component<Props, State> {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            forceFetch
+            {
+                forceFetch
+            }
         );
     }
 
@@ -554,7 +556,9 @@ class ContentPicker extends Component<Props, State> {
         const { sortBy, sortDirection }: State = this.state;
         this.api
             .getSearchAPI()
-            .search(id, query, sortBy, sortDirection, this.searchSuccessCallback, this.errorCallback, forceFetch);
+            .search(id, query, sortBy, sortDirection, this.searchSuccessCallback, this.errorCallback, {
+                forceFetch
+            });
     }, DEFAULT_SEARCH_DEBOUNCE);
 
     /**
@@ -627,7 +631,9 @@ class ContentPicker extends Component<Props, State> {
      */
     uploadSuccessHandler = (): void => {
         const { currentCollection: { id } }: State = this.state;
-        this.fetchFolder(id, false, true);
+        this.fetchFolder(id, false, {
+            forceFetch: true
+        });
     };
 
     /**
@@ -1080,4 +1086,5 @@ class ContentPicker extends Component<Props, State> {
     }
 }
 
+export { ContentPicker as ContentPickerComponent };
 export default makeResponsive(ContentPicker);

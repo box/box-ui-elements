@@ -5,7 +5,7 @@
  */
 
 import Item from './Item';
-import { getFieldsAsString } from '../util/fields';
+import { findMissingProperties, fillMissingProperties } from '../util/fields';
 import { getTypedFileId } from '../util/file';
 import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS } from '../constants';
 import { getBadItemError, getBadPermissionsError } from '../util/error';
@@ -109,51 +109,76 @@ class File extends Item {
      * @param {string} id - File id
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
-     * @param {boolean|void} [options.forceFetch] - Bypasses the cache
-     * @param {boolean|void} [options.includePreviewSidebar] - Optionally include preview sidebar fields
-     * @param {boolean|void} [options.refreshCache] - Updates the cache
+     * @param {boolean|void} [options.fields] - Optionally include specific fields
+     * @param {boolean|void} [options.forceFetch] - Optionally Bypasses the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally Updates the cache
      * @return {Promise}
      */
-    getFile(id: string, successCallback: Function, errorCallback: Function, options: Object = {}): Promise<void> {
+    async getFile(
+        id: string,
+        successCallback: Function,
+        errorCallback: Function,
+        options: FetchOptions = {}
+    ): Promise<void> {
         if (this.isDestroyed()) {
-            return Promise.reject();
+            return;
         }
 
         const cache: APICache = this.getCache();
-        const key = this.getCacheKey(id);
+        const key: string = this.getCacheKey(id);
+        const isCached: boolean = !options.forceFetch && cache.has(key);
+        const file: BoxItem = isCached ? cache.get(key) : { id };
+        let missingFields: Array<string> = findMissingProperties(file, options.fields);
+        const xhrOptions: Object = {
+            id: getTypedFileId(id),
+            url: this.getUrl(id),
+            headers: { 'X-Rep-Hints': X_REP_HINTS }
+        };
 
-        // Clear the cache if needed
-        if (options.forceFetch) {
-            cache.unset(key);
-        }
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
 
-        // Return the Cache value if it exists
-        if (cache.has(key)) {
-            successCallback(cache.get(key));
+        // If the file was cached and there are no missing fields
+        // then just return the cached file and optionally refresh
+        // the cache with new data if required
+        if (isCached && missingFields.length === 0) {
+            successCallback(file);
+            missingFields = options.fields || [];
             if (!options.refreshCache) {
-                return Promise.resolve();
+                return;
             }
         }
 
-        // Make the XHR request
-        // We use per file auth tokens for file
-        // as thats what needed by preview.
-        return this.xhr
-            .get({
-                id: getTypedFileId(id),
-                url: this.getUrl(id),
-                params: {
-                    fields: getFieldsAsString(true, options.includePreviewSidebarFields)
-                },
-                headers: { 'X-Rep-Hints': X_REP_HINTS }
-            })
-            .then(({ data }: { data: BoxItem }) => {
-                if (!this.isDestroyed()) {
-                    cache.set(key, data);
-                    successCallback(data);
-                }
-            })
-            .catch(errorCallback);
+        // If there are missing fields to fetch, add it to the params
+        if (missingFields.length > 0) {
+            xhrOptions.params = {
+                fields: missingFields.toString()
+            };
+        }
+
+        try {
+            const { data } = await this.xhr.get(xhrOptions);
+            if (this.isDestroyed()) {
+                return;
+            }
+
+            // Merge fields that were requested but were actually not returned.
+            // This part is mostly useful for metadata.foo.bar fields since the API
+            // returns { metadata: null } instead of { metadata: { foo: { bar: null } } }
+            const dataWithMissingFields = fillMissingProperties(data, missingFields);
+
+            // Cache check is again done since this code is executed async
+            if (cache.has(key)) {
+                cache.merge(key, dataWithMissingFields);
+            } else {
+                // If there was nothing in the cache
+                cache.set(key, dataWithMissingFields);
+            }
+
+            this.successHandler(cache.get(key));
+        } catch (e) {
+            this.errorHandler(e);
+        }
     }
 }
 

@@ -8,7 +8,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentPickerPopup from '../components/ContentPicker/ContentPickerPopup';
-import ContentPickerComponent from '../components/ContentPicker/ContentPicker';
+import ContentPickerReactComponent from '../components/ContentPicker/ContentPicker';
 import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK, CLIENT_NAME_CONTENT_PICKER } from '../constants';
 
 class ContentPicker extends ES6Wrapper {
@@ -53,7 +53,7 @@ class ContentPicker extends ES6Wrapper {
     /** @inheritdoc */
     render() {
         const { modal, ...rest }: { modal?: ModalOptions } = this.options;
-        const PickerComponent = modal ? ContentPickerPopup : ContentPickerComponent;
+        const PickerComponent = modal ? ContentPickerPopup : ContentPickerReactComponent;
         render(
             <PickerComponent
                 language={this.language}

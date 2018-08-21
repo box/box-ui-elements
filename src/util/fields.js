@@ -4,7 +4,8 @@
  * @author Box
  */
 
-import getProp from 'lodash/get';
+import has from 'lodash/has';
+import set from 'lodash/set';
 import {
     FIELD_ID,
     FIELD_NAME,
@@ -46,11 +47,8 @@ import {
     FIELD_RESTORED_FROM
 } from '../constants';
 
-// Optional Box file fields
-const BOX_ITEM_OPTIONAL_FIELDS = [FIELD_ITEM_COLLECTION];
-
 // Minimum set of fields needed for Content Explorer / Picker
-const BASE_FIELDS_TO_FETCH = [
+const FOLDER_FIELDS_TO_FETCH = [
     FIELD_ID,
     FIELD_NAME,
     FIELD_TYPE,
@@ -69,30 +67,47 @@ const BASE_FIELDS_TO_FETCH = [
     FIELD_ITEM_COLLECTION
 ];
 
-// Additional fields needed for the sidebar
+// Fields needed for the sidebar
 const SIDEBAR_FIELDS_TO_FETCH = [
+    FIELD_ID,
+    FIELD_NAME,
+    FIELD_SIZE,
+    FIELD_EXTENSION,
+    FIELD_FILE_VERSION,
+    FIELD_SHARED_LINK,
+    FIELD_PERMISSIONS,
+    FIELD_CREATED_AT,
     FIELD_CREATED_BY,
+    FIELD_MODIFIED_AT,
+    FIELD_MODIFIED_BY,
     FIELD_OWNED_BY,
     FIELD_DESCRIPTION,
     FIELD_METADATA_SKILLS,
-    FIELD_ITEM_EXPIRATION,
     FIELD_METADATA_CLASSIFICATION,
+    FIELD_ITEM_EXPIRATION,
     FIELD_VERSION_NUMBER,
+    FIELD_IS_EXTERNALLY_OWNED,
     FIELD_RESTORED_FROM
 ];
 
-// Additional fields needed for preview
+// Fields needed for preview
 const PREVIEW_FIELDS_TO_FETCH = [
-    FIELD_REPRESENTATIONS,
+    FIELD_ID,
+    FIELD_PERMISSIONS,
+    FIELD_SHARED_LINK,
     FIELD_SHA1,
+    FIELD_FILE_VERSION,
+    FIELD_NAME,
+    FIELD_SIZE,
+    FIELD_EXTENSION,
+    FIELD_REPRESENTATIONS,
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
-    FIELD_FILE_VERSION,
     FIELD_IS_DOWNLOAD_AVAILABLE
 ];
 
 // Fields needed to get tasks data
-export const TASKS_FIELDS_TO_FETCH = [
+const TASKS_FIELDS_TO_FETCH = [
     FIELD_TASK_ASSIGNMENT_COLLECTION,
     FIELD_IS_COMPLETED,
     FIELD_CREATED_AT,
@@ -102,7 +117,7 @@ export const TASKS_FIELDS_TO_FETCH = [
 ];
 
 // Fields needed to get tasks data
-export const VERSIONS_FIELDS_TO_FETCH = [
+const VERSIONS_FIELDS_TO_FETCH = [
     FIELD_TRASHED_AT,
     FIELD_CREATED_AT,
     FIELD_MODIFIED_AT,
@@ -111,10 +126,10 @@ export const VERSIONS_FIELDS_TO_FETCH = [
 ];
 
 // Fields needed to get task assignments data
-export const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE].toString();
+const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE];
 
 // Fields needed to get tasks data
-export const COMMENTS_FIELDS_TO_FETCH = [
+const COMMENTS_FIELDS_TO_FETCH = [
     FIELD_TAGGED_MESSAGE,
     FIELD_MESSAGE,
     FIELD_CREATED_AT,
@@ -124,75 +139,52 @@ export const COMMENTS_FIELDS_TO_FETCH = [
 ];
 
 /**
- * Returns all the fields that can be fetched
+ * Finds properties missing in an object
  *
- * @return {Array<string>} list of fields with preview and sidebar
+ * @param {Object} obj - some object
+ * @param {Array<string>|void} [properties] - object properties to check
+ * @return {Array<string>} comma seperated list of properties missing
  */
-function getFieldsIncludingPreviewSidebar(): Array<string> {
-    return BASE_FIELDS_TO_FETCH.concat(SIDEBAR_FIELDS_TO_FETCH).concat(PREVIEW_FIELDS_TO_FETCH);
-}
-
-/**
- * Returns base fields and preview fields
- *
- * @return {Array<string>} list of fields with preview
- */
-function getFieldsIncludingPreview(): Array<string> {
-    return BASE_FIELDS_TO_FETCH.concat(PREVIEW_FIELDS_TO_FETCH);
-}
-
-/**
- * Returns fields needed for fetching
- *
- * @param {boolean|void} [includePreview] - Optionally include preview fields
- * @param {boolean|void} [includePreviewSidebar] - Optionally include preview and sidebar fields
- * @return {Array<string>} list of fields
- */
-function getFields(includePreview?: boolean = false, includePreviewSidebar?: boolean = false): Array<string> {
-    let fields = BASE_FIELDS_TO_FETCH;
-    if (includePreview && includePreviewSidebar) {
-        // Only include sidebar fields if we are also including preview fields
-        fields = getFieldsIncludingPreviewSidebar();
-    } else if (includePreview) {
-        // Preview may not have a sidebar
-        fields = getFieldsIncludingPreview();
+function findMissingProperties(obj?: Object, properties?: Array<string> = []): Array<string> {
+    // If file doesn't exist or is an empty object, we should fetch all fields
+    if (!obj || typeof obj !== 'object' || Object.keys(obj).length === 0) {
+        return properties;
     }
 
-    return fields;
+    return properties.filter((field: string) => !has(obj, field));
 }
 
 /**
- * Returns fields needed for fetching
+ * Fill properties missing in an object
  *
- * @param {boolean|void} [includePreview] - Optionally include preview fields
- * @param {boolean|void} [includePreviewSidebar] - Optionally include preview and sidebar fields
- * @return {string} comma seperated list of fields
+ * @param {Object} obj - some object
+ * @param {Array<string>|void} [properties] - some properties to check
+ * @return {Object} new object with missing fields
  */
-export function getFieldsAsString(includePreview?: boolean = false, includePreviewSidebar?: boolean = false): string {
-    const fields = getFields(includePreview, includePreviewSidebar);
-    return fields.join(',');
-}
-
-/**
- * Checks the fields needed for a box file
- *
- * @param {boolean|void} [includePreview] - Optionally include preview fields
- * @param {boolean|void} [includePreviewSidebar] - Optionally include preview and sidebar fields
- * @return {string} comma seperated list of fields
- */
-export function isValidBoxFile(
-    file?: BoxItem | string,
-    includePreview?: boolean = false,
-    includePreviewSidebar?: boolean = false
-): boolean {
-    if (!file || typeof file !== 'object') {
-        return false;
+function fillMissingProperties(obj?: Object = {}, properties?: Array<string>): Object {
+    // If file doesn't exist or is an empty object, we should fetch all fields
+    if (!Array.isArray(properties) || properties.length === 0) {
+        return obj;
     }
 
-    const fields = getFields(includePreview, includePreviewSidebar).filter(
-        (field) => BOX_ITEM_OPTIONAL_FIELDS.indexOf(field) < 0
-    );
-
-    // Some fields like metadata have dots in it. Only use the root prop.
-    return fields.every((field) => typeof getProp(file, field.split('.')[0]) !== 'undefined');
+    const newObj = { ...obj };
+    const missingProperties = findMissingProperties(obj, properties);
+    missingProperties.forEach((field: string) => {
+        // @Note: This will overwrite non object fields
+        // @Note: We don't know the type of the field
+        set(newObj, field, null);
+    });
+    return newObj;
 }
+
+export {
+    FOLDER_FIELDS_TO_FETCH,
+    PREVIEW_FIELDS_TO_FETCH,
+    SIDEBAR_FIELDS_TO_FETCH,
+    TASKS_FIELDS_TO_FETCH,
+    VERSIONS_FIELDS_TO_FETCH,
+    TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
+    COMMENTS_FIELDS_TO_FETCH,
+    findMissingProperties,
+    fillMissingProperties
+};

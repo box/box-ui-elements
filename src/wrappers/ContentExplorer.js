@@ -7,7 +7,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
-import ContentExplorerComponent from '../components/ContentExplorer/ContentExplorer';
+import ContentExplorerReactComponent from '../components/ContentExplorer/ContentExplorer';
 
 class ContentExplorer extends ES6Wrapper {
     /**
@@ -100,7 +100,7 @@ class ContentExplorer extends ES6Wrapper {
     /** @inheritdoc */
     render() {
         render(
-            <ContentExplorerComponent
+            <ContentExplorerReactComponent
                 language={this.language}
                 messages={this.messages}
                 rootFolderId={this.id}
