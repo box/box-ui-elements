@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Open With Test Page</title>
+        <style>
+        </style>
+        <div class="openwith">
+            <div class="id-token-container-1"></div>
+                <div>
+                    <label>
+                        <div>File Id</div>
+                        <input class="file" type="text" placeholder="Enter file id" />
+                    </label>
+                    <label>
+                        <div>Auth Token</div>
+                        <input class="token" type="text" placeholder="Enter auth token" />
+                    </label>
+                </div>
+                <button type="button" onclick="load()">Submit</button>
+            </div>
+            </div>
+        <script src="../dev/en-US/openwith.js"></script>
+    </head>
+    <body>
+        <div class="openwith1"></div>
+        <script>
+            function load() {
+                const { OpenWith } = Box;
+                const token = document.querySelector('.token').value || localStorage.getItem('token');
+                const fileId = document.querySelector('.file').value || localStorage.getItem('file');
+
+                if (!token || !fileId) {
+                    return;
+                }
+
+                localStorage.setItem('token', token);
+                document.querySelector('.token').value = token;
+
+                localStorage.setItem('file', fileId);
+                document.querySelector('.file').value = fileId;
+
+                const openwith1 = new OpenWith();
+                openwith1.show(fileId, token, {
+                    container: '.openwith1',
+                });
+            }
+            load();
+        </script>
+    </body>
+</html>

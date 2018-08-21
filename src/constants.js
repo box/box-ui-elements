@@ -155,6 +155,7 @@ export const CLIENT_NAME_CONTENT_UPLOADER = 'ContentUploader';
 export const CLIENT_NAME_CONTENT_EXPLORER = 'ContentExplorer';
 export const CLIENT_NAME_CONTENT_PREVIEW = 'ContentPreview';
 export const CLIENT_NAME_CONTENT_SIDEBAR = 'ContentSidebar';
+export const CLIENT_NAME_OPEN_WITH = 'OpenWith';
 
 /* ---------------------- Statuses -------------------------- */
 export const STATUS_PENDING: 'pending' = 'pending';

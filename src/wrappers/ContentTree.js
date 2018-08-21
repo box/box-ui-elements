@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Base class for the folder tree ES6 wrapper
+ * @file Base class for the Content Tree ES6 wrapper
  * @author Box
  */
 
