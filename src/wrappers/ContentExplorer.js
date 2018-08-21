@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Base class for the content picker ES6 wrapper
+ * @file Base class for the Content Explorer ES6 wrapper
  * @author Box
  */
 

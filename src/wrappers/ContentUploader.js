@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Base class for the content uploader ES6 wrapper
+ * @file Base class for the Content Uploader ES6 wrapper
  * @author Box
  */
 

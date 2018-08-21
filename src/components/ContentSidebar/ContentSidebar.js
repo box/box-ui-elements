@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Content Preview Component
+ * @file Content Sidebar Component
  * @author Box
  */
 
@@ -519,7 +519,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Renders the file preview
+     * Renders the sidebar
      *
      * @private
      * @inheritdoc
