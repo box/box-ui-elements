@@ -38,7 +38,7 @@ class AppIntegrations extends Base {
         }
 
         const executeURL = `${this.getUrl(integrationId)}/execute`;
-        const requestData = {
+        const body = {
             data: {
                 item: {
                     id: fileId,
@@ -50,7 +50,7 @@ class AppIntegrations extends Base {
         this.post({
             id: fileId,
             url: executeURL,
-            data: requestData,
+            data: body,
             successCallback,
             errorCallback
         });
