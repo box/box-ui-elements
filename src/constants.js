@@ -238,4 +238,4 @@ export const VERSION_DELETE_ACTION = 'delete';
 export const VERSION_UPLOAD_ACTION = 'upload';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
-export const PLACEHOLDER_USER = { type: 'user', id: '2', name: 'Anonymous User', login: '' };
+export const PLACEHOLDER_USER = { type: 'user', id: '2', name: 'Anonymous User' };
