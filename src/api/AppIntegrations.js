@@ -11,15 +11,15 @@ class AppIntegrations extends Base {
     /**
      * API URL for Open With
      *
-     * @param {string} [id] - a box integration app ID
+     * @param {string} [integrationId] - a box integration app ID
      * @return {string} base url for app integrations
      */
-    getUrl(id: string): string {
-        if (!id) {
+    getUrl(integrationId: string): string {
+        if (!integrationId) {
             throw new Error('Missing app integration id!');
         }
 
-        return `${this.getBaseApiUrl()}/app_integrations/${id}`;
+        return `${this.getBaseApiUrl()}/app_integrations/${integrationId}`;
     }
 
     /**
