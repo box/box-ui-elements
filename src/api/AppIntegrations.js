@@ -5,6 +5,7 @@
  */
 
 import Base from './Base';
+import { TYPE_FILE } from '../constants';
 
 class AppIntegrations extends Base {
     /**
@@ -28,7 +29,7 @@ class AppIntegrations extends Base {
      * @param {string} fileID - A file ID
      * @return {string} base url for files
      */
-    execute(integrationId?: string, fileId?: string, successCallback: Function, errorCallback: Function): void {
+    execute(integrationId: ?string, fileId: ?string, successCallback: Function, errorCallback: Function): void {
         if (!integrationId) {
             throw new Error('Missing integration id!');
         }
@@ -42,7 +43,7 @@ class AppIntegrations extends Base {
             data: {
                 item: {
                     id: fileId,
-                    type: 'file'
+                    type: TYPE_FILE
                 }
             }
         };

@@ -490,7 +490,7 @@ class APIFactory {
      * API for Open With
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {FeedAPI} OpenWithAPI instance
+     * @return {OpenWithAPI} OpenWithAPI instance
      */
     getOpenWithAPI(shouldDestroy: boolean): OpenWithAPI {
         if (shouldDestroy) {
@@ -505,7 +505,7 @@ class APIFactory {
      * API for the App Integrations endpoint
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {FeedAPI} OpenWithAPI instance
+     * @return {AppIntegrationsAPI} AppIntegrationsAPI instance
      */
     getAppIntegrationsAPI(shouldDestroy: boolean): AppIntegrationsAPI {
         if (shouldDestroy) {
