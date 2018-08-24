@@ -218,11 +218,6 @@ class APIFactory {
             delete this.fileCollaboratorsAPI;
         }
 
-        if (this.feedItemsAPI) {
-            this.feedItemsAPI.destroy();
-            delete this.feedItemsAPI;
-        }
-
         if (this.appIntegrationsAPI) {
             this.appIntegrationsAPI.destroy();
             delete this.appIntegrationsAPI;
