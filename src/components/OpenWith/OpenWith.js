@@ -51,8 +51,8 @@ class OpenWith extends PureComponent<Props> {
      */
     constructor(props: Props) {
         super(props);
-        const { token, apiHost, clientName, requestInterceptor, responseInterceptor } = props;
 
+        const { token, apiHost, clientName, requestInterceptor, responseInterceptor } = props;
         this.id = uniqueid('bcow_');
         this.api = new API({
             token,
