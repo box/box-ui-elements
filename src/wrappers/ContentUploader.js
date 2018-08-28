@@ -8,7 +8,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentUploaderPopup from '../components/ContentUploader/ContentUploaderPopup';
-import ContentUploaderComponent from '../components/ContentUploader/ContentUploader';
+import WrappedContentUploaderComponent from '../components/ContentUploader/ContentUploader';
 
 class ContentUploader extends ES6Wrapper {
     /**
@@ -53,7 +53,7 @@ class ContentUploader extends ES6Wrapper {
     /** @inheritdoc */
     render() {
         const { modal, ...rest }: { modal?: ModalOptions } = this.options;
-        const UploaderComponent = modal ? ContentUploaderPopup : ContentUploaderComponent;
+        const UploaderComponent = modal ? ContentUploaderPopup : WrappedContentUploaderComponent;
 
         render(
             <UploaderComponent
