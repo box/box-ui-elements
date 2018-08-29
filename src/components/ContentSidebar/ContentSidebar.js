@@ -10,7 +10,6 @@ import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
 import APIContext from '../APIContext';
@@ -535,12 +534,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         }: Props = this.props;
         const { file, view, accessStats, accessStatsError, fileError, isFileLoading, feedItems }: State = this.state;
 
-        // By default sidebar is always visible if there is something configured
-        // to show via props. At least one of the sidebars is needed for visibility.
-        // However we may turn the visibility off if there is no data to show
-        // in the sidebar. This can only happen if skills sidebar was showing
-        // however there is no skills data to show. For all other sidebars
-        // we show them by default even if there is no data in them.
+        // Only render the sidebar if we are going to actualy show something.
+        // This is to prevent an empty sidebar when only tab we want to show is skills, but the file doesn't have any
         if (!SidebarUtils.shouldRenderSidebar(this.props, file)) {
             return null;
         }
