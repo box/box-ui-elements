@@ -457,8 +457,8 @@ class ContentPreview extends PureComponent<Props, State> {
             const totalFetchFileTime = this.getTotalFileFetchTime();
             const totalTime = (previewMetrics.value || 0) + totalFetchFileTime;
 
-            // If an unnatural fetch time occurs or is invalid, don't log the event
-            if (!totalFetchFileTime || !totalTime) {
+            // If an unnatural load time occurs or is invalid, don't log a load event
+            if (!totalTime) {
                 return;
             }
 

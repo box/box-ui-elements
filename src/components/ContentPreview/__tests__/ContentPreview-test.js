@@ -553,10 +553,9 @@ describe('components/ContentPreview/ContentPreview', () => {
             });
         });
 
-        test('should not emit a load time related metric if invalid file info time is present', () => {
+        test('should not emit a load time related metric if invalid load time is present', () => {
             data.event_name = 'load';
-            data.download_response_time = 0;
-            data.full_document_load_time = 0;
+            data.value = 0;
             instance.getTotalFileFetchTime = jest.fn().mockReturnValue(0);
             instance.onPreviewMetric(data);
             expect(onMetric).not.toBeCalled();
