@@ -303,7 +303,9 @@ class ContentTree extends Component<Props, State> {
         // Fetch the folder using folder API
         this.api
             .getFolderAPI()
-            .folder(folderId, SORT_NAME, SORT_ASC, this.fetchFolderSuccessCallback, this.errorCallback, forceFetch);
+            .getFolder(folderId, SORT_NAME, SORT_ASC, this.fetchFolderSuccessCallback, this.errorCallback, {
+                forceFetch
+            });
     };
 
     /**

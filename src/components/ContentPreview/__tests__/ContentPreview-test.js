@@ -1,9 +1,11 @@
 import React from 'react';
+import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import PreviewLoading from '../PreviewLoading';
 import * as TokenService from '../../../util/TokenService';
 import SidebarUtils from '../../ContentSidebar/SidebarUtils';
+import { PREVIEW_FIELDS_TO_FETCH } from '../../../util/fields';
 
 jest.mock('../../Internationalize', () => 'mock-internationalize');
 
@@ -229,13 +231,15 @@ describe('components/ContentPreview/ContentPreview', () => {
             const success = jest.fn();
             const error = jest.fn();
             SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
-            instance.fetchFile(file.id, success, error);
+            instance.fetchFile(file.id, success, error, {
+                forceFetch: false,
+                refreshCache: true
+            });
             expect(getFileStub).toBeCalledWith(file.id, success, error, {
                 forceFetch: false,
                 refreshCache: true,
-                includePreviewSidebarFields: true
+                fields: PREVIEW_FIELDS_TO_FETCH
             });
-            expect(SidebarUtils.canHaveSidebar).toHaveBeenCalledWith(props.contentSidebarProps);
         });
 
         test('should fetch the file with default success and error callback', () => {
@@ -248,12 +252,9 @@ describe('components/ContentPreview/ContentPreview', () => {
                 instance.fetchFileSuccessCallback,
                 instance.fetchFileErrorCallback,
                 {
-                    forceFetch: false,
-                    refreshCache: true,
-                    includePreviewSidebarFields: true
+                    fields: PREVIEW_FIELDS_TO_FETCH
                 }
             );
-            expect(SidebarUtils.canHaveSidebar).toHaveBeenCalledWith(props.contentSidebarProps);
         });
 
         test('should fetch the file without sidebar fields', () => {
@@ -266,12 +267,9 @@ describe('components/ContentPreview/ContentPreview', () => {
                 instance.fetchFileSuccessCallback,
                 instance.fetchFileErrorCallback,
                 {
-                    forceFetch: false,
-                    refreshCache: true,
-                    includePreviewSidebarFields: false
+                    fields: PREVIEW_FIELDS_TO_FETCH
                 }
             );
-            expect(SidebarUtils.canHaveSidebar).toHaveBeenCalledWith(props.contentSidebarProps);
         });
     });
 
@@ -329,7 +327,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             instance.fetchFileSuccessCallback(newFile);
 
             expect(instance.retryCount).toEqual(0);
-            expect(instance.updatedFile).toEqual(newFile);
+            expect(instance.stagedFile).toEqual(newFile);
             expect(instance.state.file).toEqual(file);
             expect(instance.state.isFileError).toBeFalsy();
             expect(instance.state.isReloadNotificationVisible).toBeTruthy();
@@ -572,7 +570,7 @@ describe('components/ContentPreview/ContentPreview', () => {
         });
     });
 
-    describe('updateFile()', () => {
+    describe('loadFileFromStage()', () => {
         test('should set new file in state if it exists', () => {
             const wrapper = getWrapper(props);
             const instance = wrapper.instance();
@@ -581,10 +579,10 @@ describe('components/ContentPreview/ContentPreview', () => {
                 isFileError: true
             });
             file = { id: '123' };
-            instance.updatedFile = file;
-            instance.updateFile();
+            instance.stagedFile = file;
+            instance.loadFileFromStage();
             expect(instance.state.file).toEqual(file);
-            expect(instance.updatedFile).toBeUndefined();
+            expect(instance.stagedFile).toBeUndefined();
             expect(instance.state.isReloadNotificationVisible).toBeFalsy();
             expect(instance.state.isFileError).toBeFalsy();
         });
@@ -599,6 +597,27 @@ describe('components/ContentPreview/ContentPreview', () => {
             });
             instance.closeReloadNotification();
             expect(instance.state.isReloadNotificationVisible).toBeFalsy();
+        });
+    });
+
+    describe('prefetch()', () => {
+        test('should prefetch files', async () => {
+            props.token = jest.fn();
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+            const options = {
+                refreshCache: false
+            };
+
+            instance.fetchFile = jest.fn();
+            TokenService.default.cacheTokens = jest.fn().mockReturnValueOnce(Promise.resolve());
+            await instance.prefetch(['1', '2', '3']);
+
+            expect(TokenService.default.cacheTokens).toHaveBeenCalledWith(['file_1', 'file_2', 'file_3'], props.token);
+            expect(instance.fetchFile).toHaveBeenCalledTimes(3);
+            expect(instance.fetchFile).toHaveBeenNthCalledWith(1, '1', noop, noop, options);
+            expect(instance.fetchFile).toHaveBeenNthCalledWith(2, '2', noop, noop, options);
+            expect(instance.fetchFile).toHaveBeenNthCalledWith(3, '3', noop, noop, options);
         });
     });
 });

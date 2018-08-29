@@ -1,7 +1,6 @@
 import Folder from '../Folder';
 import Cache from '../../util/Cache';
-import { getFieldsAsString } from '../../util/fields';
-import { X_REP_HINTS } from '../../constants';
+import { FOLDER_FIELDS_TO_FETCH } from '../../util/fields';
 import * as sort from '../../util/sorter';
 
 let folder;
@@ -58,13 +57,13 @@ describe('api/Folder', () => {
         });
     });
 
-    describe('folder()', () => {
+    describe('getFolder()', () => {
         test('should not do anything if destroyed', () => {
             folder.isDestroyed = jest.fn().mockReturnValueOnce(true);
             folder.folderRequest = jest.fn();
             folder.getCache = jest.fn();
             folder.getCacheKey = jest.fn();
-            folder.folder('id', 'query', 'by', 'direction', 'success', 'fail');
+            folder.getFolder('id', 'query', 'by', 'direction', 'success', 'fail');
             expect(folder.folderRequest).not.toHaveBeenCalled();
             expect(folder.getCache).not.toHaveBeenCalled();
             expect(folder.getCacheKey).not.toHaveBeenCalled();
@@ -73,7 +72,7 @@ describe('api/Folder', () => {
             folder.folderRequest = jest.fn();
             folder.getCacheKey = jest.fn().mockReturnValueOnce('key');
             folder.isLoaded = jest.fn().mockReturnValueOnce(false);
-            folder.folder('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
+            folder.getFolder('id', 'by', 'direction', 'success', 'fail');
             expect(folder.getCacheKey).toHaveBeenCalledWith('id');
             expect(folder.id).toBe('id');
             expect(folder.successCallback).toBe('success');
@@ -82,15 +81,13 @@ describe('api/Folder', () => {
             expect(folder.sortDirection).toBe('direction');
             expect(folder.key).toBe('key');
             expect(folder.offset).toBe(0);
-            expect(folder.includePreviewFields).toBe('preview');
-            expect(folder.includePreviewSidebarFields).toBe('sidebar');
         });
         test('should save args and not make folder request when cached', () => {
             folder.folderRequest = jest.fn();
             folder.finish = jest.fn();
             folder.getCacheKey = jest.fn().mockReturnValueOnce('key');
             folder.isLoaded = jest.fn().mockReturnValueOnce(true);
-            folder.folder('id', 'by', 'direction', 'success', 'fail', false, 'preview', 'sidebar');
+            folder.getFolder('id', 'by', 'direction', 'success', 'fail');
             expect(folder.getCacheKey).toHaveBeenCalledWith('id');
             expect(folder.folderRequest).not.toHaveBeenCalled();
             expect(folder.id).toBe('id');
@@ -100,8 +97,6 @@ describe('api/Folder', () => {
             expect(folder.sortDirection).toBe('direction');
             expect(folder.key).toBe('key');
             expect(folder.offset).toBe(0);
-            expect(folder.includePreviewFields).toBe('preview');
-            expect(folder.includePreviewSidebarFields).toBe('sidebar');
         });
         test('should save args and make folder request when cached but forced to fetch', () => {
             const unsetMock = jest.fn();
@@ -109,7 +104,7 @@ describe('api/Folder', () => {
             folder.getCache = jest.fn().mockReturnValueOnce({ unset: unsetMock });
             folder.getCacheKey = jest.fn().mockReturnValueOnce('key');
             folder.isLoaded = jest.fn().mockReturnValueOnce(false);
-            folder.folder('id', 'by', 'direction', 'success', 'fail', true, 'preview', 'sidebar');
+            folder.getFolder('id', 'by', 'direction', 'success', 'fail', { forceFetch: true });
             expect(unsetMock).toHaveBeenCalledWith('key');
             expect(folder.getCacheKey).toHaveBeenCalledWith('id');
             expect(folder.id).toBe('id');
@@ -119,8 +114,6 @@ describe('api/Folder', () => {
             expect(folder.sortDirection).toBe('direction');
             expect(folder.key).toBe('key');
             expect(folder.offset).toBe(0);
-            expect(folder.includePreviewFields).toBe('preview');
-            expect(folder.includePreviewSidebarFields).toBe('sidebar');
         });
     });
 
@@ -156,10 +149,7 @@ describe('api/Folder', () => {
                     params: {
                         offset: 0,
                         limit: 1000,
-                        fields: getFieldsAsString(true)
-                    },
-                    headers: {
-                        'X-Rep-Hints': X_REP_HINTS
+                        fields: FOLDER_FIELDS_TO_FETCH.toString()
                     }
                 });
             });
@@ -181,10 +171,7 @@ describe('api/Folder', () => {
                     params: {
                         offset: 0,
                         limit: 1000,
-                        fields: getFieldsAsString(true, true)
-                    },
-                    headers: {
-                        'X-Rep-Hints': X_REP_HINTS
+                        fields: FOLDER_FIELDS_TO_FETCH.toString()
                     }
                 });
             });
@@ -624,7 +611,7 @@ describe('api/Folder', () => {
                 expect(folder.createSuccessHandler).toHaveBeenCalledWith('success');
                 expect(folder.errorHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.post).toHaveBeenCalledWith({
-                    url: `https://api.box.com/2.0/folders?fields=${getFieldsAsString()}`,
+                    url: `https://api.box.com/2.0/folders?fields=${FOLDER_FIELDS_TO_FETCH.toString()}`,
                     data: {
                         name: 'foo',
                         parent: {
@@ -645,7 +632,7 @@ describe('api/Folder', () => {
                 expect(folder.errorHandler).toHaveBeenCalledWith(error);
                 expect(folder.createSuccessHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.post).toHaveBeenCalledWith({
-                    url: `https://api.box.com/2.0/folders?fields=${getFieldsAsString()}`,
+                    url: `https://api.box.com/2.0/folders?fields=${FOLDER_FIELDS_TO_FETCH.toString()}`,
                     data: {
                         name: 'foo',
                         parent: {

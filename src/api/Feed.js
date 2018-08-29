@@ -677,7 +677,7 @@ class Feed extends Base {
     fetchTaskAssignments(tasksWithoutAssignments: Tasks): Promise<?Tasks> {
         const requestData = {
             params: {
-                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH
+                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH.toString()
             }
         };
         const { entries } = tasksWithoutAssignments;

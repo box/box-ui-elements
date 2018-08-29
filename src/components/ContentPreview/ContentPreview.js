@@ -24,11 +24,10 @@ import API from '../../api';
 import makeResponsive from '../makeResponsive';
 import Internationalize from '../Internationalize';
 import TokenService from '../../util/TokenService';
-import { isValidBoxFile } from '../../util/fields';
 import { isInputElement, focus } from '../../util/dom';
 import { getTypedFileId } from '../../util/file';
-import SidebarUtils from '../ContentSidebar/SidebarUtils';
 import ReloadNotification from './ReloadNotification';
+import { PREVIEW_FIELDS_TO_FETCH } from '../../util/fields';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -129,7 +128,7 @@ class ContentPreview extends PureComponent<Props, State> {
     rootElement: HTMLElement;
     retryCount: number = 0;
     retryTimeout: TimeoutID;
-    updatedFile: ?BoxItem;
+    stagedFile: ?BoxItem;
 
     initialState: State = {
         isFileError: false,
@@ -419,7 +418,9 @@ class ContentPreview extends PureComponent<Props, State> {
         await TokenService.cacheTokens(typedIds, token);
         files.forEach((file) => {
             const fileId = this.getFileId(file);
-            this.fetchFile(fileId, noop, noop);
+            this.fetchFile(fileId, noop, noop, {
+                refreshCache: false
+            });
         });
     }
 
@@ -617,14 +618,14 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
-     * Updates preview file.
+     * Updates preview file from temporary staged file.
      *
      * @return {void}
      */
-    updateFile = () => {
-        if (this.updatedFile) {
-            this.setState({ ...this.initialState, file: this.updatedFile }, () => {
-                this.updatedFile = undefined;
+    loadFileFromStage = () => {
+        if (this.stagedFile) {
+            this.setState({ ...this.initialState, file: this.stagedFile }, () => {
+                this.stagedFile = undefined;
             });
         }
     };
@@ -671,7 +672,7 @@ class ContentPreview extends PureComponent<Props, State> {
         } else if (currentFile.file_version.sha1 !== file.file_version.sha1) {
             // If we are already prevewing the file that got updated then show the
             // user a notification to reload the file only if its sha1 changed
-            this.updatedFile = file;
+            this.stagedFile = file;
             this.setState({ ...this.initialState, isReloadNotificationVisible: true });
         }
     };
@@ -713,9 +714,15 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {string} id file id
      * @param {Function|void} [successCallback] - Callback after file is fetched
      * @param {Function|void} [errorCallback] - Callback after error
+     * @param {Object|void} [fetchOptions] - Fetch options
      * @return {void}
      */
-    fetchFile(id: string, successCallback?: Function, errorCallback?: Function): void {
+    fetchFile(
+        id: string,
+        successCallback?: Function,
+        errorCallback?: Function,
+        fetchOptions?: FetchOptions = {}
+    ): void {
         if (!id) {
             throw InvalidIdError;
         }
@@ -730,9 +737,8 @@ class ContentPreview extends PureComponent<Props, State> {
                 successCallback || this.fetchFileSuccessCallback,
                 errorCallback || this.fetchFileErrorCallback,
                 {
-                    forceFetch: false,
-                    refreshCache: true,
-                    includePreviewSidebarFields: SidebarUtils.canHaveSidebar(this.props.contentSidebarProps)
+                    ...fetchOptions,
+                    fields: PREVIEW_FIELDS_TO_FETCH
                 }
             );
     }
@@ -990,8 +996,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const fileIndex = this.getFileIndex();
         const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
         const hasRightNavigation = collection.length > 1 && fileIndex > -1 && fileIndex < collection.length - 1;
-        const isValidFile = isValidBoxFile(file, true, true);
-        const isSidebarVisible = isValidFile && SidebarUtils.shouldRenderSidebar(contentSidebarProps, file);
+        const fileId = file ? file.id : undefined;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1038,14 +1043,14 @@ class ContentPreview extends PureComponent<Props, State> {
                                 </PlainButton>
                             )}
                         </div>
-                        {isSidebarVisible && (
+                        {file && (
                             <ContentSidebar
                                 {...contentSidebarProps}
                                 isLarge={isLarge}
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}
-                                fileId={this.getFileId(file)}
+                                fileId={fileId}
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
                                 sharedLink={sharedLink}
@@ -1056,7 +1061,7 @@ class ContentPreview extends PureComponent<Props, State> {
                         )}
                     </div>
                     {isReloadNotificationVisible && (
-                        <ReloadNotification onClose={this.closeReloadNotification} onClick={this.updateFile} />
+                        <ReloadNotification onClose={this.closeReloadNotification} onClick={this.loadFileFromStage} />
                     )}
                 </div>
             </Internationalize>

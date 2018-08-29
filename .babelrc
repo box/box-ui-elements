@@ -1,14 +1,17 @@
 {
-    "presets": [
-        ["env", {
-            "modules": false
-        }],
-        "stage-1",
-        "react",
-        "flow"
-    ],
     "env": {
         "dev": {
+            "presets": [
+                ["env", {
+                    "modules": false,
+                    "targets": {
+                        "browsers": ["last 1 Chrome versions", "last 1 Firefox versions"]
+                    }
+                }],
+                "stage-1",
+                "react",
+                "flow"
+            ],
             "plugins": [
                 "flow-react-proptypes",
                 [
@@ -21,6 +24,14 @@
             ]
         },
         "production": {
+            "presets": [
+                ["env", {
+                    "modules": false
+                }],
+                "stage-1",
+                "react",
+                "flow"
+            ],
             "plugins": [
                 [
                     "react-intl",
@@ -32,6 +43,14 @@
             ]
         },
         "npm": {
+            "presets": [
+                ["env", {
+                    "modules": false
+                }],
+                "stage-1",
+                "react",
+                "flow"
+            ],
             "plugins": [
                 [
                     "react-intl",
@@ -48,6 +67,14 @@
             ]
         },
         "test": {
+            "presets": [
+                ["env", {
+                    "modules": false
+                }],
+                "stage-1",
+                "react",
+                "flow"
+            ],
             "plugins": [
                 "transform-es2015-modules-commonjs",
                 [

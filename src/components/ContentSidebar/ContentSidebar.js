@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Content Preview Component
+ * @file Content Sidebar Component
  * @author Box
  */
 
@@ -15,6 +15,7 @@ import Sidebar from './Sidebar';
 import API from '../../api';
 import APIContext from '../APIContext';
 import Internationalize from '../Internationalize';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../util/fields';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
@@ -68,6 +69,7 @@ type State = {
     accessStats?: FileAccessStats,
     fileError?: Errors,
     accessStatsError?: Errors,
+    isVisible: boolean,
     isFileLoading?: boolean,
     feedItems?: FeedItems,
     hasBeenToggled?: boolean
@@ -77,8 +79,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     id: string;
     props: Props;
     state: State;
-    rootElement: HTMLElement;
-    appElement: HTMLElement;
     api: API;
 
     static defaultProps = {
@@ -97,6 +97,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     initialState: State = {
+        isVisible: true,
         file: undefined,
         accessStats: undefined,
         fileError: undefined,
@@ -168,9 +169,6 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
-
         this.fetchData(this.props);
     }
 
@@ -220,7 +218,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} Props the component props
      * @param {boolean} hasFileIdChanged true if the file id has changed
      */
-    fetchData({ fileId, detailsSidebarProps }: Props) {
+    fetchData(props: Props) {
+        // If nothing to show then just return
+        if (!SidebarUtils.canHaveSidebar(props)) {
+            return;
+        }
+
+        const { fileId, detailsSidebarProps }: Props = props;
         const { hasAccessStats = false } = detailsSidebarProps;
         if (!fileId) {
             return;
@@ -416,13 +420,24 @@ class ContentSidebar extends PureComponent<Props, State> {
 
     /**
      * File fetch success callback that sets the file and view
+     * Only set file if there is data to show in the sidebar.
+     * Skills sidebar doesn't show when there is no data.
      *
      * @private
      * @param {Object} file - Box file
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        this.setState({ file, view: this.getDefaultSidebarView(file, this.props), isFileLoading: false });
+        if (SidebarUtils.shouldRenderSidebar(this.props, file)) {
+            this.setState({
+                file,
+                isVisible: true,
+                view: this.getDefaultSidebarView(file, this.props),
+                isFileLoading: false
+            });
+        } else {
+            this.setState({ isVisible: false });
+        }
     };
 
     /**
@@ -441,18 +456,18 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {string} id - File id
-     * @param {Boolean|void} [forceFetch] - To void cache
+     * @param {Object|void} [fetchOptions] - Fetch options
      * @return {void}
      */
-    fetchFile(id: string, forceFetch: boolean = false): void {
+    fetchFile(id: string, fetchOptions: FetchOptions = {}): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
             this.setState({
                 isFileLoading: true
             });
 
             this.api.getFileAPI().getFile(id, this.fetchFileSuccessCallback, this.fetchFileErrorCallback, {
-                forceFetch,
-                includePreviewSidebarFields: true
+                ...fetchOptions,
+                fields: SIDEBAR_FIELDS_TO_FETCH
             });
         }
     }
@@ -486,7 +501,9 @@ class ContentSidebar extends PureComponent<Props, State> {
             return;
         }
 
-        this.fetchFile(fileId, true);
+        this.fetchFile(fileId, {
+            forceFetch: true
+        });
     };
 
     /**
@@ -502,7 +519,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Renders the file preview
+     * Renders the sidebar
      *
      * @private
      * @inheritdoc
@@ -521,7 +538,26 @@ class ContentSidebar extends PureComponent<Props, State> {
             metadataSidebarProps,
             onVersionHistoryClick
         }: Props = this.props;
-        const { file, view, accessStats, accessStatsError, fileError, isFileLoading, feedItems }: State = this.state;
+        const {
+            file,
+            view,
+            accessStats,
+            accessStatsError,
+            fileError,
+            isFileLoading,
+            feedItems,
+            isVisible
+        }: State = this.state;
+
+        // By default sidebar is always visible if there is something configured
+        // to show via props. At least one of the sidebars is needed for visibility.
+        // However we may turn the visibility off if there is no data to show
+        // in the sidebar. This can only happen if skills sidebar was showing
+        // however there is no skills data to show. For all other sidebars
+        // we show them by default even if there is no data in them.
+        if (!isVisible || !SidebarUtils.canHaveSidebar(this.props)) {
+            return null;
+        }
 
         const styleClassName = classNames(
             'be bcs',
@@ -535,14 +571,14 @@ class ContentSidebar extends PureComponent<Props, State> {
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.canHaveMetadataSidebar(this.props);
+        const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file);
 
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <aside id={this.id} className={styleClassName}>
                     <div className='be-app-element'>
-                        {SidebarUtils.shouldRenderSidebar(this.props, file) ? (
-                            // $FlowFixMe
-                            <APIContext.Provider value={this.api}>
+                        {hasSidebar ? (
+                            <APIContext.Provider value={(this.api: any)}>
                                 <Sidebar
                                     file={((file: any): BoxItem)}
                                     view={view}

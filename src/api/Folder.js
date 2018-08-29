@@ -10,8 +10,8 @@ import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
-import { getFieldsAsString } from '../util/fields';
-import { CACHE_PREFIX_FOLDER, X_REP_HINTS } from '../constants';
+import { CACHE_PREFIX_FOLDER } from '../constants';
+import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
 import { getBadItemError } from '../util/error';
 
 const LIMIT_ITEM_FETCH = 1000;
@@ -56,16 +56,6 @@ class Folder extends Item {
      * @property {Function}
      */
     errorCallback: Function;
-
-    /**
-     * @property {boolean}
-     */
-    includePreviewFields: boolean;
-
-    /**
-     * @property {boolean}
-     */
-    includePreviewSidebarFields: boolean;
 
     /**
      * Creates a key for the cache
@@ -220,9 +210,8 @@ class Folder extends Item {
                 params: {
                     offset: this.offset,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: getFieldsAsString(this.includePreviewFields, this.includePreviewSidebarFields)
-                },
-                headers: { 'X-Rep-Hints': X_REP_HINTS }
+                    fields: FOLDER_FIELDS_TO_FETCH.toString()
+                }
             })
             .then(this.folderSuccessHandler)
             .catch(this.errorHandler);
@@ -236,20 +225,18 @@ class Folder extends Item {
      * @param {string} sortDirection - sort direction
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
-     * @param {boolean|void} [forceFetch] - Bypasses the cache
-     * @param {boolean|void} [includePreview] - Optionally include preview fields
-     * @param {boolean|void} [includePreviewSidebar] - Optionally include preview sidebar fields
+     * @param {boolean|void} [options.fields] - Optionally include specific fields
+     * @param {boolean|void} [options.forceFetch] - Optionally Bypasses the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally Updates the cache
      * @return {void}
      */
-    folder(
+    getFolder(
         id: string,
         sortBy: SortBy,
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        forceFetch: boolean = false,
-        includePreviewFields: boolean = false,
-        includePreviewSidebarFields: boolean = false
+        options: FetchOptions = {}
     ): void {
         if (this.isDestroyed()) {
             return;
@@ -263,11 +250,9 @@ class Folder extends Item {
         this.errorCallback = errorCallback;
         this.sortBy = sortBy;
         this.sortDirection = sortDirection;
-        this.includePreviewFields = includePreviewFields;
-        this.includePreviewSidebarFields = includePreviewSidebarFields; // implies preview
 
         // Clear the cache if needed
-        if (forceFetch) {
+        if (options.forceFetch) {
             this.getCache().unset(this.key);
         }
 
@@ -331,7 +316,7 @@ class Folder extends Item {
             return Promise.reject();
         }
 
-        const url = `${this.getUrl()}?fields=${getFieldsAsString()}`;
+        const url = `${this.getUrl()}?fields=${FOLDER_FIELDS_TO_FETCH.toString()}`;
         return this.xhr
             .post({
                 url,

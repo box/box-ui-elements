@@ -292,7 +292,7 @@ type BoxItem = {
     selected?: boolean,
     metadata?: MetadataType,
     file_version?: BoxItemVersion,
-    is_download_available: boolean,
+    is_download_available?: boolean,
     version_number?: string,
     restored_from?: BoxItemVersion
 };
@@ -573,4 +573,10 @@ type UploadFile = File & { webkitRelativePath?: string };
 
 type DirectoryReader = {
     readEntries: (Function, Function) => void
+};
+
+type FetchOptions = {
+    forceFetch?: boolean,
+    refreshCache?: boolean,
+    fields?: Array<string>
 };
