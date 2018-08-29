@@ -69,7 +69,6 @@ type State = {
     accessStats?: FileAccessStats,
     fileError?: Errors,
     accessStatsError?: Errors,
-    isVisible: boolean,
     isFileLoading?: boolean,
     feedItems?: FeedItems,
     hasBeenToggled?: boolean
@@ -97,7 +96,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     initialState: State = {
-        isVisible: true,
         file: undefined,
         accessStats: undefined,
         fileError: undefined,
@@ -431,12 +429,9 @@ class ContentSidebar extends PureComponent<Props, State> {
         if (SidebarUtils.shouldRenderSidebar(this.props, file)) {
             this.setState({
                 file,
-                isVisible: true,
                 view: this.getDefaultSidebarView(file, this.props),
                 isFileLoading: false
             });
-        } else {
-            this.setState({ isVisible: false });
         }
     };
 
@@ -538,16 +533,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             metadataSidebarProps,
             onVersionHistoryClick
         }: Props = this.props;
-        const {
-            file,
-            view,
-            accessStats,
-            accessStatsError,
-            fileError,
-            isFileLoading,
-            feedItems,
-            isVisible
-        }: State = this.state;
+        const { file, view, accessStats, accessStatsError, fileError, isFileLoading, feedItems }: State = this.state;
 
         // By default sidebar is always visible if there is something configured
         // to show via props. At least one of the sidebars is needed for visibility.
@@ -555,7 +541,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         // in the sidebar. This can only happen if skills sidebar was showing
         // however there is no skills data to show. For all other sidebars
         // we show them by default even if there is no data in them.
-        if (!isVisible || !SidebarUtils.canHaveSidebar(this.props)) {
+        if (!SidebarUtils.shouldRenderSidebar(this.props, file)) {
             return null;
         }
 
@@ -571,49 +557,42 @@ class ContentSidebar extends PureComponent<Props, State> {
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.canHaveMetadataSidebar(this.props);
-        const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file);
 
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <aside id={this.id} className={styleClassName}>
                     <div className='be-app-element'>
-                        {hasSidebar ? (
-                            <APIContext.Provider value={(this.api: any)}>
-                                <Sidebar
-                                    file={((file: any): BoxItem)}
-                                    view={view}
-                                    detailsSidebarProps={{
-                                        accessStats,
-                                        accessStatsError,
-                                        fileError,
-                                        isFileLoading,
-                                        onDescriptionChange: this.onDescriptionChange,
-                                        ...detailsSidebarProps,
-                                        onClassificationClick: this.onClassificationClick
-                                    }}
-                                    activitySidebarProps={activitySidebarProps}
-                                    metadataSidebarProps={{
-                                        ...metadataSidebarProps
-                                    }}
-                                    getPreview={getPreview}
-                                    getViewer={getViewer}
-                                    hasSkills={hasSkills}
-                                    hasDetails={hasDetails}
-                                    hasMetadata={hasMetadata}
-                                    hasActivityFeed={hasActivityFeed}
-                                    accessStats={accessStats}
-                                    accessStatsError={accessStatsError}
-                                    fileError={fileError}
-                                    onToggle={this.onToggle}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    feedItems={feedItems}
-                                />
-                            </APIContext.Provider>
-                        ) : (
-                            <div className='bcs-loading'>
-                                <LoadingIndicator />
-                            </div>
-                        )}
+                        <APIContext.Provider value={(this.api: any)}>
+                            <Sidebar
+                                file={((file: any): BoxItem)}
+                                view={view}
+                                detailsSidebarProps={{
+                                    accessStats,
+                                    accessStatsError,
+                                    fileError,
+                                    isFileLoading,
+                                    onDescriptionChange: this.onDescriptionChange,
+                                    ...detailsSidebarProps,
+                                    onClassificationClick: this.onClassificationClick
+                                }}
+                                activitySidebarProps={activitySidebarProps}
+                                metadataSidebarProps={{
+                                    ...metadataSidebarProps
+                                }}
+                                getPreview={getPreview}
+                                getViewer={getViewer}
+                                hasSkills={hasSkills}
+                                hasDetails={hasDetails}
+                                hasMetadata={hasMetadata}
+                                hasActivityFeed={hasActivityFeed}
+                                accessStats={accessStats}
+                                accessStatsError={accessStatsError}
+                                fileError={fileError}
+                                onToggle={this.onToggle}
+                                onVersionHistoryClick={onVersionHistoryClick}
+                                feedItems={feedItems}
+                            />
+                        </APIContext.Provider>
                     </div>
                 </aside>
             </Internationalize>
