@@ -43,9 +43,9 @@ import {
     getFile,
     getFileAPIOptions,
     getDataTransferItemAPIOptions,
-    isDataTransferItemAFolder
+    isDataTransferItemAFolder,
+    isMultiputSupported
 } from '../../util/uploads';
-import UploaderUtils from './UploaderUtils';
 
 type Props = {
     apiHost: string,
@@ -579,7 +579,7 @@ class ContentUploader extends Component<Props, State> {
         const factory = this.createAPIFactory(uploadAPIOptions);
 
         if (chunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
-            if (UploaderUtils.isMultiputSupported()) {
+            if (isMultiputSupported()) {
                 return factory.getChunkedUploadAPI();
             }
 

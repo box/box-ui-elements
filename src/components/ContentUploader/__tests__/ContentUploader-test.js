@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { ContentUploaderComponent } from '../ContentUploader';
-import UploaderUtils from '../UploaderUtils';
+import * as UploaderUtils from '../../../util/uploads';
 
 describe('components/ContentUploader/ContentUploader', () => {
     const getWrapper = (props = {}) => shallow(<ContentUploaderComponent {...props} />);
@@ -18,7 +18,7 @@ describe('components/ContentUploader/ContentUploader', () => {
         };
 
         beforeEach(() => {
-            global.console.warn = jest.fn();
+            jest.spyOn(global.console, 'warn').mockImplementation();
             wrapper = getWrapper();
             instance = wrapper.instance();
             getPlainUploadAPI = jest.fn();
@@ -35,14 +35,14 @@ describe('components/ContentUploader/ContentUploader', () => {
         });
 
         test('should use the chunked upload api', () => {
-            UploaderUtils.isMultiputSupported = jest.fn().mockReturnValue(true);
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI(file);
             expect(instance.createAPIFactory).toBeCalled();
             expect(getChunkedUploadAPI).toBeCalled();
         });
 
         test('should use the regular upload api if the file <= 50MB', () => {
-            UploaderUtils.isMultiputSupported = jest.fn().mockReturnValue(true);
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI({
                 ...file,
                 size: CHUNKED_UPLOAD_MIN_SIZE_BYTES
@@ -51,7 +51,7 @@ describe('components/ContentUploader/ContentUploader', () => {
         });
 
         test('should use the regular upload api if multiput not supported', () => {
-            UploaderUtils.isMultiputSupported = jest.fn().mockReturnValue(false);
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => false);
             instance.getUploadAPI({
                 ...file,
                 size: CHUNKED_UPLOAD_MIN_SIZE_BYTES
@@ -63,7 +63,7 @@ describe('components/ContentUploader/ContentUploader', () => {
             wrapper.setProps({
                 chunked: false
             });
-            UploaderUtils.isMultiputSupported = jest.fn().mockReturnValue(true);
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI(file);
             expect(getPlainUploadAPI).toBeCalled();
         });
