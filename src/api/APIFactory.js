@@ -21,6 +21,8 @@ import UsersAPI from './Users';
 import MetadataAPI from './Metadata';
 import FileCollaboratorsAPI from './FileCollaborators';
 import FeedAPI from './Feed';
+import AppIntegrationsAPI from './AppIntegrations';
+import OpenWithAPI from './OpenWith';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 
 class APIFactory {
@@ -108,6 +110,16 @@ class APIFactory {
      * @property {FeedAPI}
      */
     feedItemsAPI: FeedAPI;
+
+    /**
+     * @property {OpenWithAPI}
+     */
+    openWithAPI: OpenWithAPI;
+
+    /**
+     * @property {AppIntegrationsAPI}
+     */
+    appIntegrationsAPI: AppIntegrationsAPI;
 
     /**
      * [constructor]
@@ -204,6 +216,16 @@ class APIFactory {
         if (this.fileCollaboratorsAPI) {
             this.fileCollaboratorsAPI.destroy();
             delete this.fileCollaboratorsAPI;
+        }
+
+        if (this.appIntegrationsAPI) {
+            this.appIntegrationsAPI.destroy();
+            delete this.appIntegrationsAPI;
+        }
+
+        if (this.openWithAPI) {
+            this.openWithAPI.destroy();
+            delete this.openWithAPI;
         }
 
         if (destroyCache) {
@@ -459,7 +481,35 @@ class APIFactory {
         return this.feedItemsAPI;
     }
 
+    /**
+     * API for Open With
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {OpenWithAPI} OpenWithAPI instance
+     */
+    getOpenWithAPI(shouldDestroy: boolean): OpenWithAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
 
+        this.openWithAPI = new OpenWithAPI(this.options);
+        return this.openWithAPI;
+    }
+
+    /**
+     * API for the App Integrations endpoint
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {AppIntegrationsAPI} AppIntegrationsAPI instance
+     */
+    getAppIntegrationsAPI(shouldDestroy: boolean): AppIntegrationsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.appIntegrationsAPI = new AppIntegrationsAPI(this.options);
+        return this.appIntegrationsAPI;
+    }
 }
 
 export default APIFactory;
