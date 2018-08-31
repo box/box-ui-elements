@@ -43,7 +43,8 @@ import {
     getFile,
     getFileAPIOptions,
     getDataTransferItemAPIOptions,
-    isDataTransferItemAFolder
+    isDataTransferItemAFolder,
+    isMultiputSupported
 } from '../../util/uploads';
 
 type Props = {
@@ -240,7 +241,7 @@ class ContentUploader extends Component<Props, State> {
      *
      * @param {Array<UploadFileWithAPIOptions | File>} files
      */
-    getNewFiles = (files: Array<UploadFileWithAPIOptions | File>) => {
+    getNewFiles = (files: Array<UploadFileWithAPIOptions | File>): Array<UploadFileWithAPIOptions | File> => {
         const { rootFolderId } = this.props;
         const { itemIds } = this.state;
 
@@ -252,7 +253,9 @@ class ContentUploader extends Component<Props, State> {
      *
      * @param {Array<UploadFileWithAPIOptions | File>} files
      */
-    getNewDataTransferItems = (items: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>) => {
+    getNewDataTransferItems = (
+        items: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>
+    ): Array<DataTransferItem | UploadDataTransferItemWithAPIOptions> => {
         const { rootFolderId } = this.props;
         const { itemIds } = this.state;
 
@@ -570,13 +573,21 @@ class ContentUploader extends Component<Props, State> {
      * @param {UploadItemAPIOptions} [uploadAPIOptions]
      * @return {UploadAPI} - Instance of Upload API
      */
-    getUploadAPI(file, uploadAPIOptions?: UploadItemAPIOptions) {
+    getUploadAPI(file: File, uploadAPIOptions?: UploadItemAPIOptions) {
         const { chunked } = this.props;
         const { size } = file;
         const factory = this.createAPIFactory(uploadAPIOptions);
 
         if (chunked && size > CHUNKED_UPLOAD_MIN_SIZE_BYTES) {
-            return factory.getChunkedUploadAPI();
+            if (isMultiputSupported()) {
+                return factory.getChunkedUploadAPI();
+            }
+
+            /* eslint-disable no-console */
+            console.warn(
+                'Chunked uploading is enabled, but not supported by your browser. You may need to enable HTTPS.'
+            );
+            /* eslint-enable no-console */
         }
 
         return factory.getPlainUploadAPI();
@@ -1052,3 +1063,4 @@ class ContentUploader extends Component<Props, State> {
 }
 
 export default makeResponsive(ContentUploader);
+export { ContentUploader as ContentUploaderComponent };
