@@ -493,9 +493,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             expect(getDefaultSidebarView).not.toBeCalled();
             expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(instance.props, file);
-            expect(setState).toBeCalledWith({
-                isVisible: false
-            });
         });
 
         test('should set the file state to be the file response', () => {
@@ -507,8 +504,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(setState).toBeCalledWith({
                 file,
                 view: 'view',
-                isFileLoading: false,
-                isVisible: true
+                isFileLoading: false
             });
         });
     });
