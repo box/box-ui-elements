@@ -1,6 +1,6 @@
 {
   "name": "box-ui-elements",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "Box UI Elements",
   "author": "Box (https://www.box.com/)",
   "license": "SEE LICENSE IN LICENSE",
@@ -85,7 +85,7 @@
       "box-react-ui-locale-data": "<rootDir>/node_modules/box-react-ui/i18n/en-US.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/build/fileMock.js",
       "\\.(css|less)$": "<rootDir>/build/styleMock.js",
-      "react-virtualized/dist/es" : "react-virtualized/dist/commonjs"
+      "react-virtualized/dist/es": "react-virtualized/dist/commonjs"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(box-react-ui|react-virtualized))",
