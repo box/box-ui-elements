@@ -274,6 +274,14 @@ function getDataTransferItemId(
     return `${name}_${folderId}_${uploadInitTimestamp}`;
 }
 
+/**
+ * Multiput uploads require the use of crypto, which is only supported in secure contexts
+ */
+function isMultiputSupported(): boolean {
+    const cryptoObj = window.crypto || window.msCrypto;
+    return window.location.protocol === 'https:' && cryptoObj && cryptoObj.subtle;
+}
+
 export {
     DEFAULT_API_OPTIONS,
     doesDataTransferItemContainAPIOptions,
@@ -290,6 +298,7 @@ export {
     getFileId,
     getFileLastModifiedAsISONoMSIfPossible,
     isDataTransferItemAFolder,
+    isMultiputSupported,
     toISOStringNoMS,
     tryParseJson
 };
