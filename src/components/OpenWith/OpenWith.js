@@ -29,14 +29,12 @@ type Props = {
     /** Axios request interceptor that runs before a network request. */
     requestInterceptor?: Function,
     /** Axios response interceptor that runs before a network response is returned. */
-    responseInterceptor?: Function,
-    /** Temporary prop that allows app integration to be passed in for testing purporses. */
-    getAppIntegration?: Function
+    responseInterceptor?: Function
 };
 
 type State = {
     isDropdownOpen: boolean,
-    integrationsData: ?OpenWithIntegrations
+    integrations: ?Array<OpenWithIntegrationItem>
 };
 
 class OpenWith extends PureComponent<Props, State> {
@@ -53,7 +51,7 @@ class OpenWith extends PureComponent<Props, State> {
 
     initialState: State = {
         isDropdownOpen: false,
-        integrationsData: null
+        integrations: null
     };
 
     /**
@@ -109,59 +107,19 @@ class OpenWith extends PureComponent<Props, State> {
      */
     componentDidMount() {
         const { fileId }: Props = this.props;
-        this.api.getOpenWithAPI(false).get({
-            id: fileId,
-            successCallback: this.fetchAppIntegrations,
-            errorCallback: this.fetchErrorCallback
-        });
+        this.api
+            .getOpenWithAPI(false)
+            .getOpenWithIntegrations(fileId, this.fetchOpenWithSuccessHandler, this.fetchErrorCallback);
     }
 
     /**
      * Fetch app intgrations info needed to render.
      *
-     * @param {OpenWithIntegrations} openWithintegrations - The available Open With integrations
+     * @param {OpenWithIntegrations} openWithOntegrations - The available Open With integrations
      * @return {void}
      */
-    fetchAppIntegrations = (openWithintegrations: OpenWithIntegrations) => {
-        const { items } = openWithintegrations;
-        const appIntegrationInfoPromises = [];
-
-        items.forEach((integrationItem: OpenWithIntegrationItem) => {
-            const { app_integration: { id } } = integrationItem;
-            const promise = this.fetchAppIntegrationPromise(id);
-            appIntegrationInfoPromises.push(promise);
-        });
-
-        // Update state after we have information for all integrations, which are required to render.
-        Promise.all(appIntegrationInfoPromises)
-            .then((integrations) => {
-                const openWithintegrationsWithIntegrationData = this.completeOpenWithIntegrationData(
-                    openWithintegrations,
-                    integrations
-                );
-
-                this.setState({ integrationsData: openWithintegrationsWithIntegrationData });
-            })
-            .catch(this.fetchErrorCallback);
-    };
-
-    /**
-     * Creates a promise that resolves with the needed app integration fields
-     *
-     * @param {number} id - An app integration ID
-     * @return {Promise} a promise that resolves with app integration data
-     */
-    fetchAppIntegrationPromise = (id: number) => {
-        const { getAppIntegration }: Props = this.props;
-        return new Promise((resolve, reject) => {
-            // Use a passed in getter if provided, replace when no longer needed
-            const appIntegrationGetFunction: Function = getAppIntegration || this.api.getAppIntegrationsAPI(false).get;
-            appIntegrationGetFunction({
-                id,
-                successCallback: (appIntegration) => resolve(appIntegration),
-                errorCallback: (error) => reject(error)
-            });
-        });
+    fetchOpenWithSuccessHandler = async (openWithIntegrations: Array<OpenWithIntegrationItem>) => {
+        this.setState({ integrations: openWithIntegrations });
     };
 
     /**
@@ -173,24 +131,6 @@ class OpenWith extends PureComponent<Props, State> {
     fetchErrorCallback = (error: Error) => {
         console.error(error); // eslint-disable-line no-console
     };
-
-    /**
-     * Completes the app integration mini objects in Open With data with the required fields to render.
-     *
-     * @param {OpenWithIntegrations} openWithintegrations - The available Open With integrations
-     * @param {Array<AppIntegrationItem>} appIntegrations - An array of full app integration items
-     * @return {void}
-     */
-    completeOpenWithIntegrationData = (
-        openWithintegrations: OpenWithIntegrations,
-        appIntegrations: Array<AppIntegrationItem>
-    ): any =>
-        openWithintegrations.items.map((item) => ({
-            ...item,
-            app_integration: appIntegrations.find(
-                (appIntegration) => appIntegration.id === item.app_integration.id.toString()
-            )
-        }));
 
     /**
      * Called when the Open With button gets new properties
@@ -211,11 +151,11 @@ class OpenWith extends PureComponent<Props, State> {
      */
     render() {
         const { language, messages: intlMessages }: Props = this.props;
-        const { integrationsData }: State = this.state;
+        const { integrations }: State = this.state;
 
         // Placeholder
         return (
-            integrationsData && (
+            integrations && (
                 <Internationalize language={language} messages={intlMessages}>
                     <button> Open With </button>
                 </Internationalize>

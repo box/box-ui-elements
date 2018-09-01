@@ -543,30 +543,32 @@ type Translations = {
 };
 
 type OpenWithIntegrations = {
-    items: Array<OpenWithIntegrationItem> 
+    default_app_integration?: AppIntegrationMiniItem,
+    disabled_reasons?: Array<String>,
+    icon?: String,
+    is_disabled?: boolean,
+    items: Array<OpenWithIntegrationItem>,
+    should_show_consent_popup?: boolean
 }
 
 type OpenWithIntegrationItem = {
-    app_integration: AppIntegrationMiniItem,
+    app_integration: AppIntegrationMiniItem | AppIntegrationItem,
     disabled_reasons: Array<String>,
     display_order: number,
-    icon: string,
+    icon: String,
     is_disabled: boolean,
     should_show_consent_popup: boolean
 }
 
-type AppIntegrationItem = {
-    type: 'app_integration',
-    id: string,
-    title?: string,
-    description?: string
-}
-
 type AppIntegrationMiniItem = {
     type: 'app_integration',
-    // Known issue, should be a string
-    id: number
+    id: string
 }
+
+type AppIntegrationItem = {
+    title?: string,
+    description?: string
+} & AppIntegrationMiniItem
 
 type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',
