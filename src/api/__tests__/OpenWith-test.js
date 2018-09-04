@@ -29,15 +29,15 @@ const openWithItems = {
 
 const mockAppIntegrations = [
     {
-        title: 'Google',
         description: 'a Google integration',
         id: 1,
+        name: 'Google',
         type: 'app_integration'
     },
     {
-        title: 'Adobe',
         description: 'an Adobe integration',
         id: 2,
+        name: 'Adobe',
         type: 'app_integration'
     }
 ];

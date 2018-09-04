@@ -566,7 +566,7 @@ type AppIntegrationMiniItem = {
 }
 
 type AppIntegrationItem = {
-    title: string,
+    name: string,
     description: string
 } & AppIntegrationMiniItem
 
