@@ -6,7 +6,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
-import { EditorState } from 'draft-js';
+import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Form from 'box-react-ui/lib/components/form-elements/form/Form';
@@ -61,7 +61,10 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         approvalDate: null,
         approvers: [],
         approverSelectorError: '',
-        commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
+        commentEditorState: EditorState.createWithContent(
+            ContentState.createFromText(this.props.tagged_message || ''),
+            DraftMentionDecorator
+        ),
         isAddApprovalVisible: false
     };
 
@@ -231,7 +234,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}
-                            placeholder={tagged_message || formatMessage(messages.commentWrite)}
+                            placeholder={tagged_message ? null : formatMessage(messages.commentWrite)}
                             validateOnBlur={false}
                         />
                         <aside
