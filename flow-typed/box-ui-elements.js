@@ -566,8 +566,8 @@ type AppIntegrationMiniItem = {
 }
 
 type AppIntegrationItem = {
-    title?: string,
-    description?: string
+    title: string,
+    description: string
 } & AppIntegrationMiniItem
 
 type JsonPatch = {

@@ -4,9 +4,14 @@
  * @author Box
  */
 import Base from './Base';
-import AppIntegrations from './AppIntegrations';
+import AppIntegrationsAPI from './AppIntegrations';
 
 class OpenWith extends Base {
+    /**
+     * @property {AppIntegrationsAPI}
+     */
+    appIntegrationsAPI: AppIntegrationsAPI;
+
     /**
      * API URL for Open With
      *
@@ -41,9 +46,9 @@ class OpenWith extends Base {
     }
 
     /**
-     * Formats data conviniently for the client
+     * Formats data conveniently for the client
      *
-     * @param {OpenWithOntegrations} openWithOntegrations - The available Open With integrations
+     * @param {OpenWithIntegrations} openWithIntegrations - The available Open With integrations
      * @return {Array<OpenWithIntegrationItem>} formatted open with integrations
      */
     formatOpenWithData(openWithIntegrations: OpenWithIntegrations): Array<any> {
@@ -68,9 +73,9 @@ class OpenWith extends Base {
     }
 
     /**
-     * Fetch app intgrations info needed to render.
+     * Fetch app integrations info needed to render.
      *
-     * @param {Array<OpenWithIntegrationItem>} openWithOntegrations - The available Open With integrations
+     * @param {Array<OpenWithIntegrationItem>} openWithIntegrations - The available Open With integrations
      * @return {void}
      */
     fetchAppIntegrations = async (
@@ -78,11 +83,11 @@ class OpenWith extends Base {
         successCallback: Function,
         errorCallback: Function
     ) => {
-        const appIntegrationsAPI = new AppIntegrations(this.options);
+        this.appIntegrationsAPI = new AppIntegrationsAPI(this.options);
 
         const appIntegrationPromises = openWithIntegrations.map((integrationItem: OpenWithIntegrationItem) => {
             const { app_integration: { id } } = integrationItem;
-            return appIntegrationsAPI.getAppIntegrationPromise(id);
+            return this.appIntegrationsAPI.getAppIntegrationPromise(id);
         });
 
         try {

@@ -12,13 +12,13 @@ const MOCK_INTEGRATIONS = {
     '10897': {
         type: 'app_integration',
         id: '10897',
-        name: 'Edit with G Suite',
+        title: 'Edit with G Suite',
         description: 'This integration allows customers to work seamlessly between Box and G Suite\'s editor'
     },
     '3282': {
         type: 'app_integration',
         id: '3282',
-        name: 'Sign with Adobe Sign',
+        title: 'Sign with Adobe Sign',
         description: 'Send your document for signature to Adobe Sign'
     }
 };

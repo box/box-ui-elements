@@ -113,12 +113,12 @@ class OpenWith extends PureComponent<Props, State> {
     }
 
     /**
-     * Fetch app intgrations info needed to render.
+     * Fetch app integrations info needed to render.
      *
-     * @param {OpenWithIntegrations} openWithOntegrations - The available Open With integrations
+     * @param {OpenWithIntegrations} openWithIntegrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = async (openWithIntegrations: Array<OpenWithIntegrationItem>) => {
+    fetchOpenWithSuccessHandler = (openWithIntegrations: Array<OpenWithIntegrationItem>) => {
         this.setState({ integrations: openWithIntegrations });
     };
 
