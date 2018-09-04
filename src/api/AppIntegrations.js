@@ -44,7 +44,7 @@ class AppIntegrations extends Base {
      * @param {string} id - An app integration ID
      * @return {void}
      */
-    getMockAppIntegration({ id, successCallback }: { id: string, successCallback: Function }) {
+    fetchMockAppIntegration({ id, successCallback }: { id: string, successCallback: Function }) {
         // Simulate network latency to test loading states
         setTimeout(() => {
             successCallback(MOCK_INTEGRATIONS[id]);
@@ -57,10 +57,10 @@ class AppIntegrations extends Base {
      * @param {string} id - An app integration ID
      * @return {Promise} a promise that resolves with app integration data
      */
-    getAppIntegrationPromise(id: string): Promise<AppIntegrationItem> {
+    fetchAppIntegrationsPromise(id: string): Promise<AppIntegrationItem> {
         return new Promise((resolve, reject) => {
             // Using the mock getter until the API is fixed.
-            this.getMockAppIntegration({
+            this.fetchMockAppIntegration({
                 id,
                 successCallback: (appIntegration) => resolve(appIntegration),
                 errorCallback: (error) => reject(error)

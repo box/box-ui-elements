@@ -87,7 +87,7 @@ class OpenWith extends Base {
 
         const appIntegrationPromises = openWithIntegrations.map((integrationItem: OpenWithIntegrationItem) => {
             const { app_integration: { id } } = integrationItem;
-            return this.appIntegrationsAPI.getAppIntegrationPromise(id);
+            return this.appIntegrationsAPI.fetchAppIntegrationsPromise(id);
         });
 
         try {
@@ -96,7 +96,6 @@ class OpenWith extends Base {
                 openWithIntegrations,
                 appIntegrations
             );
-
             successCallback(completedOpenWithIntegrations);
         } catch (error) {
             errorCallback(error);
@@ -110,16 +109,15 @@ class OpenWith extends Base {
      * @param {Array<AppIntegrationItem>} appIntegrations - An array of full app integration items
      * @return {Array<OpenWithIntegrationItem>} array of completed Open w=With items
      */
-    completeOpenWithIntegrationData = (
+    completeOpenWithIntegrationData(
         openWithintegrations: Array<OpenWithIntegrationItem>,
         appIntegrations: Array<AppIntegrationItem>
-    ): any =>
-        openWithintegrations.map((item) => ({
+    ): any {
+        return openWithintegrations.map((item) => ({
             ...item,
-            app_integration: appIntegrations.find(
-                (appIntegration) => appIntegration.id === item.app_integration.id.toString()
-            )
+            app_integration: appIntegrations.find((appIntegration) => appIntegration.id === item.app_integration.id)
         }));
+    }
 }
 
 export default OpenWith;
