@@ -341,6 +341,40 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         );
     });
 
+    test('should have editor state reflect tagged_message prop when not empty', () => {
+        const wrapper = render({ tagged_message: 'hey there' });
+
+        expect(
+            wrapper
+                .find('DraftJSMentionSelector')
+                .at(0)
+                .prop('placeholder')
+        ).toEqual(null);
+
+        const content = wrapper
+            .state()
+            .commentEditorState.getCurrentContent()
+            .getPlainText();
+        expect(content).toEqual('hey there');
+    });
+
+    test('should have editor state reflect empty state when no tagged_message prop is passed', () => {
+        const wrapper = render();
+
+        expect(
+            wrapper
+                .find('DraftJSMentionSelector')
+                .at(0)
+                .prop('placeholder')
+        ).toEqual('be.commentWrite');
+
+        const content = wrapper
+            .state()
+            .commentEditorState.getCurrentContent()
+            .getPlainText();
+        expect(content).toEqual('');
+    });
+
     describe('handleApproverSelectorInput()', () => {
         test('should call getApproverWithQuery() when called', () => {
             const value = 'test';
