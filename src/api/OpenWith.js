@@ -105,15 +105,15 @@ class OpenWith extends Base {
     /**
      * Completes the app integration mini objects in Open With data with the required fields to render.
      *
-     * @param {Array<OpenWithIntegrationItem>} openWithintegrations - The available Open With integrations
+     * @param {Array<OpenWithIntegrationItem>} openWithIntegrations - The available Open With integrations
      * @param {Array<AppIntegrationItem>} appIntegrations - An array of full app integration items
      * @return {Array<OpenWithIntegrationItem>} array of completed Open w=With items
      */
     completeOpenWithIntegrationData(
-        openWithintegrations: Array<OpenWithIntegrationItem>,
+        openWithIntegrations: Array<OpenWithIntegrationItem>,
         appIntegrations: Array<AppIntegrationItem>
     ): any {
-        return openWithintegrations.map((item) => ({
+        return openWithIntegrations.map((item) => ({
             ...item,
             app_integration: appIntegrations.find((appIntegration) => appIntegration.id === item.app_integration.id)
         }));
