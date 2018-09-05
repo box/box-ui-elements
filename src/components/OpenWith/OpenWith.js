@@ -13,7 +13,7 @@ import { DEFAULT_HOSTNAME_API, CLIENT_NAME_OPEN_WITH } from '../../constants';
 
 type Props = {
     /** Box File ID. */
-    fileId?: string,
+    fileId: string,
     /** Application client name. */
     clientName: string,
     /** Box API url. */
@@ -32,15 +32,26 @@ type Props = {
     responseInterceptor?: Function
 };
 
-class OpenWith extends PureComponent<Props> {
+type State = {
+    isDropdownOpen: boolean,
+    integrations: ?Array<OpenWithIntegrationItem>
+};
+
+class OpenWith extends PureComponent<Props, State> {
+    api: API;
     id: string;
     props: Props;
-    api: API;
+    state: State;
 
     static defaultProps = {
         className: '',
         clientName: CLIENT_NAME_OPEN_WITH,
         apiHost: DEFAULT_HOSTNAME_API
+    };
+
+    initialState: State = {
+        isDropdownOpen: false,
+        integrations: null
     };
 
     /**
@@ -61,6 +72,9 @@ class OpenWith extends PureComponent<Props> {
             requestInterceptor,
             responseInterceptor
         });
+
+        // Clone initial state to allow for state reset on new files
+        this.state = { ...this.initialState };
     }
 
     /**
@@ -86,15 +100,37 @@ class OpenWith extends PureComponent<Props> {
     }
 
     /**
-     * Fetches the list of potential integrations on load
      *
      * @private
      * @inheritdoc
      * @return {void}
      */
     componentDidMount() {
-        /* no-op */
+        const { fileId }: Props = this.props;
+        this.api
+            .getOpenWithAPI(false)
+            .getOpenWithIntegrations(fileId, this.fetchOpenWithSuccessHandler, this.fetchErrorCallback);
     }
+
+    /**
+     * Fetch app integrations info needed to render.
+     *
+     * @param {OpenWithIntegrations} openWithIntegrations - The available Open With integrations
+     * @return {void}
+     */
+    fetchOpenWithSuccessHandler = (openWithIntegrations: Array<OpenWithIntegrationItem>) => {
+        this.setState({ integrations: openWithIntegrations });
+    };
+
+    /**
+     * Handles a fetch error for the open_with_integrations and app_integrations endpoints
+     *
+     * @param {Error} error - An axios fetch error
+     * @return {void}
+     */
+    fetchErrorCallback = (error: Error) => {
+        console.error(error); // eslint-disable-line no-console
+    };
 
     /**
      * Called when the Open With button gets new properties
@@ -115,12 +151,15 @@ class OpenWith extends PureComponent<Props> {
      */
     render() {
         const { language, messages: intlMessages }: Props = this.props;
+        const { integrations }: State = this.state;
 
         // Placeholder
         return (
-            <Internationalize language={language} messages={intlMessages}>
-                <button> Open With </button>
-            </Internationalize>
+            integrations && (
+                <Internationalize language={language} messages={intlMessages}>
+                    <button> Open With </button>
+                </Internationalize>
+            )
         );
     }
 }
