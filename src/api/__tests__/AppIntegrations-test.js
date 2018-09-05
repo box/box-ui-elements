@@ -2,7 +2,7 @@ import AppIntegrations from '../AppIntegrations';
 
 let appIntegrations;
 
-describe('api/Versions', () => {
+describe('api/AppIntegrations', () => {
     beforeEach(() => {
         appIntegrations = new AppIntegrations({});
     });
@@ -15,6 +15,16 @@ describe('api/Versions', () => {
         });
         test('should return correct app integrations api url with id', () => {
             expect(appIntegrations.getUrl('foo')).toBe('https://api.box.com/2.0/app_integrations/foo');
+        });
+    });
+
+    describe('getAppIntegrationPromise()', () => {
+        test('should return a promise and fetch app integration data', () => {
+            appIntegrations.fetchMockAppIntegration = jest.fn();
+
+            const appIntegrationPromise = appIntegrations.fetchAppIntegrationsPromise('123');
+            expect(appIntegrationPromise instanceof Promise).toBeTruthy();
+            expect(appIntegrations.fetchMockAppIntegration).toBeCalled();
         });
     });
 

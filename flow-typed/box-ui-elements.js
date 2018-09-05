@@ -542,6 +542,34 @@ type Translations = {
     onTranslate?: Function
 };
 
+type OpenWithIntegrations = {
+    default_app_integration?: AppIntegrationMiniItem,
+    disabled_reasons?: Array<string>,
+    icon?: string,
+    is_disabled?: boolean,
+    items: Array<OpenWithIntegrationItem>,
+    should_show_consent_popup?: boolean
+}
+
+type OpenWithIntegrationItem = {
+    app_integration: AppIntegrationMiniItem | AppIntegrationItem,
+    disabled_reasons: Array<string>,
+    display_order: number,
+    icon: string,
+    is_disabled: boolean,
+    should_show_consent_popup: boolean
+}
+
+type AppIntegrationMiniItem = {
+    type: 'app_integration',
+    id: string
+}
+
+type AppIntegrationItem = {
+    name: string,
+    description: string
+} & AppIntegrationMiniItem
+
 type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',
     path: string,
