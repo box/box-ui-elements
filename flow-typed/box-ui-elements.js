@@ -542,17 +542,17 @@ type Translations = {
     onTranslate?: Function
 };
 
-type OpenWithIntegrations = {
-    default_app_integration?: AppIntegrationMiniItem,
+type OpenWithAPI = {
+    default_app_integration?: AppIntegrationAPIMiniItem,
     disabled_reasons?: Array<string>,
     icon?: string,
     is_disabled?: boolean,
-    items: Array<OpenWithIntegrationItem>,
+    items: Array<OpenWithAPIItem>,
     should_show_consent_popup?: boolean
 }
 
-type OpenWithIntegrationItem = {
-    app_integration: AppIntegrationMiniItem | AppIntegrationItem,
+type OpenWithAPIItem = {
+    app_integration: AppIntegrationAPIMiniItem,
     disabled_reasons: Array<string>,
     display_order: number,
     icon: string,
@@ -560,15 +560,28 @@ type OpenWithIntegrationItem = {
     should_show_consent_popup: boolean
 }
 
-type AppIntegrationMiniItem = {
+type AppIntegrationAPIMiniItem = {
     type: 'app_integration',
     id: string
 }
 
-type AppIntegrationItem = {
+type AppIntegrationAPIItem = AppIntegrationAPIMiniItem & {
     name: string,
     description: string
-} & AppIntegrationMiniItem
+} 
+
+type Integration = {
+    appIntegrationId: string,
+    name: string,
+    description: string,
+    type: 'app_integration',
+    disabledReasons: Array<string>,
+    displayOrder: number,
+    icon: string,
+    isDefault: boolean,
+    isDisabled: boolean,
+    shouldShowConsentPopup: boolean
+}
 
 type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',

@@ -6,6 +6,7 @@
 
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
+import getProp from 'lodash/get';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 
@@ -34,7 +35,7 @@ type Props = {
 
 type State = {
     isDropdownOpen: boolean,
-    integrations: ?Array<OpenWithIntegrationItem>
+    integrations: ?Array<Integration>
 };
 
 class OpenWith extends PureComponent<Props, State> {
@@ -118,7 +119,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @param {OpenWithIntegrations} openWithIntegrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = (openWithIntegrations: Array<OpenWithIntegrationItem>) => {
+    fetchOpenWithSuccessHandler = (openWithIntegrations: Array<Integration>) => {
         this.setState({ integrations: openWithIntegrations });
     };
 

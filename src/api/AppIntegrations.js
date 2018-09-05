@@ -57,7 +57,7 @@ class AppIntegrations extends Base {
      * @param {string} id - An app integration ID
      * @return {Promise} a promise that resolves with app integration data
      */
-    fetchAppIntegrationsPromise(id: string): Promise<AppIntegrationItem> {
+    fetchAppIntegrationsPromise(id: string): Promise<AppIntegrationAPIItem> {
         return new Promise((resolve, reject) => {
             // Using the mock getter until the API is fixed.
             this.fetchMockAppIntegration({
