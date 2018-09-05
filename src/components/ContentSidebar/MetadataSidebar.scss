@@ -2,8 +2,11 @@
 
 .be.bcs.bcs-metadata {
     .metadata-instance-editor {
-        min-height: 400px;
         padding: 0 10px 20px 25px;
+
+        .collapsible-card {
+            margin-top: 10px;
+        }
     }
 
     .metadata-instance-editor-header {

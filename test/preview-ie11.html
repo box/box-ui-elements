@@ -26,17 +26,19 @@
             window.onload = function() {
                 var explorer = new Box.ContentExplorer();
                 explorer.show(FOLDER_ID, ACCESS_TOKEN, {
-                    currentFolderId: '49630563868',
                     sharedLink: 'https://app.box.com/s/sdfsdf',
+                    currentFolderId: '49630563868',
                     contentPreviewProps: {
                         contentSidebarProps: {
                             hasSkills: true,
                             hasMetadata: true,
-                            hasActivityFeed: true,
                             detailsSidebarProps: {
                                 hasProperties: true
-                            }
-                        }
+                            },
+                            hasActivityFeed: true,
+                            getUserProfileUrl: function (id) { return Promise.resolve('#'); }
+                        },
+
                     }
                 });
             }

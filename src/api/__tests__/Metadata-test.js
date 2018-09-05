@@ -599,7 +599,7 @@ describe('api/Metadata', () => {
             expect(metadata.createEditor).toHaveBeenCalledWith('foo', template, true);
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.successHandler).toHaveBeenCalled();
+            expect(metadata.successHandler).toHaveBeenCalledWith(updatedMetadata);
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
                 editors: [updatedMetadata]
@@ -869,7 +869,7 @@ describe('api/Metadata', () => {
             expect(metadata.createEditor).toHaveBeenCalledWith('foo', template, true);
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.successHandler).toHaveBeenCalled();
+            expect(metadata.successHandler).toHaveBeenCalledWith(updatedMetadata);
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
                 editors: [priorMetadata, updatedMetadata]
@@ -1042,40 +1042,6 @@ describe('api/Metadata', () => {
             metadata.deleteMetadata(
                 { id: 'id', permissions: { can_upload: false } },
                 {},
-                successCallback,
-                errorCallback
-            );
-            expect(errorCallback).toBeCalledWith('error');
-            expect(successCallback).not.toBeCalled();
-            expect(ErrorUtil.getBadPermissionsError).toBeCalled();
-        });
-        test('should call error callback when file is externally owned and template isnt global', () => {
-            ErrorUtil.getBadPermissionsError = jest.fn().mockReturnValueOnce('error');
-            const successCallback = jest.fn();
-            const errorCallback = jest.fn();
-            metadata.deleteMetadata(
-                { id: 'id', permissions: { can_upload: true }, is_externally_owned: true },
-                {
-                    scope: 'global',
-                    templateKey: 'template'
-                },
-                successCallback,
-                errorCallback
-            );
-            expect(errorCallback).toBeCalledWith('error');
-            expect(successCallback).not.toBeCalled();
-            expect(ErrorUtil.getBadPermissionsError).toBeCalled();
-        });
-        test('should call error callback when file is externally owned and template isnt properties', () => {
-            ErrorUtil.getBadPermissionsError = jest.fn().mockReturnValueOnce('error');
-            const successCallback = jest.fn();
-            const errorCallback = jest.fn();
-            metadata.deleteMetadata(
-                { id: 'id', permissions: { can_upload: true }, is_externally_owned: true },
-                {
-                    scope: 'scope',
-                    templateKey: 'properties'
-                },
                 successCallback,
                 errorCallback
             );

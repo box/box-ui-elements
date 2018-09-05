@@ -282,7 +282,7 @@ class Metadata extends File {
                     1,
                     editor
                 );
-                this.successHandler();
+                this.successHandler(editor);
             }
         } catch (e) {
             this.errorHandler(e);
@@ -340,7 +340,7 @@ class Metadata extends File {
                 const cachedMetadata = cache.get(key);
                 const editor = this.createEditor(metadata.data, template, canEdit);
                 cachedMetadata.editors.push(editor);
-                this.successHandler();
+                this.successHandler(editor);
             }
         } catch (e) {
             this.errorHandler(e);
@@ -369,15 +369,14 @@ class Metadata extends File {
         }
 
         const { scope, templateKey }: MetadataEditorTemplate = template;
-        const { id, permissions, is_externally_owned }: BoxItem = file;
-        const isProperties = templateKey === METADATA_TEMPLATE_PROPERTIES && scope === METADATA_SCOPE_GLOBAL;
+        const { id, permissions }: BoxItem = file;
 
         if (!id || !permissions) {
             errorCallback(getBadItemError());
             return;
         }
 
-        if (!permissions.can_upload || (is_externally_owned && !isProperties)) {
+        if (!permissions.can_upload) {
             errorCallback(getBadPermissionsError());
             return;
         }
