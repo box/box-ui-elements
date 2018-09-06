@@ -111,6 +111,19 @@
   version "8.0.55"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.55.tgz#015966c0af809216b8a46cc527b5c211994d36f0"
 
+"@types/prop-types@*":
+  version "15.5.5"
+  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.5.tgz#17038dd322c2325f5da650a94d5f9974943625e3"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react@*", "@types/react@>=16":
+  version "16.4.13"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.13.tgz#1385f5dc3486aa493849a32ccce626a817543e28"
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
+
 "@vxna/mini-html-webpack-template@^0.1.7":
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/@vxna/mini-html-webpack-template/-/mini-html-webpack-template-0.1.7.tgz#2a8270e513ee14f395cc17c2ce22ced383c45d22"
@@ -1735,9 +1748,9 @@ box-locales@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/box-locales/-/box-locales-0.0.1.tgz#1724959f293ae85f235b681b775d0f1a52a76b54"
 
-box-react-ui@^25.1.2:
-  version "25.1.2"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-25.1.2.tgz#ad9af483ee503bc4a48b48bf8ca47532b35de1bb"
+box-react-ui@^25.16.1:
+  version "25.16.1"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-25.16.1.tgz#0b5e2f51e87531aa21760705a90d71bfdb54b70c"
 
 brace-expansion@^1.0.0:
   version "1.1.11"
@@ -2277,7 +2290,7 @@ classnames@^2.2.3:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
-classnames@^2.2.6:
+classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
 
@@ -3146,6 +3159,10 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   resolved "https://registry.yarnpkg.com/cssstyle/-/cssstyle-0.2.37.tgz#541097234cb2513c83ceed3acddc27ff27987d54"
   dependencies:
     cssom "0.3.x"
+
+csstype@^2.2.0:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.5.6.tgz#2ae1db2319642d8b80a668d2d025c6196071e788"
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -9037,6 +9054,15 @@ rc@1.1.7, rc@^1.1.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-animate-height@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-animate-height/-/react-animate-height-2.0.4.tgz#34d60949e915ce445bf43e3046dc4b8435e21ed6"
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.6.1"
+  optionalDependencies:
+    "@types/react" ">=16"
 
 react-codemirror2@^5.1.0:
   version "5.1.0"

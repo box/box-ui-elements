@@ -11,16 +11,14 @@ exports[`components/ContentSidebar/Metadata/MetadataSidebar should render Metada
   }
 >
   <LoadingIndicatorWrapper
+    className="metadata-instance-editor"
     isLoading={false}
   >
-    <MetadataInstanceEditor
-      canAdd={false}
+    <Instances
       editors={Array []}
-      onAdd={[Function]}
       onModification={[Function]}
       onRemove={[Function]}
       onSave={[Function]}
-      templates={Array []}
     />
   </LoadingIndicatorWrapper>
 </SidebarContent>

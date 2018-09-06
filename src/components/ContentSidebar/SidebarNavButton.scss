@@ -10,12 +10,13 @@
     width: 59px; // 1px for left border
 
     &::before {
+        bottom: 0;
         content: '';
         display: block;
-        height: 60px;
         left: -1px;
         pointer-events: none;
         position: absolute;
+        top: 0;
         width: 3px;
     }
 

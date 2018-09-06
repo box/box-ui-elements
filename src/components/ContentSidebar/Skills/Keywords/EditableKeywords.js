@@ -24,6 +24,7 @@ type Props = {
 };
 
 type State = {
+    isInCompositionMode: boolean,
     keyword: string,
     pills: Pills
 };
@@ -40,7 +41,7 @@ class EditableKeywords extends React.PureComponent<Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        this.state = { pills: getPills(props.keywords), keyword: '' };
+        this.state = { pills: getPills(props.keywords), keyword: '', isInCompositionMode: false };
     }
 
     /**
@@ -77,7 +78,7 @@ class EditableKeywords extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onKeyDown = ({ key }: SyntheticKeyboardEvent<HTMLInputElement>): void => {
-        if (key === 'Enter') {
+        if (key === 'Enter' && !this.state.isInCompositionMode) {
             this.onBlur();
         }
     };
@@ -99,6 +100,26 @@ class EditableKeywords extends React.PureComponent<Props, State> {
                 text: keyword
             });
         }
+    };
+
+    /**
+     * Enables composition mode.
+     *
+     * @private
+     * @return {void}
+     */
+    onCompositionStart = () => {
+        this.setState({ isInCompositionMode: true });
+    };
+
+    /**
+     * Disables composition mode.
+     *
+     * @private
+     * @return {void}
+     */
+    onCompositionEnd = () => {
+        this.setState({ isInCompositionMode: false });
     };
 
     /**
@@ -127,6 +148,8 @@ class EditableKeywords extends React.PureComponent<Props, State> {
             <span className='pill-selector-wrapper'>
                 <PillSelector
                     onBlur={this.onBlur}
+                    onCompositionStart={this.onCompositionStart}
+                    onCompositionEnd={this.onCompositionEnd}
                     onInput={this.onInput}
                     onKeyDown={this.onKeyDown}
                     onPaste={this.onInput}
