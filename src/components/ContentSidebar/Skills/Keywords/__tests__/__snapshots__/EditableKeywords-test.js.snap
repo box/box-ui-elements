@@ -9,6 +9,8 @@ exports[`components/ContentSidebar/Skills/Keywords/EditableKeywords should corre
     error=""
     inputProps={Object {}}
     onBlur={[Function]}
+    onCompositionEnd={[Function]}
+    onCompositionStart={[Function]}
     onInput={[Function]}
     onKeyDown={[Function]}
     onPaste={[Function]}
