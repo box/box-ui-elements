@@ -152,7 +152,6 @@ class OpenWith extends PureComponent<Props, State> {
     render() {
         const { language, messages: intlMessages }: Props = this.props;
         const { integrations }: State = this.state;
-
         // Placeholder
         return (
             integrations && (
