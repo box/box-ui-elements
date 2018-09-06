@@ -1,5 +1,17 @@
+## 6.3.0 (2018-09-06)
+
+* Breaking: Update box-react-ui (#536) ([e85542c](https://github.com/box/box-ui-elements/commit/e85542c)), closes [#536](https://github.com/box/box-ui-elements/issues/536)
+* Fix: Add composition mode for skill keywords (#535) ([2c23f88](https://github.com/box/box-ui-elements/commit/2c23f88)), closes [#535](https://github.com/box/box-ui-elements/issues/535)
+* Fix: Metadata bug fixes (#533) ([3ee057f](https://github.com/box/box-ui-elements/commit/3ee057f)), closes [#533](https://github.com/box/box-ui-elements/issues/533)
+* Chore: Consuming open with and app integration API endpoints (#529) ([62047d9](https://github.com/box/box-ui-elements/commit/62047d9)), closes [#529](https://github.com/box/box-ui-elements/issues/529)
+* Update: Adding tests to ApprovalCommentForm (#532) ([21d865d](https://github.com/box/box-ui-elements/commit/21d865d)), closes [#532](https://github.com/box/box-ui-elements/issues/532)
+* Update: Edit task message (#531) ([2092ba9](https://github.com/box/box-ui-elements/commit/2092ba9)), closes [#531](https://github.com/box/box-ui-elements/issues/531)
+
+
+
 ## 6.2.0 (2018-08-31)
 
+* Release: 6.2.0 ([2460faa](https://github.com/box/box-ui-elements/commit/2460faa))
 * Fix: Filtering to only add load time to load event, if valid (#511) ([03d3ada](https://github.com/box/box-ui-elements/commit/03d3ada)), closes [#511](https://github.com/box/box-ui-elements/issues/511)
 * Fix: Replace missing modified_by with placeholder user (#521) ([341c5db](https://github.com/box/box-ui-elements/commit/341c5db)), closes [#521](https://github.com/box/box-ui-elements/issues/521)
 * Fix: uploader falls back to regular upload API if chunked unsupported (#525) ([25d9447](https://github.com/box/box-ui-elements/commit/25d9447)), closes [#525](https://github.com/box/box-ui-elements/issues/525)
