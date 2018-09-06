@@ -1,5 +1,12 @@
+## <small>6.3.1 (2018-09-06)</small>
+
+* Fix: Z-Index issue with metadata template dropdown (#537) ([620c6e7](https://github.com/box/box-ui-elements/commit/620c6e7)), closes [#537](https://github.com/box/box-ui-elements/issues/537)
+
+
+
 ## 6.3.0 (2018-09-06)
 
+* Release: 6.3.0 ([bc0590b](https://github.com/box/box-ui-elements/commit/bc0590b))
 * Breaking: Update box-react-ui (#536) ([e85542c](https://github.com/box/box-ui-elements/commit/e85542c)), closes [#536](https://github.com/box/box-ui-elements/issues/536)
 * Fix: Add composition mode for skill keywords (#535) ([2c23f88](https://github.com/box/box-ui-elements/commit/2c23f88)), closes [#535](https://github.com/box/box-ui-elements/issues/535)
 * Fix: Metadata bug fixes (#533) ([3ee057f](https://github.com/box/box-ui-elements/commit/3ee057f)), closes [#533](https://github.com/box/box-ui-elements/issues/533)
