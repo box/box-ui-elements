@@ -8,11 +8,14 @@ exports[`components/ContentSidebar/ActivityFeed/comment/InlineDelete should corr
     className=""
     closeOnClick={true}
     closeOnClickOutside={true}
+    closeOnWindowBlur={false}
     constrainToScrollParent={true}
     constrainToWindow={false}
     isVisibleByDefault={false}
     onClose={[Function]}
     onOpen={[Function]}
+    openOnHover={false}
+    openOnHoverDelayTimeout={300}
     portaledClasses={Array []}
     position="middle-left"
   >
