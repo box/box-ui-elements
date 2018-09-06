@@ -18,6 +18,7 @@ import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
     ACCESS_COMPANY,
+    APP_INTEGRATION,
     VIEW_SEARCH,
     VIEW_FOLDER,
     VIEW_ERROR,
@@ -561,7 +562,7 @@ type OpenWithAPIItem = {
 }
 
 type AppIntegrationAPIMiniItem = {
-    type: 'app_integration',
+    type: APP_INTEGRATION,
     id: string
 }
 
@@ -574,7 +575,7 @@ type Integration = {
     appIntegrationId: string,
     name: string,
     description: string,
-    type: 'app_integration',
+    type: APP_INTEGRATION,
     disabledReasons: Array<string>,
     displayOrder: number,
     icon: string,

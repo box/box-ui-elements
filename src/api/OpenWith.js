@@ -8,6 +8,8 @@ import omit from 'lodash/omit';
 import Base from './Base';
 import AppIntegrationsAPI from './AppIntegrations';
 
+const DEFAULT_APP_INTEGRATION = 'default_app_integration';
+
 class OpenWith extends Base {
     /**
      * @property {AppIntegrationsAPI}
@@ -60,7 +62,7 @@ class OpenWith extends Base {
         const items = this.addDefaultToOpenWithItems(openWithIntegrations);
         this.appIntegrationsAPI = new AppIntegrationsAPI(this.options);
 
-        const appIntegrationPromises = items.map((integrationItem: Object) => {
+        const appIntegrationPromises = items.map((integrationItem: OpenWithAPIItem) => {
             const { app_integration: { id } } = integrationItem;
             return this.appIntegrationsAPI.fetchAppIntegrationsPromise(id);
         });
@@ -88,7 +90,7 @@ class OpenWith extends Base {
             // Replace the default_app_integration with a regular app integration
             // and add the is_default field
             items.push({
-                ...omit(defaultOpenWithItem, 'default_app_integration'),
+                ...omit(defaultOpenWithItem, DEFAULT_APP_INTEGRATION),
                 app_integration: defaultOpenWithItem.default_app_integration,
                 is_default: true
             });

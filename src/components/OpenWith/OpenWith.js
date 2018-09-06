@@ -6,7 +6,6 @@
 
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
-import getProp from 'lodash/get';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 
