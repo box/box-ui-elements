@@ -51,7 +51,7 @@ class OpenWith extends Base {
     /**
      * Fetch app integrations info needed to render.
      *
-     * @param {Array<OpenWithIntegrationItem>} openWithIntegrations - The available Open With integrations
+     * @param {OpenWithAPIItems} openWithIntegrations - The available Open With integrations
      * @return {void}
      */
     fetchAppIntegrations = async (
@@ -84,8 +84,9 @@ class OpenWith extends Base {
      * @return {Array<Object>} formatted Open With integrations
      */
     addDefaultToOpenWithItems(openWithIntegrations: OpenWithAPI): Array<Object> {
-        const { defaultOpenWithItem } = omit(openWithIntegrations, 'items');
+        const defaultOpenWithItem = omit(openWithIntegrations, 'items');
         const { items } = openWithIntegrations;
+
         if (defaultOpenWithItem) {
             // Replace the default_app_integration with a regular app integration
             // and add the is_default field
@@ -124,7 +125,7 @@ class OpenWith extends Base {
                 isDefault: !!is_default,
                 isDisabled: is_disabled,
                 name: app_integration.name,
-                shouldShowConsentPopup: should_show_consent_popup,
+                requiresConsent: should_show_consent_popup,
                 type: app_integration.type
             })
         );

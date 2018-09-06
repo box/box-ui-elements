@@ -581,7 +581,7 @@ type Integration = {
     icon: string,
     isDefault: boolean,
     isDisabled: boolean,
-    shouldShowConsentPopup: boolean
+    requiresConsent: boolean
 }
 
 type JsonPatch = {

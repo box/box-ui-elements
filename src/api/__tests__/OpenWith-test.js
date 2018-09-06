@@ -1,63 +1,11 @@
 import OpenWith from '../OpenWith';
 
 let openWith;
-
-const openWithItems = {
-    items: [
-        {
-            display_order: 2,
-            icon: 'icon2',
-            is_disabled: true,
-            disabled_reasons: ['manually disabled'],
-            app_integration: {
-                id: 2,
-                type: 'app_integration'
-            }
-        },
-        {
-            display_order: 1,
-            icon: 'icon',
-            is_disabled: false,
-            disabled_reasons: [],
-            app_integration: {
-                id: 1,
-                type: 'app_integration'
-            }
-        }
-    ]
-};
-
-const mockAppIntegrations = [
-    {
-        description: 'a Google integration',
-        id: 1,
-        name: 'Google',
-        type: 'app_integration'
-    },
-    {
-        description: 'an Adobe integration',
-        id: 2,
-        name: 'Adobe',
-        type: 'app_integration'
-    }
-];
-
-const completeOpenWithItems = [
-    {
-        display_order: 2,
-        icon: 'icon2',
-        is_disabled: true,
-        disabled_reasons: ['manually disabled'],
-        app_integration: mockAppIntegrations[1]
-    },
-    {
-        display_order: 1,
-        icon: 'icon',
-        is_disabled: false,
-        disabled_reasons: [],
-        app_integration: mockAppIntegrations[0]
-    }
-];
+let mockOpenWithItems;
+let mockOpenWithIntegrationsWithDefault;
+let mockDefaultOpenWithIntegration;
+let mockAppIntegrations;
+let completeOpenWithItems;
 
 let mockFetchAppIntegrationsPromise = (id) =>
     Promise.resolve(mockAppIntegrations.find((mockAppIntegration) => mockAppIntegration.id === id));
@@ -71,36 +19,109 @@ jest.mock('../AppIntegrations', () =>
 describe('api/OpenWith', () => {
     beforeEach(() => {
         openWith = new OpenWith({});
+        mockOpenWithItems = {
+            items: [
+                {
+                    display_order: 2,
+                    icon: 'icon2',
+                    is_disabled: true,
+                    disabled_reasons: ['manually disabled'],
+                    should_show_consent_popup: false,
+                    app_integration: {
+                        id: '2',
+                        type: 'app_integration'
+                    }
+                },
+                {
+                    display_order: 1,
+                    icon: 'icon',
+                    is_disabled: false,
+                    disabled_reasons: [],
+                    should_show_consent_popup: false,
+                    app_integration: {
+                        id: '1',
+                        type: 'app_integration'
+                    }
+                }
+            ]
+        };
+
+        mockDefaultOpenWithIntegration = {
+            display_order: 3,
+            icon: 'icon',
+            is_disabled: false,
+            disabled_reasons: [],
+            should_show_consent_popup: false,
+            default_app_integration: {
+                id: '3',
+                type: 'app_integration'
+            }
+        };
+
+        mockAppIntegrations = [
+            {
+                description: 'a Google integration',
+                id: '1',
+                name: 'Google',
+                type: 'app_integration'
+            },
+            {
+                description: 'an Adobe integration',
+                id: '2',
+                name: 'Adobe',
+                type: 'app_integration'
+            }
+        ];
+
+        mockOpenWithIntegrationsWithDefault = [
+            ...mockOpenWithItems.items,
+            {
+                display_order: 3,
+                icon: 'icon',
+                is_disabled: false,
+                is_default: true,
+                disabled_reasons: [],
+                should_show_consent_popup: false,
+                app_integration: {
+                    id: '3',
+                    type: 'app_integration'
+                }
+            }
+        ];
+
+        completeOpenWithItems = [
+            {
+                display_order: 2,
+                icon: 'icon2',
+                is_disabled: true,
+                disabled_reasons: ['manually disabled'],
+                app_integration: mockAppIntegrations[1],
+                should_show_consent_popup: false
+            },
+            {
+                display_order: 1,
+                icon: 'icon',
+                is_disabled: false,
+                disabled_reasons: [],
+                app_integration: mockAppIntegrations[0],
+                should_show_consent_popup: false
+            }
+        ];
     });
 
     describe('getOpenWithIntegrations()', () => {
-        test('should format and fetch app integrations on success', () => {
+        test('should fetch app integrations on success', () => {
             const openWithData = 'openWithIntegrations';
-            const formatedOpenWithIntegrations = 'formattedOpenWithIntegrations';
             const successFn = jest.fn();
             const errorFn = jest.fn();
             openWith.get = ({ successCallback }) => {
                 successCallback(openWithData);
             };
 
-            openWith.formatOpenWithData = jest.fn().mockReturnValue(formatedOpenWithIntegrations);
             openWith.fetchAppIntegrations = jest.fn();
 
             openWith.getOpenWithIntegrations('123', successFn, errorFn);
-            expect(openWith.formatOpenWithData).toBeCalledWith(openWithData);
-            expect(openWith.fetchAppIntegrations).toBeCalledWith(formatedOpenWithIntegrations, successFn, errorFn);
-        });
-    });
-
-    describe('formatOpenWithData()', () => {
-        test('should replace the app integration ID with a string', () => {
-            const formatedOpenWithIntegrations = openWith.formatOpenWithData(openWithItems);
-            expect(typeof formatedOpenWithIntegrations[0].app_integration.id).toBe('string');
-        });
-
-        test('should sort the integrations based on display order', () => {
-            const formatedOpenWithIntegrations = openWith.formatOpenWithData(openWithItems);
-            expect(formatedOpenWithIntegrations[0].app_integration.id).toBe('1');
+            expect(openWith.fetchAppIntegrations).toBeCalledWith(openWithData, successFn, errorFn);
         });
     });
 
@@ -108,29 +129,78 @@ describe('api/OpenWith', () => {
         const successFn = jest.fn();
         const errorFn = jest.fn();
 
-        test('should add a promise to get each full app integration object', () => {
-            openWith.fetchAppIntegrations(openWithItems.items, successFn, errorFn);
-            expect(openWith.appIntegrationsAPI.fetchAppIntegrationsPromise).toBeCalledTimes(2);
+        beforeEach(() => {
+            openWith.addDefaultToOpenWithItems = jest.fn().mockReturnValue(mockOpenWithIntegrationsWithDefault);
+            openWith.completeOpenWithIntegrationData = jest.fn();
+            openWith.formatOpenWithData = jest.fn();
         });
 
-        test('should complete the open with objects when the data is successfully returned', async () => {
+        test('should add potential default integration to list of items', () => {
+            openWith.fetchAppIntegrations(mockOpenWithItems.items, successFn, errorFn);
+            expect(openWith.addDefaultToOpenWithItems).toBeCalled();
+        });
+
+        test('should add a promise to get each full app integration object', () => {
+            openWith.fetchAppIntegrations(mockOpenWithItems.items, successFn, errorFn);
+            expect(openWith.appIntegrationsAPI.fetchAppIntegrationsPromise).toBeCalledTimes(3);
+        });
+
+        test('should complete and format the open with objects when the data is successfully returned', async () => {
             openWith.completeOpenWithIntegrationData = jest.fn();
-            await openWith.fetchAppIntegrations(openWithItems.items, successFn, errorFn);
+            await openWith.fetchAppIntegrations(mockOpenWithItems.items, successFn, errorFn);
             expect(openWith.completeOpenWithIntegrationData).toBeCalled();
+            expect(openWith.formatOpenWithData).toBeCalled();
+
             expect(successFn).toBeCalled();
         });
 
         test('should call the error callback if a promise is rejected', async () => {
             mockFetchAppIntegrationsPromise = () => Promise.reject();
-            await openWith.fetchAppIntegrations(openWithItems.items, successFn, errorFn);
+            await openWith.fetchAppIntegrations(mockOpenWithItems.items, successFn, errorFn);
             expect(successFn).not.toBeCalled();
             expect(errorFn).toBeCalled();
         });
     });
 
+    describe('addDefaultToOpenWithItems()', () => {
+        test('should just return the list of items if there is no default integration', () => {
+            const result = openWith.addDefaultToOpenWithItems(mockOpenWithItems);
+            expect(result).toEqual(mockOpenWithItems.items);
+        });
+
+        test('should add the default integration and return a list of integration items', () => {
+            const openWithObject = {
+                ...mockDefaultOpenWithIntegration,
+                ...mockOpenWithItems
+            };
+
+            const result = openWith.addDefaultToOpenWithItems(openWithObject);
+            expect(result).toEqual(mockOpenWithIntegrationsWithDefault);
+        });
+    });
+
+    describe('formatOpenWithData()', () => {
+        test('should add a flattened App Integration', () => {
+            const formatedOpenWithIntegrations = openWith.formatOpenWithData(mockOpenWithItems.items);
+            expect(typeof formatedOpenWithIntegrations[0].appIntegrationId).toBe('string');
+        });
+
+        test('should add is_default to all items', () => {
+            const formatedOpenWithIntegrations = openWith.formatOpenWithData(mockOpenWithItems.items);
+            expect(typeof formatedOpenWithIntegrations[0].isDefault).toBe('boolean');
+        });
+
+        test('should return items sorted by displayOrder', () => {
+            const formatedOpenWithIntegrations = openWith.formatOpenWithData(mockOpenWithItems.items);
+            // 2 integrations with ids 1 and 2
+            expect(formatedOpenWithIntegrations[0].displayOrder).toBe(1);
+            expect(formatedOpenWithIntegrations[1].displayOrder).toBe(2);
+        });
+    });
+
     describe('completeOpenWithIntegrationData()', () => {
-        test('should replace the app integration mini item with the correct object', () => {
-            const result = openWith.completeOpenWithIntegrationData(openWithItems.items, mockAppIntegrations);
+        test('should replace the app integration mini items with the correct object', () => {
+            const result = openWith.completeOpenWithIntegrationData(mockOpenWithItems.items, mockAppIntegrations);
             expect(result).toEqual(completeOpenWithItems);
         });
     });
