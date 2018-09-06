@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import MetadataInstanceEditor from 'box-react-ui/lib/features/metadata-instance-editor/MetadataInstanceEditor';
+import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
 import TemplateDropdown from 'box-react-ui/lib/features/metadata-instance-editor/TemplateDropdown';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
@@ -85,6 +85,30 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     }
 
     /**
+     * Editor we are changing
+     *
+     * @param {number} id - instance id
+     * @return {Object} editor instance
+     */
+    getEditor(id: string): ?MetadataEditor {
+        const { editors = [] }: State = this.state;
+        return editors.find(({ instance }) => instance.id === id);
+    }
+
+    /**
+     * Instance remove success handler
+     *
+     * @param {Object} editor - the editor to remove
+     * @return {void}
+     */
+    onRemoveSuccessHandler(editor: MetadataEditor): void {
+        const { editors = [] }: State = this.state;
+        const clone = editors.slice(0);
+        clone.splice(editors.indexOf(editor), 1);
+        this.setState({ editors: clone });
+    }
+
+    /**
      * Instance remove handler
      *
      * @param {number} id - instance id
@@ -92,13 +116,27 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      */
     onRemove = (id: string): void => {
         const { api, file }: Props = this.props;
-        const { editors = [] }: State = this.state;
-        const editor = editors.find(({ instance }) => instance.id === id);
+        const editor = this.getEditor(id);
         if (!editor) {
             return;
         }
 
-        api.getMetadataAPI(false).deleteMetadata(file, editor.template, this.getMetadataEditors, this.errorCallback);
+        api
+            .getMetadataAPI(false)
+            .deleteMetadata(file, editor.template, () => this.onRemoveSuccessHandler(editor), this.errorCallback);
+    };
+
+    /**
+     * Instance add success handler
+     *
+     * @param {number} id - instance id
+     * @return {void}
+     */
+    onAddSuccessHandler = (editor: MetadataEditor): void => {
+        const { editors = [] }: State = this.state;
+        const clone = editors.slice(0);
+        clone.push(editor);
+        this.setState({ editors: clone, isLoading: false });
     };
 
     /**
@@ -110,8 +148,22 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     onAdd = (template: MetadataEditorTemplate) => {
         const { api, file }: Props = this.props;
         this.setState({ isLoading: true });
-        api.getMetadataAPI(false).createMetadata(file, template, this.getMetadataEditors, this.errorCallback);
+        api.getMetadataAPI(false).createMetadata(file, template, this.onAddSuccessHandler, this.errorCallback);
     };
+
+    /**
+     * Instance save success handler
+     *
+     * @param {Object} oldEditor - prior editor
+     * @param {Object} newEditor - updated editor
+     * @return {void}
+     */
+    onSaveSuccessHandler(oldEditor: MetadataEditor, newEditor: MetadataEditor): void {
+        const { editors = [] }: State = this.state;
+        const clone = editors.slice(0);
+        clone.splice(editors.indexOf(oldEditor), 1, newEditor);
+        this.setState({ editors: clone });
+    }
 
     /**
      * Instance save handler
@@ -122,15 +174,20 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      */
     onSave = (id: string, ops: JsonPatchData): void => {
         const { api, file }: Props = this.props;
-        const { editors = [] }: State = this.state;
-        const editor = editors.find(({ instance }) => instance.id === id);
-        if (!editor) {
+        const oldEditor = this.getEditor(id);
+        if (!oldEditor) {
             return;
         }
 
-        api
-            .getMetadataAPI(false)
-            .updateMetadata(file, editor.template, ops, this.getMetadataEditors, this.errorCallback);
+        api.getMetadataAPI(false).updateMetadata(
+            file,
+            oldEditor.template,
+            ops,
+            (newEditor: MetadataEditor) => {
+                this.onSaveSuccessHandler(oldEditor, newEditor);
+            },
+            this.errorCallback
+        );
     };
 
     /**
@@ -183,15 +240,12 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                 )}
                 {showLoadingIndicator && <LoadingIndicator />}
                 {showEditor && (
-                    <LoadingIndicatorWrapper isLoading={isLoading}>
-                        <MetadataInstanceEditor
-                            canAdd={canEdit}
+                    <LoadingIndicatorWrapper className='metadata-instance-editor' isLoading={isLoading}>
+                        <Instances
                             editors={editors}
-                            onSave={this.onSave}
                             onModification={this.onModification}
-                            onAdd={this.onAdd}
+                            onSave={this.onSave}
                             onRemove={this.onRemove}
-                            templates={templates}
                         />
                     </LoadingIndicatorWrapper>
                 )}
