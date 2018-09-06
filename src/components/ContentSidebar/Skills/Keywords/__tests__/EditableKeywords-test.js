@@ -15,4 +15,22 @@ describe('components/ContentSidebar/Skills/Keywords/EditableKeywords', () => {
         const wrapper = shallow(<EditableKeywords {...props} />);
         expect(wrapper).toMatchSnapshot();
     });
+
+    describe('onKeyDown()', () => {
+        test('should call onBlur when enter is pressed and is not in composition mode', () => {
+            const wrapper = shallow(<EditableKeywords />);
+            const instance = wrapper.instance();
+            instance.onBlur = jest.fn();
+            instance.onKeyDown({ key: 'Enter' });
+            expect(instance.onBlur).toBeCalled();
+        });
+        test('should not call onBlur when in composition mode', () => {
+            const wrapper = shallow(<EditableKeywords />);
+            const instance = wrapper.instance();
+            instance.setState({ isInCompositionMode: true });
+            instance.onBlur = jest.fn();
+            instance.onKeyDown({ key: 'Enter' });
+            expect(instance.onBlur).not.toBeCalled();
+        });
+    });
 });
