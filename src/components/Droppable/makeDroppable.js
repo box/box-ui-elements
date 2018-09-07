@@ -9,19 +9,23 @@ import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 
 type Props = {
-    className: string
+    className: string,
 };
 
 type State = {
     canDrop: boolean,
     isDragging: boolean,
-    isOver: boolean
+    isOver: boolean,
 };
 
 /* eslint-disable no-plusplus */
-const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, onDrop?: Function }) => (
-    Wrapped: Function
-): ClassComponent<any, any> =>
+const makeDroppable = ({
+    dropValidator,
+    onDrop,
+}: {
+    dropValidator?: Function,
+    onDrop?: Function,
+}) => (Wrapped: Function): ClassComponent<any, any> =>
     class DroppableComponent extends PureComponent<Props, State> {
         props: Props;
         state: State;
@@ -29,7 +33,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
         droppableEl: Element;
 
         static defaultProps = {
-            className: ''
+            className: '',
         };
 
         /**
@@ -44,7 +48,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             this.state = {
                 canDrop: false,
                 isDragging: false,
-                isOver: false
+                isOver: false,
             };
         }
 
@@ -87,9 +91,18 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
          * @inheritdoc
          */
         componentWillUnmount() {
-            this.droppableEl.removeEventListener('dragenter', this.handleDragEnter);
-            this.droppableEl.removeEventListener('dragover', this.handleDragOver);
-            this.droppableEl.removeEventListener('dragleave', this.handleDragLeave);
+            this.droppableEl.removeEventListener(
+                'dragenter',
+                this.handleDragEnter,
+            );
+            this.droppableEl.removeEventListener(
+                'dragover',
+                this.handleDragOver,
+            );
+            this.droppableEl.removeEventListener(
+                'dragleave',
+                this.handleDragLeave,
+            );
             this.droppableEl.removeEventListener('drop', this.handleDrop);
         }
 
@@ -111,11 +124,13 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
                 const { dataTransfer } = event;
 
                 // if we don't have a dropValidator, we just default canDrop to true
-                const canDrop = dropValidator ? dropValidator(this.props, dataTransfer) : true;
+                const canDrop = dropValidator
+                    ? dropValidator(this.props, dataTransfer)
+                    : true;
 
                 this.setState({
                     isOver: true,
-                    canDrop
+                    canDrop,
                 });
             }
         };
@@ -162,7 +177,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             this.setState({
                 canDrop: false,
                 isDragging: false,
-                isOver: false
+                isOver: false,
             });
 
             if (canDrop && onDrop) {
@@ -187,7 +202,7 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
             this.setState({
                 canDrop: false,
                 isDragging: false,
-                isOver: false
+                isOver: false,
             });
         };
 
@@ -204,13 +219,13 @@ const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, on
 
             const classes = classNames(className, {
                 'is-droppable': canDrop,
-                'is-over': isOver
+                'is-over': isOver,
             });
 
             const mergedProps = {
                 ...rest,
                 ...this.state,
-                className: classes
+                className: classes,
             };
 
             return <Wrapped {...mergedProps} />;

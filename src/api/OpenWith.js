@@ -35,13 +35,21 @@ class OpenWith extends Base {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    getOpenWithIntegrations(fileId: string, successCallback: Function, errorCallback: Function) {
+    getOpenWithIntegrations(
+        fileId: string,
+        successCallback: Function,
+        errorCallback: Function,
+    ) {
         this.get({
             id: fileId,
-            successCallback: (openWithIntegrations) => {
-                this.fetchAppIntegrations(openWithIntegrations, successCallback, errorCallback);
+            successCallback: openWithIntegrations => {
+                this.fetchAppIntegrations(
+                    openWithIntegrations,
+                    successCallback,
+                    errorCallback,
+                );
             },
-            errorCallback
+            errorCallback,
         });
     }
 
@@ -54,19 +62,26 @@ class OpenWith extends Base {
     fetchAppIntegrations = async (
         openWithIntegrations: OpenWithAPI,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     ) => {
         const items = this.addDefaultToOpenWithItems(openWithIntegrations);
         this.appIntegrationsAPI = new AppIntegrationsAPI(this.options);
 
-        const appIntegrationPromises = items.map((integrationItem: OpenWithAPIItem) => {
-            const { app_integration: { id } } = integrationItem;
-            return this.appIntegrationsAPI.fetchAppIntegrationsPromise(id);
-        });
+        const appIntegrationPromises = items.map(
+            (integrationItem: OpenWithAPIItem) => {
+                const { app_integration: { id } } = integrationItem;
+                return this.appIntegrationsAPI.fetchAppIntegrationsPromise(id);
+            },
+        );
 
         try {
-            const appIntegrations: Array<AppIntegrationAPIItem> = await Promise.all(appIntegrationPromises);
-            const formattedOpenWithIntegrations = this.formatOpenWithData(items, appIntegrations);
+            const appIntegrations: Array<
+                AppIntegrationAPIItem,
+            > = await Promise.all(appIntegrationPromises);
+            const formattedOpenWithIntegrations = this.formatOpenWithData(
+                items,
+                appIntegrations,
+            );
             successCallback(formattedOpenWithIntegrations);
         } catch (error) {
             errorCallback(error);
@@ -79,8 +94,14 @@ class OpenWith extends Base {
      * @param {OpenWithAPI} openWithIntegrations - The available Open With integrations
      * @return {Array<Object>} formatted Open With integrations
      */
-    addDefaultToOpenWithItems(openWithIntegrations: OpenWithAPI): Array<Object> {
-        const { items, default_app_integration, ...rest } = openWithIntegrations;
+    addDefaultToOpenWithItems(
+        openWithIntegrations: OpenWithAPI,
+    ): Array<Object> {
+        const {
+            items,
+            default_app_integration,
+            ...rest
+        } = openWithIntegrations;
         if (default_app_integration) {
             // Replace the default_app_integration with a regular app integration
             // and add the is_default field
@@ -89,8 +110,8 @@ class OpenWith extends Base {
                 {
                     app_integration: default_app_integration,
                     is_default: true,
-                    ...rest
-                }
+                    ...rest,
+                },
             ];
         }
 
@@ -105,7 +126,7 @@ class OpenWith extends Base {
      */
     formatOpenWithData(
         openWithIntegrations: Array<Object>,
-        appIntegrations: Array<AppIntegrationAPIItem>
+        appIntegrations: Array<AppIntegrationAPIItem>,
     ): Array<Integration> {
         const integrations: Array<Integration> = openWithIntegrations.map(
             ({
@@ -115,10 +136,11 @@ class OpenWith extends Base {
                 icon,
                 is_default,
                 is_disabled,
-                should_show_consent_popup
+                should_show_consent_popup,
             }: Object) => {
                 const matchedAppIntegration: ?AppIntegrationAPIItem = appIntegrations.find(
-                    (appIntegration) => appIntegration.id === app_integration.id.toString()
+                    appIntegration =>
+                        appIntegration.id === app_integration.id.toString(),
                 );
 
                 if (!matchedAppIntegration) {
@@ -135,15 +157,15 @@ class OpenWith extends Base {
                     isDisabled: is_disabled,
                     name: matchedAppIntegration.name,
                     requiresConsent: should_show_consent_popup,
-                    type: matchedAppIntegration.type
+                    type: matchedAppIntegration.type,
                 };
-            }
+            },
         );
 
         // Sort integrations by displayOrder
         return integrations.sort(
             (integrationA: Integration, integrationB: Integration) =>
-                integrationA.displayOrder - integrationB.displayOrder
+                integrationA.displayOrder - integrationB.displayOrder,
         );
     }
 }

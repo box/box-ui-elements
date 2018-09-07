@@ -3,6 +3,6 @@ import ContentPreview from '../../../src/components/ContentPreview/ContentPrevie
 import withConfig from '../withConfig';
 import './ContentPreviewExample.scss';
 
-const ContentPreviewExample = (props) => <ContentPreview {...props} />;
+const ContentPreviewExample = props => <ContentPreview {...props} />;
 
 export default withConfig(ContentPreviewExample);

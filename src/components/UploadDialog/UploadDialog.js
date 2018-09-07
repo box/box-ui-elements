@@ -9,7 +9,11 @@ import Modal from 'react-modal';
 import { injectIntl } from 'react-intl';
 import ContentUploader from '../ContentUploader';
 import messages from '../messages';
-import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
+import {
+    CLASS_MODAL_CONTENT_FULL_BLEED,
+    CLASS_MODAL_OVERLAY,
+    CLASS_MODAL,
+} from '../../constants';
 
 type Props = {
     isOpen: boolean,
@@ -25,7 +29,7 @@ type Props = {
     onUpload?: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    intl: any
+    intl: any,
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -43,7 +47,7 @@ const UploadDialog = ({
     onUpload,
     requestInterceptor,
     responseInterceptor,
-    intl
+    intl,
 }: Props) => (
     <Modal
         isOpen={isOpen}

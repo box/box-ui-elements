@@ -222,12 +222,14 @@ const createWorker = () => {
             'var setupWorker = ',
             workerBase.toString(),
             ';\n',
-            'setupWorker();' // This explicit reassigned name is necessary because workerBase
+            'setupWorker();', // This explicit reassigned name is necessary because workerBase
             // gets renamed during JS minification.
         ],
-        { type: 'text/javascript' }
+        { type: 'text/javascript' },
     );
-    const workerUrl = (window.URL || window.webkitURL).createObjectURL(workerCodeBlob);
+    const workerUrl = (window.URL || window.webkitURL).createObjectURL(
+        workerCodeBlob,
+    );
     const worker = new Worker(workerUrl);
     worker.oldTerminate = worker.terminate;
     worker.terminate = () => {

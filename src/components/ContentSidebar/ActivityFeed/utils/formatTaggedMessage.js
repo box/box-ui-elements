@@ -30,49 +30,51 @@ const formatTaggedMessage = (
     tagged_message: string,
     itemID: string,
     shouldReturnString: boolean,
-    getUserProfileUrl?: Function
+    getUserProfileUrl?: Function,
 ): React.Node | string => {
-    const contentItems = tagged_message.split(splitRegex).map((text: string, contentIndex: number) => {
-        const contentKey = `${contentIndex}-${itemID}`;
-        // attempt mention match
-        const mentionMatch = text.match(/([@＠﹫])\[([0-9]+):([^\]]+)]/i);
-        if (mentionMatch) {
-            const [, trigger, id, name] = mentionMatch;
-            if (shouldReturnString) {
-                return `${trigger}${name}`;
-            }
+    const contentItems = tagged_message
+        .split(splitRegex)
+        .map((text: string, contentIndex: number) => {
+            const contentKey = `${contentIndex}-${itemID}`;
+            // attempt mention match
+            const mentionMatch = text.match(/([@＠﹫])\[([0-9]+):([^\]]+)]/i);
+            if (mentionMatch) {
+                const [, trigger, id, name] = mentionMatch;
+                if (shouldReturnString) {
+                    return `${trigger}${name}`;
+                }
 
-            return (
-                <UserLink
-                    id={id}
-                    name={`${trigger}${name}`}
-                    data-resin-target={ACTIVITY_TARGETS.MENTION}
-                    className='bcs-comment-mention'
-                    getUserProfileUrl={getUserProfileUrl}
-                    key={contentKey}
-                />
-            );
-        }
-
-        if (!shouldReturnString) {
-            // attempt url match
-            // NOTE: There are useless escapes in the regex below, should probably remove them when safe
-            const urlMatch = text.match(
-                // eslint-disable-next-line no-useless-escape
-                /((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)/i
-            );
-            if (urlMatch) {
-                const [, url] = urlMatch;
                 return (
-                    <Link key={contentKey} href={url}>
-                        {url}
-                    </Link>
+                    <UserLink
+                        id={id}
+                        name={`${trigger}${name}`}
+                        data-resin-target={ACTIVITY_TARGETS.MENTION}
+                        className="bcs-comment-mention"
+                        getUserProfileUrl={getUserProfileUrl}
+                        key={contentKey}
+                    />
                 );
             }
-        }
 
-        return text;
-    });
+            if (!shouldReturnString) {
+                // attempt url match
+                // NOTE: There are useless escapes in the regex below, should probably remove them when safe
+                const urlMatch = text.match(
+                    // eslint-disable-next-line no-useless-escape
+                    /((?:(?:ht|f)tps?:\/\/)[\w\._\-]+(?::\d+)?(?:\/[\w\-_\.~\+\/#\?&%=:\[\]@!$'\(\)\*;,]*)?)/i,
+                );
+                if (urlMatch) {
+                    const [, url] = urlMatch;
+                    return (
+                        <Link key={contentKey} href={url}>
+                            {url}
+                        </Link>
+                    );
+                }
+            }
+
+            return text;
+        });
 
     return shouldReturnString ? contentItems.join('') : contentItems;
 };

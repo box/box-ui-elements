@@ -14,7 +14,9 @@ describe('api/FileAccessStats', () => {
             }).toThrow();
         });
         test('should return correct access stats api url with id', () => {
-            expect(accessStats.getUrl('foo')).toBe('https://api.box.com/2.0/file_access_stats/foo');
+            expect(accessStats.getUrl('foo')).toBe(
+                'https://api.box.com/2.0/file_access_stats/foo',
+            );
         });
     });
 });

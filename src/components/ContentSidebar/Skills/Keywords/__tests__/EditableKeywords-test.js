@@ -9,7 +9,7 @@ describe('components/ContentSidebar/Skills/Keywords/EditableKeywords', () => {
             onAdd: jest.fn(),
             onDelete: jest.fn(),
             onSave: jest.fn(),
-            onCancel: jest.fn()
+            onCancel: jest.fn(),
         };
 
         const wrapper = shallow(<EditableKeywords {...props} />);

@@ -18,7 +18,7 @@ import {
     SKILLS_TIMELINE,
     SKILLS_FACE,
     SKILLS_STATUS,
-    SKILLS_ERROR_UNKNOWN
+    SKILLS_ERROR_UNKNOWN,
 } from '../../../constants';
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
     cards: Array<SkillCard>,
     errors: NumberBooleanMap,
     getViewer: Function,
-    onSkillChange: Function
+    onSkillChange: Function,
 };
 
 /**
@@ -55,7 +55,10 @@ const getCardInteractionTarget = ({ skill_card_type }: SkillCard): string => {
  * @param {Object} card - skill card
  * @return {string} - skill title
  */
-const getCardTitle = ({ skill_card_type, skill_card_title = {} }: SkillCard): string | React.Node => {
+const getCardTitle = ({
+    skill_card_type,
+    skill_card_title = {},
+}: SkillCard): string | React.Node => {
     const { code, message }: SkillCardLocalizableType = skill_card_title;
     const defaultKey = `${skill_card_type}Skill`;
     const defaultMessage = messages[defaultKey] || messages.defaultSkill;
@@ -76,7 +79,13 @@ const getCardTitle = ({ skill_card_type, skill_card_title = {} }: SkillCard): st
     }
 };
 
-const SidebarSkills = ({ file, cards, errors, getViewer, onSkillChange }: Props): Array<React.Node> => {
+const SidebarSkills = ({
+    file,
+    cards,
+    errors,
+    getViewer,
+    onSkillChange,
+}: Props): Array<React.Node> => {
     const { permissions = {} }: BoxItem = file;
     const isSkillEditable = !!permissions.can_upload;
 
@@ -84,7 +93,7 @@ const SidebarSkills = ({ file, cards, errors, getViewer, onSkillChange }: Props)
         if (card.error && !card.status) {
             card.skill_card_type = SKILLS_STATUS;
             card.status = {
-                code: SKILLS_ERROR_UNKNOWN
+                code: SKILLS_ERROR_UNKNOWN,
             };
             delete card.error;
         }
@@ -94,10 +103,17 @@ const SidebarSkills = ({ file, cards, errors, getViewer, onSkillChange }: Props)
         const isValid = isValidSkillsCard(file, card);
         const interactionTarget = getCardInteractionTarget(card);
         const title = getCardTitle(card);
-        const hasEntries = Array.isArray(card.entries) ? card.entries.length > 0 : isValid;
+        const hasEntries = Array.isArray(card.entries)
+            ? card.entries.length > 0
+            : isValid;
 
         return isValid ? (
-            <SidebarSection key={cardId} isOpen={hasEntries} interactionTarget={interactionTarget} title={title}>
+            <SidebarSection
+                key={cardId}
+                isOpen={hasEntries}
+                interactionTarget={interactionTarget}
+                title={title}
+            >
                 <SidebarSkillsCard
                     card={card}
                     cards={cards}

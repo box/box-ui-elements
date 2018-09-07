@@ -10,7 +10,7 @@ import { PLACEHOLDER_USER } from '../constants';
 const ACTION = {
     upload: 'upload',
     delete: 'delete',
-    restore: 'restore'
+    restore: 'restore',
 };
 
 class Versions extends OffsetBasedAPI {
@@ -43,7 +43,7 @@ class Versions extends OffsetBasedAPI {
             return {
                 ...version,
                 modified_by: modified_by || PLACEHOLDER_USER,
-                action: version.trashed_at ? ACTION.delete : ACTION.upload
+                action: version.trashed_at ? ACTION.delete : ACTION.upload,
             };
         });
 

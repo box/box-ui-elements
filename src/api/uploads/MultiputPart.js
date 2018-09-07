@@ -65,13 +65,13 @@ class MultiputPart extends BaseMultiput {
         offset: number,
         partSize: number,
         fileSize: number,
-        sessionId: string,
+        sessionId: string, // eslint-disable-line
         sessionEndpoints: Object,
         config: MultiputConfig,
         getNumPartsUploading: Function,
         onSuccess?: Function,
         onProgress?: Function,
-        onError?: Function
+        onError?: Function,
     ): void {
         super(options, sessionEndpoints, config);
 
@@ -107,7 +107,7 @@ class MultiputPart extends BaseMultiput {
             numUploadRetriesPerformed: this.numUploadRetriesPerformed,
             numDigestRetriesPerformed: this.numDigestRetriesPerformed,
             sha256: this.sha256,
-            timing: this.timing
+            timing: this.timing,
         });
 
     /**
@@ -139,14 +139,16 @@ class MultiputPart extends BaseMultiput {
             documentHidden: document.hidden,
             digest_retries: this.numDigestRetriesPerformed,
             timing: this.timing,
-            parts_uploading: this.getNumPartsUploading()
+            parts_uploading: this.getNumPartsUploading(),
         };
 
         const headers = {
             'Content-Type': 'application/octet-stream',
             Digest: `sha-256=${this.sha256}`,
-            'Content-Range': `bytes ${this.offset}-${this.rangeEnd}/${this.fileSize}`,
-            'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo)
+            'Content-Range': `bytes ${this.offset}-${this.rangeEnd}/${
+                this.fileSize
+            }`,
+            'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo),
         };
 
         this.state = PART_STATE_UPLOADING;
@@ -162,7 +164,7 @@ class MultiputPart extends BaseMultiput {
             errorHandler: this.uploadErrorHandler,
             progressHandler: this.uploadProgressHandler,
             withIdleTimeout: true,
-            idleTimeoutDuration: this.config.requestTimeoutMs
+            idleTimeoutDuration: this.config.requestTimeoutMs,
         });
     };
 
@@ -218,7 +220,11 @@ class MultiputPart extends BaseMultiput {
         }
 
         this.consoleLog(
-            `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr.readyState}.`
+            `Upload failure ${
+                error.message
+            } for part ${this.toJSON()}. XHR state: ${
+                this.xhr.xhr.readyState
+            }.`,
         );
         const eventInfo = {
             message: error.message,
@@ -226,10 +232,10 @@ class MultiputPart extends BaseMultiput {
                 uploadedBytes: this.uploadedBytes,
                 id: this.id,
                 index: this.index,
-                offset: this.offset
+                offset: this.offset,
             },
             xhr_ready_state: this.xhr.xhr.readyState,
-            xhr_status_text: this.xhr.xhr.statusText
+            xhr_status_text: this.xhr.xhr.statusText,
         };
         const eventInfoString = JSON.stringify(eventInfo);
         this.logEvent('part_failure', eventInfoString);
@@ -242,11 +248,13 @@ class MultiputPart extends BaseMultiput {
         const retryDelayMs = getBoundedExpBackoffRetryDelay(
             this.config.initialRetryDelayMs,
             this.config.maxRetryDelayMs,
-            this.numUploadRetriesPerformed
+            this.numUploadRetriesPerformed,
         );
 
         this.numUploadRetriesPerformed += 1;
-        this.consoleLog(`Retrying uploading part ${this.toJSON()} in ${retryDelayMs} ms`);
+        this.consoleLog(
+            `Retrying uploading part ${this.toJSON()} in ${retryDelayMs} ms`,
+        );
         this.retryTimeout = setTimeout(this.retryUpload, retryDelayMs);
     };
 
@@ -268,23 +276,36 @@ class MultiputPart extends BaseMultiput {
 
             const parts = await this.listParts(this.index, 1);
 
-            if (parts && parts.length === 1 && parts[0].offset === this.offset && parts[0].part_id) {
-                this.consoleLog(`Part ${this.toJSON()} is available on server. Not re-uploading.`);
+            if (
+                parts &&
+                parts.length === 1 &&
+                parts[0].offset === this.offset &&
+                parts[0].part_id
+            ) {
+                this.consoleLog(
+                    `Part ${this.toJSON()} is available on server. Not re-uploading.`,
+                );
                 this.id = parts[0].part_id;
                 this.uploadSuccessHandler({
                     data: {
-                        part: parts[0]
-                    }
+                        part: parts[0],
+                    },
                 });
                 return;
             }
 
-            this.consoleLog(`Part ${this.toJSON()} is not available on server. Re-uploading.`);
+            this.consoleLog(
+                `Part ${this.toJSON()} is not available on server. Re-uploading.`,
+            );
             throw new Error('Part not found on the server');
         } catch (error) {
             const { response } = error;
             if (response && response.status) {
-                this.consoleLog(`Error ${response.status} while listing part ${this.toJSON()}. Re-uploading.`);
+                this.consoleLog(
+                    `Error ${
+                        response.status
+                    } while listing part ${this.toJSON()}. Re-uploading.`,
+                );
             }
 
             this.numUploadRetriesPerformed += 1;
@@ -311,15 +332,21 @@ class MultiputPart extends BaseMultiput {
      * @param {number} limit - Number of parts to be listed. Optional.
      * @return {Promise<Array<Object>>} Array of parts
      */
-    listParts = async (partIndex: number, limit: number): Promise<Array<Object>> => {
+    listParts = async (
+        partIndex: number,
+        limit: number,
+    ): Promise<Array<Object>> => {
         const params = {
             offset: partIndex,
-            limit
+            limit,
         };
 
-        const endpoint = updateQueryParameters(this.sessionEndpoints.listParts, params);
+        const endpoint = updateQueryParameters(
+            this.sessionEndpoints.listParts,
+            params,
+        );
         const response = await this.xhr.get({
-            url: endpoint
+            url: endpoint,
         });
 
         return response.entries;
@@ -332,5 +359,5 @@ export {
     PART_STATE_COMPUTING_DIGEST,
     PART_STATE_DIGEST_READY,
     PART_STATE_UPLOADING,
-    PART_STATE_UPLOADED
+    PART_STATE_UPLOADED,
 };

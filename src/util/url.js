@@ -19,7 +19,7 @@ function updateQueryParameters(url: string, queryParams: Object): string {
 
     const uri = new Uri(url);
 
-    Object.keys(queryParams).forEach((key) => {
+    Object.keys(queryParams).forEach(key => {
         const value = queryParams[key];
 
         if (!value) {

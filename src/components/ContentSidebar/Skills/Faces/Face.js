@@ -19,22 +19,24 @@ type Props = {
     selected?: SkillCardEntry,
     isEditing: boolean,
     onDelete: Function,
-    onSelect: Function
+    onSelect: Function,
 };
 
 const Face = ({ face, selected, isEditing, onDelete, onSelect }: Props) => {
     const isAnyFaceSelected = !!selected;
     const isCurrentFaceSelected = face === selected;
-    const isFaceSelected = isAnyFaceSelected && isCurrentFaceSelected && !isEditing;
+    const isFaceSelected =
+        isAnyFaceSelected && isCurrentFaceSelected && !isEditing;
     const faceClassName = classNames('be-face-wrapper', {
-        'be-face-unselected': !isEditing && isAnyFaceSelected && !isCurrentFaceSelected
+        'be-face-unselected':
+            !isEditing && isAnyFaceSelected && !isCurrentFaceSelected,
     });
 
     return (
         <div className={faceClassName}>
             <PlainButton
-                type='button'
-                className='be-face'
+                type="button"
+                className="be-face"
                 data-resin-target={SKILLS_TARGETS.FACES.FACE}
                 onClick={() => !isEditing && onSelect(face)}
             >
@@ -43,8 +45,8 @@ const Face = ({ face, selected, isEditing, onDelete, onSelect }: Props) => {
             </PlainButton>
             {isEditing && (
                 <PlainButton
-                    type='button'
-                    className='be-face-delete'
+                    type="button"
+                    className="be-face-delete"
                     data-resin-target={SKILLS_TARGETS.FACES.DELETE}
                     onClick={() => onDelete(face)}
                 >

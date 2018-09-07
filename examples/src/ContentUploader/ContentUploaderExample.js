@@ -3,6 +3,6 @@ import ContentUploader from '../../../src/components/ContentUploader/ContentUplo
 import withConfig from '../withConfig';
 import './ContentUploaderExample.scss';
 
-const ContentUploaderExample = (props) => <ContentUploader {...props} />;
+const ContentUploaderExample = props => <ContentUploader {...props} />;
 
 export default withConfig(ContentUploaderExample);

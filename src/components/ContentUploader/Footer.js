@@ -18,34 +18,56 @@ type Props = {
     errorCode?: string,
     onCancel: Function,
     onClose?: Function,
-    onUpload: Function
+    onUpload: Function,
 };
 
-const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, fileLimit }: Props) => {
+const Footer = ({
+    isLoading,
+    hasFiles,
+    errorCode,
+    onCancel,
+    onClose,
+    onUpload,
+    fileLimit,
+}: Props) => {
     let message;
     switch (errorCode) {
         case ERROR_CODE_UPLOAD_FILE_LIMIT:
-            message = <FormattedMessage {...messages.uploadErrorTooManyFiles} values={{ fileLimit }} />;
+            message = (
+                <FormattedMessage
+                    {...messages.uploadErrorTooManyFiles}
+                    values={{ fileLimit }}
+                />
+            );
             break;
         default:
         // ignore
     }
 
     return (
-        <div className='bcu-footer'>
-            <div className='bcu-footer-left'>
+        <div className="bcu-footer">
+            <div className="bcu-footer-left">
                 {onClose ? (
-                    <Button type='button' isDisabled={hasFiles} onClick={onClose}>
+                    <Button
+                        type="button"
+                        isDisabled={hasFiles}
+                        onClick={onClose}
+                    >
                         <FormattedMessage {...messages.close} />
                     </Button>
                 ) : null}
             </div>
-            {message && <div className='bcu-footer-message'>{message}</div>}
-            <div className='bcu-footer-right'>
-                <Button type='button' isDisabled={!hasFiles} onClick={onCancel}>
+            {message && <div className="bcu-footer-message">{message}</div>}
+            <div className="bcu-footer-right">
+                <Button type="button" isDisabled={!hasFiles} onClick={onCancel}>
                     <FormattedMessage {...messages.cancelUploads} />
                 </Button>
-                <PrimaryButton type='button' isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload}>
+                <PrimaryButton
+                    type="button"
+                    isDisabled={!hasFiles}
+                    isLoading={isLoading}
+                    onClick={onUpload}
+                >
                     <FormattedMessage {...messages.upload} />
                 </PrimaryButton>
             </div>

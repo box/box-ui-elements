@@ -17,7 +17,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
-    SIDEBAR_VIEW_METADATA
+    SIDEBAR_VIEW_METADATA,
 } from '../../constants';
 import './SidebarNav.scss';
 
@@ -27,14 +27,23 @@ type Props = {
     hasActivityFeed: boolean,
     hasDetails: boolean,
     onToggle: Function,
-    selectedView?: SidebarView
+    selectedView?: SidebarView,
 };
 
-const SidebarNav = ({ hasSkills, hasMetadata, hasActivityFeed, hasDetails, onToggle, selectedView }: Props) => (
+const SidebarNav = ({
+    hasSkills,
+    hasMetadata,
+    hasActivityFeed,
+    hasDetails,
+    onToggle,
+    selectedView,
+}: Props) => (
     <nav>
         {hasActivityFeed && (
             <SidebarNavButton
-                tooltip={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                tooltip={
+                    <FormattedMessage {...messages.sidebarActivityTitle} />
+                }
                 onClick={() => onToggle(SIDEBAR_VIEW_ACTIVITY)}
                 interactionTarget={SIDEBAR_NAV_TARGETS.ACTIVITY}
                 isSelected={SIDEBAR_VIEW_ACTIVITY === selectedView}
@@ -64,7 +73,9 @@ const SidebarNav = ({ hasSkills, hasMetadata, hasActivityFeed, hasDetails, onTog
         )}
         {hasMetadata && (
             <SidebarNavButton
-                tooltip={<FormattedMessage {...messages.sidebarMetadataTitle} />}
+                tooltip={
+                    <FormattedMessage {...messages.sidebarMetadataTitle} />
+                }
                 onClick={() => onToggle(SIDEBAR_VIEW_METADATA)}
                 interactionTarget={SIDEBAR_NAV_TARGETS.METADATA}
                 isSelected={SIDEBAR_VIEW_METADATA === selectedView}

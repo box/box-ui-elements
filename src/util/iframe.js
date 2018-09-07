@@ -12,7 +12,9 @@
  * @return {HTMLIFrameElement} Iframe
  */
 function createDownloadIframe(): HTMLIFrameElement {
-    let iframe: HTMLIFrameElement = ((document.querySelector('#boxdownloadiframe'): any): HTMLIFrameElement);
+    let iframe: HTMLIFrameElement = ((document.querySelector(
+        '#boxdownloadiframe',
+    ): any): HTMLIFrameElement);
     if (!iframe) {
         // if no existing iframe create a new one
         iframe = document.createElement('iframe');

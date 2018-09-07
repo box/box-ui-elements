@@ -29,7 +29,7 @@ type ExternalProps = {
     onAccessStatsClick?: Function,
     onClassificationClick?: Function,
     onRetentionPolicyExtendClick?: Function,
-    onDescriptionChange?: Function
+    onDescriptionChange?: Function,
 };
 
 export type Props = {
@@ -40,7 +40,7 @@ export type Props = {
     accessStatsError?: Errors,
     fileError?: Errors,
     onVersionHistoryClick?: Function,
-    isFileLoading?: boolean
+    isFileLoading?: boolean,
 } & ExternalProps;
 
 const DetailsSidebar = ({
@@ -62,10 +62,16 @@ const DetailsSidebar = ({
     retentionPolicy,
     bannerPolicy,
     onRetentionPolicyExtendClick,
-    isFileLoading
+    isFileLoading,
 }: Props) => (
-    <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
-        {hasNotices && <div className='bcs-details-content'>{hasNotices && <SidebarNotices file={file} />}</div>}
+    <SidebarContent
+        title={<FormattedMessage {...messages.sidebarDetailsTitle} />}
+    >
+        {hasNotices && (
+            <div className="bcs-details-content">
+                {hasNotices && <SidebarNotices file={file} />}
+            </div>
+        )}
         {hasAccessStats && (
             <SidebarAccessStats
                 accessStats={accessStats}
@@ -75,9 +81,13 @@ const DetailsSidebar = ({
             />
         )}
         {hasVersions && (
-            <div className='bcs-details-content'>
+            <div className="bcs-details-content">
                 {hasVersions && (
-                    <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} versions={versions} file={file} />
+                    <SidebarVersions
+                        onVersionHistoryClick={onVersionHistoryClick}
+                        versions={versions}
+                        file={file}
+                    />
                 )}
             </div>
         )}

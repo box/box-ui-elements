@@ -6,16 +6,16 @@ import SidebarNotices from '../SidebarNotices';
 
 describe('components/ContentSidebar/SidebarNotices', () => {
     describe('render()', () => {
-        const getWrapper = (props) => shallow(<SidebarNotices {...props} />);
+        const getWrapper = props => shallow(<SidebarNotices {...props} />);
 
         test('should render an item expiration if present', () => {
             const props = {
                 file: {
                     expires_at: '2018-04-25T23:59:00-07:00',
                     shared_link: {
-                        url: 'https://www.foo.com'
-                    }
-                }
+                        url: 'https://www.foo.com',
+                    },
+                },
             };
 
             const wrapper = getWrapper(props);
@@ -29,9 +29,9 @@ describe('components/ContentSidebar/SidebarNotices', () => {
             const props = {
                 file: {
                     shared_link: {
-                        unshared_at: '2018-04-25T23:59:00-07:00'
-                    }
-                }
+                        unshared_at: '2018-04-25T23:59:00-07:00',
+                    },
+                },
             };
             const wrapper = getWrapper(props);
 

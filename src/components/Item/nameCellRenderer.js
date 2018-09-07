@@ -18,9 +18,9 @@ export default (
     onItemSelect?: Function,
     canPreview: boolean = false,
     showDetails: boolean = true,
-    isTouch: boolean = false
+    isTouch: boolean = false,
 ) => ({ rowData }: { rowData: BoxItem }) => (
-    <div className='be-item-name'>
+    <div className="be-item-name">
         <ItemName
             isTouch={isTouch}
             item={rowData}
@@ -29,7 +29,12 @@ export default (
             onFocus={onItemSelect}
         />
         {view === VIEW_SEARCH || showDetails ? (
-            <ItemDetails item={rowData} view={view} rootId={rootId} onItemClick={onItemClick} />
+            <ItemDetails
+                item={rowData}
+                view={view}
+                rootId={rootId}
+                onItemClick={onItemClick}
+            />
         ) : null}
     </div>
 );

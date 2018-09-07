@@ -6,22 +6,22 @@ describe('components/ContentSidebar/keywordUtils/getPills', () => {
             getPills([
                 {
                     type: 'text',
-                    text: 'foo'
+                    text: 'foo',
                 },
                 {
                     type: 'text',
-                    text: 'bar'
-                }
-            ])
+                    text: 'bar',
+                },
+            ]),
         ).toEqual([
             {
                 value: 0,
-                text: 'foo'
+                text: 'foo',
             },
             {
                 value: 1,
-                text: 'bar'
-            }
+                text: 'bar',
+            },
         ]);
     });
 });

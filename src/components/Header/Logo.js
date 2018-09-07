@@ -12,23 +12,22 @@ import './Logo.scss';
 
 type Props = {
     url?: string,
-    isSmall: boolean
 };
 
-function getLogo(isSmall: boolean, url?: string) {
+function getLogo(url?: string) {
     if (url === 'box') {
         return <IconLogo />;
     } else if (typeof url === 'string') {
-        return <img alt='' src={url} className='be-logo-custom' />;
+        return <img alt="" src={url} className="be-logo-custom" />;
     }
 
     return (
-        <div className='be-logo-placeholder'>
+        <div className="be-logo-placeholder">
             <FormattedMessage {...messages.logo} />
         </div>
     );
 }
 
-const Logo = ({ url, isSmall }: Props) => <div className='be-logo'>{getLogo(isSmall, url)}</div>;
+const Logo = ({ url }: Props) => <div className="be-logo">{getLogo(url)}</div>;
 
 export default Logo;

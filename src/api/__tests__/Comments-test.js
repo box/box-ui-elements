@@ -1,5 +1,9 @@
 import Comments from '../Comments';
-import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../../constants';
+import {
+    PERMISSION_CAN_COMMENT,
+    PERMISSION_CAN_DELETE,
+    PERMISSION_CAN_EDIT,
+} from '../../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../../util/fields';
 
 let comments;
@@ -16,13 +20,17 @@ describe('api/Comments', () => {
             }).toThrow();
         });
         test('should return correct version api url with id', () => {
-            expect(comments.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/comments');
+            expect(comments.getUrl('foo')).toBe(
+                'https://api.box.com/2.0/files/foo/comments',
+            );
         });
     });
 
     describe('commentsUrl()', () => {
         test('should add an id if provided', () => {
-            expect(comments.commentsUrl('foo')).toBe('https://api.box.com/2.0/comments/foo');
+            expect(comments.commentsUrl('foo')).toBe(
+                'https://api.box.com/2.0/comments/foo',
+            );
         });
     });
 
@@ -35,7 +43,7 @@ describe('api/Comments', () => {
             tagged_message: '',
             created_by: { name: 'Akon', id: 11 },
             modified_at: 1234567890,
-            is_reply_comment: false
+            is_reply_comment: false,
         };
 
         const taggedComment = {
@@ -45,7 +53,7 @@ describe('api/Comments', () => {
             tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
             created_by: { name: 'Akon', id: 11 },
             modified_at: 1234567890,
-            is_reply_comment: true
+            is_reply_comment: true,
         };
 
         beforeEach(() => {
@@ -61,7 +69,7 @@ describe('api/Comments', () => {
         test('should return API response with properly formatted data', () => {
             const response = {
                 total_count: 2,
-                entries: [comment, taggedComment]
+                entries: [comment, taggedComment],
             };
             comments.successHandler(response);
             expect(comments.successCallback).toBeCalled();
@@ -78,7 +86,7 @@ describe('api/Comments', () => {
     describe('CRUD operations', () => {
         const file = {
             id: 'foo',
-            permissions: {}
+            permissions: {},
         };
 
         const commentId = '123';
@@ -99,8 +107,17 @@ describe('api/Comments', () => {
 
         describe('createComment()', () => {
             test('should check for valid comment permissions', () => {
-                comments.createComment({ file, message, successCallback, errorCallback });
-                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_COMMENT, file.permissions, file.id);
+                comments.createComment({
+                    file,
+                    message,
+                    successCallback,
+                    errorCallback,
+                });
+                expect(comments.checkApiCallValidity).toBeCalledWith(
+                    PERMISSION_CAN_COMMENT,
+                    file.permissions,
+                    file.id,
+                );
             });
 
             test('should post a well formed comment to the comments endpoint', () => {
@@ -108,23 +125,28 @@ describe('api/Comments', () => {
                     data: {
                         item: {
                             id: file.id,
-                            type: 'file'
+                            type: 'file',
                         },
                         message,
-                        taggedMessage: undefined
+                        taggedMessage: undefined,
                     },
                     params: {
-                        fields: COMMENTS_FIELDS_TO_FETCH.toString()
-                    }
+                        fields: COMMENTS_FIELDS_TO_FETCH.toString(),
+                    },
                 };
 
-                comments.createComment({ file, message, successCallback, errorCallback });
+                comments.createComment({
+                    file,
+                    message,
+                    successCallback,
+                    errorCallback,
+                });
                 expect(comments.post).toBeCalledWith({
                     id: 'foo',
                     url: comments.commentsUrl(),
                     data: requestData,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });
@@ -132,15 +154,26 @@ describe('api/Comments', () => {
         describe('updateComment()', () => {
             test('should check for valid comment edit permissions', () => {
                 const permissions = {
-                    [PERMISSION_CAN_EDIT]: true
+                    [PERMISSION_CAN_EDIT]: true,
                 };
-                comments.updateComment({ file, commentId, permissions, message, successCallback, errorCallback });
-                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_EDIT, permissions, file.id);
+                comments.updateComment({
+                    file,
+                    commentId,
+                    permissions,
+                    message,
+                    successCallback,
+                    errorCallback,
+                });
+                expect(comments.checkApiCallValidity).toBeCalledWith(
+                    PERMISSION_CAN_EDIT,
+                    permissions,
+                    file.id,
+                );
             });
 
             test('should put a well formed comment update to the comments endpoint', () => {
                 const requestData = {
-                    data: { message }
+                    data: { message },
                 };
 
                 comments.updateComment({
@@ -148,14 +181,14 @@ describe('api/Comments', () => {
                     commentId,
                     message,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
                 expect(comments.put).toBeCalledWith({
                     id: 'foo',
                     url: comments.commentsUrl(commentId),
                     data: requestData,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });
@@ -163,19 +196,34 @@ describe('api/Comments', () => {
         describe('deleteComment()', () => {
             test('should check for valid comment delete permissions', () => {
                 const permissions = {
-                    [PERMISSION_CAN_DELETE]: true
+                    [PERMISSION_CAN_DELETE]: true,
                 };
-                comments.deleteComment({ file, commentId, permissions, successCallback, errorCallback });
-                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_DELETE, permissions, file.id);
+                comments.deleteComment({
+                    file,
+                    commentId,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                });
+                expect(comments.checkApiCallValidity).toBeCalledWith(
+                    PERMISSION_CAN_DELETE,
+                    permissions,
+                    file.id,
+                );
             });
 
             test('should delete a comment from the comments endpoint', () => {
-                comments.deleteComment({ file, commentId, successCallback, errorCallback });
+                comments.deleteComment({
+                    file,
+                    commentId,
+                    successCallback,
+                    errorCallback,
+                });
                 expect(comments.delete).toBeCalledWith({
                     id: 'foo',
                     url: comments.commentsUrl(commentId),
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });

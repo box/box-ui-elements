@@ -9,18 +9,22 @@ import Modal from 'react-modal';
 import noop from 'lodash/noop';
 import omit from 'lodash/omit';
 
-import { CLIENT_NAME_CONTENT_PICKER, CLIENT_NAME_CONTENT_UPLOADER, CLIENT_NAME_CONTENT_TREE } from '../constants';
+import {
+    CLIENT_NAME_CONTENT_PICKER,
+    CLIENT_NAME_CONTENT_UPLOADER,
+    CLIENT_NAME_CONTENT_TREE,
+} from '../constants';
 
 type Props = {
     onCancel?: Function,
     onChoose?: Function,
     onClose?: Function,
     onClick?: Function,
-    modal: ModalOptions
+    modal: ModalOptions,
 };
 
 type State = {
-    isOpen: boolean
+    isOpen: boolean,
 };
 
 const makePopup = (kit: string) => (Wrapped: any) =>
@@ -37,7 +41,7 @@ const makePopup = (kit: string) => (Wrapped: any) =>
         constructor(props: Props) {
             super(props);
             this.state = {
-                isOpen: false
+                isOpen: false,
             };
         }
 
@@ -112,12 +116,17 @@ const makePopup = (kit: string) => (Wrapped: any) =>
         render() {
             const { isOpen }: State = this.state;
             const { modal, ...rest }: Props = this.props;
-            const wrappedProps = omit(rest, ['onCancel', 'onChoose', 'onClose', 'modal']);
+            const wrappedProps = omit(rest, [
+                'onCancel',
+                'onChoose',
+                'onClose',
+                'modal',
+            ]);
             const {
                 buttonLabel = 'Missing modal.buttonLabel in options',
                 buttonClassName = 'btn btn-primary',
                 modalClassName = 'be-modal-wrapper-content',
-                overlayClassName = 'be-modal-wrapper-overlay'
+                overlayClassName = 'be-modal-wrapper-overlay',
             }: ModalOptions = modal;
 
             switch (kit) {
@@ -137,7 +146,11 @@ const makePopup = (kit: string) => (Wrapped: any) =>
 
             return (
                 <div>
-                    <button type='button' onClick={this.onButtonClick} className={buttonClassName}>
+                    <button
+                        type="button"
+                        onClick={this.onButtonClick}
+                        className={buttonClassName}
+                    >
                         {buttonLabel}
                     </button>
                     <Modal

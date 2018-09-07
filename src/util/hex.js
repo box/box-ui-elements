@@ -12,7 +12,9 @@
  */
 function bufferToHex(arrayBuffer: Uint8Array): string {
     // eslint-disable-next-line no-bitwise
-    return Array.from(arrayBuffer, (byte) => `0${(byte & 0xff).toString(16)}`.slice(-2)).join('');
+    return Array.from(arrayBuffer, byte =>
+        `0${(byte & 0xff).toString(16)}`.slice(-2),
+    ).join('');
 }
 
 // eslint-disable-next-line import/prefer-default-export

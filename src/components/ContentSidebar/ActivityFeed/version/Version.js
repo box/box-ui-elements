@@ -13,9 +13,17 @@ import messages from '../../../messages';
 import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 import './Version.scss';
-import { VERSION_UPLOAD_ACTION, VERSION_DELETE_ACTION, VERSION_RESTORE_ACTION } from '../../../../constants';
+import {
+    VERSION_UPLOAD_ACTION,
+    VERSION_DELETE_ACTION,
+    VERSION_RESTORE_ACTION,
+} from '../../../../constants';
 
-function getMessageForAction(name: React.Node, action: string, version_number: string): React.Node {
+function getMessageForAction(
+    name: React.Node,
+    action: string,
+    version_number: string,
+): React.Node {
     switch (action) {
         case VERSION_UPLOAD_ACTION:
             return (
@@ -23,7 +31,7 @@ function getMessageForAction(name: React.Node, action: string, version_number: s
                     {...messages.versionUploaded}
                     values={{
                         name: <strong>{name}</strong>,
-                        version_number
+                        version_number,
                     }}
                 />
             );
@@ -33,7 +41,7 @@ function getMessageForAction(name: React.Node, action: string, version_number: s
                     {...messages.versionDeleted}
                     values={{
                         name: <strong>{name}</strong>,
-                        version_number
+                        version_number,
                     }}
                 />
             );
@@ -43,7 +51,7 @@ function getMessageForAction(name: React.Node, action: string, version_number: s
                     {...messages.versionRestored}
                     values={{
                         name: <strong>{name}</strong>,
-                        version_number
+                        version_number,
                     }}
                 />
             );
@@ -58,21 +66,30 @@ type Props = {
     id: string,
     intl: any,
     onInfo?: Function,
-    version_number: string
+    version_number: string,
 };
 
-const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Props): React.Node => (
-    <div className='bcs-version'>
-        <span className='bcs-version-message'>{getMessageForAction(modified_by.name, action, version_number)}</span>
+const Version = ({
+    action,
+    modified_by,
+    id,
+    intl,
+    onInfo,
+    version_number,
+}: Props): React.Node => (
+    <div className="bcs-version">
+        <span className="bcs-version-message">
+            {getMessageForAction(modified_by.name, action, version_number)}
+        </span>
         {onInfo ? (
-            <span className='bcs-version-actions'>
+            <span className="bcs-version-actions">
                 <PlainButton
                     aria-label={intl.formatMessage(messages.getVersionInfo)}
-                    className='bcs-version-info'
+                    className="bcs-version-info"
                     onClick={() => {
                         onInfo({ id, version_number });
                     }}
-                    type='button'
+                    type="button"
                     data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                 >
                     <IconInfoInverted height={16} width={16} />

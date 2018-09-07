@@ -43,7 +43,7 @@ import {
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     ERROR_CODE_ITEM_NAME_IN_USE,
-    TYPED_ID_FOLDER_PREFIX
+    TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -81,7 +81,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
-    responseInterceptor?: Function
+    responseInterceptor?: Function,
 };
 
 type State = {
@@ -96,7 +96,7 @@ type State = {
     view: View,
     isUploadModalOpen: boolean,
     isCreateFolderModalOpen: boolean,
-    focusedRow: number
+    focusedRow: number,
 };
 
 const defaultType = `${TYPE_FILE},${TYPE_WEBLINK}`;
@@ -129,7 +129,7 @@ class ContentPicker extends Component<Props, State> {
         apiHost: DEFAULT_HOSTNAME_API,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         clientName: CLIENT_NAME_CONTENT_PICKER,
-        defaultView: DEFAULT_VIEW_FILES
+        defaultView: DEFAULT_VIEW_FILES,
     };
 
     /**
@@ -152,7 +152,7 @@ class ContentPicker extends Component<Props, State> {
             clientName,
             requestInterceptor,
             responseInterceptor,
-            rootFolderId
+            rootFolderId,
         } = props;
 
         this.api = new API({
@@ -164,7 +164,7 @@ class ContentPicker extends Component<Props, State> {
             clientName,
             requestInterceptor,
             responseInterceptor,
-            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
+            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`,
         });
 
         this.id = uniqueid('bcp_');
@@ -181,7 +181,7 @@ class ContentPicker extends Component<Props, State> {
             isUploadModalOpen: false,
             focusedRow: 0,
             isLoading: false,
-            errorCode: ''
+            errorCode: '',
         };
     }
 
@@ -215,8 +215,11 @@ class ContentPicker extends Component<Props, State> {
      */
     componentDidMount() {
         const { defaultView, currentFolderId }: Props = this.props;
-        this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
+        this.rootElement = ((document.getElementById(
+            this.id,
+        ): any): HTMLElement);
+        this.appElement = ((this.rootElement
+            .firstElementChild: any): HTMLElement);
 
         if (defaultView === DEFAULT_VIEW_RECENTS) {
             this.showRecents();
@@ -256,7 +259,7 @@ class ContentPicker extends Component<Props, State> {
     choose = (): void => {
         const { selected }: State = this.state;
         const { onChoose }: Props = this.props;
-        const results: BoxItem[] = Object.keys(selected).map((key) => {
+        const results: BoxItem[] = Object.keys(selected).map(key => {
             const clone: BoxItem = Object.assign({}, selected[key]);
             delete clone.selected;
             return clone;
@@ -276,7 +279,7 @@ class ContentPicker extends Component<Props, State> {
         const { selected }: State = this.state;
 
         // Clear out the selected field
-        Object.keys(selected).forEach((key) => delete selected[key].selected);
+        Object.keys(selected).forEach(key => delete selected[key].selected);
 
         // Reset the selected state
         this.setState({ selected: {} }, () => onCancel());
@@ -293,7 +296,7 @@ class ContentPicker extends Component<Props, State> {
     currentUnloadedCollection(): Collection {
         const { currentCollection }: State = this.state;
         return Object.assign(currentCollection, {
-            percentLoaded: 0
+            percentLoaded: 0,
         });
     }
 
@@ -306,7 +309,11 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     refreshCollection = (): void => {
-        const { currentCollection: { id }, view, searchQuery }: State = this.state;
+        const {
+            currentCollection: { id },
+            view,
+            searchQuery,
+        }: State = this.state;
         if (view === VIEW_FOLDER && id) {
             this.fetchFolder(id, false);
         } else if (view === VIEW_RECENTS) {
@@ -372,7 +379,10 @@ class ContentPicker extends Component<Props, State> {
         }
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
-        if (percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
+        if (
+            percentLoaded === 100 &&
+            !isFocusableElement(document.activeElement)
+        ) {
             focus(this.rootElement, '.bcp-item-row');
             this.setState({ focusedRow: 0 });
         }
@@ -388,14 +398,17 @@ class ContentPicker extends Component<Props, State> {
      * @param {Boolean|void} triggerNavigationEvent - To focus the grid
      * @return {void}
      */
-    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
+    fetchFolderSuccessCallback(
+        collection: Collection,
+        triggerNavigationEvent: boolean,
+    ): void {
         const { rootFolderId }: Props = this.props;
         const { id, name }: Collection = collection;
 
         // New folder state
         const newState = {
             currentCollection: collection,
-            rootName: id === rootFolderId ? name : ''
+            rootName: id === rootFolderId ? name : '',
         };
 
         // Close any open modals
@@ -418,7 +431,11 @@ class ContentPicker extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true, fetchOptions?: FetchOptions): void => {
+    fetchFolder = (
+        id?: string,
+        triggerNavigationEvent?: boolean = true,
+        fetchOptions?: FetchOptions,
+    ): void => {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
@@ -435,7 +452,7 @@ class ContentPicker extends Component<Props, State> {
         this.setState({
             searchQuery: '',
             view: VIEW_FOLDER,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         // Fetch the folder using folder API
@@ -444,10 +461,13 @@ class ContentPicker extends Component<Props, State> {
             sortBy,
             sortDirection,
             (collection: Collection) => {
-                this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
+                this.fetchFolderSuccessCallback(
+                    collection,
+                    triggerNavigationEvent,
+                );
             },
             this.errorCallback,
-            fetchOptions
+            fetchOptions,
         );
     };
 
@@ -459,7 +479,10 @@ class ContentPicker extends Component<Props, State> {
      * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @return {void}
      */
-    recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
+    recentsSuccessCallback(
+        collection: Collection,
+        triggerNavigationEvent: boolean,
+    ): void {
         const newState = { currentCollection: collection };
         if (triggerNavigationEvent) {
             this.setState(newState, this.finishNavigation);
@@ -477,7 +500,10 @@ class ContentPicker extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
+    showRecents(
+        triggerNavigationEvent: boolean = true,
+        forceFetch: boolean = true,
+    ): void {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
@@ -488,7 +514,7 @@ class ContentPicker extends Component<Props, State> {
         this.setState({
             searchQuery: '',
             view: VIEW_RECENTS,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         // Fetch the folder using folder API
@@ -501,8 +527,8 @@ class ContentPicker extends Component<Props, State> {
             },
             this.errorCallback,
             {
-                forceFetch
-            }
+                forceFetch,
+            },
         );
     }
 
@@ -522,10 +548,12 @@ class ContentPicker extends Component<Props, State> {
                     sortBy,
                     sortDirection,
                     percentLoaded: 100,
-                    items: Object.keys(selected).map((key) => this.api.getCache().get(key))
-                }
+                    items: Object.keys(selected).map(key =>
+                        this.api.getCache().get(key),
+                    ),
+                },
             },
-            this.finishNavigation
+            this.finishNavigation,
         );
     };
 
@@ -539,7 +567,7 @@ class ContentPicker extends Component<Props, State> {
     searchSuccessCallback = (collection: Collection): void => {
         const { currentCollection }: State = this.state;
         this.setState({
-            currentCollection: Object.assign(currentCollection, collection)
+            currentCollection: Object.assign(currentCollection, collection),
         });
     };
 
@@ -552,14 +580,25 @@ class ContentPicker extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    debouncedSearch: Function = debounce((id: string, query: string, forceFetch?: boolean): void => {
-        const { sortBy, sortDirection }: State = this.state;
-        this.api
-            .getSearchAPI()
-            .search(id, query, sortBy, sortDirection, this.searchSuccessCallback, this.errorCallback, {
-                forceFetch
-            });
-    }, DEFAULT_SEARCH_DEBOUNCE);
+    debouncedSearch: Function = debounce(
+        (id: string, query: string, forceFetch?: boolean): void => {
+            const { sortBy, sortDirection }: State = this.state;
+            this.api
+                .getSearchAPI()
+                .search(
+                    id,
+                    query,
+                    sortBy,
+                    sortDirection,
+                    this.searchSuccessCallback,
+                    this.errorCallback,
+                    {
+                        forceFetch,
+                    },
+                );
+        },
+        DEFAULT_SEARCH_DEBOUNCE,
+    );
 
     /**
      * Searches
@@ -586,7 +625,7 @@ class ContentPicker extends Component<Props, State> {
             // Query now only has bunch of spaces
             // do nothing and but update prior state
             this.setState({
-                searchQuery: query
+                searchQuery: query,
             });
             return;
         }
@@ -594,7 +633,7 @@ class ContentPicker extends Component<Props, State> {
         this.setState({
             searchQuery: query,
             view: VIEW_SEARCH,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         this.debouncedSearch(folderId, query, forceFetch);
@@ -614,7 +653,9 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        const { can_upload: canUploadPermission }: BoxItemPermission = permissions;
+        const {
+            can_upload: canUploadPermission,
+        }: BoxItemPermission = permissions;
         if (!canUpload || !canUploadPermission) {
             return;
         }
@@ -632,7 +673,7 @@ class ContentPicker extends Component<Props, State> {
     uploadSuccessHandler = (): void => {
         const { currentCollection: { id } }: State = this.state;
         this.fetchFolder(id, false, {
-            forceFetch: true
+            forceFetch: true,
         });
     };
 
@@ -654,7 +695,10 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     createFolderCallback = (name?: string): void => {
-        const { isCreateFolderModalOpen, currentCollection }: State = this.state;
+        const {
+            isCreateFolderModalOpen,
+            currentCollection,
+        }: State = this.state;
         const { canCreateNewFolder }: Props = this.props;
         if (!canCreateNewFolder) {
             return;
@@ -676,12 +720,18 @@ class ContentPicker extends Component<Props, State> {
         }
 
         if (!name) {
-            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_INVALID, isLoading: false });
+            this.setState({
+                errorCode: ERROR_CODE_ITEM_NAME_INVALID,
+                isLoading: false,
+            });
             return;
         }
 
         if (name.length > 255) {
-            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_TOO_LONG, isLoading: false });
+            this.setState({
+                errorCode: ERROR_CODE_ITEM_NAME_TOO_LONG,
+                isLoading: false,
+            });
             return;
         }
 
@@ -694,10 +744,13 @@ class ContentPicker extends Component<Props, State> {
             },
             ({ response: { status } }) => {
                 this.setState({
-                    errorCode: status === 409 ? ERROR_CODE_ITEM_NAME_IN_USE : ERROR_CODE_ITEM_NAME_INVALID,
-                    isLoading: false
+                    errorCode:
+                        status === 409
+                            ? ERROR_CODE_ITEM_NAME_IN_USE
+                            : ERROR_CODE_ITEM_NAME_INVALID,
+                    isLoading: false,
                 });
-            }
+            },
         );
     };
 
@@ -710,7 +763,11 @@ class ContentPicker extends Component<Props, State> {
      */
     select = (item: BoxItem): void => {
         const { type: selectableType, maxSelectable }: Props = this.props;
-        const { view, selected, currentCollection: { items = [] } }: State = this.state;
+        const {
+            view,
+            selected,
+            currentCollection: { items = [] },
+        }: State = this.state;
         const { id, type }: BoxItem = item;
 
         if (!id || !type || selectableType.indexOf(type) === -1) {
@@ -835,10 +892,13 @@ class ContentPicker extends Component<Props, State> {
         this.setState({
             isLoading: false,
             isCreateFolderModalOpen: false,
-            isUploadModalOpen: false
+            isUploadModalOpen: false,
         });
 
-        const { selected, currentCollection: { items = [] } }: State = this.state;
+        const {
+            selected,
+            currentCollection: { items = [] },
+        }: State = this.state;
         if (selected && items.length > 0) {
             focus(this.rootElement, `.bcp-item-row-${focusedRow}`);
         }
@@ -861,7 +921,11 @@ class ContentPicker extends Component<Props, State> {
 
         switch (key) {
             case '/':
-                focus(this.rootElement, '.be-search input[type="search"]', false);
+                focus(
+                    this.rootElement,
+                    '.be-search input[type="search"]',
+                    false,
+                );
                 event.preventDefault();
                 break;
             case 'arrowdown':
@@ -976,7 +1040,7 @@ class ContentPicker extends Component<Props, State> {
             chooseButtonLabel,
             cancelButtonLabel,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         }: Props = this.props;
         const {
             view,
@@ -988,12 +1052,13 @@ class ContentPicker extends Component<Props, State> {
             isUploadModalOpen,
             isLoading,
             errorCode,
-            focusedRow
+            focusedRow,
         }: State = this.state;
         const { id, permissions }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const selectedCount: number = Object.keys(selected).length;
-        const hasHitSelectionLimit: boolean = selectedCount === maxSelectable && maxSelectable !== 1;
+        const hasHitSelectionLimit: boolean =
+            selectedCount === maxSelectable && maxSelectable !== 1;
         const allowUpload: boolean = canUpload && !!can_upload;
         const allowCreate: boolean = canCreateNewFolder && !!can_upload;
         const styleClassName = classNames('be bcp', className);
@@ -1003,7 +1068,11 @@ class ContentPicker extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef}>
-                    <div className='be-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                    <div
+                        className="be-app-element"
+                        onKeyDown={this.onKeyDown}
+                        tabIndex={0}
+                    >
                         <Header
                             view={view}
                             isSmall={isSmall}

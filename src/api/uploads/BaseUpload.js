@@ -41,14 +41,14 @@ class BaseUpload extends Base {
         const attributes = {
             name: this.fileName || name,
             parent: { id: this.folderId },
-            size
+            size,
         };
 
         this.xhr.options({
             url,
             data: attributes,
             successHandler: this.preflightSuccessHandler,
-            errorHandler: this.preflightErrorHandler
+            errorHandler: this.preflightErrorHandler,
         });
     };
 
@@ -87,20 +87,28 @@ class BaseUpload extends Base {
             } else {
                 // Otherwise, reupload and append timestamp
                 // 'test.jpg' becomes 'test-TIMESTAMP.jpg'
-                const extension = this.fileName.substr(this.fileName.lastIndexOf('.')) || '';
-                this.fileName = `${this.fileName.substr(0, this.fileName.lastIndexOf('.'))}-${Date.now()}${extension}`;
+                const extension =
+                    this.fileName.substr(this.fileName.lastIndexOf('.')) || '';
+                this.fileName = `${this.fileName.substr(
+                    0,
+                    this.fileName.lastIndexOf('.'),
+                )}-${Date.now()}${extension}`;
                 this.makePreflightRequest();
             }
 
             this.retryCount += 1;
             // When rate limited, retry after interval defined in header
-        } else if (errorData && (errorData.status === 429 || errorData.code === 'too_many_requests')) {
+        } else if (
+            errorData &&
+            (errorData.status === 429 || errorData.code === 'too_many_requests')
+        ) {
             let retryAfterMs = DEFAULT_RETRY_DELAY_MS;
 
             if (errorData.headers) {
                 const retryAfterSec = parseInt(
-                    errorData.headers['retry-after'] || errorData.headers.get('Retry-After'),
-                    10
+                    errorData.headers['retry-after'] ||
+                        errorData.headers.get('Retry-After'),
+                    10,
                 );
 
                 if (!Number.isNaN(retryAfterSec)) {
@@ -108,7 +116,10 @@ class BaseUpload extends Base {
                 }
             }
 
-            this.retryTimeout = setTimeout(this.makePreflightRequest, retryAfterMs);
+            this.retryTimeout = setTimeout(
+                this.makePreflightRequest,
+                retryAfterMs,
+            );
             this.retryCount += 1;
 
             // If another error status that isn't name conflict or rate limiting, fail upload
@@ -120,7 +131,10 @@ class BaseUpload extends Base {
             this.errorCallback(errorData);
             // Retry with exponential backoff for other failures since these are likely to be network errors
         } else {
-            this.retryTimeout = setTimeout(this.makePreflightRequest, 2 ** this.retryCount * MS_IN_S);
+            this.retryTimeout = setTimeout(
+                this.makePreflightRequest,
+                2 ** this.retryCount * MS_IN_S,
+            );
             this.retryCount += 1;
         }
     };
@@ -138,7 +152,7 @@ class BaseUpload extends Base {
             reader.onload = () => {
                 resolve({
                     buffer: reader.result,
-                    readCompleteTimestamp: Date.now()
+                    readCompleteTimestamp: Date.now(),
                 });
             };
 

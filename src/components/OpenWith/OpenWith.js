@@ -29,12 +29,12 @@ type Props = {
     /** Axios request interceptor that runs before a network request. */
     requestInterceptor?: Function,
     /** Axios response interceptor that runs before a network response is returned. */
-    responseInterceptor?: Function
+    responseInterceptor?: Function,
 };
 
 type State = {
     isDropdownOpen: boolean,
-    integrations: ?Array<Integration>
+    integrations: ?Array<Integration>,
 };
 
 class OpenWith extends PureComponent<Props, State> {
@@ -46,12 +46,12 @@ class OpenWith extends PureComponent<Props, State> {
     static defaultProps = {
         className: '',
         clientName: CLIENT_NAME_OPEN_WITH,
-        apiHost: DEFAULT_HOSTNAME_API
+        apiHost: DEFAULT_HOSTNAME_API,
     };
 
     initialState: State = {
         isDropdownOpen: false,
-        integrations: null
+        integrations: null,
     };
 
     /**
@@ -63,14 +63,20 @@ class OpenWith extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        const { token, apiHost, clientName, requestInterceptor, responseInterceptor } = props;
+        const {
+            token,
+            apiHost,
+            clientName,
+            requestInterceptor,
+            responseInterceptor,
+        } = props;
         this.id = uniqueid('bcow_');
         this.api = new API({
             token,
             apiHost,
             clientName,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         });
 
         // Clone initial state to allow for state reset on new files
@@ -109,7 +115,11 @@ class OpenWith extends PureComponent<Props, State> {
         const { fileId }: Props = this.props;
         this.api
             .getOpenWithAPI(false)
-            .getOpenWithIntegrations(fileId, this.fetchOpenWithSuccessHandler, this.fetchErrorCallback);
+            .getOpenWithIntegrations(
+                fileId,
+                this.fetchOpenWithSuccessHandler,
+                this.fetchErrorCallback,
+            );
     }
 
     /**
@@ -118,7 +128,9 @@ class OpenWith extends PureComponent<Props, State> {
      * @param {OpenWithIntegrations} openWithIntegrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = (openWithIntegrations: Array<Integration>) => {
+    fetchOpenWithSuccessHandler = (
+        openWithIntegrations: Array<Integration>,
+    ) => {
         this.setState({ integrations: openWithIntegrations });
     };
 

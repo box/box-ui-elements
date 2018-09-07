@@ -10,7 +10,7 @@ jest.mock('../ActivitySidebar', () => 'ActivitySidebar');
 
 describe('components/ContentSidebar/Skills/Sidebar', () => {
     const file = { id: 'id' };
-    const getWrapper = (props) => shallow(<Sidebar file={file} {...props} />);
+    const getWrapper = props => shallow(<Sidebar file={file} {...props} />);
 
     test('should render no sidebar', () => {
         const wrapper = getWrapper();

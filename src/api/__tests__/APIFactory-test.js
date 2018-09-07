@@ -82,7 +82,10 @@ describe('api/APIFactory', () => {
             expect(factory.getAPI('web_link')).toBeInstanceOf(WebLinkAPI);
         });
         test('should throw error when type is incorrect', () => {
-            expect(factory.getAPI.bind(factory, 'foo')).toThrow(Error, /Unknown Type/);
+            expect(factory.getAPI.bind(factory, 'foo')).toThrow(
+                Error,
+                /Unknown Type/,
+            );
         });
     });
 
@@ -118,7 +121,9 @@ describe('api/APIFactory', () => {
             expect(plainUploadAPI).toBeInstanceOf(PlainUploadAPI);
             expect(plainUploadAPI.options.cache).toBeInstanceOf(Cache);
             expect(plainUploadAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(plainUploadAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(plainUploadAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
     });
 
@@ -130,7 +135,9 @@ describe('api/APIFactory', () => {
             expect(chunkedUploadAPI).toBeInstanceOf(ChunkedUploadAPI);
             expect(chunkedUploadAPI.options.cache).toBeInstanceOf(Cache);
             expect(chunkedUploadAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(chunkedUploadAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(chunkedUploadAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
     });
 
@@ -178,7 +185,9 @@ describe('api/APIFactory', () => {
             expect(versionsAPI).toBeInstanceOf(VersionsAPI);
             expect(versionsAPI.options.cache).toBeInstanceOf(Cache);
             expect(versionsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(versionsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(versionsAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
 
         test('should not call destroy and return versions API', () => {
@@ -188,7 +197,9 @@ describe('api/APIFactory', () => {
             expect(versionsAPI).toBeInstanceOf(VersionsAPI);
             expect(versionsAPI.options.cache).toBeInstanceOf(Cache);
             expect(versionsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(versionsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(versionsAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
     });
 
@@ -200,7 +211,9 @@ describe('api/APIFactory', () => {
             expect(commentsAPI).toBeInstanceOf(CommentsAPI);
             expect(commentsAPI.options.cache).toBeInstanceOf(Cache);
             expect(commentsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(commentsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(commentsAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
 
         test('should not call destroy and return comments API', () => {
@@ -210,7 +223,9 @@ describe('api/APIFactory', () => {
             expect(commentsAPI).toBeInstanceOf(CommentsAPI);
             expect(commentsAPI.options.cache).toBeInstanceOf(Cache);
             expect(commentsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(commentsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(commentsAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
     });
 
@@ -243,8 +258,12 @@ describe('api/APIFactory', () => {
             expect(spy).toBeCalled();
             expect(fileAccessStatsAPI).toBeInstanceOf(FileAccessStatsAPI);
             expect(fileAccessStatsAPI.options.cache).toBeInstanceOf(Cache);
-            expect(fileAccessStatsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(fileAccessStatsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(fileAccessStatsAPI.options.apiHost).toBe(
+                DEFAULT_HOSTNAME_API,
+            );
+            expect(fileAccessStatsAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
 
         test('should not call destroy and return versions API', () => {
@@ -253,8 +272,12 @@ describe('api/APIFactory', () => {
             expect(spy).not.toHaveBeenCalled();
             expect(fileAccessStatsAPI).toBeInstanceOf(FileAccessStatsAPI);
             expect(fileAccessStatsAPI.options.cache).toBeInstanceOf(Cache);
-            expect(fileAccessStatsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(fileAccessStatsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(fileAccessStatsAPI.options.apiHost).toBe(
+                DEFAULT_HOSTNAME_API,
+            );
+            expect(fileAccessStatsAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
     });
 
@@ -266,7 +289,9 @@ describe('api/APIFactory', () => {
             expect(metadataAPI).toBeInstanceOf(MetadataAPI);
             expect(metadataAPI.options.cache).toBeInstanceOf(Cache);
             expect(metadataAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(metadataAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(metadataAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
 
         test('should not call destroy and return metadata API', () => {
@@ -276,7 +301,9 @@ describe('api/APIFactory', () => {
             expect(metadataAPI).toBeInstanceOf(MetadataAPI);
             expect(metadataAPI.options.cache).toBeInstanceOf(Cache);
             expect(metadataAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(metadataAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(metadataAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
     });
 
@@ -287,8 +314,12 @@ describe('api/APIFactory', () => {
             expect(spy).toBeCalled();
             expect(fileCollaboratorsAPI).toBeInstanceOf(FileCollaboratorsAPI);
             expect(fileCollaboratorsAPI.options.cache).toBeInstanceOf(Cache);
-            expect(fileCollaboratorsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(fileCollaboratorsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(fileCollaboratorsAPI.options.apiHost).toBe(
+                DEFAULT_HOSTNAME_API,
+            );
+            expect(fileCollaboratorsAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
 
         test('should not call destroy and return file collaborators API', () => {
@@ -297,8 +328,12 @@ describe('api/APIFactory', () => {
             expect(spy).not.toHaveBeenCalled();
             expect(fileCollaboratorsAPI).toBeInstanceOf(FileCollaboratorsAPI);
             expect(fileCollaboratorsAPI.options.cache).toBeInstanceOf(Cache);
-            expect(fileCollaboratorsAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
-            expect(fileCollaboratorsAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+            expect(fileCollaboratorsAPI.options.apiHost).toBe(
+                DEFAULT_HOSTNAME_API,
+            );
+            expect(fileCollaboratorsAPI.options.uploadHost).toBe(
+                DEFAULT_HOSTNAME_UPLOAD,
+            );
         });
     });
 

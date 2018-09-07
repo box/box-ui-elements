@@ -12,7 +12,7 @@ import { isBoxNote } from '../../util/file';
 
 type Props = {
     onVersionHistoryClick?: Function,
-    file: BoxItem
+    file: BoxItem,
 };
 
 const SidebarVersions = ({ onVersionHistoryClick, file }: Props) => {

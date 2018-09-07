@@ -13,33 +13,45 @@ import { TYPE_FOLDER, VIEW_FOLDER } from '../../constants';
 
 import './Cell.scss';
 
-export default (onExpanderClick: Function, onItemClick: Function, isSmall: boolean = false, isLoading: boolean) => ({
-    rowData
-}: {
-    rowData: BoxItem
-}) => {
+export default (
+    onExpanderClick: Function,
+    onItemClick: Function,
+    isSmall: boolean = false,
+    isLoading: boolean,
+) => ({ rowData }: { rowData: BoxItem }) => {
     const { path_collection, selected }: BoxItem = rowData;
     if (!path_collection) {
         throw new Error('Bad Item!');
     }
 
-    const paddingLeft = `${(path_collection.total_count - 1) * (isSmall ? 22 : 34)}px`;
+    const paddingLeft = `${(path_collection.total_count - 1) *
+        (isSmall ? 22 : 34)}px`;
     const onClick: Function = (): void => onExpanderClick(rowData);
 
     return (
-        <div className='bft-cell-node' style={{ paddingLeft }}>
+        <div className="bft-cell-node" style={{ paddingLeft }}>
             {rowData.type === TYPE_FOLDER ? (
-                <Button type='button' onClick={onClick} className='bft-cell-node-btn' isDisabled={isLoading}>
+                <Button
+                    type="button"
+                    onClick={onClick}
+                    className="bft-cell-node-btn"
+                    isDisabled={isLoading}
+                >
                     {selected ? '-' : '+'}
                 </Button>
             ) : (
-                <div className='bft-cell-node-btn' />
+                <div className="bft-cell-node-btn" />
             )}
             {iconCellRenderer(isSmall ? 24 : 32)({ rowData })}
-            <div className='be-item-name'>
-                <ItemName isTouch={false} item={rowData} canPreview onClick={onItemClick} />
+            <div className="be-item-name">
+                <ItemName
+                    isTouch={false}
+                    item={rowData}
+                    canPreview
+                    onClick={onItemClick}
+                />
                 {isSmall ? null : (
-                    <div className='be-item-details'>
+                    <div className="be-item-details">
                         <ItemSubDetails view={VIEW_FOLDER} item={rowData} />
                     </div>
                 )}

@@ -8,7 +8,12 @@ import noop from 'lodash/noop';
 import setProp from 'lodash/set';
 import Base from './Base';
 import { getBadItemError } from '../util/error';
-import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
+import {
+    ACCESS_NONE,
+    CACHE_PREFIX_SEARCH,
+    CACHE_PREFIX_FOLDER,
+    TYPE_FOLDER,
+} from '../constants';
 
 class Item extends Base {
     /**
@@ -121,14 +126,19 @@ class Item extends Base {
             return;
         }
 
-        const { entries, total_count }: FlattenedBoxItemCollection = item_collection;
+        const {
+            entries,
+            total_count,
+        }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
 
         const childKey: string = this.getCacheKey(this.id);
         const oldCount: number = entries.length;
-        const newEntries: string[] = entries.filter((entry: string) => entry !== childKey);
+        const newEntries: string[] = entries.filter(
+            (entry: string) => entry !== childKey,
+        );
         const newCount: number = newEntries.length;
 
         const updatedObject: BoxItem = this.merge(
@@ -136,8 +146,8 @@ class Item extends Base {
             'item_collection',
             Object.assign(item_collection, {
                 entries: newEntries,
-                total_count: total_count - (oldCount - newCount)
-            })
+                total_count: total_count - (oldCount - newCount),
+            }),
         );
 
         this.successCallback(updatedObject);
@@ -152,7 +162,11 @@ class Item extends Base {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    deleteItem(item: BoxItem, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    deleteItem(
+        item: BoxItem,
+        successCallback: Function,
+        errorCallback: Function = noop,
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
@@ -175,7 +189,9 @@ class Item extends Base {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        const url = `${this.getUrl(id)}${type === TYPE_FOLDER ? '?recursive=true' : ''}`;
+        const url = `${this.getUrl(id)}${
+            type === TYPE_FOLDER ? '?recursive=true' : ''
+        }`;
         return this.xhr
             .delete({ url })
             .then(this.deleteSuccessHandler)
@@ -192,7 +208,11 @@ class Item extends Base {
         if (!this.isDestroyed()) {
             // Get rid of all searches
             this.getCache().unsetAll(CACHE_PREFIX_SEARCH);
-            const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'name', data.name);
+            const updatedObject: BoxItem = this.merge(
+                this.getCacheKey(this.id),
+                'name',
+                data.name,
+            );
             this.successCallback(updatedObject);
         }
     };
@@ -206,7 +226,12 @@ class Item extends Base {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    rename(item: BoxItem, name: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    rename(
+        item: BoxItem,
+        name: string,
+        successCallback: Function,
+        errorCallback: Function = noop,
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
@@ -241,7 +266,11 @@ class Item extends Base {
      */
     shareSuccessHandler = ({ data }: { data: BoxItem }): void => {
         if (!this.isDestroyed()) {
-            const updatedObject: BoxItem = this.merge(this.getCacheKey(this.id), 'shared_link', data.shared_link);
+            const updatedObject: BoxItem = this.merge(
+                this.getCacheKey(this.id),
+                'shared_link',
+                data.shared_link,
+            );
             this.successCallback(updatedObject);
         }
     };
@@ -255,7 +284,12 @@ class Item extends Base {
      * @param {Function|void} errorCallback - Error callback
      * @return {void}
      */
-    share(item: BoxItem, access: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    share(
+        item: BoxItem,
+        access: string,
+        successCallback: Function,
+        errorCallback: Function = noop,
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
@@ -266,7 +300,10 @@ class Item extends Base {
             return Promise.reject();
         }
 
-        const { can_share, can_set_share_access }: BoxItemPermission = permissions;
+        const {
+            can_share,
+            can_set_share_access,
+        }: BoxItemPermission = permissions;
         if (!can_share || !can_set_share_access) {
             errorCallback();
             return Promise.reject();
@@ -282,8 +319,8 @@ class Item extends Base {
             .put({
                 url: this.getUrl(this.id),
                 data: {
-                    shared_link: access === ACCESS_NONE ? null : { access }
-                }
+                    shared_link: access === ACCESS_NONE ? null : { access },
+                },
             })
             .then(this.shareSuccessHandler)
             .catch(this.errorHandler);

@@ -15,7 +15,7 @@ import {
     HTTP_GET,
     HTTP_POST,
     HTTP_PUT,
-    HTTP_DELETE
+    HTTP_DELETE,
 } from '../constants';
 
 class Base {
@@ -88,12 +88,18 @@ class Base {
         this.options = Object.assign({}, options, {
             apiHost: this.apiHost,
             uploadHost: this.uploadHost,
-            cache: this.cache
+            cache: this.cache,
         });
         this.xhr = new Xhr(this.options);
         this.destroyed = false;
-        this.consoleLog = !!options.consoleLog && !!window.console ? window.console.log || noop : noop;
-        this.consoleError = !!options.consoleError && !!window.console ? window.console.error || noop : noop;
+        this.consoleLog =
+            !!options.consoleLog && !!window.console
+                ? window.console.log || noop
+                : noop;
+        this.consoleError =
+            !!options.consoleError && !!window.console
+                ? window.console.error || noop
+                : noop;
     }
 
     /**
@@ -123,7 +129,11 @@ class Base {
      * @param {string} id - Item id
      * @return {void}
      */
-    checkApiCallValidity(permissionToCheck: string, permissions?: Object, id?: string): void {
+    checkApiCallValidity(
+        permissionToCheck: string,
+        permissions?: Object,
+        id?: string,
+    ): void {
         if (!id || !permissions) {
             throw getBadItemError();
         }
@@ -150,7 +160,9 @@ class Base {
      * @return {string} base url
      */
     getBaseUploadUrl(): string {
-        const suffix: string = this.uploadHost.endsWith('/') ? 'api/2.0' : '/api/2.0';
+        const suffix: string = this.uploadHost.endsWith('/')
+            ? 'api/2.0'
+            : '/api/2.0';
         return `${this.uploadHost}${suffix}`;
     }
 
@@ -227,16 +239,23 @@ class Base {
         successCallback,
         errorCallback,
         params,
-        url
+        url,
     }: {
         id: string,
         successCallback: Function,
         errorCallback: Function,
         params?: Object,
-        url?: string
+        url?: string,
     }): Promise<any> {
         const apiUrl = url || this.getUrl(id);
-        return this.makeRequest(HTTP_GET, id, apiUrl, successCallback, errorCallback, params);
+        return this.makeRequest(
+            HTTP_GET,
+            id,
+            apiUrl,
+            successCallback,
+            errorCallback,
+            params,
+        );
     }
 
     /**
@@ -253,15 +272,22 @@ class Base {
         url,
         data,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         id: string,
         url: string,
         data: Object,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): Promise<any> {
-        return this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
+        return this.makeRequest(
+            HTTP_POST,
+            id,
+            url,
+            successCallback,
+            errorCallback,
+            data,
+        );
     }
 
     /**
@@ -278,15 +304,22 @@ class Base {
         url,
         data,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         id: string,
         url: string,
         data: Object,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): Promise<any> {
-        return this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
+        return this.makeRequest(
+            HTTP_PUT,
+            id,
+            url,
+            successCallback,
+            errorCallback,
+            data,
+        );
     }
 
     /**
@@ -303,15 +336,22 @@ class Base {
         url,
         data,
         successCallback,
-        errorCallback
+        errorCallback,
     }: {
         id: string,
         url: string,
         data?: Object,
         successCallback: Function,
-        errorCallback: Function
+        errorCallback: Function,
     }): Promise<any> {
-        return this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
+        return this.makeRequest(
+            HTTP_DELETE,
+            id,
+            url,
+            successCallback,
+            errorCallback,
+            data,
+        );
     }
 
     /**
@@ -330,7 +370,7 @@ class Base {
         url: string,
         successCallback: Function,
         errorCallback: Function,
-        requestData: Object = {}
+        requestData: Object = {},
     ): Promise<void> {
         if (this.isDestroyed()) {
             return;
@@ -343,7 +383,11 @@ class Base {
         const xhrMethod: Function = this.xhr[method].bind(this.xhr);
 
         try {
-            const { data } = await xhrMethod({ id: getTypedFileId(id), url, ...requestData });
+            const { data } = await xhrMethod({
+                id: getTypedFileId(id),
+                url,
+                ...requestData,
+            });
             this.successHandler(data);
         } catch (error) {
             this.errorHandler(error);

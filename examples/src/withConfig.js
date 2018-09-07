@@ -14,7 +14,7 @@ function withConfig(WrappedComponent) {
                     rootFolderId={FOLDER_ID}
                     fileId={FILE_ID}
                     token={TOKEN}
-                    language='en-US'
+                    language="en-US"
                     messages={messages}
                 />
             );

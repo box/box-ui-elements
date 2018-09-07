@@ -4,7 +4,11 @@ const LIMIT = 1000;
 
 describe('api/MarkerBasedAPI', () => {
     let markerBasedAPI;
-    const markerBasedAPIResponse = { next_marker: '', limit: LIMIT, entries: [] };
+    const markerBasedAPIResponse = {
+        next_marker: '',
+        limit: LIMIT,
+        entries: [],
+    };
     const url = 'https://foo.bar';
 
     beforeEach(() => {
@@ -35,37 +39,49 @@ describe('api/MarkerBasedAPI', () => {
                     .fn()
                     .mockReturnValueOnce(
                         Promise.resolve({
-                            data: { next_marker: 'next_marker', limit: LIMIT, entries: [] }
-                        })
+                            data: {
+                                next_marker: 'next_marker',
+                                limit: LIMIT,
+                                entries: [],
+                            },
+                        }),
                     )
                     .mockReturnValueOnce(
                         Promise.resolve({
-                            data: markerBasedAPIResponse
-                        })
-                    )
+                            data: markerBasedAPIResponse,
+                        }),
+                    ),
             };
 
-            return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
-                expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
-                expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(1);
-                expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
-            });
+            return markerBasedAPI
+                .markerGetRequest('id', 'next_marker', LIMIT, true)
+                .then(() => {
+                    expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
+                    expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(
+                        1,
+                    );
+                    expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
+                });
         });
 
         test('should do one xhr call and call successHandler once', () => {
             markerBasedAPI.xhr = {
                 get: jest.fn().mockReturnValue(
                     Promise.resolve({
-                        data: markerBasedAPIResponse
-                    })
-                )
+                        data: markerBasedAPIResponse,
+                    }),
+                ),
             };
 
-            return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
-                expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
-                expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(1);
-                expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
-            });
+            return markerBasedAPI
+                .markerGetRequest('id', 'next_marker', LIMIT, true)
+                .then(() => {
+                    expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
+                    expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(
+                        1,
+                    );
+                    expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
+                });
         });
     });
 
@@ -85,7 +101,7 @@ describe('api/MarkerBasedAPI', () => {
                 .markerGet({
                     id: 'id',
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 })
                 .catch(() => {
                     expect(successCallback).not.toHaveBeenCalled();
@@ -95,7 +111,11 @@ describe('api/MarkerBasedAPI', () => {
 
         test('should make xhr to get markerBasedAPI and call success callback', () => {
             markerBasedAPI.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse }))
+                get: jest
+                    .fn()
+                    .mockReturnValueOnce(
+                        Promise.resolve({ data: markerBasedAPIResponse }),
+                    ),
             };
             markerBasedAPI.marker = '';
 
@@ -106,10 +126,12 @@ describe('api/MarkerBasedAPI', () => {
                     errorCallback,
                     marker: 'next_marker',
                     limit: LIMIT,
-                    shouldFetchAll: true
+                    shouldFetchAll: true,
                 })
                 .then(() => {
-                    expect(successCallback).toHaveBeenCalledWith(markerBasedAPIResponse);
+                    expect(successCallback).toHaveBeenCalledWith(
+                        markerBasedAPIResponse,
+                    );
                     expect(successCallback).toHaveBeenCalledTimes(1);
                     expect(errorCallback).not.toHaveBeenCalled();
                     expect(markerBasedAPI.xhr.get).toHaveBeenCalledWith({
@@ -117,8 +139,8 @@ describe('api/MarkerBasedAPI', () => {
                         url,
                         params: {
                             marker: 'next_marker',
-                            limit: LIMIT
-                        }
+                            limit: LIMIT,
+                        },
                     });
                 });
         });
@@ -126,7 +148,7 @@ describe('api/MarkerBasedAPI', () => {
         test('should call error callback when xhr fails', () => {
             const error = new Error('error');
             markerBasedAPI.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
 
             return markerBasedAPI
@@ -136,7 +158,7 @@ describe('api/MarkerBasedAPI', () => {
                     errorCallback,
                     marker: '',
                     limit: LIMIT,
-                    shouldFetchAll: true
+                    shouldFetchAll: true,
                 })
                 .then(() => {
                     expect(successCallback).not.toHaveBeenCalled();
@@ -146,8 +168,8 @@ describe('api/MarkerBasedAPI', () => {
                         url,
                         params: {
                             marker: '',
-                            limit: LIMIT
-                        }
+                            limit: LIMIT,
+                        },
                     });
                 });
         });

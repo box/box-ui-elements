@@ -21,7 +21,7 @@ type Props = {
     canUpload: boolean,
     canCreateNewFolder: boolean,
     view: View,
-    isSmall: boolean
+    isSmall: boolean,
 };
 
 const SubHeader = ({
@@ -35,9 +35,9 @@ const SubHeader = ({
     canUpload,
     canCreateNewFolder,
     view,
-    isSmall
+    isSmall,
 }: Props) => (
-    <div className='be-sub-header'>
+    <div className="be-sub-header">
         <SubHeaderLeft
             rootId={rootId}
             rootName={rootName}

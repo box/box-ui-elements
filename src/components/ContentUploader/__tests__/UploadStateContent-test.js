@@ -3,8 +3,14 @@ import { shallow } from 'enzyme';
 import UploadStateContent from '../UploadStateContent';
 
 describe('components/ContentUploader/UploadStateContent', () => {
-    const getWrapper = (props) =>
-        shallow(<UploadStateContent fileInputLabel='file' folderInputLabel='folder' {...props} />);
+    const getWrapper = props =>
+        shallow(
+            <UploadStateContent
+                fileInputLabel="file"
+                folderInputLabel="folder"
+                {...props}
+            />,
+        );
 
     test('should render correctly when both folder and file inputs are available', () => {
         const wrapper = getWrapper();
@@ -14,7 +20,7 @@ describe('components/ContentUploader/UploadStateContent', () => {
 
     test('should render correctly when only file input is available', () => {
         const wrapper = getWrapper({
-            folderInputLabel: undefined
+            folderInputLabel: undefined,
         });
 
         expect(wrapper).toMatchSnapshot();

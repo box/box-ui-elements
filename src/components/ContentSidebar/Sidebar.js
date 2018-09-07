@@ -14,7 +14,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
-    SIDEBAR_VIEW_METADATA
+    SIDEBAR_VIEW_METADATA,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -37,7 +37,7 @@ type Props = {
     hasDetails: boolean,
     translations?: Translations,
     onToggle: Function,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
 };
 
 const Sidebar = ({
@@ -54,7 +54,7 @@ const Sidebar = ({
     detailsSidebarProps,
     metadataSidebarProps,
     onToggle,
-    onVersionHistoryClick
+    onVersionHistoryClick,
 }: Props) => (
     <React.Fragment>
         <SidebarNav
@@ -75,7 +75,14 @@ const Sidebar = ({
                 />
             )}
         {view === SIDEBAR_VIEW_SKILLS &&
-            hasSkills && <SkillsSidebar key={file.id} file={file} getPreview={getPreview} getViewer={getViewer} />}
+            hasSkills && (
+                <SkillsSidebar
+                    key={file.id}
+                    file={file}
+                    getPreview={getPreview}
+                    getViewer={getViewer}
+                />
+            )}
         {view === SIDEBAR_VIEW_ACTIVITY &&
             hasActivityFeed && (
                 <ActivitySidebar
@@ -87,7 +94,13 @@ const Sidebar = ({
                 />
             )}
         {view === SIDEBAR_VIEW_METADATA &&
-            hasMetadata && <MetadataSidebar key={file.id} file={file} {...metadataSidebarProps} />}
+            hasMetadata && (
+                <MetadataSidebar
+                    key={file.id}
+                    file={file}
+                    {...metadataSidebarProps}
+                />
+            )}
     </React.Fragment>
 );
 

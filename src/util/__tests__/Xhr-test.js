@@ -6,7 +6,7 @@ describe('util/Xhr', () => {
 
     beforeEach(() => {
         xhrInstance = new Xhr({
-            token: '123'
+            token: '123',
         });
     });
 
@@ -14,22 +14,24 @@ describe('util/Xhr', () => {
         test('should make get call with axios', () => {
             const url = 'parsedurl';
             xhrInstance.getParsedUrl = jest.fn().mockReturnValue(url);
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.resolve({}));
             xhrInstance.axios = {
-                get: jest.fn().mockReturnValue({})
+                get: jest.fn().mockReturnValue({}),
             };
 
             return xhrInstance
                 .get({
                     url: 'url',
-                    data: {}
+                    data: {},
                 })
                 .then(() => {
                     expect(xhrInstance.axios.get).toHaveBeenCalledWith('url', {
                         cancelToken: xhrInstance.axiosSource.token,
                         params: {},
                         headers: {},
-                        parsedUrl: url
+                        parsedUrl: url,
                     });
                 });
         });
@@ -39,13 +41,15 @@ describe('util/Xhr', () => {
         test('should make post call with axios', () => {
             const url = 'parsedurl';
             xhrInstance.getParsedUrl = jest.fn().mockReturnValue(url);
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.resolve({}));
             xhrInstance.axios = jest.fn().mockReturnValue({});
 
             return xhrInstance
                 .post({
                     url: 'url',
-                    data: {}
+                    data: {},
                 })
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
@@ -53,7 +57,7 @@ describe('util/Xhr', () => {
                         method: 'post',
                         parsedUrl: url,
                         data: {},
-                        headers: {}
+                        headers: {},
                     });
                 });
         });
@@ -65,7 +69,7 @@ describe('util/Xhr', () => {
             xhrInstance.put({
                 id: '123',
                 url: 'url',
-                data: {}
+                data: {},
             });
 
             expect(xhrInstance.post).toHaveBeenCalledWith({
@@ -73,7 +77,7 @@ describe('util/Xhr', () => {
                 url: 'url',
                 data: {},
                 method: 'put',
-                headers: {}
+                headers: {},
             });
         });
     });
@@ -84,7 +88,7 @@ describe('util/Xhr', () => {
             xhrInstance.delete({
                 id: '123',
                 url: 'url',
-                data: {}
+                data: {},
             });
 
             expect(xhrInstance.post).toHaveBeenCalledWith({
@@ -92,7 +96,7 @@ describe('util/Xhr', () => {
                 url: 'url',
                 data: {},
                 method: 'delete',
-                headers: {}
+                headers: {},
             });
         });
     });
@@ -101,18 +105,22 @@ describe('util/Xhr', () => {
         test('should make options call with axios and call successHandler on success', () => {
             const response = { data: {} };
             const successHandler = jest.fn();
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
-            xhrInstance.axios = jest.fn().mockReturnValue(Promise.resolve(response));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest
+                .fn()
+                .mockReturnValue(Promise.resolve(response));
 
             return xhrInstance
                 .options({
                     successHandler,
-                    errorHandler: noop
+                    errorHandler: noop,
                 })
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
                         method: 'options',
-                        headers: {}
+                        headers: {},
                     });
                     expect(successHandler).toHaveBeenCalledWith(response);
                 });
@@ -121,18 +129,22 @@ describe('util/Xhr', () => {
         test('should call errorHandler on axios error', () => {
             const error = { status: '' };
             const errorHandler = jest.fn();
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
-            xhrInstance.axios = jest.fn().mockReturnValue(Promise.reject(error));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest
+                .fn()
+                .mockReturnValue(Promise.reject(error));
 
             return xhrInstance
                 .options({
                     successHandler: noop,
-                    errorHandler
+                    errorHandler,
                 })
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
                         method: 'options',
-                        headers: {}
+                        headers: {},
                     });
                     expect(errorHandler).toHaveBeenCalledWith(error);
                 });
@@ -141,12 +153,14 @@ describe('util/Xhr', () => {
         test('should call errorHandler on getHeaders error', () => {
             const error = { status: '' };
             const errorHandler = jest.fn();
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.reject(error));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.reject(error));
 
             return xhrInstance
                 .options({
                     successHandler: noop,
-                    errorHandler
+                    errorHandler,
                 })
                 .then(() => {
                     expect(errorHandler).toHaveBeenCalledWith(error);
@@ -166,7 +180,9 @@ describe('util/Xhr', () => {
         test('should call abort & idleTimeoutHandler if there is no upload progress after idleTimeoutDuration', () => {
             xhrInstance.abort = jest.fn();
             xhrInstance.axios = jest.fn();
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.resolve({}));
             const idleTimoutHandler = jest.fn();
 
             return xhrInstance
@@ -176,7 +192,7 @@ describe('util/Xhr', () => {
                     progressHandler: noop,
                     withIdleTimeout: true,
                     idleTimeoutDuration: 100,
-                    idleTimeoutHandler: idleTimoutHandler
+                    idleTimeoutHandler: idleTimoutHandler,
                 })
                 .then(() => {
                     jest.advanceTimersByTime(101); // 101ms should trigger idle timeout func that calls abort
@@ -193,7 +209,9 @@ describe('util/Xhr', () => {
                 jest.advanceTimersByTime(50); // simulate progress event after 50ms
                 onUploadProgress();
             });
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.resolve({}));
 
             return xhrInstance
                 .uploadFile({
@@ -201,7 +219,7 @@ describe('util/Xhr', () => {
                     errorHandler: noop,
                     progressHandler: uploadHandler,
                     withIdleTimeout: true,
-                    idleTimeoutDuration: 100
+                    idleTimeoutDuration: 100,
                 })
                 .then(() => {
                     jest.advanceTimersByTime(51); // 50 + 51ms will original idle timeout func unless cancelled
@@ -216,8 +234,12 @@ describe('util/Xhr', () => {
             const response = { data: {} };
 
             xhrInstance.abort = jest.fn();
-            xhrInstance.axios = jest.fn().mockReturnValue(Promise.resolve(response));
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest
+                .fn()
+                .mockReturnValue(Promise.resolve(response));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.resolve({}));
 
             return xhrInstance
                 .uploadFile({
@@ -225,7 +247,7 @@ describe('util/Xhr', () => {
                     errorHandler: noop,
                     progressHandler: noop,
                     withIdleTimeout: true,
-                    idleTimeoutDuration: 100
+                    idleTimeoutDuration: 100,
                 })
                 .then(() => {
                     jest.advanceTimersByTime(101);
@@ -240,8 +262,12 @@ describe('util/Xhr', () => {
             const error = { status: '' };
 
             xhrInstance.abort = jest.fn();
-            xhrInstance.axios = jest.fn().mockReturnValue(Promise.reject(error));
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest
+                .fn()
+                .mockReturnValue(Promise.reject(error));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.resolve({}));
 
             return xhrInstance
                 .uploadFile({
@@ -249,7 +275,7 @@ describe('util/Xhr', () => {
                     errorHandler,
                     progressHandler: noop,
                     withIdleTimeout: true,
-                    idleTimeoutDuration: 100
+                    idleTimeoutDuration: 100,
                 })
                 .then(() => {
                     jest.advanceTimersByTime(101);
@@ -263,13 +289,15 @@ describe('util/Xhr', () => {
             const errorHandler = jest.fn();
             const error = { status: '' };
 
-            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.reject(error));
+            xhrInstance.getHeaders = jest
+                .fn()
+                .mockReturnValue(Promise.reject(error));
 
             return xhrInstance
                 .uploadFile({
                     successHandler: noop,
                     errorHandler,
-                    progressHandler: noop
+                    progressHandler: noop,
                 })
                 .then(() => {
                     expect(errorHandler).toHaveBeenCalledWith(error);
@@ -280,7 +308,7 @@ describe('util/Xhr', () => {
     describe('abort()', () => {
         test('should cancel axios request', () => {
             xhrInstance.axiosSource = {
-                cancel: jest.fn()
+                cancel: jest.fn(),
             };
 
             xhrInstance.abort();

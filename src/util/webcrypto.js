@@ -31,9 +31,12 @@ function digest(algorithm: string, buffer: ArrayBuffer): Promise<ArrayBuffer> {
     // IE11 implements an early version of the SubtleCrypto interface which doesn't use Promises
     // See http://web-developer-articles.blogspot.com/2015/05/web-cryptography-api.html
     return new Promise((resolve, reject) => {
-        const cryptoOperation = cryptoRef.subtle.digest({ name: algorithm }, buffer);
+        const cryptoOperation = cryptoRef.subtle.digest(
+            { name: algorithm },
+            buffer,
+        );
 
-        cryptoOperation.oncomplete = (event) => {
+        cryptoOperation.oncomplete = event => {
             resolve(event.target.result);
         };
 

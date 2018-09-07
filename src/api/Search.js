@@ -121,13 +121,21 @@ class Search extends Base {
 
         const cache: APICache = this.getCache();
         const search: FlattenedBoxItem = cache.get(this.key);
-        const sortedSearch: FlattenedBoxItem = sort(search, this.sortBy, this.sortDirection, cache);
+        const sortedSearch: FlattenedBoxItem = sort(
+            search,
+            this.sortBy,
+            this.sortDirection,
+            cache,
+        );
         const { item_collection }: FlattenedBoxItem = sortedSearch;
         if (!item_collection) {
             throw getBadItemError();
         }
 
-        const { entries, total_count }: FlattenedBoxItemCollection = item_collection;
+        const {
+            entries,
+            total_count,
+        }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
@@ -136,14 +144,16 @@ class Search extends Base {
         // on it on its own. Good for calculating percentatge, but not good for
         // figuring our when the collection is done loading.
         const percentLoaded: number =
-            !!item_collection.isLoaded || total_count === 0 ? 100 : entries.length * 100 / total_count;
+            !!item_collection.isLoaded || total_count === 0
+                ? 100
+                : entries.length * 100 / total_count;
 
         const collection: Collection = {
             percentLoaded,
             id: this.id,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => cache.get(key))
+            items: entries.map((key: string) => cache.get(key)),
         };
         this.successCallback(collection);
     }
@@ -173,7 +183,7 @@ class Search extends Base {
             entries,
             new FolderAPI(this.options),
             new FileAPI(this.options),
-            new WebLinkAPI(this.options)
+            new WebLinkAPI(this.options),
         );
         this.itemCache = (this.itemCache || []).concat(flattened);
 
@@ -185,8 +195,8 @@ class Search extends Base {
         this.getCache().set(this.key, {
             item_collection: Object.assign({}, data, {
                 isLoaded,
-                entries: this.itemCache
-            })
+                entries: this.itemCache,
+            }),
         });
 
         if (!isLoaded) {
@@ -229,8 +239,8 @@ class Search extends Base {
                     query: this.query,
                     ancestor_folder_ids: this.id,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: FOLDER_FIELDS_TO_FETCH.toString()
-                }
+                    fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                },
             })
             .then(this.searchSuccessHandler)
             .catch(this.searchErrorHandler);
@@ -255,7 +265,7 @@ class Search extends Base {
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        options: Object = {}
+        options: Object = {},
     ): void {
         if (this.isDestroyed()) {
             return;

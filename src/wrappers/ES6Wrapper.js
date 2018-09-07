@@ -86,7 +86,9 @@ class ES6Wrapper extends EventEmitter {
         this.emit = this.emit.bind(this);
         const container = options.container || DEFAULT_CONTAINER;
         this.container =
-            container instanceof HTMLElement ? container : ((document.querySelector(container): any): HTMLElement);
+            container instanceof HTMLElement
+                ? container
+                : ((document.querySelector(container): any): HTMLElement);
         this.render();
     }
 

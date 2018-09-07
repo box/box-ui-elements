@@ -48,7 +48,7 @@ import {
     DEFAULT_VIEW_RECENTS,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
-    TYPED_ID_FOLDER_PREFIX
+    TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -95,7 +95,7 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    contentPreviewProps: ContentPreviewProps
+    contentPreviewProps: ContentPreviewProps,
 };
 
 type State = {
@@ -114,7 +114,7 @@ type State = {
     isPreviewModalOpen: boolean,
     isLoading: boolean,
     errorCode: string,
-    focusedRow: number
+    focusedRow: number,
 };
 
 class ContentExplorer extends Component<Props, State> {
@@ -156,8 +156,8 @@ class ContentExplorer extends Component<Props, State> {
         onNavigate: noop,
         defaultView: DEFAULT_VIEW_FILES,
         contentPreviewProps: {
-            contentSidebarProps: {}
-        }
+            contentSidebarProps: {},
+        },
     };
 
     /**
@@ -179,7 +179,7 @@ class ContentExplorer extends Component<Props, State> {
             sortDirection,
             requestInterceptor,
             responseInterceptor,
-            rootFolderId
+            rootFolderId,
         }: Props = props;
 
         this.api = new API({
@@ -191,7 +191,7 @@ class ContentExplorer extends Component<Props, State> {
             requestInterceptor,
             responseInterceptor,
             clientName: CLIENT_NAME_CONTENT_EXPLORER,
-            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`
+            id: `${TYPED_ID_FOLDER_PREFIX}${rootFolderId}`,
         });
 
         this.id = uniqueid('bce_');
@@ -211,7 +211,7 @@ class ContentExplorer extends Component<Props, State> {
             isPreviewModalOpen: false,
             isLoading: false,
             errorCode: '',
-            focusedRow: 0
+            focusedRow: 0,
         };
     }
 
@@ -245,8 +245,11 @@ class ContentExplorer extends Component<Props, State> {
      */
     componentDidMount() {
         const { defaultView, currentFolderId }: Props = this.props;
-        this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
+        this.rootElement = ((document.getElementById(
+            this.id,
+        ): any): HTMLElement);
+        this.appElement = ((this.rootElement
+            .firstElementChild: any): HTMLElement);
 
         if (defaultView === DEFAULT_VIEW_RECENTS) {
             this.showRecents();
@@ -283,7 +286,7 @@ class ContentExplorer extends Component<Props, State> {
     currentUnloadedCollection(): Collection {
         const { currentCollection }: State = this.state;
         return Object.assign(currentCollection, {
-            percentLoaded: 0
+            percentLoaded: 0,
         });
     }
 
@@ -296,7 +299,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     errorCallback = (error: any) => {
         this.setState({
-            view: VIEW_ERROR
+            view: VIEW_ERROR,
         });
         /* eslint-disable no-console */
         console.error(error);
@@ -320,7 +323,10 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
-        if (percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
+        if (
+            percentLoaded === 100 &&
+            !isFocusableElement(document.activeElement)
+        ) {
             focus(this.rootElement, '.bce-item-row');
             this.setState({ focusedRow: 0 });
         }
@@ -337,7 +343,11 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     refreshCollection = () => {
-        const { currentCollection: { id }, view, searchQuery }: State = this.state;
+        const {
+            currentCollection: { id },
+            view,
+            searchQuery,
+        }: State = this.state;
         if (view === VIEW_FOLDER && id) {
             this.fetchFolder(id, false);
         } else if (view === VIEW_RECENTS) {
@@ -357,7 +367,10 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
+    fetchFolderSuccessCallback(
+        collection: Collection,
+        triggerNavigationEvent: boolean,
+    ): void {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
 
@@ -365,7 +378,7 @@ class ContentExplorer extends Component<Props, State> {
         const newState = {
             selected: undefined,
             currentCollection: collection,
-            rootName: id === rootFolderId ? name : ''
+            rootName: id === rootFolderId ? name : '',
         };
 
         // Unselect any rows that were selected
@@ -394,7 +407,11 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void the cache
      * @return {void}
      */
-    fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true, fetchOptions?: FetchOptions) => {
+    fetchFolder = (
+        id?: string,
+        triggerNavigationEvent?: boolean = true,
+        fetchOptions?: FetchOptions,
+    ) => {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
@@ -411,7 +428,7 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({
             searchQuery: '',
             view: VIEW_FOLDER,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         // Fetch the folder using folder API
@@ -420,10 +437,13 @@ class ContentExplorer extends Component<Props, State> {
             sortBy,
             sortDirection,
             (collection: Collection) => {
-                this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
+                this.fetchFolderSuccessCallback(
+                    collection,
+                    triggerNavigationEvent,
+                );
             },
             this.errorCallback,
-            fetchOptions
+            fetchOptions,
         );
     };
 
@@ -474,7 +494,7 @@ class ContentExplorer extends Component<Props, State> {
 
         this.setState({
             selected: undefined,
-            currentCollection: Object.assign(currentCollection, collection)
+            currentCollection: Object.assign(currentCollection, collection),
         });
     };
 
@@ -487,14 +507,25 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    debouncedSearch = debounce((id: string, query: string, forceFetch?: boolean) => {
-        const { sortBy, sortDirection }: State = this.state;
-        this.api
-            .getSearchAPI()
-            .search(id, query, sortBy, sortDirection, this.searchSuccessCallback, this.errorCallback, {
-                forceFetch
-            });
-    }, DEFAULT_SEARCH_DEBOUNCE);
+    debouncedSearch = debounce(
+        (id: string, query: string, forceFetch?: boolean) => {
+            const { sortBy, sortDirection }: State = this.state;
+            this.api
+                .getSearchAPI()
+                .search(
+                    id,
+                    query,
+                    sortBy,
+                    sortDirection,
+                    this.searchSuccessCallback,
+                    this.errorCallback,
+                    {
+                        forceFetch,
+                    },
+                );
+        },
+        DEFAULT_SEARCH_DEBOUNCE,
+    );
 
     /**
      * Searches
@@ -523,7 +554,7 @@ class ContentExplorer extends Component<Props, State> {
             // Query now only has bunch of spaces
             // do nothing and but update prior state
             this.setState({
-                searchQuery: query
+                searchQuery: query,
             });
             return;
         }
@@ -532,7 +563,7 @@ class ContentExplorer extends Component<Props, State> {
             selected: undefined,
             searchQuery: query,
             view: VIEW_SEARCH,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         this.debouncedSearch(folderId, query, forceFetch);
@@ -546,7 +577,10 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean} triggerNavigationEvent - To trigger navigate event
      * @return {void}
      */
-    recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean) {
+    recentsSuccessCallback(
+        collection: Collection,
+        triggerNavigationEvent: boolean,
+    ) {
         // Unselect any rows that were selected
         this.unselect();
 
@@ -568,7 +602,10 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    showRecents(triggerNavigationEvent: boolean = true, forceFetch: boolean = true): void {
+    showRecents(
+        triggerNavigationEvent: boolean = true,
+        forceFetch: boolean = true,
+    ): void {
         const { rootFolderId }: Props = this.props;
         const { sortBy, sortDirection }: State = this.state;
 
@@ -579,7 +616,7 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({
             searchQuery: '',
             view: VIEW_RECENTS,
-            currentCollection: this.currentUnloadedCollection()
+            currentCollection: this.currentUnloadedCollection(),
         });
 
         // Fetch the folder using folder API
@@ -592,8 +629,8 @@ class ContentExplorer extends Component<Props, State> {
             },
             this.errorCallback,
             {
-                forceFetch
-            }
+                forceFetch,
+            },
         );
     }
 
@@ -617,7 +654,7 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.setState({
-            isUploadModalOpen: true
+            isUploadModalOpen: true,
         });
     };
 
@@ -631,7 +668,7 @@ class ContentExplorer extends Component<Props, State> {
     uploadSuccessHandler = () => {
         const { currentCollection: { id } }: State = this.state;
         this.fetchFolder(id, false, {
-            forceFetch: true
+            forceFetch: true,
         });
     };
 
@@ -661,10 +698,12 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.setState({ isLoading: true });
-        this.api.getAPI(type).share(selected, access, (updatedItem: BoxItem) => {
-            this.setState({ isLoading: false });
-            this.select(updatedItem);
-        });
+        this.api
+            .getAPI(type)
+            .share(selected, access, (updatedItem: BoxItem) => {
+                this.setState({ isLoading: false });
+                this.select(updatedItem);
+            });
     };
 
     /**
@@ -706,7 +745,10 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     select = (item: BoxItem, callback: Function = noop): void => {
-        const { selected, currentCollection: { items = [] } }: State = this.state;
+        const {
+            selected,
+            currentCollection: { items = [] },
+        }: State = this.state;
         const { onSelect }: Props = this.props;
 
         if (item === selected) {
@@ -903,7 +945,10 @@ class ContentExplorer extends Component<Props, State> {
 
         const name = `${nameWithoutExt}${extension}`;
         if (!nameWithoutExt.trim()) {
-            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_INVALID, isLoading: false });
+            this.setState({
+                errorCode: ERROR_CODE_ITEM_NAME_INVALID,
+                isLoading: false,
+            });
             return;
         }
 
@@ -919,7 +964,7 @@ class ContentExplorer extends Component<Props, State> {
             },
             ({ code }) => {
                 this.setState({ errorCode: code, isLoading: false });
-            }
+            },
         );
     };
 
@@ -941,7 +986,10 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     createFolderCallback = (name?: string): void => {
-        const { isCreateFolderModalOpen, currentCollection }: State = this.state;
+        const {
+            isCreateFolderModalOpen,
+            currentCollection,
+        }: State = this.state;
         const { canCreateNewFolder, onCreate }: Props = this.props;
         if (!canCreateNewFolder) {
             return;
@@ -963,12 +1011,18 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         if (!name) {
-            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_INVALID, isLoading: false });
+            this.setState({
+                errorCode: ERROR_CODE_ITEM_NAME_INVALID,
+                isLoading: false,
+            });
             return;
         }
 
         if (name.length > 255) {
-            this.setState({ errorCode: ERROR_CODE_ITEM_NAME_TOO_LONG, isLoading: false });
+            this.setState({
+                errorCode: ERROR_CODE_ITEM_NAME_TOO_LONG,
+                isLoading: false,
+            });
             return;
         }
 
@@ -984,9 +1038,9 @@ class ContentExplorer extends Component<Props, State> {
             ({ code }) => {
                 this.setState({
                     errorCode: code,
-                    isLoading: false
+                    isLoading: false,
                 });
-            }
+            },
         );
     };
 
@@ -1055,10 +1109,13 @@ class ContentExplorer extends Component<Props, State> {
             isCreateFolderModalOpen: false,
             isShareModalOpen: false,
             isUploadModalOpen: false,
-            isPreviewModalOpen: false
+            isPreviewModalOpen: false,
         });
 
-        const { selected, currentCollection: { items = [] } }: State = this.state;
+        const {
+            selected,
+            currentCollection: { items = [] },
+        }: State = this.state;
         if (selected && items.length > 0) {
             focus(this.rootElement, `.bce-item-row-${focusedRow}`);
         }
@@ -1080,7 +1137,11 @@ class ContentExplorer extends Component<Props, State> {
 
         switch (key) {
             case '/':
-                focus(this.rootElement, '.be-search input[type="search"]', false);
+                focus(
+                    this.rootElement,
+                    '.be-search input[type="search"]',
+                    false,
+                );
                 event.preventDefault();
                 break;
             case 'arrowdown':
@@ -1171,7 +1232,7 @@ class ContentExplorer extends Component<Props, State> {
             onUpload,
             requestInterceptor,
             responseInterceptor,
-            contentPreviewProps
+            contentPreviewProps,
         }: Props = this.props;
 
         const {
@@ -1188,7 +1249,7 @@ class ContentExplorer extends Component<Props, State> {
             selected,
             isLoading,
             errorCode,
-            focusedRow
+            focusedRow,
         }: State = this.state;
 
         const { id, permissions }: Collection = currentCollection;
@@ -1202,7 +1263,11 @@ class ContentExplorer extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef}>
-                    <div className='be-app-element' onKeyDown={this.onKeyDown} tabIndex={0}>
+                    <div
+                        className="be-app-element"
+                        onKeyDown={this.onKeyDown}
+                        tabIndex={0}
+                    >
                         <Header
                             view={view}
                             isSmall={isSmall}

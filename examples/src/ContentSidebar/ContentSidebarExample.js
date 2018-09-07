@@ -3,7 +3,7 @@ import ContentSidebar from '../../../src/components/ContentSidebar/ContentSideba
 import withConfig from '../withConfig';
 import './ContentSidebarExample.scss';
 
-const ContentSidebarExample = (props) => (
+const ContentSidebarExample = props => (
     <ContentSidebar
         {...props}
         hasActivityFeed
@@ -15,7 +15,7 @@ const ContentSidebarExample = (props) => (
             hasAccessStats: true,
             hasClassification: true,
             hasRetentionPolicy: true,
-            hasVersions: true
+            hasVersions: true,
         }}
     />
 );

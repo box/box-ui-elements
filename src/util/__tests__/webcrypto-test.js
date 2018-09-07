@@ -5,7 +5,7 @@ describe('util/webcrypto', () => {
         test('should call getRandomValues() to get an array of random values', () => {
             const getRandomValuesMock = jest.fn();
             window.crypto = {
-                getRandomValues: getRandomValuesMock
+                getRandomValues: getRandomValuesMock,
             };
 
             getRandomValues();
@@ -22,8 +22,8 @@ describe('util/webcrypto', () => {
             const digestMock = jest.fn().mockReturnValueOnce(digestVal);
             window.crypto = {
                 subtle: {
-                    digest: digestMock
-                }
+                    digest: digestMock,
+                },
             };
 
             expect(digest(algorithm, buffer)).toBe(digestVal);
@@ -33,40 +33,47 @@ describe('util/webcrypto', () => {
         describe('msCrypto', () => {
             test('should return a promise which resolves properly when the crypto lib is msCrypto', () => {
                 const cryptoOperation = {};
-                const digestMock = jest.fn().mockReturnValueOnce(cryptoOperation);
+                const digestMock = jest
+                    .fn()
+                    .mockReturnValueOnce(cryptoOperation);
 
                 window.crypto = undefined;
                 window.msCrypto = {
                     subtle: {
-                        digest: digestMock
-                    }
+                        digest: digestMock,
+                    },
                 };
 
                 digest(algorithm, buffer);
 
                 cryptoOperation.oncomplete({
                     target: {
-                        result: 'digest'
-                    }
+                        result: 'digest',
+                    },
                 });
 
-                expect(digestMock).toHaveBeenCalledWith({ name: algorithm }, buffer);
+                expect(digestMock).toHaveBeenCalledWith(
+                    { name: algorithm },
+                    buffer,
+                );
             });
 
             test('should return a promise which rejects properly when the crypto lib is msCrypto', () => {
                 const cryptoOperation = {};
-                const digestMock = jest.fn().mockReturnValueOnce(cryptoOperation);
+                const digestMock = jest
+                    .fn()
+                    .mockReturnValueOnce(cryptoOperation);
 
                 window.crypto = undefined;
                 window.msCrypto = {
                     subtle: {
-                        digest: digestMock
-                    }
+                        digest: digestMock,
+                    },
                 };
 
                 const expectedError = new Error('lol');
 
-                digest(algorithm, buffer).catch((error) => {
+                digest(algorithm, buffer).catch(error => {
                     expect(error).toBe(expectedError);
                 });
 

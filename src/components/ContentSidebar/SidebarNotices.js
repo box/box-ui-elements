@@ -17,11 +17,11 @@ const ONE_MINUTE_IN_MS = 60000;
 const NOTICE_DATE_FORMAT = {
     month: 'short',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
 };
 
 type Props = {
-    file: BoxItem
+    file: BoxItem,
 };
 
 const SidebarNotices = ({ file }: Props) => {
@@ -38,19 +38,25 @@ const SidebarNotices = ({ file }: Props) => {
                 <ItemExpirationNotice
                     expiration={
                         <DateField
-                            date={addTime(new Date(itemExpiration), ONE_MINUTE_IN_MS)}
+                            date={addTime(
+                                new Date(itemExpiration),
+                                ONE_MINUTE_IN_MS,
+                            )}
                             dateFormat={NOTICE_DATE_FORMAT}
                             relative={false}
                         />
                     }
-                    itemType='file'
+                    itemType="file"
                 />
             )}
             {!!sharedLinkExpiration && (
                 <SharedLinkExpirationNotice
                     expiration={
                         <DateField
-                            date={addTime(new Date(sharedLinkExpiration), ONE_MINUTE_IN_MS)}
+                            date={addTime(
+                                new Date(sharedLinkExpiration),
+                                ONE_MINUTE_IN_MS,
+                            )}
                             dateFormat={NOTICE_DATE_FORMAT}
                             relative={false}
                         />
