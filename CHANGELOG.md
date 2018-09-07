@@ -1,5 +1,13 @@
+## <small>6.3.2 (2018-09-07)</small>
+
+* Fix: Add empty state when there is no metadata applied (#538) ([c05ae6c](https://github.com/box/box-ui-elements/commit/c05ae6c)), closes [#538](https://github.com/box/box-ui-elements/issues/538)
+* Chore: Refactor Open With types (#534) ([d36ecff](https://github.com/box/box-ui-elements/commit/d36ecff)), closes [#534](https://github.com/box/box-ui-elements/issues/534)
+
+
+
 ## <small>6.3.1 (2018-09-06)</small>
 
+* Release: 6.3.1 ([c570793](https://github.com/box/box-ui-elements/commit/c570793))
 * Fix: Z-Index issue with metadata template dropdown (#537) ([620c6e7](https://github.com/box/box-ui-elements/commit/620c6e7)), closes [#537](https://github.com/box/box-ui-elements/issues/537)
 
 
