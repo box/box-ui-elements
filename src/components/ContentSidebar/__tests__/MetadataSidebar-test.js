@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
+import EmptyContent from 'box-react-ui/lib/features/metadata-instance-editor/EmptyContent';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import { MetadataSidebarComponent as MetadataSidebar } from '../MetadataSidebar';
 
@@ -20,9 +21,32 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             file: {},
             api
         });
-        wrapper.setState({ templates: [], editors: [] });
+        wrapper.setState({ templates: [], editors: [{}] });
         expect(wrapper.find(LoadingIndicatorWrapper)).toHaveLength(1);
         expect(wrapper.find(Instances)).toHaveLength(1);
+        expect(wrapper.find(EmptyContent)).toHaveLength(0);
+        expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
+        expect(wrapper.find(InlineError)).toHaveLength(0);
+        expect(wrapper).toMatchSnapshot();
+        expect(getEditors).toHaveBeenCalled();
+        expect(api.getMetadataAPI).toHaveBeenCalled();
+    });
+
+    test('should render Metadata sidebar component with empty content when instances are empty', () => {
+        const getEditors = jest.fn();
+        const api = {
+            getMetadataAPI: jest.fn().mockReturnValueOnce({
+                getEditors
+            })
+        };
+        const wrapper = getWrapper({
+            file: {},
+            api
+        });
+        wrapper.setState({ templates: [], editors: [] });
+        expect(wrapper.find(LoadingIndicatorWrapper)).toHaveLength(1);
+        expect(wrapper.find(Instances)).toHaveLength(0);
+        expect(wrapper.find(EmptyContent)).toHaveLength(1);
         expect(wrapper.find(LoadingIndicator)).toHaveLength(0);
         expect(wrapper.find(InlineError)).toHaveLength(0);
         expect(wrapper).toMatchSnapshot();
