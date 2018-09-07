@@ -15,10 +15,35 @@ exports[`components/ContentSidebar/Metadata/MetadataSidebar should render Metada
     isLoading={false}
   >
     <Instances
-      editors={Array []}
+      editors={
+        Array [
+          Object {},
+        ]
+      }
       onModification={[Function]}
       onRemove={[Function]}
       onSave={[Function]}
+    />
+  </LoadingIndicatorWrapper>
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/Metadata/MetadataSidebar should render Metadata sidebar component with empty content when instances are empty 1`] = `
+<SidebarContent
+  actions={null}
+  title={
+    <FormattedMessage
+      defaultMessage="Metadata"
+      id="be.sidebarMetadataTitle"
+    />
+  }
+>
+  <LoadingIndicatorWrapper
+    className="metadata-instance-editor"
+    isLoading={false}
+  >
+    <EmptyContent
+      canAdd={false}
     />
   </LoadingIndicatorWrapper>
 </SidebarContent>

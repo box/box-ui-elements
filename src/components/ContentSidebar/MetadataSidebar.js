@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
+import EmptyContent from 'box-react-ui/lib/features/metadata-instance-editor/EmptyContent';
 import TemplateDropdown from 'box-react-ui/lib/features/metadata-instance-editor/TemplateDropdown';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
@@ -217,6 +218,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
         const showLoadingIndicator = !hasError && !showEditor;
         const canEdit = this.canEdit();
         const showTemplateDropdown = showEditor && canEdit;
+        const showEmptyContent = showEditor && ((editors: any): Array<MetadataEditor>).length === 0;
 
         return (
             <SidebarContent
@@ -241,12 +243,16 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                 {showLoadingIndicator && <LoadingIndicator />}
                 {showEditor && (
                     <LoadingIndicatorWrapper className='metadata-instance-editor' isLoading={isLoading}>
-                        <Instances
-                            editors={editors}
-                            onModification={this.onModification}
-                            onSave={this.onSave}
-                            onRemove={this.onRemove}
-                        />
+                        {showEmptyContent ? (
+                            <EmptyContent canAdd={canEdit} />
+                        ) : (
+                            <Instances
+                                editors={editors}
+                                onModification={this.onModification}
+                                onSave={this.onSave}
+                                onRemove={this.onRemove}
+                            />
+                        )}
                     </LoadingIndicatorWrapper>
                 )}
             </SidebarContent>
