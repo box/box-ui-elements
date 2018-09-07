@@ -7,13 +7,13 @@ import flatten from '../flatten';
 const list = [
     { id: '1', type: 'folder', name: 'folderName' },
     { id: '2', type: 'file', name: 'fileName' },
-    { id: '3', type: 'web_link', name: 'weblinkName' }
+    { id: '3', type: 'web_link', name: 'weblinkName' },
 ];
 
 const newList = [
     { id: '1', type: 'folder', name: 'folderNameNew' },
     { id: '2', type: 'file', name: 'fileNameNew' },
-    { id: '3', type: 'web_link', name: 'weblinkNameNew' }
+    { id: '3', type: 'web_link', name: 'weblinkNameNew' },
 ];
 
 const cache = new Cache();
@@ -45,16 +45,25 @@ describe('util/flatten', () => {
 
     test('should throw with a bad type', () => {
         const badList = [{ id: '1', type: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Unknown Type/);
+        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(
+            Error,
+            /Unknown Type/,
+        );
     });
 
     test('should throw with a bad item when no id', () => {
         const badList = [{ type: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Bad box item/);
+        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(
+            Error,
+            /Bad box item/,
+        );
     });
 
     test('should throw with a bad item when no type', () => {
         const badList = [{ id: 'foo' }];
-        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(Error, /Bad box item/);
+        expect(flatten.bind(flatten, badList, folder, file, weblink)).toThrow(
+            Error,
+            /Bad box item/,
+        );
     });
 });

@@ -1,12 +1,15 @@
 import noop from 'lodash/noop';
 import FolderUploadNode from '../FolderUploadNode';
 import FolderAPI from '../../../api/Folder';
-import { ERROR_CODE_ITEM_NAME_IN_USE, STATUS_COMPLETE } from '../../../constants';
+import {
+    ERROR_CODE_ITEM_NAME_IN_USE,
+    STATUS_COMPLETE,
+} from '../../../constants';
 
 jest.mock('../../../api/Folder');
 jest.mock('../../../util/uploads', () => ({
     ...require.requireActual('../../../util/uploads'),
-    getFileFromEntry: jest.fn((entry) => entry)
+    getFileFromEntry: jest.fn(entry => entry),
 }));
 
 let folderUploadNodeInstance;
@@ -16,13 +19,19 @@ describe('api/uploads/FolderUploadNode', () => {
     const name = 'hi';
 
     beforeEach(() => {
-        folderUploadNodeInstance = new FolderUploadNode(name, noop, noop, {}, {});
-        folderCreateMock = jest.fn((a, b, resolve) => {
+        folderUploadNodeInstance = new FolderUploadNode(
+            name,
+            noop,
+            noop,
+            {},
+            {},
+        );
+        folderCreateMock = jest.fn((a, b, resolve) => { // eslint-disable-line
             resolve();
         });
         FolderAPI.mockClear();
         FolderAPI.mockImplementation(() => ({
-            create: folderCreateMock
+            create: folderCreateMock,
         }));
     });
 
@@ -32,20 +41,28 @@ describe('api/uploads/FolderUploadNode', () => {
             const parentFolderId = '0';
             const isRoot = true;
             const files = [{ file: 1 }];
-            folderUploadNodeInstance.createAndUploadFolder = jest.fn(() => Promise.resolve());
+            folderUploadNodeInstance.createAndUploadFolder = jest.fn(() =>
+                Promise.resolve(),
+            );
             folderUploadNodeInstance.addFilesToUploadQueue = jest.fn();
             folderUploadNodeInstance.uploadChildFolders = jest.fn();
             folderUploadNodeInstance.getFormattedFiles = jest.fn(() => files);
 
-            await folderUploadNodeInstance.upload(parentFolderId, errorCallback, isRoot);
-
-            expect(folderUploadNodeInstance.createAndUploadFolder).toHaveBeenCalledWith(errorCallback, isRoot);
-            expect(folderUploadNodeInstance.addFilesToUploadQueue).toHaveBeenCalledWith(
-                files,
-                expect.any(Function),
-                true
+            await folderUploadNodeInstance.upload(
+                parentFolderId,
+                errorCallback,
+                isRoot,
             );
-            expect(folderUploadNodeInstance.uploadChildFolders).toHaveBeenCalledWith(errorCallback);
+
+            expect(
+                folderUploadNodeInstance.createAndUploadFolder,
+            ).toHaveBeenCalledWith(errorCallback, isRoot);
+            expect(
+                folderUploadNodeInstance.addFilesToUploadQueue,
+            ).toHaveBeenCalledWith(files, expect.any(Function), true);
+            expect(
+                folderUploadNodeInstance.uploadChildFolders,
+            ).toHaveBeenCalledWith(errorCallback);
         });
     });
 
@@ -56,17 +73,20 @@ describe('api/uploads/FolderUploadNode', () => {
             const upload2 = jest.fn();
             folderUploadNodeInstance.folders = {
                 a: {
-                    upload: upload1
+                    upload: upload1,
                 },
                 b: {
-                    upload: upload2
-                }
+                    upload: upload2,
+                },
             };
             folderUploadNodeInstance.folderId = '123';
 
             await folderUploadNodeInstance.uploadChildFolders(errorCallback);
 
-            expect(upload1).toHaveBeenCalledWith(folderUploadNodeInstance.folderId, errorCallback);
+            expect(upload1).toHaveBeenCalledWith(
+                folderUploadNodeInstance.folderId,
+                errorCallback,
+            );
         });
     });
 
@@ -75,12 +95,19 @@ describe('api/uploads/FolderUploadNode', () => {
             const folderId = '1';
             const errorCallback = () => 'errorCallback';
             const isRoot = true;
-            folderUploadNodeInstance.createFolder = jest.fn(() => ({ id: folderId }));
+            folderUploadNodeInstance.createFolder = jest.fn(() => ({
+                id: folderId,
+            }));
             folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
 
-            await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
+            await folderUploadNodeInstance.createAndUploadFolder(
+                errorCallback,
+                isRoot,
+            );
 
-            expect(folderUploadNodeInstance.createFolder).toHaveBeenCalledWith();
+            expect(
+                folderUploadNodeInstance.createFolder,
+            ).toHaveBeenCalledWith();
             expect(folderUploadNodeInstance.folderId).toBe(folderId);
         });
 
@@ -88,10 +115,15 @@ describe('api/uploads/FolderUploadNode', () => {
             const errorCallback = jest.fn();
             const isRoot = true;
             const error = { code: 'random' };
-            folderUploadNodeInstance.createFolder = jest.fn(() => Promise.reject(error));
+            folderUploadNodeInstance.createFolder = jest.fn(() =>
+                Promise.reject(error),
+            );
             folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
 
-            await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
+            await folderUploadNodeInstance.createAndUploadFolder(
+                errorCallback,
+                isRoot,
+            );
 
             expect(errorCallback).toHaveBeenCalledWith(error);
         });
@@ -100,11 +132,19 @@ describe('api/uploads/FolderUploadNode', () => {
             const errorCallback = jest.fn();
             const folderId = '1';
             const isRoot = true;
-            const error = { code: ERROR_CODE_ITEM_NAME_IN_USE, context_info: { conflicts: [{ id: folderId }] } };
-            folderUploadNodeInstance.createFolder = jest.fn(() => Promise.reject(error));
+            const error = {
+                code: ERROR_CODE_ITEM_NAME_IN_USE,
+                context_info: { conflicts: [{ id: folderId }] },
+            };
+            folderUploadNodeInstance.createFolder = jest.fn(() =>
+                Promise.reject(error),
+            );
             folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
 
-            await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
+            await folderUploadNodeInstance.createAndUploadFolder(
+                errorCallback,
+                isRoot,
+            );
 
             expect(errorCallback).not.toHaveBeenCalledWith(error);
             expect(folderUploadNodeInstance.folderId).toBe(folderId);
@@ -115,20 +155,27 @@ describe('api/uploads/FolderUploadNode', () => {
             const errorCallback = () => 'errorCallback';
             const isRoot = false;
             folderUploadNodeInstance.name = name;
-            folderUploadNodeInstance.createFolder = jest.fn(() => ({ id: folderId }));
+            folderUploadNodeInstance.createFolder = jest.fn(() => ({
+                id: folderId,
+            }));
             folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
 
-            await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
+            await folderUploadNodeInstance.createAndUploadFolder(
+                errorCallback,
+                isRoot,
+            );
 
-            expect(folderUploadNodeInstance.addFolderToUploadQueue).toHaveBeenCalledWith([
+            expect(
+                folderUploadNodeInstance.addFolderToUploadQueue,
+            ).toHaveBeenCalledWith([
                 {
                     extension: '',
                     name,
                     status: STATUS_COMPLETE,
                     isFolder: true,
                     size: 1,
-                    progress: 100
-                }
+                    progress: 100,
+                },
             ]);
         });
 
@@ -137,12 +184,19 @@ describe('api/uploads/FolderUploadNode', () => {
             const errorCallback = () => 'errorCallback';
             const isRoot = true;
             folderUploadNodeInstance.name = name;
-            folderUploadNodeInstance.createFolder = jest.fn(() => ({ id: folderId }));
+            folderUploadNodeInstance.createFolder = jest.fn(() => ({
+                id: folderId,
+            }));
             folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
 
-            await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
+            await folderUploadNodeInstance.createAndUploadFolder(
+                errorCallback,
+                isRoot,
+            );
 
-            expect(folderUploadNodeInstance.addFolderToUploadQueue).not.toHaveBeenCalled();
+            expect(
+                folderUploadNodeInstance.addFolderToUploadQueue,
+            ).not.toHaveBeenCalled();
         });
     });
 
@@ -165,17 +219,17 @@ describe('api/uploads/FolderUploadNode', () => {
                     options: {
                         ...folderUploadNodeInstance.fileAPIOptions,
                         folderId: folderUploadNodeInstance.folderId,
-                        uploadInitTimestamp: now
-                    }
+                        uploadInitTimestamp: now,
+                    },
                 },
                 {
                     file: file2,
                     options: {
                         ...folderUploadNodeInstance.fileAPIOptions,
                         folderId: folderUploadNodeInstance.folderId,
-                        uploadInitTimestamp: now
-                    }
-                }
+                        uploadInitTimestamp: now,
+                    },
+                },
             ]);
         });
     });
@@ -213,7 +267,7 @@ describe('api/uploads/FolderUploadNode', () => {
             };
 
             folderUploadNodeInstance.entry = {
-                createReader: () => reader
+                createReader: () => reader,
             };
 
             await folderUploadNodeInstance.buildCurrentFolderFromEntry();
@@ -233,14 +287,27 @@ describe('api/uploads/FolderUploadNode', () => {
 
     describe('createFolderUploadNodesFromEntries()', () => {
         test('should create folders and files from entries', async () => {
-            const entries = [{ name: '1', isFile: true }, { name: '2', isFile: false }, { name: '3', isFile: true }];
+            const entries = [
+                { name: '1', isFile: true },
+                { name: '2', isFile: false },
+                { name: '3', isFile: true },
+            ];
 
-            await folderUploadNodeInstance.createFolderUploadNodesFromEntries(entries);
+            await folderUploadNodeInstance.createFolderUploadNodesFromEntries(
+                entries,
+            );
 
-            expect(folderUploadNodeInstance.files).toEqual([{ name: '1', isFile: true }, { name: '3', isFile: true }]);
-            expect(Object.keys(folderUploadNodeInstance.folders)).toHaveLength(1);
+            expect(folderUploadNodeInstance.files).toEqual([
+                { name: '1', isFile: true },
+                { name: '3', isFile: true },
+            ]);
+            expect(Object.keys(folderUploadNodeInstance.folders)).toHaveLength(
+                1,
+            );
             expect(folderUploadNodeInstance.folders['2'].name).toEqual('2');
-            expect(folderUploadNodeInstance.folders['2'].entry).toEqual(entries[1]);
+            expect(folderUploadNodeInstance.folders['2'].entry).toEqual(
+                entries[1],
+            );
         });
     });
 });

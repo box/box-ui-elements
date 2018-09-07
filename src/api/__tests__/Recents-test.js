@@ -20,7 +20,9 @@ describe('api/Recents', () => {
 
     describe('getUrl()', () => {
         test('should return correct recents api url', () => {
-            expect(recents.getUrl()).toBe('https://api.box.com/2.0/recent_items');
+            expect(recents.getUrl()).toBe(
+                'https://api.box.com/2.0/recent_items',
+            );
         });
     });
 
@@ -67,7 +69,9 @@ describe('api/Recents', () => {
             recents.recentsRequest = jest.fn();
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail', { forceFetch: true });
+            recents.recents('id', 'by', 'direction', 'success', 'fail', {
+                forceFetch: true,
+            });
             expect(recents.getCacheKey).toHaveBeenCalledWith('id');
             expect(recents.id).toBe('id');
             expect(recents.successCallback).toBe('success');
@@ -93,14 +97,16 @@ describe('api/Recents', () => {
             recents.recentsErrorHandler = jest.fn();
             recents.includePreviewFields = true;
             recents.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return recents.recentsRequest().then(() => {
-                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith('success');
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(
+                    'success',
+                );
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
-                    params: { fields: FOLDER_FIELDS_TO_FETCH.toString() }
+                    params: { fields: FOLDER_FIELDS_TO_FETCH.toString() },
                 });
             });
         });
@@ -111,15 +117,17 @@ describe('api/Recents', () => {
             recents.includePreviewFields = true;
             recents.includePreviewSidebarFields = true;
             recents.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve(error))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve(error)),
             };
 
             return recents.recentsRequest().then(() => {
-                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(error);
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(
+                    error,
+                );
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
-                    params: { fields: FOLDER_FIELDS_TO_FETCH.toString() }
+                    params: { fields: FOLDER_FIELDS_TO_FETCH.toString() },
                 });
             });
         });
@@ -151,44 +159,44 @@ describe('api/Recents', () => {
                 id: 'item1',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }],
+                },
             };
             const item2 = {
                 id: 'item2',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }]
-                }
+                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }],
+                },
             };
             const item3 = {
                 id: 'item3',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }],
+                },
             };
             const response = {
                 data: {
                     order: {
                         by: 'by',
-                        direction: 'direction'
+                        direction: 'direction',
                     },
                     entries: [
                         {
                             interacted_at: 'interacted_at1',
-                            item: item1
+                            item: item1,
                         },
                         {
                             interacted_at: 'interacted_at2',
-                            item: item2
+                            item: item2,
                         },
                         {
                             interacted_at: 'interacted_at3',
-                            item: item3
-                        }
-                    ]
-                }
+                            item: item3,
+                        },
+                    ],
+                },
             };
 
             recents.options = { cache };
@@ -205,13 +213,17 @@ describe('api/Recents', () => {
                     order: [
                         {
                             by: 'by',
-                            direction: 'direction'
-                        }
-                    ]
-                }
+                            direction: 'direction',
+                        },
+                    ],
+                },
             });
-            expect(cache.get('file_item1')).toEqual(Object.assign({}, item1, { interacted_at: 'interacted_at1' }));
-            expect(cache.get('file_item3')).toEqual(Object.assign({}, item3, { interacted_at: 'interacted_at3' }));
+            expect(cache.get('file_item1')).toEqual(
+                Object.assign({}, item1, { interacted_at: 'interacted_at1' }),
+            );
+            expect(cache.get('file_item3')).toEqual(
+                Object.assign({}, item3, { interacted_at: 'interacted_at3' }),
+            );
             expect(cache.get('file_item2')).toBeUndefined();
         });
     });
@@ -222,24 +234,24 @@ describe('api/Recents', () => {
             name: 'item1',
             type: 'file',
             path_collection: {
-                entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }]
-            }
+                entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }],
+            },
         };
         const item2 = {
             id: 'item2',
             name: 'item2',
             type: 'file',
             path_collection: {
-                entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }]
-            }
+                entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }],
+            },
         };
         const item3 = {
             id: 'item3',
             name: 'item3',
             type: 'file',
             path_collection: {
-                entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }]
-            }
+                entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }],
+            },
         };
         const recent = {
             item_collection: {
@@ -248,10 +260,10 @@ describe('api/Recents', () => {
                 order: [
                     {
                         by: 'by',
-                        direction: 'direction'
-                    }
-                ]
-            }
+                        direction: 'direction',
+                    },
+                ],
+            },
         };
 
         beforeEach(() => {
@@ -281,7 +293,7 @@ describe('api/Recents', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item3, item2, item1]
+                items: [item3, item2, item1],
             });
         });
 
@@ -294,12 +306,19 @@ describe('api/Recents', () => {
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.successCallback = jest.fn();
             expect(recents.finish.bind(recents)).toThrow(Error, /Bad box item/);
-            expect(sort.default).toHaveBeenCalledWith(recent, 'name', 'DESC', cache);
+            expect(sort.default).toHaveBeenCalledWith(
+                recent,
+                'name',
+                'DESC',
+                cache,
+            );
             expect(recents.successCallback).not.toHaveBeenCalled();
         });
 
         test('should throw bad item error when item collection is missing entries', () => {
-            sort.default = jest.fn().mockReturnValueOnce({ item_collection: {} });
+            sort.default = jest
+                .fn()
+                .mockReturnValueOnce({ item_collection: {} });
             recents.id = 'id';
             recents.key = 'key';
             recents.sortBy = 'name';
@@ -307,7 +326,12 @@ describe('api/Recents', () => {
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.successCallback = jest.fn();
             expect(recents.finish.bind(recents)).toThrow(Error, /Bad box item/);
-            expect(sort.default).toHaveBeenCalledWith(recent, 'name', 'DESC', cache);
+            expect(sort.default).toHaveBeenCalledWith(
+                recent,
+                'name',
+                'DESC',
+                cache,
+            );
             expect(recents.successCallback).not.toHaveBeenCalled();
         });
     });

@@ -12,7 +12,11 @@ import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryBut
 import Button from 'box-react-ui/lib/components/button/Button';
 import messages from '../messages';
 import ShareAccessSelect from '../ShareAccessSelect';
-import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
+import {
+    CLASS_MODAL_CONTENT,
+    CLASS_MODAL_OVERLAY,
+    CLASS_MODAL,
+} from '../../constants';
 
 import './ShareDialog.scss';
 
@@ -25,7 +29,7 @@ type Props = {
     isLoading: boolean,
     parentElement: HTMLElement,
     appElement: HTMLElement,
-    intl: any
+    intl: any,
 };
 
 const ShareDialog = ({
@@ -37,7 +41,7 @@ const ShareDialog = ({
     isLoading,
     parentElement,
     appElement,
-    intl
+    intl,
 }: Props) => {
     let textInput = null;
 
@@ -50,7 +54,7 @@ const ShareDialog = ({
 
     const { shared_link: sharedLink }: BoxItem = item;
     const { url } = sharedLink || {
-        url: intl.formatMessage(messages.shareDialogNone)
+        url: intl.formatMessage(messages.shareDialogNone),
     };
 
     /* eslint-disable jsx-a11y/label-has-for */
@@ -65,32 +69,40 @@ const ShareDialog = ({
             contentLabel={intl.formatMessage(messages.shareDialogLabel)}
             appElement={appElement}
         >
-            <div className='be-modal-content'>
+            <div className="be-modal-content">
                 <label>
-                    <FormattedMessage tagName='div' {...messages.shareDialogText} />
+                    <FormattedMessage
+                        tagName="div"
+                        {...messages.shareDialogText}
+                    />
                     <span>
                         <input
-                            type='text'
+                            type="text"
                             onChange={noop}
-                            ref={(input) => {
+                            ref={input => {
                                 textInput = input;
                             }}
                             value={url}
                         />
-                        <PrimaryButton type='button' className='be-modal-button-copy' onClick={copy} autoFocus>
+                        <PrimaryButton
+                            type="button"
+                            className="be-modal-button-copy"
+                            onClick={copy}
+                            autoFocus
+                        >
                             <FormattedMessage {...messages.copy} />
                         </PrimaryButton>
                     </span>
                 </label>
             </div>
-            <div className='be-modal-btns'>
+            <div className="be-modal-btns">
                 <ShareAccessSelect
-                    className='bce-shared-access-select'
+                    className="bce-shared-access-select"
                     canSetShareAccess={canSetShareAccess}
                     onChange={onShareAccessChange}
                     item={item}
                 />
-                <Button type='button' onClick={onCancel} isLoading={isLoading}>
+                <Button type="button" onClick={onCancel} isLoading={isLoading}>
                     <FormattedMessage {...messages.close} />
                 </Button>
             </div>

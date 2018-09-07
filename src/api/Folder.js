@@ -105,14 +105,28 @@ class Folder extends Item {
 
         const cache: APICache = this.getCache();
         const folder: FlattenedBoxItem = cache.get(this.key);
-        const sortedFolder: FlattenedBoxItem = sort(folder, this.sortBy, this.sortDirection, cache);
+        const sortedFolder: FlattenedBoxItem = sort(
+            folder,
+            this.sortBy,
+            this.sortDirection,
+            cache,
+        );
 
-        const { id, name, permissions, path_collection, item_collection }: FlattenedBoxItem = sortedFolder;
+        const {
+            id,
+            name,
+            permissions,
+            path_collection,
+            item_collection,
+        }: FlattenedBoxItem = sortedFolder;
         if (!item_collection || !path_collection) {
             throw getBadItemError();
         }
 
-        const { entries, total_count }: FlattenedBoxItemCollection = item_collection;
+        const {
+            entries,
+            total_count,
+        }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
@@ -121,7 +135,9 @@ class Folder extends Item {
         // on it on its own. Good for calculating percentatge, but not good for
         // figuring our when the collection is done loading.
         const percentLoaded: number =
-            !!item_collection.isLoaded || total_count === 0 ? 100 : entries.length * 100 / total_count;
+            !!item_collection.isLoaded || total_count === 0
+                ? 100
+                : entries.length * 100 / total_count;
 
         const collection: Collection = {
             id,
@@ -132,7 +148,7 @@ class Folder extends Item {
             breadcrumbs: path_collection.entries,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => cache.get(key))
+            items: entries.map((key: string) => cache.get(key)),
         };
         this.successCallback(collection);
     }
@@ -153,7 +169,12 @@ class Folder extends Item {
             throw getBadItemError();
         }
 
-        const { entries, total_count, limit, offset }: BoxItemCollection = item_collection;
+        const {
+            entries,
+            total_count,
+            limit,
+            offset,
+        }: BoxItemCollection = item_collection;
         if (
             !Array.isArray(entries) ||
             typeof total_count !== 'number' ||
@@ -167,7 +188,7 @@ class Folder extends Item {
             entries,
             new Folder(this.options),
             new FileAPI(this.options),
-            new WebLinkAPI(this.options)
+            new WebLinkAPI(this.options),
         );
         this.itemCache = (this.itemCache || []).concat(flattened);
 
@@ -181,9 +202,9 @@ class Folder extends Item {
             Object.assign({}, data, {
                 item_collection: Object.assign({}, item_collection, {
                     isLoaded,
-                    entries: this.itemCache
-                })
-            })
+                    entries: this.itemCache,
+                }),
+            }),
         );
 
         if (!isLoaded) {
@@ -210,8 +231,8 @@ class Folder extends Item {
                 params: {
                     offset: this.offset,
                     limit: LIMIT_ITEM_FETCH,
-                    fields: FOLDER_FIELDS_TO_FETCH.toString()
-                }
+                    fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                },
             })
             .then(this.folderSuccessHandler)
             .catch(this.errorHandler);
@@ -236,7 +257,7 @@ class Folder extends Item {
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        options: FetchOptions = {}
+        options: FetchOptions = {},
     ): void {
         if (this.isDestroyed()) {
             return;
@@ -295,7 +316,10 @@ class Folder extends Item {
             throw getBadItemError();
         }
 
-        const { total_count, entries }: FlattenedBoxItemCollection = item_collection;
+        const {
+            total_count,
+            entries,
+        }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
@@ -323,9 +347,9 @@ class Folder extends Item {
                 data: {
                     name,
                     parent: {
-                        id: this.id
-                    }
-                }
+                        id: this.id,
+                    },
+                },
             })
             .then(this.createSuccessHandler)
             .catch(this.errorHandler);
@@ -340,7 +364,12 @@ class Folder extends Item {
      * @param {Function} errorCallback - error callback
      * @return {void}
      */
-    create(id: string, name: string, successCallback: Function, errorCallback: Function = noop): void {
+    create(
+        id: string,
+        name: string,
+        successCallback: Function,
+        errorCallback: Function = noop,
+    ): void {
         if (this.isDestroyed()) {
             return;
         }

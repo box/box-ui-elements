@@ -15,7 +15,7 @@ import {
     CLASS_MODAL_OVERLAY,
     CLASS_MODAL,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
-    ERROR_CODE_ITEM_NAME_IN_USE
+    ERROR_CODE_ITEM_NAME_IN_USE,
 } from '../../constants';
 
 type Props = {
@@ -26,7 +26,7 @@ type Props = {
     errorCode: string,
     parentElement: HTMLElement,
     appElement: HTMLElement,
-    intl: any
+    intl: any,
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -38,7 +38,7 @@ const CreateFolderDialog = ({
     errorCode,
     parentElement,
     appElement,
-    intl
+    intl,
 }: Props) => {
     let textInput = null;
     let error;
@@ -55,7 +55,7 @@ const CreateFolderDialog = ({
     /**
      * Grabs reference to the input element
      */
-    const ref = (input) => {
+    const ref = input => {
         textInput = input;
         if (textInput instanceof HTMLInputElement) {
             textInput.focus();
@@ -101,18 +101,25 @@ const CreateFolderDialog = ({
         >
             <label>
                 {error ? (
-                    <div className='be-modal-error'>
+                    <div className="be-modal-error">
                         <FormattedMessage {...error} />
                     </div>
                 ) : null}
-                <FormattedMessage tagName='div' {...messages.createDialogText} />
-                <input type='text' required ref={ref} onKeyDown={onKeyDown} />
+                <FormattedMessage
+                    tagName="div"
+                    {...messages.createDialogText}
+                />
+                <input type="text" required ref={ref} onKeyDown={onKeyDown} />
             </label>
-            <div className='be-modal-btns'>
-                <PrimaryButton type='button' onClick={create} isLoading={isLoading}>
+            <div className="be-modal-btns">
+                <PrimaryButton
+                    type="button"
+                    onClick={create}
+                    isLoading={isLoading}
+                >
                     <FormattedMessage {...messages.create} />
                 </PrimaryButton>
-                <Button type='button' onClick={onCancel} isDisabled={isLoading}>
+                <Button type="button" onClick={onCancel} isDisabled={isLoading}>
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

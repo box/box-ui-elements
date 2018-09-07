@@ -23,7 +23,13 @@ import FileCollaboratorsAPI from './FileCollaborators';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import OpenWithAPI from './OpenWith';
-import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
+import {
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_UPLOAD,
+    TYPE_FOLDER,
+    TYPE_FILE,
+    TYPE_WEBLINK,
+} from '../constants';
 
 class APIFactory {
     /**
@@ -137,7 +143,7 @@ class APIFactory {
         this.options = Object.assign({}, options, {
             apiHost: options.apiHost || DEFAULT_HOSTNAME_API,
             uploadHost: options.uploadHost || DEFAULT_HOSTNAME_UPLOAD,
-            cache: options.cache || new Cache()
+            cache: options.cache || new Cache(),
         });
     }
 

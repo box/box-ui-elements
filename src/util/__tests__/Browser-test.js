@@ -16,14 +16,14 @@ describe('util/Browser/isMobile()', () => {
             bb10: 'bb10',
             mini: 'mini',
             'window ce': 'windows ce',
-            palm: 'palm'
+            palm: 'palm',
         },
-        (device) => {
+        device => {
             test(`should return true for ${device}`, () => {
                 browser.getUserAgent = jest.fn().mockReturnValueOnce(device);
                 expect(browser.isMobile()).toBeTruthy();
             });
-        }
+        },
     );
 });
 
@@ -55,10 +55,12 @@ describe('util/Browser/canPlayDash()', () => {
     test('should return true when h264 is supported', () => {
         const isTypeSupportedMock = jest.fn();
         global.MediaSource = {
-            isTypeSupported: isTypeSupportedMock.mockReturnValueOnce(true)
+            isTypeSupported: isTypeSupportedMock.mockReturnValueOnce(true),
         };
 
         expect(browser.canPlayDash(true)).toBeTruthy();
-        expect(isTypeSupportedMock).toHaveBeenCalledWith('video/mp4; codecs="avc1.64001E"');
+        expect(isTypeSupportedMock).toHaveBeenCalledWith(
+            'video/mp4; codecs="avc1.64001E"',
+        );
     });
 });

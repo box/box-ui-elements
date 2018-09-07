@@ -14,9 +14,23 @@ class SidebarUtils {
      * @param {ContentSidebarProps} props - User passed in props
      * @return {Boolean} true if we should render
      */
-    static canHaveDetailsSidebar({ detailsSidebarProps = {} }: ContentSidebarProps): boolean {
-        const { hasProperties, hasAccessStats, hasClassification, hasVersions, hasNotices } = detailsSidebarProps;
-        return !!hasProperties || !!hasAccessStats || !!hasClassification || !!hasVersions || !!hasNotices;
+    static canHaveDetailsSidebar({
+        detailsSidebarProps = {},
+    }: ContentSidebarProps): boolean {
+        const {
+            hasProperties,
+            hasAccessStats,
+            hasClassification,
+            hasVersions,
+            hasNotices,
+        } = detailsSidebarProps;
+        return (
+            !!hasProperties ||
+            !!hasAccessStats ||
+            !!hasClassification ||
+            !!hasVersions ||
+            !!hasNotices
+        );
     }
 
     /**
@@ -77,7 +91,10 @@ class SidebarUtils {
      * @param {BoxItem} file - box file
      * @return {Boolean} true if we should render
      */
-    static shouldRenderSkillsSidebar(props: ContentSidebarProps, file?: BoxItem): boolean {
+    static shouldRenderSkillsSidebar(
+        props: ContentSidebarProps,
+        file?: BoxItem,
+    ): boolean {
         return !!file && !!props.hasSkills && hasSkillsData(file);
     }
 
@@ -89,7 +106,10 @@ class SidebarUtils {
      * @param {BoxItem} file - box file
      * @return {Boolean} true if we should fetch or render
      */
-    static shouldRenderSidebar(props: ContentSidebarProps, file?: BoxItem): boolean {
+    static shouldRenderSidebar(
+        props: ContentSidebarProps,
+        file?: BoxItem,
+    ): boolean {
         return (
             !!file &&
             (SidebarUtils.canHaveDetailsSidebar(props) ||

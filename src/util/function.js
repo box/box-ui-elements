@@ -21,7 +21,7 @@ function retryNumOfTimes(
     func: Function,
     times: number,
     initialTimeout?: number = 0,
-    backoffFactor?: number = 1
+    backoffFactor?: number = 1,
 ): Promise<any> {
     let tries = 0;
     let timeout = initialTimeout;
@@ -34,7 +34,7 @@ function retryNumOfTimes(
                 func(tryResolve, tryReject, hardReject);
             })
                 .then(resolve)
-                .catch((reason) => {
+                .catch(reason => {
                     if (tries < times) {
                         timeout *= backoffFactor;
                         // eslint-disable-next-line no-use-before-define

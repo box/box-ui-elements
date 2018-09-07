@@ -8,18 +8,18 @@ import { ApprovalCommentFormUnwrapped as ApprovalCommentForm } from '../Approval
 jest.mock('../../Avatar', () => () => 'Avatar');
 
 const intlFake = {
-    formatMessage: (message) => message.id
+    formatMessage: message => message.id,
 };
 
 describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalCommentForm', () => {
-    const render = (props) =>
+    const render = props =>
         mount(
             <ApprovalCommentForm
                 getMentionWithQuery={() => {}}
                 user={{ id: 123, name: 'foo bar' }}
                 intl={intlFake}
                 {...props}
-            />
+            />,
         );
 
     test('should correctly render initial state', () => {
@@ -27,8 +27,14 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
 
         expect(wrapper.find('[contentEditable]').length).toEqual(1);
         expect(wrapper.find('.bcs-comment-input-controls').length).toEqual(1);
-        expect(wrapper.find('.bcs-comment-input-controls').find('button').length).toEqual(2);
-        expect(wrapper.find('.bcs-at-mention-tip').hasClass('accessibility-hidden')).toBe(false);
+        expect(
+            wrapper.find('.bcs-comment-input-controls').find('button').length,
+        ).toEqual(2);
+        expect(
+            wrapper
+                .find('.bcs-at-mention-tip')
+                .hasClass('accessibility-hidden'),
+        ).toBe(false);
     });
 
     test('should call onFocus handler when input is focused', () => {
@@ -46,7 +52,9 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
 
         const wrapper = render({ onCancel: onCancelSpy });
 
-        const cancelButton = wrapper.find('Button.bcs-comment-input-cancel-btn');
+        const cancelButton = wrapper.find(
+            'Button.bcs-comment-input-cancel-btn',
+        );
         cancelButton.simulate('click');
         expect(onCancelSpy).toHaveBeenCalledTimes(1);
     });
@@ -55,7 +63,11 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const wrapper = render({ isOpen: true });
 
         expect(wrapper.find('.bcs-comment-input-is-open').length).toEqual(1);
-        expect(wrapper.find('.bcs-at-mention-tip').hasClass('accessibility-hidden')).toBe(true);
+        expect(
+            wrapper
+                .find('.bcs-at-mention-tip')
+                .hasClass('accessibility-hidden'),
+        ).toBe(true);
     });
 
     test('should set required to false on comment input when not open', () => {
@@ -65,7 +77,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
             wrapper
                 .find('DraftJSMentionSelector')
                 .at(0)
-                .prop('isRequired')
+                .prop('isRequired'),
         ).toEqual(false);
     });
 
@@ -76,7 +88,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
             wrapper
                 .find('DraftJSMentionSelector')
                 .at(0)
-                .prop('isRequired')
+                .prop('isRequired'),
         ).toEqual(true);
     });
 
@@ -92,13 +104,15 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         wrapper.instance().onFormChangeHandler({ addApproval: 'on' });
         wrapper.update();
 
-        expect(wrapper.find('.bcs-comment-add-approver-fields-container').length).toEqual(1);
+        expect(
+            wrapper.find('.bcs-comment-add-approver-fields-container').length,
+        ).toEqual(1);
     });
 
     withData(
         {
             'empty comment box': [{ text: '', hasMention: false }, 0],
-            'non-empty comment box': [{ text: 'hey', hasMention: false }, 1]
+            'non-empty comment box': [{ text: 'hey', hasMention: false }, 1],
         },
         (commentText, expectedCallCount) => {
             test(`should call createComment ${expectedCallCount} times`, () => {
@@ -107,16 +121,22 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
                 const wrapper = render({ createComment: createCommentSpy });
                 const instance = wrapper.instance();
 
-                instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
+                instance.getFormattedCommentText = jest
+                    .fn()
+                    .mockReturnValue(commentText);
 
-                const submitBtn = wrapper.find('PrimaryButton.bcs-comment-input-submit-btn');
+                const submitBtn = wrapper.find(
+                    'PrimaryButton.bcs-comment-input-submit-btn',
+                );
                 const formEl = wrapper.find('form').getDOMNode();
                 formEl.checkValidity = () => !!expectedCallCount;
                 submitBtn.simulate('submit', { target: formEl });
 
-                expect(createCommentSpy).toHaveBeenCalledTimes(expectedCallCount);
+                expect(createCommentSpy).toHaveBeenCalledTimes(
+                    expectedCallCount,
+                );
             });
-        }
+        },
     );
 
     test('should call createTask handler when approver has been added', () => {
@@ -124,15 +144,17 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const createCommentSpy = jest.fn();
         const wrapper = render({
             createComment: createCommentSpy,
-            createTask: createTaskSpy
+            createTask: createTaskSpy,
         });
 
         const instance = wrapper.instance();
-        instance.getFormattedCommentText = jest.fn().mockReturnValue({ text: 'hey', hasMention: false });
+        instance.getFormattedCommentText = jest
+            .fn()
+            .mockReturnValue({ text: 'hey', hasMention: false });
 
         wrapper.setState({
             approvers: [{ text: '123', value: '123' }],
-            isAddApprovalVisible: true
+            isAddApprovalVisible: true,
         });
 
         instance.onFormValidSubmitHandler({ addApproval: 'on' });
@@ -146,29 +168,34 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const createCommentStub = jest.fn();
         const commentText = { text: 'a comment', hasMention: false };
         const addApproval = 'on';
-        const approvers = [{ text: '123', value: 123 }, { text: '124', value: 124 }];
+        const approvers = [
+            { text: '123', value: 123 },
+            { text: '124', value: 124 },
+        ];
 
         const wrapper = render({
             createComment: createCommentStub,
-            createTask: createTaskSpy
+            createTask: createTaskSpy,
         });
 
         const instance = wrapper.instance();
-        instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
+        instance.getFormattedCommentText = jest
+            .fn()
+            .mockReturnValue(commentText);
 
         wrapper.setState({
             approvers,
-            approvalDate: '2014-04-12'
+            approvalDate: '2014-04-12',
         });
 
         wrapper.find('Form').prop('onValidSubmit')({
-            addApproval
+            addApproval,
         });
 
         expect(createTaskSpy).toHaveBeenCalledWith({
             text: commentText.text,
             assignees: approvers,
-            dueAt: '2014-04-12'
+            dueAt: '2014-04-12',
         });
         expect(instance.getFormattedCommentText).toHaveBeenCalledTimes(1);
     });
@@ -178,11 +205,13 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const wrapper = render({ createTask: createTaskSpy });
 
         const instance = wrapper.instance();
-        instance.getFormattedCommentText = jest.fn().mockReturnValue({ text: 'a comment', hasMention: false });
+        instance.getFormattedCommentText = jest
+            .fn()
+            .mockReturnValue({ text: 'a comment', hasMention: false });
 
         wrapper.find('Form').prop('onValidSubmit')({
             addApproval: 'on',
-            approverDateInput: '2014-04-12'
+            approverDateInput: '2014-04-12',
         });
 
         expect(wrapper.state('approverSelectorError')).toBeTruthy();
@@ -194,15 +223,17 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const wrapper = render({
             approverSelectorContacts: [
                 { id: 123, item: { id: 123, name: 'name' }, name: 'name' },
-                { id: 234, item: { id: 234, name: 'test' }, name: 'test' }
+                { id: 234, item: { id: 234, name: 'test' }, name: 'test' },
             ],
-            createTask: jest.fn()
+            createTask: jest.fn(),
         });
         wrapper.setState({
             approvers: [{ text: 'name', value: 123 }],
-            isAddApprovalVisible: true
+            isAddApprovalVisible: true,
         });
-        expect(wrapper.find('PillSelectorDropdown').prop('selectorOptions').length).toBe(1);
+        expect(
+            wrapper.find('PillSelectorDropdown').prop('selectorOptions').length,
+        ).toBe(1);
     });
 
     test('should reset approvers after submitting the form', () => {
@@ -211,18 +242,23 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         const approverDateInput = '2014-04-12';
         const wrapper = render({
             createComment: jest.fn(),
-            createTask: jest.fn()
+            createTask: jest.fn(),
         });
         const instance = wrapper.instance();
-        instance.getFormattedCommentText = jest.fn().mockReturnValue({ text: commentText, hasMention: false });
+        instance.getFormattedCommentText = jest
+            .fn()
+            .mockReturnValue({ text: commentText, hasMention: false });
 
         wrapper.setState({
-            approvers: [{ text: '123', value: 123 }, { text: '124', value: 124 }]
+            approvers: [
+                { text: '123', value: 123 },
+                { text: '124', value: 124 },
+            ],
         });
 
         wrapper.find('Form').prop('onValidSubmit')({
             addApproval,
-            approverDateInput
+            approverDateInput,
         });
 
         expect(wrapper.state('approvers').length).toBe(0);
@@ -234,15 +270,15 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
                 {
                     text: 'Hey there',
                     type: 'unstyled',
-                    entityRanges: []
-                }
+                    entityRanges: [],
+                },
             ],
             entityMap: {
                 first: {
                     type: 'MENTION',
-                    mutability: 'IMMUTABLE'
-                }
-            }
+                    mutability: 'IMMUTABLE',
+                },
+            },
         };
 
         const rawContentOneEntity = {
@@ -250,16 +286,16 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
                 {
                     text: 'Hey @Becky',
                     type: 'unstyled',
-                    entityRanges: [{ offset: 4, length: 6, key: 'first' }]
-                }
+                    entityRanges: [{ offset: 4, length: 6, key: 'first' }],
+                },
             ],
             entityMap: {
                 first: {
                     type: 'MENTION',
                     mutability: 'IMMUTABLE',
-                    data: { id: 1 }
-                }
-            }
+                    data: { id: 1 },
+                },
+            },
         };
 
         const rawContentTwoEntities = {
@@ -267,21 +303,24 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
                 {
                     text: 'I hung out with @Becky and @Shania',
                     type: 'unstyled',
-                    entityRanges: [{ offset: 16, length: 6, key: 'first' }, { offset: 27, length: 7, key: 'second' }]
-                }
+                    entityRanges: [
+                        { offset: 16, length: 6, key: 'first' },
+                        { offset: 27, length: 7, key: 'second' },
+                    ],
+                },
             ],
             entityMap: {
                 first: {
                     type: 'MENTION',
                     mutability: 'IMMUTABLE',
-                    data: { id: 1 }
+                    data: { id: 1 },
                 },
                 second: {
                     type: 'MENTION',
                     mutability: 'IMMUTABLE',
-                    data: { id: 2 }
-                }
-            }
+                    data: { id: 2 },
+                },
+            },
         };
 
         const rawContentTwoEntitiesOneLineBreak = {
@@ -289,46 +328,61 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
                 {
                     text: 'I hung out with @Becky and',
                     type: 'unstyled',
-                    entityRanges: [{ offset: 16, length: 6, key: 'first' }]
+                    entityRanges: [{ offset: 16, length: 6, key: 'first' }],
                 },
                 {
                     text: '@Shania yesterday',
                     type: 'unstyled',
-                    entityRanges: [{ offset: 0, length: 7, key: 'second' }]
-                }
+                    entityRanges: [{ offset: 0, length: 7, key: 'second' }],
+                },
             ],
             entityMap: {
                 first: {
                     type: 'MENTION',
                     mutability: 'IMMUTABLE',
-                    data: { id: 1 }
+                    data: { id: 1 },
                 },
                 second: {
                     type: 'MENTION',
                     mutability: 'IMMUTABLE',
-                    data: { id: 2 }
-                }
-            }
+                    data: { id: 2 },
+                },
+            },
         };
 
         withData(
             {
-                'no entities in the editor': [rawContentNoEntities, { text: 'Hey there', hasMention: false }],
-                'one entity in the editor': [rawContentOneEntity, { text: 'Hey @[1:Becky]', hasMention: true }],
+                'no entities in the editor': [
+                    rawContentNoEntities,
+                    { text: 'Hey there', hasMention: false },
+                ],
+                'one entity in the editor': [
+                    rawContentOneEntity,
+                    { text: 'Hey @[1:Becky]', hasMention: true },
+                ],
                 'two entities in the editor': [
                     rawContentTwoEntities,
-                    { text: 'I hung out with @[1:Becky] and @[2:Shania]', hasMention: true }
+                    {
+                        text: 'I hung out with @[1:Becky] and @[2:Shania]',
+                        hasMention: true,
+                    },
                 ],
                 'two entities and a linebreak in the editor': [
                     rawContentTwoEntitiesOneLineBreak,
-                    { text: 'I hung out with @[1:Becky] and\n@[2:Shania] yesterday', hasMention: true }
-                ]
+                    {
+                        text:
+                            'I hung out with @[1:Becky] and\n@[2:Shania] yesterday',
+                        hasMention: true,
+                    },
+                ],
             },
             (rawContent, expected) => {
                 test('should return the correct result', () => {
                     const blocks = convertFromRaw(rawContent);
 
-                    const dummyEditorState = EditorState.createWithContent(blocks);
+                    const dummyEditorState = EditorState.createWithContent(
+                        blocks,
+                    );
 
                     const wrapper = render();
                     const instance = wrapper.instance();
@@ -337,7 +391,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
                     const result = instance.getFormattedCommentText();
                     expect(result).toEqual(expected);
                 });
-            }
+            },
         );
     });
 
@@ -348,7 +402,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
             wrapper
                 .find('DraftJSMentionSelector')
                 .at(0)
-                .prop('placeholder')
+                .prop('placeholder'),
         ).toEqual(null);
 
         const content = wrapper
@@ -365,7 +419,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
             wrapper
                 .find('DraftJSMentionSelector')
                 .at(0)
-                .prop('placeholder')
+                .prop('placeholder'),
         ).toEqual('be.commentWrite');
 
         const content = wrapper
@@ -387,7 +441,7 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
 
         test('should clear approver selector error when called', () => {
             const wrapper = render({
-                getApproverWithQuery: jest.fn()
+                getApproverWithQuery: jest.fn(),
             });
             wrapper.setState({ approverSelectorError: 'test' });
             wrapper.instance().handleApproverSelectorInput('hi');
@@ -400,7 +454,10 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
             const wrapper = render();
             wrapper.setState({ approvers: [{ value: 123 }] });
             wrapper.instance().handleApproverSelectorSelect([{ value: 234 }]);
-            expect(wrapper.state('approvers')).toEqual([{ value: 123 }, { value: 234 }]);
+            expect(wrapper.state('approvers')).toEqual([
+                { value: 123 },
+                { value: 234 },
+            ]);
         });
     });
 

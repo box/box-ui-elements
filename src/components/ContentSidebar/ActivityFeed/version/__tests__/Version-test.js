@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import { VersionBase as Version } from '../Version';
 
 const translationProps = {
-    intl: { formatMessage: () => {} }
+    intl: { formatMessage: () => {} },
 };
 
 describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
@@ -14,7 +14,7 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
             id: '148953',
             version_number: 1,
             modified_by: { name: '50 Cent', id: 10 },
-            action: 'upload'
+            action: 'upload',
         };
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
@@ -29,7 +29,7 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
             onInfo: () => {},
             version_number: 1,
             modified_by: { name: '50 Cent', id: 10 },
-            action: 'upload'
+            action: 'upload',
         };
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
@@ -44,7 +44,7 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
             id: '148953',
             version_number: 1,
             modified_by: { name: '50 Cent', id: 10 },
-            action: 'delete'
+            action: 'delete',
         };
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
@@ -58,7 +58,7 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
             id: '148953',
             version_number: 1,
             modified_by: { name: '50 Cent', id: 10 },
-            action: 'restore'
+            action: 'restore',
         };
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);
@@ -72,7 +72,7 @@ describe('components/ContentSidebar/ActivityFeed/version/Version', () => {
             id: '148953',
             version_number: 1,
             modified_by: { name: '50 Cent', id: 10 },
-            action: 'restore'
+            action: 'restore',
         };
 
         const wrapper = shallow(<Version {...version} {...translationProps} />);

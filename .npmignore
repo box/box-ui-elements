@@ -16,6 +16,7 @@ src
 .editorconfig
 .eslintrc.json
 .eslintrc
+.eslintrc.js
 .git
 .gitignore
 .npmignore
@@ -37,6 +38,7 @@ browserslist
 flow-typed
 .github
 .prettierignore
+.prettierrc.js
 .eslintignore
 examples
 styleguide

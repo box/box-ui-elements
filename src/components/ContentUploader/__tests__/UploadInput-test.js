@@ -4,12 +4,13 @@ import { shallow } from 'enzyme';
 import UploadInput from '../UploadInput';
 
 describe('components/ContentUploader/UploadInput', () => {
-    const getWrapper = (props) => shallow(<UploadInput handleChange={noop} {...props} />);
+    const getWrapper = props =>
+        shallow(<UploadInput handleChange={noop} {...props} />);
 
     test('should render correctly when inputLabel is available', () => {
         const wrapper = getWrapper({
             inputLabelClass: 'inputLabelClass',
-            inputLabel: 'yo'
+            inputLabel: 'yo',
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -24,7 +25,7 @@ describe('components/ContentUploader/UploadInput', () => {
     test('should render correctly when isFolderUpload is true', () => {
         const wrapper = getWrapper({
             inputLabel: 'yo',
-            isFolderUpload: true
+            isFolderUpload: true,
         });
 
         expect(wrapper).toMatchSnapshot();

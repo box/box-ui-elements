@@ -11,13 +11,18 @@ import FolderEmptyState from 'box-react-ui/lib/icons/states/FolderEmptyState';
 import SelectedItemsEmptyState from 'box-react-ui/lib/icons/states/SelectedItemsEmptyState';
 import SearchEmptyState from 'box-react-ui/lib/icons/states/SearchEmptyState';
 import messages from '../messages';
-import { VIEW_ERROR, VIEW_FOLDER, VIEW_SEARCH, VIEW_SELECTED } from '../../constants';
+import {
+    VIEW_ERROR,
+    VIEW_FOLDER,
+    VIEW_SEARCH,
+    VIEW_SELECTED,
+} from '../../constants';
 
 import './EmptyState.scss';
 
 type Props = {
     view: View,
-    isLoading: boolean
+    isLoading: boolean,
 };
 
 const EmptyState = ({ view, isLoading }: Props) => {
@@ -45,7 +50,7 @@ const EmptyState = ({ view, isLoading }: Props) => {
     }
 
     return (
-        <div className='be-empty'>
+        <div className="be-empty">
             {type}
             <div>{message}</div>
         </div>

@@ -13,14 +13,15 @@ const MOCK_INTEGRATIONS = {
         type: APP_INTEGRATION,
         id: '10897',
         name: 'Edit with G Suite',
-        description: 'This integration allows customers to work seamlessly between Box and G Suite\'s editor'
+        description:
+            "This integration allows customers to work seamlessly between Box and G Suite's editor",
     },
     '3282': {
         type: APP_INTEGRATION,
         id: '3282',
         name: 'Sign with Adobe Sign',
-        description: 'Send your document for signature to Adobe Sign'
-    }
+        description: 'Send your document for signature to Adobe Sign',
+    },
 };
 
 class AppIntegrations extends Base {
@@ -44,7 +45,13 @@ class AppIntegrations extends Base {
      * @param {string} id - An app integration ID
      * @return {void}
      */
-    fetchMockAppIntegration({ id, successCallback }: { id: string, successCallback: Function }) {
+    fetchMockAppIntegration({
+        id,
+        successCallback,
+    }: {
+        id: string,
+        successCallback: Function,
+    }) {
         // Simulate network latency to test loading states
         setTimeout(() => {
             successCallback(MOCK_INTEGRATIONS[id]);
@@ -62,8 +69,8 @@ class AppIntegrations extends Base {
             // Using the mock getter until the API is fixed.
             this.fetchMockAppIntegration({
                 id,
-                successCallback: (appIntegration) => resolve(appIntegration),
-                errorCallback: (error) => reject(error)
+                successCallback: appIntegration => resolve(appIntegration),
+                errorCallback: error => reject(error),
             });
         });
     }
@@ -75,7 +82,12 @@ class AppIntegrations extends Base {
      * @param {string} fileID - A file ID
      * @return {string} base url for files
      */
-    execute(integrationId: ?string, fileId: ?string, successCallback: Function, errorCallback: Function): void {
+    execute(
+        integrationId: ?string,
+        fileId: ?string,
+        successCallback: Function,
+        errorCallback: Function,
+    ): void {
         if (!integrationId) {
             throw new Error('Missing integration id!');
         }
@@ -89,9 +101,9 @@ class AppIntegrations extends Base {
             data: {
                 item: {
                     id: fileId,
-                    type: TYPE_FILE
-                }
-            }
+                    type: TYPE_FILE,
+                },
+            },
         };
 
         this.post({
@@ -99,7 +111,7 @@ class AppIntegrations extends Base {
             url: executeURL,
             data: body,
             successCallback,
-            errorCallback
+            errorCallback,
         });
     }
 }

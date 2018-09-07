@@ -19,7 +19,7 @@ import {
     PERMISSION_CAN_SHARE,
     PERMISSION_CAN_PREVIEW,
     TYPE_FILE,
-    TYPE_WEBLINK
+    TYPE_WEBLINK,
 } from '../../constants';
 
 import './MoreOptionsCell.scss';
@@ -36,7 +36,7 @@ export default (
     onItemRename: Function,
     onItemShare: Function,
     onItemPreview: Function,
-    isSmall: boolean
+    isSmall: boolean,
 ) => ({ rowData }: { rowData: BoxItem }) => {
     const onFocus = () => onItemSelect(rowData);
     const onDelete = () => onItemDelete(rowData);
@@ -51,23 +51,37 @@ export default (
         return <span />;
     }
 
-    const allowPreview = type === TYPE_FILE && canPreview && permissions[PERMISSION_CAN_PREVIEW];
+    const allowPreview =
+        type === TYPE_FILE && canPreview && permissions[PERMISSION_CAN_PREVIEW];
     const allowOpen = type === TYPE_WEBLINK;
     const allowDelete = canDelete && permissions[PERMISSION_CAN_DELETE];
     const allowShare = canShare && permissions[PERMISSION_CAN_SHARE];
     const allowRename = canRename && permissions[PERMISSION_CAN_RENAME];
     const allowDownload =
-        canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE && !Browser.isMobile();
-    const allowed = allowDelete || allowRename || allowDownload || allowPreview || allowShare || allowOpen;
+        canDownload &&
+        permissions[PERMISSION_CAN_DOWNLOAD] &&
+        type === TYPE_FILE &&
+        !Browser.isMobile();
+    const allowed =
+        allowDelete ||
+        allowRename ||
+        allowDownload ||
+        allowPreview ||
+        allowShare ||
+        allowOpen;
 
     if (!allowed) {
         return <span />;
     }
 
     return (
-        <div className='bce-more-options'>
+        <div className="bce-more-options">
             <DropdownMenu isRightAligned constrainToScrollParent>
-                <Button type='button' onFocus={onFocus} className='bce-btn-more-options'>
+                <Button
+                    type="button"
+                    onFocus={onFocus}
+                    className="bce-btn-more-options"
+                >
                     ···
                 </Button>
                 <Menu>
@@ -104,7 +118,7 @@ export default (
                 </Menu>
             </DropdownMenu>
             {allowShare && !isSmall ? (
-                <Button type='button' onFocus={onFocus} onClick={onShare}>
+                <Button type="button" onFocus={onFocus} onClick={onShare}>
                     <FormattedMessage {...messages.share} />
                 </Button>
             ) : null}

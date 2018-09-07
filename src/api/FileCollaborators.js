@@ -32,12 +32,12 @@ class FileCollaborators extends MarkerBasedAPI {
         }
 
         const { entries } = data;
-        const collaborators = entries.map((collab) => {
+        const collaborators = entries.map(collab => {
             const { id, name, login } = collab;
             return {
                 id,
                 name,
-                item: { id, name, email: login }
+                item: { id, name, email: login },
             };
         });
 

@@ -10,20 +10,22 @@ describe('api/TaskAssignments', () => {
 
     describe('getUrl()', () => {
         test('should return correct version api url with id', () => {
-            expect(taskAssignments.getUrl('foo')).toBe('https://api.box.com/2.0/task_assignments/foo');
+            expect(taskAssignments.getUrl('foo')).toBe(
+                'https://api.box.com/2.0/task_assignments/foo',
+            );
         });
     });
 
     describe('CRUD operations', () => {
         const file = {
             id: 'foo',
-            permissions: {}
+            permissions: {},
         };
 
         const taskId = '123';
         const taskAssignmentId = '456';
         const assignTo = {
-            id: '987654321'
+            id: '987654321',
         };
 
         const resolutionState = 'rejected';
@@ -43,11 +45,16 @@ describe('api/TaskAssignments', () => {
 
         describe('createTaskAssignment()', () => {
             test('should check for valid task assignment permissions', () => {
-                taskAssignments.createTaskAssignment({ file, taskId, successCallback, errorCallback });
+                taskAssignments.createTaskAssignment({
+                    file,
+                    taskId,
+                    successCallback,
+                    errorCallback,
+                });
                 expect(taskAssignments.checkApiCallValidity).toBeCalledWith(
                     PERMISSION_CAN_COMMENT,
                     file.permissions,
-                    file.id
+                    file.id,
                 );
             });
 
@@ -56,10 +63,10 @@ describe('api/TaskAssignments', () => {
                     data: {
                         task: {
                             id: taskId,
-                            type: 'task'
+                            type: 'task',
                         },
-                        assign_to: assignTo
-                    }
+                        assign_to: assignTo,
+                    },
                 };
 
                 taskAssignments.createTaskAssignment({
@@ -67,14 +74,14 @@ describe('api/TaskAssignments', () => {
                     taskId,
                     assignTo,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
                 expect(taskAssignments.post).toBeCalledWith({
                     id: 'foo',
                     url: taskAssignments.getUrl(taskId),
                     data: requestData,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });
@@ -86,18 +93,18 @@ describe('api/TaskAssignments', () => {
                     taskAssignmentId,
                     resolutionState,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
                 expect(taskAssignments.checkApiCallValidity).toBeCalledWith(
                     PERMISSION_CAN_COMMENT,
                     file.permissions,
-                    file.id
+                    file.id,
                 );
             });
 
             test('should put a well formed task update to the tasks endpoint', () => {
                 const requestData = {
-                    data: { resolution_state: resolutionState }
+                    data: { resolution_state: resolutionState },
                 };
 
                 taskAssignments.updateTaskAssignment({
@@ -105,25 +112,30 @@ describe('api/TaskAssignments', () => {
                     taskAssignmentId,
                     resolutionState,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
                 expect(taskAssignments.put).toBeCalledWith({
                     id: 'foo',
                     url: taskAssignments.getUrl(taskAssignmentId),
                     data: requestData,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });
 
         describe('deleteTaskAssignment()', () => {
             test('should check for valid task assignment delete permissions', () => {
-                taskAssignments.deleteTaskAssignment({ file, taskAssignmentId, successCallback, errorCallback });
+                taskAssignments.deleteTaskAssignment({
+                    file,
+                    taskAssignmentId,
+                    successCallback,
+                    errorCallback,
+                });
                 expect(taskAssignments.checkApiCallValidity).toBeCalledWith(
                     PERMISSION_CAN_COMMENT,
                     file.permissions,
-                    file.id
+                    file.id,
                 );
             });
 
@@ -132,13 +144,13 @@ describe('api/TaskAssignments', () => {
                     file,
                     taskAssignmentId,
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
                 expect(taskAssignments.delete).toBeCalledWith({
                     id: 'foo',
                     url: taskAssignments.getUrl(taskAssignmentId),
                     successCallback,
-                    errorCallback
+                    errorCallback,
                 });
             });
         });

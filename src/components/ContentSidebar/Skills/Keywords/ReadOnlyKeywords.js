@@ -8,24 +8,27 @@ import * as React from 'react';
 import PillCloud from 'box-react-ui/lib/components/pill-cloud/PillCloud';
 import Timeline from '../Timeline';
 import getPills from './keywordUtils';
-import { SKILLS_TARGETS, INTERACTION_TARGET } from '../../../../interactionTargets';
+import {
+    SKILLS_TARGETS,
+    INTERACTION_TARGET,
+} from '../../../../interactionTargets';
 import type { Pill, Pills } from './flowTypes';
 import './ReadOnlyKeywords.scss';
 
 type Props = {
     duration?: number,
     keywords: Array<SkillCardEntry>,
-    getViewer?: Function
+    getViewer?: Function,
 };
 
 type State = {
-    selectedIndex: number
+    selectedIndex: number,
 };
 
 class ReadOnlyselecteds extends React.PureComponent<Props, State> {
     props: Props;
     state: State = {
-        selectedIndex: -1
+        selectedIndex: -1,
     };
 
     /**
@@ -38,7 +41,9 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
     onSelect = (pill: Pill) => {
         const { selectedIndex }: State = this.state;
         const newIndex = pill.value;
-        this.setState({ selectedIndex: selectedIndex === newIndex ? -1 : newIndex });
+        this.setState({
+            selectedIndex: selectedIndex === newIndex ? -1 : newIndex,
+        });
     };
 
     /**
@@ -52,7 +57,9 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
         const { selectedIndex }: State = this.state;
         const options: Pills = getPills(keywords);
         const selected = keywords[selectedIndex];
-        const pillCloudProps = selected ? { selectedOptions: [options[selectedIndex]] } : {};
+        const pillCloudProps = selected
+            ? { selectedOptions: [options[selectedIndex]] }
+            : {};
 
         return (
             <React.Fragment>
@@ -60,7 +67,9 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
                     options={options}
                     onSelect={this.onSelect}
                     {...pillCloudProps}
-                    buttonProps={{ [INTERACTION_TARGET]: SKILLS_TARGETS.KEYWORDS.SELECT }}
+                    buttonProps={{
+                        [INTERACTION_TARGET]: SKILLS_TARGETS.KEYWORDS.SELECT,
+                    }}
                 />
                 {!!selected &&
                     Array.isArray(selected.appears) &&

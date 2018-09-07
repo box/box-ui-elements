@@ -44,7 +44,7 @@ import {
     FIELD_TRASHED_AT,
     FIELD_ASSIGNED_TO,
     FIELD_RESOLUTION_STATE,
-    FIELD_RESTORED_FROM
+    FIELD_RESTORED_FROM,
 } from '../constants';
 
 // Minimum set of fields needed for Content Explorer / Picker
@@ -64,7 +64,7 @@ const FOLDER_FIELDS_TO_FETCH = [
     FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
     FIELD_HAS_COLLABORATIONS,
     FIELD_IS_EXTERNALLY_OWNED,
-    FIELD_ITEM_COLLECTION
+    FIELD_ITEM_COLLECTION,
 ];
 
 // Fields needed for the sidebar
@@ -87,7 +87,7 @@ const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_ITEM_EXPIRATION,
     FIELD_VERSION_NUMBER,
     FIELD_IS_EXTERNALLY_OWNED,
-    FIELD_RESTORED_FROM
+    FIELD_RESTORED_FROM,
 ];
 
 // Fields needed for preview
@@ -103,7 +103,7 @@ const PREVIEW_FIELDS_TO_FETCH = [
     FIELD_REPRESENTATIONS,
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
-    FIELD_IS_DOWNLOAD_AVAILABLE
+    FIELD_IS_DOWNLOAD_AVAILABLE,
 ];
 
 // Fields needed to get tasks data
@@ -113,7 +113,7 @@ const TASKS_FIELDS_TO_FETCH = [
     FIELD_CREATED_AT,
     FIELD_CREATED_BY,
     FIELD_DUE_AT,
-    FIELD_MESSAGE
+    FIELD_MESSAGE,
 ];
 
 // Fields needed to get tasks data
@@ -122,11 +122,15 @@ const VERSIONS_FIELDS_TO_FETCH = [
     FIELD_CREATED_AT,
     FIELD_MODIFIED_AT,
     FIELD_MODIFIED_BY,
-    FIELD_VERSION_NUMBER
+    FIELD_VERSION_NUMBER,
 ];
 
 // Fields needed to get task assignments data
-const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE];
+const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [
+    FIELD_ASSIGNED_TO,
+    FIELD_RESOLUTION_STATE,
+    FIELD_MESSAGE,
+];
 
 // Fields needed to get tasks data
 const COMMENTS_FIELDS_TO_FETCH = [
@@ -135,7 +139,7 @@ const COMMENTS_FIELDS_TO_FETCH = [
     FIELD_CREATED_AT,
     FIELD_CREATED_BY,
     FIELD_MODIFIED_AT,
-    FIELD_PERMISSIONS
+    FIELD_PERMISSIONS,
 ];
 
 /**
@@ -145,7 +149,10 @@ const COMMENTS_FIELDS_TO_FETCH = [
  * @param {Array<string>|void} [properties] - object properties to check
  * @return {Array<string>} comma seperated list of properties missing
  */
-function findMissingProperties(obj?: Object, properties?: Array<string> = []): Array<string> {
+function findMissingProperties(
+    obj?: Object,
+    properties?: Array<string> = [],
+): Array<string> {
     // If file doesn't exist or is an empty object, we should fetch all fields
     if (!obj || typeof obj !== 'object' || Object.keys(obj).length === 0) {
         return properties;
@@ -161,7 +168,10 @@ function findMissingProperties(obj?: Object, properties?: Array<string> = []): A
  * @param {Array<string>|void} [properties] - some properties to check
  * @return {Object} new object with missing fields
  */
-function fillMissingProperties(obj?: Object = {}, properties?: Array<string>): Object {
+function fillMissingProperties(
+    obj?: Object = {},
+    properties?: Array<string>,
+): Object {
     // If file doesn't exist or is an empty object, we should fetch all fields
     if (!Array.isArray(properties) || properties.length === 0) {
         return obj;
@@ -186,5 +196,5 @@ export {
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
     COMMENTS_FIELDS_TO_FETCH,
     findMissingProperties,
-    fillMissingProperties
+    fillMissingProperties,
 };

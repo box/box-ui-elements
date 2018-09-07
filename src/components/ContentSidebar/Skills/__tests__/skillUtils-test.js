@@ -11,16 +11,29 @@ describe('components/ContentSidebar/skillUtils', () => {
         });
 
         test('should return true when file version doesnt exist on skills', () => {
-            expect(isValidSkillsCard({ file_version: { id: 'fvid' } }, { entries: [] })).toBeTruthy();
+            expect(
+                isValidSkillsCard(
+                    { file_version: { id: 'fvid' } },
+                    { entries: [] },
+                ),
+            ).toBeTruthy();
         });
 
         test('should return false when file version doesnt match with skills', () => {
-            expect(isValidSkillsCard({ file_version: { id: 'fvid' } }, { file_version: {}, entries: [] })).toBeFalsy();
+            expect(
+                isValidSkillsCard(
+                    { file_version: { id: 'fvid' } },
+                    { file_version: {}, entries: [] },
+                ),
+            ).toBeFalsy();
         });
 
         test('should return true when file version matches with skills', () => {
             expect(
-                isValidSkillsCard({ file_version: { id: 'fvid' } }, { file_version: { id: 'fvid' }, entries: [] })
+                isValidSkillsCard(
+                    { file_version: { id: 'fvid' } },
+                    { file_version: { id: 'fvid' }, entries: [] },
+                ),
             ).toBeTruthy();
         });
     });
@@ -42,11 +55,17 @@ describe('components/ContentSidebar/skillUtils', () => {
         });
 
         test('should return false when no box skills cards', () => {
-            expect(hasSkills({ metadata: { global: { boxSkillsCards: {} } } })).toBeFalsy();
+            expect(
+                hasSkills({ metadata: { global: { boxSkillsCards: {} } } }),
+            ).toBeFalsy();
         });
 
         test('should return false when box skills cards empty', () => {
-            expect(hasSkills({ metadata: { global: { boxSkillsCards: { cards: [] } } } })).toBeFalsy();
+            expect(
+                hasSkills({
+                    metadata: { global: { boxSkillsCards: { cards: [] } } },
+                }),
+            ).toBeFalsy();
         });
 
         test('should return true when box skills cards entries empty', () => {
@@ -57,13 +76,13 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        entries: []
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                })
+                                        entries: [],
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                }),
             ).toBeTruthy();
         });
 
@@ -75,13 +94,13 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        status: 'error'
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                })
+                                        status: 'error',
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                }),
             ).toBeTruthy();
         });
 
@@ -93,13 +112,13 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        entries: [{}]
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                })
+                                        entries: [{}],
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                }),
             ).toBeTruthy();
         });
 
@@ -111,16 +130,16 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        entries: []
+                                        entries: [],
                                     },
                                     {
-                                        entries: [{}]
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                })
+                                        entries: [{}],
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                }),
             ).toBeTruthy();
         });
 
@@ -132,16 +151,16 @@ describe('components/ContentSidebar/skillUtils', () => {
                             boxSkillsCards: {
                                 cards: [
                                     {
-                                        entries: []
+                                        entries: [],
                                     },
                                     {
-                                        error: {}
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                })
+                                        error: {},
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                }),
             ).toBeTruthy();
         });
     });

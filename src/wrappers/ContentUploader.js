@@ -53,7 +53,9 @@ class ContentUploader extends ES6Wrapper {
     /** @inheritdoc */
     render() {
         const { modal, ...rest }: { modal?: ModalOptions } = this.options;
-        const UploaderComponent = modal ? ContentUploaderPopup : WrappedContentUploaderComponent;
+        const UploaderComponent = modal
+            ? ContentUploaderPopup
+            : WrappedContentUploaderComponent;
 
         render(
             <UploaderComponent
@@ -69,7 +71,7 @@ class ContentUploader extends ES6Wrapper {
                 modal={((modal: any): ModalOptions)}
                 {...rest}
             />,
-            this.container
+            this.container,
         );
     }
 }

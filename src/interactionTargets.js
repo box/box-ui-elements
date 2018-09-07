@@ -2,12 +2,12 @@ export const SIDEBAR_NAV_TARGETS = {
     ACTIVITY: 'sidebaractivity',
     DETAILS: 'sidebardetails',
     SKILLS: 'sidebarskills',
-    METADATA: 'sidebarmetadata'
+    METADATA: 'sidebarmetadata',
 };
 
 export const SECTION_TARGETS = {
     FILE_PROPERTIES: 'fileproperties',
-    ACCESS_STATS: 'accessstats'
+    ACCESS_STATS: 'accessstats',
 };
 
 export const DETAILS_TARGETS = {
@@ -17,12 +17,12 @@ export const DETAILS_TARGETS = {
         EDITS: 'accessstats-edits',
         PREVIEWS: 'accessstats-previews',
         VIEWS: 'accessstats-views',
-        VIEW_DETAILS: 'accessstats-viewdetails'
+        VIEW_DETAILS: 'accessstats-viewdetails',
     },
     CLASSIFICATION_ADD: 'addclassification',
     CLASSIFICATION_EDIT: 'editclassification',
     DESCRIPTION: 'description',
-    VERSION_HISTORY: 'versionhistory'
+    VERSION_HISTORY: 'versionhistory',
 };
 
 export const ACTIVITY_TARGETS = {
@@ -36,7 +36,7 @@ export const ACTIVITY_TARGETS = {
     VERSION_CARD: 'activityfeed-versioninfo',
     TASK_DATE_PICKER: 'activityfeed-taskdatepicker',
     TASK_APPROVE: 'activityfeed-taskapprove',
-    TASK_REJECT: 'activityfeed-taskreject'
+    TASK_REJECT: 'activityfeed-taskreject',
 };
 
 export const SKILLS_TARGETS = {
@@ -47,7 +47,7 @@ export const SKILLS_TARGETS = {
         EDIT: 'skill-faceedit',
         EDIT_SAVE: 'skill-faceeditsave',
         EDIT_CANCEL: 'skill-faceeditcancel',
-        TIMELINE: 'skill-facetimeslice'
+        TIMELINE: 'skill-facetimeslice',
     },
     KEYWORDS: {
         CARD: 'skill-keywordcard',
@@ -55,7 +55,7 @@ export const SKILLS_TARGETS = {
         EDIT_SAVE: 'skill-keywordeditsave',
         EDIT_CANCEL: 'skill-keywordeditcancel',
         TIMELINE: 'skill-keywordtimeslice',
-        SELECT: 'skill-keywordselect'
+        SELECT: 'skill-keywordselect',
     },
     TRANSCRIPTS: {
         CARD: 'skill-transcriptcard',
@@ -65,12 +65,12 @@ export const SKILLS_TARGETS = {
         EDIT_SAVE: 'skill-transcripteditsave',
         EDIT_CANCEL: 'skill-transcripteditcancel',
         TRANSCRIPT: 'skill-transcript',
-        EDIT_TEXT: 'skill-transcriptedittext'
+        EDIT_TEXT: 'skill-transcriptedittext',
     },
     TIMELINE: {
         NEXT: 'skill-timelimelinenext',
-        PREVIOUS: 'skill-timelineprevious'
-    }
+        PREVIOUS: 'skill-timelineprevious',
+    },
 };
 
 export const INTERACTION_TARGET = 'data-resin-target';

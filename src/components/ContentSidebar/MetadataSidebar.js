@@ -19,28 +19,28 @@ import API from '../../api';
 import './MetadataSidebar.scss';
 
 type ExternalProps = {
-    getMetadata?: Function
+    getMetadata?: Function,
 };
 
 type PropsWithoutContext = {
-    file: BoxItem
+    file: BoxItem,
 } & ExternalProps;
 
 type Props = {
-    api: API
+    api: API,
 } & PropsWithoutContext;
 
 type State = {
     editors?: Array<MetadataEditor>,
     templates?: Array<MetadataEditorTemplate>,
     isLoading: boolean,
-    hasError: boolean
+    hasError: boolean,
 };
 
 class MetadataSidebar extends React.PureComponent<Props, State> {
     state = {
         isLoading: false,
-        hasError: false
+        hasError: false,
     };
 
     componentDidMount() {
@@ -65,11 +65,22 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
         const { api, file, getMetadata }: Props = this.props;
         api.getMetadataAPI(true).getEditors(
             file,
-            ({ editors, templates }: { editors: Array<MetadataEditor>, templates: Array<MetadataEditorTemplate> }) => {
-                this.setState({ templates, editors: editors.slice(0), isLoading: false, hasError: false });
+            ({
+                editors,
+                templates,
+            }: {
+                editors: Array<MetadataEditor>,
+                templates: Array<MetadataEditorTemplate>,
+            }) => {
+                this.setState({
+                    templates,
+                    editors: editors.slice(0),
+                    isLoading: false,
+                    hasError: false,
+                });
             },
             this.errorCallback,
-            getMetadata
+            getMetadata,
         );
     };
 
@@ -124,7 +135,12 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
         api
             .getMetadataAPI(false)
-            .deleteMetadata(file, editor.template, () => this.onRemoveSuccessHandler(editor), this.errorCallback);
+            .deleteMetadata(
+                file,
+                editor.template,
+                () => this.onRemoveSuccessHandler(editor),
+                this.errorCallback,
+            );
     };
 
     /**
@@ -149,7 +165,14 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     onAdd = (template: MetadataEditorTemplate) => {
         const { api, file }: Props = this.props;
         this.setState({ isLoading: true });
-        api.getMetadataAPI(false).createMetadata(file, template, this.onAddSuccessHandler, this.errorCallback);
+        api
+            .getMetadataAPI(false)
+            .createMetadata(
+                file,
+                template,
+                this.onAddSuccessHandler,
+                this.errorCallback,
+            );
     };
 
     /**
@@ -159,7 +182,10 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @param {Object} newEditor - updated editor
      * @return {void}
      */
-    onSaveSuccessHandler(oldEditor: MetadataEditor, newEditor: MetadataEditor): void {
+    onSaveSuccessHandler(
+        oldEditor: MetadataEditor,
+        newEditor: MetadataEditor,
+    ): void {
         const { editors = [] }: State = this.state;
         const clone = editors.slice(0);
         clone.splice(editors.indexOf(oldEditor), 1, newEditor);
@@ -187,7 +213,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             (newEditor: MetadataEditor) => {
                 this.onSaveSuccessHandler(oldEditor, newEditor);
             },
-            this.errorCallback
+            this.errorCallback,
         );
     };
 
@@ -218,7 +244,8 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
         const showLoadingIndicator = !hasError && !showEditor;
         const canEdit = this.canEdit();
         const showTemplateDropdown = showEditor && canEdit;
-        const showEmptyContent = showEditor && ((editors: any): Array<MetadataEditor>).length === 0;
+        const showEmptyContent =
+            showEditor && ((editors: any): Array<MetadataEditor>).length === 0;
 
         return (
             <SidebarContent
@@ -230,19 +257,33 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                             isDropdownBusy={false}
                             onAdd={this.onAdd}
                             templates={templates}
-                            usedTemplates={editors && editors.map((editor) => editor.template)}
+                            usedTemplates={
+                                editors &&
+                                editors.map(editor => editor.template)
+                            }
                         />
                     ) : null
                 }
             >
                 {hasError && (
-                    <InlineError title={<FormattedMessage {...messages.sidebarMetadataErrorTitle} />}>
-                        <FormattedMessage {...messages.sidebarMetadataErrorContent} />
+                    <InlineError
+                        title={
+                            <FormattedMessage
+                                {...messages.sidebarMetadataErrorTitle}
+                            />
+                        }
+                    >
+                        <FormattedMessage
+                            {...messages.sidebarMetadataErrorContent}
+                        />
                     </InlineError>
                 )}
                 {showLoadingIndicator && <LoadingIndicator />}
                 {showEditor && (
-                    <LoadingIndicatorWrapper className='metadata-instance-editor' isLoading={isLoading}>
+                    <LoadingIndicatorWrapper
+                        className="metadata-instance-editor"
+                        isLoading={isLoading}
+                    >
                         {showEmptyContent ? (
                             <EmptyContent canAdd={canEdit} />
                         ) : (
@@ -263,5 +304,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 export type MetadataSidebarProps = ExternalProps;
 export { MetadataSidebar as MetadataSidebarComponent };
 export default (props: PropsWithoutContext) => (
-    <APIContext.Consumer>{(api) => <MetadataSidebar {...props} api={api} />}</APIContext.Consumer>
+    <APIContext.Consumer>
+        {api => <MetadataSidebar {...props} api={api} />}
+    </APIContext.Consumer>
 );

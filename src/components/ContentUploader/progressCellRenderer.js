@@ -11,7 +11,7 @@ import { STATUS_ERROR, STATUS_IN_PROGRESS } from '../../constants';
 import messages from '../messages';
 
 type Props = {
-    rowData: UploadItem
+    rowData: UploadItem,
 };
 
 /**
@@ -23,13 +23,27 @@ type Props = {
 const getErrorMessage = (errorCode: ?string) => {
     switch (errorCode) {
         case 'file_size_limit_exceeded':
-            return <FormattedMessage {...messages.uploadsFileSizeLimitExceededErrorMessage} />;
+            return (
+                <FormattedMessage
+                    {...messages.uploadsFileSizeLimitExceededErrorMessage}
+                />
+            );
         case 'storage_limit_exceeded':
-            return <FormattedMessage {...messages.uploadsStorageLimitErrorMessage} />;
+            return (
+                <FormattedMessage
+                    {...messages.uploadsStorageLimitErrorMessage}
+                />
+            );
         case 'pending_app_folder_size_limit':
-            return <FormattedMessage {...messages.uploadsPendingFolderSizeLimitErrorMessage} />;
+            return (
+                <FormattedMessage
+                    {...messages.uploadsPendingFolderSizeLimitErrorMessage}
+                />
+            );
         default:
-            return <FormattedMessage {...messages.uploadsDefaultErrorMessage} />;
+            return (
+                <FormattedMessage {...messages.uploadsDefaultErrorMessage} />
+            );
     }
 };
 

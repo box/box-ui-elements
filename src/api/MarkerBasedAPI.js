@@ -8,13 +8,13 @@ import Base from './Base';
 
 type Params = {
     marker: string,
-    limit: number
+    limit: number,
 };
 
 type Data = {
     next_marker: string,
     limit: number,
-    entries: Array<any>
+    entries: Array<any>,
 };
 
 class MarkerBasedApi extends Base {
@@ -48,7 +48,7 @@ class MarkerBasedApi extends Base {
         marker: string,
         limit: number,
         shouldFetchAll: boolean,
-        params?: Object
+        params?: Object,
     ): Promise<void> {
         if (this.isDestroyed()) {
             return;
@@ -60,19 +60,29 @@ class MarkerBasedApi extends Base {
             const queryParams: Params = {
                 ...params,
                 marker,
-                limit
+                limit,
             };
 
-            const { data }: { data: Data } = await this.xhr.get({ url, id: getTypedFileId(id), params: queryParams });
+            const { data }: { data: Data } = await this.xhr.get({
+                url,
+                id: getTypedFileId(id),
+                params: queryParams,
+            });
 
             const entries = this.data ? this.data.entries : [];
             this.data = {
                 ...data,
-                entries: entries.concat(data.entries)
+                entries: entries.concat(data.entries),
             };
             const nextMarker = data.next_marker;
             if (shouldFetchAll && this.hasMoreItems(nextMarker)) {
-                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, params);
+                this.markerGetRequest(
+                    id,
+                    nextMarker,
+                    limit,
+                    shouldFetchAll,
+                    params,
+                );
                 return;
             }
 
@@ -100,7 +110,7 @@ class MarkerBasedApi extends Base {
         marker = '',
         limit = 1000,
         params,
-        shouldFetchAll = true
+        shouldFetchAll = true,
     }: {
         id: string,
         successCallback: Function,
@@ -108,7 +118,7 @@ class MarkerBasedApi extends Base {
         marker?: string,
         limit?: number,
         params?: Object,
-        shouldFetchAll?: boolean
+        shouldFetchAll?: boolean,
     }): Promise<void> {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;

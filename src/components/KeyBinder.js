@@ -23,13 +23,13 @@ type Props = {
     onSelect: Function,
     onDelete: Function,
     items: BoxItem[],
-    id: string | void
+    id: string | void,
 };
 
 type State = {
     scrollToColumn: number,
     scrollToRow: number,
-    focusOnRender: boolean
+    focusOnRender: boolean,
 };
 
 class KeyBinder extends PureComponent<Props, State> {
@@ -48,7 +48,7 @@ class KeyBinder extends PureComponent<Props, State> {
         onDownload: noop,
         onOpen: noop,
         onSelect: noop,
-        onDelete: noop
+        onDelete: noop,
     };
 
     /**
@@ -63,7 +63,7 @@ class KeyBinder extends PureComponent<Props, State> {
         this.state = {
             scrollToColumn: props.scrollToColumn,
             scrollToRow: props.scrollToRow,
-            focusOnRender: false
+            focusOnRender: false,
         };
 
         this.columnStartIndex = 0;
@@ -83,7 +83,10 @@ class KeyBinder extends PureComponent<Props, State> {
     componentWillReceiveProps(nextProps: Props): void {
         const { id, scrollToColumn, scrollToRow }: Props = nextProps;
         const { id: prevId }: Props = this.props;
-        const { scrollToColumn: prevScrollToColumn, scrollToRow: prevScrollToRow }: State = this.state;
+        const {
+            scrollToColumn: prevScrollToColumn,
+            scrollToRow: prevScrollToRow,
+        }: State = this.state;
         const newState = {};
 
         if (id !== prevId) {
@@ -92,7 +95,10 @@ class KeyBinder extends PureComponent<Props, State> {
             newState.scrollToColumn = 0;
             newState.scrollToRow = 0;
             newState.focusOnRender = false;
-        } else if (prevScrollToColumn !== scrollToColumn && prevScrollToRow !== scrollToRow) {
+        } else if (
+            prevScrollToColumn !== scrollToColumn &&
+            prevScrollToRow !== scrollToRow
+        ) {
             newState.scrollToColumn = scrollToColumn;
             newState.scrollToRow = scrollToRow;
         } else if (prevScrollToColumn !== scrollToColumn) {
@@ -128,9 +134,12 @@ class KeyBinder extends PureComponent<Props, State> {
             onShare,
             onDelete,
             onOpen,
-            items
+            items,
         }: Props = this.props;
-        const { scrollToColumn: scrollToColumnPrevious, scrollToRow: scrollToRowPrevious }: State = this.state;
+        const {
+            scrollToColumn: scrollToColumnPrevious,
+            scrollToRow: scrollToRowPrevious,
+        }: State = this.state;
         let { scrollToColumn, scrollToRow }: State = this.state;
         const currentItem: BoxItem = items[scrollToRow];
         const ctrlMeta: boolean = event.metaKey || event.ctrlKey;
@@ -139,14 +148,18 @@ class KeyBinder extends PureComponent<Props, State> {
         // This is to keep the grid from scrolling after the snap-to update.
         switch (event.key) {
             case 'ArrowDown':
-                scrollToRow = ctrlMeta ? rowCount - 1 : Math.min(scrollToRow + 1, rowCount - 1);
+                scrollToRow = ctrlMeta
+                    ? rowCount - 1
+                    : Math.min(scrollToRow + 1, rowCount - 1);
                 event.stopPropagation(); // To prevent the arrow down capture of parent
                 break;
             case 'ArrowLeft':
                 scrollToColumn = ctrlMeta ? 0 : Math.max(scrollToColumn - 1, 0);
                 break;
             case 'ArrowRight':
-                scrollToColumn = ctrlMeta ? columnCount - 1 : Math.min(scrollToColumn + 1, columnCount - 1);
+                scrollToColumn = ctrlMeta
+                    ? columnCount - 1
+                    : Math.min(scrollToColumn + 1, columnCount - 1);
                 break;
             case 'ArrowUp':
                 scrollToRow = ctrlMeta ? 0 : Math.max(scrollToRow - 1, 0);
@@ -179,7 +192,10 @@ class KeyBinder extends PureComponent<Props, State> {
                 return;
         }
 
-        if (scrollToColumn !== scrollToColumnPrevious || scrollToRow !== scrollToRowPrevious) {
+        if (
+            scrollToColumn !== scrollToColumnPrevious ||
+            scrollToRow !== scrollToRowPrevious
+        ) {
             event.preventDefault();
             this.updateScrollState({ scrollToColumn, scrollToRow });
         }
@@ -196,12 +212,12 @@ class KeyBinder extends PureComponent<Props, State> {
         columnStartIndex,
         columnStopIndex,
         rowStartIndex,
-        rowStopIndex
+        rowStopIndex,
     }: {
         columnStartIndex: number,
         columnStopIndex: number,
         rowStartIndex: number,
-        rowStopIndex: number
+        rowStopIndex: number,
     }): void => {
         this.columnStartIndex = columnStartIndex;
         this.columnStopIndex = columnStopIndex;
@@ -216,7 +232,13 @@ class KeyBinder extends PureComponent<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    updateScrollState({ scrollToColumn, scrollToRow }: { scrollToColumn: number, scrollToRow: number }): void {
+    updateScrollState({
+        scrollToColumn,
+        scrollToRow,
+    }: {
+        scrollToColumn: number,
+        scrollToRow: number,
+    }): void {
         const { onScrollToChange } = this.props;
         onScrollToChange({ scrollToColumn, scrollToRow });
         this.setState({ scrollToColumn, scrollToRow, focusOnRender: true });
@@ -231,7 +253,11 @@ class KeyBinder extends PureComponent<Props, State> {
      */
     render() {
         const { className, children } = this.props;
-        const { scrollToColumn, scrollToRow, focusOnRender }: State = this.state;
+        const {
+            scrollToColumn,
+            scrollToRow,
+            focusOnRender,
+        }: State = this.state;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         return (
@@ -240,7 +266,7 @@ class KeyBinder extends PureComponent<Props, State> {
                     onSectionRendered: this.onSectionRendered,
                     scrollToColumn,
                     scrollToRow,
-                    focusOnRender
+                    focusOnRender,
                 })}
             </div>
         );

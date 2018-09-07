@@ -9,7 +9,11 @@ import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import messages from '../messages';
-import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../../interactionTargets';
+import {
+    INTERACTION_TARGET,
+    SECTION_TARGETS,
+    DETAILS_TARGETS,
+} from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 import withErrorHandling from './withErrorHandling';
 
@@ -18,7 +22,7 @@ type Props = {
     accessStats?: FileAccessStats,
     file: BoxItem,
     error?: MessageDescriptor,
-    intl: any
+    intl: any,
 };
 
 const SidebarAccessStats = ({
@@ -28,15 +32,26 @@ const SidebarAccessStats = ({
         comment_count: 0,
         download_count: 0,
         edit_count: 0,
-        has_count_overflowed: false
+        has_count_overflowed: false,
     },
     file,
     error,
-    intl
+    intl,
 }: Props) => {
-    const { preview_count, comment_count, download_count, edit_count } = accessStats;
+    const {
+        preview_count,
+        comment_count,
+        download_count,
+        edit_count,
+    } = accessStats;
 
-    if (!preview_count && !comment_count && !download_count && !edit_count && !error) {
+    if (
+        !preview_count &&
+        !comment_count &&
+        !download_count &&
+        !edit_count &&
+        !error
+    ) {
         return null;
     }
 
@@ -49,17 +64,31 @@ const SidebarAccessStats = ({
             <AccessStats
                 errorMessage={errorMessage}
                 commentCount={comment_count}
-                commentStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.COMMENTS }}
+                commentStatButtonProps={{
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.COMMENTS,
+                }}
                 downloadCount={download_count}
-                downloadStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS }}
+                downloadStatButtonProps={{
+                    [INTERACTION_TARGET]:
+                        DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS,
+                }}
                 previewCount={preview_count}
-                previewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.PREVIEWS }}
-                viewStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEWS }}
+                previewStatButtonProps={{
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.PREVIEWS,
+                }}
+                viewStatButtonProps={{
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEWS,
+                }}
                 editCount={edit_count}
-                editStatButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.EDITS }}
+                editStatButtonProps={{
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.EDITS,
+                }}
                 openAccessStatsModal={onAccessStatsClick}
                 isBoxNote={isBoxNote(file)}
-                viewMoreButtonProps={{ [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS }}
+                viewMoreButtonProps={{
+                    [INTERACTION_TARGET]:
+                        DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS,
+                }}
             />
         </SidebarSection>
     );

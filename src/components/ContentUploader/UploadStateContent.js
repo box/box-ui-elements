@@ -13,12 +13,22 @@ type Props = {
     folderInputLabel?: React.Node,
     message?: React.Node,
     onChange?: Function,
-    useButton?: boolean
+    useButton?: boolean,
 };
 
-const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChange, useButton = false }: Props) => {
-    const messageContent = message ? <div className='bcu-upload-state-message'>{message}</div> : null;
-    const inputLabelClass = useButton ? 'btn btn-primary be-input-btn' : 'be-input-link';
+const UploadStateContent = ({
+    fileInputLabel,
+    folderInputLabel,
+    message,
+    onChange,
+    useButton = false,
+}: Props) => {
+    const messageContent = message ? (
+        <div className="bcu-upload-state-message">{message}</div>
+    ) : null;
+    const inputLabelClass = useButton
+        ? 'btn btn-primary be-input-btn'
+        : 'be-input-link';
     const shouldShowFolderUploadInput = !useButton && !!folderInputLabel;
 
     const handleChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
@@ -34,7 +44,11 @@ const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChang
     };
 
     const fileInputContent = (
-        <UploadInput inputLabelClass={inputLabelClass} inputLabel={fileInputLabel} handleChange={handleChange} />
+        <UploadInput
+            inputLabelClass={inputLabelClass}
+            inputLabel={fileInputLabel}
+            handleChange={handleChange}
+        />
     );
     const folderInputContent = shouldShowFolderUploadInput ? (
         <UploadInput
@@ -50,7 +64,10 @@ const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChang
         inputsContent = (
             <FormattedMessage
                 {...messages.uploadOptions}
-                values={{ option1: fileInputContent, option2: folderInputContent }}
+                values={{
+                    option1: fileInputContent,
+                    option2: folderInputContent,
+                }}
             />
         );
     } else if (fileInputContent) {
@@ -60,7 +77,11 @@ const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChang
     return (
         <div>
             {messageContent}
-            {inputsContent && <div className='bcu-upload-input-container'>{inputsContent}</div>}
+            {inputsContent && (
+                <div className="bcu-upload-input-container">
+                    {inputsContent}
+                </div>
+            )}
         </div>
     );
 };

@@ -12,7 +12,12 @@ import flatten from '../util/flatten';
 import sort from '../util/sorter';
 import { getBadItemError } from '../util/error';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
-import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, SORT_DESC, FIELD_INTERACTED_AT } from '../constants';
+import {
+    DEFAULT_ROOT,
+    CACHE_PREFIX_RECENTS,
+    SORT_DESC,
+    FIELD_INTERACTED_AT,
+} from '../constants';
 
 class Recents extends Base {
     /**
@@ -76,7 +81,12 @@ class Recents extends Base {
 
         const cache: APICache = this.getCache();
         const recents: FlattenedBoxItem = cache.get(this.key);
-        const sortedRecents: FlattenedBoxItem = sort(recents, this.sortBy, this.sortDirection, cache);
+        const sortedRecents: FlattenedBoxItem = sort(
+            recents,
+            this.sortBy,
+            this.sortDirection,
+            cache,
+        );
         const { item_collection }: FlattenedBoxItem = sortedRecents;
         if (!item_collection) {
             throw getBadItemError();
@@ -92,7 +102,7 @@ class Recents extends Base {
             id: this.id,
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => cache.get(key))
+            items: entries.map((key: string) => cache.get(key)),
         };
         this.successCallback(collection);
     }
@@ -115,7 +125,10 @@ class Recents extends Base {
             const { path_collection }: BoxItem = item;
             const shouldInclude =
                 this.id === DEFAULT_ROOT ||
-                (!!path_collection && path_collection.entries.findIndex((crumb: Crumb) => crumb.id === this.id) !== -1);
+                (!!path_collection &&
+                    path_collection.entries.findIndex(
+                        (crumb: Crumb) => crumb.id === this.id,
+                    ) !== -1);
             if (shouldInclude) {
                 items.push(Object.assign(item, { interacted_at }));
             }
@@ -125,7 +138,7 @@ class Recents extends Base {
             items,
             new FolderAPI(this.options),
             new FileAPI(this.options),
-            new WebLinkAPI(this.options)
+            new WebLinkAPI(this.options),
         );
 
         this.getCache().set(this.key, {
@@ -135,10 +148,10 @@ class Recents extends Base {
                 order: [
                     {
                         by,
-                        direction
-                    }
-                ]
-            }
+                        direction,
+                    },
+                ],
+            },
         });
         this.finish();
     };
@@ -171,8 +184,8 @@ class Recents extends Base {
             .get({
                 url: this.getUrl(),
                 params: {
-                    fields: FOLDER_FIELDS_TO_FETCH.toString()
-                }
+                    fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                },
             })
             .then(this.recentsSuccessHandler)
             .catch(this.recentsErrorHandler);
@@ -195,7 +208,7 @@ class Recents extends Base {
         sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
-        options: Object = {}
+        options: Object = {},
     ): void {
         if (this.isDestroyed()) {
             return;

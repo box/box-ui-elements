@@ -11,13 +11,23 @@ type Props = {
     time?: string,
     text?: string,
     onClick: Function,
-    interactionTarget: string
+    interactionTarget: string,
 };
 
-const ReadOnlyTranscriptRow = ({ time, text = '', onClick, interactionTarget }: Props) => (
-    <PlainButton type='button' className='be-transcript-row' data-resin-target={interactionTarget} onClick={onClick}>
-        {time && <div className='be-transcript-time'>{time}</div>}
-        <div className='be-transcript-text'>{text}</div>
+const ReadOnlyTranscriptRow = ({
+    time,
+    text = '',
+    onClick,
+    interactionTarget,
+}: Props) => (
+    <PlainButton
+        type="button"
+        className="be-transcript-row"
+        data-resin-target={interactionTarget}
+        onClick={onClick}
+    >
+        {time && <div className="be-transcript-time">{time}</div>}
+        <div className="be-transcript-text">{text}</div>
     </PlainButton>
 );
 

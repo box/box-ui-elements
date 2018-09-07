@@ -7,17 +7,17 @@ describe('components/ContentSidebar/ActivityFeed/Avatar', () => {
         id: 'foo',
         login: 'foo@bar.com',
         name: 'foo bar',
-        type: 'user'
+        type: 'user',
     };
     const getAvatarUrl = jest.fn().mockReturnValue(Promise.resolve('foo'));
 
-    const getWrapper = (props) => shallow(<Avatar {...props} />);
+    const getWrapper = props => shallow(<Avatar {...props} />);
 
     test('should render nothing if no avatarUrl in state', () => {
         expect(
             getWrapper({ user, getAvatarUrl })
                 .find('Avatar')
-                .exists()
+                .exists(),
         ).toBe(false);
         expect(getAvatarUrl).toBeCalledWith(user.id);
     });

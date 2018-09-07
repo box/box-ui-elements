@@ -1,2 +1,3 @@
-export Breadcrumbs from './Breadcrumbs';
-export InlineBreadcrumbs from './InlineBreadcrumbs';
+// @flow
+export { default as Breadcrumbs } from './Breadcrumbs';
+export { default as InlineBreadcrumbs } from './InlineBreadcrumbs';

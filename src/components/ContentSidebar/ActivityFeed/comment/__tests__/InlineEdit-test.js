@@ -7,7 +7,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/InlineEdit', () => {
     const intl = { formatMessage: () => {} };
 
     test('should correctly render comment', () => {
-        const wrapper = shallow(<InlineEdit id='123' intl={intl} toEdit={() => {}} />);
+        const wrapper = shallow(
+            <InlineEdit id="123" intl={intl} toEdit={() => {}} />,
+        );
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -15,7 +17,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/InlineEdit', () => {
     test('should call toEdit handler when comment deletion is confirmed', () => {
         const toEditSpy = jest.fn();
 
-        const wrapper = mount(<InlineEdit id='123' intl={intl} toEdit={toEditSpy} />);
+        const wrapper = mount(
+            <InlineEdit id="123" intl={intl} toEdit={toEditSpy} />,
+        );
 
         const editBtn = wrapper.find('.bcs-comment-edit').hostNodes();
         editBtn.simulate('click');

@@ -24,7 +24,7 @@ type Props = {
     isEditable: boolean,
     hasError: boolean,
     getViewer?: Function,
-    onSkillChange: Function
+    onSkillChange: Function,
 };
 
 type State = {
@@ -33,7 +33,7 @@ type State = {
     isLoading: boolean,
     faces: Array<SkillCardEntry>,
     removes: Array<SkillCardEntry>,
-    hasError: boolean
+    hasError: boolean,
 };
 
 class Faces extends React.PureComponent<Props, State> {
@@ -53,7 +53,7 @@ class Faces extends React.PureComponent<Props, State> {
             removes: [],
             isEditing: props.hasError,
             hasError: props.hasError,
-            isLoading: false
+            isLoading: false,
         };
     }
 
@@ -71,7 +71,7 @@ class Faces extends React.PureComponent<Props, State> {
             isEditing: false,
             selected: undefined,
             hasError: false,
-            isLoading: false
+            isLoading: false,
         });
     }
 
@@ -82,8 +82,8 @@ class Faces extends React.PureComponent<Props, State> {
      * @return {void}
      */
     toggleIsEditing = (): void => {
-        this.setState((prevState) => ({
-            isEditing: !prevState.isEditing
+        this.setState(prevState => ({
+            isEditing: !prevState.isEditing,
         }));
     };
 
@@ -96,7 +96,7 @@ class Faces extends React.PureComponent<Props, State> {
     onSelect = (face: SkillCardEntry): void => {
         const { selected } = this.state;
         this.setState({
-            selected: selected === face ? undefined : face
+            selected: selected === face ? undefined : face,
         });
     };
 
@@ -146,22 +146,34 @@ class Faces extends React.PureComponent<Props, State> {
      */
     render() {
         const { card, isEditable, getViewer }: Props = this.props;
-        const { selected, faces, removes, isEditing, hasError, isLoading }: State = this.state;
+        const {
+            selected,
+            faces,
+            removes,
+            isEditing,
+            hasError,
+            isLoading,
+        }: State = this.state;
         const { duration }: SkillCard = card;
         const hasFaces = faces.length > 0;
-        const entries = faces.filter((face: SkillCardEntry) => !removes.includes(face));
+        const entries = faces.filter(
+            (face: SkillCardEntry) => !removes.includes(face),
+        );
         const editClassName = classNames('be-faces', {
-            'be-faces-is-editing': isEditing
+            'be-faces-is-editing': isEditing,
         });
 
         return (
-            <LoadingIndicatorWrapper isLoading={isLoading} className={editClassName}>
+            <LoadingIndicatorWrapper
+                isLoading={isLoading}
+                className={editClassName}
+            >
                 {hasFaces &&
                     isEditable &&
                     !isLoading && (
                         <PlainButton
-                            type='button'
-                            className='be-face-edit'
+                            type="button"
+                            className="be-face-edit"
                             onClick={this.toggleIsEditing}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT}
                         >
@@ -169,8 +181,16 @@ class Faces extends React.PureComponent<Props, State> {
                         </PlainButton>
                     )}
                 {hasError && (
-                    <InlineError title={<FormattedMessage {...messages.sidebarSkillsErrorTitle} />}>
-                        <FormattedMessage {...messages.sidebarSkillsErrorContent} />
+                    <InlineError
+                        title={
+                            <FormattedMessage
+                                {...messages.sidebarSkillsErrorTitle}
+                            />
+                        }
+                    >
+                        <FormattedMessage
+                            {...messages.sidebarSkillsErrorContent}
+                        />
                     </InlineError>
                 )}
                 {hasFaces ? (
@@ -201,16 +221,16 @@ class Faces extends React.PureComponent<Props, State> {
                         />
                     )}
                 {isEditing && (
-                    <div className='be-faces-buttons'>
+                    <div className="be-faces-buttons">
                         <Button
-                            type='button'
+                            type="button"
                             onClick={this.onCancel}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT_CANCEL}
                         >
                             <FormattedMessage {...messages.cancel} />
                         </Button>
                         <PrimaryButton
-                            type='button'
+                            type="button"
                             onClick={this.onSave}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT_SAVE}
                         >

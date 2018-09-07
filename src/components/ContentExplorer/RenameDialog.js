@@ -15,7 +15,7 @@ import {
     CLASS_MODAL_OVERLAY,
     CLASS_MODAL,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
-    ERROR_CODE_ITEM_NAME_IN_USE
+    ERROR_CODE_ITEM_NAME_IN_USE,
 } from '../../constants';
 
 type Props = {
@@ -27,7 +27,7 @@ type Props = {
     errorCode: string,
     parentElement: HTMLElement,
     appElement: HTMLElement,
-    intl: any
+    intl: any,
 };
 
 /* eslint-disable jsx-a11y/label-has-for */
@@ -40,7 +40,7 @@ const RenameDialog = ({
     errorCode,
     parentElement,
     appElement,
-    intl
+    intl,
 }: Props) => {
     let textInput = null;
     let error;
@@ -65,7 +65,7 @@ const RenameDialog = ({
     /**
      * Grabs reference to the input element
      */
-    const ref = (input) => {
+    const ref = input => {
         textInput = input;
         if (textInput instanceof HTMLInputElement) {
             textInput.focus();
@@ -111,18 +111,35 @@ const RenameDialog = ({
         >
             <label>
                 {error ? (
-                    <div className='be-modal-error'>
-                        <FormattedMessage {...error} values={{ name: nameWithoutExt }} />
+                    <div className="be-modal-error">
+                        <FormattedMessage
+                            {...error}
+                            values={{ name: nameWithoutExt }}
+                        />
                     </div>
                 ) : null}
-                <FormattedMessage tagName='div' {...messages.renameDialogText} values={{ name: nameWithoutExt }} />
-                <input type='text' required ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} />
+                <FormattedMessage
+                    tagName="div"
+                    {...messages.renameDialogText}
+                    values={{ name: nameWithoutExt }}
+                />
+                <input
+                    type="text"
+                    required
+                    ref={ref}
+                    defaultValue={nameWithoutExt}
+                    onKeyDown={onKeyDown}
+                />
             </label>
-            <div className='be-modal-btns'>
-                <PrimaryButton type='button' onClick={rename} isLoading={isLoading}>
+            <div className="be-modal-btns">
+                <PrimaryButton
+                    type="button"
+                    onClick={rename}
+                    isLoading={isLoading}
+                >
                     <FormattedMessage {...messages.rename} />
                 </PrimaryButton>
-                <Button type='button' onClick={onCancel} isDisabled={isLoading}>
+                <Button type="button" onClick={onCancel} isDisabled={isLoading}>
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

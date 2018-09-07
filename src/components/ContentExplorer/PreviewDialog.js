@@ -10,7 +10,12 @@ import { injectIntl } from 'react-intl';
 import cloneDeep from 'lodash/cloneDeep';
 import ContentPreview from '../ContentPreview';
 import messages from '../messages';
-import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
+import {
+    TYPE_FILE,
+    CLASS_MODAL_CONTENT_FULL_BLEED,
+    CLASS_MODAL_OVERLAY,
+    CLASS_MODAL,
+} from '../../constants';
 
 type Props = {
     isOpen: boolean,
@@ -33,7 +38,7 @@ type Props = {
     contentPreviewProps: ContentPreviewProps,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    intl: any
+    intl: any,
 };
 
 const PreviewDialog = ({
@@ -56,7 +61,7 @@ const PreviewDialog = ({
     contentPreviewProps,
     requestInterceptor,
     responseInterceptor,
-    intl
+    intl,
 }: Props) => {
     const { items }: Collection = currentCollection;
     const onLoad = (data: any): void => {

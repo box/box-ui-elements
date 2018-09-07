@@ -1,9 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
+import {
+    ActivitySidebarComponent,
+    activityFeedInlineError,
+} from '../ActivitySidebar';
 import messages from '../../messages';
 
-const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
+const {
+    defaultErrorMaskSubHeaderMessage,
+    currentUserErrorHeaderMessage,
+} = messages;
 
 describe('components/ContentSidebar/ActivitySidebar', () => {
     const feedAPI = {
@@ -13,32 +19,33 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         createTask: jest.fn(),
         updateTask: jest.fn(),
         updateTaskAssignment: jest.fn(),
-        createComment: jest.fn()
+        createComment: jest.fn(),
     };
     const usersAPI = {
         get: jest.fn(),
-        getAvatarUrlWithAccessToken: jest.fn().mockResolvedValue('foo')
+        getAvatarUrlWithAccessToken: jest.fn().mockResolvedValue('foo'),
     };
     const api = {
         getUsersAPI: () => usersAPI,
-        getFeedAPI: () => feedAPI
+        getFeedAPI: () => feedAPI,
     };
     const file = {
-        id: 'I_AM_A_FILE'
+        id: 'I_AM_A_FILE',
     };
     const currentUser = {
-        id: 'foo'
+        id: 'foo',
     };
     const collaborators = {
         entries: [
             {
                 id: '1',
                 name: 'foo',
-                item: {}
-            }
-        ]
+                item: {},
+            },
+        ],
     };
-    const getWrapper = (props = {}) => shallow(<ActivitySidebarComponent api={api} file={file} {...props} />);
+    const getWrapper = (props = {}) =>
+        shallow(<ActivitySidebarComponent api={api} file={file} {...props} />);
 
     describe('render()', () => {
         test('should render the activity feed sidebar', () => {
@@ -62,7 +69,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
 
         test('should create the task and fetch the feed items', () => {
             wrapper.setState({
-                currentUser
+                currentUser,
             });
             const message = 'message';
             const assignees = ['1', '2'];
@@ -76,7 +83,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
                 assignees,
                 dueAt,
                 instance.feedSuccessCallback,
-                instance.feedErrorCallback
+                instance.feedErrorCallback,
             );
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
@@ -110,7 +117,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             const id = '1';
             const permissions = {
                 can_edit: false,
-                can_delete: true
+                can_delete: true,
             };
             instance.deleteComment({ id, permissions });
             expect(feedAPI.deleteComment).toHaveBeenCalled();
@@ -129,7 +136,10 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         test('should invoke setState() directly if user parameter is not missing', () => {
             instance.setState = jest.fn();
             instance.fetchCurrentUser(currentUser);
-            expect(instance.setState).toBeCalledWith({ currentUser, currentUserError: undefined });
+            expect(instance.setState).toBeCalledWith({
+                currentUser,
+                currentUserError: undefined,
+            });
         });
 
         test('should get the user', () => {
@@ -155,8 +165,12 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             const inlineErrorState = wrapper.state().currentUserError.maskError;
             expect(typeof currentUserErrorHeaderMessage).toBe('object');
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(currentUserErrorHeaderMessage);
-            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+            expect(inlineErrorState.errorHeader).toEqual(
+                currentUserErrorHeaderMessage,
+            );
+            expect(inlineErrorState.errorSubHeader).toEqual(
+                defaultErrorMaskSubHeaderMessage,
+            );
         });
     });
 
@@ -199,7 +213,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         let wrapper;
         const taskObj = {
             text: 'foo',
-            id: 'bar'
+            id: 'bar',
         };
 
         beforeEach(() => {
@@ -244,12 +258,14 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         });
 
         test('should throw an error if missing current user', () => {
-            expect(() => instance.createComment(message, true)).toThrow('Bad box user!');
+            expect(() => instance.createComment(message, true)).toThrow(
+                'Bad box user!',
+            );
         });
 
         test('should call the create comment API and fetch the items', () => {
             instance.setState({
-                currentUser
+                currentUser,
             });
             instance.createComment(message, true);
             expect(feedAPI.createComment).toBeCalled();
@@ -288,7 +304,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             instance.fetchFeedItemsSuccessCallback(feedItems);
             expect(instance.setState).toBeCalledWith({
                 feedItems,
-                activityFeedError: undefined
+                activityFeedError: undefined,
             });
         });
     });
@@ -308,7 +324,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             instance.fetchFeedItemsErrorCallback(feedItems);
             expect(instance.setState).toBeCalledWith({
                 feedItems,
-                activityFeedError: activityFeedInlineError
+                activityFeedError: activityFeedInlineError,
             });
         });
     });
@@ -348,7 +364,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             instance.fetchCurrentUserSuccessCallback(currentUser);
             expect(instance.setState).toBeCalledWith({
                 currentUser,
-                currentUserError: undefined
+                currentUserError: undefined,
             });
         });
     });
@@ -367,7 +383,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             instance.fetchCurrentUserSuccessCallback(currentUser);
             expect(instance.setState).toBeCalledWith({
                 currentUser,
-                currentUserError: undefined
+                currentUserError: undefined,
             });
         });
     });
@@ -385,7 +401,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         test('should set the feedItems in the state', () => {
             instance.getApproverContactsSuccessCallback(collaborators);
             expect(instance.setState).toBeCalledWith({
-                approverSelectorContacts: collaborators.entries
+                approverSelectorContacts: collaborators.entries,
             });
         });
     });
@@ -403,7 +419,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         test('should set the feedItems in the state', () => {
             instance.getMentionContactsSuccessCallback(collaborators);
             expect(instance.setState).toBeCalledWith({
-                mentionSelectorContacts: collaborators.entries
+                mentionSelectorContacts: collaborators.entries,
             });
         });
     });
@@ -414,7 +430,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
 
         beforeEach(() => {
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
             instance.setState = jest.fn();
@@ -425,7 +441,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             instance.fetchCurrentUserErrorCallback({ status: 500 });
             expect(instance.setState).toBeCalledWith({
                 currentUser: undefined,
-                currentUserError: expect.any(Object)
+                currentUserError: expect.any(Object),
             });
             expect(instance.errorCallback).toBeCalled();
         });
@@ -437,7 +453,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
 
         beforeEach(() => {
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
         });
@@ -445,7 +461,10 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         test('should set the current user error and call the error callback', () => {
             const avatarUrl = instance.getAvatarUrl(currentUser.id);
             expect(avatarUrl instanceof Promise).toBe(true);
-            expect(usersAPI.getAvatarUrlWithAccessToken).toBeCalledWith(currentUser.id, file.id);
+            expect(usersAPI.getAvatarUrlWithAccessToken).toBeCalledWith(
+                currentUser.id,
+                file.id,
+            );
         });
     });
 });

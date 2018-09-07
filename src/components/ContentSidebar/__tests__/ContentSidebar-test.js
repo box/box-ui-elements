@@ -10,19 +10,20 @@ const {
     defaultInlineErrorContentMessage,
     defaultErrorMaskSubHeaderMessage,
     fileAccessStatsErrorHeaderMessage,
-    fileAccessStatsPermissionsError
+    fileAccessStatsPermissionsError,
 } = messages;
 
 jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
 
 const file = {
-    id: 'I_AM_A_FILE'
+    id: 'I_AM_A_FILE',
 };
 
 describe('components/ContentSidebar/ContentSidebar', () => {
     let rootElement;
-    const getWrapper = (props) => mount(<ContentSidebar {...props} />, { attachTo: rootElement });
+    const getWrapper = props =>
+        mount(<ContentSidebar {...props} />, { attachTo: rootElement });
 
     beforeEach(() => {
         SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
@@ -37,12 +38,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
     describe('componentWillReceiveProps()', () => {
         test('should fetch data when file id has changed', () => {
             const props = {
-                fileId: '123456'
+                fileId: '123456',
             };
             const wrapper = getWrapper(props);
             const instance = wrapper.instance();
             const newProps = {
-                fileId: 'abcdefg'
+                fileId: 'abcdefg',
             };
             instance.fetchData = jest.fn();
             instance.componentWillReceiveProps(newProps);
@@ -54,15 +55,20 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             const newProps = {
-                isLarge: false
+                isLarge: false,
             };
             instance.setState({ file });
 
             instance.setState = jest.fn();
-            instance.getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
+            instance.getDefaultSidebarView = jest
+                .fn()
+                .mockReturnValueOnce('view');
             instance.componentWillReceiveProps(newProps);
 
-            expect(instance.getDefaultSidebarView).toBeCalledWith(file, newProps);
+            expect(instance.getDefaultSidebarView).toBeCalledWith(
+                file,
+                newProps,
+            );
             expect(instance.setState).toBeCalledWith({ view: 'view' });
         });
 
@@ -70,11 +76,13 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             const newProps = {
-                isLarge: false
+                isLarge: false,
             };
             instance.setState({ file, hasBeenToggled: true });
             instance.setState = jest.fn();
-            instance.getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
+            instance.getDefaultSidebarView = jest
+                .fn()
+                .mockReturnValueOnce('view');
             instance.componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).not.toBeCalled();
@@ -94,10 +102,16 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         test('should set an inlineError if there is an error in updating the file description', () => {
             instance.setFileDescriptionErrorCallback();
             const inlineErrorState = wrapper.state().fileError.inlineError;
-            expect(typeof fileDescriptionInlineErrorTitleMessage).toBe('object');
+            expect(typeof fileDescriptionInlineErrorTitleMessage).toBe(
+                'object',
+            );
             expect(typeof defaultInlineErrorContentMessage).toBe('object');
-            expect(inlineErrorState.title).toEqual(fileDescriptionInlineErrorTitleMessage);
-            expect(inlineErrorState.content).toEqual(defaultInlineErrorContentMessage);
+            expect(inlineErrorState.title).toEqual(
+                fileDescriptionInlineErrorTitleMessage,
+            );
+            expect(inlineErrorState.content).toEqual(
+                defaultInlineErrorContentMessage,
+            );
         });
     });
 
@@ -115,17 +129,21 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             const inlineErrorState = wrapper.state().accessStatsError.maskError;
             expect(typeof fileAccessStatsErrorHeaderMessage).toBe('object');
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(fileAccessStatsErrorHeaderMessage);
-            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
+            expect(inlineErrorState.errorHeader).toEqual(
+                fileAccessStatsErrorHeaderMessage,
+            );
+            expect(inlineErrorState.errorSubHeader).toEqual(
+                defaultErrorMaskSubHeaderMessage,
+            );
         });
 
         test('should set error if forbidden', () => {
             instance.fetchFileAccessStatsErrorCallback({
-                status: 403
+                status: 403,
             });
             const { accessStatsError } = wrapper.state();
             expect(accessStatsError).toEqual({
-                error: fileAccessStatsPermissionsError
+                error: fileAccessStatsPermissionsError,
             });
         });
     });
@@ -139,7 +157,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState = jest.fn();
             instance.onToggle('skills');
 
-            expect(instance.setState).toBeCalledWith({ hasBeenToggled: false, view: 'skills' });
+            expect(instance.setState).toBeCalledWith({
+                hasBeenToggled: false,
+                view: 'skills',
+            });
         });
 
         test('should set new view state and toggle state', () => {
@@ -149,7 +170,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState = jest.fn();
             instance.onToggle('skills');
 
-            expect(instance.setState).toBeCalledWith({ hasBeenToggled: true, view: 'skills' });
+            expect(instance.setState).toBeCalledWith({
+                hasBeenToggled: true,
+                view: 'skills',
+            });
         });
 
         test('should remove view state', () => {
@@ -160,7 +184,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.setState = jest.fn();
             instance.onToggle('activity');
 
-            expect(instance.setState).toBeCalledWith({ hasBeenToggled: true, view: undefined });
+            expect(instance.setState).toBeCalledWith({
+                hasBeenToggled: true,
+                view: undefined,
+            });
         });
     });
 
@@ -174,21 +201,31 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         test('should return default view when provided', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            expect(instance.getDefaultSidebarView({}, { defaultView: 'default' })).toBe('default');
+            expect(
+                instance.getDefaultSidebarView({}, { defaultView: 'default' }),
+            ).toBe('default');
         });
 
         test('should return undefined when small viewport and not toggled manually', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            expect(instance.getDefaultSidebarView({}, { isLarge: false })).toBeUndefined();
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            expect(
+                instance.getDefaultSidebarView({}, { isLarge: false }),
+            ).toBeUndefined();
         });
 
         test('should return some view when large viewport and not toggled manually', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            expect(instance.getDefaultSidebarView({}, { isLarge: true })).toBe('details');
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            expect(instance.getDefaultSidebarView({}, { isLarge: true })).toBe(
+                'details',
+            );
         });
 
         test('should return skills when no current view is skills and skills exist', () => {
@@ -197,12 +234,22 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('skills');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('skills');
         });
 
         test('should return activity when current view is activity and skills exist', () => {
@@ -211,12 +258,22 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'activity' });
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('activity');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('activity');
         });
 
         test('should return details when current view is details and skills or activity both exist', () => {
@@ -225,12 +282,22 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'details' });
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('details');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('details');
         });
 
         test('should return metadata when current view is metadata and skills or activity both exist', () => {
@@ -239,60 +306,110 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'metadata' });
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('metadata');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('metadata');
         });
 
         test('should default to skills when no current view and skills exist', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('skills');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('skills');
         });
 
         test('should default to activity when no current view and skills dont exist', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('activity');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('activity');
         });
 
         test('should default to details when no current view and skills or activity dont exist', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('details');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('details');
         });
 
         test('should default to metadata when no current view and skills or activity or details dont exist', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('metadata');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('metadata');
         });
 
         test('should default to activity when current view is skills but new view has no skills', () => {
@@ -301,12 +418,22 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('activity');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('activity');
         });
 
         test('should default to details when current view is skills but new view has no skills or activity', () => {
@@ -315,12 +442,22 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'skills' });
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('details');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('details');
         });
 
         test('should default to skills when current view is details but new view has no details', () => {
@@ -329,12 +466,22 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             instance.setState({ view: 'details' });
 
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
 
-            expect(instance.getDefaultSidebarView(file, { isLarge: true })).toBe('skills');
+            expect(
+                instance.getDefaultSidebarView(file, { isLarge: true }),
+            ).toBe('skills');
         });
     });
 
@@ -379,7 +526,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should refetch the file', () => {
             wrapper.setProps({
-                fileId: file.id
+                fileId: file.id,
             });
             instance.onClassificationChange();
             expect(fetchFile).toBeCalledWith(file.id, { forceFetch: true });
@@ -387,7 +534,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should not refetch the file there is no file id', () => {
             wrapper.setState({
-                file
+                file,
             });
 
             instance.onClassificationChange();
@@ -404,8 +551,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             onClassificationClick = jest.fn();
             wrapper = getWrapper({
                 detailsSidebarProps: {
-                    onClassificationClick
-                }
+                    onClassificationClick,
+                },
             });
             instance = wrapper.instance();
             instance.onClassificationChange = jest.fn();
@@ -413,7 +560,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         test('should call onClassificationClick with the refresh function', () => {
             instance.onClassificationClick();
-            expect(onClassificationClick).toBeCalledWith(instance.onClassificationChange);
+            expect(onClassificationClick).toBeCalledWith(
+                instance.onClassificationChange,
+            );
         });
     });
 
@@ -426,7 +575,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
         beforeEach(() => {
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
             fileStub = jest.fn();
@@ -434,8 +583,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             fetchFileErrorCallback = jest.fn();
             instance.api = {
                 getFileAPI: () => ({
-                    getFile: fileStub
-                })
+                    getFile: fileStub,
+                }),
             };
             instance.fetchFileSuccessCallback = fetchFileSuccessCallback;
             instance.fetchFileErrorCallback = fetchFileErrorCallback;
@@ -451,22 +600,32 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         test('should fetch the file with forceFetch', () => {
             SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
             instance.fetchFile(file.id, {
-                forceFetch: true
+                forceFetch: true,
             });
             expect(SidebarUtils.canHaveSidebar).toBeCalledWith(instance.props);
-            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, {
-                forceFetch: true,
-                fields: SIDEBAR_FIELDS_TO_FETCH
-            });
+            expect(fileStub).toBeCalledWith(
+                file.id,
+                fetchFileSuccessCallback,
+                fetchFileErrorCallback,
+                {
+                    forceFetch: true,
+                    fields: SIDEBAR_FIELDS_TO_FETCH,
+                },
+            );
         });
 
         test('should fetch the file without forceFetch', () => {
             SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
             instance.fetchFile(file.id);
             expect(SidebarUtils.canHaveSidebar).toBeCalledWith(instance.props);
-            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, fetchFileErrorCallback, {
-                fields: SIDEBAR_FIELDS_TO_FETCH
-            });
+            expect(fileStub).toBeCalledWith(
+                file.id,
+                fetchFileSuccessCallback,
+                fetchFileErrorCallback,
+                {
+                    fields: SIDEBAR_FIELDS_TO_FETCH,
+                },
+            );
         });
     });
 
@@ -480,7 +639,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             setState = jest.fn();
             getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
             instance.getDefaultSidebarView = getDefaultSidebarView;
@@ -488,27 +647,37 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
 
         test('should set visibility to false when no data to show', () => {
-            SidebarUtils.shouldRenderSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
             instance.fetchFileSuccessCallback(file);
 
             expect(getDefaultSidebarView).not.toBeCalled();
-            expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(instance.props, file);
+            expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(
+                instance.props,
+                file,
+            );
             expect(setState).toBeCalledWith({
-                isVisible: false
+                isVisible: false,
             });
         });
 
         test('should set the file state to be the file response', () => {
-            SidebarUtils.shouldRenderSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
             instance.fetchFileSuccessCallback(file);
 
             expect(getDefaultSidebarView).toBeCalledWith(file, instance.props);
-            expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(instance.props, file);
+            expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(
+                instance.props,
+                file,
+            );
             expect(setState).toBeCalledWith({
                 file,
                 view: 'view',
                 isFileLoading: false,
-                isVisible: true
+                isVisible: true,
             });
         });
     });
@@ -522,7 +691,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             setState = jest.fn();
             errorCallback = jest.fn();
             wrapper = getWrapper({
-                file
+                file,
             });
             instance = wrapper.instance();
             instance.setState = setState;
@@ -534,7 +703,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.fetchFileErrorCallback(err);
 
             expect(setState).toBeCalledWith({
-                isFileLoading: false
+                isFileLoading: false,
             });
             expect(errorCallback).toBeCalledWith(err);
         });

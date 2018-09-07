@@ -7,7 +7,7 @@
 import { TYPED_ID_FOLDER_PREFIX, TYPED_ID_FILE_PREFIX } from '../constants';
 
 const error = new Error(
-    'Bad id or auth token. ID should be typed id like file_123 or folder_123! Token should be a string or function.'
+    'Bad id or auth token. ID should be typed id like file_123 or folder_123! Token should be a string or function.',
 );
 
 class TokenService {
@@ -22,7 +22,10 @@ class TokenService {
      * @param {string} tokenOrTokenFunction - Optional token or token function
      * @return {Promise} that resolves to a token
      */
-    static async getToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
+    static async getToken(
+        id: string,
+        tokenOrTokenFunction: Token,
+    ): Promise<?string> {
         // Make sure we are getting typed ids
         // Tokens should either be null or undefined or string or functions
         // Anything else is not supported and throw error
@@ -31,7 +34,8 @@ class TokenService {
                 tokenOrTokenFunction !== undefined &&
                 typeof tokenOrTokenFunction !== 'string' &&
                 typeof tokenOrTokenFunction !== 'function') ||
-            (!id.startsWith(TYPED_ID_FOLDER_PREFIX) && !id.startsWith(TYPED_ID_FILE_PREFIX))
+            (!id.startsWith(TYPED_ID_FOLDER_PREFIX) &&
+                !id.startsWith(TYPED_ID_FILE_PREFIX))
         ) {
             throw error;
         }
@@ -44,7 +48,11 @@ class TokenService {
         // Token is a function which returns a promise.
         // Promise on resolution returns a string/null/undefined token or token pair.
         const token = await tokenOrTokenFunction(id);
-        if (!token || typeof token === 'string' || (typeof token === 'object' && (token.read || token.write))) {
+        if (
+            !token ||
+            typeof token === 'string' ||
+            (typeof token === 'object' && (token.read || token.write))
+        ) {
             return token;
         }
 
@@ -60,8 +68,14 @@ class TokenService {
      * @param {string} tokenOrTokenFunction - Optional token or token function
      * @return {Promise} that resolves to a token
      */
-    static async getReadToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
-        const token: TokenLiteral = await TokenService.getToken(id, tokenOrTokenFunction);
+    static async getReadToken(
+        id: string,
+        tokenOrTokenFunction: Token,
+    ): Promise<?string> {
+        const token: TokenLiteral = await TokenService.getToken(
+            id,
+            tokenOrTokenFunction,
+        );
         if (token && typeof token === 'object') {
             return token.read;
         }
@@ -78,8 +92,14 @@ class TokenService {
      * @param {string} tokenOrTokenFunction - Optional token or token function
      * @return {Promise} that resolves to a token
      */
-    static async getWriteToken(id: string, tokenOrTokenFunction: Token): Promise<?string> {
-        const token: TokenLiteral = await TokenService.getToken(id, tokenOrTokenFunction);
+    static async getWriteToken(
+        id: string,
+        tokenOrTokenFunction: Token,
+    ): Promise<?string> {
+        const token: TokenLiteral = await TokenService.getToken(
+            id,
+            tokenOrTokenFunction,
+        );
         if (token && typeof token === 'object') {
             return token.write || token.read;
         }
@@ -100,7 +120,10 @@ class TokenService {
      * @param {string} tokenOrTokenFunction - Optional token or token function
      * @return {Promise<TokenMap>} that resolves to a token map
      */
-    static async cacheTokens(ids: Array<string>, tokenOrTokenFunction: Token): Promise<void> {
+    static async cacheTokens(
+        ids: Array<string>,
+        tokenOrTokenFunction: Token,
+    ): Promise<void> {
         // Make sure we are getting typed ids
         // Tokens should either be null or undefined or string or functions
         // Anything else is not supported and throw error
@@ -109,7 +132,11 @@ class TokenService {
                 tokenOrTokenFunction !== undefined &&
                 typeof tokenOrTokenFunction !== 'string' &&
                 typeof tokenOrTokenFunction !== 'function') ||
-            !ids.every((itemId) => itemId.startsWith(TYPED_ID_FOLDER_PREFIX) || itemId.startsWith(TYPED_ID_FILE_PREFIX))
+            !ids.every(
+                itemId =>
+                    itemId.startsWith(TYPED_ID_FOLDER_PREFIX) ||
+                    itemId.startsWith(TYPED_ID_FILE_PREFIX),
+            )
         ) {
             throw error;
         }

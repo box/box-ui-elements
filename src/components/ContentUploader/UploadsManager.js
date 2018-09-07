@@ -18,7 +18,7 @@ type Props = {
     items: UploadItem[],
     onItemActionClick: Function,
     toggleUploadsManager: Function,
-    view: View
+    view: View,
 };
 
 const UploadsManager = ({
@@ -28,7 +28,7 @@ const UploadsManager = ({
     toggleUploadsManager,
     isExpanded,
     isVisible,
-    isDragging
+    isDragging,
 }: Props) => {
     /**
      * Keydown handler for progress bar
@@ -36,7 +36,9 @@ const UploadsManager = ({
      * @param {SyntheticKeyboardEvent} event
      * @return {void}
      */
-    const handleProgressBarKeyDown = (event: SyntheticKeyboardEvent<*>): void => {
+    const handleProgressBarKeyDown = (
+        event: SyntheticKeyboardEvent<*>,
+    ): void => {
         switch (event.key) {
             case 'Enter':
             case 'Space':
@@ -48,15 +50,18 @@ const UploadsManager = ({
     };
 
     const totalSize = items.reduce(
-        (updatedSize, item) => (item.status === STATUS_ERROR || item.isFolder ? updatedSize : updatedSize + item.size),
-        0
+        (updatedSize, item) =>
+            item.status === STATUS_ERROR || item.isFolder
+                ? updatedSize
+                : updatedSize + item.size,
+        0,
     );
     const totalUploaded = items.reduce(
         (updatedSize, item) =>
             item.status === STATUS_ERROR || item.isFolder
                 ? updatedSize
                 : updatedSize + item.size * item.progress / 100.0,
-        0
+        0,
     );
     const percent = totalUploaded / totalSize * 100;
 
@@ -64,7 +69,7 @@ const UploadsManager = ({
         <div
             className={classNames('be bcu-uploads-manager-container', {
                 'bcu-is-expanded': isExpanded,
-                'bcu-is-visible': isVisible
+                'bcu-is-visible': isVisible,
             })}
         >
             <OverallUploadsProgressBar
@@ -75,8 +80,12 @@ const UploadsManager = ({
                 onKeyDown={handleProgressBarKeyDown}
                 view={view}
             />
-            <div className='bcu-uploads-manager-item-list'>
-                <ItemList items={items} view={view} onClick={onItemActionClick} />
+            <div className="bcu-uploads-manager-item-list">
+                <ItemList
+                    items={items}
+                    view={view}
+                    onClick={onItemActionClick}
+                />
             </div>
         </div>
     );

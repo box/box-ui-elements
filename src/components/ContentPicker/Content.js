@@ -27,7 +27,7 @@ type Props = {
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
     view: View,
-    currentCollection: Collection
+    currentCollection: Collection,
 };
 
 /**
@@ -57,14 +57,17 @@ const Content = ({
     onItemSelect,
     onShareAccessChange,
     onFocusChange,
-    extensionsWhitelist
+    extensionsWhitelist,
 }: Props) => (
-    <div className='bcp-content'>
+    <div className="bcp-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}
         {isEmpty(view, currentCollection) ? (
-            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
+            <EmptyState
+                view={view}
+                isLoading={currentCollection.percentLoaded !== 100}
+            />
         ) : (
             <ItemList
                 view={view}

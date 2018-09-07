@@ -7,7 +7,7 @@ import {
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
     COMMENTS_FIELDS_TO_FETCH,
     findMissingProperties,
-    fillMissingProperties
+    fillMissingProperties,
 } from '../fields';
 import {
     FIELD_ID,
@@ -47,7 +47,7 @@ import {
     FIELD_TRASHED_AT,
     FIELD_ASSIGNED_TO,
     FIELD_RESOLUTION_STATE,
-    FIELD_RESTORED_FROM
+    FIELD_RESTORED_FROM,
 } from '../../constants';
 
 describe('util/fields', () => {
@@ -68,7 +68,7 @@ describe('util/fields', () => {
             FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS,
             FIELD_HAS_COLLABORATIONS,
             FIELD_IS_EXTERNALLY_OWNED,
-            FIELD_ITEM_COLLECTION
+            FIELD_ITEM_COLLECTION,
         ]);
     });
 
@@ -85,7 +85,7 @@ describe('util/fields', () => {
             FIELD_REPRESENTATIONS,
             FIELD_WATERMARK_INFO,
             FIELD_AUTHENTICATED_DOWNLOAD_URL,
-            FIELD_IS_DOWNLOAD_AVAILABLE
+            FIELD_IS_DOWNLOAD_AVAILABLE,
         ]);
     });
 
@@ -109,7 +109,7 @@ describe('util/fields', () => {
             FIELD_ITEM_EXPIRATION,
             FIELD_VERSION_NUMBER,
             FIELD_IS_EXTERNALLY_OWNED,
-            FIELD_RESTORED_FROM
+            FIELD_RESTORED_FROM,
         ]);
     });
 
@@ -120,7 +120,7 @@ describe('util/fields', () => {
             FIELD_CREATED_AT,
             FIELD_CREATED_BY,
             FIELD_DUE_AT,
-            FIELD_MESSAGE
+            FIELD_MESSAGE,
         ]);
     });
 
@@ -130,12 +130,16 @@ describe('util/fields', () => {
             FIELD_CREATED_AT,
             FIELD_MODIFIED_AT,
             FIELD_MODIFIED_BY,
-            FIELD_VERSION_NUMBER
+            FIELD_VERSION_NUMBER,
         ]);
     });
 
     test('should fetch correct task assignment fields', () => {
-        expect(TASK_ASSIGNMENTS_FIELDS_TO_FETCH).toEqual([FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE]);
+        expect(TASK_ASSIGNMENTS_FIELDS_TO_FETCH).toEqual([
+            FIELD_ASSIGNED_TO,
+            FIELD_RESOLUTION_STATE,
+            FIELD_MESSAGE,
+        ]);
     });
 
     test('should fetch correct comments fields', () => {
@@ -145,7 +149,7 @@ describe('util/fields', () => {
             FIELD_CREATED_AT,
             FIELD_CREATED_BY,
             FIELD_MODIFIED_AT,
-            FIELD_PERMISSIONS
+            FIELD_PERMISSIONS,
         ]);
     });
 
@@ -161,12 +165,16 @@ describe('util/fields', () => {
 
         test('should return passed in properties when object is invalid', () => {
             const properties = ['foo', 'bar'];
-            expect(findMissingProperties('string', properties)).toBe(properties);
+            expect(findMissingProperties('string', properties)).toBe(
+                properties,
+            );
         });
 
         test('should return missing properties', () => {
             const properties = ['foo', 'bar'];
-            expect(findMissingProperties({ foo: 1, baz: 2 }, properties)).toEqual(['bar']);
+            expect(
+                findMissingProperties({ foo: 1, baz: 2 }, properties),
+            ).toEqual(['bar']);
         });
     });
 
@@ -182,10 +190,17 @@ describe('util/fields', () => {
 
         test('should return object with missing properties nulled', () => {
             const obj = { foo: { bar: 1 } };
-            const properties = ['foo', 'bar', 'foo.baz.bum', 'bar.bum', 'foo.baz.bup', 'bar.bop.bip'];
+            const properties = [
+                'foo',
+                'bar',
+                'foo.baz.bum',
+                'bar.bum',
+                'foo.baz.bup',
+                'bar.bop.bip',
+            ];
             expect(fillMissingProperties(obj, properties)).toEqual({
                 foo: { bar: 1, baz: { bum: null, bup: null } },
-                bar: { bum: null, bop: { bip: null } }
+                bar: { bum: null, bop: { bip: null } },
             });
         });
     });

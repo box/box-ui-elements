@@ -13,15 +13,22 @@ export default (
     canSetShareAccess: boolean,
     selectableType: string,
     extensionsWhitelist: string[],
-    hasHitSelectionLimit: boolean
+    hasHitSelectionLimit: boolean,
 ) => ({ rowData }: { rowData: BoxItem }) => {
-    if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData)) {
+    if (
+        !isRowSelectable(
+            selectableType,
+            extensionsWhitelist,
+            hasHitSelectionLimit,
+            rowData,
+        )
+    ) {
         return <span />;
     }
 
     return (
         <ShareAccessSelect
-            className='bcp-shared-access-select'
+            className="bcp-shared-access-select"
             canSetShareAccess={canSetShareAccess}
             onChange={onChange}
             item={rowData}

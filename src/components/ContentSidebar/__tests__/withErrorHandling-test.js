@@ -8,18 +8,19 @@ describe('components/withErrorHandling', () => {
     const WrappedComponent = () => <div />;
     const WithErrorHandlingComponent = withErrorHandling(WrappedComponent);
 
-    const getWrapper = (props) => shallow(<WithErrorHandlingComponent {...props} />);
+    const getWrapper = props =>
+        shallow(<WithErrorHandlingComponent {...props} />);
     const fakeMessage = {
         id: 'foo',
         description: 'bar',
-        defaultMessage: 'baz'
+        defaultMessage: 'baz',
     };
 
     test('should render a ErrorMask', () => {
         const props = {
             maskError: {
-                errorHeader: fakeMessage
-            }
+                errorHeader: fakeMessage,
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -33,8 +34,8 @@ describe('components/withErrorHandling', () => {
         const props = {
             maskError: {
                 errorHeader: fakeMessage,
-                errorSubHeader: fakeMessage
-            }
+                errorSubHeader: fakeMessage,
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -47,12 +48,12 @@ describe('components/withErrorHandling', () => {
     test('should render an ErrorMask if both maskError and inlineError props passed', () => {
         const props = {
             maskError: {
-                errorHeader: fakeMessage
+                errorHeader: fakeMessage,
             },
             inlineError: {
                 title: fakeMessage,
-                content: fakeMessage
-            }
+                content: fakeMessage,
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -65,8 +66,8 @@ describe('components/withErrorHandling', () => {
         const props = {
             inlineError: {
                 title: fakeMessage,
-                content: fakeMessage
-            }
+                content: fakeMessage,
+            },
         };
         const wrapper = getWrapper(props);
 

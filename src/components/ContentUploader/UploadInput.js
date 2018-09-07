@@ -11,7 +11,7 @@ type Props = {
     isFolderUpload?: boolean,
     inputLabelClass?: string,
     inputLabel?: React.Node,
-    handleChange: Function
+    handleChange: Function,
 };
 
 const UploadInput = ({
@@ -19,7 +19,7 @@ const UploadInput = ({
     isFolderUpload = false,
     inputLabelClass = '',
     inputLabel,
-    handleChange
+    handleChange,
 }: Props) =>
     inputLabel ? (
         // eslint-disable-next-line jsx-a11y/label-has-for
@@ -27,7 +27,7 @@ const UploadInput = ({
             {inputLabel}
             <input
                 multiple={isMultiple}
-                type='file'
+                type="file"
                 onChange={handleChange}
                 directory={isFolderUpload ? '' : undefined}
                 webkitdirectory={isFolderUpload ? '' : undefined}

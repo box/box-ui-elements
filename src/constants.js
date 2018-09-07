@@ -62,7 +62,8 @@ export const HEADER_CLIENT_VERSION = 'X-Box-Client-Version';
 
 /* ------------------ Metadata ---------------------- */
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
-export const METADATA_TEMPLATE_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
+export const METADATA_TEMPLATE_CLASSIFICATION =
+    'securityClassification-6VMVochwUWo';
 export const METADATA_TEMPLATE_SKILLS = 'boxSkillsCards';
 export const METADATA_TEMPLATE_PROPERTIES = 'properties';
 export const METADATA_SCOPE_GLOBAL = 'global';
@@ -84,7 +85,8 @@ export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
-export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
+export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS =
+    'allowed_shared_link_access_levels';
 export const FIELD_HAS_COLLABORATIONS = 'has_collaborations';
 export const FIELD_IS_EXTERNALLY_OWNED = 'is_externally_owned';
 export const FIELD_TOTAL_COUNT = 'total_count';
@@ -165,7 +167,8 @@ export const STATUS_ERROR: 'error' = 'error';
 
 /* ------------------- Styles ------------------------ */
 export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
-export const CLASS_MODAL_CONTENT_FULL_BLEED = 'be-modal-dialog-content-full-bleed';
+export const CLASS_MODAL_CONTENT_FULL_BLEED =
+    'be-modal-dialog-content-full-bleed';
 export const CLASS_MODAL_OVERLAY = 'be-modal-dialog-overlay';
 export const CLASS_IS_SMALL = 'be-is-small';
 export const CLASS_IS_MEDIUM = 'be-is-medium';
@@ -184,7 +187,9 @@ const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';
 const X_REP_HINT_IMAGE = '[jpg?dimensions=2048x2048,png?dimensions=2048x2048]';
 const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
 const X_REP_HINT_VIDEO_MP4 = '[mp4]';
-const videoHint = Browser.canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
+const videoHint = Browser.canPlayDash()
+    ? X_REP_HINT_VIDEO_DASH
+    : X_REP_HINT_VIDEO_MP4;
 export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;
 
 /* ------------------ Uploader ---------------------- */
@@ -207,7 +212,8 @@ export const SKILLS_ERROR_BILLING = 'skills_billing_error';
 export const SKILLS_ERROR_EXTERNAL_AUTH = 'skills_external_auth_error';
 export const SKILLS_ERROR_UNKNOWN = 'skills_unknown_error';
 export const SKILLS_ERROR_INVALID_FILE_SIZE = 'skills_invalid_file_size_error';
-export const SKILLS_ERROR_INVALID_FILE_FORMAT = 'skills_invalid_file_format_error';
+export const SKILLS_ERROR_INVALID_FILE_FORMAT =
+    'skills_invalid_file_format_error';
 export const SKILLS_ERROR_FILE_PROCESSING = 'skills_file_processing_error';
 export const SKILLS_STATUS_PENDING = 'skills_pending_status';
 export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
