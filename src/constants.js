@@ -239,3 +239,6 @@ export const VERSION_UPLOAD_ACTION = 'upload';
 
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
+
+/* ------------------ Integrations ------------------------- */
+export const APP_INTEGRATION = 'app_integration';
