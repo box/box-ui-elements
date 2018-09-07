@@ -5,18 +5,18 @@
  */
 
 import Base from './Base';
-import { TYPE_FILE } from '../constants';
+import { TYPE_FILE, APP_INTEGRATION } from '../constants';
 
 // Test data, will be replaced with the API when functioning
 const MOCK_INTEGRATIONS = {
     '10897': {
-        type: 'app_integration',
+        type: APP_INTEGRATION,
         id: '10897',
         name: 'Edit with G Suite',
         description: 'This integration allows customers to work seamlessly between Box and G Suite\'s editor'
     },
     '3282': {
-        type: 'app_integration',
+        type: APP_INTEGRATION,
         id: '3282',
         name: 'Sign with Adobe Sign',
         description: 'Send your document for signature to Adobe Sign'
@@ -57,7 +57,7 @@ class AppIntegrations extends Base {
      * @param {string} id - An app integration ID
      * @return {Promise} a promise that resolves with app integration data
      */
-    fetchAppIntegrationsPromise(id: string): Promise<AppIntegrationItem> {
+    fetchAppIntegrationsPromise(id: string): Promise<AppIntegrationAPIItem> {
         return new Promise((resolve, reject) => {
             // Using the mock getter until the API is fixed.
             this.fetchMockAppIntegration({

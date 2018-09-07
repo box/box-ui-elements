@@ -34,7 +34,7 @@ type Props = {
 
 type State = {
     isDropdownOpen: boolean,
-    integrations: ?Array<OpenWithIntegrationItem>
+    integrations: ?Array<Integration>
 };
 
 class OpenWith extends PureComponent<Props, State> {
@@ -118,7 +118,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @param {OpenWithIntegrations} openWithIntegrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = (openWithIntegrations: Array<OpenWithIntegrationItem>) => {
+    fetchOpenWithSuccessHandler = (openWithIntegrations: Array<Integration>) => {
         this.setState({ integrations: openWithIntegrations });
     };
 
@@ -152,7 +152,6 @@ class OpenWith extends PureComponent<Props, State> {
     render() {
         const { language, messages: intlMessages }: Props = this.props;
         const { integrations }: State = this.state;
-
         // Placeholder
         return (
             integrations && (
