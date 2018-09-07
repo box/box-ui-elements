@@ -18,7 +18,9 @@ describe('api/WebLink', () => {
             expect(webLink.getUrl()).toBe('https://api.box.com/2.0/web_links');
         });
         test('should return correct web link api url with id', () => {
-            expect(webLink.getUrl('foo')).toBe('https://api.box.com/2.0/web_links/foo');
+            expect(webLink.getUrl('foo')).toBe(
+                'https://api.box.com/2.0/web_links/foo',
+            );
         });
     });
 });

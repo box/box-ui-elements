@@ -15,7 +15,7 @@ import {
     HTTP_POST,
     HTTP_PUT,
     HTTP_DELETE,
-    HTTP_OPTIONS
+    HTTP_OPTIONS,
 } from '../constants';
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
@@ -57,7 +57,7 @@ class Xhr {
         sharedLink,
         sharedLinkPassword,
         responseInterceptor,
-        requestInterceptor
+        requestInterceptor,
     }: Options = {}) {
         this.id = id;
         this.token = token;
@@ -71,7 +71,10 @@ class Xhr {
 
         if (typeof responseInterceptor === 'function') {
             // Called on any non 2xx response
-            this.axios.interceptors.response.use(responseInterceptor, this.errorInterceptor);
+            this.axios.interceptors.response.use(
+                responseInterceptor,
+                this.errorInterceptor,
+            );
         }
 
         if (typeof requestInterceptor === 'function') {
@@ -111,7 +114,7 @@ class Xhr {
             origin: a.origin,
             protocol: a.protocol,
             hash: a.hash,
-            port: a.port
+            port: a.port,
         };
     }
 
@@ -126,16 +129,18 @@ class Xhr {
         const headers: StringMap = Object.assign(
             {
                 Accept: 'application/json',
-                [HEADER_CONTENT_TYPE]: 'application/json'
+                [HEADER_CONTENT_TYPE]: 'application/json',
             },
-            args
+            args,
         );
 
         if (this.sharedLink) {
             headers.BoxApi = `shared_link=${this.sharedLink}`;
 
             if (this.sharedLinkPassword) {
-                headers.BoxApi = `${headers.BoxApi}&shared_link_password=${this.sharedLinkPassword}`;
+                headers.BoxApi = `${headers.BoxApi}&shared_link_password=${
+                    this.sharedLinkPassword
+                }`;
             }
         }
 
@@ -171,20 +176,20 @@ class Xhr {
         url,
         id,
         params = {},
-        headers = {}
+        headers = {},
     }: {
         url: string,
         id?: string,
         params?: StringAnyMap,
-        headers?: StringMap
+        headers?: StringMap,
     }): Promise<StringAnyMap> {
-        return this.getHeaders(id, headers).then((hdrs) =>
+        return this.getHeaders(id, headers).then(hdrs =>
             this.axios.get(url, {
                 cancelToken: this.axiosSource.token,
                 params,
                 headers: hdrs,
-                parsedUrl: this.getParsedUrl(url)
-            })
+                parsedUrl: this.getParsedUrl(url),
+            }),
         );
     }
 
@@ -205,24 +210,24 @@ class Xhr {
         data,
         params,
         headers = {},
-        method = HTTP_POST
+        method = HTTP_POST,
     }: {
         url: string,
         id?: string,
         data: PayloadType,
         params?: StringAnyMap,
         headers?: StringMap,
-        method?: Method
+        method?: Method,
     }): Promise<StringAnyMap> {
-        return this.getHeaders(id, headers).then((hdrs) =>
+        return this.getHeaders(id, headers).then(hdrs =>
             this.axios({
                 url,
                 data,
                 params,
                 method,
                 parsedUrl: this.getParsedUrl(url),
-                headers: hdrs
-            })
+                headers: hdrs,
+            }),
         );
     }
 
@@ -241,13 +246,13 @@ class Xhr {
         id,
         data,
         params,
-        headers = {}
+        headers = {},
     }: {
         url: string,
         id?: string,
         data: PayloadType,
         params?: StringAnyMap,
-        headers?: StringMap
+        headers?: StringMap,
     }): Promise<StringAnyMap> {
         return this.post({ id, url, data, params, headers, method: HTTP_PUT });
     }
@@ -265,12 +270,12 @@ class Xhr {
         url,
         id,
         data = {},
-        headers = {}
+        headers = {},
     }: {
         url: string,
         id?: string,
         data?: StringAnyMap,
-        headers?: StringMap
+        headers?: StringMap,
     }): Promise<StringAnyMap> {
         return this.post({ id, url, data, headers, method: HTTP_DELETE });
     }
@@ -292,7 +297,7 @@ class Xhr {
         data,
         headers = {},
         successHandler,
-        errorHandler
+        errorHandler,
     }: {
         url: string,
         data: StringAnyMap,
@@ -300,18 +305,18 @@ class Xhr {
         headers?: StringMap,
         successHandler: Function,
         errorHandler: Function,
-        progressHandler?: Function
+        progressHandler?: Function,
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers)
-            .then((hdrs) =>
+            .then(hdrs =>
                 this.axios({
                     url,
                     data,
                     method: HTTP_OPTIONS,
-                    headers: hdrs
+                    headers: hdrs,
                 })
                     .then(successHandler)
-                    .catch(errorHandler)
+                    .catch(errorHandler),
             )
             .catch(errorHandler);
     }
@@ -343,7 +348,7 @@ class Xhr {
         progressHandler,
         withIdleTimeout = false,
         idleTimeoutDuration = DEFAULT_UPLOAD_TIMEOUT_MS,
-        idleTimeoutHandler
+        idleTimeoutHandler,
     }: {
         url: string,
         id?: string,
@@ -355,10 +360,10 @@ class Xhr {
         progressHandler: Function,
         withIdleTimeout?: boolean,
         idleTimeoutDuration?: number,
-        idleTimeoutHandler?: Function
+        idleTimeoutHandler?: Function,
     }): Promise<any> {
         return this.getHeaders(id, headers)
-            .then((hdrs) => {
+            .then(hdrs => {
                 let idleTimeout;
                 let progressHandlerToUse = progressHandler;
 
@@ -372,12 +377,18 @@ class Xhr {
                         }
                     };
 
-                    idleTimeout = setTimeout(idleTimeoutFunc, idleTimeoutDuration);
+                    idleTimeout = setTimeout(
+                        idleTimeoutFunc,
+                        idleTimeoutDuration,
+                    );
 
                     // Progress handler that aborts upload if there has been no progress for >= timeoutMs
-                    progressHandlerToUse = (event) => {
+                    progressHandlerToUse = event => {
                         clearTimeout(idleTimeout);
-                        idleTimeout = setTimeout(idleTimeoutFunc, idleTimeoutDuration);
+                        idleTimeout = setTimeout(
+                            idleTimeoutFunc,
+                            idleTimeoutDuration,
+                        );
                         progressHandler(event);
                     };
                 }
@@ -391,13 +402,18 @@ class Xhr {
                         delete reqHeaders[HEADER_CONTENT_TYPE];
 
                         if (headers[HEADER_CONTENT_TYPE]) {
-                            reqHeaders[HEADER_CONTENT_TYPE] = headers[HEADER_CONTENT_TYPE];
+                            reqHeaders[HEADER_CONTENT_TYPE] =
+                                headers[HEADER_CONTENT_TYPE];
                         }
 
                         // Convert to FormData if needed
-                        if (reqData && !(reqData instanceof Blob) && reqData.attributes) {
+                        if (
+                            reqData &&
+                            !(reqData instanceof Blob) &&
+                            reqData.attributes
+                        ) {
                             const formData = new FormData();
-                            Object.keys(reqData).forEach((key) => {
+                            Object.keys(reqData).forEach(key => {
                                 formData.append(key, reqData[key]);
                             });
 
@@ -409,13 +425,13 @@ class Xhr {
                     method,
                     headers: hdrs,
                     onUploadProgress: progressHandlerToUse,
-                    cancelToken: this.axiosSource.token
+                    cancelToken: this.axiosSource.token,
                 })
-                    .then((response) => {
+                    .then(response => {
                         clearTimeout(idleTimeout);
                         successHandler(response);
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         clearTimeout(idleTimeout);
                         errorHandler(error);
                     });

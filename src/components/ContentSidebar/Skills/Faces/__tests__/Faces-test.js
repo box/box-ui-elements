@@ -7,10 +7,10 @@ describe('components/ContentSidebar/Skills/Faces/Faces', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: []
+                entries: [],
             },
             isEditable: false,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Faces {...props} />);
@@ -21,10 +21,10 @@ describe('components/ContentSidebar/Skills/Faces/Faces', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             isEditable: false,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Faces {...props} />);
@@ -35,10 +35,10 @@ describe('components/ContentSidebar/Skills/Faces/Faces', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             isEditable: false,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Faces {...props} />);
@@ -51,10 +51,10 @@ describe('components/ContentSidebar/Skills/Faces/Faces', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             isEditable: true,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Faces {...props} />);
@@ -65,10 +65,13 @@ describe('components/ContentSidebar/Skills/Faces/Faces', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo', appears: [{ start: 1 }] }, { text: 'bar', appears: [{ start: 1 }] }]
+                entries: [
+                    { text: 'foo', appears: [{ start: 1 }] },
+                    { text: 'bar', appears: [{ start: 1 }] },
+                ],
             },
             isEditable: false,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Faces {...props} />);
@@ -81,10 +84,10 @@ describe('components/ContentSidebar/Skills/Faces/Faces', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             isEditable: true,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Faces {...props} />);
@@ -97,11 +100,11 @@ describe('components/ContentSidebar/Skills/Faces/Faces', () => {
         const props = {
             card: {
                 duration: 100,
-                entries: [{ text: 'foo' }, { text: 'bar' }]
+                entries: [{ text: 'foo' }, { text: 'bar' }],
             },
             transcript: { duration: 100 },
             isEditable: true,
-            onSkillChange: jest.fn()
+            onSkillChange: jest.fn(),
         };
 
         const wrapper = shallow(<Faces {...props} />);

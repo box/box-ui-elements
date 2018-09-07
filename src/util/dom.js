@@ -11,7 +11,9 @@
  * @param {HTMLElement|null} element - the dom element to check
  * @return {boolean} true if its one of the above elements
  */
-export function isInputElement(element: HTMLElement | EventTarget | null): boolean {
+export function isInputElement(
+    element: HTMLElement | EventTarget | null,
+): boolean {
     if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
@@ -32,7 +34,9 @@ export function isInputElement(element: HTMLElement | EventTarget | null): boole
  * @param {HTMLElement|null} element - the dom element to check
  * @return {boolean} true if its one of the above elements
  */
-export function isFocusableElement(element: HTMLElement | EventTarget | null): boolean {
+export function isFocusableElement(
+    element: HTMLElement | EventTarget | null,
+): boolean {
     if (!element || !(element instanceof HTMLElement)) {
         return false;
     }
@@ -48,9 +52,18 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
 
     const isButton =
         element.classList.contains('btn-content') ||
-        (element.parentElement instanceof HTMLElement ? element.parentElement.classList.contains('btn') : false);
+        (element.parentElement instanceof HTMLElement
+            ? element.parentElement.classList.contains('btn')
+            : false);
 
-    return isInputElement(element) || tag === 'button' || tag === 'a' || tag === 'option' || isCheckbox || isButton;
+    return (
+        isInputElement(element) ||
+        tag === 'button' ||
+        tag === 'a' ||
+        tag === 'option' ||
+        isCheckbox ||
+        isButton
+    );
 }
 
 /**
@@ -61,7 +74,11 @@ export function isFocusableElement(element: HTMLElement | EventTarget | null): b
  * @param {boolean|void} [focusRoot] - if root should be focused
  * @return {void}
  */
-export function focus(root?: HTMLElement, selector?: string, focusRoot: boolean = true): void {
+export function focus(
+    root?: HTMLElement,
+    selector?: string,
+    focusRoot: boolean = true,
+): void {
     if (!root) {
         return;
     }

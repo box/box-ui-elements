@@ -15,7 +15,7 @@ import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 type Props = {
     toEdit: Function,
     id: string,
-    intl: any
+    intl: any,
 };
 
 class InlineEdit extends React.Component<Props> {
@@ -27,12 +27,14 @@ class InlineEdit extends React.Component<Props> {
     render(): React.Node {
         const { onEdit } = this;
         return (
-            <div className='bcs-comment-edit-container'>
+            <div className="bcs-comment-edit-container">
                 <PlainButton
-                    aria-label={this.props.intl.formatMessage(messages.editLabel)}
-                    className='bcs-comment-edit'
+                    aria-label={this.props.intl.formatMessage(
+                        messages.editLabel,
+                    )}
+                    className="bcs-comment-edit"
                     onClick={onEdit}
-                    type='button'
+                    type="button"
                     data-resin-target={ACTIVITY_TARGETS.INLINE_EDIT}
                 >
                     <IconPencil />

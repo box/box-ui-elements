@@ -40,8 +40,8 @@ type Props = {
     message: string,
     mentionSelectorContacts?: SelectorItems,
     getMentionWithQuery?: Function,
-    getAvatarUrl: (string) => Promise<?string>,
-    getUserProfileUrl?: (string) => Promise<string>
+    getAvatarUrl: string => Promise<?string>,
+    getUserProfileUrl?: string => Promise<string>,
 };
 
 // eslint-disable-next-line
@@ -66,10 +66,14 @@ class Task extends React.Component<Props> {
             getAvatarUrl,
             getUserProfileUrl,
             getMentionWithQuery,
-            mentionSelectorContacts
+            mentionSelectorContacts,
         } = this.props;
         return (
-            <div className={classNames('bcs-task', { 'bcs-is-pending': isPending || error })}>
+            <div
+                className={classNames('bcs-task', {
+                    'bcs-is-pending': isPending || error,
+                })}
+            >
                 <Comment
                     created_at={created_at}
                     created_by={created_by}
@@ -89,57 +93,87 @@ class Task extends React.Component<Props> {
                     mentionSelectorContacts={mentionSelectorContacts}
                     getMentionWithQuery={getMentionWithQuery}
                 />
-                <div className='bcs-task-approvers-container'>
-                    <div className='bcs-task-approvers-header'>
+                <div className="bcs-task-approvers-container">
+                    <div className="bcs-task-approvers-header">
                         <strong>
                             <FormattedMessage {...messages.tasksForApproval} />
                         </strong>
                         {due_at ? (
-                            <span className='bcs-task-due-date'>
+                            <span className="bcs-task-due-date">
                                 <FormattedMessage {...messages.taskDueDate} />
-                                <FormattedDate value={due_at} day='numeric' month='long' year='numeric' />
+                                <FormattedDate
+                                    value={due_at}
+                                    day="numeric"
+                                    month="long"
+                                    year="numeric"
+                                />
                             </span>
                         ) : null}
                     </div>
-                    <div className='bcs-task-assignees'>
-                        {task_assignment_collection && task_assignment_collection.entries
+                    <div className="bcs-task-assignees">
+                        {task_assignment_collection &&
+                        task_assignment_collection.entries
                             ? task_assignment_collection.entries.map(
-                                ({ id: assignmentId, assigned_to, resolution_state }) => {
-                                    switch (resolution_state) {
-                                        case TASK_COMPLETED:
-                                        case TASK_APPROVED:
-                                            return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
-                                        case TASK_REJECTED:
-                                            return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
-                                        case TASK_INCOMPLETE:
-                                            return (
-                                                <PendingAssignment
-                                                    {...assigned_to}
-                                                    key={assigned_to.id}
-                                                    onTaskApproval={
-                                                        isPending
-                                                            ? noop
-                                                            : () =>
-                                                                onAssignmentUpdate(id, assignmentId, TASK_APPROVED)
-                                                    }
-                                                    onTaskReject={
-                                                        isPending
-                                                            ? noop
-                                                            : () =>
-                                                                onAssignmentUpdate(id, assignmentId, TASK_REJECTED)
-                                                    }
-                                                    shouldShowActions={
-                                                        onAssignmentUpdate !== noop &&
+                                  ({
+                                      id: assignmentId,
+                                      assigned_to,
+                                      resolution_state,
+                                  }) => {
+                                      switch (resolution_state) {
+                                          case TASK_COMPLETED:
+                                          case TASK_APPROVED:
+                                              return (
+                                                  <CompletedAssignment
+                                                      {...assigned_to}
+                                                      key={assigned_to.id}
+                                                  />
+                                              );
+                                          case TASK_REJECTED:
+                                              return (
+                                                  <RejectedAssignment
+                                                      {...assigned_to}
+                                                      key={assigned_to.id}
+                                                  />
+                                              );
+                                          case TASK_INCOMPLETE:
+                                              return (
+                                                  <PendingAssignment
+                                                      {...assigned_to}
+                                                      key={assigned_to.id}
+                                                      onTaskApproval={
+                                                          isPending
+                                                              ? noop
+                                                              : () =>
+                                                                    onAssignmentUpdate(
+                                                                        id,
+                                                                        assignmentId,
+                                                                        TASK_APPROVED,
+                                                                    )
+                                                      }
+                                                      onTaskReject={
+                                                          isPending
+                                                              ? noop
+                                                              : () =>
+                                                                    onAssignmentUpdate(
+                                                                        id,
+                                                                        assignmentId,
+                                                                        TASK_REJECTED,
+                                                                    )
+                                                      }
+                                                      shouldShowActions={
+                                                          onAssignmentUpdate !==
+                                                              noop &&
                                                           currentUser &&
-                                                          assigned_to.id === currentUser.id
-                                                    }
-                                                />
-                                            );
-                                        default:
-                                            return null;
-                                    }
-                                }
-                            )
+                                                          assigned_to.id ===
+                                                              currentUser.id
+                                                      }
+                                                  />
+                                              );
+                                          default:
+                                              return null;
+                                      }
+                                  },
+                              )
                             : null}
                     </div>
                 </div>

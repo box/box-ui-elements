@@ -9,7 +9,7 @@ jest.mock('../../Avatar', () => () => 'Avatar');
 
 const currentUser = {
     name: 'testuser',
-    id: 11
+    id: 11,
 };
 const approverSelectorContacts = [];
 const mentionSelectorContacts = [];
@@ -17,12 +17,12 @@ const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
 
 const allHandlers = {
     tasks: {
-        edit: jest.fn()
+        edit: jest.fn(),
     },
     contacts: {
         getApproverWithQuery: jest.fn(),
-        getMentionWithQuery: jest.fn()
-    }
+        getMentionWithQuery: jest.fn(),
+    },
 };
 
 describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
@@ -35,14 +35,14 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         shallow(
             <Comment
                 created_by={{ name: '50 Cent', id: 10 }}
-                id='123'
-                tagged_message='test'
+                id="123"
+                tagged_message="test"
                 handlers={allHandlers}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 {...props}
-            />
+            />,
         );
 
     test('should correctly render comment', () => {
@@ -50,22 +50,24 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
-            />
+            />,
         );
 
         // validating that the Tooltip and the comment posted time are properly set
-        expect(wrapper.find('ReadableTime').prop('timestamp')).toEqual(unixTime);
+        expect(wrapper.find('ReadableTime').prop('timestamp')).toEqual(
+            unixTime,
+        );
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -76,32 +78,36 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         expect(comment.hasClass('bcs-is-focused')).toBe(false);
         comment.simulate('focus');
-        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(true);
+        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(
+            true,
+        );
         comment.simulate('blur');
-        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(false);
+        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(
+            false,
+        );
     });
 
     test('should correctly render comment when translation is enabled', () => {
         const translations = {
             translationEnabled: true,
-            onTranslate: jest.fn()
+            onTranslate: jest.fn(),
         };
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 translations={translations}
-            />
+            />,
         );
 
         expect(wrapper).toMatchSnapshot();
@@ -111,18 +117,18 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
-            />
+            />,
         );
 
         expect(wrapper).toMatchSnapshot();
@@ -134,19 +140,19 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
             permissions: { can_delete: true },
-            isPending: true
+            isPending: true,
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
-            />
+            />,
         );
 
         expect(wrapper.find('InlineDelete').length).toEqual(0);
@@ -159,19 +165,19 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_delete: true }
+            permissions: { can_delete: true },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
-            />
+            />,
         );
 
         expect(wrapper.find('InlineDelete').length).toEqual(1);
@@ -183,19 +189,19 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_delete: true }
+            permissions: { can_delete: true },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...task}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
-            />
+            />,
         );
 
         expect(wrapper.find('InlineDelete').length).toEqual(1);
@@ -206,18 +212,18 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true }
+            permissions: { can_edit: true },
         };
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
-            />
+            />,
         );
 
         const instance = wrapper.instance();
@@ -246,19 +252,19 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: {}
+            permissions: {},
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
-            />
+            />,
         );
 
         expect(wrapper.find('InlineDelete').length).toEqual(0);
@@ -269,19 +275,19 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: {}
+            permissions: {},
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
-            />
+            />,
         );
 
         expect(wrapper.find('InlineEdit').length).toEqual(0);
@@ -291,17 +297,17 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 11 }
+            created_by: { name: '50 Cent', id: 11 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
-            />
+            />,
         );
 
         expect(wrapper.find('InlineDelete').length).toEqual(0);
@@ -311,18 +317,18 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 11 }
+            created_by: { name: '50 Cent', id: 11 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
-            />
+            />,
         );
 
         expect(wrapper.find('InlineEdit').length).toEqual(0);
@@ -332,12 +338,12 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
 
         const wrapper = shallow(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -346,9 +352,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 onDelete={jest.fn()}
                 error={{
                     title: 'error',
-                    message: 'errorrrrr'
+                    message: 'errorrrrr',
                 }}
-            />
+            />,
         );
 
         expect(wrapper).toMatchSnapshot();
@@ -358,13 +364,13 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
-            created_by: { name: '50 Cent', id: 10 }
+            created_by: { name: '50 Cent', id: 10 },
         };
         const onActionSpy = jest.fn();
 
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
@@ -376,12 +382,14 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                     message: 'errorrrrr',
                     action: {
                         text: 'click',
-                        onAction: onActionSpy
-                    }
+                        onAction: onActionSpy,
+                    },
                 }}
-            />
+            />,
         );
-        const inlineErrorActionLink = wrapper.find('InlineError').find('PlainButton.lnk');
+        const inlineErrorActionLink = wrapper
+            .find('InlineError')
+            .find('PlainButton.lnk');
         expect(inlineErrorActionLink.length).toEqual(1);
 
         inlineErrorActionLink.simulate('click');
@@ -394,18 +402,18 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
             created_at: '2016-11-02T11:35:14-07:00',
             tagged_message: 'test @[3203255873:test user] ',
             created_by: { name: '50 Cent', id: 10 },
-            permissions: { can_edit: true }
+            permissions: { can_edit: true },
         };
         const wrapper = mount(
             <Comment
-                id='123'
+                id="123"
                 {...comment}
                 currentUser={currentUser}
                 approverSelectorContacts={approverSelectorContacts}
                 mentionSelectorContacts={mentionSelectorContacts}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
-            />
+            />,
         );
 
         expect(wrapper.find('InlineEdit').length).toEqual(2);

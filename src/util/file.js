@@ -4,7 +4,11 @@
  * @author Box
  */
 
-import { TYPED_ID_FILE_PREFIX, TYPED_ID_FOLDER_PREFIX, FILE_EXTENSION_BOX_NOTE } from '../constants';
+import {
+    TYPED_ID_FILE_PREFIX,
+    TYPED_ID_FOLDER_PREFIX,
+    FILE_EXTENSION_BOX_NOTE,
+} from '../constants';
 
 /**
  * Returns typed id for file. Useful for when

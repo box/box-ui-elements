@@ -6,7 +6,7 @@ let upload;
 describe('api/uploads/PlainUpload', () => {
     beforeEach(() => {
         upload = new PlainUpload({
-            token: '123'
+            token: '123',
         });
     });
 
@@ -15,7 +15,7 @@ describe('api/uploads/PlainUpload', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.successCallback = jest.fn();
             upload.uploadSuccessHandler({
-                data: { entries: {} }
+                data: { entries: {} },
             });
             expect(upload.successCallback).not.toHaveBeenCalled();
         });
@@ -27,7 +27,7 @@ describe('api/uploads/PlainUpload', () => {
             upload.successCallback = jest.fn();
 
             upload.uploadSuccessHandler({
-                data: { entries }
+                data: { entries },
             });
             expect(upload.successCallback).toHaveBeenCalledWith(entries);
         });
@@ -57,11 +57,11 @@ describe('api/uploads/PlainUpload', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.getBaseUploadUrl = jest.fn();
             upload.xhr = {
-                options: jest.fn()
+                options: jest.fn(),
             };
             upload.makePreflightRequest({
                 fileId: '123',
-                fileName: 'cayde'
+                fileName: 'cayde',
             });
             expect(upload.getBaseUploadUrl).not.toHaveBeenCalled();
             expect(upload.xhr.options).not.toHaveBeenCalled();
@@ -74,12 +74,12 @@ describe('api/uploads/PlainUpload', () => {
             upload.getBaseApiUrl = jest.fn().mockReturnValueOnce(baseUrl);
             upload.file = {
                 size: 1,
-                name: 'zavala'
+                name: 'zavala',
             };
             upload.folderId = '123';
 
             upload.xhr = {
-                options: jest.fn()
+                options: jest.fn(),
             };
 
             upload.makePreflightRequest({});
@@ -88,12 +88,12 @@ describe('api/uploads/PlainUpload', () => {
                 data: {
                     name: upload.file.name,
                     parent: {
-                        id: upload.folderId
+                        id: upload.folderId,
                     },
-                    size: upload.file.size
+                    size: upload.file.size,
                 },
                 successHandler: expect.any(Function),
-                errorHandler: expect.any(Function)
+                errorHandler: expect.any(Function),
             });
         });
 
@@ -105,12 +105,12 @@ describe('api/uploads/PlainUpload', () => {
             upload.getBaseApiUrl = jest.fn().mockReturnValueOnce(baseUrl);
             upload.file = {
                 size: 1,
-                name: 'zavala'
+                name: 'zavala',
             };
             upload.folderId = '123';
 
             upload.xhr = {
-                options: jest.fn()
+                options: jest.fn(),
             };
 
             upload.makePreflightRequest();
@@ -118,7 +118,7 @@ describe('api/uploads/PlainUpload', () => {
                 url: `${baseUrl}/files/${upload.fileId}/content`,
                 data: expect.any(Object),
                 successHandler: expect.any(Function),
-                errorHandler: expect.any(Function)
+                errorHandler: expect.any(Function),
             });
         });
     });
@@ -127,7 +127,7 @@ describe('api/uploads/PlainUpload', () => {
         test('should not do anything if API is destroyed', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.xhr = {
-                uploadFile: jest.fn()
+                uploadFile: jest.fn(),
             };
             upload.preflightSuccessHandler({ data: {} });
             expect(upload.xhr.uploadFile).not.toHaveBeenCalled();
@@ -135,13 +135,15 @@ describe('api/uploads/PlainUpload', () => {
 
         test('should generate upload URL and make request if no URL is provided', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve('somehash'));
+            upload.computeSHA1 = jest
+                .fn()
+                .mockReturnValueOnce(Promise.resolve('somehash'));
             upload.file = {
-                name: 'warlock'
+                name: 'warlock',
             };
             upload.folderId = '123';
             upload.xhr = {
-                uploadFile: jest.fn()
+                uploadFile: jest.fn(),
             };
 
             return upload.preflightSuccessHandler({ data: {} }).then(() => {
@@ -149,27 +151,29 @@ describe('api/uploads/PlainUpload', () => {
                     url: `${upload.uploadHost}/api/2.0/files/content`,
                     data: {
                         attributes: expect.any(String),
-                        file: upload.file
+                        file: upload.file,
                     },
                     headers: {
-                        'Content-MD5': 'somehash'
+                        'Content-MD5': 'somehash',
                     },
                     successHandler: expect.any(Function),
                     errorHandler: expect.any(Function),
-                    progressHandler: expect.any(Function)
+                    progressHandler: expect.any(Function),
                 });
             });
         });
 
         test('should upload with no Content-MD5 hash if hashing fails', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve(''));
+            upload.computeSHA1 = jest
+                .fn()
+                .mockReturnValueOnce(Promise.resolve(''));
             upload.file = {
-                name: 'warlock'
+                name: 'warlock',
             };
             upload.folderId = '123';
             upload.xhr = {
-                uploadFile: jest.fn()
+                uploadFile: jest.fn(),
             };
 
             return upload.preflightSuccessHandler({ data: {} }).then(() => {
@@ -177,12 +181,12 @@ describe('api/uploads/PlainUpload', () => {
                     url: `${upload.uploadHost}/api/2.0/files/content`,
                     data: {
                         attributes: expect.any(String),
-                        file: upload.file
+                        file: upload.file,
                     },
                     headers: {},
                     successHandler: expect.any(Function),
                     errorHandler: expect.any(Function),
-                    progressHandler: expect.any(Function)
+                    progressHandler: expect.any(Function),
                 });
             });
         });
@@ -191,14 +195,16 @@ describe('api/uploads/PlainUpload', () => {
             const fileId = '123';
 
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve('somehash'));
+            upload.computeSHA1 = jest
+                .fn()
+                .mockReturnValueOnce(Promise.resolve('somehash'));
             upload.file = {
-                name: 'warlock'
+                name: 'warlock',
             };
             upload.fileId = fileId;
             upload.folderId = '123';
             upload.xhr = {
-                uploadFile: jest.fn()
+                uploadFile: jest.fn(),
             };
 
             return upload.preflightSuccessHandler({ data: {} }).then(() => {
@@ -206,11 +212,11 @@ describe('api/uploads/PlainUpload', () => {
                     url: `${upload.uploadHost}/api/2.0/files/${fileId}/content`,
                     data: expect.any(Object),
                     headers: {
-                        'Content-MD5': 'somehash'
+                        'Content-MD5': 'somehash',
                     },
                     successHandler: expect.any(Function),
                     errorHandler: expect.any(Function),
-                    progressHandler: expect.any(Function)
+                    progressHandler: expect.any(Function),
                 });
             });
         });
@@ -240,7 +246,7 @@ describe('api/uploads/PlainUpload', () => {
                 successCallback,
                 errorCallback,
                 progressCallback,
-                overwrite
+                overwrite,
             });
 
             expect(upload.folderId).toBe(folderId);
@@ -271,10 +277,16 @@ describe('api/uploads/PlainUpload', () => {
     describe('computeSHA1()', () => {
         it('should read file and compute digest', () => {
             const file = new File(['123'], 'sample.jpg');
-            upload.readFile = jest.fn().mockReturnValueOnce(Promise.resolve({ buffer: new ArrayBuffer(3) }));
-            crypto.digest = jest.fn().mockReturnValueOnce(Promise.resolve(new ArrayBuffer(3)));
+            upload.readFile = jest
+                .fn()
+                .mockReturnValueOnce(
+                    Promise.resolve({ buffer: new ArrayBuffer(3) }),
+                );
+            crypto.digest = jest
+                .fn()
+                .mockReturnValueOnce(Promise.resolve(new ArrayBuffer(3)));
 
-            return upload.computeSHA1(file).then((computedSHA1) => {
+            return upload.computeSHA1(file).then(computedSHA1 => {
                 expect(upload.readFile).toBeCalled();
                 expect(crypto.digest).toBeCalled();
                 expect(computedSHA1).toEqual('000000');

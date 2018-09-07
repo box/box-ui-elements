@@ -13,20 +13,22 @@ import messages from '../../../messages';
 
 type Props = {
     isLoading?: boolean,
-    showCommentMessage?: boolean
+    showCommentMessage?: boolean,
 };
 
 const EmptyState = ({ isLoading, showCommentMessage }: Props): React.Node => (
-    <div className='bcs-activity-feed-empty-state'>
+    <div className="bcs-activity-feed-empty-state">
         <IconActivityFeedEmptyState />
         {isLoading ? (
             <LoadingIndicator />
         ) : (
-            <div className='bcs-empty-state-cta'>
+            <div className="bcs-empty-state-cta">
                 <FormattedMessage {...messages.noActivity} />
                 {showCommentMessage ? (
                     <aside>
-                        <FormattedMessage {...messages.noActivityCommentPrompt} />
+                        <FormattedMessage
+                            {...messages.noActivityCommentPrompt}
+                        />
                     </aside>
                 ) : null}
             </div>

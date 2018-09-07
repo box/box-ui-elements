@@ -2,10 +2,15 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import UploadState from '../UploadState';
-import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../../constants';
+import {
+    VIEW_ERROR,
+    VIEW_UPLOAD_EMPTY,
+    VIEW_UPLOAD_IN_PROGRESS,
+    VIEW_UPLOAD_SUCCESS,
+} from '../../../constants';
 
 describe('components/ContentUploader/UploadState', () => {
-    const getWrapper = (props) =>
+    const getWrapper = props =>
         shallow(
             <UploadState
                 {...{
@@ -16,16 +21,16 @@ describe('components/ContentUploader/UploadState', () => {
                         isTouch: false,
                         view: VIEW_ERROR,
                         onSelect: noop,
-                        isFolderUploadEnabled: false
+                        isFolderUploadEnabled: false,
                     },
-                    ...props
+                    ...props,
                 }}
-            />
+            />,
         );
 
     test('should render VIEW_ERROR correctly', () => {
         const wrapper = getWrapper({
-            view: VIEW_ERROR
+            view: VIEW_ERROR,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -33,7 +38,7 @@ describe('components/ContentUploader/UploadState', () => {
 
     test('should render VIEW_UPLOAD_EMPTY correctly', () => {
         const wrapper = getWrapper({
-            view: VIEW_UPLOAD_EMPTY
+            view: VIEW_UPLOAD_EMPTY,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -42,7 +47,7 @@ describe('components/ContentUploader/UploadState', () => {
     test('should render VIEW_UPLOAD_EMPTY correctly when folder upload is enabled', () => {
         const wrapper = getWrapper({
             view: VIEW_UPLOAD_EMPTY,
-            isFolderUploadEnabled: true
+            isFolderUploadEnabled: true,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -50,7 +55,7 @@ describe('components/ContentUploader/UploadState', () => {
 
     test('should render VIEW_UPLOAD_IN_PROGRESS correctly', () => {
         const wrapper = getWrapper({
-            view: VIEW_UPLOAD_IN_PROGRESS
+            view: VIEW_UPLOAD_IN_PROGRESS,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -58,7 +63,7 @@ describe('components/ContentUploader/UploadState', () => {
 
     test('should render VIEW_UPLOAD_SUCCESS correctly', () => {
         const wrapper = getWrapper({
-            view: VIEW_UPLOAD_SUCCESS
+            view: VIEW_UPLOAD_SUCCESS,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -67,7 +72,7 @@ describe('components/ContentUploader/UploadState', () => {
     test('should render VIEW_UPLOAD_SUCCESS correctly  when folder upload is enabled', () => {
         const wrapper = getWrapper({
             view: VIEW_UPLOAD_SUCCESS,
-            isFolderUploadEnabled: true
+            isFolderUploadEnabled: true,
         });
 
         expect(wrapper).toMatchSnapshot();

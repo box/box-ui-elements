@@ -8,6 +8,8 @@ describe('util/error/getBadItemError()', () => {
 
 describe('util/error/getBadPermissionsError()', () => {
     test('should set and get correctly', () => {
-        expect(getBadPermissionsError().message).toBe('Insufficient Permissions!');
+        expect(getBadPermissionsError().message).toBe(
+            'Insufficient Permissions!',
+        );
     });
 });

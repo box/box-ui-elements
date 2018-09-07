@@ -12,7 +12,7 @@ import { FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 
 type Props = {
-    errorCode?: string
+    errorCode?: string,
 } & Errors;
 
 const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
@@ -25,9 +25,15 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
         return (
             <SidebarSection>
                 <ErrorMask
-                    errorHeader={<FormattedMessage {...maskError.errorHeader} />}
+                    errorHeader={
+                        <FormattedMessage {...maskError.errorHeader} />
+                    }
                     errorSubHeader={
-                        maskError.errorSubHeader ? <FormattedMessage {...maskError.errorSubHeader} /> : undefined
+                        maskError.errorSubHeader ? (
+                            <FormattedMessage {...maskError.errorSubHeader} />
+                        ) : (
+                            undefined
+                        )
                     }
                 />
             </SidebarSection>
@@ -35,7 +41,9 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
     } else if (inlineError) {
         return (
             <React.Fragment>
-                <InlineError title={<FormattedMessage {...inlineError.title} />}>
+                <InlineError
+                    title={<FormattedMessage {...inlineError.title} />}
+                >
                     {<FormattedMessage {...inlineError.content} />}
                 </InlineError>
                 <WrappedComponent {...rest} />

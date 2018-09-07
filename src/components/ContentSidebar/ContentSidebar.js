@@ -23,7 +23,7 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
-    UNAUTHORIZED_CODE
+    UNAUTHORIZED_CODE,
 } from '../../constants';
 import messages from '../messages';
 import SidebarUtils from './SidebarUtils';
@@ -60,7 +60,7 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    onVersionHistoryClick?: Function
+    onVersionHistoryClick?: Function,
 };
 
 type State = {
@@ -72,7 +72,7 @@ type State = {
     isVisible: boolean,
     isFileLoading?: boolean,
     feedItems?: FeedItems,
-    hasBeenToggled?: boolean
+    hasBeenToggled?: boolean,
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -93,7 +93,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         hasActivityFeed: false,
         activitySidebarProps: {},
         detailsSidebarProps: {},
-        metadataSidebarProps: {}
+        metadataSidebarProps: {},
     };
 
     initialState: State = {
@@ -101,7 +101,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         file: undefined,
         accessStats: undefined,
         fileError: undefined,
-        accessStatsError: undefined
+        accessStatsError: undefined,
     };
 
     /**
@@ -120,7 +120,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             apiHost,
             clientName,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         } = props;
 
         this.id = uniqueid('bcs_');
@@ -132,7 +132,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             apiHost,
             clientName,
             requestInterceptor,
-            responseInterceptor
+            responseInterceptor,
         });
 
         // Clone initial state to allow for state reset on new files
@@ -190,7 +190,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.fetchData(nextProps);
         } else if (!hasBeenToggled && hasVisibilityChanged) {
             this.setState({
-                view: this.getDefaultSidebarView(file, nextProps)
+                view: this.getDefaultSidebarView(file, nextProps),
             });
         }
     }
@@ -208,7 +208,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         const isToggling = isTogglingOff || isTogglingOn;
         this.setState({
             view: isTogglingOff ? undefined : view,
-            hasBeenToggled: isToggling
+            hasBeenToggled: isToggling,
         });
     };
 
@@ -262,7 +262,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 file,
                 newDescription,
                 this.setFileDescriptionSuccessCallback,
-                this.setFileDescriptionErrorCallback
+                this.setFileDescriptionErrorCallback,
             );
     };
 
@@ -288,16 +288,19 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {BoxItem} file - Original file description
      * @return {void}
      */
-    setFileDescriptionErrorCallback = (e: $AxiosXHR<any>, file: BoxItem): void => {
+    setFileDescriptionErrorCallback = (
+        e: $AxiosXHR<any>,
+        file: BoxItem,
+    ): void => {
         // Reset the state back to the original description since the API call failed
         this.setState({
             file,
             fileError: {
                 inlineError: {
                     title: messages.fileDescriptionInlineErrorTitleMessage,
-                    content: messages.defaultInlineErrorContentMessage
-                }
-            }
+                    content: messages.defaultInlineErrorContentMessage,
+                },
+            },
         });
         this.errorCallback(e);
     };
@@ -314,20 +317,20 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         if (getProp(e, 'status') === UNAUTHORIZED_CODE) {
             accessStatsError = {
-                error: messages.fileAccessStatsPermissionsError
+                error: messages.fileAccessStatsPermissionsError,
             };
         } else {
             accessStatsError = {
                 maskError: {
                     errorHeader: messages.fileAccessStatsErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage
-                }
+                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
+                },
             };
         }
 
         this.setState({
             accessStats: undefined,
-            accessStatsError
+            accessStatsError,
         });
         this.errorCallback(e);
     };
@@ -341,7 +344,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFileErrorCallback = (e: $AxiosXHR<any>) => {
         this.setState({
-            isFileLoading: false
+            isFileLoading: false,
         });
         this.errorCallback(e);
     };
@@ -388,10 +391,19 @@ class ContentSidebar extends PureComponent<Props, State> {
         }
 
         let newView;
-        const canDefaultToSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
-        const canDefaultToDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
-        const canDefaultToActivity = SidebarUtils.canHaveActivitySidebar(this.props);
-        const canDefaultToMetadata = SidebarUtils.canHaveMetadataSidebar(this.props);
+        const canDefaultToSkills = SidebarUtils.shouldRenderSkillsSidebar(
+            this.props,
+            file,
+        );
+        const canDefaultToDetails = SidebarUtils.canHaveDetailsSidebar(
+            this.props,
+        );
+        const canDefaultToActivity = SidebarUtils.canHaveActivitySidebar(
+            this.props,
+        );
+        const canDefaultToMetadata = SidebarUtils.canHaveMetadataSidebar(
+            this.props,
+        );
 
         // Calculate the default view with latest props
         if (canDefaultToSkills) {
@@ -433,7 +445,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 file,
                 isVisible: true,
                 view: this.getDefaultSidebarView(file, this.props),
-                isFileLoading: false
+                isFileLoading: false,
             });
         } else {
             this.setState({ isVisible: false });
@@ -447,7 +459,9 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} accessStats - access stats for a file
      * @return {void}
      */
-    fetchFileAccessStatsSuccessCallback = (accessStats: FileAccessStats): void => {
+    fetchFileAccessStatsSuccessCallback = (
+        accessStats: FileAccessStats,
+    ): void => {
         this.setState({ accessStats, accessStatsError: undefined });
     };
 
@@ -462,13 +476,20 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchFile(id: string, fetchOptions: FetchOptions = {}): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
             this.setState({
-                isFileLoading: true
+                isFileLoading: true,
             });
 
-            this.api.getFileAPI().getFile(id, this.fetchFileSuccessCallback, this.fetchFileErrorCallback, {
-                ...fetchOptions,
-                fields: SIDEBAR_FIELDS_TO_FETCH
-            });
+            this.api
+                .getFileAPI()
+                .getFile(
+                    id,
+                    this.fetchFileSuccessCallback,
+                    this.fetchFileErrorCallback,
+                    {
+                        ...fetchOptions,
+                        fields: SIDEBAR_FIELDS_TO_FETCH,
+                    },
+                );
         }
     }
 
@@ -484,7 +505,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             this.api.getFileAccessStatsAPI(shouldDestroy).get({
                 id,
                 successCallback: this.fetchFileAccessStatsSuccessCallback,
-                errorCallback: this.fetchFileAccessStatsErrorCallback
+                errorCallback: this.fetchFileAccessStatsErrorCallback,
             });
         }
     }
@@ -502,7 +523,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         }
 
         this.fetchFile(fileId, {
-            forceFetch: true
+            forceFetch: true,
         });
     };
 
@@ -536,7 +557,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             activitySidebarProps,
             detailsSidebarProps,
             metadataSidebarProps,
-            onVersionHistoryClick
+            onVersionHistoryClick,
         }: Props = this.props;
         const {
             file,
@@ -546,7 +567,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             fileError,
             isFileLoading,
             feedItems,
-            isVisible
+            isVisible,
         }: State = this.state;
 
         // By default sidebar is always visible if there is something configured
@@ -563,12 +584,15 @@ class ContentSidebar extends PureComponent<Props, State> {
             'be bcs',
             {
                 [`bcs-${((view: any): string)}`]: !!view,
-                'bcs-is-open': !!view
+                'bcs-is-open': !!view,
             },
-            className
+            className,
         );
 
-        const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
+        const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(
+            this.props,
+            file,
+        );
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.canHaveMetadataSidebar(this.props);
         const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file);
@@ -576,7 +600,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <aside id={this.id} className={styleClassName}>
-                    <div className='be-app-element'>
+                    <div className="be-app-element">
                         {hasSidebar ? (
                             <APIContext.Provider value={(this.api: any)}>
                                 <Sidebar
@@ -587,13 +611,15 @@ class ContentSidebar extends PureComponent<Props, State> {
                                         accessStatsError,
                                         fileError,
                                         isFileLoading,
-                                        onDescriptionChange: this.onDescriptionChange,
+                                        onDescriptionChange: this
+                                            .onDescriptionChange,
                                         ...detailsSidebarProps,
-                                        onClassificationClick: this.onClassificationClick
+                                        onClassificationClick: this
+                                            .onClassificationClick,
                                     }}
                                     activitySidebarProps={activitySidebarProps}
                                     metadataSidebarProps={{
-                                        ...metadataSidebarProps
+                                        ...metadataSidebarProps,
                                     }}
                                     getPreview={getPreview}
                                     getViewer={getViewer}
@@ -605,12 +631,14 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     accessStatsError={accessStatsError}
                                     fileError={fileError}
                                     onToggle={this.onToggle}
-                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    onVersionHistoryClick={
+                                        onVersionHistoryClick
+                                    }
                                     feedItems={feedItems}
                                 />
                             </APIContext.Provider>
                         ) : (
-                            <div className='bcs-loading'>
+                            <div className="bcs-loading">
                                 <LoadingIndicator />
                             </div>
                         )}

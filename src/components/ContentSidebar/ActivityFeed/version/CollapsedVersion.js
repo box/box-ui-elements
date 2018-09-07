@@ -18,7 +18,7 @@ function getMessageForAction(
     action: string,
     collaborators: { [collaborator_id: string]: User },
     version_start: number,
-    version_end: number
+    version_end: number,
 ): React.Node {
     // We only support collapsing for multiple upload versions
     if (action !== 'upload') {
@@ -29,7 +29,7 @@ function getMessageForAction(
     const numberOfCollaborators = collaboratorIDs.length;
 
     const versionRange: React.Node = (
-        <span className='bcs-version-range'>
+        <span className="bcs-version-range">
             {version_start} - {version_end}
         </span>
     );
@@ -41,7 +41,7 @@ function getMessageForAction(
                 {...messages.versionUploadCollapsed}
                 values={{
                     name: <strong>{collaborator.name}</strong>,
-                    versions: versionRange
+                    versions: versionRange,
                 }}
             />
         );
@@ -52,7 +52,7 @@ function getMessageForAction(
             {...messages.versionMultipleUsersUploaded}
             values={{
                 numberOfCollaborators,
-                versions: versionRange
+                versions: versionRange,
             }}
         />
     );
@@ -65,7 +65,7 @@ type Props = {
     onInfo?: Function,
     versions: FileVersions,
     version_start: number,
-    version_end: number
+    version_end: number,
 };
 
 const CollapsedVersion = ({
@@ -75,21 +75,26 @@ const CollapsedVersion = ({
     onInfo,
     versions,
     version_start,
-    version_end
+    version_end,
 }: Props): React.Node => (
-    <div className='bcs-collapsed-version'>
-        <span className='bcs-version-message'>
-            {getMessageForAction(action, collaborators, version_start, version_end)}
+    <div className="bcs-collapsed-version">
+        <span className="bcs-version-message">
+            {getMessageForAction(
+                action,
+                collaborators,
+                version_start,
+                version_end,
+            )}
         </span>
         {onInfo ? (
-            <span className='bcs-version-actions'>
+            <span className="bcs-version-actions">
                 <PlainButton
                     aria-label={intl.formatMessage(messages.getVersionInfo)}
-                    className='bcs-version-info'
+                    className="bcs-version-info"
                     onClick={() => {
                         onInfo({ versions });
                     }}
-                    type='button'
+                    type="button"
                     data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
                 >
                     <IconInfoInverted height={16} width={16} />

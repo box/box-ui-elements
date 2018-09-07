@@ -6,11 +6,11 @@ jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
 
 const file = {
-    id: 'foo'
+    id: 'foo',
 };
 
 describe('components/ContentSidebar/DetailsSidebar', () => {
-    const getWrapper = (props) => shallow(<DetailsSidebar {...props} />);
+    const getWrapper = props => shallow(<DetailsSidebar {...props} />);
 
     test('should render DetailsSidebar with all components', () => {
         const wrapper = getWrapper({
@@ -20,7 +20,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             hasAccessStats: true,
             hasClassification: true,
             hasRetentionPolicy: true,
-            hasVersions: true
+            hasVersions: true,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -28,7 +28,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
 
     test('should render empty SidebarContent', () => {
         const wrapper = getWrapper({
-            file
+            file,
         });
 
         expect(wrapper.find('SidebarContent').children()).toHaveLength(0);

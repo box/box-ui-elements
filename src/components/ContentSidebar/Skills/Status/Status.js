@@ -16,11 +16,11 @@ import {
     SKILLS_ERROR_INVALID_FILE_SIZE,
     SKILLS_ERROR_INVALID_FILE_FORMAT,
     SKILLS_STATUS_PENDING,
-    SKILLS_STATUS_INVOKED
+    SKILLS_STATUS_INVOKED,
 } from '../../../../constants';
 
 type Props = {
-    card: SkillCard
+    card: SkillCard,
 };
 
 const Status = ({ card }: Props) => {

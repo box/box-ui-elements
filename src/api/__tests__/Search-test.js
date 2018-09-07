@@ -78,8 +78,18 @@ describe('api/Search', () => {
             search.searchRequest = jest.fn();
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(false);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail');
-            expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
+            search.search(
+                'id',
+                'foo query',
+                'by',
+                'direction',
+                'success',
+                'fail',
+            );
+            expect(search.getCacheKey).toHaveBeenCalledWith(
+                'id',
+                'foo%20query',
+            );
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
@@ -94,9 +104,19 @@ describe('api/Search', () => {
             search.finish = jest.fn();
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(true);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail');
+            search.search(
+                'id',
+                'foo query',
+                'by',
+                'direction',
+                'success',
+                'fail',
+            );
             expect(search.searchRequest).not.toHaveBeenCalled();
-            expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
+            expect(search.getCacheKey).toHaveBeenCalledWith(
+                'id',
+                'foo%20query',
+            );
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
@@ -109,12 +129,25 @@ describe('api/Search', () => {
         test('should save args and make search request when cached but forced to fetch', () => {
             const unsetMock = jest.fn();
             search.searchRequest = jest.fn();
-            search.getCache = jest.fn().mockReturnValueOnce({ unset: unsetMock });
+            search.getCache = jest
+                .fn()
+                .mockReturnValueOnce({ unset: unsetMock });
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(false);
-            search.search('id', 'foo query', 'by', 'direction', 'success', 'fail', { forceFetch: true });
+            search.search(
+                'id',
+                'foo query',
+                'by',
+                'direction',
+                'success',
+                'fail',
+                { forceFetch: true },
+            );
             expect(unsetMock).toHaveBeenCalledWith('key');
-            expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
+            expect(search.getCacheKey).toHaveBeenCalledWith(
+                'id',
+                'foo%20query',
+            );
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
@@ -149,10 +182,12 @@ describe('api/Search', () => {
             search.searchErrorHandler = jest.fn();
             search.includePreviewFields = true;
             search.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.resolve('success'))
+                get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return search.searchRequest().then(() => {
-                expect(search.searchSuccessHandler).toHaveBeenCalledWith('success');
+                expect(search.searchSuccessHandler).toHaveBeenCalledWith(
+                    'success',
+                );
                 expect(search.searchErrorHandler).not.toHaveBeenCalled();
                 expect(search.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/search',
@@ -161,8 +196,8 @@ describe('api/Search', () => {
                         query: 'query',
                         ancestor_folder_ids: 'id',
                         limit: 200,
-                        fields: FOLDER_FIELDS_TO_FETCH.toString()
-                    }
+                        fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                    },
                 });
             });
         });
@@ -174,7 +209,7 @@ describe('api/Search', () => {
             search.includePreviewFields = true;
             search.includePreviewSidebarFields = true;
             search.xhr = {
-                get: jest.fn().mockReturnValueOnce(Promise.reject(error))
+                get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
             return search.searchRequest().then(() => {
                 expect(search.searchErrorHandler).toHaveBeenCalledWith(error);
@@ -186,8 +221,8 @@ describe('api/Search', () => {
                         query: 'query',
                         ancestor_folder_ids: 'id',
                         limit: 200,
-                        fields: FOLDER_FIELDS_TO_FETCH.toString()
-                    }
+                        fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                    },
                 });
             });
         });
@@ -214,32 +249,32 @@ describe('api/Search', () => {
                 name: 'item1',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }],
+                },
             };
             item2 = {
                 id: 'item2',
                 name: 'item2',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }]
-                }
+                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }],
+                },
             };
             item3 = {
                 id: 'item3',
                 name: 'item3',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }],
+                },
             };
             response = {
                 data: {
                     limit: 200,
                     offset: 0,
                     total_count: 3,
-                    entries: [item1, item2, item3]
-                }
+                    entries: [item1, item2, item3],
+                },
             };
         });
 
@@ -264,8 +299,8 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 3,
-                    entries: ['file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['file_item1', 'file_item2', 'file_item3'],
+                },
             });
             expect(cache.get('file_item1')).toBe(item1);
             expect(cache.get('file_item2')).toBe(item2);
@@ -289,8 +324,14 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 5,
-                    entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: [
+                        'foo',
+                        'bar',
+                        'file_item1',
+                        'file_item2',
+                        'file_item3',
+                    ],
+                },
             });
             expect(cache.get('file_item1')).toBe(item1);
             expect(cache.get('file_item2')).toBe(item2);
@@ -312,8 +353,8 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 2000,
-                    entries: ['file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['file_item1', 'file_item2', 'file_item3'],
+                },
             });
             expect(search.offset).toBe(200);
         });
@@ -334,27 +375,39 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 2000,
-                    entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: [
+                        'foo',
+                        'bar',
+                        'file_item1',
+                        'file_item2',
+                        'file_item3',
+                    ],
+                },
             });
             expect(search.offset).toBe(200);
         });
 
         test('should throw bad item error when entries is missing', () => {
             search.finish = jest.fn();
-            expect(search.searchSuccessHandler.bind(search, { total_count: 1, offset: 0, limit: 100 })).toThrow(
-                Error,
-                /Bad box item/
-            );
+            expect(
+                search.searchSuccessHandler.bind(search, {
+                    total_count: 1,
+                    offset: 0,
+                    limit: 100,
+                }),
+            ).toThrow(Error, /Bad box item/);
             expect(search.finish).not.toHaveBeenCalled();
         });
 
         test('should throw bad item error when total count is missing', () => {
             search.finish = jest.fn();
-            expect(search.searchSuccessHandler.bind(search, { entries: [], offset: 0, limit: 100 })).toThrow(
-                Error,
-                /Bad box item/
-            );
+            expect(
+                search.searchSuccessHandler.bind(search, {
+                    entries: [],
+                    offset: 0,
+                    limit: 100,
+                }),
+            ).toThrow(Error, /Bad box item/);
             expect(search.finish).not.toHaveBeenCalled();
         });
 
@@ -364,8 +417,8 @@ describe('api/Search', () => {
                 search.searchSuccessHandler.bind(search, {
                     entries: [],
                     total_count: 0,
-                    limit: 100
-                })
+                    limit: 100,
+                }),
             ).toThrow(Error, /Bad box item/);
             expect(search.finish).not.toHaveBeenCalled();
         });
@@ -376,8 +429,8 @@ describe('api/Search', () => {
                 search.searchSuccessHandler.bind(search, {
                     entries: [],
                     total_count: 0,
-                    offset: 100
-                })
+                    offset: 100,
+                }),
             ).toThrow(Error, /Bad box item/);
             expect(search.finish).not.toHaveBeenCalled();
         });
@@ -390,24 +443,24 @@ describe('api/Search', () => {
                 name: 'item1',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id1' }, { id: 'id2' }],
+                },
             };
             item2 = {
                 id: 'item2',
                 name: 'item2',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }]
-                }
+                    entries: [{ id: 'id4' }, { id: 'id5' }, { id: 'id6' }],
+                },
             };
             item3 = {
                 id: 'item3',
                 name: 'item3',
                 type: 'file',
                 path_collection: {
-                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }]
-                }
+                    entries: [{ id: 'id0' }, { id: 'id2' }, { id: 'id3' }],
+                },
             };
             searchResults = {
                 item_collection: {
@@ -415,8 +468,8 @@ describe('api/Search', () => {
                     limit: 200,
                     offset: 0,
                     total_count: 3,
-                    entries: ['file_item1', 'file_item2', 'file_item3']
-                }
+                    entries: ['file_item1', 'file_item2', 'file_item3'],
+                },
             };
 
             cache.set('file_item1', item1);
@@ -445,7 +498,7 @@ describe('api/Search', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item3, item2, item1]
+                items: [item3, item2, item1],
             });
         });
 
@@ -457,7 +510,10 @@ describe('api/Search', () => {
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
 
-            searchResults.item_collection.entries = ['file_item1', 'file_item2'];
+            searchResults.item_collection.entries = [
+                'file_item1',
+                'file_item2',
+            ];
             cache.set('key', searchResults);
             search.finish();
             expect(search.successCallback).toHaveBeenCalledWith({
@@ -465,7 +521,7 @@ describe('api/Search', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item2, item1]
+                items: [item2, item1],
             });
         });
 
@@ -477,7 +533,10 @@ describe('api/Search', () => {
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
 
-            searchResults.item_collection.entries = ['file_item1', 'file_item2'];
+            searchResults.item_collection.entries = [
+                'file_item1',
+                'file_item2',
+            ];
             searchResults.item_collection.isLoaded = true;
             cache.set('key', searchResults);
             search.finish();
@@ -486,7 +545,7 @@ describe('api/Search', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item2, item1]
+                items: [item2, item1],
             });
         });
 
@@ -498,7 +557,10 @@ describe('api/Search', () => {
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
 
-            searchResults.item_collection.entries = ['file_item1', 'file_item2'];
+            searchResults.item_collection.entries = [
+                'file_item1',
+                'file_item2',
+            ];
             searchResults.item_collection.total_count = 0;
             cache.set('key', searchResults);
             search.finish();
@@ -507,7 +569,7 @@ describe('api/Search', () => {
                 id: 'id',
                 sortBy: 'name',
                 sortDirection: 'DESC',
-                items: [item2, item1]
+                items: [item2, item1],
             });
         });
 
@@ -520,7 +582,12 @@ describe('api/Search', () => {
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
             expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
-            expect(sort.default).toHaveBeenCalledWith(searchResults, 'name', 'DESC', cache);
+            expect(sort.default).toHaveBeenCalledWith(
+                searchResults,
+                'name',
+                'DESC',
+                cache,
+            );
             expect(search.successCallback).not.toHaveBeenCalled();
         });
 
@@ -533,12 +600,19 @@ describe('api/Search', () => {
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
             expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
-            expect(sort.default).toHaveBeenCalledWith(searchResults, 'name', 'DESC', cache);
+            expect(sort.default).toHaveBeenCalledWith(
+                searchResults,
+                'name',
+                'DESC',
+                cache,
+            );
             expect(search.successCallback).not.toHaveBeenCalled();
         });
 
         test('should throw bad item error when item collection is missing total count', () => {
-            sort.default = jest.fn().mockReturnValueOnce({ item_collection: { entries: [] } });
+            sort.default = jest
+                .fn()
+                .mockReturnValueOnce({ item_collection: { entries: [] } });
             search.id = 'id';
             search.key = 'key';
             search.sortBy = 'name';
@@ -547,7 +621,12 @@ describe('api/Search', () => {
             search.successCallback = jest.fn();
             expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
             expect(search.successCallback).not.toHaveBeenCalled();
-            expect(sort.default).toHaveBeenCalledWith(searchResults, 'name', 'DESC', cache);
+            expect(sort.default).toHaveBeenCalledWith(
+                searchResults,
+                'name',
+                'DESC',
+                cache,
+            );
         });
     });
 });

@@ -7,14 +7,14 @@ import Faces from '../Faces';
 import Status from '../Status';
 
 describe('components/ContentSidebar/Skills/SidebarSkillsCard', () => {
-    const getWrapper = (props) => shallow(<SidebarSkillsCard {...props} />);
+    const getWrapper = props => shallow(<SidebarSkillsCard {...props} />);
 
     let cardProps;
 
     beforeEach(() => {
         cardProps = {
             card: {},
-            getViewer: jest.fn()
+            getViewer: jest.fn(),
         };
     });
 

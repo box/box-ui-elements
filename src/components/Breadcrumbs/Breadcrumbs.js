@@ -16,7 +16,7 @@ type Props = {
     onCrumbClick: Function,
     crumbs: Crumb[],
     delimiter: Delimiter,
-    isSmall?: boolean
+    isSmall?: boolean,
 };
 
 /**
@@ -41,26 +41,46 @@ function filterCrumbs(rootId: string, crumbs: Crumb[]): Crumb[] {
  * @param {boolean} isLast is this the last crumb
  * @return {Element}
  */
-function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: Function, delimiter: Delimiter) {
+function getBreadcrumb(
+    crumbs: Crumb | Crumb[],
+    isLast: boolean,
+    onCrumbClick: Function,
+    delimiter: Delimiter,
+) {
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (
-            <span className='be-breadcrumb-more'>
+            <span className="be-breadcrumb-more">
                 <BreadcrumbDropdown
                     onCrumbClick={onCrumbClick}
                     crumbs={crumbs}
                     className={condensed ? 'be-breadcrumbs-condensed' : ''}
                 />
-                <BreadcrumbDelimiter delimiter={condensed ? DELIMITER_SLASH : DELIMITER_CARET} />
+                <BreadcrumbDelimiter
+                    delimiter={condensed ? DELIMITER_SLASH : DELIMITER_CARET}
+                />
             </span>
         );
     }
 
     const { id, name } = crumbs;
-    return <Breadcrumb name={name} onClick={() => onCrumbClick(id)} isLast={isLast} delimiter={delimiter} />;
+    return (
+        <Breadcrumb
+            name={name}
+            onClick={() => onCrumbClick(id)}
+            isLast={isLast}
+            delimiter={delimiter}
+        />
+    );
 }
 
-const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false }: Props) => {
+const Breadcrumbs = ({
+    rootId,
+    crumbs,
+    onCrumbClick,
+    delimiter,
+    isSmall = false,
+}: Props) => {
     if (!rootId || crumbs.length === 0) {
         return <span />;
     }
@@ -72,21 +92,40 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
     // Always show the last/leaf breadcrumb.
     const crumb = filteredCrumbs[length - 1];
     const onClick = crumb.id ? () => onCrumbClick(crumb.id) : undefined;
-    const lastBreadcrumb = <Breadcrumb name={crumb.name} onClick={onClick} isLast />;
+    const lastBreadcrumb = (
+        <Breadcrumb name={crumb.name} onClick={onClick} isLast />
+    );
 
     // Always show the second last/parent breadcrumb when there are at least 2 crumbs.
     const secondLastBreadcrumb =
-        length > 1 ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter) : null;
+        length > 1
+            ? getBreadcrumb(
+                  filteredCrumbs[length - 2],
+                  false,
+                  onCrumbClick,
+                  delimiter,
+              )
+            : null;
 
     // Only show the more dropdown when there were at least 4 crumbs.
     const moreBreadcrumbs =
-        length > 3 ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter) : null;
+        length > 3
+            ? getBreadcrumb(
+                  filteredCrumbs.slice(1, length - 2),
+                  false,
+                  onCrumbClick,
+                  delimiter,
+              )
+            : null;
 
     // Only show the root breadcrumb when there are at least 3 crumbs.
-    const firstBreadcrumb = length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter) : null;
+    const firstBreadcrumb =
+        length > 2
+            ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter)
+            : null;
 
     return (
-        <div className='be-breadcrumbs'>
+        <div className="be-breadcrumbs">
             {isSmall ? null : firstBreadcrumb}
             {isSmall ? null : moreBreadcrumbs}
             {secondLastBreadcrumb}

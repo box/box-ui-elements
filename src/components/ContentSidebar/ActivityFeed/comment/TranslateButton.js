@@ -11,11 +11,11 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 import messages from '../../../messages';
 
 type Props = {
-    handleTranslate: Function
+    handleTranslate: Function,
 };
 
 const TranslateButton = ({ handleTranslate }: Props): React.Node => (
-    <PlainButton className='bcs-comment-translate' onClick={handleTranslate}>
+    <PlainButton className="bcs-comment-translate" onClick={handleTranslate}>
         <FormattedMessage {...messages.commentTranslate} />
     </PlainButton>
 );

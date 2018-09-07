@@ -12,7 +12,12 @@ import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import IconRetry from 'box-react-ui/lib/icons/general/IconRetry';
 import IconInProgress from './IconInProgress';
 import messages from '../messages';
-import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
+import {
+    STATUS_PENDING,
+    STATUS_IN_PROGRESS,
+    STATUS_COMPLETE,
+    STATUS_ERROR,
+} from '../../constants';
 
 import './ItemAction.scss';
 
@@ -22,7 +27,7 @@ type Props = {
     status: UploadStatus,
     onClick: Function,
     isFolder?: boolean,
-    intl: any
+    intl: any,
 };
 
 const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
@@ -51,9 +56,9 @@ const ItemAction = ({ status, onClick, intl, isFolder = false }: Props) => {
     }
 
     return (
-        <div className='bcu-item-action'>
-            <Tooltip text={tooltip} position='top-left'>
-                <PlainButton type='button' onClick={onClick}>
+        <div className="bcu-item-action">
+            <Tooltip text={tooltip} position="top-left">
+                <PlainButton type="button" onClick={onClick}>
                     {icon}
                 </PlainButton>
             </Tooltip>

@@ -56,7 +56,11 @@ class PlainUpload extends BaseUpload {
      * @param {boolean} [options.url] - Upload URL to use
      * @return {Promise} Async function promise
      */
-    preflightSuccessHandler = async ({ data }: { data: { upload_url?: string } }): Promise<any> => {
+    preflightSuccessHandler = async ({
+        data,
+    }: {
+        data: { upload_url?: string },
+    }): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
@@ -67,32 +71,35 @@ class PlainUpload extends BaseUpload {
             uploadUrl = `${this.getBaseUploadUrl()}/files/content`;
 
             if (this.fileId) {
-                uploadUrl = uploadUrl.replace('content', `${this.fileId}/content`);
+                uploadUrl = uploadUrl.replace(
+                    'content',
+                    `${this.fileId}/content`,
+                );
             }
         }
 
         const attributes = JSON.stringify({
             name: this.file.name,
-            parent: { id: this.folderId }
+            parent: { id: this.folderId },
         });
 
         const options = {
             url: uploadUrl,
             data: {
                 attributes,
-                file: this.file
+                file: this.file,
             },
             headers: {},
             successHandler: this.uploadSuccessHandler,
             errorHandler: this.preflightErrorHandler,
-            progressHandler: this.uploadProgressHandler
+            progressHandler: this.uploadProgressHandler,
         };
 
         // Calculate SHA1 for file consistency check
         const sha1 = await this.computeSHA1(this.file);
         if (sha1) {
             options.headers = {
-                [CONTENT_MD5_HEADER]: sha1
+                [CONTENT_MD5_HEADER]: sha1,
             };
         }
 
@@ -120,7 +127,7 @@ class PlainUpload extends BaseUpload {
         successCallback = noop,
         errorCallback = noop,
         progressCallback = noop,
-        overwrite = true
+        overwrite = true,
     }: {
         folderId: string,
         fileId: ?string,
@@ -128,7 +135,7 @@ class PlainUpload extends BaseUpload {
         successCallback: Function,
         errorCallback: Function,
         progressCallback: Function,
-        overwrite: boolean
+        overwrite: boolean,
     }): void {
         if (this.isDestroyed()) {
             return;
@@ -175,7 +182,7 @@ class PlainUpload extends BaseUpload {
             const { buffer } = await this.readFile(reader, file);
             const hashBuffer: ArrayBuffer = await digest('SHA-1', buffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
-            sha1 = hashArray.map((b) => `00${b.toString(16)}`.slice(-2)).join('');
+            sha1 = hashArray.map(b => `00${b.toString(16)}`.slice(-2)).join('');
         } catch (e) {
             // Return empty sha1 if hashing fails
         }

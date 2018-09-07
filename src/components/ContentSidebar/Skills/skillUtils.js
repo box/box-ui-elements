@@ -14,8 +14,13 @@ import getProp from 'lodash/get';
  */
 const isValidSkillsCard = (file: BoxItem, card: SkillCard): boolean => {
     const fileVersion = getProp(file, 'file_version.id');
-    const skillCardFileVersion = card.file_version ? card.file_version.id : fileVersion;
-    return fileVersion === skillCardFileVersion && (!!card.status || Array.isArray(card.entries));
+    const skillCardFileVersion = card.file_version
+        ? card.file_version.id
+        : fileVersion;
+    return (
+        fileVersion === skillCardFileVersion &&
+        (!!card.status || Array.isArray(card.entries))
+    );
 };
 
 /**
@@ -26,7 +31,11 @@ const isValidSkillsCard = (file: BoxItem, card: SkillCard): boolean => {
  */
 const hasSkills = (file: BoxItem): boolean => {
     const cards = getProp(file, 'metadata.global.boxSkillsCards.cards', []);
-    return Array.isArray(cards) && cards.length > 0 && cards.some((card) => isValidSkillsCard(file, card));
+    return (
+        Array.isArray(cards) &&
+        cards.length > 0 &&
+        cards.some(card => isValidSkillsCard(file, card))
+    );
 };
 
 export { hasSkills, isValidSkillsCard };

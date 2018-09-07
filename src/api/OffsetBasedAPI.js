@@ -9,12 +9,12 @@ import Base from './Base';
 type Params = {
     offset: number,
     limit: number,
-    fields?: string
+    fields?: string,
 };
 
 type Data = {
     entries: Array<any>,
-    total_count: number
+    total_count: number,
 };
 
 class OffsetBasedApi extends Base {
@@ -31,10 +31,14 @@ class OffsetBasedApi extends Base {
      * @param {array} fields the fields to fetch
      * @return the query params object
      */
-    getQueryParameters(offset: number, limit: number, fields?: Array<string>): Object {
+    getQueryParameters(
+        offset: number,
+        limit: number,
+        fields?: Array<string>,
+    ): Object {
         const queryParams: Params = {
             offset,
-            limit
+            limit,
         };
 
         if (fields && fields.length > 0) {
@@ -70,7 +74,7 @@ class OffsetBasedApi extends Base {
         offset: number,
         limit: number,
         shouldFetchAll: boolean,
-        fields?: Array<string>
+        fields?: Array<string>,
     ): Promise<void> {
         if (this.isDestroyed()) {
             return;
@@ -81,17 +85,27 @@ class OffsetBasedApi extends Base {
             const params = this.getQueryParameters(offset, limit, fields);
             const url = this.getUrl(id);
 
-            const { data }: { data: Data } = await this.xhr.get({ url, id: getTypedFileId(id), params });
+            const { data }: { data: Data } = await this.xhr.get({
+                url,
+                id: getTypedFileId(id),
+                params,
+            });
 
             const entries = this.data ? this.data.entries : [];
             this.data = {
                 ...data,
-                entries: entries.concat(data.entries)
+                entries: entries.concat(data.entries),
             };
             const totalCount = data.total_count;
             const nextOffset = offset + limit;
             if (shouldFetchAll && this.hasMoreItems(nextOffset, totalCount)) {
-                this.offsetGetRequest(id, nextOffset, limit, shouldFetchAll, fields);
+                this.offsetGetRequest(
+                    id,
+                    nextOffset,
+                    limit,
+                    shouldFetchAll,
+                    fields,
+                );
                 return;
             }
 
@@ -119,7 +133,7 @@ class OffsetBasedApi extends Base {
         offset: number = 0,
         limit: number = 1000,
         fields?: Array<string>,
-        shouldFetchAll: boolean = true
+        shouldFetchAll: boolean = true,
     ): Promise<void> {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;

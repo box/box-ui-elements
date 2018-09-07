@@ -10,7 +10,7 @@ import {
     getFile,
     getFileAPIOptions,
     getDataTransferItem,
-    getDataTransferItemAPIOptions
+    getDataTransferItemAPIOptions,
 } from '../../util/uploads';
 
 const PATH_DELIMITER = '/';
@@ -36,7 +36,7 @@ class FolderUpload {
         addFilesToUploadQueue: Function,
         destinationFolderId: string,
         addFolderToUploadQueue: Function,
-        baseAPIOptions: Object
+        baseAPIOptions: Object,
     ): void {
         this.addFilesToUploadQueue = addFilesToUploadQueue;
         this.destinationFolderId = destinationFolderId;
@@ -51,8 +51,10 @@ class FolderUpload {
      * @param  {Array} Array<UploadFileWithAPIOptions | UploadFile> | FileList
      * @returns {void}
      */
-    buildFolderTreeFromWebkitRelativePath(fileList: Array<UploadFileWithAPIOptions | UploadFile> | FileList): void {
-        Array.from(fileList).forEach((fileData) => {
+    buildFolderTreeFromWebkitRelativePath(
+        fileList: Array<UploadFileWithAPIOptions | UploadFile> | FileList,
+    ): void {
+        Array.from(fileList).forEach(fileData => {
             const file = getFile(fileData);
             const { webkitRelativePath } = file;
 
@@ -61,7 +63,9 @@ class FolderUpload {
             }
 
             const fileAPIOptions = getFileAPIOptions(fileData);
-            const pathArray = webkitRelativePath.split(PATH_DELIMITER).slice(0, -1);
+            const pathArray = webkitRelativePath
+                .split(PATH_DELIMITER)
+                .slice(0, -1);
             if (pathArray.length <= 0) {
                 return;
             }
@@ -70,7 +74,10 @@ class FolderUpload {
             // of all the files should be the same.
             if (!this.folder) {
                 const rootFolderName = pathArray[0];
-                this.folder = this.createFolderUploadNode(rootFolderName, fileAPIOptions);
+                this.folder = this.createFolderUploadNode(
+                    rootFolderName,
+                    fileAPIOptions,
+                );
             }
 
             // Add file to the root folder
@@ -84,7 +91,10 @@ class FolderUpload {
             pathArryAfterRoot.forEach((folderName, index) => {
                 // Create new child folder
                 if (!subTree[folderName]) {
-                    subTree[folderName] = this.createFolderUploadNode(folderName, fileAPIOptions);
+                    subTree[folderName] = this.createFolderUploadNode(
+                        folderName,
+                        fileAPIOptions,
+                    );
                 }
 
                 if (index === pathArryAfterRoot.length - 1) {
@@ -105,7 +115,9 @@ class FolderUpload {
      * @returns {Promise<any>}
      */
     async buildFolderTreeFromDataTransferItem(
-        dataTransferItem: DataTransferItem | UploadDataTransferItemWithAPIOptions
+        dataTransferItem:
+            | DataTransferItem
+            | UploadDataTransferItemWithAPIOptions,
     ) {
         const item = getDataTransferItem(dataTransferItem);
         const apiOptions = getDataTransferItemAPIOptions(dataTransferItem);
@@ -123,7 +135,11 @@ class FolderUpload {
      * @param {FileSystemFileEntry} [entry]
      * @returns {FolderUploadNode}
      */
-    createFolderUploadNode(name: string, apiOptions: Object, entry?: FileSystemFileEntry): FolderUploadNode {
+    createFolderUploadNode(
+        name: string,
+        apiOptions: Object,
+        entry?: FileSystemFileEntry,
+    ): FolderUploadNode {
         return new FolderUploadNode(
             name,
             this.addFilesToUploadQueue,
@@ -131,9 +147,9 @@ class FolderUpload {
             apiOptions,
             {
                 ...this.baseAPIOptions,
-                ...apiOptions
+                ...apiOptions,
             },
-            entry
+            entry,
         );
     }
 
@@ -147,17 +163,17 @@ class FolderUpload {
      */
     async upload({
         errorCallback,
-        successCallback
+        successCallback,
     }: {
         errorCallback: Function,
-        successCallback: Function
+        successCallback: Function,
     }): Promise<any> {
         await this.folder.upload(this.destinationFolderId, errorCallback, true);
         // Simulate BoxItem
         successCallback([
             {
-                id: this.folder.folderId
-            }
+                id: this.folder.folderId,
+            },
         ]);
     }
 

@@ -7,9 +7,11 @@ import React from 'react';
 import './ItemName.scss';
 
 type Props = {
-    name: string
+    name: string,
 };
 
-const ItemName = ({ name }: Props) => <span className='bcu-item-label'>{name}</span>;
+const ItemName = ({ name }: Props) => (
+    <span className="bcu-item-label">{name}</span>
+);
 
 export default ItemName;

@@ -4,11 +4,12 @@ import { shallow } from 'enzyme';
 import { CollapsedVersionBase as CollapsedVersion } from '../CollapsedVersion';
 
 const translationProps = {
-    intl: { formatMessage: () => {} }
+    intl: { formatMessage: () => {} },
 };
 
 describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () => {
-    const render = (item) => shallow(<CollapsedVersion {...translationProps} {...item} />);
+    const render = item =>
+        shallow(<CollapsedVersion {...translationProps} {...item} />);
 
     test('should correctly render for single collaborator', () => {
         const version_start = 1;
@@ -17,14 +18,16 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
             action: 'upload',
             collaborators: { 1: { name: 'Person one', id: 1 } },
             version_start,
-            version_end
+            version_end,
         };
 
         const wrapper = render(item);
         const formattedMessage = wrapper.find('FormattedMessage');
         expect(wrapper).toMatchSnapshot();
 
-        const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
+        const renderedVersionsMessage = shallow(
+            formattedMessage.prop('values').versions,
+        );
         expect(renderedVersionsMessage).toMatchSnapshot();
     });
 
@@ -35,10 +38,10 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
             action: 'upload',
             collaborators: {
                 1: { name: 'Person one', id: 1 },
-                2: { name: 'Person two', id: 2 }
+                2: { name: 'Person two', id: 2 },
             },
             version_start,
-            version_end
+            version_end,
         };
 
         const wrapper = render(item);
@@ -47,7 +50,9 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
         expect(wrapper.hasClass('bcs-collapsed-version')).toBe(true);
         expect(wrapper).toMatchSnapshot();
 
-        const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
+        const renderedVersionsMessage = shallow(
+            formattedMessage.prop('values').versions,
+        );
         expect(renderedVersionsMessage).toMatchSnapshot();
     });
 
@@ -57,10 +62,10 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
             onInfo: () => {},
             collaborators: {
                 1: { name: 'Person one', id: 1 },
-                2: { name: 'Person two', id: 2 }
+                2: { name: 'Person two', id: 2 },
             },
             version_start: 1,
-            version_end: 10
+            version_end: 10,
         };
 
         const wrapper = render(item);
@@ -73,7 +78,7 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
             action: 'delete',
             collaborators: { 1: { name: 'Person one', id: 1 } },
             version_start: 1,
-            version_end: 10
+            version_end: 10,
         };
 
         const wrapper = render(item);

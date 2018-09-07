@@ -19,7 +19,7 @@ type Props = {
     addFiles: Function,
     onClick: Function,
     addDataTransferItemsToUploadQueue: Function,
-    isFolderUploadEnabled: boolean
+    isFolderUploadEnabled: boolean,
 };
 
 /**
@@ -29,8 +29,10 @@ const dropDefinition = {
     /**
      * Validates whether a file can be dropped or not.
      */
-    dropValidator: ({ allowedTypes }: { allowedTypes: Array<string> }, { types }: { types: Array<string> }) =>
-        Array.from(types).some((type) => allowedTypes.indexOf(type) > -1),
+    dropValidator: (
+        { allowedTypes }: { allowedTypes: Array<string> },
+        { types }: { types: Array<string> },
+    ) => Array.from(types).some(type => allowedTypes.indexOf(type) > -1),
 
     /**
      * Determines what happens after a file is dropped
@@ -39,16 +41,26 @@ const dropDefinition = {
         const { dataTransfer: { items } } = event;
 
         addDataTransferItemsToUploadQueue(items);
-    }
+    },
 };
 
 const DroppableContent = makeDroppable(dropDefinition)(
-    ({ canDrop, isOver, isTouch, view, items, addFiles, onClick, isFolderUploadEnabled }: Props) => {
-        const handleSelectFiles = ({ target: { files } }: any) => addFiles(files);
+    ({
+        canDrop,
+        isOver,
+        isTouch,
+        view,
+        items,
+        addFiles,
+        onClick,
+        isFolderUploadEnabled,
+    }: Props) => {
+        const handleSelectFiles = ({ target: { files } }: any) =>
+            addFiles(files);
         const hasItems = items.length > 0;
 
         return (
-            <div className='bcu-droppable-content'>
+            <div className="bcu-droppable-content">
                 <ItemList items={items} view={view} onClick={onClick} />
                 <UploadState
                     canDrop={canDrop}
@@ -61,7 +73,7 @@ const DroppableContent = makeDroppable(dropDefinition)(
                 />
             </div>
         );
-    }
+    },
 );
 
 export default DroppableContent;

@@ -117,7 +117,7 @@ class ContentExplorer extends ES6Wrapper {
                 onInteraction={this.onInteraction}
                 {...this.options}
             />,
-            this.container
+            this.container,
         );
     }
 }

@@ -47,7 +47,7 @@ class ContentTree extends ES6Wrapper {
                 modal={((modal: any): ModalOptions)}
                 {...rest}
             />,
-            this.container
+            this.container,
         );
     }
 }

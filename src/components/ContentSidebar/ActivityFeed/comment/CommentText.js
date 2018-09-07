@@ -19,22 +19,22 @@ type Props = {
     translationEnabled?: boolean,
     onTranslate?: Function,
     translationFailed?: ?boolean,
-    getUserProfileUrl?: (string) => Promise<string>
+    getUserProfileUrl?: string => Promise<string>,
 };
 
 type State = {
     isLoading?: boolean,
-    isTranslation?: boolean
+    isTranslation?: boolean,
 };
 
 class CommentText extends React.Component<Props, State> {
     static defaultProps = {
-        translationEnabled: false
+        translationEnabled: false,
     };
 
     state = {
         isLoading: false,
-        isTranslation: false
+        isTranslation: false,
     };
 
     componentWillReceiveProps(nextProps: Props): void {
@@ -47,7 +47,11 @@ class CommentText extends React.Component<Props, State> {
     getButton(isTranslation?: boolean): React.Node {
         let button = null;
         if (isTranslation) {
-            button = <ShowOriginalButton handleShowOriginal={this.handleShowOriginal} />;
+            button = (
+                <ShowOriginalButton
+                    handleShowOriginal={this.handleShowOriginal}
+                />
+            );
         } else {
             button = <TranslateButton handleTranslate={this.handleTranslate} />;
         }
@@ -56,7 +60,12 @@ class CommentText extends React.Component<Props, State> {
     }
 
     handleTranslate = (event: SyntheticMouseEvent<>): void => {
-        const { id, tagged_message, onTranslate = noop, translatedTaggedMessage } = this.props;
+        const {
+            id,
+            tagged_message,
+            onTranslate = noop,
+            translatedTaggedMessage,
+        } = this.props;
         if (!translatedTaggedMessage) {
             this.setState({ isLoading: true });
             onTranslate({ id, tagged_message });
@@ -72,17 +81,30 @@ class CommentText extends React.Component<Props, State> {
     };
 
     render(): React.Node {
-        const { id, tagged_message, translatedTaggedMessage, translationEnabled, getUserProfileUrl } = this.props;
+        const {
+            id,
+            tagged_message,
+            translatedTaggedMessage,
+            translationEnabled,
+            getUserProfileUrl,
+        } = this.props;
         const { isLoading, isTranslation } = this.state;
         const commentToDisplay =
-            translationEnabled && isTranslation && translatedTaggedMessage ? translatedTaggedMessage : tagged_message;
+            translationEnabled && isTranslation && translatedTaggedMessage
+                ? translatedTaggedMessage
+                : tagged_message;
         return isLoading ? (
-            <div className='bcs-comment-text-loading'>
-                <LoadingIndicator size='small' />
+            <div className="bcs-comment-text-loading">
+                <LoadingIndicator size="small" />
             </div>
         ) : (
-            <div className='bcs-comment-text'>
-                {formatTaggedMessage(commentToDisplay, id, false, getUserProfileUrl)}
+            <div className="bcs-comment-text">
+                {formatTaggedMessage(
+                    commentToDisplay,
+                    id,
+                    false,
+                    getUserProfileUrl,
+                )}
                 {translationEnabled ? this.getButton(isTranslation) : null}
             </div>
         );

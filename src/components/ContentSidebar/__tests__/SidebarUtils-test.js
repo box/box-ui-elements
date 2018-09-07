@@ -7,28 +7,54 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             expect(SidebarUtils.canHaveSidebar({})).toBeFalsy();
         });
         test('should return true when skills should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasSkills: true })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveSidebar({ hasSkills: true }),
+            ).toBeTruthy();
         });
         test('should return true when properties should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasProperties: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveSidebar({
+                    detailsSidebarProps: { hasProperties: true },
+                }),
+            ).toBeTruthy();
         });
         test('should return true when access stats should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasAccessStats: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveSidebar({
+                    detailsSidebarProps: { hasAccessStats: true },
+                }),
+            ).toBeTruthy();
         });
         test('should return true when metadata should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasMetadata: true })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveSidebar({ hasMetadata: true }),
+            ).toBeTruthy();
         });
         test('should return true when classification should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasClassification: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveSidebar({
+                    detailsSidebarProps: { hasClassification: true },
+                }),
+            ).toBeTruthy();
         });
         test('should return true when activity feed should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasActivityFeed: true })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveSidebar({ hasActivityFeed: true }),
+            ).toBeTruthy();
         });
         test('should return true when versions should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasVersions: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveSidebar({
+                    detailsSidebarProps: { hasVersions: true },
+                }),
+            ).toBeTruthy();
         });
         test('should return true when notices should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ detailsSidebarProps: { hasNotices: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveSidebar({
+                    detailsSidebarProps: { hasNotices: true },
+                }),
+            ).toBeTruthy();
         });
     });
     describe('canHaveDetailsSidebar()', () => {
@@ -36,21 +62,39 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             expect(SidebarUtils.canHaveDetailsSidebar({})).toBeFalsy();
         });
         test('should return true when properties should render', () => {
-            expect(SidebarUtils.canHaveDetailsSidebar({ detailsSidebarProps: { hasProperties: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveDetailsSidebar({
+                    detailsSidebarProps: { hasProperties: true },
+                }),
+            ).toBeTruthy();
         });
         test('should return true when access stats should render', () => {
-            expect(SidebarUtils.canHaveDetailsSidebar({ detailsSidebarProps: { hasAccessStats: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveDetailsSidebar({
+                    detailsSidebarProps: { hasAccessStats: true },
+                }),
+            ).toBeTruthy();
         });
         test('should return true when classification should render', () => {
             expect(
-                SidebarUtils.canHaveDetailsSidebar({ detailsSidebarProps: { hasClassification: true } })
+                SidebarUtils.canHaveDetailsSidebar({
+                    detailsSidebarProps: { hasClassification: true },
+                }),
             ).toBeTruthy();
         });
         test('should return true when versions should render', () => {
-            expect(SidebarUtils.canHaveDetailsSidebar({ detailsSidebarProps: { hasVersions: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveDetailsSidebar({
+                    detailsSidebarProps: { hasVersions: true },
+                }),
+            ).toBeTruthy();
         });
         test('should return true when notices should render', () => {
-            expect(SidebarUtils.canHaveDetailsSidebar({ detailsSidebarProps: { hasNotices: true } })).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveDetailsSidebar({
+                    detailsSidebarProps: { hasNotices: true },
+                }),
+            ).toBeTruthy();
         });
     });
     describe('shouldRenderSkillsSidebar()', () => {
@@ -58,36 +102,64 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             expect(SidebarUtils.shouldRenderSkillsSidebar({})).toBeFalsy();
         });
         test('should return false when no file', () => {
-            expect(SidebarUtils.shouldRenderSkillsSidebar({ hasSkills: true })).toBeFalsy();
+            expect(
+                SidebarUtils.shouldRenderSkillsSidebar({ hasSkills: true }),
+            ).toBeFalsy();
         });
         test('should return false when hasSkills is false', () => {
-            expect(SidebarUtils.shouldRenderSkillsSidebar({ hasSkills: false }, {})).toBeFalsy();
+            expect(
+                SidebarUtils.shouldRenderSkillsSidebar(
+                    { hasSkills: false },
+                    {},
+                ),
+            ).toBeFalsy();
         });
         test('should return false when no skill data', () => {
             skillUtils.hasSkills = jest.fn().mockReturnValueOnce(false);
-            expect(SidebarUtils.shouldRenderSkillsSidebar({ hasSkills: true }, 'file')).toBeFalsy();
+            expect(
+                SidebarUtils.shouldRenderSkillsSidebar(
+                    { hasSkills: true },
+                    'file',
+                ),
+            ).toBeFalsy();
             expect(skillUtils.hasSkills).toHaveBeenCalledWith('file');
         });
         test('should return true when hasSkills is true and there is skills data', () => {
             skillUtils.hasSkills = jest.fn().mockReturnValueOnce(true);
-            expect(SidebarUtils.shouldRenderSkillsSidebar({ hasSkills: true }, 'file')).toBeTruthy();
+            expect(
+                SidebarUtils.shouldRenderSkillsSidebar(
+                    { hasSkills: true },
+                    'file',
+                ),
+            ).toBeTruthy();
             expect(skillUtils.hasSkills).toHaveBeenCalledWith('file');
         });
     });
     describe('canHaveActivitySidebar()', () => {
         test('should return false when hasActivityFeed is false', () => {
-            expect(SidebarUtils.canHaveActivitySidebar({ hasActivityFeed: false })).toBeFalsy();
+            expect(
+                SidebarUtils.canHaveActivitySidebar({ hasActivityFeed: false }),
+            ).toBeFalsy();
         });
         test('should return true when hasActivityFeed is true', () => {
-            expect(SidebarUtils.canHaveActivitySidebar({ hasActivityFeed: true }, {})).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveActivitySidebar(
+                    { hasActivityFeed: true },
+                    {},
+                ),
+            ).toBeTruthy();
         });
     });
     describe('canHaveMetadataSidebar()', () => {
         test('should return false when hasMetadata is false', () => {
-            expect(SidebarUtils.canHaveMetadataSidebar({ hasMetadata: false })).toBeFalsy();
+            expect(
+                SidebarUtils.canHaveMetadataSidebar({ hasMetadata: false }),
+            ).toBeFalsy();
         });
         test('should return true when hasMetadata is true', () => {
-            expect(SidebarUtils.canHaveMetadataSidebar({ hasMetadata: true }, {})).toBeTruthy();
+            expect(
+                SidebarUtils.canHaveMetadataSidebar({ hasMetadata: true }, {}),
+            ).toBeTruthy();
         });
     });
     describe('shouldRenderSidebar()', () => {
@@ -95,39 +167,90 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             expect(SidebarUtils.shouldRenderSidebar({})).toBeFalsy();
         });
         test('should return false when no file', () => {
-            expect(SidebarUtils.shouldRenderSidebar({ hasSkills: true })).toBeFalsy();
+            expect(
+                SidebarUtils.shouldRenderSidebar({ hasSkills: true }),
+            ).toBeFalsy();
         });
         test('should return true when we can render details sidebar', () => {
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(false);
-            expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
-            expect(SidebarUtils.canHaveDetailsSidebar).toHaveBeenCalledWith('props');
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            expect(
+                SidebarUtils.shouldRenderSidebar('props', 'file'),
+            ).toBeTruthy();
+            expect(SidebarUtils.canHaveDetailsSidebar).toHaveBeenCalledWith(
+                'props',
+            );
         });
         test('should return true when we can render metadata sidebar', () => {
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
-            expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
-            expect(SidebarUtils.canHaveMetadataSidebar).toHaveBeenCalledWith('props');
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            expect(
+                SidebarUtils.shouldRenderSidebar('props', 'file'),
+            ).toBeTruthy();
+            expect(SidebarUtils.canHaveMetadataSidebar).toHaveBeenCalledWith(
+                'props',
+            );
         });
         test('should return true when we can render activity sidebar', () => {
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(false);
-            expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
-            expect(SidebarUtils.canHaveActivitySidebar).toHaveBeenCalledWith('props');
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            expect(
+                SidebarUtils.shouldRenderSidebar('props', 'file'),
+            ).toBeTruthy();
+            expect(SidebarUtils.canHaveActivitySidebar).toHaveBeenCalledWith(
+                'props',
+            );
         });
         test('should return true when we can render skills sidebar', () => {
-            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
-            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(false);
-            expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
-            expect(SidebarUtils.shouldRenderSkillsSidebar).toHaveBeenCalledWith('props', 'file');
+            SidebarUtils.canHaveDetailsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            expect(
+                SidebarUtils.shouldRenderSidebar('props', 'file'),
+            ).toBeTruthy();
+            expect(SidebarUtils.shouldRenderSkillsSidebar).toHaveBeenCalledWith(
+                'props',
+                'file',
+            );
         });
     });
 });

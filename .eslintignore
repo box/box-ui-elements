@@ -1,4 +1,6 @@
 flow/**
 lib/**
 dist/**
-flow-typed
+flow-typed/**
+build/**
+i18n/**

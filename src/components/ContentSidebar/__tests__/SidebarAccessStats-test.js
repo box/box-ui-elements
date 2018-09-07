@@ -2,13 +2,16 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
 import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
-import SidebarAccessStats, { SidebarAccessStatsComponent } from '../SidebarAccessStats';
+import SidebarAccessStats, {
+    SidebarAccessStatsComponent,
+} from '../SidebarAccessStats';
 
 describe('components/ContentSidebar/SidebarAccessStats', () => {
     const intl = {
-        formatMessage: jest.fn()
+        formatMessage: jest.fn(),
     };
-    const getWrapper = (props) => shallow(<SidebarAccessStatsComponent intl={intl} {...props} />);
+    const getWrapper = props =>
+        shallow(<SidebarAccessStatsComponent intl={intl} {...props} />);
 
     test('should not render the component when there are no access stats', () => {
         const props = {
@@ -16,11 +19,11 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
                 preview_count: 0,
                 comment_count: 0,
                 download_count: 0,
-                edit_count: 0
+                edit_count: 0,
             },
             file: {
-                extension: 'foo'
-            }
+                extension: 'foo',
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -34,12 +37,12 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
                 preview_count: 1,
                 comment_count: 0,
                 download_count: 0,
-                edit_count: 0
+                edit_count: 0,
             },
             error: 'foo',
             file: {
-                extension: 'foo'
-            }
+                extension: 'foo',
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -52,11 +55,11 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
                 preview_count: 1,
                 comment_count: 0,
                 download_count: 0,
-                edit_count: 0
+                edit_count: 0,
             },
             file: {
-                extension: 'foo'
-            }
+                extension: 'foo',
+            },
         };
         const wrapper = getWrapper(props);
 
@@ -70,9 +73,9 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
                 errorHeader: {
                     id: 'foo',
                     description: 'bar',
-                    defaultMessage: 'baz'
-                }
-            }
+                    defaultMessage: 'baz',
+                },
+            },
         };
         const wrapper = shallow(<SidebarAccessStats {...props} />);
 

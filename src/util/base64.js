@@ -20,7 +20,7 @@ export default function hexToBase64(str: string): string {
                 .replace(/\r|\n/g, '')
                 .replace(/([\da-fA-F]{2}) ?/g, '0x$1 ')
                 .replace(/ +$/, '')
-                .split(' ')
-        )
+                .split(' '),
+        ),
     );
 }

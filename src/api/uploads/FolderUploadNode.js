@@ -34,7 +34,7 @@ class FolderUploadNode {
         addFolderToUploadQueue: Function,
         fileAPIOptions: Object,
         baseAPIOptions: Object,
-        entry?: FileSystemFileEntry
+        entry?: FileSystemFileEntry,
     ) {
         this.name = name;
         this.addFilesToUploadQueue = addFilesToUploadQueue;
@@ -53,7 +53,11 @@ class FolderUploadNode {
      * @param {boolean} isRoot
      * @returns {Promise}
      */
-    async upload(parentFolderId: string, errorCallback: Function, isRoot: boolean = false) {
+    async upload(
+        parentFolderId: string,
+        errorCallback: Function,
+        isRoot: boolean = false,
+    ) {
         this.parentFolderId = parentFolderId;
 
         await this.createAndUploadFolder(errorCallback, isRoot);
@@ -71,7 +75,9 @@ class FolderUploadNode {
     uploadChildFolders = async (errorCallback: Function) => {
         // $FlowFixMe
         const folders: Array<FolderUploadNode> = Object.values(this.folders);
-        const promises = folders.map((folder) => folder.upload(this.folderId, errorCallback));
+        const promises = folders.map(folder =>
+            folder.upload(this.folderId, errorCallback),
+        );
 
         await Promise.all(promises);
     };
@@ -84,7 +90,10 @@ class FolderUploadNode {
      * @param {boolean} isRoot
      * @returns {Promise}
      */
-    createAndUploadFolder = async (errorCallback: Function, isRoot: boolean) => {
+    createAndUploadFolder = async (
+        errorCallback: Function,
+        isRoot: boolean,
+    ) => {
         await this.buildCurrentFolderFromEntry();
 
         try {
@@ -112,8 +121,8 @@ class FolderUploadNode {
                 status: STATUS_COMPLETE,
                 isFolder: true,
                 size: 1,
-                progress: 100
-            }
+                progress: 100,
+            },
         ]);
     };
 
@@ -129,8 +138,8 @@ class FolderUploadNode {
             options: {
                 ...this.fileAPIOptions,
                 folderId: this.folderId,
-                uploadInitTimestamp: Date.now()
-            }
+                uploadInitTimestamp: Date.now(),
+            },
         }));
 
     /**
@@ -142,7 +151,7 @@ class FolderUploadNode {
     createFolder(): Promise<any> {
         const folderAPI = new FolderAPI({
             ...this.baseAPIOptions,
-            id: `folder_${this.parentFolderId}`
+            id: `folder_${this.parentFolderId}`,
         });
         return new Promise((resolve, reject) => {
             folderAPI.create(this.parentFolderId, this.name, resolve, reject);
@@ -156,9 +165,11 @@ class FolderUploadNode {
      * @param {Array<FileSystemFileEntry>} entries
      * @returns {Promise<any>}
      */
-    createFolderUploadNodesFromEntries = async (entries: Array<FileSystemFileEntry>): Promise<any> => {
+    createFolderUploadNodesFromEntries = async (
+        entries: Array<FileSystemFileEntry>,
+    ): Promise<any> => {
         await Promise.all(
-            entries.map(async (entry) => {
+            entries.map(async entry => {
                 const { isFile, name } = entry;
 
                 if (isFile) {
@@ -174,11 +185,11 @@ class FolderUploadNode {
                     this.fileAPIOptions,
                     {
                         ...this.baseAPIOptions,
-                        ...this.fileAPIOptions
+                        ...this.fileAPIOptions,
                     },
-                    entry
+                    entry,
                 );
-            })
+            }),
         );
     };
 
@@ -191,7 +202,7 @@ class FolderUploadNode {
      * @returns {void}
      */
     readEntry = (reader: DirectoryReader, resolve: Function) => {
-        reader.readEntries(async (entries) => {
+        reader.readEntries(async entries => {
             // Quit recursing when there are no remaining entries.
             if (!entries.length) {
                 resolve();
@@ -215,7 +226,7 @@ class FolderUploadNode {
             return Promise.resolve();
         }
 
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             // $FlowFixMe entry is not empty
             const reader = this.entry.createReader();
 

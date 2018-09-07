@@ -17,10 +17,17 @@ type Props = {
     tableRef: Function,
     items?: BoxItem[],
     isSmall: boolean,
-    isLoading: boolean
+    isLoading: boolean,
 };
 
-const ItemList = ({ isSmall, isLoading, onItemClick, onExpanderClick, items = [], tableRef }: Props) => (
+const ItemList = ({
+    isSmall,
+    isLoading,
+    onItemClick,
+    onExpanderClick,
+    items = [],
+    tableRef,
+}: Props) => (
     <AutoSizer>
         {({ width, height }) => (
             <Table
@@ -35,7 +42,12 @@ const ItemList = ({ isSmall, isLoading, onItemClick, onExpanderClick, items = []
             >
                 <Column
                     dataKey={FIELD_NAME}
-                    cellRenderer={cellRenderer(onExpanderClick, onItemClick, isSmall, isLoading)}
+                    cellRenderer={cellRenderer(
+                        onExpanderClick,
+                        onItemClick,
+                        isSmall,
+                        isLoading,
+                    )}
                     width={300}
                     flexGrow={1}
                 />

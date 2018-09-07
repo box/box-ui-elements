@@ -14,7 +14,9 @@ describe('api/FileCollaborators', () => {
             }).toThrow();
         });
         test('should return correct collaborators api url with id', () => {
-            expect(fileCollaborators.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/collaborators');
+            expect(fileCollaborators.getUrl('foo')).toBe(
+                'https://api.box.com/2.0/files/foo/collaborators',
+            );
         });
     });
 
@@ -23,11 +25,11 @@ describe('api/FileCollaborators', () => {
             const collaborator = {
                 id: 123,
                 name: 'Kanye West',
-                login: 'kwest@box.com'
+                login: 'kwest@box.com',
             };
             const response = {
                 next_marker: null,
-                entries: [collaborator]
+                entries: [collaborator],
             };
 
             fileCollaborators.successCallback = jest.fn();
@@ -41,15 +43,17 @@ describe('api/FileCollaborators', () => {
                         item: {
                             id: 123,
                             name: 'Kanye West',
-                            email: 'kwest@box.com'
-                        }
-                    }
-                ]
+                            email: 'kwest@box.com',
+                        },
+                    },
+                ],
             };
 
             fileCollaborators.successHandler(response);
 
-            expect(fileCollaborators.successCallback).toBeCalledWith(formattedResponse);
+            expect(fileCollaborators.successCallback).toBeCalledWith(
+                formattedResponse,
+            );
         });
     });
 });

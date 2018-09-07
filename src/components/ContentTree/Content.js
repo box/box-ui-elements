@@ -18,7 +18,7 @@ type Props = {
     tableRef: Function,
     onItemClick: Function,
     onExpanderClick: Function,
-    currentCollection: Collection
+    currentCollection: Collection,
 };
 
 /**
@@ -33,15 +33,25 @@ function isEmpty(view: View, currentCollection: Collection): boolean {
     return view === VIEW_ERROR || items.length === 0;
 }
 
-const Content = ({ view, isSmall, currentCollection, tableRef, onItemClick, onExpanderClick }: Props) => (
-    <div className='bct-content'>
+const Content = ({
+    view,
+    isSmall,
+    currentCollection,
+    tableRef,
+    onItemClick,
+    onExpanderClick,
+}: Props) => (
+    <div className="bct-content">
         {isEmpty(view, currentCollection) ? (
-            <div className='be-empty'>
-                <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
+            <div className="be-empty">
+                <EmptyState
+                    view={view}
+                    isLoading={currentCollection.percentLoaded !== 100}
+                />
                 <ProgressBar percent={currentCollection.percentLoaded} />
             </div>
         ) : (
-            <div className='bct-item-list'>
+            <div className="bct-item-list">
                 <ItemList
                     isSmall={isSmall}
                     items={currentCollection.items}

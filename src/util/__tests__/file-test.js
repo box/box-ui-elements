@@ -5,16 +5,16 @@ describe('util/file', () => {
         test('should false when file is not a box note', () => {
             expect(
                 isBoxNote({
-                    extension: 'foo'
-                })
+                    extension: 'foo',
+                }),
             ).toBe(false);
         });
 
         test('should true when file is a box note', () => {
             expect(
                 isBoxNote({
-                    extension: 'boxnote'
-                })
+                    extension: 'boxnote',
+                }),
             ).toBe(true);
         });
     });

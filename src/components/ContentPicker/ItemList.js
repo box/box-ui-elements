@@ -15,7 +15,13 @@ import nameCellRenderer from '../Item/nameCellRenderer';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import isRowSelectable from './cellRendererHelper';
 import { isFocusableElement, focus } from '../../util/dom';
-import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
+import {
+    VIEW_SELECTED,
+    FIELD_NAME,
+    FIELD_ID,
+    FIELD_SHARED_LINK,
+    TYPE_FOLDER,
+} from '../../constants';
 
 import './ItemList.scss';
 
@@ -34,7 +40,7 @@ type Props = {
     extensionsWhitelist: string[],
     currentCollection: Collection,
     isSmall: boolean,
-    view: View
+    view: View,
 };
 
 const ItemList = ({
@@ -52,17 +58,22 @@ const ItemList = ({
     onShareAccessChange,
     onFocusChange,
     currentCollection,
-    tableRef
+    tableRef,
 }: Props) => {
     const iconCell = iconCellRenderer();
     const nameCell = nameCellRenderer(rootId, view, onItemClick);
-    const checkboxCell = checkboxCellRenderer(onItemSelect, selectableType, extensionsWhitelist, hasHitSelectionLimit);
+    const checkboxCell = checkboxCellRenderer(
+        onItemSelect,
+        selectableType,
+        extensionsWhitelist,
+        hasHitSelectionLimit,
+    );
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
         canSetShareAccess,
         selectableType,
         extensionsWhitelist,
-        hasHitSelectionLimit
+        hasHitSelectionLimit,
     );
     const { id, items = [] }: Collection = currentCollection;
     const rowCount: number = items.length;
@@ -73,25 +84,35 @@ const ItemList = ({
         }
 
         const { selected, type } = items[index];
-        const isSelectable = isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, items[index]);
+        const isSelectable = isRowSelectable(
+            selectableType,
+            extensionsWhitelist,
+            hasHitSelectionLimit,
+            items[index],
+        );
         return classNames(`bcp-item-row bcp-item-row-${index}`, {
             'bcp-item-row-selected': selected && view !== VIEW_SELECTED,
-            'bcp-item-row-unselectable': type !== TYPE_FOLDER && !isSelectable // folder row should never dim
+            'bcp-item-row-unselectable': type !== TYPE_FOLDER && !isSelectable, // folder row should never dim
         });
     };
 
     const onRowClick = ({
         event,
         rowData,
-        index
+        index,
     }: {
         event: Event & { target: HTMLElement },
         rowData: BoxItem,
-        index: number
+        index: number,
     }) => {
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (
-            isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) &&
+            isRowSelectable(
+                selectableType,
+                extensionsWhitelist,
+                hasHitSelectionLimit,
+                rowData,
+            ) &&
             !isFocusableElement(event.target)
         ) {
             onItemSelect(rowData);
@@ -104,13 +125,15 @@ const ItemList = ({
         <KeyBinder
             columnCount={1}
             rowCount={rowCount}
-            className='bcp-item-grid'
+            className="bcp-item-grid"
             id={id}
             items={items}
             onSelect={onItemSelect}
             onOpen={onItemClick}
             scrollToRow={focusedRow}
-            onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bcp-item-row-${scrollToRow}`)}
+            onScrollToChange={({ scrollToRow }) =>
+                focus(rootElement, `.bcp-item-row-${scrollToRow}`)
+            }
         >
             {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
@@ -128,9 +151,15 @@ const ItemList = ({
                             onRowClick={onRowClick}
                             scrollToIndex={scrollToRow}
                             onRowsRendered={({ startIndex, stopIndex }) => {
-                                onSectionRendered({ rowStartIndex: startIndex, rowStopIndex: stopIndex });
+                                onSectionRendered({
+                                    rowStartIndex: startIndex,
+                                    rowStopIndex: stopIndex,
+                                });
                                 if (focusOnRender) {
-                                    focus(rootElement, `.bcp-item-row-${scrollToRow}`);
+                                    focus(
+                                        rootElement,
+                                        `.bcp-item-row-${scrollToRow}`,
+                                    );
                                 }
                             }}
                         >
@@ -140,7 +169,12 @@ const ItemList = ({
                                 width={isSmall ? 30 : 50}
                                 flexShrink={0}
                             />
-                            <Column dataKey={FIELD_NAME} cellRenderer={nameCell} width={300} flexGrow={1} />
+                            <Column
+                                dataKey={FIELD_NAME}
+                                cellRenderer={nameCell}
+                                width={300}
+                                flexGrow={1}
+                            />
                             {isSmall ? null : (
                                 <Column
                                     dataKey={FIELD_SHARED_LINK}

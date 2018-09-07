@@ -8,31 +8,43 @@ import * as React from 'react';
 import debounce from 'lodash/debounce';
 import Measure from 'react-measure';
 import classNames from 'classnames';
-import { SIZE_LARGE, SIZE_MEDIUM, SIZE_SMALL, CLASS_IS_SMALL, CLASS_IS_TOUCH, CLASS_IS_MEDIUM } from '../constants';
+import {
+    SIZE_LARGE,
+    SIZE_MEDIUM,
+    SIZE_SMALL,
+    CLASS_IS_SMALL,
+    CLASS_IS_TOUCH,
+    CLASS_IS_MEDIUM,
+} from '../constants';
 
 type Props = {
     isTouch: boolean,
     size?: Size,
     className: string,
-    componentRef?: Function
+    componentRef?: Function,
 };
 
 type State = {
-    size: Size
+    size: Size,
 };
 
 const CROSS_OVER_WIDTH_SMALL = 700;
 const CROSS_OVER_WIDTH_MEDIUM = 1000;
-const HAS_TOUCH = !!('ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch));
+const HAS_TOUCH = !!(
+    'ontouchstart' in window ||
+    (window.DocumentTouch && document instanceof window.DocumentTouch)
+);
 
-function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<any> {
+function makeResponsive(
+    Wrapped: React.ComponentType<any>,
+): React.ComponentType<any> {
     return class extends React.PureComponent<Props, State> {
         props: Props;
         state: State;
 
         static defaultProps = {
             className: '',
-            isTouch: HAS_TOUCH
+            isTouch: HAS_TOUCH,
         };
 
         /**
@@ -44,7 +56,7 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
         constructor(props: Props) {
             super(props);
             this.state = {
-                size: props.size || this.getSize(window.innerWidth)
+                size: props.size || this.getSize(window.innerWidth),
             };
         }
 
@@ -85,14 +97,26 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
          * @return {Element}
          */
         render() {
-            const { isTouch, size, className, componentRef, ...rest }: Props = this.props;
+            const {
+                isTouch,
+                size,
+                className,
+                componentRef,
+                ...rest
+            }: Props = this.props;
             let isSmall: boolean = size === SIZE_SMALL;
             let isLarge: boolean = size === SIZE_LARGE;
             let isMedium: boolean = size === SIZE_MEDIUM;
             const isResponsive: boolean = !isSmall && !isLarge && !isMedium;
 
-            if ((isSmall && isLarge) || (isSmall && isMedium) || (isMedium && isLarge)) {
-                throw new Error('Box UI Element cannot be small or large or medium at the same time');
+            if (
+                (isSmall && isLarge) ||
+                (isSmall && isMedium) ||
+                (isMedium && isLarge)
+            ) {
+                throw new Error(
+                    'Box UI Element cannot be small or large or medium at the same time',
+                );
             }
 
             if (!isResponsive) {
@@ -117,9 +141,9 @@ function makeResponsive(Wrapped: React.ComponentType<any>): React.ComponentType<
                 {
                     [CLASS_IS_SMALL]: isSmall,
                     [CLASS_IS_MEDIUM]: isMedium,
-                    [CLASS_IS_TOUCH]: isTouch
+                    [CLASS_IS_TOUCH]: isTouch,
                 },
-                className
+                className,
             );
 
             return (

@@ -16,11 +16,11 @@ type Props = {
     className: string,
     title?: string | React.Node,
     isOpen: boolean,
-    interactionTarget?: string
+    interactionTarget?: string,
 };
 
 type State = {
-    isOpen: boolean
+    isOpen: boolean,
 };
 
 class SidebarSection extends React.PureComponent<Props, State> {
@@ -29,7 +29,7 @@ class SidebarSection extends React.PureComponent<Props, State> {
 
     static defaultProps = {
         className: '',
-        isOpen: true
+        isOpen: true,
     };
 
     /**
@@ -41,7 +41,7 @@ class SidebarSection extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            isOpen: props.isOpen
+            isOpen: props.isOpen,
         };
     }
 
@@ -53,8 +53,8 @@ class SidebarSection extends React.PureComponent<Props, State> {
      * @return {void}
      */
     toggleVisibility = () => {
-        this.setState((prevState) => ({
-            isOpen: !prevState.isOpen
+        this.setState(prevState => ({
+            isOpen: !prevState.isOpen,
         }));
     };
 
@@ -67,30 +67,37 @@ class SidebarSection extends React.PureComponent<Props, State> {
      */
     render() {
         const { isOpen }: State = this.state;
-        const { children, className, title, interactionTarget }: Props = this.props;
+        const {
+            children,
+            className,
+            title,
+            interactionTarget,
+        }: Props = this.props;
 
         const sectionClassName = classNames(
             'bcs-section',
             {
-                'bcs-section-open': isOpen
+                'bcs-section-open': isOpen,
             },
-            className
+            className,
         );
 
         return (
             <div className={sectionClassName}>
                 {title && (
                     <PlainButton
-                        type='button'
+                        type="button"
                         onClick={this.toggleVisibility}
-                        className='bcs-section-title'
+                        className="bcs-section-title"
                         data-resin-target={interactionTarget}
                     >
                         {title}
                         <IconCaretDown color={COLOR_999} width={8} />
                     </PlainButton>
                 )}
-                {(isOpen || !title) && <div className='bcs-section-content'>{children}</div>}
+                {(isOpen || !title) && (
+                    <div className="bcs-section-content">{children}</div>
+                )}
             </div>
         );
     }
