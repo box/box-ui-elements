@@ -357,7 +357,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.sidebarSkillsErrorContent',
         description: 'Generic error content for skills editing.',
         defaultMessage:
-            'An error has occured while updating skills. Please refresh the page and try again.',
+            'An error has occurred while updating skills. Please refresh the page and try again.',
     },
     sidebarActivityTitle: {
         id: 'be.sidebarActivityTitle',
@@ -378,7 +378,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.sidebarMetadataErrorContent',
         description: 'Generic error content for metadata editing.',
         defaultMessage:
-            'An error has occured while editing metadata. Please refresh the page and try again.',
+            'An error has occurred while editing metadata. Please refresh the page and try again.',
     },
     sidebarProperties: {
         id: 'be.sidebarProperties',
@@ -472,7 +472,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.uploadError',
         description:
             'Message shown when there is a network error when uploading',
-        defaultMessage: 'A network error has occured while trying to upload.',
+        defaultMessage: 'A network error has occurred while trying to upload.',
     },
     uploadEmptyWithFolderUploadEnabled: {
         id: 'be.uploadEmptyWithFolderUploadEnabled',
@@ -721,7 +721,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     errorOccured: {
         id: 'be.errorOccured',
-        defaultMessage: 'An error occured',
+        defaultMessage: 'An error occurred',
         description: 'Title when an error occurs',
     },
     commentCancel: {

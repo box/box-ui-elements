@@ -9,7 +9,7 @@ exports[`components/ContentUploader/UploadState should render VIEW_ERROR correct
     <UploadStateContent
       message={
         <FormattedMessage
-          defaultMessage="A network error has occured while trying to upload."
+          defaultMessage="A network error has occurred while trying to upload."
           id="be.uploadError"
         />
       }
