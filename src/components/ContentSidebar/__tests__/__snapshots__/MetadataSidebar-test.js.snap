@@ -68,7 +68,7 @@ exports[`components/ContentSidebar/Metadata/MetadataSidebar should render error 
     }
   >
     <FormattedMessage
-      defaultMessage="An error has occured while editing metadata. Please refresh the page and try again."
+      defaultMessage="An error has occurred while editing metadata. Please refresh the page and try again."
       id="be.sidebarMetadataErrorContent"
     />
   </InlineError>
