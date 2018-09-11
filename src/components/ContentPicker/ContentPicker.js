@@ -238,7 +238,9 @@ class ContentPicker extends Component<Props, State> {
      */
     componentWillReceiveProps(nextProps: Props) {
         const { currentFolderId }: Props = nextProps;
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id },
+        }: State = this.state;
 
         if (typeof currentFolderId === 'string' && id !== currentFolderId) {
             this.fetchFolder(currentFolderId);
@@ -370,7 +372,9 @@ class ContentPicker extends Component<Props, State> {
      */
     finishNavigation(): void {
         const { autoFocus }: Props = this.props;
-        const { currentCollection: { percentLoaded } }: State = this.state;
+        const {
+            currentCollection: { percentLoaded },
+        }: State = this.state;
 
         // If loading for the very first time, only allow focus if autoFocus is true
         if (this.firstLoad && !autoFocus) {
@@ -610,7 +614,9 @@ class ContentPicker extends Component<Props, State> {
      */
     search = (query: string, forceFetch: boolean = false): void => {
         const { rootFolderId }: Props = this.props;
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id },
+        }: State = this.state;
         const folderId = typeof id === 'string' ? id : rootFolderId;
         const trimmedQuery: string = query.trim();
 
@@ -647,7 +653,9 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     upload = (): void => {
-        const { currentCollection: { id, permissions } }: State = this.state;
+        const {
+            currentCollection: { id, permissions },
+        }: State = this.state;
         const { canUpload }: Props = this.props;
         if (!id || !permissions) {
             return;
@@ -671,7 +679,9 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     uploadSuccessHandler = (): void => {
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id },
+        }: State = this.state;
         this.fetchFolder(id, false, {
             forceFetch: true,
         });
@@ -863,7 +873,9 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
-        const { currentCollection: { id } }: State = this.state;
+        const {
+            currentCollection: { id },
+        }: State = this.state;
         if (id) {
             this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }

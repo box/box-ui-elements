@@ -60,10 +60,10 @@ const UploadsManager = ({
         (updatedSize, item) =>
             item.status === STATUS_ERROR || item.isFolder
                 ? updatedSize
-                : updatedSize + item.size * item.progress / 100.0,
+                : updatedSize + (item.size * item.progress) / 100.0,
         0,
     );
-    const percent = totalUploaded / totalSize * 100;
+    const percent = (totalUploaded / totalSize) * 100;
 
     return (
         <div

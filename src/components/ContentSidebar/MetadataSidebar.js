@@ -133,14 +133,12 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             return;
         }
 
-        api
-            .getMetadataAPI(false)
-            .deleteMetadata(
-                file,
-                editor.template,
-                () => this.onRemoveSuccessHandler(editor),
-                this.errorCallback,
-            );
+        api.getMetadataAPI(false).deleteMetadata(
+            file,
+            editor.template,
+            () => this.onRemoveSuccessHandler(editor),
+            this.errorCallback,
+        );
     };
 
     /**
@@ -165,14 +163,12 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     onAdd = (template: MetadataEditorTemplate) => {
         const { api, file }: Props = this.props;
         this.setState({ isLoading: true });
-        api
-            .getMetadataAPI(false)
-            .createMetadata(
-                file,
-                template,
-                this.onAddSuccessHandler,
-                this.errorCallback,
-            );
+        api.getMetadataAPI(false).createMetadata(
+            file,
+            template,
+            this.onAddSuccessHandler,
+            this.errorCallback,
+        );
     };
 
     /**

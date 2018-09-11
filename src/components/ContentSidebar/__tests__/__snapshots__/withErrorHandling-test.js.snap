@@ -42,7 +42,7 @@ exports[`components/withErrorHandling should render a ErrorMask with sub header 
 `;
 
 exports[`components/withErrorHandling should render an InlineError, along with the wrapped component 1`] = `
-<React.Fragment>
+<Fragment>
   <InlineError
     title={
       <FormattedMessage
@@ -59,7 +59,7 @@ exports[`components/withErrorHandling should render an InlineError, along with t
     />
   </InlineError>
   <WrappedComponent />
-</React.Fragment>
+</Fragment>
 `;
 
 exports[`components/withErrorHandling should render the wrapped component 1`] = `<WrappedComponent />`;

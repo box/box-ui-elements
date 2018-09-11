@@ -131,7 +131,10 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     previewSegment(index: number) {
-        const { card: { entries }, getViewer }: Props = this.props;
+        const {
+            card: { entries },
+            getViewer,
+        }: Props = this.props;
         const { appears } = entries[index];
         const viewer = getViewer ? getViewer() : null;
         const isValid =
@@ -153,7 +156,10 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onSave = (): void => {
-        const { card: { entries }, onSkillChange }: Props = this.props;
+        const {
+            card: { entries },
+            onSkillChange,
+        }: Props = this.props;
         const { isEditingIndex, newTranscriptText }: State = this.state;
 
         if (typeof isEditingIndex !== 'number') {
@@ -205,7 +211,9 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onClick = (index: number): void => {
-        const { card: { entries } }: Props = this.props;
+        const {
+            card: { entries },
+        }: Props = this.props;
         const { isEditingIndex }: State = this.state;
         if (typeof isEditingIndex === 'number') {
             this.setState({
@@ -225,7 +233,9 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {void}
      */
     copyTranscript = () => {
-        const { card: { entries } }: Props = this.props;
+        const {
+            card: { entries },
+        }: Props = this.props;
         const copiedClass = 'be-transcript-copied';
         copy(entries.reduce(this.transcriptReducer, ''));
 
@@ -271,7 +281,10 @@ class Transcript extends React.PureComponent<Props, State> {
      * @return {Object}
      */
     render() {
-        const { card: { entries }, isEditable }: Props = this.props;
+        const {
+            card: { entries },
+            isEditable,
+        }: Props = this.props;
         const { isEditingIndex, isCollapsed, isLoading }: State = this.state;
         const hasEntries = entries.length > 0;
         const hasManyEntries = entries.length > 5;

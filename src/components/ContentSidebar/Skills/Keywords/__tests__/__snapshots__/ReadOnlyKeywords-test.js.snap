@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should correctly render timeline with keyword selected 1`] = `
-<React.Fragment>
+<Fragment>
   <PillCloud
     buttonProps={
       Object {
@@ -22,11 +22,11 @@ exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should corre
       ]
     }
   />
-</React.Fragment>
+</Fragment>
 `;
 
 exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should correctly render with no keyword selected 1`] = `
-<React.Fragment>
+<Fragment>
   <PillCloud
     buttonProps={
       Object {
@@ -47,5 +47,5 @@ exports[`components/ContentSidebar/Skills/Keywords/ReadOnlyKeywords should corre
       ]
     }
   />
-</React.Fragment>
+</Fragment>
 `;
