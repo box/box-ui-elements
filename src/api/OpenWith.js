@@ -7,7 +7,7 @@
 import Base from './Base';
 import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE } from '../constants';
 // Temporary until API is fixed
-import mockOpenWithData from './__tests__/MockOpenWithData.json';
+import mockOpenWithData from './MockOpenWithData.json';
 
 class OpenWith extends Base {
     /**
