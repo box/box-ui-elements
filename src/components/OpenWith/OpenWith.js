@@ -6,12 +6,19 @@
 
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_OPEN_WITH } from '../../constants';
+import {
+    DEFAULT_HOSTNAME_API,
+    CLIENT_NAME_OPEN_WITH,
+    FIELD_EXTENSION,
+} from '../../constants';
 
 type Props = {
+    /** File extension */
+    extension?: string,
     /** Box File ID. */
     fileId: string,
     /** Application client name. */
@@ -33,6 +40,7 @@ type Props = {
 };
 
 type State = {
+    extension: ?string,
     isDropdownOpen: boolean,
     integrations: ?Array<Integration>,
 };
@@ -50,6 +58,7 @@ class OpenWith extends PureComponent<Props, State> {
     };
 
     initialState: State = {
+        extension: '',
         isDropdownOpen: false,
         integrations: null,
     };
@@ -112,14 +121,58 @@ class OpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { fileId }: Props = this.props;
+        this.fetchOpenWithData();
+    }
+
+    /**
+     * Fetches file extension and Open With data.
+     *
+     * @return {void}
+     */
+    fetchOpenWithData() {
+        const { fileId, extension, language }: Props = this.props;
+        if (extension) {
+            this.setState({ extension });
+        } else {
+            this.api
+                .getFileAPI()
+                .getFile(fileId, this.fetchExtensionSuccessCallback, noop, {
+                    fields: [FIELD_EXTENSION],
+                });
+        }
+
         this.api
             .getOpenWithAPI(false)
             .getOpenWithIntegrations(
                 fileId,
+                language,
                 this.fetchOpenWithSuccessHandler,
                 this.fetchErrorCallback,
             );
+    }
+
+    /**
+     * Handles a successful files call to get the file extension.
+     *
+     * @param {object} extensionData - The files call response with the file extension
+     * @return {void}
+     */
+    fetchExtensionSuccessCallback = ({ extension }: { extension: string }) => {
+        this.setState({ extension });
+    };
+
+    /**
+     * After component updates, re-fetch Open With data if appropriate.
+     *
+     * @return {void}
+     */
+    componentDidUpdate(prevProps: Props): void {
+        const { fileId: currentFileId }: Props = this.props;
+        const { fileId: previousFileId }: Props = prevProps;
+
+        if (currentFileId !== previousFileId) {
+            this.fetchOpenWithData();
+        }
     }
 
     /**
