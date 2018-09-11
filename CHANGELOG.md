@@ -1,5 +1,12 @@
+## <small>6.4.1 (2018-09-11)</small>
+
+* Fix: Move mock data (#547) ([1bc5770](https://github.com/box/box-ui-elements/commit/1bc5770)), closes [#547](https://github.com/box/box-ui-elements/issues/547)
+
+
+
 ## 6.4.0 (2018-09-11)
 
+* Release: 6.4.0 ([b17abbc](https://github.com/box/box-ui-elements/commit/b17abbc))
 * Breaking: Upgrade React to 16.5 (#544) ([9fdef0e](https://github.com/box/box-ui-elements/commit/9fdef0e)), closes [#544](https://github.com/box/box-ui-elements/issues/544)
 * Chore: fix occurred typos in messages (#540) ([4d45a7a](https://github.com/box/box-ui-elements/commit/4d45a7a)), closes [#540](https://github.com/box/box-ui-elements/issues/540)
 * Chore: Refactor Open With based on API changes (#543) ([61251ff](https://github.com/box/box-ui-elements/commit/61251ff)), closes [#543](https://github.com/box/box-ui-elements/issues/543)
