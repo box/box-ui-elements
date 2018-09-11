@@ -779,15 +779,18 @@ class Feed extends Base {
         );
 
         const formattedTasks: Tasks = { total_count: 0, entries: [] };
-        return Promise.all(assignmentPromises).then(assignments => {
-            assignments.forEach(task => {
-                if (task) {
-                    formattedTasks.entries.push(task);
-                    formattedTasks.total_count += 1;
-                }
-            });
-            return formattedTasks;
-        }, () => formattedTasks);
+        return Promise.all(assignmentPromises).then(
+            assignments => {
+                assignments.forEach(task => {
+                    if (task) {
+                        formattedTasks.entries.push(task);
+                        formattedTasks.total_count += 1;
+                    }
+                });
+                return formattedTasks;
+            },
+            () => formattedTasks,
+        );
     }
 
     /**

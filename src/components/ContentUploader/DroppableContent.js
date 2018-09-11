@@ -38,7 +38,9 @@ const dropDefinition = {
      * Determines what happens after a file is dropped
      */
     onDrop: (event, { addDataTransferItemsToUploadQueue }: Props) => {
-        const { dataTransfer: { items } } = event;
+        const {
+            dataTransfer: { items },
+        } = event;
 
         addDataTransferItemsToUploadQueue(items);
     },

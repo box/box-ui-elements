@@ -6,6 +6,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const safeParser = require('postcss-safe-parser');
 const license = require('./license');
 
 const DefinePlugin = webpack.DefinePlugin;
@@ -94,7 +95,7 @@ function getConfig(isReactExternalized) {
             new OptimizeCssAssetsPlugin({
                 cssProcessorOptions: {
                     discardComments: { removeAll: true },
-                    safe: true
+                    parser: safeParser,
                 }
             }),
             new BannerPlugin(license)
