@@ -922,7 +922,7 @@ class ContentUploader extends Component<Props, State> {
         }
 
         item.progress = Math.min(
-            Math.round(event.loaded / event.total * 100),
+            Math.round((event.loaded / event.total) * 100),
             100,
         );
         item.status = STATUS_IN_PROGRESS;

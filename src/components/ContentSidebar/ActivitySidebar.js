@@ -134,15 +134,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     updateTask = ({ text, id }: { text: string, id: string }): void => {
         const { file, api } = this.props;
-        api
-            .getFeedAPI(false)
-            .updateTask(
-                file,
-                id,
-                text,
-                this.feedSuccessCallback,
-                this.feedErrorCallback,
-            );
+        api.getFeedAPI(false).updateTask(
+            file,
+            id,
+            text,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -165,17 +163,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     ): void => {
         const { file, api } = this.props;
 
-        api
-            .getFeedAPI(false)
-            .updateTaskAssignment(
-                file,
-                taskId,
-                taskAssignmentId,
-                status,
-                message,
-                this.feedSuccessCallback,
-                this.feedErrorCallback,
-            );
+        api.getFeedAPI(false).updateTaskAssignment(
+            file,
+            taskId,
+            taskAssignmentId,
+            status,
+            message,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -262,17 +258,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             throw getBadUserError();
         }
 
-        api
-            .getFeedAPI(false)
-            .createTask(
-                file,
-                currentUser,
-                message,
-                assignees,
-                dueAt,
-                this.feedSuccessCallback,
-                this.feedErrorCallback,
-            );
+        api.getFeedAPI(false).createTask(
+            file,
+            currentUser,
+            message,
+            assignees,
+            dueAt,
+            this.feedSuccessCallback,
+            this.feedErrorCallback,
+        );
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -285,13 +279,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItems(shouldDestroy: boolean = false) {
         const { file, api } = this.props;
-        api
-            .getFeedAPI(shouldDestroy)
-            .feedItems(
-                file,
-                this.fetchFeedItemsSuccessCallback,
-                this.fetchFeedItemsErrorCallback,
-            );
+        api.getFeedAPI(shouldDestroy).feedItems(
+            file,
+            this.fetchFeedItemsSuccessCallback,
+            this.fetchFeedItemsErrorCallback,
+        );
     }
 
     /**

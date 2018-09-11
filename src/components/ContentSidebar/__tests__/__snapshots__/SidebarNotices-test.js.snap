@@ -3,7 +3,7 @@
 exports[`components/ContentSidebar/SidebarNotices render() should correctly render the empty state 1`] = `""`;
 
 exports[`components/ContentSidebar/SidebarNotices render() should render a shared link expiration if present 1`] = `
-<React.Fragment>
+<Fragment>
   <SharedLinkExpirationNotice
     expiration={
       <DateField
@@ -19,11 +19,11 @@ exports[`components/ContentSidebar/SidebarNotices render() should render a share
       />
     }
   />
-</React.Fragment>
+</Fragment>
 `;
 
 exports[`components/ContentSidebar/SidebarNotices render() should render an item expiration if present 1`] = `
-<React.Fragment>
+<Fragment>
   <ItemExpirationNotice
     expiration={
       <DateField
@@ -40,5 +40,5 @@ exports[`components/ContentSidebar/SidebarNotices render() should render an item
     }
     itemType="file"
   />
-</React.Fragment>
+</Fragment>
 `;

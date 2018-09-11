@@ -118,7 +118,10 @@ class Recents extends Base {
             return;
         }
 
-        const { entries, order: { by, direction } }: RecentCollection = data;
+        const {
+            entries,
+            order: { by, direction },
+        }: RecentCollection = data;
         const items: BoxItem[] = [];
 
         entries.forEach(({ item, interacted_at }: Recent) => {
