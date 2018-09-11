@@ -74,7 +74,6 @@ type Props = {
     onMetric: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    previewInstance?: any,
 };
 
 type State = {
@@ -204,14 +203,19 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillUnmount(): void {
+        // Don't destroy the cache while unmounting
+        this.api.destroy(false);
+    }
+
+    /**
+     * Cleans up the preview instance
+     */
+    destroyPreview() {
         if (this.preview) {
             this.preview.removeAllListeners();
             this.preview.destroy();
             this.preview = undefined;
         }
-
-        // Don't destroy the cache while unmounting
-        this.api.destroy(false);
     }
 
     /**
@@ -248,14 +252,10 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        const { fileId, previewInstance }: Props = this.props;
+        const { fileId }: Props = this.props;
 
-        if (previewInstance) {
-            this.setPreviewInstance(previewInstance);
-        } else {
-            this.loadStylesheet();
-            this.loadScript();
-        }
+        this.loadStylesheet();
+        this.loadScript();
 
         this.fetchFile(fileId);
         this.rootElement = ((document.getElementById(
@@ -269,8 +269,10 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
+    /* eslint-disable no-unused-vars */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        if (this.shouldLoadPreview(prevProps, prevState)) {
+        /* eslint-enable no-unused-vars */
+        if (this.shouldLoadPreview(prevState)) {
             this.loadPreview();
         }
     }
@@ -282,7 +284,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {State} prevState - Previous state
      * @return {boolean}
      */
-    shouldLoadPreview(prevProps: Props, prevState: State): boolean { // eslint-disable-line
+    shouldLoadPreview(prevState: State): boolean {
         const { file }: State = this.state;
         const { file: prevFile }: State = prevState;
         let loadPreview = false;
@@ -576,8 +578,11 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {Object} preview - Preview instance
      * @return {void}
      */
-    setPreviewInstance = (preview: any): void => {
-        this.preview = preview;
+    setPreviewInstance = (): void => {
+        this.destroyPreview();
+
+        const { Preview } = global.Box;
+        this.preview = new Preview();
         this.addPreviewListeners();
     };
 
@@ -629,10 +634,7 @@ class ContentPreview extends PureComponent<Props, State> {
             useHotkeys: false,
         };
 
-        if (!this.preview) {
-            const { Preview } = global.Box;
-            this.setPreviewInstance(new Preview());
-        }
+        this.setPreviewInstance();
 
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
