@@ -13,7 +13,7 @@ import messages from '../messages';
 
 type Props = {
     extension: ?string,
-    displayIntegration: ?Integration,
+    displayIntegration: Integration | Object,
     onClick: ?Function,
     tooltipText?: string | Object,
     isDisabled: boolean,
@@ -21,24 +21,21 @@ type Props = {
     icon?: string,
 };
 
-const INTEGRATION_ICON_CLASS = 'integration-icon';
-
 const OpenWithButton = ({
     extension,
     onClick,
-    displayIntegration,
+    displayIntegration = {},
     tooltipText,
     isDisabled = false,
     isLoading = true,
 }: Props) => {
-    const { displayName = null, appIntegrationId = null } =
-        displayIntegration || {};
+    const { displayName = null, appIntegrationId = null } = displayIntegration;
     let DisplayIcon = ICON_FILE_MAP[displayName || 'default'];
 
     let iconProps = {
         height: 26,
         width: 26,
-        className: INTEGRATION_ICON_CLASS,
+        className: 'integration-icon',
     };
 
     if (isLoading) {

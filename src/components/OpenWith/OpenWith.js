@@ -181,6 +181,7 @@ class OpenWith extends PureComponent<Props, State> {
         const { fileId: previousFileId }: Props = prevProps;
 
         if (currentFileId !== previousFileId) {
+            this.setState({ isLoading: true });
             this.fetchOpenWithData();
         }
     }
@@ -237,11 +238,14 @@ class OpenWith extends PureComponent<Props, State> {
         const displayIntegration = this.getDisplayIntegration();
         if (isLoading) {
             return null;
-        } else if (fetchError) {
+        }
+        if (fetchError) {
             return <FormattedMessage {...messages.errorOpenWithDescription} />;
-        } else if (displayIntegration) {
+        }
+        if (displayIntegration) {
             return displayIntegration.displayDescription;
-        } else if (Array.isArray(integrations) && integrations.length > 1) {
+        }
+        if (Array.isArray(integrations) && integrations.length > 1) {
             return (
                 <FormattedMessage {...messages.defaultOpenWithDescription} />
             );
