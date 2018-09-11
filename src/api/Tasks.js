@@ -6,6 +6,7 @@
 
 import Base from './Base';
 import { PERMISSION_CAN_COMMENT } from '../constants';
+import { fillUserPlaceholder } from '../util/fields';
 
 class Tasks extends Base {
     /**
@@ -195,6 +196,27 @@ class Tasks extends Base {
             errorCallback,
         });
     }
+
+    /**
+     * Overrides the Base.successHandler to handle filling in a placeholder user if
+     * task created_by or tas assignment assigned_to field is null
+     *
+     * @param {Object} data the api response data
+     */
+    successHandler = (data: Object): void => {
+        if (this.isDestroyed() || typeof this.successCallback !== 'function') {
+            return;
+        }
+
+        if (!data.entries) {
+            this.successCallback(data);
+            return;
+        }
+
+        // This could be tasks entries as well as task assignment entries
+        const entries = data.entries.map(fillUserPlaceholder);
+        this.successCallback({ ...data, entries: entries });
+    };
 }
 
 export default Tasks;

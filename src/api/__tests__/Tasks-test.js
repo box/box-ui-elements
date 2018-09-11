@@ -1,5 +1,5 @@
 import Tasks from '../Tasks';
-import { PERMISSION_CAN_COMMENT } from '../../constants';
+import { PERMISSION_CAN_COMMENT, PLACEHOLDER_USER } from '../../constants';
 
 let tasks;
 
@@ -209,6 +209,37 @@ describe('api/Tasks', () => {
                     successCallback,
                     errorCallback,
                     params,
+                });
+            });
+        });
+
+        describe('successHandler()', () => {
+            test('should just return if tasks instance is destroyed', () => {
+                tasks.successCallback = successCallback;
+                tasks.destroyed = true;
+                tasks.successHandler();
+                expect(successCallback).not.toHaveBeenCalled();
+            });
+
+            test('should throw error if no data.entries', () => {
+                tasks.successCallback = successCallback;
+                tasks.successHandler({});
+                expect(successCallback).toHaveBeenLastCalledWith({});
+            });
+
+            test('should return same entries if assigned_to exists', () => {
+                const data = { entries: [{ assigned_to: 'superman' }] };
+                tasks.successCallback = successCallback;
+                tasks.successHandler(data);
+                expect(successCallback).toHaveBeenCalledWith(data);
+            });
+
+            test('should return entries with placeholder user if assigned_to is null', () => {
+                const data = { entries: [{ assigned_to: null }] };
+                tasks.successCallback = successCallback;
+                tasks.successHandler(data);
+                expect(successCallback).toHaveBeenCalledWith({
+                    entries: [{ assigned_to: PLACEHOLDER_USER }],
                 });
             });
         });

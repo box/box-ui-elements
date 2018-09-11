@@ -5,7 +5,11 @@
  */
 
 import Item from './Item';
-import { findMissingProperties, fillMissingProperties } from '../util/fields';
+import {
+    findMissingProperties,
+    fillMissingProperties,
+    fillUserPlaceholder,
+} from '../util/fields';
 import { getTypedFileId } from '../util/file';
 import {
     FIELD_DOWNLOAD_URL,
@@ -189,12 +193,16 @@ class File extends Item {
                 missingFields,
             );
 
+            // If fields are user fields, make sure if value is null to prepopulate
+            // with placeholder user
+            const filledInData = fillUserPlaceholder(dataWithMissingFields);
+
             // Cache check is again done since this code is executed async
             if (cache.has(key)) {
-                cache.merge(key, dataWithMissingFields);
+                cache.merge(key, filledInData);
             } else {
                 // If there was nothing in the cache
-                cache.set(key, dataWithMissingFields);
+                cache.set(key, filledInData);
             }
 
             this.successHandler(cache.get(key));
