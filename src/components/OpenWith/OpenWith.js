@@ -9,6 +9,12 @@ import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import API from '../../api';
 import Internationalize from '../Internationalize';
+import { FormattedMessage } from 'react-intl';
+import OpenWithButton from './OpenWithButton';
+import messages from '../messages';
+
+import '../base.scss';
+import './OpenWith.scss';
 
 import {
     DEFAULT_HOSTNAME_API,
@@ -43,6 +49,8 @@ type State = {
     extension: ?string,
     isDropdownOpen: boolean,
     integrations: ?Array<Integration>,
+    isLoading: boolean,
+    fetchError: ?Error,
 };
 
 class OpenWith extends PureComponent<Props, State> {
@@ -61,6 +69,8 @@ class OpenWith extends PureComponent<Props, State> {
         extension: '',
         isDropdownOpen: false,
         integrations: null,
+        isLoading: true,
+        fetchError: null,
     };
 
     /**
@@ -178,13 +188,11 @@ class OpenWith extends PureComponent<Props, State> {
     /**
      * Fetch app integrations info needed to render.
      *
-     * @param {OpenWithIntegrations} openWithIntegrations - The available Open With integrations
+     * @param {OpenWithIntegrations} integrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = (
-        openWithIntegrations: Array<Integration>,
-    ) => {
-        this.setState({ integrations: openWithIntegrations });
+    fetchOpenWithSuccessHandler = (integrations: Array<Integration>) => {
+        this.setState({ integrations, isLoading: false });
     };
 
     /**
@@ -194,6 +202,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchErrorCallback = (error: Error) => {
+        this.setState({ fetchError: error, isLoading: false });
         console.error(error); // eslint-disable-line no-console
     };
 
@@ -208,7 +217,55 @@ class OpenWith extends PureComponent<Props, State> {
     }
 
     /**
-     * Renders the Open With element
+     * Click handler when an integration is clicked
+     *
+     * @private
+     * @return {void}
+     */
+    onIntegrationClick(): void {
+        /* no-op */
+    }
+
+    /**
+     * Gets the tooltip text for the OpenWith button
+     *
+     * @private
+     * @return {?string | ?Element}
+     */
+    getTooltip(): ?string | ?Element {
+        const { fetchError, isLoading, integrations }: State = this.state;
+        const displayIntegration = this.getDisplayIntegration();
+        if (isLoading) {
+            return null;
+        } else if (fetchError) {
+            return <FormattedMessage {...messages.errorOpenWithDescription} />;
+        } else if (displayIntegration) {
+            return displayIntegration.displayDescription;
+        } else if (Array.isArray(integrations) && integrations.length > 1) {
+            return (
+                <FormattedMessage {...messages.defaultOpenWithDescription} />
+            );
+        }
+
+        return <FormattedMessage {...messages.emptyOpenWithDescription} />;
+    }
+
+    /**
+     * Gets a display integration, if available, for the Open With button
+     *
+     * @private
+     * @return {?Integration}
+     */
+    getDisplayIntegration(): ?Integration {
+        const { integrations }: State = this.state;
+        // We only consider an integration a display integration if is the only integration in our state
+        return Array.isArray(integrations) && integrations.length === 1
+            ? integrations[0]
+            : null;
+    }
+
+    /**
+     * Render the Open With element
      *
      * @private
      * @inheritdoc
@@ -216,14 +273,29 @@ class OpenWith extends PureComponent<Props, State> {
      */
     render() {
         const { language, messages: intlMessages }: Props = this.props;
-        const { integrations }: State = this.state;
-        // Placeholder
+        const { fetchError: error, isLoading, extension }: State = this.state;
+
+        const displayIntegration = this.getDisplayIntegration();
+
         return (
-            integrations && (
-                <Internationalize language={language} messages={intlMessages}>
-                    <button> Open With </button>
-                </Internationalize>
-            )
+            <Internationalize language={language} messages={intlMessages}>
+                <div id={this.id} className="be bcow">
+                    {
+                        <OpenWithButton
+                            isDisabled={
+                                (displayIntegration &&
+                                    !!displayIntegration.isDisabled) ||
+                                !!error
+                            }
+                            onClick={this.onIntegrationClick}
+                            displayIntegration={displayIntegration}
+                            extension={extension}
+                            isLoading={isLoading}
+                            tooltipText={this.getTooltip()}
+                        />
+                    }
+                </div>
+            </Internationalize>
         );
     }
 }
