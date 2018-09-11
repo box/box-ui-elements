@@ -562,20 +562,20 @@ type OpenWithAPIItem = {
 }
 
 type AppIntegrationAPIMiniItem = {
+    id: string,
     type: APP_INTEGRATION,
-    id: string
 }
 
 type Integration = {
     appIntegrationId: string,
-    displayName: string,
-    displayDescription: string,
-    type: APP_INTEGRATION,
     disabledReasons: Array<string>,
+    displayDescription: string,
+    displayName: string,
     displayOrder: number,
     isDefault: boolean,
     isDisabled: boolean,
-    requiresConsent: boolean
+    requiresConsent: boolean,
+    type: APP_INTEGRATION,
 }
 
 type JsonPatch = {

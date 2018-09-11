@@ -5,8 +5,8 @@
  */
 
 import Base from './Base';
-// Temporary until API is fixed
 import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE } from '../constants';
+// Temporary until API is fixed
 import mockOpenWithData from './__tests__/MockOpenWithData.json';
 
 class OpenWith extends Base {
@@ -35,13 +35,13 @@ class OpenWith extends Base {
      */
     getOpenWithIntegrations(
         fileId: string,
-        locale: ?string,
+        locale: ?string = DEFAULT_LOCALE,
         successCallback: Function,
         errorCallback: Function,
     ) {
         const params = {
             headers: {
-                [HEADER_ACCEPT_LANGUAGE]: locale || DEFAULT_LOCALE,
+                [HEADER_ACCEPT_LANGUAGE]: locale,
             },
         };
 
