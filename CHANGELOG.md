@@ -1,5 +1,17 @@
+## 6.4.0 (2018-09-11)
+
+* Breaking: Upgrade React to 16.5 (#544) ([9fdef0e](https://github.com/box/box-ui-elements/commit/9fdef0e)), closes [#544](https://github.com/box/box-ui-elements/issues/544)
+* Chore: fix occurred typos in messages (#540) ([4d45a7a](https://github.com/box/box-ui-elements/commit/4d45a7a)), closes [#540](https://github.com/box/box-ui-elements/issues/540)
+* Chore: Refactor Open With based on API changes (#543) ([61251ff](https://github.com/box/box-ui-elements/commit/61251ff)), closes [#543](https://github.com/box/box-ui-elements/issues/543)
+* Chore: removing user-select to allow for highlight/copy of text (#542) ([3c24377](https://github.com/box/box-ui-elements/commit/3c24377)), closes [#542](https://github.com/box/box-ui-elements/issues/542)
+* Chore: Upgrade code styling based on box-react-ui (#539) ([65b781e](https://github.com/box/box-ui-elements/commit/65b781e)), closes [#539](https://github.com/box/box-ui-elements/issues/539)
+* Mojito: Update translations (#541) ([38b2a52](https://github.com/box/box-ui-elements/commit/38b2a52)), closes [#541](https://github.com/box/box-ui-elements/issues/541)
+
+
+
 ## <small>6.3.2 (2018-09-07)</small>
 
+* Release: 6.3.2 ([5e82cfc](https://github.com/box/box-ui-elements/commit/5e82cfc))
 * Fix: Add empty state when there is no metadata applied (#538) ([c05ae6c](https://github.com/box/box-ui-elements/commit/c05ae6c)), closes [#538](https://github.com/box/box-ui-elements/issues/538)
 * Chore: Refactor Open With types (#534) ([d36ecff](https://github.com/box/box-ui-elements/commit/d36ecff)), closes [#534](https://github.com/box/box-ui-elements/issues/534)
 
