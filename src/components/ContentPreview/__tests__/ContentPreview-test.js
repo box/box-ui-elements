@@ -55,35 +55,33 @@ describe('components/ContentPreview/ContentPreview', () => {
     });
 
     describe('shouldLoadPreview()', () => {
-        test('should return true if file version ID has changed', () => {
-            const wrapper = getWrapper(props);
-            const instance = wrapper.instance();
+        let wrapper;
+        let instance;
+        let file;
 
+        beforeEach(() => {
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            file = { id: '123', file_version: { id: '1' } };
+            wrapper.setState({
+                file,
+            });
+        });
+
+        test('should return true if file version ID has changed', () => {
             const oldFile = { id: '123', file_version: { id: '1234' } };
-            const newFile = { id: '123', file_version: { id: '2345' } };
-            wrapper.setState({ file: newFile });
-            expect(
-                instance.shouldLoadPreview({}, { file: oldFile }),
-            ).toBeTruthy();
+            expect(instance.shouldLoadPreview({ file: oldFile })).toBe(true);
         });
 
         test('should return true if file object has newly been populated', () => {
-            const wrapper = getWrapper(props);
-            const instance = wrapper.instance();
-
             wrapper.setState({ file: { id: '123' } });
             expect(
-                instance.shouldLoadPreview({}, { file: undefined }),
+                instance.shouldLoadPreview({ file: undefined }),
             ).toBeTruthy();
         });
 
         test('should return false if file has not changed', () => {
-            file = { id: '123' };
-            const wrapper = getWrapper(props);
-            wrapper.setState({ file });
-            const instance = wrapper.instance();
-
-            expect(instance.shouldLoadPreview({}, { file })).toBeFalsy();
+            expect(instance.shouldLoadPreview({ file })).toBe(false);
         });
     });
 
