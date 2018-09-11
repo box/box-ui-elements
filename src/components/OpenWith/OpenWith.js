@@ -130,7 +130,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchOpenWithData() {
-        const { fileId, extension }: Props = this.props;
+        const { fileId, extension, language }: Props = this.props;
         if (extension) {
             this.setState({ extension });
         } else {
@@ -145,6 +145,7 @@ class OpenWith extends PureComponent<Props, State> {
             .getOpenWithAPI(false)
             .getOpenWithIntegrations(
                 fileId,
+                language,
                 this.fetchOpenWithSuccessHandler,
                 this.fetchErrorCallback,
             );

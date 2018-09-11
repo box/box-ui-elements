@@ -6,6 +6,7 @@
 
 import Base from './Base';
 // Temporary until API is fixed
+import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE } from '../constants';
 import mockOpenWithData from './__tests__/MockOpenWithData.json';
 
 class OpenWith extends Base {
@@ -27,17 +28,26 @@ class OpenWith extends Base {
      * Gets Open With integration data
      *
      * @param {string} fileId - Box file ID
+     * @param {string} locale - locale to receive translated strings from the API
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
     getOpenWithIntegrations(
         fileId: string,
+        locale: ?string,
         successCallback: Function,
         errorCallback: Function,
     ) {
+        const params = {
+            headers: {
+                [HEADER_ACCEPT_LANGUAGE]: locale || DEFAULT_LOCALE,
+            },
+        };
+
         this.get({
             id: fileId,
+            params,
             successCallback: openWithIntegrations => {
                 const formattedOpenWithData = this.formatOpenWithData(
                     // Temporary until API is fixed
