@@ -546,7 +546,6 @@ type Translations = {
 type OpenWithAPI = {
     default_app_integration?: AppIntegrationAPIMiniItem,
     disabled_reasons?: Array<string>,
-    icon?: string,
     is_disabled?: boolean,
     items: Array<OpenWithAPIItem>,
     should_show_consent_popup?: boolean
@@ -555,33 +554,28 @@ type OpenWithAPI = {
 type OpenWithAPIItem = {
     app_integration: AppIntegrationAPIMiniItem,
     disabled_reasons: Array<string>,
+    display_description: string,
+    display_name: string,
     display_order: number,
-    icon: string,
     is_disabled: boolean,
     should_show_consent_popup: boolean
 }
 
 type AppIntegrationAPIMiniItem = {
+    id: string,
     type: APP_INTEGRATION,
-    id: string
 }
-
-type AppIntegrationAPIItem = AppIntegrationAPIMiniItem & {
-    name: string,
-    description: string
-} 
 
 type Integration = {
     appIntegrationId: string,
-    name: string,
-    description: string,
-    type: APP_INTEGRATION,
     disabledReasons: Array<string>,
+    displayDescription: string,
+    displayName: string,
     displayOrder: number,
-    icon: string,
     isDefault: boolean,
     isDisabled: boolean,
-    requiresConsent: boolean
+    requiresConsent: boolean,
+    type: APP_INTEGRATION,
 }
 
 type JsonPatch = {
