@@ -269,6 +269,11 @@ class ContentPreview extends PureComponent<Props, State> {
         }
     }
 
+    /**
+     * Updates the access token used by preview library
+     *
+     * @param {boolean} shouldReload - true if preview should be reloaded
+     */
     updatePreviewToken(shouldReload: boolean = false) {
         if (this.preview) {
             const { token } = this.props;

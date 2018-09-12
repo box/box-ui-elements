@@ -21,6 +21,8 @@ describe('components/ContentPreview/ContentPreview', () => {
         global.Box.Preview = function Preview() {
             this.updateFileCache = jest.fn();
             this.show = jest.fn();
+            this.updateToken = jest.fn();
+            this.addListener = jest.fn();
         };
         global.performance = {
             now: jest.fn().mockReturnValue(PERFORMANCE_TIME),
@@ -636,24 +638,63 @@ describe('components/ContentPreview/ContentPreview', () => {
         });
     });
 
-    describe('setPreviewInstance()', () => {
+    describe('updatePreviewToken()', () => {
         let instance;
+        const token = 'token';
         beforeEach(() => {
             const wrapper = getWrapper({
-                token: 'token',
+                token,
                 fileId: 'foo',
             });
             instance = wrapper.instance();
-            instance.destroyPreview = jest.fn();
-            instance.addPreviewListeners = jest.fn();
         });
 
-        test('should cleanup and setup a new preview instance', () => {
-            instance.setPreviewInstance();
+        test('should update the preview token and not reload', () => {
+            instance.preview = new global.Box.Preview();
+            instance.updatePreviewToken();
 
-            expect(instance.destroyPreview).toBeCalled();
-            expect(instance.addPreviewListeners).toBeCalled();
-            expect(instance.preview).toBeTruthy();
+            expect(instance.preview.updateToken).toBeCalledWith(token, false);
+        });
+    });
+
+    describe('componentDidUpdate', () => {
+        let wrapper;
+        let instance;
+        const token = 'token';
+        beforeEach(() => {
+            wrapper = getWrapper({
+                token,
+                fileId: 'foo',
+            });
+            instance = wrapper.instance();
+            instance.fetchFile = jest.fn();
+            instance.destroyPreview = jest.fn();
+            instance.shouldLoadPreview = jest.fn();
+            instance.updatePreviewToken = jest.fn();
+            instance.loadPreview = jest.fn();
+        });
+
+        test('should destroy preview and load the file if file id changed', () => {
+            wrapper.setProps({
+                fileId: 'bar',
+            });
+            expect(instance.destroyPreview).toBeCalledTimes(1);
+            expect(instance.fetchFile).toBeCalledTimes(1);
+        });
+
+        test('should load preview if version changes or newly populated file in state', () => {
+            instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
+            wrapper.setProps({
+                foo: 'bar',
+            });
+            expect(instance.loadPreview).toBeCalledTimes(1);
+        });
+
+        test('should update the preview with the new token if it changes', () => {
+            wrapper.setProps({
+                token: 'bar',
+            });
+            expect(instance.updatePreviewToken).toBeCalledTimes(1);
         });
     });
 });
