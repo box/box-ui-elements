@@ -589,7 +589,6 @@ class ContentPreview extends PureComponent<Props, State> {
             return;
         }
 
-        this.destroyPreview();
         const typedId: string = getTypedFileId(this.getFileId(file));
         const token: TokenLiteral = await TokenService.getReadToken(
             typedId,
