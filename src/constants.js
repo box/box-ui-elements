@@ -43,9 +43,6 @@ export const CACHE_PREFIX_METADATA = 'metadata_';
 /* ----------------------- Sorts ---------------------------- */
 export const SORT_ASC: 'ASC' = 'ASC';
 export const SORT_DESC: 'DESC' = 'DESC';
-export const SORT_NAME: 'name' = 'name';
-export const SORT_DATE: 'date' = 'date';
-export const SORT_SIZE: 'size' = 'size';
 
 /* -------------------- Shared access ----------------------- */
 export const ACCESS_NONE: 'none' = 'none';
@@ -72,6 +69,7 @@ export const METADATA_SCOPE_ENTERPRISE = 'enterprise';
 
 /* ----------------------- Fields --------------------------- */
 export const FIELD_ID = 'id';
+export const FIELD_DATE: 'date' = 'date';
 export const FIELD_NAME: 'name' = 'name';
 export const FIELD_TYPE = 'type';
 export const FIELD_SIZE: 'size' = 'size';
@@ -118,6 +116,7 @@ export const FIELD_TAGGED_MESSAGE = 'tagged_message';
 export const FIELD_TRASHED_AT = 'trashed_at';
 export const FIELD_ASSIGNED_TO = 'assigned_to';
 export const FIELD_RESOLUTION_STATE = 'resolution_state';
+export const FIELD_RELEVANCE: '' = '';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';
@@ -148,6 +147,8 @@ export const DEFAULT_ROOT = '0';
 export const DEFAULT_SEARCH_DEBOUNCE = 500;
 export const DEFAULT_COLLAB_DEBOUNCE = 500;
 export const DEFAULT_MAX_COLLABORATORS = 5;
+export const DEFAULT_OFFSET = 0;
+export const DEFAULT_PAGE_SIZE = 20;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
 export const CLIENT_NAME_CONTENT_TREE = 'ContentTree';

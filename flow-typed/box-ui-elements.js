@@ -29,9 +29,6 @@ import {
     VIEW_UPLOAD_SUCCESS,
     SORT_ASC,
     SORT_DESC,
-    SORT_NAME,
-    SORT_SIZE,
-    SORT_DATE,
     TYPE_FILE,
     TYPE_FOLDER,
     TYPE_WEBLINK,
@@ -43,10 +40,9 @@ import {
     DELIMITER_CARET,
     SIZE_SMALL,
     SIZE_LARGE,
+    FIELD_DATE,
     FIELD_NAME,
-    FIELD_MODIFIED_AT,
-    FIELD_INTERACTED_AT,
-    FIELD_SIZE,
+    FIELD_RELEVANCE,
     DEFAULT_VIEW_RECENTS,
     DEFAULT_VIEW_FILES,
     SKILLS_KEYWORD,
@@ -94,9 +90,8 @@ type View =
     | typeof VIEW_UPLOAD_EMPTY
     | typeof VIEW_UPLOAD_IN_PROGRESS
     | typeof VIEW_UPLOAD_SUCCESS;
+type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE;
 type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
-type SortableOptions = typeof SORT_NAME | typeof SORT_DATE | typeof SORT_SIZE;
-type SortBy = typeof FIELD_NAME | typeof FIELD_MODIFIED_AT | typeof FIELD_INTERACTED_AT | typeof FIELD_SIZE;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
 type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
@@ -358,11 +353,13 @@ type Collection = {
     name?: string,
     permissions?: BoxItemPermission,
     breadcrumbs?: Array<Crumb>,
+    offset?: number,
     percentLoaded?: number,
     sortBy?: SortBy,
     sortDirection?: SortDirection,
     items?: Array<BoxItem>,
-    boxItem?: FlattenedBoxItem
+    boxItem?: FlattenedBoxItem,
+    totalCount?: number,
 };
 
 type UploadItem = {
@@ -612,7 +609,7 @@ type DirectoryReader = {
 };
 
 type FetchOptions = {
+    fields?: Array<string>,
     forceFetch?: boolean,
     refreshCache?: boolean,
-    fields?: Array<string>
 };

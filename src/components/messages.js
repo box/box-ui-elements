@@ -943,6 +943,22 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage:
             'There was a problem loading the activity feed. Please refresh the page or try again later.',
     },
+    nextPage: {
+        defaultMessage: 'Next Page',
+        description: 'Next page button tooltip',
+        id: 'be.pagination.nextPage',
+    },
+    pageStatus: {
+        defaultMessage: '{pageNumber} of {pageCount}',
+        description:
+            'Pagination menu button with current page number out of total number of pages',
+        id: 'be.pagination.pageStatus',
+    },
+    previousPage: {
+        defaultMessage: 'Previous Page',
+        description: 'Previous page button tooltip',
+        id: 'be.pagination.previousPage',
+    },
     previousSegment: {
         id: 'be.previousSegment',
         description: 'Title for previous segment on skill timeline',

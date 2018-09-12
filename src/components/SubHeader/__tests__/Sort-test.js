@@ -9,7 +9,7 @@ import messages from '../../messages';
 import { SORT_ASC, SORT_DESC } from '../../../constants';
 
 describe('components/SubHeader/Sort', () => {
-    test('should render a button and menu with 6 menu items', () => {
+    test('should render a button and menu with 4 menu items', () => {
         const wrapper = shallow(
             <Sort
                 isLoaded={false}
@@ -21,10 +21,10 @@ describe('components/SubHeader/Sort', () => {
         expect(wrapper.find(Button)).toHaveLength(1);
         expect(wrapper.find(DropdownMenu)).toHaveLength(1);
         expect(wrapper.find(Menu)).toHaveLength(1);
-        expect(wrapper.find(MenuItem)).toHaveLength(6);
+        expect(wrapper.find(MenuItem)).toHaveLength(4);
     });
 
-    test('should render a select with 6 options', () => {
+    test('should render a select with 4 options', () => {
         const wrapper = shallow(
             <Sort
                 isLoaded={false}
@@ -34,7 +34,7 @@ describe('components/SubHeader/Sort', () => {
             />,
         );
         const options = wrapper.find(MenuItem);
-        expect(options).toHaveLength(6);
+        expect(options).toHaveLength(4);
 
         expect(
             options
@@ -87,32 +87,6 @@ describe('components/SubHeader/Sort', () => {
                 .childAt(1)
                 .prop('id'),
         ).toBe(messages.dateDESC.id);
-
-        expect(
-            options
-                .at(4)
-                .childAt(0)
-                .text(),
-        ).toBe('');
-        expect(
-            options
-                .at(4)
-                .childAt(1)
-                .prop('id'),
-        ).toBe(messages.sizeASC.id);
-
-        expect(
-            options
-                .at(5)
-                .childAt(0)
-                .text(),
-        ).toBe('');
-        expect(
-            options
-                .at(5)
-                .childAt(1)
-                .prop('id'),
-        ).toBe(messages.sizeDESC.id);
     });
 
     test('should pass correct parameters when clicked', () => {
@@ -134,49 +108,23 @@ describe('components/SubHeader/Sort', () => {
         expect(sort).toHaveBeenCalledWith('name', SORT_DESC);
 
         options.at(2).simulate('click');
-        expect(sort).toHaveBeenCalledWith('modified_at', SORT_ASC);
+        expect(sort).toHaveBeenCalledWith('date', SORT_ASC);
 
         options.at(3).simulate('click');
-        expect(sort).toHaveBeenCalledWith('modified_at', SORT_DESC);
-
-        options.at(4).simulate('click');
-        expect(sort).toHaveBeenCalledWith('size', SORT_ASC);
-
-        options.at(5).simulate('click');
-        expect(sort).toHaveBeenCalledWith('size', SORT_DESC);
-    });
-
-    test('should pass correct parameters when clicked when view is recents', () => {
-        const sort = jest.fn();
-        const wrapper = shallow(
-            <Sort
-                isRecents
-                isLoaded={false}
-                sortBy="name"
-                sortDirection={SORT_ASC}
-                onSortChange={sort}
-            />,
-        );
-        const options = wrapper.find(MenuItem);
-
-        options.at(2).simulate('click');
-        expect(sort).toHaveBeenCalledWith('interacted_at', SORT_ASC);
-
-        options.at(3).simulate('click');
-        expect(sort).toHaveBeenCalledWith('interacted_at', SORT_DESC);
+        expect(sort).toHaveBeenCalledWith('date', SORT_DESC);
     });
 
     test('should render a select with correct option selected', () => {
         const wrapper = shallow(
             <Sort
                 isLoaded={false}
-                sortBy="modified_at"
+                sortBy="date"
                 sortDirection={SORT_DESC}
                 onSortChange={jest.fn()}
             />,
         );
         const options = wrapper.find(MenuItem);
-        expect(options).toHaveLength(6);
+        expect(options).toHaveLength(4);
 
         expect(
             options

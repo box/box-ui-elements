@@ -26,7 +26,8 @@ describe('api/uploads/FolderUploadNode', () => {
             {},
             {},
         );
-        folderCreateMock = jest.fn((a, b, resolve) => { // eslint-disable-line
+        // eslint-disable-next-line
+        folderCreateMock = jest.fn((a, b, resolve) => {
             resolve();
         });
         FolderAPI.mockClear();

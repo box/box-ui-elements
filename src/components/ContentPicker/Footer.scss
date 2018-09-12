@@ -20,8 +20,16 @@
         font-size: 11px;
     }
 
-    .bcp-footer-right .btn {
-        margin-left: 8px;
+    .bcp-footer-right {
+        display: flex;
+    }
+
+    .bcp-footer-actions {
+        margin-left: 20px;
+
+        .btn {
+            margin-left: 8px;
+        }
     }
 }
 

@@ -1,0 +1,11 @@
+@import '../variables';
+
+.bce-footer {
+    align-items: center;
+    background-color: $almost-white;
+    border-top: 1px solid $off-white;
+    display: flex;
+    flex: 0 0 70px;
+    justify-content: flex-end;
+    padding: 0 20px;
+}

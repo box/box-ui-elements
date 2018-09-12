@@ -24,7 +24,7 @@ import {
     TYPE_FILE,
     TYPE_WEBLINK,
     CLIENT_NAME_CONTENT_TREE,
-    SORT_NAME,
+    FIELD_NAME,
     SORT_ASC,
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
@@ -57,6 +57,10 @@ type State = {
     currentCollection: Collection,
     view: View,
 };
+
+// Pagination is not supported by this component
+const ITEM_LIMIT = 200;
+const ITEM_OFFSET = 0;
 
 class ContentTree extends Component<Props, State> {
     id: string;
@@ -312,7 +316,9 @@ class ContentTree extends Component<Props, State> {
             .getFolderAPI()
             .getFolder(
                 folderId,
-                SORT_NAME,
+                ITEM_LIMIT,
+                ITEM_OFFSET,
+                FIELD_NAME,
                 SORT_ASC,
                 this.fetchFolderSuccessCallback,
                 this.errorCallback,

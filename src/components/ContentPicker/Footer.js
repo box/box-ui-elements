@@ -20,6 +20,7 @@ type Props = {
     onCancel: Function,
     chooseButtonLabel?: string,
     cancelButtonLabel?: string,
+    children?: any,
 };
 
 const Footer = ({
@@ -30,6 +31,7 @@ const Footer = ({
     onChoose,
     chooseButtonLabel,
     cancelButtonLabel,
+    children,
 }: Props) => (
     <div className="bcp-footer">
         <div className="bcp-footer-left">
@@ -46,12 +48,20 @@ const Footer = ({
             ) : null}
         </div>
         <div className="bcp-footer-right">
-            <Button type="button" onClick={onCancel}>
-                {cancelButtonLabel || <FormattedMessage {...messages.cancel} />}
-            </Button>
-            <PrimaryButton type="button" onClick={onChoose}>
-                {chooseButtonLabel || <FormattedMessage {...messages.choose} />}
-            </PrimaryButton>
+            {children}
+
+            <div className="bcp-footer-actions">
+                <Button type="button" onClick={onCancel}>
+                    {cancelButtonLabel || (
+                        <FormattedMessage {...messages.cancel} />
+                    )}
+                </Button>
+                <PrimaryButton type="button" onClick={onChoose}>
+                    {chooseButtonLabel || (
+                        <FormattedMessage {...messages.choose} />
+                    )}
+                </PrimaryButton>
+            </div>
         </div>
     </div>
 );

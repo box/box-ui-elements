@@ -1,7 +1,7 @@
 import Search from '../Search';
 import Cache from '../../util/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../util/fields';
-import * as sort from '../../util/sorter';
+import { FIELD_RELEVANCE, SORT_DESC } from '../../constants';
 
 let search;
 let cache;
@@ -36,28 +36,20 @@ describe('api/Search', () => {
     });
 
     describe('isLoaded()', () => {
-        test('should return false when not cached', () => {
+        test('should return false when no cache', () => {
             search.key = 'key';
             expect(search.isLoaded()).toBe(false);
         });
 
-        test('should return false when no item collection', () => {
+        test('should return false when no value', () => {
             search.key = 'key';
-            cache.set('key', {});
-            search.getCache = jest.fn().mockReturnValueOnce(cache);
-            expect(search.isLoaded()).toBe(false);
-        });
-
-        test('should return false when not loaded', () => {
-            search.key = 'key';
-            cache.set('key', { item_collection: { isLoaded: false } });
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             expect(search.isLoaded()).toBe(false);
         });
 
         test('should return true when loaded', () => {
             search.key = 'key';
-            cache.set('key', { item_collection: { isLoaded: true } });
+            cache.set('key', { item_collection: {} });
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             expect(search.isLoaded()).toBe(true);
         });
@@ -69,7 +61,7 @@ describe('api/Search', () => {
             search.searchRequest = jest.fn();
             search.getCache = jest.fn();
             search.getCacheKey = jest.fn();
-            search.search('id', 'query', 'by', 'direction', 'success', 'fail');
+            search.search('id', 'query', 20, 0, 'success', 'fail');
             expect(search.searchRequest).not.toHaveBeenCalled();
             expect(search.getCache).not.toHaveBeenCalled();
             expect(search.getCacheKey).not.toHaveBeenCalled();
@@ -78,14 +70,7 @@ describe('api/Search', () => {
             search.searchRequest = jest.fn();
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(false);
-            search.search(
-                'id',
-                'foo query',
-                'by',
-                'direction',
-                'success',
-                'fail',
-            );
+            search.search('id', 'foo query', 20, 0, 'success', 'fail');
             expect(search.getCacheKey).toHaveBeenCalledWith(
                 'id',
                 'foo%20query',
@@ -93,9 +78,8 @@ describe('api/Search', () => {
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
-            expect(search.sortBy).toBe('by');
-            expect(search.sortDirection).toBe('direction');
             expect(search.key).toBe('key');
+            expect(search.limit).toBe(20);
             expect(search.offset).toBe(0);
             expect(search.query).toBe('foo query');
         });
@@ -104,14 +88,7 @@ describe('api/Search', () => {
             search.finish = jest.fn();
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(true);
-            search.search(
-                'id',
-                'foo query',
-                'by',
-                'direction',
-                'success',
-                'fail',
-            );
+            search.search('id', 'foo query', 20, 0, 'success', 'fail');
             expect(search.searchRequest).not.toHaveBeenCalled();
             expect(search.getCacheKey).toHaveBeenCalledWith(
                 'id',
@@ -120,9 +97,8 @@ describe('api/Search', () => {
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
-            expect(search.sortBy).toBe('by');
-            expect(search.sortDirection).toBe('direction');
             expect(search.key).toBe('key');
+            expect(search.limit).toBe(20);
             expect(search.offset).toBe(0);
             expect(search.query).toBe('foo query');
         });
@@ -134,15 +110,9 @@ describe('api/Search', () => {
                 .mockReturnValueOnce({ unset: unsetMock });
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(false);
-            search.search(
-                'id',
-                'foo query',
-                'by',
-                'direction',
-                'success',
-                'fail',
-                { forceFetch: true },
-            );
+            search.search('id', 'foo query', 20, 0, 'success', 'fail', {
+                forceFetch: true,
+            });
             expect(unsetMock).toHaveBeenCalledWith('key');
             expect(search.getCacheKey).toHaveBeenCalledWith(
                 'id',
@@ -151,9 +121,8 @@ describe('api/Search', () => {
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
-            expect(search.sortBy).toBe('by');
-            expect(search.sortDirection).toBe('direction');
             expect(search.key).toBe('key');
+            expect(search.limit).toBe(20);
             expect(search.offset).toBe(0);
             expect(search.query).toBe('foo query');
         });
@@ -164,9 +133,8 @@ describe('api/Search', () => {
             search.id = 'id';
             search.successCallback = 'success';
             search.errorCallback = 'fail';
-            search.sortBy = 'by';
-            search.sortDirection = 'direction';
             search.key = 'key';
+            search.limit = 20;
             search.offset = 0;
             search.query = 'query';
         });
@@ -195,7 +163,7 @@ describe('api/Search', () => {
                         offset: 0,
                         query: 'query',
                         ancestor_folder_ids: 'id',
-                        limit: 200,
+                        limit: 20,
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                     },
                 });
@@ -220,7 +188,7 @@ describe('api/Search', () => {
                         offset: 0,
                         query: 'query',
                         ancestor_folder_ids: 'id',
-                        limit: 200,
+                        limit: 20,
                         fields: FOLDER_FIELDS_TO_FETCH.toString(),
                     },
                 });
@@ -270,7 +238,7 @@ describe('api/Search', () => {
             };
             response = {
                 data: {
-                    limit: 200,
+                    limit: 20,
                     offset: 0,
                     total_count: 3,
                     entries: [item1, item2, item3],
@@ -295,8 +263,7 @@ describe('api/Search', () => {
 
             expect(cache.get('key')).toEqual({
                 item_collection: {
-                    isLoaded: true,
-                    limit: 200,
+                    limit: 20,
                     offset: 0,
                     total_count: 3,
                     entries: ['file_item1', 'file_item2', 'file_item3'],
@@ -320,8 +287,7 @@ describe('api/Search', () => {
 
             expect(cache.get('key')).toEqual({
                 item_collection: {
-                    isLoaded: true,
-                    limit: 200,
+                    limit: 20,
                     offset: 0,
                     total_count: 5,
                     entries: [
@@ -336,55 +302,6 @@ describe('api/Search', () => {
             expect(cache.get('file_item1')).toBe(item1);
             expect(cache.get('file_item2')).toBe(item2);
             expect(cache.get('file_item3')).toBe(item3);
-        });
-
-        test('should call search request again if offset + limit less than total', () => {
-            search.options = { cache };
-            search.offset = 0;
-            search.key = 'key';
-            search.finish = jest.fn();
-            search.searchRequest = jest.fn();
-            search.getCache = jest.fn().mockReturnValueOnce(cache);
-            response.data.total_count = 2000;
-            search.searchSuccessHandler(response);
-            expect(cache.get('key')).toEqual({
-                item_collection: {
-                    isLoaded: false,
-                    limit: 200,
-                    offset: 0,
-                    total_count: 2000,
-                    entries: ['file_item1', 'file_item2', 'file_item3'],
-                },
-            });
-            expect(search.offset).toBe(200);
-        });
-
-        test('should append the collection and call search request again if returned items are less than total', () => {
-            search.options = { cache };
-            search.offset = 0;
-            search.key = 'key';
-            search.finish = jest.fn();
-            search.searchRequest = jest.fn();
-            search.getCache = jest.fn().mockReturnValueOnce(cache);
-            search.itemCache = ['foo', 'bar'];
-            response.data.total_count = 2000;
-            search.searchSuccessHandler(response);
-            expect(cache.get('key')).toEqual({
-                item_collection: {
-                    isLoaded: false,
-                    limit: 200,
-                    offset: 0,
-                    total_count: 2000,
-                    entries: [
-                        'foo',
-                        'bar',
-                        'file_item1',
-                        'file_item2',
-                        'file_item3',
-                    ],
-                },
-            });
-            expect(search.offset).toBe(200);
         });
 
         test('should throw bad item error when entries is missing', () => {
@@ -464,8 +381,7 @@ describe('api/Search', () => {
             };
             searchResults = {
                 item_collection: {
-                    isLoaded: false,
-                    limit: 200,
+                    limit: 20,
                     offset: 0,
                     total_count: 3,
                     entries: ['file_item1', 'file_item2', 'file_item3'],
@@ -488,145 +404,49 @@ describe('api/Search', () => {
         test('should call success callback with proper collection', () => {
             search.id = 'id';
             search.key = 'key';
-            search.sortBy = 'name';
-            search.sortDirection = 'DESC';
+            search.offset = 0;
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
             search.finish();
             expect(search.successCallback).toHaveBeenCalledWith({
+                id: 'id',
+                items: [item1, item2, item3],
+                offset: 0,
                 percentLoaded: 100,
-                id: 'id',
-                sortBy: 'name',
-                sortDirection: 'DESC',
-                items: [item3, item2, item1],
-            });
-        });
-
-        test('should call success callback with proper percent loaded', () => {
-            search.id = 'id';
-            search.key = 'key';
-            search.sortBy = 'name';
-            search.sortDirection = 'DESC';
-            search.getCache = jest.fn().mockReturnValueOnce(cache);
-            search.successCallback = jest.fn();
-
-            searchResults.item_collection.entries = [
-                'file_item1',
-                'file_item2',
-            ];
-            cache.set('key', searchResults);
-            search.finish();
-            expect(search.successCallback).toHaveBeenCalledWith({
-                percentLoaded: 66.66666666666667,
-                id: 'id',
-                sortBy: 'name',
-                sortDirection: 'DESC',
-                items: [item2, item1],
-            });
-        });
-
-        test('should call success callback with 100% percent loaded when item collection isLoaded is true', () => {
-            search.id = 'id';
-            search.key = 'key';
-            search.sortBy = 'name';
-            search.sortDirection = 'DESC';
-            search.getCache = jest.fn().mockReturnValueOnce(cache);
-            search.successCallback = jest.fn();
-
-            searchResults.item_collection.entries = [
-                'file_item1',
-                'file_item2',
-            ];
-            searchResults.item_collection.isLoaded = true;
-            cache.set('key', searchResults);
-            search.finish();
-            expect(search.successCallback).toHaveBeenCalledWith({
-                percentLoaded: 100,
-                id: 'id',
-                sortBy: 'name',
-                sortDirection: 'DESC',
-                items: [item2, item1],
-            });
-        });
-
-        test('should call success callback with 100% loaded when item collection total count is 0', () => {
-            search.id = 'id';
-            search.key = 'key';
-            search.sortBy = 'name';
-            search.sortDirection = 'DESC';
-            search.getCache = jest.fn().mockReturnValueOnce(cache);
-            search.successCallback = jest.fn();
-
-            searchResults.item_collection.entries = [
-                'file_item1',
-                'file_item2',
-            ];
-            searchResults.item_collection.total_count = 0;
-            cache.set('key', searchResults);
-            search.finish();
-            expect(search.successCallback).toHaveBeenCalledWith({
-                percentLoaded: 100,
-                id: 'id',
-                sortBy: 'name',
-                sortDirection: 'DESC',
-                items: [item2, item1],
+                sortBy: FIELD_RELEVANCE,
+                sortDirection: SORT_DESC,
+                totalCount: 3,
             });
         });
 
         test('should throw bad item error when item collection is missing', () => {
-            sort.default = jest.fn().mockReturnValueOnce({});
+            cache.set('key', {});
             search.id = 'id';
             search.key = 'key';
-            search.sortBy = 'name';
-            search.sortDirection = 'DESC';
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
             expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
-            expect(sort.default).toHaveBeenCalledWith(
-                searchResults,
-                'name',
-                'DESC',
-                cache,
-            );
             expect(search.successCallback).not.toHaveBeenCalled();
         });
 
         test('should throw bad item error when item collection is missing entries', () => {
-            sort.default = jest.fn();
+            cache.set('key', { item_collection: {} });
             search.id = 'id';
             search.key = 'key';
-            search.sortBy = 'name';
-            search.sortDirection = 'DESC';
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
             expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
-            expect(sort.default).toHaveBeenCalledWith(
-                searchResults,
-                'name',
-                'DESC',
-                cache,
-            );
             expect(search.successCallback).not.toHaveBeenCalled();
         });
 
         test('should throw bad item error when item collection is missing total count', () => {
-            sort.default = jest
-                .fn()
-                .mockReturnValueOnce({ item_collection: { entries: [] } });
+            cache.set('key', { item_collection: { entries: [] } });
             search.id = 'id';
             search.key = 'key';
-            search.sortBy = 'name';
-            search.sortDirection = 'DESC';
             search.getCache = jest.fn().mockReturnValueOnce(cache);
             search.successCallback = jest.fn();
             expect(search.finish.bind(search)).toThrow(Error, /Bad box item/);
             expect(search.successCallback).not.toHaveBeenCalled();
-            expect(sort.default).toHaveBeenCalledWith(
-                searchResults,
-                'name',
-                'DESC',
-                cache,
-            );
         });
     });
 });

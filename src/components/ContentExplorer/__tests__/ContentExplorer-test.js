@@ -40,9 +40,7 @@ describe('components/ContentExplorer/ContentExplorer', () => {
             });
             instance.fetchFolder = jest.fn();
             instance.uploadSuccessHandler();
-            expect(instance.fetchFolder).toHaveBeenCalledWith('123', false, {
-                forceFetch: true,
-            });
+            expect(instance.fetchFolder).toHaveBeenCalledWith('123', false);
         });
     });
 });

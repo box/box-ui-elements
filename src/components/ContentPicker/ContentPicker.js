@@ -17,17 +17,16 @@ import SubHeader from '../SubHeader/SubHeader';
 import UploadDialog from '../UploadDialog';
 import CreateFolderDialog from '../CreateFolderDialog';
 import API from '../../api';
-import makeResponsive from '../makeResponsive';
-import { isFocusableElement, isInputElement, focus } from '../../util/dom';
 import Internationalize from '../Internationalize';
+import makeResponsive from '../makeResponsive';
+import Pagination from '../Pagination/Pagination';
+import { isFocusableElement, isInputElement, focus } from '../../util/dom';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
-    FIELD_MODIFIED_AT,
-    FIELD_INTERACTED_AT,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
@@ -38,6 +37,8 @@ import {
     TYPE_FOLDER,
     TYPE_WEBLINK,
     CLIENT_NAME_CONTENT_PICKER,
+    DEFAULT_OFFSET,
+    DEFAULT_PAGE_SIZE,
     DEFAULT_VIEW_FILES,
     DEFAULT_VIEW_RECENTS,
     ERROR_CODE_ITEM_NAME_INVALID,
@@ -82,6 +83,8 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
+    initialOffset: number,
+    pageSize: number,
 };
 
 type State = {
@@ -90,6 +93,7 @@ type State = {
     rootName: string,
     errorCode: string,
     currentCollection: Collection,
+    currentOffset: number,
     selected: { [string]: BoxItem },
     searchQuery: string,
     isLoading: boolean,
@@ -130,6 +134,8 @@ class ContentPicker extends Component<Props, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         clientName: CLIENT_NAME_CONTENT_PICKER,
         defaultView: DEFAULT_VIEW_FILES,
+        initialOffset: DEFAULT_OFFSET,
+        pageSize: DEFAULT_PAGE_SIZE,
     };
 
     /**
@@ -153,6 +159,7 @@ class ContentPicker extends Component<Props, State> {
             requestInterceptor,
             responseInterceptor,
             rootFolderId,
+            initialOffset,
         } = props;
 
         this.api = new API({
@@ -174,6 +181,7 @@ class ContentPicker extends Component<Props, State> {
             sortDirection,
             rootName: '',
             currentCollection: {},
+            currentOffset: initialOffset,
             selected: {},
             searchQuery: '',
             view: VIEW_FOLDER,
@@ -292,8 +300,7 @@ class ContentPicker extends Component<Props, State> {
      * so that the loading bar starts showing
      *
      * @private
-     * @fires cancel
-     * @return {void}
+     * @return {Collection}
      */
     currentUnloadedCollection(): Collection {
         const { currentCollection }: State = this.state;
@@ -319,7 +326,7 @@ class ContentPicker extends Component<Props, State> {
         if (view === VIEW_FOLDER && id) {
             this.fetchFolder(id, false);
         } else if (view === VIEW_RECENTS) {
-            this.showRecents(false, false);
+            this.showRecents(false);
         } else if (view === VIEW_SEARCH && searchQuery) {
             this.search(searchQuery);
         } else if (view === VIEW_SELECTED) {
@@ -432,17 +439,24 @@ class ContentPicker extends Component<Props, State> {
      * @private
      * @param {string|void} [id] folder id
      * @param {Boolean|void} [triggerNavigationEvent] - To focus the grid
-     * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
     fetchFolder = (
         id?: string,
         triggerNavigationEvent?: boolean = true,
-        fetchOptions?: FetchOptions,
     ): void => {
-        const { rootFolderId }: Props = this.props;
-        const { sortBy, sortDirection }: State = this.state;
+        const { pageSize: limit, rootFolderId }: Props = this.props;
+        const {
+            currentCollection,
+            currentOffset,
+            searchQuery,
+            sortBy,
+            sortDirection,
+        }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
+        const hasFolderChanged = folderId !== currentCollection.id;
+        const hasSearchQuery = !!searchQuery && !!searchQuery.trim();
+        const offset = hasFolderChanged || hasSearchQuery ? 0 : currentOffset; // Reset offset on folder or mode change
 
         // If we are navigating around, aka not first load
         // then reset the focus to the root so that after
@@ -457,11 +471,14 @@ class ContentPicker extends Component<Props, State> {
             searchQuery: '',
             view: VIEW_FOLDER,
             currentCollection: this.currentUnloadedCollection(),
+            currentOffset: offset,
         });
 
         // Fetch the folder using folder API
         this.api.getFolderAPI().getFolder(
             folderId,
+            limit,
+            offset,
             sortBy,
             sortDirection,
             (collection: Collection) => {
@@ -471,7 +488,7 @@ class ContentPicker extends Component<Props, State> {
                 );
             },
             this.errorCallback,
-            fetchOptions,
+            { forceFetch: true },
         );
     };
 
@@ -504,35 +521,25 @@ class ContentPicker extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    showRecents(
-        triggerNavigationEvent: boolean = true,
-        forceFetch: boolean = true,
-    ): void {
+    showRecents(triggerNavigationEvent: boolean = true): void {
         const { rootFolderId }: Props = this.props;
-        const { sortBy, sortDirection }: State = this.state;
-
-        // Recents are sorted by a different date field than the rest
-        const by = sortBy === FIELD_MODIFIED_AT ? FIELD_INTERACTED_AT : sortBy;
 
         // Reset search state, the view and show busy indicator
         this.setState({
             searchQuery: '',
             view: VIEW_RECENTS,
             currentCollection: this.currentUnloadedCollection(),
+            currentOffset: 0,
         });
 
         // Fetch the folder using folder API
         this.api.getRecentsAPI().recents(
             rootFolderId,
-            by,
-            sortDirection,
             (collection: Collection) => {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            {
-                forceFetch,
-            },
+            { forceFetch: true },
         );
     }
 
@@ -682,9 +689,7 @@ class ContentPicker extends Component<Props, State> {
         const {
             currentCollection: { id },
         }: State = this.state;
-        this.fetchFolder(id, false, {
-            forceFetch: true,
-        });
+        this.fetchFolder(id, false);
     };
 
     /**
@@ -1023,6 +1028,15 @@ class ContentPicker extends Component<Props, State> {
     };
 
     /**
+     * Handle pagination changes
+     *
+     * @param {number} newOffset - the new page offset value
+     */
+    paginate = (newOffset: number) => {
+        this.setState({ currentOffset: newOffset }, this.refreshCollection);
+    };
+
+    /**
      * Renders the file picker
      *
      * @private
@@ -1053,6 +1067,7 @@ class ContentPicker extends Component<Props, State> {
             cancelButtonLabel,
             requestInterceptor,
             responseInterceptor,
+            pageSize,
         }: Props = this.props;
         const {
             view,
@@ -1066,7 +1081,12 @@ class ContentPicker extends Component<Props, State> {
             errorCode,
             focusedRow,
         }: State = this.state;
-        const { id, permissions }: Collection = currentCollection;
+        const {
+            id,
+            offset,
+            permissions,
+            totalCount,
+        }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const selectedCount: number = Object.keys(selected).length;
         const hasHitSelectionLimit: boolean =
@@ -1130,7 +1150,14 @@ class ContentPicker extends Component<Props, State> {
                             onCancel={this.cancel}
                             chooseButtonLabel={chooseButtonLabel}
                             cancelButtonLabel={cancelButtonLabel}
-                        />
+                        >
+                            <Pagination
+                                offset={offset}
+                                onChange={this.paginate}
+                                pageSize={pageSize}
+                                totalCount={totalCount}
+                            />
+                        </Footer>
                     </div>
                     {allowUpload && !!this.appElement ? (
                         <UploadDialog
