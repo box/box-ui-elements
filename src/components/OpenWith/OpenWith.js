@@ -9,9 +9,8 @@ import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import API from '../../api';
 import Internationalize from '../Internationalize';
-import { FormattedMessage } from 'react-intl';
+import LoadingOpenWithButton from './LoadingOpenWithButton';
 import OpenWithButton from './OpenWithButton';
-import messages from '../messages';
 
 import '../base.scss';
 import './OpenWith.scss';
@@ -228,33 +227,6 @@ class OpenWith extends PureComponent<Props, State> {
     }
 
     /**
-     * Gets the tooltip text for the OpenWith button
-     *
-     * @private
-     * @return {?string | ?Element}
-     */
-    getTooltip(): ?string | ?Element {
-        const { fetchError, isLoading, integrations }: State = this.state;
-        const displayIntegration = this.getDisplayIntegration();
-        if (isLoading) {
-            return null;
-        }
-        if (fetchError) {
-            return <FormattedMessage {...messages.errorOpenWithDescription} />;
-        }
-        if (displayIntegration) {
-            return displayIntegration.displayDescription;
-        }
-        if (Array.isArray(integrations) && integrations.length > 1) {
-            return (
-                <FormattedMessage {...messages.defaultOpenWithDescription} />
-            );
-        }
-
-        return <FormattedMessage {...messages.emptyOpenWithDescription} />;
-    }
-
-    /**
      * Gets a display integration, if available, for the Open With button
      *
      * @private
@@ -277,27 +249,30 @@ class OpenWith extends PureComponent<Props, State> {
      */
     render() {
         const { language, messages: intlMessages }: Props = this.props;
-        const { fetchError: error, isLoading, extension }: State = this.state;
+        const {
+            fetchError: error,
+            isLoading,
+            extension,
+            integrations,
+        }: State = this.state;
 
         const displayIntegration = this.getDisplayIntegration();
+        const numIntegrations = integrations ? integrations.length : 0;
 
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <div id={this.id} className="be bcow">
-                    {
+                    {isLoading ? (
+                        <LoadingOpenWithButton />
+                    ) : (
                         <OpenWithButton
-                            isDisabled={
-                                (displayIntegration &&
-                                    !!displayIntegration.isDisabled) ||
-                                !!error
-                            }
+                            error={error}
                             onClick={this.onIntegrationClick}
                             displayIntegration={displayIntegration}
+                            numIntegrations={numIntegrations}
                             extension={extension}
-                            isLoading={isLoading}
-                            tooltipText={this.getTooltip()}
                         />
-                    }
+                    )}
                 </div>
             </Internationalize>
         );
