@@ -221,10 +221,13 @@ describe('api/Tasks', () => {
                 expect(successCallback).not.toHaveBeenCalled();
             });
 
-            test('should throw error if no data.entries', () => {
+            test('should return default empty response if no entries in API response', () => {
                 tasks.successCallback = successCallback;
                 tasks.successHandler({});
-                expect(successCallback).toHaveBeenLastCalledWith({});
+                expect(successCallback).toHaveBeenLastCalledWith({
+                    entries: [],
+                    total_count: 0,
+                });
             });
 
             test('should return same entries if assigned_to exists', () => {

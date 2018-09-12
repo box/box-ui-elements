@@ -45,7 +45,6 @@ import {
     FIELD_ASSIGNED_TO,
     FIELD_RESOLUTION_STATE,
     FIELD_RESTORED_FROM,
-    PLACEHOLDER_USER,
 } from '../constants';
 
 // Minimum set of fields needed for Content Explorer / Picker
@@ -195,26 +194,6 @@ function fillMissingProperties(
     return newObj;
 }
 
-/**
- * Fill user properties that are null in an object
- * @param {Object} obj - some object
- * @return {Object} new object with user placeholder
- */
-function fillUserPlaceholder(obj: Object): Object {
-    const newObj = { ...obj };
-
-    USER_FIELDS.forEach((field: string) => {
-        if (
-            Object.prototype.hasOwnProperty.call(newObj, field) &&
-            newObj[field] === null
-        ) {
-            set(newObj, field, PLACEHOLDER_USER);
-        }
-    });
-
-    return newObj;
-}
-
 export {
     FOLDER_FIELDS_TO_FETCH,
     PREVIEW_FIELDS_TO_FETCH,
@@ -226,5 +205,4 @@ export {
     USER_FIELDS,
     findMissingProperties,
     fillMissingProperties,
-    fillUserPlaceholder,
 };
