@@ -276,8 +276,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     updatePreviewToken(shouldReload: boolean = false) {
         if (this.preview) {
-            const { token } = this.props;
-            this.preview.updateToken(token, shouldReload);
+            this.preview.updateToken(this.props.token, shouldReload);
         }
     }
 
