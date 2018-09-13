@@ -9,15 +9,15 @@ import TooltipCore from 'box-react-ui/lib/components/tooltip/Tooltip';
 
 const Tooltip = ({
     children,
-    isEnabled,
+    isDisabled,
     text,
     ...rest
 }: {
     children: React.Node,
-    isEnabled?: boolean,
+    isDisabled?: boolean,
     text?: string | React.Node,
 }) => {
-    if (!isEnabled || !text) {
+    if (isDisabled || !text) {
         return children;
     }
 

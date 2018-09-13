@@ -453,13 +453,13 @@ class ContentPicker extends Component<Props, State> {
             currentCollection: { id: currentId },
             currentOffset,
             currentPageSize: limit,
-            searchQuery,
+            searchQuery = '',
             sortBy,
             sortDirection,
         }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
         const hasFolderChanged = currentId && currentId !== folderId;
-        const hasSearchQuery = !!searchQuery && !!searchQuery.trim();
+        const hasSearchQuery = !!searchQuery.trim().length;
         const offset = hasFolderChanged || hasSearchQuery ? 0 : currentOffset; // Reset offset on folder or mode change
 
         // If we are navigating around, aka not first load
@@ -622,14 +622,22 @@ class ContentPicker extends Component<Props, State> {
         const { rootFolderId }: Props = this.props;
         const {
             currentCollection: { id },
+            currentOffset,
+            searchQuery,
         }: State = this.state;
         const folderId = typeof id === 'string' ? id : rootFolderId;
         const trimmedQuery: string = query.trim();
 
         if (!query) {
+            // Cancel the debounce so we don't search on a previous query
+            this.debouncedSearch.cancel();
+
             // Query was cleared out, load the prior folder
             // The prior folder is always the parent folder for search
-            this.fetchFolder(folderId);
+            this.setState({ currentOffset: 0 }, () => {
+                this.fetchFolder(folderId, false);
+            });
+
             return;
         }
 
@@ -646,6 +654,7 @@ class ContentPicker extends Component<Props, State> {
             searchQuery: query,
             view: VIEW_SEARCH,
             currentCollection: this.currentUnloadedCollection(),
+            currentOffset: trimmedQuery === searchQuery ? currentOffset : 0,
         });
 
         this.debouncedSearch(folderId, query);

@@ -425,13 +425,13 @@ class ContentExplorer extends Component<Props, State> {
             currentCollection: { id: currentId },
             currentOffset,
             currentPageSize: limit,
-            searchQuery,
+            searchQuery = '',
             sortBy,
             sortDirection,
         }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
         const hasFolderChanged = currentId && currentId !== folderId;
-        const hasSearchQuery = !!searchQuery && !!searchQuery.trim();
+        const hasSearchQuery = !!searchQuery.trim().length;
         const offset = hasFolderChanged || hasSearchQuery ? 0 : currentOffset; // Reset offset on folder or mode change
 
         // If we are navigating around, aka not first load

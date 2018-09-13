@@ -38,7 +38,8 @@ const Pagination = ({
     const pageCount = Math.ceil(totalCount / pageSize);
     if (pageCount <= 1) return null;
 
-    const pageNumber = Math.floor(offset / pageSize) + 1;
+    const pageByOffset = Math.floor(offset / pageSize) + 1;
+    const pageNumber = pageByOffset > 0 ? Math.min(pageCount, pageByOffset) : 1;
     const hasNextPage = pageNumber < pageCount;
     const hasPreviousPage = pageNumber > 1;
 
@@ -76,7 +77,7 @@ const Pagination = ({
 
             <ButtonGroup>
                 <Tooltip
-                    isEnabled={hasPreviousPage}
+                    isDisabled={!hasPreviousPage}
                     text={<FormattedMessage {...messages.previousPage} />}
                 >
                     <Button
@@ -87,7 +88,7 @@ const Pagination = ({
                     </Button>
                 </Tooltip>
                 <Tooltip
-                    isEnabled={hasNextPage}
+                    isDisabled={!hasNextPage}
                     text={<FormattedMessage {...messages.nextPage} />}
                 >
                     <Button onClick={handleNextClick} isDisabled={!hasNextPage}>
