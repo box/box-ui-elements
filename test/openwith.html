@@ -5,8 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Open With Test Page</title>
         <style>
+            .openwith {
+                margin: 0 auto;
+            }
+
+            .container {
+                display: flex;
+                height: 100%;
+                width: 100%;
+            }
         </style>
-        <div class="openwith">
+        <div class="openwith-setup-container">
             <div class="id-token-container-1"></div>
                 <div>
                     <label>
@@ -21,10 +30,13 @@
                 <button type="button" onclick="load()">Submit</button>
             </div>
             </div>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/openwith.css" />
         <script src="../dev/en-US/openwith.js"></script>
     </head>
     <body>
-        <div class="openwith1"></div>
+        <div class='container'>
+            <div class="openwith openwith1"></div>
+        </div>
         <script>
             function load() {
                 const { OpenWith } = Box;

@@ -8,3 +8,4 @@ export {
     ContentUploaderPopup,
 } from './ContentUploader';
 export { default as ContentTree, ContentTreePopup } from './ContentTree';
+export { default as OpenWith } from './OpenWith';
