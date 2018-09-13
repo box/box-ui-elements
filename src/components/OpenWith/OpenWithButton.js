@@ -59,13 +59,8 @@ const OpenWithButton = ({
 
     const isDisabled =
         !!isDisplayIntegrationDisabled || !!error || numIntegrations === 0;
-
-    const DisplayIcon = displayName && ICON_FILE_MAP[displayName];
-    const Icon = DisplayIcon ? (
-        <DisplayIcon height={26} width={26} className="integration-icon" />
-    ) : (
-        <IconFileDefault height={26} width={26} />
-    );
+    const IntegrationIcon = displayName && ICON_FILE_MAP[displayName];
+    const Icon = IntegrationIcon || IconFileDefault;
 
     return (
         <Tooltip
@@ -77,7 +72,11 @@ const OpenWithButton = ({
                 onClick={onClick}
                 data-attribute-id={appIntegrationId}
             >
-                {Icon}
+                <Icon
+                    height={26}
+                    width={26}
+                    className={IntegrationIcon ? 'integration-icon' : ''}
+                />
                 <FormattedMessage {...messages.open} />
             </Button>
         </Tooltip>
