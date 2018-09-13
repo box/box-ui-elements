@@ -40,29 +40,6 @@ describe('components/OpenWith/OpenWith', () => {
             }),
         };
 
-        it('should set the extension in state if present', () => {
-            const instance = getWrapper({
-                fileId: '1234',
-                extension: 'docx',
-            }).instance();
-
-            instance.setState = jest.fn();
-            instance.api = api;
-
-            instance.fetchOpenWithData();
-            expect(instance.setState).toBeCalledWith({ extension: 'docx' });
-            expect(fileStub).not.toHaveBeenCalled();
-        });
-
-        it('should fetch the file extension if needed', () => {
-            const instance = getWrapper({ fileId }).instance();
-            instance.setState = jest.fn();
-            instance.api = api;
-
-            instance.fetchOpenWithData();
-            expect(fileStub).toHaveBeenCalled();
-        });
-
         it('should should fetch Open With integrations', () => {
             const instance = getWrapper({
                 fileId: '1234',
@@ -78,17 +55,6 @@ describe('components/OpenWith/OpenWith', () => {
                 expect.any(Function),
                 expect.any(Function),
             );
-        });
-    });
-
-    describe('fetchExtensionSuccessCallback()', () => {
-        it('should set the extension in state', () => {
-            const extension = 'docx';
-            const instance = getWrapper({ fileId }).instance();
-            instance.setState = jest.fn();
-
-            instance.fetchExtensionSuccessCallback({ extension });
-            expect(instance.setState).toHaveBeenCalledWith({ extension });
         });
     });
 
@@ -155,7 +121,6 @@ describe('components/OpenWith/OpenWith', () => {
             const instance = wrapper.instance();
             instance.setState({
                 integrations: ['Adobe'],
-                extension: 'docx',
                 isLoading: false,
             });
             expect(wrapper).toMatchSnapshot();

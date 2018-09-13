@@ -6,7 +6,6 @@
 
 import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
-import noop from 'lodash/noop';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 import OpenWithLoadingButton from './OpenWithLoadingButton';
@@ -15,15 +14,9 @@ import OpenWithButton from './OpenWithButton';
 import '../base.scss';
 import './OpenWith.scss';
 
-import {
-    DEFAULT_HOSTNAME_API,
-    CLIENT_NAME_OPEN_WITH,
-    FIELD_EXTENSION,
-} from '../../constants';
+import { DEFAULT_HOSTNAME_API, CLIENT_NAME_OPEN_WITH } from '../../constants';
 
 type Props = {
-    /** File extension */
-    extension?: string,
     /** Box File ID. */
     fileId: string,
     /** Application client name. */
@@ -45,7 +38,6 @@ type Props = {
 };
 
 type State = {
-    extension: ?string,
     isDropdownOpen: boolean,
     integrations: ?Array<Integration>,
     isLoading: boolean,
@@ -65,7 +57,6 @@ class OpenWith extends PureComponent<Props, State> {
     };
 
     initialState: State = {
-        extension: '',
         isDropdownOpen: false,
         integrations: null,
         isLoading: true,
@@ -149,22 +140,12 @@ class OpenWith extends PureComponent<Props, State> {
     }
 
     /**
-     * Fetches file extension and Open With data.
+     * Fetches Open With data.
      *
      * @return {void}
      */
     fetchOpenWithData() {
-        const { fileId, extension, language }: Props = this.props;
-        if (extension) {
-            this.setState({ extension });
-        } else {
-            this.api
-                .getFileAPI()
-                .getFile(fileId, this.fetchExtensionSuccessCallback, noop, {
-                    fields: [FIELD_EXTENSION],
-                });
-        }
-
+        const { fileId, language }: Props = this.props;
         this.api
             .getOpenWithAPI(false)
             .getOpenWithIntegrations(
@@ -174,16 +155,6 @@ class OpenWith extends PureComponent<Props, State> {
                 this.fetchErrorCallback,
             );
     }
-
-    /**
-     * Handles a successful files call to get the file extension.
-     *
-     * @param {object} extensionData - The files call response with the file extension
-     * @return {void}
-     */
-    fetchExtensionSuccessCallback = ({ extension }: { extension: string }) => {
-        this.setState({ extension });
-    };
 
     /**
      * Fetch app integrations info needed to render.
@@ -251,7 +222,6 @@ class OpenWith extends PureComponent<Props, State> {
         const {
             fetchError: error,
             isLoading,
-            extension,
             integrations,
         }: State = this.state;
 
@@ -269,7 +239,6 @@ class OpenWith extends PureComponent<Props, State> {
                             onClick={this.onIntegrationClick}
                             displayIntegration={displayIntegration}
                             numIntegrations={numIntegrations}
-                            extension={extension}
                         />
                     )}
                 </div>

@@ -4,12 +4,11 @@ exports[`components/OpenWith/OpenWith render() should render the Open With butto
 <Internationalize>
   <div
     className="be bcow"
-    id="bcow_12"
+    id="bcow_9"
   >
     <OpenWithButton
       displayIntegration="Adobe"
       error={null}
-      extension="docx"
       numIntegrations={1}
       onClick={[Function]}
     />
@@ -21,7 +20,7 @@ exports[`components/OpenWith/OpenWith render() should render the loading button 
 <Internationalize>
   <div
     className="be bcow"
-    id="bcow_11"
+    id="bcow_8"
   >
     <LoadingOpenWithButton />
   </div>

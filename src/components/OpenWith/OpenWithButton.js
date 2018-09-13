@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import Button from 'box-react-ui/lib/components/button/Button';
-import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
+import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
 import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import ICON_FILE_MAP from './IconFileMap';
@@ -14,7 +14,6 @@ import messages from '../messages';
 
 type Props = {
     error: ?Error,
-    extension: ?string,
     displayIntegration?: Integration | Object,
     numIntegrations: number,
     onClick: ?Function,
@@ -48,7 +47,6 @@ const getTooltip = (
 
 const OpenWithButton = ({
     error,
-    extension,
     numIntegrations,
     onClick,
     displayIntegration,
@@ -62,7 +60,12 @@ const OpenWithButton = ({
     const isDisabled =
         !!isDisplayIntegrationDisabled || !!error || numIntegrations === 0;
 
-    const IntegrationIcon = displayName && ICON_FILE_MAP[displayName];
+    const DisplayIcon = displayName && ICON_FILE_MAP[displayName];
+    const Icon = DisplayIcon ? (
+        <DisplayIcon height={26} width={26} className="integration-icon" />
+    ) : (
+        <IconFileDefault height={26} width={26} />
+    );
 
     return (
         <Tooltip
@@ -74,15 +77,7 @@ const OpenWithButton = ({
                 onClick={onClick}
                 data-attribute-id={appIntegrationId}
             >
-                {IntegrationIcon ? (
-                    <IntegrationIcon
-                        height={26}
-                        width={26}
-                        className="integration-icon"
-                    />
-                ) : (
-                    <FileIcon dimension={26} extension={extension} />
-                )}
+                {Icon}
                 <FormattedMessage {...messages.open} />
             </Button>
         </Tooltip>
