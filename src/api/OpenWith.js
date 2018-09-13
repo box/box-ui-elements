@@ -5,14 +5,11 @@
  */
 
 import Base from './Base';
-import AppIntegrationsAPI from './AppIntegrations';
+import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE } from '../constants';
+// Temporary until API is fixed
+import mockOpenWithData from './MockOpenWithData.json';
 
 class OpenWith extends Base {
-    /**
-     * @property {AppIntegrationsAPI}
-     */
-    appIntegrationsAPI: AppIntegrationsAPI;
-
     /**
      * API URL for Open With
      *
@@ -31,91 +28,35 @@ class OpenWith extends Base {
      * Gets Open With integration data
      *
      * @param {string} fileId - Box file ID
+     * @param {string} locale - locale to receive translated strings from the API
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
     getOpenWithIntegrations(
         fileId: string,
+        locale: ?string = DEFAULT_LOCALE,
         successCallback: Function,
         errorCallback: Function,
     ) {
+        const params = {
+            headers: {
+                [HEADER_ACCEPT_LANGUAGE]: locale,
+            },
+        };
+
         this.get({
             id: fileId,
+            params,
             successCallback: openWithIntegrations => {
-                this.fetchAppIntegrations(
-                    openWithIntegrations,
-                    successCallback,
-                    errorCallback,
+                const formattedOpenWithData = this.formatOpenWithData(
+                    // Temporary until API is fixed
+                    mockOpenWithData || openWithIntegrations,
                 );
+                successCallback(formattedOpenWithData);
             },
             errorCallback,
         });
-    }
-
-    /**
-     * Fetch app integrations info needed to render.
-     *
-     * @param {OpenWithAPIItems} openWithIntegrations - The available Open With integrations
-     * @return {void}
-     */
-    fetchAppIntegrations = async (
-        openWithIntegrations: OpenWithAPI,
-        successCallback: Function,
-        errorCallback: Function,
-    ) => {
-        const items = this.addDefaultToOpenWithItems(openWithIntegrations);
-        this.appIntegrationsAPI = new AppIntegrationsAPI(this.options);
-
-        const appIntegrationPromises = items.map(
-            (integrationItem: OpenWithAPIItem) => {
-                const { app_integration: { id } } = integrationItem;
-                return this.appIntegrationsAPI.fetchAppIntegrationsPromise(id);
-            },
-        );
-
-        try {
-            const appIntegrations: Array<
-                AppIntegrationAPIItem,
-            > = await Promise.all(appIntegrationPromises);
-            const formattedOpenWithIntegrations = this.formatOpenWithData(
-                items,
-                appIntegrations,
-            );
-            successCallback(formattedOpenWithIntegrations);
-        } catch (error) {
-            errorCallback(error);
-        }
-    };
-
-    /**
-     * Adds an optional default integration to our list of Open With integration items.
-     *
-     * @param {OpenWithAPI} openWithIntegrations - The available Open With integrations
-     * @return {Array<Object>} formatted Open With integrations
-     */
-    addDefaultToOpenWithItems(
-        openWithIntegrations: OpenWithAPI,
-    ): Array<Object> {
-        const {
-            items,
-            default_app_integration,
-            ...rest
-        } = openWithIntegrations;
-        if (default_app_integration) {
-            // Replace the default_app_integration with a regular app integration
-            // and add the is_default field
-            return [
-                ...items,
-                {
-                    app_integration: default_app_integration,
-                    is_default: true,
-                    ...rest,
-                },
-            ];
-        }
-
-        return items;
     }
 
     /**
@@ -124,40 +65,34 @@ class OpenWith extends Base {
      * @param {Array<Object>} openWithIntegrations - The modified Open With integration objects
      * @return {Array<Integration>} formatted Open With integrations
      */
-    formatOpenWithData(
-        openWithIntegrations: Array<Object>,
-        appIntegrations: Array<AppIntegrationAPIItem>,
-    ): Array<Integration> {
-        const integrations: Array<Integration> = openWithIntegrations.map(
+    formatOpenWithData(openWithIntegrations: OpenWithAPI): Array<Integration> {
+        const {
+            items,
+            default_app_integration: defaultIntegration,
+        } = openWithIntegrations;
+        const integrations: Array<Integration> = items.map(
             ({
                 app_integration,
                 disabled_reasons,
+                display_name,
+                display_description,
                 display_order,
-                icon,
-                is_default,
                 is_disabled,
                 should_show_consent_popup,
             }: Object) => {
-                const matchedAppIntegration: ?AppIntegrationAPIItem = appIntegrations.find(
-                    appIntegration =>
-                        appIntegration.id === app_integration.id.toString(),
-                );
-
-                if (!matchedAppIntegration) {
-                    throw Error('Unable to find a matching App Integration');
-                }
+                const { id, type } = app_integration;
 
                 return {
-                    appIntegrationId: matchedAppIntegration.id,
-                    description: matchedAppIntegration.description,
+                    appIntegrationId: id,
+                    displayDescription: display_description,
                     disabledReasons: disabled_reasons,
                     displayOrder: display_order,
-                    icon,
-                    isDefault: !!is_default,
+                    isDefault:
+                        !!defaultIntegration && id === defaultIntegration.id,
                     isDisabled: is_disabled,
-                    name: matchedAppIntegration.name,
+                    displayName: display_name,
                     requiresConsent: should_show_consent_popup,
-                    type: matchedAppIntegration.type,
+                    type,
                 };
             },
         );

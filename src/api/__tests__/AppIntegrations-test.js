@@ -20,18 +20,6 @@ describe('api/AppIntegrations', () => {
         });
     });
 
-    describe('getAppIntegrationPromise()', () => {
-        test('should return a promise and fetch app integration data', () => {
-            appIntegrations.fetchMockAppIntegration = jest.fn();
-
-            const appIntegrationPromise = appIntegrations.fetchAppIntegrationsPromise(
-                '123',
-            );
-            expect(appIntegrationPromise instanceof Promise).toBeTruthy();
-            expect(appIntegrations.fetchMockAppIntegration).toBeCalled();
-        });
-    });
-
     describe('execute()', () => {
         test('should throw an error if the integration ID or file ID is missing', () => {
             expect(() => {

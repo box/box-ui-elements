@@ -1,0 +1,47 @@
+{
+    "is_disabled": false,
+    "icon": "data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZpZXdCb3g9IjAgMCAzMiAzMiIgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAzMiAzMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgcm9sZT0iaW1nIiA+ICAgICAgIDxwYXRoIGQ9Ik0yNSAyN0g3VjVoMTNsNSA1djE3eiIgZmlsbD0iI0ZGRkZGRiIvPiAgICA8cGF0aCBkPSJNMjAgNEg3Yy0uNiAwLTEgLjQtMSAxdjIyYzAgLjYuNCAxIDEgMWgxOGMuNiAwIDEtLjQgMS0xVjkuOUwyMCA0em01IDIzSDdWNWgxM3Y0YzAgLjYuNCAxIDEgMWg0djE3eiIgZmlsbD0iIzQwODNGNyIvPiAgICA8cGF0aCBkPSJNMTAgMTVoMTF2MUgxMHYtMXptMCAyaDExdjFIMTB2LTF6bTAgMmgxMXYxSDEwdi0xem0wIDJoOHYxaC04di0xeiIgZmlsbD0iIzQwODNGNyIvPjwvc3ZnPg==",
+    "disabled_reasons": [],
+    "default_app_integration": {
+        "id": "3",
+        "type": "app_integration"
+    },
+    "items": [
+        {
+            "display_name": "Adobe",
+            "display_description": "Send for Signature",
+            "display_order": 1,
+            "is_disabled": false,
+            "should_show_consent_popup": false,
+            "disabled_reasons": [],
+            "app_integration": {
+                "id": "3",
+                "type": "app_integration"
+            }
+        },
+        {
+            "display_name": "Google Docs",
+            "display_description": "open with google docs",
+            "display_order": 3,
+            "is_disabled": true,
+            "disabled_reasons": ["manually disabled"],
+            "should_show_consent_popup": false,
+            "app_integration": {
+                "id": "2",
+                "type": "app_integration"
+            }
+        },
+        {
+            "display_name": "Google Slides",
+            "display_description": "open with google docs",
+            "display_order": 2,
+            "is_disabled": false,
+            "disabled_reasons": [],
+            "should_show_consent_popup": false,
+            "app_integration": {
+                "id": "1",
+                "type": "app_integration"
+            }
+        }
+    ]
+}

@@ -137,7 +137,7 @@ class Folder extends Item {
         const percentLoaded: number =
             !!item_collection.isLoaded || total_count === 0
                 ? 100
-                : entries.length * 100 / total_count;
+                : (entries.length * 100) / total_count;
 
         const collection: Collection = {
             id,

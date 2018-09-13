@@ -33,11 +33,11 @@ const Timeslice = ({
     }
 
     const barLength = LENGTH_TEXT_ITEMLINE;
-    let startLeft = Math.round(start * barLength / duration);
+    let startLeft = Math.round((start * barLength) / duration);
     const minEnding = startLeft + MIN_WIDTH; // Need at least some width to be clickable
     const ending =
         typeof end === 'number'
-            ? Math.max(minEnding, end * barLength / duration)
+            ? Math.max(minEnding, (end * barLength) / duration)
             : minEnding;
     const endLeft = Math.round(Math.min(barLength, ending));
     let width = endLeft - startLeft;

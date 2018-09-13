@@ -40,7 +40,10 @@ const ItemSubDetails = ({ view, item }: Props) => {
                     name: modifiedBy,
                 }}
             />
-            <span>&nbsp;-&nbsp;{getSize(size)}</span>
+            <span>
+                &nbsp;-&nbsp;
+                {getSize(size)}
+            </span>
         </span>
     );
 };
