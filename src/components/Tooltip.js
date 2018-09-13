@@ -7,7 +7,7 @@
 import * as React from 'react';
 import TooltipCore from 'box-react-ui/lib/components/tooltip/Tooltip';
 
-export default function Tooltip({
+const Tooltip = ({
     children,
     isEnabled,
     text,
@@ -16,7 +16,7 @@ export default function Tooltip({
     children: React.Node,
     isEnabled?: boolean,
     text?: string | React.Node,
-}) {
+}) => {
     if (!isEnabled || !text) {
         return children;
     }
@@ -26,4 +26,6 @@ export default function Tooltip({
             {children}
         </TooltipCore>
     );
-}
+};
+
+export default Tooltip;

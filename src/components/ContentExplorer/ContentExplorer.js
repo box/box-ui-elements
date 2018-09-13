@@ -44,7 +44,7 @@ import {
     TYPE_WEBLINK,
     TYPE_FOLDER,
     CLIENT_NAME_CONTENT_EXPLORER,
-    DEFAULT_OFFSET,
+    DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_SIZE,
     DEFAULT_VIEW_FILES,
     DEFAULT_VIEW_RECENTS,
@@ -97,8 +97,8 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    initialOffset: number,
-    pageSize: number,
+    initialPage: number,
+    initialPageSize: number,
     contentPreviewProps: ContentPreviewProps,
 };
 
@@ -108,6 +108,7 @@ type State = {
     rootName: string,
     currentCollection: Collection,
     currentOffset: number,
+    currentPageSize: number,
     selected?: BoxItem,
     searchQuery: string,
     view: View,
@@ -160,8 +161,8 @@ class ContentExplorer extends Component<Props, State> {
         onUpload: noop,
         onNavigate: noop,
         defaultView: DEFAULT_VIEW_FILES,
-        initialOffset: DEFAULT_OFFSET,
-        pageSize: DEFAULT_PAGE_SIZE,
+        initialPage: DEFAULT_PAGE_NUMBER,
+        initialPageSize: DEFAULT_PAGE_SIZE,
         contentPreviewProps: {
             contentSidebarProps: {},
         },
@@ -182,7 +183,8 @@ class ContentExplorer extends Component<Props, State> {
             sharedLinkPassword,
             apiHost,
             uploadHost,
-            initialOffset,
+            initialPage,
+            initialPageSize,
             sortBy,
             sortDirection,
             requestInterceptor,
@@ -209,7 +211,8 @@ class ContentExplorer extends Component<Props, State> {
             sortDirection,
             rootName: '',
             currentCollection: {},
-            currentOffset: initialOffset,
+            currentOffset: initialPageSize * (initialPage - 1),
+            currentPageSize: initialPageSize,
             searchQuery: '',
             view: VIEW_FOLDER,
             isDeleteModalOpen: false,
@@ -417,16 +420,17 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true) => {
-        const { pageSize: limit, rootFolderId }: Props = this.props;
+        const { rootFolderId }: Props = this.props;
         const {
-            currentCollection,
+            currentCollection: { id: currentId },
             currentOffset,
+            currentPageSize: limit,
             searchQuery,
             sortBy,
             sortDirection,
         }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
-        const hasFolderChanged = folderId !== currentCollection.id;
+        const hasFolderChanged = currentId && currentId !== folderId;
         const hasSearchQuery = !!searchQuery && !!searchQuery.trim();
         const offset = hasFolderChanged || hasSearchQuery ? 0 : currentOffset; // Reset offset on folder or mode change
 
@@ -524,21 +528,18 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     debouncedSearch = debounce((id: string, query: string) => {
-        const { pageSize: limit } = this.props;
-        const { currentOffset }: State = this.state;
+        const { currentOffset, currentPageSize }: State = this.state;
 
         this.api
             .getSearchAPI()
             .search(
                 id,
                 query,
-                limit,
+                currentPageSize,
                 currentOffset,
                 this.searchSuccessCallback,
                 this.errorCallback,
-                {
-                    forceFetch: true,
-                },
+                { forceFetch: true },
             );
     }, DEFAULT_SEARCH_DEBOUNCE);
 
@@ -1254,7 +1255,6 @@ class ContentExplorer extends Component<Props, State> {
             onPreview,
             onDownload,
             onUpload,
-            pageSize,
             requestInterceptor,
             responseInterceptor,
             contentPreviewProps,
@@ -1264,6 +1264,7 @@ class ContentExplorer extends Component<Props, State> {
             view,
             rootName,
             currentCollection,
+            currentPageSize,
             searchQuery,
             isDeleteModalOpen,
             isRenameModalOpen,
@@ -1347,7 +1348,7 @@ class ContentExplorer extends Component<Props, State> {
                             <Pagination
                                 offset={offset}
                                 onChange={this.paginate}
-                                pageSize={pageSize}
+                                pageSize={currentPageSize}
                                 totalCount={totalCount}
                             />
                         </Footer>

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import Button from 'box-react-ui/lib/components/button';
 import ButtonGroup from 'box-react-ui/lib/components/button-group';
@@ -14,11 +14,10 @@ import IconPageForward from 'box-react-ui/lib/icons/general/IconPageForward';
 import PaginationMenu from './PaginationMenu';
 import Tooltip from '../Tooltip';
 import messages from '../messages';
-import { DEFAULT_OFFSET, DEFAULT_PAGE_SIZE } from '../../constants';
+import { DEFAULT_PAGE_SIZE } from '../../constants';
 import './Pagination.scss';
 
 type Props = {
-    intl: any,
     offset?: number,
     onChange?: Function,
     pageSize?: number,
@@ -31,13 +30,19 @@ const PAGE_ICON_STYLE = {
 };
 
 const Pagination = ({
-    intl,
-    offset = DEFAULT_OFFSET,
+    offset = 0,
     onChange = noop,
     pageSize = DEFAULT_PAGE_SIZE,
     totalCount = 0,
 }: Props) => {
-    function updateOffset(newPageNumber: number) {
+    const pageCount = Math.ceil(totalCount / pageSize);
+    if (pageCount <= 1) return null;
+
+    const pageNumber = Math.floor(offset / pageSize) + 1;
+    const hasNextPage = pageNumber < pageCount;
+    const hasPreviousPage = pageNumber > 1;
+
+    const updateOffset = (newPageNumber: number) => {
         let newOffset = (newPageNumber - 1) * pageSize;
 
         if (newOffset <= 0) {
@@ -49,14 +54,7 @@ const Pagination = ({
         }
 
         onChange(newOffset);
-    }
-
-    const pageCount = Math.ceil(totalCount / pageSize);
-    if (pageCount <= 1) return null;
-
-    const pageNumber = Math.floor(offset / pageSize) + 1;
-    const hasNextPage = pageNumber < pageCount;
-    const hasPreviousPage = pageNumber > 1;
+    };
 
     const handleNextClick = () => {
         updateOffset(pageNumber + 1);
@@ -79,7 +77,7 @@ const Pagination = ({
             <ButtonGroup>
                 <Tooltip
                     isEnabled={hasPreviousPage}
-                    text={intl.formatMessage(messages.previousPage)}
+                    text={<FormattedMessage {...messages.previousPage} />}
                 >
                     <Button
                         onClick={handlePreviousClick}
@@ -90,7 +88,7 @@ const Pagination = ({
                 </Tooltip>
                 <Tooltip
                     isEnabled={hasNextPage}
-                    text={intl.formatMessage(messages.nextPage)}
+                    text={<FormattedMessage {...messages.nextPage} />}
                 >
                     <Button onClick={handleNextClick} isDisabled={!hasNextPage}>
                         <IconPageForward {...PAGE_ICON_STYLE} />
@@ -101,4 +99,4 @@ const Pagination = ({
     );
 };
 
-export default injectIntl(Pagination);
+export default Pagination;

@@ -37,7 +37,7 @@ import {
     TYPE_FOLDER,
     TYPE_WEBLINK,
     CLIENT_NAME_CONTENT_PICKER,
-    DEFAULT_OFFSET,
+    DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_SIZE,
     DEFAULT_VIEW_FILES,
     DEFAULT_VIEW_RECENTS,
@@ -83,8 +83,8 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    initialOffset: number,
-    pageSize: number,
+    initialPage: number,
+    initialPageSize: number,
 };
 
 type State = {
@@ -94,6 +94,7 @@ type State = {
     errorCode: string,
     currentCollection: Collection,
     currentOffset: number,
+    currentPageSize: number,
     selected: { [string]: BoxItem },
     searchQuery: string,
     isLoading: boolean,
@@ -121,6 +122,8 @@ class ContentPicker extends Component<Props, State> {
         rootFolderId: DEFAULT_ROOT,
         onChoose: noop,
         onCancel: noop,
+        initialPage: DEFAULT_PAGE_NUMBER,
+        initialPageSize: DEFAULT_PAGE_SIZE,
         sortBy: FIELD_NAME,
         sortDirection: SORT_ASC,
         extensions: [],
@@ -134,8 +137,6 @@ class ContentPicker extends Component<Props, State> {
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
         clientName: CLIENT_NAME_CONTENT_PICKER,
         defaultView: DEFAULT_VIEW_FILES,
-        initialOffset: DEFAULT_OFFSET,
-        pageSize: DEFAULT_PAGE_SIZE,
     };
 
     /**
@@ -153,13 +154,14 @@ class ContentPicker extends Component<Props, State> {
             sharedLinkPassword,
             apiHost,
             uploadHost,
+            initialPage,
+            initialPageSize,
             sortBy,
             sortDirection,
             clientName,
             requestInterceptor,
             responseInterceptor,
             rootFolderId,
-            initialOffset,
         } = props;
 
         this.api = new API({
@@ -181,7 +183,8 @@ class ContentPicker extends Component<Props, State> {
             sortDirection,
             rootName: '',
             currentCollection: {},
-            currentOffset: initialOffset,
+            currentOffset: initialPageSize * (initialPage - 1),
+            currentPageSize: initialPageSize,
             selected: {},
             searchQuery: '',
             view: VIEW_FOLDER,
@@ -445,16 +448,17 @@ class ContentPicker extends Component<Props, State> {
         id?: string,
         triggerNavigationEvent?: boolean = true,
     ): void => {
-        const { pageSize: limit, rootFolderId }: Props = this.props;
+        const { rootFolderId }: Props = this.props;
         const {
-            currentCollection,
+            currentCollection: { id: currentId },
             currentOffset,
+            currentPageSize: limit,
             searchQuery,
             sortBy,
             sortDirection,
         }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
-        const hasFolderChanged = folderId !== currentCollection.id;
+        const hasFolderChanged = currentId && currentId !== folderId;
         const hasSearchQuery = !!searchQuery && !!searchQuery.trim();
         const offset = hasFolderChanged || hasSearchQuery ? 0 : currentOffset; // Reset offset on folder or mode change
 
@@ -591,35 +595,30 @@ class ContentPicker extends Component<Props, State> {
      * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    debouncedSearch: Function = debounce(
-        (id: string, query: string, forceFetch?: boolean): void => {
-            const { sortBy, sortDirection }: State = this.state;
-            this.api
-                .getSearchAPI()
-                .search(
-                    id,
-                    query,
-                    sortBy,
-                    sortDirection,
-                    this.searchSuccessCallback,
-                    this.errorCallback,
-                    {
-                        forceFetch,
-                    },
-                );
-        },
-        DEFAULT_SEARCH_DEBOUNCE,
-    );
+    debouncedSearch: Function = debounce((id: string, query: string): void => {
+        const { currentOffset, currentPageSize }: State = this.state;
+
+        this.api
+            .getSearchAPI()
+            .search(
+                id,
+                query,
+                currentPageSize,
+                currentOffset,
+                this.searchSuccessCallback,
+                this.errorCallback,
+                { forceFetch: true },
+            );
+    }, DEFAULT_SEARCH_DEBOUNCE);
 
     /**
      * Searches
      *
      * @private
      * @param {string} query search string
-     * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    search = (query: string, forceFetch: boolean = false): void => {
+    search = (query: string): void => {
         const { rootFolderId }: Props = this.props;
         const {
             currentCollection: { id },
@@ -649,7 +648,7 @@ class ContentPicker extends Component<Props, State> {
             currentCollection: this.currentUnloadedCollection(),
         });
 
-        this.debouncedSearch(folderId, query, forceFetch);
+        this.debouncedSearch(folderId, query);
     };
 
     /**
@@ -1067,13 +1066,13 @@ class ContentPicker extends Component<Props, State> {
             cancelButtonLabel,
             requestInterceptor,
             responseInterceptor,
-            pageSize,
         }: Props = this.props;
         const {
             view,
             rootName,
             selected,
             currentCollection,
+            currentPageSize,
             searchQuery,
             isCreateFolderModalOpen,
             isUploadModalOpen,
@@ -1154,7 +1153,7 @@ class ContentPicker extends Component<Props, State> {
                             <Pagination
                                 offset={offset}
                                 onChange={this.paginate}
-                                pageSize={pageSize}
+                                pageSize={currentPageSize}
                                 totalCount={totalCount}
                             />
                         </Footer>

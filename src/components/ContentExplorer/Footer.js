@@ -12,7 +12,7 @@ type Props = {
 };
 
 const Footer = ({ children }: Props) => (
-    <div className="bce-footer">{children}</div>
+    <footer className="bce-footer">{children}</footer>
 );
 
 export default Footer;

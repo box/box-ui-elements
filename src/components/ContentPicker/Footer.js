@@ -33,7 +33,7 @@ const Footer = ({
     cancelButtonLabel,
     children,
 }: Props) => (
-    <div className="bcp-footer">
+    <footer className="bcp-footer">
         <div className="bcp-footer-left">
             <PlainButton type="button" onClick={onSelectedClick}>
                 <span className="bcp-selected-count">{selectedCount}</span>
@@ -63,7 +63,7 @@ const Footer = ({
                 </PrimaryButton>
             </div>
         </div>
-    </div>
+    </footer>
 );
 
 export default Footer;
