@@ -9,6 +9,11 @@ import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import API from '../../api';
 import Internationalize from '../Internationalize';
+import OpenWithLoadingButton from './OpenWithLoadingButton';
+import OpenWithButton from './OpenWithButton';
+
+import '../base.scss';
+import './OpenWith.scss';
 
 import {
     DEFAULT_HOSTNAME_API,
@@ -43,6 +48,8 @@ type State = {
     extension: ?string,
     isDropdownOpen: boolean,
     integrations: ?Array<Integration>,
+    isLoading: boolean,
+    fetchError: ?Error,
 };
 
 class OpenWith extends PureComponent<Props, State> {
@@ -61,6 +68,8 @@ class OpenWith extends PureComponent<Props, State> {
         extension: '',
         isDropdownOpen: false,
         integrations: null,
+        isLoading: true,
+        fetchError: null,
     };
 
     /**
@@ -125,6 +134,21 @@ class OpenWith extends PureComponent<Props, State> {
     }
 
     /**
+     * After component updates, re-fetch Open With data if appropriate.
+     *
+     * @return {void}
+     */
+    componentDidUpdate(prevProps: Props): void {
+        const { fileId: currentFileId }: Props = this.props;
+        const { fileId: previousFileId }: Props = prevProps;
+
+        if (currentFileId !== previousFileId) {
+            this.setState({ isLoading: true });
+            this.fetchOpenWithData();
+        }
+    }
+
+    /**
      * Fetches file extension and Open With data.
      *
      * @return {void}
@@ -162,29 +186,13 @@ class OpenWith extends PureComponent<Props, State> {
     };
 
     /**
-     * After component updates, re-fetch Open With data if appropriate.
-     *
-     * @return {void}
-     */
-    componentDidUpdate(prevProps: Props): void {
-        const { fileId: currentFileId }: Props = this.props;
-        const { fileId: previousFileId }: Props = prevProps;
-
-        if (currentFileId !== previousFileId) {
-            this.fetchOpenWithData();
-        }
-    }
-
-    /**
      * Fetch app integrations info needed to render.
      *
-     * @param {OpenWithIntegrations} openWithIntegrations - The available Open With integrations
+     * @param {OpenWithIntegrations} integrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = (
-        openWithIntegrations: Array<Integration>,
-    ) => {
-        this.setState({ integrations: openWithIntegrations });
+    fetchOpenWithSuccessHandler = (integrations: Array<Integration>) => {
+        this.setState({ integrations, isLoading: false });
     };
 
     /**
@@ -194,7 +202,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchErrorCallback = (error: Error) => {
-        console.error(error); // eslint-disable-line no-console
+        this.setState({ fetchError: error, isLoading: false });
     };
 
     /**
@@ -208,7 +216,31 @@ class OpenWith extends PureComponent<Props, State> {
     }
 
     /**
-     * Renders the Open With element
+     * Click handler when an integration is clicked
+     *
+     * @private
+     * @return {void}
+     */
+    onIntegrationClick(): void {
+        /* no-op */
+    }
+
+    /**
+     * Gets a display integration, if available, for the Open With button
+     *
+     * @private
+     * @return {?Integration}
+     */
+    getDisplayIntegration(): ?Integration {
+        const { integrations }: State = this.state;
+        // We only consider an integration a display integration if is the only integration in our state
+        return Array.isArray(integrations) && integrations.length === 1
+            ? integrations[0]
+            : null;
+    }
+
+    /**
+     * Render the Open With element
      *
      * @private
      * @inheritdoc
@@ -216,14 +248,32 @@ class OpenWith extends PureComponent<Props, State> {
      */
     render() {
         const { language, messages: intlMessages }: Props = this.props;
-        const { integrations }: State = this.state;
-        // Placeholder
+        const {
+            fetchError: error,
+            isLoading,
+            extension,
+            integrations,
+        }: State = this.state;
+
+        const displayIntegration = this.getDisplayIntegration();
+        const numIntegrations = integrations ? integrations.length : 0;
+
         return (
-            integrations && (
-                <Internationalize language={language} messages={intlMessages}>
-                    <button> Open With </button>
-                </Internationalize>
-            )
+            <Internationalize language={language} messages={intlMessages}>
+                <div id={this.id} className="be bcow">
+                    {isLoading ? (
+                        <OpenWithLoadingButton />
+                    ) : (
+                        <OpenWithButton
+                            error={error}
+                            onClick={this.onIntegrationClick}
+                            displayIntegration={displayIntegration}
+                            numIntegrations={numIntegrations}
+                            extension={extension}
+                        />
+                    )}
+                </div>
+            </Internationalize>
         );
     }
 }
