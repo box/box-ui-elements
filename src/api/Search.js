@@ -9,14 +9,16 @@ import FileAPI from './File';
 import FolderAPI from './Folder';
 import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
-import sort from '../util/sorter';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
-import { CACHE_PREFIX_SEARCH } from '../constants';
+import { CACHE_PREFIX_SEARCH, FIELD_RELEVANCE, SORT_DESC } from '../constants';
 import { getBadItemError } from '../util/error';
 
-const LIMIT_ITEM_FETCH = 200;
-
 class Search extends Base {
+    /**
+     * @property {number}
+     */
+    limit: number;
+
     /**
      * @property {number}
      */
@@ -36,16 +38,6 @@ class Search extends Base {
      * @property {string}
      */
     query: string;
-
-    /**
-     * @property {string}
-     */
-    sortBy: SortBy;
-
-    /**
-     * @property {string}
-     */
-    sortDirection: SortDirection;
 
     /**
      * @property {Function}
@@ -101,16 +93,11 @@ class Search extends Base {
      */
     isLoaded(): boolean {
         const cache: APICache = this.getCache();
-        if (!cache.has(this.key)) {
-            return false;
-        }
-
-        const { item_collection = {} }: FlattenedBoxItem = cache.get(this.key);
-        return !!item_collection.isLoaded;
+        return cache.has(this.key);
     }
 
     /**
-     * Sorts and returns the results
+     * Returns the results
      *
      * @return {void}
      */
@@ -121,13 +108,7 @@ class Search extends Base {
 
         const cache: APICache = this.getCache();
         const search: FlattenedBoxItem = cache.get(this.key);
-        const sortedSearch: FlattenedBoxItem = sort(
-            search,
-            this.sortBy,
-            this.sortDirection,
-            cache,
-        );
-        const { item_collection }: FlattenedBoxItem = sortedSearch;
+        const { item_collection }: FlattenedBoxItem = search;
         if (!item_collection) {
             throw getBadItemError();
         }
@@ -140,20 +121,14 @@ class Search extends Base {
             throw getBadItemError();
         }
 
-        // Total count may be more than the actual number of entries, so don't rely
-        // on it on its own. Good for calculating percentatge, but not good for
-        // figuring our when the collection is done loading.
-        const percentLoaded: number =
-            !!item_collection.isLoaded || total_count === 0
-                ? 100
-                : (entries.length * 100) / total_count;
-
         const collection: Collection = {
-            percentLoaded,
             id: this.id,
-            sortBy: this.sortBy,
-            sortDirection: this.sortDirection,
             items: entries.map((key: string) => cache.get(key)),
+            offset: this.offset,
+            percentLoaded: 100,
+            sortBy: FIELD_RELEVANCE, // Results are always sorted by relevance
+            sortDirection: SORT_DESC, // Results are always sorted descending
+            totalCount: total_count,
         };
         this.successCallback(collection);
     }
@@ -187,22 +162,11 @@ class Search extends Base {
         );
         this.itemCache = (this.itemCache || []).concat(flattened);
 
-        // Total count may be more than the actual number of entries, so don't rely
-        // on it on its own. Good for calculating percentatge, but not good for
-        // figuring our when the collection is done loading.
-        const isLoaded: boolean = offset + limit >= total_count;
-
         this.getCache().set(this.key, {
             item_collection: Object.assign({}, data, {
-                isLoaded,
                 entries: this.itemCache,
             }),
         });
-
-        if (!isLoaded) {
-            this.offset += limit;
-            this.searchRequest();
-        }
 
         this.finish();
     };
@@ -238,7 +202,7 @@ class Search extends Base {
                     offset: this.offset,
                     query: this.query,
                     ancestor_folder_ids: this.id,
-                    limit: LIMIT_ITEM_FETCH,
+                    limit: this.limit,
                     fields: FOLDER_FIELDS_TO_FETCH.toString(),
                 },
             })
@@ -251,8 +215,8 @@ class Search extends Base {
      *
      * @param {string} id - folder id
      * @param {string} query - search string
-     * @param {string} sortBy - sort by field
-     * @param {string} sortDirection - sort direction
+     * @param {number} limit - maximum number of items to retrieve
+     * @param {number} offset - starting index from which to retrieve items
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
      * @param {boolean|void} [options.forceFetch] - Bypasses the cache
@@ -261,8 +225,8 @@ class Search extends Base {
     search(
         id: string,
         query: string,
-        sortBy: SortBy,
-        sortDirection: SortDirection,
+        limit: number,
+        offset: number,
         successCallback: Function,
         errorCallback: Function,
         options: Object = {},
@@ -272,14 +236,13 @@ class Search extends Base {
         }
 
         // Save references
-        this.offset = 0;
+        this.limit = limit;
+        this.offset = offset;
         this.query = query;
         this.id = id;
         this.key = this.getCacheKey(id, this.getEncodedQuery(this.query));
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
-        this.sortBy = sortBy;
-        this.sortDirection = sortDirection;
 
         // Clear the cache if needed
         if (options.forceFetch) {
