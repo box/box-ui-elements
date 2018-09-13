@@ -19,11 +19,11 @@ import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { focus } from '../../util/dom';
 import messages from '../messages';
 import {
-    FIELD_NAME,
+    FIELD_DATE,
     FIELD_ID,
-    FIELD_MODIFIED_AT,
-    FIELD_INTERACTED_AT,
+    FIELD_NAME,
     FIELD_SIZE,
+    VIEW_FOLDER,
     VIEW_RECENTS,
 } from '../../constants';
 import './ItemList.scss';
@@ -105,6 +105,7 @@ const ItemList = ({
         isSmall,
     );
     const isRecents: boolean = view === VIEW_RECENTS;
+    const hasSort: boolean = view === VIEW_FOLDER;
     const {
         id,
         items = [],
@@ -156,12 +157,12 @@ const ItemList = ({
                             rowCount={rowCount}
                             rowGetter={({ index }) => items[index]}
                             ref={tableRef}
+                            rowClassName={rowClassName}
+                            scrollToIndex={scrollToRow}
                             sort={sort}
                             sortBy={sortBy}
                             sortDirection={sortDirection}
-                            rowClassName={rowClassName}
                             onRowClick={({ rowData }) => onItemSelect(rowData)}
-                            scrollToIndex={scrollToRow}
                             onRowsRendered={({ startIndex, stopIndex }) => {
                                 onSectionRendered({
                                     rowStartIndex: startIndex,
@@ -183,6 +184,7 @@ const ItemList = ({
                                 flexShrink={0}
                             />
                             <Column
+                                disableSort={!hasSort}
                                 label={intl.formatMessage(messages.name)}
                                 dataKey={FIELD_NAME}
                                 cellRenderer={nameCell}
@@ -193,6 +195,7 @@ const ItemList = ({
                             {isSmall ? null : (
                                 <Column
                                     className="bce-item-coloumn"
+                                    disableSort={!hasSort}
                                     label={
                                         isRecents
                                             ? intl.formatMessage(
@@ -202,11 +205,7 @@ const ItemList = ({
                                                   messages.modified,
                                               )
                                     }
-                                    dataKey={
-                                        isRecents
-                                            ? FIELD_INTERACTED_AT
-                                            : FIELD_MODIFIED_AT
-                                    }
+                                    dataKey={FIELD_DATE}
                                     cellRenderer={dateCell}
                                     headerRenderer={headerCellRenderer}
                                     width={isRecents ? 120 : 300}
@@ -216,6 +215,7 @@ const ItemList = ({
                             {isSmall || isMedium ? null : (
                                 <Column
                                     className="bce-item-coloumn"
+                                    disableSort
                                     label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}

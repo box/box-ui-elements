@@ -1,7 +1,6 @@
 import Recents from '../Recents';
 import Cache from '../../util/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../util/fields';
-import * as sort from '../../util/sorter';
 
 let recents;
 let cache;
@@ -32,7 +31,7 @@ describe('api/Recents', () => {
             recents.recentsRequest = jest.fn();
             recents.getCache = jest.fn();
             recents.getCacheKey = jest.fn();
-            recents.recents('id', 'by', 'direction', 'success', 'fail');
+            recents.recents('id', 'success', 'fail');
             expect(recents.recentsRequest).not.toHaveBeenCalled();
             expect(recents.getCache).not.toHaveBeenCalled();
             expect(recents.getCacheKey).not.toHaveBeenCalled();
@@ -41,13 +40,11 @@ describe('api/Recents', () => {
             recents.recentsRequest = jest.fn();
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail');
+            recents.recents('id', 'success', 'fail');
             expect(recents.getCacheKey).toHaveBeenCalledWith('id');
             expect(recents.id).toBe('id');
             expect(recents.successCallback).toBe('success');
             expect(recents.errorCallback).toBe('fail');
-            expect(recents.sortBy).toBe('interacted_at');
-            expect(recents.sortDirection).toBe('DESC');
             expect(recents.key).toBe('key');
         });
         test('should save args and not make recents request when cached', () => {
@@ -55,13 +52,11 @@ describe('api/Recents', () => {
             recents.finish = jest.fn();
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail');
+            recents.recents('id', 'success', 'fail');
             expect(recents.getCacheKey).toHaveBeenCalledWith('id');
             expect(recents.id).toBe('id');
             expect(recents.successCallback).toBe('success');
             expect(recents.errorCallback).toBe('fail');
-            expect(recents.sortBy).toBe('by');
-            expect(recents.sortDirection).toBe('direction');
             expect(recents.key).toBe('key');
         });
         test('should save args and make recents request when cached but forced to fetch', () => {
@@ -69,15 +64,11 @@ describe('api/Recents', () => {
             recents.recentsRequest = jest.fn();
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.getCacheKey = jest.fn().mockReturnValueOnce('key');
-            recents.recents('id', 'by', 'direction', 'success', 'fail', {
-                forceFetch: true,
-            });
+            recents.recents('id', 'success', 'fail', { forceFetch: true });
             expect(recents.getCacheKey).toHaveBeenCalledWith('id');
             expect(recents.id).toBe('id');
             expect(recents.successCallback).toBe('success');
             expect(recents.errorCallback).toBe('fail');
-            expect(recents.sortBy).toBe('interacted_at');
-            expect(recents.sortDirection).toBe('DESC');
             expect(recents.key).toBe('key');
         });
     });
@@ -208,7 +199,6 @@ describe('api/Recents', () => {
 
             expect(cache.get('key')).toEqual({
                 item_collection: {
-                    isLoaded: true,
                     entries: ['file_item1', 'file_item3'],
                     order: [
                         {
@@ -255,7 +245,6 @@ describe('api/Recents', () => {
         };
         const recent = {
             item_collection: {
-                isLoaded: true,
                 entries: ['file_item1', 'file_item2', 'file_item3'],
                 order: [
                     {
@@ -283,55 +272,35 @@ describe('api/Recents', () => {
         test('should call success callback with proper collection', () => {
             recents.id = 'id';
             recents.key = 'key';
-            recents.sortBy = 'name';
-            recents.sortDirection = 'DESC';
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.successCallback = jest.fn();
             recents.finish();
             expect(recents.successCallback).toHaveBeenCalledWith({
                 percentLoaded: 100,
                 id: 'id',
-                sortBy: 'name',
+                sortBy: 'date',
                 sortDirection: 'DESC',
-                items: [item3, item2, item1],
+                items: [item1, item2, item3],
             });
         });
 
         test('should throw bad item error when item collection is missing', () => {
-            sort.default = jest.fn().mockReturnValueOnce({});
+            cache.set('key', {});
             recents.id = 'id';
             recents.key = 'key';
-            recents.sortBy = 'name';
-            recents.sortDirection = 'DESC';
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.successCallback = jest.fn();
             expect(recents.finish.bind(recents)).toThrow(Error, /Bad box item/);
-            expect(sort.default).toHaveBeenCalledWith(
-                recent,
-                'name',
-                'DESC',
-                cache,
-            );
             expect(recents.successCallback).not.toHaveBeenCalled();
         });
 
         test('should throw bad item error when item collection is missing entries', () => {
-            sort.default = jest
-                .fn()
-                .mockReturnValueOnce({ item_collection: {} });
+            cache.set('key', { item_collection: {} });
             recents.id = 'id';
             recents.key = 'key';
-            recents.sortBy = 'name';
-            recents.sortDirection = 'DESC';
             recents.getCache = jest.fn().mockReturnValueOnce(cache);
             recents.successCallback = jest.fn();
             expect(recents.finish.bind(recents)).toThrow(Error, /Bad box item/);
-            expect(sort.default).toHaveBeenCalledWith(
-                recent,
-                'name',
-                'DESC',
-                cache,
-            );
             expect(recents.successCallback).not.toHaveBeenCalled();
         });
     });

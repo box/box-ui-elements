@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default ({ dataKey, label, sortBy, sortDirection }: Props) => {
-    const by = sortBy.toLowerCase();
+    const by = sortBy && sortBy.toLowerCase();
     const direction = sortDirection === SORT_ASC ? 'up' : 'down';
     return (
         <div>

@@ -1,0 +1,11 @@
+@import '../variables';
+
+.be-pagination {
+    display: flex;
+}
+
+.be-pagination-count {
+    align-items: center;
+    display: flex;
+    margin-right: 20px;
+}
