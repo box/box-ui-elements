@@ -18,7 +18,9 @@ import CreateFolderDialog from '../CreateFolderDialog';
 import ShareDialog from './ShareDialog';
 import UploadDialog from '../UploadDialog';
 import PreviewDialog from './PreviewDialog';
+import Footer from './Footer';
 import Header from '../Header';
+import Pagination from '../Pagination';
 import SubHeader from '../SubHeader/SubHeader';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
@@ -33,8 +35,6 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
-    FIELD_MODIFIED_AT,
-    FIELD_INTERACTED_AT,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
@@ -44,6 +44,8 @@ import {
     TYPE_WEBLINK,
     TYPE_FOLDER,
     CLIENT_NAME_CONTENT_EXPLORER,
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE,
     DEFAULT_VIEW_FILES,
     DEFAULT_VIEW_RECENTS,
     ERROR_CODE_ITEM_NAME_INVALID,
@@ -95,6 +97,8 @@ type Props = {
     sharedLinkPassword?: string,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
+    initialPage: number,
+    initialPageSize: number,
     contentPreviewProps: ContentPreviewProps,
 };
 
@@ -103,6 +107,8 @@ type State = {
     sortDirection: SortDirection,
     rootName: string,
     currentCollection: Collection,
+    currentOffset: number,
+    currentPageSize: number,
     selected?: BoxItem,
     searchQuery: string,
     view: View,
@@ -155,6 +161,8 @@ class ContentExplorer extends Component<Props, State> {
         onUpload: noop,
         onNavigate: noop,
         defaultView: DEFAULT_VIEW_FILES,
+        initialPage: DEFAULT_PAGE_NUMBER,
+        initialPageSize: DEFAULT_PAGE_SIZE,
         contentPreviewProps: {
             contentSidebarProps: {},
         },
@@ -164,7 +172,7 @@ class ContentExplorer extends Component<Props, State> {
      * [constructor]
      *
      * @private
-     * @return {ItemPicker}
+     * @return {ContentExplorer}
      */
     constructor(props: Props) {
         super(props);
@@ -175,6 +183,8 @@ class ContentExplorer extends Component<Props, State> {
             sharedLinkPassword,
             apiHost,
             uploadHost,
+            initialPage,
+            initialPageSize,
             sortBy,
             sortDirection,
             requestInterceptor,
@@ -201,6 +211,8 @@ class ContentExplorer extends Component<Props, State> {
             sortDirection,
             rootName: '',
             currentCollection: {},
+            currentOffset: initialPageSize * (initialPage - 1),
+            currentPageSize: initialPageSize,
             searchQuery: '',
             view: VIEW_FOLDER,
             isDeleteModalOpen: false,
@@ -278,12 +290,10 @@ class ContentExplorer extends Component<Props, State> {
     }
 
     /**
-     * Resets the percentLoaded in the collection
-     * so that the loading bar starts showing
+     * Resets the collection so that the loading bar starts showing
      *
      * @private
-     * @fires cancel
-     * @return {void}
+     * @return {Collection}
      */
     currentUnloadedCollection(): Collection {
         const { currentCollection }: State = this.state;
@@ -339,8 +349,7 @@ class ContentExplorer extends Component<Props, State> {
     }
 
     /**
-     * Refreshing the item collection depending
-     * upon the view. Collection is gotten from cache.
+     * Refreshing the item collection depending upon the view.
      * Navigation event is prevented.
      *
      * @private
@@ -355,11 +364,11 @@ class ContentExplorer extends Component<Props, State> {
         if (view === VIEW_FOLDER && id) {
             this.fetchFolder(id, false);
         } else if (view === VIEW_RECENTS) {
-            this.showRecents(false, false);
+            this.showRecents(false);
         } else if (view === VIEW_SEARCH && searchQuery) {
             this.search(searchQuery);
         } else {
-            throw new Error('Cannot sort incompatible view!');
+            throw new Error('Cannot refresh incompatible view!');
         }
     };
 
@@ -408,17 +417,22 @@ class ContentExplorer extends Component<Props, State> {
      * @private
      * @param {string|void} [id] folder id
      * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
-     * @param {Boolean|void} [forceFetch] To void the cache
      * @return {void}
      */
-    fetchFolder = (
-        id?: string,
-        triggerNavigationEvent?: boolean = true,
-        fetchOptions?: FetchOptions,
-    ) => {
+    fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true) => {
         const { rootFolderId }: Props = this.props;
-        const { sortBy, sortDirection }: State = this.state;
+        const {
+            currentCollection: { id: currentId },
+            currentOffset,
+            currentPageSize: limit,
+            searchQuery = '',
+            sortBy,
+            sortDirection,
+        }: State = this.state;
         const folderId: string = typeof id === 'string' ? id : rootFolderId;
+        const hasFolderChanged = currentId && currentId !== folderId;
+        const hasSearchQuery = !!searchQuery.trim().length;
+        const offset = hasFolderChanged || hasSearchQuery ? 0 : currentOffset; // Reset offset on folder or mode change
 
         // If we are navigating around, aka not first load
         // then reset the focus to the root so that after
@@ -433,11 +447,14 @@ class ContentExplorer extends Component<Props, State> {
             searchQuery: '',
             view: VIEW_FOLDER,
             currentCollection: this.currentUnloadedCollection(),
+            currentOffset: offset,
         });
 
         // Fetch the folder using folder API
         this.api.getFolderAPI().getFolder(
             folderId,
+            limit,
+            offset,
             sortBy,
             sortDirection,
             (collection: Collection) => {
@@ -447,7 +464,7 @@ class ContentExplorer extends Component<Props, State> {
                 );
             },
             this.errorCallback,
-            fetchOptions,
+            { forceFetch: true },
         );
     };
 
@@ -508,51 +525,51 @@ class ContentExplorer extends Component<Props, State> {
      * @private
      * @param {string} id folder id
      * @param {string} query search string
-     * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    debouncedSearch = debounce(
-        (id: string, query: string, forceFetch?: boolean) => {
-            const { sortBy, sortDirection }: State = this.state;
-            this.api
-                .getSearchAPI()
-                .search(
-                    id,
-                    query,
-                    sortBy,
-                    sortDirection,
-                    this.searchSuccessCallback,
-                    this.errorCallback,
-                    {
-                        forceFetch,
-                    },
-                );
-        },
-        DEFAULT_SEARCH_DEBOUNCE,
-    );
+    debouncedSearch = debounce((id: string, query: string) => {
+        const { currentOffset, currentPageSize }: State = this.state;
+
+        this.api
+            .getSearchAPI()
+            .search(
+                id,
+                query,
+                currentPageSize,
+                currentOffset,
+                this.searchSuccessCallback,
+                this.errorCallback,
+                { forceFetch: true },
+            );
+    }, DEFAULT_SEARCH_DEBOUNCE);
 
     /**
      * Searches
      *
      * @private
      * @param {string} query search string
-     * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    search = (query: string, forceFetch: boolean = false) => {
+    search = (query: string) => {
         const { rootFolderId }: Props = this.props;
         const {
             currentCollection: { id },
+            currentOffset,
+            searchQuery,
         }: State = this.state;
         const folderId = typeof id === 'string' ? id : rootFolderId;
         const trimmedQuery: string = query.trim();
 
         if (!query) {
-            // Query was cleared out, load the prior folder
-            // The prior folder is always the parent folder for search
-            this.fetchFolder(folderId, false);
             // Cancel the debounce so we don't search on a previous query
             this.debouncedSearch.cancel();
+
+            // Query was cleared out, load the prior folder
+            // The prior folder is always the parent folder for search
+            this.setState({ currentOffset: 0 }, () => {
+                this.fetchFolder(folderId, false);
+            });
+
             return;
         }
 
@@ -570,9 +587,10 @@ class ContentExplorer extends Component<Props, State> {
             searchQuery: query,
             view: VIEW_SEARCH,
             currentCollection: this.currentUnloadedCollection(),
+            currentOffset: trimmedQuery === searchQuery ? currentOffset : 0,
         });
 
-        this.debouncedSearch(folderId, query, forceFetch);
+        this.debouncedSearch(folderId, query);
     };
 
     /**
@@ -601,42 +619,30 @@ class ContentExplorer extends Component<Props, State> {
 
     /**
      * Shows recents.
-     * We always try to force fetch recents.
      *
      * @private
      * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
-     * @param {Boolean|void} [forceFetch] To void cache
      * @return {void}
      */
-    showRecents(
-        triggerNavigationEvent: boolean = true,
-        forceFetch: boolean = true,
-    ): void {
+    showRecents(triggerNavigationEvent: boolean = true): void {
         const { rootFolderId }: Props = this.props;
-        const { sortBy, sortDirection }: State = this.state;
-
-        // Recents are sorted by a different date field than the rest
-        const by = sortBy === FIELD_MODIFIED_AT ? FIELD_INTERACTED_AT : sortBy;
 
         // Reset search state, the view and show busy indicator
         this.setState({
             searchQuery: '',
             view: VIEW_RECENTS,
             currentCollection: this.currentUnloadedCollection(),
+            currentOffset: 0,
         });
 
         // Fetch the folder using folder API
         this.api.getRecentsAPI().recents(
             rootFolderId,
-            by,
-            sortDirection,
             (collection: Collection) => {
                 this.recentsSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
-            {
-                forceFetch,
-            },
+            { forceFetch: true },
         );
     }
 
@@ -677,9 +683,7 @@ class ContentExplorer extends Component<Props, State> {
         const {
             currentCollection: { id },
         }: State = this.state;
-        this.fetchFolder(id, false, {
-            forceFetch: true,
-        });
+        this.fetchFolder(id, false);
     };
 
     /**
@@ -1207,6 +1211,15 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Handle pagination changes
+     *
+     * @param {number} newOffset - the new page offset value
+     */
+    paginate = (newOffset: number) => {
+        this.setState({ currentOffset: newOffset }, this.refreshCollection);
+    };
+
+    /**
      * Renders the file picker
      *
      * @private
@@ -1251,6 +1264,7 @@ class ContentExplorer extends Component<Props, State> {
             view,
             rootName,
             currentCollection,
+            currentPageSize,
             searchQuery,
             isDeleteModalOpen,
             isRenameModalOpen,
@@ -1264,7 +1278,12 @@ class ContentExplorer extends Component<Props, State> {
             focusedRow,
         }: State = this.state;
 
-        const { id, permissions }: Collection = currentCollection;
+        const {
+            id,
+            offset,
+            permissions,
+            totalCount,
+        }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const styleClassName = classNames('be bce', className);
         const allowUpload: boolean = canUpload && !!can_upload;
@@ -1325,6 +1344,14 @@ class ContentExplorer extends Component<Props, State> {
                             onItemPreview={this.preview}
                             onSortChange={this.sort}
                         />
+                        <Footer>
+                            <Pagination
+                                offset={offset}
+                                onChange={this.paginate}
+                                pageSize={currentPageSize}
+                                totalCount={totalCount}
+                            />
+                        </Footer>
                     </div>
                     {allowUpload && !!this.appElement ? (
                         <UploadDialog

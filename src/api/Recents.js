@@ -9,14 +9,13 @@ import FileAPI from './File';
 import FolderAPI from './Folder';
 import WebLinkAPI from '../api/WebLink';
 import flatten from '../util/flatten';
-import sort from '../util/sorter';
 import { getBadItemError } from '../util/error';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
 import {
     DEFAULT_ROOT,
     CACHE_PREFIX_RECENTS,
+    FIELD_DATE,
     SORT_DESC,
-    FIELD_INTERACTED_AT,
 } from '../constants';
 
 class Recents extends Base {
@@ -41,16 +40,6 @@ class Recents extends Base {
     errorCallback: Function;
 
     /**
-     * @property {string}
-     */
-    sortBy: SortBy;
-
-    /**
-     * @property {string}
-     */
-    sortDirection: SortDirection;
-
-    /**
      * Creates a key for the cache
      *
      * @param {string} id folder id
@@ -70,7 +59,7 @@ class Recents extends Base {
     }
 
     /**
-     * Sorts and returns the results
+     * Returns the results
      *
      * @return {void}
      */
@@ -81,13 +70,7 @@ class Recents extends Base {
 
         const cache: APICache = this.getCache();
         const recents: FlattenedBoxItem = cache.get(this.key);
-        const sortedRecents: FlattenedBoxItem = sort(
-            recents,
-            this.sortBy,
-            this.sortDirection,
-            cache,
-        );
-        const { item_collection }: FlattenedBoxItem = sortedRecents;
+        const { item_collection }: FlattenedBoxItem = recents;
         if (!item_collection) {
             throw getBadItemError();
         }
@@ -98,11 +81,11 @@ class Recents extends Base {
         }
 
         const collection: Collection = {
-            percentLoaded: 100,
             id: this.id,
-            sortBy: this.sortBy,
-            sortDirection: this.sortDirection,
             items: entries.map((key: string) => cache.get(key)),
+            percentLoaded: 100,
+            sortBy: FIELD_DATE, // Results are always sorted by date
+            sortDirection: SORT_DESC, // Results are always sorted descending
         };
         this.successCallback(collection);
     }
@@ -146,7 +129,6 @@ class Recents extends Base {
 
         this.getCache().set(this.key, {
             item_collection: {
-                isLoaded: true,
                 entries: flattenedItems,
                 order: [
                     {
@@ -198,8 +180,6 @@ class Recents extends Base {
      * Gets recent files
      *
      * @param {string} id - parent folder id
-     * @param {string} sortBy - sort by field
-     * @param {string} sortDirection - sort direction
      * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
      * @param {boolean|void} [options.forceFetch] - Bypasses the cache
@@ -207,8 +187,6 @@ class Recents extends Base {
      */
     recents(
         id: string,
-        sortBy: SortBy,
-        sortDirection: SortDirection,
         successCallback: Function,
         errorCallback: Function,
         options: Object = {},
@@ -221,8 +199,6 @@ class Recents extends Base {
         this.id = id;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
-        this.sortBy = sortBy;
-        this.sortDirection = sortDirection;
 
         const cache: APICache = this.getCache();
         this.key = this.getCacheKey(this.id);
@@ -237,11 +213,6 @@ class Recents extends Base {
             this.finish();
             return;
         }
-
-        // Recents should always be sorted with date desc
-        // on non cached loads, aka newest to oldest
-        this.sortBy = FIELD_INTERACTED_AT;
-        this.sortDirection = SORT_DESC;
 
         // Make the XHR request
         this.recentsRequest();

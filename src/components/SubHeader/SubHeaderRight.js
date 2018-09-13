@@ -7,7 +7,7 @@
 import React from 'react';
 import Sort from './Sort';
 import Add from './Add';
-import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS } from '../../constants';
+import { VIEW_FOLDER } from '../../constants';
 
 import './SubHeaderRight.scss';
 
@@ -36,13 +36,10 @@ const SubHeaderRight = ({
         percentLoaded,
         items = [],
     }: Collection = currentCollection;
-    const isRecents: boolean = view === VIEW_RECENTS;
     const isFolder: boolean = view === VIEW_FOLDER;
-    const isSearch: boolean = view === VIEW_SEARCH;
-    const showSort: boolean =
-        (isRecents || isFolder || isSearch) && items.length > 0;
-    const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
     const isLoaded: boolean = percentLoaded === 100;
+    const showSort: boolean = isFolder && items.length > 0;
+    const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
 
     return (
         <div className="be-sub-header-right">
@@ -50,11 +47,10 @@ const SubHeaderRight = ({
                 !!sortBy &&
                 !!sortDirection && (
                     <Sort
-                        isRecents={isRecents}
                         isLoaded={isLoaded}
+                        onSortChange={onSortChange}
                         sortBy={sortBy}
                         sortDirection={sortDirection}
-                        onSortChange={onSortChange}
                     />
                 )}
             {showAdd && (

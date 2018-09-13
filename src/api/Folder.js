@@ -7,21 +7,13 @@
 import noop from 'lodash/noop';
 import Item from './Item';
 import flatten from '../util/flatten';
-import sort from '../util/sorter';
 import FileAPI from '../api/File';
 import WebLinkAPI from '../api/WebLink';
-import { CACHE_PREFIX_FOLDER } from '../constants';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
+import { CACHE_PREFIX_FOLDER } from '../constants';
 import { getBadItemError } from '../util/error';
 
-const LIMIT_ITEM_FETCH = 1000;
-
 class Folder extends Item {
-    /**
-     * @property {number}
-     */
-    offset: number;
-
     /**
      * @property {string}
      */
@@ -31,6 +23,16 @@ class Folder extends Item {
      * @property {string}
      */
     key: string;
+
+    /**
+     * @property {number}
+     */
+    limit: number;
+
+    /**
+     * @property {number}
+     */
+    offset: number;
 
     /**
      * @property {string}
@@ -85,16 +87,11 @@ class Folder extends Item {
      */
     isLoaded(): boolean {
         const cache: APICache = this.getCache();
-        if (!cache.has(this.key)) {
-            return false;
-        }
-
-        const { item_collection = {} }: FlattenedBoxItem = cache.get(this.key);
-        return !!item_collection.isLoaded;
+        return cache.has(this.key);
     }
 
     /**
-     * Sorts and returns the results
+     * Composes and returns the results
      *
      * @return {void}
      */
@@ -105,50 +102,38 @@ class Folder extends Item {
 
         const cache: APICache = this.getCache();
         const folder: FlattenedBoxItem = cache.get(this.key);
-        const sortedFolder: FlattenedBoxItem = sort(
-            folder,
-            this.sortBy,
-            this.sortDirection,
-            cache,
-        );
-
         const {
             id,
             name,
             permissions,
             path_collection,
             item_collection,
-        }: FlattenedBoxItem = sortedFolder;
+        }: FlattenedBoxItem = folder;
         if (!item_collection || !path_collection) {
             throw getBadItemError();
         }
 
         const {
             entries,
+            offset,
             total_count,
         }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
 
-        // Total count may be more than the actual number of entries, so don't rely
-        // on it on its own. Good for calculating percentatge, but not good for
-        // figuring our when the collection is done loading.
-        const percentLoaded: number =
-            !!item_collection.isLoaded || total_count === 0
-                ? 100
-                : (entries.length * 100) / total_count;
-
         const collection: Collection = {
             id,
             name,
-            percentLoaded,
+            offset,
+            percentLoaded: 100,
             permissions,
-            boxItem: sortedFolder,
+            boxItem: folder,
             breadcrumbs: path_collection.entries,
+            items: entries.map((key: string) => cache.get(key)),
             sortBy: this.sortBy,
             sortDirection: this.sortDirection,
-            items: entries.map((key: string) => cache.get(key)),
+            totalCount: total_count,
         };
         this.successCallback(collection);
     }
@@ -192,25 +177,14 @@ class Folder extends Item {
         );
         this.itemCache = (this.itemCache || []).concat(flattened);
 
-        // Total count may be more than the actual number of entries, so don't rely
-        // on it on its own. Good for calculating percentatge, but not good for
-        // figuring our when the collection is done loading.
-        const isLoaded: boolean = offset + limit >= total_count;
-
         this.getCache().set(
             this.key,
             Object.assign({}, data, {
                 item_collection: Object.assign({}, item_collection, {
-                    isLoaded,
                     entries: this.itemCache,
                 }),
             }),
         );
-
-        if (!isLoaded) {
-            this.offset += limit;
-            this.folderRequest();
-        }
 
         this.finish();
     };
@@ -229,9 +203,11 @@ class Folder extends Item {
             .get({
                 url: this.getUrl(this.id),
                 params: {
+                    direction: this.sortDirection.toLowerCase(),
+                    limit: this.limit,
                     offset: this.offset,
-                    limit: LIMIT_ITEM_FETCH,
                     fields: FOLDER_FIELDS_TO_FETCH.toString(),
+                    sort: this.sortBy.toLowerCase(),
                 },
             })
             .then(this.folderSuccessHandler)
@@ -242,6 +218,8 @@ class Folder extends Item {
      * Gets a box folder and its items
      *
      * @param {string} id - Folder id
+     * @param {number} limit - maximum number of items to retrieve
+     * @param {number} offset - starting index from which to retrieve items
      * @param {string} sortBy - sort by field
      * @param {string} sortDirection - sort direction
      * @param {Function} successCallback - Function to call with results
@@ -253,6 +231,8 @@ class Folder extends Item {
      */
     getFolder(
         id: string,
+        limit: number,
+        offset: number,
         sortBy: SortBy,
         sortDirection: SortDirection,
         successCallback: Function,
@@ -264,13 +244,14 @@ class Folder extends Item {
         }
 
         // Save references
-        this.offset = 0;
         this.id = id;
         this.key = this.getCacheKey(id);
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
+        this.limit = limit;
+        this.offset = offset;
         this.sortBy = sortBy;
         this.sortDirection = sortDirection;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
 
         // Clear the cache if needed
         if (options.forceFetch) {

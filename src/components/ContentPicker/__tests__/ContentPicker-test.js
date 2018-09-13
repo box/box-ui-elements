@@ -27,7 +27,7 @@ describe('components/ContentPicker/ContentPicker', () => {
     });
 
     describe('uploadSuccessHandler()', () => {
-        test('should force reload the files list', () => {
+        test('should reload the files list', () => {
             const wrapper = getWrapper({});
             const instance = wrapper.instance();
             instance.setState({
@@ -37,9 +37,7 @@ describe('components/ContentPicker/ContentPicker', () => {
             });
             instance.fetchFolder = jest.fn();
             instance.uploadSuccessHandler();
-            expect(instance.fetchFolder).toHaveBeenCalledWith('123', false, {
-                forceFetch: true,
-            });
+            expect(instance.fetchFolder).toHaveBeenCalledWith('123', false);
         });
     });
 });
