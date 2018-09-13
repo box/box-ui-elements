@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/OpenWith/OpenWith render() should render the Open With button 1`] = `
+<Internationalize>
+  <div
+    className="be bcow"
+    id="bcow_12"
+  >
+    <OpenWithButton
+      displayIntegration="Adobe"
+      error={null}
+      extension="docx"
+      numIntegrations={1}
+      onClick={[Function]}
+    />
+  </div>
+</Internationalize>
+`;
+
+exports[`components/OpenWith/OpenWith render() should render the loading button when loading 1`] = `
+<Internationalize>
+  <div
+    className="be bcow"
+    id="bcow_11"
+  >
+    <LoadingOpenWithButton />
+  </div>
+</Internationalize>
+`;
