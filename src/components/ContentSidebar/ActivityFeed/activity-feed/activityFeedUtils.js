@@ -2,6 +2,7 @@
  * @flow
  * @file Activity feed utility methods
  */
+import { fillUserPlaceholder } from '../../../../util/fields';
 
 const ItemTypes = {
     fileVersion: 'file_version',
@@ -16,14 +17,16 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
     return feedState.reduce((collapsedFeedState, feedItem) => {
         const previousFeedItem = collapsedFeedState.pop();
 
+        const filledFeedItem = fillUserPlaceholder(feedItem);
+
         if (!previousFeedItem) {
-            return collapsedFeedState.concat([feedItem]);
+            return collapsedFeedState.concat([filledFeedItem]);
         }
 
         if (
-            feedItem.type === ItemTypes.fileVersion &&
+            filledFeedItem.type === ItemTypes.fileVersion &&
             previousFeedItem.type === ItemTypes.fileVersion &&
-            feedItem.action === ItemTypes.upload &&
+            filledFeedItem.action === ItemTypes.upload &&
             previousFeedItem.action === ItemTypes.upload
         ) {
             const {
@@ -39,7 +42,7 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
                 trashed_at,
                 id,
                 version_number,
-            } = feedItem;
+            } = filledFeedItem;
             const parsedVersionNumber = parseInt(version_number, 10);
             const collaborators = previousFeedItem.collaborators || {
                 [prevModifiedBy.id]: { ...prevModifiedBy },
@@ -58,14 +61,14 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
                     id,
                     type: ItemTypes.fileVersion,
                     version_number,
-                    versions: versions.concat([feedItem]),
+                    versions: versions.concat([filledFeedItem]),
                     version_start: Math.min(version_start, parsedVersionNumber),
                     version_end: Math.max(version_end, parsedVersionNumber),
                 },
             ]);
         }
 
-        return collapsedFeedState.concat([previousFeedItem, feedItem]);
+        return collapsedFeedState.concat([previousFeedItem, filledFeedItem]);
     }, []);
 }
 

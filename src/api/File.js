@@ -189,18 +189,12 @@ class File extends Item {
                 missingFields,
             );
 
-            // If fields are user fields, make sure if value is null to prepopulate
-            // with placeholder user
-            const filledInData = this.fillUserPlaceholder(
-                dataWithMissingFields,
-            );
-
             // Cache check is again done since this code is executed async
             if (cache.has(key)) {
-                cache.merge(key, filledInData);
+                cache.merge(key, dataWithMissingFields);
             } else {
                 // If there was nothing in the cache
-                cache.set(key, filledInData);
+                cache.set(key, dataWithMissingFields);
             }
 
             this.successHandler(cache.get(key));

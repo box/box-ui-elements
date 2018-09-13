@@ -9,7 +9,6 @@ import {
     PERMISSION_CAN_COMMENT,
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_EDIT,
-    PLACEHOLDER_USER,
 } from '../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
@@ -52,7 +51,6 @@ class Comments extends OffsetBasedAPI {
                 comment.tagged_message !== ''
                     ? comment.tagged_message
                     : comment.message,
-            created_by: comment.created_by || PLACEHOLDER_USER,
         };
     }
 

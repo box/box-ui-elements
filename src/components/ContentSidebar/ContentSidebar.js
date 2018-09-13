@@ -25,6 +25,7 @@ import {
     SIDEBAR_VIEW_METADATA,
     UNAUTHORIZED_CODE,
 } from '../../constants';
+import { fillUserPlaceholder } from '../../util/fields';
 import messages from '../messages';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
@@ -442,7 +443,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     fetchFileSuccessCallback = (file: BoxItem): void => {
         if (SidebarUtils.shouldRenderSidebar(this.props, file)) {
             this.setState({
-                file,
+                file: fillUserPlaceholder(file),
                 isVisible: true,
                 view: this.getDefaultSidebarView(file, this.props),
                 isFileLoading: false,

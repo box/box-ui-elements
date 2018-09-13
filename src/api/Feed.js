@@ -13,6 +13,7 @@ import {
     TASKS_FIELDS_TO_FETCH,
     VERSIONS_FIELDS_TO_FETCH,
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
+    fillUserPlaceholder,
 } from '../util/fields';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
@@ -24,6 +25,7 @@ import {
     VERSION_UPLOAD_ACTION,
     VERSION_RESTORE_ACTION,
     TYPED_ID_FEED_PREFIX,
+    PLACEHOLDER_USER,
 } from '../constants';
 import { sortFeedItems } from '../util/sorter';
 
@@ -146,8 +148,9 @@ class Feed extends Base {
         Promise.all([versionsPromise, commentsPromise, tasksPromise]).then(
             feedItems => {
                 const versions: ?FileVersions = feedItems[0];
+                const filledInVersions = this.fillInUserPlaceholders(versions);
                 const versionsWithRestoredVersion = this.addCurrentVersion(
-                    versions,
+                    filledInVersions,
                     file,
                 );
                 const unsortedFeedItems = [
@@ -165,6 +168,24 @@ class Feed extends Base {
                 }
             },
         );
+    }
+
+    /**
+     * Takes a FileVersions object and fills in any placeholder users
+     * in the BoxItemVersion objects in the entries array.
+     *
+     * @param {FileVersions} versions - the file versions API data
+     * @return {FileVersions}
+     */
+    fillInUserPlaceholders(versions: ?FileVersions): ?FileVersions {
+        if (!versions) {
+            return versions;
+        }
+
+        return {
+            ...versions,
+            entries: versions.entries.map(fillUserPlaceholder),
+        };
     }
 
     /**
@@ -819,7 +840,7 @@ class Feed extends Base {
                 return {
                     type: TASK_ASSIGNMENT,
                     id,
-                    assigned_to,
+                    assigned_to: assigned_to || PLACEHOLDER_USER,
                     message,
                     resolution_state: message
                         ? message.toLowerCase()
@@ -1059,7 +1080,7 @@ class Feed extends Base {
         const currentFileVersion: BoxItemVersion = {
             ...currentVersion,
             action,
-            modified_by,
+            modified_by: modified_by || PLACEHOLDER_USER,
             created_at: modified_at,
             version_number: versionNumber,
         };

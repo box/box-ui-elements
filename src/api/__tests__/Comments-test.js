@@ -3,7 +3,6 @@ import {
     PERMISSION_CAN_COMMENT,
     PERMISSION_CAN_DELETE,
     PERMISSION_CAN_EDIT,
-    PLACEHOLDER_USER,
 } from '../../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../../util/fields';
 
@@ -32,43 +31,6 @@ describe('api/Comments', () => {
             expect(comments.commentsUrl('foo')).toBe(
                 'https://api.box.com/2.0/comments/foo',
             );
-        });
-    });
-
-    describe('format()', () => {
-        test('should keep tagged_message if present', () => {
-            const formattedComment = comments.format({
-                tagged_message: 'hello world',
-                created_by: { foo: 'bar' },
-            });
-            expect(formattedComment).toEqual({
-                tagged_message: 'hello world',
-                created_by: { foo: 'bar' },
-            });
-        });
-
-        test('should populate message as tagged_message if tagged_message not present', () => {
-            const formattedComment = comments.format({
-                message: 'hello world',
-                tagged_message: '',
-                created_by: { foo: 'bar' },
-            });
-            expect(formattedComment).toEqual({
-                tagged_message: 'hello world',
-                message: 'hello world',
-                created_by: { foo: 'bar' },
-            });
-        });
-
-        test('should populate created_by with placeholder user if null', () => {
-            const formattedComment = comments.format({
-                tagged_message: 'hello world',
-                created_by: null,
-            });
-            expect(formattedComment).toEqual({
-                tagged_message: 'hello world',
-                created_by: PLACEHOLDER_USER,
-            });
         });
     });
 

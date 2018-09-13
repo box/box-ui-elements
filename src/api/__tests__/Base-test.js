@@ -2,12 +2,7 @@ import Base from '../Base';
 import Xhr from '../../util/Xhr';
 import Cache from '../../util/Cache';
 import { getBadItemError, getBadPermissionsError } from '../../util/error';
-import {
-    HTTP_GET,
-    HTTP_POST,
-    HTTP_PUT,
-    PLACEHOLDER_USER,
-} from '../../constants';
+import { HTTP_GET, HTTP_POST, HTTP_PUT } from '../../constants';
 
 let base;
 
@@ -252,43 +247,6 @@ describe('api/Base', () => {
                         data: requestData.data,
                     });
                 });
-        });
-    });
-
-    describe('fillUserPlaceholder()', () => {
-        test('should return same object if none of the user properties are present', () => {
-            const obj = { foo: 1 };
-            expect(base.fillUserPlaceholder(obj)).toEqual(obj);
-        });
-
-        test('should not modify existing created_by if the value is not null', () => {
-            const obj = { foo: 1, created_by: { bar: 2 } };
-            expect(base.fillUserPlaceholder(obj)).toEqual(obj);
-        });
-
-        test('should add placeholder user for created_by if value is null', () => {
-            const obj = { foo: 1, created_by: null };
-            expect(base.fillUserPlaceholder(obj)).toEqual({
-                foo: 1,
-                created_by: PLACEHOLDER_USER,
-            });
-        });
-
-        test('should add placeholder user for all user properties if values are null', () => {
-            const obj = {
-                foo: 1,
-                created_by: null,
-                owned_by: null,
-                assigned_to: null,
-                modified_by: null,
-            };
-            expect(base.fillUserPlaceholder(obj)).toEqual({
-                foo: 1,
-                created_by: PLACEHOLDER_USER,
-                owned_by: PLACEHOLDER_USER,
-                assigned_to: PLACEHOLDER_USER,
-                modified_by: PLACEHOLDER_USER,
-            });
         });
     });
 });

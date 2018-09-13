@@ -16,10 +16,7 @@ import {
     HTTP_POST,
     HTTP_PUT,
     HTTP_DELETE,
-    PLACEHOLDER_USER,
 } from '../constants';
-import set from 'lodash/set';
-import { USER_FIELDS } from '../util/fields';
 
 class Base {
     /**
@@ -395,27 +392,6 @@ class Base {
         } catch (error) {
             this.errorHandler(error);
         }
-    }
-
-    /**
-     * Fill user properties that are null in an object
-     *
-     * @param {Object} obj - some object
-     * @return {Object} new object with user placeholder
-     */
-    fillUserPlaceholder(obj: Object): Object {
-        const newObj = { ...obj };
-
-        USER_FIELDS.forEach((field: string) => {
-            if (
-                Object.prototype.hasOwnProperty.call(newObj, field) &&
-                newObj[field] === null
-            ) {
-                set(newObj, field, PLACEHOLDER_USER);
-            }
-        });
-
-        return newObj;
     }
 }
 
