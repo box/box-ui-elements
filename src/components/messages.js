@@ -975,6 +975,24 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
             'Message to the user for editing the transcript in the sidebar',
         defaultMessage: 'Click any section to edit.',
     },
+    emptyOpenWithDescription: {
+        id: 'be.emptyOpenWithDescription',
+        description:
+            'Message to the user when there are no Open With integrations',
+        defaultMessage: 'No integrations are available for this file',
+    },
+    errorOpenWithDescription: {
+        id: 'be.errorOpenWithDescription',
+        description: 'Message to the user when the open with element errors',
+        defaultMessage:
+            'Opening this file with other services is currently unavailable',
+    },
+    defaultOpenWithDescription: {
+        id: 'be.defaultOpenWithDescription',
+        description:
+            'Message to the user when there is at least one Open With integration available',
+        defaultMessage: 'Open this file with a partner service',
+    },
 });
 
 export default messages;
