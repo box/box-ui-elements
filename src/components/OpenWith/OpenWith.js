@@ -9,7 +9,7 @@ import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import API from '../../api';
 import Internationalize from '../Internationalize';
-import LoadingOpenWithButton from './LoadingOpenWithButton';
+import OpenWithLoadingButton from './OpenWithLoadingButton';
 import OpenWithButton from './OpenWithButton';
 
 import '../base.scss';
@@ -134,6 +134,21 @@ class OpenWith extends PureComponent<Props, State> {
     }
 
     /**
+     * After component updates, re-fetch Open With data if appropriate.
+     *
+     * @return {void}
+     */
+    componentDidUpdate(prevProps: Props): void {
+        const { fileId: currentFileId }: Props = this.props;
+        const { fileId: previousFileId }: Props = prevProps;
+
+        if (currentFileId !== previousFileId) {
+            this.setState({ isLoading: true });
+            this.fetchOpenWithData();
+        }
+    }
+
+    /**
      * Fetches file extension and Open With data.
      *
      * @return {void}
@@ -171,21 +186,6 @@ class OpenWith extends PureComponent<Props, State> {
     };
 
     /**
-     * After component updates, re-fetch Open With data if appropriate.
-     *
-     * @return {void}
-     */
-    componentDidUpdate(prevProps: Props): void {
-        const { fileId: currentFileId }: Props = this.props;
-        const { fileId: previousFileId }: Props = prevProps;
-
-        if (currentFileId !== previousFileId) {
-            this.setState({ isLoading: true });
-            this.fetchOpenWithData();
-        }
-    }
-
-    /**
      * Fetch app integrations info needed to render.
      *
      * @param {OpenWithIntegrations} integrations - The available Open With integrations
@@ -203,7 +203,6 @@ class OpenWith extends PureComponent<Props, State> {
      */
     fetchErrorCallback = (error: Error) => {
         this.setState({ fetchError: error, isLoading: false });
-        console.error(error); // eslint-disable-line no-console
     };
 
     /**
@@ -263,7 +262,7 @@ class OpenWith extends PureComponent<Props, State> {
             <Internationalize language={language} messages={intlMessages}>
                 <div id={this.id} className="be bcow">
                     {isLoading ? (
-                        <LoadingOpenWithButton />
+                        <OpenWithLoadingButton />
                     ) : (
                         <OpenWithButton
                             error={error}
