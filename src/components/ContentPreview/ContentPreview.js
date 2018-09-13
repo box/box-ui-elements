@@ -74,7 +74,6 @@ type Props = {
     onMetric: Function,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
-    previewInstance?: any,
 };
 
 type State = {
@@ -204,14 +203,22 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentWillUnmount(): void {
+        if (this.retryTimeout) {
+            clearTimeout(this.retryTimeout);
+        }
+        // Don't destroy the cache while unmounting
+        this.api.destroy(false);
+    }
+
+    /**
+     * Cleans up the preview instance
+     */
+    destroyPreview() {
         if (this.preview) {
             this.preview.removeAllListeners();
             this.preview.destroy();
             this.preview = undefined;
         }
-
-        // Don't destroy the cache while unmounting
-        this.api.destroy(false);
     }
 
     /**
@@ -225,37 +232,15 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
-     * If new file ID or token is received, destroy preview and fetch file info for new file.
-     *
-     * @return {void}
-     */
-    componentWillReceiveProps(nextProps: Props): void {
-        const { fileId, token, isLarge }: Props = this.props;
-        const hasTokenChanged = nextProps.token !== token;
-        const hasFileIdChanged = nextProps.fileId !== fileId;
-        const hasSizeChanged = nextProps.isLarge !== isLarge;
-
-        if (hasTokenChanged || hasFileIdChanged) {
-            this.fetchFile(nextProps.fileId);
-        } else if (hasSizeChanged) {
-            this.forceUpdate();
-        }
-    }
-
-    /**
      * Once the component mounts, load Preview assets and fetch file info.
      *
      * @return {void}
      */
     componentDidMount(): void {
-        const { fileId, previewInstance }: Props = this.props;
+        const { fileId }: Props = this.props;
 
-        if (previewInstance) {
-            this.setPreviewInstance(previewInstance);
-        } else {
-            this.loadStylesheet();
-            this.loadScript();
-        }
+        this.loadStylesheet();
+        this.loadScript();
 
         this.fetchFile(fileId);
         this.rootElement = ((document.getElementById(
@@ -270,8 +255,28 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        if (this.shouldLoadPreview(prevProps, prevState)) {
+        const { fileId, token } = this.props;
+        const hasFileIdChanged = prevProps.fileId !== fileId;
+        const hasTokenChanged = prevProps.token !== token;
+
+        if (hasFileIdChanged) {
+            this.destroyPreview();
+            this.fetchFile(fileId);
+        } else if (this.shouldLoadPreview(prevState)) {
             this.loadPreview();
+        } else if (hasTokenChanged) {
+            this.updatePreviewToken();
+        }
+    }
+
+    /**
+     * Updates the access token used by preview library
+     *
+     * @param {boolean} shouldReload - true if preview should be reloaded
+     */
+    updatePreviewToken(shouldReload: boolean = false) {
+        if (this.preview) {
+            this.preview.updateToken(this.props.token, shouldReload);
         }
     }
 
@@ -282,7 +287,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {State} prevState - Previous state
      * @return {boolean}
      */
-    shouldLoadPreview(prevProps: Props, prevState: State): boolean { // eslint-disable-line
+    shouldLoadPreview(prevState: State): boolean {
         const { file }: State = this.state;
         const { file: prevFile }: State = prevState;
         let loadPreview = false;
@@ -291,7 +296,7 @@ class ContentPreview extends PureComponent<Props, State> {
         if (file && file.file_version && prevFile && prevFile.file_version) {
             loadPreview = file.file_version.id !== prevFile.file_version.id;
         } else {
-            // Load preview if file object has newly been popuplated in state
+            // Load preview if file object has newly been populated in state
             loadPreview = !prevFile && !!file;
         }
 
@@ -571,34 +576,6 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
-     * Sets a preview instance and adds event listeners.
-     *
-     * @param {Object} preview - Preview instance
-     * @return {void}
-     */
-    setPreviewInstance = (preview: any): void => {
-        this.preview = preview;
-        this.addPreviewListeners();
-    };
-
-    /**
-     * Adds preview event listeners.
-     *
-     * @return {void}
-     */
-    addPreviewListeners(): void {
-        if (!this.preview || typeof this.preview.addListener !== 'function') {
-            return;
-        }
-
-        const { onError } = this.props;
-
-        this.preview.addListener('load', this.onPreviewLoad);
-        this.preview.addListener('preview_error', onError);
-        this.preview.addListener('preview_metric', this.onPreviewMetric);
-    }
-
-    /**
      * Loads preview in the component using the preview library.
      *
      * @return {void}
@@ -607,6 +584,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const {
             token: tokenOrTokenFunction,
             collection,
+            onError,
             ...rest
         }: Props = this.props;
         const { file }: State = this.state;
@@ -620,7 +598,6 @@ class ContentPreview extends PureComponent<Props, State> {
             typedId,
             tokenOrTokenFunction,
         );
-
         const previewOptions = {
             showDownload: this.canDownload(),
             skipServerUpdate: true,
@@ -628,12 +605,11 @@ class ContentPreview extends PureComponent<Props, State> {
             container: `#${this.id} .bcpr-content`,
             useHotkeys: false,
         };
-
-        if (!this.preview) {
-            const { Preview } = global.Box;
-            this.setPreviewInstance(new Preview());
-        }
-
+        const { Preview } = global.Box;
+        this.preview = new Preview();
+        this.preview.addListener('load', this.onPreviewLoad);
+        this.preview.addListener('preview_error', onError);
+        this.preview.addListener('preview_metric', this.onPreviewMetric);
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
@@ -850,7 +826,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onNavigate(fileId);
 
         // Hide current preview immediately - we don't want to wait until the next file info returns
-        this.preview.hide();
+        this.destroyPreview();
 
         // Fetch file info for next file
         this.fetchFile(fileId);
