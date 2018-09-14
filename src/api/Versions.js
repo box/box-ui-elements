@@ -5,7 +5,6 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import { PLACEHOLDER_USER } from '../constants';
 
 const ACTION = {
     upload: 'upload',
@@ -39,10 +38,8 @@ class Versions extends OffsetBasedAPI {
 
         const { entries } = data;
         const versions = entries.map((version: BoxItemVersion) => {
-            const { modified_by } = version;
             return {
                 ...version,
-                modified_by: modified_by || PLACEHOLDER_USER,
                 action: version.trashed_at ? ACTION.delete : ACTION.upload,
             };
         });

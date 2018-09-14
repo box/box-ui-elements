@@ -1,6 +1,7 @@
 import Feed from '../Feed';
 import messages from '../../components/messages';
 import * as sorter from '../../util/sorter';
+import { PLACEHOLDER_USER } from '../../constants';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
@@ -170,6 +171,21 @@ describe('api/Feed', () => {
         modified_by: { name: 'Akon', id: 11 },
     };
 
+    const no_user_version = {
+        action: 'upload',
+        type: 'file_version',
+        id: 123,
+        created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
+        trashed_at: 1234567891,
+        modified_at: 1234567891,
+        modified_by: null,
+    };
+
+    const placeholder_user_version = {
+        ...no_user_version,
+        modified_by: PLACEHOLDER_USER,
+    };
+
     const deleted_version = {
         action: 'delete',
         type: 'file_version',
@@ -298,10 +314,56 @@ describe('api/Feed', () => {
             });
         });
 
+        test('should get feed items, sort, save to cache, and call the success callback with filled in user placeholder', done => {
+            // Set the expectations
+            const noUserVersions = {
+                total_count: 1,
+                entries: [first_version, no_user_version],
+            };
+
+            const placeholderUserVersions = {
+                total_count: 1,
+                entries: [first_version, placeholder_user_version],
+            };
+
+            feed.fetchVersions = jest.fn().mockResolvedValue(noUserVersions);
+
+            const placeholderUserSortedItems = [
+                ...placeholderUserVersions.entries,
+                ...tasks.entries,
+                ...comments.entries,
+            ];
+
+            feed.addCurrentVersion = jest
+                .fn()
+                .mockReturnValue(placeholderUserVersions);
+            sorter.sortFeedItems = jest
+                .fn()
+                .mockReturnValue(placeholderUserSortedItems);
+
+            // Do the test
+            feed.feedItems(file, successCb, errorCb);
+            setImmediate(() => {
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(
+                    placeholderUserVersions,
+                    comments,
+                    tasks,
+                );
+                expect(feed.setCachedItems).toHaveBeenCalledWith(
+                    file.id,
+                    placeholderUserSortedItems,
+                );
+                expect(successCb).toHaveBeenCalledWith(
+                    placeholderUserSortedItems,
+                );
+                done();
+            });
+        });
+
         test('should get feed items, sort, save to cache, and call the error callback', done => {
             feed.fetchVersions = function fetchVersionsWithError() {
                 this.hasError = true;
-                return [];
+                return;
             };
 
             feed.feedItems(file, successCb, errorCb);
@@ -329,6 +391,37 @@ describe('api/Feed', () => {
             feed.feedItems(file, successCb, errorCb);
             expect(feed.getCachedItems).toHaveBeenCalledWith(file.id);
             expect(successCb).toHaveBeenCalledWith(feedItems);
+        });
+    });
+
+    describe('fillInUserPlaceholders()', () => {
+        test('should return if versions is not passed in', () => {
+            expect(feed.fillInUserPlaceholders()).toBeUndefined();
+        });
+
+        test('should return data as is if modified_by users are defined', () => {
+            const versions = {
+                total_count: 1,
+                entries: [first_version, deleted_version],
+            };
+
+            expect(feed.fillInUserPlaceholders(versions)).toEqual(versions);
+        });
+
+        test('should return data wit placeholder users if modified_by user is null', () => {
+            const versions = {
+                total_count: 1,
+                entries: [first_version, no_user_version],
+            };
+
+            const filledInVersions = {
+                total_count: 1,
+                entries: [first_version, placeholder_user_version],
+            };
+
+            expect(feed.fillInUserPlaceholders(versions)).toEqual(
+                filledInVersions,
+            );
         });
     });
 

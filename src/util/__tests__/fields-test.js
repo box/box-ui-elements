@@ -6,8 +6,10 @@ import {
     VERSIONS_FIELDS_TO_FETCH,
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
     COMMENTS_FIELDS_TO_FETCH,
+    USER_FIELDS,
     findMissingProperties,
     fillMissingProperties,
+    fillUserPlaceholder,
 } from '../fields';
 import {
     FIELD_ID,
@@ -48,6 +50,7 @@ import {
     FIELD_ASSIGNED_TO,
     FIELD_RESOLUTION_STATE,
     FIELD_RESTORED_FROM,
+    PLACEHOLDER_USER,
 } from '../../constants';
 
 describe('util/fields', () => {
@@ -153,6 +156,15 @@ describe('util/fields', () => {
         ]);
     });
 
+    test('should fetch correct user fields', () => {
+        expect(USER_FIELDS).toEqual([
+            FIELD_CREATED_BY,
+            FIELD_MODIFIED_BY,
+            FIELD_OWNED_BY,
+            FIELD_ASSIGNED_TO,
+        ]);
+    });
+
     describe('findMissingProperties()', () => {
         test('should return passed in properties when object is null', () => {
             const properties = ['foo', 'bar'];
@@ -201,6 +213,43 @@ describe('util/fields', () => {
             expect(fillMissingProperties(obj, properties)).toEqual({
                 foo: { bar: 1, baz: { bum: null, bup: null } },
                 bar: { bum: null, bop: { bip: null } },
+            });
+        });
+    });
+
+    describe('fillUserPlaceholder()', () => {
+        test('should return same object if none of the user properties are present', () => {
+            const obj = { foo: 1 };
+            expect(fillUserPlaceholder(obj)).toEqual(obj);
+        });
+
+        test('should not modify existing created_by if the value is not null', () => {
+            const obj = { foo: 1, created_by: { bar: 2 } };
+            expect(fillUserPlaceholder(obj)).toEqual(obj);
+        });
+
+        test('should add placeholder user for created_by if value is null', () => {
+            const obj = { foo: 1, created_by: null };
+            expect(fillUserPlaceholder(obj)).toEqual({
+                foo: 1,
+                created_by: PLACEHOLDER_USER,
+            });
+        });
+
+        test('should add placeholder user for all user properties if values are null', () => {
+            const obj = {
+                foo: 1,
+                created_by: null,
+                owned_by: null,
+                assigned_to: null,
+                modified_by: null,
+            };
+            expect(fillUserPlaceholder(obj)).toEqual({
+                foo: 1,
+                created_by: PLACEHOLDER_USER,
+                owned_by: PLACEHOLDER_USER,
+                assigned_to: PLACEHOLDER_USER,
+                modified_by: PLACEHOLDER_USER,
             });
         });
     });

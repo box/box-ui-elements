@@ -374,7 +374,7 @@ describe('api/File', () => {
                 .mockReturnValueOnce(['missing1', 'missing2']);
             fields.fillMissingProperties = jest
                 .fn()
-                .mockReturnValueOnce('new file');
+                .mockReturnValueOnce({ foo: 'new file' });
             file.xhr = {
                 get: jest
                     .fn()
@@ -383,7 +383,7 @@ describe('api/File', () => {
 
             const success = jest.fn();
             await file.getFile('id', success);
-            expect(success).toHaveBeenCalledWith('new file');
+            expect(success).toHaveBeenCalledWith({ foo: 'new file' });
             expect(fields.findMissingProperties).toHaveBeenCalledWith(
                 { id: 'id' },
                 undefined,
