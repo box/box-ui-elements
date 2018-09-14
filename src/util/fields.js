@@ -205,7 +205,7 @@ function fillUserPlaceholder(obj: Object): Object {
     const newObj = { ...obj };
 
     USER_FIELDS.forEach((field: string) => {
-        if (newObj.hasOwnProperty(field) && newObj[field] === null) {
+        if (has(newObj, field) && newObj[field] === null) {
             setProp(newObj, field, PLACEHOLDER_USER);
         }
     });
