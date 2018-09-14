@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 
 type Props = {
@@ -16,9 +16,9 @@ const OpenWithButtonContents = ({ children }: Props) => (
     <React.Fragment>
         {children}
         <span className="btn-header-text">
-            <FormattedMessage {...messages.open} />{' '}
+            <FormattedMessage {...messages.open} />
         </span>
     </React.Fragment>
 );
 
-export default injectIntl(OpenWithButtonContents);
+export default OpenWithButtonContents;

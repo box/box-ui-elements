@@ -5,7 +5,6 @@
  */
 
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
 import ICON_FILE_MAP from './IconFileMap';
@@ -31,4 +30,4 @@ const OpenWithDropdownMenuItem = ({
     );
 };
 
-export default injectIntl(OpenWithDropdownMenuItem);
+export default OpenWithDropdownMenuItem;

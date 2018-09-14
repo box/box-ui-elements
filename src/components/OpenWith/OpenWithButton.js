@@ -7,14 +7,14 @@
 import * as React from 'react';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Tooltip from '../Tooltip';
 import OpenWithButtonContents from './OpenWithButtonContents';
 import ICON_FILE_MAP from './IconFileMap';
 import messages from '../messages';
 
 type Props = {
-    displayIntegration?: Integration | Object,
+    displayIntegration: ?Integration | ?Object,
     error: ?Error,
     icon?: string,
     isLoading: boolean,
@@ -85,4 +85,4 @@ const OpenWithButton = ({
     );
 };
 
-export default injectIntl(OpenWithButton);
+export default OpenWithButton;
