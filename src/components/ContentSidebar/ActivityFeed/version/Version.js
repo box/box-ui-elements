@@ -17,6 +17,7 @@ import {
     VERSION_UPLOAD_ACTION,
     VERSION_DELETE_ACTION,
     VERSION_RESTORE_ACTION,
+    PLACEHOLDER_USER,
 } from '../../../../constants';
 
 function getMessageForAction(
@@ -76,28 +77,35 @@ const Version = ({
     intl,
     onInfo,
     version_number,
-}: Props): React.Node => (
-    <div className="bcs-version">
-        <span className="bcs-version-message">
-            {getMessageForAction(modified_by.name, action, version_number)}
-        </span>
-        {onInfo ? (
-            <span className="bcs-version-actions">
-                <PlainButton
-                    aria-label={intl.formatMessage(messages.getVersionInfo)}
-                    className="bcs-version-info"
-                    onClick={() => {
-                        onInfo({ id, version_number });
-                    }}
-                    type="button"
-                    data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
-                >
-                    <IconInfoInverted height={16} width={16} />
-                </PlainButton>
+}: Props): React.Node => {
+    const modifiedByUser = modified_by || PLACEHOLDER_USER;
+    return (
+        <div className="bcs-version">
+            <span className="bcs-version-message">
+                {getMessageForAction(
+                    modifiedByUser.name,
+                    action,
+                    version_number,
+                )}
             </span>
-        ) : null}
-    </div>
-);
+            {onInfo ? (
+                <span className="bcs-version-actions">
+                    <PlainButton
+                        aria-label={intl.formatMessage(messages.getVersionInfo)}
+                        className="bcs-version-info"
+                        onClick={() => {
+                            onInfo({ id, version_number });
+                        }}
+                        type="button"
+                        data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
+                    >
+                        <IconInfoInverted height={16} width={16} />
+                    </PlainButton>
+                </span>
+            ) : null}
+        </div>
+    );
+};
 
 export { Version as VersionBase };
 export default injectIntl(Version);

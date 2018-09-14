@@ -24,6 +24,7 @@ import messages from '../../../messages';
 import { ACTIVITY_TARGETS } from '../../../../interactionTargets';
 
 import './Comment.scss';
+import { PLACEHOLDER_USER } from '../../../../constants';
 
 const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
 
@@ -116,6 +117,7 @@ class Comment extends React.Component<Props, State> {
         const createdAtTimestamp = new Date(created_at).getTime();
         const canDelete = getProp(permissions, 'can_delete', false);
         const canEdit = getProp(permissions, 'can_edit', false);
+        const createdByUser = created_by || PLACEHOLDER_USER;
 
         return (
             <div className="bcs-comment-container">
@@ -130,15 +132,15 @@ class Comment extends React.Component<Props, State> {
                     <Avatar
                         className="bcs-comment-avatar"
                         getAvatarUrl={getAvatarUrl}
-                        user={created_by}
+                        user={createdByUser}
                     />
                     <div className="bcs-comment-content">
                         <div className="bcs-comment-headline">
                             <UserLink
                                 className="bcs-comment-user-name"
                                 data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                                id={created_by.id}
-                                name={created_by.name}
+                                id={createdByUser.id}
+                                name={createdByUser.name}
                                 getUserProfileUrl={getUserProfileUrl}
                             />
                             <Tooltip
