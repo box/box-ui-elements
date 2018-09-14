@@ -1,5 +1,4 @@
 import Versions from '../Versions';
-import { PLACEHOLDER_USER } from '../../constants';
 
 let versions;
 
@@ -54,36 +53,6 @@ describe('api/Versions', () => {
                     {
                         ...deleteVersion,
                         action: 'delete',
-                    },
-                ],
-            };
-
-            versions.successHandler(response);
-            expect(versions.successCallback).toBeCalledWith(formattedResponse);
-        });
-
-        test('should replace missing "modified_by" property with a placeholder user', () => {
-            const uploadVersion = {
-                id: 123,
-                trashed_at: null,
-                modified_at: 1234567892,
-                modified_by: null,
-                version_number: '1',
-            };
-            const response = {
-                total_count: 1,
-                entries: [uploadVersion],
-            };
-
-            versions.successCallback = jest.fn();
-
-            const formattedResponse = {
-                total_count: 1,
-                entries: [
-                    {
-                        ...uploadVersion,
-                        modified_by: PLACEHOLDER_USER,
-                        action: 'upload',
                     },
                 ],
             };
