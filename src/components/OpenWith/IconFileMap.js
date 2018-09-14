@@ -6,7 +6,7 @@ import IconGoogleSlides from 'box-react-ui/lib/icons/google-docs/IconGoogleSlide
 
 const ICON_FILE_MAP = {
     default: IconFileDefault,
-    Adobe: IconAdobeSign,
+    'Adobe Sign': IconAdobeSign,
     'Google Docs': IconGoogleDocs,
     'Google Sheets': IconGoogleSheets,
     'Google Slides': IconGoogleSlides,
