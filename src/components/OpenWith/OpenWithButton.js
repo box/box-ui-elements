@@ -14,12 +14,12 @@ import ICON_FILE_MAP from './IconFileMap';
 import messages from '../messages';
 
 type Props = {
-    error: ?Error,
     displayIntegration?: Integration | Object,
-    onClick: ?Function,
-    tooltipText?: string | Object,
+    error: ?Error,
     icon?: string,
     isLoading: boolean,
+    onClick: ?Function,
+    tooltipText?: string | Object,
 };
 
 /**
@@ -29,8 +29,8 @@ type Props = {
  * @return {?(string | Element)} the tooltip message
  */
 const getTooltip = (
-    error: ?Error,
     displayDescription: ?string,
+    error: ?Error,
     isLoading: boolean,
 ): ?(string | Element) => {
     if (isLoading) {
@@ -53,10 +53,10 @@ const OpenWithButton = ({
     isLoading,
 }: Props) => {
     const {
-        isDisabled: isDisplayIntegrationDisabled,
-        displayName,
-        displayDescription,
         appIntegrationId: id,
+        displayDescription,
+        displayName,
+        isDisabled: isDisplayIntegrationDisabled,
     } = displayIntegration || {};
 
     const isDisabled = !!isDisplayIntegrationDisabled || !displayName;
@@ -65,19 +65,19 @@ const OpenWithButton = ({
 
     return (
         <Tooltip
-            text={getTooltip(error, displayDescription, isLoading)}
+            text={getTooltip(displayDescription, error, isLoading)}
             position="bottom-center"
         >
             <Button
+                data-attribute-id={id}
                 isDisabled={isDisabled}
                 onClick={onClick}
-                data-attribute-id={id}
             >
                 <OpenWithButtonContents>
                     <Icon
+                        className={IntegrationIcon ? 'integration-icon' : ''}
                         height={26}
                         width={26}
-                        className={IntegrationIcon ? 'integration-icon' : ''}
                     />
                 </OpenWithButtonContents>
             </Button>
