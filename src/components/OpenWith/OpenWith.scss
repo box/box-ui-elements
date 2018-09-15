@@ -1,6 +1,8 @@
+@import '../variables';
+
 .be.bcow {
     .btn {
-        padding: 3px 10px;
+        padding: 3px 13px 3px 10px;
     }
 
     .btn-content {
@@ -8,7 +10,34 @@
         display: flex;
     }
 
+    .bcow-btn-header-text {
+        padding-left: 3px;
+    }
+
+    .icon-caret-down {
+        margin-top: 4px;
+    }
+
     .integration-icon {
         padding: 3px;
+    }
+}
+
+.bcow-menu {
+    .menu-item-title {
+        color: $threes;
+        font-weight: 700;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .menu-item-description {
+        color: $downtown-grey;
+        font-size: 11px;
+        line-height: 14px;
+        margin: 0;
+        white-space: normal;
+        word-wrap: break-word;
     }
 }
