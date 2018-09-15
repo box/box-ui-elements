@@ -6,17 +6,35 @@
         <title>Open With Test Page</title>
         <style>
             .openwith {
-                margin: 0 auto;
+                margin-top: 50px;
             }
 
             .container {
                 display: flex;
                 height: 100%;
                 width: 100%;
+                align-items: center;
+                justify-content: center;
             }
+
+            .container > div {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                margin: 20px;
+            }
+
         </style>
-        <div class="openwith-setup-container">
-            <div class="id-token-container-1"></div>
+        <link rel="stylesheet" type="text/css" href="../dev/en-US/openwith.css" />
+        <script src="../dev/en-US/openwith.js"></script>
+    </head>
+    <body>
+        <div class='container'>
+            <div class="id-token-container-1">
                 <div>
                     <label>
                         <div>File Id</div>
@@ -27,38 +45,63 @@
                         <input class="token" type="text" placeholder="Enter auth token" />
                     </label>
                 </div>
-                <button type="button" onclick="load()">Submit</button>
+                <button type="button" onclick="load(1)">Submit</button>
+                <div class="openwith openwith1"></div>
             </div>
+            <div class="id-token-container-2">
+                    <div>
+                        <label>
+                            <div>File Id</div>
+                            <input class="file" type="text" placeholder="Enter file id" />
+                        </label>
+                        <label>
+                            <div>Auth Token</div>
+                            <input class="token" type="text" placeholder="Enter auth token" />
+                        </label>
+                    </div>
+                    <button type="button" onclick="load(1)">Submit</button>
+                    <div class="openwith openwith2"></div>
             </div>
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/openwith.css" />
-        <script src="../dev/en-US/openwith.js"></script>
-    </head>
-    <body>
-        <div class='container'>
-            <div class="openwith openwith1"></div>
+            <div class="id-token-container-3">
+                    <div>
+                        <label>
+                            <div>File Id</div>
+                            <input class="file" type="text" placeholder="Enter file id" />
+                        </label>
+                        <label>
+                            <div>Auth Token</div>
+                            <input class="token" type="text" placeholder="Enter auth token" />
+                        </label>
+                    </div>
+                    <button type="button" onclick="load(1)">Submit</button>
+                    <div class="openwith openwith3"></div>
+            </div>
         </div>
         <script>
-            function load() {
+            function load(buttonNum) {
                 const { OpenWith } = Box;
-                const token = document.querySelector('.token').value || localStorage.getItem('token');
-                const fileId = document.querySelector('.file').value || localStorage.getItem('file');
+                const container = document.querySelector(`.id-token-container-${buttonNum}`); 
+                const token = container.querySelector('.token').value || localStorage.getItem('token');
+                const fileId = container.querySelector('.file').value || localStorage.getItem('file');
 
                 if (!token || !fileId) {
                     return;
                 }
 
-                localStorage.setItem('token', token);
-                document.querySelector('.token').value = token;
+                localStorage.setItem(`token${buttonNum}`, token);
+                container.querySelector(`.token`).value = token;
 
-                localStorage.setItem('file', fileId);
-                document.querySelector('.file').value = fileId;
+                localStorage.setItem(`file${buttonNum}`, fileId);
+                container.querySelector('.file').value = fileId;
 
-                const openwith1 = new OpenWith();
-                openwith1.show(fileId, token, {
-                    container: '.openwith1'
+                const openwith = new OpenWith();
+                openwith.show(fileId, token, {
+                    container: `.openwith${buttonNum}`
                 });
             }
-            load();
+            load(1);
+            load(2);
+            load(3);
         </script>
     </body>
 </html>
