@@ -8,7 +8,7 @@
     },
     "items": [
         {
-            "display_name": "Adobe",
+            "display_name": "Adobe Sign",
             "display_description": "Send for Signature",
             "display_order": 1,
             "is_disabled": false,
@@ -21,7 +21,7 @@
         },
         {
             "display_name": "Google Docs",
-            "display_description": "open with google docs",
+            "display_description": "Open with Google Docs",
             "display_order": 3,
             "is_disabled": true,
             "disabled_reasons": ["manually disabled"],
@@ -33,7 +33,7 @@
         },
         {
             "display_name": "Google Slides",
-            "display_description": "open with google docs",
+            "display_description": "Open with Google Slides",
             "display_order": 2,
             "is_disabled": false,
             "disabled_reasons": [],

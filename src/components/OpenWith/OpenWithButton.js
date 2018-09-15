@@ -7,39 +7,40 @@
 import * as React from 'react';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
-import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import Tooltip from '../Tooltip';
+import OpenWithButtonContents from './OpenWithButtonContents';
 import ICON_FILE_MAP from './IconFileMap';
 import messages from '../messages';
 
 type Props = {
+    displayIntegration: ?Integration | ?Object,
     error: ?Error,
-    displayIntegration?: Integration | Object,
-    numIntegrations: number,
+    icon?: string,
+    isLoading: boolean,
     onClick: ?Function,
     tooltipText?: string | Object,
-    icon?: string,
 };
 
 /**
  * Gets the tooltip text for the OpenWith button
  *
  * @private
- * @return {string | Element}
+ * @return {?(string | Element)} the tooltip message
  */
 const getTooltip = (
+    displayDescription: ?string,
     error: ?Error,
-    displayIntegration: ?Integration,
-    numIntegrations: number,
-): string | Element => {
+    isLoading: boolean,
+): ?(string | Element) => {
+    if (isLoading) {
+        return null;
+    }
     if (error) {
         return <FormattedMessage {...messages.errorOpenWithDescription} />;
     }
-    if (displayIntegration) {
-        return displayIntegration.displayDescription;
-    }
-    if (numIntegrations > 1) {
-        return <FormattedMessage {...messages.defaultOpenWithDescription} />;
+    if (displayDescription) {
+        return displayDescription;
     }
 
     return <FormattedMessage {...messages.emptyOpenWithDescription} />;
@@ -47,40 +48,41 @@ const getTooltip = (
 
 const OpenWithButton = ({
     error,
-    numIntegrations,
     onClick,
     displayIntegration,
+    isLoading,
 }: Props) => {
     const {
-        displayName = null,
-        appIntegrationId = null,
-        isDisabled: isDisplayIntegrationDisabled = false,
+        appIntegrationId: id,
+        displayDescription,
+        displayName,
+        isDisabled: isDisplayIntegrationDisabled,
     } = displayIntegration || {};
 
-    const isDisabled =
-        !!isDisplayIntegrationDisabled || !!error || numIntegrations === 0;
+    const isDisabled = !!isDisplayIntegrationDisabled || !displayName;
     const IntegrationIcon = displayName && ICON_FILE_MAP[displayName];
     const Icon = IntegrationIcon || IconFileDefault;
 
     return (
         <Tooltip
-            text={getTooltip(error, displayIntegration, numIntegrations)}
+            text={getTooltip(displayDescription, error, isLoading)}
             position="bottom-center"
         >
             <Button
+                data-attribute-id={id}
                 isDisabled={isDisabled}
                 onClick={onClick}
-                data-attribute-id={appIntegrationId}
             >
-                <Icon
-                    height={26}
-                    width={26}
-                    className={IntegrationIcon ? 'integration-icon' : ''}
-                />
-                <FormattedMessage {...messages.open} />
+                <OpenWithButtonContents>
+                    <Icon
+                        className={IntegrationIcon ? 'integration-icon' : ''}
+                        height={26}
+                        width={26}
+                    />
+                </OpenWithButtonContents>
             </Button>
         </Tooltip>
     );
 };
 
-export default injectIntl(OpenWithButton);
+export default OpenWithButton;

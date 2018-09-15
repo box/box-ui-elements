@@ -9,7 +9,7 @@ exports[`components/OpenWith/OpenWith render() should render the Open With butto
     <OpenWithButton
       displayIntegration="Adobe"
       error={null}
-      numIntegrations={1}
+      isLoading={false}
       onClick={[Function]}
     />
   </div>
@@ -22,7 +22,12 @@ exports[`components/OpenWith/OpenWith render() should render the loading button 
     className="be bcow"
     id="bcow_8"
   >
-    <LoadingOpenWithButton />
+    <OpenWithButton
+      displayIntegration={null}
+      error={null}
+      isLoading={true}
+      onClick={[Function]}
+    />
   </div>
 </Internationalize>
 `;
