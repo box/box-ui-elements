@@ -8,7 +8,7 @@ import React, { PureComponent } from 'react';
 import uniqueid from 'lodash/uniqueId';
 import API from '../../api';
 import Internationalize from '../Internationalize';
-import OpenWithLoadingButton from './OpenWithLoadingButton';
+import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import OpenWithButton from './OpenWithButton';
 
 import '../base.scss';
@@ -231,14 +231,17 @@ class OpenWith extends PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={intlMessages}>
                 <div id={this.id} className="be bcow">
-                    {isLoading ? (
-                        <OpenWithLoadingButton />
-                    ) : (
+                    {numIntegrations <= 1 ? (
                         <OpenWithButton
                             error={error}
                             onClick={this.onIntegrationClick}
                             displayIntegration={displayIntegration}
-                            numIntegrations={numIntegrations}
+                            isLoading={isLoading}
+                        />
+                    ) : (
+                        <OpenWithDropdownMenu
+                            onClick={this.onIntegrationClick}
+                            integrations={integrations}
                         />
                     )}
                 </div>
