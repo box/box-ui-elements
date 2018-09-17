@@ -9,7 +9,7 @@
 Box UI Elements are pre-built UI components that allow developers to add features of the main Box web application into their own applications. They can be used to navigate through, upload, preview, and select content stored on Box and are available both as React components and framework-agnostic JavaScript libraries.
 
 # Demo
-*The demo page has limited functionality*
+*The demo page has limited functionality*  
 https://opensource.box.com/box-ui-elements/
 
 # Usage
