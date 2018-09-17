@@ -255,11 +255,10 @@ render(
 | language | string | `en-US` | *See the [Internationalization](#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | onLoad | function |  | Callback function for when a file preview loads. |
+| onClose | function |  | Callback function for when the file preview closes. If absent, the close button will not render in the header. |
 | collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| showAnnotations | boolean | false | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| showDownload | boolean | false | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| header | string | `light` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| canDownload | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| hasHeader | boolean | `true` | Shows or hides the preview header |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |

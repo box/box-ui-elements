@@ -87,6 +87,55 @@ describe('components/ContentPreview/ContentPreview', () => {
         });
     });
 
+    describe('canDownload()', () => {
+        let wrapper;
+        let instance;
+        let file;
+
+        beforeEach(() => {
+            file = {
+                id: '123',
+                permissions: {
+                    can_download: true,
+                },
+                is_download_available: true,
+            };
+        });
+
+        test('should return true when all conditions are met', () => {
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canDownload()).toBeTruthy();
+        });
+
+        test('should return false if canDownload is false', () => {
+            props.canDownload = false;
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canDownload()).toBeFalsy();
+        });
+
+        test('should return false if can_download is false', () => {
+            props.canDownload = true;
+            file.permissions.can_download = false;
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canDownload()).toBeFalsy();
+        });
+
+        test('should return false if is_download_available is false', () => {
+            props.canDownload = true;
+            file.is_download_available = false;
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canDownload()).toBeFalsy();
+        });
+    });
+
     describe('loadPreview()', () => {
         beforeEach(() => {
             // Fresh global preview object

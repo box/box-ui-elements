@@ -15,40 +15,79 @@
                 padding: 0;
                 width: 100%;
             }
+
+            .inputs {
+                padding: 15px;
+            }
+
+            .inputs input {
+                margin-bottom: 10px;
+            }
+
             .preview {
                 height: 600px;
-                width: 100%;
+                margin: 0 auto 50px;
+                width: 800px;
             }
         </style>
         <link rel="stylesheet" type="text/css" href="../dev/en-US/preview.css" />
         <script src="../dev/en-US/preview.js"></script>
     </head>
     <body>
-        <div class="preivew preview1"></div>
-        <div class="preivew preview2"></div>
-        <div class="preivew preview3"></div>
+        <div class="inputs">
+            <div>
+                <label>
+                    <div>Auth Token</div>
+                    <input class="token" type="text" placeholder="Enter auth token" />
+                </label>
+            </div>
+            <button type="button" onclick="load()">Submit</button>
+        </div>
+        <div class="preview preview1"></div>
+        <div class="preview preview2"></div>
+        <div class="preview preview3"></div>
         <script>
-            window.onload = function() {
+            function load() {
                 const { ContentPreview } = Box;
+                const token = document.querySelector('.token').value || localStorage.getItem('token');
+
+                const FILE_ID_DOC = '308339768087';
+                const FILE_ID_VIDEO = '308566420378';
+                const FILE_ID_3D = '319004423111';
+                const FILE_ID_TEXT = '308349801521';
+                const FILE_ID_EXCEL = '319011536090';
+                const FILE_ID_AUDIO = '308566419514';
+                const FILE_ID_IMAGE = '308345646235';
+
+                if (!token) {
+                    return;
+                }
+
+                localStorage.setItem('token', token);
+                document.querySelector('.token').value = token;
 
                 const preview1 = new ContentPreview();
-                preview1.show('41362267026', 'fStdsjuZbiyDBz4TY7XpnRAJSWOyKICE', {
+                preview1.show(FILE_ID_EXCEL, token, {
+                    hasHeader: true,
                     container: '.preview1',
-                    collection: ['41362267026', '44702126425', '34159725861']
+                    collection: [FILE_ID_EXCEL, FILE_ID_VIDEO, FILE_ID_3D, FILE_ID_TEXT, FILE_ID_AUDIO]
                 });
 
                 const preview2 = new ContentPreview();
-                preview2.show('44702126425', 'fStdsjuZbiyDBz4TY7XpnRAJSWOyKICE', {
+                preview2.show(FILE_ID_DOC, token, {
+                    hasHeader: true,
+                    canDownload: false,
                     container: '.preview2',
-                    collection: ['41362267026', '44702126425', '34159725861']
+                    collection: [FILE_ID_DOC, FILE_ID_VIDEO, FILE_ID_3D, FILE_ID_TEXT, FILE_ID_AUDIO, FILE_ID_IMAGE]
                 });
 
                 const preview3 = new ContentPreview();
-                preview3.show('34159725861', 'fStdsjuZbiyDBz4TY7XpnRAJSWOyKICE', {
+                preview3.show(FILE_ID_VIDEO, token, {
                     container: '.preview3',
-                    collection: ['41362267026', '44702126425', '34159725861']
+                    collection: [FILE_ID_VIDEO, FILE_ID_3D, FILE_ID_TEXT, FILE_ID_AUDIO, FILE_ID_IMAGE]
                 });
             }
+            load();
         </script>
     </body>
 </html>

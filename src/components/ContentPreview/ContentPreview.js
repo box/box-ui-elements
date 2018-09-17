@@ -44,14 +44,13 @@ import './ContentPreview.scss';
 
 type Props = {
     fileId: string,
-    version: string,
+    previewLibraryVersion: string,
     isLarge: boolean,
     autoFocus: boolean,
     useHotkeys: boolean,
     contentSidebarProps: ContentSidebarProps,
     canDownload?: boolean,
-    showDownload?: boolean,
-    hasHeader: boolean,
+    hasHeader?: boolean,
     apiHost: string,
     appHost: string,
     staticHost: string,
@@ -141,9 +140,8 @@ class ContentPreview extends PureComponent<Props, State> {
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         language: DEFAULT_LOCALE,
-        version: DEFAULT_PREVIEW_VERSION,
+        previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         canDownload: true,
-        showDownload: true,
         hasHeader: false,
         autoFocus: false,
         useHotkeys: true,
@@ -309,8 +307,13 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {string} base url
      */
     getBasePath(asset: string): string {
-        const { staticHost, staticPath, language, version }: Props = this.props;
-        const path: string = `${staticPath}/${version}/${language}/${asset}`;
+        const {
+            staticHost,
+            staticPath,
+            language,
+            previewLibraryVersion,
+        }: Props = this.props;
+        const path: string = `${staticPath}/${previewLibraryVersion}/${language}/${asset}`;
         const suffix: string = staticHost.endsWith('/') ? path : `/${path}`;
         return `${staticHost}${suffix}`;
     }
@@ -566,13 +569,12 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {boolean}
      */
     canDownload(): boolean {
-        // showDownload is a prop that preview library uses and can be passed by the user
-        const { showDownload, canDownload }: Props = this.props;
+        const { canDownload }: Props = this.props;
         const { file }: State = this.state;
         const isFileDownloadable =
             getProp(file, 'permissions.can_download', false) &&
             getProp(file, 'is_download_available', false);
-        return isFileDownloadable && !!canDownload && !!showDownload;
+        return isFileDownloadable && !!canDownload;
     }
 
     /**
