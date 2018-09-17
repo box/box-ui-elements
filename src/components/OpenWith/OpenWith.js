@@ -10,11 +10,17 @@ import API from '../../api';
 import Internationalize from '../Internationalize';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import OpenWithButton from './OpenWithButton';
+import ExecuteForm from './ExecuteForm';
 
 import '../base.scss';
 import './OpenWith.scss';
 
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_OPEN_WITH } from '../../constants';
+import {
+    CLIENT_NAME_OPEN_WITH,
+    DEFAULT_HOSTNAME_API,
+    HTTP_GET,
+    HTTP_POST,
+} from '../../constants';
 
 type Props = {
     /** Box File ID. */
@@ -42,6 +48,7 @@ type State = {
     integrations: ?Array<Integration>,
     isLoading: boolean,
     fetchError: ?Error,
+    executePostData: ?Object,
 };
 
 class OpenWith extends PureComponent<Props, State> {
@@ -49,6 +56,8 @@ class OpenWith extends PureComponent<Props, State> {
     id: string;
     props: Props;
     state: State;
+    formRef: any;
+    windowObjectRef: any;
 
     static defaultProps = {
         className: '',
@@ -61,6 +70,7 @@ class OpenWith extends PureComponent<Props, State> {
         integrations: null,
         isLoading: true,
         fetchError: null,
+        executePostData: null,
     };
 
     /**
@@ -87,6 +97,8 @@ class OpenWith extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor,
         });
+
+        this.formRef = React.createRef();
 
         // Clone initial state to allow for state reset on new files
         this.state = { ...this.initialState };
@@ -144,7 +156,7 @@ class OpenWith extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    fetchOpenWithData() {
+    fetchOpenWithData(): void {
         const { fileId, language }: Props = this.props;
         this.api
             .getOpenWithAPI(false)
@@ -162,7 +174,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @param {OpenWithIntegrations} integrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = (integrations: Array<Integration>) => {
+    fetchOpenWithSuccessHandler = (integrations: Array<Integration>): void => {
         this.setState({ integrations, isLoading: false });
     };
 
@@ -172,7 +184,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @param {Error} error - An axios fetch error
      * @return {void}
      */
-    fetchErrorCallback = (error: Error) => {
+    fetchErrorCallback = (error: Error): void => {
         this.setState({ fetchError: error, isLoading: false });
     };
 
@@ -192,9 +204,90 @@ class OpenWith extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    onIntegrationClick(): void {
-        /* no-op */
-    }
+    onIntegrationClick = (appIntegrationId: string): void => {
+        const { fileId }: Props = this.props;
+        this.api
+            .getAppIntegrationsAPI(false)
+            .execute(
+                appIntegrationId,
+                fileId,
+                this.executeIntegrationSuccessHandler.bind(
+                    this,
+                    appIntegrationId,
+                ),
+                this.executeIntegrationErrorHandler,
+            );
+    };
+
+    /**
+     * Opens the integration in a new tab based on the API data
+     *
+     * @private
+     * @param {ExecuteAPI} executeData - API response on how to open an executed integration
+     * @param {string} appIntegrationId - ID of the integration that was executed
+
+     * @return {void}
+     */
+    executeIntegrationSuccessHandler = (
+        executeData: ExecuteAPI,
+        appIntegrationId: string,
+    ): void => {
+        switch (executeData.method.toLowerCase()) {
+            case HTTP_POST:
+                this.setState(
+                    { executePostData: executeData },
+                    this.submitForm,
+                );
+
+                break;
+            case HTTP_GET:
+                this.windowObjectRef = window.open(
+                    executeData.url,
+                    `OpenWithIntegration${appIntegrationId}`,
+                );
+
+                if (this.windowObjectRef) {
+                    this.executeIntegrationErrorHandler(
+                        Error('unable to open integration in new window'),
+                    );
+                }
+                break;
+            default:
+                this.executeIntegrationErrorHandler(
+                    Error('unknown invocation type'),
+                );
+        }
+    };
+
+    /**
+     * Submits the integration form used for invocation
+     *
+     * @private
+     * @return {void}
+     */
+    submitForm = (): void => {
+        const form: ?HTMLFormElement = this.formRef;
+
+        if (!form) {
+            this.executeIntegrationErrorHandler(
+                Error('execution form unavailable'),
+            );
+            return;
+        }
+
+        form.submit();
+    };
+
+    /**
+     * Handles execution related errors
+     *
+     * @private
+     * @param {Error} error - Error object
+     * @return {void}
+     */
+    executeIntegrationErrorHandler = (error: Error): void => {
+        console.error(error);
+    };
 
     /**
      * Gets a display integration, if available, for the Open With button
@@ -223,6 +316,7 @@ class OpenWith extends PureComponent<Props, State> {
             fetchError: error,
             isLoading,
             integrations,
+            executePostData,
         }: State = this.state;
 
         const displayIntegration = this.getDisplayIntegration();
@@ -242,6 +336,13 @@ class OpenWith extends PureComponent<Props, State> {
                         <OpenWithDropdownMenu
                             onClick={this.onIntegrationClick}
                             integrations={integrations}
+                        />
+                    )}
+                    {executePostData && (
+                        <ExecuteForm
+                            ref={this.formRef}
+                            formData={executePostData}
+                            id={this.id}
                         />
                     )}
                 </div>

@@ -14,7 +14,7 @@ import ICON_FILE_MAP from './IconFileMap';
 import messages from '../messages';
 
 type Props = {
-    displayIntegration: ?Integration | ?Object,
+    displayIntegration?: ?Integration | ?Object,
     error: ?Error,
     icon?: string,
     isLoading: boolean,
@@ -69,9 +69,8 @@ const OpenWithButton = ({
             position="bottom-center"
         >
             <Button
-                data-attribute-id={id}
                 isDisabled={isDisabled}
-                onClick={onClick}
+                onClick={onClick ? () => onClick(id) : null}
             >
                 <OpenWithButtonContents>
                     <Icon
