@@ -257,13 +257,14 @@ render(
 | onLoad | function |  | Callback function for when a file preview loads. |
 | onClose | function |  | Callback function for when the file preview closes. If absent, the close button will not render in the header. |
 | collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| canDownload | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
-| hasHeader | boolean | `true` | Shows or hides the preview header |
+| canDownload | boolean | `true` | Visually hides the download and print buttons in the preview header if this is set to `false`. *This prop has no effect when the file permission `can_download` is set to `false`.* |
+| hasHeader | boolean | `true` | Visually hides the preview header if this is set to `false`. |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 
+***Note: Any other option listed here https://github.com/box/box-content-preview#parameters--options, which is also not listed or overriden above as a prop, will be passed on as-is to the Preview Library.***
 
 # Questions
 If you have any questions, please visit our [developer forum](https://community.box.com/t5/Box-Developer-Forum/bd-p/DeveloperForum) or contact us via one of our [available support channels](https://community.box.com/t5/Community/ct-p/English).
