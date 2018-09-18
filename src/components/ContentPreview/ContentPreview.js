@@ -290,8 +290,15 @@ class ContentPreview extends PureComponent<Props, State> {
         const { file: prevFile }: State = prevState;
         let loadPreview = false;
 
-        // Load preview if file version ID has changed
-        if (file && file.file_version && prevFile && prevFile.file_version) {
+        if (file && !this.preview) {
+            loadPreview = true;
+        } else if (
+            file &&
+            file.file_version &&
+            prevFile &&
+            prevFile.file_version
+        ) {
+            // Load preview if file version ID has changed
             loadPreview = file.file_version.id !== prevFile.file_version.id;
         } else {
             // Load preview if file object has newly been populated in state
