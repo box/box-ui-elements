@@ -230,12 +230,12 @@ export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
 
 /* ------------------ HTTP Requests ---------------------- */
-export const HTTP_GET: 'get' = 'get';
-export const HTTP_POST: 'post' = 'post';
-export const HTTP_PUT: 'put' = 'put';
-export const HTTP_DELETE: 'delete' = 'delete';
-export const HTTP_OPTIONS: 'options' = 'options';
-export const HTTP_HEAD: 'head' = 'head';
+export const HTTP_GET: 'GET' = 'GET';
+export const HTTP_POST: 'POST' = 'POST';
+export const HTTP_PUT: 'PUT' = 'PUT';
+export const HTTP_DELETE: 'DELETE' = 'DELETE';
+export const HTTP_OPTIONS: 'OPTIONS' = 'OPTIONS';
+export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
 export const UNAUTHORIZED_CODE = 403;

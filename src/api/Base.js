@@ -380,7 +380,9 @@ class Base {
         this.errorCallback = errorCallback;
 
         // $FlowFixMe
-        const xhrMethod: Function = this.xhr[method].bind(this.xhr);
+        const xhrMethod: Function = this.xhr[method.toLowerCase()].bind(
+            this.xhr,
+        );
 
         try {
             const { data } = await xhrMethod({
