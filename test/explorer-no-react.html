@@ -100,7 +100,7 @@
                         // Only apply filtering if it was a certain API request
                         // In this example we are filtering out all but PNG files
                         // The data integreity of the response data must be maintained
-                        if (method === 'get' && /^\/folders/.test(api) && !!item_collection) {
+                        if (method === 'GET' && /^\/folders/.test(api) && !!item_collection) {
                             const originalLength = item_collection.entries.length; // Keep track of items originally sent
                             item_collection.entries = item_collection.entries.filter((item) => item.extension === 'png'); // Filter out unwanted items
                             const newLength = item_collection.entries.length; // Calculate the new item list length
