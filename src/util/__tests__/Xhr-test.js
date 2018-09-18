@@ -54,7 +54,7 @@ describe('util/Xhr', () => {
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
                         url: 'url',
-                        method: 'post',
+                        method: 'POST',
                         parsedUrl: url,
                         data: {},
                         headers: {},
@@ -76,7 +76,7 @@ describe('util/Xhr', () => {
                 id: '123',
                 url: 'url',
                 data: {},
-                method: 'put',
+                method: 'PUT',
                 headers: {},
             });
         });
@@ -95,7 +95,7 @@ describe('util/Xhr', () => {
                 id: '123',
                 url: 'url',
                 data: {},
-                method: 'delete',
+                method: 'DELETE',
                 headers: {},
             });
         });
@@ -119,7 +119,7 @@ describe('util/Xhr', () => {
                 })
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
-                        method: 'options',
+                        method: 'OPTIONS',
                         headers: {},
                     });
                     expect(successHandler).toHaveBeenCalledWith(response);
@@ -143,7 +143,7 @@ describe('util/Xhr', () => {
                 })
                 .then(() => {
                     expect(xhrInstance.axios).toHaveBeenCalledWith({
-                        method: 'options',
+                        method: 'OPTIONS',
                         headers: {},
                     });
                     expect(errorHandler).toHaveBeenCalledWith(error);
