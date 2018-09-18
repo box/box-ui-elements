@@ -68,6 +68,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             wrapper.setState({
                 file,
             });
+            instance.preview = new global.Box.Preview();
         });
 
         test('should return true if file version ID has changed', () => {
@@ -80,6 +81,11 @@ describe('components/ContentPreview/ContentPreview', () => {
             expect(
                 instance.shouldLoadPreview({ file: undefined }),
             ).toBeTruthy();
+        });
+
+        test('should return true if there is a file object, and preview is not already instantiated', () => {
+            instance.preview = undefined;
+            expect(instance.shouldLoadPreview({ file })).toBe(true);
         });
 
         test('should return false if file has not changed', () => {
