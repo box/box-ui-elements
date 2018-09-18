@@ -43,7 +43,7 @@ import '../base.scss';
 import './ContentPreview.scss';
 
 type Props = {
-    fileId: string,
+    fileId?: string,
     previewLibraryVersion: string,
     isLarge: boolean,
     autoFocus: boolean,
@@ -732,13 +732,13 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchFile(
-        id: string,
+        id: ?string,
         successCallback?: Function,
         errorCallback?: Function,
         fetchOptions?: FetchOptions = {},
     ): void {
         if (!id) {
-            throw InvalidIdError;
+            return;
         }
 
         this.fetchFileStartTime = performance.now();
@@ -1016,6 +1016,7 @@ class ContentPreview extends PureComponent<Props, State> {
             sharedLinkPassword,
             requestInterceptor,
             responseInterceptor,
+            fileId,
         }: Props = this.props;
 
         const {
@@ -1033,8 +1034,10 @@ class ContentPreview extends PureComponent<Props, State> {
             collection.length > 1 &&
             fileIndex > -1 &&
             fileIndex < collection.length - 1;
-        const fileId = file ? file.id : undefined;
 
+        if (!fileId) {
+            return null;
+        }
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
