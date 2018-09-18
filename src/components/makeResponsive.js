@@ -41,6 +41,7 @@ function makeResponsive(
     return class extends React.PureComponent<Props, State> {
         props: Props;
         state: State;
+        innerElement: ?HTMLElement;
 
         static defaultProps = {
             className: '',
@@ -88,6 +89,24 @@ function makeResponsive(
         onResize = debounce(({ bounds: { width } }: { bounds: ClientRect }) => {
             this.setState({ size: this.getSize(width) });
         }, 500);
+
+        /**
+         * Callback function for setting the ref which measureRef is attached to
+         *
+         * @return {void}
+         */
+        innerRef = el => {
+            this.innerElement = el;
+        };
+
+        /**
+         * Gets the ref element which measureRef is attached to
+         *
+         * @return {?HTMLElement} - the HTML element
+         */
+        getInnerElement = () => {
+            return this.innerElement;
+        };
 
         /**
          * Renders the Box UI Element
@@ -147,9 +166,14 @@ function makeResponsive(
             );
 
             return (
-                <Measure bounds onResize={this.onResize}>
+                <Measure
+                    bounds
+                    onResize={this.onResize}
+                    innerRef={this.innerRef}
+                >
                     {({ measureRef }) => (
                         <Wrapped
+                            getInnerRef={this.getInnerElement}
                             ref={componentRef}
                             isTouch={isTouch}
                             isSmall={isSmall}
