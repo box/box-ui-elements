@@ -232,12 +232,15 @@ class OpenWith extends PureComponent<Props, State> {
                 break;
             case HTTP_GET:
                 const windowRef = window.open(url);
-
                 if (!windowRef) {
                     this.executeIntegrationErrorHandler(
                         Error(WINDOW_OPEN_BLOCKED_ERROR),
                     );
+                } else {
+                    windowRef.opener = null;
+                    windowRef.location = url;
                 }
+
                 break;
             default:
                 this.executeIntegrationErrorHandler(

@@ -5,6 +5,7 @@
  */
 
 import React, { PureComponent } from 'react';
+import { HTTP_POST } from '../../constants';
 
 type Props = {
     executePostData: ExecuteAPI,
@@ -37,9 +38,8 @@ class ExecuteForm extends PureComponent<Props> {
                 id={`bcow-execute-form-${id}`}
                 action={url}
                 target="_blank"
-                acceptCharset="utf-8"
-                method="post"
-                encType="application/x-www-form-urlencoded"
+                rel="noreferrer noopener"
+                method={HTTP_POST}
             >
                 {params &&
                     params.map(({ key, value }) => (

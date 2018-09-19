@@ -23,7 +23,7 @@ const OpenWithDropdownMenuItem = ({
         <MenuItem onClick={() => onClick(appIntegrationId)}>
             <Icon />
             <span>
-                <p className="bcow-menu-item-title"> {displayName} </p>
+                <p className="bcow-menu-item-title">{displayName}</p>
                 <p className="bcow-menu-item-description">
                     {displayDescription}
                 </p>
