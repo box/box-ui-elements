@@ -319,6 +319,11 @@ describe('components/ContentPreview/ContentPreview', () => {
                 },
             );
         });
+
+        test('should short circuit if there is no fileId', () => {
+            instance.fetchFile(null);
+            expect(getFileStub).not.toBeCalled();
+        });
     });
 
     describe('fetchFileSuccessCallback()', () => {
@@ -616,6 +621,13 @@ describe('components/ContentPreview/ContentPreview', () => {
         test('should render PreviewLoading if there is no file', () => {
             const wrapper = getWrapper(props);
             expect(wrapper.find(PreviewLoading).exists()).toBe(true);
+        });
+
+        test('should render nothing if there is no fileId', () => {
+            const wrapper = getWrapper({
+                fileId: null,
+            });
+            expect(wrapper.getElement()).toBe(null);
         });
     });
 
