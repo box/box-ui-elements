@@ -6,8 +6,6 @@
 
 import Base from './Base';
 import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE } from '../constants';
-// Temporary until API is fixed
-import mockOpenWithData from './MockOpenWithData.json';
 
 class OpenWith extends Base {
     /**
@@ -50,8 +48,7 @@ class OpenWith extends Base {
             params,
             successCallback: openWithIntegrations => {
                 const formattedOpenWithData = this.formatOpenWithData(
-                    // Temporary until API is fixed
-                    mockOpenWithData || openWithIntegrations,
+                    openWithIntegrations,
                 );
                 successCallback(formattedOpenWithData);
             },

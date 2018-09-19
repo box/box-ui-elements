@@ -1,5 +1,5 @@
 import OpenWith from '../OpenWith';
-import mockOpenWithData from '../MockOpenWithData.json';
+import mockOpenWithData from './MockOpenWithData.json';
 
 let openWith;
 
