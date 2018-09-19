@@ -10,11 +10,21 @@ import API from '../../api';
 import Internationalize from '../Internationalize';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import OpenWithButton from './OpenWithButton';
+import ExecuteForm from './ExecuteForm';
 
 import '../base.scss';
 import './OpenWith.scss';
 
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_OPEN_WITH } from '../../constants';
+import {
+    CLIENT_NAME_OPEN_WITH,
+    DEFAULT_HOSTNAME_API,
+    HTTP_GET,
+    HTTP_POST,
+} from '../../constants';
+
+const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
+const UNSUPPORTED_INVOCATION_METHOD_TYPE =
+    'Integration invocation using this HTTP method type is not supported';
 
 type Props = {
     /** Box File ID. */
@@ -42,6 +52,7 @@ type State = {
     integrations: ?Array<Integration>,
     isLoading: boolean,
     fetchError: ?Error,
+    executePostData: ?Object,
 };
 
 class OpenWith extends PureComponent<Props, State> {
@@ -61,6 +72,7 @@ class OpenWith extends PureComponent<Props, State> {
         integrations: null,
         isLoading: true,
         fetchError: null,
+        executePostData: null,
     };
 
     /**
@@ -144,7 +156,7 @@ class OpenWith extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    fetchOpenWithData() {
+    fetchOpenWithData(): void {
         const { fileId, language }: Props = this.props;
         this.api
             .getOpenWithAPI(false)
@@ -162,7 +174,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @param {OpenWithIntegrations} integrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = (integrations: Array<Integration>) => {
+    fetchOpenWithSuccessHandler = (integrations: Array<Integration>): void => {
         this.setState({ integrations, isLoading: false });
     };
 
@@ -172,7 +184,7 @@ class OpenWith extends PureComponent<Props, State> {
      * @param {Error} error - An axios fetch error
      * @return {void}
      */
-    fetchErrorCallback = (error: Error) => {
+    fetchErrorCallback = (error: Error): void => {
         this.setState({ fetchError: error, isLoading: false });
     };
 
@@ -192,9 +204,71 @@ class OpenWith extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    onIntegrationClick(): void {
-        /* no-op */
-    }
+    onIntegrationClick = (appIntegrationId: string): void => {
+        const { fileId }: Props = this.props;
+        this.api
+            .getAppIntegrationsAPI(false)
+            .execute(
+                appIntegrationId,
+                fileId,
+                this.executeIntegrationSuccessHandler,
+                this.executeIntegrationErrorHandler,
+            );
+    };
+
+    /**
+     * Opens the integration in a new tab based on the API data
+     *
+     * @private
+     * @param {ExecuteAPI} executePostData - API response on how to open an executed integration
+
+     * @return {void}
+     */
+    executeIntegrationSuccessHandler = (executePostData: ExecuteAPI): void => {
+        const { method, url } = executePostData;
+        switch (method) {
+            case HTTP_POST:
+                this.setState({ executePostData });
+                break;
+            case HTTP_GET:
+                const windowRef = window.open(url);
+                if (!windowRef) {
+                    this.executeIntegrationErrorHandler(
+                        Error(WINDOW_OPEN_BLOCKED_ERROR),
+                    );
+                } else {
+                    windowRef.opener = null;
+                    windowRef.location = url;
+                }
+
+                break;
+            default:
+                this.executeIntegrationErrorHandler(
+                    Error(UNSUPPORTED_INVOCATION_METHOD_TYPE),
+                );
+        }
+    };
+
+    /**
+     * Clears state after a form has been submitted
+     *
+     * @private
+     * @return {void}
+     */
+    onExecuteFormSubmit = (): void => {
+        this.setState({ executePostData: null });
+    };
+
+    /**
+     * Handles execution related errors
+     *
+     * @private
+     * @param {Error} error - Error object
+     * @return {void}
+     */
+    executeIntegrationErrorHandler = (error: Error): void => {
+        console.error(error);
+    };
 
     /**
      * Gets a display integration, if available, for the Open With button
@@ -223,6 +297,7 @@ class OpenWith extends PureComponent<Props, State> {
             fetchError: error,
             isLoading,
             integrations,
+            executePostData,
         }: State = this.state;
 
         const displayIntegration = this.getDisplayIntegration();
@@ -242,6 +317,13 @@ class OpenWith extends PureComponent<Props, State> {
                         <OpenWithDropdownMenu
                             onClick={this.onIntegrationClick}
                             integrations={integrations}
+                        />
+                    )}
+                    {executePostData && (
+                        <ExecuteForm
+                            onSubmit={this.onExecuteFormSubmit}
+                            executePostData={executePostData}
+                            id={this.id}
                         />
                     )}
                 </div>
