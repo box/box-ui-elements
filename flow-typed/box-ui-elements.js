@@ -60,7 +60,7 @@ import {
     HTTP_PUT,
     HTTP_DELETE,
     HTTP_OPTIONS,
-    HTTP_HEAD
+    HTTP_HEAD,
 } from '../src/constants';
 
 type Method =
@@ -561,6 +561,18 @@ type OpenWithAPIItem = {
 type AppIntegrationAPIMiniItem = {
     id: string,
     type: APP_INTEGRATION,
+}
+
+type ExecuteAPIParam = {
+    key: string,
+    value: string,
+}
+
+type ExecuteAPI = {
+    url: string,
+    params: ?Array<ExecuteAPIParam>,
+    integration_type: string,
+    method: HTTP_POST | HTTP_GET,
 }
 
 type Integration = {

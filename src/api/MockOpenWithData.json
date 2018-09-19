@@ -15,7 +15,7 @@
             "should_show_consent_popup": false,
             "disabled_reasons": [],
             "app_integration": {
-                "id": "3",
+                "id": "3282",
                 "type": "app_integration"
             }
         },
@@ -27,7 +27,7 @@
             "disabled_reasons": ["manually disabled"],
             "should_show_consent_popup": false,
             "app_integration": {
-                "id": "2",
+                "id": "10897",
                 "type": "app_integration"
             }
         },
@@ -39,7 +39,7 @@
             "disabled_reasons": [],
             "should_show_consent_popup": false,
             "app_integration": {
-                "id": "1",
+                "id": "10897",
                 "type": "app_integration"
             }
         }
