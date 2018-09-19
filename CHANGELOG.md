@@ -1,5 +1,13 @@
+## <small>7.0.1 (2018-09-19)</small>
+
+* Fix: ContentPreview navigation sometimes fails (#566) ([be55bb4](https://github.com/box/box-ui-elements/commit/be55bb4)), closes [#566](https://github.com/box/box-ui-elements/issues/566)
+* Chore: Uppercase HTTP methods (#565) ([00390d2](https://github.com/box/box-ui-elements/commit/00390d2)), closes [#565](https://github.com/box/box-ui-elements/issues/565)
+
+
+
 ## 7.0.0 (2018-09-17)
 
+* Release: 7.0.0 ([408a1ba](https://github.com/box/box-ui-elements/commit/408a1ba))
 * Docs: Add note for preview passthrough options ([802bd98](https://github.com/box/box-ui-elements/commit/802bd98))
 * Breaking: Package upgrades / downgrades (#556) ([4cb7f6e](https://github.com/box/box-ui-elements/commit/4cb7f6e)), closes [#556](https://github.com/box/box-ui-elements/issues/556)
 * Breaking: Remove preview instance prop from ContentPreview (#549) ([b6bb6fd](https://github.com/box/box-ui-elements/commit/b6bb6fd)), closes [#549](https://github.com/box/box-ui-elements/issues/549)
