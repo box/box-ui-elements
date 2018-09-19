@@ -75,7 +75,7 @@ export function isFocusableElement(
  * @return {void}
  */
 export function focus(
-    root?: HTMLElement,
+    root: ?HTMLElement,
     selector?: string,
     focusRoot: boolean = true,
 ): void {
