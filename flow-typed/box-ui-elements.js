@@ -61,8 +61,6 @@ import {
     HTTP_DELETE,
     HTTP_OPTIONS,
     HTTP_HEAD,
-    HTTP_METHOD_GET,
-    HTTP_METHOD_POST,
 } from '../src/constants';
 
 type Method =
@@ -569,7 +567,7 @@ type ExecuteAPI = {
     url: string,
     params: ?Array<{key: string, value: string}>,
     integration_type: string,
-    method: HTTP_METHOD_POST | HTTP_METHOD_GET,
+    method: HTTP_POST | HTTP_GET,
 }
 
 type Integration = {

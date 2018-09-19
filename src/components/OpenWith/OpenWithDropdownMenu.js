@@ -24,7 +24,7 @@ const OpenWithDropdownMenu = ({ integrations, onClick }: Props) => (
                     <OpenWithDropdownMenuItem
                         integration={integration}
                         onClick={onClick}
-                        key={integration.displayName}
+                        key={integration.appIntegrationId}
                     />
                 ))}
         </Menu>

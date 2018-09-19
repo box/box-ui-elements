@@ -4,29 +4,55 @@
  * @author Box
  */
 
-import * as React from 'react';
+import React, { PureComponent } from 'react';
 
 type Props = {
-    formData: ExecuteAPI,
+    executePostData: ExecuteAPI,
     id: string,
-    ref: any,
+    onSubmit: Function,
 };
 
-const ExecuteForm = ({ formData: { url, params }, id, ref }: Props) => (
-    <form
-        ref={ref}
-        id={`bcow-execute-form-${id}`}
-        action={url}
-        target="_blank"
-        acceptCharset="utf-8"
-        method="post"
-        encType="application/x-www-form-urlencoded"
-    >
-        {params &&
-            params.map(({ key, value }) => (
-                <input key={key} name={key} value={value} type="hidden" />
-            ))}
-    </form>
-);
+class ExecuteForm extends PureComponent<Props> {
+    ref: any;
+
+    constructor(props: Props) {
+        super(props);
+        this.ref = React.createRef();
+    }
+
+    componentDidMount() {
+        const { onSubmit }: Props = this.props;
+        this.ref.current.submit();
+        onSubmit();
+    }
+
+    render() {
+        const {
+            executePostData: { url, params },
+            id,
+        }: Props = this.props;
+        return (
+            <form
+                ref={this.ref}
+                id={`bcow-execute-form-${id}`}
+                action={url}
+                target="_blank"
+                acceptCharset="utf-8"
+                method="post"
+                encType="application/x-www-form-urlencoded"
+            >
+                {params &&
+                    params.map(({ key, value }) => (
+                        <input
+                            key={key}
+                            name={key}
+                            value={value}
+                            type="hidden"
+                        />
+                    ))}
+            </form>
+        );
+    }
+}
 
 export default ExecuteForm;

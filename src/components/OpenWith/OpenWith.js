@@ -56,8 +56,6 @@ class OpenWith extends PureComponent<Props, State> {
     id: string;
     props: Props;
     state: State;
-    formRef: any;
-    windowObjectRef: any;
 
     static defaultProps = {
         className: '',
@@ -97,8 +95,6 @@ class OpenWith extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor,
         });
-
-        this.formRef = React.createRef();
 
         // Clone initial state to allow for state reset on new files
         this.state = { ...this.initialState };
@@ -211,10 +207,7 @@ class OpenWith extends PureComponent<Props, State> {
             .execute(
                 appIntegrationId,
                 fileId,
-                this.executeIntegrationSuccessHandler.bind(
-                    this,
-                    appIntegrationId,
-                ),
+                this.executeIntegrationSuccessHandler,
                 this.executeIntegrationErrorHandler,
             );
     };
@@ -223,59 +216,43 @@ class OpenWith extends PureComponent<Props, State> {
      * Opens the integration in a new tab based on the API data
      *
      * @private
-     * @param {ExecuteAPI} executeData - API response on how to open an executed integration
-     * @param {string} appIntegrationId - ID of the integration that was executed
+     * @param {ExecuteAPI} executePostData - API response on how to open an executed integration
 
      * @return {void}
      */
-    executeIntegrationSuccessHandler = (
-        executeData: ExecuteAPI,
-        appIntegrationId: string,
-    ): void => {
-        switch (executeData.method.toLowerCase()) {
+    executeIntegrationSuccessHandler = (executePostData: ExecuteAPI): void => {
+        const { method, url } = executePostData;
+        switch (method) {
             case HTTP_POST:
-                this.setState(
-                    { executePostData: executeData },
-                    this.submitForm,
-                );
-
+                this.setState({ executePostData });
                 break;
             case HTTP_GET:
-                this.windowObjectRef = window.open(
-                    executeData.url,
-                    `OpenWithIntegration${appIntegrationId}`,
-                );
+                // Use a unique combination of integration + file ID to avoid creation of new windows
+                const windowRef = window.open(url);
 
-                if (this.windowObjectRef) {
+                if (!windowRef) {
                     this.executeIntegrationErrorHandler(
-                        Error('unable to open integration in new window'),
+                        Error('Unable to open integration in new window'),
                     );
                 }
                 break;
             default:
                 this.executeIntegrationErrorHandler(
-                    Error('unknown invocation type'),
+                    Error(
+                        'Integration invocation using this HTTP method type is not supported',
+                    ),
                 );
         }
     };
 
     /**
-     * Submits the integration form used for invocation
+     * Clears state after a form has been submitted
      *
      * @private
      * @return {void}
      */
-    submitForm = (): void => {
-        const form: ?HTMLFormElement = this.formRef;
-
-        if (!form) {
-            this.executeIntegrationErrorHandler(
-                Error('execution form unavailable'),
-            );
-            return;
-        }
-
-        form.submit();
+    onExecuteFormSubmit = (): void => {
+        this.setState({ executePostData: null });
     };
 
     /**
@@ -340,8 +317,8 @@ class OpenWith extends PureComponent<Props, State> {
                     )}
                     {executePostData && (
                         <ExecuteForm
-                            ref={this.formRef}
-                            formData={executePostData}
+                            onSubmit={this.onExecuteFormSubmit}
+                            executePostData={executePostData}
                             id={this.id}
                         />
                     )}
