@@ -231,7 +231,6 @@ class OpenWith extends PureComponent<Props, State> {
                 this.setState({ executePostData });
                 break;
             case HTTP_GET:
-                // Use a unique combination of integration + file ID to avoid creation of new windows
                 const windowRef = window.open(url);
 
                 if (!windowRef) {
