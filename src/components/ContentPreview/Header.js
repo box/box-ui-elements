@@ -13,10 +13,12 @@ import IconDownload from 'box-react-ui/lib/icons/general/IconDownloadSolid';
 import messages from '../messages';
 import { getIcon } from '../Item/iconCellRenderer';
 import { COLOR_999 } from '../../constants';
-
+import OpenWith from '../OpenWith/OpenWith';
 import './Header.scss';
 
 type Props = {
+    openWithProps: OpenWithProps,
+    token: ?string,
     file?: BoxItem,
     onPrint: Function,
     canDownload: boolean,
@@ -26,6 +28,8 @@ type Props = {
 };
 
 const Header = ({
+    openWithProps = {},
+    token,
     file,
     onClose,
     onPrint,
@@ -34,9 +38,11 @@ const Header = ({
     intl,
 }: Props) => {
     const name = file ? file.name : '';
+    const id = file && file.id;
     const closeMsg = intl.formatMessage(messages.close);
     const printMsg = intl.formatMessage(messages.print);
     const downloadMsg = intl.formatMessage(messages.download);
+    const shouldRenderOpenWith = id && openWithProps.show;
 
     return (
         <div className="bcpr-header">
@@ -45,6 +51,14 @@ const Header = ({
                 <span>{name}</span>
             </div>
             <div className="bcpr-btns">
+                {shouldRenderOpenWith && (
+                    <OpenWith
+                        className="bcpr-bcow-btn"
+                        {...openWithProps}
+                        fileId={id}
+                        token={token}
+                    />
+                )}
                 {canDownload && (
                     <PlainButton
                         type="button"

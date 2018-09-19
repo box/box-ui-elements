@@ -3,7 +3,9 @@
 .bcpr-btns {
     display: flex;
 
+    .be & .bcpr-bcow-btn,
     .be & .btn-plain.bcpr-btn {
+        line-height: 0;
         padding: 0 15px 0 5px;
 
         &:hover,
@@ -18,7 +20,7 @@
     background-color: $haze;
     border-bottom: 1px solid $see-see;
     display: flex;
-    flex: 0 0 45px;
+    flex: 0 0 60px;
     font-size: 13px;
     justify-content: space-between;
     padding: 0 0 0 15px;

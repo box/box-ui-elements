@@ -13,6 +13,7 @@ import type MultiputUploadAPI from '../src/api/uploads/MultiputUpload';
 import type PlainUploadAPI from '../src/api/uploads/PlainUpload';
 import type APICache from '../src/util/Cache';
 import type { ContentSidebarProps } from '../src/components/ContentSidebar';
+import type { OpenWithProps } from '../src/components/OpenWithProps';
 import type { ContentPreviewProps } from '../src/components/ContentPreview';
 import {
     ACCESS_OPEN,
