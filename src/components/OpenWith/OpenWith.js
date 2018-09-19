@@ -22,6 +22,10 @@ import {
     HTTP_POST,
 } from '../../constants';
 
+const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
+const UNSUPPORTED_INVOCATION_METHOD_TYPE =
+    'Integration invocation using this HTTP method type is not supported';
+
 type Props = {
     /** Box File ID. */
     fileId: string,
@@ -232,15 +236,13 @@ class OpenWith extends PureComponent<Props, State> {
 
                 if (!windowRef) {
                     this.executeIntegrationErrorHandler(
-                        Error('Unable to open integration in new window'),
+                        Error(WINDOW_OPEN_BLOCKED_ERROR),
                     );
                 }
                 break;
             default:
                 this.executeIntegrationErrorHandler(
-                    Error(
-                        'Integration invocation using this HTTP method type is not supported',
-                    ),
+                    Error(UNSUPPORTED_INVOCATION_METHOD_TYPE),
                 );
         }
     };
