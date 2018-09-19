@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+import noop from 'lodash/noop';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
 import { FormattedMessage } from 'react-intl';
@@ -14,7 +15,7 @@ import ICON_FILE_MAP from './IconFileMap';
 import messages from '../messages';
 
 type Props = {
-    displayIntegration: ?Integration | ?Object,
+    displayIntegration?: ?Integration,
     error: ?Error,
     icon?: string,
     isLoading: boolean,
@@ -69,13 +70,14 @@ const OpenWithButton = ({
             position="bottom-center"
         >
             <Button
-                data-attribute-id={id}
                 isDisabled={isDisabled}
-                onClick={onClick}
+                onClick={onClick ? () => onClick(id) : noop}
             >
                 <OpenWithButtonContents>
                     <Icon
-                        className={IntegrationIcon ? 'integration-icon' : ''}
+                        className={
+                            IntegrationIcon ? 'bcow-integration-icon' : ''
+                        }
                         height={26}
                         width={26}
                     />

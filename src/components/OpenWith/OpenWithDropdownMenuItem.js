@@ -15,16 +15,18 @@ type Props = {
 };
 
 const OpenWithDropdownMenuItem = ({
-    integration: { displayName, displayDescription },
+    integration: { displayName, displayDescription, appIntegrationId },
     onClick,
 }: Props) => {
     const Icon = ICON_FILE_MAP[displayName] || IconFileDefault;
     return (
-        <MenuItem onClick={onClick}>
+        <MenuItem onClick={() => onClick(appIntegrationId)}>
             <Icon />
             <span>
-                <p className="menu-item-title"> {displayName} </p>
-                <p className="menu-item-description"> {displayDescription} </p>
+                <p className="bcow-menu-item-title">{displayName}</p>
+                <p className="bcow-menu-item-description">
+                    {displayDescription}
+                </p>
             </span>
         </MenuItem>
     );
