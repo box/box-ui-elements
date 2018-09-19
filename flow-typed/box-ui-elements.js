@@ -563,9 +563,14 @@ type AppIntegrationAPIMiniItem = {
     type: APP_INTEGRATION,
 }
 
+type ExecuteAPIParam = {
+    key: string,
+    value: string,
+}
+
 type ExecuteAPI = {
     url: string,
-    params: ?Array<{key: string, value: string}>,
+    params: ?Array<ExecuteAPIParam>,
     integration_type: string,
     method: HTTP_POST | HTTP_GET,
 }
