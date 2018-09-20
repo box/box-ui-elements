@@ -5,6 +5,7 @@
  */
 
 import React, { PureComponent } from 'react';
+import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import API from '../../api';
 import Internationalize from '../Internationalize';
@@ -25,6 +26,11 @@ import {
 const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE =
     'Integration invocation using this HTTP method type is not supported';
+
+type ExternalProps = {
+    show?: boolean,
+    token?: string,
+};
 
 type Props = {
     /** Box File ID. */
@@ -133,6 +139,11 @@ class OpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount() {
+        const { fileId }: Props = this.props;
+        if (!fileId) {
+            return;
+        }
+
         this.fetchOpenWithData();
     }
 
@@ -144,6 +155,10 @@ class OpenWith extends PureComponent<Props, State> {
     componentDidUpdate(prevProps: Props): void {
         const { fileId: currentFileId }: Props = this.props;
         const { fileId: previousFileId }: Props = prevProps;
+
+        if (!currentFileId) {
+            return;
+        }
 
         if (currentFileId !== previousFileId) {
             this.setState({ isLoading: true });
@@ -300,12 +315,13 @@ class OpenWith extends PureComponent<Props, State> {
             executePostData,
         }: State = this.state;
 
+        const className = classNames('be bcow', this.props.className);
         const displayIntegration = this.getDisplayIntegration();
         const numIntegrations = integrations ? integrations.length : 0;
 
         return (
             <Internationalize language={language} messages={intlMessages}>
-                <div id={this.id} className="be bcow">
+                <div id={this.id} className={className}>
                     {numIntegrations <= 1 ? (
                         <OpenWithButton
                             error={error}
@@ -332,4 +348,5 @@ class OpenWith extends PureComponent<Props, State> {
     }
 }
 
+export type OpenWithProps = Props & ExternalProps;
 export default OpenWith;
