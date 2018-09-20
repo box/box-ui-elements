@@ -91,6 +91,10 @@ const makeDroppable = ({
          * @inheritdoc
          */
         componentWillUnmount() {
+            if (!this.droppableEl || !(this.droppableEl instanceof Element)) {
+                return;
+            }
+
             this.droppableEl.removeEventListener(
                 'dragenter',
                 this.handleDragEnter,
