@@ -29,6 +29,7 @@ const UNSUPPORTED_INVOCATION_METHOD_TYPE =
 
 type ExternalProps = {
     show?: boolean,
+    token?: string,
 };
 
 type Props = {

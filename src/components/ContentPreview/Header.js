@@ -54,9 +54,9 @@ const Header = ({
                 {shouldRenderOpenWith && (
                     <OpenWith
                         className="bcpr-bcow-btn"
-                        {...openWithProps}
                         fileId={id}
                         token={token}
+                        {...openWithProps}
                     />
                 )}
                 {canDownload && (
