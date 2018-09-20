@@ -49,6 +49,7 @@ type Props = {
     autoFocus: boolean,
     useHotkeys: boolean,
     contentSidebarProps: ContentSidebarProps,
+    openWithProps: OpenWithProps,
     canDownload?: boolean,
     hasHeader?: boolean,
     apiHost: string,
@@ -1012,6 +1013,7 @@ class ContentPreview extends PureComponent<Props, State> {
             messages,
             className,
             contentSidebarProps,
+            openWithProps,
             hasHeader,
             onClose,
             measureRef,
@@ -1055,10 +1057,12 @@ class ContentPreview extends PureComponent<Props, State> {
                     {hasHeader && (
                         <Header
                             file={file}
+                            token={token}
                             onClose={onClose}
                             onPrint={this.print}
                             canDownload={this.canDownload()}
                             onDownload={this.download}
+                            openWithProps={openWithProps}
                         />
                     )}
                     <div className="bcpr-body">
