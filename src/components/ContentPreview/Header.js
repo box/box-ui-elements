@@ -13,7 +13,7 @@ import IconDownload from 'box-react-ui/lib/icons/general/IconDownloadSolid';
 import messages from '../messages';
 import { getIcon } from '../Item/iconCellRenderer';
 import { COLOR_999 } from '../../constants';
-import OpenWith from '../OpenWith/OpenWith';
+import ContentOpenWith from '../ContentOpenWith/ContentOpenWith';
 import './Header.scss';
 
 type Props = {
@@ -52,7 +52,7 @@ const Header = ({
             </div>
             <div className="bcpr-btns">
                 {shouldRenderOpenWith && (
-                    <OpenWith
+                    <ContentOpenWith
                         className="bcpr-bcow-btn"
                         fileId={id}
                         token={token}

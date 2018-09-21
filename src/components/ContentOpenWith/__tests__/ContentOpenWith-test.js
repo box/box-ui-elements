@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import OpenWith from '../OpenWith';
+import ContentOpenWith from '../ContentOpenWith';
 
-describe('components/OpenWith/OpenWith', () => {
+describe('components/ContentOpenWith/ContentOpenWith', () => {
     const fileId = '1234';
-    const getWrapper = props => shallow(<OpenWith {...props} />);
+    const getWrapper = props => shallow(<ContentOpenWith {...props} />);
 
     describe('componentDidMount()', () => {
         it('should fetch Open With data', () => {

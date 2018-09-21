@@ -7,9 +7,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
-import OpenWithComponent from '../components/OpenWith/OpenWith';
+import OpenWithComponent from '../components/ContentOpenWith/ContentOpenWith';
 
-class OpenWith extends ES6Wrapper {
+class ContentOpenWith extends ES6Wrapper {
     /** @inheritdoc */
     render() {
         render(
@@ -28,5 +28,5 @@ class OpenWith extends ES6Wrapper {
 }
 
 global.Box = global.Box || {};
-global.Box.OpenWith = OpenWith;
-export default OpenWith;
+global.Box.ContentOpenWith = ContentOpenWith;
+export default ContentOpenWith;

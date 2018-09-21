@@ -61,7 +61,7 @@ type State = {
     executePostData: ?Object,
 };
 
-class OpenWith extends PureComponent<Props, State> {
+class ContentOpenWith extends PureComponent<Props, State> {
     api: API;
     id: string;
     props: Props;
@@ -85,7 +85,7 @@ class OpenWith extends PureComponent<Props, State> {
      * [constructor]
      *
      * @private
-     * @return {OpenWith}
+     * @return {ContentOpenWith}
      */
     constructor(props: Props) {
         super(props);
@@ -349,4 +349,4 @@ class OpenWith extends PureComponent<Props, State> {
 }
 
 export type OpenWithProps = Props & ExternalProps;
-export default OpenWith;
+export default ContentOpenWith;

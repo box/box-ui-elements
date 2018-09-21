@@ -30,7 +30,7 @@ const entries = {
     tree: path.resolve('src/wrappers/ContentTree.js'),
     preview: path.resolve('src/wrappers/ContentPreview.js'),
     sidebar: path.resolve('src/wrappers/ContentSidebar.js'),
-    openwith: path.resolve('src/wrappers/OpenWith.js')
+    openwith: path.resolve('src/wrappers/ContentOpenWith.js')
 };
 const entriesToBuild =
     typeof process.env.ENTRY === 'string'
