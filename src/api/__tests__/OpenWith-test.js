@@ -3,7 +3,7 @@ import mockOpenWithData from './MockOpenWithData.json';
 
 let openWith;
 
-describe('api/OpenWith', () => {
+describe('api/ContentOpenWith', () => {
     beforeEach(() => {
         openWith = new OpenWith({});
     });

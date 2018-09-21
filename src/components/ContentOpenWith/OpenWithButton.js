@@ -24,7 +24,7 @@ type Props = {
 };
 
 /**
- * Gets the tooltip text for the OpenWith button
+ * Gets the tooltip text for the ContentOpenWith button
  *
  * @private
  * @return {?(string | Element)} the tooltip message

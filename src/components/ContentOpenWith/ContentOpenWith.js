@@ -14,7 +14,7 @@ import OpenWithButton from './OpenWithButton';
 import ExecuteForm from './ExecuteForm';
 
 import '../base.scss';
-import './OpenWith.scss';
+import './ContentOpenWith.scss';
 
 import {
     CLIENT_NAME_OPEN_WITH,
@@ -61,7 +61,7 @@ type State = {
     executePostData: ?Object,
 };
 
-class OpenWith extends PureComponent<Props, State> {
+class ContentOpenWith extends PureComponent<Props, State> {
     api: API;
     id: string;
     props: Props;
@@ -85,7 +85,7 @@ class OpenWith extends PureComponent<Props, State> {
      * [constructor]
      *
      * @private
-     * @return {OpenWith}
+     * @return {ContentOpenWith}
      */
     constructor(props: Props) {
         super(props);
@@ -348,5 +348,5 @@ class OpenWith extends PureComponent<Props, State> {
     }
 }
 
-export type OpenWithProps = Props & ExternalProps;
-export default OpenWith;
+export type ContentOpenWithProps = Props & ExternalProps;
+export default ContentOpenWith;
