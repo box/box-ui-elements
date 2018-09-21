@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/OpenWith/OpenWith render() should render the Open With button 1`] = `
+exports[`components/ContentOpenWith/ContentOpenWith render() should render the Open With button 1`] = `
 <Internationalize>
   <div
     className="be bcow"
@@ -16,7 +16,7 @@ exports[`components/OpenWith/OpenWith render() should render the Open With butto
 </Internationalize>
 `;
 
-exports[`components/OpenWith/OpenWith render() should render the loading button when loading 1`] = `
+exports[`components/ContentOpenWith/ContentOpenWith render() should render the loading button when loading 1`] = `
 <Internationalize>
   <div
     className="be bcow"

@@ -75,7 +75,7 @@
         </div>
         <script>
             function load(buttonNum) {
-                const { OpenWith } = Box;
+                const { ContentOpenWith } = Box;
                 const container = document.querySelector(`.id-token-container-${buttonNum}`); 
                 const token = container.querySelector('.token').value || localStorage.getItem(`token${buttonNum}`);
                 const fileId = container.querySelector('.file').value || localStorage.getItem(`file${buttonNum}`);
@@ -86,7 +86,7 @@
                 container.querySelector(`.token`).value = token;
                 localStorage.setItem(`file${buttonNum}`, fileId);
                 container.querySelector('.file').value = fileId;
-                const openwith = new OpenWith();
+                const openwith = new ContentOpenWith();
                 openwith.show(fileId, token, {
                     container: `.openwith${buttonNum}`
                 });
