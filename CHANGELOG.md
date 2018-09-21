@@ -1,5 +1,16 @@
+## 7.1.0 (2018-09-21)
+
+* New: Callbacks for execution and errors (#573) ([8aa7e4f](https://github.com/box/box-ui-elements/commit/8aa7e4f)), closes [#573](https://github.com/box/box-ui-elements/issues/573)
+* New: Open With works inside of Content Preview (#569) ([a77841d](https://github.com/box/box-ui-elements/commit/a77841d)), closes [#569](https://github.com/box/box-ui-elements/issues/569)
+* Fix: Prevent double load when protecting against window.opener abuse (#572) ([bed6753](https://github.com/box/box-ui-elements/commit/bed6753)), closes [#572](https://github.com/box/box-ui-elements/issues/572)
+* Mojito: Update translations (#567) ([07c6c71](https://github.com/box/box-ui-elements/commit/07c6c71)), closes [#567](https://github.com/box/box-ui-elements/issues/567)
+* Breaking: Rename OpenWith to ContentOpenWith (#571) ([2f4fdae](https://github.com/box/box-ui-elements/commit/2f4fdae)), closes [#571](https://github.com/box/box-ui-elements/issues/571)
+
+
+
 ## <small>7.0.2 (2018-09-20)</small>
 
+* Release: 7.0.2 ([e589145](https://github.com/box/box-ui-elements/commit/e589145))
 * Chore: Guard against missing ref to droppableEl (#570) ([6363621](https://github.com/box/box-ui-elements/commit/6363621)), closes [#570](https://github.com/box/box-ui-elements/issues/570)
 * Chore: Use actual Open With API data (#568) ([eabc791](https://github.com/box/box-ui-elements/commit/eabc791)), closes [#568](https://github.com/box/box-ui-elements/issues/568)
 * Update: optional fileId in ContentPreview (#563) ([6788fe4](https://github.com/box/box-ui-elements/commit/6788fe4)), closes [#563](https://github.com/box/box-ui-elements/issues/563)
