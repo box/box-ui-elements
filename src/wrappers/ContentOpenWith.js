@@ -10,6 +10,24 @@ import ES6Wrapper from './ES6Wrapper';
 import ContentOpenWithReactComponent from '../components/ContentOpenWith/ContentOpenWith';
 
 class ContentOpenWith extends ES6Wrapper {
+    /**
+     * Callback for executing an integration
+     *
+     * @return {void}
+     */
+    onExecute = (appIntegrationId: string): void => {
+        this.emit('execute', appIntegrationId);
+    };
+
+    /**
+     * Callback when an error occurs while loading or executing integrations
+     *
+     * @return {void}
+     */
+    onError = (error: Error): void => {
+        this.emit('error', error);
+    };
+
     /** @inheritdoc */
     render() {
         render(
@@ -21,6 +39,8 @@ class ContentOpenWith extends ES6Wrapper {
                 componentRef={this.setComponent}
                 onInteraction={this.onInteraction}
                 {...this.options}
+                onExecute={this.onExecute}
+                onError={this.onError}
             />,
             this.container,
         );

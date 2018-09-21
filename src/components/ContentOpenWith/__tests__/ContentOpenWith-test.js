@@ -72,13 +72,13 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
         });
     });
 
-    describe('fetchErrorCallback()', () => {
+    describe('fetchErrorHandler()', () => {
         it('should set the error state', () => {
             const instance = getWrapper({ fileId }).instance();
             const mockError = new Error();
             instance.setState = jest.fn();
 
-            instance.fetchErrorCallback(mockError);
+            instance.fetchErrorHandler(mockError);
             expect(instance.setState).toHaveBeenCalledWith({
                 fetchError: mockError,
                 isLoading: false,
