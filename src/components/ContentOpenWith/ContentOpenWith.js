@@ -246,16 +246,18 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 this.setState({ executePostData });
                 break;
             case HTTP_GET:
-                const windowRef = window.open(url);
+                // window.open() is intentionally invoked with no URL to support workaround below
+                const windowRef = window.open();
                 if (!windowRef) {
                     this.executeIntegrationErrorHandler(
                         Error(WINDOW_OPEN_BLOCKED_ERROR),
                     );
-                } else {
-                    windowRef.opener = null;
-                    windowRef.location = url;
+                    return;
                 }
-
+                // Prevents abuse of window.opener
+                // see here for more details: https://mathiasbynens.github.io/rel-noopener/
+                windowRef.opener = null;
+                windowRef.location = url;
                 break;
             default:
                 this.executeIntegrationErrorHandler(
