@@ -14,7 +14,7 @@ import OpenWithButton from './OpenWithButton';
 import ExecuteForm from './ExecuteForm';
 
 import '../base.scss';
-import './OpenWith.scss';
+import './ContentOpenWith.scss';
 
 import {
     CLIENT_NAME_OPEN_WITH,
@@ -348,5 +348,5 @@ class ContentOpenWith extends PureComponent<Props, State> {
     }
 }
 
-export type OpenWithProps = Props & ExternalProps;
+export type ContentOpenWithProps = Props & ExternalProps;
 export default ContentOpenWith;

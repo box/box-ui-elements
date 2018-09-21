@@ -17,7 +17,7 @@ import ContentOpenWith from '../ContentOpenWith/ContentOpenWith';
 import './Header.scss';
 
 type Props = {
-    openWithProps: OpenWithProps,
+    contentOpenWithProps: ContentOpenWithProps,
     token: ?string,
     file?: BoxItem,
     onPrint: Function,
@@ -28,7 +28,7 @@ type Props = {
 };
 
 const Header = ({
-    openWithProps = {},
+    contentOpenWithProps = {},
     token,
     file,
     onClose,
@@ -42,7 +42,7 @@ const Header = ({
     const closeMsg = intl.formatMessage(messages.close);
     const printMsg = intl.formatMessage(messages.print);
     const downloadMsg = intl.formatMessage(messages.download);
-    const shouldRenderOpenWith = id && openWithProps.show;
+    const shouldRenderOpenWith = id && contentOpenWithProps.show;
 
     return (
         <div className="bcpr-header">
@@ -56,7 +56,7 @@ const Header = ({
                         className="bcpr-bcow-btn"
                         fileId={id}
                         token={token}
-                        {...openWithProps}
+                        {...contentOpenWithProps}
                     />
                 )}
                 {canDownload && (

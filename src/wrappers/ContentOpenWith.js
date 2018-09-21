@@ -7,13 +7,13 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
-import OpenWithComponent from '../components/ContentOpenWith/ContentOpenWith';
+import ContentOpenWithReactComponent from '../components/ContentOpenWith/ContentOpenWith';
 
 class ContentOpenWith extends ES6Wrapper {
     /** @inheritdoc */
     render() {
         render(
-            <OpenWithComponent
+            <ContentOpenWithReactComponent
                 language={this.language}
                 messages={this.messages}
                 fileId={this.id}
