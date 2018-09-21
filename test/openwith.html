@@ -87,8 +87,17 @@
                 localStorage.setItem(`file${buttonNum}`, fileId);
                 container.querySelector('.file').value = fileId;
                 const openwith = new ContentOpenWith();
+
+                openwith.addListener('execute', (id) => {
+                    console.log('executing app integration: ' + id);
+                });
+
+                openwith.addListener('error', (error) => {
+                    console.log(error);
+                });
+
                 openwith.show(fileId, token, {
-                    container: `.openwith${buttonNum}`
+                    container: `.openwith${buttonNum}`,
                 });
             }
             load(1);

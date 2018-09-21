@@ -7,6 +7,7 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
+import noop from 'lodash/noop';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
@@ -29,7 +30,6 @@ const UNSUPPORTED_INVOCATION_METHOD_TYPE =
 
 type ExternalProps = {
     show?: boolean,
-    token?: string,
 };
 
 type Props = {
@@ -51,6 +51,10 @@ type Props = {
     requestInterceptor?: Function,
     /** Axios response interceptor that runs before a network response is returned. */
     responseInterceptor?: Function,
+    /** Callback that executes when an integration attempts to open the given file */
+    onExecute: Function,
+    /** Callback that executes when an integration invocation fails. The two most common cases being API failures or blocking of a new window */
+    onError: Function,
 };
 
 type State = {
@@ -66,11 +70,14 @@ class ContentOpenWith extends PureComponent<Props, State> {
     id: string;
     props: Props;
     state: State;
+    executeId: ?string;
 
     static defaultProps = {
         className: '',
         clientName: CLIENT_NAME_OPEN_WITH,
         apiHost: DEFAULT_HOSTNAME_API,
+        onExecute: noop,
+        onError: noop,
     };
 
     initialState: State = {
@@ -179,7 +186,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 fileId,
                 language,
                 this.fetchOpenWithSuccessHandler,
-                this.fetchErrorCallback,
+                this.fetchErrorHandler,
             );
     }
 
@@ -199,7 +206,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @param {Error} error - An axios fetch error
      * @return {void}
      */
-    fetchErrorCallback = (error: Error): void => {
+    fetchErrorHandler = (error: Error): void => {
+        this.props.onError(error);
         this.setState({ fetchError: error, isLoading: false });
     };
 
@@ -229,21 +237,23 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 this.executeIntegrationSuccessHandler,
                 this.executeIntegrationErrorHandler,
             );
+
+        this.executeId = appIntegrationId;
     };
 
     /**
      * Opens the integration in a new tab based on the API data
      *
      * @private
-     * @param {ExecuteAPI} executePostData - API response on how to open an executed integration
+     * @param {ExecuteAPI} executeData - API response on how to open an executed integration
 
      * @return {void}
      */
-    executeIntegrationSuccessHandler = (executePostData: ExecuteAPI): void => {
-        const { method, url } = executePostData;
+    executeIntegrationSuccessHandler = (executeData: ExecuteAPI): void => {
+        const { method, url } = executeData;
         switch (method) {
             case HTTP_POST:
-                this.setState({ executePostData });
+                this.setState({ executePostData: executeData });
                 break;
             case HTTP_GET:
                 // window.open() is intentionally invoked with no URL to support workaround below
@@ -253,6 +263,10 @@ class ContentOpenWith extends PureComponent<Props, State> {
                         Error(WINDOW_OPEN_BLOCKED_ERROR),
                     );
                     return;
+                } else {
+                    windowRef.opener = null;
+                    windowRef.location = url;
+                    this.onExecute();
                 }
                 // Prevents abuse of window.opener
                 // see here for more details: https://mathiasbynens.github.io/rel-noopener/
@@ -273,8 +287,20 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     onExecuteFormSubmit = (): void => {
+        this.onExecute();
         this.setState({ executePostData: null });
     };
+
+    /**
+     * Calls the onExecute prop and resets the execute ID
+     *
+     * @private
+     * @return {void}
+     */
+    onExecute() {
+        this.props.onExecute(this.executeId);
+        this.executeId = null;
+    }
 
     /**
      * Handles execution related errors
@@ -284,6 +310,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     executeIntegrationErrorHandler = (error: Error): void => {
+        this.props.onError(error);
         console.error(error);
     };
 
