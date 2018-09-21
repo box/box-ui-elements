@@ -246,7 +246,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 this.setState({ executePostData });
                 break;
             case HTTP_GET:
-                const windowRef = window.open(url);
+                const windowRef = window.open();
                 if (!windowRef) {
                     this.executeIntegrationErrorHandler(
                         Error(WINDOW_OPEN_BLOCKED_ERROR),
