@@ -1,5 +1,12 @@
+## <small>7.1.1 (2018-09-24)</small>
+
+* Fix: Import regenerator-runtime in ContentOpenWith (#575) ([09572a0](https://github.com/box/box-ui-elements/commit/09572a0)), closes [#575](https://github.com/box/box-ui-elements/issues/575)
+
+
+
 ## 7.1.0 (2018-09-21)
 
+* Release: 7.1.0 ([2348fd2](https://github.com/box/box-ui-elements/commit/2348fd2))
 * New: Callbacks for execution and errors (#573) ([8aa7e4f](https://github.com/box/box-ui-elements/commit/8aa7e4f)), closes [#573](https://github.com/box/box-ui-elements/issues/573)
 * New: Open With works inside of Content Preview (#569) ([a77841d](https://github.com/box/box-ui-elements/commit/a77841d)), closes [#569](https://github.com/box/box-ui-elements/issues/569)
 * Fix: Prevent double load when protecting against window.opener abuse (#572) ([bed6753](https://github.com/box/box-ui-elements/commit/bed6753)), closes [#572](https://github.com/box/box-ui-elements/issues/572)
