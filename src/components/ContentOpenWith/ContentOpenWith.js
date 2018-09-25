@@ -264,8 +264,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
                     );
                     return;
                 } else {
-                    windowRef.opener = null;
                     windowRef.location = url;
+                    windowRef.opener = null;
                     this.onExecute();
                 }
                 // Prevents abuse of window.opener
