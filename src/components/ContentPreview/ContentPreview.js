@@ -253,7 +253,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
     static getDerivedStateFromProps(props: Props, state: State) {
         const { fileId } = props;
-        if (state.prevFileId !== fileId && fileId !== state.currentFileId) {
+        if (fileId !== state.prevFileId && fileId !== state.currentFileId) {
             return {
                 currentFileId: fileId,
                 prevFileId: fileId,
@@ -847,11 +847,15 @@ class ContentPreview extends PureComponent<Props, State> {
         const fileId =
             typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
 
-        this.setState({
-            currentFileId: fileId,
-        });
-        // Execute navigation callback
-        onNavigate(fileId);
+        this.setState(
+            {
+                currentFileId: fileId,
+            },
+            () => {
+                // Execute navigation callback
+                onNavigate(fileId);
+            },
+        );
     }
 
     /**
