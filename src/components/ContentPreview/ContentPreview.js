@@ -613,12 +613,16 @@ class ContentPreview extends PureComponent<Props, State> {
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
             return;
         }
-
-        const typedId: string = getTypedFileId(this.getFileId(file));
+        const fileId = this.getFileId(file);
+        const typedId: string = getTypedFileId(fileId);
         const token: TokenLiteral = await TokenService.getReadToken(
             typedId,
             tokenOrTokenFunction,
         );
+        if (fileId !== this.state.currentFileId) {
+            return;
+        }
+
         const previewOptions = {
             showDownload: this.canDownload(),
             skipServerUpdate: true,
