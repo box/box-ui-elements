@@ -1,5 +1,13 @@
+## <small>7.1.2 (2018-09-25)</small>
+
+* Fix: ContentPreview navigation issues (#577) ([b0759f6](https://github.com/box/box-ui-elements/commit/b0759f6)), closes [#577](https://github.com/box/box-ui-elements/issues/577)
+* Fix: Fix sandboxed iframe case for GET integrations (#576) ([db14c37](https://github.com/box/box-ui-elements/commit/db14c37)), closes [#576](https://github.com/box/box-ui-elements/issues/576)
+
+
+
 ## <small>7.1.1 (2018-09-24)</small>
 
+* Release: 7.1.1 ([11ef154](https://github.com/box/box-ui-elements/commit/11ef154))
 * Fix: Import regenerator-runtime in ContentOpenWith (#575) ([09572a0](https://github.com/box/box-ui-elements/commit/09572a0)), closes [#575](https://github.com/box/box-ui-elements/issues/575)
 
 
