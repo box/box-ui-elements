@@ -71,6 +71,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     props: Props;
     state: State;
     executeId: ?string;
+    window: any;
     windowRef: ?any;
 
     static defaultProps = {
@@ -152,6 +153,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
             return;
         }
 
+        this.window = window;
+
         this.fetchOpenWithData();
     }
 
@@ -232,7 +235,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         const { fileId }: Props = this.props;
         // window.open() is immediately invoked to avoid popup-blockers
         // The name is included to be the target of a form if the integration is a POST integration
-        this.windowRef = window.open(
+        this.windowRef = this.window.open(
             '',
             `OpenWithIntegration-${appIntegrationId}`,
         );
@@ -282,6 +285,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
                     Error(UNSUPPORTED_INVOCATION_METHOD_TYPE),
                 );
         }
+
+        this.windowRef = null;
     };
 
     /**
@@ -372,7 +377,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                         <ExecuteForm
                             onSubmit={this.onExecuteFormSubmit}
                             executePostData={executePostData}
-                            windowRef={this.windowRef}
+                            windowName={this.windowRef && this.windowRef.name}
                             id={this.id}
                         />
                     )}
