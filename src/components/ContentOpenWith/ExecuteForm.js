@@ -11,6 +11,7 @@ type Props = {
     executePostData: ExecuteAPI,
     id: string,
     onSubmit: Function,
+    windowRef: any,
 };
 
 class ExecuteForm extends PureComponent<Props> {
@@ -31,13 +32,14 @@ class ExecuteForm extends PureComponent<Props> {
         const {
             executePostData: { url, params },
             id,
+            windowRef,
         }: Props = this.props;
         return (
             <form
                 ref={this.ref}
                 id={`bcow-execute-form-${id}`}
                 action={url}
-                target="_blank"
+                target={windowRef.name}
                 rel="noreferrer noopener"
                 method={HTTP_POST}
             >

@@ -71,6 +71,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     props: Props;
     state: State;
     executeId: ?string;
+    windowRef: ?any;
 
     static defaultProps = {
         className: '',
@@ -229,6 +230,12 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     onIntegrationClick = (appIntegrationId: string): void => {
         const { fileId }: Props = this.props;
+        // window.open() is immediately invoked to avoid popup-blockers
+        // The name is included to be the target of a form if the integration is a POST integration
+        this.windowRef = window.open(
+            '',
+            `OpenWithIntegration-${appIntegrationId}`,
+        );
         this.api
             .getAppIntegrationsAPI(false)
             .execute(
@@ -256,22 +263,19 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 this.setState({ executePostData: executeData });
                 break;
             case HTTP_GET:
-                // window.open() is intentionally invoked with no URL to support workaround below
-                const windowRef = window.open();
-                if (!windowRef) {
+                if (!this.windowRef) {
                     this.executeIntegrationErrorHandler(
                         Error(WINDOW_OPEN_BLOCKED_ERROR),
                     );
                     return;
-                } else {
-                    windowRef.location = url;
-                    windowRef.opener = null;
-                    this.onExecute();
                 }
+
                 // Prevents abuse of window.opener
                 // see here for more details: https://mathiasbynens.github.io/rel-noopener/
-                windowRef.opener = null;
-                windowRef.location = url;
+                this.windowRef.location = url;
+                this.windowRef.opener = null;
+                this.onExecute();
+
                 break;
             default:
                 this.executeIntegrationErrorHandler(
@@ -368,6 +372,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                         <ExecuteForm
                             onSubmit={this.onExecuteFormSubmit}
                             executePostData={executePostData}
+                            windowRef={this.windowRef}
                             id={this.id}
                         />
                     )}
