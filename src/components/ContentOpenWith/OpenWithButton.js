@@ -7,11 +7,12 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import Button from 'box-react-ui/lib/components/button/Button';
-import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
+import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
 import Tooltip from '../Tooltip';
 import OpenWithButtonContents from './OpenWithButtonContents';
 import ICON_FILE_MAP from './IconFileMap';
+import { CLASS_INTEGRATION_ICON } from '../../constants';
 import messages from '../messages';
 
 type Props = {
@@ -62,7 +63,7 @@ const OpenWithButton = ({
 
     const isDisabled = !!isDisplayIntegrationDisabled || !displayName;
     const IntegrationIcon = displayName && ICON_FILE_MAP[displayName];
-    const Icon = IntegrationIcon || IconFileDefault;
+    const Icon = IntegrationIcon || IconOpenWith;
 
     return (
         <Tooltip
@@ -75,9 +76,7 @@ const OpenWithButton = ({
             >
                 <OpenWithButtonContents>
                     <Icon
-                        className={
-                            IntegrationIcon ? 'bcow-integration-icon' : ''
-                        }
+                        className={CLASS_INTEGRATION_ICON}
                         height={26}
                         width={26}
                     />
