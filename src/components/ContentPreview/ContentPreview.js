@@ -81,6 +81,8 @@ type State = {
     file?: BoxItem,
     isFileError: boolean,
     isReloadNotificationVisible: boolean,
+    currentFileId?: string, // the currently displayed file id in the collection
+    prevFileId?: string, // the prop "fileId" which is needed to implement getDerivedStateFromProps
 };
 
 // Emitted by preview's 'load' event
@@ -181,6 +183,7 @@ class ContentPreview extends PureComponent<Props, State> {
             apiHost,
             requestInterceptor,
             responseInterceptor,
+            fileId,
         } = props;
 
         this.id = uniqueid('bcpr_');
@@ -194,7 +197,11 @@ class ContentPreview extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor,
         });
-        this.state = { ...this.initialState };
+        this.state = {
+            ...this.initialState,
+            currentFileId: fileId,
+            prevFileId: fileId,
+        };
     }
 
     /**
@@ -237,13 +244,23 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
-        const { fileId }: Props = this.props;
-
         this.loadStylesheet();
         this.loadScript();
 
-        this.fetchFile(fileId);
+        this.fetchFile(this.state.currentFileId);
         this.focusPreview();
+    }
+
+    static getDerivedStateFromProps(props: Props, state: State) {
+        const { fileId } = props;
+        if (state.prevFileId !== fileId && fileId !== state.currentFileId) {
+            return {
+                currentFileId: fileId,
+                prevFileId: fileId,
+            };
+        }
+
+        return null;
     }
 
     /**
@@ -252,13 +269,13 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { fileId, token } = this.props;
-        const hasFileIdChanged = prevProps.fileId !== fileId;
+        const { token } = this.props;
+        const { currentFileId } = this.state;
+        const hasFileIdChanged = prevState.currentFileId !== currentFileId;
         const hasTokenChanged = prevProps.token !== token;
-
         if (hasFileIdChanged) {
             this.destroyPreview();
-            this.fetchFile(fileId);
+            this.fetchFile(currentFileId);
         } else if (this.shouldLoadPreview(prevState)) {
             this.loadPreview();
         } else if (hasTokenChanged) {
@@ -292,9 +309,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const currentVersionId = getProp(file, versionPath);
         let loadPreview = false;
 
-        if (file && !this.preview) {
-            loadPreview = true;
-        } else if (previousVersionId && currentVersionId) {
+        if (previousVersionId && currentVersionId) {
             // Load preview if file version ID has changed
             loadPreview = currentVersionId !== previousVersionId;
         } else {
@@ -701,7 +716,7 @@ class ContentPreview extends PureComponent<Props, State> {
     /* eslint-disable no-unused-vars */
     fetchFileErrorCallback = (fileError: Error): void => {
         /* eslint-enable no-unused-vars */
-        const { fileId }: Props = this.props;
+        const { currentFileId } = this.state;
         if (this.retryCount >= RETRY_COUNT) {
             this.setState({ isFileError: true });
         } else {
@@ -721,7 +736,7 @@ class ContentPreview extends PureComponent<Props, State> {
             }
 
             this.retryTimeout = setTimeout(() => {
-                this.fetchFile(fileId);
+                this.fetchFile(currentFileId);
             }, timeoutMs);
         }
     };
@@ -795,18 +810,18 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {number} -1 if not indexed
      */
     getFileIndex() {
-        const { file }: State = this.state;
+        const { currentFileId }: State = this.state;
         const { collection }: Props = this.props;
-        if (!file || collection.length < 2) {
+        if (!currentFileId || collection.length < 2) {
             return -1;
         }
 
         return collection.findIndex(item => {
             if (typeof item === 'string') {
-                return item === file.id;
+                return item === currentFileId;
             }
 
-            return item.id === file.id;
+            return item.id === currentFileId;
         });
     }
 
@@ -828,14 +843,11 @@ class ContentPreview extends PureComponent<Props, State> {
         const fileId =
             typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
 
+        this.setState({
+            currentFileId: fileId,
+        });
         // Execute navigation callback
         onNavigate(fileId);
-
-        // Hide current preview immediately - we don't want to wait until the next file info returns
-        this.destroyPreview();
-
-        // Fetch file info for next file
-        this.fetchFile(fileId);
     }
 
     /**
@@ -1021,13 +1033,13 @@ class ContentPreview extends PureComponent<Props, State> {
             sharedLinkPassword,
             requestInterceptor,
             responseInterceptor,
-            fileId,
         }: Props = this.props;
 
         const {
             file,
             isFileError,
             isReloadNotificationVisible,
+            currentFileId,
         }: State = this.state;
         const { collection }: Props = this.props;
         const fileIndex = this.getFileIndex();
@@ -1040,7 +1052,7 @@ class ContentPreview extends PureComponent<Props, State> {
             fileIndex > -1 &&
             fileIndex < collection.length - 1;
 
-        if (!fileId) {
+        if (!currentFileId) {
             return null;
         }
         /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -1116,7 +1128,7 @@ class ContentPreview extends PureComponent<Props, State> {
                                 apiHost={apiHost}
                                 token={token}
                                 cache={this.api.getCache()}
-                                fileId={fileId}
+                                fileId={currentFileId}
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
                                 sharedLink={sharedLink}
