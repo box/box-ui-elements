@@ -210,7 +210,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @param {Error} error - An axios fetch error
      * @return {void}
      */
-    fetchErrorHandler = (error: Error): void => {
+    fetchErrorHandler = (error: any): void => {
         this.props.onError(error);
         this.setState({ fetchError: error, isLoading: false });
     };
@@ -318,7 +318,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @param {Error} error - Error object
      * @return {void}
      */
-    executeIntegrationErrorHandler = (error: Error): void => {
+    executeIntegrationErrorHandler = (error: any): void => {
         this.props.onError(error);
         console.error(error);
     };
