@@ -1,5 +1,14 @@
+## 7.2.0 (2018-09-27)
+
+* Fix: Fix prop errors on network failures (#580) ([3153301](https://github.com/box/box-ui-elements/commit/3153301)), closes [#580](https://github.com/box/box-ui-elements/issues/580)
+* New: Use Open With Icon (#579) ([804a1c8](https://github.com/box/box-ui-elements/commit/804a1c8)), closes [#579](https://github.com/box/box-ui-elements/issues/579)
+* Chore: Create new windows immediately to avoid popup blockers (#578) ([f85524d](https://github.com/box/box-ui-elements/commit/f85524d)), closes [#578](https://github.com/box/box-ui-elements/issues/578)
+
+
+
 ## <small>7.1.2 (2018-09-25)</small>
 
+* Release: 7.1.2 ([4d5a16c](https://github.com/box/box-ui-elements/commit/4d5a16c))
 * Fix: ContentPreview navigation issues (#577) ([b0759f6](https://github.com/box/box-ui-elements/commit/b0759f6)), closes [#577](https://github.com/box/box-ui-elements/issues/577)
 * Fix: Fix sandboxed iframe case for GET integrations (#576) ([db14c37](https://github.com/box/box-ui-elements/commit/db14c37)), closes [#576](https://github.com/box/box-ui-elements/issues/576)
 
