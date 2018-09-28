@@ -156,6 +156,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onNavigate: noop,
         collection: [],
         contentSidebarProps: {},
+        contentOpenWithProps: {},
     };
 
     /**
