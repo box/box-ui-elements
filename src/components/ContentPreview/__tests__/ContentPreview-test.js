@@ -83,11 +83,6 @@ describe('components/ContentPreview/ContentPreview', () => {
             ).toBeTruthy();
         });
 
-        test('should return true if there is a file object, and preview is not already instantiated', () => {
-            instance.preview = undefined;
-            expect(instance.shouldLoadPreview({ file })).toBe(true);
-        });
-
         test('should return false if file has not changed', () => {
             expect(instance.shouldLoadPreview({ file })).toBe(false);
         });
@@ -724,7 +719,7 @@ describe('components/ContentPreview/ContentPreview', () => {
         });
     });
 
-    describe('componentDidUpdate', () => {
+    describe('componentDidUpdate()', () => {
         let wrapper;
         let instance;
         const token = 'token';
@@ -749,7 +744,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             expect(instance.fetchFile).toBeCalledTimes(1);
         });
 
-        test('should load preview if version changes or newly populated file in state', () => {
+        test('should load preview if fileId hasnt changed and shouldLoadPreview returns ture', () => {
             instance.shouldLoadPreview = jest.fn().mockReturnValue(true);
             wrapper.setProps({
                 foo: 'bar',
@@ -762,6 +757,39 @@ describe('components/ContentPreview/ContentPreview', () => {
                 token: 'bar',
             });
             expect(instance.updatePreviewToken).toBeCalledTimes(1);
+        });
+    });
+
+    describe('getDerivedStateFromProps()', () => {
+        let wrapper;
+        const token = 'token';
+        const initialFileId = 'foo';
+        const newFileId = 'bar';
+
+        beforeEach(() => {
+            wrapper = getWrapper({
+                token,
+                fileId: initialFileId,
+            });
+            expect(wrapper.state('currentFileId')).toBe(initialFileId);
+        });
+        test('should update the currentFileId in state if the fileId prop changes', () => {
+            wrapper.setProps({
+                fileId: newFileId,
+            });
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+        });
+
+        test('should not update the currentFileId in state if the fileId prop stays the same', () => {
+            wrapper.setState({
+                currentFileId: newFileId,
+            });
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            wrapper.setProps({
+                fileId: initialFileId,
+                foo: 'baz',
+            });
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
         });
     });
 });
