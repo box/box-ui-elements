@@ -50,7 +50,7 @@ The Box UI Elements are designed to be agnostic of authentication type. They can
 The Box UI Elements require their corresponding CSS stylesheets to render properly. You will need to set up Webpack's style-loader and css-loader in order to properly include the CSS like in the examples below. Alternatively, you can include the appropriate CSS files in your application's HTML without importing it in React. Links to hosted versions of these CSS files on the Box CDN can be found in the documentation links below.
 
 # Components
-You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, or `ContentPreview`. Similarly, you can also import the `ContentPickerPopup` and `ContentUploaderPopup` which are popup versions for the Content Picker and Content Uploader, respectively.
+You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview` or `ContentOpenWith`. Similarly, you can also import the `ContentPickerPopup` and `ContentUploaderPopup` which are popup versions for the Content Picker and Content Uploader, respectively.
 
 ## Content Explorer ([Documentation](https://developer.box.com/docs/box-content-explorer))
 
@@ -265,6 +265,35 @@ render(
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 
 ***Note: Any other option listed here https://github.com/box/box-content-preview#parameters--options, which is also not listed or overriden above as a prop, will be passed on as-is to the Preview Library.***
+
+## Content Open With ([Documentation](https://developer.box.com/docs/box-content-open-with)) [Beta]
+
+<img src="https://cdn-images-1.medium.com/max/1600/1*vYnh6Obs8FP6HH1EJCsmuQ.gif" width="75%"/>
+
+***IMPORTANT: The Content Open With Element is in beta, see the documentation for more information.***
+
+```js
+import React from 'react';
+import { render } from 'react-dom';
+import { addLocaleData } from 'react-intl';
+import enLocaleData from 'react-intl/locale-data/en';
+import { ContentOpenWith } from 'box-ui-elements';
+import messages from 'box-ui-elements/i18n/en-US';
+import 'box-ui-elements/dist/openwith.css';
+
+addLocaleData(enLocaleData);
+
+render(
+    <ContentOpenWith
+        fileId='FILE_ID'
+        token='ACCESS_TOKEN'
+        language='en-US'
+        messages={messages}
+    />,
+    document.querySelector('.container')
+);
+```
+
 
 # Questions
 If you have any questions, please visit our [developer forum](https://community.box.com/t5/Box-Developer-Forum/bd-p/DeveloperForum) or contact us via one of our [available support channels](https://community.box.com/t5/Community/ct-p/English).
