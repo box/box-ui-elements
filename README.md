@@ -268,7 +268,7 @@ render(
 
 ## Content Open With ([Documentation](https://developer.box.com/docs/box-content-open-with)) [Beta]
 
-<img src="https://cdn-images-1.medium.com/max/1600/1*vYnh6Obs8FP6HH1EJCsmuQ.gif" width="75%"/>
+<img src="https://cdn-images-1.medium.com/max/1600/1*dd2YfUFtbt9z6Lrv6hNF_g.gif" width="75%"/>
 
 ***IMPORTANT: The Content Open With Element is in beta, see the documentation for more information.***
 
