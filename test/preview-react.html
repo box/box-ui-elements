@@ -37,6 +37,10 @@
         <div class="inputs">
             <div>
                 <label>
+                    <div>File Id</div>
+                    <input class="file" type="text" placeholder="Enter file id" />
+                </label>
+                <label>
                     <div>Auth Token</div>
                     <input class="token" type="text" placeholder="Enter auth token" />
                 </label>
@@ -44,12 +48,11 @@
             <button type="button" onclick="load()">Submit</button>
         </div>
         <div class="preview preview1"></div>
-        <div class="preview preview2"></div>
-        <div class="preview preview3"></div>
         <script>
             function load() {
                 const { ContentPreview } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
+                const fileId = document.querySelector('.file').value || localStorage.getItem('file');
 
                 const FILE_ID_DOC = '308339768087';
                 const FILE_ID_VIDEO = '308566420378';
@@ -59,32 +62,22 @@
                 const FILE_ID_AUDIO = '308566419514';
                 const FILE_ID_IMAGE = '308345646235';
 
-                if (!token) {
+                if (!token || !fileId) {
                     return;
                 }
 
                 localStorage.setItem('token', token);
                 document.querySelector('.token').value = token;
 
+                localStorage.setItem('file', fileId);
+                document.querySelector('.file').value = fileId;
+
                 const preview1 = new ContentPreview();
-                preview1.show(FILE_ID_EXCEL, token, {
+                preview1.show(fileId, token, {
                     hasHeader: true,
                     container: '.preview1',
-                    collection: [FILE_ID_EXCEL, FILE_ID_VIDEO, FILE_ID_3D, FILE_ID_TEXT, FILE_ID_AUDIO]
-                });
-
-                const preview2 = new ContentPreview();
-                preview2.show(FILE_ID_DOC, token, {
-                    hasHeader: true,
-                    canDownload: false,
-                    container: '.preview2',
-                    collection: [FILE_ID_DOC, FILE_ID_VIDEO, FILE_ID_3D, FILE_ID_TEXT, FILE_ID_AUDIO, FILE_ID_IMAGE]
-                });
-
-                const preview3 = new ContentPreview();
-                preview3.show(FILE_ID_VIDEO, token, {
-                    container: '.preview3',
-                    collection: [FILE_ID_VIDEO, FILE_ID_3D, FILE_ID_TEXT, FILE_ID_AUDIO, FILE_ID_IMAGE]
+                    collection: [FILE_ID_EXCEL, FILE_ID_VIDEO, FILE_ID_3D, FILE_ID_TEXT, FILE_ID_AUDIO],
+                    contentOpenWithProps: {},
                 });
             }
             load();

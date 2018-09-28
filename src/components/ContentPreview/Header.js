@@ -8,6 +8,8 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconClose from 'box-react-ui/lib/icons/general/IconClose';
+import IconDrawAnnotationMode from 'box-react-ui/lib/icons/annotations/IconDrawAnnotation';
+import IconPointAnnotation from 'box-react-ui/lib/icons/annotations/IconPointAnnotation';
 import IconPrint from 'box-react-ui/lib/icons/general/IconPrint';
 import IconDownload from 'box-react-ui/lib/icons/general/IconDownloadSolid';
 import messages from '../messages';
@@ -17,85 +19,129 @@ import ContentOpenWith from '../ContentOpenWith/ContentOpenWith';
 import './Header.scss';
 
 type Props = {
-    contentOpenWithProps?: ContentOpenWithProps,
-    token: ?string,
-    file?: BoxItem,
-    onPrint: Function,
+    canAnnotate: boolean,
     canDownload: boolean,
-    onDownload: Function,
-    onClose?: Function,
+    contentOpenWithProps?: ContentOpenWithProps,
+    file?: BoxItem,
     intl: any,
+    onClose?: Function,
+    onDownload: Function,
+    onPrint: Function,
+    token: ?string,
 };
 
 const Header = ({
-    contentOpenWithProps = {},
-    token,
-    file,
-    onClose,
-    onPrint,
+    canAnnotate,
     canDownload,
-    onDownload,
+    contentOpenWithProps = {},
+    file,
     intl,
+    onClose,
+    onDownload,
+    onPrint,
+    token,
 }: Props) => {
     const name = file ? file.name : '';
     const id = file && file.id;
     const closeMsg = intl.formatMessage(messages.close);
     const printMsg = intl.formatMessage(messages.print);
     const downloadMsg = intl.formatMessage(messages.download);
+    const drawMsg = intl.formatMessage(messages.drawAnnotation);
+    const pointMsg = intl.formatMessage(messages.pointAnnotation);
     const shouldRenderOpenWith = id && contentOpenWithProps.show;
 
     return (
         <div className="bcpr-header">
-            <div className="bcpr-name">
-                {file ? getIcon(24, file) : null}
-                <span>{name}</span>
-            </div>
-            <div className="bcpr-btns">
-                {shouldRenderOpenWith && (
-                    <ContentOpenWith
-                        className="bcpr-bcow-btn"
-                        fileId={id}
-                        token={token}
-                        {...contentOpenWithProps}
-                    />
-                )}
-                {canDownload && (
-                    <PlainButton
-                        type="button"
-                        className="bcpr-btn"
-                        onClick={onPrint}
-                        title={printMsg}
-                        aria-label={printMsg}
-                    >
-                        <IconPrint color={COLOR_999} width={22} height={22} />
-                    </PlainButton>
-                )}
-                {canDownload && (
-                    <PlainButton
-                        type="button"
-                        className="bcpr-btn"
-                        onClick={onDownload}
-                        title={downloadMsg}
-                        aria-label={downloadMsg}
-                    >
-                        <IconDownload
-                            color={COLOR_999}
-                            width={18}
-                            height={18}
+            <div className="bp-header bp-base-header">
+                <div className="bcpr-name">
+                    {file ? getIcon(24, file) : null}
+                    <span>{name}</span>
+                </div>
+                <div className="bcpr-btns">
+                    {shouldRenderOpenWith && (
+                        <ContentOpenWith
+                            className="bcpr-bcow-btn"
+                            fileId={id}
+                            token={token}
+                            {...contentOpenWithProps}
                         />
-                    </PlainButton>
-                )}
-                {onClose && (
-                    <PlainButton
-                        type="button"
-                        className="bcpr-btn"
-                        onClick={onClose}
-                        title={closeMsg}
-                        aria-label={closeMsg}
-                    >
-                        <IconClose color={COLOR_999} width={24} height={24} />
-                    </PlainButton>
-                )}
+                    )}
+                    {canAnnotate && (
+                        <PlainButton
+                            type="button"
+                            className="bcpr-btn bp-btn-annotate-draw"
+                            onClick={() => {}}
+                            title={drawMsg}
+                            aria-label={drawMsg}
+                        >
+                            <IconDrawAnnotationMode
+                                color={COLOR_999}
+                                width={18}
+                                height={18}
+                            />
+                        </PlainButton>
+                    )}
+                    {canAnnotate && (
+                        <PlainButton
+                            type="button"
+                            className="bcpr-btn bp-btn-annotate-point"
+                            onClick={() => {}}
+                            title={pointMsg}
+                            aria-label={pointMsg}
+                        >
+                            <IconPointAnnotation
+                                color={COLOR_999}
+                                width={18}
+                                height={18}
+                            />
+                        </PlainButton>
+                    )}
+                    {canDownload && (
+                        <PlainButton
+                            type="button"
+                            className="bcpr-btn"
+                            onClick={onPrint}
+                            title={printMsg}
+                            aria-label={printMsg}
+                        >
+                            <IconPrint
+                                color={COLOR_999}
+                                width={22}
+                                height={22}
+                            />
+                        </PlainButton>
+                    )}
+                    {canDownload && (
+                        <PlainButton
+                            type="button"
+                            className="bcpr-btn"
+                            onClick={onDownload}
+                            title={downloadMsg}
+                            aria-label={downloadMsg}
+                        >
+                            <IconDownload
+                                color={COLOR_999}
+                                width={18}
+                                height={18}
+                            />
+                        </PlainButton>
+                    )}
+                    {onClose && (
+                        <PlainButton
+                            type="button"
+                            className="bcpr-btn"
+                            onClick={onClose}
+                            title={closeMsg}
+                            aria-label={closeMsg}
+                        >
+                            <IconClose
+                                color={COLOR_999}
+                                width={24}
+                                height={24}
+                            />
+                        </PlainButton>
+                    )}
+                </div>
             </div>
         </div>
     );

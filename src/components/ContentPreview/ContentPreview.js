@@ -43,38 +43,39 @@ import '../base.scss';
 import './ContentPreview.scss';
 
 type Props = {
-    fileId?: string,
-    previewLibraryVersion: string,
-    isLarge: boolean,
-    autoFocus: boolean,
-    useHotkeys: boolean,
-    contentSidebarProps: ContentSidebarProps,
-    contentOpenWithProps: ContentOpenWithProps,
-    canDownload?: boolean,
-    hasHeader?: boolean,
     apiHost: string,
     appHost: string,
+    autoFocus: boolean,
+    cache?: APICache,
+    canAnnotate?: boolean,
+    canDownload?: boolean,
+    className: string,
+    collection: Array<string | BoxItem>,
+    contentOpenWithProps: ContentOpenWithProps,
+    contentSidebarProps: ContentSidebarProps,
+    fileId?: string,
+    getInnerRef: () => ?HTMLElement,
+    hasHeader?: boolean,
+    isLarge: boolean,
+    language: string,
+    logoUrl?: string,
+    measureRef: Function,
+    messages?: StringMap,
+    onClose?: Function,
+    onDownload: Function,
+    onError?: Function,
+    onLoad: Function,
+    onMetric: Function,
+    onNavigate: Function,
+    previewLibraryVersion: string,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
+    sharedLink?: string,
+    sharedLinkPassword?: string,
     staticHost: string,
     staticPath: string,
     token: Token,
-    className: string,
-    measureRef: Function,
-    onLoad: Function,
-    onNavigate: Function,
-    onDownload: Function,
-    onClose?: Function,
-    language: string,
-    messages?: StringMap,
-    cache?: APICache,
-    collection: Array<string | BoxItem>,
-    logoUrl?: string,
-    sharedLink?: string,
-    sharedLinkPassword?: string,
-    onError?: Function,
-    onMetric: Function,
-    requestInterceptor?: Function,
-    responseInterceptor?: Function,
-    getInnerRef: () => ?HTMLElement,
+    useHotkeys: boolean,
 };
 
 type State = {
@@ -138,25 +139,26 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     static defaultProps = {
-        className: '',
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
-        staticHost: DEFAULT_HOSTNAME_STATIC,
-        staticPath: DEFAULT_PATH_STATIC_PREVIEW,
-        language: DEFAULT_LOCALE,
-        previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
-        canDownload: true,
-        hasHeader: false,
         autoFocus: false,
-        useHotkeys: true,
+        canAnnotate: true,
+        canDownload: true,
+        className: '',
+        collection: [],
+        contentOpenWithProps: {},
+        contentSidebarProps: {},
+        hasHeader: false,
+        language: DEFAULT_LOCALE,
         onDownload: noop,
         onError: noop,
         onLoad: noop,
         onMetric: noop,
         onNavigate: noop,
-        collection: [],
-        contentSidebarProps: {},
-        contentOpenWithProps: {},
+        previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
+        staticHost: DEFAULT_HOSTNAME_STATIC,
+        staticPath: DEFAULT_PATH_STATIC_PREVIEW,
+        useHotkeys: true,
     };
 
     /**
@@ -598,6 +600,22 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Returns whether file can be annotated based on permissions
+     *
+     * @return {boolean}
+     */
+    canAnnotate(): boolean {
+        const { canAnnotate }: Props = this.props;
+        const { file }: State = this.state;
+        const isFileAnnotatable = getProp(
+            file,
+            'permissions.can_annotate',
+            false,
+        );
+        return isFileAnnotatable && !!canAnnotate;
+    }
+
+    /**
      * Loads preview in the component using the preview library.
      *
      * @return {void}
@@ -625,11 +643,13 @@ class ContentPreview extends PureComponent<Props, State> {
         }
 
         const previewOptions = {
+            container: `#${this.id} .bcpr-content`,
+            header: 'none',
+            showAnnotations: this.canAnnotate(),
             showDownload: this.canDownload(),
             skipServerUpdate: true,
-            header: 'none',
-            container: `#${this.id} .bcpr-content`,
             useHotkeys: false,
+            headerElement: `#${this.id} .bcpr-header`,
         };
         const { Preview } = global.Box;
         this.preview = new Preview();
@@ -1084,6 +1104,7 @@ class ContentPreview extends PureComponent<Props, State> {
                             canDownload={this.canDownload()}
                             onDownload={this.download}
                             contentOpenWithProps={contentOpenWithProps}
+                            canAnnotate={this.canAnnotate()}
                         />
                     )}
                     <div className="bcpr-body">
