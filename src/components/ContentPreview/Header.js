@@ -17,7 +17,7 @@ import ContentOpenWith from '../ContentOpenWith/ContentOpenWith';
 import './Header.scss';
 
 type Props = {
-    contentOpenWithProps: ContentOpenWithProps,
+    contentOpenWithProps?: ContentOpenWithProps,
     token: ?string,
     file?: BoxItem,
     onPrint: Function,
