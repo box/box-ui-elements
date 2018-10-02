@@ -1,5 +1,15 @@
+## 7.3.0 (2018-10-02)
+
+* Fix: Fix optionality of Open With props (#581) ([6adac9b](https://github.com/box/box-ui-elements/commit/6adac9b)), closes [#581](https://github.com/box/box-ui-elements/issues/581)
+* Fix: Sidebar null user in modified_by (#583) ([4856b71](https://github.com/box/box-ui-elements/commit/4856b71)), closes [#583](https://github.com/box/box-ui-elements/issues/583)
+* Update README.md ([c9c1d9a](https://github.com/box/box-ui-elements/commit/c9c1d9a))
+* Update screenshot ([1bf72a2](https://github.com/box/box-ui-elements/commit/1bf72a2))
+
+
+
 ## 7.2.0 (2018-09-27)
 
+* Release: 7.2.0 ([6f2dc3c](https://github.com/box/box-ui-elements/commit/6f2dc3c))
 * Fix: Fix prop errors on network failures (#580) ([3153301](https://github.com/box/box-ui-elements/commit/3153301)), closes [#580](https://github.com/box/box-ui-elements/issues/580)
 * New: Use Open With Icon (#579) ([804a1c8](https://github.com/box/box-ui-elements/commit/804a1c8)), closes [#579](https://github.com/box/box-ui-elements/issues/579)
 * Chore: Create new windows immediately to avoid popup blockers (#578) ([f85524d](https://github.com/box/box-ui-elements/commit/f85524d)), closes [#578](https://github.com/box/box-ui-elements/issues/578)
