@@ -60,7 +60,7 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
                     action,
                     collaborators,
                     created_at,
-                    modifiedBy,
+                    modified_by: modifiedBy,
                     trashed_at,
                     id,
                     type: ItemTypes.fileVersion,
