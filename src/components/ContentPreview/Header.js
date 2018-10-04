@@ -67,34 +67,32 @@ const Header = ({
                         />
                     )}
                     {canAnnotate && (
-                        <PlainButton
-                            type="button"
-                            className="bcpr-btn bp-btn-annotate-draw"
-                            onClick={() => {}}
-                            title={drawMsg}
-                            aria-label={drawMsg}
-                        >
-                            <IconDrawAnnotationMode
-                                color={COLOR_999}
-                                width={18}
-                                height={18}
-                            />
-                        </PlainButton>
-                    )}
-                    {canAnnotate && (
-                        <PlainButton
-                            type="button"
-                            className="bcpr-btn bp-btn-annotate-point"
-                            onClick={() => {}}
-                            title={pointMsg}
-                            aria-label={pointMsg}
-                        >
-                            <IconPointAnnotation
-                                color={COLOR_999}
-                                width={18}
-                                height={18}
-                            />
-                        </PlainButton>
+                        <React.Fragment>
+                            <PlainButton
+                                type="button"
+                                className="bcpr-btn bp-btn-annotate-draw bp-is-hidden"
+                                title={drawMsg}
+                                aria-label={drawMsg}
+                            >
+                                <IconDrawAnnotationMode
+                                    color={COLOR_999}
+                                    width={18}
+                                    height={18}
+                                />
+                            </PlainButton>
+                            <PlainButton
+                                type="button"
+                                className="bcpr-btn bp-btn-annotate-point bp-is-hidden"
+                                title={pointMsg}
+                                aria-label={pointMsg}
+                            >
+                                <IconPointAnnotation
+                                    color={COLOR_999}
+                                    width={18}
+                                    height={18}
+                                />
+                            </PlainButton>
+                        </React.Fragment>
                     )}
                     {canDownload && (
                         <PlainButton

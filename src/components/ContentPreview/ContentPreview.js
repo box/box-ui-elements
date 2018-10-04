@@ -645,11 +645,11 @@ class ContentPreview extends PureComponent<Props, State> {
         const previewOptions = {
             container: `#${this.id} .bcpr-content`,
             header: 'none',
+            headerElement: `#${this.id} .bcpr-header`,
             showAnnotations: this.canAnnotate(),
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,
-            headerElement: `#${this.id} .bcpr-header`,
         };
         const { Preview } = global.Box;
         this.preview = new Preview();
