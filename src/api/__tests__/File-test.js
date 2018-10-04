@@ -282,7 +282,7 @@ describe('api/File', () => {
                         'description',
                         'foo',
                     );
-                    expect(error).toHaveBeenCalledWith(mockError, 'orig');
+                    expect(error).toHaveBeenCalledWith('orig');
                 });
         });
     });

@@ -107,14 +107,14 @@ class File extends Item {
                     successCallback(updatedFile);
                 }
             })
-            .catch(e => {
+            .catch(() => {
                 if (!this.isDestroyed()) {
                     const originalFile = this.merge(
                         this.getCacheKey(id),
                         'description',
                         file.description,
                     );
-                    errorCallback(e, originalFile);
+                    errorCallback(originalFile);
                 }
             });
     }
