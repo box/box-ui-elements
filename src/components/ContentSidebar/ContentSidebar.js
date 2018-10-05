@@ -63,6 +63,7 @@ type Props = {
 type State = {
     view?: SidebarView,
     file?: BoxItem,
+    isNavigating: boolean,
     isVisible: boolean,
     hasBeenToggled?: boolean,
 };
@@ -90,6 +91,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
     initialState: State = {
         isVisible: true,
+        isNavigating: false,
         file: undefined,
     };
 
@@ -175,7 +177,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         if (hasFileIdChanged) {
             // Clear out existing state
-            this.setState({ ...this.initialState });
+            this.setState({ ...this.initialState, isNavigating: true });
             this.fetchData(nextProps);
         } else if (!hasBeenToggled && hasVisibilityChanged) {
             this.setState({
@@ -226,6 +228,10 @@ class ContentSidebar extends PureComponent<Props, State> {
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
+
+        this.setState({
+            isNavigating: false,
+        });
     };
 
     /**
@@ -311,6 +317,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                 file,
                 isVisible: true,
                 view: this.getDefaultSidebarView(file, this.props),
+                isNavigating: false,
             });
         } else {
             this.setState({ isVisible: false });
@@ -361,7 +368,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             metadataSidebarProps,
             onVersionHistoryClick,
         }: Props = this.props;
-        const { file, view, isVisible }: State = this.state;
+        const { file, view, isVisible, isNavigating }: State = this.state;
 
         // By default sidebar is always visible if there is something configured
         // to show via props. At least one of the sidebars is needed for visibility.
@@ -415,9 +422,11 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 />
                             </APIContext.Provider>
                         ) : (
-                            <div className="bcs-loading">
-                                <LoadingIndicator />
-                            </div>
+                            isNavigating && (
+                                <div className="bcs-loading">
+                                    <LoadingIndicator />
+                                </div>
+                            )
                         )}
                     </div>
                 </aside>

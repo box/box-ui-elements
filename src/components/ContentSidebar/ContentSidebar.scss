@@ -8,7 +8,6 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
         background-color: $haze;
         display: flex;
         max-width: $sidebarWidth;
-        min-width: $sidebarTabsWidth;
         width: auto;
     }
 
@@ -19,7 +18,7 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
         font-size: 0;
         margin: 0 auto;
         white-space: nowrap;
-        width: 10px;
+        width: $sidebarTabsWidth;
     }
 
     &.bcs-is-open {

@@ -528,6 +528,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(setState).toBeCalledWith({
                 file,
                 view: 'view',
+                isNavigating: false,
                 isVisible: true,
             });
         });
