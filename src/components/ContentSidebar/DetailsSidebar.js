@@ -18,7 +18,7 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import APIContext from '../APIContext';
 import {
-    UNAUTHORIZED_CODE,
+    HTTP_STATUS_CODE_FORBIDDEN,
     FIELD_METADATA_CLASSIFICATION,
 } from '../../constants';
 import API from '../../api';
@@ -35,7 +35,7 @@ type ExternalProps = {
     retentionPolicy?: Object,
     bannerPolicy?: Object,
     onAccessStatsClick?: Function,
-    onClassificationClick?: Function,
+    onClassificationClick: Function,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
 };
@@ -64,6 +64,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         hasClassification: false,
         hasRetentionPolicy: false,
         hasVersions: false,
+        onClassificationClick: noop,
     };
 
     constructor(props: Props) {
@@ -142,10 +143,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @param {Error} e - API error
      * @return {void}
      */
-    fetchAccessStatsErrorCallback = (e: $AxiosXHR<any>) => {
+    fetchAccessStatsErrorCallback = (error: $AxiosXHR<any>) => {
         let accessStatsError;
 
-        if (getProp(e, 'status') === UNAUTHORIZED_CODE) {
+        if (getProp(error, 'status') === HTTP_STATUS_CODE_FORBIDDEN) {
             accessStatsError = {
                 error: messages.fileAccessStatsPermissionsError,
             };
@@ -251,7 +252,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onClassificationClick = (): void => {
-        const { onClassificationClick = noop }: Props = this.props;
+        const { onClassificationClick }: Props = this.props;
         onClassificationClick(this.onClassificationChange);
     };
 

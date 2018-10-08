@@ -202,12 +202,12 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Fetches the data for the sidebar
+     * Fetches the file data for the sidebar
      *
      * @param {Object} Props the component props
-     * @param {boolean} hasFileIdChanged true if the file id has changed
+     * @return {void}
      */
-    fetchData(props: Props) {
+    fetchData(props: Props): void {
         const { fileId }: Props = props;
         if (fileId && SidebarUtils.canHaveSidebar(props)) {
             // Fetch the new file
@@ -398,7 +398,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                             <APIContext.Provider value={(this.api: any)}>
                                 <Sidebar
                                     file={((file: any): BoxItem)}
-                                    fetchFile={this.fetchFile}
                                     view={view}
                                     detailsSidebarProps={detailsSidebarProps}
                                     activitySidebarProps={activitySidebarProps}
