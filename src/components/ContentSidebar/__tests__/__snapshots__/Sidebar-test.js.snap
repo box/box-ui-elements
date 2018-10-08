@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentSidebar/Skills/Sidebar should render activity sidebar 1`] = `
+exports[`components/ContentSidebar/Sidebar should render activity sidebar 1`] = `
 <Fragment>
   <SidebarNav
     hasActivityFeed={true}
@@ -17,7 +17,7 @@ exports[`components/ContentSidebar/Skills/Sidebar should render activity sidebar
 </Fragment>
 `;
 
-exports[`components/ContentSidebar/Skills/Sidebar should render details sidebar 1`] = `
+exports[`components/ContentSidebar/Sidebar should render details sidebar 1`] = `
 <Fragment>
   <SidebarNav
     hasDetails={true}
@@ -34,13 +34,13 @@ exports[`components/ContentSidebar/Skills/Sidebar should render details sidebar 
 </Fragment>
 `;
 
-exports[`components/ContentSidebar/Skills/Sidebar should render metadata sidebar 1`] = `
+exports[`components/ContentSidebar/Sidebar should render metadata sidebar 1`] = `
 <Fragment>
   <SidebarNav
     hasMetadata={true}
     selectedView="metadata"
   />
-  <Component
+  <MetadataSidebar
     file={
       Object {
         "id": "id",
@@ -51,19 +51,19 @@ exports[`components/ContentSidebar/Skills/Sidebar should render metadata sidebar
 </Fragment>
 `;
 
-exports[`components/ContentSidebar/Skills/Sidebar should render no sidebar 1`] = `
+exports[`components/ContentSidebar/Sidebar should render no sidebar 1`] = `
 <Fragment>
   <SidebarNav />
 </Fragment>
 `;
 
-exports[`components/ContentSidebar/Skills/Sidebar should render skills sidebar 1`] = `
+exports[`components/ContentSidebar/Sidebar should render skills sidebar 1`] = `
 <Fragment>
   <SidebarNav
     hasSkills={true}
     selectedView="skills"
   />
-  <Component
+  <SkillsSidebar
     file={
       Object {
         "id": "id",

@@ -13,7 +13,10 @@ import {
 import { retryNumOfTimes } from '../../util/function';
 import { digest } from '../../util/webcrypto';
 import hexToBase64 from '../../util/base64';
-import { DEFAULT_RETRY_DELAY_MS, UNAUTHORIZED_CODE } from '../../constants';
+import {
+    DEFAULT_RETRY_DELAY_MS,
+    HTTP_STATUS_CODE_FORBIDDEN,
+} from '../../constants';
 import MultiputPart, {
     PART_STATE_UPLOADED,
     PART_STATE_DIGEST_READY,
@@ -243,9 +246,9 @@ class MultiputUpload extends BaseMultiput {
 
             if (
                 (errorData &&
-                    (errorData.status === UNAUTHORIZED_CODE &&
+                    (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
                         errorData.code === 'storage_limit_exceeded')) ||
-                (errorData.status === UNAUTHORIZED_CODE &&
+                (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
                     errorData.code === 'access_denied_insufficient_permissions')
             ) {
                 this.errorCallback(errorData);
