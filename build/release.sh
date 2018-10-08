@@ -167,9 +167,23 @@ push_new_release() {
         exit 1
     fi
 
-    git checkout master || exit 1
-    git fetch release || exit 1
-    git reset --hard release/master || exit 1
+    if $patch_release; then
+        read -p "Patch releases will push your current branch as is. Are you sure you want to continue? [y/N] " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "Starting patch release"
+        else
+            exit 1
+        fi
+    fi
+
+    if ! $patch_release; then
+        # reset to latest master if its a major / minor release
+        git checkout master || exit 1
+        git fetch release || exit 1
+        git reset --hard release/master || exit 1
+    fi
+
     # Remove old local tags in case a build failed
     git fetch --prune release '+refs/tags/*:refs/tags/*' || exit 1
     git clean -fd || exit 1
@@ -182,11 +196,12 @@ push_new_release() {
         exit 1
     fi
 
-    # Double check that we have the latest code... just in case yarn install took forever.
-    # i.e. Translation commits have been known to sneak in.
-    git fetch release || exit 1
-    git diff --quiet release/master || git reset --hard release/master || exit 1
-
+    if ! $patch_release; then
+        # Double check that we have the latest code... just in case yarn install took forever.
+        # i.e. Translation commits have been known to sneak in.
+        git fetch release || exit 1
+        git diff --quiet release/master || git reset --hard release/master || exit 1
+    fi
 
     # Do testing and linting
     if ! lint_and_test; then
