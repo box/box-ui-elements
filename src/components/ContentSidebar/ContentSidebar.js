@@ -8,7 +8,6 @@ import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
-import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
@@ -23,9 +22,7 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
-    UNAUTHORIZED_CODE,
 } from '../../constants';
-import messages from '../messages';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -66,12 +63,7 @@ type Props = {
 type State = {
     view?: SidebarView,
     file?: BoxItem,
-    accessStats?: FileAccessStats,
-    fileError?: Errors,
-    accessStatsError?: Errors,
     isVisible: boolean,
-    isFileLoading?: boolean,
-    feedItems?: FeedItems,
     hasBeenToggled?: boolean,
 };
 
@@ -99,9 +91,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     initialState: State = {
         isVisible: true,
         file: undefined,
-        accessStats: undefined,
-        fileError: undefined,
-        accessStatsError: undefined,
     };
 
     /**
@@ -213,141 +202,18 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     /**
-     * Fetches the data for the sidebar
+     * Fetches the file data for the sidebar
      *
      * @param {Object} Props the component props
-     * @param {boolean} hasFileIdChanged true if the file id has changed
+     * @return {void}
      */
-    fetchData(props: Props) {
-        // If nothing to show then just return
-        if (!SidebarUtils.canHaveSidebar(props)) {
-            return;
-        }
-
-        const { fileId, detailsSidebarProps }: Props = props;
-        const { hasAccessStats = false } = detailsSidebarProps;
-        if (!fileId) {
-            return;
-        }
-
-        // Fetch the new file
-        this.fetchFile(fileId);
-
-        if (hasAccessStats) {
-            this.fetchFileAccessStats(fileId);
+    fetchData(props: Props): void {
+        const { fileId }: Props = props;
+        if (fileId && SidebarUtils.canHaveSidebar(props)) {
+            // Fetch the new file
+            this.fetchFile(fileId);
         }
     }
-
-    /**
-     * Function to update file description
-     *
-     * @private
-     * @param {string} newDescription - New file description
-     * @return {void}
-     */
-    onDescriptionChange = (newDescription: string): void => {
-        const { file } = this.state;
-        if (!file) {
-            return;
-        }
-
-        const { description, id } = file;
-        if (newDescription === description || !id) {
-            return;
-        }
-
-        this.api
-            .getFileAPI()
-            .setFileDescription(
-                file,
-                newDescription,
-                this.setFileDescriptionSuccessCallback,
-                this.setFileDescriptionErrorCallback,
-            );
-    };
-
-    /**
-     * File update description callback
-     *
-     * @private
-     * @param {BoxItem} file - Updated file object
-     * @return {void}
-     */
-    setFileDescriptionSuccessCallback = (file: BoxItem): void => {
-        const { onDescriptionChange = noop } = this.props.detailsSidebarProps;
-        onDescriptionChange(file);
-
-        this.setState({ file, fileError: undefined });
-    };
-
-    /**
-     * Handles a failed file description update
-     *
-     * @private
-     * @param {Error} e - API error
-     * @param {BoxItem} file - Original file description
-     * @return {void}
-     */
-    setFileDescriptionErrorCallback = (
-        e: $AxiosXHR<any>,
-        file: BoxItem,
-    ): void => {
-        // Reset the state back to the original description since the API call failed
-        this.setState({
-            file,
-            fileError: {
-                inlineError: {
-                    title: messages.fileDescriptionInlineErrorTitleMessage,
-                    content: messages.defaultInlineErrorContentMessage,
-                },
-            },
-        });
-        this.errorCallback(e);
-    };
-
-    /**
-     * Handles a failed file access stats fetch
-     *
-     * @private
-     * @param {Error} e - API error
-     * @return {void}
-     */
-    fetchFileAccessStatsErrorCallback = (e: $AxiosXHR<any>) => {
-        let accessStatsError;
-
-        if (getProp(e, 'status') === UNAUTHORIZED_CODE) {
-            accessStatsError = {
-                error: messages.fileAccessStatsPermissionsError,
-            };
-        } else {
-            accessStatsError = {
-                maskError: {
-                    errorHeader: messages.fileAccessStatsErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
-                },
-            };
-        }
-
-        this.setState({
-            accessStats: undefined,
-            accessStatsError,
-        });
-        this.errorCallback(e);
-    };
-
-    /**
-     * Handles a failed file info fetch
-     *
-     * @private
-     * @param {Error} e - API error
-     * @return {void}
-     */
-    fetchFileErrorCallback = (e: $AxiosXHR<any>) => {
-        this.setState({
-            isFileLoading: false,
-        });
-        this.errorCallback(e);
-    };
 
     /**
      * Network error callback
@@ -445,24 +311,10 @@ class ContentSidebar extends PureComponent<Props, State> {
                 file,
                 isVisible: true,
                 view: this.getDefaultSidebarView(file, this.props),
-                isFileLoading: false,
             });
         } else {
             this.setState({ isVisible: false });
         }
-    };
-
-    /**
-     * File access stats fetch success callback
-     *
-     * @private
-     * @param {Object} accessStats - access stats for a file
-     * @return {void}
-     */
-    fetchFileAccessStatsSuccessCallback = (
-        accessStats: FileAccessStats,
-    ): void => {
-        this.setState({ accessStats, accessStatsError: undefined });
     };
 
     /**
@@ -475,16 +327,12 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFile(id: string, fetchOptions: FetchOptions = {}): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.setState({
-                isFileLoading: true,
-            });
-
             this.api
                 .getFileAPI()
                 .getFile(
                     id,
                     this.fetchFileSuccessCallback,
-                    this.fetchFileErrorCallback,
+                    this.errorCallback,
                     {
                         ...fetchOptions,
                         fields: SIDEBAR_FIELDS_TO_FETCH,
@@ -492,52 +340,6 @@ class ContentSidebar extends PureComponent<Props, State> {
                 );
         }
     }
-
-    /**
-     * Fetches the access stats for a file
-     *
-     * @private
-     * @param {string} id - File id
-     * @return {void}
-     */
-    fetchFileAccessStats(id: string, shouldDestroy?: boolean = false): void {
-        if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api.getFileAccessStatsAPI(shouldDestroy).get({
-                id,
-                successCallback: this.fetchFileAccessStatsSuccessCallback,
-                errorCallback: this.fetchFileAccessStatsErrorCallback,
-            });
-        }
-    }
-
-    /**
-     * Refreshes sidebar when classification is changed
-     *
-     * @private
-     * @return {void}
-     */
-    onClassificationChange = (): void => {
-        const { fileId } = this.props;
-        if (!fileId) {
-            return;
-        }
-
-        this.fetchFile(fileId, {
-            forceFetch: true,
-        });
-    };
-
-    /**
-     * Add classification click handler
-     *
-     * @private
-     * @return {void}
-     */
-    onClassificationClick = (): void => {
-        const { onClassificationClick = noop } = this.props.detailsSidebarProps;
-
-        onClassificationClick(this.onClassificationChange);
-    };
 
     /**
      * Renders the sidebar
@@ -549,7 +351,7 @@ class ContentSidebar extends PureComponent<Props, State> {
     render() {
         const {
             language,
-            messages: intlMessages,
+            messages,
             getPreview,
             getViewer,
             hasActivityFeed,
@@ -559,16 +361,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             metadataSidebarProps,
             onVersionHistoryClick,
         }: Props = this.props;
-        const {
-            file,
-            view,
-            accessStats,
-            accessStatsError,
-            fileError,
-            isFileLoading,
-            feedItems,
-            isVisible,
-        }: State = this.state;
+        const { file, view, isVisible }: State = this.state;
 
         // By default sidebar is always visible if there is something configured
         // to show via props. At least one of the sidebars is needed for visibility.
@@ -598,7 +391,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file);
 
         return (
-            <Internationalize language={language} messages={intlMessages}>
+            <Internationalize language={language} messages={messages}>
                 <aside id={this.id} className={styleClassName}>
                     <div className="be-app-element">
                         {hasSidebar ? (
@@ -606,35 +399,19 @@ class ContentSidebar extends PureComponent<Props, State> {
                                 <Sidebar
                                     file={((file: any): BoxItem)}
                                     view={view}
-                                    detailsSidebarProps={{
-                                        accessStats,
-                                        accessStatsError,
-                                        fileError,
-                                        isFileLoading,
-                                        onDescriptionChange: this
-                                            .onDescriptionChange,
-                                        ...detailsSidebarProps,
-                                        onClassificationClick: this
-                                            .onClassificationClick,
-                                    }}
+                                    detailsSidebarProps={detailsSidebarProps}
                                     activitySidebarProps={activitySidebarProps}
-                                    metadataSidebarProps={{
-                                        ...metadataSidebarProps,
-                                    }}
+                                    metadataSidebarProps={metadataSidebarProps}
                                     getPreview={getPreview}
                                     getViewer={getViewer}
                                     hasSkills={hasSkills}
                                     hasDetails={hasDetails}
                                     hasMetadata={hasMetadata}
                                     hasActivityFeed={hasActivityFeed}
-                                    accessStats={accessStats}
-                                    accessStatsError={accessStatsError}
-                                    fileError={fileError}
                                     onToggle={this.onToggle}
                                     onVersionHistoryClick={
                                         onVersionHistoryClick
                                     }
-                                    feedItems={feedItems}
                                 />
                             </APIContext.Provider>
                         ) : (
