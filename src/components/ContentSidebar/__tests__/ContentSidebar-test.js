@@ -1,17 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import ContentSidebar from '../ContentSidebar';
-import messages from '../../messages';
 import SidebarUtils from '../SidebarUtils';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../../util/fields';
-
-const {
-    fileDescriptionInlineErrorTitleMessage,
-    defaultInlineErrorContentMessage,
-    defaultErrorMaskSubHeaderMessage,
-    fileAccessStatsErrorHeaderMessage,
-    fileAccessStatsPermissionsError,
-} = messages;
 
 jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
@@ -87,64 +78,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             expect(instance.getDefaultSidebarView).not.toBeCalled();
             expect(instance.setState).not.toBeCalled();
-        });
-    });
-
-    describe('setFileDescriptionErrorCallback()', () => {
-        let instance;
-        let wrapper;
-        beforeEach(() => {
-            const props = {};
-            wrapper = getWrapper(props);
-            instance = wrapper.instance();
-            instance.errorCallback = jest.fn();
-        });
-        test('should set an inlineError if there is an error in updating the file description', () => {
-            instance.setFileDescriptionErrorCallback();
-            const inlineErrorState = wrapper.state().fileError.inlineError;
-            expect(typeof fileDescriptionInlineErrorTitleMessage).toBe(
-                'object',
-            );
-            expect(typeof defaultInlineErrorContentMessage).toBe('object');
-            expect(inlineErrorState.title).toEqual(
-                fileDescriptionInlineErrorTitleMessage,
-            );
-            expect(inlineErrorState.content).toEqual(
-                defaultInlineErrorContentMessage,
-            );
-        });
-    });
-
-    describe('fetchFileAccessStatsErrorCallback()', () => {
-        let instance;
-        let wrapper;
-        beforeEach(() => {
-            const props = {};
-            wrapper = getWrapper(props);
-            instance = wrapper.instance();
-            instance.errorCallback = jest.fn();
-        });
-        test('should set a maskError if there is an error in fetching the access stats', () => {
-            instance.fetchFileAccessStatsErrorCallback();
-            const inlineErrorState = wrapper.state().accessStatsError.maskError;
-            expect(typeof fileAccessStatsErrorHeaderMessage).toBe('object');
-            expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(
-                fileAccessStatsErrorHeaderMessage,
-            );
-            expect(inlineErrorState.errorSubHeader).toEqual(
-                defaultErrorMaskSubHeaderMessage,
-            );
-        });
-
-        test('should set error if forbidden', () => {
-            instance.fetchFileAccessStatsErrorCallback({
-                status: 403,
-            });
-            const { accessStatsError } = wrapper.state();
-            expect(accessStatsError).toEqual({
-                error: fileAccessStatsPermissionsError,
-            });
         });
     });
 
@@ -485,87 +418,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
-    describe('setFileDescriptionSuccessCallback()', () => {
-        let instance;
-        let wrapper;
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-        });
-
-        test('should update the file state', () => {
-            instance.setFileDescriptionSuccessCallback(file);
-
-            const { file: fileState, fileError } = instance.state;
-            expect(fileState).toEqual(file);
-            expect(fileError).toBe(undefined);
-        });
-
-        test('should reset fileError if one was previously set', () => {
-            const fileError = 'test error';
-            instance.setState({ fileError });
-            expect(fileError).toBe(fileError);
-
-            instance.setFileDescriptionSuccessCallback(file);
-            const { fileError: fileErrorState } = instance.state;
-            expect(fileErrorState).toBe(undefined);
-        });
-    });
-
-    describe('onClassificationChange()', () => {
-        let instance;
-        let wrapper;
-        let fetchFile;
-
-        beforeEach(() => {
-            wrapper = getWrapper();
-            instance = wrapper.instance();
-            fetchFile = jest.fn();
-            instance.fetchFile = fetchFile;
-        });
-
-        test('should refetch the file', () => {
-            wrapper.setProps({
-                fileId: file.id,
-            });
-            instance.onClassificationChange();
-            expect(fetchFile).toBeCalledWith(file.id, { forceFetch: true });
-        });
-
-        test('should not refetch the file there is no file id', () => {
-            wrapper.setState({
-                file,
-            });
-
-            instance.onClassificationChange();
-            expect(fetchFile).not.toBeCalled();
-        });
-    });
-
-    describe('onClassificationClick()', () => {
-        let instance;
-        let wrapper;
-        let onClassificationClick;
-
-        beforeEach(() => {
-            onClassificationClick = jest.fn();
-            wrapper = getWrapper({
-                detailsSidebarProps: {
-                    onClassificationClick,
-                },
-            });
-            instance = wrapper.instance();
-            instance.onClassificationChange = jest.fn();
-        });
-
-        test('should call onClassificationClick with the refresh function', () => {
-            instance.onClassificationClick();
-            expect(onClassificationClick).toBeCalledWith(
-                instance.onClassificationChange,
-            );
-        });
-    });
-
     describe('fetchFile()', () => {
         let fileStub;
         let wrapper;
@@ -606,7 +458,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(fileStub).toBeCalledWith(
                 file.id,
                 fetchFileSuccessCallback,
-                fetchFileErrorCallback,
+                instance.errorCallback,
                 {
                     forceFetch: true,
                     fields: SIDEBAR_FIELDS_TO_FETCH,
@@ -621,7 +473,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(fileStub).toBeCalledWith(
                 file.id,
                 fetchFileSuccessCallback,
-                fetchFileErrorCallback,
+                instance.errorCallback,
                 {
                     fields: SIDEBAR_FIELDS_TO_FETCH,
                 },
@@ -676,36 +528,8 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(setState).toBeCalledWith({
                 file,
                 view: 'view',
-                isFileLoading: false,
                 isVisible: true,
             });
-        });
-    });
-
-    describe('fetchFileErrorCallback()', () => {
-        let setState;
-        let wrapper;
-        let instance;
-        let errorCallback;
-        beforeEach(() => {
-            setState = jest.fn();
-            errorCallback = jest.fn();
-            wrapper = getWrapper({
-                file,
-            });
-            instance = wrapper.instance();
-            instance.setState = setState;
-            instance.errorCallback = errorCallback;
-        });
-
-        test('should set isFileLoading to be false, and call the errorCallback', () => {
-            const err = 'test error';
-            instance.fetchFileErrorCallback(err);
-
-            expect(setState).toBeCalledWith({
-                isFileLoading: false,
-            });
-            expect(errorCallback).toBeCalledWith(err);
         });
     });
 });

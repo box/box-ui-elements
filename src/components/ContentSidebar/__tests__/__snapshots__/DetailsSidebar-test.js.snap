@@ -1,6 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentSidebar/DetailsSidebar should render DetailsSidebar with all components 1`] = `
+exports[`components/ContentSidebar/DetailsSidebar render() should render DetailsSidebar with access stats 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Details"
+      id="be.sidebarDetailsTitle"
+    />
+  }
+>
+  <SidebarAccessStats
+    file={
+      Object {
+        "id": "foo",
+      }
+    }
+  />
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/DetailsSidebar render() should render DetailsSidebar with all components 1`] = `
 <SidebarContent
   title={
     <FormattedMessage
@@ -57,7 +76,92 @@ exports[`components/ContentSidebar/DetailsSidebar should render DetailsSidebar w
       }
       hasClassification={true}
       hasRetentionPolicy={true}
+      isLoading={false}
+      onClassificationClick={[Function]}
+      onDescriptionChange={[Function]}
     />
   </SidebarSection>
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/DetailsSidebar render() should render DetailsSidebar with notices 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Details"
+      id="be.sidebarDetailsTitle"
+    />
+  }
+>
+  <div
+    className="bcs-details-content"
+  >
+    <SidebarNotices
+      file={
+        Object {
+          "id": "foo",
+        }
+      }
+    />
+  </div>
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/DetailsSidebar render() should render DetailsSidebar with properties 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Details"
+      id="be.sidebarDetailsTitle"
+    />
+  }
+>
+  <SidebarSection
+    className=""
+    interactionTarget="fileproperties"
+    isOpen={true}
+    title={
+      <FormattedMessage
+        defaultMessage="File Properties"
+        id="be.sidebarProperties"
+      />
+    }
+  >
+    <SidebarFileProperties
+      file={
+        Object {
+          "id": "foo",
+        }
+      }
+      hasClassification={false}
+      hasRetentionPolicy={false}
+      isLoading={false}
+      onClassificationClick={[Function]}
+      onDescriptionChange={[Function]}
+    />
+  </SidebarSection>
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/DetailsSidebar render() should render DetailsSidebar with versions 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Details"
+      id="be.sidebarDetailsTitle"
+    />
+  }
+>
+  <div
+    className="bcs-details-content"
+  >
+    <SidebarVersions
+      file={
+        Object {
+          "id": "foo",
+        }
+      }
+    />
+  </div>
 </SidebarContent>
 `;

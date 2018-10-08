@@ -239,7 +239,7 @@ export const HTTP_OPTIONS: 'OPTIONS' = 'OPTIONS';
 export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
-export const UNAUTHORIZED_CODE = 403;
+export const HTTP_STATUS_CODE_FORBIDDEN = 403;
 
 /* ------------------ Version Action Types  ---------------------- */
 export const VERSION_RESTORE_ACTION = 'restore';
