@@ -5,3 +5,4 @@ flow-typed/**
 build/**
 i18n/**
 node_modules/**
+styleguide/**
