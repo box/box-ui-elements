@@ -42,24 +42,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(instance.fetchData).toBeCalledWith(newProps);
         });
 
-        test('should reset state and set visible state if the file ids have changed', () => {
-            const props = {
-                fileId: '123456',
-            };
-            const wrapper = getWrapper(props);
-            const instance = wrapper.instance();
-            const newProps = {
-                fileId: 'abcdefg',
-            };
-            instance.fetchData = jest.fn();
-            instance.setState = jest.fn();
-            instance.componentWillReceiveProps(newProps);
-
-            expect(instance.setState).toBeCalledWith({
-                ...instance.initialState,
-            });
-        });
-
         test('should set new view when viewport width may have changed', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
