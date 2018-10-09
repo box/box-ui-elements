@@ -57,7 +57,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             expect(instance.setState).toBeCalledWith({
                 ...instance.initialState,
-                isVisible: true,
             });
         });
 

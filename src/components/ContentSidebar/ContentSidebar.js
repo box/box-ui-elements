@@ -174,7 +174,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         if (hasFileIdChanged) {
             // Clear out existing state
-            this.setState({ ...this.initialState, isVisible: true });
+            this.setState({ ...this.initialState });
             this.fetchData(nextProps);
         } else if (!hasBeenToggled && hasVisibilityChanged) {
             this.setState({
