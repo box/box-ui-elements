@@ -42,7 +42,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(instance.fetchData).toBeCalledWith(newProps);
         });
 
-        test('should set navigating state if the file ids have changed', () => {
+        test('should reset state and set visible state if the file ids have changed', () => {
             const props = {
                 fileId: '123456',
             };
@@ -57,7 +57,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             expect(instance.setState).toBeCalledWith({
                 ...instance.initialState,
-                isNavigating: true,
+                isVisible: true,
             });
         });
 
@@ -140,23 +140,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 hasBeenToggled: true,
                 view: undefined,
             });
-        });
-    });
-
-    describe('errorCallback()', () => {
-        test('should unset the navigating state', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
-            const consoleError = console.error;
-            console.error = jest.fn();
-            instance.errorCallback();
-
-            expect(instance.setState).toBeCalledWith({
-                isNavigating: false,
-            });
-
-            console.error = consoleError;
         });
     });
 
@@ -561,7 +544,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(setState).toBeCalledWith({
                 file,
                 view: 'view',
-                isNavigating: false,
                 isVisible: true,
             });
         });
