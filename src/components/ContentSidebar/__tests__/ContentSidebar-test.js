@@ -42,6 +42,25 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(instance.fetchData).toBeCalledWith(newProps);
         });
 
+        test('should set navigating state if the file ids have changed', () => {
+            const props = {
+                fileId: '123456',
+            };
+            const wrapper = getWrapper(props);
+            const instance = wrapper.instance();
+            const newProps = {
+                fileId: 'abcdefg',
+            };
+            instance.fetchData = jest.fn();
+            instance.setState = jest.fn();
+            instance.componentWillReceiveProps(newProps);
+
+            expect(instance.setState).toBeCalledWith({
+                ...instance.initialState,
+                isNavigating: true,
+            });
+        });
+
         test('should set new view when viewport width may have changed', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
@@ -121,6 +140,23 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 hasBeenToggled: true,
                 view: undefined,
             });
+        });
+    });
+
+    describe('errorCallback()', () => {
+        test('should unset the navigating state', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            const consoleError = console.error;
+            console.error = jest.fn();
+            instance.errorCallback();
+
+            expect(instance.setState).toBeCalledWith({
+                isNavigating: false,
+            });
+
+            console.error = consoleError;
         });
     });
 
@@ -423,7 +459,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let wrapper;
         let instance;
         let fetchFileSuccessCallback;
-        let fetchFileErrorCallback;
 
         beforeEach(() => {
             wrapper = getWrapper({
@@ -432,14 +467,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance = wrapper.instance();
             fileStub = jest.fn();
             fetchFileSuccessCallback = jest.fn();
-            fetchFileErrorCallback = jest.fn();
             instance.api = {
                 getFileAPI: () => ({
                     getFile: fileStub,
                 }),
             };
             instance.fetchFileSuccessCallback = fetchFileSuccessCallback;
-            instance.fetchFileErrorCallback = fetchFileErrorCallback;
         });
 
         test('should not fetch the file when sidebar is not configured to show anything', () => {
