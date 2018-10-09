@@ -65,7 +65,7 @@ type State = {
     isLoading: boolean,
     fetchError: ?Error,
     executePostData: ?Object,
-    integrationWindowRef: ?any,
+    shouldRenderIntegrationPortal: boolean,
 };
 
 class ContentOpenWith extends PureComponent<Props, State> {
@@ -75,6 +75,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     state: State;
     executeId: ?string;
     window: any;
+    integrationWindow: ?any;
 
     static defaultProps = {
         className: '',
@@ -90,7 +91,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         isLoading: true,
         fetchError: null,
         executePostData: null,
-        integrationWindowRef: null,
+        shouldRenderIntegrationPortal: false,
     };
 
     /**
@@ -238,13 +239,13 @@ class ContentOpenWith extends PureComponent<Props, State> {
         const { fileId }: Props = this.props;
         // window.open() is immediately invoked to avoid popup-blockers
         // The name is included to be the target of a form if the integration is a POST integration
-        const windowRef = this.window.open(
+        this.integrationWindow = this.window.open(
             '',
             `OpenWithIntegration-${appIntegrationId}`,
         );
 
         this.setState({
-            integrationWindowRef: windowRef,
+            shouldRenderIntegrationPortal: true,
         });
 
         this.api
@@ -268,14 +269,13 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     executeIntegrationSuccessHandler = (executeData: ExecuteAPI): void => {
-        let { integrationWindowRef }: State = this.state;
         const { method, url } = executeData;
         switch (method) {
             case HTTP_POST:
                 this.setState({ executePostData: executeData });
                 break;
             case HTTP_GET:
-                if (!integrationWindowRef) {
+                if (!this.integrationWindow) {
                     this.executeIntegrationErrorHandler(
                         Error(WINDOW_OPEN_BLOCKED_ERROR),
                     );
@@ -284,8 +284,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
                 // Prevents abuse of window.opener
                 // see here for more details: https://mathiasbynens.github.io/rel-noopener/
-                integrationWindowRef.location = url;
-                integrationWindowRef.opener = null;
+                this.integrationWindow.location = url;
+                this.integrationWindow.opener = null;
                 this.onExecute();
 
                 break;
@@ -295,7 +295,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 );
         }
 
-        integrationWindowRef = null;
+        this.integrationWindow = null;
     };
 
     /**
@@ -319,7 +319,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         this.props.onExecute(this.executeId);
         this.executeId = null;
         this.setState({
-            integrationWindowRef: null,
+            shouldRenderIntegrationPortal: false,
         });
     }
 
@@ -334,7 +334,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         this.props.onError(error);
         console.error(error);
         this.setState({
-            integrationWindowRef: null,
+            shouldRenderIntegrationPortal: false,
         });
     };
 
@@ -366,7 +366,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             isLoading,
             integrations,
             executePostData,
-            integrationWindowRef,
+            shouldRenderIntegrationPortal,
         }: State = this.state;
 
         const className = classNames('be bcow', this.props.className);
@@ -389,9 +389,9 @@ class ContentOpenWith extends PureComponent<Props, State> {
                             integrations={integrations}
                         />
                     )}
-                    {integrationWindowRef && (
+                    {shouldRenderIntegrationPortal && (
                         <IntegrationPortal
-                            integrationWindowRef={integrationWindowRef}
+                            integrationWindow={this.integrationWindow}
                         >
                             <div className="bcow-portal-container">
                                 <LoadingIndicator
@@ -406,8 +406,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
                             onSubmit={this.onExecuteFormSubmit}
                             executePostData={executePostData}
                             windowName={
-                                integrationWindowRef &&
-                                integrationWindowRef.name
+                                this.integrationWindow &&
+                                this.integrationWindow.name
                             }
                             id={this.id}
                         />

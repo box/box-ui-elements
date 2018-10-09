@@ -9,10 +9,10 @@ import { createPortal } from 'react-dom';
 
 type Props = {
     children: any,
-    integrationWindowRef: any,
+    integrationWindow: any,
 };
 class IntegrationPortal extends PureComponent<Props> {
-    containerEl: ?HTMLElement;
+    containerElement: ?HTMLElement;
 
     /**
      * [constructor]
@@ -22,7 +22,7 @@ class IntegrationPortal extends PureComponent<Props> {
      */
     constructor(props: Props) {
         super(props);
-        this.containerEl = document.createElement('div');
+        this.containerElement = document.createElement('div');
     }
 
     /**
@@ -33,9 +33,9 @@ class IntegrationPortal extends PureComponent<Props> {
      * @return {void}
      */
     componentDidMount() {
-        const { integrationWindowRef }: Props = this.props;
+        const { integrationWindow }: Props = this.props;
         this.copyStyles();
-        integrationWindowRef.document.body.appendChild(this.containerEl);
+        integrationWindow.document.body.appendChild(this.containerElement);
     }
 
     /**
@@ -45,19 +45,26 @@ class IntegrationPortal extends PureComponent<Props> {
      * @return {void}
      */
     copyStyles() {
-        const { integrationWindowRef }: Props = this.props;
+        const { integrationWindow }: Props = this.props;
         // The new window will have no CSS, so we copy all style sheets as a safe way
         // of ensuring required styles are present
+        const documentFragment: DocumentFragment = document.createDocumentFragment();
         Array.from(document.styleSheets).forEach(styleSheet => {
+            if (!styleSheet.href) {
+                return;
+            }
+
             const copiedStyleSheet = document.createElement('link');
             copiedStyleSheet.rel = 'stylesheet';
             copiedStyleSheet.href = styleSheet.href;
-            integrationWindowRef.document.head.appendChild(copiedStyleSheet);
+            documentFragment.appendChild(copiedStyleSheet);
         });
+
+        integrationWindow.document.head.appendChild(documentFragment);
     }
 
     render() {
-        return createPortal(this.props.children, this.containerEl);
+        return createPortal(this.props.children, this.containerElement);
     }
 }
 
