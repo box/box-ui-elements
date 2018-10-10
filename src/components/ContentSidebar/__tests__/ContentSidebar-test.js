@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import ContentSidebar from '../ContentSidebar';
+import { ContentSidebarComponent as ContentSidebar } from '../ContentSidebar';
 import SidebarUtils from '../SidebarUtils';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../../util/fields';
 

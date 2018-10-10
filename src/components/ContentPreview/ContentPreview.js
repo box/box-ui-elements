@@ -22,6 +22,7 @@ import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
+import withErrorBoundary from '../ErrorBoundary/withErrorBoundary';
 import Internationalize from '../Internationalize';
 import TokenService from '../../util/TokenService';
 import { isInputElement, focus } from '../../util/dom';
@@ -1194,4 +1195,4 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default makeResponsive(ContentPreview);
+export default withErrorBoundary(makeResponsive(ContentPreview));
