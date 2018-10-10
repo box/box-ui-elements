@@ -26,6 +26,7 @@
             }
         </style>
         <link rel="stylesheet" type="text/css" href="../dev/en-US/openwith.css" />
+        <script src="https://cdn.polyfill.io/v2/polyfill.js?features=es6,Intl"></script>
         <script src="../dev/en-US/openwith.js"></script>
     </head>
     <body>
@@ -75,29 +76,31 @@
         </div>
         <script>
             function load(buttonNum) {
-                const { ContentOpenWith } = Box;
-                const container = document.querySelector(`.id-token-container-${buttonNum}`); 
-                const token = container.querySelector('.token').value || localStorage.getItem(`token${buttonNum}`);
-                const fileId = container.querySelector('.file').value || localStorage.getItem(`file${buttonNum}`);
+                var ContentOpenWith = Box.ContentOpenWith;
+                var tokenNum = 'token' + buttonNum;
+                var fileNum = 'file' + buttonNum
+                var container = document.querySelector('.id-token-container-' + buttonNum); 
+                var token = container.querySelector('.token').value || localStorage.getItem(tokenNum);
+                var fileId = container.querySelector('.file').value || localStorage.getItem(fileNum);
                 if (!token || !fileId) {
                     return;
                 }
-                localStorage.setItem(`token${buttonNum}`, token);
-                container.querySelector(`.token`).value = token;
-                localStorage.setItem(`file${buttonNum}`, fileId);
+                localStorage.setItem(tokenNum, token);
+                container.querySelector('.token').value = token;
+                localStorage.setItem(fileNum, fileId);
                 container.querySelector('.file').value = fileId;
-                const openwith = new ContentOpenWith();
+                var openwith = new ContentOpenWith();
 
-                openwith.addListener('execute', (id) => {
+                openwith.addListener('execute', function(id) {
                     console.log('executing app integration: ' + id);
                 });
 
-                openwith.addListener('error', (error) => {
+                openwith.addListener('error', function(error)  {
                     console.log(error);
                 });
 
                 openwith.show(fileId, token, {
-                    container: `.openwith${buttonNum}`,
+                    container: '.openwith' + buttonNum,
                 });
             }
             load(1);
