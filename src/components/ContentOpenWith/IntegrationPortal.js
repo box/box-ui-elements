@@ -22,7 +22,9 @@ class IntegrationPortal extends PureComponent<Props> {
      */
     constructor(props: Props) {
         super(props);
-        this.containerElement = document.createElement('div');
+
+        const { integrationWindow }: Props = this.props;
+        this.containerElement = integrationWindow.document.createElement('div');
     }
 
     /**
@@ -48,19 +50,18 @@ class IntegrationPortal extends PureComponent<Props> {
         const { integrationWindow }: Props = this.props;
         // The new window will have no CSS, so we copy all style sheets as a safe way
         // of ensuring required styles are present
-        const documentFragment: DocumentFragment = document.createDocumentFragment();
         Array.from(document.styleSheets).forEach(styleSheet => {
             if (!styleSheet.href) {
                 return;
             }
 
-            const copiedStyleSheet = document.createElement('link');
+            const copiedStyleSheet = integrationWindow.document.createElement(
+                'link',
+            );
             copiedStyleSheet.rel = 'stylesheet';
             copiedStyleSheet.href = styleSheet.href;
-            documentFragment.appendChild(copiedStyleSheet);
+            integrationWindow.document.head.appendChild(copiedStyleSheet);
         });
-
-        integrationWindow.document.head.appendChild(documentFragment);
     }
 
     render() {
