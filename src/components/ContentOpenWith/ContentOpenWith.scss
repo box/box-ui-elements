@@ -41,3 +41,18 @@
         word-wrap: break-word;
     }
 }
+
+.bcow-portal-container {
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+
+    .bcow-portal-loading-indicator {
+        div {
+            // Platform standard color
+            background-color: $twos;
+        }
+    }
+}
+

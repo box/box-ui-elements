@@ -11,7 +11,7 @@ type Props = {
     executePostData: ExecuteAPI,
     id: string,
     onSubmit: Function,
-    windowName: ?any,
+    windowName: ?string,
 };
 
 class ExecuteForm extends PureComponent<Props> {

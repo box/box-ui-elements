@@ -17,7 +17,7 @@ import messages from '../messages';
 
 type Props = {
     displayIntegration?: ?Integration,
-    error: ?Error,
+    error: ?any,
     icon?: string,
     isLoading: boolean,
     onClick: ?Function,
@@ -32,7 +32,7 @@ type Props = {
  */
 const getTooltip = (
     displayDescription: ?string,
-    error: ?Error,
+    error: ?any,
     isLoading: boolean,
 ): ?(string | Element) => {
     if (isLoading) {
