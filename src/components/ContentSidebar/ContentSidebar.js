@@ -63,7 +63,7 @@ type Props = {
 type State = {
     view?: SidebarView,
     file?: BoxItem,
-    isVisible: boolean,
+    isVisible?: boolean,
     hasBeenToggled?: boolean,
 };
 
@@ -89,7 +89,6 @@ class ContentSidebar extends PureComponent<Props, State> {
     };
 
     initialState: State = {
-        isVisible: true,
         file: undefined,
     };
 
