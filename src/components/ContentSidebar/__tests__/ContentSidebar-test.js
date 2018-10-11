@@ -423,7 +423,6 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         let wrapper;
         let instance;
         let fetchFileSuccessCallback;
-        let fetchFileErrorCallback;
 
         beforeEach(() => {
             wrapper = getWrapper({
@@ -432,14 +431,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance = wrapper.instance();
             fileStub = jest.fn();
             fetchFileSuccessCallback = jest.fn();
-            fetchFileErrorCallback = jest.fn();
             instance.api = {
                 getFileAPI: () => ({
                     getFile: fileStub,
                 }),
             };
             instance.fetchFileSuccessCallback = fetchFileSuccessCallback;
-            instance.fetchFileErrorCallback = fetchFileErrorCallback;
         });
 
         test('should not fetch the file when sidebar is not configured to show anything', () => {
