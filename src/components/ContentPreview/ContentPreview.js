@@ -47,7 +47,6 @@ type Props = {
     appHost: string,
     autoFocus: boolean,
     cache?: APICache,
-    canAnnotate?: boolean,
     canDownload?: boolean,
     className: string,
     collection: Array<string | BoxItem>,
@@ -72,6 +71,7 @@ type Props = {
     responseInterceptor?: Function,
     sharedLink?: string,
     sharedLinkPassword?: string,
+    showAnnotations?: boolean,
     staticHost: string,
     staticPath: string,
     token: Token,
@@ -142,7 +142,6 @@ class ContentPreview extends PureComponent<Props, State> {
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
         autoFocus: false,
-        canAnnotate: true,
         canDownload: true,
         className: '',
         collection: [],
@@ -156,6 +155,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onMetric: noop,
         onNavigate: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
+        showAnnotations: true,
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         useHotkeys: true,
@@ -605,14 +605,14 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {boolean}
      */
     canAnnotate(): boolean {
-        const { canAnnotate }: Props = this.props;
+        const { showAnnotations }: Props = this.props;
         const { file }: State = this.state;
         const isFileAnnotatable = getProp(
             file,
             'permissions.can_annotate',
             false,
         );
-        return isFileAnnotatable && !!canAnnotate;
+        return isFileAnnotatable && !!showAnnotations;
     }
 
     /**
