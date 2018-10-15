@@ -993,6 +993,17 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
             'Message to the user when there is at least one Open With integration available',
         defaultMessage: 'Open this file with a partner service',
     },
+    drawAnnotation: {
+        id: 'be.drawAnnotation',
+        description:
+            'Message to the user to enter into drawing annotation mode',
+        defaultMessage: 'Drawing annotation mode',
+    },
+    pointAnnotation: {
+        id: 'be.pointAnnotation',
+        description: 'Message to the user to enter into point annotation mode',
+        defaultMessage: 'Point annotation mode',
+    },
 });
 
 export default messages;
