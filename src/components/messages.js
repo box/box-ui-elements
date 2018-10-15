@@ -993,6 +993,19 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
             'Message to the user when there is at least one Open With integration available',
         defaultMessage: 'Open this file with a partner service',
     },
+    executeIntegrationOpenWithErrorHeader: {
+        id: 'be.executeIntegrationOpenWithErrorHeader',
+        description:
+            'Header message to the user when an Open With integration fails to execute',
+        defaultMessage:
+            "We're sorry, this integration is currently unavailable.",
+    },
+    executeIntegrationOpenWithErrorSubHeader: {
+        id: 'be.executeIntegrationOpenWithErrorSubHeader',
+        description:
+            'Sub header message to the user when an Open With integration fails to execute',
+        defaultMessage: 'Please try again later.',
+    },
     drawAnnotation: {
         id: 'be.drawAnnotation',
         description:

@@ -5,9 +5,11 @@
  */
 
 import React, { PureComponent } from 'react';
+import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import API from '../../api';
 import Internationalize from '../Internationalize';
@@ -15,7 +17,7 @@ import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import OpenWithButton from './OpenWithButton';
 import IntegrationPortal from './IntegrationPortal';
 import ExecuteForm from './ExecuteForm';
-
+import messages from '../messages';
 import '../base.scss';
 import './ContentOpenWith.scss';
 
@@ -65,7 +67,8 @@ type State = {
     isLoading: boolean,
     fetchError: ?Error,
     executePostData: ?Object,
-    shouldRenderIntegrationPortal: boolean,
+    shouldRenderErrorIntegrationPortal: boolean,
+    shouldRenderLoadingIntegrationPortal: boolean,
 };
 
 class ContentOpenWith extends PureComponent<Props, State> {
@@ -91,7 +94,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
         isLoading: true,
         fetchError: null,
         executePostData: null,
-        shouldRenderIntegrationPortal: false,
+        shouldRenderErrorIntegrationPortal: false,
+        shouldRenderLoadingIntegrationPortal: false,
     };
 
     /**
@@ -245,7 +249,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
         );
 
         this.setState({
-            shouldRenderIntegrationPortal: true,
+            shouldRenderLoadingIntegrationPortal: true,
+            shouldRenderErrorIntegrationPortal: false,
         });
 
         this.api
@@ -319,7 +324,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         this.props.onExecute(this.executeId);
         this.executeId = null;
         this.setState({
-            shouldRenderIntegrationPortal: false,
+            shouldRenderLoadingIntegrationPortal: false,
         });
     }
 
@@ -334,7 +339,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
         this.props.onError(error);
         console.error(error);
         this.setState({
-            shouldRenderIntegrationPortal: false,
+            shouldRenderLoadingIntegrationPortal: false,
+            shouldRenderErrorIntegrationPortal: true,
         });
     };
 
@@ -362,11 +368,12 @@ class ContentOpenWith extends PureComponent<Props, State> {
     render() {
         const { language, messages: intlMessages }: Props = this.props;
         const {
-            fetchError: error,
+            fetchError,
             isLoading,
             integrations,
             executePostData,
-            shouldRenderIntegrationPortal,
+            shouldRenderLoadingIntegrationPortal,
+            shouldRenderErrorIntegrationPortal,
         }: State = this.state;
 
         const className = classNames('be bcow', this.props.className);
@@ -378,7 +385,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 <div id={this.id} className={className}>
                     {numIntegrations <= 1 ? (
                         <OpenWithButton
-                            error={error}
+                            error={fetchError}
                             onClick={this.onIntegrationClick}
                             displayIntegration={displayIntegration}
                             isLoading={isLoading}
@@ -389,14 +396,34 @@ class ContentOpenWith extends PureComponent<Props, State> {
                             integrations={integrations}
                         />
                     )}
-                    {shouldRenderIntegrationPortal && (
+                    {shouldRenderLoadingIntegrationPortal && (
                         <IntegrationPortal
                             integrationWindow={this.integrationWindow}
                         >
-                            <div className="bcow-portal-container">
+                            <div className="be bcow bcow-portal-container">
                                 <LoadingIndicator
                                     className="bcow-portal-loading-indicator"
                                     size="large"
+                                />
+                            </div>
+                        </IntegrationPortal>
+                    )}
+                    {shouldRenderErrorIntegrationPortal && (
+                        <IntegrationPortal
+                            integrationWindow={this.integrationWindow}
+                        >
+                            <div className="be bcow bcow-portal-container">
+                                <ErrorMask
+                                    errorHeader={
+                                        <FormattedMessage
+                                            {...messages.executeIntegrationOpenWithErrorHeader}
+                                        />
+                                    }
+                                    errorSubHeader={
+                                        <FormattedMessage
+                                            {...messages.executeIntegrationOpenWithErrorSubHeader}
+                                        />
+                                    }
                                 />
                             </div>
                         </IntegrationPortal>

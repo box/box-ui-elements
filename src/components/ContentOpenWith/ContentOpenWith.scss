@@ -1,6 +1,8 @@
 @import '../variables';
 
 .be.bcow {
+    font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
     .btn {
         padding: 3px 13px 3px 10px;
     }
@@ -53,6 +55,11 @@
             // Platform standard color
             background-color: $twos;
         }
+    }
+
+    .error-mask {
+        margin: 0 auto;
+        max-width: 650px;
     }
 }
 
