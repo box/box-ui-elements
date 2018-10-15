@@ -2049,10 +2049,9 @@ box-locales@^0.0.1:
   resolved "https://registry.yarnpkg.com/box-locales/-/box-locales-0.0.1.tgz#1724959f293ae85f235b681b775d0f1a52a76b54"
   integrity sha512-a9ZHTtNHOqc2mIPmymc/LZ8u2dJFbQTIShLi34oOIzeLm/esb67IsHzLWshHMbJpZjpnimNBG8vdh2cs8Sx67Q==
 
-box-react-ui@^26.2.1:
-  version "26.2.1"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-26.2.1.tgz#e56438affe66610870df1ceb97c10d8aea299266"
-  integrity sha512-Uul7oU8z8njmmOJFwjiLPde5+xVqHchYWYuPtdF8/eiXl9Trh3Yc+aYW1BavVMQTrdIkzqzriPLKXB4UcsMRaA==
+box-react-ui@^26.6.4:
+  version "26.6.4"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-26.6.4.tgz#05c259b4071b75f5f690362666de2fca2fcb90f0"
 
 brace-expansion@^1.0.0:
   version "1.1.11"

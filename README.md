@@ -9,7 +9,7 @@
 Box UI Elements are pre-built UI components that allow developers to add features of the main Box web application into their own applications. They can be used to navigate through, upload, preview, and select content stored on Box and are available both as React components and framework-agnostic JavaScript libraries.
 
 # Demo
-*The demo page has limited functionality*  
+*The demo page has limited functionality*
 https://opensource.box.com/box-ui-elements/
 
 # Usage
@@ -250,19 +250,20 @@ render(
 ### Props
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| canDownload | boolean | `true` | Visually hides the download and print buttons in the preview header if this is set to `false`. *This prop has no effect when the file permission `can_download` is set to `false`.* |
+| collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | fileId* | string | | The id of the file to preview. |
+| hasHeader | boolean | `true` | Visually hides the preview header if this is set to `false`. |
 | language | string | `en-US` | *See the [Internationalization](#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
-| onLoad | function |  | Callback function for when a file preview loads. |
 | onClose | function |  | Callback function for when the file preview closes. If absent, the close button will not render in the header. |
-| collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| canDownload | boolean | `true` | Visually hides the download and print buttons in the preview header if this is set to `false`. *This prop has no effect when the file permission `can_download` is set to `false`.* |
-| hasHeader | boolean | `true` | Visually hides the preview header if this is set to `false`. |
-| sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| onLoad | function |  | Callback function for when a file preview loads. |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| showAnnotations | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 
 ***Note: Any other option listed here https://github.com/box/box-content-preview#parameters--options, which is also not listed or overriden above as a prop, will be passed on as-is to the Preview Library.***
 

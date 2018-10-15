@@ -792,4 +792,42 @@ describe('components/ContentPreview/ContentPreview', () => {
             expect(wrapper.state('currentFileId')).toBe(newFileId);
         });
     });
+
+    describe('canAnnotate()', () => {
+        let wrapper;
+        let instance;
+        let file;
+
+        beforeEach(() => {
+            file = {
+                id: '123',
+                permissions: {
+                    can_annotate: true,
+                },
+            };
+        });
+
+        test('should return true if showAnnotations prop is true and has can_annotate permission', () => {
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canAnnotate()).toBeTruthy();
+        });
+
+        test('should return false if showAnnotations prop is false', () => {
+            props.showAnnotations = false;
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canAnnotate()).toBeFalsy();
+        });
+
+        test('should return false if can_annotate permission is false', () => {
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            file.permissions.can_annotate = false;
+            wrapper.setState({ file });
+            expect(instance.canAnnotate()).toBeFalsy();
+        });
+    });
 });
