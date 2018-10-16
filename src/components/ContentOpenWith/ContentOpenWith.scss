@@ -1,7 +1,7 @@
 @import '../variables';
 
 .be.bcow {
-    font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: $font;
 
     .btn {
         padding: 3px 13px 3px 10px;
@@ -58,6 +58,7 @@
     }
 
     .error-mask {
+        font-size: 16px;
         margin: 0 auto;
         max-width: 650px;
     }

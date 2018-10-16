@@ -396,15 +396,31 @@ class ContentOpenWith extends PureComponent<Props, State> {
                             integrations={integrations}
                         />
                     )}
-                    {shouldRenderLoadingIntegrationPortal && (
+                    {(shouldRenderLoadingIntegrationPortal ||
+                        shouldRenderErrorIntegrationPortal) && (
                         <IntegrationPortal
                             integrationWindow={this.integrationWindow}
                         >
                             <div className="be bcow bcow-portal-container">
-                                <LoadingIndicator
-                                    className="bcow-portal-loading-indicator"
-                                    size="large"
-                                />
+                                {shouldRenderErrorIntegrationPortal ? (
+                                    <ErrorMask
+                                        errorHeader={
+                                            <FormattedMessage
+                                                {...messages.executeIntegrationOpenWithErrorHeader}
+                                            />
+                                        }
+                                        errorSubHeader={
+                                            <FormattedMessage
+                                                {...messages.executeIntegrationOpenWithErrorSubHeader}
+                                            />
+                                        }
+                                    />
+                                ) : (
+                                    <LoadingIndicator
+                                        className="bcow-portal-loading-indicator"
+                                        size="large"
+                                    />
+                                )}
                             </div>
                         </IntegrationPortal>
                     )}
