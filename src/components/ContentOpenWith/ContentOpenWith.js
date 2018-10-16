@@ -424,26 +424,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
                             </div>
                         </IntegrationPortal>
                     )}
-                    {shouldRenderErrorIntegrationPortal && (
-                        <IntegrationPortal
-                            integrationWindow={this.integrationWindow}
-                        >
-                            <div className="be bcow bcow-portal-container">
-                                <ErrorMask
-                                    errorHeader={
-                                        <FormattedMessage
-                                            {...messages.executeIntegrationOpenWithErrorHeader}
-                                        />
-                                    }
-                                    errorSubHeader={
-                                        <FormattedMessage
-                                            {...messages.executeIntegrationOpenWithErrorSubHeader}
-                                        />
-                                    }
-                                />
-                            </div>
-                        </IntegrationPortal>
-                    )}
                     {executePostData && (
                         <ExecuteForm
                             onSubmit={this.onExecuteFormSubmit}

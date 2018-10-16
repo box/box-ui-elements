@@ -45,8 +45,10 @@ const IntegrationPortal = ({ integrationWindow, children }: Props) => {
     const containerElement =
         existingContainer || integrationWindow.document.createElement('div');
 
-    copyStyles(integrationWindow);
-    integrationWindow.document.body.appendChild(containerElement);
+    if (!existingContainer) {
+        copyStyles(integrationWindow);
+        integrationWindow.document.body.appendChild(containerElement);
+    }
 
     return createPortal(children, containerElement);
 };
