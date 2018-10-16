@@ -4,53 +4,81 @@
  * @author Box
  */
 
+import { PureComponent } from 'react';
 import { createPortal } from 'react-dom';
 
 type Props = {
     children: any,
     integrationWindow: any,
 };
+class IntegrationPortal extends PureComponent<Props> {
+    containerElement: ?HTMLElement;
 
-/**
- * Copies stylesheets to the new window.
- *
- * @private
- * @return {void}
- */
-const copyStyles = integrationWindow => {
-    // The new window will have no CSS, so we copy all style sheets as a safe way
-    // of ensuring required styles are present
-    Array.from(document.styleSheets).forEach(styleSheet => {
-        if (!styleSheet.href) {
-            return;
-        }
+    /**
+     * [constructor]
+     *
+     * @private
+     * @return {IntegrationPortal}
+     */
+    constructor(props: Props) {
+        super(props);
 
-        const copiedStyleSheet = integrationWindow.document.createElement(
-            'link',
+        const { integrationWindow }: Props = this.props;
+        const existingContainer = integrationWindow.document.querySelector(
+            'div',
         );
-        copiedStyleSheet.rel = 'stylesheet';
-        copiedStyleSheet.href = styleSheet.href;
-        integrationWindow.document.head.appendChild(copiedStyleSheet);
-    });
 
-    // Reset margin and padding in our new window
-    integrationWindow.document.body.style.margin = 0;
-    integrationWindow.document.body.style.padding = 0;
-};
-
-const IntegrationPortal = ({ integrationWindow, children }: Props) => {
-    // If the integration window isn't closed, we should reuse the container div and avoid
-    // creating another one.
-    const existingContainer = integrationWindow.document.querySelector('div');
-    const containerElement =
-        existingContainer || integrationWindow.document.createElement('div');
-
-    if (!existingContainer) {
-        copyStyles(integrationWindow);
-        integrationWindow.document.body.appendChild(containerElement);
+        // If the integration window isn't closed, we should reuse the container div and avoid
+        // creating another one.
+        this.containerElement =
+            existingContainer ||
+            integrationWindow.document.createElement('div');
     }
 
-    return createPortal(children, containerElement);
-};
+    /**
+     * Setup UI in the new window.
+     *
+     * @private
+     * @inheritdoc
+     * @return {void}
+     */
+    componentDidMount() {
+        const { integrationWindow }: Props = this.props;
+        this.copyStyles();
+        integrationWindow.document.body.appendChild(this.containerElement);
+    }
+
+    /**
+     * Copies stylesheets to the new window.
+     *
+     * @private
+     * @return {void}
+     */
+    copyStyles() {
+        const { integrationWindow }: Props = this.props;
+        // The new window will have no CSS, so we copy all style sheets as a safe way
+        // of ensuring required styles are present
+        Array.from(document.styleSheets).forEach(styleSheet => {
+            if (!styleSheet.href) {
+                return;
+            }
+
+            const copiedStyleSheet = integrationWindow.document.createElement(
+                'link',
+            );
+            copiedStyleSheet.rel = 'stylesheet';
+            copiedStyleSheet.href = styleSheet.href;
+            integrationWindow.document.head.appendChild(copiedStyleSheet);
+        });
+
+        // Reset margin and padding in our new window
+        integrationWindow.document.body.style.margin = 0;
+        integrationWindow.document.body.style.padding = 0;
+    }
+
+    render() {
+        return createPortal(this.props.children, this.containerElement);
+    }
+}
 
 export default IntegrationPortal;

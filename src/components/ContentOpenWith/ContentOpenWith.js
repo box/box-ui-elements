@@ -400,6 +400,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                         shouldRenderErrorIntegrationPortal) && (
                         <IntegrationPortal
                             integrationWindow={this.integrationWindow}
+                            key={uniqueid('integration_portal_')}
                         >
                             <div className="be bcow bcow-portal-container">
                                 {shouldRenderErrorIntegrationPortal ? (
