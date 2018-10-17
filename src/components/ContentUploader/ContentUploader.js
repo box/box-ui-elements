@@ -68,6 +68,7 @@ type Props = {
     onMinimize?: Function,
     onUpload: Function,
     onUpload: Function,
+    overwrite: boolean,
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     rootFolderId: string,
@@ -117,6 +118,7 @@ class ContentUploader extends Component<Props, State> {
         onComplete: noop,
         onError: noop,
         onUpload: noop,
+        overwrite: true,
         useUploadsManager: false,
         files: [],
         onMinimize: noop,
@@ -714,7 +716,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     uploadFile(item: UploadItem) {
-        const { rootFolderId } = this.props;
+        const { overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
 
         if (this.numItemsUploading >= UPLOAD_CONCURRENCY) {
@@ -730,7 +732,7 @@ class ContentUploader extends Component<Props, State> {
             errorCallback: error => this.handleUploadError(item, error),
             progressCallback: event => this.handleUploadProgress(item, event),
             successCallback: entries => this.handleUploadSuccess(item, entries),
-            overwrite: true,
+            overwrite,
             fileId: options && options.fileId ? options.fileId : null,
         };
 
