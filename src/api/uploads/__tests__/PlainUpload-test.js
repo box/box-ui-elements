@@ -141,6 +141,7 @@ describe('api/uploads/PlainUpload', () => {
             upload.file = {
                 name: 'warlock',
             };
+            upload.fileName = 'warlock-152340';
             upload.folderId = '123';
             upload.xhr = {
                 uploadFile: jest.fn(),
@@ -150,7 +151,8 @@ describe('api/uploads/PlainUpload', () => {
                 expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
                     url: `${upload.uploadHost}/api/2.0/files/content`,
                     data: {
-                        attributes: expect.any(String),
+                        attributes:
+                            '{"name":"warlock-152340","parent":{"id":"123"}}',
                         file: upload.file,
                     },
                     headers: {

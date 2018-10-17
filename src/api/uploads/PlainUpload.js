@@ -79,7 +79,7 @@ class PlainUpload extends BaseUpload {
         }
 
         const attributes = JSON.stringify({
-            name: this.file.name,
+            name: this.fileName,
             parent: { id: this.folderId },
         });
 
@@ -145,6 +145,7 @@ class PlainUpload extends BaseUpload {
         this.folderId = folderId;
         this.fileId = fileId;
         this.file = file;
+        this.fileName = this.file.name;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         this.progressCallback = progressCallback;
