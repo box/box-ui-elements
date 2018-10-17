@@ -5,19 +5,15 @@
  */
 
 import React, { PureComponent } from 'react';
-import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import API from '../../api';
 import Internationalize from '../Internationalize';
+import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import OpenWithButton from './OpenWithButton';
-import IntegrationPortal from './IntegrationPortal';
 import ExecuteForm from './ExecuteForm';
-import messages from '../messages';
 import '../base.scss';
 import './ContentOpenWith.scss';
 
@@ -398,32 +394,10 @@ class ContentOpenWith extends PureComponent<Props, State> {
                     )}
                     {(shouldRenderLoadingIntegrationPortal ||
                         shouldRenderErrorIntegrationPortal) && (
-                        <IntegrationPortal
+                        <IntegrationPortalContainer
+                            hasError={shouldRenderErrorIntegrationPortal}
                             integrationWindow={this.integrationWindow}
-                            key={uniqueid('integration_portal_')}
-                        >
-                            <div className="be bcow bcow-portal-container">
-                                {shouldRenderErrorIntegrationPortal ? (
-                                    <ErrorMask
-                                        errorHeader={
-                                            <FormattedMessage
-                                                {...messages.executeIntegrationOpenWithErrorHeader}
-                                            />
-                                        }
-                                        errorSubHeader={
-                                            <FormattedMessage
-                                                {...messages.executeIntegrationOpenWithErrorSubHeader}
-                                            />
-                                        }
-                                    />
-                                ) : (
-                                    <LoadingIndicator
-                                        className="bcow-portal-loading-indicator"
-                                        size="large"
-                                    />
-                                )}
-                            </div>
-                        </IntegrationPortal>
+                        />
                     )}
                     {executePostData && (
                         <ExecuteForm

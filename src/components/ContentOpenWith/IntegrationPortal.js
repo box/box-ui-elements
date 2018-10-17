@@ -11,6 +11,8 @@ type Props = {
     children: any,
     integrationWindow: any,
 };
+
+const INTEGRATION_CONTAINER_ID = 'integration-container';
 class IntegrationPortal extends PureComponent<Props> {
     containerElement: ?HTMLElement;
 
@@ -25,7 +27,7 @@ class IntegrationPortal extends PureComponent<Props> {
 
         const { integrationWindow }: Props = this.props;
         const existingContainer = integrationWindow.document.querySelector(
-            'div',
+            `#${INTEGRATION_CONTAINER_ID}`,
         );
 
         // If the integration window isn't closed, we should reuse the container div and avoid
@@ -33,6 +35,8 @@ class IntegrationPortal extends PureComponent<Props> {
         this.containerElement =
             existingContainer ||
             integrationWindow.document.createElement('div');
+
+        this.containerElement.id = INTEGRATION_CONTAINER_ID;
     }
 
     /**
