@@ -83,7 +83,7 @@ type State = {
     isFileError: boolean,
     isReloadNotificationVisible: boolean,
     currentFileId?: string, // the currently displayed file id in the collection
-    prevFileId?: string, // the prop "fileId" which is needed to implement getDerivedStateFromProps
+    prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
 };
 
 // Emitted by preview's 'load' event
@@ -203,7 +203,7 @@ class ContentPreview extends PureComponent<Props, State> {
         this.state = {
             ...this.initialState,
             currentFileId: fileId,
-            prevFileId: fileId,
+            prevFileIdProp: fileId,
         };
     }
 
@@ -256,10 +256,10 @@ class ContentPreview extends PureComponent<Props, State> {
 
     static getDerivedStateFromProps(props: Props, state: State) {
         const { fileId } = props;
-        if (fileId !== state.prevFileId && fileId !== state.currentFileId) {
+        if (fileId !== state.prevFileIdProp) {
             return {
                 currentFileId: fileId,
-                prevFileId: fileId,
+                prevFileIdProp: fileId,
             };
         }
 
