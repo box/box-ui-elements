@@ -22,11 +22,11 @@ import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
 import makeResponsive from '../makeResponsive';
-import withErrorBoundary from '../ErrorBoundary/withErrorBoundary';
 import Internationalize from '../Internationalize';
 import TokenService from '../../util/TokenService';
 import { isInputElement, focus } from '../../util/dom';
 import { getTypedFileId } from '../../util/file';
+import { withErrorBoundary } from '../ErrorBoundary';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../util/fields';
 import {

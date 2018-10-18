@@ -14,7 +14,7 @@ import Sidebar from './Sidebar';
 import API from '../../api';
 import APIContext from '../APIContext';
 import Internationalize from '../Internationalize';
-import withErrorBoundary from '../ErrorBoundary/withErrorBoundary';
+import { withErrorBoundary } from '../ErrorBoundary';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../util/fields';
 import {
     DEFAULT_HOSTNAME_API,

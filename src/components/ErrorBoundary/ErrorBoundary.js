@@ -9,9 +9,8 @@ import noop from 'lodash/noop';
 
 type Props = {
     children?: any,
-    errorComponent: any,
+    component: any,
     onError: Function,
-    render?: Function,
 };
 
 type State = {
@@ -23,7 +22,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     state: State = {};
 
     static defaultProps = {
-        errorComponent: null,
+        component: null,
         onError: noop,
     };
 
@@ -34,15 +33,8 @@ class ErrorBoundary extends React.Component<Props, State> {
     }
 
     render() {
-        const { errorComponent, render }: Props = this.props;
-        const { error }: State = this.state;
-
-        if (render) {
-            return render({ error });
-        }
-
-        if (error) {
-            return errorComponent;
+        if (this.state.error) {
+            return this.props.component;
         }
 
         return this.props.children;
