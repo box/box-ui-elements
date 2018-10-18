@@ -765,31 +765,33 @@ describe('components/ContentPreview/ContentPreview', () => {
         const token = 'token';
         const initialFileId = 'foo';
         const newFileId = 'bar';
+        const currentFileId = 'currentFileId';
+        const prevFileIdProp = 'prevFileIdProp';
 
         beforeEach(() => {
             wrapper = getWrapper({
                 token,
                 fileId: initialFileId,
             });
-            expect(wrapper.state('currentFileId')).toBe(initialFileId);
+            expect(wrapper.state(currentFileId)).toBe(initialFileId);
         });
         test('should update the currentFileId in state if the fileId prop changes', () => {
             wrapper.setProps({
                 fileId: newFileId,
             });
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
         });
 
         test('should not update the currentFileId in state if the fileId prop stays the same', () => {
             wrapper.setState({
                 currentFileId: newFileId,
             });
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
             wrapper.setProps({
                 fileId: initialFileId,
                 foo: 'baz',
             });
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
         });
 
         test('should update preview if navigation occurs then browser back clicked', () => {
@@ -797,24 +799,24 @@ describe('components/ContentPreview/ContentPreview', () => {
             wrapper.setState({
                 currentFileId: newFileId,
             });
-            expect(wrapper.state('prevFileId')).toBe(initialFileId);
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(initialFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
 
             // URL update
             wrapper.setProps({
                 fileId: newFileId,
                 foo: 'baz',
             });
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
-            expect(wrapper.state('prevFileId')).toBe(newFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(newFileId);
 
             // browser back
             wrapper.setProps({
                 fileId: initialFileId,
                 foo: 'baz',
             });
-            expect(wrapper.state('prevFileId')).toBe(initialFileId);
-            expect(wrapper.state('currentFileId')).toBe(initialFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(initialFileId);
+            expect(wrapper.state(currentFileId)).toBe(initialFileId);
         });
 
         test('should have the correct state when navigation and props update', () => {
@@ -822,50 +824,50 @@ describe('components/ContentPreview/ContentPreview', () => {
             wrapper.setState({
                 currentFileId: newFileId,
             });
-            expect(wrapper.state('prevFileId')).toBe(initialFileId);
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(initialFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
 
             // URL update
             wrapper.setProps({
                 fileId: newFileId,
             });
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
-            expect(wrapper.state('prevFileId')).toBe(newFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(newFileId);
 
             // browser back
             wrapper.setProps({
                 fileId: initialFileId,
             });
-            expect(wrapper.state('prevFileId')).toBe(initialFileId);
-            expect(wrapper.state('currentFileId')).toBe(initialFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(initialFileId);
+            expect(wrapper.state(currentFileId)).toBe(initialFileId);
 
             // browser forward
             wrapper.setProps({
                 fileId: newFileId,
             });
-            expect(wrapper.state('prevFileId')).toBe(newFileId);
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(newFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
 
             // browser back
             wrapper.setProps({
                 fileId: initialFileId,
             });
-            expect(wrapper.state('prevFileId')).toBe(initialFileId);
-            expect(wrapper.state('currentFileId')).toBe(initialFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(initialFileId);
+            expect(wrapper.state(currentFileId)).toBe(initialFileId);
 
             // navigation
             wrapper.setState({
                 currentFileId: newFileId,
             });
-            expect(wrapper.state('prevFileId')).toBe(initialFileId);
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(initialFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
 
             // URL update
             wrapper.setProps({
                 fileId: newFileId,
             });
-            expect(wrapper.state('currentFileId')).toBe(newFileId);
-            expect(wrapper.state('prevFileId')).toBe(newFileId);
+            expect(wrapper.state(currentFileId)).toBe(newFileId);
+            expect(wrapper.state(prevFileIdProp)).toBe(newFileId);
         });
     });
 
