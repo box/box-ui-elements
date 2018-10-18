@@ -662,7 +662,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     uploadsFileSizeLimitExceededErrorMessage: {
         id: 'be.uploadsFileSizeLimitExceededErrorMessage',
         description: 'Error message shown when file size exceeds the limit',
-        defaultMessage: "File size exceeds the folder owner's file size limit",
+        defaultMessage: 'File size exceeds the folder owner’s file size limit',
     },
     uploadsStorageLimitErrorMessage: {
         id: 'be.uploadsStorageLimitErrorMessage',
@@ -825,7 +825,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.getVersionInfo',
         defaultMessage: 'Get version information',
         description:
-            "Aria label for button to get information about a file's versions",
+            'Aria label for button to get information about a file’s versions',
     },
     keywordsApplied: {
         id: 'be.keywordsAppliedList',
@@ -998,7 +998,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description:
             'Header message to the user when an Open With integration fails to execute',
         defaultMessage:
-            "We're sorry, this integration is currently unavailable.",
+            'We’re sorry, this integration is currently unavailable.',
     },
     executeIntegrationOpenWithErrorSubHeader: {
         id: 'be.executeIntegrationOpenWithErrorSubHeader',
