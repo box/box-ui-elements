@@ -11,6 +11,8 @@ type Props = {
     children: any,
     integrationWindow: any,
 };
+
+const INTEGRATION_CONTAINER_ID = 'integration-container';
 class IntegrationPortal extends PureComponent<Props> {
     containerElement: ?HTMLElement;
 
@@ -24,7 +26,17 @@ class IntegrationPortal extends PureComponent<Props> {
         super(props);
 
         const { integrationWindow }: Props = this.props;
-        this.containerElement = integrationWindow.document.createElement('div');
+        const existingContainer = integrationWindow.document.querySelector(
+            `#${INTEGRATION_CONTAINER_ID}`,
+        );
+
+        // If the integration window isn't closed, we should reuse the container div and avoid
+        // creating another one.
+        this.containerElement =
+            existingContainer ||
+            integrationWindow.document.createElement('div');
+
+        this.containerElement.id = INTEGRATION_CONTAINER_ID;
     }
 
     /**
@@ -62,6 +74,10 @@ class IntegrationPortal extends PureComponent<Props> {
             copiedStyleSheet.href = styleSheet.href;
             integrationWindow.document.head.appendChild(copiedStyleSheet);
         });
+
+        // Reset margin and padding in our new window
+        integrationWindow.document.body.style.margin = 0;
+        integrationWindow.document.body.style.padding = 0;
     }
 
     render() {
