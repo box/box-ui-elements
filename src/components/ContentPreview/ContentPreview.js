@@ -256,7 +256,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
     static getDerivedStateFromProps(props: Props, state: State) {
         const { fileId } = props;
-        if (fileId !== state.prevFileId && fileId !== state.currentFileId) {
+        if (fileId !== state.prevFileId) {
             return {
                 currentFileId: fileId,
                 prevFileId: fileId,

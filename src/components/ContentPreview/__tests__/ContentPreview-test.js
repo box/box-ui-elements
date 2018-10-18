@@ -791,6 +791,82 @@ describe('components/ContentPreview/ContentPreview', () => {
             });
             expect(wrapper.state('currentFileId')).toBe(newFileId);
         });
+
+        test('should update preview if navigation occurs then browser back clicked', () => {
+            // navigation
+            wrapper.setState({
+                currentFileId: newFileId,
+            });
+            expect(wrapper.state('prevFileId')).toBe(initialFileId);
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+
+            // URL update
+            wrapper.setProps({
+                fileId: newFileId,
+                foo: 'baz',
+            });
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state('prevFileId')).toBe(newFileId);
+
+            // browser back
+            wrapper.setProps({
+                fileId: initialFileId,
+                foo: 'baz',
+            });
+            expect(wrapper.state('prevFileId')).toBe(initialFileId);
+            expect(wrapper.state('currentFileId')).toBe(initialFileId);
+        });
+
+        test('should have the correct state when navigation and props update', () => {
+            // navigation
+            wrapper.setState({
+                currentFileId: newFileId,
+            });
+            expect(wrapper.state('prevFileId')).toBe(initialFileId);
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+
+            // URL update
+            wrapper.setProps({
+                fileId: newFileId,
+            });
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state('prevFileId')).toBe(newFileId);
+
+            // browser back
+            wrapper.setProps({
+                fileId: initialFileId,
+            });
+            expect(wrapper.state('prevFileId')).toBe(initialFileId);
+            expect(wrapper.state('currentFileId')).toBe(initialFileId);
+
+            // browser forward
+            wrapper.setProps({
+                fileId: newFileId,
+            });
+            expect(wrapper.state('prevFileId')).toBe(newFileId);
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+
+            // browser back
+            wrapper.setProps({
+                fileId: initialFileId,
+            });
+            expect(wrapper.state('prevFileId')).toBe(initialFileId);
+            expect(wrapper.state('currentFileId')).toBe(initialFileId);
+
+            // navigation
+            wrapper.setState({
+                currentFileId: newFileId,
+            });
+            expect(wrapper.state('prevFileId')).toBe(initialFileId);
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+
+            // URL update
+            wrapper.setProps({
+                fileId: newFileId,
+            });
+            expect(wrapper.state('currentFileId')).toBe(newFileId);
+            expect(wrapper.state('prevFileId')).toBe(newFileId);
+        });
     });
 
     describe('canAnnotate()', () => {
