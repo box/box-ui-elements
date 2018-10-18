@@ -243,6 +243,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             '',
             `OpenWithIntegration-${appIntegrationId}`,
         );
+        this.integrationWindow.onunload = this.cleanupIntegrationWindow;
 
         this.setState({
             shouldRenderLoadingIntegrationPortal: true,
@@ -261,6 +262,18 @@ class ContentOpenWith extends PureComponent<Props, State> {
         this.executeId = appIntegrationId;
     };
 
+    /**
+     * cleans up the portal UI when a tab is closed so that we can remount the component later.
+     *
+     * @private
+     * @return {void}
+     */
+    cleanupIntegrationWindow = () => {
+        this.setState({
+            shouldRenderLoadingIntegrationPortal: false,
+            shouldRenderErrorIntegrationPortal: false,
+        });
+    };
     /**
      * Opens the integration in a new tab based on the API data
      *

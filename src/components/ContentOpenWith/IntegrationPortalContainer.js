@@ -10,7 +10,6 @@ import messages from '../messages';
 import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import { FormattedMessage } from 'react-intl';
-import uniqueid from 'lodash/uniqueId';
 
 type Props = {
     hasError: boolean,
@@ -19,10 +18,7 @@ type Props = {
 
 const IntegrationPortalContainer = ({ hasError, integrationWindow }: Props) => {
     return (
-        <IntegrationPortal
-            integrationWindow={integrationWindow}
-            key={uniqueid('integration_portal_')}
-        >
+        <IntegrationPortal integrationWindow={integrationWindow}>
             <div className="be bcow bcow-portal-container">
                 {hasError ? (
                     <ErrorMask
