@@ -8,14 +8,12 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import API from '../../api';
 import Internationalize from '../Internationalize';
+import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import OpenWithButton from './OpenWithButton';
-import IntegrationPortal from './IntegrationPortal';
 import ExecuteForm from './ExecuteForm';
-
 import '../base.scss';
 import './ContentOpenWith.scss';
 
@@ -65,7 +63,8 @@ type State = {
     isLoading: boolean,
     fetchError: ?Error,
     executePostData: ?Object,
-    shouldRenderIntegrationPortal: boolean,
+    shouldRenderErrorIntegrationPortal: boolean,
+    shouldRenderLoadingIntegrationPortal: boolean,
 };
 
 class ContentOpenWith extends PureComponent<Props, State> {
@@ -91,7 +90,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
         isLoading: true,
         fetchError: null,
         executePostData: null,
-        shouldRenderIntegrationPortal: false,
+        shouldRenderErrorIntegrationPortal: false,
+        shouldRenderLoadingIntegrationPortal: false,
     };
 
     /**
@@ -243,9 +243,11 @@ class ContentOpenWith extends PureComponent<Props, State> {
             '',
             `OpenWithIntegration-${appIntegrationId}`,
         );
+        this.integrationWindow.onunload = this.cleanupIntegrationWindow;
 
         this.setState({
-            shouldRenderIntegrationPortal: true,
+            shouldRenderLoadingIntegrationPortal: true,
+            shouldRenderErrorIntegrationPortal: false,
         });
 
         this.api
@@ -260,6 +262,18 @@ class ContentOpenWith extends PureComponent<Props, State> {
         this.executeId = appIntegrationId;
     };
 
+    /**
+     * cleans up the portal UI when a tab is closed so that we can remount the component later.
+     *
+     * @private
+     * @return {void}
+     */
+    cleanupIntegrationWindow = () => {
+        this.setState({
+            shouldRenderLoadingIntegrationPortal: false,
+            shouldRenderErrorIntegrationPortal: false,
+        });
+    };
     /**
      * Opens the integration in a new tab based on the API data
      *
@@ -319,7 +333,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         this.props.onExecute(this.executeId);
         this.executeId = null;
         this.setState({
-            shouldRenderIntegrationPortal: false,
+            shouldRenderLoadingIntegrationPortal: false,
         });
     }
 
@@ -334,7 +348,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
         this.props.onError(error);
         console.error(error);
         this.setState({
-            shouldRenderIntegrationPortal: false,
+            shouldRenderLoadingIntegrationPortal: false,
+            shouldRenderErrorIntegrationPortal: true,
         });
     };
 
@@ -362,11 +377,12 @@ class ContentOpenWith extends PureComponent<Props, State> {
     render() {
         const { language, messages: intlMessages }: Props = this.props;
         const {
-            fetchError: error,
+            fetchError,
             isLoading,
             integrations,
             executePostData,
-            shouldRenderIntegrationPortal,
+            shouldRenderLoadingIntegrationPortal,
+            shouldRenderErrorIntegrationPortal,
         }: State = this.state;
 
         const className = classNames('be bcow', this.props.className);
@@ -378,7 +394,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 <div id={this.id} className={className}>
                     {numIntegrations <= 1 ? (
                         <OpenWithButton
-                            error={error}
+                            error={fetchError}
                             onClick={this.onIntegrationClick}
                             displayIntegration={displayIntegration}
                             isLoading={isLoading}
@@ -389,17 +405,12 @@ class ContentOpenWith extends PureComponent<Props, State> {
                             integrations={integrations}
                         />
                     )}
-                    {shouldRenderIntegrationPortal && (
-                        <IntegrationPortal
+                    {(shouldRenderLoadingIntegrationPortal ||
+                        shouldRenderErrorIntegrationPortal) && (
+                        <IntegrationPortalContainer
+                            hasError={shouldRenderErrorIntegrationPortal}
                             integrationWindow={this.integrationWindow}
-                        >
-                            <div className="bcow-portal-container">
-                                <LoadingIndicator
-                                    className="bcow-portal-loading-indicator"
-                                    size="large"
-                                />
-                            </div>
-                        </IntegrationPortal>
+                        />
                     )}
                     {executePostData && (
                         <ExecuteForm
