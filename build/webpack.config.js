@@ -1,6 +1,6 @@
 const path = require('path');
 const packageJSON = require('../package.json');
-const TranslationsPlugin = require('./TranslationsPlugin');
+const TranslationsPlugin = require('@box/i18n/TranslationsPlugin.js');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -23,6 +23,9 @@ const outputDir = process.env.OUTPUT;
 const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
+const propsDir = path.resolve('i18n'); // Where the .properties files are dumped
+const jsonDir = path.join(propsDir, 'json'); // Where the react-intl plugin dumps json
+const Translations = new TranslationsPlugin(propsDir, jsonDir);
 const entries = {
     picker: path.resolve('src/wrappers/ContentPickers.js'),
     uploader: path.resolve('src/wrappers/ContentUploader.js'),
@@ -114,7 +117,7 @@ function getConfig(isReactExternalized) {
 
     if (isDev) {
         config.devtool = 'source-map';
-        config.plugins.push(new TranslationsPlugin());
+        config.plugins.push(Translations);
         config.plugins.push(
             new CircularDependencyPlugin({
                 exclude: /node_modules/,
