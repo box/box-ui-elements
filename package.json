@@ -43,7 +43,7 @@
     "build-link": "yarn run npm && yarn run build-link-lib",
     "build-link-lib": "yarn run copy-lib && BABEL_ENV=npm NODE_ENV=dev ./node_modules/.bin/babel lib -d lib -s inline && yarn run copy-messages",
     "build-lib": "yarn run copy-lib && BABEL_ENV=npm NODE_ENV=production ./node_modules/.bin/babel lib -d lib",
-    "build-locales": "node ./build/props-to-es2015.js",
+    "build:i18n": "node ./node_modules/@box/i18n/props2es.js ./i18n ./i18n/json",
     "changelog": "./node_modules/.bin/conventional-changelog -i CHANGELOG.md -s -r 0",
     "clean": "rm -rf dist lib reports/* i18n/json i18n/*.js styleguide",
     "clean-styleguide": "rm -rf styleguide",
@@ -63,9 +63,7 @@
     "major": "./build/release.sh -m && ./build/publish.sh && ./build/publish-examples.sh",
     "minor": "./build/release.sh -n && ./build/publish.sh && ./build/publish-examples.sh",
     "patch": "./build/release.sh -p && ./build/publish.sh && ./build/publish-examples.sh",
-    "precommit": "lint-staged",
-    "prepush": "./build/prepush.sh",
-    "pre-build": "yarn install && yarn run clean && yarn run build-locales",
+    "pre-build": "yarn install && npm-run-all clean build:i18n",
     "prod": "yarn run pre-build && node ./build/prod.js",
     "styleguide": "yarn run pre-build && LANGUAGE=en-US REACT=true BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js server --config build/styleguide.config.js --mode development",
     "styleguide-static": "LANGUAGE=en-US REACT=true BABEL_ENV=production NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config build/styleguide.config.js --mode production",
@@ -82,6 +80,9 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "./build/prepush.sh",
+      "pre-build": "yarn pre-build",
       "commit-msg": "commitlint -e"
     }
   },
@@ -120,6 +121,7 @@
   },
   "devDependencies": {
     "@box/frontend-config": "^0.3.1",
+    "@box/i18n": "^0.1.1",
     "@commitlint/cli": "^7.2.1",
     "autoprefixer": "^9.1.5",
     "axios": "^0.18.0",
@@ -139,7 +141,6 @@
     "babel-preset-stage-1": "^6.24.1",
     "babel-template": "^6.25.0",
     "babel-types": "^6.25.0",
-    "box-locales": "^0.0.1",
     "box-react-ui": "^26.6.4",
     "circular-dependency-plugin": "^5.0.2",
     "classnames": "^2.2.6",
