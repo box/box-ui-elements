@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import OpenWithButtonContents from '../OpenWithButtonContents';
 import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
+import OpenWithButtonContents from '../OpenWithButtonContents';
 
 describe('components/ContentOpenWith/MultipleIntegrationsOpenWithButton', () => {
     const getWrapper = props => shallow(<OpenWithButtonContents {...props} />);

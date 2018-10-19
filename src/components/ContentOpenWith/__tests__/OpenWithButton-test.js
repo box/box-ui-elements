@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import OpenWithButton from '../OpenWithButton';
-import { getTooltip } from '../OpenWithButton';
+import OpenWithButton, { getTooltip } from '../OpenWithButton';
 import messages from '../../messages';
 
 describe('components/ContentOpenWith/OpenWithButton', () => {
