@@ -30,7 +30,7 @@ type Props = {
  * @private
  * @return {?(string | Element)} the tooltip message
  */
-const getTooltip = (
+export const getTooltip = (
     displayDescription: ?string,
     error: ?any,
     isLoading: boolean,

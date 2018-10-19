@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentOpenWith/MultipleIntegrationsOpenWithButton should pass down props to the button 1`] = `
+<Tooltip
+  position="middle-left"
+  text={
+    <FormattedMessage
+      defaultMessage="Open this file with a partner service"
+      id="be.defaultOpenWithDescription"
+    />
+  }
+>
+  <Button
+    width={50}
+  >
+    <MenuToggle>
+      <OpenWithButtonContents>
+        <IconOpenWith
+          className="bcow-integration-icon"
+          height={26}
+          width={26}
+        />
+      </OpenWithButtonContents>
+    </MenuToggle>
+  </Button>
+</Tooltip>
+`;
+
+exports[`components/ContentOpenWith/MultipleIntegrationsOpenWithButton should render button 1`] = `
+<Tooltip
+  position="middle-left"
+  text={
+    <FormattedMessage
+      defaultMessage="Open this file with a partner service"
+      id="be.defaultOpenWithDescription"
+    />
+  }
+>
+  <Button>
+    <MenuToggle>
+      <OpenWithButtonContents>
+        <IconOpenWith
+          className="bcow-integration-icon"
+          height={26}
+          width={26}
+        />
+      </OpenWithButtonContents>
+    </MenuToggle>
+  </Button>
+</Tooltip>
+`;
