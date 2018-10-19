@@ -17,10 +17,15 @@ const PATH_DELIMITER = '/';
 
 class FolderUpload {
     folder: FolderUploadNode;
+
     files: Array<UploadFile> = [];
+
     destinationFolderId: string;
+
     addFilesToUploadQueue: Function;
+
     addFolderToUploadQueue: Function;
+
     baseAPIOptions: Object;
 
     /**

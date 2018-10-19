@@ -43,30 +43,55 @@ const LOG_EVENT_TYPE_PART_DIGEST_RETRIES_EXCEEDED =
 
 class MultiputUpload extends BaseMultiput {
     clientId: ?string;
+
     commitRetryCount: number;
+
     createSessionNumRetriesPerformed: number;
+
     destinationFileId: ?string;
+
     folderId: string;
+
     fileSha1: ?string;
+
     firstUnuploadedPartIndex: number;
+
     initialFileLastModified: ?string;
+
     initialFileSize: number;
+
     successCallback: Function;
+
     progressCallback: Function;
+
     options: Options;
+
     partSize: number;
+
     parts: Array<MultiputPart>;
+
     numPartsDigestComputing: number;
+
     numPartsDigestReady: number;
+
     numPartsNotStarted: number;
+
     numPartsUploaded: number;
+
     numPartsUploading: number;
+
     sessionEndpoints: Object;
+
     sessionId: string;
+
     totalUploadedBytes: number;
+
     sha1Worker: Worker;
+
     createSessionTimeout: TimeoutID;
+
     commitSessionTimeout: TimeoutID;
+
     partsUploaded: number;
 
     /**

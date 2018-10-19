@@ -64,9 +64,13 @@ const ITEM_OFFSET = 0;
 
 class ContentTree extends Component<Props, State> {
     id: string;
+
     api: API;
+
     state: State;
+
     props: Props;
+
     table: any;
 
     static defaultProps = {

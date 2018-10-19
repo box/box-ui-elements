@@ -7,8 +7,8 @@
 import noop from 'lodash/noop';
 import Item from './Item';
 import flatten from '../util/flatten';
-import FileAPI from '../api/File';
-import WebLinkAPI from '../api/WebLink';
+import FileAPI from './File';
+import WebLinkAPI from './WebLink';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
 import { CACHE_PREFIX_FOLDER } from '../constants';
 import { getBadItemError } from '../util/error';

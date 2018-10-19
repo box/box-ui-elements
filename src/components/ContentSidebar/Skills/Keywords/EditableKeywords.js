@@ -31,6 +31,7 @@ type State = {
 
 class EditableKeywords extends React.PureComponent<Props, State> {
     props: Props;
+
     state: State;
 
     /**

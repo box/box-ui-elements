@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 
-import Task from '../';
+import Task from '..';
 
 jest.mock('../../comment/Comment', () => 'mock-comment');
 

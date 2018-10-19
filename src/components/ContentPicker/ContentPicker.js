@@ -108,13 +108,21 @@ const defaultType = `${TYPE_FILE},${TYPE_WEBLINK}`;
 
 class ContentPicker extends Component<Props, State> {
     id: string;
+
     api: API;
+
     state: State;
+
     props: Props;
+
     table: any;
+
     rootElement: HTMLElement;
+
     appElement: HTMLElement;
+
     globalModifier: boolean;
+
     firstLoad: boolean = true; // Keeps track of very 1st load
 
     static defaultProps = {

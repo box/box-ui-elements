@@ -99,11 +99,17 @@ const UPLOAD_CONCURRENCY = 6;
 
 class ContentUploader extends Component<Props, State> {
     id: string;
+
     state: State;
+
     props: Props;
+
     rootElement: HTMLElement;
+
     appElement: HTMLElement;
+
     resetItemsTimeout: TimeoutID;
+
     numItemsUploading: number = 0;
 
     static defaultProps = {

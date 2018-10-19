@@ -1,6 +1,6 @@
 import noop from 'lodash/noop';
 import FolderUploadNode from '../FolderUploadNode';
-import FolderAPI from '../../../api/Folder';
+import FolderAPI from '../../Folder';
 import {
     ERROR_CODE_ITEM_NAME_IN_USE,
     STATUS_COMPLETE,

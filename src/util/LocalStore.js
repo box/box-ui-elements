@@ -11,7 +11,9 @@ const SERVICE_VERSION = '0';
 
 class LocalStore {
     memoryStore: APICache;
+
     localStorage: typeof localStorage;
+
     isLocalStorageAvailable: boolean;
 
     /**

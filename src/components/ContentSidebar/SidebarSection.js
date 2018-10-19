@@ -25,6 +25,7 @@ type State = {
 
 class SidebarSection extends React.PureComponent<Props, State> {
     props: Props;
+
     state: State;
 
     static defaultProps = {

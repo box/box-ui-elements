@@ -69,8 +69,11 @@ type State = {
 
 class ContentSidebar extends PureComponent<Props, State> {
     id: string;
+
     props: Props;
+
     state: State;
+
     api: API;
 
     static defaultProps = {

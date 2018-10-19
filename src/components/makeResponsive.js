@@ -40,7 +40,9 @@ function makeResponsive(
 ): React.ComponentType<any> {
     return class extends React.PureComponent<Props, State> {
         props: Props;
+
         state: State;
+
         innerElement: ?HTMLElement;
 
         static defaultProps = {
@@ -104,9 +106,7 @@ function makeResponsive(
          *
          * @return {?HTMLElement} - the HTML element
          */
-        getInnerElement = () => {
-            return this.innerElement;
-        };
+        getInnerElement = () => this.innerElement;
 
         /**
          * Renders the Box UI Element

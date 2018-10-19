@@ -38,6 +38,7 @@ type State = {
 
 class Keywords extends PureComponent<Props, State> {
     props: Props;
+
     state: State;
 
     /**

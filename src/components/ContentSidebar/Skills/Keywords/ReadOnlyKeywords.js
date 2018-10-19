@@ -27,6 +27,7 @@ type State = {
 
 class ReadOnlyselecteds extends React.PureComponent<Props, State> {
     props: Props;
+
     state: State = {
         selectedIndex: -1,
     };
