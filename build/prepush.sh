@@ -21,6 +21,11 @@ check_and_commit_updated_translations() {
 # lint, test, and build assets to update translations
 prepush() {
     echo "--------------------------------------------------------"
+    echo "Pre-build"
+    echo "--------------------------------------------------------"
+    yarn pre-build || exit 1
+
+    echo "--------------------------------------------------------"
     echo "Linting"
     echo "--------------------------------------------------------"
     yarn lint || exit 1

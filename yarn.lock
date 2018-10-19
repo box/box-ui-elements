@@ -191,6 +191,11 @@
   resolved "https://registry.yarnpkg.com/@box/frontend-config/-/frontend-config-0.3.1.tgz#d158c846e439c07e3cbafdd84d6de1c773d51d44"
   integrity sha512-9H1MxPgRZKkmXDJyWXyJDF+/2geIWlCAHLAMD4YYz24MnGUzKuEvWJIIavLIhuyy442xF3mB4mz5Vo1Yb83ADQ==
 
+"@box/i18n@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@box/i18n/-/i18n-0.1.1.tgz#7492ebd19bb64a0107e52c7fb34e7997726606c3"
+  integrity sha512-iHtFYx+0E+hJPniD+ZNYI7y4eJRf1b/aQITV64u/tHiI1XjJOsZsNf4dZfhDqi4xhDETBK95m7r5dJF872RcAg==
+
 "@commitlint/cli@^7.2.1":
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-7.2.1.tgz#dbb9eeb1f5015a129bb0801fbc1115eb1dcd513b"
@@ -2245,11 +2250,6 @@ boom@5.x.x:
   integrity sha512-Z5BTk6ZRe4tXXQlkqftmsAUANpXmuwlsF5Oov8ThoMbQRzdGTA1ngYRW160GexgOgjsFOKJz0LYhoNi+2AMBUw==
   dependencies:
     hoek "4.x.x"
-
-box-locales@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/box-locales/-/box-locales-0.0.1.tgz#1724959f293ae85f235b681b775d0f1a52a76b54"
-  integrity sha512-a9ZHTtNHOqc2mIPmymc/LZ8u2dJFbQTIShLi34oOIzeLm/esb67IsHzLWshHMbJpZjpnimNBG8vdh2cs8Sx67Q==
 
 box-react-ui@^26.6.4:
   version "26.6.4"
