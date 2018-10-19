@@ -53,8 +53,10 @@ class ActivityFeed extends React.Component<Props, State> {
 
     approvalCommentFormFocusHandler = (): void =>
         this.setState({ isInputOpen: true });
+
     approvalCommentFormCancelHandler = (): void =>
         this.setState({ isInputOpen: false });
+
     approvalCommentFormSubmitHandler = (): void =>
         this.setState({ isInputOpen: false });
 

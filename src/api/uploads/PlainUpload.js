@@ -12,6 +12,7 @@ const CONTENT_MD5_HEADER = 'Content-MD5';
 
 class PlainUpload extends BaseUpload {
     successCallback: Function;
+
     progressCallback: Function;
 
     /**

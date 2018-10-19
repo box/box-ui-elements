@@ -122,15 +122,25 @@ const PREVIEW_LOAD_METRIC_EVENT = 'load';
 
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
+
     props: Props;
+
     state: State;
+
     preview: any;
+
     api: API;
+
     previewContainer: ?HTMLDivElement;
+
     mouseMoveTimeoutID: TimeoutID;
+
     rootElement: HTMLElement;
+
     retryCount: number = 0;
+
     retryTimeout: TimeoutID;
+
     stagedFile: ?BoxItem;
 
     initialState: State = {

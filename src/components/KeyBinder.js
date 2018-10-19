@@ -34,10 +34,15 @@ type State = {
 
 class KeyBinder extends PureComponent<Props, State> {
     state: State;
+
     props: Props;
+
     columnStartIndex: number;
+
     columnStopIndex: number;
+
     rowStartIndex: number;
+
     rowStopIndex: number;
 
     static defaultProps = {

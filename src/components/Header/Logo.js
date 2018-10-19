@@ -17,7 +17,8 @@ type Props = {
 function getLogo(url?: string) {
     if (url === 'box') {
         return <IconLogo />;
-    } else if (typeof url === 'string') {
+    }
+    if (typeof url === 'string') {
         return <img alt="" src={url} className="be-logo-custom" />;
     }
 

@@ -41,7 +41,7 @@ class Versions extends OffsetBasedAPI {
             const { modified_by } = version;
             return {
                 ...version,
-                modified_by: modified_by,
+                modified_by,
                 action: version.trashed_at ? ACTION.delete : ACTION.upload,
             };
         });

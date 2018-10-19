@@ -17,6 +17,7 @@ const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
 
 class BaseMultiput extends BaseUpload {
     config: MultiputConfig;
+
     sessionEndpoints: Object;
 
     /**

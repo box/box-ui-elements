@@ -30,6 +30,7 @@ type State = {
 const makePopup = (kit: string) => (Wrapped: any) =>
     class Wrapper extends PureComponent<Props, State> {
         props: Props;
+
         state: State;
 
         /**

@@ -21,6 +21,7 @@ class AppIntegrations extends Base {
 
         return `${this.getBaseApiUrl()}/app_integrations/${integrationId}`;
     }
+
     /**
      * API endpoint to execute an integration, given an ID
      *

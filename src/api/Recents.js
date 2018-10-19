@@ -7,7 +7,7 @@
 import Base from './Base';
 import FileAPI from './File';
 import FolderAPI from './Folder';
-import WebLinkAPI from '../api/WebLink';
+import WebLinkAPI from './WebLink';
 import flatten from '../util/flatten';
 import { getBadItemError } from '../util/error';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';

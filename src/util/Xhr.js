@@ -24,16 +24,27 @@ const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 
 class Xhr {
     id: ?string;
+
     axios: Axios;
+
     axiosSource: CancelTokenSource;
+
     clientName: ?string;
+
     token: Token;
+
     version: ?string;
+
     sharedLink: ?string;
+
     sharedLinkPassword: ?string;
+
     xhr: XMLHttpRequest;
+
     responseInterceptor: ?Function;
+
     requestInterceptor: ?Function;
+
     tokenService: TokenService;
 
     /**

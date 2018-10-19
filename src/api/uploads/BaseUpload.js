@@ -11,13 +11,21 @@ const MAX_RETRY = 5;
 
 class BaseUpload extends Base {
     errorCallback: Function;
+
     file: File;
+
     fileId: ?string;
+
     fileName: string;
+
     folderId: string;
+
     overwrite: boolean;
+
     preflightSuccessHandler: Function;
+
     retryCount: number = 0;
+
     retryTimeout: TimeoutID;
 
     /**

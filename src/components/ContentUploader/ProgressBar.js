@@ -16,6 +16,7 @@ type State = {
 
 class ProgressBar extends PureComponent<Props, State> {
     props: Props;
+
     state: State;
 
     static defaultProps = {

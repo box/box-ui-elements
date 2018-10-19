@@ -49,7 +49,6 @@
     "clean-styleguide": "rm -rf styleguide",
     "copy-lib": "./node_modules/.bin/cpx './src/{**/!(__tests__)/*,*}' lib",
     "copy-messages": "cp src/components/messages.js lib/components/messages.js",
-    "commitmsg": "conventional-changelog-lint -e",
     "debug": "NODE_ENV=test yarn run jest --watch",
     "deploy": "yarn run pre-build && LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/webpack-dev-server/bin/webpack-dev-server.js --config build/webpack.config.js --mode development",
     "dev": "yarn deploy",
@@ -80,6 +79,11 @@
     "src/**/*.scss": [
       "yarn lint:css"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e"
+    }
   },
   "jest": {
     "clearMocks": true,
@@ -115,6 +119,8 @@
     "yarn": ">=1.0.0"
   },
   "devDependencies": {
+    "@box/frontend-config": "^0.3.1",
+    "@commitlint/cli": "^7.2.1",
     "autoprefixer": "^9.1.5",
     "axios": "^0.18.0",
     "babel-cli": "^6.24.1",
@@ -140,7 +146,6 @@
     "color": "^3.0.0",
     "conventional-changelog": "^2.0.3",
     "conventional-changelog-cli": "^2.0.5",
-    "conventional-changelog-lint": "^2.1.1",
     "conventional-github-releaser": "^3.1.2",
     "core-js": "^2.5.7",
     "cpx": "^1.5.0",
@@ -152,19 +157,19 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "enzyme-to-json": "^3.3.4",
     "eslint": "^4.19.1",
-    "eslint-config-prettier": "^3.0.1",
-    "eslint-config-react-app": "^3.0.0-next.3e165448",
-    "eslint-plugin-babel": "^5.2.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-babel": "^5.2.1",
     "eslint-plugin-flowtype": "^2.34.1",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jest": "^21.21.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-jest": "^21.25.1",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.8.2",
     "filesize": "^3.6.1",
     "flow-bin": "^0.80.0",
     "form-serialize": "^0.7.2",
-    "husky": "^0.14.3",
+    "husky": "^1.1.2",
     "immutable": "^3.7.4",
     "intl": "^1.2.5",
     "jest": "^23.6.0",
@@ -181,7 +186,7 @@
     "pikaday": "^1.7.0",
     "postcss-loader": "^3.0.0",
     "postcss-safe-parser": "^4.0.1",
-    "prettier": "^1.14.2",
+    "prettier": "^1.14.3",
     "prettier-eslint-cli": "^4.7.1",
     "prop-types": "^15.6.2",
     "properties-parser": "^0.3.1",
@@ -203,7 +208,7 @@
     "sass-loader": "^7.1.0",
     "scroll-into-view-if-needed": "^1.5.0",
     "style-loader": "^0.23.0",
-    "stylelint": "^9.5.0",
+    "stylelint": "^9.6.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-order": "^1.0.0",
     "tabbable": "^1.1.3",
