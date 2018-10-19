@@ -38,12 +38,14 @@ type State = {
 
 class Transcript extends React.PureComponent<Props, State> {
     props: Props;
+
     state: State = {
         isEditingIndex: undefined,
         newTranscriptText: '',
         isCollapsed: true,
         isLoading: false,
     };
+
     copyBtn: HTMLButtonElement;
 
     /**

@@ -4,20 +4,29 @@
  * @author Box
  */
 import noop from 'lodash/noop';
-import FolderAPI from '../../api/Folder';
+import FolderAPI from '../Folder';
 import { STATUS_COMPLETE, ERROR_CODE_ITEM_NAME_IN_USE } from '../../constants';
 import { getFileFromEntry } from '../../util/uploads';
 
 class FolderUploadNode {
     addFolderToUploadQueue: Function;
+
     files: Array<File> = [];
+
     folderId: string;
+
     folders: Object = {};
+
     name: string;
+
     parentFolderId: string;
+
     addFilesToUploadQueue: Function;
+
     fileAPIOptions: Object;
+
     baseAPIOptions: Object;
+
     entry: ?FileSystemFileEntry;
 
     /**

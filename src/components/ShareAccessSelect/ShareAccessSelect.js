@@ -23,7 +23,6 @@ type Props = {
     intl: any,
 };
 
-/* eslint-disable jsx-a11y/label-has-for */
 const ShareAccessSelect = ({
     className,
     canSetShareAccess,
@@ -57,6 +56,7 @@ const ShareAccessSelect = ({
         return <span />;
     }
 
+    /* eslint-disable jsx-a11y/no-onchange */
     return (
         <select
             className={`be-share-access-select ${className}`}

@@ -69,11 +69,17 @@ type State = {
 
 class ContentOpenWith extends PureComponent<Props, State> {
     api: API;
+
     id: string;
+
     props: Props;
+
     state: State;
+
     executeId: ?string;
+
     window: any;
+
     integrationWindow: ?any;
 
     static defaultProps = {
@@ -274,6 +280,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             shouldRenderErrorIntegrationPortal: false,
         });
     };
+
     /**
      * Opens the integration in a new tab based on the API data
      *
@@ -346,6 +353,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     executeIntegrationErrorHandler = (error: any): void => {
         this.props.onError(error);
+        // eslint-disable-next-line no-console
         console.error(error);
         this.setState({
             shouldRenderLoadingIntegrationPortal: false,

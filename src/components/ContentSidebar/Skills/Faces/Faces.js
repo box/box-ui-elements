@@ -38,6 +38,7 @@ type State = {
 
 class Faces extends React.PureComponent<Props, State> {
     props: Props;
+
     state: State;
 
     /**

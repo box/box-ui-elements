@@ -17,30 +17,50 @@ const PART_STATE_UPLOADED: 4 = 4;
 
 class MultiputPart extends BaseMultiput {
     index: number;
+
     numDigestRetriesPerformed: number;
+
     numUploadRetriesPerformed: number;
+
     offset: number;
+
     sha256: string;
+
     partSize: number;
+
     state:
         | typeof PART_STATE_NOT_STARTED
         | typeof PART_STATE_COMPUTING_DIGEST
         | typeof PART_STATE_DIGEST_READY
         | typeof PART_STATE_UPLOADING
         | typeof PART_STATE_UPLOADED;
+
     timing: Object;
+
     uploadedBytes: number;
+
     onProgress: Function;
+
     onSuccess: Function;
+
     onError: Function;
+
     data: MultiputData;
+
     config: MultiputConfig;
+
     id: string;
+
     retryTimeout: TimeoutID;
+
     blob: ?Blob;
+
     rangeEnd: number;
+
     startTimestamp: number;
+
     getNumPartsUploading: Function;
+
     fileSize: number;
 
     /**

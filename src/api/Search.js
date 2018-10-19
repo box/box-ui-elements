@@ -7,7 +7,7 @@
 import Base from './Base';
 import FileAPI from './File';
 import FolderAPI from './Folder';
-import WebLinkAPI from '../api/WebLink';
+import WebLinkAPI from './WebLink';
 import flatten from '../util/flatten';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
 import { CACHE_PREFIX_SEARCH, FIELD_RELEVANCE, SORT_DESC } from '../constants';

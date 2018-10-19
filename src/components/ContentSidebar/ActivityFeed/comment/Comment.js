@@ -71,10 +71,13 @@ class Comment extends React.Component<Props, State> {
 
     approvalCommentFormFocusHandler = (): void =>
         this.setState({ isInputOpen: true });
+
     approvalCommentFormCancelHandler = (): void =>
         this.setState({ isInputOpen: false, isEditing: false });
+
     approvalCommentFormSubmitHandler = (): void =>
         this.setState({ isInputOpen: false, isEditing: false });
+
     updateTaskHandler = (args: any): void => {
         const { onEdit = noop } = this.props;
         onEdit(args);

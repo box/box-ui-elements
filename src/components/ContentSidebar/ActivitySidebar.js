@@ -65,6 +65,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
         this.fetchCurrentUser(currentUser);
     }
+
     /**
      * Fetches a Users info
      *

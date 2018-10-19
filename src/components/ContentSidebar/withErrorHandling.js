@@ -38,7 +38,8 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
                 />
             </SidebarSection>
         );
-    } else if (inlineError) {
+    }
+    if (inlineError) {
         return (
             <React.Fragment>
                 <InlineError

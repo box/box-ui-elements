@@ -28,8 +28,11 @@ const makeDroppable = ({
 }) => (Wrapped: Function): ClassComponent<any, any> =>
     class DroppableComponent extends PureComponent<Props, State> {
         props: Props;
+
         state: State;
+
         enterLeaveCounter: number;
+
         droppableEl: Element;
 
         static defaultProps = {
