@@ -6,12 +6,12 @@ describe('components/ContentOpenWith/MultipleIntegrationsOpenWithButton', () => 
     const getWrapper = props =>
         shallow(<MultipleIntegrationsOpenWithButton {...props} />);
 
-    it('should render button', () => {
+    test('should render button', () => {
         const wrapper = getWrapper({});
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('should pass down props to the button', () => {
+    test('should pass down props to the button', () => {
         const wrapper = getWrapper({ width: 50 });
         expect(wrapper).toMatchSnapshot();
     });
