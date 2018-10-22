@@ -27,7 +27,6 @@ class IntegrationPortal extends PureComponent<Props> {
     constructor(props: Props) {
         super(props);
 
-        this.document = document;
         const { integrationWindow }: Props = this.props;
         const existingContainer = integrationWindow.document.querySelector(
             `#${INTEGRATION_CONTAINER_ID}`,
@@ -50,6 +49,8 @@ class IntegrationPortal extends PureComponent<Props> {
      * @return {void}
      */
     componentDidMount() {
+        this.document = document;
+
         const { integrationWindow }: Props = this.props;
         this.copyStyles();
         integrationWindow.document.body.appendChild(this.containerElement);

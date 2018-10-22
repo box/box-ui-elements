@@ -24,16 +24,15 @@ describe('components/ContentOpenWith/IntegrationPortal', () => {
     });
 
     it('should create the container if needed, and assign an id ', () => {
-        const wrapper = getWrapper({
+        getWrapper({
             integrationWindow: {
                 // use normal document in our integrationWindow
                 document,
             },
         });
 
-        wrapper.instance();
         const containerElement = document.querySelector('div');
-        expect(!!containerElement).toBeTruthy();
+        expect(containerElement).toBeTruthy();
         expect(containerElement.id).toEqual(INTEGRATION_CONTAINER_ID);
     });
 
@@ -52,7 +51,7 @@ describe('components/ContentOpenWith/IntegrationPortal', () => {
             instance.componentDidMount();
 
             expect(instance.copyStyles).toBeCalled();
-            expect(!!document.querySelector('div')).toBeTruthy();
+            expect(document.querySelector('div')).toBeTruthy();
         });
     });
 
