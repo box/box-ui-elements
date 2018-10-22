@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/ContentOpenWith/OpenWithMenu should render the description and correct icon 1`] = `
+<MenuItem
+  onClick={[Function]}
+>
+  <IconAdobeSign />
+  <span>
+    <p
+      className="bcow-menu-item-title"
+    >
+      Adobe Sign
+    </p>
+    <p
+      className="bcow-menu-item-description"
+    >
+      Open With Adobe
+    </p>
+  </span>
+</MenuItem>
+`;
+
+exports[`components/ContentOpenWith/OpenWithMenu should use the default icon when no mapping can be found to an existing icon 1`] = `
+<MenuItem
+  onClick={[Function]}
+>
+  <IconFileDefault />
+  <span>
+    <p
+      className="bcow-menu-item-title"
+    >
+      A new integration
+    </p>
+    <p
+      className="bcow-menu-item-description"
+    >
+      Open With the new integration
+    </p>
+  </span>
+</MenuItem>
+`;
