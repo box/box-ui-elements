@@ -3,6 +3,10 @@ import { shallow } from 'enzyme';
 import ExecuteForm from '../ExecuteForm';
 
 describe('components/ContentOpenWith/ExecuteForm', () => {
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     const executePostData = {
         url: 'foo.com',
         params: [{ key: 'foo', value: 'bar' }, { key: 'bar', value: 'baz' }],
