@@ -16,6 +16,8 @@ const INTEGRATION_CONTAINER_ID = 'integration-container';
 class IntegrationPortal extends PureComponent<Props> {
     containerElement: ?HTMLElement;
 
+    document: Document;
+
     /**
      * [constructor]
      *
@@ -25,6 +27,7 @@ class IntegrationPortal extends PureComponent<Props> {
     constructor(props: Props) {
         super(props);
 
+        this.document = document;
         const { integrationWindow }: Props = this.props;
         const existingContainer = integrationWindow.document.querySelector(
             `#${INTEGRATION_CONTAINER_ID}`,
@@ -62,7 +65,7 @@ class IntegrationPortal extends PureComponent<Props> {
         const { integrationWindow }: Props = this.props;
         // The new window will have no CSS, so we copy all style sheets as a safe way
         // of ensuring required styles are present
-        Array.from(document.styleSheets).forEach(styleSheet => {
+        Array.from(this.document.styleSheets).forEach(styleSheet => {
             if (!styleSheet.href) {
                 return;
             }
