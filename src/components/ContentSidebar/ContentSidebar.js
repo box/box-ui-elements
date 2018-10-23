@@ -14,6 +14,7 @@ import Sidebar from './Sidebar';
 import API from '../../api';
 import APIContext from '../APIContext';
 import Internationalize from '../Internationalize';
+import { withErrorBoundary } from '../ErrorBoundary';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../util/fields';
 import {
     DEFAULT_HOSTNAME_API,
@@ -429,4 +430,5 @@ class ContentSidebar extends PureComponent<Props, State> {
 }
 
 export type ContentSidebarProps = Props;
-export default ContentSidebar;
+export { ContentSidebar as ContentSidebarComponent };
+export default withErrorBoundary(ContentSidebar);

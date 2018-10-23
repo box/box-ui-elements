@@ -14,7 +14,8 @@ import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicat
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import messages from '../messages';
 import SidebarContent from './SidebarContent';
-import APIContext from '../APIContext';
+import { withAPIContext } from '../APIContext';
+import { withErrorBoundary } from '../ErrorBoundary';
 import API from '../../api';
 import './MetadataSidebar.scss';
 
@@ -299,8 +300,4 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
 export type MetadataSidebarProps = ExternalProps;
 export { MetadataSidebar as MetadataSidebarComponent };
-export default (props: PropsWithoutContext) => (
-    <APIContext.Consumer>
-        {api => <MetadataSidebar {...props} api={api} />}
-    </APIContext.Consumer>
-);
+export default withErrorBoundary(withAPIContext(MetadataSidebar));

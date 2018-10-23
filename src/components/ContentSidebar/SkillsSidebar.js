@@ -11,7 +11,8 @@ import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/Load
 import { SKILLS_TRANSCRIPT } from '../../constants';
 import messages from '../messages';
 import SidebarContent from './SidebarContent';
-import APIContext from '../APIContext';
+import { withAPIContext } from '../APIContext';
+import { withErrorBoundary } from '../ErrorBoundary';
 import SidebarSkills from './Skills/SidebarSkills';
 import API from '../../api';
 
@@ -201,8 +202,4 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
 }
 
 export { SkillsSidebar as SkillsSidebarComponent };
-export default (props: PropsWithoutContext) => (
-    <APIContext.Consumer>
-        {api => <SkillsSidebar {...props} api={api} />}
-    </APIContext.Consumer>
-);
+export default withErrorBoundary(withAPIContext(SkillsSidebar));
