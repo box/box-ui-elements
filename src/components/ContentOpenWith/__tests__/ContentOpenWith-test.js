@@ -7,7 +7,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     const getWrapper = props => shallow(<ContentOpenWith {...props} />);
 
     describe('componentDidMount()', () => {
-        it('should fetch Open With data', () => {
+        test('should fetch Open With data', () => {
             const instance = getWrapper({ fileId }).instance();
             instance.fetchOpenWithData = jest.fn();
 
@@ -17,7 +17,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('componentDidUpdate()', () => {
-        it('should reset loading state and get Open With data if the file ID has changed', () => {
+        test('should reset loading state and get Open With data if the file ID has changed', () => {
             const instance = getWrapper({ fileId }).instance();
             instance.fetchOpenWithData = jest.fn();
             instance.setState = jest.fn();
@@ -40,7 +40,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             }),
         };
 
-        it('should should fetch Open With integrations', () => {
+        test('should should fetch Open With integrations', () => {
             const instance = getWrapper({
                 fileId: '1234',
                 language: 'en-US',
@@ -59,7 +59,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('fetchOpenWithSuccessHandler()', () => {
-        it('should set the state with the new integrations and disable loading', () => {
+        test('should set the state with the new integrations and disable loading', () => {
             const instance = getWrapper({ fileId }).instance();
             const mockIntegrations = ['Adobe', 'Google'];
             instance.setState = jest.fn();
@@ -73,7 +73,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('fetchErrorHandler()', () => {
-        it('should set the error state', () => {
+        test('should set the error state', () => {
             const instance = getWrapper({ fileId }).instance();
             const mockError = new Error();
             instance.setState = jest.fn();
@@ -87,7 +87,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('getDisplayIntegration()', () => {
-        it('should return null iff there is not one integration', () => {
+        test('should return null iff there is not one integration', () => {
             const instance = getWrapper({ fileId }).instance();
             instance.setState({ integrations: null });
             const result = instance.getDisplayIntegration();
@@ -102,7 +102,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             expect(emptyResult).toEqual(null);
         });
 
-        it('should return the sole integration as the display integration', () => {
+        test('should return the sole integration as the display integration', () => {
             const instance = getWrapper({ fileId }).instance();
             instance.setState({ integrations: ['Adobe'] });
             const result = instance.getDisplayIntegration();
@@ -111,12 +111,12 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('render()', () => {
-        it('should render the loading button when loading', () => {
+        test('should render the loading button when loading', () => {
             const wrapper = getWrapper({ fileId });
             expect(wrapper).toMatchSnapshot();
         });
 
-        it('should render the Open With button', () => {
+        test('should render the Open With button', () => {
             const wrapper = getWrapper({ fileId });
             const instance = wrapper.instance();
             instance.setState({

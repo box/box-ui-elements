@@ -9,7 +9,7 @@ describe('util/function', () => {
     });
 
     describe('retryNumOfTimes()', () => {
-        it('should create a promise that resolves when the wrapped promise resolves', () => {
+        test('should create a promise that resolves when the wrapped promise resolves', () => {
             const inner = sandbox.mock();
             const promise = retryNumOfTimes((resolve) => {
                 inner();
@@ -21,7 +21,7 @@ describe('util/function', () => {
             return promise.then(sandbox.mock());
         });
 
-        it('should create a promise that resolves when the wrapped promise resolves on the second try', () => {
+        test('should create a promise that resolves when the wrapped promise resolves on the second try', () => {
             let times = 0;
             const inner = sandbox.mock().twice();
             const promise = retryNumOfTimes((resolve, reject) => {
@@ -39,7 +39,7 @@ describe('util/function', () => {
             return promise.then(sandbox.mock());
         });
 
-        it('should create a promise that rejects when the wrapped promise fails after the second try', () => {
+        test('should create a promise that rejects when the wrapped promise fails after the second try', () => {
             const inner = sandbox.spy();
             const promise = retryNumOfTimes((resolve, reject) => {
                 inner();
@@ -52,7 +52,7 @@ describe('util/function', () => {
             }, 100);
         });
 
-        it('should create a promise that does not retry when the wrapped promise hardRejects', () => {
+        test('should create a promise that does not retry when the wrapped promise hardRejects', () => {
             const inner = sandbox.spy();
             const promise = retryNumOfTimes((resolve, reject, hardReject) => {
                 inner();

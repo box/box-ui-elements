@@ -6,7 +6,7 @@ import OpenWithDropdownMenu from '../OpenWithDropdownMenu';
 describe('components/ContentOpenWith/OpenWithMenu', () => {
     const getWrapper = props => shallow(<OpenWithDropdownMenu {...props} />);
 
-    it('should render a button and an menu item for each integration', () => {
+    test('should render a button and an menu item for each integration', () => {
         const integrations = [
             {
                 appIntegrationId: 1,

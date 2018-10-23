@@ -6,12 +6,12 @@ import OpenWithButtonContents from '../OpenWithButtonContents';
 describe('components/ContentOpenWith/MultipleIntegrationsOpenWithButton', () => {
     const getWrapper = props => shallow(<OpenWithButtonContents {...props} />);
 
-    it('should render contents', () => {
+    test('should render contents', () => {
         const wrapper = getWrapper({});
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('should render children if provided', () => {
+    test('should render children if provided', () => {
         const wrapper = getWrapper({ children: <IconOpenWith /> });
         expect(wrapper).toMatchSnapshot();
     });
