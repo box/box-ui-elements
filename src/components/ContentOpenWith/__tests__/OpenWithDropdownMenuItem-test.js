@@ -6,7 +6,7 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
     const getWrapper = props =>
         shallow(<OpenWithDropdownMenuItem {...props} />);
 
-    it('should render the description and correct icon', () => {
+    test('should render the description and correct icon', () => {
         const props = {
             integration: {
                 displayName: 'Adobe Sign',
@@ -18,7 +18,7 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('should use the default icon when no mapping can be found to an existing icon', () => {
+    test('should use the default icon when no mapping can be found to an existing icon', () => {
         const props = {
             integration: {
                 displayName: 'A new integration',

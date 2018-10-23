@@ -277,7 +277,7 @@ describe('api/uploads/PlainUpload', () => {
     });
 
     describe('computeSHA1()', () => {
-        it('should read file and compute digest', () => {
+        test('should read file and compute digest', () => {
             const file = new File(['123'], 'sample.jpg');
             upload.readFile = jest
                 .fn()
