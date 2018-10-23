@@ -805,7 +805,12 @@ class MultiputUpload extends BaseMultiput {
             return;
         }
 
-        const { entries } = data;
+        let { entries } = data;
+        // v2.1 API response format is different from v2.0. v2.1 returns individual upload entry directly inside data,
+        // while v2.0 returns a collection of entries under data.entries
+        if (!entries && data.id) {
+            entries = [data];
+        }
 
         this.destroy();
 
