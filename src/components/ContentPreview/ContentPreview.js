@@ -26,6 +26,7 @@ import Internationalize from '../Internationalize';
 import TokenService from '../../util/TokenService';
 import { isInputElement, focus } from '../../util/dom';
 import { getTypedFileId } from '../../util/file';
+import { withErrorBoundary } from '../ErrorBoundary';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../util/fields';
 import {
@@ -1194,4 +1195,4 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default makeResponsive(ContentPreview);
+export default withErrorBoundary(makeResponsive(ContentPreview));

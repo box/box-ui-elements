@@ -11,7 +11,8 @@ import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
-import APIContext from '../APIContext';
+import { withAPIContext } from '../APIContext';
+import { withErrorBoundary } from '../ErrorBoundary';
 import { getBadUserError, getBadItemError } from '../../util/error';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
@@ -497,8 +498,4 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default (props: PropsWithoutContext) => (
-    <APIContext.Consumer>
-        {api => <ActivitySidebar {...props} api={api} />}
-    </APIContext.Consumer>
-);
+export default withErrorBoundary(withAPIContext(ActivitySidebar));

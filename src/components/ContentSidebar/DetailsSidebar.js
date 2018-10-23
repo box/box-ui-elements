@@ -16,7 +16,8 @@ import SidebarContent from './SidebarContent';
 import SidebarVersions from './SidebarVersions';
 import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
-import APIContext from '../APIContext';
+import { withAPIContext } from '../APIContext';
+import { withErrorBoundary } from '../ErrorBoundary';
 import {
     HTTP_STATUS_CODE_FORBIDDEN,
     FIELD_METADATA_CLASSIFICATION,
@@ -336,8 +337,4 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default (props: PropsWithoutContext) => (
-    <APIContext.Consumer>
-        {api => <DetailsSidebar {...props} api={api} />}
-    </APIContext.Consumer>
-);
+export default withErrorBoundary(withAPIContext(DetailsSidebar));

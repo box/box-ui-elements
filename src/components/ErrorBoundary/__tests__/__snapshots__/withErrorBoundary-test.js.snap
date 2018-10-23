@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/withErrorBoundary should wrap the provided component with an ErrorBoundary 1`] = `
+<ErrorBoundary
+  component={null}
+  onError={[Function]}
+>
+  <WrappedComponent />
+</ErrorBoundary>
+`;
