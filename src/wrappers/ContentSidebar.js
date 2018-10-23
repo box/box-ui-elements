@@ -7,7 +7,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
-import ContentSidebarComponent from '../components/ContentSidebar/ContentSidebar';
+import ContentSidebarComponent from '../components/ContentSidebar';
 
 class ContentSidebar extends ES6Wrapper {
     /** @inheritdoc */
