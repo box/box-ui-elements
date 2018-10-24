@@ -1,5 +1,24 @@
+## 8.0.0 (2018-10-24)
+
+* Fix: unbind preview events after destroy instead of before (#610) ([1761183](https://github.com/box/box-ui-elements/commit/1761183)), closes [#610](https://github.com/box/box-ui-elements/issues/610)
+* Fix: Update MultiputUpload successHandler to parse the response (#606) ([e07194e](https://github.com/box/box-ui-elements/commit/e07194e)), closes [#606](https://github.com/box/box-ui-elements/issues/606)
+* Upgrade: Preview 1.55.0 (#611) ([e884f51](https://github.com/box/box-ui-elements/commit/e884f51)), closes [#611](https://github.com/box/box-ui-elements/issues/611)
+* Breaking: Removing the ContentTree (#612) ([1fefae8](https://github.com/box/box-ui-elements/commit/1fefae8)), closes [#612](https://github.com/box/box-ui-elements/issues/612)
+* Chore: Adding tests to ContentOpenWith (#608) ([77758de](https://github.com/box/box-ui-elements/commit/77758de)), closes [#608](https://github.com/box/box-ui-elements/issues/608)
+* Chore: Decrease parallelization in production job (#609) ([34c5cc4](https://github.com/box/box-ui-elements/commit/34c5cc4)), closes [#609](https://github.com/box/box-ui-elements/issues/609)
+* Chore: Migrate to the @box/i18n project (#603) ([14099f3](https://github.com/box/box-ui-elements/commit/14099f3)), closes [#603](https://github.com/box/box-ui-elements/issues/603)
+* Chore: Migrating to the new frontend-config project (#600) ([d191a5e](https://github.com/box/box-ui-elements/commit/d191a5e)), closes [#600](https://github.com/box/box-ui-elements/issues/600)
+* Chore: Replace it with test (#607) ([a57a8f8](https://github.com/box/box-ui-elements/commit/a57a8f8)), closes [#607](https://github.com/box/box-ui-elements/issues/607)
+* Chore: Test OpenWith dropdown (#602) ([cb4f53e](https://github.com/box/box-ui-elements/commit/cb4f53e)), closes [#602](https://github.com/box/box-ui-elements/issues/602)
+* Chore: Testing Open With button components (#601) ([b2b60d8](https://github.com/box/box-ui-elements/commit/b2b60d8)), closes [#601](https://github.com/box/box-ui-elements/issues/601)
+* Update: Add error boundaries for Preview and Sidebar components (#597) ([7114942](https://github.com/box/box-ui-elements/commit/7114942)), closes [#597](https://github.com/box/box-ui-elements/issues/597)
+*  Chore: Testing integration components (#605) ([41238ee](https://github.com/box/box-ui-elements/commit/41238ee)), closes [#605](https://github.com/box/box-ui-elements/issues/605)
+
+
+
 ## 7.4.0 (2018-10-18)
 
+* Release: 7.4.0 ([c4cb870](https://github.com/box/box-ui-elements/commit/c4cb870))
 * Fix: file id not updating in ContentPreview after props change (#598) ([774502f](https://github.com/box/box-ui-elements/commit/774502f)), closes [#598](https://github.com/box/box-ui-elements/issues/598)
 * Fix: Fix ContentUploads overwrite failure issue (#595) ([147b98d](https://github.com/box/box-ui-elements/commit/147b98d)), closes [#595](https://github.com/box/box-ui-elements/issues/595)
 * Fix: Sidebar only renders initially after file info is returned (#584) ([97e3bf6](https://github.com/box/box-ui-elements/commit/97e3bf6)), closes [#584](https://github.com/box/box-ui-elements/issues/584)
