@@ -7,5 +7,4 @@ export {
     default as ContentUploader,
     ContentUploaderPopup,
 } from './ContentUploader';
-export { default as ContentTree, ContentTreePopup } from './ContentTree';
 export { default as ContentOpenWith } from './ContentOpenWith';

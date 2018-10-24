@@ -134,7 +134,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.54.0';
+export const DEFAULT_PREVIEW_VERSION = '1.55.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -151,7 +151,6 @@ export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 50;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
-export const CLIENT_NAME_CONTENT_TREE = 'ContentTree';
 export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
 export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
 export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';

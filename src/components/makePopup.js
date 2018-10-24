@@ -12,7 +12,6 @@ import omit from 'lodash/omit';
 import {
     CLIENT_NAME_CONTENT_PICKER,
     CLIENT_NAME_CONTENT_UPLOADER,
-    CLIENT_NAME_CONTENT_TREE,
 } from '../constants';
 
 type Props = {
@@ -137,9 +136,6 @@ const makePopup = (kit: string) => (Wrapped: any) =>
                     break;
                 case CLIENT_NAME_CONTENT_UPLOADER:
                     wrappedProps.onClose = this.onClose;
-                    break;
-                case CLIENT_NAME_CONTENT_TREE:
-                    wrappedProps.onClick = this.onClick;
                     break;
                 default:
                     throw new Error('Unknown kit type');
