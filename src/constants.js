@@ -151,7 +151,6 @@ export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 50;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
-export const CLIENT_NAME_CONTENT_TREE = 'ContentTree';
 export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
 export const CLIENT_NAME_FILE_PICKER = 'FilePicker';
 export const CLIENT_NAME_FOLDER_PICKER = 'FolderPicker';
