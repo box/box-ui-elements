@@ -236,8 +236,8 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     destroyPreview() {
         if (this.preview) {
-            this.preview.removeAllListeners();
             this.preview.destroy();
+            this.preview.removeAllListeners();
             this.preview = undefined;
         }
     }
