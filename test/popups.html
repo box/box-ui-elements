@@ -50,7 +50,6 @@
         </style>
         <link rel="stylesheet" type="text/css" href="../dev/en-US/picker.css" />
         <link rel="stylesheet" type="text/css" href="../dev/en-US/uploader.css" />
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/tree.css" />
     </head>
     <body>
         <div class="inputs">
@@ -98,16 +97,11 @@
             <h1>Folder Picker (max 3 items / token generator / no upload)</h1>
             <div class="folderPicker2"></div>
         </div>
-        <div class="container">
-            <h1>Content Tree</h1>
-            <div class="tree1"></div>
-        </div>
         <script src="../dev/en-US/picker.js"></script>
         <script src="../dev/en-US/uploader.js"></script>
-        <script src="../dev/en-US/tree.js"></script>
         <script>
             function load() {
-                const { FilePicker, FolderPicker, ContentPicker, ContentUploader, ContentTree } = Box;
+                const { FilePicker, FolderPicker, ContentPicker, ContentUploader } = Box;
                 const tokenGenerator1 = (id) => {
                     if (id === `folder_${folderId}`) {
                         return Promise.resolve(token);
@@ -286,28 +280,6 @@
                         buttonLabel: 'launch content uploader with default styles'
                     }
                 });
-
-
-
-
-                const tree1 = new ContentTree();
-                tree1.addListener('click', function(data) {
-                    console.log('%c' + JSON.stringify(data, null, 2), 'background: orange; color: #fff');
-                })
-                document.querySelector('.tree1').innerHTML = '';
-                tree1.show(folderId, token, {
-                    container: '.tree1',
-                    modal: {
-                        buttonLabel: 'launch tree with custom styles',
-                        buttonClassName: 'contentPicker1-modal-button-class',
-                        modalClassName: 'contentPicker1-modal-class',
-                        overlayClassName: 'contentPicker1-overlay-class'
-                    }
-                });
-
-
-
-
             }
             load();
         </script>

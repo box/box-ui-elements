@@ -31,7 +31,6 @@
         <link rel="stylesheet" type="text/css" href="../dev/en-x-pseudo/explorer.css" />
         <link rel="stylesheet" type="text/css" href="../dev/en-x-pseudo/picker.css" />
         <link rel="stylesheet" type="text/css" href="../dev/en-x-pseudo/uploader.css" />
-        <link rel="stylesheet" type="text/css" href="../dev/en-x-pseudo/tree.css" />
     </head>
     <body>
         <div class="inputs">
@@ -63,17 +62,12 @@
             <h1>Content Uploader</h1>
             <div class="uploader1"></div>
         </div>
-        <div class="container">
-            <h1>Content Tree</h1>
-            <div class="tree1"></div>
-        </div>
         <script src="../dev/en-x-pseudo/explorer.js"></script>
         <script src="../dev/en-x-pseudo/picker.js"></script>
         <script src="../dev/en-x-pseudo/uploader.js"></script>
-        <script src="../dev/en-x-pseudo/tree.js"></script>
         <script>
             function load() {
-                const { ContentTree, ContentExplorer, FolderPicker, FilePicker, ContentUploader } = Box;
+                const { ContentExplorer, FolderPicker, FilePicker, ContentUploader } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
 
@@ -139,19 +133,6 @@
                     canUpload: false,
                     canSetShareAccess: false
                 });
-
-
-
-                const tree1 = new ContentTree();
-                tree1.addListener('click', function(data) {
-                    console.log('%c' + JSON.stringify(data, null, 2), 'background: orange; color: #fff');
-                })
-                document.querySelector('.tree1').innerHTML = '';
-                tree1.show(folderId, token, {
-                    container: '.tree1'
-                });
-
-
             }
             load();
         </script>
