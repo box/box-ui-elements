@@ -29,6 +29,7 @@ describe('api/uploads/MultiputUpload', () => {
         multiputUploadTest = new MultiputUpload(config);
         multiputUploadTest.file = file;
         multiputUploadTest.partSize = partSize;
+        multiputUploadTest.sessionEndpoints = {};
     });
 
     describe('getBaseUploadUrlFromPreflightResponse()', () => {

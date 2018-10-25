@@ -14,7 +14,7 @@ import {
     CLIENT_NAME_CONTENT_UPLOADER,
 } from '../constants';
 
-type Props = {
+type PropsShape = {
     onCancel?: Function,
     onChoose?: Function,
     onClose?: Function,
@@ -26,7 +26,7 @@ type State = {
     isOpen: boolean,
 };
 
-const makePopup = (kit: string) => (Wrapped: any) =>
+const makePopup = (kit: string) => <Props: PropsShape>(Wrapped: any) =>
     class Wrapper extends PureComponent<Props, State> {
         props: Props;
 
