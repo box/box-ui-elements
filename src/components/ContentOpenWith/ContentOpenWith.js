@@ -250,7 +250,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             '',
             `OpenWithIntegration-${appIntegrationId}`,
         );
-        this.integrationWindow.document.title = `${displayName}`;
+        this.integrationWindow.document.title = displayName;
         this.integrationWindow.onunload = this.cleanupIntegrationWindow;
 
         this.setState({
