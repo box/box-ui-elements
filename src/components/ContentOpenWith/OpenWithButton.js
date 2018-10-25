@@ -5,7 +5,6 @@
  */
 
 import * as React from 'react';
-import noop from 'lodash/noop';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
@@ -20,7 +19,7 @@ type Props = {
     error: ?any,
     icon?: string,
     isLoading: boolean,
-    onClick: ?Function,
+    onClick: Function,
     tooltipText?: string | Object,
 };
 
@@ -55,7 +54,6 @@ const OpenWithButton = ({
     isLoading,
 }: Props) => {
     const {
-        appIntegrationId: id,
         displayDescription,
         displayName,
         isDisabled: isDisplayIntegrationDisabled,
@@ -72,7 +70,7 @@ const OpenWithButton = ({
         >
             <Button
                 isDisabled={isDisabled}
-                onClick={onClick ? () => onClick(id) : noop}
+                onClick={onClick(displayIntegration)}
             >
                 <OpenWithButtonContents>
                     <Icon

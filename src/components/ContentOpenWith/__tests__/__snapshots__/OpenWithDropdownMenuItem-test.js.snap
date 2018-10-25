@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/ContentOpenWith/OpenWithMenu should render the description and correct icon 1`] = `
-<MenuItem
-  onClick={[Function]}
->
+<MenuItem>
   <IconAdobeSign />
   <span>
     <p
@@ -21,9 +19,7 @@ exports[`components/ContentOpenWith/OpenWithMenu should render the description a
 `;
 
 exports[`components/ContentOpenWith/OpenWithMenu should use the default icon when no mapping can be found to an existing icon 1`] = `
-<MenuItem
-  onClick={[Function]}
->
+<MenuItem>
   <IconFileDefault />
   <span>
     <p
