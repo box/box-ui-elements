@@ -12,7 +12,12 @@ Our development setup assumes a LINUX/BSD environemnt. Windows users may have to
 6. Verify your remotes are properly set up `git remote -v`. You should pull updates from the Box repo `upstream` and push changes to your fork `origin`.
 7. Install dependencies `yarn install`
 8. Test your first build! `yarn run build`
-9. To test the Box UI Elements lauch a local webpack dev server via `yarn run deploy` and navigate to `http://localhost:8080/`. Sample test files are located inside the test folder.
+9. To test the Box UI Elements lauch a local webpack dev server via `yarn run deploy` and navigate to `http://localhost:8080/`. HTML files for local development are located inside the [`test` folder](http://localhost:8080/test).
+  - Open a test file, such as http://localhost:8080/test/sidebar.html
+  - When prompted, enter a file id and developer token.
+    - Developer tokens can be created at https://cloud.app.box.com/developers/console
+    - Select "Custom App" and choose "Oauth 2.0 with JWT (Server Authentication)". Select "View Your App" > "Configuration" > "CORS Domains" and add `http://localhost,http:localhost:8080` to the domain whitelist. Save the configuration.
+    - The developer token will be regenerated once the configuration is saved. Copy the token and paste into the prompt in the localhost test page.
 
 While Developing
 ----------------
