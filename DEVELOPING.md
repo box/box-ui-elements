@@ -35,7 +35,7 @@ Install the following plugins in your preferred editor
 
 * `yarn run build` to run webpack and generate JS/CSS.
 * `yarn run watch` to run webpack and generate JS/CSS on file changes.
-* `yarn run deploy` launches a local webpack dev server for testing. Also watches file changes.
+* `yarn run dev` launches a local webpack dev server for testing. Also watches file changes.
 * `yarn run prettier` to format JS code with prettier.
 * `yarn run test` launches tests with jest.
 * `yarn run test --coverage` launches tests with jest with coverage.
