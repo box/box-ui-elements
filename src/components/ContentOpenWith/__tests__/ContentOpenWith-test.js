@@ -97,9 +97,12 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('onIntegrationClick()', () => {
-        it('should open a new window, set state, unload, and kick off the integration execution', () => {
+        it('should open a new window, set state, unload, title, and kick off the integration execution', () => {
             instance.window.open = jest.fn().mockReturnValue({
                 onunload: null,
+                document: {
+                    title: null,
+                },
             });
             const executeStub = jest.fn();
             const api = {
@@ -107,11 +110,18 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             };
             instance.api = api;
             instance.setState = jest.fn();
+            const displayIntegration = {
+                appIntegrationId: '1',
+                displayName: 'Adobe Sign',
+            };
 
-            instance.onIntegrationClick('1');
+            instance.onIntegrationClick(displayIntegration);
             expect(instance.window.open).toBeCalled();
-            expect(typeof instance.cleanupIntegrationWindow).toEqual(
+            expect(typeof instance.integrationWindow.onunload).toEqual(
                 'function',
+            );
+            expect(instance.integrationWindow.document.title).toEqual(
+                displayIntegration.displayName,
             );
             expect(instance.setState).toHaveBeenCalledWith({
                 shouldRenderLoadingIntegrationPortal: true,

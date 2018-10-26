@@ -1,4 +1,5 @@
 import React from 'react';
+import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import OpenWithButton, { getTooltip } from '../OpenWithButton';
 import messages from '../../messages';
@@ -36,6 +37,7 @@ describe('components/ContentOpenWith/OpenWithButton', () => {
     test('should render as disabled if the integration is disabled', () => {
         const wrapper = getWrapper({
             displayIntegration: { isDisabled: true, displayName: 'Adobe Sign' },
+            onClick: noop,
         });
         expect(wrapper).toMatchSnapshot();
     });
@@ -43,6 +45,7 @@ describe('components/ContentOpenWith/OpenWithButton', () => {
     test('should render as disabled if there is no display integration', () => {
         const wrapper = getWrapper({
             displayIntegration: { isDisabled: false, displayName: null },
+            onClick: noop,
         });
 
         expect(wrapper).toMatchSnapshot();
@@ -54,6 +57,7 @@ describe('components/ContentOpenWith/OpenWithButton', () => {
                 isDisabled: false,
                 displayName: 'Google Docs',
             },
+            onClick: noop,
         });
 
         expect(wrapper).toMatchSnapshot();
