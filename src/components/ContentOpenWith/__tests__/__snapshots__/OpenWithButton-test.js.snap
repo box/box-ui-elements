@@ -12,6 +12,7 @@ exports[`components/ContentOpenWith/OpenWithButton should render as disabled if 
 >
   <Button
     isDisabled={true}
+    onClick={[Function]}
   >
     <OpenWithButtonContents>
       <IconAdobeSign
@@ -36,6 +37,7 @@ exports[`components/ContentOpenWith/OpenWithButton should render as disabled if 
 >
   <Button
     isDisabled={true}
+    onClick={[Function]}
   >
     <OpenWithButtonContents>
       <IconOpenWith
@@ -60,6 +62,7 @@ exports[`components/ContentOpenWith/OpenWithButton should render with the correc
 >
   <Button
     isDisabled={false}
+    onClick={[Function]}
   >
     <OpenWithButtonContents>
       <IconGoogleDocs

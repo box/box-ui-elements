@@ -18,7 +18,7 @@ const OpenWithDropdownMenuItem = ({ integration, onClick }: Props) => {
     const { displayName, displayDescription } = integration;
     const Icon = ICON_FILE_MAP[displayName] || IconFileDefault;
     return (
-        <MenuItem onClick={onClick(integration)}>
+        <MenuItem onClick={() => onClick(integration)}>
             <Icon />
             <span>
                 <p className="bcow-menu-item-title">{displayName}</p>

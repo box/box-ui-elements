@@ -241,8 +241,10 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    onIntegrationClick = (displayIntegration: Integration): void => {
-        const { appIntegrationId, displayName } = displayIntegration;
+    onIntegrationClick = ({
+        appIntegrationId,
+        displayName,
+    }: Integration): void => {
         const { fileId }: Props = this.props;
         // window.open() is immediately invoked to avoid popup-blockers
         // The name is included to be the target of a form if the integration is a POST integration

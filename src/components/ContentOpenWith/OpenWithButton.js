@@ -70,7 +70,7 @@ const OpenWithButton = ({
         >
             <Button
                 isDisabled={isDisabled}
-                onClick={onClick(displayIntegration)}
+                onClick={() => onClick(displayIntegration)}
             >
                 <OpenWithButtonContents>
                     <Icon
