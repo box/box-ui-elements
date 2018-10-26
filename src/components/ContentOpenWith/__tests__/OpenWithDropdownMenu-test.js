@@ -1,9 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import noop from 'lodash/noop';
 import Menu from 'box-react-ui/lib/components/menu/Menu';
 import OpenWithDropdownMenu from '../OpenWithDropdownMenu';
 
-describe('components/ContentOpenWith/OpenWithMenu', () => {
+describe('components/ContentOpenWith/OpenWithDropdownMenu', () => {
     const getWrapper = props => shallow(<OpenWithDropdownMenu {...props} />);
 
     test('should render a button and an menu item for each integration', () => {
@@ -18,7 +19,10 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
             },
         ];
 
-        const wrapper = getWrapper({ integrations });
+        const wrapper = getWrapper({
+            integrations,
+            onClick: noop,
+        });
         expect(wrapper.find(Menu).children()).toHaveLength(2);
 
         expect(wrapper).toMatchSnapshot();
