@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentOpenWith/OpenWithMenu should render a button and an menu item for each integration 1`] = `
+exports[`components/ContentOpenWith/OpenWithDropdownMenu should render a button and an menu item for each integration 1`] = `
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={false}
@@ -20,6 +20,7 @@ exports[`components/ContentOpenWith/OpenWithMenu should render a button and an m
         }
       }
       key="1"
+      onClick={[Function]}
     />
     <OpenWithDropdownMenuItem
       integration={
@@ -29,6 +30,7 @@ exports[`components/ContentOpenWith/OpenWithMenu should render a button and an m
         }
       }
       key="2"
+      onClick={[Function]}
     />
   </Menu>
 </DropdownMenu>
