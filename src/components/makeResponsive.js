@@ -17,7 +17,7 @@ import {
     CLASS_IS_MEDIUM,
 } from '../constants';
 
-type Props = {
+type PropsShape = {
     isTouch: boolean,
     size?: Size,
     className: string,
@@ -35,7 +35,7 @@ const HAS_TOUCH = !!(
     (window.DocumentTouch && document instanceof window.DocumentTouch)
 );
 
-function makeResponsive(
+function makeResponsive<Props: PropsShape>(
     Wrapped: React.ComponentType<any>,
 ): React.ComponentType<any> {
     return class extends React.PureComponent<Props, State> {

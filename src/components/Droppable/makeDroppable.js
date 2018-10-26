@@ -8,7 +8,7 @@ import React, { PureComponent } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 
-type Props = {
+type PropsShape = {
     className: string,
 };
 
@@ -25,7 +25,7 @@ const makeDroppable = ({
 }: {
     dropValidator?: Function,
     onDrop?: Function,
-}) => (Wrapped: Function): ClassComponent<any, any> =>
+}) => <Props: PropsShape>(Wrapped: Function): ClassComponent<any, any> =>
     class DroppableComponent extends PureComponent<Props, State> {
         props: Props;
 
