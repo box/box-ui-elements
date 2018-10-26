@@ -1,4 +1,5 @@
 import React from 'react';
+import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import OpenWithDropdownMenuItem from '../OpenWithDropdownMenuItem';
 
@@ -13,6 +14,7 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
                 displayDescription: 'Open With Adobe',
                 appIntegrationId: '1',
             },
+            onClick: noop,
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
@@ -25,6 +27,7 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
                 displayDescription: 'Open With the new integration',
                 appIntegrationId: '22',
             },
+            onClick: noop,
         };
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
