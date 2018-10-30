@@ -247,10 +247,12 @@ class ContentOpenWith extends PureComponent<Props, State> {
     }: Integration): void => {
         const { fileId }: Props = this.props;
         // window.open() is immediately invoked to avoid popup-blockers
-        // The name is included to be the target of a form if the integration is a POST integration
+        // The name is included to be the target of a form if the integration is a POST integration.
+        // A uniqueid is used to force the browser to open a new tab every time, while still allowing
+        // a form to reference a given tab.
         this.integrationWindow = this.window.open(
             '',
-            `OpenWithIntegration-${appIntegrationId}`,
+            `${uniqueid(appIntegrationId)}`,
         );
         this.integrationWindow.document.title = displayName;
         this.integrationWindow.onunload = this.cleanupIntegrationWindow;
