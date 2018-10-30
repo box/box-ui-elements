@@ -34,11 +34,10 @@ Install the following plugins in your preferred editor
 ### Yarn commands
 
 * `yarn run build` to run webpack and generate JS/CSS.
-* `yarn run watch` to run webpack and generate JS/CSS on file changes.
-* `yarn run dev` launches a local webpack dev server for testing. Also watches file changes.
+* `yarn run dev` to launch a local webpack dev server and watch file changes.
 * `yarn run prettier` to format JS code with prettier.
-* `yarn run test` launches tests with jest.
-* `yarn run test --coverage` launches tests with jest with coverage.
+* `yarn run test` to launch tests with jest.
+* `yarn run test --coverage` to launch tests with jest with coverage.
 
 For more script commands see `package.json`. Test coverage reports are available under reports/coverage.
 
@@ -46,13 +45,12 @@ For test debugging follow instructions provided in the [jest documentation](http
 
 ### Config files
 
-* .babelrc - https://babeljs.io/docs/usage/babelrc/
-* .conventional-changelog-lintrc - https://github.com/marionebl/conventional-changelog-lint
 * .editorconfig - http://editorconfig.org/
 * .eslintignore - http://eslint.org/docs/user-guide/configuring#ignoring-files-and-directories
-* .eslintrc - http://eslint.org/docs/user-guide/configuring
+* .eslintrc.js - http://eslint.org/docs/user-guide/configuring
 * .gitignore - https://git-scm.com/docs/gitignore
 * .stylelintrc - https://stylelint.io/user-guide/configuration/
 * .travis.yml - https://docs.travis-ci.com/user/customizing-the-build
+* babel.config.js - https://babeljs.io/docs/en/config-files/
 * browserslist - https://github.com/ai/browserslist
 * postcss.config.js - https://github.com/postcss/postcss-loader
