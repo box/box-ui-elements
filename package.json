@@ -206,7 +206,7 @@
   },
   "peerDependencies": {
     "axios": "^0.18.0",
-    "box-react-ui": "^25.16.1",
+    "box-react-ui": "26.14.0",
     "classnames": "^2.2.5",
     "draft-js": "^0.10.1",
     "filesize": "^3.6.0",
