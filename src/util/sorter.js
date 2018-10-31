@@ -59,7 +59,7 @@ export default function(
 }
 
 /**
- * Sort valid feed items, descending by created_at time.
+ * Sort valid feed items, ascending by created_at time.
  *
  * @param {Array<?Comments | ?Tasks | ?FileVersions>} args - Arguments list of each item container
  * type that is allowed in the feed.
@@ -76,7 +76,7 @@ export function sortFeedItems(
 
             return items;
         }, [])
-        .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+        .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at));
 
     return feedItems;
 }
