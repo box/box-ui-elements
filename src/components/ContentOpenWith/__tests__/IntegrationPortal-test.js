@@ -1,59 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import IntegrationPortal from '../IntegrationPortal';
-
-const INTEGRATION_CONTAINER_ID = 'integration-container';
+import IntegrationPortal, * as integrationPortal from '../IntegrationPortal';
 
 describe('components/ContentOpenWith/IntegrationPortal', () => {
     const getWrapper = props => shallow(<IntegrationPortal {...props} />);
-
-    it('should use an existing container if possible', () => {
-        const container = document.createElement('div');
-        container.id = INTEGRATION_CONTAINER_ID;
-        document.body.appendChild(container);
-
-        const wrapper = getWrapper({
-            integrationWindow: {
-                // use normal document in our integrationWindow
-                document,
-            },
-        });
-
-        const instance = wrapper.instance();
-        expect(instance.containerElement).toEqual(container);
-    });
-
-    it('should create the container if needed, and assign an id ', () => {
-        getWrapper({
-            integrationWindow: {
-                // use normal document in our integrationWindow
-                document,
-            },
-        });
-
-        const containerElement = document.querySelector('div');
-        expect(containerElement).toBeTruthy();
-        expect(containerElement.id).toEqual(INTEGRATION_CONTAINER_ID);
-    });
-
-    describe('componentDidMount()', () => {
-        it('should copy styles and append the container to the integration window', () => {
-            const wrapper = getWrapper({
-                integrationWindow: {
-                    // use normal document in our integrationWindow
-                    document,
-                },
-            });
-            const instance = wrapper.instance();
-            instance.containerElement = document.createElement('div');
-            instance.copyStyles = jest.fn();
-
-            instance.componentDidMount();
-
-            expect(instance.copyStyles).toBeCalled();
-            expect(document.querySelector('div')).toBeTruthy();
-        });
-    });
 
     describe('copyStyles()', () => {
         let integrationWindow;
@@ -80,26 +30,28 @@ describe('components/ContentOpenWith/IntegrationPortal', () => {
             style2.href = 'bar.com';
             const style3 = document.createElement('link');
 
-            const wrapper = getWrapper({ integrationWindow });
-            const instance = wrapper.instance();
-            instance.document = {
+            const mockDocumentElement = {
                 styleSheets: [style1, style2, style3],
             };
 
-            instance.copyStyles();
+            integrationPortal.copyStyles(
+                mockDocumentElement,
+                integrationWindow,
+            );
             const stylesheets = integrationWindow.document.querySelectorAll(
                 'link',
             );
             expect(stylesheets.length).toEqual(2);
         });
         it('perform a margin/padding reset on the integration window', () => {
-            const wrapper = getWrapper({ integrationWindow });
-            const instance = wrapper.instance();
-            instance.document = {
+            const mockDocumentElement = {
                 styleSheets: [],
             };
 
-            instance.copyStyles();
+            integrationPortal.copyStyles(
+                mockDocumentElement,
+                integrationWindow,
+            );
 
             expect(integrationWindow.document.body.style.margin).toEqual('0px');
             expect(integrationWindow.document.body.style.padding).toEqual(
@@ -108,14 +60,26 @@ describe('components/ContentOpenWith/IntegrationPortal', () => {
         });
     });
 
-    it('should portal passed in children to the container element', () => {
-        const containerElement = document.createElement('div');
-        containerElement.id = INTEGRATION_CONTAINER_ID;
-
-        const wrapper = getWrapper({
-            integrationWindow: window,
-            children: document.createElement('div'),
+    describe('IntegrationPortal()', () => {
+        beforeEach(() => {
+            integrationPortal.copyStyles = jest.fn();
         });
-        expect(wrapper).toMatchSnapshot();
+
+        it('should append the portal container div to the integration window', () => {
+            getWrapper({
+                integrationWindow: window,
+                children: document.createElement('div'),
+            });
+
+            expect(document.querySelector('div')).toBeTruthy();
+        });
+
+        it('should portal passed in children to the container element', () => {
+            const wrapper = getWrapper({
+                integrationWindow: window,
+                children: document.createElement('div'),
+            });
+            expect(wrapper).toMatchSnapshot();
+        });
     });
 });
