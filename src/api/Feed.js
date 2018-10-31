@@ -106,9 +106,10 @@ class Feed extends Base {
     setCachedItems(id: string, items: FeedItems) {
         const cache = this.getCache();
         const cacheKey = this.getCacheKey(id);
+        const sortedItems = sortFeedItems({ entries: items });
         cache.set(cacheKey, {
             hasError: !!this.hasError,
-            items,
+            items: sortedItems,
         });
     }
 
