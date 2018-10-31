@@ -297,16 +297,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         {...accessStatsError}
                     />
                 )}
-                {hasVersions && (
-                    <div className="bcs-details-content">
-                        {hasVersions && (
-                            <SidebarVersions
-                                onVersionHistoryClick={onVersionHistoryClick}
-                                file={file}
-                            />
-                        )}
-                    </div>
-                )}
                 {hasProperties && (
                     <SidebarSection
                         interactionTarget={SECTION_TARGETS.FILE_PROPERTIES}
@@ -314,6 +304,18 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                             <FormattedMessage {...messages.sidebarProperties} />
                         }
                     >
+                        {hasVersions && (
+                            <div className="bcs-details-content">
+                                {hasVersions && (
+                                    <SidebarVersions
+                                        onVersionHistoryClick={
+                                            onVersionHistoryClick
+                                        }
+                                        file={file}
+                                    />
+                                )}
+                            </div>
+                        )}
                         <SidebarFileProperties
                             onDescriptionChange={this.onDescriptionChange}
                             file={file}
