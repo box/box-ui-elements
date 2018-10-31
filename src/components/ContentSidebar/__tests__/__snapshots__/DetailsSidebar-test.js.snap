@@ -46,17 +46,6 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
       }
     }
   />
-  <div
-    className="bcs-details-content"
-  >
-    <SidebarVersions
-      file={
-        Object {
-          "id": "foo",
-        }
-      }
-    />
-  </div>
   <SidebarSection
     className=""
     interactionTarget="fileproperties"
@@ -68,6 +57,17 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
       />
     }
   >
+    <div
+      className="bcs-details-content"
+    >
+      <SidebarVersions
+        file={
+          Object {
+            "id": "foo",
+          }
+        }
+      />
+    </div>
     <SidebarFileProperties
       file={
         Object {
@@ -151,17 +151,5 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
       id="be.sidebarDetailsTitle"
     />
   }
->
-  <div
-    className="bcs-details-content"
-  >
-    <SidebarVersions
-      file={
-        Object {
-          "id": "foo",
-        }
-      }
-    />
-  </div>
-</SidebarContent>
+/>
 `;
