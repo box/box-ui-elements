@@ -47,20 +47,28 @@ class ActivityFeed extends React.Component<Props, State> {
     feedContainer: null | HTMLElement;
 
     componentDidMount() {
-        if (this.feedContainer) {
-            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-        }
+        this.scrollFeedContainerToBottom(false);
     }
 
     componentDidUpdate(prevProps) {
+        this.scrollFeedContainerToBottom(true, prevProps);
+    }
+
+    scrollFeedContainerToBottom = (
+        componentWasUpdated: boolean,
+        prevProps?: Props,
+    ) => {
         if (
+            componentWasUpdated &&
             this.feedContainer &&
-            prevProps.feedItems === undefined &&
+            !prevProps.feedItems &&
             this.props.feedItems
         ) {
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+        } else if (!componentWasUpdated && this.feedContainer) {
+            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
         }
-    }
+    };
 
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
@@ -202,11 +210,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 </div>
                 {showApprovalCommentForm ? (
                     <ApprovalCommentForm
-                        onSubmit={() => {
-                            if (this.feedContainer) {
-                                this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-                            }
-                        }}
+                        onSubmit={this.scrollFeedContainerToBottom(false)}
                         isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
