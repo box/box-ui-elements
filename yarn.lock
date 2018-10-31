@@ -1906,10 +1906,6 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
-box-locales@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/box-locales/-/box-locales-0.0.1.tgz#1724959f293ae85f235b681b775d0f1a52a76b54"
-
 box-react-ui@26.14.0:
   version "26.14.0"
   resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-26.14.0.tgz#6aca05355df78003cfd120b659822e179d6d1013"
