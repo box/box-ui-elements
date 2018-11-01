@@ -59,6 +59,9 @@ class ActivityFeed extends React.Component<Props, State> {
         prevProps?: Props,
         prevState?: State,
     ) => {
+        /**
+         * If our feedItems just got populated then we should scroll to the bottom.
+         */
         if (
             componentWasUpdated &&
             this.feedContainer &&
@@ -72,13 +75,27 @@ class ActivityFeed extends React.Component<Props, State> {
             prevProps.feedItems &&
             prevProps.feedItems.length < this.props.feedItems.length
         ) {
+            /**
+             * If we added a new comment we should scroll to the bottom.
+             */
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
         } else if (!componentWasUpdated && this.feedContainer) {
+            /**
+             * On initial load we should scroll to the bottom
+             */
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
         } else if (
             this.feedContainer &&
             this.state.isInputOpen !== prevState.isInputOpen
         ) {
+            /**
+             * When we open the input we should scroll to the bottom
+             */
+            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+        } else if (this.props.currentUser !== prevProps.currentUser) {
+            /**
+             * When changing between tabs we should scroll to the bottom
+             */
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
         }
     };
