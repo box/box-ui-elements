@@ -198,7 +198,8 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         this.setState({ approvers: this.state.approvers.concat(pills) });
     };
 
-    handleApproverSelectorRemove = (option: any, index: number): void => { // eslint-disable-line
+    handleApproverSelectorRemove = (option: any, index: number): void => {
+        // eslint-disable-line
         const approvers = this.state.approvers.slice();
         approvers.splice(index, 1);
         this.setState({ approvers });

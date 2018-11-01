@@ -50,13 +50,14 @@ class ActivityFeed extends React.Component<Props, State> {
         this.scrollFeedContainerToBottom(false);
     }
 
-    componentDidUpdate(prevProps) {
-        this.scrollFeedContainerToBottom(true, prevProps);
+    componentDidUpdate(prevProps, prevState) {
+        this.scrollFeedContainerToBottom(true, prevProps, prevState);
     }
 
     scrollFeedContainerToBottom = (
         componentWasUpdated: boolean,
         prevProps?: Props,
+        prevState?: State,
     ) => {
         if (
             componentWasUpdated &&
@@ -65,7 +66,19 @@ class ActivityFeed extends React.Component<Props, State> {
             this.props.feedItems
         ) {
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+        } else if (
+            componentWasUpdated &&
+            this.feedContainer &&
+            prevProps.feedItems &&
+            prevProps.feedItems.length < this.props.feedItems.length
+        ) {
+            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
         } else if (!componentWasUpdated && this.feedContainer) {
+            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+        } else if (
+            this.feedContainer &&
+            this.state.isInputOpen !== prevState.isInputOpen
+        ) {
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
         }
     };
@@ -75,8 +88,10 @@ class ActivityFeed extends React.Component<Props, State> {
         nativeEvent.stopImmediatePropagation();
     };
 
-    approvalCommentFormFocusHandler = (): void =>
+    approvalCommentFormFocusHandler = (): void => {
+        this.scrollFeedContainerToBottom(false);
         this.setState({ isInputOpen: true });
+    };
 
     approvalCommentFormCancelHandler = (): void =>
         this.setState({ isInputOpen: false });
@@ -210,7 +225,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 </div>
                 {showApprovalCommentForm ? (
                     <ApprovalCommentForm
-                        onSubmit={this.scrollFeedContainerToBottom(false)}
+                        onSubmit={() => this.scrollFeedContainerToBottom(false)}
                         isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
