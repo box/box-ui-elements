@@ -135,6 +135,39 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
     });
 
+    test('should set scrollTop to be the scrollHeight if feedContainer ref is set', () => {
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidMount();
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should set scrollTop to be the scrollHeight if feedContainer exists and prevProps feedItems is undefined and this.props.feedItems is defined', () => {
+        const wrapper = shallow(
+            <ActivityFeed
+                currentUser={currentUser}
+                feedItems={[{ type: 'comment' }]}
+            />,
+        );
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidUpdate({
+            feedItems: undefined,
+        });
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
     test('should show input when approvalCommentFormFocusHandler is called', () => {
         const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
 

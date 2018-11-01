@@ -860,7 +860,7 @@ class Feed extends Base {
         };
         const cachedItems = this.getCachedItems(this.id);
         const feedItems = cachedItems ? cachedItems.items : [];
-        const feedItemsWithPendingItem = [pendingFeedItem, ...feedItems];
+        const feedItemsWithPendingItem = [...feedItems, pendingFeedItem];
         this.setCachedItems(id, feedItemsWithPendingItem);
 
         return pendingFeedItem;

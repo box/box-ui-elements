@@ -32,7 +32,8 @@ jest.mock('../Tasks', () => {
         get: jest.fn().mockReturnValue(task),
         getAssignments: jest
             .fn()
-            .mockImplementation((id, taskId, successCallback) => { // eslint-disable-line
+            .mockImplementation((id, taskId, successCallback) => {
+                // eslint-disable-line
                 successCallback({
                     total_count: 1,
                     entries: [
@@ -870,8 +871,8 @@ describe('api/Feed', () => {
 
             const item = feed.addPendingItem(file.id, user, itemBase);
             expect(feed.setCachedItems).toBeCalledWith(file.id, [
-                item,
                 ...feedItems,
+                item,
             ]);
         });
     });
