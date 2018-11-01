@@ -47,59 +47,37 @@ class ActivityFeed extends React.Component<Props, State> {
     feedContainer: null | HTMLElement;
 
     componentDidMount() {
-        this.scrollFeedContainerToBottom(false);
+        this.resetFeedScroll();
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        this.scrollFeedContainerToBottom(true, prevProps, prevState);
+        const {
+            currentUser: previousUser,
+            feedItems: prevFeedItems,
+        } = prevProps;
+        const { currentUser, feedItems: currFeedItems } = this.props;
+        const { isInputOpen: prevIsInputOpen } = prevState;
+        const { isInputOpen: currIsInputOpen } = this.state;
+
+        const hasMoreItems =
+            prevFeedItems &&
+            currFeedItems &&
+            prevFeedItems.length < currFeedItems.length;
+        const hasNewItems = !prevFeedItems && currFeedItems;
+        const hasNewUser = currentUser !== previousUser;
+        const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
+
+        if (hasMoreItems || hasNewItems || hasNewUser || hasInputOpened) {
+            this.resetFeedScroll();
+        }
     }
 
     /**
-     * Determines when the sidebar should scroll to the bottom
-     * @param {boolean} componentWasUpdated - True if this call came from componentDidUpdate
-     * @param {object} prevProps - Exists only if this call came from componentDidUpdate
-     * @param {object} prevState - Exists only if this call came from componentDidUpdate
+     * Scrolls the container to the bottom
      */
-    scrollFeedContainerToBottom = (
-        componentWasUpdated: boolean,
-        prevProps?: Props,
-        prevState?: State,
-    ) => {
+    resetFeedScroll = () => {
         if (this.feedContainer) {
-            if (componentWasUpdated) {
-                if (
-                    // If our feedItems just got populated then we should scroll to the bottom.
-                    prevProps &&
-                    !prevProps.feedItems &&
-                    this.props.feedItems
-                ) {
-                    this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-                } else if (
-                    // If we added a new comment we should scroll to the bottom.
-                    prevProps &&
-                    prevProps.feedItems &&
-                    this.props.feedItems &&
-                    prevProps.feedItems.length < this.props.feedItems.length
-                ) {
-                    this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-                } else if (
-                    // If comment input section was opened we should scroll to the bottom.
-                    prevState &&
-                    this.state.isInputOpen !== prevState.isInputOpen
-                ) {
-                    this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-                } else if (
-                    // When changing between tabs we should scroll to the bottom.
-                    prevProps &&
-                    this.props &&
-                    this.props.currentUser !== prevProps.currentUser
-                ) {
-                    this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-                }
-            } else if (!componentWasUpdated) {
-                // On initial load we should scroll to the bottom.
-                this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-            }
+            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
         }
     };
 
@@ -109,7 +87,7 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     approvalCommentFormFocusHandler = (): void => {
-        this.scrollFeedContainerToBottom(false);
+        this.resetFeedScroll();
         this.setState({ isInputOpen: true });
     };
 
@@ -245,7 +223,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 </div>
                 {showApprovalCommentForm ? (
                     <ApprovalCommentForm
-                        onSubmit={() => this.scrollFeedContainerToBottom(false)}
+                        onSubmit={() => this.resetFeedScroll()}
                         isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}

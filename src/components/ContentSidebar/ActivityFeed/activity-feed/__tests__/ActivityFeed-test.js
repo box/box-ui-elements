@@ -142,7 +142,6 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             scrollTop: 0,
             scrollHeight: 100,
         };
-
         instance.componentDidMount();
 
         expect(instance.feedContainer.scrollTop).toEqual(100);
@@ -161,9 +160,88 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             scrollHeight: 100,
         };
 
-        instance.componentDidUpdate({
-            feedItems: undefined,
+        instance.componentDidUpdate(
+            {
+                feedItems: undefined,
+                currentUser,
+            },
+            { isInputOpen: false },
+        );
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should set scrollTop to be the scrollHeight if more feedItems are added', () => {
+        const wrapper = shallow(
+            <ActivityFeed
+                currentUser={currentUser}
+                feedItems={[{ type: 'comment' }, { type: 'comment' }]}
+            />,
+        );
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidUpdate(
+            {
+                feedItems: [{ type: 'comment' }],
+                currentUser,
+            },
+            { isInputOpen: false },
+        );
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should set scrollTop to be the scrollHeight if the user becomes defined', () => {
+        const wrapper = shallow(
+            <ActivityFeed
+                currentUser={currentUser}
+                feedItems={[{ type: 'comment' }]}
+            />,
+        );
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidUpdate(
+            {
+                feedItems: [{ type: 'comment' }],
+                currentUser: undefined,
+            },
+            { isInputOpen: false },
+        );
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should set scrollTop to be the scrollHeight if input opens', () => {
+        const wrapper = shallow(
+            <ActivityFeed
+                currentUser={currentUser}
+                feedItems={[{ type: 'comment' }]}
+            />,
+        );
+        wrapper.setState({
+            isInputOpen: true,
         });
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidUpdate(
+            {
+                feedItems: [{ type: 'comment' }],
+                currentUser,
+            },
+            { isInputOpen: false },
+        );
 
         expect(instance.feedContainer.scrollTop).toEqual(100);
     });
