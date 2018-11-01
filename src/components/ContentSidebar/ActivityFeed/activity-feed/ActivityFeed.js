@@ -50,57 +50,56 @@ class ActivityFeed extends React.Component<Props, State> {
         this.scrollFeedContainerToBottom(false);
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps: Props, prevState: State) {
         this.scrollFeedContainerToBottom(true, prevProps, prevState);
     }
 
+    /**
+     * Determines when the sidebar should scroll to the bottom
+     * @param {boolean} componentWasUpdated - True if this call came from componentDidUpdate
+     * @param {object} prevProps - Exists only if this call came from componentDidUpdate
+     * @param {object} prevState - Exists only if this call came from componentDidUpdate
+     */
     scrollFeedContainerToBottom = (
         componentWasUpdated: boolean,
         prevProps?: Props,
         prevState?: State,
     ) => {
-        /**
-         * If our feedItems just got populated then we should scroll to the bottom.
-         */
-        if (
-            componentWasUpdated &&
-            this.feedContainer &&
-            !prevProps.feedItems &&
-            this.props.feedItems
-        ) {
-            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-        } else if (
-            componentWasUpdated &&
-            this.feedContainer &&
-            prevProps.feedItems &&
-            prevProps.feedItems.length < this.props.feedItems.length
-        ) {
-            /**
-             * If we added a new comment we should scroll to the bottom.
-             */
-            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-        } else if (!componentWasUpdated && this.feedContainer) {
-            /**
-             * On initial load we should scroll to the bottom
-             */
-            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-        } else if (
-            this.feedContainer &&
-            this.state.isInputOpen !== prevState.isInputOpen
-        ) {
-            /**
-             * When we open the input we should scroll to the bottom
-             */
-            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-        } else if (
-            prevProps &&
-            this.props &&
-            this.props.currentUser !== prevProps.currentUser
-        ) {
-            /**
-             * When changing between tabs we should scroll to the bottom
-             */
-            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+        if (this.feedContainer) {
+            if (componentWasUpdated) {
+                if (
+                    // If our feedItems just got populated then we should scroll to the bottom.
+                    prevProps &&
+                    !prevProps.feedItems &&
+                    this.props.feedItems
+                ) {
+                    this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+                } else if (
+                    // If we added a new comment we should scroll to the bottom.
+                    prevProps &&
+                    prevProps.feedItems &&
+                    this.props.feedItems &&
+                    prevProps.feedItems.length < this.props.feedItems.length
+                ) {
+                    this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+                } else if (
+                    // If comment input section was opened we should scroll to the bottom.
+                    prevState &&
+                    this.state.isInputOpen !== prevState.isInputOpen
+                ) {
+                    this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+                } else if (
+                    // When changing between tabs we should scroll to the bottom.
+                    prevProps &&
+                    this.props &&
+                    this.props.currentUser !== prevProps.currentUser
+                ) {
+                    this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+                }
+            } else if (!componentWasUpdated) {
+                // On initial load we should scroll to the bottom.
+                this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+            }
         }
     };
 
