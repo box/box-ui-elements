@@ -92,7 +92,11 @@ class ActivityFeed extends React.Component<Props, State> {
              * When we open the input we should scroll to the bottom
              */
             this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
-        } else if (this.props.currentUser !== prevProps.currentUser) {
+        } else if (
+            prevProps &&
+            this.props &&
+            this.props.currentUser !== prevProps.currentUser
+        ) {
             /**
              * When changing between tabs we should scroll to the bottom
              */
