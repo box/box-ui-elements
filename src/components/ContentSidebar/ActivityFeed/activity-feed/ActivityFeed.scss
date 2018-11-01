@@ -38,8 +38,7 @@
         .bcs-activity-feed-task,
         .bcs-activity-feed-comment {
             border-bottom: 1px solid $ffive;
-            margin-top: 20px;
-            padding-bottom: 20px;
+            padding-bottom: 8px;
 
             &:first-child .bcs-comment {
                 margin-top: 0;
