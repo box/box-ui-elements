@@ -64,10 +64,10 @@ class ActivityFeed extends React.Component<Props, State> {
             currFeedItems &&
             prevFeedItems.length < currFeedItems.length;
         const hasNewItems = !prevFeedItems && currFeedItems;
-        const hasNewUser = currentUser !== previousUser;
+        const hasSameItems = prevFeedItems === currFeedItems;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
 
-        if (hasMoreItems || hasNewItems || hasNewUser || hasInputOpened) {
+        if (hasMoreItems || hasNewItems || hasInputOpened || hasSameItems) {
             this.resetFeedScroll();
         }
     }
@@ -223,7 +223,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 </div>
                 {showApprovalCommentForm ? (
                     <ApprovalCommentForm
-                        onSubmit={() => this.resetFeedScroll()}
+                        onSubmit={this.resetFeedScroll}
                         isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
