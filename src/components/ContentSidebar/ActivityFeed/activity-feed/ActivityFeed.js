@@ -36,14 +36,14 @@ type Props = {
 };
 
 type State = {
-    hasResetScrollOnMount: boolean,
+    hasResetScrollAfterItemsLoaded: boolean,
     isInputOpen: boolean,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
+        hasResetScrollAfterItemsLoaded: false,
         isInputOpen: false,
-        hasResetScrollOnMount: false,
     };
 
     feedContainer: null | HTMLElement;
@@ -57,8 +57,8 @@ class ActivityFeed extends React.Component<Props, State> {
         const { feedItems: currFeedItems } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const {
+            hasResetScrollAfterItemsLoaded,
             isInputOpen: currIsInputOpen,
-            hasResetScrollOnMount,
         } = this.state;
 
         const hasMoreItems =
@@ -70,11 +70,12 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (hasMoreItems || hasNewItems || hasInputOpened) {
             this.resetFeedScroll();
-        } else if (prevFeedItems && !hasResetScrollOnMount) {
-            this.setState({
-                hasResetScrollOnMount: true,
-            });
+        } else if (prevFeedItems && !hasResetScrollAfterItemsLoaded) {
+            // Handles scroll reset after view renders feedItems
             this.resetFeedScroll();
+            this.setState({
+                hasResetScrollAfterItemsLoaded: true,
+            });
         }
     }
 
