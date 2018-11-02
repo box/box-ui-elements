@@ -36,12 +36,14 @@ type Props = {
 };
 
 type State = {
+    hasResetScrollOnMount: boolean,
     isInputOpen: boolean,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
         isInputOpen: false,
+        hasResetScrollOnMount: false,
     };
 
     feedContainer: null | HTMLElement;
@@ -51,23 +53,27 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const {
-            currentUser: previousUser,
-            feedItems: prevFeedItems,
-        } = prevProps;
-        const { currentUser, feedItems: currFeedItems } = this.props;
+        const { feedItems: prevFeedItems } = prevProps;
+        const { feedItems: currFeedItems } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
-        const { isInputOpen: currIsInputOpen } = this.state;
+        const {
+            isInputOpen: currIsInputOpen,
+            hasResetScrollOnMount,
+        } = this.state;
 
         const hasMoreItems =
             prevFeedItems &&
             currFeedItems &&
             prevFeedItems.length < currFeedItems.length;
         const hasNewItems = !prevFeedItems && currFeedItems;
-        const hasSameItems = prevFeedItems === currFeedItems;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
 
-        if (hasMoreItems || hasNewItems || hasInputOpened || hasSameItems) {
+        if (hasMoreItems || hasNewItems || hasInputOpened) {
+            this.resetFeedScroll();
+        } else if (prevFeedItems && !hasResetScrollOnMount) {
+            this.setState({
+                hasResetScrollOnMount: true,
+            });
             this.resetFeedScroll();
         }
     }
