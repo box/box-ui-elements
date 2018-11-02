@@ -72,6 +72,11 @@ class ActivityFeed extends React.Component<Props, State> {
         }
     }
 
+    /**
+     * Detects whether or not the empty state should be shown.
+     * @param {object} currentUser - The user that is logged into the account
+     * @param {object} feedItems - Items in the activity feed
+     */
     isEmpty = ({ currentUser, feedItems }: Props = this.props): boolean =>
         !currentUser ||
         !feedItems ||
