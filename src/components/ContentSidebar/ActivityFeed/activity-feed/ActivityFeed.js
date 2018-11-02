@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
-import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
+import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import './ActivityFeed.scss';
 
 type Props = {
@@ -46,13 +46,61 @@ class ActivityFeed extends React.Component<Props, State> {
 
     feedContainer: null | HTMLElement;
 
+    componentDidMount() {
+        this.resetFeedScroll();
+    }
+
+    componentDidUpdate(prevProps: Props, prevState: State) {
+        const { feedItems: prevFeedItems } = prevProps;
+        const { feedItems: currFeedItems } = this.props;
+        const { isInputOpen: prevIsInputOpen } = prevState;
+        const { isInputOpen: currIsInputOpen } = this.state;
+
+        const isEmpty = this.isEmpty(this.props);
+        const wasEmpty = this.isEmpty(prevProps);
+        const hasLoaded = isEmpty !== wasEmpty && !isEmpty;
+
+        const hasMoreItems =
+            prevFeedItems &&
+            currFeedItems &&
+            prevFeedItems.length < currFeedItems.length;
+        const hasNewItems = !prevFeedItems && currFeedItems;
+        const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
+
+        if (hasLoaded || hasMoreItems || hasNewItems || hasInputOpened) {
+            this.resetFeedScroll();
+        }
+    }
+
+    /**
+     * Detects whether or not the empty state should be shown.
+     * @param {object} currentUser - The user that is logged into the account
+     * @param {object} feedItems - Items in the activity feed
+     */
+    isEmpty = ({ currentUser, feedItems }: Props = this.props): boolean =>
+        !currentUser ||
+        !feedItems ||
+        feedItems.length === 0 ||
+        (feedItems.length === 1 && feedItems[0].type === ItemTypes.fileVersion);
+
+    /**
+     * Scrolls the container to the bottom
+     */
+    resetFeedScroll = () => {
+        if (this.feedContainer) {
+            this.feedContainer.scrollTop = this.feedContainer.scrollHeight;
+        }
+    };
+
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
     };
 
-    approvalCommentFormFocusHandler = (): void =>
+    approvalCommentFormFocusHandler = (): void => {
+        this.resetFeedScroll();
         this.setState({ isInputOpen: true });
+    };
 
     approvalCommentFormCancelHandler = (): void =>
         this.setState({ isInputOpen: false });
@@ -139,6 +187,8 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems
         );
 
+        const isEmpty = this.isEmpty(this.props);
+
         return (
             // eslint-disable-next-line
             <div className="bcs-activity-feed" onKeyDown={this.onKeyDown}>
@@ -148,7 +198,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className="bcs-activity-feed-items-container"
                 >
-                    {shouldShowEmptyState(feedItems) || !currentUser ? (
+                    {isEmpty ? (
                         <EmptyState
                             isLoading={!feedItems}
                             showCommentMessage={showApprovalCommentForm}
@@ -186,11 +236,7 @@ class ActivityFeed extends React.Component<Props, State> {
                 </div>
                 {showApprovalCommentForm ? (
                     <ApprovalCommentForm
-                        onSubmit={() => {
-                            if (this.feedContainer) {
-                                this.feedContainer.scrollTop = 0;
-                            }
-                        }}
+                        onSubmit={this.resetFeedScroll}
                         isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
