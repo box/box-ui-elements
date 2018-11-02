@@ -120,8 +120,7 @@
 
         .bcs-comment-avatar {
             flex-shrink: 0;
-            margin-right: 17px;
-            margin-top: 3px;
+            margin-right: 10px;
         }
 
         .bcs-comment-content {
@@ -137,8 +136,10 @@
             }
 
             .bcs-comment-created-at {
-                color: $nines;
+                color: $sevens;
                 cursor: default;
+                font-size: 11px;
+                line-height: 20px;
             }
         }
 
