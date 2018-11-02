@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
-import { collapseFeedState, shouldShowEmptyState } from './activityFeedUtils';
+import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import './ActivityFeed.scss';
 
 type Props = {
@@ -36,13 +36,11 @@ type Props = {
 };
 
 type State = {
-    hasResetScrollAfterItemsLoaded: boolean,
     isInputOpen: boolean,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
-        hasResetScrollAfterItemsLoaded: false,
         isInputOpen: false,
     };
 
@@ -56,10 +54,11 @@ class ActivityFeed extends React.Component<Props, State> {
         const { feedItems: prevFeedItems } = prevProps;
         const { feedItems: currFeedItems } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
-        const {
-            hasResetScrollAfterItemsLoaded,
-            isInputOpen: currIsInputOpen,
-        } = this.state;
+        const { isInputOpen: currIsInputOpen } = this.state;
+
+        const isEmpty = this.isEmpty(this.props);
+        const wasEmpty = this.isEmpty(prevProps);
+        const hasLoaded = isEmpty !== wasEmpty && !isEmpty;
 
         const hasMoreItems =
             prevFeedItems &&
@@ -68,16 +67,16 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasNewItems = !prevFeedItems && currFeedItems;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
 
-        if (hasMoreItems || hasNewItems || hasInputOpened) {
+        if (hasLoaded || hasMoreItems || hasNewItems || hasInputOpened) {
             this.resetFeedScroll();
-        } else if (prevFeedItems && !hasResetScrollAfterItemsLoaded) {
-            // Handles scroll reset after view renders feedItems
-            this.resetFeedScroll();
-            this.setState({
-                hasResetScrollAfterItemsLoaded: true,
-            });
         }
     }
+
+    isEmpty = ({ currentUser, feedItems }: Props = this.props): boolean =>
+        !currentUser ||
+        !feedItems ||
+        feedItems.length === 0 ||
+        (feedItems.length === 1 && feedItems[0].type === ItemTypes.fileVersion);
 
     /**
      * Scrolls the container to the bottom
@@ -183,6 +182,8 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems
         );
 
+        const isEmpty = this.isEmpty(this.props);
+
         return (
             // eslint-disable-next-line
             <div className="bcs-activity-feed" onKeyDown={this.onKeyDown}>
@@ -192,7 +193,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     }}
                     className="bcs-activity-feed-items-container"
                 >
-                    {shouldShowEmptyState(feedItems) || !currentUser ? (
+                    {isEmpty ? (
                         <EmptyState
                             isLoading={!feedItems}
                             showCommentMessage={showApprovalCommentForm}
