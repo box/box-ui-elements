@@ -76,7 +76,7 @@ export function sortFeedItems(
 
             return items;
         }, [])
-        .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+        .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at));
 
     return feedItems;
 }

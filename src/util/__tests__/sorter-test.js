@@ -479,8 +479,8 @@ describe('util/sorter', () => {
 
         test('should sort items based on date', () => {
             const sorted = sortFeedItems(comments, tasks);
-            expect(sorted[0].id).toEqual(comments.entries[0].id);
-            expect(sorted[1].id).toEqual(tasks.entries[0].id);
+            expect(sorted[0].id).toEqual(tasks.entries[0].id);
+            expect(sorted[1].id).toEqual(comments.entries[0].id);
         });
     });
 });
