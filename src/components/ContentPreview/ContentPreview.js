@@ -229,6 +229,8 @@ class ContentPreview extends PureComponent<Props, State> {
         }
         // Don't destroy the cache while unmounting
         this.api.destroy(false);
+
+        document.removeEventListener('keydown', this.onKeyDown);
     }
 
     /**
@@ -263,6 +265,12 @@ class ContentPreview extends PureComponent<Props, State> {
 
         this.fetchFile(this.state.currentFileId);
         this.focusPreview();
+
+        // Workaround for COXP-5840. React synthetic events don't
+        // bubble up when a nested element is in fullscreen mode.
+        // However, native elements do. Can do it the React way
+        // when fix is available.
+        document.addEventListener('keydown', this.onKeyDown);
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
@@ -1000,7 +1008,7 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+    onKeyDown = (event: KeyboardEvent) => {
         const { useHotkeys }: Props = this.props;
         if (!useHotkeys) {
             return;
@@ -1017,7 +1025,7 @@ class ContentPreview extends PureComponent<Props, State> {
         }
 
         if (typeof viewer.onKeydown === 'function') {
-            consumed = !!viewer.onKeydown(key, event.nativeEvent);
+            consumed = !!viewer.onKeydown(key, event);
         }
 
         if (!consumed) {
@@ -1103,8 +1111,6 @@ class ContentPreview extends PureComponent<Props, State> {
                     id={this.id}
                     className={`be bcpr ${className}`}
                     ref={measureRef}
-                    onKeyDown={this.onKeyDown}
-                    tabIndex={0}
                 >
                     {hasHeader && (
                         <Header
