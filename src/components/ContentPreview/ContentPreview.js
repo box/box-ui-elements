@@ -1022,7 +1022,9 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    onKeyDown = (event: KeyboardEvent) => {
+    onKeyDown = (
+        event: KeyboardEvent | SyntheticKeyboardEvent<HTMLElement>,
+    ) => {
         const { useHotkeys }: Props = this.props;
         if (!useHotkeys) {
             return;
