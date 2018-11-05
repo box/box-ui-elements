@@ -229,8 +229,6 @@ class ContentPreview extends PureComponent<Props, State> {
         }
         // Don't destroy the cache while unmounting
         this.api.destroy(false);
-
-        document.removeEventListener('keydown', this.onKeyDown);
     }
 
     /**
@@ -265,12 +263,6 @@ class ContentPreview extends PureComponent<Props, State> {
 
         this.fetchFile(this.state.currentFileId);
         this.focusPreview();
-
-        // Workaround for COXP-5840. React synthetic events don't
-        // bubble up when a nested element is in fullscreen mode.
-        // However, native elements do. Can do it the React way
-        // when fix is available.
-        document.addEventListener('keydown', this.onKeyDown);
     }
 
     static getDerivedStateFromProps(props: Props, state: State) {
@@ -604,6 +596,27 @@ class ContentPreview extends PureComponent<Props, State> {
         }
     };
 
+    onPreviewViewerEvent = (data: Object): void => {
+        if (!data) {
+            return;
+        }
+
+        switch (data.event) {
+            case 'fullscreenenter':
+                // Workaround because React synthetic events don't
+                // bubble up when a nested element is in fullscreen mode.
+                // However, the native events do bubble up to the document.
+                // Can do it the React way when fix is available. (Chrome only)
+                document.addEventListener('keydown', this.onKeyDown);
+                break;
+            case 'fullscreenexit':
+                document.removeEventListener('keydown', this.onKeyDown);
+                break;
+            default:
+                break;
+        }
+    };
+
     /**
      * Returns whether file can be downloaded based on file properties, permissions, and user-defined options.
      *
@@ -675,6 +688,7 @@ class ContentPreview extends PureComponent<Props, State> {
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preview_error', onError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
+        this.preview.addListener('viewerevent', this.onPreviewViewerEvent);
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
@@ -1025,7 +1039,7 @@ class ContentPreview extends PureComponent<Props, State> {
         }
 
         if (typeof viewer.onKeydown === 'function') {
-            consumed = !!viewer.onKeydown(key, event);
+            consumed = !!viewer.onKeydown(key, event.nativeEvent || event);
         }
 
         if (!consumed) {
@@ -1111,6 +1125,8 @@ class ContentPreview extends PureComponent<Props, State> {
                     id={this.id}
                     className={`be bcpr ${className}`}
                     ref={measureRef}
+                    onKeyDown={this.onKeyDown}
+                    tabIndex={0}
                 >
                     {hasHeader && (
                         <Header
