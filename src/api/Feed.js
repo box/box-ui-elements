@@ -24,15 +24,15 @@ import {
     VERSION_UPLOAD_ACTION,
     VERSION_RESTORE_ACTION,
     TYPED_ID_FEED_PREFIX,
+    CONFLICT_CODE,
+    UNAUTHORIZED_CODE,
+    RATE_LIMIT_CODE,
+    INTERNAL_SERVER_ERROR_CODE,
 } from '../constants';
 import { sortFeedItems } from '../util/sorter';
 
 const DEFAULT_START = 0;
 const DEFAULT_END = 1000;
-const CONFLICT_CODE = 409;
-const UNAUTHORIZED_CODE = 401;
-const RATE_LIMIT_CODE = 429;
-const INTERNAL_SERVER_ERROR_CODE = 500;
 const TASK_INCOMPLETE = 'incomplete';
 const TASK = 'task';
 const TASK_ASSIGNMENT = 'task_assignment';

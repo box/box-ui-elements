@@ -250,3 +250,9 @@ export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Integrations ------------------------- */
 export const APP_INTEGRATION = 'app_integration';
+
+/* ------------------ Status Codes ------------------------- */
+export const CONFLICT_CODE = 409;
+export const UNAUTHORIZED_CODE = 401;
+export const RATE_LIMIT_CODE = 429;
+export const INTERNAL_SERVER_ERROR_CODE = 500;
