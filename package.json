@@ -109,6 +109,9 @@
       "!**/node_modules/**",
       "!**/__tests__/**"
     ],
+    "roots": [
+      "src"
+    ],
     "setupTestFrameworkScriptFile": "<rootDir>/build/enzyme-adapter.js",
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
