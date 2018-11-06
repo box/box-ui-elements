@@ -239,6 +239,10 @@ export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
 export const HTTP_STATUS_CODE_FORBIDDEN = 403;
+export const HTTP_STATUS_CODE_CONFLICT = 409;
+export const HTTP_STATUS_CODE_UNAUTHORIZED = 401;
+export const HTTP_STATUS_CODE_RATE_LIMIT = 429;
+export const HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR = 500;
 
 /* ------------------ Version Action Types  ---------------------- */
 export const VERSION_RESTORE_ACTION = 'restore';
