@@ -18,6 +18,7 @@ import {
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
     METADATA_TEMPLATE_PROPERTIES,
+    METADATA_TEMPLATE_CLASSIFICATION,
     METADATA_TEMPLATE_SKILLS,
     FIELD_METADATA_SKILLS,
     CACHE_PREFIX_METADATA,
@@ -125,7 +126,9 @@ class Metadata extends File {
         }
 
         return getProp(templates, 'data.entries', []).filter(
-            template => !template.hidden,
+            template =>
+                !template.hidden &&
+                template.templateKey !== METADATA_TEMPLATE_CLASSIFICATION,
         );
     }
 
@@ -515,9 +518,9 @@ class Metadata extends File {
             ];
             const templates: Array<
                 MetadataEditorTemplate,
-            > = customPropertiesTemplate
-                .concat(await this.getTemplates(id, METADATA_SCOPE_ENTERPRISE))
-                .concat(await this.getTemplates(id, METADATA_SCOPE_GLOBAL));
+            > = customPropertiesTemplate.concat(
+                await this.getTemplates(id, METADATA_SCOPE_ENTERPRISE),
+            );
 
             if (this.isDestroyed()) {
                 return;

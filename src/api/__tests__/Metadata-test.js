@@ -1,6 +1,7 @@
 import Metadata from '../Metadata';
 import Cache from '../../util/Cache';
 import * as ErrorUtil from '../../util/error';
+import { METADATA_TEMPLATE_CLASSIFICATION } from '../../constants';
 
 let metadata;
 
@@ -101,7 +102,7 @@ describe('api/Metadata', () => {
     });
 
     describe('getTemplates()', () => {
-        test('should return unhidden templates', async () => {
+        test('should return unhidden templates that are not classification', async () => {
             metadata.getMetadataTemplateUrl = jest
                 .fn()
                 .mockReturnValueOnce('template_url');
@@ -112,6 +113,16 @@ describe('api/Metadata', () => {
                         { id: 2, hidden: true },
                         { id: 3, hidden: false },
                         { id: 4, hidden: false },
+                        {
+                            id: 5,
+                            hidden: true,
+                            templateKey: METADATA_TEMPLATE_CLASSIFICATION,
+                        },
+                        {
+                            id: 6,
+                            hidden: false,
+                            templateKey: METADATA_TEMPLATE_CLASSIFICATION,
+                        },
                     ],
                 },
             });
