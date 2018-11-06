@@ -24,10 +24,10 @@ import {
     VERSION_UPLOAD_ACTION,
     VERSION_RESTORE_ACTION,
     TYPED_ID_FEED_PREFIX,
-    CONFLICT_CODE,
-    UNAUTHORIZED_CODE,
-    RATE_LIMIT_CODE,
-    INTERNAL_SERVER_ERROR_CODE,
+    HTTP_STATUS_CODE_CONFLICT,
+    HTTP_STATUS_CODE_UNAUTHORIZED,
+    HTTP_STATUS_CODE_RATE_LIMIT,
+    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
 } from '../constants';
 import { sortFeedItems } from '../util/sorter';
 
@@ -242,16 +242,16 @@ class Feed extends Base {
      * Error callback for fetching feed items.
      * Should only call the error callback if the response is a 401, 429 or >= 500
      *
-     * @param {Object} e - the axios error
      * @param {Function} cb - optional callback to be executed
+     * @param {Object} e - the axios error
      * @return {void}
      */
     fetchFeedItemErrorCallback = (cb: ?Function, e: $AxiosXHR<any>) => {
         const { status } = e;
         if (
-            status === RATE_LIMIT_CODE ||
-            status === UNAUTHORIZED_CODE ||
-            status >= INTERNAL_SERVER_ERROR_CODE
+            status === HTTP_STATUS_CODE_RATE_LIMIT ||
+            status === HTTP_STATUS_CODE_UNAUTHORIZED ||
+            status >= HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR
         ) {
             this.errorCallback(e);
         }
@@ -926,7 +926,7 @@ class Feed extends Base {
         errorCallback: Function,
     ) => {
         const errorMessage =
-            e.status === CONFLICT_CODE
+            e.status === HTTP_STATUS_CODE_CONFLICT
                 ? messages.commentCreateConflictMessage
                 : messages.commentCreateErrorMessage;
         this.updateFeedItem(this.createFeedError(errorMessage), id);
