@@ -7,7 +7,11 @@
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 import File from './File';
-import { getBadItemError, getBadPermissionsError } from '../util/error';
+import {
+    getBadItemError,
+    getBadPermissionsError,
+    isUserCorrectableError,
+} from '../util/error';
 import { getTypedFileId } from '../util/file';
 import {
     HEADER_CONTENT_TYPE,
@@ -107,14 +111,22 @@ class Metadata extends File {
         id: string,
         scope: string,
     ): Promise<Array<MetadataEditorTemplate>> {
-        return getProp(
-            await this.xhr.get({
+        let templates = {};
+        try {
+            templates = await this.xhr.get({
                 url: this.getMetadataTemplateUrl(scope),
                 id: getTypedFileId(id),
-            }),
-            'data.entries',
-            [],
-        ).filter(template => !template.hidden);
+            });
+        } catch (e) {
+            const { status } = e;
+            if (isUserCorrectableError(status)) {
+                throw e;
+            }
+        }
+
+        return getProp(templates, 'data.entries', []).filter(
+            template => !template.hidden,
+        );
     }
 
     /**

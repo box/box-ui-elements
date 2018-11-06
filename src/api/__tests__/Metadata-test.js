@@ -129,6 +129,54 @@ describe('api/Metadata', () => {
                 id: 'file_id',
             });
         });
+        test('should return empty array of templates when error is 400', async () => {
+            const error = new Error();
+            error.status = 400;
+            metadata.getMetadataTemplateUrl = jest
+                .fn()
+                .mockReturnValueOnce('template_url');
+            metadata.xhr.get = jest
+                .fn()
+                .mockReturnValueOnce(Promise.reject(error));
+            let templates;
+            try {
+                templates = await metadata.getTemplates('id', 'scope');
+            } catch (e) {
+                expect(e.status).toEqual(400);
+            }
+            expect(templates).toEqual([]);
+            expect(metadata.getMetadataTemplateUrl).toHaveBeenCalledWith(
+                'scope',
+            );
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'template_url',
+                id: 'file_id',
+            });
+        });
+        test('should throw error when error is not 400', async () => {
+            const error = new Error();
+            error.status = 401;
+            metadata.getMetadataTemplateUrl = jest
+                .fn()
+                .mockReturnValueOnce('template_url');
+            metadata.xhr.get = jest
+                .fn()
+                .mockReturnValueOnce(Promise.reject(error));
+            let templates;
+            try {
+                templates = await metadata.getTemplates('id', 'scope');
+            } catch (e) {
+                expect(e.status).toEqual(401);
+            }
+            expect(templates).toBeUndefined();
+            expect(metadata.getMetadataTemplateUrl).toHaveBeenCalledWith(
+                'scope',
+            );
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'template_url',
+                id: 'file_id',
+            });
+        });
     });
 
     describe('getInstances()', () => {
