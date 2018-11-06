@@ -18,16 +18,17 @@ import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksAPI from './Tasks';
 import TaskAssignmentsAPI from './TaskAssignments';
-import { getBadItemError, getBadUserError } from '../util/error';
+import {
+    getBadItemError,
+    getBadUserError,
+    isUserCorrectableError,
+} from '../util/error';
 import messages from '../components/messages';
 import {
     VERSION_UPLOAD_ACTION,
     VERSION_RESTORE_ACTION,
     TYPED_ID_FEED_PREFIX,
     HTTP_STATUS_CODE_CONFLICT,
-    HTTP_STATUS_CODE_UNAUTHORIZED,
-    HTTP_STATUS_CODE_RATE_LIMIT,
-    HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
 } from '../constants';
 import { sortFeedItems } from '../util/sorter';
 
@@ -248,11 +249,7 @@ class Feed extends Base {
      */
     fetchFeedItemErrorCallback = (cb: ?Function, e: $AxiosXHR<any>) => {
         const { status } = e;
-        if (
-            status === HTTP_STATUS_CODE_RATE_LIMIT ||
-            status === HTTP_STATUS_CODE_UNAUTHORIZED ||
-            status >= HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR
-        ) {
+        if (isUserCorrectableError(status)) {
             this.errorCallback(e);
         }
 
