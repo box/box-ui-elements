@@ -11,7 +11,7 @@ yarn-debug.log
 Thumbs.db
 .idea
 src
-.babelrc
+babel.config.js
 .DS_Store
 .editorconfig
 .eslintrc.json
@@ -32,7 +32,6 @@ yarn.lock
 .travis.yml
 flow
 .flowconfig
-browserslist
 .conventional-changelog-lintrc
 *~~bak
 flow-typed

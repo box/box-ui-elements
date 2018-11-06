@@ -52,5 +52,4 @@ For test debugging follow instructions provided in the [jest documentation](http
 * .stylelintrc - https://stylelint.io/user-guide/configuration/
 * .travis.yml - https://docs.travis-ci.com/user/customizing-the-build
 * babel.config.js - https://babeljs.io/docs/en/config-files/
-* browserslist - https://github.com/ai/browserslist
 * postcss.config.js - https://github.com/postcss/postcss-loader

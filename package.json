@@ -69,6 +69,20 @@
     "styleguide-static": "LANGUAGE=en-US REACT=true NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config build/styleguide.config.js --mode production",
     "test": "NODE_ENV=test yarn run jest"
   },
+  "browserslist": {
+    "production": [
+      "last 2 Chrome versions",
+      "last 2 Firefox versions",
+      "last 2 Safari versions",
+      "last 2 Edge versions",
+      "last 2 iOS versions",
+      "IE 11"
+    ],
+    "dev": [
+      "last 1 Chrome versions",
+      "last 1 Firefox versions"
+    ]
+  },
   "lint-staged": {
     "src/**/*.js": [
       "yarn lint:js:fix-staged",
