@@ -30,6 +30,7 @@ import { sortFeedItems } from '../util/sorter';
 const DEFAULT_START = 0;
 const DEFAULT_END = 1000;
 const CONFLICT_CODE = 409;
+const UNAUTHORIZED_CODE = 401;
 const RATE_LIMIT_CODE = 429;
 const INTERNAL_SERVER_ERROR_CODE = 500;
 const TASK_INCOMPLETE = 'incomplete';
@@ -239,7 +240,7 @@ class Feed extends Base {
 
     /**
      * Error callback for fetching feed items.
-     * Should only call the error callback if the response is a 429 or 500
+     * Should only call the error callback if the response is a 401, 429 or >= 500
      *
      * @param {Object} e - the axios error
      * @param {Function} cb - optional callback to be executed
@@ -248,8 +249,9 @@ class Feed extends Base {
     fetchFeedItemErrorCallback = (cb: ?Function, e: $AxiosXHR<any>) => {
         const { status } = e;
         if (
-            status === INTERNAL_SERVER_ERROR_CODE ||
-            status === RATE_LIMIT_CODE
+            status === RATE_LIMIT_CODE ||
+            status === UNAUTHORIZED_CODE ||
+            status >= INTERNAL_SERVER_ERROR_CODE
         ) {
             this.errorCallback(e);
         }
@@ -875,7 +877,7 @@ class Feed extends Base {
         };
         const cachedItems = this.getCachedItems(this.id);
         const feedItems = cachedItems ? cachedItems.items : [];
-        const feedItemsWithPendingItem = [pendingFeedItem, ...feedItems];
+        const feedItemsWithPendingItem = [...feedItems, pendingFeedItem];
         this.setCachedItems(id, feedItemsWithPendingItem);
 
         return pendingFeedItem;
