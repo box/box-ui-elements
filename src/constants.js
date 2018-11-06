@@ -238,7 +238,6 @@ export const HTTP_OPTIONS: 'OPTIONS' = 'OPTIONS';
 export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
-export const HTTP_STATUS_CODE_BAD_REQUEST = 400;
 export const HTTP_STATUS_CODE_FORBIDDEN = 403;
 export const HTTP_STATUS_CODE_CONFLICT = 409;
 export const HTTP_STATUS_CODE_UNAUTHORIZED = 401;
