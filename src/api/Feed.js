@@ -30,6 +30,8 @@ import { sortFeedItems } from '../util/sorter';
 const DEFAULT_START = 0;
 const DEFAULT_END = 1000;
 const CONFLICT_CODE = 409;
+const RATE_LIMIT_CODE = 429;
+const INTERNAL_SERVER_ERROR_CODE = 500;
 const TASK_INCOMPLETE = 'incomplete';
 const TASK = 'task';
 const TASK_ASSIGNMENT = 'task_assignment';
@@ -178,10 +180,7 @@ class Feed extends Base {
             this.commentsAPI.offsetGet(
                 this.id,
                 resolve,
-                err => {
-                    this.errorCallback(err);
-                    resolve();
-                },
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
                 DEFAULT_START,
                 DEFAULT_END,
                 COMMENTS_FIELDS_TO_FETCH,
@@ -201,10 +200,7 @@ class Feed extends Base {
             this.versionsAPI.offsetGet(
                 this.id,
                 resolve,
-                err => {
-                    this.errorCallback(err);
-                    resolve();
-                },
+                this.fetchFeedItemErrorCallback.bind(this, resolve),
                 DEFAULT_START,
                 DEFAULT_END,
                 VERSIONS_FIELDS_TO_FETCH,
@@ -232,14 +228,36 @@ class Feed extends Base {
                 successCallback: tasks => {
                     this.fetchTaskAssignments(tasks).then(resolve);
                 },
-                errorCallback: err => {
-                    this.errorCallback(err);
-                    resolve();
-                },
+                errorCallback: this.fetchFeedItemErrorCallback.bind(
+                    this,
+                    resolve,
+                ),
                 params: requestData,
             });
         });
     }
+
+    /**
+     * Error callback for fetching feed items.
+     * Should only call the error callback if the response is a 429 or 500
+     *
+     * @param {Object} e - the axios error
+     * @param {Function} cb - optional callback to be executed
+     * @return {void}
+     */
+    fetchFeedItemErrorCallback = (cb: ?Function, e: $AxiosXHR<any>) => {
+        const { status } = e;
+        if (
+            status === INTERNAL_SERVER_ERROR_CODE ||
+            status === RATE_LIMIT_CODE
+        ) {
+            this.errorCallback(e);
+        }
+
+        if (typeof cb === 'function') {
+            cb();
+        }
+    };
 
     /**
      * Updates a task assignment
@@ -769,10 +787,7 @@ class Feed extends Base {
                             );
                             resolve(formattedTask);
                         },
-                        err => {
-                            this.errorCallback(err);
-                            resolve();
-                        },
+                        this.fetchFeedItemErrorCallback.bind(this, resolve),
                         requestData,
                     );
                 }),
@@ -860,7 +875,7 @@ class Feed extends Base {
         };
         const cachedItems = this.getCachedItems(this.id);
         const feedItems = cachedItems ? cachedItems.items : [];
-        const feedItemsWithPendingItem = [...feedItems, pendingFeedItem];
+        const feedItemsWithPendingItem = [pendingFeedItem, ...feedItems];
         this.setCachedItems(id, feedItemsWithPendingItem);
 
         return pendingFeedItem;

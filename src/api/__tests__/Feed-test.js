@@ -1146,4 +1146,33 @@ describe('api/Feed', () => {
             expect(restoredVersion.created_at).toBe(file.modified_at);
         });
     });
+
+    describe('fetchFeedItemErrorCallback()', () => {
+        let errorCb;
+        beforeEach(() => {
+            feed.errorCallback = jest.fn();
+            errorCb = jest.fn();
+        });
+
+        test('should call the error callback if error is rate limited', () => {
+            feed.fetchFeedItemErrorCallback(errorCb, {
+                status: 429,
+            });
+            expect(feed.errorCallback).toHaveBeenCalled();
+        });
+
+        test('should call the error callback if error is internal server error', () => {
+            feed.fetchFeedItemErrorCallback(errorCb, {
+                status: 500,
+            });
+            expect(feed.errorCallback).toHaveBeenCalled();
+        });
+
+        test('should call the error callback if error is forbidden or another error', () => {
+            feed.fetchFeedItemErrorCallback(errorCb, {
+                status: 403,
+            });
+            expect(feed.errorCallback).not.toHaveBeenCalled();
+        });
+    });
 });
