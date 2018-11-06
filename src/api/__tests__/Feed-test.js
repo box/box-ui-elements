@@ -1168,7 +1168,7 @@ describe('api/Feed', () => {
             expect(feed.errorCallback).toHaveBeenCalled();
         });
 
-        test('should call the error callback if error is forbidden or another error', () => {
+        test('should not call the error callback if error is forbidden or another error', () => {
             feed.fetchFeedItemErrorCallback(errorCb, {
                 status: 403,
             });
