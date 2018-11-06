@@ -20,6 +20,7 @@ import API from '../../api';
 import './MetadataSidebar.scss';
 
 type ExternalProps = {
+    isFeatureEnabled?: boolean,
     getMetadata?: Function,
 };
 
@@ -63,7 +64,13 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     getMetadataEditors = (): void => {
-        const { api, file, getMetadata }: Props = this.props;
+        const {
+            api,
+            file,
+            getMetadata,
+            isFeatureEnabled = true,
+        }: Props = this.props;
+
         api.getMetadataAPI(true).getEditors(
             file,
             ({
@@ -82,6 +89,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             },
             this.errorCallback,
             getMetadata,
+            isFeatureEnabled,
         );
     };
 
