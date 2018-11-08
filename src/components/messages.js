@@ -1017,6 +1017,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Message to the user to enter into point annotation mode',
         defaultMessage: 'Point annotation mode',
     },
+    expand: {
+        id: 'be.expand',
+        description: 'Message to the user to expand the Transcript entries',
+        defaultMessage: 'Expand',
+    },
+    collapse: {
+        id: 'be.collapse',
+        description: 'Message to the user to collapse the Transcript entries',
+        defaultMessage: 'Collapse',
+    },
 });
 
 export default messages;
