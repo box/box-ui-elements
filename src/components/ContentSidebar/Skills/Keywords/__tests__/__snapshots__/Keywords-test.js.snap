@@ -5,14 +5,27 @@ exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly ren
   className="be-keywords"
   isLoading={false}
 >
-  <PlainButton
-    className="be-keyword-edit"
-    data-resin-target="skill-keywordedit"
-    onClick={[Function]}
-    type="button"
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    position="top-center"
+    text={
+      <FormattedMessage
+        defaultMessage="Edit"
+        id="be.editLabel"
+      />
+    }
+    theme="default"
   >
-    <IconEdit />
-  </PlainButton>
+    <PlainButton
+      className="be-keyword-edit"
+      data-resin-target="skill-keywordedit"
+      onClick={[Function]}
+      type="button"
+    >
+      <IconEdit />
+    </PlainButton>
+  </Tooltip>
   <ReadOnlyselecteds
     duration={100}
     keywords={
@@ -34,14 +47,27 @@ exports[`components/ContentSidebar/Skills/Keywords/Keywords should correctly ren
   className="be-keywords"
   isLoading={false}
 >
-  <PlainButton
-    className="be-keyword-edit be-keyword-is-editing"
-    data-resin-target="skill-keywordedit"
-    onClick={[Function]}
-    type="button"
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    position="top-center"
+    text={
+      <FormattedMessage
+        defaultMessage="Edit"
+        id="be.editLabel"
+      />
+    }
+    theme="default"
   >
-    <IconEdit />
-  </PlainButton>
+    <PlainButton
+      className="be-keyword-edit be-keyword-is-editing"
+      data-resin-target="skill-keywordedit"
+      onClick={[Function]}
+      type="button"
+    >
+      <IconEdit />
+    </PlainButton>
+  </Tooltip>
   <EditableKeywords
     keywords={
       Array [

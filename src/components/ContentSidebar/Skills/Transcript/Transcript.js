@@ -14,6 +14,7 @@ import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
+import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
 import { nines } from 'box-react-ui/lib/styles/variables';
 import TranscriptRow from './TranscriptRow';
 import { isValidTimeSlice } from './timeSliceUtils';
@@ -297,6 +298,9 @@ class Transcript extends React.PureComponent<Props, State> {
         const contentClassName = classNames({
             'be-transcript-content-collapsed': isCollapsed,
         });
+        const expandCollapseMessage = isCollapsed
+            ? messages.expand
+            : messages.collapse;
 
         return (
             <LoadingIndicatorWrapper
@@ -306,44 +310,64 @@ class Transcript extends React.PureComponent<Props, State> {
                 {hasEntries &&
                     !isLoading && (
                         <div className="be-transcript-actions">
-                            <PlainButton
-                                type="button"
-                                className="be-transcript-copy"
-                                getDOMRef={this.copyBtnRef}
-                                onClick={this.copyTranscript}
-                                data-resin-target={
-                                    SKILLS_TARGETS.TRANSCRIPTS.COPY
-                                }
+                            <Tooltip
+                                text={<FormattedMessage {...messages.copy} />}
                             >
-                                <IconCopy color={nines} />
-                            </PlainButton>
-                            {hasManyEntries && (
                                 <PlainButton
                                     type="button"
-                                    className="be-transcript-expand"
-                                    onClick={this.toggleExpandCollapse}
+                                    className="be-transcript-copy"
+                                    getDOMRef={this.copyBtnRef}
+                                    onClick={this.copyTranscript}
                                     data-resin-target={
-                                        SKILLS_TARGETS.TRANSCRIPTS.EXPAND
+                                        SKILLS_TARGETS.TRANSCRIPTS.COPY
                                     }
                                 >
-                                    {isCollapsed ? (
-                                        <IconExpand color={nines} />
-                                    ) : (
-                                        <IconCollapse color={nines} />
-                                    )}
+                                    <IconCopy color={nines} />
                                 </PlainButton>
+                            </Tooltip>
+                            {hasManyEntries && (
+                                <Tooltip
+                                    text={
+                                        <FormattedMessage
+                                            {...expandCollapseMessage}
+                                        />
+                                    }
+                                >
+                                    <PlainButton
+                                        type="button"
+                                        className="be-transcript-expand"
+                                        onClick={this.toggleExpandCollapse}
+                                        data-resin-target={
+                                            SKILLS_TARGETS.TRANSCRIPTS.EXPAND
+                                        }
+                                    >
+                                        {isCollapsed ? (
+                                            <IconExpand color={nines} />
+                                        ) : (
+                                            <IconCollapse color={nines} />
+                                        )}
+                                    </PlainButton>
+                                </Tooltip>
                             )}
                             {isEditable && (
-                                <PlainButton
-                                    type="button"
-                                    className={editBtnClassName}
-                                    onClick={this.toggleIsEditing}
-                                    data-resin-target={
-                                        SKILLS_TARGETS.TRANSCRIPTS.EDIT
+                                <Tooltip
+                                    text={
+                                        <FormattedMessage
+                                            {...messages.editLabel}
+                                        />
                                     }
                                 >
-                                    <IconEdit />
-                                </PlainButton>
+                                    <PlainButton
+                                        type="button"
+                                        className={editBtnClassName}
+                                        onClick={this.toggleIsEditing}
+                                        data-resin-target={
+                                            SKILLS_TARGETS.TRANSCRIPTS.EDIT
+                                        }
+                                    >
+                                        <IconEdit />
+                                    </PlainButton>
+                                </Tooltip>
                             )}
                         </div>
                     )}
