@@ -11,6 +11,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import Face from './Face';
@@ -160,26 +161,27 @@ class Faces extends React.PureComponent<Props, State> {
         const entries = faces.filter(
             (face: SkillCardEntry) => !removes.includes(face),
         );
-        const editClassName = classNames('be-faces', {
+        const editClassName = classNames('be-face-edit', {
             'be-faces-is-editing': isEditing,
         });
 
         return (
-            <LoadingIndicatorWrapper
-                isLoading={isLoading}
-                className={editClassName}
-            >
+            <LoadingIndicatorWrapper isLoading={isLoading} className="be-faces">
                 {hasFaces &&
                     isEditable &&
                     !isLoading && (
-                        <PlainButton
-                            type="button"
-                            className="be-face-edit"
-                            onClick={this.toggleIsEditing}
-                            data-resin-target={SKILLS_TARGETS.FACES.EDIT}
+                        <Tooltip
+                            text={<FormattedMessage {...messages.editLabel} />}
                         >
-                            <IconEdit />
-                        </PlainButton>
+                            <PlainButton
+                                type="button"
+                                className={editClassName}
+                                onClick={this.toggleIsEditing}
+                                data-resin-target={SKILLS_TARGETS.FACES.EDIT}
+                            >
+                                <IconEdit />
+                            </PlainButton>
+                        </Tooltip>
                     )}
                 {hasError && (
                     <InlineError

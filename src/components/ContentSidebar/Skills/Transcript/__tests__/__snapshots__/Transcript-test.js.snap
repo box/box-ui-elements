@@ -8,25 +8,51 @@ exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly
   <div
     className="be-transcript-actions"
   >
-    <PlainButton
-      className="be-transcript-copy"
-      data-resin-target="skill-transcriptcopy"
-      getDOMRef={[Function]}
-      onClick={[Function]}
-      type="button"
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-center"
+      text={
+        <FormattedMessage
+          defaultMessage="Copy"
+          id="be.copy"
+        />
+      }
+      theme="default"
     >
-      <IconCopy
-        color="#999"
-      />
-    </PlainButton>
-    <PlainButton
-      className="be-transcript-edit"
-      data-resin-target="skill-transcriptedit"
-      onClick={[Function]}
-      type="button"
+      <PlainButton
+        className="be-transcript-copy"
+        data-resin-target="skill-transcriptcopy"
+        getDOMRef={[Function]}
+        onClick={[Function]}
+        type="button"
+      >
+        <IconCopy
+          color="#999"
+        />
+      </PlainButton>
+    </Tooltip>
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-center"
+      text={
+        <FormattedMessage
+          defaultMessage="Edit"
+          id="be.editLabel"
+        />
+      }
+      theme="default"
     >
-      <IconEdit />
-    </PlainButton>
+      <PlainButton
+        className="be-transcript-edit"
+        data-resin-target="skill-transcriptedit"
+        onClick={[Function]}
+        type="button"
+      >
+        <IconEdit />
+      </PlainButton>
+    </Tooltip>
   </div>
   <div
     className="be-transcript-content-collapsed"
@@ -75,35 +101,74 @@ exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly
   <div
     className="be-transcript-actions"
   >
-    <PlainButton
-      className="be-transcript-copy"
-      data-resin-target="skill-transcriptcopy"
-      getDOMRef={[Function]}
-      onClick={[Function]}
-      type="button"
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-center"
+      text={
+        <FormattedMessage
+          defaultMessage="Copy"
+          id="be.copy"
+        />
+      }
+      theme="default"
     >
-      <IconCopy
-        color="#999"
-      />
-    </PlainButton>
-    <PlainButton
-      className="be-transcript-expand"
-      data-resin-target="skill-transcriptexpand"
-      onClick={[Function]}
-      type="button"
+      <PlainButton
+        className="be-transcript-copy"
+        data-resin-target="skill-transcriptcopy"
+        getDOMRef={[Function]}
+        onClick={[Function]}
+        type="button"
+      >
+        <IconCopy
+          color="#999"
+        />
+      </PlainButton>
+    </Tooltip>
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-center"
+      text={
+        <FormattedMessage
+          defaultMessage="Expand"
+          id="be.expand"
+        />
+      }
+      theme="default"
     >
-      <IconExpand
-        color="#999"
-      />
-    </PlainButton>
-    <PlainButton
-      className="be-transcript-edit"
-      data-resin-target="skill-transcriptedit"
-      onClick={[Function]}
-      type="button"
+      <PlainButton
+        className="be-transcript-expand"
+        data-resin-target="skill-transcriptexpand"
+        onClick={[Function]}
+        type="button"
+      >
+        <IconExpand
+          color="#999"
+        />
+      </PlainButton>
+    </Tooltip>
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-center"
+      text={
+        <FormattedMessage
+          defaultMessage="Edit"
+          id="be.editLabel"
+        />
+      }
+      theme="default"
     >
-      <IconEdit />
-    </PlainButton>
+      <PlainButton
+        className="be-transcript-edit"
+        data-resin-target="skill-transcriptedit"
+        onClick={[Function]}
+        type="button"
+      >
+        <IconEdit />
+      </PlainButton>
+    </Tooltip>
   </div>
   <div
     className="be-transcript-content-collapsed"
@@ -180,17 +245,30 @@ exports[`components/ContentSidebar/Skills/Transcript/Transcript should correctly
   <div
     className="be-transcript-actions"
   >
-    <PlainButton
-      className="be-transcript-copy"
-      data-resin-target="skill-transcriptcopy"
-      getDOMRef={[Function]}
-      onClick={[Function]}
-      type="button"
+    <Tooltip
+      constrainToScrollParent={false}
+      constrainToWindow={true}
+      position="top-center"
+      text={
+        <FormattedMessage
+          defaultMessage="Copy"
+          id="be.copy"
+        />
+      }
+      theme="default"
     >
-      <IconCopy
-        color="#999"
-      />
-    </PlainButton>
+      <PlainButton
+        className="be-transcript-copy"
+        data-resin-target="skill-transcriptcopy"
+        getDOMRef={[Function]}
+        onClick={[Function]}
+        type="button"
+      >
+        <IconCopy
+          color="#999"
+        />
+      </PlainButton>
+    </Tooltip>
   </div>
   <div
     className="be-transcript-content-collapsed"

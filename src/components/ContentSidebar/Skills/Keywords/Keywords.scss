@@ -18,6 +18,10 @@
 
         &.be-keyword-is-editing {
             background-color: $off-white;
+
+            .icon-edit > .fill-color {
+                fill: $fivef;
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
 import messages from '../../../messages';
@@ -199,14 +200,18 @@ class Keywords extends PureComponent<Props, State> {
                 {hasKeywords &&
                     isEditable &&
                     !isLoading && (
-                        <PlainButton
-                            type="button"
-                            className={editClassName}
-                            onClick={this.toggleIsEditing}
-                            data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
+                        <Tooltip
+                            text={<FormattedMessage {...messages.editLabel} />}
                         >
-                            <IconEdit />
-                        </PlainButton>
+                            <PlainButton
+                                type="button"
+                                className={editClassName}
+                                onClick={this.toggleIsEditing}
+                                data-resin-target={SKILLS_TARGETS.KEYWORDS.EDIT}
+                            >
+                                <IconEdit />
+                            </PlainButton>
+                        </Tooltip>
                     )}
                 {hasError && (
                     <InlineError
