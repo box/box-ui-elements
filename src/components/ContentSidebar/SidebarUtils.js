@@ -5,6 +5,7 @@
  */
 
 import { hasSkills as hasSkillsData } from './Skills/skillUtils';
+import type { MetadataSidebarProps } from './MetadataSidebar';
 
 class SidebarUtils {
     /**
@@ -95,7 +96,36 @@ class SidebarUtils {
         props: ContentSidebarProps,
         file?: BoxItem,
     ): boolean {
-        return !!file && !!props.hasSkills && hasSkillsData(file);
+        return (
+            !!file &&
+            SidebarUtils.canHaveSkillsSidebar(props) &&
+            hasSkillsData(file)
+        );
+    }
+
+    /**
+     * Determines if we should bother rendering the metadata sidebar.
+     * Relies on props and metadata data and feature enabled or not.
+     *
+     * @private
+     * @param {ContentSidebarProps} props - User passed in props
+     * @param {Array<MetadataEditor>} editors - metadata editors
+     * @param {Boolean} isMetadataEnabled - metadata feature
+     * @return {Boolean} true if we should render
+     */
+    static shouldRenderMetadataSidebar(
+        props: ContentSidebarProps,
+        editors?: Array<MetadataEditor>,
+    ): boolean {
+        const { metadataSidebarProps = {} }: ContentSidebarProps = props;
+        const {
+            isFeatureEnabled = true,
+        }: MetadataSidebarProps = metadataSidebarProps;
+
+        return (
+            SidebarUtils.canHaveMetadataSidebar(props) &&
+            (isFeatureEnabled || (Array.isArray(editors) && editors.length > 0))
+        );
     }
 
     /**
@@ -109,13 +139,14 @@ class SidebarUtils {
     static shouldRenderSidebar(
         props: ContentSidebarProps,
         file?: BoxItem,
+        editors?: Array<MetadataEditor>,
     ): boolean {
         return (
             !!file &&
             (SidebarUtils.canHaveDetailsSidebar(props) ||
                 SidebarUtils.shouldRenderSkillsSidebar(props, file) ||
                 SidebarUtils.canHaveActivitySidebar(props) ||
-                SidebarUtils.canHaveMetadataSidebar(props))
+                SidebarUtils.shouldRenderMetadataSidebar(props, editors))
         );
     }
 }

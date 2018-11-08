@@ -96,6 +96,7 @@ const Sidebar = ({
         {view === SIDEBAR_VIEW_METADATA &&
             hasMetadata && (
                 <MetadataSidebar
+                    currentUser={currentUser}
                     key={file.id}
                     file={file}
                     {...metadataSidebarProps}
