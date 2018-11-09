@@ -128,7 +128,7 @@ class Feed extends Base {
         successCallback: Function,
         errorCallback: Function,
     ): void {
-        const { id } = file;
+        const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
         if (cachedItems) {
             const { hasError, items } = cachedItems;
@@ -144,7 +144,7 @@ class Feed extends Base {
         this.id = id;
         this.hasError = false;
         const versionsPromise = this.fetchVersions();
-        const commentsPromise = this.fetchComments();
+        const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = this.fetchTasks();
 
         Promise.all([versionsPromise, commentsPromise, tasksPromise]).then(
@@ -176,11 +176,12 @@ class Feed extends Base {
      *
      * @return {Promise} - the file comments
      */
-    fetchComments(): Promise<?Comments> {
+    fetchComments(permissions: BoxItemPermission): Promise<?Comments> {
         this.commentsAPI = new CommentsAPI(this.options);
         return new Promise(resolve => {
-            this.commentsAPI.offsetGet(
+            this.commentsAPI.getComments(
                 this.id,
+                permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
                 DEFAULT_START,

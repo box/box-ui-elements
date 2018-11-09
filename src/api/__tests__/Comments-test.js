@@ -100,6 +100,7 @@ describe('api/Comments', () => {
             comments.put = jest.fn();
             comments.delete = jest.fn();
             comments.checkApiCallValidity = jest.fn(() => true);
+            comments.offsetGet = jest.fn();
 
             const url = 'https://www.foo.com/comments';
             comments.commentsUrl = jest.fn(() => url);
@@ -225,6 +226,42 @@ describe('api/Comments', () => {
                     successCallback,
                     errorCallback,
                 });
+            });
+        });
+
+        describe('getComments()', () => {
+            test('should check for valid comment permissions', () => {
+                const permissions = {
+                    [PERMISSION_CAN_COMMENT]: true,
+                };
+                comments.getComments(
+                    file.id,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                );
+                expect(comments.checkApiCallValidity).toBeCalledWith(
+                    PERMISSION_CAN_COMMENT,
+                    permissions,
+                    file.id,
+                );
+            });
+
+            test('should return a list of comments from the comments endpoint', () => {
+                const permissions = {
+                    [PERMISSION_CAN_COMMENT]: true,
+                };
+                comments.getComments(
+                    file.id,
+                    permissions,
+                    successCallback,
+                    errorCallback,
+                );
+                expect(comments.offsetGet).toBeCalledWith(
+                    'foo',
+                    successCallback,
+                    errorCallback,
+                );
             });
         });
     });

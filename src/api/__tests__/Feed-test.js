@@ -72,7 +72,7 @@ jest.mock('../TaskAssignments', () =>
 
 jest.mock('../Comments', () =>
     jest.fn().mockImplementation(() => ({
-        offsetGet: jest.fn().mockReturnValue({
+        getComments: jest.fn().mockReturnValue({
             total_count: 1,
             entries: [
                 {
@@ -337,7 +337,7 @@ describe('api/Feed', () => {
         test('should return a promise and call the comments api', () => {
             const commentItems = feed.fetchComments();
             expect(commentItems instanceof Promise).toBeTruthy();
-            expect(feed.commentsAPI.offsetGet).toBeCalled();
+            expect(feed.commentsAPI.getComments).toBeCalled();
         });
     });
 
