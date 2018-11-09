@@ -221,6 +221,37 @@ class Comments extends OffsetBasedAPI {
             errorCallback,
         });
     }
+
+    /**
+     * API for fetching comments on a file
+     *
+     * @param {string} fileId
+     * @param {BoxItemPermission} permissions
+     * @param {Function} successCallback
+     * @param {Function} errorCallback
+     * @param {any} rest
+     * @returns {Promise<void>}
+     */
+    getComments(
+        fileId: string,
+        permissions: BoxItemPermission,
+        successCallback: Function,
+        errorCallback: Function,
+        ...rest: any
+    ): void {
+        try {
+            this.checkApiCallValidity(
+                PERMISSION_CAN_COMMENT,
+                permissions,
+                fileId,
+            );
+        } catch (e) {
+            errorCallback(e);
+            return;
+        }
+
+        this.offsetGet(fileId, successCallback, errorCallback, ...rest);
+    }
 }
 
 export default Comments;
