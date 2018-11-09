@@ -5,14 +5,27 @@ exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render ed
   className="be-faces"
   isLoading={false}
 >
-  <PlainButton
-    className="be-face-edit"
-    data-resin-target="skill-faceedit"
-    onClick={[Function]}
-    type="button"
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    position="top-center"
+    text={
+      <FormattedMessage
+        defaultMessage="Edit"
+        id="be.editLabel"
+      />
+    }
+    theme="default"
   >
-    <IconEdit />
-  </PlainButton>
+    <PlainButton
+      className="be-face-edit"
+      data-resin-target="skill-faceedit"
+      onClick={[Function]}
+      type="button"
+    >
+      <IconEdit />
+    </PlainButton>
+  </Tooltip>
   <Face
     face={
       Object {
@@ -96,17 +109,30 @@ exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render fa
 
 exports[`components/ContentSidebar/Skills/Faces/Faces should correctly render save and cancel button when editable and editing 1`] = `
 <LoadingIndicatorWrapper
-  className="be-faces be-faces-is-editing"
+  className="be-faces"
   isLoading={false}
 >
-  <PlainButton
-    className="be-face-edit"
-    data-resin-target="skill-faceedit"
-    onClick={[Function]}
-    type="button"
+  <Tooltip
+    constrainToScrollParent={false}
+    constrainToWindow={true}
+    position="top-center"
+    text={
+      <FormattedMessage
+        defaultMessage="Edit"
+        id="be.editLabel"
+      />
+    }
+    theme="default"
   >
-    <IconEdit />
-  </PlainButton>
+    <PlainButton
+      className="be-face-edit be-faces-is-editing"
+      data-resin-target="skill-faceedit"
+      onClick={[Function]}
+      type="button"
+    >
+      <IconEdit />
+    </PlainButton>
+  </Tooltip>
   <Face
     face={
       Object {

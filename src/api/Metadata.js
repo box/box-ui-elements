@@ -18,6 +18,7 @@ import {
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
     METADATA_TEMPLATE_PROPERTIES,
+    METADATA_TEMPLATE_CLASSIFICATION,
     METADATA_TEMPLATE_SKILLS,
     FIELD_METADATA_SKILLS,
     CACHE_PREFIX_METADATA,
@@ -68,6 +69,20 @@ class Metadata extends File {
      */
     getMetadataTemplateUrl(scope: string): string {
         return `${this.getBaseApiUrl()}/metadata_templates/${scope}`;
+    }
+
+    /**
+     * Returns the custom properties template
+     *
+     * @return {Object} temaplte for custom properties
+     */
+    getCustomPropertiesTemplate(): MetadataEditorTemplate {
+        return {
+            id: uniqueId('metadata_template_'),
+            scope: METADATA_SCOPE_GLOBAL,
+            templateKey: METADATA_TEMPLATE_PROPERTIES,
+            hidden: false,
+        };
     }
 
     /**
@@ -125,7 +140,9 @@ class Metadata extends File {
         }
 
         return getProp(templates, 'data.entries', []).filter(
-            template => !template.hidden,
+            template =>
+                !template.hidden &&
+                template.templateKey !== METADATA_TEMPLATE_CLASSIFICATION,
         );
     }
 
@@ -475,6 +492,7 @@ class Metadata extends File {
         successCallback: Function,
         errorCallback: Function,
         getMetadata?: Function,
+        hasMetadataFeature: boolean,
         forceFetch: boolean = false,
     ): Promise<void> {
         const { id, permissions, is_externally_owned }: BoxItem = file;
@@ -501,23 +519,46 @@ class Metadata extends File {
         }
 
         try {
+            // Metadata instances
             const instances: Array<MetadataInstance> = await this.getInstances(
                 id,
             );
+
+            // Metadata instances and templates from webapp
+            // This will be removed soon
             const legacyInstances = getMetadata ? await getMetadata(id) : null;
-            const customPropertiesTemplate: Array<MetadataEditorTemplate> = [
-                {
-                    id: uniqueId('metadata_template_'),
-                    scope: METADATA_SCOPE_GLOBAL,
-                    templateKey: METADATA_TEMPLATE_PROPERTIES,
-                    hidden: false,
-                },
-            ];
-            const templates: Array<
+
+            // Get custom properties template
+            const customPropertiesTemplate: MetadataEditorTemplate = this.getCustomPropertiesTemplate();
+
+            // Get templates for the enterprise  of the current user and
+            // not templates from the enterprise of file owner if collabed
+            const enterpriseTemplates: Array<
                 MetadataEditorTemplate,
-            > = customPropertiesTemplate
-                .concat(await this.getTemplates(id, METADATA_SCOPE_ENTERPRISE))
-                .concat(await this.getTemplates(id, METADATA_SCOPE_GLOBAL));
+            > = hasMetadataFeature
+                ? await this.getTemplates(id, METADATA_SCOPE_ENTERPRISE)
+                : [];
+
+            // Get global templates defined by box
+            const globalTemplates: Array<
+                MetadataEditorTemplate,
+            > = await this.getTemplates(id, METADATA_SCOPE_GLOBAL);
+
+            // Templates that can be added by the user.
+            // This will only be current user's enterprise templates
+            // and only global properties.
+            let userAddableTemplates: Array<MetadataEditorTemplate> = [];
+            if (hasMetadataFeature) {
+                userAddableTemplates = is_externally_owned
+                    ? [customPropertiesTemplate]
+                    : [customPropertiesTemplate].concat(enterpriseTemplates);
+            }
+
+            // Templates that can have an associated instance.
+            // This will be all templates.
+            const templates: Array<MetadataEditorTemplate> = [
+                customPropertiesTemplate,
+            ].concat(enterpriseTemplates, globalTemplates);
 
             if (this.isDestroyed()) {
                 return;
@@ -556,9 +597,7 @@ class Metadata extends File {
 
             const metadata = {
                 editors,
-                templates: is_externally_owned
-                    ? customPropertiesTemplate
-                    : templates,
+                templates: userAddableTemplates,
             };
             cache.set(key, metadata);
             this.successHandler(metadata);

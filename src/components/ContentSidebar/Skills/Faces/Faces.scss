@@ -19,17 +19,19 @@
         &:hover svg path {
             fill: $twos;
         }
+
+        &.be-faces-is-editing {
+            background-color: $off-white;
+
+            .icon-edit > .fill-color {
+                fill: $fivef;
+            }
+        }
     }
 
     .be-faces-buttons {
         margin-right: -5px;
         padding-top: 7px;
         text-align: right;
-    }
-
-    &.be-faces-is-editing {
-        .btn-plain.be-face-edit {
-            background-color: $off-white;
-        }
     }
 }

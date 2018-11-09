@@ -1,5 +1,19 @@
+## 8.2.0 (2018-11-08)
+
+* Fix: Add Tooltip to Skill Cards buttons (#636) ([2d50854](https://github.com/box/box-ui-elements/commit/2d50854)), closes [#636](https://github.com/box/box-ui-elements/issues/636) [#5f5f5](https://github.com/box/box-ui-elements/issues/5f5f5)
+* Fix: Fetching enterprise templates should fail gracefully (#633) ([c99faa4](https://github.com/box/box-ui-elements/commit/c99faa4)), closes [#633](https://github.com/box/box-ui-elements/issues/633)
+* Fix: Metadata sidebar fixes (#635) ([0716ec8](https://github.com/box/box-ui-elements/commit/0716ec8)), closes [#635](https://github.com/box/box-ui-elements/issues/635)
+* Chore: Limit browser targets in dev mode (#632) ([cd7241c](https://github.com/box/box-ui-elements/commit/cd7241c)), closes [#632](https://github.com/box/box-ui-elements/issues/632)
+* Chore: Limit jest roots to src directory (#630) ([fee0968](https://github.com/box/box-ui-elements/commit/fee0968)), closes [#630](https://github.com/box/box-ui-elements/issues/630)
+* Update: activity feed error message to only show for certain error codes (#631) ([14e3ae6](https://github.com/box/box-ui-elements/commit/14e3ae6)), closes [#631](https://github.com/box/box-ui-elements/issues/631)
+* Update: changed styling for feed item comments (#626) ([919d2ae](https://github.com/box/box-ui-elements/commit/919d2ae)), closes [#626](https://github.com/box/box-ui-elements/issues/626)
+* Update: flip sort order of preview sidebar items (#624) ([115da0c](https://github.com/box/box-ui-elements/commit/115da0c)), closes [#624](https://github.com/box/box-ui-elements/issues/624)
+
+
+
 ## 8.1.0 (2018-11-01)
 
+* Release: 8.1.0 ([049bba2](https://github.com/box/box-ui-elements/commit/049bba2))
 * Fix: moved saved versions to be within File Properties section (#623) ([6c47619](https://github.com/box/box-ui-elements/commit/6c47619)), closes [#623](https://github.com/box/box-ui-elements/issues/623)
 * Chore: Add support for incremental linked builds (#614) ([2910e97](https://github.com/box/box-ui-elements/commit/2910e97)), closes [#614](https://github.com/box/box-ui-elements/issues/614)
 * Chore: Remove reuse of integration browser tabs (#619) ([1e36539](https://github.com/box/box-ui-elements/commit/1e36539)), closes [#619](https://github.com/box/box-ui-elements/issues/619)

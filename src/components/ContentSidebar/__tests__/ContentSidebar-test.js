@@ -11,6 +11,8 @@ const file = {
     id: 'I_AM_A_FILE',
 };
 
+const editors = ['foo'];
+
 describe('components/ContentSidebar/ContentSidebar', () => {
     let rootElement;
     const getWrapper = props =>
@@ -57,8 +59,9 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             instance.componentWillReceiveProps(newProps);
 
             expect(instance.getDefaultSidebarView).toBeCalledWith(
-                file,
                 newProps,
+                file,
+                undefined,
             );
             expect(instance.setState).toBeCalledWith({ view: 'view' });
         });
@@ -128,14 +131,16 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         test('should return undefined when no file', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            expect(instance.getDefaultSidebarView(null, {})).toBeUndefined();
+            expect(
+                instance.getDefaultSidebarView({}, null, null),
+            ).toBeUndefined();
         });
 
         test('should return default view when provided', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             expect(
-                instance.getDefaultSidebarView({}, { defaultView: 'default' }),
+                instance.getDefaultSidebarView({ defaultView: 'default' }, {}),
             ).toBe('default');
         });
 
@@ -146,7 +151,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 .fn()
                 .mockReturnValueOnce(true);
             expect(
-                instance.getDefaultSidebarView({}, { isLarge: false }),
+                instance.getDefaultSidebarView({ isLarge: false }, {}),
             ).toBeUndefined();
         });
 
@@ -156,7 +161,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveDetailsSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            expect(instance.getDefaultSidebarView({}, { isLarge: true })).toBe(
+            expect(instance.getDefaultSidebarView({ isLarge: true }, {})).toBe(
                 'details',
             );
         });
@@ -176,12 +181,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('skills');
         });
 
@@ -200,12 +205,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('activity');
         });
 
@@ -224,12 +229,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('details');
         });
 
@@ -248,12 +253,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('metadata');
         });
 
@@ -270,12 +275,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('skills');
         });
 
@@ -292,12 +297,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('activity');
         });
 
@@ -314,12 +319,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('details');
         });
 
@@ -336,12 +341,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('metadata');
         });
 
@@ -365,7 +370,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('activity');
         });
 
@@ -384,12 +389,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('details');
         });
 
@@ -408,12 +413,12 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
 
             expect(
-                instance.getDefaultSidebarView(file, { isLarge: true }),
+                instance.getDefaultSidebarView({ isLarge: true }, file),
             ).toBe('skills');
         });
     });
@@ -478,7 +483,7 @@ describe('components/ContentSidebar/ContentSidebar', () => {
         });
     });
 
-    describe('fetchFileSuccessCallback()', () => {
+    describe('fetchMetadataSuccessCallback()', () => {
         let setState;
         let getDefaultSidebarView;
         let wrapper;
@@ -499,34 +504,130 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             SidebarUtils.shouldRenderSidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
-            instance.fetchFileSuccessCallback(file);
+            instance.fetchMetadataSuccessCallback(file);
 
             expect(getDefaultSidebarView).not.toBeCalled();
             expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(
                 instance.props,
                 file,
+                undefined,
             );
             expect(setState).toBeCalledWith({
                 isVisible: false,
             });
         });
 
-        test('should set the file state to be the file response', () => {
+        test('should set the file and metadata state from responses', () => {
             SidebarUtils.shouldRenderSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            instance.fetchFileSuccessCallback(file);
+            instance.fetchMetadataSuccessCallback(file, editors);
 
-            expect(getDefaultSidebarView).toBeCalledWith(file, instance.props);
+            expect(getDefaultSidebarView).toBeCalledWith(
+                instance.props,
+                file,
+                editors,
+            );
             expect(SidebarUtils.shouldRenderSidebar).toBeCalledWith(
                 instance.props,
                 file,
+                editors,
             );
             expect(setState).toBeCalledWith({
                 file,
+                editors,
                 view: 'view',
                 isVisible: true,
             });
+        });
+    });
+
+    describe('fetchFileSuccessCallback()', () => {
+        let setState;
+        let getDefaultSidebarView;
+        let wrapper;
+        let instance;
+        const getMetadata = jest.fn();
+
+        beforeEach(() => {
+            setState = jest.fn();
+            getDefaultSidebarView = jest.fn().mockReturnValueOnce('view');
+            wrapper = getWrapper({
+                file,
+                metadataSidebarProps: {
+                    getMetadata,
+                    isFeatureEnabled: false,
+                },
+            });
+            instance = wrapper.instance();
+            instance.getDefaultSidebarView = getDefaultSidebarView;
+            instance.setState = setState;
+        });
+
+        test('should just call metadata success callback when metadata feature is enabled', () => {
+            wrapper = getWrapper({
+                file,
+                metadataSidebarProps: {
+                    getMetadata,
+                    isFeatureEnabled: true,
+                },
+            });
+            instance = wrapper.instance();
+            instance.getDefaultSidebarView = getDefaultSidebarView;
+            instance.setState = setState;
+
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+            instance.fetchMetadataSuccessCallback = jest.fn();
+            instance.fetchFileSuccessCallback(file);
+
+            expect(getDefaultSidebarView).not.toBeCalled();
+            expect(SidebarUtils.canHaveMetadataSidebar).not.toBeCalled();
+            expect(instance.fetchMetadataSuccessCallback).toBeCalledWith(file);
+        });
+
+        test('should call metadata success callback when no metadata sidebar', () => {
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(false);
+            instance.fetchMetadataSuccessCallback = jest.fn();
+            instance.fetchFileSuccessCallback(file);
+
+            expect(getDefaultSidebarView).not.toBeCalled();
+            expect(SidebarUtils.canHaveMetadataSidebar).toBeCalledWith(
+                instance.props,
+            );
+            expect(instance.fetchMetadataSuccessCallback).toBeCalledWith(file);
+        });
+
+        test('should call the fetch metadata when metadata sidebar is allowed', () => {
+            const getEditors = jest.fn();
+            const getMetadataAPI = jest.fn().mockReturnValueOnce({
+                getEditors,
+            });
+
+            SidebarUtils.canHaveMetadataSidebar = jest
+                .fn()
+                .mockReturnValueOnce(true);
+
+            instance.api = {
+                getMetadataAPI,
+            };
+
+            instance.fetchFileSuccessCallback(file);
+
+            expect(getEditors).toBeCalledWith(
+                file,
+                expect.any(Function),
+                expect.any(Function),
+                getMetadata,
+                false,
+            );
+            expect(SidebarUtils.canHaveMetadataSidebar).toBeCalledWith(
+                instance.props,
+            );
+            expect(getMetadataAPI).toBeCalledWith(true);
         });
     });
 });

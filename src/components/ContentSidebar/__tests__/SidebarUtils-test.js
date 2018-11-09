@@ -162,6 +162,75 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             ).toBeTruthy();
         });
     });
+    describe('shouldRenderMetadataSidebar()', () => {
+        test('should return false when nothing is wanted in the metadata sidebar', () => {
+            expect(SidebarUtils.shouldRenderMetadataSidebar({})).toBeFalsy();
+        });
+        test('should return false when nothing is wanted in the metadata sidebar', () => {
+            expect(
+                SidebarUtils.shouldRenderMetadataSidebar({
+                    hasMetadata: false,
+                }),
+            ).toBeFalsy();
+        });
+        test('should return true by default when we dont know availability of metadata feature', () => {
+            expect(
+                SidebarUtils.shouldRenderMetadataSidebar({ hasMetadata: true }),
+            ).toBeTruthy();
+        });
+        test('should return false when hasMetadata is false', () => {
+            expect(
+                SidebarUtils.shouldRenderMetadataSidebar(
+                    { hasMetadata: false },
+                    ['foo'],
+                ),
+            ).toBeFalsy();
+        });
+        test('should return false when hasMetadata is false', () => {
+            expect(
+                SidebarUtils.shouldRenderMetadataSidebar(
+                    {
+                        hasMetadata: false,
+                        metadataSidebarProps: { isFeatureEnabled: true },
+                    },
+                    ['foo'],
+                ),
+            ).toBeFalsy();
+        });
+        test('should return false when no metadata and no feature', () => {
+            expect(
+                SidebarUtils.shouldRenderMetadataSidebar(
+                    {
+                        hasMetadata: true,
+                        metadataSidebarProps: { isFeatureEnabled: false },
+                    },
+                    [],
+                ),
+            ).toBeFalsy();
+        });
+        test('should return true when no metadata and feature enabled', () => {
+            expect(
+                SidebarUtils.shouldRenderMetadataSidebar(
+                    {
+                        hasMetadata: true,
+                        metadataSidebarProps: { isFeatureEnabled: true },
+                    },
+                    [],
+                ),
+            ).toBeTruthy();
+        });
+        test('should return true when metadata and feature is not enabled', () => {
+            expect(
+                SidebarUtils.shouldRenderMetadataSidebar(
+                    {
+                        hasMetadata: true,
+                        metadataSidebarProps: { isFeatureEnabled: false },
+                    },
+                    ['foo'],
+                ),
+            ).toBeTruthy();
+        });
+    });
     describe('shouldRenderSidebar()', () => {
         test('should return false when nothing is wanted in the sidebar', () => {
             expect(SidebarUtils.shouldRenderSidebar({})).toBeFalsy();
@@ -181,7 +250,7 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
             expect(
@@ -201,15 +270,15 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
             expect(
-                SidebarUtils.shouldRenderSidebar('props', 'file'),
+                SidebarUtils.shouldRenderSidebar('props', 'file', 'editors'),
             ).toBeTruthy();
-            expect(SidebarUtils.canHaveMetadataSidebar).toHaveBeenCalledWith(
-                'props',
-            );
+            expect(
+                SidebarUtils.shouldRenderMetadataSidebar,
+            ).toHaveBeenCalledWith('props', 'editors');
         });
         test('should return true when we can render activity sidebar', () => {
             SidebarUtils.canHaveDetailsSidebar = jest
@@ -221,7 +290,7 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(true);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
             expect(
@@ -241,7 +310,7 @@ describe('components/ContentSidebar/SidebarUtil', () => {
             SidebarUtils.canHaveActivitySidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
-            SidebarUtils.canHaveMetadataSidebar = jest
+            SidebarUtils.shouldRenderMetadataSidebar = jest
                 .fn()
                 .mockReturnValueOnce(false);
             expect(
