@@ -626,9 +626,13 @@ class Metadata extends File {
 
         legacyInstance.fields.forEach(
             ({ key, type, displayName, options, description }) => {
+                let v2Type = type;
+                if (type === 'array') {
+                    v2Type = 'multiSelect';
+                }
                 fields.push({
                     id: uniqueId('metadata_field_'),
-                    type,
+                    type: v2Type,
                     key,
                     displayName,
                     description,
