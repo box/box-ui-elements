@@ -47,6 +47,31 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
     const getWrapper = (props = {}) =>
         shallow(<ActivitySidebarComponent api={api} file={file} {...props} />);
 
+    describe('componentDidMount()', () => {
+        let wrapper;
+        let instance;
+        const currentUser = {
+            id: '123',
+        };
+        beforeEach(() => {
+            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
+            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchCurrentUser');
+            wrapper = getWrapper({
+                currentUser,
+            });
+            instance = wrapper.instance();
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should fetch the file and refresh the cache and fetch the current user', () => {
+            expect(instance.fetchFeedItems).toHaveBeenCalledWith(true);
+            expect(instance.fetchCurrentUser).toHaveBeenCalledWith(currentUser);
+        });
+    });
+
     describe('render()', () => {
         test('should render the activity feed sidebar', () => {
             const wrapper = getWrapper();

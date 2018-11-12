@@ -120,11 +120,13 @@ class Feed extends Base {
      * Gets the feed items
      *
      * @param {BoxItem} file - The file to which the task is assigned
+     * @param {boolean} refreshCache - Optionally updates the cache
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      */
     feedItems(
         file: BoxItem,
+        shouldRefreshCache: boolean,
         successCallback: Function,
         errorCallback: Function,
     ): void {
@@ -138,7 +140,9 @@ class Feed extends Base {
                 successCallback(items);
             }
 
-            return;
+            if (!shouldRefreshCache) {
+                return;
+            }
         }
 
         this.id = id;
