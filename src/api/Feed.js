@@ -120,7 +120,7 @@ class Feed extends Base {
      * Gets the feed items
      *
      * @param {BoxItem} file - The file to which the task is assigned
-     * @param {boolean} refreshCache - Optionally updates the cache
+     * @param {boolean} shouldRefreshCache - Optionally updates the cache
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      */
