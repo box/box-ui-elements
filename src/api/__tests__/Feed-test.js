@@ -261,7 +261,7 @@ describe('api/Feed', () => {
         });
     });
 
-    describe('feedItems', () => {
+    describe('feedItems()', () => {
         const sortedItems = [
             ...versions.entries,
             ...tasks.entries,
@@ -279,11 +279,15 @@ describe('api/Feed', () => {
             successCb = jest.fn();
             errorCb = jest.fn();
             feed.isDestroyed = jest.fn().mockReturnValue(false);
-            sorter.sortFeedItems = jest.fn().mockReturnValue(sortedItems);
+            jest.spyOn(sorter, 'sortFeedItems').mockReturnValue(sortedItems);
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
         });
 
         test('should get feed items, sort, save to cache, and call the success callback', done => {
-            feed.feedItems(file, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
                 expect(sorter.sortFeedItems).toHaveBeenCalledWith(
                     versions,
@@ -305,7 +309,7 @@ describe('api/Feed', () => {
                 return [];
             };
 
-            feed.feedItems(file, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
                 expect(errorCb).toHaveBeenCalledWith(sortedItems);
                 done();
@@ -314,7 +318,7 @@ describe('api/Feed', () => {
 
         test('should not call success or error callback if it is destroyed', done => {
             feed.isDestroyed = jest.fn().mockReturnValue(true);
-            feed.feedItems(file, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).not.toHaveBeenCalled();
@@ -327,9 +331,26 @@ describe('api/Feed', () => {
                 hasError: false,
                 items: feedItems,
             });
-            feed.feedItems(file, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb);
             expect(feed.getCachedItems).toHaveBeenCalledWith(file.id);
             expect(successCb).toHaveBeenCalledWith(feedItems);
+        });
+
+        test('should refersh the cache after returning the cached items', done => {
+            feed.getCachedItems = jest.fn().mockReturnValue({
+                hasError: false,
+                items: feedItems,
+            });
+            feed.feedItems(file, true, successCb, errorCb);
+            expect(feed.getCachedItems).toHaveBeenCalledWith(file.id);
+            expect(successCb).toHaveBeenCalledTimes(1);
+            expect(successCb).toHaveBeenCalledWith(feedItems);
+
+            // refresh cache
+            setImmediate(() => {
+                expect(successCb).toHaveBeenCalledTimes(2);
+                done();
+            });
         });
     });
 
