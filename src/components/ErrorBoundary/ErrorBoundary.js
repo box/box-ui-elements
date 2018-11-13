@@ -7,11 +7,12 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../constants';
+import DefaultError from './DefaultError';
 
 type Props = {
-    component: any,
+    ErrorComponent: React.Element,
     errorOrigin: ErrorOrigins,
-    children: React.Element<*>,
+    children: React.ChildrenArray<React.Element<any>>,
     onError: (error: ElementsError) => void,
 };
 
@@ -25,7 +26,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     state: State = {};
 
     static defaultProps = {
-        component: null,
+        errorComponent: DefaultError,
         onError: noop,
     };
 
@@ -76,10 +77,10 @@ class ErrorBoundary extends React.Component<Props, State> {
     };
 
     render() {
-        const { children, component, ...rest } = this.props;
-
-        if (this.state.error) {
-            return component;
+        const { children, ErrorComponent, ...rest } = this.props;
+        const { error } = this.state;
+        if (error) {
+            return <ErrorComponent error={error} />;
         }
 
         return React.cloneElement(children, {
