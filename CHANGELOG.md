@@ -1,5 +1,15 @@
+## 8.3.0 (2018-11-13)
+
+* Fix: array type should be multiSelect for metadata (#639) ([4a7eee7](https://github.com/box/box-ui-elements/commit/4a7eee7)), closes [#639](https://github.com/box/box-ui-elements/issues/639)
+* Fix: Check can_comment permissions before loading comments (#638) ([c828bf1](https://github.com/box/box-ui-elements/commit/c828bf1)), closes [#638](https://github.com/box/box-ui-elements/issues/638)
+* Update: refresh activity feed cache in background when component mounted (#640) ([c549c2c](https://github.com/box/box-ui-elements/commit/c549c2c)), closes [#640](https://github.com/box/box-ui-elements/issues/640)
+* Mojito: Update translations (#637) ([080419a](https://github.com/box/box-ui-elements/commit/080419a)), closes [#637](https://github.com/box/box-ui-elements/issues/637)
+
+
+
 ## 8.2.0 (2018-11-08)
 
+* Release: 8.2.0 ([34ef091](https://github.com/box/box-ui-elements/commit/34ef091))
 * Fix: Add Tooltip to Skill Cards buttons (#636) ([2d50854](https://github.com/box/box-ui-elements/commit/2d50854)), closes [#636](https://github.com/box/box-ui-elements/issues/636) [#5f5f5](https://github.com/box/box-ui-elements/issues/5f5f5)
 * Fix: Fetching enterprise templates should fail gracefully (#633) ([c99faa4](https://github.com/box/box-ui-elements/commit/c99faa4)), closes [#633](https://github.com/box/box-ui-elements/issues/633)
 * Fix: Metadata sidebar fixes (#635) ([0716ec8](https://github.com/box/box-ui-elements/commit/0716ec8)), closes [#635](https://github.com/box/box-ui-elements/issues/635)
