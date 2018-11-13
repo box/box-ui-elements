@@ -63,7 +63,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         const { currentUser } = this.props;
-        this.fetchFeedItems();
+        this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
     }
 
@@ -279,10 +279,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      *
      * @param {boolean} shouldDestroy true if the api factory should be destroyed
      */
-    fetchFeedItems(shouldDestroy: boolean = false) {
+    fetchFeedItems(
+        shouldRefreshCache: boolean = false,
+        shouldDestroy: boolean = false,
+    ) {
         const { file, api } = this.props;
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
+            shouldRefreshCache,
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
         );
