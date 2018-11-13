@@ -18,14 +18,7 @@ import iconCellRenderer from '../Item/iconCellRenderer';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { focus } from '../../util/dom';
 import messages from '../messages';
-import {
-    FIELD_DATE,
-    FIELD_ID,
-    FIELD_NAME,
-    FIELD_SIZE,
-    VIEW_FOLDER,
-    VIEW_RECENTS,
-} from '../../constants';
+import { FIELD_DATE, FIELD_ID, FIELD_NAME, FIELD_SIZE, VIEW_FOLDER, VIEW_RECENTS } from '../../constants';
 import './ItemList.scss';
 
 type Props = {
@@ -106,12 +99,7 @@ const ItemList = ({
     );
     const isRecents: boolean = view === VIEW_RECENTS;
     const hasSort: boolean = view === VIEW_FOLDER;
-    const {
-        id,
-        items = [],
-        sortBy,
-        sortDirection,
-    }: Collection = currentCollection;
+    const { id, items = [], sortBy, sortDirection }: Collection = currentCollection;
     const rowCount: number = items.length;
     const rowClassName = ({ index }) => {
         if (index === -1) {
@@ -142,9 +130,7 @@ const ItemList = ({
             onSelect={onItemSelect}
             onDelete={onItemDelete}
             scrollToRow={focusedRow}
-            onScrollToChange={({ scrollToRow }) =>
-                focus(rootElement, `.bce-item-row-${scrollToRow}`)
-            }
+            onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bce-item-row-${scrollToRow}`)}
         >
             {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
@@ -169,10 +155,7 @@ const ItemList = ({
                                     rowStopIndex: stopIndex,
                                 });
                                 if (focusOnRender) {
-                                    focus(
-                                        rootElement,
-                                        `.bce-item-row-${scrollToRow}`,
-                                    );
+                                    focus(rootElement, `.bce-item-row-${scrollToRow}`);
                                 }
                             }}
                         >
@@ -198,12 +181,8 @@ const ItemList = ({
                                     disableSort={!hasSort}
                                     label={
                                         isRecents
-                                            ? intl.formatMessage(
-                                                  messages.interacted,
-                                              )
-                                            : intl.formatMessage(
-                                                  messages.modified,
-                                              )
+                                            ? intl.formatMessage(messages.interacted)
+                                            : intl.formatMessage(messages.modified)
                                     }
                                     dataKey={FIELD_DATE}
                                     cellRenderer={dateCell}

@@ -21,16 +21,8 @@ type Props = {
     intl: any,
 };
 
-const Header = ({
-    view,
-    isSmall,
-    searchQuery,
-    onSearch,
-    logoUrl,
-    intl,
-}: Props) => {
-    const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) =>
-        onSearch(currentTarget.value);
+const Header = ({ view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
+    const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
     const isFolder = view === VIEW_FOLDER;
     const isSearch = view === VIEW_SEARCH;
     return (

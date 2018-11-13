@@ -1,15 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import {
-    ActivitySidebarComponent,
-    activityFeedInlineError,
-} from '../ActivitySidebar';
+import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import messages from '../../messages';
 
-const {
-    defaultErrorMaskSubHeaderMessage,
-    currentUserErrorHeaderMessage,
-} = messages;
+const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
 describe('components/ContentSidebar/ActivitySidebar', () => {
     const feedAPI = {
@@ -44,8 +38,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             },
         ],
     };
-    const getWrapper = (props = {}) =>
-        shallow(<ActivitySidebarComponent api={api} file={file} {...props} />);
+    const getWrapper = (props = {}) => shallow(<ActivitySidebarComponent api={api} file={file} {...props} />);
 
     describe('componentDidMount()', () => {
         let wrapper;
@@ -190,12 +183,8 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             const inlineErrorState = wrapper.state().currentUserError.maskError;
             expect(typeof currentUserErrorHeaderMessage).toBe('object');
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(
-                currentUserErrorHeaderMessage,
-            );
-            expect(inlineErrorState.errorSubHeader).toEqual(
-                defaultErrorMaskSubHeaderMessage,
-            );
+            expect(inlineErrorState.errorHeader).toEqual(currentUserErrorHeaderMessage);
+            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
         });
     });
 
@@ -283,9 +272,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         });
 
         test('should throw an error if missing current user', () => {
-            expect(() => instance.createComment(message, true)).toThrow(
-                'Bad box user!',
-            );
+            expect(() => instance.createComment(message, true)).toThrow('Bad box user!');
         });
 
         test('should call the create comment API and fetch the items', () => {
@@ -486,10 +473,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         test('should set the current user error and call the error callback', () => {
             const avatarUrl = instance.getAvatarUrl(currentUser.id);
             expect(avatarUrl instanceof Promise).toBe(true);
-            expect(usersAPI.getAvatarUrlWithAccessToken).toBeCalledWith(
-                currentUser.id,
-                file.id,
-            );
+            expect(usersAPI.getAvatarUrlWithAccessToken).toBeCalledWith(currentUser.id, file.id);
         });
     });
 });

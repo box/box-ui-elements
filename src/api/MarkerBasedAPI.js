@@ -76,13 +76,7 @@ class MarkerBasedApi extends Base {
             };
             const nextMarker = data.next_marker;
             if (shouldFetchAll && this.hasMoreItems(nextMarker)) {
-                this.markerGetRequest(
-                    id,
-                    nextMarker,
-                    limit,
-                    shouldFetchAll,
-                    params,
-                );
+                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, params);
                 return;
             }
 

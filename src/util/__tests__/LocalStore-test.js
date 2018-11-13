@@ -33,10 +33,7 @@ describe('util/LocalStore', () => {
             localStore.buildKey = jest.fn().mockReturnValueOnce(key);
             localStore.localStorage.setItem = jest.fn();
             localStore.setItem(key, value);
-            expect(localStore.localStorage.setItem).toHaveBeenCalledWith(
-                key,
-                JSON.stringify(value),
-            );
+            expect(localStore.localStorage.setItem).toHaveBeenCalledWith(key, JSON.stringify(value));
         });
 
         test('should set value in memory when localStorage is not available', () => {
@@ -48,22 +45,15 @@ describe('util/LocalStore', () => {
     });
 
     describe('getItem()', () => {
-        withData(
-            [[value, JSON.parse(value)], [null, null]],
-            (rawValue, expected) => {
-                test('should call getItem on localStorage properly when localStorage is available', () => {
-                    localStore.isLocalStorageAvailable = true;
-                    localStore.buildKey = jest.fn().mockReturnValueOnce(key);
-                    localStore.localStorage.getItem = jest
-                        .fn()
-                        .mockReturnValueOnce(rawValue);
-                    expect(localStore.getItem(key, value)).toEqual(expected);
-                    expect(
-                        localStore.localStorage.getItem,
-                    ).toHaveBeenCalledWith(key);
-                });
-            },
-        );
+        withData([[value, JSON.parse(value)], [null, null]], (rawValue, expected) => {
+            test('should call getItem on localStorage properly when localStorage is available', () => {
+                localStore.isLocalStorageAvailable = true;
+                localStore.buildKey = jest.fn().mockReturnValueOnce(key);
+                localStore.localStorage.getItem = jest.fn().mockReturnValueOnce(rawValue);
+                expect(localStore.getItem(key, value)).toEqual(expected);
+                expect(localStore.localStorage.getItem).toHaveBeenCalledWith(key);
+            });
+        });
 
         test('should set value from memory when localStorage is not available', () => {
             localStore.isLocalStorageAvailable = false;
@@ -79,9 +69,7 @@ describe('util/LocalStore', () => {
             localStore.buildKey = jest.fn().mockReturnValueOnce(key);
             localStore.localStorage.removeItem = jest.fn();
             localStore.removeItem(key);
-            expect(localStore.localStorage.removeItem).toHaveBeenCalledWith(
-                key,
-            );
+            expect(localStore.localStorage.removeItem).toHaveBeenCalledWith(key);
         });
 
         test('should delete value from memory when localStorage is not available and key exists in memory', () => {

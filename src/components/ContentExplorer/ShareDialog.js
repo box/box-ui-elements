@@ -12,11 +12,7 @@ import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryBut
 import Button from 'box-react-ui/lib/components/button/Button';
 import messages from '../messages';
 import ShareAccessSelect from '../ShareAccessSelect';
-import {
-    CLASS_MODAL_CONTENT,
-    CLASS_MODAL_OVERLAY,
-    CLASS_MODAL,
-} from '../../constants';
+import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 
 import './ShareDialog.scss';
 
@@ -71,10 +67,7 @@ const ShareDialog = ({
         >
             <div className="be-modal-content">
                 <label>
-                    <FormattedMessage
-                        tagName="div"
-                        {...messages.shareDialogText}
-                    />
+                    <FormattedMessage tagName="div" {...messages.shareDialogText} />
                     <span>
                         <input
                             type="text"
@@ -84,12 +77,7 @@ const ShareDialog = ({
                             }}
                             value={url}
                         />
-                        <PrimaryButton
-                            type="button"
-                            className="be-modal-button-copy"
-                            onClick={copy}
-                            autoFocus
-                        >
+                        <PrimaryButton type="button" className="be-modal-button-copy" onClick={copy} autoFocus>
                             <FormattedMessage {...messages.copy} />
                         </PrimaryButton>
                     </span>

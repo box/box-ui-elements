@@ -20,11 +20,7 @@ import {
     PLACEHOLDER_USER,
 } from '../../../../constants';
 
-function getMessageForAction(
-    name: React.Node,
-    action: string,
-    version_number: string,
-): React.Node {
+function getMessageForAction(name: React.Node, action: string, version_number: string): React.Node {
     switch (action) {
         case VERSION_UPLOAD_ACTION:
             return (
@@ -70,23 +66,12 @@ type Props = {
     version_number: string,
 };
 
-const Version = ({
-    action,
-    modified_by,
-    id,
-    intl,
-    onInfo,
-    version_number,
-}: Props): React.Node => {
+const Version = ({ action, modified_by, id, intl, onInfo, version_number }: Props): React.Node => {
     const modifiedByUser = modified_by || PLACEHOLDER_USER;
     return (
         <div className="bcs-version">
             <span className="bcs-version-message">
-                {getMessageForAction(
-                    modifiedByUser.name,
-                    action,
-                    version_number,
-                )}
+                {getMessageForAction(modifiedByUser.name, action, version_number)}
             </span>
             {onInfo ? (
                 <span className="bcs-version-actions">

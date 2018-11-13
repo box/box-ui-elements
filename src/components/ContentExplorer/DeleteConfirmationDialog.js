@@ -10,12 +10,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import Button from 'box-react-ui/lib/components/button/Button';
 import messages from '../messages';
-import {
-    CLASS_MODAL_CONTENT,
-    CLASS_MODAL_OVERLAY,
-    CLASS_MODAL,
-    TYPE_FOLDER,
-} from '../../constants';
+import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL, TYPE_FOLDER } from '../../constants';
 
 type Props = {
     isOpen: boolean,
@@ -38,10 +33,7 @@ const DeleteConfirmationDialog = ({
     appElement,
     intl,
 }: Props) => {
-    const message =
-        item.type === TYPE_FOLDER
-            ? messages.deleteDialogFolderText
-            : messages.deleteDialogFileText;
+    const message = item.type === TYPE_FOLDER ? messages.deleteDialogFolderText : messages.deleteDialogFileText;
     return (
         <Modal
             isOpen={isOpen}
@@ -55,19 +47,10 @@ const DeleteConfirmationDialog = ({
         >
             <FormattedMessage {...message} values={{ name: item.name }} />
             <div className="be-modal-btns">
-                <PrimaryButton
-                    type="button"
-                    onClick={onDelete}
-                    isLoading={isLoading}
-                >
+                <PrimaryButton type="button" onClick={onDelete} isLoading={isLoading}>
                     <FormattedMessage {...messages.delete} />
                 </PrimaryButton>
-                <Button
-                    type="button"
-                    onClick={onCancel}
-                    isDisabled={isLoading}
-                    autoFocus
-                >
+                <Button type="button" onClick={onCancel} isDisabled={isLoading} autoFocus>
                     <FormattedMessage {...messages.cancel} />
                 </Button>
             </div>

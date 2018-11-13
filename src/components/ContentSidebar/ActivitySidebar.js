@@ -14,10 +14,7 @@ import messages from '../messages';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
 import { getBadUserError, getBadItemError } from '../../util/error';
-import {
-    DEFAULT_COLLAB_DEBOUNCE,
-    DEFAULT_MAX_COLLABORATORS,
-} from '../../constants';
+import { DEFAULT_COLLAB_DEBOUNCE, DEFAULT_MAX_COLLABORATORS } from '../../constants';
 import API from '../../api';
 import type { $AxiosXHR } from 'axios'; // eslint-disable-line
 
@@ -136,13 +133,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     updateTask = ({ text, id }: { text: string, id: string }): void => {
         const { file, api } = this.props;
-        api.getFeedAPI(false).updateTask(
-            file,
-            id,
-            text,
-            this.feedSuccessCallback,
-            this.feedErrorCallback,
-        );
+        api.getFeedAPI(false).updateTask(file, id, text, this.feedSuccessCallback, this.feedErrorCallback);
 
         // need to load the pending item
         this.fetchFeedItems();
@@ -157,12 +148,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} message - the message to the assignee
      * @return void
      */
-    updateTaskAssignment = (
-        taskId: string,
-        taskAssignmentId: string,
-        status: string,
-        message?: string,
-    ): void => {
+    updateTaskAssignment = (taskId: string, taskAssignmentId: string, status: string, message?: string): void => {
         const { file, api } = this.props;
 
         api.getFeedAPI(false).updateTaskAssignment(
@@ -185,13 +171,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Object} args - A subset of the comment
      * @return void
      */
-    deleteComment = ({
-        id,
-        permissions,
-    }: {
-        id: string,
-        permissions: BoxItemPermission,
-    }): void => {
+    deleteComment = ({ id, permissions }: { id: string, permissions: BoxItemPermission }): void => {
         const { file, api, onCommentDelete = noop } = this.props;
 
         api.getFeedAPI(false).deleteComment(
@@ -248,11 +228,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {number} dueAt - Task's due date
      * @return {void}
      */
-    createTask = (
-        message: string,
-        assignees: SelectorItems,
-        dueAt: string,
-    ): void => {
+    createTask = (message: string, assignees: SelectorItems, dueAt: string): void => {
         const { currentUser } = this.state;
         const { file, api } = this.props;
 
@@ -279,10 +255,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      *
      * @param {boolean} shouldDestroy true if the api factory should be destroyed
      */
-    fetchFeedItems(
-        shouldRefreshCache: boolean = false,
-        shouldDestroy: boolean = false,
-    ) {
+    fetchFeedItems(shouldRefreshCache: boolean = false, shouldDestroy: boolean = false) {
         const { file, api } = this.props;
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
@@ -348,9 +321,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
-    getApproverContactsSuccessCallback = (
-        collaborators: Collaborators,
-    ): void => {
+    getApproverContactsSuccessCallback = (collaborators: Collaborators): void => {
         const { entries } = collaborators;
         this.setState({ approverSelectorContacts: entries });
     };
@@ -362,9 +333,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {BoxItemCollection} collaborators - Collaborators response data
      * @return {void}
      */
-    getMentionContactsSuccessCallback = (
-        collaborators: Collaborators,
-    ): void => {
+    getMentionContactsSuccessCallback = (collaborators: Collaborators): void => {
         const { entries } = collaborators;
         this.setState({ mentionSelectorContacts: entries });
     };
@@ -449,18 +418,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     getAvatarUrl = async (userId: string): Promise<?string> => {
         const { file, api } = this.props;
 
-        return api
-            .getUsersAPI(false)
-            .getAvatarUrlWithAccessToken(userId, file.id);
+        return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
     };
 
     render() {
-        const {
-            file,
-            isDisabled = false,
-            onVersionHistoryClick,
-            getUserProfileUrl,
-        } = this.props;
+        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
 
         const {
             currentUser,
@@ -471,9 +433,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             currentUserError,
         } = this.state;
         return (
-            <SidebarContent
-                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
-            >
+            <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
                 <ActivityFeed
                     file={file}
                     activityFeedError={activityFeedError}

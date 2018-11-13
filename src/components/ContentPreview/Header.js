@@ -74,11 +74,7 @@ const Header = ({
                                 title={drawMsg}
                                 aria-label={drawMsg}
                             >
-                                <IconDrawAnnotationMode
-                                    color={COLOR_999}
-                                    width={18}
-                                    height={18}
-                                />
+                                <IconDrawAnnotationMode color={COLOR_999} width={18} height={18} />
                             </PlainButton>
                             <PlainButton
                                 type="button"
@@ -86,11 +82,7 @@ const Header = ({
                                 title={pointMsg}
                                 aria-label={pointMsg}
                             >
-                                <IconPointAnnotation
-                                    color={COLOR_999}
-                                    width={18}
-                                    height={18}
-                                />
+                                <IconPointAnnotation color={COLOR_999} width={18} height={18} />
                             </PlainButton>
                         </React.Fragment>
                     )}
@@ -102,11 +94,7 @@ const Header = ({
                             title={printMsg}
                             aria-label={printMsg}
                         >
-                            <IconPrint
-                                color={COLOR_999}
-                                width={22}
-                                height={22}
-                            />
+                            <IconPrint color={COLOR_999} width={22} height={22} />
                         </PlainButton>
                     )}
                     {canDownload && (
@@ -117,11 +105,7 @@ const Header = ({
                             title={downloadMsg}
                             aria-label={downloadMsg}
                         >
-                            <IconDownload
-                                color={COLOR_999}
-                                width={18}
-                                height={18}
-                            />
+                            <IconDownload color={COLOR_999} width={18} height={18} />
                         </PlainButton>
                     )}
                     {onClose && (
@@ -132,11 +116,7 @@ const Header = ({
                             title={closeMsg}
                             aria-label={closeMsg}
                         >
-                            <IconClose
-                                color={COLOR_999}
-                                width={24}
-                                height={24}
-                            />
+                            <IconClose color={COLOR_999} width={24} height={24} />
                         </PlainButton>
                     )}
                 </div>

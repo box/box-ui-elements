@@ -27,9 +27,7 @@ export function copyStyles(documentElement: Document, integrationWindow: any) {
             return;
         }
 
-        const copiedStyleSheet = integrationWindow.document.createElement(
-            'link',
-        );
+        const copiedStyleSheet = integrationWindow.document.createElement('link');
         copiedStyleSheet.rel = 'stylesheet';
         copiedStyleSheet.href = styleSheet.href;
         integrationWindow.document.head.appendChild(copiedStyleSheet);

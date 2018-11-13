@@ -7,12 +7,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import ProgressBar from './ProgressBar';
-import {
-    VIEW_UPLOAD_IN_PROGRESS,
-    VIEW_UPLOAD_SUCCESS,
-    VIEW_ERROR,
-    VIEW_UPLOAD_EMPTY,
-} from '../../constants';
+import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR, VIEW_UPLOAD_EMPTY } from '../../constants';
 
 import './OverallUploadsProgressBar.scss';
 
@@ -25,23 +20,13 @@ import './OverallUploadsProgressBar.scss';
 const getUploadStatus = (view: string) => {
     switch (view) {
         case VIEW_UPLOAD_IN_PROGRESS:
-            return (
-                <FormattedMessage
-                    {...messages.uploadsManagerUploadInProgress}
-                />
-            );
+            return <FormattedMessage {...messages.uploadsManagerUploadInProgress} />;
         case VIEW_UPLOAD_SUCCESS:
-            return (
-                <FormattedMessage {...messages.uploadsManagerUploadComplete} />
-            );
+            return <FormattedMessage {...messages.uploadsManagerUploadComplete} />;
         case VIEW_UPLOAD_EMPTY:
-            return (
-                <FormattedMessage {...messages.uploadsManagerUploadPrompt} />
-            );
+            return <FormattedMessage {...messages.uploadsManagerUploadPrompt} />;
         case VIEW_ERROR:
-            return (
-                <FormattedMessage {...messages.uploadsManagerUploadFailed} />
-            );
+            return <FormattedMessage {...messages.uploadsManagerUploadFailed} />;
         default:
             return '';
     }
@@ -74,14 +59,7 @@ type Props = {
     view: View,
 };
 
-const OverallUploadsProgressBar = ({
-    percent,
-    view,
-    onClick,
-    onKeyDown,
-    isDragging,
-    isVisible,
-}: Props) => {
+const OverallUploadsProgressBar = ({ percent, view, onClick, onKeyDown, isDragging, isVisible }: Props) => {
     // Show the upload prompt and set progress to 0 when the uploads manager
     // is invisible or is having files dragged to it
     const shouldShowPrompt = isDragging || !isVisible;

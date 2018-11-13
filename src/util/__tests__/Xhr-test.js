@@ -14,9 +14,7 @@ describe('util/Xhr', () => {
         test('should make get call with axios', () => {
             const url = 'parsedurl';
             xhrInstance.getParsedUrl = jest.fn().mockReturnValue(url);
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.resolve({}));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
             xhrInstance.axios = {
                 get: jest.fn().mockReturnValue({}),
             };
@@ -41,9 +39,7 @@ describe('util/Xhr', () => {
         test('should make post call with axios', () => {
             const url = 'parsedurl';
             xhrInstance.getParsedUrl = jest.fn().mockReturnValue(url);
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.resolve({}));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
             xhrInstance.axios = jest.fn().mockReturnValue({});
 
             return xhrInstance
@@ -105,12 +101,8 @@ describe('util/Xhr', () => {
         test('should make options call with axios and call successHandler on success', () => {
             const response = { data: {} };
             const successHandler = jest.fn();
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.resolve({}));
-            xhrInstance.axios = jest
-                .fn()
-                .mockReturnValue(Promise.resolve(response));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest.fn().mockReturnValue(Promise.resolve(response));
 
             return xhrInstance
                 .options({
@@ -129,12 +121,8 @@ describe('util/Xhr', () => {
         test('should call errorHandler on axios error', () => {
             const error = { status: '' };
             const errorHandler = jest.fn();
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.resolve({}));
-            xhrInstance.axios = jest
-                .fn()
-                .mockReturnValue(Promise.reject(error));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest.fn().mockReturnValue(Promise.reject(error));
 
             return xhrInstance
                 .options({
@@ -153,9 +141,7 @@ describe('util/Xhr', () => {
         test('should call errorHandler on getHeaders error', () => {
             const error = { status: '' };
             const errorHandler = jest.fn();
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.reject(error));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.reject(error));
 
             return xhrInstance
                 .options({
@@ -180,9 +166,7 @@ describe('util/Xhr', () => {
         test('should call abort & idleTimeoutHandler if there is no upload progress after idleTimeoutDuration', () => {
             xhrInstance.abort = jest.fn();
             xhrInstance.axios = jest.fn();
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.resolve({}));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
             const idleTimoutHandler = jest.fn();
 
             return xhrInstance
@@ -209,9 +193,7 @@ describe('util/Xhr', () => {
                 jest.advanceTimersByTime(50); // simulate progress event after 50ms
                 onUploadProgress();
             });
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.resolve({}));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
 
             return xhrInstance
                 .uploadFile({
@@ -234,12 +216,8 @@ describe('util/Xhr', () => {
             const response = { data: {} };
 
             xhrInstance.abort = jest.fn();
-            xhrInstance.axios = jest
-                .fn()
-                .mockReturnValue(Promise.resolve(response));
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest.fn().mockReturnValue(Promise.resolve(response));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
 
             return xhrInstance
                 .uploadFile({
@@ -262,12 +240,8 @@ describe('util/Xhr', () => {
             const error = { status: '' };
 
             xhrInstance.abort = jest.fn();
-            xhrInstance.axios = jest
-                .fn()
-                .mockReturnValue(Promise.reject(error));
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.resolve({}));
+            xhrInstance.axios = jest.fn().mockReturnValue(Promise.reject(error));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.resolve({}));
 
             return xhrInstance
                 .uploadFile({
@@ -289,9 +263,7 @@ describe('util/Xhr', () => {
             const errorHandler = jest.fn();
             const error = { status: '' };
 
-            xhrInstance.getHeaders = jest
-                .fn()
-                .mockReturnValue(Promise.reject(error));
+            xhrInstance.getHeaders = jest.fn().mockReturnValue(Promise.reject(error));
 
             return xhrInstance
                 .uploadFile({

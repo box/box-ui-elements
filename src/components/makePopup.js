@@ -9,10 +9,7 @@ import Modal from 'react-modal';
 import noop from 'lodash/noop';
 import omit from 'lodash/omit';
 
-import {
-    CLIENT_NAME_CONTENT_PICKER,
-    CLIENT_NAME_CONTENT_UPLOADER,
-} from '../constants';
+import { CLIENT_NAME_CONTENT_PICKER, CLIENT_NAME_CONTENT_UPLOADER } from '../constants';
 
 type PropsShape = {
     onCancel?: Function,
@@ -116,12 +113,7 @@ const makePopup = (kit: string) => <Props: PropsShape>(Wrapped: any) =>
         render() {
             const { isOpen }: State = this.state;
             const { modal, ...rest }: Props = this.props;
-            const wrappedProps = omit(rest, [
-                'onCancel',
-                'onChoose',
-                'onClose',
-                'modal',
-            ]);
+            const wrappedProps = omit(rest, ['onCancel', 'onChoose', 'onClose', 'modal']);
             const {
                 buttonLabel = 'Missing modal.buttonLabel in options',
                 buttonClassName = 'btn btn-primary',
@@ -143,11 +135,7 @@ const makePopup = (kit: string) => <Props: PropsShape>(Wrapped: any) =>
 
             return (
                 <div>
-                    <button
-                        type="button"
-                        onClick={this.onButtonClick}
-                        className={buttonClassName}
-                    >
+                    <button type="button" onClick={this.onButtonClick} className={buttonClassName}>
                         {buttonLabel}
                     </button>
                     <Modal

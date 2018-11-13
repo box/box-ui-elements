@@ -137,11 +137,7 @@ describe('util/fields', () => {
     });
 
     test('should fetch correct task assignment fields', () => {
-        expect(TASK_ASSIGNMENTS_FIELDS_TO_FETCH).toEqual([
-            FIELD_ASSIGNED_TO,
-            FIELD_RESOLUTION_STATE,
-            FIELD_MESSAGE,
-        ]);
+        expect(TASK_ASSIGNMENTS_FIELDS_TO_FETCH).toEqual([FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE]);
     });
 
     test('should fetch correct comments fields', () => {
@@ -167,16 +163,12 @@ describe('util/fields', () => {
 
         test('should return passed in properties when object is invalid', () => {
             const properties = ['foo', 'bar'];
-            expect(findMissingProperties('string', properties)).toBe(
-                properties,
-            );
+            expect(findMissingProperties('string', properties)).toBe(properties);
         });
 
         test('should return missing properties', () => {
             const properties = ['foo', 'bar'];
-            expect(
-                findMissingProperties({ foo: 1, baz: 2 }, properties),
-            ).toEqual(['bar']);
+            expect(findMissingProperties({ foo: 1, baz: 2 }, properties)).toEqual(['bar']);
         });
     });
 
@@ -192,14 +184,7 @@ describe('util/fields', () => {
 
         test('should return object with missing properties nulled', () => {
             const obj = { foo: { bar: 1 } };
-            const properties = [
-                'foo',
-                'bar',
-                'foo.baz.bum',
-                'bar.bum',
-                'foo.baz.bup',
-                'bar.bop.bip',
-            ];
+            const properties = ['foo', 'bar', 'foo.baz.bum', 'bar.bum', 'foo.baz.bup', 'bar.bop.bip'];
             expect(fillMissingProperties(obj, properties)).toEqual({
                 foo: { bar: 1, baz: { bum: null, bup: null } },
                 bar: { bum: null, bop: { bip: null } },

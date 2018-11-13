@@ -69,9 +69,7 @@ describe('util/uploads', () => {
             },
             (file, expectedResult) => {
                 test('should return the properly formatted date when possible and return null otherwise', () => {
-                    expect(getFileLastModifiedAsISONoMSIfPossible(file)).toBe(
-                        expectedResult,
-                    );
+                    expect(getFileLastModifiedAsISONoMSIfPossible(file)).toBe(expectedResult);
                 });
             },
         );
@@ -183,14 +181,11 @@ describe('util/uploads', () => {
         });
 
         test('should return DEFAULT_API_OPTIONS when argument is DataTransferItem type', () => {
-            expect(getDataTransferItemAPIOptions(mockItem)).toEqual(
-                DEFAULT_API_OPTIONS,
-            );
+            expect(getDataTransferItemAPIOptions(mockItem)).toEqual(DEFAULT_API_OPTIONS);
         });
     });
 
     describe('getFileFromDataTransferItem()', () => {
-        // eslint-disable-next-line
         test('should return file of UploadFileWithAPIOptions type when itemData is UploadDataTransferItemWithAPIOptions type', async () => {
             const itemData = {
                 item: mockItem,
@@ -297,9 +292,7 @@ describe('util/uploads', () => {
         Date.now = jest.fn(() => now);
 
         test('should return item id correctly when item does not contain API options', () => {
-            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe(
-                `hi_0_${now}`,
-            );
+            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe(`hi_0_${now}`);
         });
 
         test('should return item id correctly when item does contain API options', () => {
@@ -311,9 +304,7 @@ describe('util/uploads', () => {
                 },
             };
 
-            expect(getDataTransferItemId(item, rootFolderId)).toBe(
-                'hi_0_123123',
-            );
+            expect(getDataTransferItemId(item, rootFolderId)).toBe('hi_0_123123');
         });
     });
 });

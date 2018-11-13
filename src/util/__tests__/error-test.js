@@ -1,8 +1,4 @@
-import {
-    getBadItemError,
-    getBadPermissionsError,
-    isUserCorrectableError,
-} from '../error';
+import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../error';
 
 describe('util/error', () => {
     describe('getBadItemError()', () => {
@@ -13,9 +9,7 @@ describe('util/error', () => {
 
     describe('getBadPermissionsError()', () => {
         test('should set and get correctly', () => {
-            expect(getBadPermissionsError().message).toBe(
-                'Insufficient Permissions!',
-            );
+            expect(getBadPermissionsError().message).toBe('Insufficient Permissions!');
         });
     });
 

@@ -78,9 +78,7 @@ describe('components/ContentPreview/ContentPreview', () => {
 
         test('should return true if file object has newly been populated', () => {
             wrapper.setState({ file: { id: '123' } });
-            expect(
-                instance.shouldLoadPreview({ file: undefined }),
-            ).toBeTruthy();
+            expect(instance.shouldLoadPreview({ file: undefined })).toBeTruthy();
         });
 
         test('should return false if file has not changed', () => {
@@ -158,17 +156,12 @@ describe('components/ContentPreview/ContentPreview', () => {
                 fileId: file.id,
             };
             const origGetReadToken = TokenService.default.getReadToken;
-            TokenService.default.getReadToken = jest
-                .fn()
-                .mockReturnValueOnce(Promise.resolve(props.token));
+            TokenService.default.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
             await instance.loadPreview();
-            expect(TokenService.default.getReadToken).toHaveBeenCalledWith(
-                'file_123',
-                props.token,
-            );
+            expect(TokenService.default.getReadToken).toHaveBeenCalledWith('file_123', props.token);
             TokenService.default.getReadToken = origGetReadToken;
         });
 
@@ -182,10 +175,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             wrapper.setState({ file });
             const instance = wrapper.instance();
             await instance.loadPreview();
-            expect(instance.preview.addListener).toHaveBeenCalledWith(
-                'preview_error',
-                props.onError,
-            );
+            expect(instance.preview.addListener).toHaveBeenCalledWith('preview_error', props.onError);
         });
 
         test('should bind onError prop to preview "preview_metric" event', async () => {
@@ -198,10 +188,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             wrapper.setState({ file });
             const instance = wrapper.instance();
             await instance.loadPreview();
-            expect(instance.preview.addListener).toHaveBeenCalledWith(
-                'preview_metric',
-                instance.onPreviewMetric,
-            );
+            expect(instance.preview.addListener).toHaveBeenCalledWith('preview_metric', instance.onPreviewMetric);
         });
 
         test('should bind onPreviewLoad method to preview "load" event', async () => {
@@ -214,10 +201,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             wrapper.setState({ file });
             const instance = wrapper.instance();
             await instance.loadPreview();
-            expect(instance.preview.addListener).toHaveBeenCalledWith(
-                'load',
-                instance.onPreviewLoad,
-            );
+            expect(instance.preview.addListener).toHaveBeenCalledWith('load', instance.onPreviewLoad);
         });
 
         test('should call preview show with correct params', async () => {
@@ -226,9 +210,7 @@ describe('components/ContentPreview/ContentPreview', () => {
                 token: 'token',
                 fileId: file.id,
             };
-            TokenService.getReadToken = jest
-                .fn()
-                .mockReturnValueOnce(Promise.resolve(props.token));
+            TokenService.getReadToken = jest.fn().mockReturnValueOnce(Promise.resolve(props.token));
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
@@ -459,15 +441,11 @@ describe('components/ContentPreview/ContentPreview', () => {
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
-            instance.getTotalFileFetchTime = jest
-                .fn()
-                .mockReturnValue(FETCHING_TIME);
+            instance.getTotalFileFetchTime = jest.fn().mockReturnValue(FETCHING_TIME);
         });
 
         test('should add the total file fetching time to rendering if the file was converted', () => {
-            const totalMetrics = instance.addFetchFileTimeToPreviewMetrics(
-                metrics,
-            );
+            const totalMetrics = instance.addFetchFileTimeToPreviewMetrics(metrics);
             const { conversion, rendering } = metrics;
             const totalRendering = rendering + FETCHING_TIME;
 
@@ -547,16 +525,12 @@ describe('components/ContentPreview/ContentPreview', () => {
             instance.focusPreview = jest.fn();
             instance.prefetch = jest.fn();
             instance.getFileIndex = jest.fn().mockReturnValue(0);
-            instance.addFetchFileTimeToPreviewMetrics = jest
-                .fn()
-                .mockReturnValue(totalTimeMetrics);
+            instance.addFetchFileTimeToPreviewMetrics = jest.fn().mockReturnValue(totalTimeMetrics);
         });
 
         test('should modify the timing metrics to add in the total file fetching time', () => {
             instance.onPreviewLoad(data);
-            expect(instance.addFetchFileTimeToPreviewMetrics).toBeCalledWith(
-                data.metrics.time,
-            );
+            expect(instance.addFetchFileTimeToPreviewMetrics).toBeCalledWith(data.metrics.time);
             expect(props.onLoad).toBeCalledWith({
                 ...data,
                 metrics: {
@@ -588,9 +562,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
-            instance.getTotalFileFetchTime = jest
-                .fn()
-                .mockReturnValue(FETCHING_TIME);
+            instance.getTotalFileFetchTime = jest.fn().mockReturnValue(FETCHING_TIME);
         });
 
         test('should add in the total file fetching time to load events', () => {
@@ -666,37 +638,14 @@ describe('components/ContentPreview/ContentPreview', () => {
             };
 
             instance.fetchFile = jest.fn();
-            TokenService.default.cacheTokens = jest
-                .fn()
-                .mockReturnValueOnce(Promise.resolve());
+            TokenService.default.cacheTokens = jest.fn().mockReturnValueOnce(Promise.resolve());
             await instance.prefetch(['1', '2', '3']);
 
-            expect(TokenService.default.cacheTokens).toHaveBeenCalledWith(
-                ['file_1', 'file_2', 'file_3'],
-                props.token,
-            );
+            expect(TokenService.default.cacheTokens).toHaveBeenCalledWith(['file_1', 'file_2', 'file_3'], props.token);
             expect(instance.fetchFile).toHaveBeenCalledTimes(3);
-            expect(instance.fetchFile).toHaveBeenNthCalledWith(
-                1,
-                '1',
-                noop,
-                noop,
-                options,
-            );
-            expect(instance.fetchFile).toHaveBeenNthCalledWith(
-                2,
-                '2',
-                noop,
-                noop,
-                options,
-            );
-            expect(instance.fetchFile).toHaveBeenNthCalledWith(
-                3,
-                '3',
-                noop,
-                noop,
-                options,
-            );
+            expect(instance.fetchFile).toHaveBeenNthCalledWith(1, '1', noop, noop, options);
+            expect(instance.fetchFile).toHaveBeenNthCalledWith(2, '2', noop, noop, options);
+            expect(instance.fetchFile).toHaveBeenNthCalledWith(3, '3', noop, noop, options);
         });
     });
 

@@ -9,10 +9,7 @@ describe('components/ContentOpenWith/IntegrationPortal', () => {
         let integrationWindow;
 
         beforeEach(() => {
-            const mockDoc = document.implementation.createDocument(
-                'http://www.w3.org/1999/xhtml',
-                'html',
-            );
+            const mockDoc = document.implementation.createDocument('http://www.w3.org/1999/xhtml', 'html');
             const body = mockDoc.createElement('body');
             const head = mockDoc.createElement('head');
             mockDoc.documentElement.appendChild(head);
@@ -34,13 +31,8 @@ describe('components/ContentOpenWith/IntegrationPortal', () => {
                 styleSheets: [style1, style2, style3],
             };
 
-            integrationPortal.copyStyles(
-                mockDocumentElement,
-                integrationWindow,
-            );
-            const stylesheets = integrationWindow.document.querySelectorAll(
-                'link',
-            );
+            integrationPortal.copyStyles(mockDocumentElement, integrationWindow);
+            const stylesheets = integrationWindow.document.querySelectorAll('link');
             expect(stylesheets.length).toEqual(2);
         });
         it('perform a margin/padding reset on the integration window', () => {
@@ -48,15 +40,10 @@ describe('components/ContentOpenWith/IntegrationPortal', () => {
                 styleSheets: [],
             };
 
-            integrationPortal.copyStyles(
-                mockDocumentElement,
-                integrationWindow,
-            );
+            integrationPortal.copyStyles(mockDocumentElement, integrationWindow);
 
             expect(integrationWindow.document.body.style.margin).toEqual('0px');
-            expect(integrationWindow.document.body.style.padding).toEqual(
-                '0px',
-            );
+            expect(integrationWindow.document.body.style.padding).toEqual('0px');
         });
     });
 

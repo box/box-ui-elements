@@ -16,24 +16,9 @@ export default (
 ): Function => ({ rowData }: { rowData: BoxItem }) => {
     const { name, selected = false } = rowData;
 
-    if (
-        !isRowSelectable(
-            selectableType,
-            extensionsWhitelist,
-            hasHitSelectionLimit,
-            rowData,
-        )
-    ) {
+    if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData)) {
         return <span />;
     }
 
-    return (
-        <Checkbox
-            hideLabel
-            label={name}
-            name={name}
-            isChecked={selected}
-            onChange={() => onItemSelect(rowData)}
-        />
-    );
+    return <Checkbox hideLabel label={name} name={name} isChecked={selected} onChange={() => onItemSelect(rowData)} />;
 };

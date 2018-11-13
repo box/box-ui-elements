@@ -11,10 +11,7 @@ import ItemProperties from 'box-react-ui/lib/features/item-details/ItemPropertie
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
-import {
-    FIELD_METADATA_CLASSIFICATION,
-    KEY_CLASSIFICATION_TYPE,
-} from '../../constants';
+import { FIELD_METADATA_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
 type Props = {
@@ -37,15 +34,9 @@ type Props = {
  * @param {Function} onClassificationClick the optional callback
  * @returns {Function|undefined} the callback function if it is passed in, and the user has permissions
  */
-export const getClassificationModal = (
-    file: BoxItem,
-    onClassificationClick: ?Function,
-) => {
+export const getClassificationModal = (file: BoxItem, onClassificationClick: ?Function) => {
     // Changing classification requires edit metadata permission, which is included in can_upload
-    if (
-        onClassificationClick &&
-        getProp(file, 'permissions.can_upload', false)
-    ) {
+    if (onClassificationClick && getProp(file, 'permissions.can_upload', false)) {
         return onClassificationClick;
     }
 
@@ -64,10 +55,7 @@ const SidebarFileProperties = ({
     isLoading,
     intl,
 }: Props) => {
-    const value = getProp(
-        file,
-        `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`,
-    );
+    const value = getProp(file, `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
 
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
@@ -78,21 +66,14 @@ const SidebarFileProperties = ({
                 owner={getProp(file, 'owned_by.name')}
                 size={getFileSize(file.size, intl.locale)}
                 uploader={getProp(file, 'created_by.name')}
-                onDescriptionChange={
-                    getProp(file, 'permissions.can_rename')
-                        ? onDescriptionChange
-                        : undefined
-                }
+                onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
                 descriptionTextareaProps={{
                     [INTERACTION_TARGET]: DETAILS_TARGETS.DESCRIPTION,
                 }}
                 classificationProps={
                     hasClassification
                         ? {
-                              openModal: getClassificationModal(
-                                  file,
-                                  onClassificationClick,
-                              ),
+                              openModal: getClassificationModal(file, onClassificationClick),
                               tooltip: getProp(bannerPolicy, 'body'),
                               value,
                               [INTERACTION_TARGET]: value

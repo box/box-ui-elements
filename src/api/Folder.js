@@ -102,22 +102,12 @@ class Folder extends Item {
 
         const cache: APICache = this.getCache();
         const folder: FlattenedBoxItem = cache.get(this.key);
-        const {
-            id,
-            name,
-            permissions,
-            path_collection,
-            item_collection,
-        }: FlattenedBoxItem = folder;
+        const { id, name, permissions, path_collection, item_collection }: FlattenedBoxItem = folder;
         if (!item_collection || !path_collection) {
             throw getBadItemError();
         }
 
-        const {
-            entries,
-            offset,
-            total_count,
-        }: FlattenedBoxItemCollection = item_collection;
+        const { entries, offset, total_count }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
@@ -154,12 +144,7 @@ class Folder extends Item {
             throw getBadItemError();
         }
 
-        const {
-            entries,
-            total_count,
-            limit,
-            offset,
-        }: BoxItemCollection = item_collection;
+        const { entries, total_count, limit, offset }: BoxItemCollection = item_collection;
         if (
             !Array.isArray(entries) ||
             typeof total_count !== 'number' ||
@@ -297,10 +282,7 @@ class Folder extends Item {
             throw getBadItemError();
         }
 
-        const {
-            total_count,
-            entries,
-        }: FlattenedBoxItemCollection = item_collection;
+        const { total_count, entries }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
@@ -345,12 +327,7 @@ class Folder extends Item {
      * @param {Function} errorCallback - error callback
      * @return {void}
      */
-    create(
-        id: string,
-        name: string,
-        successCallback: Function,
-        errorCallback: Function = noop,
-    ): void {
+    create(id: string, name: string, successCallback: Function, errorCallback: Function = noop): void {
         if (this.isDestroyed()) {
             return;
         }

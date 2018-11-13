@@ -51,24 +51,14 @@ export default (
         return <span />;
     }
 
-    const allowPreview =
-        type === TYPE_FILE && canPreview && permissions[PERMISSION_CAN_PREVIEW];
+    const allowPreview = type === TYPE_FILE && canPreview && permissions[PERMISSION_CAN_PREVIEW];
     const allowOpen = type === TYPE_WEBLINK;
     const allowDelete = canDelete && permissions[PERMISSION_CAN_DELETE];
     const allowShare = canShare && permissions[PERMISSION_CAN_SHARE];
     const allowRename = canRename && permissions[PERMISSION_CAN_RENAME];
     const allowDownload =
-        canDownload &&
-        permissions[PERMISSION_CAN_DOWNLOAD] &&
-        type === TYPE_FILE &&
-        !Browser.isMobile();
-    const allowed =
-        allowDelete ||
-        allowRename ||
-        allowDownload ||
-        allowPreview ||
-        allowShare ||
-        allowOpen;
+        canDownload && permissions[PERMISSION_CAN_DOWNLOAD] && type === TYPE_FILE && !Browser.isMobile();
+    const allowed = allowDelete || allowRename || allowDownload || allowPreview || allowShare || allowOpen;
 
     if (!allowed) {
         return <span />;
@@ -77,11 +67,7 @@ export default (
     return (
         <div className="bce-more-options">
             <DropdownMenu isRightAligned constrainToScrollParent>
-                <Button
-                    type="button"
-                    onFocus={onFocus}
-                    className="bce-btn-more-options"
-                >
+                <Button type="button" onFocus={onFocus} className="bce-btn-more-options">
                     ···
                 </Button>
                 <Menu>

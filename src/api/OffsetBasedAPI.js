@@ -31,11 +31,7 @@ class OffsetBasedApi extends Base {
      * @param {array} fields the fields to fetch
      * @return the query params object
      */
-    getQueryParameters(
-        offset: number,
-        limit: number,
-        fields?: Array<string>,
-    ): Object {
+    getQueryParameters(offset: number, limit: number, fields?: Array<string>): Object {
         const queryParams: Params = {
             offset,
             limit,
@@ -99,13 +95,7 @@ class OffsetBasedApi extends Base {
             const totalCount = data.total_count;
             const nextOffset = offset + limit;
             if (shouldFetchAll && this.hasMoreItems(nextOffset, totalCount)) {
-                this.offsetGetRequest(
-                    id,
-                    nextOffset,
-                    limit,
-                    shouldFetchAll,
-                    fields,
-                );
+                this.offsetGetRequest(id, nextOffset, limit, shouldFetchAll, fields);
                 return;
             }
 

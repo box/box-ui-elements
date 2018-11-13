@@ -9,13 +9,7 @@ import Status from './Status';
 import Transcript from './Transcript';
 import Keywords from './Keywords';
 import Faces from './Faces';
-import {
-    SKILLS_TRANSCRIPT,
-    SKILLS_KEYWORD,
-    SKILLS_TIMELINE,
-    SKILLS_FACE,
-    SKILLS_STATUS,
-} from '../../../constants';
+import { SKILLS_TRANSCRIPT, SKILLS_KEYWORD, SKILLS_TIMELINE, SKILLS_FACE, SKILLS_STATUS } from '../../../constants';
 
 type Props = {
     getViewer: Function,
@@ -26,14 +20,7 @@ type Props = {
     isEditable: boolean,
 };
 
-const SidebarSkillsCard = ({
-    card,
-    cards,
-    hasError,
-    isEditable,
-    onSkillChange,
-    getViewer,
-}: Props) => {
+const SidebarSkillsCard = ({ card, cards, hasError, isEditable, onSkillChange, getViewer }: Props) => {
     switch (card.skill_card_type) {
         case SKILLS_KEYWORD:
             return (
@@ -42,10 +29,7 @@ const SidebarSkillsCard = ({
                     hasError={hasError}
                     transcript={
                         isEditable
-                            ? cards.find(
-                                  ({ skill_card_type }) =>
-                                      skill_card_type === SKILLS_TRANSCRIPT,
-                              )
+                            ? cards.find(({ skill_card_type }) => skill_card_type === SKILLS_TRANSCRIPT)
                             : undefined
                     }
                     isEditable={isEditable}

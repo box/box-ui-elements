@@ -15,23 +15,9 @@ class SidebarUtils {
      * @param {ContentSidebarProps} props - User passed in props
      * @return {Boolean} true if we should render
      */
-    static canHaveDetailsSidebar({
-        detailsSidebarProps = {},
-    }: ContentSidebarProps): boolean {
-        const {
-            hasProperties,
-            hasAccessStats,
-            hasClassification,
-            hasVersions,
-            hasNotices,
-        } = detailsSidebarProps;
-        return (
-            !!hasProperties ||
-            !!hasAccessStats ||
-            !!hasClassification ||
-            !!hasVersions ||
-            !!hasNotices
-        );
+    static canHaveDetailsSidebar({ detailsSidebarProps = {} }: ContentSidebarProps): boolean {
+        const { hasProperties, hasAccessStats, hasClassification, hasVersions, hasNotices } = detailsSidebarProps;
+        return !!hasProperties || !!hasAccessStats || !!hasClassification || !!hasVersions || !!hasNotices;
     }
 
     /**
@@ -92,15 +78,8 @@ class SidebarUtils {
      * @param {BoxItem} file - box file
      * @return {Boolean} true if we should render
      */
-    static shouldRenderSkillsSidebar(
-        props: ContentSidebarProps,
-        file?: BoxItem,
-    ): boolean {
-        return (
-            !!file &&
-            SidebarUtils.canHaveSkillsSidebar(props) &&
-            hasSkillsData(file)
-        );
+    static shouldRenderSkillsSidebar(props: ContentSidebarProps, file?: BoxItem): boolean {
+        return !!file && SidebarUtils.canHaveSkillsSidebar(props) && hasSkillsData(file);
     }
 
     /**
@@ -113,14 +92,9 @@ class SidebarUtils {
      * @param {Boolean} isMetadataEnabled - metadata feature
      * @return {Boolean} true if we should render
      */
-    static shouldRenderMetadataSidebar(
-        props: ContentSidebarProps,
-        editors?: Array<MetadataEditor>,
-    ): boolean {
+    static shouldRenderMetadataSidebar(props: ContentSidebarProps, editors?: Array<MetadataEditor>): boolean {
         const { metadataSidebarProps = {} }: ContentSidebarProps = props;
-        const {
-            isFeatureEnabled = true,
-        }: MetadataSidebarProps = metadataSidebarProps;
+        const { isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
 
         return (
             SidebarUtils.canHaveMetadataSidebar(props) &&
@@ -136,11 +110,7 @@ class SidebarUtils {
      * @param {BoxItem} file - box file
      * @return {Boolean} true if we should fetch or render
      */
-    static shouldRenderSidebar(
-        props: ContentSidebarProps,
-        file?: BoxItem,
-        editors?: Array<MetadataEditor>,
-    ): boolean {
+    static shouldRenderSidebar(props: ContentSidebarProps, file?: BoxItem, editors?: Array<MetadataEditor>): boolean {
         return (
             !!file &&
             (SidebarUtils.canHaveDetailsSidebar(props) ||

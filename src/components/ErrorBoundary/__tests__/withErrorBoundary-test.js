@@ -7,8 +7,7 @@ describe('components/withErrorBoundary', () => {
     const WrappedComponent = () => <div>Test</div>;
     const WithErrorBoundaryComponent = withErrorBoundary(WrappedComponent);
 
-    const getWrapper = props =>
-        shallow(<WithErrorBoundaryComponent {...props} />);
+    const getWrapper = props => shallow(<WithErrorBoundaryComponent {...props} />);
 
     test('should wrap the provided component with an ErrorBoundary', () => {
         const wrapper = getWrapper();

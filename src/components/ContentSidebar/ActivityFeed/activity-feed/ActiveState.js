@@ -46,10 +46,7 @@ const ActiveState = ({
             switch (type) {
                 case 'comment':
                     return (
-                        <li
-                            className="bcs-activity-feed-comment"
-                            key={type + id}
-                        >
+                        <li className="bcs-activity-feed-comment" key={type + id}>
                             <Comment
                                 {...item}
                                 currentUser={currentUser}
@@ -58,16 +55,8 @@ const ActiveState = ({
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
                                 permissions={{
-                                    can_delete: getProp(
-                                        permissions,
-                                        'can_delete',
-                                        false,
-                                    ),
-                                    can_edit: getProp(
-                                        permissions,
-                                        'can_edit',
-                                        false,
-                                    ),
+                                    can_delete: getProp(permissions, 'can_delete', false),
+                                    can_edit: getProp(permissions, 'can_edit', false),
                                 }}
                             />
                         </li>
@@ -84,9 +73,7 @@ const ActiveState = ({
                                 translations={translations}
                                 getAvatarUrl={getAvatarUrl}
                                 getUserProfileUrl={getUserProfileUrl}
-                                mentionSelectorContacts={
-                                    mentionSelectorContacts
-                                }
+                                mentionSelectorContacts={mentionSelectorContacts}
                                 getMentionWithQuery={getMentionWithQuery}
                                 // permissions are not part of task API so hard code to true
                                 permissions={{
@@ -100,10 +87,7 @@ const ActiveState = ({
                     return (
                         <li className="bcs-version-item" key={type + id}>
                             {versions ? (
-                                <CollapsedVersion
-                                    {...item}
-                                    onInfo={onVersionInfo}
-                                />
+                                <CollapsedVersion {...item} onInfo={onVersionInfo} />
                             ) : (
                                 <Version {...item} onInfo={onVersionInfo} />
                             )}

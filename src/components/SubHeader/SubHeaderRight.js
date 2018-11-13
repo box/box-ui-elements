@@ -30,12 +30,7 @@ const SubHeaderRight = ({
     currentCollection,
     onSortChange,
 }: Props) => {
-    const {
-        sortBy,
-        sortDirection,
-        percentLoaded,
-        items = [],
-    }: Collection = currentCollection;
+    const { sortBy, sortDirection, percentLoaded, items = [] }: Collection = currentCollection;
     const isFolder: boolean = view === VIEW_FOLDER;
     const isLoaded: boolean = percentLoaded === 100;
     const showSort: boolean = isFolder && items.length > 0;
@@ -43,16 +38,9 @@ const SubHeaderRight = ({
 
     return (
         <div className="be-sub-header-right">
-            {showSort &&
-                !!sortBy &&
-                !!sortDirection && (
-                    <Sort
-                        isLoaded={isLoaded}
-                        onSortChange={onSortChange}
-                        sortBy={sortBy}
-                        sortDirection={sortDirection}
-                    />
-                )}
+            {showSort && !!sortBy && !!sortDirection && (
+                <Sort isLoaded={isLoaded} onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />
+            )}
             {showAdd && (
                 <Add
                     showUpload={canUpload}

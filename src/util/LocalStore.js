@@ -72,10 +72,7 @@ class LocalStore {
     setItem(key: string, value: any) {
         if (this.isLocalStorageAvailable) {
             try {
-                this.localStorage.setItem(
-                    this.buildKey(key),
-                    JSON.stringify(value),
-                );
+                this.localStorage.setItem(this.buildKey(key), JSON.stringify(value));
             } catch (e) {
                 // no-op
             }

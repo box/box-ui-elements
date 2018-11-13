@@ -20,9 +20,7 @@ describe('api/OffsetBasedAPI', () => {
         });
 
         test('should return query parameters with fields', () => {
-            expect(
-                offsetBasedAPI.getQueryParameters(0, LIMIT, ['foo', 'bar']),
-            ).toEqual({
+            expect(offsetBasedAPI.getQueryParameters(0, LIMIT, ['foo', 'bar'])).toEqual({
                 offset: 0,
                 limit: LIMIT,
                 fields: 'foo,bar',
@@ -63,15 +61,11 @@ describe('api/OffsetBasedAPI', () => {
                 ),
             };
 
-            return offsetBasedAPI
-                .offsetGetRequest('id', 0, 1000, true)
-                .then(() => {
-                    expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
-                    expect(offsetBasedAPI.successHandler).toHaveBeenCalledTimes(
-                        1,
-                    );
-                    expect(offsetBasedAPI.errorHandler).not.toHaveBeenCalled();
-                });
+            return offsetBasedAPI.offsetGetRequest('id', 0, 1000, true).then(() => {
+                expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
+                expect(offsetBasedAPI.successHandler).toHaveBeenCalledTimes(1);
+                expect(offsetBasedAPI.errorHandler).not.toHaveBeenCalled();
+            });
         });
 
         test('should do one xhr call and call successHandler once', () => {
@@ -83,15 +77,11 @@ describe('api/OffsetBasedAPI', () => {
                 ),
             };
 
-            return offsetBasedAPI
-                .offsetGetRequest('id', 0, 1000, true)
-                .then(() => {
-                    expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
-                    expect(offsetBasedAPI.successHandler).toHaveBeenCalledTimes(
-                        1,
-                    );
-                    expect(offsetBasedAPI.errorHandler).not.toHaveBeenCalled();
-                });
+            return offsetBasedAPI.offsetGetRequest('id', 0, 1000, true).then(() => {
+                expect(offsetBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
+                expect(offsetBasedAPI.successHandler).toHaveBeenCalledTimes(1);
+                expect(offsetBasedAPI.errorHandler).not.toHaveBeenCalled();
+            });
         });
     });
 
@@ -107,39 +97,29 @@ describe('api/OffsetBasedAPI', () => {
             offsetBasedAPI.isDestroyed = jest.fn().mockReturnValueOnce(true);
             offsetBasedAPI.xhr = null;
 
-            return offsetBasedAPI
-                .offsetGet('id', successCb, errorCb)
-                .catch(() => {
-                    expect(successCb).not.toHaveBeenCalled();
-                    expect(errorCb).not.toHaveBeenCalled();
-                });
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb).catch(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).not.toHaveBeenCalled();
+            });
         });
 
         test('should make xhr to get offsetBasedAPI and call success callback', () => {
             offsetBasedAPI.xhr = {
-                get: jest
-                    .fn()
-                    .mockReturnValueOnce(
-                        Promise.resolve({ data: offsetBasedAPIResponse }),
-                    ),
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: offsetBasedAPIResponse })),
             };
 
-            return offsetBasedAPI
-                .offsetGet('id', successCb, errorCb)
-                .then(() => {
-                    expect(successCb).toHaveBeenCalledWith(
-                        offsetBasedAPIResponse,
-                    );
-                    expect(successCb).toHaveBeenCalledTimes(1);
-                    expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
-                        id: 'file_id',
-                        url,
-                        params: {
-                            offset: 0,
-                            limit: LIMIT,
-                        },
-                    });
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
+                expect(successCb).toHaveBeenCalledWith(offsetBasedAPIResponse);
+                expect(successCb).toHaveBeenCalledTimes(1);
+                expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url,
+                    params: {
+                        offset: 0,
+                        limit: LIMIT,
+                    },
                 });
+            });
         });
 
         test('should immediately reject if offset >= total_count', () => {
@@ -155,13 +135,11 @@ describe('api/OffsetBasedAPI', () => {
                 ),
             };
 
-            return offsetBasedAPI
-                .offsetGet('id', successCb, errorCb, 50)
-                .catch(() => {
-                    expect(successCb).not.toHaveBeenCalled();
-                    expect(errorCb).not.toHaveBeenCalled();
-                    expect(offsetBasedAPI.xhr.get).not.toHaveBeenCalled();
-                });
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb, 50).catch(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).not.toHaveBeenCalled();
+                expect(offsetBasedAPI.xhr.get).not.toHaveBeenCalled();
+            });
         });
 
         test('should call error callback when xhr fails', () => {
@@ -170,20 +148,18 @@ describe('api/OffsetBasedAPI', () => {
                 get: jest.fn().mockReturnValueOnce(Promise.reject(error)),
             };
 
-            return offsetBasedAPI
-                .offsetGet('id', successCb, errorCb)
-                .then(() => {
-                    expect(successCb).not.toHaveBeenCalled();
-                    expect(errorCb).toHaveBeenCalledWith(error);
-                    expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
-                        id: 'file_id',
-                        url,
-                        params: {
-                            offset: 0,
-                            limit: LIMIT,
-                        },
-                    });
+            return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).toHaveBeenCalledWith(error);
+                expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url,
+                    params: {
+                        offset: 0,
+                        limit: LIMIT,
+                    },
                 });
+            });
         });
     });
 });
