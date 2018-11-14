@@ -114,7 +114,7 @@ commit_and_tag() {
     echo "Creating commit for version and changelog"
     echo "----------------------------------------------------"
 
-    git commit -am "Release: $VERSION"
+    git commit -am "build(release): $VERSION"
 
     echo "----------------------------------------------------"
     echo "Tagging commit v"$VERSION
