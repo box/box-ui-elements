@@ -26,9 +26,7 @@ const EmptyState = ({ isLoading, showCommentMessage }: Props): React.Node => (
                 <FormattedMessage {...messages.noActivity} />
                 {showCommentMessage ? (
                     <aside>
-                        <FormattedMessage
-                            {...messages.noActivityCommentPrompt}
-                        />
+                        <FormattedMessage {...messages.noActivityCommentPrompt} />
                     </aside>
                 ) : null}
             </div>

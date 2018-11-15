@@ -68,8 +68,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             created_at: Date.now(),
             due_at: Date.now(),
             id: '123125',
-            message:
-                'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             task_assignment_collection: {
@@ -96,13 +95,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
 
     test('should show actions for current user and if onAssignmentUpdate is defined', () => {
         task.isPending = false;
-        const wrapper = shallow(
-            <Task
-                currentUser={currentUser}
-                {...task}
-                onAssignmentUpdate={jest.fn()}
-            />,
-        );
+        const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
 
         expect(
             wrapper
@@ -121,13 +114,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     });
 
     test('should show tooltips when actions are shown', () => {
-        const wrapper = shallow(
-            <Task
-                currentUser={currentUser}
-                {...task}
-                onAssignmentUpdate={jest.fn()}
-            />,
-        );
+        const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
         const assignment = shallow(
             wrapper
                 .find('.bcs-task-assignees')
@@ -164,11 +151,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         const checkButton = wrapper.find('.bcs-task-check-btn').hostNodes();
         checkButton.simulate('click');
 
-        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith(
-            '123125',
-            0,
-            'approved',
-        );
+        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'approved');
     });
 
     test('should call onAssignmentUpdate with rejected status when check is clicked', () => {
@@ -186,11 +169,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         const checkButton = wrapper.find('.bcs-task-x-btn').hostNodes();
         checkButton.simulate('click');
 
-        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith(
-            '123125',
-            0,
-            'rejected',
-        );
+        expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'rejected');
     });
 
     test('should not allow user to delete if they lack delete permissions on the comment', () => {
@@ -198,8 +177,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             created_at: Date.now(),
             due_at: Date.now(),
             id: '123125',
-            message:
-                'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             task_assignment_collection: {
@@ -238,8 +216,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             created_at: Date.now(),
             due_at: Date.now(),
             id: '123125',
-            message:
-                'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             task_assignment_collection: {
@@ -278,8 +255,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             created_at: Date.now(),
             due_at: Date.now(),
             id: '123125',
-            message:
-                'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             task_assignment_collection: {
@@ -316,8 +292,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             created_at: Date.now(),
             due_at: Date.now(),
             id: '123125',
-            message:
-                'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
+            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
             permissions: {},
             task_assignment_collection: {
@@ -356,9 +331,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             due_at: null,
         };
 
-        const wrapper = shallow(
-            <Task currentUser={currentUser} {...taskWithNoDueDate} />,
-        );
+        const wrapper = shallow(<Task currentUser={currentUser} {...taskWithNoDueDate} />);
 
         expect(wrapper).toMatchSnapshot();
     });

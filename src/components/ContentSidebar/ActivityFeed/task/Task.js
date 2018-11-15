@@ -102,81 +102,49 @@ class Task extends React.Component<Props> {
                         {due_at ? (
                             <span className="bcs-task-due-date">
                                 <FormattedMessage {...messages.taskDueDate} />
-                                <FormattedDate
-                                    value={due_at}
-                                    day="numeric"
-                                    month="long"
-                                    year="numeric"
-                                />
+                                <FormattedDate value={due_at} day="numeric" month="long" year="numeric" />
                             </span>
                         ) : null}
                     </div>
                     <div className="bcs-task-assignees">
-                        {task_assignment_collection &&
-                        task_assignment_collection.entries
+                        {task_assignment_collection && task_assignment_collection.entries
                             ? task_assignment_collection.entries
                                   .map(fillUserPlaceholder)
-                                  .map(
-                                      ({
-                                          id: assignmentId,
-                                          assigned_to,
-                                          resolution_state,
-                                      }) => {
-                                          switch (resolution_state) {
-                                              case TASK_COMPLETED:
-                                              case TASK_APPROVED:
-                                                  return (
-                                                      <CompletedAssignment
-                                                          {...assigned_to}
-                                                          key={assigned_to.id}
-                                                      />
-                                                  );
-                                              case TASK_REJECTED:
-                                                  return (
-                                                      <RejectedAssignment
-                                                          {...assigned_to}
-                                                          key={assigned_to.id}
-                                                      />
-                                                  );
-                                              case TASK_INCOMPLETE:
-                                                  return (
-                                                      <PendingAssignment
-                                                          {...assigned_to}
-                                                          key={assigned_to.id}
-                                                          onTaskApproval={
-                                                              isPending
-                                                                  ? noop
-                                                                  : () =>
-                                                                        onAssignmentUpdate(
-                                                                            id,
-                                                                            assignmentId,
-                                                                            TASK_APPROVED,
-                                                                        )
-                                                          }
-                                                          onTaskReject={
-                                                              isPending
-                                                                  ? noop
-                                                                  : () =>
-                                                                        onAssignmentUpdate(
-                                                                            id,
-                                                                            assignmentId,
-                                                                            TASK_REJECTED,
-                                                                        )
-                                                          }
-                                                          shouldShowActions={
-                                                              onAssignmentUpdate !==
-                                                                  noop &&
-                                                              currentUser &&
-                                                              assigned_to.id ===
-                                                                  currentUser.id
-                                                          }
-                                                      />
-                                                  );
-                                              default:
-                                                  return null;
-                                          }
-                                      },
-                                  )
+                                  .map(({ id: assignmentId, assigned_to, resolution_state }) => {
+                                      switch (resolution_state) {
+                                          case TASK_COMPLETED:
+                                          case TASK_APPROVED:
+                                              return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
+                                          case TASK_REJECTED:
+                                              return <RejectedAssignment {...assigned_to} key={assigned_to.id} />;
+                                          case TASK_INCOMPLETE:
+                                              return (
+                                                  <PendingAssignment
+                                                      {...assigned_to}
+                                                      key={assigned_to.id}
+                                                      onTaskApproval={
+                                                          isPending
+                                                              ? noop
+                                                              : () =>
+                                                                    onAssignmentUpdate(id, assignmentId, TASK_APPROVED)
+                                                      }
+                                                      onTaskReject={
+                                                          isPending
+                                                              ? noop
+                                                              : () =>
+                                                                    onAssignmentUpdate(id, assignmentId, TASK_REJECTED)
+                                                      }
+                                                      shouldShowActions={
+                                                          onAssignmentUpdate !== noop &&
+                                                          currentUser &&
+                                                          assigned_to.id === currentUser.id
+                                                      }
+                                                  />
+                                              );
+                                          default:
+                                              return null;
+                                      }
+                                  })
                             : null}
                     </div>
                 </div>

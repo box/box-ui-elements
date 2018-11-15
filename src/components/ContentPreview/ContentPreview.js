@@ -340,12 +340,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {string} base url
      */
     getBasePath(asset: string): string {
-        const {
-            staticHost,
-            staticPath,
-            language,
-            previewLibraryVersion,
-        }: Props = this.props;
+        const { staticHost, staticPath, language, previewLibraryVersion }: Props = this.props;
         const path: string = `${staticPath}/${previewLibraryVersion}/${language}/${asset}`;
         const suffix: string = staticHost.endsWith('/') ? path : `/${path}`;
         return `${staticHost}${suffix}`;
@@ -369,10 +364,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const { head } = document;
         const url: string = this.getBasePath('preview.css');
 
-        if (
-            !head ||
-            head.querySelector(`link[rel="stylesheet"][href="${url}"]`)
-        ) {
+        if (!head || head.querySelector(`link[rel="stylesheet"][href="${url}"]`)) {
             return;
         }
 
@@ -460,9 +452,7 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     async prefetch(files: Array<string | BoxItem>): Promise<void> {
         const { token }: Props = this.props;
-        const typedIds: string[] = files.map(file =>
-            getTypedFileId(this.getFileId(file)),
-        );
+        const typedIds: string[] = files.map(file => getTypedFileId(this.getFileId(file)));
         await TokenService.cacheTokens(typedIds, token);
         files.forEach(file => {
             const fileId = this.getFileId(file);
@@ -482,9 +472,7 @@ class ContentPreview extends PureComponent<Props, State> {
             return 0;
         }
 
-        const totalFetchFileTime = Math.round(
-            this.fetchFileEndTime - this.fetchFileStartTime,
-        );
+        const totalFetchFileTime = Math.round(this.fetchFileEndTime - this.fetchFileStartTime);
         return totalFetchFileTime;
     }
 
@@ -528,9 +516,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @param {Object} previewTimeMetrics - the preview time metrics
      * @return {Object} the preview time metrics merged with the files call time
      */
-    addFetchFileTimeToPreviewMetrics(
-        previewTimeMetrics: PreviewTimeMetrics,
-    ): PreviewTimeMetrics {
+    addFetchFileTimeToPreviewMetrics(previewTimeMetrics: PreviewTimeMetrics): PreviewTimeMetrics {
         const totalFetchFileTime = this.getTotalFileFetchTime();
         const { rendering, conversion, preload } = previewTimeMetrics;
 
@@ -569,17 +555,12 @@ class ContentPreview extends PureComponent<Props, State> {
     onPreviewLoad = (data: Object): void => {
         const { onLoad, collection }: Props = this.props;
         const currentIndex = this.getFileIndex();
-        const filesToPrefetch = collection.slice(
-            currentIndex + 1,
-            currentIndex + 5,
-        );
+        const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
         const previewTimeMetrics = getProp(data, 'metrics.time');
         let loadData = data;
 
         if (previewTimeMetrics) {
-            const totalPreviewMetrics = this.addFetchFileTimeToPreviewMetrics(
-                previewTimeMetrics,
-            );
+            const totalPreviewMetrics = this.addFetchFileTimeToPreviewMetrics(previewTimeMetrics);
             loadData = {
                 ...loadData,
                 metrics: {
@@ -605,8 +586,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const { canDownload }: Props = this.props;
         const { file }: State = this.state;
         const isFileDownloadable =
-            getProp(file, 'permissions.can_download', false) &&
-            getProp(file, 'is_download_available', false);
+            getProp(file, 'permissions.can_download', false) && getProp(file, 'is_download_available', false);
         return isFileDownloadable && !!canDownload;
     }
 
@@ -618,11 +598,7 @@ class ContentPreview extends PureComponent<Props, State> {
     canAnnotate(): boolean {
         const { showAnnotations }: Props = this.props;
         const { file }: State = this.state;
-        const isFileAnnotatable = getProp(
-            file,
-            'permissions.can_annotate',
-            false,
-        );
+        const isFileAnnotatable = getProp(file, 'permissions.can_annotate', false);
         return isFileAnnotatable && !!showAnnotations;
     }
 
@@ -632,12 +608,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = async (): Promise<void> => {
-        const {
-            token: tokenOrTokenFunction,
-            collection,
-            onError,
-            ...rest
-        }: Props = this.props;
+        const { token: tokenOrTokenFunction, collection, onError, ...rest }: Props = this.props;
         const { file }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
@@ -645,10 +616,7 @@ class ContentPreview extends PureComponent<Props, State> {
         }
         const fileId = this.getFileId(file);
         const typedId: string = getTypedFileId(fileId);
-        const token: TokenLiteral = await TokenService.getReadToken(
-            typedId,
-            tokenOrTokenFunction,
-        );
+        const token: TokenLiteral = await TokenService.getReadToken(typedId, tokenOrTokenFunction);
         if (fileId !== this.state.currentFileId) {
             return;
         }
@@ -681,12 +649,9 @@ class ContentPreview extends PureComponent<Props, State> {
      */
     loadFileFromStage = () => {
         if (this.stagedFile) {
-            this.setState(
-                { ...this.initialState, file: this.stagedFile },
-                () => {
-                    this.stagedFile = undefined;
-                },
-            );
+            this.setState({ ...this.initialState, file: this.stagedFile }, () => {
+                this.stagedFile = undefined;
+            });
         }
     };
 
@@ -722,11 +687,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const { file: currentFile }: State = this.state;
         const isExistingFile = currentFile ? currentFile.id === file.id : false;
-        const isWatermarked = getProp(
-            file,
-            'watermark_info.is_watermarked',
-            false,
-        );
+        const isWatermarked = getProp(file, 'watermark_info.is_watermarked', false);
 
         // If the file is watermarked or if its a new file, then update the state
         // In this case preview should reload without prompting the user
@@ -761,9 +722,7 @@ class ContentPreview extends PureComponent<Props, State> {
 
             // Respect 'Retry-After' header if present, otherwise retry with exponential back-off
             let timeoutMs = 2 ** this.retryCount * MS_IN_S;
-            const retryAfter = getProp(
-                `fileError.response.headers[${HEADER_RETRY_AFTER}]`,
-            );
+            const retryAfter = getProp(`fileError.response.headers[${HEADER_RETRY_AFTER}]`);
             if (retryAfter) {
                 const retryAfterS = parseInt(retryAfter, 10);
                 if (!Number.isNaN(retryAfterS)) {
@@ -835,9 +794,7 @@ class ContentPreview extends PureComponent<Props, State> {
     getViewer = (): any => {
         const preview = this.getPreview();
         const viewer = preview ? preview.getCurrentViewer() : null;
-        return viewer && viewer.isLoaded() && !viewer.isDestroyed()
-            ? viewer
-            : null;
+        return viewer && viewer.isLoaded() && !viewer.isDestroyed() ? viewer : null;
     };
 
     /**
@@ -876,8 +833,7 @@ class ContentPreview extends PureComponent<Props, State> {
         }
 
         const fileOrId = collection[index];
-        const fileId =
-            typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
+        const fileId = typeof fileOrId === 'object' ? fileOrId.id || '' : fileOrId;
 
         this.setState(
             {
@@ -913,10 +869,7 @@ class ContentPreview extends PureComponent<Props, State> {
     navigateRight = () => {
         const { collection }: Props = this.props;
         const currentIndex = this.getFileIndex();
-        const newIndex =
-            currentIndex === collection.length - 1
-                ? collection.length - 1
-                : currentIndex + 1;
+        const newIndex = currentIndex === collection.length - 1 ? collection.length - 1 : currentIndex + 1;
         if (newIndex !== currentIndex) {
             this.navigateToIndex(newIndex);
         }
@@ -974,20 +927,13 @@ class ContentPreview extends PureComponent<Props, State> {
             // is not blocking the show. If we are previewing then the viewer may choose
             // to not allow navigation arrows. This is mostly useful for videos since the
             // navigation arrows may interfere with the settings menu inside video player.
-            if (
-                this.previewContainer &&
-                (!isPreviewing || viewer.allowNavigationArrows())
-            ) {
-                this.previewContainer.classList.add(
-                    CLASS_NAVIGATION_VISIBILITY,
-                );
+            if (this.previewContainer && (!isPreviewing || viewer.allowNavigationArrows())) {
+                this.previewContainer.classList.add(CLASS_NAVIGATION_VISIBILITY);
             }
 
             this.mouseMoveTimeoutID = setTimeout(() => {
                 if (this.previewContainer) {
-                    this.previewContainer.classList.remove(
-                        CLASS_NAVIGATION_VISIBILITY,
-                    );
+                    this.previewContainer.classList.remove(CLASS_NAVIGATION_VISIBILITY);
                 }
             }, 1500);
         },
@@ -1075,22 +1021,11 @@ class ContentPreview extends PureComponent<Props, State> {
             responseInterceptor,
         }: Props = this.props;
 
-        const {
-            file,
-            isFileError,
-            isReloadNotificationVisible,
-            currentFileId,
-        }: State = this.state;
+        const { file, isFileError, isReloadNotificationVisible, currentFileId }: State = this.state;
         const { collection }: Props = this.props;
         const fileIndex = this.getFileIndex();
-        const hasLeftNavigation =
-            collection.length > 1 &&
-            fileIndex > 0 &&
-            fileIndex < collection.length;
-        const hasRightNavigation =
-            collection.length > 1 &&
-            fileIndex > -1 &&
-            fileIndex < collection.length - 1;
+        const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
+        const hasRightNavigation = collection.length > 1 && fileIndex > -1 && fileIndex < collection.length - 1;
 
         if (!currentFileId) {
             return null;
@@ -1119,19 +1054,10 @@ class ContentPreview extends PureComponent<Props, State> {
                         />
                     )}
                     <div className="bcpr-body">
-                        <div
-                            className="bcpr-container"
-                            onMouseMove={this.onMouseMove}
-                            ref={this.containerRef}
-                        >
+                        <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
                             {file ? (
                                 <Measure bounds onResize={this.onResize}>
-                                    {({ measureRef: previewRef }) => (
-                                        <div
-                                            ref={previewRef}
-                                            className="bcpr-content"
-                                        />
-                                    )}
+                                    {({ measureRef: previewRef }) => <div ref={previewRef} className="bcpr-content" />}
                                 </Measure>
                             ) : (
                                 <div className="bcpr-loading-wrapper">
@@ -1144,20 +1070,12 @@ class ContentPreview extends PureComponent<Props, State> {
                                 </div>
                             )}
                             {hasLeftNavigation && (
-                                <PlainButton
-                                    type="button"
-                                    className="bcpr-navigate-left"
-                                    onClick={this.navigateLeft}
-                                >
+                                <PlainButton type="button" className="bcpr-navigate-left" onClick={this.navigateLeft}>
                                     <IconNavigateLeft />
                                 </PlainButton>
                             )}
                             {hasRightNavigation && (
-                                <PlainButton
-                                    type="button"
-                                    className="bcpr-navigate-right"
-                                    onClick={this.navigateRight}
-                                >
+                                <PlainButton type="button" className="bcpr-navigate-right" onClick={this.navigateRight}>
                                     <IconNavigateRight />
                                 </PlainButton>
                             )}
@@ -1180,10 +1098,7 @@ class ContentPreview extends PureComponent<Props, State> {
                         )}
                     </div>
                     {isReloadNotificationVisible && (
-                        <ReloadNotification
-                            onClose={this.closeReloadNotification}
-                            onClick={this.loadFileFromStage}
-                        />
+                        <ReloadNotification onClose={this.closeReloadNotification} onClick={this.loadFileFromStage} />
                     )}
                 </div>
             </Internationalize>

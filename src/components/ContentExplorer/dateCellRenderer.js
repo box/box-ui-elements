@@ -10,18 +10,8 @@ import Datefield from '../Date';
 import messages from '../messages';
 import { FIELD_INTERACTED_AT } from '../../constants';
 
-export default () => ({
-    dataKey,
-    rowData,
-}: {
-    dataKey: string,
-    rowData: BoxItem,
-}) => {
-    const {
-        modified_at = '',
-        interacted_at = '',
-        modified_by,
-    }: BoxItem = rowData;
+export default () => ({ dataKey, rowData }: { dataKey: string, rowData: BoxItem }) => {
+    const { modified_at = '', interacted_at = '', modified_by }: BoxItem = rowData;
     const modifiedBy: string = modified_by ? modified_by.name || '' : '';
     const isRecents: boolean = dataKey === FIELD_INTERACTED_AT;
     const date: string = isRecents ? interacted_at || modified_at : modified_at;

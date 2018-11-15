@@ -11,10 +11,7 @@ import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
 import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelectorDropdown';
 
 import messages from '../../../messages';
-import {
-    ACTIVITY_TARGETS,
-    INTERACTION_TARGET,
-} from '../../../../interactionTargets';
+import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../../interactionTargets';
 
 type Props = {
     approvalDate: ?Date,
@@ -62,11 +59,7 @@ const AddApprovalFields = ({
                 selectorOptions={approverOptions}
             >
                 {approverOptions.map(({ id, name, email }) => (
-                    <ContactDatalistItem
-                        key={id}
-                        name={name}
-                        subtitle={email}
-                    />
+                    <ContactDatalistItem key={id} name={name} subtitle={email} />
                 ))}
             </PillSelectorDropdown>
             <DatePicker

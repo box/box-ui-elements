@@ -29,12 +29,7 @@ const PAGE_ICON_STYLE = {
     width: 6,
 };
 
-const Pagination = ({
-    offset = 0,
-    onChange = noop,
-    pageSize = DEFAULT_PAGE_SIZE,
-    totalCount = 0,
-}: Props) => {
+const Pagination = ({ offset = 0, onChange = noop, pageSize = DEFAULT_PAGE_SIZE, totalCount = 0 }: Props) => {
     const pageCount = Math.ceil(totalCount / pageSize);
     if (pageCount <= 1) return null;
 
@@ -68,29 +63,16 @@ const Pagination = ({
     return (
         <div className="be-pagination">
             <div className="be-pagination-count">
-                <PaginationMenu
-                    onPageClick={updateOffset}
-                    pageCount={pageCount}
-                    pageNumber={pageNumber}
-                />
+                <PaginationMenu onPageClick={updateOffset} pageCount={pageCount} pageNumber={pageNumber} />
             </div>
 
             <ButtonGroup>
-                <Tooltip
-                    isDisabled={!hasPreviousPage}
-                    text={<FormattedMessage {...messages.previousPage} />}
-                >
-                    <Button
-                        onClick={handlePreviousClick}
-                        isDisabled={!hasPreviousPage}
-                    >
+                <Tooltip isDisabled={!hasPreviousPage} text={<FormattedMessage {...messages.previousPage} />}>
+                    <Button onClick={handlePreviousClick} isDisabled={!hasPreviousPage}>
                         <IconPageBack {...PAGE_ICON_STYLE} />
                     </Button>
                 </Tooltip>
-                <Tooltip
-                    isDisabled={!hasNextPage}
-                    text={<FormattedMessage {...messages.nextPage} />}
-                >
+                <Tooltip isDisabled={!hasNextPage} text={<FormattedMessage {...messages.nextPage} />}>
                     <Button onClick={handleNextClick} isDisabled={!hasNextPage}>
                         <IconPageForward {...PAGE_ICON_STYLE} />
                     </Button>

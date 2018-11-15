@@ -4,8 +4,7 @@ import { ContentUploaderComponent } from '../ContentUploader';
 import * as UploaderUtils from '../../../util/uploads';
 
 describe('components/ContentUploader/ContentUploader', () => {
-    const getWrapper = (props = {}) =>
-        shallow(<ContentUploaderComponent {...props} />);
+    const getWrapper = (props = {}) => shallow(<ContentUploaderComponent {...props} />);
 
     describe('getUploadAPI()', () => {
         const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
@@ -36,18 +35,14 @@ describe('components/ContentUploader/ContentUploader', () => {
         });
 
         test('should use the chunked upload api', () => {
-            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(
-                () => true,
-            );
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI(file);
             expect(instance.createAPIFactory).toBeCalled();
             expect(getChunkedUploadAPI).toBeCalled();
         });
 
         test('should use the regular upload api if the file <= 50MB', () => {
-            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(
-                () => true,
-            );
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI({
                 ...file,
                 size: CHUNKED_UPLOAD_MIN_SIZE_BYTES,
@@ -56,9 +51,7 @@ describe('components/ContentUploader/ContentUploader', () => {
         });
 
         test('should use the regular upload api if multiput not supported', () => {
-            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(
-                () => false,
-            );
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => false);
             instance.getUploadAPI({
                 ...file,
                 size: CHUNKED_UPLOAD_MIN_SIZE_BYTES,
@@ -70,9 +63,7 @@ describe('components/ContentUploader/ContentUploader', () => {
             wrapper.setProps({
                 chunked: false,
             });
-            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(
-                () => true,
-            );
+            jest.spyOn(UploaderUtils, 'isMultiputSupported').mockImplementation(() => true);
             instance.getUploadAPI(file);
             expect(getPlainUploadAPI).toBeCalled();
         });

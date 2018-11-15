@@ -37,14 +37,7 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
 
             const prevModifiedBy = tmpModifiedBy || PLACEHOLDER_USER;
 
-            const {
-                action,
-                modified_by: tmpCurModifiedBy,
-                created_at,
-                trashed_at,
-                id,
-                version_number,
-            } = feedItem;
+            const { action, modified_by: tmpCurModifiedBy, created_at, trashed_at, id, version_number } = feedItem;
             const parsedVersionNumber = parseInt(version_number, 10);
             const collaborators = previousFeedItem.collaborators || {
                 [prevModifiedBy.id]: { ...prevModifiedBy },

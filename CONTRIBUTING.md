@@ -16,9 +16,9 @@ This project adheres to the [Box Open Code of Conduct](http://opensource.box.com
 
 ## How to contribute
 
-* See [Developing Guide](Developing.md).
-* **File an issue** - if you found a bug, want to request an enhancement, or want to implement something (bug fix or feature).
-* **Send a pull request** - if you want to contribute code. Please be sure to file an issue first.
+-   See [Developing Guide](Developing.md).
+-   **File an issue** - if you found a bug, want to request an enhancement, or want to implement something (bug fix or feature).
+-   **Send a pull request** - if you want to contribute code. Please be sure to file an issue first.
 
 ## Pull request best practices
 
@@ -48,27 +48,23 @@ Create a branch with a descriptive name, such as `add-search`.
 
 ### Step 5: Push your feature branch to your fork
 
-As you develop code, continue to push code to your remote feature branch. Please make sure to include the issue number you're addressing in your commit message, such as:
+We use [semantic-release](https://github.com/semantic-release/semantic-release#commit-message-format) and the [conventional commit message format](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional). Keep a separate feature branch for each issue you want to address. As you develop code, continue to push code to your remote feature branch. If applicable, please make sure to include the issue number you're addressing in your commit message, such as:
 
 ```
-Tag: Short description (fixes #1234)
+tag(optional scope): short description
 
-Longer description here if necessary
+fixes #1234
+longer description here if necessary.
+include BREAKING CHANGE keyword for breaking changes.
 ```
-The Tag is one of the following:
 
-* `Fix` - for a bug fix.
-* `Update` - for a backwards-compatible enhancement or a change to a rule that increases the number of reported problems.
-* `New` - implemented a new feature.
-* `Breaking` - for a backwards-incompatible enhancement or feature.
-* `Docs` - changes to documentation only.
-* `Build` - changes to build process only.
-* `Upgrade` - for a dependency upgrade.
-* `Chore` - for refactoring, adding tests, etc. (anything that isn’t user-facing).
+The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please click [here](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional#type-enum). Here is an example of the release type that will be done based on a commit message:
 
-The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. If the pull request addresses an issue, then the issue number should be mentioned at the end.
-
-Keep a separate feature branch for each issue you want to address.
+| Commit message                                                                                                                                          | Release type               |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `fix(preview): fullscreen behavior in ie11`                                                                                                             | Patch Release              |
+| `feat(preview): add ability to fullscreen`                                                                                                              | ~~Minor~~ Feature Release  |
+| `feat(preview): remove fullscreen ability`<br><br>`BREAKING CHANGE: The fullscreen ability has been removed due to poor support of the fullscreen api.` | ~~Major~~ Breaking Release |
 
 ### Step 6: Rebase
 

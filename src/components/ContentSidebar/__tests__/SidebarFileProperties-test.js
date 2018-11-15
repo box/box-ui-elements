@@ -6,16 +6,11 @@ import SidebarFileProperties, {
     SidebarFilePropertiesComponent,
     getClassificationModal,
 } from '../SidebarFileProperties';
-import {
-    METADATA_TEMPLATE_CLASSIFICATION,
-    KEY_CLASSIFICATION_TYPE,
-} from '../../../constants';
+import { METADATA_TEMPLATE_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../../constants';
 
 describe('components/ContentSidebar/SidebarFileProperties', () => {
-    const getWrapper = props =>
-        shallow(<SidebarFilePropertiesComponent {...props} />);
-    const getMountWrapper = props =>
-        mount(<SidebarFilePropertiesComponent {...props} />);
+    const getWrapper = props => shallow(<SidebarFilePropertiesComponent {...props} />);
+    const getMountWrapper = props => mount(<SidebarFilePropertiesComponent {...props} />);
     const props = {
         file: {
             created_at: '2018-04-18T16:56:05.352Z',
@@ -72,8 +67,7 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
             dispositionTime: 1556317461,
             policyName: 'test policy',
             policyType: 'finite',
-            retentionPolicyDescription:
-                'test policy (1 year retention & auto-deletion',
+            retentionPolicyDescription: 'test policy (1 year retention & auto-deletion',
         },
         intl: {
             locale: 'en',
@@ -101,9 +95,7 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
                     content: fakeError,
                 },
             };
-            const wrapper = shallow(
-                <SidebarFileProperties {...errorProps} />,
-            ).dive();
+            const wrapper = shallow(<SidebarFileProperties {...errorProps} />).dive();
 
             expect(wrapper.find(InlineError)).toHaveLength(1);
             expect(wrapper).toMatchSnapshot();
@@ -161,10 +153,7 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
     describe('getClassificationModal()', () => {
         test('should not have onClassificationClick prop on SidebarFileProperties when can_upload is falsy', () => {
             expect(
-                getClassificationModal(
-                    classificationProps.file,
-                    classificationProps.onClassificationClick,
-                ),
+                getClassificationModal(classificationProps.file, classificationProps.onClassificationClick),
             ).toBeUndefined();
         });
 

@@ -12,8 +12,7 @@ const file = {
 };
 
 describe('components/ContentSidebar/DetailsSidebar', () => {
-    const getWrapper = (props, options) =>
-        shallow(<DetailsSidebar {...props} />, options);
+    const getWrapper = (props, options) => shallow(<DetailsSidebar {...props} />, options);
 
     describe('render()', () => {
         test('should render DetailsSidebar with all components', () => {
@@ -87,10 +86,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
 
     describe('componentDidMount()', () => {
         test('should call fetchAccessStats when hasAccessStats is true', () => {
-            const wrapper = getWrapper(
-                { hasAccessStats: true },
-                { disableLifecycleMethods: true },
-            );
+            const wrapper = getWrapper({ hasAccessStats: true }, { disableLifecycleMethods: true });
             const instance = wrapper.instance();
             instance.fetchAccessStats = jest.fn();
             instance.componentDidMount();
@@ -124,8 +120,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
                 accessStatsError: {
                     maskError: {
                         errorHeader: messages.fileAccessStatsErrorHeaderMessage,
-                        errorSubHeader:
-                            messages.defaultErrorMaskSubHeaderMessage,
+                        errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
                     },
                 },
             });
@@ -233,9 +228,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             const instance = wrapper.instance();
             instance.onClassificationChange = jest.fn();
             instance.onClassificationClick();
-            expect(onClassificationClick).toBeCalledWith(
-                instance.onClassificationChange,
-            );
+            expect(onClassificationClick).toBeCalledWith(instance.onClassificationChange);
         });
     });
 });

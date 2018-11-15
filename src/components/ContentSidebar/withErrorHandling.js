@@ -25,15 +25,9 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
         return (
             <SidebarSection>
                 <ErrorMask
-                    errorHeader={
-                        <FormattedMessage {...maskError.errorHeader} />
-                    }
+                    errorHeader={<FormattedMessage {...maskError.errorHeader} />}
                     errorSubHeader={
-                        maskError.errorSubHeader ? (
-                            <FormattedMessage {...maskError.errorSubHeader} />
-                        ) : (
-                            undefined
-                        )
+                        maskError.errorSubHeader ? <FormattedMessage {...maskError.errorSubHeader} /> : undefined
                     }
                 />
             </SidebarSection>
@@ -42,9 +36,7 @@ const withErrorHandling = (WrappedComponent: React.ComponentType<any>) => ({
     if (inlineError) {
         return (
             <React.Fragment>
-                <InlineError
-                    title={<FormattedMessage {...inlineError.title} />}
-                >
+                <InlineError title={<FormattedMessage {...inlineError.title} />}>
                     {<FormattedMessage {...inlineError.content} />}
                 </InlineError>
                 <WrappedComponent {...rest} />

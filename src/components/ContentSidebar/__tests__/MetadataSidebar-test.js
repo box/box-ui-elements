@@ -131,11 +131,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 getViewer: jest.fn(),
                 api,
             });
-            const editors = [
-                { instance: { id: 1 } },
-                { instance: { id: 2 } },
-                { instance: { id: 3 } },
-            ];
+            const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             const instance = wrapper.instance();
             expect(instance.getEditor(2)).toBe(editors[1]);
@@ -156,11 +152,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 api,
             });
             const instance = wrapper.instance();
-            const editors = [
-                { instance: { id: 1 } },
-                { instance: { id: 2 } },
-                { instance: { id: 3 } },
-            ];
+            const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             instance.setState = jest.fn();
             instance.onRemoveSuccessHandler(editors[1]);
@@ -185,11 +177,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 api,
             });
             const instance = wrapper.instance();
-            const editors = [
-                { instance: { id: 1 } },
-                { instance: { id: 2 } },
-                { instance: { id: 3 } },
-            ];
+            const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             instance.setState = jest.fn();
             instance.onRemove(5);
@@ -209,11 +197,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 api,
             });
             const instance = wrapper.instance();
-            const editors = [
-                { instance: { id: 1 } },
-                { instance: { id: 2 } },
-                { instance: { id: 3 } },
-            ];
+            const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             instance.setState = jest.fn();
             instance.onRemove(1);
@@ -246,11 +230,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             instance.onAddSuccessHandler({ instance: { id: 3 } });
             expect(instance.setState).toBeCalledWith({
                 isLoading: false,
-                editors: [
-                    { instance: { id: 1 } },
-                    { instance: { id: 2 } },
-                    { instance: { id: 3 } },
-                ],
+                editors: [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }],
             });
         });
     });
@@ -272,12 +252,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             const instance = wrapper.instance();
             instance.setState = jest.fn();
             instance.onAdd('template');
-            expect(createMetadata).toBeCalledWith(
-                {},
-                'template',
-                instance.onAddSuccessHandler,
-                instance.errorCallback,
-            );
+            expect(createMetadata).toBeCalledWith({}, 'template', instance.onAddSuccessHandler, instance.errorCallback);
             expect(instance.setState).toBeCalledWith({
                 isLoading: true,
             });
@@ -297,20 +272,12 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 api,
             });
             const instance = wrapper.instance();
-            const editors = [
-                { instance: { id: 1 } },
-                { instance: { id: 2 } },
-                { instance: { id: 3 } },
-            ];
+            const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             instance.setState = jest.fn();
             instance.onSaveSuccessHandler(editors[1], { instance: { id: 5 } });
             expect(instance.setState).toBeCalledWith({
-                editors: [
-                    { instance: { id: 1 } },
-                    { instance: { id: 5 } },
-                    { instance: { id: 3 } },
-                ],
+                editors: [{ instance: { id: 1 } }, { instance: { id: 5 } }, { instance: { id: 3 } }],
             });
         });
     });
@@ -331,11 +298,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             });
             const instance = wrapper.instance();
             wrapper.setState({
-                editors: [
-                    { instance: { id: 1 } },
-                    { instance: { id: 2 } },
-                    { instance: { id: 3 } },
-                ],
+                editors: [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }],
             });
             instance.setState = jest.fn();
             instance.onSave(5, {});
@@ -355,11 +318,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 api,
             });
             const instance = wrapper.instance();
-            const editors = [
-                { instance: { id: 1 } },
-                { instance: { id: 2 } },
-                { instance: { id: 3 } },
-            ];
+            const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             instance.setState = jest.fn();
             instance.onSave(1, 'ops');
@@ -389,11 +348,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             });
             const instance = wrapper.instance();
             wrapper.setState({
-                editors: [
-                    { instance: { id: 1 } },
-                    { instance: { id: 2 } },
-                    { instance: { id: 3 } },
-                ],
+                editors: [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }],
             });
             instance.setState = jest.fn();
             instance.onModification(5, {});
@@ -413,20 +368,12 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 api,
             });
             const instance = wrapper.instance();
-            const editors = [
-                { instance: { id: 1 } },
-                { instance: { id: 2 } },
-                { instance: { id: 3 } },
-            ];
+            const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             instance.setState = jest.fn();
             instance.onModification(1, true);
             expect(instance.setState).toBeCalledWith({
-                editors: [
-                    { instance: { id: 1 }, isDirty: true },
-                    { instance: { id: 2 } },
-                    { instance: { id: 3 } },
-                ],
+                editors: [{ instance: { id: 1 }, isDirty: true }, { instance: { id: 2 } }, { instance: { id: 3 } }],
             });
         });
     });

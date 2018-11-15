@@ -15,13 +15,7 @@ import nameCellRenderer from '../Item/nameCellRenderer';
 import iconCellRenderer from '../Item/iconCellRenderer';
 import isRowSelectable from './cellRendererHelper';
 import { isFocusableElement, focus } from '../../util/dom';
-import {
-    VIEW_SELECTED,
-    FIELD_NAME,
-    FIELD_ID,
-    FIELD_SHARED_LINK,
-    TYPE_FOLDER,
-} from '../../constants';
+import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
 
 import './ItemList.scss';
 
@@ -62,12 +56,7 @@ const ItemList = ({
 }: Props) => {
     const iconCell = iconCellRenderer();
     const nameCell = nameCellRenderer(rootId, view, onItemClick);
-    const checkboxCell = checkboxCellRenderer(
-        onItemSelect,
-        selectableType,
-        extensionsWhitelist,
-        hasHitSelectionLimit,
-    );
+    const checkboxCell = checkboxCellRenderer(onItemSelect, selectableType, extensionsWhitelist, hasHitSelectionLimit);
     const shareAccessCell = shareAccessCellRenderer(
         onShareAccessChange,
         canSetShareAccess,
@@ -84,12 +73,7 @@ const ItemList = ({
         }
 
         const { selected, type } = items[index];
-        const isSelectable = isRowSelectable(
-            selectableType,
-            extensionsWhitelist,
-            hasHitSelectionLimit,
-            items[index],
-        );
+        const isSelectable = isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, items[index]);
         return classNames(`bcp-item-row bcp-item-row-${index}`, {
             'bcp-item-row-selected': selected && view !== VIEW_SELECTED,
             'bcp-item-row-unselectable': type !== TYPE_FOLDER && !isSelectable, // folder row should never dim
@@ -107,12 +91,7 @@ const ItemList = ({
     }) => {
         // If the click is happening on a clickable element on the item row, ignore row selection
         if (
-            isRowSelectable(
-                selectableType,
-                extensionsWhitelist,
-                hasHitSelectionLimit,
-                rowData,
-            ) &&
+            isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData) &&
             !isFocusableElement(event.target)
         ) {
             onItemSelect(rowData);
@@ -131,9 +110,7 @@ const ItemList = ({
             onSelect={onItemSelect}
             onOpen={onItemClick}
             scrollToRow={focusedRow}
-            onScrollToChange={({ scrollToRow }) =>
-                focus(rootElement, `.bcp-item-row-${scrollToRow}`)
-            }
+            onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bcp-item-row-${scrollToRow}`)}
         >
             {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
@@ -156,10 +133,7 @@ const ItemList = ({
                                     rowStopIndex: stopIndex,
                                 });
                                 if (focusOnRender) {
-                                    focus(
-                                        rootElement,
-                                        `.bcp-item-row-${scrollToRow}`,
-                                    );
+                                    focus(rootElement, `.bcp-item-row-${scrollToRow}`);
                                 }
                             }}
                         >
@@ -169,12 +143,7 @@ const ItemList = ({
                                 width={isSmall ? 30 : 50}
                                 flexShrink={0}
                             />
-                            <Column
-                                dataKey={FIELD_NAME}
-                                cellRenderer={nameCell}
-                                width={300}
-                                flexGrow={1}
-                            />
+                            <Column dataKey={FIELD_NAME} cellRenderer={nameCell} width={300} flexGrow={1} />
                             {isSmall ? null : (
                                 <Column
                                     dataKey={FIELD_SHARED_LINK}

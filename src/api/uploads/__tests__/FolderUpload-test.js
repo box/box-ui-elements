@@ -12,13 +12,7 @@ jest.mock('../../../util/uploads', () => ({
 
 describe('api/uploads/FolderUpload', () => {
     beforeEach(() => {
-        folderUploadInstance = new FolderUpload(
-            noop,
-            destinationFolderID,
-            noop,
-            true,
-            {},
-        );
+        folderUploadInstance = new FolderUpload(noop, destinationFolderID, noop, true, {});
     });
 
     describe('upload()', () => {
@@ -29,11 +23,7 @@ describe('api/uploads/FolderUpload', () => {
 
             folderUploadInstance.upload({ errorCallback, noop });
 
-            expect(upload1).toHaveBeenCalledWith(
-                destinationFolderID,
-                errorCallback,
-                true,
-            );
+            expect(upload1).toHaveBeenCalledWith(destinationFolderID, errorCallback, true);
         });
     });
 
@@ -87,13 +77,7 @@ describe('api/uploads/FolderUpload', () => {
         });
 
         test('should construct folders correctly when API options are missing', () => {
-            folderUploadInstance = new FolderUpload(
-                noop,
-                destinationFolderID,
-                noop,
-                false,
-                {},
-            );
+            folderUploadInstance = new FolderUpload(noop, destinationFolderID, noop, false, {});
             folderUploadInstance.buildFolderTreeFromWebkitRelativePath([
                 { webkitRelativePath: 'a' },
                 { name: 'f1', webkitRelativePath: 'a/f1' },
@@ -152,11 +136,7 @@ describe('api/uploads/FolderUpload', () => {
             const apiOptions = { apiOptions: true };
             const entry = { entry: true };
 
-            const nodeInstance = folderUploadInstance.createFolderUploadNode(
-                name,
-                apiOptions,
-                entry,
-            );
+            const nodeInstance = folderUploadInstance.createFolderUploadNode(name, apiOptions, entry);
 
             expect(nodeInstance.name).toEqual(name);
             expect(nodeInstance.fileAPIOptions).toEqual(apiOptions);

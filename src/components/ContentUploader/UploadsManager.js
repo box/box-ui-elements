@@ -36,9 +36,7 @@ const UploadsManager = ({
      * @param {SyntheticKeyboardEvent} event
      * @return {void}
      */
-    const handleProgressBarKeyDown = (
-        event: SyntheticKeyboardEvent<*>,
-    ): void => {
+    const handleProgressBarKeyDown = (event: SyntheticKeyboardEvent<*>): void => {
         switch (event.key) {
             case 'Enter':
             case 'Space':
@@ -50,10 +48,7 @@ const UploadsManager = ({
     };
 
     const totalSize = items.reduce(
-        (updatedSize, item) =>
-            item.status === STATUS_ERROR || item.isFolder
-                ? updatedSize
-                : updatedSize + item.size,
+        (updatedSize, item) => (item.status === STATUS_ERROR || item.isFolder ? updatedSize : updatedSize + item.size),
         0,
     );
     const totalUploaded = items.reduce(
@@ -81,11 +76,7 @@ const UploadsManager = ({
                 view={view}
             />
             <div className="bcu-uploads-manager-item-list">
-                <ItemList
-                    items={items}
-                    view={view}
-                    onClick={onItemActionClick}
-                />
+                <ItemList items={items} view={view} onClick={onItemActionClick} />
             </div>
         </div>
     );

@@ -15,9 +15,7 @@ describe('components/ContentOpenWith/OpenWithButton', () => {
 
         test('should use a message if there is an error', () => {
             const result = getTooltip(null, 'error', false);
-            expect(result.props.defaultMessage).toEqual(
-                messages.errorOpenWithDescription.defaultMessage,
-            );
+            expect(result.props.defaultMessage).toEqual(messages.errorOpenWithDescription.defaultMessage);
         });
 
         test('should return the display description if provided', () => {
@@ -28,9 +26,7 @@ describe('components/ContentOpenWith/OpenWithButton', () => {
 
         test('should use a message if there is nothing else to display', () => {
             const result = getTooltip(null, null, false);
-            expect(result.props.defaultMessage).toEqual(
-                messages.emptyOpenWithDescription.defaultMessage,
-            );
+            expect(result.props.defaultMessage).toEqual(messages.emptyOpenWithDescription.defaultMessage);
         });
     });
 

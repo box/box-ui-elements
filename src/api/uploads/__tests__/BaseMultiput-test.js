@@ -37,13 +37,9 @@ describe('api/uploads/BaseMultiput', () => {
             (eventInfo, expectedData) => {
                 test('should POST to the correct endpoint', async () => {
                     BaseMultiputTest.sessionEndpoints.logEvent = 'logEvent';
-                    BaseMultiputTest.xhr.post = jest
-                        .fn()
-                        .mockReturnValueOnce('expected');
+                    BaseMultiputTest.xhr.post = jest.fn().mockReturnValueOnce('expected');
 
-                    expect(
-                        await BaseMultiputTest.logEvent(event_type, eventInfo),
-                    ).toBe('expected');
+                    expect(await BaseMultiputTest.logEvent(event_type, eventInfo)).toBe('expected');
                     expect(BaseMultiputTest.xhr.post).toHaveBeenCalledWith({
                         url: 'logEvent',
                         data: expectedData,

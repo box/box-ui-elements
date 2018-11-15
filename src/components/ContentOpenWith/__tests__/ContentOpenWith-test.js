@@ -61,12 +61,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             instance.api = api;
 
             instance.fetchOpenWithData();
-            expect(openWithStub).toHaveBeenCalledWith(
-                '1234',
-                'en-US',
-                expect.any(Function),
-                expect.any(Function),
-            );
+            expect(openWithStub).toHaveBeenCalledWith('1234', 'en-US', expect.any(Function), expect.any(Function));
         });
     });
 
@@ -117,12 +112,8 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
 
             instance.onIntegrationClick(displayIntegration);
             expect(instance.window.open).toBeCalled();
-            expect(typeof instance.integrationWindow.onunload).toEqual(
-                'function',
-            );
-            expect(instance.integrationWindow.document.title).toEqual(
-                displayIntegration.displayName,
-            );
+            expect(typeof instance.integrationWindow.onunload).toEqual('function');
+            expect(instance.integrationWindow.document.title).toEqual(displayIntegration.displayName);
             expect(instance.setState).toHaveBeenCalledWith({
                 shouldRenderLoadingIntegrationPortal: true,
                 shouldRenderErrorIntegrationPortal: false,

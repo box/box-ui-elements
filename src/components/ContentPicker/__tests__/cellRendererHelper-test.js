@@ -1,11 +1,8 @@
-/* eslint-disable no-unused-expressions */
 import isRowSelectable from '../cellRendererHelper';
 
 describe('picker/components/cellRendererHelper/isRowSelectable()', () => {
     test('should return true when folder picker and type is folder', () => {
-        expect(
-            isRowSelectable('folder', [], false, { type: 'folder' }),
-        ).toBeTruthy();
+        expect(isRowSelectable('folder', [], false, { type: 'folder' })).toBeTruthy();
     });
     test('should return false when folder picker and type is file', () => {
         expect(
@@ -24,9 +21,7 @@ describe('picker/components/cellRendererHelper/isRowSelectable()', () => {
         ).toBeTruthy();
     });
     test('should return false when file picker and type is folder', () => {
-        expect(
-            isRowSelectable('file', [], false, { type: 'folder' }),
-        ).toBeFalsy();
+        expect(isRowSelectable('file', [], false, { type: 'folder' })).toBeFalsy();
     });
     test('should return true when file picker and type is file and extension is whitelisted', () => {
         expect(
@@ -51,8 +46,6 @@ describe('picker/components/cellRendererHelper/isRowSelectable()', () => {
         expect(isRowSelectable('file', [], true, { type: 'file' })).toBeFalsy();
     });
     test('should return true when selection limit has reached and item is selected', () => {
-        expect(
-            isRowSelectable('file', [], true, { type: 'file', selected: true }),
-        ).toBeTruthy();
+        expect(isRowSelectable('file', [], true, { type: 'file', selected: true })).toBeTruthy();
     });
 });

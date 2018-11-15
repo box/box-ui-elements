@@ -161,9 +161,7 @@ describe('api/uploads/BaseUpload', () => {
             const retryAfterMs = 1000;
 
             upload.makePreflightRequest = jest.fn();
-            const getMock = jest
-                .fn()
-                .mockReturnValueOnce(`${retryAfterMs / 1000}`);
+            const getMock = jest.fn().mockReturnValueOnce(`${retryAfterMs / 1000}`);
 
             upload.preflightErrorHandler({
                 code: 'too_many_requests',

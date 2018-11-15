@@ -6,10 +6,7 @@ jest.mock('../../Header/Header', () => 'mock-header');
 jest.mock('../../SubHeader/SubHeader', () => 'mock-subheader');
 jest.mock('../Content', () => 'mock-content');
 jest.mock('../../UploadDialog/UploadDialog', () => 'mock-uploaddialog');
-jest.mock(
-    '../../CreateFolderDialog/CreateFolderDialog',
-    () => 'mock-createfolderdialog',
-);
+jest.mock('../../CreateFolderDialog/CreateFolderDialog', () => 'mock-createfolderdialog');
 jest.mock('../DeleteConfirmationDialog', () => 'mock-deletedialog');
 jest.mock('../RenameDialog', () => 'mock-renamedialog');
 jest.mock('../ShareDialog', () => 'mock-sharedialog');
@@ -17,8 +14,7 @@ jest.mock('../PreviewDialog', () => 'mock-previewdialog');
 
 describe('components/ContentExplorer/ContentExplorer', () => {
     let rootElement;
-    const getWrapper = props =>
-        mount(<ContentExplorer {...props} />, { attachTo: rootElement });
+    const getWrapper = props => mount(<ContentExplorer {...props} />, { attachTo: rootElement });
 
     beforeEach(() => {
         rootElement = document.createElement('div');

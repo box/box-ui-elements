@@ -17,16 +17,10 @@ import ExecuteForm from './ExecuteForm';
 import '../base.scss';
 import './ContentOpenWith.scss';
 
-import {
-    CLIENT_NAME_OPEN_WITH,
-    DEFAULT_HOSTNAME_API,
-    HTTP_GET,
-    HTTP_POST,
-} from '../../constants';
+import { CLIENT_NAME_OPEN_WITH, DEFAULT_HOSTNAME_API, HTTP_GET, HTTP_POST } from '../../constants';
 
 const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
-const UNSUPPORTED_INVOCATION_METHOD_TYPE =
-    'Integration invocation using this HTTP method type is not supported';
+const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 
 type ExternalProps = {
     show?: boolean,
@@ -109,13 +103,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        const {
-            token,
-            apiHost,
-            clientName,
-            requestInterceptor,
-            responseInterceptor,
-        } = props;
+        const { token, apiHost, clientName, requestInterceptor, responseInterceptor } = props;
         this.id = uniqueid('bcow_');
         this.api = new API({
             token,
@@ -196,12 +184,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         const { fileId, language }: Props = this.props;
         this.api
             .getOpenWithAPI(false)
-            .getOpenWithIntegrations(
-                fileId,
-                language,
-                this.fetchOpenWithSuccessHandler,
-                this.fetchErrorHandler,
-            );
+            .getOpenWithIntegrations(fileId, language, this.fetchOpenWithSuccessHandler, this.fetchErrorHandler);
     }
 
     /**
@@ -241,19 +224,13 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    onIntegrationClick = ({
-        appIntegrationId,
-        displayName,
-    }: Integration): void => {
+    onIntegrationClick = ({ appIntegrationId, displayName }: Integration): void => {
         const { fileId }: Props = this.props;
         // window.open() is immediately invoked to avoid popup-blockers
         // The name is included to be the target of a form if the integration is a POST integration.
         // A uniqueid is used to force the browser to open a new tab every time, while still allowing
         // a form to reference a given tab.
-        this.integrationWindow = this.window.open(
-            '',
-            `${uniqueid(appIntegrationId)}`,
-        );
+        this.integrationWindow = this.window.open('', `${uniqueid(appIntegrationId)}`);
         this.integrationWindow.document.title = displayName;
         this.integrationWindow.onunload = this.cleanupIntegrationWindow;
 
@@ -303,9 +280,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 break;
             case HTTP_GET:
                 if (!this.integrationWindow) {
-                    this.executeIntegrationErrorHandler(
-                        Error(WINDOW_OPEN_BLOCKED_ERROR),
-                    );
+                    this.executeIntegrationErrorHandler(Error(WINDOW_OPEN_BLOCKED_ERROR));
                     return;
                 }
 
@@ -317,9 +292,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
                 break;
             default:
-                this.executeIntegrationErrorHandler(
-                    Error(UNSUPPORTED_INVOCATION_METHOD_TYPE),
-                );
+                this.executeIntegrationErrorHandler(Error(UNSUPPORTED_INVOCATION_METHOD_TYPE));
         }
 
         this.integrationWindow = null;
@@ -376,9 +349,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     getDisplayIntegration(): ?Integration {
         const { integrations }: State = this.state;
         // We only consider an integration a display integration if is the only integration in our state
-        return Array.isArray(integrations) && integrations.length === 1
-            ? integrations[0]
-            : null;
+        return Array.isArray(integrations) && integrations.length === 1 ? integrations[0] : null;
     }
 
     /**
@@ -414,13 +385,9 @@ class ContentOpenWith extends PureComponent<Props, State> {
                             isLoading={isLoading}
                         />
                     ) : (
-                        <OpenWithDropdownMenu
-                            onClick={this.onIntegrationClick}
-                            integrations={integrations}
-                        />
+                        <OpenWithDropdownMenu onClick={this.onIntegrationClick} integrations={integrations} />
                     )}
-                    {(shouldRenderLoadingIntegrationPortal ||
-                        shouldRenderErrorIntegrationPortal) && (
+                    {(shouldRenderLoadingIntegrationPortal || shouldRenderErrorIntegrationPortal) && (
                         <IntegrationPortalContainer
                             hasError={shouldRenderErrorIntegrationPortal}
                             integrationWindow={this.integrationWindow}
@@ -430,10 +397,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                         <ExecuteForm
                             onSubmit={this.onExecuteFormSubmit}
                             executePostData={executePostData}
-                            windowName={
-                                this.integrationWindow &&
-                                this.integrationWindow.name
-                            }
+                            windowName={this.integrationWindow && this.integrationWindow.name}
                             id={this.id}
                         />
                     )}

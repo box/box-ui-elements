@@ -1,20 +1,21 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-const eslintrc = require('@box/frontend-config/eslint/eslintrc.js');
+const eslintrc = require.resolve('@box/frontend/eslint/eslintrc.js');
 
-eslintrc.rules = {
-    ...eslintrc.rules,
-    'class-methods-use-this': 0,
-    'camelcase': 0,
-    'jsx-a11y/label-has-associated-control': 0,
-    'no-shadow': 0, //fixme
-    'react/default-props-match-prop-types': 0, //fixme
-    'react/destructuring-assignment': 0, //fixme
-    'react/display-name': 0,
-    'react/sort-comp': 0, //fixme
-    'react/no-unused-prop-types': 0, //fixme
-    'react/no-access-state-in-setstate': 0, //fixme
-    'react/no-this-in-sfc': 0,
-    'react/no-unused-state': 0 //fixme
+module.exports = {
+    extends: [eslintrc],
+    rules: {
+        'class-methods-use-this': 'off',
+        'camelcase': 'off',
+        'flowtype/sort-keys': 'off', //fixme
+        'jsx-a11y/label-has-associated-control': 'off',
+        'no-shadow': 'off', //fixme
+        'react/default-props-match-prop-types': 'off', //fixme
+        'react/destructuring-assignment': 'off', //fixme
+        'react/display-name': 'off',
+        'react/jsx-sort-props': 'off', //fixme
+        'react/sort-comp': 'off', //fixme
+        'react/no-unused-prop-types': 'off', //fixme
+        'react/no-access-state-in-setstate': 'off', //fixme
+        'react/no-this-in-sfc': 'off',
+        'react/no-unused-state': 'off', //fixme
+    }
 };
-
-module.exports = eslintrc;

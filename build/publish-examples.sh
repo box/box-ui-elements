@@ -46,7 +46,7 @@ push_to_gh_pages() {
     git rebase release/gh-pages || exit 1
     cp -R styleguide/. ./ || exit 1
     git add -A || exit 1
-    git commit -am "Docs: v$VERSION" || exit 1
+    git commit -am "build(examples): v$VERSION" || exit 1
     git push release gh-pages --no-verify || exit 1
 }
 

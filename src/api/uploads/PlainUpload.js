@@ -57,11 +57,7 @@ class PlainUpload extends BaseUpload {
      * @param {boolean} [options.url] - Upload URL to use
      * @return {Promise} Async function promise
      */
-    preflightSuccessHandler = async ({
-        data,
-    }: {
-        data: { upload_url?: string },
-    }): Promise<any> => {
+    preflightSuccessHandler = async ({ data }: { data: { upload_url?: string } }): Promise<any> => {
         if (this.isDestroyed()) {
             return;
         }
@@ -72,10 +68,7 @@ class PlainUpload extends BaseUpload {
             uploadUrl = `${this.getBaseUploadUrl()}/files/content`;
 
             if (this.fileId) {
-                uploadUrl = uploadUrl.replace(
-                    'content',
-                    `${this.fileId}/content`,
-                );
+                uploadUrl = uploadUrl.replace('content', `${this.fileId}/content`);
             }
         }
 

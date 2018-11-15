@@ -7,11 +7,7 @@
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 import File from './File';
-import {
-    getBadItemError,
-    getBadPermissionsError,
-    isUserCorrectableError,
-} from '../util/error';
+import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../util/error';
 import { getTypedFileId } from '../util/file';
 import {
     HEADER_CONTENT_TYPE,
@@ -94,11 +90,7 @@ class Metadata extends File {
      * @param {boolean} canEdit - is instance editable
      * @return {Object} metadata editor
      */
-    createEditor(
-        instance: MetadataInstance,
-        template: MetadataEditorTemplate,
-        canEdit: boolean,
-    ): MetadataEditor {
+    createEditor(instance: MetadataInstance, template: MetadataEditorTemplate, canEdit: boolean): MetadataEditor {
         const data = {};
         Object.keys(instance).forEach(key => {
             if (!key.startsWith('$')) {
@@ -122,10 +114,7 @@ class Metadata extends File {
      * @param {string} scope - metadata scope
      * @return {Object} array of metadata templates
      */
-    async getTemplates(
-        id: string,
-        scope: string,
-    ): Promise<Array<MetadataEditorTemplate>> {
+    async getTemplates(id: string, scope: string): Promise<Array<MetadataEditorTemplate>> {
         let templates = {};
         try {
             templates = await this.xhr.get({
@@ -140,9 +129,7 @@ class Metadata extends File {
         }
 
         return getProp(templates, 'data.entries', []).filter(
-            template =>
-                !template.hidden &&
-                template.templateKey !== METADATA_TEMPLATE_CLASSIFICATION,
+            template => !template.hidden && template.templateKey !== METADATA_TEMPLATE_CLASSIFICATION,
         );
     }
 
@@ -205,11 +192,7 @@ class Metadata extends File {
         try {
             if (!skills.data) {
                 skills = await this.xhr.get({
-                    url: this.getMetadataUrl(
-                        id,
-                        METADATA_SCOPE_GLOBAL,
-                        METADATA_TEMPLATE_SKILLS,
-                    ),
+                    url: this.getMetadataUrl(id, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_SKILLS),
                     id: getTypedFileId(id),
                 });
             }
@@ -256,11 +239,7 @@ class Metadata extends File {
 
         try {
             const metadata = await this.xhr.put({
-                url: this.getMetadataUrl(
-                    id,
-                    METADATA_SCOPE_GLOBAL,
-                    METADATA_TEMPLATE_SKILLS,
-                ),
+                url: this.getMetadataUrl(id, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_SKILLS),
                 headers: {
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
                 },
@@ -269,11 +248,7 @@ class Metadata extends File {
             });
             if (!this.isDestroyed()) {
                 const cards = metadata.data.cards || [];
-                this.merge(
-                    this.getCacheKey(id),
-                    FIELD_METADATA_SKILLS,
-                    metadata.data,
-                );
+                this.merge(this.getCacheKey(id), FIELD_METADATA_SKILLS, metadata.data);
                 this.getCache().set(this.getSkillsCacheKey(id), cards);
                 this.successHandler(cards);
             }
@@ -317,11 +292,7 @@ class Metadata extends File {
 
         try {
             const metadata = await this.xhr.put({
-                url: this.getMetadataUrl(
-                    id,
-                    template.scope,
-                    template.templateKey,
-                ),
+                url: this.getMetadataUrl(id, template.scope, template.templateKey),
                 headers: {
                     [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
                 },
@@ -332,15 +303,9 @@ class Metadata extends File {
                 const cache: APICache = this.getCache();
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
-                const editor = this.createEditor(
-                    metadata.data,
-                    template,
-                    canEdit,
-                );
+                const editor = this.createEditor(metadata.data, template, canEdit);
                 cachedMetadata.editors.splice(
-                    cachedMetadata.editors.findIndex(
-                        ({ instance }) => instance.id === editor.instance.id,
-                    ),
+                    cachedMetadata.editors.findIndex(({ instance }) => instance.id === editor.instance.id),
                     1,
                     editor,
                 );
@@ -380,8 +345,7 @@ class Metadata extends File {
 
         const canEdit = !!permissions.can_upload;
         const isProperties =
-            template.templateKey === METADATA_TEMPLATE_PROPERTIES &&
-            template.scope === METADATA_SCOPE_GLOBAL;
+            template.templateKey === METADATA_TEMPLATE_PROPERTIES && template.scope === METADATA_SCOPE_GLOBAL;
 
         if (!canEdit || (is_externally_owned && !isProperties)) {
             errorCallback(getBadPermissionsError());
@@ -393,11 +357,7 @@ class Metadata extends File {
 
         try {
             const metadata = await this.xhr.post({
-                url: this.getMetadataUrl(
-                    id,
-                    template.scope,
-                    template.templateKey,
-                ),
+                url: this.getMetadataUrl(id, template.scope, template.templateKey),
                 id: getTypedFileId(id),
                 data: {},
             });
@@ -405,11 +365,7 @@ class Metadata extends File {
                 const cache: APICache = this.getCache();
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
-                const editor = this.createEditor(
-                    metadata.data,
-                    template,
-                    canEdit,
-                );
+                const editor = this.createEditor(metadata.data, template, canEdit);
                 cachedMetadata.editors.push(editor);
                 this.successHandler(editor);
             }
@@ -466,9 +422,7 @@ class Metadata extends File {
                 const metadata = cache.get(key);
                 metadata.editors.splice(
                     metadata.editors.findIndex(
-                        editor =>
-                            editor.template.scope === scope &&
-                            editor.template.templateKey === templateKey,
+                        editor => editor.template.scope === scope && editor.template.templateKey === templateKey,
                     ),
                     1,
                 );
@@ -520,9 +474,7 @@ class Metadata extends File {
 
         try {
             // Metadata instances
-            const instances: Array<MetadataInstance> = await this.getInstances(
-                id,
-            );
+            const instances: Array<MetadataInstance> = await this.getInstances(id);
 
             // Metadata instances and templates from webapp
             // This will be removed soon
@@ -533,16 +485,12 @@ class Metadata extends File {
 
             // Get templates for the enterprise  of the current user and
             // not templates from the enterprise of file owner if collabed
-            const enterpriseTemplates: Array<
-                MetadataEditorTemplate,
-            > = hasMetadataFeature
+            const enterpriseTemplates: Array<MetadataEditorTemplate> = hasMetadataFeature
                 ? await this.getTemplates(id, METADATA_SCOPE_ENTERPRISE)
                 : [];
 
             // Get global templates defined by box
-            const globalTemplates: Array<
-                MetadataEditorTemplate,
-            > = await this.getTemplates(id, METADATA_SCOPE_GLOBAL);
+            const globalTemplates: Array<MetadataEditorTemplate> = await this.getTemplates(id, METADATA_SCOPE_GLOBAL);
 
             // Templates that can be added by the user.
             // This will only be current user's enterprise templates
@@ -556,9 +504,10 @@ class Metadata extends File {
 
             // Templates that can have an associated instance.
             // This will be all templates.
-            const templates: Array<MetadataEditorTemplate> = [
-                customPropertiesTemplate,
-            ].concat(enterpriseTemplates, globalTemplates);
+            const templates: Array<MetadataEditorTemplate> = [customPropertiesTemplate].concat(
+                enterpriseTemplates,
+                globalTemplates,
+            );
 
             if (this.isDestroyed()) {
                 return;
@@ -567,31 +516,14 @@ class Metadata extends File {
             instances.forEach(instance => {
                 const templateKey = instance.$template;
                 const scope = instance.$scope;
-                let template = templates.find(
-                    t => t.templateKey === templateKey && t.scope === scope,
-                );
+                let template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
 
-                if (
-                    !template &&
-                    legacyInstances &&
-                    legacyInstances.entries &&
-                    legacyInstances.entries.length > 0
-                ) {
-                    template = this.createTemplateFromLegacy(
-                        legacyInstances.entries,
-                        templateKey,
-                        scope,
-                    );
+                if (!template && legacyInstances && legacyInstances.entries && legacyInstances.entries.length > 0) {
+                    template = this.createTemplateFromLegacy(legacyInstances.entries, templateKey, scope);
                 }
 
                 if (template && !template.hidden) {
-                    editors.push(
-                        this.createEditor(
-                            instance,
-                            template,
-                            !!permissions.can_upload,
-                        ),
-                    );
+                    editors.push(this.createEditor(instance, template, !!permissions.can_upload));
                 }
             });
 
@@ -606,17 +538,10 @@ class Metadata extends File {
         }
     }
 
-    createTemplateFromLegacy(
-        legacyInstances: Array<any>,
-        templateKey: string,
-        scope: string,
-    ): ?MetadataEditorTemplate {
+    createTemplateFromLegacy(legacyInstances: Array<any>, templateKey: string, scope: string): ?MetadataEditorTemplate {
         const fields = [];
         const legacyInstance = legacyInstances.find(instance => {
-            const template = instance.type.substring(
-                0,
-                instance.type.indexOf('-'),
-            );
+            const template = instance.type.substring(0, instance.type.indexOf('-'));
             return template === templateKey && instance.scope === scope;
         });
 
@@ -624,24 +549,20 @@ class Metadata extends File {
             return null;
         }
 
-        legacyInstance.fields.forEach(
-            ({ key, type, displayName, options, description }) => {
-                let v2Type = type;
-                if (type === 'array') {
-                    v2Type = 'multiSelect';
-                }
-                fields.push({
-                    id: uniqueId('metadata_field_'),
-                    type: v2Type,
-                    key,
-                    displayName,
-                    description,
-                    options: Array.isArray(options)
-                        ? options.map(option => ({ key: option.value }))
-                        : undefined,
-                });
-            },
-        );
+        legacyInstance.fields.forEach(({ key, type, displayName, options, description }) => {
+            let v2Type = type;
+            if (type === 'array') {
+                v2Type = 'multiSelect';
+            }
+            fields.push({
+                id: uniqueId('metadata_field_'),
+                type: v2Type,
+                key,
+                displayName,
+                description,
+                options: Array.isArray(options) ? options.map(option => ({ key: option.value })) : undefined,
+            });
+        });
 
         return {
             id: legacyInstance.type,

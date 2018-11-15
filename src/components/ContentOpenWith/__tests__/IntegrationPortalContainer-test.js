@@ -3,8 +3,7 @@ import { shallow } from 'enzyme';
 import IntegrationPortalContainer from '../IntegrationPortalContainer';
 
 describe('components/ContentOpenWith/IntegrationPortalContainer', () => {
-    const getWrapper = props =>
-        shallow(<IntegrationPortalContainer {...props} />);
+    const getWrapper = props => shallow(<IntegrationPortalContainer {...props} />);
     it('should render an error mask if an error occurs', () => {
         const wrapper = getWrapper({
             hasError: true,
