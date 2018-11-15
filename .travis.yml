@@ -4,8 +4,6 @@ node_js:
 cache: yarn
 jobs:
   include:
-    - stage: test
-      name: "Linting & Testing"
     - # commit lint
       script: commitlint-travis
     - # code lint
@@ -14,6 +12,5 @@ jobs:
       script: npm-run-all clean build:i18n; yarn flow
     - # tests
       script: yarn test
-    - stage: build
-      name: "Production Build"
+    - # build
       script: npm-run-all clean build:i18n build-ci
