@@ -15,5 +15,7 @@ jobs:
       script: npm-run-all clean build:i18n; yarn flow
     - # tests
       script: yarn test
-    - # build
+    - # babel build
+      script: npm-run-all clean build:i18n build-lib
+    - # webpack build
       script: npm-run-all clean build:i18n build-ci

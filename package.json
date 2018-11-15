@@ -37,7 +37,7 @@
     },
     "scripts": {
         "build": "yarn run pre-build && LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev webpack --progress --colors --config build/webpack.config.js --mode development",
-        "build-ci": "LANGUAGE=en-US REACT=true yarn run build-prod && LANGUAGE=en-US REACT=false yarn run build-prod",
+        "build-ci": "LANGUAGE=en-US REACT=true yarn run build-prod",
         "build:es": "./node_modules/.bin/babel src -d lib",
         "build-prod": "NODE_ENV=production webpack --config build/webpack.config.js --mode production",
         "build-npm": "yarn run npm && yarn run build-lib",
