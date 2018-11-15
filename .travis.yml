@@ -1,5 +1,19 @@
 language: node_js
 node_js:
     - "8"
-script: ./build/ci.sh
 cache: yarn
+jobs:
+  include:
+    - stage: test
+      name: "Linting & Testing"
+    - # commit lint
+      script: commitlint-travis
+    - # code lint
+      script: npm-run-all clean build:i18n lint
+    - # flow types
+      script: npm-run-all clean build:i18n; yarn flow
+    - # tests
+      script: yarn test
+    - stage: build
+      name: "Production Build"
+      script: npm-run-all clean build:i18n build-ci
