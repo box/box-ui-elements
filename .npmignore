@@ -41,3 +41,4 @@ flow-typed
 .eslintignore
 examples
 styleguide
+release.config.js

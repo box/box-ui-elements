@@ -1,6 +1,6 @@
 {
     "name": "box-ui-elements",
-    "version": "8.3.0",
+    "version": "0.0.0-semantically-released",
     "description": "Box UI Elements",
     "author": "Box (https://www.box.com/)",
     "license": "SEE LICENSE IN LICENSE",
@@ -30,43 +30,36 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/box/box-ui-elements.git"
+        "url": "git@github.com:box/box-ui-elements.git"
     },
     "bugs": {
         "url": "https://github.com/box/box-ui-elements/issues"
     },
     "scripts": {
-        "build": "yarn run pre-build && LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev webpack --progress --colors --config build/webpack.config.js --mode development",
-        "build-ci": "LANGUAGE=en-US REACT=true yarn run build-prod",
-        "build:es": "./node_modules/.bin/babel src -d lib",
-        "build-prod": "NODE_ENV=production webpack --config build/webpack.config.js --mode production",
-        "build-npm": "yarn run npm && yarn run build-lib",
-        "build-link": "yarn run npm && yarn run build-link-lib",
-        "build:link-dev": "yarn run npm && yarn run build-link-lib -w",
-        "build-link-lib": "yarn run clean:lib && BABEL_ENV=dev NODE_ENV=dev yarn run build:es --ignore \"**/__tests__/**\",\"src/components/messages.js\" --copy-files -s inline",
-        "build-lib": "yarn run clean:lib && BABEL_ENV=npm NODE_ENV=production yarn run build:es --ignore \"**/__tests__/**\"",
+        "build": "yarn build:dev:dist",
+        "build:ci:es": "yarn build:prod:es",
+        "build:ci:dist": "LANGUAGE=en-US REACT=true yarn build:prod:dist",
+        "build:dev:dist": "LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev webpack --config build/webpack.config.js --mode development --progress --colors",
+        "build:es": "babel src --out-dir lib",
+        "build:es:link": "BABEL_ENV=npm NODE_ENV=dev yarn build:es --copy-files --source-maps inline --watch --ignore \"**/__tests__/**\",\"src/components/messages.js\"",
         "build:i18n": "props2es",
-        "changelog": "./node_modules/.bin/conventional-changelog -i CHANGELOG.md -s -r 0",
-        "clean": "rm -rf dist lib reports/* i18n/json i18n/*.js styleguide",
-        "clean:lib": "rm -rf lib",
-        "clean-styleguide": "rm -rf styleguide",
-        "debug": "NODE_ENV=test yarn run jest --watch",
-        "dev": "yarn run pre-build && LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/webpack-dev-server/bin/webpack-dev-server.js --config build/webpack.config.js --mode development",
-        "github-release": "./node_modules/.bin/conventional-github-releaser",
-        "lint": "npm-run-all lint:js lint:css",
+        "build:npm": "npm-run-all build:prod:npm build:prod:es",
+        "build:prod:es": "BABEL_ENV=production NODE_ENV=production yarn build:es --ignore \"**/__tests__/**\"",
+        "build:prod:dist": "NODE_ENV=production webpack --config build/webpack.config.js --mode production",
+        "build:prod:examples": "LANGUAGE=en-US REACT=true NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config build/styleguide.config.js --mode production",
+        "build:prod:npm": "BABEL_ENV=npm OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
+        "clean": "rm -rf dist lib i18n/json i18n/*.js reports styleguide",
+        "lint": "npm-run-all lint:*",
         "lint:js": "eslint --max-warnings=0 .",
-        "lint:js:fix": "eslint --fix --max-warnings=0 .",
         "lint:css": "stylelint \"src/**/*.scss\" --syntax scss",
-        "npm": "OUTPUT=dist LANGUAGE=en-US REACT=true yarn run build-prod",
-        "nsp": "nsp check --reporter summary",
-        "major": "./build/release.sh -m && ./build/publish.sh && ./build/publish-examples.sh",
-        "minor": "./build/release.sh -n && ./build/publish.sh && ./build/publish-examples.sh",
-        "patch": "./build/release.sh -p && ./build/publish.sh && ./build/publish-examples.sh",
-        "pre-build": "yarn install && npm-run-all clean build:i18n",
-        "prod": "yarn run pre-build && node ./build/prod.js",
-        "styleguide": "yarn run pre-build && LANGUAGE=en-US REACT=true BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js server --config build/styleguide.config.js --mode development",
-        "styleguide-static": "LANGUAGE=en-US REACT=true NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config build/styleguide.config.js --mode production",
-        "test": "NODE_ENV=test yarn run jest"
+        "release": "./build/release.sh && ./build/publish.sh && ./build/publish-examples.sh",
+        "release:cdn": "yarn setup; node ./build/prod.js",
+        "setup": "yarn install --frozen-lockfile; npm-run-all clean build:i18n",
+        "start": "yarn start:examples",
+        "start:dev": "yarn setup; LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/webpack-dev-server/bin/webpack-dev-server.js --config build/webpack.config.js --mode development",
+        "start:examples": "yarn setup; LANGUAGE=en-US REACT=true BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js server --config build/styleguide.config.js --mode development",
+        "start:npm": "yarn setup; npm-run-all build:prod:npm build:es:link",
+        "test": "BABEL_ENV=test NODE_ENV=test yarn run jest"
     },
     "browserslist": {
         "production": [
@@ -90,7 +83,6 @@
         "hooks": {
             "pre-commit": "lint-staged",
             "pre-push": "./build/prepush.sh",
-            "pre-build": "yarn pre-build",
             "commit-msg": "commitlint -e"
         }
     },
@@ -213,6 +205,7 @@
         "sass-lint": "^1.12.1",
         "sass-loader": "^7.1.0",
         "scroll-into-view-if-needed": "^1.5.0",
+        "semantic-release": "^15.12.0",
         "style-loader": "^0.23.0",
         "stylelint": "^9.6.0",
         "stylelint-config-standard": "^18.2.0",
@@ -249,6 +242,5 @@
         "regenerator-runtime": "^0.11.1",
         "scroll-into-view-if-needed": "^1.5.0",
         "tabbable": "^1.1.2"
-    },
-    "dependencies": {}
+    }
 }

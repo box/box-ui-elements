@@ -11,6 +11,7 @@
 .*/node_modules/webpack*
 .*/node_modules/draft-js*
 .*/node_modules/findup*
+.*/node_modules/config-chain*
 
 [untyped]
 .*/node_modules/box-react-ui/*

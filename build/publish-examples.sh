@@ -3,17 +3,25 @@
 # Temp version
 VERSION="XXX"
 
-pre_build() {
-    echo "-------------------------------------------------------------"
-    echo "Starting install, clean and pre build for version" $VERSION
-    echo "----------------------------------------------------"
-    if yarn pre-build; then
+add_remote() {
+    # Add the release remote if it is not present
+    if git remote get-url release; then
+        git remote remove release || return 1
+    fi
+    git remote add release git@github.com:box/box-ui-elements.git || return 1
+}
+
+setup() {
+    echo "----------------------------------------------"
+    echo "Starting install, clean and locale build"
+    echo "----------------------------------------------"
+    if yarn setup; then
         echo "----------------------------------------------------"
-        echo "Pre build complete for version" $VERSION
+        echo "Setup complete"
         echo "----------------------------------------------------"
     else
         echo "----------------------------------------------------"
-        echo "Failed to pre build!"
+        echo "Failed to setup!"
         echo "----------------------------------------------------"
         exit 1;
     fi
@@ -23,7 +31,7 @@ build_examples() {
     echo "----------------------------------------------------"
     echo "Starting examples build for version" $VERSION
     echo "----------------------------------------------------"
-    if yarn styleguide-static; then
+    if yarn build:prod:examples; then
         echo "----------------------------------------------------"
         echo "Built examples for version" $VERSION
         echo "----------------------------------------------------"
@@ -50,14 +58,6 @@ push_to_gh_pages() {
     git push release gh-pages --no-verify || exit 1
 }
 
-add_remote() {
-    # Add the release remote if it is not present
-    if git remote get-url release; then
-        git remote remove release || return 1
-    fi
-    git remote add release git@github.com:box/box-ui-elements.git || return 1
-}
-
 publish_examples() {
     if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != "" ]] ; then
         echo "----------------------------------------------------"
@@ -73,14 +73,36 @@ publish_examples() {
         exit 1
     fi
 
-    git checkout master || exit 1
+    # Checkout the release branch
+    git checkout release || exit 1
+
+    # Fetch latest from the release remote
     git fetch release || exit 1
-    git reset --hard release/master || exit 1
+
+    # Reset hard to release branch on release remote
+    git reset --hard release/release || exit 1
+
     # Remove old local tags in case a build failed
     git fetch --prune release '+refs/tags/*:refs/tags/*' || exit 1
+
+    # Clean untracked files
     git clean -fd || exit 1
 
-    VERSION=$(./build/current_version.sh)
+    VERSION=$(./node_modules/@box/frontend/shell/version.sh)
+
+    echo "----------------------------------------------------"
+    echo "Checking out version" $VERSION
+    echo "----------------------------------------------------"
+    # Check out the version we want to build (version tags are prefixed with a v)
+    git checkout v$VERSION || exit 1
+
+    # Run setup
+    if ! setup; then
+        echo "----------------------------------------------------"
+        echo "Error in setup!"
+        echo "----------------------------------------------------"
+        exit 1
+    fi
 
     if [[ $(git status --porcelain 2>/dev/null| grep "^??") != "" ]] ; then
         echo "----------------------------------------------------"
@@ -92,20 +114,6 @@ publish_examples() {
     if [[ $(git status --porcelain 2>/dev/null| egrep "^(M| M)") != "" ]] ; then
         echo "----------------------------------------------------"
         echo "Your branch has uncommited files!"
-        echo "----------------------------------------------------"
-        exit 1
-    fi
-
-    echo "----------------------------------------------------"
-    echo "Checking out version" $VERSION
-    echo "----------------------------------------------------"
-    # Check out the version we want to build (version tags are prefixed with a v)
-    git checkout v$VERSION || exit 1
-
-    # Do pre build
-    if ! pre_build; then
-        echo "----------------------------------------------------"
-        echo "Error in pre_build!"
         echo "----------------------------------------------------"
         exit 1
     fi
@@ -136,6 +144,6 @@ if ! publish_examples; then
 fi
 
 echo "----------------------------------------------------"
-echo "Checking out back to master"
+echo "Checking out back to release"
 echo "----------------------------------------------------"
-git checkout master || exit 1
+git checkout release || exit 1
