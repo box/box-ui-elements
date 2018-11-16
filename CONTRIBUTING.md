@@ -58,7 +58,7 @@ longer description here if necessary.
 include BREAKING CHANGE keyword for breaking changes.
 ```
 
-The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please click [here](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional#type-enum). Here is an example of the release type that will be done based on a commit message:
+The message summary should be a one-sentence description of the change, and it must be 72 characters in length or shorter. For a list of tags, please [click here](https://github.com/marionebl/commitlint/tree/master/%40commitlint/config-conventional#type-enum). We use the angular style for tags. See the [default release rules](https://github.com/semantic-release/commit-analyzer/blob/master/lib/default-release-rules.js) based on the commit tag. Shown below is an example of the release type that will be done based on a commit message.
 
 | Commit message                                                                                                                                          | Release type               |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |

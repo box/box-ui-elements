@@ -25,6 +25,7 @@ babel.config.js
 .vscode
 .yarnrc
 build
+conf
 postcss.config.js
 reports
 test
@@ -41,3 +42,4 @@ flow-typed
 .eslintignore
 examples
 styleguide
+release.config.js
