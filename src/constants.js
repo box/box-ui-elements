@@ -179,6 +179,30 @@ export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
 export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
+export const ERROR_CODE_FETCH_FILE = 'fetch_file_error';
+export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
+export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';
+export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
+export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';
+export const ERROR_CODE_FETCH_TASK_ASSIGNMENT = 'fetch_task_assignment_error';
+export const ERROR_CODE_CREATE_COMMENT = 'create_comment_error';
+export const ERROR_CODE_CREATE_TASK = 'create_task_error';
+export const ERROR_CODE_CREATE_TASK_ASSIGNMENT = 'create_task_assignment_error';
+export const ERROR_CODE_DELETE_COMMENT = 'delete_comment_error';
+export const ERROR_CODE_DELETE_TASK = 'delete_task_error';
+export const ERROR_CODE_UPDATE_TASK = 'update_task_error';
+export const ERROR_CODE_UPDATE_TASK_ASSIGNMENT = 'update_task_assignment_error';
+export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
+export const ERROR_CODE_UNKNOWN = 'unknown_error';
+
+/* ------------------ Error Types ---------------------- */
+export const ERROR_TYPE_CONTENT_PREVIEW = 'error_content_preview';
+export const ERROR_TYPE_CONTENT_SIDEBAR = 'error_content_sidebar';
+export const ERROR_TYPE_CONTENT_EXPLORER = 'error_content_explorer';
+export const ERROR_TYPE_PREVIEW = 'error_preview';
+
+/* ------------------ Error Keys ---------------------- */
+export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message
 
 /* ------------- Representation Hints ------------------- */
 const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';

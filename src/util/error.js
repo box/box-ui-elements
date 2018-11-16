@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Helper for throwing errors
+ * @file Helper functions for errors
  * @author Box
  */
 import {
@@ -23,8 +23,36 @@ export function getBadUserError(): Error {
 
 export function isUserCorrectableError(status: number) {
     return (
+        !status ||
         status === HTTP_STATUS_CODE_RATE_LIMIT ||
         status === HTTP_STATUS_CODE_UNAUTHORIZED ||
         status >= HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR
     );
+}
+
+export function enhanceErrorForLogging(
+    error: Error,
+    type: ErrorTypes,
+    code: string,
+    contextInfo: Object = {},
+): ElementsError {
+    // $FlowFixMe
+    const enhancedError: ElementsError = error;
+    enhancedError.data = {
+        type,
+        code,
+        context_info: {
+            ...contextInfo,
+        },
+    };
+
+    return enhancedError;
+}
+
+export function createErrorFromResponse(response: ElementsXhrError): Error {
+    if (response instanceof Error) {
+        return response;
+    }
+
+    return new Error(response.message);
 }

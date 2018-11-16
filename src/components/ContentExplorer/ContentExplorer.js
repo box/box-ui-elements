@@ -27,6 +27,7 @@ import makeResponsive from '../makeResponsive';
 import openUrlInsideIframe from '../../util/iframe';
 import { isFocusableElement, isInputElement, focus } from '../../util/dom';
 import Internationalize from '../Internationalize';
+import { withErrorBoundary } from '../ErrorBoundary';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -51,6 +52,7 @@ import {
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX,
+    ERROR_TYPE_CONTENT_EXPLORER,
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -1418,4 +1420,4 @@ class ContentExplorer extends Component<Props, State> {
 }
 
 export { ContentExplorer as ContentExplorerComponent };
-export default makeResponsive(ContentExplorer);
+export default withErrorBoundary(ERROR_TYPE_CONTENT_EXPLORER)(makeResponsive(ContentExplorer));

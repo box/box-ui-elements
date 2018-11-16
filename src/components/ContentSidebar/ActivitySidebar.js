@@ -13,10 +13,14 @@ import SidebarContent from './SidebarContent';
 import messages from '../messages';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { getBadUserError, getBadItemError } from '../../util/error';
-import { DEFAULT_COLLAB_DEBOUNCE, DEFAULT_MAX_COLLABORATORS } from '../../constants';
+import { getBadUserError, getBadItemError, createErrorFromResponse } from '../../util/error';
+import {
+    DEFAULT_COLLAB_DEBOUNCE,
+    DEFAULT_MAX_COLLABORATORS,
+    ERROR_TYPE_CONTENT_SIDEBAR,
+    ERROR_CODE_FETCH_CURRENT_USER,
+} from '../../constants';
 import API from '../../api';
-import type { $AxiosXHR } from 'axios'; // eslint-disable-line
 
 type ExternalProps = {
     onCommentCreate?: Function,
@@ -38,7 +42,8 @@ type PropsWithoutContext = {
 
 type Props = {
     api: API,
-} & PropsWithoutContext;
+} & PropsWithoutContext &
+    ErrorContextProps;
 
 type State = {
     currentUser?: User,
@@ -98,9 +103,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     /**
      * Error callback for fetching feed items
+     *
+     * @param {Error} e - the error which occured
+     * @param {Error} code - the code for the error
+     * @param {Object} contextInfo - the context info for the error
      */
-    feedErrorCallback = (e: $AxiosXHR<any>) => {
-        this.errorCallback(e);
+    feedErrorCallback = (e?: Error, code?: string, contextInfo?: Object) => {
+        if (e && code) {
+            this.errorCallback(e, code, contextInfo);
+        }
         this.fetchFeedItems();
     };
 
@@ -262,6 +273,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             shouldRefreshCache,
             this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
+            this.errorCallback,
         );
     }
 
@@ -295,12 +307,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      *
      * @private
      * @param {Error} error - Error object
+     * @param {Error} code - the code for the error
+     * @param {Object} contextInfo - the context info for the error
      * @return {void}
      */
-    errorCallback = (error: $AxiosXHR<any>): void => {
+    errorCallback = (error: Error, code: string, contextInfo: Object = {}): void => {
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
+
+        this.props.onError(error, ERROR_TYPE_CONTENT_SIDEBAR, code, contextInfo);
     };
 
     /**
@@ -392,10 +408,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * Handles a failed file user info fetch
      *
      * @private
-     * @param {Error} e - API error
+     * @param {ElementsXhrError} e - API error
      * @return {void}
      */
-    fetchCurrentUserErrorCallback = (e: $AxiosXHR<any>) => {
+    fetchCurrentUserErrorCallback = (e: ElementsXhrError) => {
         this.setState({
             currentUser: undefined,
             currentUserError: {
@@ -405,7 +421,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 },
             },
         });
-        this.errorCallback(e);
+
+        const error = createErrorFromResponse(e);
+        this.errorCallback(error, ERROR_CODE_FETCH_CURRENT_USER);
     };
 
     /**
@@ -462,4 +480,4 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default withErrorBoundary(withAPIContext(ActivitySidebar));
+export default withErrorBoundary(ERROR_TYPE_CONTENT_SIDEBAR)(withAPIContext(ActivitySidebar));
