@@ -599,7 +599,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const { showAnnotations }: Props = this.props;
         const { file }: State = this.state;
         const isFileAnnotatable = getProp(file, 'permissions.can_annotate', false);
-        return isFileAnnotatable && !!showAnnotations;
+        return !!showAnnotations && isFileAnnotatable;
     }
 
     /**
@@ -612,7 +612,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const { file }: State = this.state;
         const hasViewAllPermissions = getProp(file, 'permissions.annotation_view_all', false);
         const hasViewSelfPermissions = getProp(file, 'permissions.annotation_view_self', false);
-        return (this.canAnnotate() || hasViewAllPermissions || hasViewSelfPermissions) && !!showAnnotations;
+        return !!showAnnotations && (this.canAnnotate() || hasViewAllPermissions || hasViewSelfPermissions);
     }
 
     /**
