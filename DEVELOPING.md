@@ -3,7 +3,7 @@
 Our development setup assumes a LINUX/BSD environemnt. Windows users may have to use cygwin.
 
 1. Install Node v8.10.0 or higher.
-2. Install yarn package manager `https://yarnpkg.com/en/docs/install` v1.2 or higher.
+2. Install yarn package manager `https://yarnpkg.com/en/docs/install` v1.12 or higher.
 3. Fork the upstream repo `https://github.com/box/box-ui-elements`.
 4. Clone your fork locally `git clone git@github.com:[YOUR GITHUB USERNAME]/box-ui-elements.git`.
 5. Navigate to the cloned folder `cd box-ui-elements`.
@@ -22,6 +22,15 @@ To test the Box UI Elements with your own box data and auth token, launch a loca
     2. Select `Custom App` and choose `Oauth 2.0 with JWT (Server Authentication)`. Select `View Your App` > `Configuration` > `CORS Domains` and add `http://localhost:8080` to the domain whitelist. Save the configuration.
     3. The developer token will be regenerated once the configuration is saved. Copy the token and paste into the prompt in the localhost test page. The token will be valid for an hour; return to the app configuration page to generate a new token.
     4. For additional information about developing on the Box Platform, see the [Platform docs](https://developer.box.com/docs/box-ui-elements#section-using-the-box-ui-elements).
+
+## Testing UI in a parent project
+
+To test the Box UI Elements with your own project use yarn linking.
+
+1. In the UI Elements project run `yarn link` as a one time setup.
+2. In UI Elements project run `yarn start:npm` which starts a local npm build in watch mode.
+3. In your parent project run `yarn link box-ui-elements` every time you plan to use the local linked version.
+4. Run your parent project's build.
 
 ## While Developing
 
@@ -53,7 +62,7 @@ For test debugging follow instructions provided in the [jest documentation](http
 
 ## Publishing
 
-**_Note: For box employees only_**
+**_Note: For Box employees only_**
 
 This project is published on public [npmjs](https://www.npmjs.com/package/box-ui-elements). Before doing a release, make sure you have `GITHUB_TOKEN` environment variable set on your machine.
 

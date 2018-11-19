@@ -1,31 +1,11 @@
 #!/bin/bash
 
+source ./build/add_remote.sh
+source ./build/setup.sh
+source ./build/lint_test.sh
+
 # Temp version
 VERSION="XXX"
-
-add_remote() {
-    # Add the release remote if it is not present
-    if git remote get-url release; then
-        git remote remove release || return 1
-    fi
-    git remote add release git@github.com:box/box-ui-elements.git || return 1
-}
-
-setup() {
-    echo "----------------------------------------------"
-    echo "Starting install, clean and locale build"
-    echo "----------------------------------------------"
-    if yarn setup; then
-        echo "----------------------------------------------------"
-        echo "Setup complete"
-        echo "----------------------------------------------------"
-    else
-        echo "----------------------------------------------------"
-        echo "Failed to setup!"
-        echo "----------------------------------------------------"
-        exit 1;
-    fi
-}
 
 build_assets() {
     echo "----------------------------------------------------"
@@ -75,7 +55,9 @@ publish_to_npm() {
     fi
 
     # Checkout the release branch
-    git checkout release || exit 1
+    if ! git checkout release; then
+        git checkout -b release || exit 1
+    fi
 
     # Fetch latest from the release remote
     git fetch release || exit 1
@@ -114,7 +96,7 @@ publish_to_npm() {
 
     if [[ $(git status --porcelain 2>/dev/null| egrep "^(M| M)") != "" ]] ; then
         echo "----------------------------------------------------"
-        echo "Your branch has uncommited files!"
+        echo "Your branch has uncommitted files!"
         echo "----------------------------------------------------"
         exit 1
     fi
