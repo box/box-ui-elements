@@ -1,47 +1,29 @@
 #!/bin/bash
 
+source ./build/variables.sh
+
 lint_and_test() {
-    echo "----------------------------------------------------"
-    echo "Running linter"
-    echo "----------------------------------------------------"
+    printf "${blue}Running linter...${end}"
     if yarn lint; then
-        echo "----------------------------------------------------"
-        echo "Done linting"
-        echo "----------------------------------------------------"
+        printf "${green}Linting done!${end}"
     else
-        echo "----------------------------------------------------"
-        echo "Failed linting!"
-        echo "----------------------------------------------------"
+        printf "${red}Linting failed!${end}"
         exit 1;
     fi
 
-
-    echo "----------------------------------------------------"
-    echo "Running flow"
-    echo "----------------------------------------------------"
+    printf "${blue}Running flow...${end}"
     if yarn flow check; then
-        echo "----------------------------------------------------"
-        echo "Done flow check"
-        echo "----------------------------------------------------"
+        printf "${green}Flow check done!${end}"
     else
-        echo "----------------------------------------------------"
-        echo "Failed flow check!"
-        echo "----------------------------------------------------"
+        printf "${red}Flow check failed!${end}"
         exit 1;
     fi
 
-
-    echo "----------------------------------------------------"
-    echo "Running tests"
-    echo "----------------------------------------------------"
+    printf "${blue}Running tests...${end}"
     if yarn test; then
-        echo "----------------------------------------------------"
-        echo "Done testing"
-        echo "----------------------------------------------------"
+        printf "${green}Tests done!${end}"
     else
-        echo "----------------------------------------------------"
-        echo "Failed testing!"
-        echo "----------------------------------------------------"
+        printf "${red}Tests failed!${end}"
         exit 1;
     fi
 }
