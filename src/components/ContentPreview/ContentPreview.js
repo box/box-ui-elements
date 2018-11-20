@@ -610,8 +610,8 @@ class ContentPreview extends PureComponent<Props, State> {
     canViewAnnotations(): boolean {
         const { showAnnotations }: Props = this.props;
         const { file }: State = this.state;
-        const hasViewAllPermissions = getProp(file, 'permissions.annotation_view_all', false);
-        const hasViewSelfPermissions = getProp(file, 'permissions.annotation_view_self', false);
+        const hasViewAllPermissions = getProp(file, 'permissions.can_view_annotations_all', false);
+        const hasViewSelfPermissions = getProp(file, 'permissions.can_view_annotations_self', false);
         return !!showAnnotations && (this.canAnnotate() || hasViewAllPermissions || hasViewSelfPermissions);
     }
 
