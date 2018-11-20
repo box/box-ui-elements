@@ -613,26 +613,13 @@ class Feed extends Base {
                 successCallback: (taskAssignment: TaskAssignment) => {
                     resolve(taskAssignment);
                 },
-                errorCallback: e => {
-                    this.createTaskAssignmentErrorCallback(e, file, task);
-                    reject();
+                errorCallback: (e: ElementsXhrError) => {
+                    // Attempt to delete the task due to it's bad assignment
+                    this.deleteTask(file, task.id);
+                    reject(e);
                 },
             });
         });
-    }
-
-    /**
-     * Handles a failed task assignment create
-     *
-     * @param {Object} e - The axios error
-     * @param {BoxItem} file - The file to which the task is assigned
-     * @param {Task} task - The task for which the assignment create failed
-     * @param {Function} errorCallback - Passed in error callback
-     * @return {void}
-     */
-    createTaskAssignmentErrorCallback(e: ErrorResponseData, file: BoxItem, task: Task) {
-        // Attempt to delete the task due to it's bad assignment
-        this.deleteTask(file, task.id);
     }
 
     /**
