@@ -195,11 +195,15 @@ export const ERROR_CODE_UPDATE_TASK_ASSIGNMENT = 'update_task_assignment_error';
 export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
 export const ERROR_CODE_UNKNOWN = 'unknown_error';
 
-/* ------------------ Error Types ---------------------- */
-export const ERROR_TYPE_CONTENT_PREVIEW = 'error_content_preview';
-export const ERROR_TYPE_CONTENT_SIDEBAR = 'error_content_sidebar';
-export const ERROR_TYPE_CONTENT_EXPLORER = 'error_content_explorer';
-export const ERROR_TYPE_PREVIEW = 'error_preview';
+/* ------------------ Error Origins ---------------------- */
+export const ORIGIN_CONTENT_PREVIEW = 'content_preview';
+export const ORIGIN_CONTENT_SIDEBAR = 'content_sidebar';
+export const ORIGIN_ACTIVITY_SIDEBAR = 'activity_sidebar';
+export const ORIGIN_DETAILS_SIDEBAR = 'details_sidebar';
+export const ORIGIN_METADATA_SIDEBAR = 'metadata_sidebar';
+export const ORIGIN_SKILLS_SIDEBAR = 'skills_sidebar';
+export const ORIGIN_PREVIEW = 'preview';
+export const ORIGIN_CONTENT_EXPLORER = 'content_explorer';
 
 /* ------------------ Error Keys ---------------------- */
 export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message

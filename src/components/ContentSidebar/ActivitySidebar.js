@@ -13,11 +13,11 @@ import SidebarContent from './SidebarContent';
 import messages from '../messages';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { getBadUserError, getBadItemError, createErrorFromResponse } from '../../util/error';
+import { getBadUserError, getBadItemError } from '../../util/error';
 import {
     DEFAULT_COLLAB_DEBOUNCE,
     DEFAULT_MAX_COLLABORATORS,
-    ERROR_TYPE_CONTENT_SIDEBAR,
+    ORIGIN_ACTIVITY_SIDEBAR,
     ERROR_CODE_FETCH_CURRENT_USER,
 } from '../../constants';
 import API from '../../api';
@@ -108,10 +108,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Error} code - the code for the error
      * @param {Object} contextInfo - the context info for the error
      */
-    feedErrorCallback = (e?: Error, code?: string, contextInfo?: Object) => {
-        if (e && code) {
-            this.errorCallback(e, code, contextInfo);
-        }
+    feedErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => {
+        this.errorCallback(e, code, contextInfo);
         this.fetchFeedItems();
     };
 
@@ -311,12 +309,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Object} contextInfo - the context info for the error
      * @return {void}
      */
-    errorCallback = (error: Error, code: string, contextInfo: Object = {}): void => {
+    errorCallback = (error: ElementsXhrError, code: string, contextInfo: Object = {}): void => {
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
 
-        this.props.onError(error, ERROR_TYPE_CONTENT_SIDEBAR, code, contextInfo);
+        this.props.onError(error, code, contextInfo);
     };
 
     /**
@@ -422,8 +420,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             },
         });
 
-        const error = createErrorFromResponse(e);
-        this.errorCallback(error, ERROR_CODE_FETCH_CURRENT_USER);
+        this.errorCallback(e, ERROR_CODE_FETCH_CURRENT_USER);
     };
 
     /**
@@ -480,4 +477,4 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default withErrorBoundary(ERROR_TYPE_CONTENT_SIDEBAR)(withAPIContext(ActivitySidebar));
+export default withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR)(withAPIContext(ActivitySidebar));

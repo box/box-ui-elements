@@ -38,13 +38,12 @@ import {
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW,
     HEADER_RETRY_AFTER,
-    ERROR_TYPE_PREVIEW,
-    ERROR_TYPE_CONTENT_PREVIEW,
+    ORIGIN_PREVIEW,
+    ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_FETCH_FILE,
     ERROR_CODE_UNKNOWN,
     IS_ERROR_DISPLAYED,
 } from '../../constants';
-import { createErrorFromResponse } from '../../util/error';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
@@ -122,7 +121,12 @@ type PreviewMetrics = {
 };
 
 type PreviewError = {
-    error: Object,
+    error: {
+        code: string,
+        details: Object,
+        displayMessage: string,
+        message: string,
+    },
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -487,15 +491,22 @@ class ContentPreview extends PureComponent<Props, State> {
 
     /**
      * Handler for 'preview_error' preview event
+     *
      * @param {PreviewError} previewError - the error data emitted from preview
      * @return {void}
      */
     onPreviewError = ({ error, ...rest }: PreviewError): void => {
-        const elementsError = createErrorFromResponse(error);
-        this.props.onError(elementsError, ERROR_TYPE_PREVIEW, error.code || ERROR_CODE_UNKNOWN, {
-            ...rest,
-            [IS_ERROR_DISPLAYED]: true,
-        });
+        const { message, code = ERROR_CODE_UNKNOWN, ...errorRest } = error;
+        this.props.onError(
+            message,
+            code,
+            {
+                ...rest,
+                ...errorRest,
+                [IS_ERROR_DISPLAYED]: true,
+            },
+            ORIGIN_PREVIEW,
+        );
     };
 
     /**
@@ -725,6 +736,10 @@ class ContentPreview extends PureComponent<Props, State> {
                 isReloadNotificationVisible: true,
             });
         }
+
+        this.retryCount = RETRY_COUNT + 5;
+
+        this.fetchFileErrorCallback(new Error('foo'));
     };
 
     /**
@@ -736,8 +751,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const { currentFileId } = this.state;
         if (this.retryCount >= RETRY_COUNT) {
             this.setState({ isFileError: true });
-            const error = createErrorFromResponse(fileError);
-            this.props.onError(error, ERROR_TYPE_CONTENT_PREVIEW, ERROR_CODE_FETCH_FILE);
+            this.props.onError(fileError, ERROR_CODE_FETCH_FILE);
         } else {
             this.retryCount += 1;
             clearTimeout(this.retryTimeout);
@@ -1132,4 +1146,4 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default withErrorBoundary(ERROR_TYPE_CONTENT_PREVIEW)(makeResponsive(ContentPreview));
+export default withErrorBoundary(ORIGIN_CONTENT_PREVIEW)(makeResponsive(ContentPreview));

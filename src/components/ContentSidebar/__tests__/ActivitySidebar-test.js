@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import messages from '../../messages';
+import { ERROR_TYPE_CONTENT_SIDEBAR } from '../../../constants';
 
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
@@ -342,14 +343,23 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
     });
 
     describe('errorCallback()', () => {
-        const message = 'foo';
         let instance;
         let wrapper;
+        let onError;
+        let error;
+        const code = 'some_code';
+        const contextInfo = {
+            foo: 'bar',
+        };
 
         beforeEach(() => {
-            wrapper = getWrapper();
+            error = new Error('foo');
+            onError = jest.fn();
+            wrapper = getWrapper({
+                onError,
+            });
             instance = wrapper.instance();
-            global.console.error = jest.fn();
+            jest.spyOn(global.console, 'error');
         });
 
         afterEach(() => {
@@ -357,8 +367,8 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         });
 
         test('should log the error', () => {
-            instance.errorCallback(message);
-            expect(global.console.error).toBeCalledWith(message);
+            instance.errorCallback(error, 'some_code', contextInfo);
+            expect(onError).toHaveBeenCalledWith(error, ERROR_TYPE_CONTENT_SIDEBAR, code, contextInfo);
         });
     });
 

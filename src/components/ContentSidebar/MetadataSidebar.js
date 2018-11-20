@@ -17,7 +17,7 @@ import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
 import API from '../../api';
-import { ERROR_TYPE_CONTENT_SIDEBAR } from '../../constants';
+import { ORIGIN_METADATA_SIDEBAR } from '../../constants';
 import './MetadataSidebar.scss';
 
 type ExternalProps = {
@@ -275,4 +275,4 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
 export type MetadataSidebarProps = ExternalProps;
 export { MetadataSidebar as MetadataSidebarComponent };
-export default withErrorBoundary(ERROR_TYPE_CONTENT_SIDEBAR)(withAPIContext(MetadataSidebar));
+export default withErrorBoundary(ORIGIN_METADATA_SIDEBAR)(withAPIContext(MetadataSidebar));

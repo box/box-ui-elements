@@ -17,7 +17,7 @@ import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksAPI from './Tasks';
 import TaskAssignmentsAPI from './TaskAssignments';
-import { getBadItemError, getBadUserError, isUserCorrectableError, createErrorFromResponse } from '../util/error';
+import { getBadItemError, getBadUserError, isUserCorrectableError } from '../util/error';
 import messages from '../components/messages';
 import {
     VERSION_UPLOAD_ACTION,
@@ -51,7 +51,7 @@ type FeedItemsCache = {
     items: FeedItems,
 };
 
-type ErrorCallback = (e: Error, code: string, contextInfo?: ElementsXhrError) => void;
+type ErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 class Feed extends Base {
     /**
@@ -578,8 +578,7 @@ class Feed extends Base {
             errorCallback: (e: ElementsXhrError) => {
                 this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
                 if (!this.isDestroyed()) {
-                    const error = createErrorFromResponse(e);
-                    errorCallback(error, ERROR_CODE_CREATE_TASK, {
+                    errorCallback(e, ERROR_CODE_CREATE_TASK, {
                         [IS_ERROR_DISPLAYED]: true,
                     });
                 }
@@ -693,8 +692,7 @@ class Feed extends Base {
         }
 
         if (!this.isDestroyed() && errorCallback && code) {
-            const error = createErrorFromResponse(e);
-            errorCallback(error, code, {
+            errorCallback(e, code, {
                 error: e,
                 [IS_ERROR_DISPLAYED]: hasError,
             });
@@ -850,8 +848,7 @@ class Feed extends Base {
                 : messages.commentCreateErrorMessage;
         this.updateFeedItem(this.createFeedError(errorMessage), id);
         if (!this.isDestroyed()) {
-            const error = createErrorFromResponse(e);
-            errorCallback(error, ERROR_CODE_CREATE_COMMENT, {
+            errorCallback(e, ERROR_CODE_CREATE_COMMENT, {
                 response: e,
                 [IS_ERROR_DISPLAYED]: true,
             });

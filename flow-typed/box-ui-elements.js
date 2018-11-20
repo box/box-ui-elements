@@ -62,9 +62,13 @@ import {
     HTTP_DELETE,
     HTTP_OPTIONS,
     HTTP_HEAD,
-    ERROR_TYPE_CONTENT_SIDEBAR,
-    ERROR_TYPE_PREVIEW,
-    ERROR_TYPE_CONTENT_PREVIEW,
+    ORIGIN_CONTENT_SIDEBAR,
+    ORIGIN_PREVIEW,
+    ORIGIN_CONTENT_PREVIEW,
+    ORIGIN_DETAILS_SIDEBAR,
+    ORIGIN_ACTIVITY_SIDEBAR,
+    ORIGIN_SKILLS_SIDEBAR,
+    ORIGIN_METADATA_SIDEBAR,
 } from '../src/constants';
 
 type Method =
@@ -97,11 +101,7 @@ type View =
 type SortBy = typeof FIELD_DATE | typeof FIELD_NAME | typeof FIELD_RELEVANCE;
 type SortDirection = typeof SORT_ASC | typeof SORT_DESC;
 type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
-type UploadStatus =
-    | typeof STATUS_PENDING
-    | typeof STATUS_IN_PROGRESS
-    | typeof STATUS_COMPLETE
-    | typeof STATUS_ERROR;
+type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
 
@@ -634,11 +634,6 @@ type FetchOptions = {
     refreshCache?: boolean,
 };
 
-type ErrorTypes =
-    | ERROR_TYPE_CONTENT_SIDEBAR
-    | ERROR_TYPE_CONTENT_PREVIEW
-    | ERROR_TYPE_PREVIEW;
-
 type ErrorResponseData = {
     code: string,
     help_url: string,
@@ -651,20 +646,23 @@ type ErrorResponseData = {
 
 type ElementsXhrError = $AxiosError<any> | ErrorResponseData;
 
-type ElementsError = Error & {
-    data: {
-        type: ErrorTypes,
-        code: string,
-        context_info: Object,
-        displayMessage?: string,
-    },
+type ErrorOrigins =
+    | ORIGIN_CONTENT_SIDEBAR
+    | ORIGIN_CONTENT_PREVIEW
+    | ORIGIN_PREVIEW
+    | ORIGIN_DETAILS_SIDEBAR
+    | ORIGIN_ACTIVITY_SIDEBAR
+    | ORIGIN_SKILLS_SIDEBAR
+    | ORIGIN_METADATA_SIDEBAR;
+
+type ElementsError = {
+    type: 'error',
+    code: string,
+    message: string,
+    origin: ErrorOrigins,
+    context_info: Object,
 };
 
 type ErrorContextProps = {
-    onError: (
-        e: Error,
-        type: ErrorTypes,
-        code: string,
-        contextInfo?: Object,
-    ) => void,
+    onError: (error: ElementsXhrError, code: string, contextInfo?: Object, origin: ErrorOrigins) => void,
 };

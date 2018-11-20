@@ -7,21 +7,19 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../constants';
-import { enhanceErrorForLogging } from '../../util/error';
 
 type Props = {
     children?: any,
     component: any,
-    errorType: ErrorTypes,
+    errorOrigin: ErrorOrigins,
     forwardedRef: ?React.ElementRef<any>,
     children: React.Element<*>,
-} & ErrorContextProps;
+    onError: (error: ElementsError) => void,
+};
 
 type State = {
     error?: Error,
 };
-
-let onError: Function = noop; // closure to keep track of top level onError prop
 
 class ErrorBoundary extends React.Component<Props, State> {
     props: Props;
@@ -33,31 +31,18 @@ class ErrorBoundary extends React.Component<Props, State> {
         onError: noop,
     };
 
-    constructor(props: Props) {
-        super(props);
-        this.updateOnError(props.onError);
-    }
-
-    componentDidUpdate() {
-        this.updateOnError(this.props.onError);
-    }
-
     componentDidCatch(error: Error, info: Object): void {
         this.setState({ error }, () => {
-            this.props.onError(error, this.props.errorType, ERROR_CODE_UNEXPECTED_EXCEPTION, {
-                ...info,
-                [IS_ERROR_DISPLAYED]: true,
-            });
+            this.handleError(
+                error,
+                ERROR_CODE_UNEXPECTED_EXCEPTION,
+                {
+                    ...info,
+                    [IS_ERROR_DISPLAYED]: true,
+                },
+                this.props.errorOrigin,
+            );
         });
-    }
-
-    updateOnError(onErrorProp: ?Function) {
-        // We only want to update onError if it is the top level onError.
-        // For example if component tree is ContentPreview -> ContentSidebar, onError should be the
-        // onError prop passed to ContentPreview, and should be used for ContentSidebar
-        if (typeof onErrorProp === 'function') {
-            onError = onErrorProp;
-        }
     }
 
     /**
@@ -69,10 +54,23 @@ class ErrorBoundary extends React.Component<Props, State> {
      * @param {Object} contextInfo - additional information which may be useful for the consumer of the error
      * @return {void}
      */
-    handleError = (e: Error, type: ErrorTypes, code: string, contextInfo: Object = {}) => {
-        const enhancedError: ElementsError = enhanceErrorForLogging(e, type, code, contextInfo);
+    handleError = (
+        error: ElementsXhrError,
+        code: string,
+        contextInfo: Object = {},
+        origin: ErrorOrigins = this.props.errorOrigin,
+    ) => {
+        const elementsError: ElementsError = {
+            type: 'error',
+            code,
+            message: error.message,
+            origin,
+            context_info: {
+                ...contextInfo,
+            },
+        };
 
-        onError(enhancedError);
+        this.props.onError(elementsError);
     };
 
     render() {
@@ -82,11 +80,14 @@ class ErrorBoundary extends React.Component<Props, State> {
             return component;
         }
 
-        return React.cloneElement(this.props.children, {
+        // $FlowFixMe doesn't know about forwardRef (https://github.com/facebook/flow/issues/6103)
+        // return React.forwardRef((props: Object, ref: React.Ref<any>) =>
+        return React.cloneElement(children, {
             ...rest,
-            ref: this.props.forwardedRef,
+
             onError: this.handleError,
         });
+        // );
     }
 }
 

@@ -18,7 +18,7 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { HTTP_STATUS_CODE_FORBIDDEN, FIELD_METADATA_CLASSIFICATION, ERROR_TYPE_CONTENT_SIDEBAR } from '../../constants';
+import { HTTP_STATUS_CODE_FORBIDDEN, FIELD_METADATA_CLASSIFICATION, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
 import API from '../../api';
 import type { $AxiosXHR } from 'axios'; // eslint-disable-line
 import './DetailsSidebar.scss';
@@ -317,4 +317,4 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default withErrorBoundary(ERROR_TYPE_CONTENT_SIDEBAR)(withAPIContext(DetailsSidebar));
+export default withErrorBoundary(ORIGIN_DETAILS_SIDEBAR)(withAPIContext(DetailsSidebar));
