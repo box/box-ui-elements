@@ -630,7 +630,20 @@ class ContentPreview extends PureComponent<Props, State> {
         const { showAnnotations }: Props = this.props;
         const { file }: State = this.state;
         const isFileAnnotatable = getProp(file, 'permissions.can_annotate', false);
-        return isFileAnnotatable && !!showAnnotations;
+        return !!showAnnotations && isFileAnnotatable;
+    }
+
+    /**
+     * Returns whether a preview should render annotations based on permissions
+     *
+     * @return {boolean}
+     */
+    canViewAnnotations(): boolean {
+        const { showAnnotations }: Props = this.props;
+        const { file }: State = this.state;
+        const hasViewAllPermissions = getProp(file, 'permissions.can_view_annotations_all', false);
+        const hasViewSelfPermissions = getProp(file, 'permissions.can_view_annotations_self', false);
+        return !!showAnnotations && (this.canAnnotate() || hasViewAllPermissions || hasViewSelfPermissions);
     }
 
     /**
@@ -656,7 +669,7 @@ class ContentPreview extends PureComponent<Props, State> {
             container: `#${this.id} .bcpr-content`,
             header: 'none',
             headerElement: `#${this.id} .bcpr-header`,
-            showAnnotations: this.canAnnotate(),
+            showAnnotations: this.canViewAnnotations(),
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,

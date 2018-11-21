@@ -845,7 +845,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             };
         });
 
-        test('should return true if showAnnotations prop is true and has can_annotate permission', () => {
+        test('should return true if showAnnotations prop is true and there are annotations edit permissions', () => {
             wrapper = getWrapper(props);
             instance = wrapper.instance();
             wrapper.setState({ file });
@@ -866,6 +866,79 @@ describe('components/ContentPreview/ContentPreview', () => {
             file.permissions.can_annotate = false;
             wrapper.setState({ file });
             expect(instance.canAnnotate()).toBeFalsy();
+        });
+    });
+
+    describe('canViewAnnotations()', () => {
+        let wrapper;
+        let instance;
+        let file;
+
+        beforeEach(() => {
+            props.showAnnotations = true;
+            file = {
+                id: '123',
+                permissions: {
+                    can_annotate: true,
+                    can_view_annotations_all: false,
+                    can_view_annotations_self: false,
+                },
+            };
+        });
+
+        test('should return true if showAnnotations prop is true and has can_annotate permission', () => {
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            instance.canAnnotate = jest.fn().mockReturnValue(true);
+            wrapper.setState({ file });
+            expect(instance.canViewAnnotations()).toBeTruthy();
+        });
+
+        test('should return true if showAnnotations prop is true and has can view all annotations', () => {
+            file.permissions = {
+                can_annotate: false,
+                can_view_annotations_all: true,
+                can_view_annotations_self: false,
+            };
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canViewAnnotations()).toBeTruthy();
+        });
+
+        test('should return true if showAnnotations prop is true and has can view self annotations', () => {
+            file.permissions = {
+                can_annotate: false,
+                can_view_annotations_all: false,
+                can_view_annotations_self: true,
+            };
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canViewAnnotations()).toBeTruthy();
+        });
+
+        test('should return false if showAnnotations prop is false', () => {
+            props.showAnnotations = false;
+            wrapper = getWrapper(props);
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canViewAnnotations()).toBeFalsy();
+        });
+
+        test('should return false if there are no view or edit permissions', () => {
+            wrapper = getWrapper(props);
+            props.showAnnotations = true;
+
+            file.permissions = {
+                can_annotate: false,
+                can_view_annotations_all: false,
+                can_view_annotations_self: false,
+            };
+
+            instance = wrapper.instance();
+            wrapper.setState({ file });
+            expect(instance.canViewAnnotations()).toBeFalsy();
         });
     });
 });
