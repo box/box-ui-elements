@@ -495,13 +495,13 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onPreviewError = ({ error, ...rest }: PreviewError): void => {
-        const { message, code = ERROR_CODE_UNKNOWN, ...errorRest } = error;
+        const { code = ERROR_CODE_UNKNOWN } = error;
         this.props.onError(
-            message,
+            error,
             code,
             {
                 ...rest,
-                ...errorRest,
+                error,
             },
             ORIGIN_PREVIEW,
         );
