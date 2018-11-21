@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import messages from '../../messages';
-import { ERROR_TYPE_CONTENT_SIDEBAR } from '../../../constants';
 
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
@@ -359,16 +358,16 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
                 onError,
             });
             instance = wrapper.instance();
-            jest.spyOn(global.console, 'error');
+            jest.spyOn(global.console, 'error').mockImplementation();
         });
 
         afterEach(() => {
-            global.console.error.mockRestore();
+            jest.restoreAllMocks();
         });
 
         test('should log the error', () => {
-            instance.errorCallback(error, 'some_code', contextInfo);
-            expect(onError).toHaveBeenCalledWith(error, ERROR_TYPE_CONTENT_SIDEBAR, code, contextInfo);
+            instance.errorCallback(error, code, undefined, contextInfo);
+            expect(onError).toHaveBeenCalledWith(error, code, undefined, contextInfo);
         });
     });
 

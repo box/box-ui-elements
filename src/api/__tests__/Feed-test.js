@@ -1,6 +1,8 @@
 import Feed from '../Feed';
 import messages from '../../components/messages';
+import { ERROR_CODE_DELETE_COMMENT } from '../../constants';
 import * as sorter from '../../util/sorter';
+import * as error from '../../util/error';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
@@ -31,7 +33,6 @@ jest.mock('../Tasks', () => {
         }),
         get: jest.fn().mockReturnValue(task),
         getAssignments: jest.fn().mockImplementation((id, taskId, successCallback) => {
-                // eslint-disable-line
             successCallback({
                 total_count: 1,
                 entries: [
@@ -418,25 +419,6 @@ describe('api/Feed', () => {
         });
     });
 
-    describe('updateTaskErrorCallback()', () => {
-        let errorCb;
-        beforeEach(() => {
-            feed.errorCallback = jest.fn();
-            errorCb = jest.fn();
-        });
-
-        test('should call the error callback', () => {
-            feed.updateTaskErrorCallback(tasks.entries[0], errorCb);
-            expect(errorCb).toBeCalled();
-        });
-
-        test('should not call the error callback', () => {
-            feed.isDestroyed = jest.fn().mockReturnValue(true);
-            feed.updateTaskErrorCallback(tasks.entries[0], errorCb);
-            expect(errorCb).not.toBeCalled();
-        });
-    });
-
     describe('updateTaskSuccessCallback()', () => {
         let successCb;
         beforeEach(() => {
@@ -484,24 +466,21 @@ describe('api/Feed', () => {
     });
 
     describe('deleteCommentErrorCallback()', () => {
-        const error = 'foo';
+        const e = new Error('foo');
         let errorCb;
+
         beforeEach(() => {
             feed.updateFeedItem = jest.fn();
             feed.createFeedError = jest.fn().mockReturnValue(error);
+            feed.errorCallback = jest.fn();
             errorCb = jest.fn();
         });
 
         test('should update the feed item and call the error callback', () => {
             const commentId = '1';
-            feed.deleteCommentErrorCallback(commentId, errorCb);
+            feed.deleteCommentErrorCallback(commentId, errorCb, e);
             expect(feed.updateFeedItem).toBeCalledWith(error, commentId);
-            expect(errorCb).toBeCalled();
-        });
-
-        test('should not call the error callback', () => {
-            feed.isDestroyed = jest.fn().mockReturnValue(true);
-            expect(errorCb).not.toBeCalled();
+            expect(feed.errorCallback).toBeCalledWith(true, e, errorCb, ERROR_CODE_DELETE_COMMENT);
         });
     });
 
@@ -626,22 +605,6 @@ describe('api/Feed', () => {
         });
     });
 
-    describe('createTaskAssignmentErrorCallback()', () => {
-        let errorCb;
-        beforeEach(() => {
-            feed.errorCallback = jest.fn();
-            feed.deleteTask = jest.fn();
-            errorCb = jest.fn();
-        });
-
-        test('should call generic error callback, delete feed item', () => {
-            feed.createTaskAssignmentErrorCallback('foo', file, tasks.entries[0], errorCb);
-            expect(feed.errorCallback).toBeCalled();
-            expect(feed.deleteTask).toBeCalled();
-            expect(errorCb).toBeCalled();
-        });
-    });
-
     describe('deleteTask()', () => {
         beforeEach(() => {
             feed.updateFeedItem = jest.fn();
@@ -687,18 +650,40 @@ describe('api/Feed', () => {
     });
 
     describe('errorCallback()', () => {
+        const code = 'foo';
+        const e = new Error('bar');
+        let errorCb;
+
         beforeEach(() => {
-            global.console.error = jest.fn();
+            errorCb = jest.fn();
+            jest.spyOn(global.console, 'error').mockImplementation();
         });
 
         afterEach(() => {
-            global.console.error.mockRestore();
+            jest.restoreAllMocks();
         });
 
-        test('should log the error and set the hasError property', () => {
-            const e = 'foo error';
-            feed.errorCallback(e);
+        test('should log the error and set the hasError property if its not destroyed and hasError is set to true', () => {
+            const hasError = true;
+            feed.errorCallback(hasError, e, errorCb, code);
             expect(global.console.error).toBeCalledWith(e);
+            expect(feed.hasError).toBe(true);
+            expect(errorCb).toHaveBeenCalled();
+        });
+
+        test('should not call the error callback if missing parameters', () => {
+            const hasError = true;
+            feed.errorCallback(hasError, e, errorCb);
+            expect(errorCb).not.toHaveBeenCalled();
+        });
+
+        test('should set hasError only if hasError is set', () => {
+            feed.hasError = null;
+            expect(feed.hasError).toBe(null);
+            const hasError = false;
+            feed.errorCallback(hasError, e, errorCb, code);
+            expect(feed.hasError).toBe(null);
+            feed.errorCallback(true, e, errorCb, code);
             expect(feed.hasError).toBe(true);
         });
     });
@@ -1050,30 +1035,30 @@ describe('api/Feed', () => {
 
     describe('fetchFeedItemErrorCallback()', () => {
         let errorCb;
+        const code = 'foo';
+        const e = new Error('bar');
+
         beforeEach(() => {
             feed.errorCallback = jest.fn();
             errorCb = jest.fn();
         });
 
-        test('should call the error callback if error is rate limited', () => {
-            feed.fetchFeedItemErrorCallback(errorCb, {
-                status: 429,
-            });
-            expect(feed.errorCallback).toHaveBeenCalled();
+        afterEach(() => {
+            jest.restoreAllMocks();
         });
 
         test('should call the error callback if error is internal server error', () => {
-            feed.fetchFeedItemErrorCallback(errorCb, {
-                status: 500,
-            });
-            expect(feed.errorCallback).toHaveBeenCalled();
+            const shouldDisplayError = true;
+            jest.spyOn(error, 'isUserCorrectableError').mockReturnValue(shouldDisplayError);
+            feed.fetchFeedItemErrorCallback(e, errorCb, code);
+            expect(feed.errorCallback).toHaveBeenCalledWith(shouldDisplayError, e, errorCb, code);
         });
 
         test('should not call the error callback if error is forbidden or another error', () => {
-            feed.fetchFeedItemErrorCallback(errorCb, {
-                status: 403,
-            });
-            expect(feed.errorCallback).not.toHaveBeenCalled();
+            const shouldDisplayError = false;
+            jest.spyOn(error, 'isUserCorrectableError').mockReturnValue(shouldDisplayError);
+            feed.fetchFeedItemErrorCallback(e, errorCb, code);
+            expect(feed.errorCallback).toHaveBeenCalledWith(shouldDisplayError, e, errorCb, code);
         });
     });
 });

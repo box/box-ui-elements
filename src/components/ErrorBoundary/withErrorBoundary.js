@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file withErrorBoundary HOC which adds error boundaries as well as error error logging
+ * @file withErrorBoundary HOC which adds error boundaries as well as error logging
  * @author Box
  */
 

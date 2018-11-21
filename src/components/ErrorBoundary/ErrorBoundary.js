@@ -94,3 +94,4 @@ class ErrorBoundary extends React.Component<Props, State> {
 export default React.forwardRef((props: Object, ref: React.Ref<any>) => (
     <ErrorBoundary {...props} forwardedRef={ref} />
 ));
+export { ErrorBoundary as ErrorBoundaryComponent };

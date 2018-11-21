@@ -463,7 +463,7 @@ class Feed extends Base {
      */
     deleteCommentErrorCallback = (commentId: string, errorCallback: ErrorCallback, e: ElementsXhrError) => {
         this.updateFeedItem(this.createFeedError(messages.commentDeleteErrorMessage), commentId);
-        this.errorCallback(false, e, noop, ERROR_CODE_DELETE_COMMENT);
+        this.errorCallback(true, e, errorCallback, ERROR_CODE_DELETE_COMMENT);
     };
 
     /**

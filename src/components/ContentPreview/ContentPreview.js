@@ -735,8 +735,6 @@ class ContentPreview extends PureComponent<Props, State> {
                 isReloadNotificationVisible: true,
             });
         }
-
-        this.retryCount = RETRY_COUNT + 5;
     };
 
     /**
