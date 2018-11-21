@@ -67,7 +67,7 @@ class Base {
     /**
      * @property {Function}
      */
-    errorCallback: (error: Object) => void;
+    errorCallback: Function;
 
     /**
      * [constructor]
