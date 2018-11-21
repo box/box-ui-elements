@@ -349,8 +349,6 @@ class ContentSidebar extends PureComponent<Props, State> {
         } else {
             this.fetchMetadataSuccessCallback(file);
         }
-
-        this.errorCallback(new Error('foo'));
     };
 
     /**

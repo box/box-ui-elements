@@ -737,8 +737,6 @@ class ContentPreview extends PureComponent<Props, State> {
         }
 
         this.retryCount = RETRY_COUNT + 5;
-
-        this.fetchFileErrorCallback(new Error('foo'));
     };
 
     /**
