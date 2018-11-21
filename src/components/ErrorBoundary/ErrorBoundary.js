@@ -9,10 +9,8 @@ import noop from 'lodash/noop';
 import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../constants';
 
 type Props = {
-    children?: any,
     component: any,
     errorOrigin: ErrorOrigins,
-    forwardedRef: ?React.ElementRef<any>,
     children: React.Element<*>,
     onError: (error: ElementsError) => void,
 };
@@ -74,7 +72,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     };
 
     render() {
-        const { children, component, forwardedRef, ...rest } = this.props;
+        const { children, component, ...rest } = this.props;
 
         if (this.state.error) {
             return component;
@@ -82,7 +80,6 @@ class ErrorBoundary extends React.Component<Props, State> {
 
         return React.cloneElement(children, {
             ...rest,
-            ref: forwardedRef,
             onError: this.handleError,
         });
     }
