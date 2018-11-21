@@ -57,6 +57,10 @@ class ErrorBoundary extends React.Component<Props, State> {
         contextInfo: Object = {},
         origin: ErrorOrigins = this.props.errorOrigin,
     ) => {
+        if (!error || !code || !origin) {
+            return;
+        }
+
         const elementsError: ElementsError = {
             type: 'error',
             code,
