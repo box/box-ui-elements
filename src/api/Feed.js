@@ -35,7 +35,6 @@ import {
     ERROR_CODE_DELETE_TASK,
     ERROR_CODE_UPDATE_TASK,
     ERROR_CODE_UPDATE_TASK_ASSIGNMENT,
-    IS_ERROR_DISPLAYED,
 } from '../constants';
 import { sortFeedItems } from '../util/sorter';
 
@@ -51,7 +50,7 @@ type FeedItemsCache = {
     items: FeedItems,
 };
 
-type ErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
+type ErrorCallback = (e: ElementsXhrError, code: string, isErrorDisplayed: boolean, contextInfo?: Object) => void;
 
 class Feed extends Base {
     /**
@@ -578,9 +577,7 @@ class Feed extends Base {
             errorCallback: (e: ElementsXhrError) => {
                 this.updateFeedItem(this.createFeedError(messages.taskCreateErrorMessage), uuid);
                 if (!this.isDestroyed()) {
-                    errorCallback(e, ERROR_CODE_CREATE_TASK, {
-                        [IS_ERROR_DISPLAYED]: true,
-                    });
+                    errorCallback(e, ERROR_CODE_CREATE_TASK, true);
                 }
             },
         });
@@ -692,9 +689,8 @@ class Feed extends Base {
         }
 
         if (!this.isDestroyed() && errorCallback && code) {
-            errorCallback(e, code, {
+            errorCallback(e, code, true, {
                 error: e,
-                [IS_ERROR_DISPLAYED]: hasError,
             });
         }
 
@@ -848,9 +844,8 @@ class Feed extends Base {
                 : messages.commentCreateErrorMessage;
         this.updateFeedItem(this.createFeedError(errorMessage), id);
         if (!this.isDestroyed()) {
-            errorCallback(e, ERROR_CODE_CREATE_COMMENT, {
-                response: e,
-                [IS_ERROR_DISPLAYED]: true,
+            errorCallback(e, ERROR_CODE_CREATE_COMMENT, true, {
+                error: e,
             });
         }
     };

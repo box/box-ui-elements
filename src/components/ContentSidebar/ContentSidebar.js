@@ -25,7 +25,6 @@ import {
     SIDEBAR_VIEW_METADATA,
     ORIGIN_CONTENT_SIDEBAR,
     ERROR_CODE_FETCH_FILE,
-    IS_ERROR_DISPLAYED,
 } from '../../constants';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
@@ -235,8 +234,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         /* eslint-enable no-console */
 
         /* eslint-disable react/prop-types */
-        this.props.onError(error, ERROR_CODE_FETCH_FILE, {
-            [IS_ERROR_DISPLAYED]: true,
+        this.props.onError(error, ERROR_CODE_FETCH_FILE, true, {
+            error,
         });
         /* eslint-enable react/prop-types */
     };
@@ -350,6 +349,8 @@ class ContentSidebar extends PureComponent<Props, State> {
         } else {
             this.fetchMetadataSuccessCallback(file);
         }
+
+        this.errorCallback(new Error('foo'));
     };
 
     /**

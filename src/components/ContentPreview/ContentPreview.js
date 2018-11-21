@@ -42,7 +42,6 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_FETCH_FILE,
     ERROR_CODE_UNKNOWN,
-    IS_ERROR_DISPLAYED,
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -500,10 +499,10 @@ class ContentPreview extends PureComponent<Props, State> {
         this.props.onError(
             message,
             code,
+            true,
             {
                 ...rest,
                 ...errorRest,
-                [IS_ERROR_DISPLAYED]: true,
             },
             ORIGIN_PREVIEW,
         );
@@ -751,7 +750,9 @@ class ContentPreview extends PureComponent<Props, State> {
         const { currentFileId } = this.state;
         if (this.retryCount >= RETRY_COUNT) {
             this.setState({ isFileError: true });
-            this.props.onError(fileError, ERROR_CODE_FETCH_FILE);
+            this.props.onError(fileError, ERROR_CODE_FETCH_FILE, true, {
+                error: fileError,
+            });
         } else {
             this.retryCount += 1;
             clearTimeout(this.retryTimeout);

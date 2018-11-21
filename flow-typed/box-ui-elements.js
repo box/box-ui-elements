@@ -664,5 +664,11 @@ type ElementsError = {
 };
 
 type ErrorContextProps = {
-    onError: (error: ElementsXhrError, code: string, contextInfo?: Object, origin: ErrorOrigins) => void,
+    onError: (
+        error: ElementsXhrError,
+        code: string,
+        isErrorDisplayed: boolean,
+        contextInfo?: Object,
+        origin: ErrorOrigins,
+    ) => void,
 };
