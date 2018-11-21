@@ -88,8 +88,4 @@ class ErrorBoundary extends React.Component<Props, State> {
     }
 }
 
-// $FlowFixMe doesn't know about forwardRef (https://github.com/facebook/flow/issues/6103)
-export default React.forwardRef((props: Object, ref: React.Ref<any>) => (
-    <ErrorBoundary {...props} forwardedRef={ref} />
-));
-export { ErrorBoundary as ErrorBoundaryComponent };
+export default ErrorBoundary;

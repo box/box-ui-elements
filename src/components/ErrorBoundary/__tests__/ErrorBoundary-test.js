@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { ErrorBoundaryComponent as ErrorBoundary } from '../ErrorBoundary';
+import ErrorBoundary from '../ErrorBoundary';
 import { ERROR_CODE_UNEXPECTED_EXCEPTION } from '../../../constants';
 
 describe('components/ErrorBoundary', () => {
