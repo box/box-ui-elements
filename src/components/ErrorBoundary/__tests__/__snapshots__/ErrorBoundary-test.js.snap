@@ -8,4 +8,8 @@ exports[`components/ErrorBoundary should render the component specified when an 
 </div>
 `;
 
-exports[`components/ErrorBoundary should render the wrapped component when no error is thrown 1`] = `<WrappedComponent />`;
+exports[`components/ErrorBoundary should render the wrapped component when no error is thrown 1`] = `
+<WrappedComponent
+  onError={[Function]}
+/>
+`;

@@ -165,7 +165,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             TokenService.default.getReadToken = origGetReadToken;
         });
 
-        test('should bind onError prop to preview "preview_error" event', async () => {
+        test('should bind onPreviewError prop to preview "preview_error" event', async () => {
             props = {
                 onError: jest.fn(),
                 token: 'token',
@@ -174,11 +174,12 @@ describe('components/ContentPreview/ContentPreview', () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
+            instance.onPreviewError = jest.fn();
             await instance.loadPreview();
-            expect(instance.preview.addListener).toHaveBeenCalledWith('preview_error', props.onError);
+            expect(instance.preview.addListener).toHaveBeenCalledWith('preview_error', instance.onPreviewError);
         });
 
-        test('should bind onError prop to preview "preview_metric" event', async () => {
+        test('should bind onPreviewMetric prop to preview "preview_metric" event', async () => {
             props = {
                 onMetric: jest.fn(),
                 token: 'token',
@@ -187,6 +188,7 @@ describe('components/ContentPreview/ContentPreview', () => {
             const wrapper = getWrapper(props);
             wrapper.setState({ file });
             const instance = wrapper.instance();
+            instance.onPreviewMetric = jest.fn();
             await instance.loadPreview();
             expect(instance.preview.addListener).toHaveBeenCalledWith('preview_metric', instance.onPreviewMetric);
         });
@@ -366,28 +368,37 @@ describe('components/ContentPreview/ContentPreview', () => {
 
     describe('fetchFileErrorCallback()', () => {
         let instance;
+        let error;
+        let onError;
 
         beforeEach(() => {
-            const wrapper = getWrapper(props);
+            onError = jest.fn();
+            const wrapper = getWrapper({
+                ...props,
+                onError,
+            });
             instance = wrapper.instance();
             instance.fetchFile = jest.fn();
             instance.retryCount = 5;
+            error = new Error('foo');
         });
 
         test('should set the file error state if we have surpassed our retry count', () => {
-            instance.fetchFileErrorCallback();
+            instance.fetchFileErrorCallback(error);
             expect(instance.state.isFileError).toEqual(true);
             expect(instance.fetchFile).not.toBeCalled();
+            expect(onError).toHaveBeenCalled();
         });
 
         jest.useFakeTimers();
 
         test('should try to fetch the file again after the timeout', () => {
             instance.retryCount = 0;
-            instance.fetchFileErrorCallback();
+            instance.fetchFileErrorCallback(error);
             jest.runAllTimers();
 
             expect(instance.fetchFile).toBeCalled();
+            expect(onError).not.toHaveBeenCalled();
         });
     });
 

@@ -38,6 +38,10 @@ import {
     DEFAULT_PATH_STATIC_PREVIEW,
     CLIENT_NAME_CONTENT_PREVIEW,
     HEADER_RETRY_AFTER,
+    ORIGIN_PREVIEW,
+    ORIGIN_CONTENT_PREVIEW,
+    ERROR_CODE_FETCH_FILE,
+    ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -63,7 +67,6 @@ type Props = {
     messages?: StringMap,
     onClose?: Function,
     onDownload: Function,
-    onError?: Function,
     onLoad: Function,
     onMetric: Function,
     onNavigate: Function,
@@ -77,7 +80,7 @@ type Props = {
     staticPath: string,
     token: Token,
     useHotkeys: boolean,
-};
+} & ErrorContextProps;
 
 type State = {
     file?: BoxItem,
@@ -114,6 +117,15 @@ type PreviewMetrics = {
     client_version: string,
     browser_name: string,
     logger_session_id: string,
+};
+
+type PreviewError = {
+    error: {
+        code: string,
+        details: Object,
+        displayMessage: string,
+        message: string,
+    },
 };
 
 const InvalidIdError = new Error('Invalid id for Preview!');
@@ -477,6 +489,25 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Handler for 'preview_error' preview event
+     *
+     * @param {PreviewError} previewError - the error data emitted from preview
+     * @return {void}
+     */
+    onPreviewError = ({ error, ...rest }: PreviewError): void => {
+        const { code = ERROR_CODE_UNKNOWN } = error;
+        this.props.onError(
+            error,
+            code,
+            {
+                ...rest,
+                error,
+            },
+            ORIGIN_PREVIEW,
+        );
+    };
+
+    /**
      * Event handler 'preview_metric' which also adds in the file fetch time if it's a load event
      *
      * @param {Object} previewMetrics - the object emitted by 'preview_metric'
@@ -646,7 +677,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
-        this.preview.addListener('preview_error', onError);
+        this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
@@ -723,12 +754,13 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    /* eslint-disable no-unused-vars */
-    fetchFileErrorCallback = (fileError: Error): void => {
-        /* eslint-enable no-unused-vars */
+    fetchFileErrorCallback = (fileError: ElementsXhrError): void => {
         const { currentFileId } = this.state;
         if (this.retryCount >= RETRY_COUNT) {
             this.setState({ isFileError: true });
+            this.props.onError(fileError, ERROR_CODE_FETCH_FILE, {
+                error: fileError,
+            });
         } else {
             this.retryCount += 1;
             clearTimeout(this.retryTimeout);
@@ -1123,4 +1155,4 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default withErrorBoundary(makeResponsive(ContentPreview));
+export default withErrorBoundary(ORIGIN_CONTENT_PREVIEW)(makeResponsive(ContentPreview));

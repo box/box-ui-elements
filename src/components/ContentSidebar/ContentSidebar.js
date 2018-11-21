@@ -23,6 +23,8 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
+    ORIGIN_CONTENT_SIDEBAR,
+    ERROR_CODE_FETCH_FILE,
 } from '../../constants';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
@@ -59,7 +61,7 @@ type Props = {
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onVersionHistoryClick?: Function,
-};
+} & ErrorContextProps;
 
 type State = {
     view?: SidebarView,
@@ -226,10 +228,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} error - Error object
      * @return {void}
      */
-    errorCallback = (error: $AxiosXHR<any>): void => {
+    errorCallback = (error: ElementsXhrError): void => {
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
+
+        /* eslint-disable react/prop-types */
+        this.props.onError(error, ERROR_CODE_FETCH_FILE, {
+            error,
+        });
+        /* eslint-enable react/prop-types */
     };
 
     /**
@@ -442,4 +450,4 @@ class ContentSidebar extends PureComponent<Props, State> {
 
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
-export default withErrorBoundary(ContentSidebar);
+export default withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)(ContentSidebar);

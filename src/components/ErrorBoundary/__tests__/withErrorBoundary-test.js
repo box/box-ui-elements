@@ -5,11 +5,12 @@ import withErrorBoundary from '../withErrorBoundary';
 
 describe('components/withErrorBoundary', () => {
     const WrappedComponent = () => <div>Test</div>;
-    const WithErrorBoundaryComponent = withErrorBoundary(WrappedComponent);
+    const origin = 'foo';
+    const WithErrorBoundaryComponent = withErrorBoundary(origin)(WrappedComponent);
 
     const getWrapper = props => shallow(<WithErrorBoundaryComponent {...props} />);
 
-    test('should wrap the provided component with an ErrorBoundary', () => {
+    test('should wrap the provided component with an ErrorBoundary and pass the origin as a prop', () => {
         const wrapper = getWrapper();
 
         expect(wrapper).toMatchSnapshot();

@@ -1,17 +1,17 @@
 /**
  * @flow
- * @file withErrorBoundary HOC
+ * @file withErrorBoundary HOC which adds error boundaries as well as error logging
  * @author Box
  */
 
 import * as React from 'react';
 import ErrorBoundary from './ErrorBoundary';
 
-const withErrorBoundary = (WrappedComponent: React.ComponentType<any>) =>
+const withErrorBoundary = (errorOrigin: ErrorOrigins) => (WrappedComponent: React.ComponentType<any>) =>
     // $FlowFixMe doesn't know about forwardRef (https://github.com/facebook/flow/issues/6103)
     React.forwardRef((props: Object, ref: React.Ref<any>) => (
-        <ErrorBoundary>
-            <WrappedComponent {...props} ref={ref} />
+        <ErrorBoundary {...props} errorOrigin={errorOrigin}>
+            <WrappedComponent ref={ref} />
         </ErrorBoundary>
     ));
 
