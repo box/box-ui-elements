@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Helper for throwing errors
+ * @file Helper functions for errors
  * @author Box
  */
 import {

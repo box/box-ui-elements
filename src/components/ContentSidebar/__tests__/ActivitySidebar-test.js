@@ -342,23 +342,32 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
     });
 
     describe('errorCallback()', () => {
-        const message = 'foo';
         let instance;
         let wrapper;
+        let onError;
+        let error;
+        const code = 'some_code';
+        const contextInfo = {
+            foo: 'bar',
+        };
 
         beforeEach(() => {
-            wrapper = getWrapper();
+            error = new Error('foo');
+            onError = jest.fn();
+            wrapper = getWrapper({
+                onError,
+            });
             instance = wrapper.instance();
-            global.console.error = jest.fn();
+            jest.spyOn(global.console, 'error').mockImplementation();
         });
 
         afterEach(() => {
-            global.console.error.mockRestore();
+            jest.restoreAllMocks();
         });
 
         test('should log the error', () => {
-            instance.errorCallback(message);
-            expect(global.console.error).toBeCalledWith(message);
+            instance.errorCallback(error, code, contextInfo);
+            expect(onError).toHaveBeenCalledWith(error, code, contextInfo);
         });
     });
 

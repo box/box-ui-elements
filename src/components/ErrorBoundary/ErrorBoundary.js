@@ -4,13 +4,15 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import noop from 'lodash/noop';
+import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../constants';
 
 type Props = {
-    children?: any,
     component: any,
-    onError: Function,
+    errorOrigin: ErrorOrigins,
+    children: React.Element<*>,
+    onError: (error: ElementsError) => void,
 };
 
 type State = {
@@ -27,18 +29,63 @@ class ErrorBoundary extends React.Component<Props, State> {
         onError: noop,
     };
 
-    componentDidCatch(error: Error): void {
+    componentDidCatch(error: Error, info: Object): void {
         this.setState({ error }, () => {
-            this.props.onError(error);
+            this.handleError(
+                error,
+                ERROR_CODE_UNEXPECTED_EXCEPTION,
+                {
+                    ...info,
+                },
+                this.props.errorOrigin,
+            );
         });
     }
 
-    render() {
-        if (this.state.error) {
-            return this.props.component;
+    /**
+     * Formats the error and emits it to the top level onError prop
+     *
+     * @param {Error} e - the error which occured
+     * @param {string} type - the error type to identify where the error occured
+     * @param {string} code - the error code to identify what error occured
+     * @param {Object} contextInfo - additional information which may be useful for the consumer of the error
+     * @return {void}
+     */
+    handleError = (
+        error: ElementsXhrError | Error,
+        code: string,
+        contextInfo: Object = {},
+        origin: ErrorOrigins = this.props.errorOrigin,
+    ) => {
+        if (!error || !code || !origin) {
+            return;
         }
 
-        return this.props.children;
+        const elementsError: ElementsError = {
+            type: 'error',
+            code,
+            message: error.message,
+            origin,
+            context_info: {
+                [IS_ERROR_DISPLAYED]: true,
+                ...contextInfo,
+            },
+        };
+
+        this.props.onError(elementsError);
+    };
+
+    render() {
+        const { children, component, ...rest } = this.props;
+
+        if (this.state.error) {
+            return component;
+        }
+
+        return React.cloneElement(children, {
+            ...rest,
+            onError: this.handleError,
+        });
     }
 }
 

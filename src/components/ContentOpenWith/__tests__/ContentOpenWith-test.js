@@ -13,7 +13,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     beforeEach(() => {
         wrapper = getWrapper({ fileId });
         instance = wrapper.instance();
-        global.console.error = jest.fn();
+        jest.spyOn(global.console, 'error').mockImplementation();
     });
 
     afterEach(() => {

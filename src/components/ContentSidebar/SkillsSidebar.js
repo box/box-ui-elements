@@ -8,7 +8,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import { SKILLS_TRANSCRIPT } from '../../constants';
+import { SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
 import messages from '../messages';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../APIContext';
@@ -196,4 +196,4 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
 }
 
 export { SkillsSidebar as SkillsSidebarComponent };
-export default withErrorBoundary(withAPIContext(SkillsSidebar));
+export default withErrorBoundary(ORIGIN_SKILLS_SIDEBAR)(withAPIContext(SkillsSidebar));
