@@ -76,21 +76,21 @@ class ErrorBoundary extends React.Component<Props, State> {
     };
 
     render() {
-        const { children, component, ...rest } = this.props;
+        const { children, component, forwardedRef, ...rest } = this.props;
 
         if (this.state.error) {
             return component;
         }
 
-        // $FlowFixMe doesn't know about forwardRef (https://github.com/facebook/flow/issues/6103)
-        // return React.forwardRef((props: Object, ref: React.Ref<any>) =>
         return React.cloneElement(children, {
             ...rest,
-
+            ref: forwardedRef,
             onError: this.handleError,
         });
-        // );
     }
 }
 
-export default ErrorBoundary;
+// $FlowFixMe doesn't know about forwardRef (https://github.com/facebook/flow/issues/6103)
+export default React.forwardRef((props: Object, ref: React.Ref<any>) => (
+    <ErrorBoundary {...props} forwardedRef={ref} />
+));
