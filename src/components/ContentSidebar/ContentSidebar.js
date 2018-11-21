@@ -234,7 +234,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         /* eslint-enable no-console */
 
         /* eslint-disable react/prop-types */
-        this.props.onError(error, ERROR_CODE_FETCH_FILE, true, {
+        this.props.onError(error, ERROR_CODE_FETCH_FILE, {
             error,
         });
         /* eslint-enable react/prop-types */

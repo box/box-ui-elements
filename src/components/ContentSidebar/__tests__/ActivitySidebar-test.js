@@ -366,8 +366,8 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         });
 
         test('should log the error', () => {
-            instance.errorCallback(error, code, undefined, contextInfo);
-            expect(onError).toHaveBeenCalledWith(error, code, undefined, contextInfo);
+            instance.errorCallback(error, code, contextInfo);
+            expect(onError).toHaveBeenCalledWith(error, code, contextInfo);
         });
     });
 

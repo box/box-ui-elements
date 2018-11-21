@@ -205,6 +205,9 @@ export const ORIGIN_SKILLS_SIDEBAR = 'skills_sidebar';
 export const ORIGIN_PREVIEW = 'preview';
 export const ORIGIN_CONTENT_EXPLORER = 'content_explorer';
 
+/* ------------------ Error Keys ---------------------- */
+export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message
+
 /* ------------- Representation Hints ------------------- */
 const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';
 const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';

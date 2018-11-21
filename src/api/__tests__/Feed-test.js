@@ -1,6 +1,6 @@
 import Feed from '../Feed';
 import messages from '../../components/messages';
-import { ERROR_CODE_DELETE_COMMENT } from '../../constants';
+import { ERROR_CODE_DELETE_COMMENT, IS_ERROR_DISPLAYED } from '../../constants';
 import * as sorter from '../../util/sorter';
 import * as error from '../../util/error';
 
@@ -204,6 +204,11 @@ describe('api/Feed', () => {
 
     beforeEach(() => {
         feed = new Feed({});
+        jest.spyOn(global.console, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     describe('getCacheKey()', () => {
@@ -656,7 +661,6 @@ describe('api/Feed', () => {
 
         beforeEach(() => {
             errorCb = jest.fn();
-            jest.spyOn(global.console, 'error').mockImplementation();
         });
 
         afterEach(() => {
@@ -668,7 +672,19 @@ describe('api/Feed', () => {
             feed.errorCallback(hasError, e, errorCb, code);
             expect(global.console.error).toBeCalledWith(e);
             expect(feed.hasError).toBe(true);
-            expect(errorCb).toHaveBeenCalled();
+            expect(errorCb).toHaveBeenCalledWith(e, code, {
+                error: e,
+                [IS_ERROR_DISPLAYED]: hasError,
+            });
+        });
+
+        test('should call the error callback with the value of hasError', () => {
+            const hasError = false;
+            feed.errorCallback(hasError, e, errorCb, code);
+            expect(errorCb).toHaveBeenCalledWith(e, code, {
+                error: e,
+                [IS_ERROR_DISPLAYED]: hasError,
+            });
         });
 
         test('should not call the error callback if missing parameters', () => {

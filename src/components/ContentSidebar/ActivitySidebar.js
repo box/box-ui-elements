@@ -108,8 +108,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Error} code - the code for the error
      * @param {Object} contextInfo - the context info for the error
      */
-    feedErrorCallback = (e: ElementsXhrError, code: string, isErrorDisplayed: boolean, contextInfo?: Object) => {
-        this.errorCallback(e, code, isErrorDisplayed, contextInfo);
+    feedErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => {
+        this.errorCallback(e, code, contextInfo);
         this.fetchFeedItems();
     };
 
@@ -309,17 +309,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Object} contextInfo - the context info for the error
      * @return {void}
      */
-    errorCallback = (
-        error: ElementsXhrError,
-        code: string,
-        isErrorDisplayed: boolean,
-        contextInfo: Object = {},
-    ): void => {
+    errorCallback = (error: ElementsXhrError, code: string, contextInfo: Object = {}): void => {
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
 
-        this.props.onError(error, code, isErrorDisplayed, contextInfo);
+        this.props.onError(error, code, contextInfo);
     };
 
     /**
@@ -425,7 +420,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             },
         });
 
-        this.errorCallback(e, ERROR_CODE_FETCH_CURRENT_USER, true, {
+        this.errorCallback(e, ERROR_CODE_FETCH_CURRENT_USER, {
             error: e,
         });
     };

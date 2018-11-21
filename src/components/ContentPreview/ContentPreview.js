@@ -499,7 +499,6 @@ class ContentPreview extends PureComponent<Props, State> {
         this.props.onError(
             message,
             code,
-            true,
             {
                 ...rest,
                 ...errorRest,
@@ -746,7 +745,7 @@ class ContentPreview extends PureComponent<Props, State> {
         const { currentFileId } = this.state;
         if (this.retryCount >= RETRY_COUNT) {
             this.setState({ isFileError: true });
-            this.props.onError(fileError, ERROR_CODE_FETCH_FILE, true, {
+            this.props.onError(fileError, ERROR_CODE_FETCH_FILE, {
                 error: fileError,
             });
         } else {

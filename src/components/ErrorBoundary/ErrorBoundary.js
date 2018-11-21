@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import noop from 'lodash/noop';
-import { ERROR_CODE_UNEXPECTED_EXCEPTION } from '../../constants';
+import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../constants';
 
 type Props = {
     children?: any,
@@ -36,7 +36,6 @@ class ErrorBoundary extends React.Component<Props, State> {
             this.handleError(
                 error,
                 ERROR_CODE_UNEXPECTED_EXCEPTION,
-                true,
                 {
                     ...info,
                 },
@@ -55,9 +54,8 @@ class ErrorBoundary extends React.Component<Props, State> {
      * @return {void}
      */
     handleError = (
-        error: ElementsXhrError,
+        error: ElementsXhrError | Error,
         code: string,
-        isErrorDisplayed: boolean = false,
         contextInfo: Object = {},
         origin: ErrorOrigins = this.props.errorOrigin,
     ) => {
@@ -67,8 +65,8 @@ class ErrorBoundary extends React.Component<Props, State> {
             message: error.message,
             origin,
             context_info: {
+                [IS_ERROR_DISPLAYED]: true,
                 ...contextInfo,
-                isErrorDisplayed,
             },
         };
 
