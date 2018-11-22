@@ -16,6 +16,6 @@ jobs:
     - # tests
       script: yarn test
     - # babel build
-      script: npm-run-all clean build:i18n build-lib
+      script: npm-run-all clean build:i18n build:ci:es
     - # webpack build
-      script: npm-run-all clean build:i18n build-ci
+      script: npm-run-all clean build:i18n build:ci:dist
