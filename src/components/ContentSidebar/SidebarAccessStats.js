@@ -45,16 +45,6 @@ const SidebarAccessStats = ({
         edit_count,
     } = accessStats;
 
-    if (
-        !preview_count &&
-        !comment_count &&
-        !download_count &&
-        !edit_count &&
-        !error
-    ) {
-        return null;
-    }
-
     const errorMessage = error ? intl.formatMessage(error) : undefined;
     return (
         <SidebarSection
