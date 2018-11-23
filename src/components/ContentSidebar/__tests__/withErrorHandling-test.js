@@ -8,8 +8,7 @@ describe('components/withErrorHandling', () => {
     const WrappedComponent = () => <div />;
     const WithErrorHandlingComponent = withErrorHandling(WrappedComponent);
 
-    const getWrapper = props =>
-        shallow(<WithErrorHandlingComponent {...props} />);
+    const getWrapper = props => shallow(<WithErrorHandlingComponent {...props} />);
     const fakeMessage = {
         id: 'foo',
         description: 'bar',

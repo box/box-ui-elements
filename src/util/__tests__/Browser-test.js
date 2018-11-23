@@ -59,8 +59,6 @@ describe('util/Browser/canPlayDash()', () => {
         };
 
         expect(browser.canPlayDash(true)).toBeTruthy();
-        expect(isTypeSupportedMock).toHaveBeenCalledWith(
-            'video/mp4; codecs="avc1.64001E"',
-        );
+        expect(isTypeSupportedMock).toHaveBeenCalledWith('video/mp4; codecs="avc1.64001E"');
     });
 });

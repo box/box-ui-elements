@@ -13,9 +13,7 @@ const DEFAULT_API_OPTIONS = {};
  * @param {UploadFile | UploadFileWithAPIOptions} item
  * @returns {boolean}
  */
-function doesFileContainAPIOptions(
-    file: UploadFile | UploadFileWithAPIOptions,
-): boolean {
+function doesFileContainAPIOptions(file: UploadFile | UploadFileWithAPIOptions): boolean {
     // $FlowFixMe UploadFileWithAPIOptions has `file` and `options` properties
     return !!(file.options && file.file);
 }
@@ -26,9 +24,7 @@ function doesFileContainAPIOptions(
  * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} item
  * @returns {boolean}
  */
-function doesDataTransferItemContainAPIOptions(
-    item: DataTransferItem | UploadDataTransferItemWithAPIOptions,
-): boolean {
+function doesDataTransferItemContainAPIOptions(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): boolean {
     // $FlowFixMe UploadDataTransferItemWithAPIOptions has `item` and `options` properties
     return !!(item.options && item.item);
 }
@@ -53,9 +49,7 @@ function getFile(file: UploadFile | UploadFileWithAPIOptions): UploadFile {
  * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} item
  * @returns {DataTransferItem}
  */
-function getDataTransferItem(
-    item: DataTransferItem | UploadDataTransferItemWithAPIOptions,
-): DataTransferItem {
+function getDataTransferItem(item: DataTransferItem | UploadDataTransferItemWithAPIOptions): DataTransferItem {
     if (doesDataTransferItemContainAPIOptions(item)) {
         return ((item: any): UploadDataTransferItemWithAPIOptions).item;
     }
@@ -69,14 +63,9 @@ function getDataTransferItem(
  * @param {UploadFile | UploadFileWithAPIOptions} file
  * @returns {UploadItemAPIOptions}
  */
-function getFileAPIOptions(
-    file: UploadFile | UploadFileWithAPIOptions,
-): UploadItemAPIOptions {
+function getFileAPIOptions(file: UploadFile | UploadFileWithAPIOptions): UploadItemAPIOptions {
     if (doesFileContainAPIOptions(file)) {
-        return (
-            ((file: any): UploadFileWithAPIOptions).options ||
-            DEFAULT_API_OPTIONS
-        );
+        return ((file: any): UploadFileWithAPIOptions).options || DEFAULT_API_OPTIONS;
     }
 
     return DEFAULT_API_OPTIONS;
@@ -92,10 +81,7 @@ function getDataTransferItemAPIOptions(
     item: DataTransferItem | UploadDataTransferItemWithAPIOptions,
 ): UploadItemAPIOptions {
     if (doesDataTransferItemContainAPIOptions(item)) {
-        return (
-            ((item: any): UploadDataTransferItemWithAPIOptions).options ||
-            DEFAULT_API_OPTIONS
-        );
+        return ((item: any): UploadDataTransferItemWithAPIOptions).options || DEFAULT_API_OPTIONS;
     }
 
     return DEFAULT_API_OPTIONS;
@@ -112,10 +98,7 @@ function getDataTransferItemAPIOptions(
  * @return {boolean}
  */
 function isValidDateObject(date: Date): boolean {
-    return (
-        Object.prototype.toString.call(date) === '[object Date]' &&
-        !Number.isNaN(date.getTime())
-    );
+    return Object.prototype.toString.call(date) === '[object Date]' && !Number.isNaN(date.getTime());
 }
 
 /**
@@ -176,11 +159,7 @@ function tryParseJson(maybeJson: string): ?Object {
  * @param {number} retryNum - Current retry number (first retry will have value of 0).
  * @return {number}
  */
-function getBoundedExpBackoffRetryDelay(
-    initialRetryDelay: number,
-    maxRetryDelay: number,
-    retryNum: number,
-) {
+function getBoundedExpBackoffRetryDelay(initialRetryDelay: number, maxRetryDelay: number, retryNum: number) {
     const delay = initialRetryDelay * retryNum ** 2;
     return delay > maxRetryDelay ? maxRetryDelay : delay;
 }
@@ -191,9 +170,7 @@ function getBoundedExpBackoffRetryDelay(
  * @param {DataTransferItem} item
  * @returns {FileSystemFileEntry}
  */
-function getEntryFromDataTransferItem(
-    item: DataTransferItem,
-): FileSystemFileEntry {
+function getEntryFromDataTransferItem(item: DataTransferItem): FileSystemFileEntry {
     const entry =
         // $FlowFixMe
         item.webkitGetAsEntry || item.mozGetAsEntry || item.getAsEntry;
@@ -207,9 +184,7 @@ function getEntryFromDataTransferItem(
  * @param {UploadDataTransferItemWithAPIOptions | DataTransferItem} itemData
  * @returns {boolean}
  */
-function isDataTransferItemAFolder(
-    itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem,
-): boolean {
+function isDataTransferItemAFolder(itemData: UploadDataTransferItemWithAPIOptions | DataTransferItem): boolean {
     const item = getDataTransferItem(itemData);
     const entry = getEntryFromDataTransferItem(((item: any): DataTransferItem));
     if (!entry) {
@@ -270,23 +245,15 @@ async function getFileFromDataTransferItem(
  * @param {string} rootFolderId
  * @returns {string}
  */
-function getFileId(
-    file: UploadFileWithAPIOptions | UploadFile,
-    rootFolderId: string,
-): string {
+function getFileId(file: UploadFileWithAPIOptions | UploadFile, rootFolderId: string): string {
     if (!doesFileContainAPIOptions(file)) {
         return ((file: any): UploadFile).name;
     }
 
     const fileWithOptions = ((file: any): UploadFileWithAPIOptions);
     const folderId = getProp(fileWithOptions, 'options.folderId', rootFolderId);
-    const uploadInitTimestamp = getProp(
-        fileWithOptions,
-        'options.uploadInitTimestamp',
-        Date.now(),
-    );
-    const fileName =
-        fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
+    const uploadInitTimestamp = getProp(fileWithOptions, 'options.uploadInitTimestamp', Date.now());
+    const fileName = fileWithOptions.file.webkitRelativePath || fileWithOptions.file.name;
 
     return `${fileName}_${folderId}_${uploadInitTimestamp}`;
 }
@@ -305,10 +272,7 @@ function getDataTransferItemId(
 ): string {
     const item = getDataTransferItem(itemData);
     const { name } = getEntryFromDataTransferItem(item);
-    const {
-        folderId = rootFolderId,
-        uploadInitTimestamp = Date.now(),
-    } = getDataTransferItemAPIOptions(itemData);
+    const { folderId = rootFolderId, uploadInitTimestamp = Date.now() } = getDataTransferItemAPIOptions(itemData);
 
     return `${name}_${folderId}_${uploadInitTimestamp}`;
 }
@@ -318,9 +282,7 @@ function getDataTransferItemId(
  */
 function isMultiputSupported(): boolean {
     const cryptoObj = window.crypto || window.msCrypto;
-    return (
-        window.location.protocol === 'https:' && cryptoObj && cryptoObj.subtle
-    );
+    return window.location.protocol === 'https:' && cryptoObj && cryptoObj.subtle;
 }
 
 export {

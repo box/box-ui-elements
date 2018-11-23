@@ -112,31 +112,14 @@ const RenameDialog = ({
             <label>
                 {error ? (
                     <div className="be-modal-error">
-                        <FormattedMessage
-                            {...error}
-                            values={{ name: nameWithoutExt }}
-                        />
+                        <FormattedMessage {...error} values={{ name: nameWithoutExt }} />
                     </div>
                 ) : null}
-                <FormattedMessage
-                    tagName="div"
-                    {...messages.renameDialogText}
-                    values={{ name: nameWithoutExt }}
-                />
-                <input
-                    type="text"
-                    required
-                    ref={ref}
-                    defaultValue={nameWithoutExt}
-                    onKeyDown={onKeyDown}
-                />
+                <FormattedMessage tagName="div" {...messages.renameDialogText} values={{ name: nameWithoutExt }} />
+                <input type="text" required ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} />
             </label>
             <div className="be-modal-btns">
-                <PrimaryButton
-                    type="button"
-                    onClick={rename}
-                    isLoading={isLoading}
-                >
+                <PrimaryButton type="button" onClick={rename} isLoading={isLoading}>
                     <FormattedMessage {...messages.rename} />
                 </PrimaryButton>
                 <Button type="button" onClick={onCancel} isDisabled={isLoading}>

@@ -26,10 +26,7 @@ const CommentInputControls = ({ onCancel }: Props): React.Node => (
         >
             <FormattedMessage {...messages.commentCancel} />
         </Button>
-        <PrimaryButton
-            className="bcs-comment-input-submit-btn"
-            data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
-        >
+        <PrimaryButton className="bcs-comment-input-submit-btn" data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}>
             <FormattedMessage {...messages.commentPost} />
         </PrimaryButton>
     </div>

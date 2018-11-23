@@ -20,12 +20,7 @@ const Info = ({ words }: Props): React.Node => (
         <Tooltip
             className="bcs-keywords-actions-tooltip"
             position="bottom-left"
-            text={
-                <FormattedMessage
-                    {...messages.keywordsList}
-                    values={{ words }}
-                />
-            }
+            text={<FormattedMessage {...messages.keywordsList} values={{ words }} />}
         >
             <div className="bcs-keywords-info">
                 <IconInfoInverted height={16} width={16} />

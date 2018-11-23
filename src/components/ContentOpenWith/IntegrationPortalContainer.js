@@ -21,22 +21,11 @@ const IntegrationPortalContainer = ({ hasError, integrationWindow }: Props) => (
         <div className="be bcow bcow-portal-container">
             {hasError ? (
                 <ErrorMask
-                    errorHeader={
-                        <FormattedMessage
-                            {...messages.executeIntegrationOpenWithErrorHeader}
-                        />
-                    }
-                    errorSubHeader={
-                        <FormattedMessage
-                            {...messages.executeIntegrationOpenWithErrorSubHeader}
-                        />
-                    }
+                    errorHeader={<FormattedMessage {...messages.executeIntegrationOpenWithErrorHeader} />}
+                    errorSubHeader={<FormattedMessage {...messages.executeIntegrationOpenWithErrorSubHeader} />}
                 />
             ) : (
-                <LoadingIndicator
-                    className="bcow-portal-loading-indicator"
-                    size="large"
-                />
+                <LoadingIndicator className="bcow-portal-loading-indicator" size="large" />
             )}
         </div>
     </IntegrationPortal>

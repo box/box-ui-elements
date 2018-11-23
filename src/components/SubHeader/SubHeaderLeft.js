@@ -8,12 +8,7 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import messages from '../messages';
 import { Breadcrumbs } from '../Breadcrumbs';
-import {
-    VIEW_SEARCH,
-    VIEW_FOLDER,
-    VIEW_RECENTS,
-    DELIMITER_CARET,
-} from '../../constants';
+import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../constants';
 
 type Props = {
     rootId: string,
@@ -25,15 +20,7 @@ type Props = {
     intl: any,
 };
 
-const SubHeaderLeft = ({
-    view,
-    isSmall,
-    rootId,
-    rootName,
-    currentCollection,
-    onItemClick,
-    intl,
-}: Props) => {
+const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick, intl }: Props) => {
     let crumbs;
 
     if (view === VIEW_FOLDER || view === VIEW_SEARCH) {

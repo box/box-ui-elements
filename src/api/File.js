@@ -7,11 +7,7 @@
 import Item from './Item';
 import { findMissingProperties, fillMissingProperties } from '../util/fields';
 import { getTypedFileId } from '../util/file';
-import {
-    FIELD_DOWNLOAD_URL,
-    CACHE_PREFIX_FILE,
-    X_REP_HINTS,
-} from '../constants';
+import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS } from '../constants';
 import { getBadItemError, getBadPermissionsError } from '../util/error';
 
 class File extends Item {
@@ -44,11 +40,7 @@ class File extends Item {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    getDownloadUrl(
-        id: string,
-        successCallback: Function,
-        errorCallback: Function,
-    ): Promise<void> {
+    getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         return this.xhr
@@ -99,21 +91,13 @@ class File extends Item {
             })
             .then(({ data }: { data: BoxItem }) => {
                 if (!this.isDestroyed()) {
-                    const updatedFile = this.merge(
-                        this.getCacheKey(id),
-                        'description',
-                        data.description,
-                    );
+                    const updatedFile = this.merge(this.getCacheKey(id), 'description', data.description);
                     successCallback(updatedFile);
                 }
             })
             .catch(() => {
                 if (!this.isDestroyed()) {
-                    const originalFile = this.merge(
-                        this.getCacheKey(id),
-                        'description',
-                        file.description,
-                    );
+                    const originalFile = this.merge(this.getCacheKey(id), 'description', file.description);
                     errorCallback(originalFile);
                 }
             });
@@ -144,10 +128,7 @@ class File extends Item {
         const key: string = this.getCacheKey(id);
         const isCached: boolean = !options.forceFetch && cache.has(key);
         const file: BoxItem = isCached ? cache.get(key) : { id };
-        let missingFields: Array<string> = findMissingProperties(
-            file,
-            options.fields,
-        );
+        let missingFields: Array<string> = findMissingProperties(file, options.fields);
         const xhrOptions: Object = {
             id: getTypedFileId(id),
             url: this.getUrl(id),
@@ -184,10 +165,7 @@ class File extends Item {
             // Merge fields that were requested but were actually not returned.
             // This part is mostly useful for metadata.foo.bar fields since the API
             // returns { metadata: null } instead of { metadata: { foo: { bar: null } } }
-            const dataWithMissingFields = fillMissingProperties(
-                data,
-                missingFields,
-            );
+            const dataWithMissingFields = fillMissingProperties(data, missingFields);
 
             // Cache check is again done since this code is executed async
             if (cache.has(key)) {

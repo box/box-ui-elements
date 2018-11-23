@@ -113,10 +113,7 @@ class Search extends Base {
             throw getBadItemError();
         }
 
-        const {
-            entries,
-            total_count,
-        }: FlattenedBoxItemCollection = item_collection;
+        const { entries, total_count }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }

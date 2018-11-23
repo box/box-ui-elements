@@ -19,9 +19,7 @@ describe('api/Recents', () => {
 
     describe('getUrl()', () => {
         test('should return correct recents api url', () => {
-            expect(recents.getUrl()).toBe(
-                'https://api.box.com/2.0/recent_items',
-            );
+            expect(recents.getUrl()).toBe('https://api.box.com/2.0/recent_items');
         });
     });
 
@@ -91,9 +89,7 @@ describe('api/Recents', () => {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return recents.recentsRequest().then(() => {
-                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(
-                    'success',
-                );
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith('success');
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
@@ -112,9 +108,7 @@ describe('api/Recents', () => {
             };
 
             return recents.recentsRequest().then(() => {
-                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(
-                    error,
-                );
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(error);
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
@@ -208,12 +202,8 @@ describe('api/Recents', () => {
                     ],
                 },
             });
-            expect(cache.get('file_item1')).toEqual(
-                Object.assign({}, item1, { interacted_at: 'interacted_at1' }),
-            );
-            expect(cache.get('file_item3')).toEqual(
-                Object.assign({}, item3, { interacted_at: 'interacted_at3' }),
-            );
+            expect(cache.get('file_item1')).toEqual(Object.assign({}, item1, { interacted_at: 'interacted_at1' }));
+            expect(cache.get('file_item3')).toEqual(Object.assign({}, item3, { interacted_at: 'interacted_at3' }));
             expect(cache.get('file_item2')).toBeUndefined();
         });
     });

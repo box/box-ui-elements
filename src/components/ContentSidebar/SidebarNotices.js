@@ -38,10 +38,7 @@ const SidebarNotices = ({ file }: Props) => {
                 <ItemExpirationNotice
                     expiration={
                         <DateField
-                            date={addTime(
-                                new Date(itemExpiration),
-                                ONE_MINUTE_IN_MS,
-                            )}
+                            date={addTime(new Date(itemExpiration), ONE_MINUTE_IN_MS)}
                             dateFormat={NOTICE_DATE_FORMAT}
                             relative={false}
                         />
@@ -53,10 +50,7 @@ const SidebarNotices = ({ file }: Props) => {
                 <SharedLinkExpirationNotice
                     expiration={
                         <DateField
-                            date={addTime(
-                                new Date(sharedLinkExpiration),
-                                ONE_MINUTE_IN_MS,
-                            )}
+                            date={addTime(new Date(sharedLinkExpiration), ONE_MINUTE_IN_MS)}
                             dateFormat={NOTICE_DATE_FORMAT}
                             relative={false}
                         />

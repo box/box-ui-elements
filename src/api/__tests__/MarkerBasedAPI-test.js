@@ -53,15 +53,11 @@ describe('api/MarkerBasedAPI', () => {
                     ),
             };
 
-            return markerBasedAPI
-                .markerGetRequest('id', 'next_marker', LIMIT, true)
-                .then(() => {
-                    expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
-                    expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(
-                        1,
-                    );
-                    expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
-                });
+            return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
+                expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
+                expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(1);
+                expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
+            });
         });
 
         test('should do one xhr call and call successHandler once', () => {
@@ -73,15 +69,11 @@ describe('api/MarkerBasedAPI', () => {
                 ),
             };
 
-            return markerBasedAPI
-                .markerGetRequest('id', 'next_marker', LIMIT, true)
-                .then(() => {
-                    expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
-                    expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(
-                        1,
-                    );
-                    expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
-                });
+            return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
+                expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
+                expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(1);
+                expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
+            });
         });
     });
 
@@ -111,11 +103,7 @@ describe('api/MarkerBasedAPI', () => {
 
         test('should make xhr to get markerBasedAPI and call success callback', () => {
             markerBasedAPI.xhr = {
-                get: jest
-                    .fn()
-                    .mockReturnValueOnce(
-                        Promise.resolve({ data: markerBasedAPIResponse }),
-                    ),
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse })),
             };
             markerBasedAPI.marker = '';
 
@@ -129,9 +117,7 @@ describe('api/MarkerBasedAPI', () => {
                     shouldFetchAll: true,
                 })
                 .then(() => {
-                    expect(successCallback).toHaveBeenCalledWith(
-                        markerBasedAPIResponse,
-                    );
+                    expect(successCallback).toHaveBeenCalledWith(markerBasedAPIResponse);
                     expect(successCallback).toHaveBeenCalledTimes(1);
                     expect(errorCallback).not.toHaveBeenCalled();
                     expect(markerBasedAPI.xhr.get).toHaveBeenCalledWith({

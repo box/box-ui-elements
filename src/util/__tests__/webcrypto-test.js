@@ -33,9 +33,7 @@ describe('util/webcrypto', () => {
         describe('msCrypto', () => {
             test('should return a promise which resolves properly when the crypto lib is msCrypto', () => {
                 const cryptoOperation = {};
-                const digestMock = jest
-                    .fn()
-                    .mockReturnValueOnce(cryptoOperation);
+                const digestMock = jest.fn().mockReturnValueOnce(cryptoOperation);
 
                 window.crypto = undefined;
                 window.msCrypto = {
@@ -52,17 +50,12 @@ describe('util/webcrypto', () => {
                     },
                 });
 
-                expect(digestMock).toHaveBeenCalledWith(
-                    { name: algorithm },
-                    buffer,
-                );
+                expect(digestMock).toHaveBeenCalledWith({ name: algorithm }, buffer);
             });
 
             test('should return a promise which rejects properly when the crypto lib is msCrypto', () => {
                 const cryptoOperation = {};
-                const digestMock = jest
-                    .fn()
-                    .mockReturnValueOnce(cryptoOperation);
+                const digestMock = jest.fn().mockReturnValueOnce(cryptoOperation);
 
                 window.crypto = undefined;
                 window.msCrypto = {

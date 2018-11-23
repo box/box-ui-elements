@@ -15,9 +15,7 @@ describe('api/Users', () => {
 
     describe('getAvatarUrl()', () => {
         test('should return correct users avatar url', () => {
-            expect(users.getAvatarUrl('foo')).toBe(
-                'https://api.box.com/2.0/users/foo/avatar',
-            );
+            expect(users.getAvatarUrl('foo')).toBe('https://api.box.com/2.0/users/foo/avatar');
         });
     });
 });

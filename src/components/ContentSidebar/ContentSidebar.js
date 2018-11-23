@@ -23,6 +23,8 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
+    ORIGIN_CONTENT_SIDEBAR,
+    ERROR_CODE_FETCH_FILE,
 } from '../../constants';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
@@ -59,7 +61,7 @@ type Props = {
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     onVersionHistoryClick?: Function,
-};
+} & ErrorContextProps;
 
 type State = {
     view?: SidebarView,
@@ -226,10 +228,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Error} error - Error object
      * @return {void}
      */
-    errorCallback = (error: $AxiosXHR<any>): void => {
+    errorCallback = (error: ElementsXhrError): void => {
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
+
+        /* eslint-disable react/prop-types */
+        this.props.onError(error, ERROR_CODE_FETCH_FILE, {
+            error,
+        });
+        /* eslint-enable react/prop-types */
     };
 
     /**
@@ -240,11 +248,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} file - Box file
      * @return {string} Sidebar view to use
      */
-    getDefaultSidebarView(
-        props: Props,
-        file?: BoxItem,
-        editors?: Array<MetadataEditor>,
-    ): SidebarView {
+    getDefaultSidebarView(props: Props, file?: BoxItem, editors?: Array<MetadataEditor>): SidebarView {
         const { view, hasBeenToggled }: State = this.state;
         const { isLarge, defaultView }: Props = props;
 
@@ -265,20 +269,10 @@ class ContentSidebar extends PureComponent<Props, State> {
         }
 
         let newView;
-        const canDefaultToSkills = SidebarUtils.shouldRenderSkillsSidebar(
-            this.props,
-            file,
-        );
-        const canDefaultToDetails = SidebarUtils.canHaveDetailsSidebar(
-            this.props,
-        );
-        const canDefaultToActivity = SidebarUtils.canHaveActivitySidebar(
-            this.props,
-        );
-        const canDefaultToMetadata = SidebarUtils.shouldRenderMetadataSidebar(
-            this.props,
-            editors,
-        );
+        const canDefaultToSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
+        const canDefaultToDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
+        const canDefaultToActivity = SidebarUtils.canHaveActivitySidebar(this.props);
+        const canDefaultToMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, editors);
 
         // Calculate the default view with latest props
         if (canDefaultToSkills) {
@@ -314,10 +308,7 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} file - Box file
      * @return {void}
      */
-    fetchMetadataSuccessCallback = (
-        file: BoxItem,
-        editors?: Array<MetadataEditor>,
-    ): void => {
+    fetchMetadataSuccessCallback = (file: BoxItem, editors?: Array<MetadataEditor>): void => {
         let newState = { isVisible: false };
         if (SidebarUtils.shouldRenderSidebar(this.props, file, editors)) {
             newState = {
@@ -341,13 +332,8 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
         const { metadataSidebarProps }: Props = this.props;
-        const {
-            getMetadata,
-            isFeatureEnabled = true,
-        }: MetadataSidebarProps = metadataSidebarProps;
-        const canHaveMetadataSidebar =
-            !isFeatureEnabled &&
-            SidebarUtils.canHaveMetadataSidebar(this.props);
+        const { getMetadata, isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
+        const canHaveMetadataSidebar = !isFeatureEnabled && SidebarUtils.canHaveMetadataSidebar(this.props);
 
         if (canHaveMetadataSidebar) {
             this.api
@@ -375,17 +361,10 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     fetchFile(id: string, fetchOptions: FetchOptions = {}): void {
         if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api
-                .getFileAPI()
-                .getFile(
-                    id,
-                    this.fetchFileSuccessCallback,
-                    this.errorCallback,
-                    {
-                        ...fetchOptions,
-                        fields: SIDEBAR_FIELDS_TO_FETCH,
-                    },
-                );
+            this.api.getFileAPI().getFile(id, this.fetchFileSuccessCallback, this.errorCallback, {
+                ...fetchOptions,
+                fields: SIDEBAR_FIELDS_TO_FETCH,
+            });
         }
     }
 
@@ -430,20 +409,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             className,
         );
 
-        const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(
-            this.props,
-            file,
-        );
+        const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
-        const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(
-            this.props,
-            editors,
-        );
-        const hasSidebar = SidebarUtils.shouldRenderSidebar(
-            this.props,
-            file,
-            editors,
-        );
+        const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, editors);
+        const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file, editors);
 
         return (
             <Internationalize language={language} messages={messages}>
@@ -464,9 +433,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     hasMetadata={hasMetadata}
                                     hasActivityFeed={hasActivityFeed}
                                     onToggle={this.onToggle}
-                                    onVersionHistoryClick={
-                                        onVersionHistoryClick
-                                    }
+                                    onVersionHistoryClick={onVersionHistoryClick}
                                 />
                             </APIContext.Provider>
                         ) : (
@@ -483,4 +450,4 @@ class ContentSidebar extends PureComponent<Props, State> {
 
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
-export default withErrorBoundary(ContentSidebar);
+export default withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)(ContentSidebar);

@@ -17,13 +17,7 @@ type Props = {
 
 const IconName = ({ name, extension, isFolder = false }: Props) => (
     <div className="bcu-item-icon-name">
-        <div className="bcu-item-icon">
-            {isFolder ? (
-                <IconFolderPersonal />
-            ) : (
-                <FileIcon extension={extension} />
-            )}
-        </div>
+        <div className="bcu-item-icon">{isFolder ? <IconFolderPersonal /> : <FileIcon extension={extension} />}</div>
         <div className="bcu-item-name">
             <ItemName name={name} />
         </div>

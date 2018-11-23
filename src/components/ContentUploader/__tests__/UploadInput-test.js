@@ -4,8 +4,7 @@ import { shallow } from 'enzyme';
 import UploadInput from '../UploadInput';
 
 describe('components/ContentUploader/UploadInput', () => {
-    const getWrapper = props =>
-        shallow(<UploadInput handleChange={noop} {...props} />);
+    const getWrapper = props => shallow(<UploadInput handleChange={noop} {...props} />);
 
     test('should render correctly when inputLabel is available', () => {
         const wrapper = getWrapper({

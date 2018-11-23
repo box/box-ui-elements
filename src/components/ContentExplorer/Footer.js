@@ -11,8 +11,6 @@ type Props = {
     children: React.Node,
 };
 
-const Footer = ({ children }: Props) => (
-    <footer className="bce-footer">{children}</footer>
-);
+const Footer = ({ children }: Props) => <footer className="bce-footer">{children}</footer>;
 
 export default Footer;

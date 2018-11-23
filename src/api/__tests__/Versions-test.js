@@ -14,9 +14,7 @@ describe('api/Versions', () => {
             }).toThrow();
         });
         test('should return correct version api url with id', () => {
-            expect(versions.getUrl('foo')).toBe(
-                'https://api.box.com/2.0/files/foo/versions',
-            );
+            expect(versions.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/versions');
         });
     });
 

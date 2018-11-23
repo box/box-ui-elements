@@ -29,9 +29,7 @@ class InlineEdit extends React.Component<Props> {
         return (
             <div className="bcs-comment-edit-container">
                 <PlainButton
-                    aria-label={this.props.intl.formatMessage(
-                        messages.editLabel,
-                    )}
+                    aria-label={this.props.intl.formatMessage(messages.editLabel)}
                     className="bcs-comment-edit"
                     onClick={onEdit}
                     type="button"

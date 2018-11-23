@@ -19,13 +19,11 @@ type State = {
 };
 
 /* eslint-disable no-plusplus */
-const makeDroppable = ({
-    dropValidator,
-    onDrop,
-}: {
-    dropValidator?: Function,
-    onDrop?: Function,
-}) => <Props: PropsShape>(Wrapped: Function): ClassComponent<any, any> =>
+const makeDroppable = ({ dropValidator, onDrop }: { dropValidator?: Function, onDrop?: Function }) => <
+    Props: PropsShape,
+>(
+    Wrapped: Function,
+): ClassComponent<any, any> =>
     class DroppableComponent extends PureComponent<Props, State> {
         props: Props;
 
@@ -98,18 +96,9 @@ const makeDroppable = ({
                 return;
             }
 
-            this.droppableEl.removeEventListener(
-                'dragenter',
-                this.handleDragEnter,
-            );
-            this.droppableEl.removeEventListener(
-                'dragover',
-                this.handleDragOver,
-            );
-            this.droppableEl.removeEventListener(
-                'dragleave',
-                this.handleDragLeave,
-            );
+            this.droppableEl.removeEventListener('dragenter', this.handleDragEnter);
+            this.droppableEl.removeEventListener('dragover', this.handleDragOver);
+            this.droppableEl.removeEventListener('dragleave', this.handleDragLeave);
             this.droppableEl.removeEventListener('drop', this.handleDrop);
         }
 
@@ -131,9 +120,7 @@ const makeDroppable = ({
                 const { dataTransfer } = event;
 
                 // if we don't have a dropValidator, we just default canDrop to true
-                const canDrop = dropValidator
-                    ? dropValidator(this.props, dataTransfer)
-                    : true;
+                const canDrop = dropValidator ? dropValidator(this.props, dataTransfer) : true;
 
                 this.setState({
                     isOver: true,

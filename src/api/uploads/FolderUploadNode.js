@@ -62,11 +62,7 @@ class FolderUploadNode {
      * @param {boolean} isRoot
      * @returns {Promise}
      */
-    async upload(
-        parentFolderId: string,
-        errorCallback: Function,
-        isRoot: boolean = false,
-    ) {
+    async upload(parentFolderId: string, errorCallback: Function, isRoot: boolean = false) {
         this.parentFolderId = parentFolderId;
 
         await this.createAndUploadFolder(errorCallback, isRoot);
@@ -84,9 +80,7 @@ class FolderUploadNode {
     uploadChildFolders = async (errorCallback: Function) => {
         // $FlowFixMe
         const folders: Array<FolderUploadNode> = Object.values(this.folders);
-        const promises = folders.map(folder =>
-            folder.upload(this.folderId, errorCallback),
-        );
+        const promises = folders.map(folder => folder.upload(this.folderId, errorCallback));
 
         await Promise.all(promises);
     };
@@ -99,10 +93,7 @@ class FolderUploadNode {
      * @param {boolean} isRoot
      * @returns {Promise}
      */
-    createAndUploadFolder = async (
-        errorCallback: Function,
-        isRoot: boolean,
-    ) => {
+    createAndUploadFolder = async (errorCallback: Function, isRoot: boolean) => {
         await this.buildCurrentFolderFromEntry();
 
         try {
@@ -174,9 +165,7 @@ class FolderUploadNode {
      * @param {Array<FileSystemFileEntry>} entries
      * @returns {Promise<any>}
      */
-    createFolderUploadNodesFromEntries = async (
-        entries: Array<FileSystemFileEntry>,
-    ): Promise<any> => {
+    createFolderUploadNodesFromEntries = async (entries: Array<FileSystemFileEntry>): Promise<any> => {
         await Promise.all(
             entries.map(async entry => {
                 const { isFile, name } = entry;

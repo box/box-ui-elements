@@ -23,13 +23,7 @@ import FileCollaboratorsAPI from './FileCollaborators';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import OpenWithAPI from './OpenWith';
-import {
-    DEFAULT_HOSTNAME_API,
-    DEFAULT_HOSTNAME_UPLOAD,
-    TYPE_FOLDER,
-    TYPE_FILE,
-    TYPE_WEBLINK,
-} from '../constants';
+import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 
 class APIFactory {
     /**

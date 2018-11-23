@@ -4,8 +4,7 @@ import { shallow } from 'enzyme';
 import OpenWithDropdownMenuItem from '../OpenWithDropdownMenuItem';
 
 describe('components/ContentOpenWith/OpenWithMenu', () => {
-    const getWrapper = props =>
-        shallow(<OpenWithDropdownMenuItem {...props} />);
+    const getWrapper = props => shallow(<OpenWithDropdownMenuItem {...props} />);
 
     test('should render the description and correct icon', () => {
         const props = {

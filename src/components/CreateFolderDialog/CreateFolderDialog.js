@@ -105,18 +105,11 @@ const CreateFolderDialog = ({
                         <FormattedMessage {...error} />
                     </div>
                 ) : null}
-                <FormattedMessage
-                    tagName="div"
-                    {...messages.createDialogText}
-                />
+                <FormattedMessage tagName="div" {...messages.createDialogText} />
                 <input type="text" required ref={ref} onKeyDown={onKeyDown} />
             </label>
             <div className="be-modal-btns">
-                <PrimaryButton
-                    type="button"
-                    onClick={create}
-                    isLoading={isLoading}
-                >
+                <PrimaryButton type="button" onClick={create} isLoading={isLoading}>
                     <FormattedMessage {...messages.create} />
                 </PrimaryButton>
                 <Button type="button" onClick={onCancel} isDisabled={isLoading}>
