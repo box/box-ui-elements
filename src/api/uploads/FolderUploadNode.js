@@ -103,6 +103,9 @@ class FolderUploadNode {
             // @TODO: Handle 429
             if (error.code !== ERROR_CODE_ITEM_NAME_IN_USE) {
                 errorCallback(error);
+                if (isRoot) {
+                    throw new Error('abort');
+                }
                 return;
             }
 

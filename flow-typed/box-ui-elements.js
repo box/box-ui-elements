@@ -52,6 +52,7 @@ import {
     SKILLS_FACE,
     SKILLS_STATUS,
     SIZE_MEDIUM,
+    SIDEBAR_VIEW_NONE,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
@@ -608,6 +609,7 @@ type JsonPatch = {
 type JsonPatchData = Array<JsonPatch>;
 
 type SidebarView =
+    | typeof SIDEBAR_VIEW_NONE
     | typeof SIDEBAR_VIEW_SKILLS
     | typeof SIDEBAR_VIEW_DETAILS
     | typeof SIDEBAR_VIEW_METADATA
