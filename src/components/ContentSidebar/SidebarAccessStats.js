@@ -19,6 +19,7 @@ type Props = {
     file: BoxItem,
     error?: MessageDescriptor,
     intl: any,
+    isLoading?: boolean,
 };
 
 const SidebarAccessStats = ({
@@ -33,14 +34,15 @@ const SidebarAccessStats = ({
     file,
     error,
     intl,
+    isLoading = false,
 }: Props) => {
-    const { preview_count, comment_count, download_count, edit_count } = accessStats;
-
-    if (!preview_count && !comment_count && !download_count && !edit_count && !error) {
+    if (isLoading) {
         return null;
     }
 
+    const { preview_count, comment_count, download_count, edit_count } = accessStats;
     const errorMessage = error ? intl.formatMessage(error) : undefined;
+
     return (
         <SidebarSection
             interactionTarget={SECTION_TARGETS.ACCESS_STATS}

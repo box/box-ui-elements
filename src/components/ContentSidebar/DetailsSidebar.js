@@ -281,6 +281,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         accessStats={accessStats}
                         onAccessStatsClick={onAccessStatsClick}
                         file={file}
+                        isLoading={isLoading}
                         {...accessStatsError}
                     />
                 )}
