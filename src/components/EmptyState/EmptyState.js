@@ -11,12 +11,7 @@ import FolderEmptyState from 'box-react-ui/lib/icons/states/FolderEmptyState';
 import SelectedItemsEmptyState from 'box-react-ui/lib/icons/states/SelectedItemsEmptyState';
 import SearchEmptyState from 'box-react-ui/lib/icons/states/SearchEmptyState';
 import messages from '../messages';
-import {
-    VIEW_ERROR,
-    VIEW_FOLDER,
-    VIEW_SEARCH,
-    VIEW_SELECTED,
-} from '../../constants';
+import { VIEW_ERROR, VIEW_FOLDER, VIEW_SEARCH, VIEW_SELECTED } from '../../constants';
 
 import './EmptyState.scss';
 

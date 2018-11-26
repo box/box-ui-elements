@@ -9,11 +9,7 @@ import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import messages from '../messages';
-import {
-    INTERACTION_TARGET,
-    SECTION_TARGETS,
-    DETAILS_TARGETS,
-} from '../../interactionTargets';
+import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 import withErrorHandling from './withErrorHandling';
 
@@ -40,12 +36,7 @@ const SidebarAccessStats = ({
     intl,
     isLoading = false,
 }: Props) => {
-    const {
-        preview_count,
-        comment_count,
-        download_count,
-        edit_count,
-    } = accessStats;
+    const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
     if (isLoading) {
         return null;
@@ -66,8 +57,7 @@ const SidebarAccessStats = ({
                 }}
                 downloadCount={download_count}
                 downloadStatButtonProps={{
-                    [INTERACTION_TARGET]:
-                        DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS,
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS,
                 }}
                 previewCount={preview_count}
                 previewStatButtonProps={{
@@ -83,8 +73,7 @@ const SidebarAccessStats = ({
                 openAccessStatsModal={onAccessStatsClick}
                 isBoxNote={isBoxNote(file)}
                 viewMoreButtonProps={{
-                    [INTERACTION_TARGET]:
-                        DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS,
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS,
                 }}
             />
         </SidebarSection>

@@ -18,10 +18,7 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import {
-    HTTP_STATUS_CODE_FORBIDDEN,
-    FIELD_METADATA_CLASSIFICATION,
-} from '../../constants';
+import { HTTP_STATUS_CODE_FORBIDDEN, FIELD_METADATA_CLASSIFICATION, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
 import API from '../../api';
 import type { $AxiosXHR } from 'axios'; // eslint-disable-line
 import './DetailsSidebar.scss';
@@ -272,22 +269,12 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             bannerPolicy,
         }: Props = this.props;
 
-        const {
-            accessStats,
-            accessStatsError,
-            file,
-            fileError,
-            isLoading,
-        }: State = this.state;
+        const { accessStats, accessStatsError, file, fileError, isLoading }: State = this.state;
 
         return (
-            <SidebarContent
-                title={<FormattedMessage {...messages.sidebarDetailsTitle} />}
-            >
+            <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
                 {hasNotices && (
-                    <div className="bcs-details-content">
-                        {hasNotices && <SidebarNotices file={file} />}
-                    </div>
+                    <div className="bcs-details-content">{hasNotices && <SidebarNotices file={file} />}</div>
                 )}
                 {hasAccessStats && (
                     <SidebarAccessStats
@@ -301,19 +288,12 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                 {hasProperties && (
                     <SidebarSection
                         interactionTarget={SECTION_TARGETS.FILE_PROPERTIES}
-                        title={
-                            <FormattedMessage {...messages.sidebarProperties} />
-                        }
+                        title={<FormattedMessage {...messages.sidebarProperties} />}
                     >
                         {hasVersions && (
                             <div className="bcs-details-content">
                                 {hasVersions && (
-                                    <SidebarVersions
-                                        onVersionHistoryClick={
-                                            onVersionHistoryClick
-                                        }
-                                        file={file}
-                                    />
+                                    <SidebarVersions onVersionHistoryClick={onVersionHistoryClick} file={file} />
                                 )}
                             </div>
                         )}
@@ -326,9 +306,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                             hasRetentionPolicy={hasRetentionPolicy}
                             retentionPolicy={retentionPolicy}
                             bannerPolicy={bannerPolicy}
-                            onRetentionPolicyExtendClick={
-                                onRetentionPolicyExtendClick
-                            }
+                            onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
                             isLoading={isLoading}
                         />
                     </SidebarSection>
@@ -340,4 +318,4 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default withErrorBoundary(withAPIContext(DetailsSidebar));
+export default withErrorBoundary(ORIGIN_DETAILS_SIDEBAR)(withAPIContext(DetailsSidebar));

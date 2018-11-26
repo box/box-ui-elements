@@ -11,15 +11,7 @@ const translationProps = {
 describe('components/ContentSidebar/ActivityFeed/comment/InlineDelete', () => {
     const id = '123';
     const render = (props = {}) =>
-        shallow(
-            <InlineDelete
-                {...translationProps}
-                id={id}
-                message="test"
-                onDelete={() => {}}
-                {...props}
-            />,
-        );
+        shallow(<InlineDelete {...translationProps} id={id} message="test" onDelete={() => {}} {...props} />);
 
     test('should correctly render comment', () => {
         const wrapper = render();

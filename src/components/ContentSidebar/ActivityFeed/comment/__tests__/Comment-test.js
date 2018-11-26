@@ -65,9 +65,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         );
 
         // validating that the Tooltip and the comment posted time are properly set
-        expect(wrapper.find('ReadableTime').prop('timestamp')).toEqual(
-            unixTime,
-        );
+        expect(wrapper.find('ReadableTime').prop('timestamp')).toEqual(unixTime);
 
         expect(wrapper).toMatchSnapshot();
     });
@@ -78,13 +76,9 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
 
         expect(comment.hasClass('bcs-is-focused')).toBe(false);
         comment.simulate('focus');
-        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(
-            true,
-        );
+        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(true);
         comment.simulate('blur');
-        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(
-            false,
-        );
+        expect(wrapper.find('.bcs-comment').hasClass('bcs-is-focused')).toBe(false);
     });
 
     test('should correctly render comment when translation is enabled', () => {
@@ -159,7 +153,6 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.find('InlineEdit').length).toEqual(0);
     });
 
-    // eslint-disable-next-line
     test('should allow user to delete if they have delete permissions on the comment and delete handler is defined', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
@@ -183,7 +176,6 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.find('InlineDelete').length).toEqual(1);
     });
 
-    // eslint-disable-next-line
     test('should allow user to delete if they have delete permissions on the task and delete handler is defined', () => {
         const task = {
             created_at: TIME_STRING_SEPT_27_2017,
@@ -387,9 +379,7 @@ describe('components/ContentSidebar/ActivityFeed/comment/Comment', () => {
                 }}
             />,
         );
-        const inlineErrorActionLink = wrapper
-            .find('InlineError')
-            .find('PlainButton.lnk');
+        const inlineErrorActionLink = wrapper.find('InlineError').find('PlainButton.lnk');
         expect(inlineErrorActionLink.length).toEqual(1);
 
         inlineErrorActionLink.simulate('click');

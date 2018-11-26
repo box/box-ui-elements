@@ -47,9 +47,7 @@ class OpenWith extends Base {
             id: fileId,
             params,
             successCallback: openWithIntegrations => {
-                const formattedOpenWithData = this.formatOpenWithData(
-                    openWithIntegrations,
-                );
+                const formattedOpenWithData = this.formatOpenWithData(openWithIntegrations);
                 successCallback(formattedOpenWithData);
             },
             errorCallback,
@@ -63,10 +61,7 @@ class OpenWith extends Base {
      * @return {Array<Integration>} formatted Open With integrations
      */
     formatOpenWithData(openWithIntegrations: OpenWithAPI): Array<Integration> {
-        const {
-            items,
-            default_app_integration: defaultIntegration,
-        } = openWithIntegrations;
+        const { items, default_app_integration: defaultIntegration } = openWithIntegrations;
         const integrations: Array<Integration> = items.map(
             ({
                 app_integration,
@@ -84,8 +79,7 @@ class OpenWith extends Base {
                     displayDescription: display_description,
                     disabledReasons: disabled_reasons,
                     displayOrder: display_order,
-                    isDefault:
-                        !!defaultIntegration && id === defaultIntegration.id,
+                    isDefault: !!defaultIntegration && id === defaultIntegration.id,
                     isDisabled: is_disabled,
                     displayName: display_name,
                     requiresConsent: should_show_consent_popup,

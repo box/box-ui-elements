@@ -27,9 +27,7 @@ describe('api/Folder', () => {
             expect(folder.getUrl()).toBe('https://api.box.com/2.0/folders');
         });
         test('should return correct folder api url with id', () => {
-            expect(folder.getUrl('foo')).toBe(
-                'https://api.box.com/2.0/folders/foo',
-            );
+            expect(folder.getUrl('foo')).toBe('https://api.box.com/2.0/folders/foo');
         });
     });
 
@@ -59,14 +57,7 @@ describe('api/Folder', () => {
             folder.folderRequest = jest.fn();
             folder.getCache = jest.fn();
             folder.getCacheKey = jest.fn();
-            folder.getFolder(
-                'id',
-                'query',
-                'by',
-                'direction',
-                'success',
-                'fail',
-            );
+            folder.getFolder('id', 'query', 'by', 'direction', 'success', 'fail');
             expect(folder.folderRequest).not.toHaveBeenCalled();
             expect(folder.getCache).not.toHaveBeenCalled();
             expect(folder.getCacheKey).not.toHaveBeenCalled();
@@ -106,23 +97,12 @@ describe('api/Folder', () => {
         test('should save args and make folder request when cached but forced to fetch', () => {
             const unsetMock = jest.fn();
             folder.folderRequest = jest.fn();
-            folder.getCache = jest
-                .fn()
-                .mockReturnValueOnce({ unset: unsetMock });
+            folder.getCache = jest.fn().mockReturnValueOnce({ unset: unsetMock });
             folder.getCacheKey = jest.fn().mockReturnValueOnce('key');
             folder.isLoaded = jest.fn().mockReturnValueOnce(false);
-            folder.getFolder(
-                'id',
-                20,
-                0,
-                'by',
-                'direction',
-                'success',
-                'fail',
-                {
-                    forceFetch: true,
-                },
-            );
+            folder.getFolder('id', 20, 0, 'by', 'direction', 'success', 'fail', {
+                forceFetch: true,
+            });
             expect(unsetMock).toHaveBeenCalledWith('key');
             expect(folder.getCacheKey).toHaveBeenCalledWith('id');
             expect(folder.id).toBe('id');
@@ -162,9 +142,7 @@ describe('api/Folder', () => {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return folder.folderRequest().then(() => {
-                expect(folder.folderSuccessHandler).toHaveBeenCalledWith(
-                    'success',
-                );
+                expect(folder.folderSuccessHandler).toHaveBeenCalledWith('success');
                 expect(folder.errorHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/folders/id',
@@ -289,13 +267,7 @@ describe('api/Folder', () => {
                     limit: 1000,
                     offset: 0,
                     total_count: 5,
-                    entries: [
-                        'foo',
-                        'bar',
-                        'file_item1',
-                        'file_item2',
-                        'file_item3',
-                    ],
+                    entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3'],
                 },
             });
             expect(cache.get('file_item1')).toBe(item1);
@@ -305,10 +277,7 @@ describe('api/Folder', () => {
 
         test('should throw bad item error when item collection is missing', () => {
             folder.finish = jest.fn();
-            expect(folder.folderSuccessHandler.bind(folder, {})).toThrow(
-                Error,
-                /Bad box item/,
-            );
+            expect(folder.folderSuccessHandler.bind(folder, {})).toThrow(Error, /Bad box item/);
             expect(folder.finish).not.toHaveBeenCalled();
         });
 
@@ -445,10 +414,7 @@ describe('api/Folder', () => {
             folder.getCache = jest.fn().mockReturnValueOnce(cache);
             folder.successCallback = jest.fn();
 
-            folderResults.item_collection.entries = [
-                'file_item1',
-                'file_item2',
-            ];
+            folderResults.item_collection.entries = ['file_item1', 'file_item2'];
             cache.set('key', folderResults);
             folder.finish();
             expect(folder.successCallback).toHaveBeenCalledWith({
@@ -474,10 +440,7 @@ describe('api/Folder', () => {
             folder.getCache = jest.fn().mockReturnValueOnce(cache);
             folder.successCallback = jest.fn();
 
-            folderResults.item_collection.entries = [
-                'file_item1',
-                'file_item2',
-            ];
+            folderResults.item_collection.entries = ['file_item1', 'file_item2'];
             folderResults.item_collection.total_count = 0;
             cache.set('key', folderResults);
             folder.finish();
@@ -585,9 +548,7 @@ describe('api/Folder', () => {
         test('should not do anything if destroyed', () => {
             folder.isDestroyed = jest.fn().mockReturnValueOnce(true);
             folder.xhr = null;
-            return expect(
-                folder.folderCreateRequest('foo'),
-            ).rejects.toBeUndefined();
+            return expect(folder.folderCreateRequest('foo')).rejects.toBeUndefined();
         });
         test('should make xhr to folder create and call success callback', () => {
             folder.createSuccessHandler = jest.fn();
@@ -596,9 +557,7 @@ describe('api/Folder', () => {
                 post: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return folder.folderCreateRequest('foo').then(() => {
-                expect(folder.createSuccessHandler).toHaveBeenCalledWith(
-                    'success',
-                );
+                expect(folder.createSuccessHandler).toHaveBeenCalledWith('success');
                 expect(folder.errorHandler).not.toHaveBeenCalled();
                 expect(folder.xhr.post).toHaveBeenCalledWith({
                     url: `https://api.box.com/2.0/folders?fields=${FOLDER_FIELDS_TO_FETCH.toString()}`,
@@ -694,9 +653,7 @@ describe('api/Folder', () => {
             cache.set('key', {
                 id: 'id',
             });
-            expect(
-                folder.createSuccessHandler.bind(folder, { id: 'foo' }),
-            ).toThrow(Error, /Bad box item/);
+            expect(folder.createSuccessHandler.bind(folder, { id: 'foo' })).toThrow(Error, /Bad box item/);
             expect(folder.successCallback).not.toHaveBeenCalled();
         });
 
@@ -711,9 +668,7 @@ describe('api/Folder', () => {
                     total_count: 2,
                 },
             });
-            expect(
-                folder.createSuccessHandler.bind(folder, { id: 'foo' }),
-            ).toThrow(Error, /Bad box item/);
+            expect(folder.createSuccessHandler.bind(folder, { id: 'foo' })).toThrow(Error, /Bad box item/);
             expect(folder.successCallback).not.toHaveBeenCalled();
         });
 

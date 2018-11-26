@@ -13,19 +13,19 @@ module.exports = {
                 '../src/components/ContentExplorer/ContentExplorer.js',
                 '../src/components/ContentUploader/ContentUploader.js',
                 '../src/components/ContentSidebar/ContentSidebar.js',
-                '../src/components/ContentPreview/ContentPreview.js'
-            ]
-        }
+                '../src/components/ContentPreview/ContentPreview.js',
+            ],
+        },
     ],
     title: `Box UI Elements ${version}`,
     theme: {
         color: {
             link: '#777',
-            linkHover: '#0061d5'
+            linkHover: '#0061d5',
         },
         fontFamily: {
-            base: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif'
-        }
+            base: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
+        },
     },
-    pagePerSection: true
+    pagePerSection: true,
 };

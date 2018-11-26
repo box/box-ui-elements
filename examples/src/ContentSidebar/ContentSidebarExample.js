@@ -6,9 +6,6 @@ import './ContentSidebarExample.scss';
 const ContentSidebarExample = props => (
     <ContentSidebar
         {...props}
-        hasActivityFeed
-        hasSkills
-        hasMetadata
         detailsSidebarProps={{
             hasProperties: true,
             hasNotices: true,
@@ -17,6 +14,9 @@ const ContentSidebarExample = props => (
             hasRetentionPolicy: true,
             hasVersions: true,
         }}
+        hasActivityFeed
+        hasMetadata
+        hasSkills
     />
 );
 

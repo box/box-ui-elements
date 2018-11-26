@@ -11,7 +11,6 @@ const DEFAULT_MULTIPUT_CONFIG: MultiputConfig = {
     maxRetryDelayMs: 60000, // Upper bound for time between retries
     parallelism: 5, // Maximum number of parts to upload at a time
     requestTimeoutMs: 120000, // Idle timeout on part upload, overall request timeout on other requests
-    // eslint-disable-next-line max-len
     retries: 5, // How many times to retry requests such as upload part or commit. Note that total number of attempts will be retries + 1 in worst case where all attempts fail.
 };
 
@@ -28,11 +27,7 @@ class BaseMultiput extends BaseUpload {
      * @param {MultiputConfig} [config]
      * @return {void}
      */
-    constructor(
-        options: Options,
-        sessionEndpoints: Object,
-        config?: MultiputConfig,
-    ): void {
+    constructor(options: Options, sessionEndpoints: Object, config?: MultiputConfig): void {
         super(options);
 
         this.config = config || DEFAULT_MULTIPUT_CONFIG;

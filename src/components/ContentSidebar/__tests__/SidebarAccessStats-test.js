@@ -2,16 +2,13 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
 import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
-import SidebarAccessStats, {
-    SidebarAccessStatsComponent,
-} from '../SidebarAccessStats';
+import SidebarAccessStats, { SidebarAccessStatsComponent } from '../SidebarAccessStats';
 
 describe('components/ContentSidebar/SidebarAccessStats', () => {
     const intl = {
         formatMessage: jest.fn(),
     };
-    const getWrapper = props =>
-        shallow(<SidebarAccessStatsComponent intl={intl} {...props} />);
+    const getWrapper = props => shallow(<SidebarAccessStatsComponent intl={intl} {...props} />);
 
     test('should render the component even when there are no access stats', () => {
         const props = {

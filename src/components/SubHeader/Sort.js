@@ -38,21 +38,12 @@ const Sort = ({ isLoaded, sortBy, sortDirection, onSortChange }: Props) => (
         </Button>
         <Menu className="be-menu-sort">
             {SORT_ITEMS.map(([sortByValue, sortDirectionValue]) => {
-                const isSelected =
-                    sortByValue === sortBy &&
-                    sortDirectionValue === sortDirection;
+                const isSelected = sortByValue === sortBy && sortDirectionValue === sortDirection;
                 const sortItemKey = `${sortByValue}${sortDirectionValue}`;
 
                 return (
-                    <MenuItem
-                        key={sortItemKey}
-                        onClick={() =>
-                            onSortChange(sortByValue, sortDirectionValue)
-                        }
-                    >
-                        <div className="be-sort-selected">
-                            {isSelected && <IconCheck width={16} height={16} />}
-                        </div>
+                    <MenuItem key={sortItemKey} onClick={() => onSortChange(sortByValue, sortDirectionValue)}>
+                        <div className="be-sort-selected">{isSelected && <IconCheck width={16} height={16} />}</div>
                         <FormattedMessage {...messages[sortItemKey]} />
                     </MenuItem>
                 );

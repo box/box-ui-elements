@@ -21,30 +21,16 @@ type Props = {
     onChange: Function,
 };
 
-const EditingTranscriptRow = ({
-    time,
-    text = '',
-    onSave,
-    onCancel,
-    onChange,
-}: Props) => (
+const EditingTranscriptRow = ({ time, text = '', onSave, onCancel, onChange }: Props) => (
     <div className="be-transcript-row be-transcript-editing-row">
         {time && <div className="be-transcript-time">{time}</div>}
         <div className="be-transcript-text">
             <TextareaAutosize maxRows={10} onChange={onChange} value={text} />
             <div className="be-transcript-buttons">
-                <Button
-                    type="button"
-                    onClick={onCancel}
-                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT_CANCEL}
-                >
+                <Button type="button" onClick={onCancel} data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT_CANCEL}>
                     <FormattedMessage {...messages.cancel} />
                 </Button>
-                <PrimaryButton
-                    type="button"
-                    onClick={onSave}
-                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT_SAVE}
-                >
+                <PrimaryButton type="button" onClick={onSave} data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT_SAVE}>
                     <FormattedMessage {...messages.save} />
                 </PrimaryButton>
             </div>

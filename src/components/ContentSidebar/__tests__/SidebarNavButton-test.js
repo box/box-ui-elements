@@ -21,9 +21,7 @@ describe('components/ContentSidebar/SidebarNavButton', () => {
             isSelected: true,
         };
         const wrapper = getWrapper(props);
-        expect(wrapper.childAt(0).prop('className')).toBe(
-            'bcs-nav-btn bcs-nav-btn-is-selected',
-        );
+        expect(wrapper.childAt(0).prop('className')).toBe('bcs-nav-btn bcs-nav-btn-is-selected');
         expect(wrapper).toMatchSnapshot();
     });
 });

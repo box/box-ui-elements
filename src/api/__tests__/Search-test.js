@@ -71,10 +71,7 @@ describe('api/Search', () => {
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(false);
             search.search('id', 'foo query', 20, 0, 'success', 'fail');
-            expect(search.getCacheKey).toHaveBeenCalledWith(
-                'id',
-                'foo%20query',
-            );
+            expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
@@ -90,10 +87,7 @@ describe('api/Search', () => {
             search.isLoaded = jest.fn().mockReturnValueOnce(true);
             search.search('id', 'foo query', 20, 0, 'success', 'fail');
             expect(search.searchRequest).not.toHaveBeenCalled();
-            expect(search.getCacheKey).toHaveBeenCalledWith(
-                'id',
-                'foo%20query',
-            );
+            expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
@@ -105,19 +99,14 @@ describe('api/Search', () => {
         test('should save args and make search request when cached but forced to fetch', () => {
             const unsetMock = jest.fn();
             search.searchRequest = jest.fn();
-            search.getCache = jest
-                .fn()
-                .mockReturnValueOnce({ unset: unsetMock });
+            search.getCache = jest.fn().mockReturnValueOnce({ unset: unsetMock });
             search.getCacheKey = jest.fn().mockReturnValueOnce('key');
             search.isLoaded = jest.fn().mockReturnValueOnce(false);
             search.search('id', 'foo query', 20, 0, 'success', 'fail', {
                 forceFetch: true,
             });
             expect(unsetMock).toHaveBeenCalledWith('key');
-            expect(search.getCacheKey).toHaveBeenCalledWith(
-                'id',
-                'foo%20query',
-            );
+            expect(search.getCacheKey).toHaveBeenCalledWith('id', 'foo%20query');
             expect(search.id).toBe('id');
             expect(search.successCallback).toBe('success');
             expect(search.errorCallback).toBe('fail');
@@ -153,9 +142,7 @@ describe('api/Search', () => {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return search.searchRequest().then(() => {
-                expect(search.searchSuccessHandler).toHaveBeenCalledWith(
-                    'success',
-                );
+                expect(search.searchSuccessHandler).toHaveBeenCalledWith('success');
                 expect(search.searchErrorHandler).not.toHaveBeenCalled();
                 expect(search.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/search',
@@ -290,13 +277,7 @@ describe('api/Search', () => {
                     limit: 20,
                     offset: 0,
                     total_count: 5,
-                    entries: [
-                        'foo',
-                        'bar',
-                        'file_item1',
-                        'file_item2',
-                        'file_item3',
-                    ],
+                    entries: ['foo', 'bar', 'file_item1', 'file_item2', 'file_item3'],
                 },
             });
             expect(cache.get('file_item1')).toBe(item1);

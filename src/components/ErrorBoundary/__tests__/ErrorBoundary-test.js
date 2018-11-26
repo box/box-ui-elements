@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import ErrorBoundary from '../ErrorBoundary';
+import { ERROR_CODE_UNEXPECTED_EXCEPTION } from '../../../constants';
 
 describe('components/ErrorBoundary', () => {
     const WrappedComponent = () => <div>Test</div>;
@@ -43,15 +44,26 @@ describe('components/ErrorBoundary', () => {
     });
 
     describe('onError callback', () => {
-        test('should be be called with any wrapped error', () => {
+        const origin = 'some_component';
+
+        test('should call the onError prop', () => {
             const onError = jest.fn();
             const wrapper = getWrapper({
                 onError,
+                errorOrigin: origin,
             });
 
             simulateError(wrapper);
 
-            expect(onError).toHaveBeenCalledWith(wrappedError);
+            expect(onError).toHaveBeenCalledWith({
+                type: 'error',
+                code: ERROR_CODE_UNEXPECTED_EXCEPTION,
+                message: wrappedError.message,
+                origin,
+                context_info: expect.objectContaining({
+                    isErrorDisplayed: true,
+                }),
+            });
         });
     });
 });

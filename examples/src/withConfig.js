@@ -11,11 +11,11 @@ function withConfig(WrappedComponent) {
             return (
                 <WrappedComponent
                     {...this.props}
-                    rootFolderId={FOLDER_ID}
                     fileId={FILE_ID}
-                    token={TOKEN}
                     language="en-US"
                     messages={messages}
+                    rootFolderId={FOLDER_ID}
+                    token={TOKEN}
                 />
             );
         }

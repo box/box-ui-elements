@@ -60,10 +60,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const wasEmpty = this.isEmpty(prevProps);
         const hasLoaded = isEmpty !== wasEmpty && !isEmpty;
 
-        const hasMoreItems =
-            prevFeedItems &&
-            currFeedItems &&
-            prevFeedItems.length < currFeedItems.length;
+        const hasMoreItems = prevFeedItems && currFeedItems && prevFeedItems.length < currFeedItems.length;
         const hasNewItems = !prevFeedItems && currFeedItems;
         const hasInputOpened = currIsInputOpen !== prevIsInputOpen;
 
@@ -102,19 +99,11 @@ class ActivityFeed extends React.Component<Props, State> {
         this.setState({ isInputOpen: true });
     };
 
-    approvalCommentFormCancelHandler = (): void =>
-        this.setState({ isInputOpen: false });
+    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false });
 
-    approvalCommentFormSubmitHandler = (): void =>
-        this.setState({ isInputOpen: false });
+    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
-    onCommentCreate = ({
-        text,
-        hasMention,
-    }: {
-        text: string,
-        hasMention: boolean,
-    }) => {
+    onCommentCreate = ({ text, hasMention }: { text: string, hasMention: boolean }) => {
         const { onCommentCreate = noop } = this.props;
         onCommentCreate(text, hasMention);
         this.approvalCommentFormSubmitHandler();
@@ -128,15 +117,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {number} dueAt - Task's due date
      * @return {void}
      */
-    onTaskCreate = ({
-        text,
-        assignees,
-        dueAt,
-    }: {
-        text: string,
-        assignees: SelectorItems,
-        dueAt: string,
-    }): void => {
+    onTaskCreate = ({ text, assignees, dueAt }: { text: string, assignees: SelectorItems, dueAt: string }): void => {
         const { onTaskCreate = noop } = this.props;
         onTaskCreate(text, assignees, dueAt);
         this.approvalCommentFormSubmitHandler();
@@ -175,17 +156,8 @@ class ActivityFeed extends React.Component<Props, State> {
             feedItems,
         } = this.props;
         const { isInputOpen } = this.state;
-        const hasCommentPermission = getProp(
-            file,
-            'permissions.can_comment',
-            false,
-        );
-        const showApprovalCommentForm = !!(
-            currentUser &&
-            hasCommentPermission &&
-            onCommentCreate &&
-            feedItems
-        );
+        const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
+        const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
 
@@ -199,10 +171,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     className="bcs-activity-feed-items-container"
                 >
                     {isEmpty ? (
-                        <EmptyState
-                            isLoading={!feedItems}
-                            showCommentMessage={showApprovalCommentForm}
-                        />
+                        <EmptyState isLoading={!feedItems} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
                             {...activityFeedError}
@@ -210,22 +179,12 @@ class ActivityFeed extends React.Component<Props, State> {
                             isDisabled={isDisabled}
                             currentUser={currentUser}
                             onTaskAssignmentUpdate={onTaskAssignmentUpdate}
-                            onCommentDelete={
-                                hasCommentPermission ? onCommentDelete : noop
-                            }
+                            onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             // We don't know task edit/delete specific permissions,
                             // but you must at least be able to comment to do these operations.
-                            onTaskDelete={
-                                hasCommentPermission ? onTaskDelete : noop
-                            }
-                            onTaskEdit={
-                                hasCommentPermission ? onTaskUpdate : noop
-                            }
-                            onVersionInfo={
-                                onVersionHistoryClick
-                                    ? this.openVersionHistoryPopup
-                                    : null
-                            }
+                            onTaskDelete={hasCommentPermission ? onTaskDelete : noop}
+                            onTaskEdit={hasCommentPermission ? onTaskUpdate : noop}
+                            onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
                             getAvatarUrl={getAvatarUrl}
                             getUserProfileUrl={getUserProfileUrl}
@@ -240,18 +199,11 @@ class ActivityFeed extends React.Component<Props, State> {
                         isDisabled={isDisabled}
                         approverSelectorContacts={approverSelectorContacts}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        className={classNames(
-                            'bcs-activity-feed-comment-input',
-                            {
-                                'bcs-is-disabled': isDisabled,
-                            },
-                        )}
-                        createComment={
-                            hasCommentPermission ? this.onCommentCreate : noop
-                        }
-                        createTask={
-                            hasCommentPermission ? this.onTaskCreate : noop
-                        }
+                        className={classNames('bcs-activity-feed-comment-input', {
+                            'bcs-is-disabled': isDisabled,
+                        })}
+                        createComment={hasCommentPermission ? this.onCommentCreate : noop}
+                        createTask={hasCommentPermission ? this.onTaskCreate : noop}
                         updateTask={hasCommentPermission ? onTaskUpdate : noop}
                         getApproverWithQuery={getApproverWithQuery}
                         getMentionWithQuery={getMentionWithQuery}

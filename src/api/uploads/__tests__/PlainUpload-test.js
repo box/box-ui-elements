@@ -135,9 +135,7 @@ describe('api/uploads/PlainUpload', () => {
 
         test('should generate upload URL and make request if no URL is provided', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.computeSHA1 = jest
-                .fn()
-                .mockReturnValueOnce(Promise.resolve('somehash'));
+            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve('somehash'));
             upload.file = {
                 name: 'warlock',
             };
@@ -151,8 +149,7 @@ describe('api/uploads/PlainUpload', () => {
                 expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
                     url: `${upload.uploadHost}/api/2.0/files/content`,
                     data: {
-                        attributes:
-                            '{"name":"warlock-152340","parent":{"id":"123"}}',
+                        attributes: '{"name":"warlock-152340","parent":{"id":"123"}}',
                         file: upload.file,
                     },
                     headers: {
@@ -167,9 +164,7 @@ describe('api/uploads/PlainUpload', () => {
 
         test('should upload with no Content-MD5 hash if hashing fails', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.computeSHA1 = jest
-                .fn()
-                .mockReturnValueOnce(Promise.resolve(''));
+            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve(''));
             upload.file = {
                 name: 'warlock',
             };
@@ -197,9 +192,7 @@ describe('api/uploads/PlainUpload', () => {
             const fileId = '123';
 
             upload.isDestroyed = jest.fn().mockReturnValueOnce(false);
-            upload.computeSHA1 = jest
-                .fn()
-                .mockReturnValueOnce(Promise.resolve('somehash'));
+            upload.computeSHA1 = jest.fn().mockReturnValueOnce(Promise.resolve('somehash'));
             upload.file = {
                 name: 'warlock',
             };
@@ -279,14 +272,8 @@ describe('api/uploads/PlainUpload', () => {
     describe('computeSHA1()', () => {
         test('should read file and compute digest', () => {
             const file = new File(['123'], 'sample.jpg');
-            upload.readFile = jest
-                .fn()
-                .mockReturnValueOnce(
-                    Promise.resolve({ buffer: new ArrayBuffer(3) }),
-                );
-            crypto.digest = jest
-                .fn()
-                .mockReturnValueOnce(Promise.resolve(new ArrayBuffer(3)));
+            upload.readFile = jest.fn().mockReturnValueOnce(Promise.resolve({ buffer: new ArrayBuffer(3) }));
+            crypto.digest = jest.fn().mockReturnValueOnce(Promise.resolve(new ArrayBuffer(3)));
 
             return upload.computeSHA1(file).then(computedSHA1 => {
                 expect(upload.readFile).toBeCalled();

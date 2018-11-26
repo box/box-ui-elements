@@ -4,13 +4,7 @@ import UploadStateContent from '../UploadStateContent';
 
 describe('components/ContentUploader/UploadStateContent', () => {
     const getWrapper = props =>
-        shallow(
-            <UploadStateContent
-                fileInputLabel="file"
-                folderInputLabel="folder"
-                {...props}
-            />,
-        );
+        shallow(<UploadStateContent fileInputLabel="file" folderInputLabel="folder" {...props} />);
 
     test('should render correctly when both folder and file inputs are available', () => {
         const wrapper = getWrapper();

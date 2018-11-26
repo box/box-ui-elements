@@ -29,12 +29,7 @@ class AppIntegrations extends Base {
      * @param {string} fileID - A file ID
      * @return {string} base url for files
      */
-    execute(
-        integrationId: ?string,
-        fileId: ?string,
-        successCallback: Function,
-        errorCallback: Function,
-    ): void {
+    execute(integrationId: ?string, fileId: ?string, successCallback: Function, errorCallback: Function): void {
         if (!integrationId) {
             throw new Error('Missing integration id!');
         }

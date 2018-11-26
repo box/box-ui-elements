@@ -56,10 +56,7 @@ class ProgressBar extends PureComponent<Props, State> {
         };
         return (
             <div className="bcu-progress-container" style={containerStyle}>
-                <div
-                    className="bcu-progress"
-                    style={{ width: `${percent}%` }}
-                />
+                <div className="bcu-progress" style={{ width: `${percent}%` }} />
             </div>
         );
     }

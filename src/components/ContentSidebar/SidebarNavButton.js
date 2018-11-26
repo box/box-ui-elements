@@ -18,25 +18,14 @@ type Props = {
     children: React.Node,
 };
 
-const SidebarNavButton = ({
-    tooltip,
-    isSelected,
-    onClick,
-    interactionTarget,
-    children,
-}: Props) => {
+const SidebarNavButton = ({ tooltip, isSelected, onClick, interactionTarget, children }: Props) => {
     const buttonClass = classNames('bcs-nav-btn', {
         'bcs-nav-btn-is-selected': isSelected,
     });
 
     return (
         <Tooltip text={tooltip} position="middle-left">
-            <PlainButton
-                className={buttonClass}
-                type="button"
-                onClick={onClick}
-                data-resin-target={interactionTarget}
-            >
+            <PlainButton className={buttonClass} type="button" onClick={onClick} data-resin-target={interactionTarget}>
                 {children}
             </PlainButton>
         </Tooltip>

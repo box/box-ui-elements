@@ -265,11 +265,8 @@ class ContentExplorer extends Component<Props, State> {
      */
     componentDidMount() {
         const { defaultView, currentFolderId }: Props = this.props;
-        this.rootElement = ((document.getElementById(
-            this.id,
-        ): any): HTMLElement);
-        this.appElement = ((this.rootElement
-            .firstElementChild: any): HTMLElement);
+        this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
+        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
 
         if (defaultView === DEFAULT_VIEW_RECENTS) {
             this.showRecents();
@@ -345,10 +342,7 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         // Don't focus the grid until its loaded and user is not already on an interactable element
-        if (
-            percentLoaded === 100 &&
-            !isFocusableElement(document.activeElement)
-        ) {
+        if (percentLoaded === 100 && !isFocusableElement(document.activeElement)) {
             focus(this.rootElement, '.bce-item-row');
             this.setState({ focusedRow: 0 });
         }
@@ -388,10 +382,7 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    fetchFolderSuccessCallback(
-        collection: Collection,
-        triggerNavigationEvent: boolean,
-    ): void {
+    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
         const { id, name, boxItem }: Collection = collection;
 
@@ -466,10 +457,7 @@ class ContentExplorer extends Component<Props, State> {
             sortBy,
             sortDirection,
             (collection: Collection) => {
-                this.fetchFolderSuccessCallback(
-                    collection,
-                    triggerNavigationEvent,
-                );
+                this.fetchFolderSuccessCallback(collection, triggerNavigationEvent);
             },
             this.errorCallback,
             { forceFetch: true },
@@ -540,15 +528,9 @@ class ContentExplorer extends Component<Props, State> {
 
         this.api
             .getSearchAPI()
-            .search(
-                id,
-                query,
-                currentPageSize,
-                currentOffset,
-                this.searchSuccessCallback,
-                this.errorCallback,
-                { forceFetch: true },
-            );
+            .search(id, query, currentPageSize, currentOffset, this.searchSuccessCallback, this.errorCallback, {
+                forceFetch: true,
+            });
     }, DEFAULT_SEARCH_DEBOUNCE);
 
     /**
@@ -609,10 +591,7 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean} triggerNavigationEvent - To trigger navigate event
      * @return {void}
      */
-    recentsSuccessCallback(
-        collection: Collection,
-        triggerNavigationEvent: boolean,
-    ) {
+    recentsSuccessCallback(collection: Collection, triggerNavigationEvent: boolean) {
         // Unselect any rows that were selected
         this.unselect();
 
@@ -720,12 +699,10 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         this.setState({ isLoading: true });
-        this.api
-            .getAPI(type)
-            .share(selected, access, (updatedItem: BoxItem) => {
-                this.setState({ isLoading: false });
-                this.select(updatedItem);
-            });
+        this.api.getAPI(type).share(selected, access, (updatedItem: BoxItem) => {
+            this.setState({ isLoading: false });
+            this.select(updatedItem);
+        });
     };
 
     /**
@@ -1010,10 +987,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     createFolderCallback = (name?: string): void => {
-        const {
-            isCreateFolderModalOpen,
-            currentCollection,
-        }: State = this.state;
+        const { isCreateFolderModalOpen, currentCollection }: State = this.state;
         const { canCreateNewFolder, onCreate }: Props = this.props;
         if (!canCreateNewFolder) {
             return;
@@ -1161,11 +1135,7 @@ class ContentExplorer extends Component<Props, State> {
 
         switch (key) {
             case '/':
-                focus(
-                    this.rootElement,
-                    '.be-search input[type="search"]',
-                    false,
-                );
+                focus(this.rootElement, '.be-search input[type="search"]', false);
                 event.preventDefault();
                 break;
             case 'arrowdown':
@@ -1286,12 +1256,7 @@ class ContentExplorer extends Component<Props, State> {
             focusedRow,
         }: State = this.state;
 
-        const {
-            id,
-            offset,
-            permissions,
-            totalCount,
-        }: Collection = currentCollection;
+        const { id, offset, permissions, totalCount }: Collection = currentCollection;
         const { can_upload }: BoxItemPermission = permissions || {};
         const styleClassName = classNames('be bce', className);
         const allowUpload: boolean = canUpload && !!can_upload;
@@ -1302,11 +1267,7 @@ class ContentExplorer extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef}>
-                    <div
-                        className="be-app-element"
-                        onKeyDown={this.onKeyDown}
-                        tabIndex={0}
-                    >
+                    <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
                             isSmall={isSmall}

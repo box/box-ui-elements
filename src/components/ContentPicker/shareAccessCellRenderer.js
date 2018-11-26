@@ -15,14 +15,7 @@ export default (
     extensionsWhitelist: string[],
     hasHitSelectionLimit: boolean,
 ) => ({ rowData }: { rowData: BoxItem }) => {
-    if (
-        !isRowSelectable(
-            selectableType,
-            extensionsWhitelist,
-            hasHitSelectionLimit,
-            rowData,
-        )
-    ) {
+    if (!isRowSelectable(selectableType, extensionsWhitelist, hasHitSelectionLimit, rowData)) {
         return <span />;
     }
 

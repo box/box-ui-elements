@@ -26,20 +26,11 @@ type Props = {
     interactionTarget: string,
 };
 
-const Timeline = ({
-    text = '',
-    duration = 0,
-    timeslices = [],
-    getViewer,
-    interactionTarget,
-}: Props) => {
+const Timeline = ({ text = '', duration = 0, timeslices = [], getViewer, interactionTarget }: Props) => {
     let timeSliceIndex = -1;
 
     const playSegment = (index: number, incr: number = 0) => {
-        const newIndex =
-            incr > 0
-                ? Math.min(timeslices.length - 1, index + incr)
-                : Math.max(0, index + incr);
+        const newIndex = incr > 0 ? Math.min(timeslices.length - 1, index + incr) : Math.max(0, index + incr);
         const viewer = getViewer ? getViewer() : null;
         const timeslice = timeslices[newIndex];
         const validTime = isValidStartTime(timeslice);
@@ -77,20 +68,14 @@ const Timeline = ({
                     onClick={() => playSegment(timeSliceIndex, -1)}
                     data-resin-target={SKILLS_TARGETS.TIMELINE.PREVIOUS}
                 >
-                    <IconTrackPrevious
-                        title={
-                            <FormattedMessage {...messages.previousSegment} />
-                        }
-                    />
+                    <IconTrackPrevious title={<FormattedMessage {...messages.previousSegment} />} />
                 </PlainButton>
                 <PlainButton
                     type="button"
                     onClick={() => playSegment(timeSliceIndex, 1)}
                     data-resin-target={SKILLS_TARGETS.TIMELINE.NEXT}
                 >
-                    <IconTrackNext
-                        title={<FormattedMessage {...messages.nextSegment} />}
-                    />
+                    <IconTrackNext title={<FormattedMessage {...messages.nextSegment} />} />
                 </PlainButton>
             </div>
         </div>

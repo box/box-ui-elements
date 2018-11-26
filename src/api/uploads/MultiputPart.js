@@ -85,7 +85,7 @@ class MultiputPart extends BaseMultiput {
         offset: number,
         partSize: number,
         fileSize: number,
-        sessionId: string, // eslint-disable-line
+        sessionId: string,
         sessionEndpoints: Object,
         config: MultiputConfig,
         getNumPartsUploading: Function,
@@ -165,9 +165,7 @@ class MultiputPart extends BaseMultiput {
         const headers = {
             'Content-Type': 'application/octet-stream',
             Digest: `sha-256=${this.sha256}`,
-            'Content-Range': `bytes ${this.offset}-${this.rangeEnd}/${
-                this.fileSize
-            }`,
+            'Content-Range': `bytes ${this.offset}-${this.rangeEnd}/${this.fileSize}`,
             'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo),
         };
 
@@ -240,11 +238,7 @@ class MultiputPart extends BaseMultiput {
         }
 
         this.consoleLog(
-            `Upload failure ${
-                error.message
-            } for part ${this.toJSON()}. XHR state: ${
-                this.xhr.xhr.readyState
-            }.`,
+            `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr.readyState}.`,
         );
         const eventInfo = {
             message: error.message,
@@ -272,9 +266,7 @@ class MultiputPart extends BaseMultiput {
         );
 
         this.numUploadRetriesPerformed += 1;
-        this.consoleLog(
-            `Retrying uploading part ${this.toJSON()} in ${retryDelayMs} ms`,
-        );
+        this.consoleLog(`Retrying uploading part ${this.toJSON()} in ${retryDelayMs} ms`);
         this.retryTimeout = setTimeout(this.retryUpload, retryDelayMs);
     };
 
@@ -296,15 +288,8 @@ class MultiputPart extends BaseMultiput {
 
             const parts = await this.listParts(this.index, 1);
 
-            if (
-                parts &&
-                parts.length === 1 &&
-                parts[0].offset === this.offset &&
-                parts[0].part_id
-            ) {
-                this.consoleLog(
-                    `Part ${this.toJSON()} is available on server. Not re-uploading.`,
-                );
+            if (parts && parts.length === 1 && parts[0].offset === this.offset && parts[0].part_id) {
+                this.consoleLog(`Part ${this.toJSON()} is available on server. Not re-uploading.`);
                 this.id = parts[0].part_id;
                 this.uploadSuccessHandler({
                     data: {
@@ -314,18 +299,12 @@ class MultiputPart extends BaseMultiput {
                 return;
             }
 
-            this.consoleLog(
-                `Part ${this.toJSON()} is not available on server. Re-uploading.`,
-            );
+            this.consoleLog(`Part ${this.toJSON()} is not available on server. Re-uploading.`);
             throw new Error('Part not found on the server');
         } catch (error) {
             const { response } = error;
             if (response && response.status) {
-                this.consoleLog(
-                    `Error ${
-                        response.status
-                    } while listing part ${this.toJSON()}. Re-uploading.`,
-                );
+                this.consoleLog(`Error ${response.status} while listing part ${this.toJSON()}. Re-uploading.`);
             }
 
             this.numUploadRetriesPerformed += 1;
@@ -352,19 +331,13 @@ class MultiputPart extends BaseMultiput {
      * @param {number} limit - Number of parts to be listed. Optional.
      * @return {Promise<Array<Object>>} Array of parts
      */
-    listParts = async (
-        partIndex: number,
-        limit: number,
-    ): Promise<Array<Object>> => {
+    listParts = async (partIndex: number, limit: number): Promise<Array<Object>> => {
         const params = {
             offset: partIndex,
             limit,
         };
 
-        const endpoint = updateQueryParameters(
-            this.sessionEndpoints.listParts,
-            params,
-        );
+        const endpoint = updateQueryParameters(this.sessionEndpoints.listParts, params);
         const response = await this.xhr.get({
             url: endpoint,
         });

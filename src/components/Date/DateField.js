@@ -52,9 +52,7 @@ const DateField = ({
     }
 
     let formattedDate = intl.formatDate(d, dateFormat);
-    formattedDate = omitCommas
-        ? formattedDate.replace(/,/g, '')
-        : formattedDate;
+    formattedDate = omitCommas ? formattedDate.replace(/,/g, '') : formattedDate;
     return formattedDate;
 };
 

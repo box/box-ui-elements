@@ -69,14 +69,11 @@ class Comment extends React.Component<Props, State> {
         nativeEvent.stopImmediatePropagation();
     };
 
-    approvalCommentFormFocusHandler = (): void =>
-        this.setState({ isInputOpen: true });
+    approvalCommentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
 
-    approvalCommentFormCancelHandler = (): void =>
-        this.setState({ isInputOpen: false, isEditing: false });
+    approvalCommentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
-    approvalCommentFormSubmitHandler = (): void =>
-        this.setState({ isInputOpen: false, isEditing: false });
+    approvalCommentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
 
     updateTaskHandler = (args: any): void => {
         const { onEdit = noop } = this.props;
@@ -132,11 +129,7 @@ class Comment extends React.Component<Props, State> {
                     onBlur={this.handleCommentBlur}
                     onFocus={this.handleCommentFocus}
                 >
-                    <Avatar
-                        className="bcs-comment-avatar"
-                        getAvatarUrl={getAvatarUrl}
-                        user={createdByUser}
-                    />
+                    <Avatar className="bcs-comment-avatar" getAvatarUrl={getAvatarUrl} user={createdByUser} />
                     <div className="bcs-comment-content">
                         <div className="bcs-comment-headline">
                             <UserLink
@@ -155,24 +148,15 @@ class Comment extends React.Component<Props, State> {
                                 }
                             >
                                 <small className="bcs-comment-created-at">
-                                    <ReadableTime
-                                        timestamp={createdAtTimestamp}
-                                        relativeThreshold={ONE_HOUR_MS}
-                                    />
+                                    <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
-                            {onEdit && canEdit && !isPending ? (
-                                <InlineEdit id={id} toEdit={toEdit} />
-                            ) : null}
+                            {onEdit && canEdit && !isPending ? <InlineEdit id={id} toEdit={toEdit} /> : null}
                             {onDelete && canDelete && !isPending ? (
                                 <InlineDelete
                                     id={id}
                                     permissions={permissions}
-                                    message={
-                                        <FormattedMessage
-                                            {...inlineDeleteMessage}
-                                        />
-                                    }
+                                    message={<FormattedMessage {...inlineDeleteMessage} />}
                                     onDelete={onDelete}
                                 />
                             ) : null}
@@ -181,12 +165,9 @@ class Comment extends React.Component<Props, State> {
                             <ApprovalCommentForm
                                 onSubmit={() => {}}
                                 isDisabled={isDisabled}
-                                className={classNames(
-                                    'bcs-activity-feed-comment-input',
-                                    {
-                                        'bcs-is-disabled': isDisabled,
-                                    },
-                                )}
+                                className={classNames('bcs-activity-feed-comment-input', {
+                                    'bcs-is-disabled': isDisabled,
+                                })}
                                 updateTask={this.updateTaskHandler}
                                 isOpen={isInputOpen}
                                 user={currentUser}
@@ -194,16 +175,9 @@ class Comment extends React.Component<Props, State> {
                                 onFocus={this.approvalCommentFormFocusHandler}
                                 isEditing={isEditing}
                                 entityId={id}
-                                tagged_message={formatTaggedMessage(
-                                    tagged_message,
-                                    id,
-                                    true,
-                                    getUserProfileUrl,
-                                )}
+                                tagged_message={formatTaggedMessage(tagged_message, id, true, getUserProfileUrl)}
                                 getAvatarUrl={getAvatarUrl}
-                                mentionSelectorContacts={
-                                    mentionSelectorContacts
-                                }
+                                mentionSelectorContacts={mentionSelectorContacts}
                                 getMentionWithQuery={getMentionWithQuery}
                             />
                         ) : null}
@@ -211,9 +185,7 @@ class Comment extends React.Component<Props, State> {
                             <CommentText
                                 id={id}
                                 tagged_message={tagged_message}
-                                translatedTaggedMessage={
-                                    translatedTaggedMessage
-                                }
+                                translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}
                                 translationFailed={error ? true : null}
                                 getUserProfileUrl={getUserProfileUrl}

@@ -11,29 +11,16 @@ describe('components/ContentSidebar/skillUtils', () => {
         });
 
         test('should return true when file version doesnt exist on skills', () => {
-            expect(
-                isValidSkillsCard(
-                    { file_version: { id: 'fvid' } },
-                    { entries: [] },
-                ),
-            ).toBeTruthy();
+            expect(isValidSkillsCard({ file_version: { id: 'fvid' } }, { entries: [] })).toBeTruthy();
         });
 
         test('should return false when file version doesnt match with skills', () => {
-            expect(
-                isValidSkillsCard(
-                    { file_version: { id: 'fvid' } },
-                    { file_version: {}, entries: [] },
-                ),
-            ).toBeFalsy();
+            expect(isValidSkillsCard({ file_version: { id: 'fvid' } }, { file_version: {}, entries: [] })).toBeFalsy();
         });
 
         test('should return true when file version matches with skills', () => {
             expect(
-                isValidSkillsCard(
-                    { file_version: { id: 'fvid' } },
-                    { file_version: { id: 'fvid' }, entries: [] },
-                ),
+                isValidSkillsCard({ file_version: { id: 'fvid' } }, { file_version: { id: 'fvid' }, entries: [] }),
             ).toBeTruthy();
         });
     });
@@ -55,9 +42,7 @@ describe('components/ContentSidebar/skillUtils', () => {
         });
 
         test('should return false when no box skills cards', () => {
-            expect(
-                hasSkills({ metadata: { global: { boxSkillsCards: {} } } }),
-            ).toBeFalsy();
+            expect(hasSkills({ metadata: { global: { boxSkillsCards: {} } } })).toBeFalsy();
         });
 
         test('should return false when box skills cards empty', () => {

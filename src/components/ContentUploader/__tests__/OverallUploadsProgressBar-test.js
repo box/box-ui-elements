@@ -2,12 +2,7 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import OverallUploadsProgressBar from '../OverallUploadsProgressBar';
-import {
-    VIEW_UPLOAD_IN_PROGRESS,
-    VIEW_UPLOAD_SUCCESS,
-    VIEW_ERROR,
-    VIEW_UPLOAD_EMPTY,
-} from '../../../constants';
+import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR, VIEW_UPLOAD_EMPTY } from '../../../constants';
 
 describe('components/ContentUploader/OverallUploadsProgressBar', () => {
     const getWrapper = props =>

@@ -70,9 +70,7 @@ describe('components/ContentSidebar/ActiveState/activity-feed/ActiveState', () =
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
-        const wrapper = shallow(
-            <ActiveState inlineError={activityFeedError} items={[]} />,
-        );
+        const wrapper = shallow(<ActiveState inlineError={activityFeedError} items={[]} />);
         expect(wrapper).toMatchSnapshot();
     });
 });

@@ -4,21 +4,11 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import Pagination from '../Pagination';
 
 describe('components/Pagination/Pagination', () => {
-    test.each([-5, 0, 10, 20, 75, 100])(
-        'should render properly with offset %i',
-        offset => {
-            const wrapper = shallow(
-                <Pagination
-                    offset={offset}
-                    onChange={jest.fn()}
-                    pageSize={20}
-                    totalCount={100}
-                />,
-            );
+    test.each([-5, 0, 10, 20, 75, 100])('should render properly with offset %i', offset => {
+        const wrapper = shallow(<Pagination offset={offset} onChange={jest.fn()} pageSize={20} totalCount={100} />);
 
-            expect(wrapper).toMatchSnapshot();
-        },
-    );
+        expect(wrapper).toMatchSnapshot();
+    });
 
     describe('change handler', () => {
         test.each`
@@ -34,12 +24,7 @@ describe('components/Pagination/Pagination', () => {
             ({ offset, expected }) => {
                 const onChange = jest.fn();
                 const wrapper = shallow(
-                    <Pagination
-                        offset={offset}
-                        onChange={onChange}
-                        pageSize={20}
-                        totalCount={100}
-                    />,
+                    <Pagination offset={offset} onChange={onChange} pageSize={20} totalCount={100} />,
                 );
 
                 const buttons = wrapper.find(Button);
@@ -64,12 +49,7 @@ describe('components/Pagination/Pagination', () => {
             ({ offset, expected }) => {
                 const onChange = jest.fn();
                 const wrapper = shallow(
-                    <Pagination
-                        offset={offset}
-                        onChange={onChange}
-                        pageSize={20}
-                        totalCount={100}
-                    />,
+                    <Pagination offset={offset} onChange={onChange} pageSize={20} totalCount={100} />,
                 );
 
                 const buttons = wrapper.find(Button);

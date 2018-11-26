@@ -2,7 +2,5 @@ flow/**
 lib/**
 dist/**
 flow-typed/**
-build/**
 i18n/**
 node_modules/**
-styleguide/**

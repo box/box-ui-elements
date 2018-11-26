@@ -13,21 +13,10 @@ import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../constants';
 import './IconCell.scss';
 
 export function getIcon(dimension: number, rowData: BoxItem) {
-    const {
-        type,
-        extension,
-        has_collaborations,
-        is_externally_owned,
-    }: BoxItem = rowData;
+    const { type, extension, has_collaborations, is_externally_owned }: BoxItem = rowData;
     switch (type) {
         case TYPE_FOLDER:
-            return (
-                <FolderIcon
-                    dimension={dimension}
-                    isCollab={has_collaborations}
-                    isExternal={is_externally_owned}
-                />
-            );
+            return <FolderIcon dimension={dimension} isCollab={has_collaborations} isExternal={is_externally_owned} />;
         case TYPE_FILE:
             return <FileIcon dimension={dimension} extension={extension} />;
         case TYPE_WEBLINK:
@@ -37,8 +26,6 @@ export function getIcon(dimension: number, rowData: BoxItem) {
     }
 }
 
-export default (dimension: number = 32): Function => ({
-    rowData,
-}: {
-    rowData: BoxItem,
-}) => <div className="be-item-icon">{getIcon(dimension, rowData)}</div>;
+export default (dimension: number = 32): Function => ({ rowData }: { rowData: BoxItem }) => (
+    <div className="be-item-icon">{getIcon(dimension, rowData)}</div>
+);

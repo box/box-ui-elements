@@ -5,11 +5,7 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import {
-    PERMISSION_CAN_COMMENT,
-    PERMISSION_CAN_DELETE,
-    PERMISSION_CAN_EDIT,
-} from '../constants';
+import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
 class Comments extends OffsetBasedAPI {
@@ -47,10 +43,7 @@ class Comments extends OffsetBasedAPI {
     format(comment: Object): Comment {
         return {
             ...comment,
-            tagged_message:
-                comment.tagged_message !== ''
-                    ? comment.tagged_message
-                    : comment.message,
+            tagged_message: comment.tagged_message !== '' ? comment.tagged_message : comment.message,
         };
     }
 
@@ -240,11 +233,7 @@ class Comments extends OffsetBasedAPI {
         ...rest: any
     ): void {
         try {
-            this.checkApiCallValidity(
-                PERMISSION_CAN_COMMENT,
-                permissions,
-                fileId,
-            );
+            this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileId);
         } catch (e) {
             errorCallback(e);
             return;

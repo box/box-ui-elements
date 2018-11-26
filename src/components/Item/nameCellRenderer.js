@@ -29,12 +29,7 @@ export default (
             onFocus={onItemSelect}
         />
         {view === VIEW_SEARCH || showDetails ? (
-            <ItemDetails
-                item={rowData}
-                view={view}
-                rootId={rootId}
-                onItemClick={onItemClick}
-            />
+            <ItemDetails item={rowData} view={view} rootId={rootId} onItemClick={onItemClick} />
         ) : null}
     </div>
 );

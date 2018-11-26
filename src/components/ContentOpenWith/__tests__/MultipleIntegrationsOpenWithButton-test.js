@@ -3,8 +3,7 @@ import { shallow } from 'enzyme';
 import MultipleIntegrationsOpenWithButton from '../MultipleIntegrationsOpenWithButton';
 
 describe('components/ContentOpenWith/MultipleIntegrationsOpenWithButton', () => {
-    const getWrapper = props =>
-        shallow(<MultipleIntegrationsOpenWithButton {...props} />);
+    const getWrapper = props => shallow(<MultipleIntegrationsOpenWithButton {...props} />);
 
     test('should render button', () => {
         const wrapper = getWrapper({});

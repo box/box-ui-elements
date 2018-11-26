@@ -77,10 +77,7 @@ const Content = ({
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}
         {isEmpty(view, currentCollection) ? (
-            <EmptyState
-                view={view}
-                isLoading={currentCollection.percentLoaded !== 100}
-            />
+            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
         ) : (
             <ItemList
                 view={view}

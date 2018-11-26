@@ -79,12 +79,7 @@ const CollapsedVersion = ({
 }: Props): React.Node => (
     <div className="bcs-collapsed-version">
         <span className="bcs-version-message">
-            {getMessageForAction(
-                action,
-                collaborators,
-                version_start,
-                version_end,
-            )}
+            {getMessageForAction(action, collaborators, version_start, version_end)}
         </span>
         {onInfo ? (
             <span className="bcs-version-actions">

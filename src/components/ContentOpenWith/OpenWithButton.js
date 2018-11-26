@@ -29,11 +29,7 @@ type Props = {
  * @private
  * @return {?(string | Element)} the tooltip message
  */
-export const getTooltip = (
-    displayDescription: ?string,
-    error: ?any,
-    isLoading: boolean,
-): ?(string | Element) => {
+export const getTooltip = (displayDescription: ?string, error: ?any, isLoading: boolean): ?(string | Element) => {
     if (isLoading) {
         return null;
     }
@@ -47,37 +43,18 @@ export const getTooltip = (
     return <FormattedMessage {...messages.emptyOpenWithDescription} />;
 };
 
-const OpenWithButton = ({
-    error,
-    onClick,
-    displayIntegration,
-    isLoading,
-}: Props) => {
-    const {
-        displayDescription,
-        displayName,
-        isDisabled: isDisplayIntegrationDisabled,
-    } = displayIntegration || {};
+const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props) => {
+    const { displayDescription, displayName, isDisabled: isDisplayIntegrationDisabled } = displayIntegration || {};
 
     const isDisabled = !!isDisplayIntegrationDisabled || !displayName;
     const IntegrationIcon = displayName && ICON_FILE_MAP[displayName];
     const Icon = IntegrationIcon || IconOpenWith;
 
     return (
-        <Tooltip
-            text={getTooltip(displayDescription, error, isLoading)}
-            position="bottom-center"
-        >
-            <Button
-                isDisabled={isDisabled}
-                onClick={() => onClick(displayIntegration)}
-            >
+        <Tooltip text={getTooltip(displayDescription, error, isLoading)} position="bottom-center">
+            <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration)}>
                 <OpenWithButtonContents>
-                    <Icon
-                        className={CLASS_INTEGRATION_ICON}
-                        height={26}
-                        width={26}
-                    />
+                    <Icon className={CLASS_INTEGRATION_ICON} height={26} width={26} />
                 </OpenWithButtonContents>
             </Button>
         </Tooltip>
