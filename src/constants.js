@@ -246,6 +246,7 @@ export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
 
 /* ------------------ Sidebar View ---------------------- */
+export const SIDEBAR_VIEW_NONE: 'none' = 'none';
 export const SIDEBAR_VIEW_SKILLS: 'skills' = 'skills';
 export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
 export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';

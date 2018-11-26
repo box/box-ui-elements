@@ -23,6 +23,7 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
+    SIDEBAR_VIEW_NONE,
     ORIGIN_CONTENT_SIDEBAR,
     ERROR_CODE_FETCH_FILE,
 } from '../../constants';
@@ -64,11 +65,11 @@ type Props = {
 } & ErrorContextProps;
 
 type State = {
-    view?: SidebarView,
-    editors?: Array<MetadataEditor>,
     file?: BoxItem,
-    isVisible?: boolean,
     hasBeenToggled?: boolean,
+    isVisible?: boolean,
+    metadataEditors?: Array<MetadataEditor>,
+    view?: SidebarView,
 };
 
 class ContentSidebar extends PureComponent<Props, State> {
@@ -97,6 +98,7 @@ class ContentSidebar extends PureComponent<Props, State> {
 
     initialState: State = {
         file: undefined,
+        metadataEditors: undefined,
     };
 
     /**
@@ -108,30 +110,32 @@ class ContentSidebar extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         const {
-            cache,
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
+            cache,
             clientName,
             requestInterceptor,
             responseInterceptor,
+            sharedLink,
+            sharedLinkPassword,
+            token,
         } = props;
 
         this.id = uniqueid('bcs_');
         this.api = new API({
-            cache,
-            token,
-            sharedLink,
-            sharedLinkPassword,
             apiHost,
+            cache,
             clientName,
             requestInterceptor,
             responseInterceptor,
+            sharedLink,
+            sharedLinkPassword,
+            token,
         });
 
         // Clone initial state to allow for state reset on new files
-        this.state = { ...this.initialState };
+        this.state = {
+            ...this.initialState,
+        };
     }
 
     /**
@@ -157,36 +161,28 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * Fetches the root folder on load
+     * Fetches the file data on load
      *
      * @private
      * @inheritdoc
      * @return {void}
      */
     componentDidMount() {
-        this.fetchData(this.props);
+        this.fetchFile();
     }
 
     /**
-     * Called when sidebar gets new properties
+     * Fetches new file data on update
      *
      * @private
+     * @inheritdoc
      * @return {void}
      */
-    componentWillReceiveProps(nextProps: Props): void {
-        const { fileId, isLarge }: Props = this.props;
-        const { file, editors, hasBeenToggled }: State = this.state;
-        const hasVisibilityChanged = nextProps.isLarge !== isLarge;
-        const hasFileIdChanged = nextProps.fileId !== fileId;
-
-        if (hasFileIdChanged) {
-            // Clear out existing state
-            this.setState({ ...this.initialState });
-            this.fetchData(nextProps);
-        } else if (!hasBeenToggled && hasVisibilityChanged) {
-            this.setState({
-                view: this.getDefaultSidebarView(nextProps, file, editors),
-            });
+    componentDidUpdate(prevProps: Props) {
+        const { fileId }: Props = this.props;
+        const { fileId: prevFileId }: Props = prevProps;
+        if (fileId !== prevFileId) {
+            this.fetchFile();
         }
     }
 
@@ -199,27 +195,13 @@ class ContentSidebar extends PureComponent<Props, State> {
     onToggle = (view: SidebarView): void => {
         const { view: stateView }: State = this.state;
         const isTogglingOff = view === stateView;
-        const isTogglingOn = !stateView && !!view;
-        const isToggling = isTogglingOff || isTogglingOn;
+        // const isTogglingOn = !stateView && !!view;
+        // const isToggling = isTogglingOff || isTogglingOn;
         this.setState({
-            view: isTogglingOff ? undefined : view,
-            hasBeenToggled: isToggling,
+            view: isTogglingOff ? SIDEBAR_VIEW_NONE : view,
+            hasBeenToggled: true,
         });
     };
-
-    /**
-     * Fetches the file data for the sidebar
-     *
-     * @param {Object} Props the component props
-     * @return {void}
-     */
-    fetchData(props: Props): void {
-        const { fileId }: Props = props;
-        if (fileId && SidebarUtils.canHaveSidebar(props)) {
-            // Fetch the new file
-            this.fetchFile(fileId);
-        }
-    }
 
     /**
      * Network error callback
@@ -248,13 +230,13 @@ class ContentSidebar extends PureComponent<Props, State> {
      * @param {Object} file - Box file
      * @return {string} Sidebar view to use
      */
-    getDefaultSidebarView(props: Props, file?: BoxItem, editors?: Array<MetadataEditor>): SidebarView {
-        const { view, hasBeenToggled }: State = this.state;
-        const { isLarge, defaultView }: Props = props;
+    getDefaultSidebarView(file?: BoxItem, metadataEditors?: Array<MetadataEditor>): SidebarView {
+        const { hasBeenToggled, view }: State = this.state;
+        const { isLarge, defaultView }: Props = this.props;
 
         // If no file we don't have a view
         if (!file) {
-            return undefined;
+            return SIDEBAR_VIEW_NONE;
         }
 
         // If there was a default view provided, force use that
@@ -262,17 +244,18 @@ class ContentSidebar extends PureComponent<Props, State> {
             return defaultView;
         }
 
-        // If the user manually toggled the sidebar, respect that.
-        // Otherwise use responsiveness to determine default view.
         if (!hasBeenToggled && !isLarge) {
-            return undefined;
+            // Hide the sidebar when small viewport only if the user did
+            // not manually show or hide a sidebar. That is unless the
+            // user has intervened respect responsiveness.
+            return SIDEBAR_VIEW_NONE;
         }
 
         let newView;
         const canDefaultToSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const canDefaultToDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const canDefaultToActivity = SidebarUtils.canHaveActivitySidebar(this.props);
-        const canDefaultToMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, editors);
+        const canDefaultToMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
 
         // Calculate the default view with latest props
         if (canDefaultToSkills) {
@@ -300,68 +283,86 @@ class ContentSidebar extends PureComponent<Props, State> {
     }
 
     /**
-     * File fetch success callback that sets the file and view
-     * Only set file if there is data to show in the sidebar.
-     * Skills sidebar doesn't show when there is no data.
+     * Success callback for fetching metadata editors
      *
      * @private
      * @param {Object} file - Box file
      * @return {void}
      */
-    fetchMetadataSuccessCallback = (file: BoxItem, editors?: Array<MetadataEditor>): void => {
-        let newState = { isVisible: false };
-        if (SidebarUtils.shouldRenderSidebar(this.props, file, editors)) {
-            newState = {
-                file,
-                editors,
-                isVisible: true,
-                view: this.getDefaultSidebarView(this.props, file, editors),
-            };
-        }
-        this.setState(newState);
+    fetchMetadataSuccessCallback = ({ editors }: { editors: Array<MetadataEditor> }): void => {
+        const { file }: State = this.state;
+        this.setState({
+            isVisible: SidebarUtils.shouldRenderSidebar(this.props, file, editors),
+            metadataEditors: editors,
+            view: this.getDefaultSidebarView(file, editors),
+        });
     };
 
     /**
-     * File fetch success callback that sets the file and view
-     * Only set file if there is data to show in the sidebar.
-     * Skills sidebar doesn't show when there is no data.
+     * Fetches file metadata editors if required
      *
      * @private
-     * @param {Object} file - Box file
      * @return {void}
      */
-    fetchFileSuccessCallback = (file: BoxItem): void => {
+    fetchMetadata(): void {
+        const { file }: State = this.state;
         const { metadataSidebarProps }: Props = this.props;
         const { getMetadata, isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
+
+        // Only need to fetch metadata if the feature is disabled
+        // but the parent app has not hidden the metadata sidebar because
+        // the file may have metadata. Use case of this would be a free
+        // user who doesn't have the feature but is collabed on a file
+        // from a user who added metadata on the file.
+        // If the feature is enabled we always end up showing the metadata
+        // sidebar irrespective of there being any existing metadata or not.
+        // In that case let the metadata sidebar fetch the metadata when
+        // the user clicks on that tab.
         const canHaveMetadataSidebar = !isFeatureEnabled && SidebarUtils.canHaveMetadataSidebar(this.props);
 
         if (canHaveMetadataSidebar) {
             this.api
                 .getMetadataAPI(true)
                 .getEditors(
-                    file,
-                    ({ editors }: { editors?: Array<MetadataEditor> }) =>
-                        this.fetchMetadataSuccessCallback(file, editors),
-                    () => this.fetchMetadataSuccessCallback(file),
+                    ((file: any): BoxItem),
+                    this.fetchMetadataSuccessCallback,
+                    noop,
                     getMetadata,
                     isFeatureEnabled,
                 );
-        } else {
-            this.fetchMetadataSuccessCallback(file);
         }
+    }
+
+    /**
+     * File fetch success callback that sets the file and sidebar visibility.
+     * Also makes an optional request to fetch metadata editors.
+     *
+     * @private
+     * @param {Object} file - Box file
+     * @return {void}
+     */
+    fetchFileSuccessCallback = (file: BoxItem): void => {
+        this.setState(
+            {
+                file,
+                isVisible: SidebarUtils.shouldRenderSidebar(this.props, file),
+                view: this.getDefaultSidebarView(file),
+            },
+            this.fetchMetadata,
+        );
     };
 
     /**
      * Fetches a file
      *
      * @private
-     * @param {string} id - File id
      * @param {Object|void} [fetchOptions] - Fetch options
      * @return {void}
      */
-    fetchFile(id: string, fetchOptions: FetchOptions = {}): void {
-        if (SidebarUtils.canHaveSidebar(this.props)) {
-            this.api.getFileAPI().getFile(id, this.fetchFileSuccessCallback, this.errorCallback, {
+    fetchFile(fetchOptions: FetchOptions = {}): void {
+        const { fileId }: Props = this.props;
+        if (fileId && SidebarUtils.canHaveSidebar(this.props)) {
+            this.api.getFileAPI().getFile(fileId, this.fetchFileSuccessCallback, this.errorCallback, {
                 ...fetchOptions,
                 fields: SIDEBAR_FIELDS_TO_FETCH,
             });
@@ -377,25 +378,25 @@ class ContentSidebar extends PureComponent<Props, State> {
      */
     render() {
         const {
-            language,
-            messages,
+            activitySidebarProps,
+            className,
+            detailsSidebarProps,
             getPreview,
             getViewer,
             hasActivityFeed,
-            className,
-            activitySidebarProps,
-            detailsSidebarProps,
+            language,
+            messages,
             metadataSidebarProps,
             onVersionHistoryClick,
         }: Props = this.props;
-        const { editors, file, view, isVisible }: State = this.state;
+        const { file, isVisible, metadataEditors, view }: State = this.state;
 
         // By default sidebar is always visible if there is something configured
         // to show via props. At least one of the sidebars is needed for visibility.
         // However we may turn the visibility off if there is no data to show
-        // in the sidebar. This can only happen if skills sidebar was showing
-        // however there is no skills data to show. For all other sidebars
-        // we show them by default even if there is no data in them.
+        // in the sidebar. This can only happen if skills or metadata sidebar was showing
+        // however there is no skills data to show or metadata feature disabled.
+        // For all other sidebar use cases we show them by default even if there is no data in them.
         if (!isVisible || !SidebarUtils.canHaveSidebar(this.props)) {
             return null;
         }
@@ -411,8 +412,8 @@ class ContentSidebar extends PureComponent<Props, State> {
 
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
-        const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, editors);
-        const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file, editors);
+        const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
+        const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors);
 
         return (
             <Internationalize language={language} messages={messages}>

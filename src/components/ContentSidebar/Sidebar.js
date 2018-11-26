@@ -22,7 +22,7 @@ import type { MetadataSidebarProps } from './MetadataSidebar';
 import './Sidebar.scss';
 
 type Props = {
-    view?: SidebarView,
+    view: SidebarView,
     currentUser?: User,
     file: BoxItem,
     getPreview: Function,
