@@ -10,7 +10,7 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
     };
     const getWrapper = props => shallow(<SidebarAccessStatsComponent intl={intl} {...props} />);
 
-    test('should not render the component when there are no access stats', () => {
+    test('should render the component even when there are no access stats', () => {
         const props = {
             accessStats: {
                 preview_count: 0,
@@ -24,7 +24,7 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
         };
         const wrapper = getWrapper(props);
 
-        expect(wrapper.find(AccessStats)).toHaveLength(0);
+        expect(wrapper.find(AccessStats)).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
 
