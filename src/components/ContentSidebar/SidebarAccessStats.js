@@ -36,12 +36,11 @@ const SidebarAccessStats = ({
     intl,
     isLoading = false,
 }: Props) => {
-    const { preview_count, comment_count, download_count, edit_count } = accessStats;
-
     if (isLoading) {
         return null;
     }
 
+    const { preview_count, comment_count, download_count, edit_count } = accessStats;
     const errorMessage = error ? intl.formatMessage(error) : undefined;
 
     return (
