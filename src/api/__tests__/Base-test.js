@@ -8,9 +8,11 @@ let base;
 
 describe('api/Base', () => {
     const baseResponse = { total_count: 0, entries: [] };
+    const errorCode = 'foo';
 
     beforeEach(() => {
         base = new Base({});
+        base.errorCode = errorCode;
     });
 
     test('should should have correct defaults on construct', () => {
@@ -122,14 +124,21 @@ describe('api/Base', () => {
             const url = 'https://www.foo.com';
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            const params = {
+            const requestData = {
                 fields: 'start=0',
             };
             base.makeRequest = jest.fn();
             base.getUrl = jest.fn(() => url);
 
-            base.get({ id, successCallback, errorCallback, params });
-            expect(base.makeRequest).toHaveBeenCalledWith(HTTP_GET, id, url, successCallback, errorCallback, params);
+            base.get({ id, successCallback, errorCallback, requestData });
+            expect(base.makeRequest).toHaveBeenCalledWith(
+                HTTP_GET,
+                id,
+                url,
+                successCallback,
+                errorCallback,
+                requestData,
+            );
         });
     });
 
@@ -176,7 +185,7 @@ describe('api/Base', () => {
 
             return base.makeRequest(HTTP_PUT, 'id', url, successCb, errorCb).then(() => {
                 expect(successCb).not.toHaveBeenCalled();
-                expect(errorCb).toHaveBeenCalledWith(error);
+                expect(errorCb).toHaveBeenCalledWith(error, errorCode);
                 expect(base.xhr.put).toHaveBeenCalledWith({
                     id: 'file_id',
                     url,

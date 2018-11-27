@@ -10,7 +10,7 @@ import FolderAPI from './Folder';
 import WebLinkAPI from './WebLink';
 import flatten from '../util/flatten';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
-import { CACHE_PREFIX_SEARCH, FIELD_RELEVANCE, SORT_DESC } from '../constants';
+import { CACHE_PREFIX_SEARCH, FIELD_RELEVANCE, SORT_DESC, ERROR_CODE_SEARCH } from '../constants';
 import { getBadItemError } from '../util/error';
 
 class Search extends Base {
@@ -47,7 +47,7 @@ class Search extends Base {
     /**
      * @property {Function}
      */
-    errorCallback: Function;
+    errorCallback: ElementsErrorCallback;
 
     /**
      * @property {Array}
@@ -179,7 +179,7 @@ class Search extends Base {
             return;
         }
 
-        this.errorCallback(error);
+        this.errorCallback(error, this.errorCode);
     };
 
     /**
@@ -192,6 +192,7 @@ class Search extends Base {
             return Promise.reject();
         }
 
+        this.errorCode = ERROR_CODE_SEARCH;
         return this.xhr
             .get({
                 url: this.getUrl(),
@@ -225,7 +226,7 @@ class Search extends Base {
         limit: number,
         offset: number,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
         options: Object = {},
     ): void {
         if (this.isDestroyed()) {

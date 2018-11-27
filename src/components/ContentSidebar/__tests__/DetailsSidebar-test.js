@@ -12,7 +12,8 @@ const file = {
 };
 
 describe('components/ContentSidebar/DetailsSidebar', () => {
-    const getWrapper = (props, options) => shallow(<DetailsSidebar {...props} />, options);
+    const onError = jest.fn();
+    const getWrapper = (props, options) => shallow(<DetailsSidebar onError={onError} {...props} />, options);
 
     describe('render()', () => {
         test('should render DetailsSidebar with all components', () => {
@@ -148,7 +149,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             const getStats = jest.fn();
             const api = {
                 getFileAccessStatsAPI: () => ({
-                    get: getStats,
+                    getFileAccessStats: getStats,
                 }),
             };
             const wrapper = getWrapper({ api, file });
@@ -156,11 +157,11 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.setState = jest.fn();
             instance.fetchAccessStats();
             expect(instance.setState).toBeCalledWith({ isLoading: true });
-            expect(getStats).toBeCalledWith({
-                id: file.id,
-                successCallback: instance.fetchAccessStatsSuccessCallback,
-                errorCallback: instance.fetchAccessStatsErrorCallback,
-            });
+            expect(getStats).toBeCalledWith(
+                file.id,
+                instance.fetchAccessStatsSuccessCallback,
+                instance.fetchAccessStatsErrorCallback,
+            );
         });
     });
 

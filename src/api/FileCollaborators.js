@@ -5,6 +5,7 @@
  */
 
 import MarkerBasedAPI from './MarkerBasedAPI';
+import { DEFAULT_MAX_COLLABORATORS } from '../constants';
 
 class FileCollaborators extends MarkerBasedAPI {
     /**
@@ -43,6 +44,32 @@ class FileCollaborators extends MarkerBasedAPI {
 
         this.successCallback({ ...data, entries: collaborators });
     };
+
+    /**
+     * API for fetching collaborators on a file
+     *
+     * @param {string} id - the file id
+     * @param {number} limit - the max number of collaborators to return
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @param {Object} requestData - any additional request data
+     * @returns {Promise<void>}
+     */
+    getFileCollaborators(
+        id: string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+        requestData: Object = {},
+        limit: number = DEFAULT_MAX_COLLABORATORS,
+    ): void {
+        this.markerGet({
+            id,
+            limit,
+            successCallback,
+            errorCallback,
+            ...requestData,
+        });
+    }
 }
 
 export default FileCollaborators;

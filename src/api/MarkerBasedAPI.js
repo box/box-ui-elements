@@ -108,7 +108,7 @@ class MarkerBasedApi extends Base {
     }: {
         id: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
         marker?: string,
         limit?: number,
         params?: Object,

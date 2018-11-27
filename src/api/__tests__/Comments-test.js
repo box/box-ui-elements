@@ -223,7 +223,15 @@ describe('api/Comments', () => {
                     [PERMISSION_CAN_COMMENT]: true,
                 };
                 comments.getComments(file.id, permissions, successCallback, errorCallback);
-                expect(comments.offsetGet).toBeCalledWith('foo', successCallback, errorCallback);
+                expect(comments.offsetGet).toBeCalledWith(
+                    'foo',
+                    successCallback,
+                    errorCallback,
+                    expect.any(Number),
+                    expect.any(Number),
+                    COMMENTS_FIELDS_TO_FETCH,
+                    true,
+                );
             });
         });
     });

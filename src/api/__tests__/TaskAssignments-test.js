@@ -85,6 +85,10 @@ describe('api/TaskAssignments', () => {
         });
 
         describe('updateTaskAssignment()', () => {
+            beforeEach(() => {
+                taskAssignments.put = jest.fn();
+            });
+
             test('should check for valid task assignment permissions', () => {
                 taskAssignments.updateTaskAssignment({
                     file,

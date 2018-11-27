@@ -671,3 +671,5 @@ type ErrorContextProps = {
         origin: ErrorOrigins,
     ) => void,
 };
+
+type ElementsErrorCallback = (e: ElementsXhrError, code: string) => void;

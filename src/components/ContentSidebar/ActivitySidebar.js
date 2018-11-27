@@ -14,12 +14,7 @@ import messages from '../messages';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
 import { getBadUserError, getBadItemError } from '../../util/error';
-import {
-    DEFAULT_COLLAB_DEBOUNCE,
-    DEFAULT_MAX_COLLABORATORS,
-    ORIGIN_ACTIVITY_SIDEBAR,
-    ERROR_CODE_FETCH_CURRENT_USER,
-} from '../../constants';
+import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
 
 type ExternalProps = {
@@ -84,11 +79,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
 
         if (typeof user === 'undefined') {
-            api.getUsersAPI(shouldDestroy).get({
-                id: file.id,
-                successCallback: this.fetchCurrentUserSuccessCallback,
-                errorCallback: this.fetchCurrentUserErrorCallback,
-            });
+            api.getUsersAPI(shouldDestroy).getUser(
+                file.id,
+                this.fetchCurrentUserSuccessCallback,
+                this.fetchCurrentUserErrorCallback,
+            );
         } else {
             this.setState({ currentUser: user, currentUserError: undefined });
         }
@@ -359,48 +354,44 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {string} searchStr - Search string to filter file collaborators by
      * @return {void}
      */
-    getApproverWithQuery = debounce((searchStr: string): void => {
-        // Do not fetch without filter
-        const { file, api } = this.props;
-        if (!searchStr || searchStr.trim() === '') {
-            return;
-        }
-
-        api.getFileCollaboratorsAPI(true).markerGet({
-            id: file.id,
-            limit: DEFAULT_MAX_COLLABORATORS,
-            params: {
-                filter_term: searchStr,
-            },
-            successCallback: this.getApproverContactsSuccessCallback,
-            errorCallback: this.errorCallback,
-        });
-    }, DEFAULT_COLLAB_DEBOUNCE);
+    getApproverWithQuery = debounce(
+        this.getCollaborators.bind(this, this.getApproverContactsSuccessCallback, this.errorCallback),
+        DEFAULT_COLLAB_DEBOUNCE,
+    );
 
     /**
-     * File @mention contacts fetch success callback
+     * Fetches file @mention's
      *
      * @private
      * @param {string} searchStr - Search string to filter file collaborators by
      * @return {void}
      */
-    getMentionWithQuery = debounce((searchStr: string): void => {
+    getMentionWithQuery = debounce(
+        this.getCollaborators.bind(this, this.getMentionContactsSuccessCallback, this.errorCallback),
+        DEFAULT_COLLAB_DEBOUNCE,
+    );
+
+    /**
+     * Fetches file collaborators
+     *
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @param {string} searchStr - the search string
+     * @return {void}
+     */
+    getCollaborators(successCallback: Function, errorCallback: ElementsErrorCallback, searchStr: string): void {
         // Do not fetch without filter
         const { file, api } = this.props;
         if (!searchStr || searchStr.trim() === '') {
             return;
         }
 
-        api.getFileCollaboratorsAPI(true).markerGet({
-            id: file.id,
-            limit: DEFAULT_MAX_COLLABORATORS,
+        api.getFileCollaboratorsAPI(true).getFileCollaborators(file.id, successCallback, errorCallback, {
             params: {
                 filter_term: searchStr,
             },
-            successCallback: this.getMentionContactsSuccessCallback,
-            errorCallback: this.errorCallback,
         });
-    }, DEFAULT_COLLAB_DEBOUNCE);
+    }
 
     /**
      * Handles a failed file user info fetch
@@ -409,7 +400,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {ElementsXhrError} e - API error
      * @return {void}
      */
-    fetchCurrentUserErrorCallback = (e: ElementsXhrError) => {
+    fetchCurrentUserErrorCallback = (e: ElementsXhrError, code: string) => {
         this.setState({
             currentUser: undefined,
             currentUserError: {
@@ -420,7 +411,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             },
         });
 
-        this.errorCallback(e, ERROR_CODE_FETCH_CURRENT_USER, {
+        this.errorCallback(e, code, {
             error: e,
         });
     };

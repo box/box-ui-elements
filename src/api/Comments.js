@@ -5,7 +5,17 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../constants';
+import {
+    PERMISSION_CAN_COMMENT,
+    PERMISSION_CAN_DELETE,
+    PERMISSION_CAN_EDIT,
+    ERROR_CODE_CREATE_COMMENT,
+    ERROR_CODE_UPDATE_COMMENT,
+    ERROR_CODE_DELETE_COMMENT,
+    ERROR_CODE_FETCH_COMMENTS,
+    DEFAULT_FETCH_START,
+    DEFAULT_FETCH_END,
+} from '../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
 class Comments extends OffsetBasedAPI {
@@ -93,14 +103,15 @@ class Comments extends OffsetBasedAPI {
         message?: string,
         taggedMessage?: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     }): void {
+        this.errorCode = ERROR_CODE_CREATE_COMMENT;
         const { id = '', permissions } = file;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
@@ -151,14 +162,15 @@ class Comments extends OffsetBasedAPI {
         message: string,
         permissions: BoxItemPermission,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     }): void {
+        this.errorCode = ERROR_CODE_UPDATE_COMMENT;
         const { id = '' } = file;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_EDIT, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
@@ -196,14 +208,15 @@ class Comments extends OffsetBasedAPI {
         commentId: string,
         permissions: BoxItemPermission,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     }): void {
+        this.errorCode = ERROR_CODE_DELETE_COMMENT;
         const { id = '' } = file;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_DELETE, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
@@ -229,17 +242,21 @@ class Comments extends OffsetBasedAPI {
         fileId: string,
         permissions: BoxItemPermission,
         successCallback: Function,
-        errorCallback: Function,
-        ...rest: any
+        errorCallback: (e: ElementsXhrError, code: string) => void,
+        offset: number = DEFAULT_FETCH_START,
+        limit: number = DEFAULT_FETCH_END,
+        fields: Array<string> = COMMENTS_FIELDS_TO_FETCH,
+        shouldFetchAll: boolean = true,
     ): void {
+        this.errorCode = ERROR_CODE_FETCH_COMMENTS;
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileId);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
-        this.offsetGet(fileId, successCallback, errorCallback, ...rest);
+        this.offsetGet(fileId, successCallback, errorCallback, offset, limit, fields, shouldFetchAll);
     }
 }
 

@@ -10,9 +10,11 @@ describe('api/MarkerBasedAPI', () => {
         entries: [],
     };
     const url = 'https://foo.bar';
+    const errorCode = 'foo';
 
     beforeEach(() => {
         markerBasedAPI = new MarkerBasedAPI({});
+        markerBasedAPI.errorCode = errorCode;
     });
 
     describe('hasMoreItems()', () => {
@@ -145,10 +147,11 @@ describe('api/MarkerBasedAPI', () => {
                     marker: '',
                     limit: LIMIT,
                     shouldFetchAll: true,
+                    errorCode,
                 })
                 .then(() => {
                     expect(successCallback).not.toHaveBeenCalled();
-                    expect(errorCallback).toHaveBeenCalledWith(error);
+                    expect(errorCallback).toHaveBeenCalledWith(error, errorCode);
                     expect(markerBasedAPI.xhr.get).toHaveBeenCalledWith({
                         id: 'file_id',
                         url,
