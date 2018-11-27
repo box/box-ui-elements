@@ -15,7 +15,6 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
         "id": "foo",
       }
     }
-    isLoading={false}
   />
 </SidebarContent>
 `;
@@ -46,7 +45,6 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
         "id": "foo",
       }
     }
-    isLoading={false}
   />
   <SidebarSection
     className=""
