@@ -10,7 +10,7 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
     };
     const getWrapper = props => shallow(<SidebarAccessStatsComponent intl={intl} {...props} />);
 
-    test('should render the component when there are no access stats', () => {
+    test('should render the component when access stats are zero (newly uploaded file)', () => {
         const props = {
             accessStats: {
                 preview_count: 0,
@@ -25,6 +25,24 @@ describe('components/ContentSidebar/SidebarAccessStats', () => {
         const wrapper = getWrapper(props);
 
         expect(wrapper.find(AccessStats)).toHaveLength(1);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should not render the component when there are no access stats', () => {
+        const props = {
+            accessStats: {
+                preview_count: undefined,
+                comment_count: undefined,
+                download_count: undefined,
+                edit_count: undefined,
+            },
+            file: {
+                extension: 'foo',
+            },
+        };
+        const wrapper = getWrapper(props);
+
+        expect(wrapper.find(AccessStats)).toHaveLength(0);
         expect(wrapper).toMatchSnapshot();
     });
 

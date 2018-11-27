@@ -33,10 +33,10 @@ const SidebarAccessStats = ({
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
     if (
-        Number.isNaN(preview_count) &&
-        Number.isNaN(comment_count) &&
-        Number.isNaN(download_count) &&
-        Number.isNaN(edit_count) &&
+        !Number.isFinite(preview_count) &&
+        !Number.isFinite(comment_count) &&
+        !Number.isFinite(download_count) &&
+        !Number.isFinite(edit_count) &&
         !error
     ) {
         return null;
