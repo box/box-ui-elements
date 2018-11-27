@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/ContentSidebar/SidebarAccessStats should not render the component when there are no access stats 1`] = `""`;
+
 exports[`components/ContentSidebar/SidebarAccessStats should render an error 1`] = `
 <SidebarSection
   className=""
