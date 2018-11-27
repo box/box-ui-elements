@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentSidebar/SidebarAccessStats should not render the component when there are no access stats 1`] = `""`;
-
 exports[`components/ContentSidebar/SidebarAccessStats should render an error 1`] = `
 <SidebarSection
   className=""
@@ -14,6 +12,58 @@ exports[`components/ContentSidebar/SidebarAccessStats should render an error 1`]
         description="bar"
         id="foo"
       />
+    }
+  />
+</SidebarSection>
+`;
+
+exports[`components/ContentSidebar/SidebarAccessStats should render the component when there are no access stats 1`] = `
+<SidebarSection
+  className=""
+  interactionTarget="accessstats"
+  isOpen={true}
+  title={
+    <FormattedMessage
+      defaultMessage="Access Stats"
+      id="be.sidebarAccessStats"
+    />
+  }
+>
+  <AccessStats
+    commentCount={0}
+    commentStatButtonProps={
+      Object {
+        "data-resin-target": "accessstats-comments",
+      }
+    }
+    downloadCount={0}
+    downloadStatButtonProps={
+      Object {
+        "data-resin-target": "accessstats-downloads",
+      }
+    }
+    editCount={0}
+    editStatButtonProps={
+      Object {
+        "data-resin-target": "accessstats-edits",
+      }
+    }
+    isBoxNote={false}
+    previewCount={0}
+    previewStatButtonProps={
+      Object {
+        "data-resin-target": "accessstats-previews",
+      }
+    }
+    viewMoreButtonProps={
+      Object {
+        "data-resin-target": "accessstats-viewdetails",
+      }
+    }
+    viewStatButtonProps={
+      Object {
+        "data-resin-target": "accessstats-views",
+      }
     }
   />
 </SidebarSection>
