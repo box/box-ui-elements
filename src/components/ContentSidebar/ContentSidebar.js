@@ -94,13 +94,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         metadataSidebarProps: {},
     };
 
-    initialState: State = {
-        file: undefined,
-        hasBeenManuallyToggled: false,
-        metadataEditors: undefined,
-        view: SIDEBAR_VIEW_NONE,
-    };
-
     /**
      * [constructor]
      *
@@ -132,8 +125,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             token,
         });
 
-        // Clone initial state to allow for state reset on new files
-        this.state = { ...this.initialState };
+        this.state = { hasBeenManuallyToggled: false, view: SIDEBAR_VIEW_NONE };
     }
 
     /**
@@ -260,6 +252,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         const canDefaultToMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
 
         // Calculate the default view with latest props
+        // This is the current order of importance for defaulting.
         if (canDefaultToSkills) {
             newView = SIDEBAR_VIEW_SKILLS;
         } else if (canDefaultToActivity) {
@@ -281,7 +274,11 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             return newView;
         }
 
-        return view;
+        // If the user has manually toggled respect that prior view,
+        // otherwise return the newly calculated view based on the above
+        // order of importance. This is mostly for making skills tab
+        // the priority always if skills are present.
+        return hasBeenManuallyToggled ? view : newView;
     }
 
     /**
@@ -310,15 +307,11 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         const { metadataSidebarProps }: Props = this.props;
         const { getMetadata, isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
 
-        // Only need to fetch metadata if the feature is disabled
-        // but the parent app has not hidden the metadata sidebar because
-        // the file may have metadata. Use case of this would be a free
-        // user who doesn't have the feature but is collabed on a file
-        // from a user who added metadata on the file.
-        // If the feature is enabled we always end up showing the metadata
-        // sidebar irrespective of there being any existing metadata or not.
-        // In that case let the metadata sidebar fetch the metadata when
-        // the user clicks on that tab.
+        // Only fetch metadata if we think that the file may have metadata on it
+        // but currently the metadata feature is turned off. Use case of this would be a free
+        // user who doesn't have the metadata feature but is collabed on a file from a user
+        // who added metadata on the file. If the feature is enabled we always end up showing
+        // the metadata sidebar irrespective of there being any existing metadata or not.
         const canHaveMetadataSidebar = !isFeatureEnabled && SidebarUtils.canHaveMetadataSidebar(this.props);
 
         if (canHaveMetadataSidebar) {
