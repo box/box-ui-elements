@@ -5,7 +5,12 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT } from '../constants';
+import {
+    PERMISSION_CAN_COMMENT,
+    ERROR_CODE_CREATE_TASK_ASSIGNMENT,
+    ERROR_CODE_UPDATE_TASK_ASSIGNMENT,
+    ERROR_CODE_DELETE_TASK_ASSIGNMENT,
+} from '../constants';
 
 class TaskAssignments extends Base {
     /**
@@ -67,6 +72,7 @@ class TaskAssignments extends Base {
             id,
             url: this.getUrl(),
             data: requestData,
+            errorCode: ERROR_CODE_CREATE_TASK_ASSIGNMENT,
             successCallback,
             errorCallback,
         });
@@ -118,6 +124,7 @@ class TaskAssignments extends Base {
             data: requestData,
             successCallback,
             errorCallback,
+            errorCode: ERROR_CODE_UPDATE_TASK_ASSIGNMENT,
         });
     }
 
@@ -156,6 +163,7 @@ class TaskAssignments extends Base {
             url: this.getUrl(taskAssignmentId),
             successCallback,
             errorCallback,
+            errorCode: ERROR_CODE_DELETE_TASK_ASSIGNMENT,
         });
     }
 }

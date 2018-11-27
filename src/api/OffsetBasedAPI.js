@@ -24,6 +24,11 @@ class OffsetBasedApi extends Base {
     data: Data;
 
     /**
+     * @property {string}
+     */
+    errorCode: string;
+
+    /**
      * Gets query params for the API
      *
      * @param {number} offset the offset from the start to start fetching at
@@ -101,7 +106,7 @@ class OffsetBasedApi extends Base {
 
             this.successHandler(this.data);
         } catch (error) {
-            this.errorHandler(error);
+            this.errorHandler(error, this.errorCode);
         }
     }
 
@@ -118,6 +123,7 @@ class OffsetBasedApi extends Base {
      */
     async offsetGet(
         id: string,
+        errorCode: string,
         successCallback: Function,
         errorCallback: Function,
         offset: number = 0,
@@ -127,6 +133,7 @@ class OffsetBasedApi extends Base {
     ): Promise<void> {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
+        this.errorCode = errorCode;
 
         return this.offsetGetRequest(id, offset, limit, shouldFetchAll, fields);
     }

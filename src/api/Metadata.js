@@ -18,6 +18,12 @@ import {
     METADATA_TEMPLATE_SKILLS,
     FIELD_METADATA_SKILLS,
     CACHE_PREFIX_METADATA,
+    ERROR_CODE_UPDATE_SKILLS,
+    ERROR_CODE_UPDATE_METADATA,
+    ERROR_CODE_CREATE_METADATA,
+    ERROR_CODE_DELETE_METADATA,
+    ERROR_CODE_FETCH_EDITORS,
+    ERROR_CODE_FETCH_SKILLS,
 } from '../constants';
 
 class Metadata extends File {
@@ -203,7 +209,7 @@ class Metadata extends File {
                 this.successHandler(cards);
             }
         } catch (e) {
-            this.errorHandler(e);
+            this.errorHandler(e, ERROR_CODE_FETCH_SKILLS);
         }
     }
 
@@ -253,7 +259,7 @@ class Metadata extends File {
                 this.successHandler(cards);
             }
         } catch (e) {
-            this.errorHandler(e);
+            this.errorHandler(e, ERROR_CODE_UPDATE_SKILLS);
         }
     }
 
@@ -312,7 +318,7 @@ class Metadata extends File {
                 this.successHandler(editor);
             }
         } catch (e) {
-            this.errorHandler(e);
+            this.errorHandler(e, ERROR_CODE_UPDATE_METADATA);
         }
     }
 
@@ -370,7 +376,7 @@ class Metadata extends File {
                 this.successHandler(editor);
             }
         } catch (e) {
-            this.errorHandler(e);
+            this.errorHandler(e, ERROR_CODE_CREATE_METADATA);
         }
     }
 
@@ -429,7 +435,7 @@ class Metadata extends File {
                 this.successHandler();
             }
         } catch (e) {
-            this.errorHandler(e);
+            this.errorHandler(e, ERROR_CODE_DELETE_METADATA);
         }
     }
 
@@ -534,7 +540,7 @@ class Metadata extends File {
             cache.set(key, metadata);
             this.successHandler(metadata);
         } catch (e) {
-            this.errorHandler(e);
+            this.errorHandler(e, ERROR_CODE_FETCH_EDITORS);
         }
     }
 

@@ -67,7 +67,7 @@ class Base {
     /**
      * @property {Function}
      */
-    errorCallback: Function;
+    errorCallback: (e: ElementsXhrError, code: string) => void;
 
     /**
      * [constructor]
@@ -180,14 +180,14 @@ class Base {
      * @param {Object} data - The response data
      * @param {Function} errorCallback the error callback
      */
-    errorHandler = (error: $AxiosError<any>): void => {
+    errorHandler = (error: $AxiosError<any>, code: string): void => {
         if (!this.isDestroyed() && typeof this.errorCallback === 'function') {
             const { response } = error;
 
             if (response) {
-                this.errorCallback(response.data);
+                this.errorCallback(response.data, code);
             } else {
-                this.errorCallback(error);
+                this.errorCallback(error, code);
             }
         }
     };
@@ -218,7 +218,7 @@ class Base {
      * @param {string} id - The file id
      * @param {Function} successCallback - The success callback
      * @param {Function} errorCallback - The error callback
-     * @param {Object} params request params
+     * @param {Object} requestData - additional request data
      * @param {string} url - API url
      * @returns {Promise}
      */
@@ -226,17 +226,19 @@ class Base {
         id,
         successCallback,
         errorCallback,
-        params,
+        requestData,
         url,
+        errorCode,
     }: {
         id: string,
         successCallback: Function,
         errorCallback: Function,
-        params?: Object,
+        requestData?: Object,
         url?: string,
+        errorCode: string,
     }): Promise<any> {
         const apiUrl = url || this.getUrl(id);
-        return this.makeRequest(HTTP_GET, id, apiUrl, successCallback, errorCallback, params);
+        return this.makeRequest(HTTP_GET, id, apiUrl, errorCode, successCallback, errorCallback, requestData);
     }
 
     /**
@@ -254,14 +256,16 @@ class Base {
         data,
         successCallback,
         errorCallback,
+        errorCode,
     }: {
         id: string,
         url: string,
         data: Object,
         successCallback: Function,
         errorCallback: Function,
+        errorCode: string,
     }): Promise<any> {
-        return this.makeRequest(HTTP_POST, id, url, successCallback, errorCallback, data);
+        return this.makeRequest(HTTP_POST, id, url, errorCode, successCallback, errorCallback, data);
     }
 
     /**
@@ -279,14 +283,16 @@ class Base {
         data,
         successCallback,
         errorCallback,
+        errorCode,
     }: {
         id: string,
         url: string,
         data: Object,
         successCallback: Function,
         errorCallback: Function,
+        errorCode: string,
     }): Promise<any> {
-        return this.makeRequest(HTTP_PUT, id, url, successCallback, errorCallback, data);
+        return this.makeRequest(HTTP_PUT, id, url, errorCode, successCallback, errorCallback, data);
     }
 
     /**
@@ -304,14 +310,16 @@ class Base {
         data,
         successCallback,
         errorCallback,
+        errorCode,
     }: {
         id: string,
         url: string,
         data?: Object,
         successCallback: Function,
         errorCallback: Function,
+        errorCode: string,
     }): Promise<any> {
-        return this.makeRequest(HTTP_DELETE, id, url, successCallback, errorCallback, data);
+        return this.makeRequest(HTTP_DELETE, id, url, errorCode, successCallback, errorCallback, data);
     }
 
     /**
@@ -328,6 +336,7 @@ class Base {
         method: string,
         id: string,
         url: string,
+        errorCode: string,
         successCallback: Function,
         errorCallback: Function,
         requestData: Object = {},
@@ -349,8 +358,8 @@ class Base {
                 ...requestData,
             });
             this.successHandler(data);
-        } catch (error) {
-            this.errorHandler(error);
+        } catch (e) {
+            this.errorHandler(e, errorCode);
         }
     }
 }

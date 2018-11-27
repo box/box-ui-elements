@@ -43,6 +43,32 @@ class FileCollaborators extends MarkerBasedAPI {
 
         this.successCallback({ ...data, entries: collaborators });
     };
+
+    /**
+     * API for fetching collaborators on a file
+     *
+     * @param {string} id - the file id
+     * @param {number} limit - the max number of collaborators to return
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @param {Object} requestData - any additional request data
+     * @returns {Promise<void>}
+     */
+    getFileCollaborators(
+        id: string,
+        limit: number,
+        successCallback: Function,
+        errorCallback: Function,
+        requestData: Object = {},
+    ): void {
+        this.markerGet({
+            id,
+            limit,
+            successCallback,
+            errorCallback,
+            ...requestData,
+        });
+    }
 }
 
 export default FileCollaborators;

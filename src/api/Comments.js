@@ -5,7 +5,15 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../constants';
+import {
+    PERMISSION_CAN_COMMENT,
+    PERMISSION_CAN_DELETE,
+    PERMISSION_CAN_EDIT,
+    ERROR_CODE_CREATE_COMMENT,
+    ERROR_CODE_UPDATE_COMMENT,
+    ERROR_CODE_DELETE_COMMENT,
+    ERROR_CODE_FETCH_COMMENTS,
+} from '../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
 class Comments extends OffsetBasedAPI {
@@ -122,6 +130,7 @@ class Comments extends OffsetBasedAPI {
             id,
             url: this.commentsUrl(),
             data: requestData,
+            errorCode: ERROR_CODE_CREATE_COMMENT,
             successCallback,
             errorCallback,
         });
@@ -169,6 +178,7 @@ class Comments extends OffsetBasedAPI {
         this.put({
             id,
             url: this.commentsUrl(commentId),
+            errorCode: ERROR_CODE_UPDATE_COMMENT,
             data: requestData,
             successCallback,
             errorCallback,
@@ -210,6 +220,7 @@ class Comments extends OffsetBasedAPI {
         this.delete({
             id,
             url: this.commentsUrl(commentId),
+            errorCode: ERROR_CODE_DELETE_COMMENT,
             successCallback,
             errorCallback,
         });
@@ -239,7 +250,7 @@ class Comments extends OffsetBasedAPI {
             return;
         }
 
-        this.offsetGet(fileId, successCallback, errorCallback, ...rest);
+        this.offsetGet(fileId, ERROR_CODE_FETCH_COMMENTS, successCallback, errorCallback, ...rest);
     }
 }
 

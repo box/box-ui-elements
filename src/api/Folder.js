@@ -10,7 +10,7 @@ import flatten from '../util/flatten';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
-import { CACHE_PREFIX_FOLDER } from '../constants';
+import { CACHE_PREFIX_FOLDER, ERROR_CODE_FETCH_FOLDER, ERROR_CODE_CREATE_FOLDER } from '../constants';
 import { getBadItemError } from '../util/error';
 
 class Folder extends Item {
@@ -196,7 +196,9 @@ class Folder extends Item {
                 },
             })
             .then(this.folderSuccessHandler)
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e, ERROR_CODE_FETCH_FOLDER);
+            });
     }
 
     /**
@@ -315,7 +317,9 @@ class Folder extends Item {
                 },
             })
             .then(this.createSuccessHandler)
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e, ERROR_CODE_CREATE_FOLDER);
+            });
     }
 
     /**

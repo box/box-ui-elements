@@ -5,7 +5,15 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT } from '../constants';
+import {
+    PERMISSION_CAN_COMMENT,
+    ERROR_CODE_CREATE_TASK,
+    ERROR_CODE_UPDATE_TASK,
+    ERROR_CODE_DELETE_TASK,
+    ERROR_CODE_FETCH_TASK_ASSIGNMENT,
+    ERROR_CODE_FETCH_TASKS,
+} from '../constants';
+import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
 class Tasks extends Base {
     /**
@@ -34,7 +42,7 @@ class Tasks extends Base {
     }
 
     /**
-     * API for creating a task on a file
+     * API for getting assignments for a given task
      *
      * @param {string} id - a box file id
      * @param {string} taskId - Task ID
@@ -48,10 +56,14 @@ class Tasks extends Base {
         taskId: string,
         successCallback: Function,
         errorCallback: Function,
-        params?: Object,
+        requestData: Object = {
+            params: {
+                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH.toString(),
+            },
+        },
     ): void {
         const url = `${this.tasksUrl(taskId)}/assignments`;
-        this.get({ id, successCallback, errorCallback, params, url });
+        this.get({ id, successCallback, errorCallback, requestData, url, errorCode: ERROR_CODE_FETCH_TASK_ASSIGNMENT });
     }
 
     /**
@@ -101,6 +113,7 @@ class Tasks extends Base {
             id,
             url: this.tasksUrl(),
             data: requestData,
+            errorCode: ERROR_CODE_CREATE_TASK,
             successCallback,
             errorCallback,
         });
@@ -153,6 +166,7 @@ class Tasks extends Base {
             id,
             url: this.tasksUrl(taskId),
             data: requestData,
+            errorCode: ERROR_CODE_UPDATE_TASK,
             successCallback,
             errorCallback,
         });
@@ -191,8 +205,37 @@ class Tasks extends Base {
         this.delete({
             id,
             url: this.tasksUrl(taskId),
+            errorCode: ERROR_CODE_DELETE_TASK,
             successCallback,
             errorCallback,
+        });
+    }
+
+    /**
+     * API for fetching tasks on a file
+     *
+     * @param {string} id - a box file id
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {Object} requestData - additional request data
+     * @returns {Promise<void>}
+     */
+    getTasks(
+        id: string,
+        successCallback: Function,
+        errorCallback: Function,
+        requestData: Object = {
+            params: {
+                fields: TASKS_FIELDS_TO_FETCH.toString(),
+            },
+        },
+    ): void {
+        this.get({
+            id,
+            successCallback,
+            errorCallback,
+            errorCode: ERROR_CODE_FETCH_TASKS,
+            requestData,
         });
     }
 }

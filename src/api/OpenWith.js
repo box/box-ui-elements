@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE } from '../constants';
+import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE, ERROR_CODE_FETCH_INTEGRATIONS } from '../constants';
 
 class OpenWith extends Base {
     /**
@@ -46,6 +46,7 @@ class OpenWith extends Base {
         this.get({
             id: fileId,
             params,
+            errorCode: ERROR_CODE_FETCH_INTEGRATIONS,
             successCallback: openWithIntegrations => {
                 const formattedOpenWithData = this.formatOpenWithData(openWithIntegrations);
                 successCallback(formattedOpenWithData);

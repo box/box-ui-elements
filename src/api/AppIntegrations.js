@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import { TYPE_FILE } from '../constants';
+import { TYPE_FILE, ERROR_CODE_EXECUTE_INTEGRATION } from '../constants';
 
 class AppIntegrations extends Base {
     /**
@@ -52,6 +52,7 @@ class AppIntegrations extends Base {
             id: fileId,
             url: executeURL,
             data: body,
+            errorCode: ERROR_CODE_EXECUTE_INTEGRATION,
             successCallback,
             errorCallback,
         });

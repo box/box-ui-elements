@@ -189,11 +189,11 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         const { api }: Props = this.props;
         const { file }: State = this.state;
         this.setState({ isLoading: true });
-        api.getFileAccessStatsAPI(false).get({
-            id: file.id,
-            successCallback: this.fetchAccessStatsSuccessCallback,
-            errorCallback: this.fetchAccessStatsErrorCallback,
-        });
+        api.getFileAccessStatsAPI(false).getFileAccessStats(
+            file.id,
+            this.fetchAccessStatsSuccessCallback,
+            this.fetchAccessStatsErrorCallback,
+        );
     }
 
     /**

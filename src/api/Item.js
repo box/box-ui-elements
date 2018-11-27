@@ -8,7 +8,15 @@ import noop from 'lodash/noop';
 import setProp from 'lodash/set';
 import Base from './Base';
 import { getBadItemError } from '../util/error';
-import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
+import {
+    ACCESS_NONE,
+    CACHE_PREFIX_SEARCH,
+    CACHE_PREFIX_FOLDER,
+    TYPE_FOLDER,
+    ERROR_CODE_DELETE_ITEM,
+    ERROR_CODE_RENAME_ITEM,
+    ERROR_CODE_SHARE_ITEM,
+} from '../constants';
 
 class Item extends Base {
     /**
@@ -179,7 +187,9 @@ class Item extends Base {
         return this.xhr
             .delete({ url })
             .then(this.deleteSuccessHandler)
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e, ERROR_CODE_DELETE_ITEM);
+            });
     }
 
     /**
@@ -230,7 +240,9 @@ class Item extends Base {
         return this.xhr
             .put({ url: `${this.getUrl(id)}`, data: { name } })
             .then(this.renameSuccessHandler)
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e, ERROR_CODE_RENAME_ITEM);
+            });
     }
 
     /**
@@ -286,7 +298,9 @@ class Item extends Base {
                 },
             })
             .then(this.shareSuccessHandler)
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e, ERROR_CODE_SHARE_ITEM);
+            });
     }
 }
 

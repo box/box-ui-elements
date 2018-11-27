@@ -5,6 +5,7 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
+import { ERROR_CODE_FETCH_VERSIONS } from '../constants';
 
 const ACTION = {
     upload: 'upload',
@@ -48,6 +49,19 @@ class Versions extends OffsetBasedAPI {
 
         this.successCallback({ ...data, entries: versions });
     };
+
+    /**
+     * API for fetching versions on a file
+     *
+     * @param {string} fileId - a box file id
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @param {Array<any>} rest
+     * @returns {void}
+     */
+    getVersions(fileId: string, successCallback: Function, errorCallback: Function, ...rest: Array<any>): void {
+        this.offsetGet(fileId, ERROR_CODE_FETCH_VERSIONS, successCallback, errorCallback, ...rest);
+    }
 }
 
 export default Versions;

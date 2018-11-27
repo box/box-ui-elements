@@ -24,6 +24,11 @@ class MarkerBasedApi extends Base {
     data: Data;
 
     /**
+     * @property {string}
+     */
+    errorCode: string;
+
+    /**
      * Determines if the API has more items to fetch
      *
      * @param {string} marker the marker from the start to start fetching at
@@ -82,7 +87,7 @@ class MarkerBasedApi extends Base {
 
             this.successHandler(this.data);
         } catch (error) {
-            this.errorHandler(error);
+            this.errorHandler(error, this.errorCode);
         }
     }
 
@@ -105,6 +110,7 @@ class MarkerBasedApi extends Base {
         limit = 1000,
         params,
         shouldFetchAll = true,
+        errorCode,
     }: {
         id: string,
         successCallback: Function,
@@ -113,9 +119,11 @@ class MarkerBasedApi extends Base {
         limit?: number,
         params?: Object,
         shouldFetchAll?: boolean,
+        errorCode: string,
     }): Promise<void> {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
+        this.errorCode = errorCode;
 
         return this.markerGetRequest(id, marker, limit, shouldFetchAll, params);
     }
