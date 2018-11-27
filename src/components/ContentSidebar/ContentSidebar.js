@@ -69,7 +69,7 @@ type State = {
     hasBeenManuallyToggled: boolean,
     isLoading: boolean,
     metadataEditors?: Array<MetadataEditor>,
-    view: SidebarView,
+    view?: SidebarView,
 };
 
 class ContentSidebar extends React.PureComponent<Props, State> {
@@ -127,7 +127,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             token,
         });
 
-        this.state = { hasBeenManuallyToggled: false, isLoading: true, view: SIDEBAR_VIEW_NONE };
+        this.state = { hasBeenManuallyToggled: false, isLoading: true };
     }
 
     /**
@@ -267,7 +267,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
         // Only reset the view if prior view is no longer applicable
         if (
-            view === SIDEBAR_VIEW_NONE ||
+            !view ||
             (view === SIDEBAR_VIEW_SKILLS && !canDefaultToSkills) ||
             (view === SIDEBAR_VIEW_ACTIVITY && !canDefaultToActivity) ||
             (view === SIDEBAR_VIEW_DETAILS && !canDefaultToDetails) ||
@@ -402,7 +402,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             'be bcs',
             {
                 [`bcs-${((view: any): string)}`]: !!view,
-                'bcs-is-open': !!view,
+                'bcs-is-open': !!view && view !== SIDEBAR_VIEW_NONE,
             },
             className,
         );
