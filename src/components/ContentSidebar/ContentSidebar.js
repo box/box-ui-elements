@@ -9,6 +9,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import API from '../../api';
 import APIContext from '../APIContext';
@@ -66,6 +67,7 @@ type Props = {
 type State = {
     file?: BoxItem,
     hasBeenManuallyToggled: boolean,
+    isLoading: boolean,
     metadataEditors?: Array<MetadataEditor>,
     view: SidebarView,
 };
@@ -125,7 +127,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             token,
         });
 
-        this.state = { hasBeenManuallyToggled: false, view: SIDEBAR_VIEW_NONE };
+        this.state = { hasBeenManuallyToggled: false, isLoading: true, view: SIDEBAR_VIEW_NONE };
     }
 
     /**
@@ -339,6 +341,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         this.setState(
             {
                 file,
+                isLoading: false,
                 view: this.getDefaultSidebarView(file),
             },
             this.fetchMetadata,
@@ -354,6 +357,9 @@ class ContentSidebar extends React.PureComponent<Props, State> {
      */
     fetchFile(fetchOptions: FetchOptions = {}): void {
         const { fileId }: Props = this.props;
+        this.setState({
+            isLoading: true,
+        });
         if (fileId && SidebarUtils.canHaveSidebar(this.props)) {
             this.api.getFileAPI().getFile(fileId, this.fetchFileSuccessCallback, this.errorCallback, {
                 ...fetchOptions,
@@ -382,7 +388,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             metadataSidebarProps,
             onVersionHistoryClick,
         }: Props = this.props;
-        const { file, metadataEditors, view }: State = this.state;
+        const { file, isLoading, metadataEditors, view }: State = this.state;
         const hasSidebar = SidebarUtils.shouldRenderSidebar(this.props, file, metadataEditors);
 
         if (!hasSidebar) {
@@ -405,23 +411,29 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <aside id={this.id} className={styleClassName}>
                     <div className="be-app-element">
-                        <APIContext.Provider value={(this.api: any)}>
-                            <Sidebar
-                                file={((file: any): BoxItem)}
-                                view={view}
-                                detailsSidebarProps={detailsSidebarProps}
-                                activitySidebarProps={activitySidebarProps}
-                                metadataSidebarProps={metadataSidebarProps}
-                                getPreview={getPreview}
-                                getViewer={getViewer}
-                                hasSkills={hasSkills}
-                                hasDetails={hasDetails}
-                                hasMetadata={hasMetadata}
-                                hasActivityFeed={hasActivityFeed}
-                                onToggle={this.onToggle}
-                                onVersionHistoryClick={onVersionHistoryClick}
-                            />
-                        </APIContext.Provider>
+                        {isLoading ? (
+                            <div className="bcs-loading">
+                                <LoadingIndicator />
+                            </div>
+                        ) : (
+                            <APIContext.Provider value={(this.api: any)}>
+                                <Sidebar
+                                    file={((file: any): BoxItem)}
+                                    view={view}
+                                    detailsSidebarProps={detailsSidebarProps}
+                                    activitySidebarProps={activitySidebarProps}
+                                    metadataSidebarProps={metadataSidebarProps}
+                                    getPreview={getPreview}
+                                    getViewer={getViewer}
+                                    hasSkills={hasSkills}
+                                    hasDetails={hasDetails}
+                                    hasMetadata={hasMetadata}
+                                    hasActivityFeed={hasActivityFeed}
+                                    onToggle={this.onToggle}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                />
+                            </APIContext.Provider>
+                        )}
                     </div>
                 </aside>
             </Internationalize>
