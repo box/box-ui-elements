@@ -7,7 +7,6 @@ import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import omit from 'lodash/omit';
 import Base from './Base';
-import { COMMENTS_FIELDS_TO_FETCH, VERSIONS_FIELDS_TO_FETCH } from '../util/fields';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksAPI from './Tasks';
@@ -24,8 +23,6 @@ import {
 } from '../constants';
 import { sortFeedItems } from '../util/sorter';
 
-const DEFAULT_START = 0;
-const DEFAULT_END = 1000;
 const TASK_INCOMPLETE = 'incomplete';
 const TASK = 'task';
 const TASK_ASSIGNMENT = 'task_assignment';
@@ -184,10 +181,6 @@ class Feed extends Base {
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
-                DEFAULT_START,
-                DEFAULT_END,
-                COMMENTS_FIELDS_TO_FETCH,
-                true,
             );
         });
     }
@@ -201,15 +194,7 @@ class Feed extends Base {
     fetchVersions(): Promise<?FileVersions> {
         this.versionsAPI = new VersionsAPI(this.options);
         return new Promise(resolve => {
-            this.versionsAPI.getVersions(
-                this.id,
-                resolve,
-                this.fetchFeedItemErrorCallback.bind(this, resolve),
-                DEFAULT_START,
-                DEFAULT_END,
-                VERSIONS_FIELDS_TO_FETCH,
-                true,
-            );
+            this.versionsAPI.getVersions(this.id, resolve, this.fetchFeedItemErrorCallback.bind(this, resolve));
         });
     }
 

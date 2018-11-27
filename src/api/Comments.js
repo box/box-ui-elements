@@ -13,6 +13,8 @@ import {
     ERROR_CODE_UPDATE_COMMENT,
     ERROR_CODE_DELETE_COMMENT,
     ERROR_CODE_FETCH_COMMENTS,
+    DEFAULT_FETCH_START,
+    DEFAULT_FETCH_END,
 } from '../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
@@ -240,17 +242,29 @@ class Comments extends OffsetBasedAPI {
         fileId: string,
         permissions: BoxItemPermission,
         successCallback: Function,
-        errorCallback: Function,
-        ...rest: any
+        errorCallback: (e: ElementsXhrError, code: string) => void,
+        offset: number = DEFAULT_FETCH_START,
+        limit: number = DEFAULT_FETCH_END,
+        fields: Array<string> = COMMENTS_FIELDS_TO_FETCH,
+        shouldFetchAll: boolean = true,
     ): void {
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileId);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, ERROR_CODE_FETCH_COMMENTS);
             return;
         }
 
-        this.offsetGet(fileId, ERROR_CODE_FETCH_COMMENTS, successCallback, errorCallback, ...rest);
+        this.offsetGet(
+            fileId,
+            ERROR_CODE_FETCH_COMMENTS,
+            successCallback,
+            errorCallback,
+            offset,
+            limit,
+            fields,
+            shouldFetchAll,
+        );
     }
 }
 

@@ -5,7 +5,8 @@
  */
 
 import OffsetBasedAPI from './OffsetBasedAPI';
-import { ERROR_CODE_FETCH_VERSIONS } from '../constants';
+import { ERROR_CODE_FETCH_VERSIONS, DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
+import { VERSIONS_FIELDS_TO_FETCH } from '../util/fields';
 
 const ACTION = {
     upload: 'upload',
@@ -32,17 +33,15 @@ class Versions extends OffsetBasedAPI {
      * Formats the versions api response to usable data
      * @param {Object} data the api response data
      */
-    successHandler = (data: any): void => {
+    successHandler = (data: FileVersions): void => {
         if (this.isDestroyed() || typeof this.successCallback !== 'function') {
             return;
         }
 
         const { entries } = data;
         const versions = entries.map((version: BoxItemVersion) => {
-            const { modified_by } = version;
             return {
                 ...version,
-                modified_by,
                 action: version.trashed_at ? ACTION.delete : ACTION.upload,
             };
         });
@@ -59,8 +58,25 @@ class Versions extends OffsetBasedAPI {
      * @param {Array<any>} rest
      * @returns {void}
      */
-    getVersions(fileId: string, successCallback: Function, errorCallback: Function, ...rest: Array<any>): void {
-        this.offsetGet(fileId, ERROR_CODE_FETCH_VERSIONS, successCallback, errorCallback, ...rest);
+    getVersions(
+        fileId: string,
+        successCallback: Function,
+        errorCallback: Function,
+        offset: number = DEFAULT_FETCH_START,
+        limit: number = DEFAULT_FETCH_END,
+        fields: Array<string> = VERSIONS_FIELDS_TO_FETCH,
+        shouldFetchAll: boolean = true,
+    ): void {
+        this.offsetGet(
+            fileId,
+            ERROR_CODE_FETCH_VERSIONS,
+            successCallback,
+            errorCallback,
+            offset,
+            limit,
+            fields,
+            shouldFetchAll,
+        );
     }
 }
 
