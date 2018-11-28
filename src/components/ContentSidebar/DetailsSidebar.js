@@ -18,7 +18,7 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { HTTP_STATUS_CODE_FORBIDDEN, FIELD_METADATA_CLASSIFICATION, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
+import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
 import API from '../../api';
 import type { $AxiosXHR } from 'axios'; // eslint-disable-line
 import './DetailsSidebar.scss';
@@ -49,6 +49,7 @@ type Props = {
 type State = {
     accessStats?: FileAccessStats,
     accessStatsError?: Errors,
+    classificationInfo?: any,
     file: BoxItem,
     fileError?: Errors,
     isLoading: boolean,
@@ -74,9 +75,13 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        const { hasAccessStats }: Props = this.props;
+        const { hasAccessStats, hasClassification }: Props = this.props;
         if (hasAccessStats) {
             this.fetchAccessStats();
+        }
+
+        if (hasClassification) {
+            this.fetchClassification();
         }
     }
 
@@ -196,52 +201,36 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         });
     }
 
-    /**
-     * Sucess callback for classification change
-     *
-     * @private
-     * @return {void}
-     */
-    classifiationChangeSuccessCallback = (file: BoxItem) => {
+    fetchClassificationSuccessCallback = (classificationInfo: any): void => {
         this.setState({
-            file,
+            classificationInfo,
             isLoading: false,
         });
     };
 
-    /**
-     * Error callback for classification change
-     *
-     * @private
-     * @return {void}
-     */
-    classifiationChangeErrorCallback = () => {
+    fetchClassificationErrorCallback = (error: $AxiosXHR<any>): void => {
         this.setState({
             isLoading: false,
         });
     };
 
     /**
-     * Refreshes sidebar when classification is changed
+     * Fetches the classification for a file
      *
      * @private
      * @return {void}
      */
-    onClassificationChange = (): void => {
-        const { file }: State = this.state;
+    fetchClassification(): void {
         const { api }: Props = this.props;
+        const { file }: State = this.state;
         this.setState({ isLoading: true });
-        api.getFileAPI().getFile(
-            file.id,
-            this.classifiationChangeSuccessCallback,
-            this.classifiationChangeErrorCallback,
-            {
-                forceFetch: true,
-                updateCache: true,
-                fields: [FIELD_METADATA_CLASSIFICATION],
-            },
+        api.getMetadataAPI(false).getClassification(
+            file,
+            this.fetchClassificationSuccessCallback,
+            this.fetchClassificationErrorCallback,
+            true,
         );
-    };
+    }
 
     /**
      * Add classification click handler
@@ -251,7 +240,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      */
     onClassificationClick = (): void => {
         const { onClassificationClick }: Props = this.props;
-        onClassificationClick(this.onClassificationChange);
+        onClassificationClick(this.fetchClassification);
     };
 
     render() {
@@ -269,7 +258,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             bannerPolicy,
         }: Props = this.props;
 
-        const { accessStats, accessStatsError, file, fileError, isLoading }: State = this.state;
+        const { accessStats, accessStatsError, classificationInfo, file, fileError, isLoading }: State = this.state;
 
         return (
             <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>
@@ -302,6 +291,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                             {...fileError}
                             hasClassification={hasClassification}
                             onClassificationClick={this.onClassificationClick}
+                            classificationInfo={classificationInfo}
                             hasRetentionPolicy={hasRetentionPolicy}
                             retentionPolicy={retentionPolicy}
                             bannerPolicy={bannerPolicy}
