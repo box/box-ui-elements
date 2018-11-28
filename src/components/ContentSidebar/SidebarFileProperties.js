@@ -57,7 +57,7 @@ const SidebarFileProperties = ({
     isLoading,
     intl,
 }: Props) => {
-    const value = getProp(classificationInfo, `${KEY_CLASSIFICATION_TYPE}`);
+    const value = getProp(classificationInfo, KEY_CLASSIFICATION_TYPE);
 
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
