@@ -11,10 +11,11 @@ import ItemProperties from 'box-react-ui/lib/features/item-details/ItemPropertie
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
-import { FIELD_METADATA_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../constants';
+import { KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
 type Props = {
+    classificationInfo?: any,
     file: BoxItem,
     onDescriptionChange: Function,
     hasClassification: boolean,
@@ -44,6 +45,7 @@ export const getClassificationModal = (file: BoxItem, onClassificationClick: ?Fu
 };
 
 const SidebarFileProperties = ({
+    classificationInfo,
     file,
     onDescriptionChange,
     hasClassification,
@@ -55,7 +57,7 @@ const SidebarFileProperties = ({
     isLoading,
     intl,
 }: Props) => {
-    const value = getProp(file, `${FIELD_METADATA_CLASSIFICATION}.${KEY_CLASSIFICATION_TYPE}`);
+    const value = getProp(classificationInfo, `${KEY_CLASSIFICATION_TYPE}`);
 
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
