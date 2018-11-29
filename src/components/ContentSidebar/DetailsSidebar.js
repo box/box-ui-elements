@@ -43,7 +43,8 @@ type PropsWithoutContext = {
 
 type Props = {
     api: API,
-} & PropsWithoutContext;
+} & PropsWithoutContext &
+    ErrorContextProps;
 
 type State = {
     accessStats?: FileAccessStats,
@@ -65,6 +66,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         hasRetentionPolicy: false,
         hasVersions: false,
         onClassificationClick: noop,
+        onError: noop,
     };
 
     constructor(props: Props) {
