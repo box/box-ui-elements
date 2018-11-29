@@ -177,6 +177,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             accessStats: undefined,
             accessStatsError,
         });
+
+        this.props.onError(error, ERROR_CODE_FETCH_CLASSIFICATION, {
+            error,
+        });
     };
 
     /**
