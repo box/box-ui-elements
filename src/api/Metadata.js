@@ -306,9 +306,9 @@ class Metadata extends File {
             if (cachedItem) {
                 const { hasError } = cachedItem;
                 if (hasError) {
-                    errorCallback(cachedItem);
+                    this.errorHandler(cachedItem);
                 } else {
-                    successCallback(cachedItem);
+                    this.successHandler(cachedItem);
                 }
 
                 if (!refreshCache) {
