@@ -2,6 +2,11 @@
 
 exports[`components/ContentSidebar/SidebarFileProperties render() should not render a tooltip if no banner policy body is provided 1`] = `
 <SidebarFileProperties
+  classificationInfo={
+    Object {
+      "Box__Security__Classification__Key": "Public",
+    }
+  }
   file={
     Object {
       "metadata": null,
@@ -26,10 +31,10 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should not ren
       <ItemProperties
         classificationProps={
           Object {
-            "data-resin-target": "addclassification",
+            "data-resin-target": "editclassification",
             "openModal": [MockFunction],
             "tooltip": undefined,
-            "value": undefined,
+            "value": "Public",
           }
         }
         descriptionTextareaProps={
@@ -55,8 +60,9 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should not ren
           </dd>
           <RetentionPolicy />
           <ClassificationProperty
-            data-resin-target="addclassification"
+            data-resin-target="editclassification"
             openModal={[MockFunction]}
+            value="Public"
           >
             <FormattedMessage
               defaultMessage="Classification"
@@ -66,6 +72,25 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should not ren
               <div />
             </FormattedMessage>
             <dd>
+              <div
+                className="mbs"
+              >
+                <ClassificationBadge
+                  tooltipPosition="middle-left"
+                  value="Public"
+                >
+                  <Badge
+                    className="classification-badge"
+                    type="warning"
+                  >
+                    <span
+                      className="badge badge-warning classification-badge"
+                    >
+                      Public
+                    </span>
+                  </Badge>
+                </ClassificationBadge>
+              </div>
               <PlainButton
                 className="lnk"
                 onClick={[MockFunction]}
@@ -76,8 +101,8 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should not ren
                   type="submit"
                 >
                   <FormattedMessage
-                    defaultMessage="Add Classification"
-                    id="boxui.classification.addClassification"
+                    defaultMessage="Edit"
+                    id="boxui.classification.edit"
                   >
                     <div />
                   </FormattedMessage>
@@ -338,15 +363,13 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
       "body": "tooltip value",
     }
   }
+  classificationInfo={
+    Object {
+      "Box__Security__Classification__Key": "Public",
+    }
+  }
   file={
     Object {
-      "metadata": Object {
-        "enterprise": Object {
-          "securityClassification-6VMVochwUWo": Object {
-            "Box__Security__Classification__Key": "Public",
-          },
-        },
-      },
       "permissions": Object {
         "can_upload": false,
       },
@@ -490,6 +513,11 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
       "body": "tooltip value",
     }
   }
+  classificationInfo={
+    Object {
+      "Box__Security__Classification__Key": "Public",
+    }
+  }
   file={
     Object {
       "metadata": null,
@@ -514,10 +542,10 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
       <ItemProperties
         classificationProps={
           Object {
-            "data-resin-target": "addclassification",
+            "data-resin-target": "editclassification",
             "openModal": [MockFunction],
             "tooltip": "tooltip value",
-            "value": undefined,
+            "value": "Public",
           }
         }
         descriptionTextareaProps={
@@ -543,9 +571,10 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
           </dd>
           <RetentionPolicy />
           <ClassificationProperty
-            data-resin-target="addclassification"
+            data-resin-target="editclassification"
             openModal={[MockFunction]}
             tooltip="tooltip value"
+            value="Public"
           >
             <FormattedMessage
               defaultMessage="Classification"
@@ -555,6 +584,71 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
               <div />
             </FormattedMessage>
             <dd>
+              <div
+                className="mbs"
+              >
+                <ClassificationBadge
+                  tooltip="tooltip value"
+                  tooltipPosition="middle-left"
+                  value="Public"
+                >
+                  <Tooltip
+                    constrainToScrollParent={false}
+                    constrainToWindow={true}
+                    position="middle-left"
+                    text="tooltip value"
+                    theme="default"
+                  >
+                    <TetherComponent
+                      attachment="middle right"
+                      bodyElement={
+                        <body>
+                          <textarea
+                            style="min-height: 0 !important; max-height: none !important; height: 0px !important; visibility: hidden !important; overflow: hidden !important; position: absolute !important; z-index: -1000 !important; top: 0px !important; right: 0px;"
+                          />
+                        </body>
+                      }
+                      classPrefix="tooltip"
+                      constraints={
+                        Array [
+                          Object {
+                            "attachment": "together",
+                            "to": "window",
+                          },
+                        ]
+                      }
+                      enabled={false}
+                      renderElementTag="div"
+                      renderElementTo={null}
+                      targetAttachment="middle left"
+                    >
+                      <Badge
+                        className="classification-badge"
+                        key=".0"
+                        onBlur={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                        tabIndex="0"
+                        type="warning"
+                      >
+                        <span
+                          className="badge badge-warning classification-badge"
+                          onBlur={[Function]}
+                          onFocus={[Function]}
+                          onKeyDown={[Function]}
+                          onMouseEnter={[Function]}
+                          onMouseLeave={[Function]}
+                          tabIndex="0"
+                        >
+                          Public
+                        </span>
+                      </Badge>
+                    </TetherComponent>
+                  </Tooltip>
+                </ClassificationBadge>
+              </div>
               <PlainButton
                 className="lnk"
                 onClick={[MockFunction]}
@@ -565,8 +659,8 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
                   type="submit"
                 >
                   <FormattedMessage
-                    defaultMessage="Add Classification"
-                    id="boxui.classification.addClassification"
+                    defaultMessage="Edit"
+                    id="boxui.classification.edit"
                   >
                     <div />
                   </FormattedMessage>

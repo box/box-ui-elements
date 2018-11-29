@@ -2,7 +2,6 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import messages from '../../messages';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
-import { FIELD_METADATA_CLASSIFICATION } from '../../../constants';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
@@ -101,7 +100,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.setState = jest.fn();
             instance.fetchAccessStatsSuccessCallback('stats');
             expect(instance.setState).toBeCalledWith({
-                isLoading: false,
+                isLoadingAccessStats: false,
                 accessStats: 'stats',
                 accessStatsError: undefined,
             });
@@ -115,7 +114,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.setState = jest.fn();
             instance.fetchAccessStatsErrorCallback();
             expect(instance.setState).toBeCalledWith({
-                isLoading: false,
+                isLoadingAccessStats: false,
                 accessStats: undefined,
                 accessStatsError: {
                     maskError: {
@@ -134,7 +133,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
                 status: 403,
             });
             expect(instance.setState).toBeCalledWith({
-                isLoading: false,
+                isLoadingAccessStats: false,
                 accessStats: undefined,
                 accessStatsError: {
                     error: messages.fileAccessStatsPermissionsError,
@@ -155,7 +154,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             const instance = wrapper.instance();
             instance.setState = jest.fn();
             instance.fetchAccessStats();
-            expect(instance.setState).toBeCalledWith({ isLoading: true });
+            expect(instance.setState).toBeCalledWith({ isLoadingAccessStats: true });
             expect(getStats).toBeCalledWith({
                 id: file.id,
                 successCallback: instance.fetchAccessStatsSuccessCallback,
@@ -195,40 +194,14 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         });
     });
 
-    describe('onClassificationChange()', () => {
-        test('should refetch the file', () => {
-            const getFile = jest.fn();
-            const api = {
-                getFileAPI: () => ({
-                    getFile,
-                }),
-            };
-            const wrapper = getWrapper({ api, file });
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
-            instance.onClassificationChange();
-            expect(instance.setState).toBeCalledWith({ isLoading: true });
-            expect(getFile).toBeCalledWith(
-                file.id,
-                instance.classifiationChangeSuccessCallback,
-                instance.classifiationChangeErrorCallback,
-                {
-                    forceFetch: true,
-                    updateCache: true,
-                    fields: [FIELD_METADATA_CLASSIFICATION],
-                },
-            );
-        });
-    });
-
     describe('onClassificationClick()', () => {
-        test('should call onClassificationClick with the refresh function', () => {
+        test('should call onClassificationClick with the classification fetch function', () => {
             const onClassificationClick = jest.fn();
             const wrapper = getWrapper({ onClassificationClick });
             const instance = wrapper.instance();
-            instance.onClassificationChange = jest.fn();
+            instance.fetchClassification = jest.fn();
             instance.onClassificationClick();
-            expect(onClassificationClick).toBeCalledWith(instance.onClassificationChange);
+            expect(onClassificationClick).toBeCalledWith(instance.fetchClassification);
         });
     });
 });
