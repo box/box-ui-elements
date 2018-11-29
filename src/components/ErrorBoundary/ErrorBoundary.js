@@ -10,7 +10,7 @@ import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../const
 import DefaultError from './DefaultError';
 
 type Props = {
-    ErrorComponent: React.Element,
+    errorComponent: React.Element,
     errorOrigin: ErrorOrigins,
     children: React.ChildrenArray<React.Element<any>>,
     onError: (error: ElementsError) => void,
@@ -26,7 +26,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     state: State = {};
 
     static defaultProps = {
-        ErrorComponent: DefaultError,
+        errorComponent: DefaultError,
         onError: noop,
     };
 
@@ -77,7 +77,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     };
 
     render() {
-        const { children, ErrorComponent, ...rest } = this.props;
+        const { children, errorComponent: ErrorComponent, ...rest } = this.props;
         const { error } = this.state;
         if (error) {
             return <ErrorComponent error={error} />;

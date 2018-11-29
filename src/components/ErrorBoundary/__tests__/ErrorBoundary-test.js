@@ -18,7 +18,7 @@ describe('components/ErrorBoundary', () => {
     };
 
     describe('render()', () => {
-        test('the wrapped component when no error is thrown', () => {
+        test('should render the wrapped component when no error is thrown', () => {
             const wrapper = getWrapper();
 
             expect(wrapper).toMatchSnapshot();
@@ -35,7 +35,7 @@ describe('components/ErrorBoundary', () => {
         test('the component specified when an error is thrown', () => {
             const ErrorComponent = () => <div>Error</div>;
             const wrapper = getWrapper({
-                ErrorComponent,
+                errorComponent: ErrorComponent,
             });
 
             simulateError(wrapper);

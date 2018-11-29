@@ -2,7 +2,7 @@
 
 exports[`components/withErrorBoundary should wrap the provided component with an ErrorBoundary and pass the origin as a prop 1`] = `
 <ErrorBoundary
-  ErrorComponent={[Function]}
+  errorComponent={[Function]}
   errorOrigin="foo"
   onError={[Function]}
 >
