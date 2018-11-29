@@ -671,3 +671,15 @@ type ErrorContextProps = {
         origin: ErrorOrigins,
     ) => void,
 };
+
+type ClassificationInfo = {
+    $canEdit: boolean,
+    $id: string,
+    $parent: string,
+    $scope: string,
+    $template: string,
+    $type: string,
+    $typeVersion: number,
+    $version: number,
+    Box__Security__Classification__Key?: string
+};
