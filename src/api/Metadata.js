@@ -274,6 +274,7 @@ class Metadata extends File {
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {boolean} forceFetch - True to clear the cache and make an api call
+     * @param {boolean} refreshCache - True to
      * @return {Promise}
      */
     async getClassification(
@@ -281,6 +282,7 @@ class Metadata extends File {
         successCallback: Function,
         errorCallback: Function,
         forceFetch: boolean = false,
+        refreshCache: boolean = false,
     ): Promise<void> {
         const { id }: BoxItem = file;
         if (!id) {
@@ -300,8 +302,19 @@ class Metadata extends File {
 
         // Return the Cache value if it exists
         if (cache.has(key)) {
-            this.successHandler(cache.get(key));
-            return;
+            const cachedItem = cache.get(key);
+            if (cachedItem) {
+                const { hasError } = cachedItem;
+                if (hasError) {
+                    errorCallback(cachedItem);
+                } else {
+                    successCallback(cachedItem);
+                }
+
+                if (!refreshCache) {
+                    return;
+                }
+            }
         }
 
         try {

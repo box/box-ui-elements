@@ -15,7 +15,7 @@ import { KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
 type Props = {
-    classificationInfo?: any,
+    classificationInfo?: ClassificationInfo,
     file: BoxItem,
     onDescriptionChange: Function,
     hasClassification: boolean,
