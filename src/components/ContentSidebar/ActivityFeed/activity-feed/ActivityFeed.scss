@@ -96,6 +96,8 @@
 
         .selector-dropdown-wrapper {
             width: 100%;
+            // Override z index to prevent a new stacking context under the approval comment form
+            z-index: auto;
         }
     }
 }
