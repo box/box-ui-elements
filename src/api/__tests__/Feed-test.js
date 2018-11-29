@@ -698,12 +698,6 @@ describe('api/Feed', () => {
             });
         });
 
-        test('should not call the error callback if missing parameters', () => {
-            const hasError = true;
-            feed.feedErrorCallback(hasError, e);
-            expect(feed.onError).not.toHaveBeenCalled();
-        });
-
         test('should set hasError only if hasError is set', () => {
             feed.hasError = null;
             expect(feed.hasError).toBe(null);

@@ -55,7 +55,10 @@ class Versions extends OffsetBasedAPI {
      * @param {string} fileId - a box file id
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
-     * @param {Array<any>} rest
+     * @param {number} offset - the offset of the starting version index
+     * @param {number} limit - the max number of versions to fetch
+     * @param {Array} fields - the fields to fetch
+     * @param {boolean} shouldFetchAll - true if all versions should be fetched
      * @returns {void}
      */
     getVersions(

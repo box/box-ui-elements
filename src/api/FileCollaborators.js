@@ -49,11 +49,11 @@ class FileCollaborators extends MarkerBasedAPI {
      * API for fetching collaborators on a file
      *
      * @param {string} id - the file id
-     * @param {number} limit - the max number of collaborators to return
      * @param {Function} successCallback - the success callback
      * @param {Function} errorCallback - the error callback
      * @param {Object} requestData - any additional request data
-     * @returns {Promise<void>}
+     * @param {number} limit - the max number of collaborators to return
+     * @returns {void}
      */
     getFileCollaborators(
         id: string,

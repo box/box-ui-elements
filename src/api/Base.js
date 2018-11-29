@@ -72,7 +72,7 @@ class Base {
     /**
      * @property {Function}
      */
-    errorCallback: (e: ElementsXhrError, code: string) => void;
+    errorCallback: ElementsErrorCallback;
 
     /**
      * [constructor]

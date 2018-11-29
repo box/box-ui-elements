@@ -170,7 +170,6 @@ class Feed extends Base {
      * Fetches the comments for a file
      *
      * @param {Object} permissions - the file permissions
-     * @param {Function} errorCallback - the function which will be called on error
      * @return {Promise} - the file comments
      */
     fetchComments(permissions: BoxItemPermission): Promise<?Comments> {
@@ -188,7 +187,6 @@ class Feed extends Base {
     /**
      * Fetches the versions for a file
      *
-     * @param {Function} errorCallback - the function which will be called on error
      * @return {Promise} - the file versions
      */
     fetchVersions(): Promise<?FileVersions> {
@@ -201,7 +199,6 @@ class Feed extends Base {
     /**
      * Fetches the tasks for a file
      *
-     * @param errorCallback - the function which will be called on error
      * @return {Promise} - the feed items
      */
     fetchTasks(): Promise<?Tasks> {
@@ -222,8 +219,9 @@ class Feed extends Base {
      * Error callback for fetching feed items.
      * Should only call the error callback if the response is a 401, 429 or >= 500
      *
+     * @param {Function} resolve - the function which will be called on error
      * @param {Object} e - the axios error
-     * @param {Function} errorCallback - the function which will be called on error
+     * @param {string} code - the error code
      * @return {void}
      */
     fetchFeedItemErrorCallback(resolve: Function, e: ElementsXhrError, code: string) {
@@ -425,8 +423,9 @@ class Feed extends Base {
     /**
      * Error callback for deleting a comment
      *
+     * @param {ElementsXhrError} e - the error returned by the API
+     * @param {string} code - the error code
      * @param {string} commentId - the comment id
-     * @param {Function} errorCallback - the error callback
      * @return {void}
      */
     deleteCommentErrorCallback = (e: ElementsXhrError, code: string, commentId: string) => {
@@ -640,17 +639,16 @@ class Feed extends Base {
      * Network error callback
      *
      * @param {boolean} hasError - true if the UI should display an error
-     * @param {Error} error - Axios error object
-     * @param {Function} errorCallback - the optional error callback to be executed
+     * @param {ElementsXhrError} e - the error returned by the API
      * @param {string} code - the error code for the error which occured
      * @return {void}
      */
-    feedErrorCallback = (hasError: boolean = false, e: ElementsXhrError, code?: string): void => {
+    feedErrorCallback = (hasError: boolean = false, e: ElementsXhrError, code: string): void => {
         if (hasError) {
             this.hasError = true;
         }
 
-        if (!this.isDestroyed() && this.onError && code) {
+        if (!this.isDestroyed() && this.onError) {
             this.onError(e, code, {
                 error: e,
                 [IS_ERROR_DISPLAYED]: hasError,
@@ -786,8 +784,8 @@ class Feed extends Base {
      * Callback for failed creation of a Comment.
      *
      * @param {Object} e - The axios error
+     * @param {string} code - the error code
      * @param {string} id - ID of the feed item to update
-     * @param {Function} errorCallback - the error callback
      * @return {void}
      */
     createCommentErrorCallback = (e: ElementsXhrError, code: string, id: string) => {
@@ -806,7 +804,7 @@ class Feed extends Base {
      * @param {string} title - The error message title.
      * @return {Object} An error message object
      */
-    createFeedError(message: string, title?: string = messages.errorOccured) {
+    createFeedError(message: string, title: string = messages.errorOccured) {
         return {
             error: { message, title },
         };
