@@ -101,22 +101,6 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         });
     });
 
-    describe('componentWillUnmount()', () => {
-        test('should set loading state back to clean, to use loading UI on next run', () => {
-            const wrapper = getWrapper(
-                { isLoadingAccessStats: true, isLoadingClassification: true },
-                { disableLifecycleMethods: true },
-            );
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
-            instance.componentWillUnmount();
-            expect(instance.setState).toHaveBeenCalledWith({
-                isLoadingAccessStats: false,
-                isLoadingClassification: false,
-            });
-        });
-    });
-
     describe('fetchAccessStatsSuccessCallback()', () => {
         test('should update the file state', () => {
             const wrapper = getWrapper();
@@ -201,14 +185,14 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
     });
 
     describe('fetchClassificationSuccessCallback', () => {
-        test('should update the classificationInfo state', () => {
+        test('should update the classification state', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.setState = jest.fn();
             instance.fetchClassificationSuccessCallback('classification');
             expect(instance.setState).toBeCalledWith({
                 isLoadingClassification: false,
-                classificationInfo: 'classification',
+                classification: 'classification',
                 classificationError: undefined,
             });
         });
@@ -222,7 +206,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.fetchClassificationErrorCallback();
             expect(instance.setState).toBeCalledWith({
                 isLoadingClassification: false,
-                classificationInfo: undefined,
+                classification: undefined,
                 classificationError: {
                     maskError: {
                         errorHeader: messages.fileClassificationErrorHeaderMessage,
@@ -254,7 +238,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.fetchClassificationErrorCallback(error);
             expect(instance.setState).toBeCalledWith({
                 isLoadingClassification: false,
-                classificationInfo: undefined,
+                classification: undefined,
                 classificationError: {
                     error: messages.fileClassificationPermissionsError,
                 },
@@ -279,8 +263,9 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
                 file,
                 instance.fetchClassificationSuccessCallback,
                 instance.fetchClassificationErrorCallback,
-                false,
-                true,
+                {
+                    refreshCache: true,
+                },
             );
         });
     });

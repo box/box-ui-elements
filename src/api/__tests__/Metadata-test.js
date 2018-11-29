@@ -628,7 +628,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error, false, true);
+            await metadata.getClassification(file, success, error, { refreshCache: true });
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -659,7 +659,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error, true);
+            await metadata.getClassification(file, success, error, { forceFetch: true });
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -699,7 +699,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error, true);
+            await metadata.getClassification(file, success, error, { forceFetch: true });
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -739,7 +739,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error, true);
+            await metadata.getClassification(file, success, error, { forceFetch: true });
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);

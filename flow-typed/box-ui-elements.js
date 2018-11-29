@@ -243,6 +243,10 @@ type MetadataInstance = {
     $template: string,
     $canEdit: boolean,
     $scope: string,
+    $parent: string,
+    $type: string,
+    $typeVersion: number,
+    $version: number,
 };
 
 type MetadataEditor = {
@@ -485,10 +489,10 @@ type Errors = {
 };
 
 type FileAccessStats = {
-    preview_count?: number,
-    download_count?: number,
-    comment_count?: number,
-    edit_count?: number,
+    preview_count: number,
+    download_count: number,
+    comment_count: number,
+    edit_count: number,
     has_count_overflowed: boolean,
 };
 
@@ -673,13 +677,5 @@ type ErrorContextProps = {
 };
 
 type ClassificationInfo = {
-    $canEdit: boolean,
-    $id: string,
-    $parent: string,
-    $scope: string,
-    $template: string,
-    $type: string,
-    $typeVersion: number,
-    $version: number,
     Box__Security__Classification__Key?: string
-};
+} & MetadataInstance;

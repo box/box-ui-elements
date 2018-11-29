@@ -2,7 +2,7 @@
 
 exports[`components/ContentSidebar/SidebarFileProperties render() should not render a tooltip if no banner policy body is provided 1`] = `
 <SidebarFileProperties
-  classificationInfo={
+  classification={
     Object {
       "Box__Security__Classification__Key": "Public",
     }
@@ -363,7 +363,7 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
       "body": "tooltip value",
     }
   }
-  classificationInfo={
+  classification={
     Object {
       "Box__Security__Classification__Key": "Public",
     }
@@ -513,7 +513,7 @@ exports[`components/ContentSidebar/SidebarFileProperties render() should render 
       "body": "tooltip value",
     }
   }
-  classificationInfo={
+  classification={
     Object {
       "Box__Security__Classification__Key": "Public",
     }

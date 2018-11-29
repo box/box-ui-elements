@@ -48,7 +48,7 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
         intl: {
             locale: 'en',
         },
-        classificationInfo: {
+        classification: {
             [KEY_CLASSIFICATION_TYPE]: 'Public',
         },
     };

@@ -55,7 +55,7 @@ type State = {
     accessStats?: FileAccessStats,
     accessStatsError?: Errors,
     isLoadingAccessStats: boolean,
-    classificationInfo?: ClassificationInfo,
+    classification?: ClassificationInfo,
     classificationError?: Errors,
     isLoadingClassification: boolean,
     file: BoxItem,
@@ -92,14 +92,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         if (hasClassification) {
             this.fetchClassification();
         }
-    }
-
-    componentWillUnmount() {
-        // Reset loading state to allow loading spinner
-        this.setState({
-            isLoadingAccessStats: false,
-            isLoadingClassification: false,
-        });
     }
 
     /**
@@ -225,12 +217,12 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     /**
      * File classification fetch success callback.
      *
-     * @param {ClassificationInfo} classificationInfo - Info about the file's classification
+     * @param {ClassificationInfo} classification - Info about the file's classification
      * @return {void}
      */
-    fetchClassificationSuccessCallback = (classificationInfo: ClassificationInfo): void => {
+    fetchClassificationSuccessCallback = (classification: ClassificationInfo): void => {
         this.setState({
-            classificationInfo,
+            classification,
             classificationError: undefined,
             isLoadingClassification: false,
         });
@@ -260,7 +252,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         }
 
         this.setState({
-            classificationInfo: undefined,
+            classification: undefined,
             classificationError,
             isLoadingClassification: false,
         });
@@ -284,8 +276,9 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             file,
             this.fetchClassificationSuccessCallback,
             this.fetchClassificationErrorCallback,
-            false,
-            true,
+            {
+                refreshCache: true,
+            },
         );
     };
 
@@ -318,7 +311,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         const {
             accessStats,
             accessStatsError,
-            classificationInfo,
+            classification,
             classificationError,
             file,
             fileError,
@@ -358,7 +351,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                             {...fileError}
                             hasClassification={hasClassification}
                             onClassificationClick={this.onClassificationClick}
-                            classificationInfo={classificationInfo}
+                            classification={classification}
                             hasRetentionPolicy={hasRetentionPolicy}
                             retentionPolicy={retentionPolicy}
                             bannerPolicy={bannerPolicy}

@@ -273,16 +273,15 @@ class Metadata extends File {
      * @param {BoxItem} file - File object for which we are getting classification
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {boolean} forceFetch - True to clear the cache and make an api call
-     * @param {boolean} refreshCache - True to
+     * @param {boolean|void} [options.forceFetch] - Optionally Bypasses the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally Updates the cache
      * @return {Promise}
      */
     async getClassification(
         file: BoxItem,
         successCallback: Function,
         errorCallback: Function,
-        forceFetch: boolean = false,
-        refreshCache: boolean = false,
+        options: FetchOptions = {},
     ): Promise<void> {
         const { id }: BoxItem = file;
         if (!id) {
@@ -296,7 +295,7 @@ class Metadata extends File {
         this.errorCallback = errorCallback;
 
         // Clear the cache if needed
-        if (forceFetch) {
+        if (options.forceFetch) {
             cache.unset(key);
         }
 
@@ -304,14 +303,8 @@ class Metadata extends File {
         if (cache.has(key)) {
             const cachedItem = cache.get(key);
             if (cachedItem) {
-                const { hasError } = cachedItem;
-                if (hasError) {
-                    this.errorHandler(cachedItem);
-                } else {
-                    this.successHandler(cachedItem);
-                }
-
-                if (!refreshCache) {
+                this.successHandler(cachedItem);
+                if (!options.refreshCache) {
                     return;
                 }
             }

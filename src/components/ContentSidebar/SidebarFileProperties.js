@@ -15,7 +15,7 @@ import { KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
 type Props = {
-    classificationInfo?: ClassificationInfo,
+    classification?: ClassificationInfo,
     file: BoxItem,
     onDescriptionChange: Function,
     hasClassification: boolean,
@@ -45,7 +45,7 @@ export const getClassificationModal = (file: BoxItem, onClassificationClick: ?Fu
 };
 
 const SidebarFileProperties = ({
-    classificationInfo,
+    classification,
     file,
     onDescriptionChange,
     hasClassification,
@@ -57,7 +57,7 @@ const SidebarFileProperties = ({
     isLoading,
     intl,
 }: Props) => {
-    const value = getProp(classificationInfo, KEY_CLASSIFICATION_TYPE);
+    const value = getProp(classification, KEY_CLASSIFICATION_TYPE);
 
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
