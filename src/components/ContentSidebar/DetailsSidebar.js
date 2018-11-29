@@ -18,7 +18,12 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { ERROR_CODE_FETCH_CLASSIFICATION, HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
+import {
+    ERROR_CODE_FETCH_ACCESS_STATS,
+    ERROR_CODE_FETCH_CLASSIFICATION,
+    HTTP_STATUS_CODE_FORBIDDEN,
+    ORIGIN_DETAILS_SIDEBAR,
+} from '../../constants';
 import API from '../../api';
 import './DetailsSidebar.scss';
 
@@ -180,7 +185,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             accessStatsError,
         });
 
-        this.props.onError(error, ERROR_CODE_FETCH_CLASSIFICATION, {
+        this.props.onError(error, ERROR_CODE_FETCH_ACCESS_STATS, {
             error,
         });
     };
