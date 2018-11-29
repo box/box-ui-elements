@@ -26,7 +26,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     state: State = {};
 
     static defaultProps = {
-        errorComponent: DefaultError,
+        ErrorComponent: DefaultError,
         onError: noop,
     };
 

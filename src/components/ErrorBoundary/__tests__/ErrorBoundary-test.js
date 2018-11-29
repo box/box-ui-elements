@@ -35,7 +35,7 @@ describe('components/ErrorBoundary', () => {
         test('the component specified when an error is thrown', () => {
             const ErrorComponent = () => <div>Error</div>;
             const wrapper = getWrapper({
-                errorComponent: ErrorComponent,
+                ErrorComponent,
             });
 
             simulateError(wrapper);
@@ -45,6 +45,7 @@ describe('components/ErrorBoundary', () => {
     });
 
     describe('componentDidCatch()', () => {
+        const origin = 'some_component';
         test('should set the error state and call the onError callback', () => {
             const onError = jest.fn();
             const wrapper = getWrapper({
