@@ -67,6 +67,8 @@ class Feed extends Base {
     hasError: boolean;
 
     /**
+     * The function to be called immediately after an error occurs
+     *
      * @property {Function}
      */
     onError: ?ErrorCallback;
