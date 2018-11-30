@@ -197,8 +197,8 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
                 classification: undefined,
                 classificationError: {
                     inlineError: {
-                        errorHeader: messages.fileClassificationErrorHeaderMessage,
-                        errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
+                        title: messages.fileClassificationErrorHeaderMessage,
+                        content: messages.defaultErrorMaskSubHeaderMessage,
                     },
                 },
             });

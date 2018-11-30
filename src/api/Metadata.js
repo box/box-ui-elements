@@ -285,15 +285,17 @@ class Metadata extends File {
         options: FetchOptions = {},
     ): Promise<void> {
         const { id }: BoxItem = file;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+        this.errorCode = ERROR_CODE_FETCH_CLASSIFICATION;
+
         if (!id) {
-            errorCallback(getBadItemError(), ERROR_CODE_FETCH_CLASSIFICATION);
+            this.errorHandler(getBadItemError());
             return;
         }
 
         const cache: APICache = this.getCache();
         const key = this.getClassificationCacheKey(id);
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
 
         // Clear the cache if needed
         if (options.forceFetch) {
@@ -310,7 +312,6 @@ class Metadata extends File {
         }
 
         try {
-            this.errorCode = ERROR_CODE_FETCH_CLASSIFICATION;
             const classification = await this.xhr.get({
                 url: this.getMetadataUrl(id, METADATA_SCOPE_ENTERPRISE, METADATA_TEMPLATE_CLASSIFICATION),
                 id: getTypedFileId(id),
