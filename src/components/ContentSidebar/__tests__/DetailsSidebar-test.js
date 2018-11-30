@@ -196,7 +196,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
                 isLoadingClassification: false,
                 classification: undefined,
                 classificationError: {
-                    inline: {
+                    inlineError: {
                         errorHeader: messages.fileClassificationErrorHeaderMessage,
                         errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
                     },
@@ -215,23 +215,6 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.setState = jest.fn();
             instance.fetchClassificationErrorCallback(error, code);
             expect(onError).toBeCalledWith(error, code, { error });
-        });
-
-        test('should set an error if user is forbidden from fetching classification info', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            const error = {
-                status: 403,
-            };
-            instance.setState = jest.fn();
-            instance.fetchClassificationErrorCallback(error);
-            expect(instance.setState).toBeCalledWith({
-                isLoadingClassification: false,
-                classification: undefined,
-                classificationError: {
-                    error: messages.fileClassificationPermissionsError,
-                },
-            });
         });
     });
 

@@ -159,7 +159,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             };
         } else {
             accessStatsError = {
-                inlineError: {
+                maskError: {
                     errorHeader: messages.fileAccessStatsErrorHeaderMessage,
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
                 },
@@ -228,20 +228,12 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchClassificationErrorCallback = (error: ElementsXhrError, code: string): void => {
-        let classificationError;
-
-        if (getProp(error, 'status') === HTTP_STATUS_CODE_FORBIDDEN) {
-            classificationError = {
-                error: messages.fileClassificationPermissionsError,
-            };
-        } else {
-            classificationError = {
-                maskError: {
-                    errorHeader: messages.fileClassificationErrorHeaderMessage,
-                    errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
-                },
-            };
-        }
+        const classificationError = {
+            inlineError: {
+                errorHeader: messages.fileClassificationErrorHeaderMessage,
+                errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
+            },
+        };
 
         this.setState({
             classification: undefined,
