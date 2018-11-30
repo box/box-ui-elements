@@ -10,6 +10,7 @@ import File from './File';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../util/error';
 import { getTypedFileId } from '../util/file';
 import {
+    ERROR_CODE_FETCH_CLASSIFICATION,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
@@ -21,6 +22,11 @@ import {
 } from '../constants';
 
 class Metadata extends File {
+    /**
+     * Error Code emitted with errors, from errorHandler()
+     */
+    errorCode: string;
+
     /**
      * Creates a key for the metadata cache
      *
@@ -39,6 +45,16 @@ class Metadata extends File {
      */
     getSkillsCacheKey(id: string): string {
         return `${this.getMetadataCacheKey(id)}_skills`;
+    }
+
+    /**
+     * Creates a key for the classification cache
+     *
+     * @param {string} id - Folder id
+     * @return {string} key
+     */
+    getClassificationCacheKey(id: string): string {
+        return `${this.getMetadataCacheKey(id)}_classification`;
     }
 
     /**
@@ -251,6 +267,64 @@ class Metadata extends File {
                 this.merge(this.getCacheKey(id), FIELD_METADATA_SKILLS, metadata.data);
                 this.getCache().set(this.getSkillsCacheKey(id), cards);
                 this.successHandler(cards);
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
+     * Gets classification for a file.
+     *
+     * @param {BoxItem} file - File object for which we are getting classification
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {boolean|void} [options.forceFetch] - Optionally Bypasses the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally Updates the cache
+     * @return {Promise}
+     */
+    async getClassification(
+        file: BoxItem,
+        successCallback: Function,
+        errorCallback: Function,
+        options: FetchOptions = {},
+    ): Promise<void> {
+        const { id }: BoxItem = file;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+        this.errorCode = ERROR_CODE_FETCH_CLASSIFICATION;
+
+        if (!id) {
+            this.errorHandler(getBadItemError());
+            return;
+        }
+
+        const cache: APICache = this.getCache();
+        const key = this.getClassificationCacheKey(id);
+
+        // Clear the cache if needed
+        if (options.forceFetch) {
+            cache.unset(key);
+        }
+
+        // Return the Cache value if it exists
+        if (cache.has(key)) {
+            this.successHandler(cache.get(key));
+
+            if (!options.refreshCache) {
+                return;
+            }
+        }
+
+        try {
+            const classification = await this.xhr.get({
+                url: this.getMetadataUrl(id, METADATA_SCOPE_ENTERPRISE, METADATA_TEMPLATE_CLASSIFICATION),
+                id: getTypedFileId(id),
+            });
+
+            if (!this.isDestroyed()) {
+                cache.set(key, classification.data);
+                this.successHandler(cache.get(key));
             }
         } catch (e) {
             this.errorHandler(e);

@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import messages from '../../messages';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
-import { FIELD_METADATA_CLASSIFICATION } from '../../../constants';
+import { ERROR_CODE_FETCH_CLASSIFICATION, IS_ERROR_DISPLAYED } from '../../../constants';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
@@ -92,6 +92,13 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.componentDidMount();
             expect(instance.fetchAccessStats).toHaveBeenCalled();
         });
+        test('should call fetchClassification when hasClassification is true', () => {
+            const wrapper = getWrapper({ hasClassification: true }, { disableLifecycleMethods: true });
+            const instance = wrapper.instance();
+            instance.fetchClassification = jest.fn();
+            instance.componentDidMount();
+            expect(instance.fetchClassification).toHaveBeenCalled();
+        });
     });
 
     describe('fetchAccessStatsSuccessCallback()', () => {
@@ -101,7 +108,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.setState = jest.fn();
             instance.fetchAccessStatsSuccessCallback('stats');
             expect(instance.setState).toBeCalledWith({
-                isLoading: false,
+                isLoadingAccessStats: false,
                 accessStats: 'stats',
                 accessStatsError: undefined,
             });
@@ -115,7 +122,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.setState = jest.fn();
             instance.fetchAccessStatsErrorCallback();
             expect(instance.setState).toBeCalledWith({
-                isLoading: false,
+                isLoadingAccessStats: false,
                 accessStats: undefined,
                 accessStatsError: {
                     maskError: {
@@ -126,15 +133,16 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             });
         });
 
-        test('should set error if forbidden', () => {
+        test('should set an error if user is forbidden from fetching the access stats', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            instance.setState = jest.fn();
-            instance.fetchAccessStatsErrorCallback({
+            const error = {
                 status: 403,
-            });
+            };
+            instance.setState = jest.fn();
+            instance.fetchAccessStatsErrorCallback(error);
             expect(instance.setState).toBeCalledWith({
-                isLoading: false,
+                isLoadingAccessStats: false,
                 accessStats: undefined,
                 accessStatsError: {
                     error: messages.fileAccessStatsPermissionsError,
@@ -155,12 +163,105 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             const instance = wrapper.instance();
             instance.setState = jest.fn();
             instance.fetchAccessStats();
-            expect(instance.setState).toBeCalledWith({ isLoading: true });
+            expect(instance.setState).toBeCalledWith({ isLoadingAccessStats: true });
             expect(getStats).toBeCalledWith({
                 id: file.id,
                 successCallback: instance.fetchAccessStatsSuccessCallback,
                 errorCallback: instance.fetchAccessStatsErrorCallback,
             });
+        });
+    });
+
+    describe('fetchClassificationSuccessCallback', () => {
+        test('should update the classification state', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.fetchClassificationSuccessCallback('classification');
+            expect(instance.setState).toBeCalledWith({
+                isLoadingClassification: false,
+                classification: 'classification',
+                classificationError: undefined,
+            });
+        });
+    });
+
+    describe('fetchClassificationErrorCallback', () => {
+        test('should set an inlineError if there is an error in fetching the classification', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.fetchClassificationErrorCallback();
+            expect(instance.setState).toBeCalledWith({
+                isLoadingClassification: false,
+                classification: undefined,
+                classificationError: {
+                    inlineError: {
+                        title: messages.fileClassificationErrorHeaderMessage,
+                        content: messages.defaultErrorMaskSubHeaderMessage,
+                    },
+                },
+            });
+        });
+
+        test('should invoke onError prop with error details', () => {
+            const onError = jest.fn();
+            const code = ERROR_CODE_FETCH_CLASSIFICATION;
+            const error = {};
+            const wrapper = getWrapper({ onError });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.fetchClassificationErrorCallback(error, code);
+            expect(onError).toBeCalledWith(error, code, {
+                error,
+                [IS_ERROR_DISPLAYED]: true,
+            });
+        });
+
+        test('should not display inline error when a forbidden error', () => {
+            const onError = jest.fn();
+            const code = ERROR_CODE_FETCH_CLASSIFICATION;
+            const error = {
+                status: 403,
+            };
+            const wrapper = getWrapper({ onError });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.fetchClassificationErrorCallback(error, code);
+            expect(onError).toBeCalledWith(error, code, {
+                error,
+                [IS_ERROR_DISPLAYED]: false,
+            });
+
+            expect(instance.setState).toBeCalledWith({
+                isLoadingClassification: false,
+                classification: undefined,
+                classificationError: undefined,
+            });
+        });
+    });
+
+    describe('fetchClassification', () => {
+        test('should fetch the classification info', () => {
+            const getClassification = jest.fn();
+            const api = {
+                getMetadataAPI: () => ({
+                    getClassification,
+                }),
+            };
+            const wrapper = getWrapper({ api, file });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.fetchClassification();
+            expect(instance.setState).toBeCalledWith({ isLoadingClassification: true });
+            expect(getClassification).toBeCalledWith(
+                file,
+                instance.fetchClassificationSuccessCallback,
+                instance.fetchClassificationErrorCallback,
+                {
+                    refreshCache: true,
+                },
+            );
         });
     });
 
@@ -195,40 +296,14 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         });
     });
 
-    describe('onClassificationChange()', () => {
-        test('should refetch the file', () => {
-            const getFile = jest.fn();
-            const api = {
-                getFileAPI: () => ({
-                    getFile,
-                }),
-            };
-            const wrapper = getWrapper({ api, file });
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
-            instance.onClassificationChange();
-            expect(instance.setState).toBeCalledWith({ isLoading: true });
-            expect(getFile).toBeCalledWith(
-                file.id,
-                instance.classifiationChangeSuccessCallback,
-                instance.classifiationChangeErrorCallback,
-                {
-                    forceFetch: true,
-                    updateCache: true,
-                    fields: [FIELD_METADATA_CLASSIFICATION],
-                },
-            );
-        });
-    });
-
     describe('onClassificationClick()', () => {
-        test('should call onClassificationClick with the refresh function', () => {
+        test('should call onClassificationClick with the classification fetch function', () => {
             const onClassificationClick = jest.fn();
             const wrapper = getWrapper({ onClassificationClick });
             const instance = wrapper.instance();
-            instance.onClassificationChange = jest.fn();
+            instance.fetchClassification = jest.fn();
             instance.onClassificationClick();
-            expect(onClassificationClick).toBeCalledWith(instance.onClassificationChange);
+            expect(onClassificationClick).toBeCalledWith(instance.fetchClassification);
         });
     });
 });
