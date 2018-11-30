@@ -888,11 +888,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'File classification error message',
         defaultMessage: 'Something went wrong when fetching classification.',
     },
-    fileClassificationPermissionsError: {
-        id: 'be.fileClassificationPermissionsError',
-        description: 'The text for when the user does not have permissions to see classification.',
-        defaultMessage: 'Sorry, you do not have permission to see classification for this file.',
-    },
     currentUserErrorHeaderMessage: {
         id: 'be.currentUserErrorHeaderMessage',
         description: 'Current user error message',
