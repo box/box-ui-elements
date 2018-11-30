@@ -32,7 +32,7 @@ describe('components/ErrorBoundary', () => {
             expect(wrapper.find('DefaultError').exists()).toBe(true);
         });
 
-        test('the component specified when an error is thrown', () => {
+        test('should render the component specified when an error is thrown', () => {
             const ErrorComponent = () => <div>Error</div>;
             const wrapper = getWrapper({
                 errorComponent: ErrorComponent,
