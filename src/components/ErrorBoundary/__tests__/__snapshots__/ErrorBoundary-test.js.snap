@@ -1,14 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ErrorBoundary should render nothing by default when an error is thrown 1`] = `""`;
-
-exports[`components/ErrorBoundary should render the component specified when an error is thrown 1`] = `
-<div>
-  Error
-</div>
-`;
-
-exports[`components/ErrorBoundary should render the wrapped component when no error is thrown 1`] = `
+exports[`components/ErrorBoundary render() should render the wrapped component when no error is thrown 1`] = `
 <WrappedComponent
   onError={[Function]}
 />
