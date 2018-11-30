@@ -179,6 +179,7 @@ export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
 export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
+export const ERROR_CODE_CHILD_FOLDER_FAILED_UPLOAD = 'child_folder_failed_upload';
 export const ERROR_CODE_FETCH_FILE = 'fetch_file_error';
 export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
 export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';

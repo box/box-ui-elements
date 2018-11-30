@@ -5,7 +5,12 @@
  */
 import noop from 'lodash/noop';
 import FolderAPI from '../Folder';
-import { STATUS_COMPLETE, ERROR_CODE_ITEM_NAME_IN_USE } from '../../constants';
+import {
+    STATUS_COMPLETE,
+    STATUS_ERROR,
+    ERROR_CODE_CHILD_FOLDER_FAILED_UPLOAD,
+    ERROR_CODE_ITEM_NAME_IN_USE,
+} from '../../constants';
 import { getFileFromEntry } from '../../util/uploads';
 
 class FolderUploadNode {
@@ -66,7 +71,12 @@ class FolderUploadNode {
         this.parentFolderId = parentFolderId;
 
         await this.createAndUploadFolder(errorCallback, isRoot);
+        if (!this.getFolderId()) {
+            // Folder was not successfully created. Do not attempt to upload its contents.
+            return;
+        }
         this.addFilesToUploadQueue(this.getFormattedFiles(), noop, true);
+
         await this.uploadChildFolders(errorCallback);
     }
 
@@ -96,17 +106,28 @@ class FolderUploadNode {
     createAndUploadFolder = async (errorCallback: Function, isRoot: boolean) => {
         await this.buildCurrentFolderFromEntry();
 
+        let errorEncountered = false;
+        let errorCode = '';
         try {
             const data = await this.createFolder();
             this.folderId = data.id;
         } catch (error) {
+            errorEncountered = true;
+            errorCode = error.code;
             // @TODO: Handle 429
             if (error.code !== ERROR_CODE_ITEM_NAME_IN_USE) {
-                errorCallback(error);
-                return;
+                if (!isRoot) {
+                    // If this is a child folder of the folder being uploaded, this errorCallback will set
+                    // an error message on the root folder being uploaded. Set a generic messages saying that a
+                    // child has caused the error. The child folder will be tagged with the error message in
+                    // the call to this.addFolderToUploadQueue below
+                    errorCallback({ code: ERROR_CODE_CHILD_FOLDER_FAILED_UPLOAD });
+                } else {
+                    errorCallback(error);
+                }
+            } else {
+                this.folderId = error.context_info.conflicts[0].id;
             }
-
-            this.folderId = error.context_info.conflicts[0].id;
         }
 
         // The root folder has already been added to the upload queue in ContentUploader
@@ -114,16 +135,29 @@ class FolderUploadNode {
             return;
         }
 
-        this.addFolderToUploadQueue([
-            {
-                extension: '',
-                name: this.name,
-                status: STATUS_COMPLETE,
-                isFolder: true,
-                size: 1,
-                progress: 100,
-            },
-        ]);
+        const folderObject: {
+            extension: string,
+            name: string,
+            status: string,
+            isFolder: boolean,
+            size: number,
+            progress: number,
+            error?: Object,
+        } = {
+            extension: '',
+            name: this.name,
+            status: STATUS_COMPLETE,
+            isFolder: true,
+            size: 1,
+            progress: 100,
+        };
+
+        if (errorEncountered) {
+            folderObject.status = STATUS_ERROR;
+            folderObject.error = { code: errorCode };
+        }
+
+        this.addFolderToUploadQueue([folderObject]);
     };
 
     /**
@@ -230,6 +264,14 @@ class FolderUploadNode {
 
             this.readEntry(reader, resolve);
         });
+    };
+
+    /**
+     * Returns the folderId
+     * @returns {string}
+     */
+    getFolderId = (): string => {
+        return this.folderId;
     };
 }
 

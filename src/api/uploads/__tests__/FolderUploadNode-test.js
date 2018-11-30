@@ -36,6 +36,7 @@ describe('api/uploads/FolderUploadNode', () => {
             folderUploadNodeInstance.addFilesToUploadQueue = jest.fn();
             folderUploadNodeInstance.uploadChildFolders = jest.fn();
             folderUploadNodeInstance.getFormattedFiles = jest.fn(() => files);
+            folderUploadNodeInstance.getFolderId = jest.fn(() => 123);
 
             await folderUploadNodeInstance.upload(parentFolderId, errorCallback, isRoot);
 
