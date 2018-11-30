@@ -10,6 +10,7 @@ import File from './File';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../util/error';
 import { getTypedFileId } from '../util/file';
 import {
+    ERROR_CODE_FETCH_CLASSIFICATION,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
@@ -311,6 +312,7 @@ class Metadata extends File {
         }
 
         try {
+            this.errorCode = ERROR_CODE_FETCH_CLASSIFICATION;
             const classification = await this.xhr.get({
                 url: this.getMetadataUrl(id, METADATA_SCOPE_ENTERPRISE, METADATA_TEMPLATE_CLASSIFICATION),
                 id: getTypedFileId(id),

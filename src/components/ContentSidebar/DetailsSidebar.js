@@ -18,12 +18,7 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import {
-    ERROR_CODE_FETCH_ACCESS_STATS,
-    ERROR_CODE_FETCH_CLASSIFICATION,
-    HTTP_STATUS_CODE_FORBIDDEN,
-    ORIGIN_DETAILS_SIDEBAR,
-} from '../../constants';
+import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
 import API from '../../api';
 import './DetailsSidebar.scss';
 
@@ -176,10 +171,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             accessStats: undefined,
             accessStatsError,
         });
-
-        this.props.onError(error, ERROR_CODE_FETCH_ACCESS_STATS, {
-            error,
-        });
     };
 
     /**
@@ -233,9 +224,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      *
      * @private
      * @param {ElementsXhrError} error - API error
+     * @param {string} code - Error code
      * @return {void}
      */
-    fetchClassificationErrorCallback = (error: ElementsXhrError): void => {
+    fetchClassificationErrorCallback = (error: ElementsXhrError, code: string): void => {
         let classificationError;
 
         if (getProp(error, 'status') === HTTP_STATUS_CODE_FORBIDDEN) {
@@ -257,7 +249,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             isLoadingClassification: false,
         });
 
-        this.props.onError(error, ERROR_CODE_FETCH_CLASSIFICATION, {
+        this.props.onError(error, code, {
             error,
         });
     };

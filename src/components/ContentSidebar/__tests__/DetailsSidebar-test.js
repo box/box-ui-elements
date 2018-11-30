@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import messages from '../../messages';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
-import { ERROR_CODE_FETCH_ACCESS_STATS, ERROR_CODE_FETCH_CLASSIFICATION } from '../../../constants';
+import { ERROR_CODE_FETCH_CLASSIFICATION } from '../../../constants';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
@@ -133,18 +133,6 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             });
         });
 
-        test('should invoke onError prop with error details', () => {
-            const onError = jest.fn();
-            const error = {
-                status: 403,
-            };
-            const wrapper = getWrapper({ onError });
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
-            instance.fetchAccessStatsErrorCallback(error);
-            expect(onError).toBeCalledWith(error, ERROR_CODE_FETCH_ACCESS_STATS, { error });
-        });
-
         test('should set an error if user is forbidden from fetching the access stats', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
@@ -218,14 +206,15 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
 
         test('should invoke onError prop with error details', () => {
             const onError = jest.fn();
+            const code = ERROR_CODE_FETCH_CLASSIFICATION;
             const error = {
                 status: 403,
             };
             const wrapper = getWrapper({ onError });
             const instance = wrapper.instance();
             instance.setState = jest.fn();
-            instance.fetchClassificationErrorCallback(error);
-            expect(onError).toBeCalledWith(error, ERROR_CODE_FETCH_CLASSIFICATION, { error });
+            instance.fetchClassificationErrorCallback(error, code);
+            expect(onError).toBeCalledWith(error, code, { error });
         });
 
         test('should set an error if user is forbidden from fetching classification info', () => {
