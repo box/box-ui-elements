@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import messages from '../../messages';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
-import { ERROR_CODE_FETCH_CLASSIFICATION } from '../../../constants';
+import { ERROR_CODE_FETCH_CLASSIFICATION, IS_ERROR_DISPLAYED } from '../../../constants';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
@@ -207,6 +207,20 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         test('should invoke onError prop with error details', () => {
             const onError = jest.fn();
             const code = ERROR_CODE_FETCH_CLASSIFICATION;
+            const error = {};
+            const wrapper = getWrapper({ onError });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.fetchClassificationErrorCallback(error, code);
+            expect(onError).toBeCalledWith(error, code, {
+                error,
+                [IS_ERROR_DISPLAYED]: true,
+            });
+        });
+
+        test('should not display inline error when a forbidden error', () => {
+            const onError = jest.fn();
+            const code = ERROR_CODE_FETCH_CLASSIFICATION;
             const error = {
                 status: 403,
             };
@@ -214,7 +228,16 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             const instance = wrapper.instance();
             instance.setState = jest.fn();
             instance.fetchClassificationErrorCallback(error, code);
-            expect(onError).toBeCalledWith(error, code, { error });
+            expect(onError).toBeCalledWith(error, code, {
+                error,
+                [IS_ERROR_DISPLAYED]: false,
+            });
+
+            expect(instance.setState).toBeCalledWith({
+                isLoadingClassification: false,
+                classification: undefined,
+                classificationError: undefined,
+            });
         });
     });
 

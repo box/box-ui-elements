@@ -18,7 +18,7 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
+import { HTTP_STATUS_CODE_FORBIDDEN, IS_ERROR_DISPLAYED, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
 import API from '../../api';
 import './DetailsSidebar.scss';
 
@@ -228,12 +228,17 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchClassificationErrorCallback = (error: ElementsXhrError, code: string): void => {
-        const classificationError = {
-            inlineError: {
-                title: messages.fileClassificationErrorHeaderMessage,
-                content: messages.defaultErrorMaskSubHeaderMessage,
-            },
-        };
+        const isForbiddenError = getProp(error, 'status') === HTTP_STATUS_CODE_FORBIDDEN;
+        let classificationError;
+
+        if (!isForbiddenError) {
+            classificationError = {
+                inlineError: {
+                    title: messages.fileClassificationErrorHeaderMessage,
+                    content: messages.defaultErrorMaskSubHeaderMessage,
+                },
+            };
+        }
 
         this.setState({
             classification: undefined,
@@ -243,6 +248,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
         this.props.onError(error, code, {
             error,
+            [IS_ERROR_DISPLAYED]: !isForbiddenError,
         });
     };
 
