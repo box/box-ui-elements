@@ -868,6 +868,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Inline error title message for file description',
         defaultMessage: 'Something went wrong when saving the description.',
     },
+    defaultErrorMaskHeaderMessage: {
+        id: 'be.defaultErrorMaskHeaderMessage',
+        description: 'Default error mask top message',
+        defaultMessage: 'We’re sorry, something went wrong.',
+    },
     defaultErrorMaskSubHeaderMessage: {
         id: 'be.defaultErrorMaskSubHeaderMessage',
         description: 'Default error mask bottom message',
