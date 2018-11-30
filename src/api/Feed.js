@@ -66,13 +66,6 @@ class Feed extends Base {
      */
     hasError: boolean;
 
-    /**
-     * The function to be called immediately after an error occurs
-     *
-     * @property {Function}
-     */
-    onError: ?ErrorCallback;
-
     constructor(options: Options) {
         super(options);
         this.taskAssignmentsAPI = [];
@@ -147,7 +140,7 @@ class Feed extends Base {
 
         this.id = id;
         this.hasError = false;
-        this.onError = onError;
+        this.errorCallback = onError;
         const versionsPromise = this.fetchVersions();
         const commentsPromise = this.fetchComments(permissions);
         const tasksPromise = this.fetchTasks();
@@ -259,7 +252,7 @@ class Feed extends Base {
         }
 
         this.id = file.id;
-        this.onError = errorCallback;
+        this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, taskId);
         const assignmentAPI = new TaskAssignmentsAPI(this.options);
         this.taskAssignmentsAPI.push(assignmentAPI);
@@ -347,7 +340,7 @@ class Feed extends Base {
         }
 
         this.id = file.id;
-        this.onError = errorCallback;
+        this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, taskId);
         this.tasksAPI = new TasksAPI(this.options);
         this.tasksAPI.updateTask({
@@ -408,7 +401,7 @@ class Feed extends Base {
         }
 
         this.id = file.id;
-        this.onError = errorCallback;
+        this.errorCallback = errorCallback;
         this.updateFeedItem({ isPending: true }, commentId);
 
         this.commentsAPI.deleteComment({
@@ -458,7 +451,7 @@ class Feed extends Base {
             throw getBadItemError();
         }
 
-        this.onError = errorCallback;
+        this.errorCallback = errorCallback;
         const assignmentPromises = assignees.map((assignee: SelectorItem) => {
             return this.createTaskAssignment(file, task, assignee);
         });
@@ -507,7 +500,7 @@ class Feed extends Base {
         }
 
         this.id = file.id;
-        this.onError = errorCallback;
+        this.errorCallback = errorCallback;
         const uuid = uniqueId('task_');
         let dueAtString;
         if (dueAt) {
@@ -605,7 +598,7 @@ class Feed extends Base {
         }
 
         this.id = file.id;
-        this.onError = errorCallback;
+        this.errorCallback = errorCallback;
         this.tasksAPI = new TasksAPI(this.options);
         this.updateFeedItem({ isPending: true }, taskId);
 
@@ -650,8 +643,8 @@ class Feed extends Base {
             this.hasError = true;
         }
 
-        if (!this.isDestroyed() && this.onError) {
-            this.onError(e, code, {
+        if (!this.isDestroyed() && this.errorCallback) {
+            this.errorCallback(e, code, {
                 error: e,
                 [IS_ERROR_DISPLAYED]: hasError,
             });
@@ -875,7 +868,7 @@ class Feed extends Base {
         }
 
         this.id = file.id;
-        this.onError = errorCallback;
+        this.errorCallback = errorCallback;
         this.addPendingItem(this.id, currentUser, commentData);
 
         const message = {};

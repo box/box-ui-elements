@@ -671,7 +671,7 @@ describe('api/Feed', () => {
 
         beforeEach(() => {
             jest.spyOn(global.console, 'error').mockImplementation();
-            feed.onError = jest.fn();
+            feed.errorCallback = jest.fn();
         });
 
         afterEach(() => {
@@ -683,7 +683,7 @@ describe('api/Feed', () => {
             feed.feedErrorCallback(hasError, e, code);
             expect(global.console.error).toBeCalledWith(e);
             expect(feed.hasError).toBe(true);
-            expect(feed.onError).toHaveBeenCalledWith(e, code, {
+            expect(feed.errorCallback).toHaveBeenCalledWith(e, code, {
                 error: e,
                 [IS_ERROR_DISPLAYED]: hasError,
             });
@@ -692,7 +692,7 @@ describe('api/Feed', () => {
         test('should call the error callback with the value of hasError', () => {
             const hasError = false;
             feed.feedErrorCallback(hasError, e, code);
-            expect(feed.onError).toHaveBeenCalledWith(e, code, {
+            expect(feed.errorCallback).toHaveBeenCalledWith(e, code, {
                 error: e,
                 [IS_ERROR_DISPLAYED]: hasError,
             });
