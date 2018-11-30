@@ -198,9 +198,7 @@ class Folder extends Item {
                 },
             })
             .then(this.folderSuccessHandler)
-            .catch((e: $AxiosError<any>) => {
-                this.errorHandler(e);
-            });
+            .catch(this.errorHandler);
     }
 
     /**
@@ -320,9 +318,7 @@ class Folder extends Item {
                 },
             })
             .then(this.createSuccessHandler)
-            .catch((e: $AxiosError<any>) => {
-                this.errorHandler(e);
-            });
+            .catch(this.errorHandler);
     }
 
     /**

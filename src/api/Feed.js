@@ -119,7 +119,7 @@ class Feed extends Base {
      * @param {boolean} shouldRefreshCache - Optionally updates the cache
      * @param {Function} successCallback - the success callback  which is called after data fetching is complete
      * @param {Function} errorCallback - the error callback which is called after data fetching is complete if there was an error
-     * @param {Function} onError - the function to be called immediate after an error occurs
+     * @param {Function} onError - the function to be called immediately after an error occurs
      */
     feedItems(
         file: BoxItem,
