@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { EditorState, convertFromRaw } from 'draft-js';
-import { withData } from 'leche';
 
 import { ApprovalCommentFormUnwrapped as ApprovalCommentForm } from '../ApprovalCommentForm';
 
@@ -95,27 +94,33 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         expect(wrapper.find('.bcs-comment-add-approver-fields-container').length).toEqual(1);
     });
 
-    withData(
-        {
-            'empty comment box': [{ text: '', hasMention: false }, 0],
-            'non-empty comment box': [{ text: 'hey', hasMention: false }, 1],
-        },
-        (commentText, expectedCallCount) => {
-            test(`should call createComment ${expectedCallCount} times`, () => {
-                const createCommentSpy = jest.fn();
+    // Test cases in order
+    // empty comment box
+    // non empty comment box
+    test.each`
+        commentText                           | expectedCallCount
+        ${{ text: '', hasMention: false }}    | ${0}
+        ${{ text: 'hey', hasMention: false }} | ${1}
+    `(
+        `should call createComment $expectedCallCount times`,
+        ({ commentText, expectedCallCount }) => {
+            const createCommentSpy = jest.fn();
 
-                const wrapper = render({ createComment: createCommentSpy });
-                const instance = wrapper.instance();
+            const wrapper = render({ createComment: createCommentSpy });
+            const instance = wrapper.instance();
 
-                instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
+            instance.getFormattedCommentText = jest
+                .fn()
+                .mockReturnValue(commentText);
 
-                const submitBtn = wrapper.find('PrimaryButton.bcs-comment-input-submit-btn');
-                const formEl = wrapper.find('form').getDOMNode();
-                formEl.checkValidity = () => !!expectedCallCount;
-                submitBtn.simulate('submit', { target: formEl });
+            const submitBtn = wrapper.find(
+                'PrimaryButton.bcs-comment-input-submit-btn',
+            );
+            const formEl = wrapper.find('form').getDOMNode();
+            formEl.checkValidity = () => !!expectedCallCount;
+            submitBtn.simulate('submit', { target: formEl });
 
-                expect(createCommentSpy).toHaveBeenCalledTimes(expectedCallCount);
-            });
+            expect(createCommentSpy).toHaveBeenCalledTimes(expectedCallCount);
         },
     );
 
@@ -311,40 +316,29 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
             },
         };
 
-        withData(
-            {
-                'no entities in the editor': [rawContentNoEntities, { text: 'Hey there', hasMention: false }],
-                'one entity in the editor': [rawContentOneEntity, { text: 'Hey @[1:Becky]', hasMention: true }],
-                'two entities in the editor': [
-                    rawContentTwoEntities,
-                    {
-                        text: 'I hung out with @[1:Becky] and @[2:Shania]',
-                        hasMention: true,
-                    },
-                ],
-                'two entities and a linebreak in the editor': [
-                    rawContentTwoEntitiesOneLineBreak,
-                    {
-                        text: 'I hung out with @[1:Becky] and\n@[2:Shania] yesterday',
-                        hasMention: true,
-                    },
-                ],
-            },
-            (rawContent, expected) => {
-                test('should return the correct result', () => {
-                    const blocks = convertFromRaw(rawContent);
+        // Test cases in order
+        // no entities in the editor
+        // one entity in the editor
+        // two entities in the editor
+        // two entities and a linebreak in the editor
+        test.each`
+            rawContent                           | expected
+            ${rawContentNoEntities}              | ${{ text: 'Hey there', hasMention: false }}
+            ${rawContentOneEntity}               | ${{ text: 'Hey @[1:Becky]', hasMention: true }}
+            ${rawContentTwoEntities}             | ${{ text: 'I hung out with @[1:Becky] and @[2:Shania]', hasMention: true }}
+            ${rawContentTwoEntitiesOneLineBreak} | ${{ text: 'I hung out with @[1:Becky] and\n@[2:Shania] yesterday', hasMention: true }}
+        `('should return the correct result', ({ rawContent, expected }) => {
+            const blocks = convertFromRaw(rawContent);
 
-                    const dummyEditorState = EditorState.createWithContent(blocks);
+            const dummyEditorState = EditorState.createWithContent(blocks);
 
-                    const wrapper = render();
-                    const instance = wrapper.instance();
-                    wrapper.setState({ commentEditorState: dummyEditorState });
+            const wrapper = render();
+            const instance = wrapper.instance();
+            wrapper.setState({ commentEditorState: dummyEditorState });
 
-                    const result = instance.getFormattedCommentText();
-                    expect(result).toEqual(expected);
-                });
-            },
-        );
+            const result = instance.getFormattedCommentText();
+            expect(result).toEqual(expected);
+        });
     });
 
     test('should have editor state reflect tagged_message prop when not empty', () => {
