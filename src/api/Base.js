@@ -354,8 +354,8 @@ class Base {
                 ...requestData,
             });
             this.successHandler(data);
-        } catch (e) {
-            this.errorHandler(e);
+        } catch (error) {
+            this.errorHandler(error);
         }
     }
 }

@@ -227,10 +227,10 @@ describe('api/Comments', () => {
                     'foo',
                     successCallback,
                     errorCallback,
-                    expect.any(Number),
-                    expect.any(Number),
+                    undefined,
+                    undefined,
                     COMMENTS_FIELDS_TO_FETCH,
-                    true,
+                    undefined,
                 );
             });
         });

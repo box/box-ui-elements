@@ -13,8 +13,6 @@ import {
     ERROR_CODE_UPDATE_COMMENT,
     ERROR_CODE_DELETE_COMMENT,
     ERROR_CODE_FETCH_COMMENTS,
-    DEFAULT_FETCH_START,
-    DEFAULT_FETCH_END,
 } from '../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
@@ -231,22 +229,25 @@ class Comments extends OffsetBasedAPI {
     /**
      * API for fetching comments on a file
      *
-     * @param {string} fileId
-     * @param {BoxItemPermission} permissions
-     * @param {Function} successCallback
-     * @param {Function} errorCallback
-     * @param {any} rest
-     * @returns {Promise<void>}
+     * @param {string} fileId - the file id
+     * @param {BoxItemPermission} permissions - the permissions for the file
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @param {array} fields - the fields to fetch
+     * @param {number} offset - the offset from the start to start fetching at
+     * @param {number} limit - the number of items to fetch
+     * @param {boolean} shouldFetchAll - true if should get all the pages before calling the sucessCallback
+     * @returns {void}
      */
     getComments(
         fileId: string,
         permissions: BoxItemPermission,
         successCallback: Function,
         errorCallback: (e: ElementsXhrError, code: string) => void,
-        offset: number = DEFAULT_FETCH_START,
-        limit: number = DEFAULT_FETCH_END,
         fields: Array<string> = COMMENTS_FIELDS_TO_FETCH,
-        shouldFetchAll: boolean = true,
+        offset?: number,
+        limit?: number,
+        shouldFetchAll?: boolean,
     ): void {
         this.errorCode = ERROR_CODE_FETCH_COMMENTS;
         try {
