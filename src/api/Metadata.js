@@ -23,6 +23,11 @@ import {
 
 class Metadata extends File {
     /**
+     * Error Code emitted with errors, from errorHandler()
+     */
+    errorCode: string;
+
+    /**
      * Creates a key for the metadata cache
      *
      * @param {string} id - Folder id
