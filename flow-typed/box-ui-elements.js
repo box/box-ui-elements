@@ -485,10 +485,10 @@ type Errors = {
 };
 
 type FileAccessStats = {
-    preview_count: number,
-    download_count: number,
-    comment_count: number,
-    edit_count: number,
+    preview_count?: number,
+    download_count?: number,
+    comment_count?: number,
+    edit_count?: number,
     has_count_overflowed: boolean,
 };
 
