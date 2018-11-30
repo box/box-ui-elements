@@ -67,7 +67,7 @@ class FileCollaborators extends MarkerBasedAPI {
             limit,
             successCallback,
             errorCallback,
-            ...requestData,
+            requestData,
         });
     }
 }

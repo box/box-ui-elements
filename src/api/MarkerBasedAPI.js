@@ -48,7 +48,7 @@ class MarkerBasedApi extends Base {
         marker: string,
         limit: number,
         shouldFetchAll: boolean,
-        params?: Object,
+        requestData: Object = {},
     ): Promise<void> {
         if (this.isDestroyed()) {
             return;
@@ -58,7 +58,7 @@ class MarkerBasedApi extends Base {
         try {
             const url = this.getUrl(id);
             const queryParams: Params = {
-                ...params,
+                ...requestData,
                 marker,
                 limit,
             };
@@ -76,7 +76,7 @@ class MarkerBasedApi extends Base {
             };
             const nextMarker = data.next_marker;
             if (shouldFetchAll && this.hasMoreItems(nextMarker)) {
-                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, params);
+                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, requestData);
                 return;
             }
 
@@ -103,7 +103,7 @@ class MarkerBasedApi extends Base {
         errorCallback,
         marker = '',
         limit = 1000,
-        params,
+        requestData,
         shouldFetchAll = true,
     }: {
         id: string,
@@ -111,13 +111,13 @@ class MarkerBasedApi extends Base {
         errorCallback: ElementsErrorCallback,
         marker?: string,
         limit?: number,
-        params?: Object,
+        requestData?: Object,
         shouldFetchAll?: boolean,
     }): Promise<void> {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        return this.markerGetRequest(id, marker, limit, shouldFetchAll, params);
+        return this.markerGetRequest(id, marker, limit, shouldFetchAll, requestData);
     }
 }
 
