@@ -286,7 +286,7 @@ class Metadata extends File {
     ): Promise<void> {
         const { id }: BoxItem = file;
         if (!id) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), ERROR_CODE_FETCH_CLASSIFICATION);
             return;
         }
 

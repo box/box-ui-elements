@@ -2,6 +2,7 @@ import Metadata from '../Metadata';
 import Cache from '../../util/Cache';
 import * as ErrorUtil from '../../util/error';
 import {
+    ERROR_CODE_FETCH_CLASSIFICATION,
     KEY_CLASSIFICATION_TYPE,
     METADATA_TEMPLATE_CLASSIFICATION,
     METADATA_SCOPE_ENTERPRISE,
@@ -566,12 +567,12 @@ describe('api/Metadata', () => {
     });
 
     describe('getClassification()', () => {
-        test('should call error callback with a bad item error when no id', () => {
+        test('should call error callback with a bad item error, and code, when no id', () => {
             ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.getClassification({}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_FETCH_CLASSIFICATION);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
