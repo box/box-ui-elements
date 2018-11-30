@@ -1,4 +1,3 @@
-import { withData } from 'leche';
 import * as func from '../../../util/function';
 import * as webcrypto from '../../../util/webcrypto';
 import * as uploadUtil from '../../../util/uploads';
@@ -129,26 +128,27 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.config.parallelism = 2;
         });
 
-        withData(
-            {
-                'ended is true': [false, true, 1],
-                'upload pipeline full': [false, false, 2, 1],
-                'upload pipeline not full and not ended': [true, false, 1, 1],
-                'upload pipeline not full and not ended but no digest is ready': [false, false, 1, 0],
-            },
-            (expected, ended, numPartsUploading, numPartsDigestReady) => {
-                test('should return correct value:', () => {
-                    // Setup
-                    multiputUploadTest.destroyed = ended;
-                    multiputUploadTest.numPartsUploading = numPartsUploading;
-                    multiputUploadTest.numPartsDigestReady = numPartsDigestReady;
-                    // Execute
-                    const result = multiputUploadTest.canStartMorePartUploads();
-                    // Verify
-                    expect(result).toBe(expected);
-                });
-            },
-        );
+        // Test Cases In order:
+        // Ended is true
+        // upload pipeline full
+        // upload pipeline not full and not ended
+        // upload pipeline not full and not ended but no digest is ready
+        test.each`
+            expected | ended    | numPartsUploading | numPartsDigestReady
+            ${false} | ${true}  | ${1}              | ${undefined}
+            ${false} | ${false} | ${2}              | ${1}
+            ${true}  | ${false} | ${1}              | ${1}
+            ${false} | ${false} | ${1}              | ${0}
+        `('should return correct value:', ({ expected, ended, numPartsUploading, numPartsDigestReady }) => {
+            // Setup
+            multiputUploadTest.destroyed = ended;
+            multiputUploadTest.numPartsUploading = numPartsUploading;
+            multiputUploadTest.numPartsDigestReady = numPartsDigestReady;
+            // Execute
+            const result = multiputUploadTest.canStartMorePartUploads();
+            // Verify
+            expect(result).toBe(expected);
+        });
     });
 
     describe('updateFirstUnuploadedPartIndex()', () => {
@@ -179,51 +179,50 @@ describe('api/uploads/MultiputUpload', () => {
             expect(multiputUploadTest.firstUnuploadedPartIndex).toBe(0);
         });
 
-        withData(
-            {
-                'firstUnuploadedPartIndex is 0': [0],
-                'firstUnuploadedPartIndex is 1': [1],
-                'firstUnuploadedPartIndex is 2': [2],
-            },
-            firstUnuploadedPart => {
-                test('should update firstUnuploadedPartIndex correctly when some parts done', () => {
-                    // Setup
-                    multiputUploadTest.parts[0].state = PART_STATE_UPLOADED;
-                    multiputUploadTest.parts[1].state = PART_STATE_UPLOADED;
-                    multiputUploadTest.parts[2].state = PART_STATE_COMPUTING_DIGEST;
-                    multiputUploadTest.firstUnuploadedPartIndex = firstUnuploadedPart;
+        // Test cases in order
+        // firstUnuploadedPartIndex is 0
+        // firstUnuploadedPartIndex is 1
+        // firstUnuploadedPartIndex is 2
+        test.each`
+            firstUnuploadedPart
+            ${0}
+            ${1}
+            ${2}
+        `('should update firstUnuploadedPartIndex correctly when some parts done', ({ firstUnuploadedPart }) => {
+            // Setup
+            multiputUploadTest.parts[0].state = PART_STATE_UPLOADED;
+            multiputUploadTest.parts[1].state = PART_STATE_UPLOADED;
+            multiputUploadTest.parts[2].state = PART_STATE_COMPUTING_DIGEST;
+            multiputUploadTest.firstUnuploadedPartIndex = firstUnuploadedPart;
+            // Execute
+            multiputUploadTest.updateFirstUnuploadedPartIndex();
 
-                    // Execute
-                    multiputUploadTest.updateFirstUnuploadedPartIndex();
+            // Verify
+            expect(multiputUploadTest.firstUnuploadedPartIndex).toBe(2);
+        });
 
-                    // Verify
-                    expect(multiputUploadTest.firstUnuploadedPartIndex).toBe(2);
-                });
-            },
-        );
+        // Test cases in order
+        // firstUnuploadedPartIndex is 0
+        // firstUnuploadedPartIndex is 1
+        // firstUnuploadedPartIndex is 2
+        test.each`
+            firstUnuploadedPart
+            ${0}
+            ${1}
+            ${2}
+        `('should update firstUnuploadedPartIndex correctly when some parts done', ({ firstUnuploadedPart }) => {
+            // Setup
+            multiputUploadTest.parts[0].state = PART_STATE_UPLOADED;
+            multiputUploadTest.parts[1].state = PART_STATE_UPLOADED;
+            multiputUploadTest.parts[2].state = PART_STATE_UPLOADED;
+            multiputUploadTest.firstUnuploadedPartIndex = firstUnuploadedPart;
 
-        withData(
-            {
-                'firstUnuploadedPartIndex is 0': [0],
-                'firstUnuploadedPartIndex is 1': [1],
-                'firstUnuploadedPartIndex is 2': [2],
-            },
-            firstUnuploadedPart => {
-                test('should update firstUnuploadedPartIndex correctly when all parts done', () => {
-                    // Setup
-                    multiputUploadTest.parts[0].state = PART_STATE_UPLOADED;
-                    multiputUploadTest.parts[1].state = PART_STATE_UPLOADED;
-                    multiputUploadTest.parts[2].state = PART_STATE_UPLOADED;
-                    multiputUploadTest.firstUnuploadedPartIndex = firstUnuploadedPart;
+            // Execute
+            multiputUploadTest.updateFirstUnuploadedPartIndex();
 
-                    // Execute
-                    multiputUploadTest.updateFirstUnuploadedPartIndex();
-
-                    // Verify
-                    expect(multiputUploadTest.firstUnuploadedPartIndex).toBe(3);
-                });
-            },
-        );
+            // Verify
+            expect(multiputUploadTest.firstUnuploadedPartIndex).toBe(3);
+        });
     });
 
     describe('populateParts()', () => {
@@ -354,71 +353,61 @@ describe('api/uploads/MultiputUpload', () => {
             expect(multiputUploadTest.createSessionErrorHandler).toHaveBeenCalledWith(error);
         });
 
-        withData(
-            {
-                'storage limit exceeded': [{ code: ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED, status: 403 }],
-                'insufficient permissions': [
-                    {
-                        code: 'access_denied_insufficient_permissions',
-                        status: 403,
-                    },
-                ],
-            },
-            data => {
-                test('should invoke errorCallback but not sessionErrorHandler on expected failure', async () => {
-                    // Setup
-                    const error = {
-                        response: {
-                            data,
-                        },
-                    };
+        // Test cases in order
+        // storage limit exceeded
+        // insuffficient permissions
+        test.each`
+            data
+            ${{ code: ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED, status: 403 }}
+            ${{ code: 'access_denied_insufficient_permissions', status: 403 }}
+        `('should invoke errorCallback but not sessionErrorHandler on expected failure', async ({ data }) => {
+            // Setup
+            const error = {
+                response: {
+                    data,
+                },
+            };
 
-                    multiputUploadTest.errorCallback = jest.fn();
-                    multiputUploadTest.getErrorResponse = jest.fn().mockReturnValueOnce(data);
-                    multiputUploadTest.createSessionErrorHandler = jest.fn();
-                    multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
-                    multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest
-                        .fn()
-                        .mockReturnValueOnce(uploadHost);
+            multiputUploadTest.errorCallback = jest.fn();
+            multiputUploadTest.getErrorResponse = jest.fn().mockReturnValueOnce(data);
+            multiputUploadTest.createSessionErrorHandler = jest.fn();
+            multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest.fn().mockReturnValueOnce(uploadHost);
 
-                    await multiputUploadTest.preflightSuccessHandler(preflightResponse);
-                    expect(multiputUploadTest.createSessionErrorHandler).not.toHaveBeenCalledWith();
-                    expect(multiputUploadTest.errorCallback).toHaveBeenCalledWith(data);
-                });
-            },
-        );
+            await multiputUploadTest.preflightSuccessHandler(preflightResponse);
+            expect(multiputUploadTest.createSessionErrorHandler).not.toHaveBeenCalledWith();
+            expect(multiputUploadTest.errorCallback).toHaveBeenCalledWith(data);
+        });
 
-        withData(
-            {
-                'maybeResponse null': [{ status: 403 }],
-                'no code': [{ status: 403, a: 1 }],
-                '403 with code that is not storage_limit_exceeded': [{ status: '403', code: 'foo' }],
-            },
-            data => {
-                test('should invoke sessionErrorHandler on other non-201 status code', async () => {
-                    const error = {
-                        response: {
-                            data,
-                        },
-                    };
+        // Test cases in order
+        // maybe response null
+        // no code
+        // 403 with code that is not storage limit exceeded
+        test.each`
+            data
+            ${{ status: 403 }}
+            ${{ status: 403, a: 1 }}
+            ${{ status: '403', code: 'foo' }}
+        `('should invoke sessionErrorHandler on other non-201 status code', async ({ data }) => {
+            const error = {
+                response: {
+                    data,
+                },
+            };
 
-                    multiputUploadTest.getErrorResponse = jest.fn().mockReturnValueOnce(data);
-                    multiputUploadTest.sessionErrorHandler = jest.fn();
-                    multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
-                    multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest
-                        .fn()
-                        .mockReturnValueOnce(uploadHost);
+            multiputUploadTest.getErrorResponse = jest.fn().mockReturnValueOnce(data);
+            multiputUploadTest.sessionErrorHandler = jest.fn();
+            multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest.fn().mockReturnValueOnce(uploadHost);
 
-                    await multiputUploadTest.preflightSuccessHandler(preflightResponse);
+            await multiputUploadTest.preflightSuccessHandler(preflightResponse);
 
-                    expect(multiputUploadTest.sessionErrorHandler).toHaveBeenCalledWith(
-                        error,
-                        'create_session_misc_error',
-                        JSON.stringify(error),
-                    );
-                });
-            },
-        );
+            expect(multiputUploadTest.sessionErrorHandler).toHaveBeenCalledWith(
+                error,
+                'create_session_misc_error',
+                JSON.stringify(error),
+            );
+        });
     });
 
     describe('createSessionErrorHandler()', () => {
@@ -546,28 +535,32 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.config.digestReadahead = 2;
         });
 
-        withData(
-            {
-                'ended is true': [false, true],
-                'a part is already computing': [false, false, 1],
-                'all parts started': [false, false, 0, 0],
-                'readahead is full': [false, false, 0, 1, 2],
-                'no part computing, there is a part not started, and readahead not full': [true, false, 0, 1, 1],
-            },
-            (expected, ended, numPartsDigestComputing, numPartsNotStarted, numPartsDigestReady) => {
-                test('should return correct value', () => {
-                    // Setup
-                    multiputUploadTest.ended = ended;
-                    multiputUploadTest.numPartsDigestComputing = numPartsDigestComputing;
-                    multiputUploadTest.numPartsNotStarted = numPartsNotStarted;
-                    multiputUploadTest.numPartsDigestReady = numPartsDigestReady;
+        // Test cases in order
+        // ended is true
+        // a part is already computing
+        // all parts started
+        // readahead is full
+        // no part computing, there is a part not started and readahead not full
+        test.each`
+            expected | ended    | numPartsDigestComputing | numPartsNotStarted | numPartsDigestReady
+            ${false} | ${true}  | ${undefined}            | ${undefined}       | ${undefined}
+            ${false} | ${false} | ${1}                    | ${undefined}       | ${undefined}
+            ${false} | ${false} | ${0}                    | ${0}               | ${undefined}
+            ${false} | ${false} | ${0}                    | ${1}               | ${2}
+            ${true}  | ${false} | ${0}                    | ${1}               | ${1}
+        `(
+            'should return correct value',
+            ({ expected, ended, numPartsDigestComputing, numPartsNotStarted, numPartsDigestReady }) => {
+                // Setup
+                multiputUploadTest.ended = ended;
+                multiputUploadTest.numPartsDigestComputing = numPartsDigestComputing;
+                multiputUploadTest.numPartsNotStarted = numPartsNotStarted;
+                multiputUploadTest.numPartsDigestReady = numPartsDigestReady;
 
-                    // Execute
-                    const result = multiputUploadTest.shouldComputeDigestForNextPart();
-
-                    // Verify
-                    expect(result).toBe(expected);
-                });
+                // Execute
+                const result = multiputUploadTest.shouldComputeDigestForNextPart();
+                // Verify
+                expect(result).toBe(expected);
             },
         );
     });
