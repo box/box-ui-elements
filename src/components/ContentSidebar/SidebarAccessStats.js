@@ -24,10 +24,6 @@ type Props = {
 const SidebarAccessStats = ({
     onAccessStatsClick,
     accessStats = {
-        preview_count: 0,
-        comment_count: 0,
-        download_count: 0,
-        edit_count: 0,
         has_count_overflowed: false,
     },
     file,
@@ -36,7 +32,13 @@ const SidebarAccessStats = ({
 }: Props) => {
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
-    if (!preview_count && !comment_count && !download_count && !edit_count && !error) {
+    if (
+        !Number.isFinite(preview_count) &&
+        !Number.isFinite(comment_count) &&
+        !Number.isFinite(download_count) &&
+        !Number.isFinite(edit_count) &&
+        !error
+    ) {
         return null;
     }
 

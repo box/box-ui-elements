@@ -70,4 +70,9 @@ This project is published on public [npmjs](https://www.npmjs.com/package/box-ui
 2. Add `export GITHUB_TOKEN="<your-token>"` in your `~/.bash_profile` (or `~/.bashrc`).
 3. Make sure the token is set in your current terminal window.
 
-To push a new release use `yarn release`.
+Releases are done from the `release` branch. To push a new release use `yarn release`. Doing so will reset the `release` branch to match the latest `master` branch and thereafter run a release. If you want to do a hotfix on a prior release, instead use `yarn release:hotfix` which will skip resetting to the `master` branch. When doing a hotfix release, it is assumed some hotfix is cherry picked to the release branch locally prior to running the release. Essentially, for a hotfix you want to:
+
+1. git checkout release (or -b release) locally.
+2. git reset --hard upstream/release
+3. Merge/cherry-pick your hotfix and commit locally.
+4. yarn release:hotfix
