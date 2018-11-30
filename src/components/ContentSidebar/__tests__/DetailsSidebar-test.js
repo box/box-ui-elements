@@ -187,7 +187,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
     });
 
     describe('fetchClassificationErrorCallback', () => {
-        test('should set a maskError if there is an error in fetching the classification', () => {
+        test('should set an inlineError if there is an error in fetching the classification', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.setState = jest.fn();
@@ -196,7 +196,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
                 isLoadingClassification: false,
                 classification: undefined,
                 classificationError: {
-                    maskError: {
+                    inline: {
                         errorHeader: messages.fileClassificationErrorHeaderMessage,
                         errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
                     },

@@ -159,7 +159,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             };
         } else {
             accessStatsError = {
-                maskError: {
+                inlineError: {
                     errorHeader: messages.fileAccessStatsErrorHeaderMessage,
                     errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
                 },
@@ -322,7 +322,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         onAccessStatsClick={onAccessStatsClick}
                         file={file}
                         {...accessStatsError}
-                        {...classificationError}
                     />
                 )}
                 {hasProperties && (
@@ -349,6 +348,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                             bannerPolicy={bannerPolicy}
                             onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
                             isLoading={isLoadingAccessStats && isLoadingClassification}
+                            {...classificationError}
                         />
                     </SidebarSection>
                 )}
