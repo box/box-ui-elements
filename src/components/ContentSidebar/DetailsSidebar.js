@@ -230,8 +230,8 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     fetchClassificationErrorCallback = (error: ElementsXhrError, code: string): void => {
         const classificationError = {
             inlineError: {
-                errorHeader: messages.fileClassificationErrorHeaderMessage,
-                errorSubHeader: messages.defaultErrorMaskSubHeaderMessage,
+                title: messages.fileClassificationErrorHeaderMessage,
+                content: messages.defaultErrorMaskSubHeaderMessage,
             },
         };
 

@@ -57,7 +57,7 @@ const SidebarFileProperties = ({
     isLoading,
     intl,
 }: Props) => {
-    const classificationName = getProp(classification, KEY_CLASSIFICATION_TYPE);
+    const classificationType = getProp(classification, KEY_CLASSIFICATION_TYPE);
 
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
@@ -77,8 +77,8 @@ const SidebarFileProperties = ({
                         ? {
                               openModal: getClassificationModal(file, onClassificationClick),
                               tooltip: getProp(bannerPolicy, 'body'),
-                              value: classificationName,
-                              [INTERACTION_TARGET]: classificationName
+                              value: classificationType,
+                              [INTERACTION_TARGET]: classificationType
                                   ? DETAILS_TARGETS.CLASSIFICATION_EDIT
                                   : DETAILS_TARGETS.CLASSIFICATION_ADD,
                           }

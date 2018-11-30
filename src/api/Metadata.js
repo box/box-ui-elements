@@ -302,8 +302,7 @@ class Metadata extends File {
 
         // Return the Cache value if it exists
         if (cache.has(key)) {
-            const cachedItem = cache.get(key);
-            this.successHandler(cachedItem);
+            this.successHandler(cache.get(key));
 
             if (!options.refreshCache) {
                 return;
