@@ -88,6 +88,7 @@
         margin-bottom: 4px;
         max-height: 500px;
         min-height: 93px;
+        overflow: hidden;
 
         &.bcs-is-disabled {
             opacity: .4;
@@ -96,6 +97,8 @@
 
         .selector-dropdown-wrapper {
             width: 100%;
+            // Override z index to prevent a new stacking context under the approval comment form
+            z-index: auto;
         }
     }
 }

@@ -868,6 +868,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Inline error title message for file description',
         defaultMessage: 'Something went wrong when saving the description.',
     },
+    defaultErrorMaskHeaderMessage: {
+        id: 'be.defaultErrorMaskHeaderMessage',
+        description: 'Default error mask top message',
+        defaultMessage: 'We’re sorry, something went wrong.',
+    },
     defaultErrorMaskSubHeaderMessage: {
         id: 'be.defaultErrorMaskSubHeaderMessage',
         description: 'Default error mask bottom message',
@@ -882,6 +887,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.accessStatsPermissionsError',
         description: 'The text for when the user does not have permissions to see access stats.',
         defaultMessage: 'Sorry, you do not have permission to see the access stats for this file.',
+    },
+    fileClassificationErrorHeaderMessage: {
+        id: 'be.fileClassificationErrorHeaderMessage',
+        description: 'File classification error message',
+        defaultMessage: 'Something went wrong when fetching classification.',
     },
     currentUserErrorHeaderMessage: {
         id: 'be.currentUserErrorHeaderMessage',
