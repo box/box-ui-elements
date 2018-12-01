@@ -186,6 +186,12 @@ push_new_release() {
     # Check untracked files
     check_untracked_files || return 1
 
+    # Build npm assets
+    if ! build_assets; then
+        printf "${red}Failed building npm assets!${end}"
+        return 1
+    fi
+
     # Publish to npm
     if ! push_to_npm; then
         printf "${red}Failed pushing to npm!${end}"
