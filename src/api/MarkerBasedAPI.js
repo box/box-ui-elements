@@ -39,7 +39,7 @@ class MarkerBasedApi extends Base {
      * @param {string} id the file id
      * @param {string} marker the marker from the start to start fetching at
      * @param {number} limit the number of items to fetch
-     * @param {Object} params the request query params
+     * @param {Object} requestData the request query params
      * @param {boolean} shouldFetchAll true if should get all the pages before calling
      * @private
      */
