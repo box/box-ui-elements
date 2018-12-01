@@ -185,7 +185,7 @@ describe('api/uploads/MultiputPart', () => {
 
         test.each`
             parts
-            ${{ offset: 1, part_id: 1 }}
+            ${[{ offset: 1, part_id: 1 }, { offset: 1, part_id: 1 }]}
             ${{ offset: 1 }}
             ${{ offset: 2, part_id: 1 }}
         `('should call upload when upload is not available on the server', async ({ parts }) => {
