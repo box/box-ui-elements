@@ -32,7 +32,7 @@ setup() {
     git fetch release || return 1
     printf "${green}Fetched from remote release branch!${end}"
 
-    if [ $HOTFIX == true ]; then
+    if [ "$HOTFIX" == true ]; then
         printf "${blue}This is a hotfix release, ignoring reset to master...${end}"
     else
         # Reset hard to master branch on release remote
