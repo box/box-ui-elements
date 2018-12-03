@@ -32,8 +32,16 @@
         right: 0;
         top: 60px; // Same as title above
 
+        &.metadata-sidebar {
+            padding-top: 0px;
+        }
+
         .bcs-scroll-content {
             width: 323px; // 17px less than the total width for scroll bar
+
+            &.metadata-sidebar {
+                padding-top: 15px;
+            }
         }
 
         .bcs.bcs-activity & {

@@ -5,24 +5,33 @@
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
 import './SidebarContent.scss';
 
 type Props = {
     actions?: React.Node,
     title: React.Node,
     children: any,
+    className?: string,
 };
 
-const SidebarContent = ({ actions, title, children }: Props) => (
-    <div className="bcs-content">
-        <div className="bcs-content-header">
-            <h3 className="bcs-title">{title}</h3>
-            {actions}
+const SidebarContent = ({ actions, title, children, className }: Props) => {
+    const scrollContentWrapperClassName = classNames(
+        'bcs-scroll-content-wrapper',
+        className,
+    );
+    const scrollContentClassName = classNames('bcs-scroll-content', className);
+    return (
+        <div className="bcs-content">
+            <div className="bcs-content-header">
+                <h3 className="bcs-title">{title}</h3>
+                {actions}
+            </div>
+            <div className={scrollContentWrapperClassName}>
+                <div className={scrollContentClassName}>{children}</div>
+            </div>
         </div>
-        <div className="bcs-scroll-content-wrapper">
-            <div className="bcs-scroll-content">{children}</div>
-        </div>
-    </div>
-);
+    );
+};
 
 export default SidebarContent;

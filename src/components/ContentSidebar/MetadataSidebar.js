@@ -246,6 +246,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
+                className="metadata-sidebar"
                 title={<FormattedMessage {...messages.sidebarMetadataTitle} />}
                 actions={
                     showTemplateDropdown ? (
