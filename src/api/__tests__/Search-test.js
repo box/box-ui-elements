@@ -10,10 +10,12 @@ let item2;
 let item3;
 let response;
 let searchResults;
+const errorCode = 'foo';
 
 describe('api/Search', () => {
     beforeEach(() => {
         search = new Search({});
+        search.errorCode = errorCode;
         cache = new Cache();
     });
 
@@ -193,7 +195,7 @@ describe('api/Search', () => {
         test('should call error callback', () => {
             search.errorCallback = jest.fn();
             search.searchErrorHandler('foo');
-            expect(search.errorCallback).toHaveBeenCalledWith('foo');
+            expect(search.errorCallback).toHaveBeenCalledWith('foo', errorCode);
         });
     });
 

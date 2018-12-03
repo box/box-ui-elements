@@ -898,6 +898,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'The text for when the user does not have permissions to see access stats.',
         defaultMessage: 'Sorry, you do not have permission to see the access stats for this file.',
     },
+    fileClassificationErrorHeaderMessage: {
+        id: 'be.fileClassificationErrorHeaderMessage',
+        description: 'File classification error message',
+        defaultMessage: 'Something went wrong when fetching classification.',
+    },
     currentUserErrorHeaderMessage: {
         id: 'be.currentUserErrorHeaderMessage',
         description: 'Current user error message',

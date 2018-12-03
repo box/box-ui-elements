@@ -10,6 +10,7 @@ import File from './File';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../util/error';
 import { getTypedFileId } from '../util/file';
 import {
+    ERROR_CODE_FETCH_CLASSIFICATION,
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
@@ -18,6 +19,12 @@ import {
     METADATA_TEMPLATE_SKILLS,
     FIELD_METADATA_SKILLS,
     CACHE_PREFIX_METADATA,
+    ERROR_CODE_UPDATE_SKILLS,
+    ERROR_CODE_UPDATE_METADATA,
+    ERROR_CODE_CREATE_METADATA,
+    ERROR_CODE_DELETE_METADATA,
+    ERROR_CODE_FETCH_EDITORS,
+    ERROR_CODE_FETCH_SKILLS,
 } from '../constants';
 
 class Metadata extends File {
@@ -39,6 +46,16 @@ class Metadata extends File {
      */
     getSkillsCacheKey(id: string): string {
         return `${this.getMetadataCacheKey(id)}_skills`;
+    }
+
+    /**
+     * Creates a key for the classification cache
+     *
+     * @param {string} id - Folder id
+     * @return {string} key
+     */
+    getClassificationCacheKey(id: string): string {
+        return `${this.getMetadataCacheKey(id)}_classification`;
     }
 
     /**
@@ -159,12 +176,13 @@ class Metadata extends File {
     async getSkills(
         file: BoxItem,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
         forceFetch: boolean = false,
     ): Promise<void> {
+        this.errorCode = ERROR_CODE_FETCH_SKILLS;
         const { id }: BoxItem = file;
         if (!id) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), this.errorCode);
             return;
         }
 
@@ -221,16 +239,17 @@ class Metadata extends File {
         file: BoxItem,
         operations: JsonPatchData,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     ): Promise<void> {
+        this.errorCode = ERROR_CODE_UPDATE_SKILLS;
         const { id, permissions } = file;
         if (!id || !permissions) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), this.errorCode);
             return;
         }
 
         if (!permissions.can_upload) {
-            errorCallback(getBadPermissionsError());
+            errorCallback(getBadPermissionsError(), this.errorCode);
             return;
         }
 
@@ -258,6 +277,64 @@ class Metadata extends File {
     }
 
     /**
+     * Gets classification for a file.
+     *
+     * @param {BoxItem} file - File object for which we are getting classification
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {boolean|void} [options.forceFetch] - Optionally Bypasses the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally Updates the cache
+     * @return {Promise}
+     */
+    async getClassification(
+        file: BoxItem,
+        successCallback: Function,
+        errorCallback: Function,
+        options: FetchOptions = {},
+    ): Promise<void> {
+        const { id }: BoxItem = file;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+        this.errorCode = ERROR_CODE_FETCH_CLASSIFICATION;
+
+        if (!id) {
+            this.errorHandler(getBadItemError());
+            return;
+        }
+
+        const cache: APICache = this.getCache();
+        const key = this.getClassificationCacheKey(id);
+
+        // Clear the cache if needed
+        if (options.forceFetch) {
+            cache.unset(key);
+        }
+
+        // Return the Cache value if it exists
+        if (cache.has(key)) {
+            this.successHandler(cache.get(key));
+
+            if (!options.refreshCache) {
+                return;
+            }
+        }
+
+        try {
+            const classification = await this.xhr.get({
+                url: this.getMetadataUrl(id, METADATA_SCOPE_ENTERPRISE, METADATA_TEMPLATE_CLASSIFICATION),
+                id: getTypedFileId(id),
+            });
+
+            if (!this.isDestroyed()) {
+                cache.set(key, classification.data);
+                this.successHandler(cache.get(key));
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
      * API for patching metadata on file
      *
      * @param {BoxItem} file - File object for which we are changing the description
@@ -272,18 +349,19 @@ class Metadata extends File {
         template: MetadataEditorTemplate,
         operations: JsonPatchData,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     ): Promise<void> {
+        this.errorCode = ERROR_CODE_UPDATE_METADATA;
         const { id, permissions } = file;
         if (!id || !permissions) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), this.errorCode);
             return;
         }
 
         const canEdit = !!permissions.can_upload;
 
         if (!canEdit) {
-            errorCallback(getBadPermissionsError());
+            errorCallback(getBadPermissionsError(), this.errorCode);
             return;
         }
 
@@ -329,17 +407,18 @@ class Metadata extends File {
         file: BoxItem,
         template: MetadataEditorTemplate,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     ): Promise<void> {
+        this.errorCode = ERROR_CODE_CREATE_METADATA;
         if (!file || !template) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), this.errorCode);
             return;
         }
 
         const { id, permissions, is_externally_owned }: BoxItem = file;
 
         if (!id || !permissions) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), this.errorCode);
             return;
         }
 
@@ -348,7 +427,7 @@ class Metadata extends File {
             template.templateKey === METADATA_TEMPLATE_PROPERTIES && template.scope === METADATA_SCOPE_GLOBAL;
 
         if (!canEdit || (is_externally_owned && !isProperties)) {
-            errorCallback(getBadPermissionsError());
+            errorCallback(getBadPermissionsError(), this.errorCode);
             return;
         }
 
@@ -388,10 +467,11 @@ class Metadata extends File {
         file: BoxItem,
         template: MetadataEditorTemplate,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     ): Promise<void> {
+        this.errorCode = ERROR_CODE_DELETE_METADATA;
         if (!file || !template) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), this.errorCode);
             return;
         }
 
@@ -399,12 +479,12 @@ class Metadata extends File {
         const { id, permissions }: BoxItem = file;
 
         if (!id || !permissions) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), this.errorCode);
             return;
         }
 
         if (!permissions.can_upload) {
-            errorCallback(getBadPermissionsError());
+            errorCallback(getBadPermissionsError(), this.errorCode);
             return;
         }
 
@@ -444,14 +524,15 @@ class Metadata extends File {
     async getEditors(
         file: BoxItem,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
         getMetadata?: Function,
         hasMetadataFeature: boolean,
         forceFetch: boolean = false,
     ): Promise<void> {
+        this.errorCode = ERROR_CODE_FETCH_EDITORS;
         const { id, permissions, is_externally_owned }: BoxItem = file;
         if (!id || !permissions) {
-            errorCallback(getBadItemError());
+            errorCallback(getBadItemError(), this.errorCode);
             return;
         }
 

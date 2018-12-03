@@ -5,7 +5,15 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT } from '../constants';
+import {
+    PERMISSION_CAN_COMMENT,
+    ERROR_CODE_CREATE_TASK,
+    ERROR_CODE_UPDATE_TASK,
+    ERROR_CODE_DELETE_TASK,
+    ERROR_CODE_FETCH_TASK_ASSIGNMENT,
+    ERROR_CODE_FETCH_TASKS,
+} from '../constants';
+import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../util/fields';
 
 class Tasks extends Base {
     /**
@@ -34,7 +42,7 @@ class Tasks extends Base {
     }
 
     /**
-     * API for creating a task on a file
+     * API for getting assignments for a given task
      *
      * @param {string} id - a box file id
      * @param {string} taskId - Task ID
@@ -47,11 +55,16 @@ class Tasks extends Base {
         id: string,
         taskId: string,
         successCallback: Function,
-        errorCallback: Function,
-        params?: Object,
+        errorCallback: ElementsErrorCallback,
+        requestData: Object = {
+            params: {
+                fields: TASK_ASSIGNMENTS_FIELDS_TO_FETCH.toString(),
+            },
+        },
     ): void {
+        this.errorCode = ERROR_CODE_FETCH_TASK_ASSIGNMENT;
         const url = `${this.tasksUrl(taskId)}/assignments`;
-        this.get({ id, successCallback, errorCallback, params, url });
+        this.get({ id, successCallback, errorCallback, requestData, url });
     }
 
     /**
@@ -75,14 +88,15 @@ class Tasks extends Base {
         message: string,
         dueAt?: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: (e: ElementsXhrError, code: string) => void,
     }): void {
         const { id = '', permissions } = file;
+        this.errorCode = ERROR_CODE_CREATE_TASK;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
@@ -130,15 +144,15 @@ class Tasks extends Base {
         message: string,
         dueAt?: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     }): void {
         const { id = '', permissions } = file;
-
+        this.errorCode = ERROR_CODE_UPDATE_TASK;
         try {
             // We don't know task_edit specific permissions, so let the client try and fail gracefully
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
@@ -176,15 +190,16 @@ class Tasks extends Base {
         file: BoxItem,
         taskId: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     }): void {
+        this.errorCode = ERROR_CODE_DELETE_TASK;
         const { id = '', permissions } = file;
 
         try {
             // We don't know task_delete specific permissions, so let the client try and fail gracefully
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
@@ -193,6 +208,34 @@ class Tasks extends Base {
             url: this.tasksUrl(taskId),
             successCallback,
             errorCallback,
+        });
+    }
+
+    /**
+     * API for fetching tasks on a file
+     *
+     * @param {string} id - a box file id
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {Object} requestData - additional request data
+     * @returns {Promise<void>}
+     */
+    getTasks(
+        id: string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+        requestData: Object = {
+            params: {
+                fields: TASKS_FIELDS_TO_FETCH.toString(),
+            },
+        },
+    ): void {
+        this.errorCode = ERROR_CODE_FETCH_TASKS;
+        this.get({
+            id,
+            successCallback,
+            errorCallback,
+            requestData,
         });
     }
 }

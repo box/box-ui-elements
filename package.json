@@ -43,7 +43,7 @@
         "build:dev:es": "BABEL_ENV=dev NODE_ENV=dev yarn build:es --copy-files --source-maps inline --watch --ignore \"**/__tests__/**\",\"src/components/messages.js\"",
         "build:es": "babel src --out-dir lib",
         "build:i18n": "props2es",
-        "build:npm": "npm-run-all build:prod:npm build:prod:es",
+        "build:npm": "npm-run-all clean build:i18n build:prod:npm build:prod:es",
         "build:prod:es": "BABEL_ENV=production NODE_ENV=production yarn build:es --ignore \"**/__tests__/**\"",
         "build:prod:dist": "NODE_ENV=production webpack --config conf/webpack.config.js --mode production",
         "build:prod:examples": "LANGUAGE=en-US REACT=true NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config conf/styleguide.config.js --mode production",
@@ -60,7 +60,7 @@
         "start:dev": "yarn setup; LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/webpack-dev-server/bin/webpack-dev-server.js --config conf/webpack.config.js --mode development",
         "start:examples": "yarn setup; LANGUAGE=en-US REACT=true BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js server --config conf/styleguide.config.js --mode development",
         "start:npm": "yarn setup; npm-run-all build:prod:npm build:dev:es",
-        "test": "BABEL_ENV=test NODE_ENV=test yarn run jest"
+        "test": "BABEL_ENV=test NODE_ENV=test yarn jest"
     },
     "browserslist": {
         "production": [

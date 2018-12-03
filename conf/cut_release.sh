@@ -32,7 +32,7 @@ setup() {
     git fetch release || return 1
     printf "${green}Fetched from remote release branch!${end}"
 
-    if [ $HOTFIX == true ]; then
+    if [ "$HOTFIX" == true ]; then
         printf "${blue}This is a hotfix release, ignoring reset to master...${end}"
     else
         # Reset hard to master branch on release remote
@@ -185,6 +185,12 @@ push_new_release() {
 
     # Check untracked files
     check_untracked_files || return 1
+
+    # Build npm assets
+    if ! build_assets; then
+        printf "${red}Failed building npm assets!${end}"
+        return 1
+    fi
 
     # Publish to npm
     if ! push_to_npm; then
