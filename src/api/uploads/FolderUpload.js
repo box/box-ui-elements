@@ -159,10 +159,11 @@ class FolderUpload {
     }): Promise<any> {
         await this.folder.upload(this.destinationFolderId, errorCallback, true);
         // If the folder upload failed then a folderID will not be set
-        if (this.folder.folderId) {
+        const newFolderId = this.folder.getFolderId();
+        if (newFolderId) {
             successCallback([
                 {
-                    id: this.folder.folderId,
+                    id: newFolderId,
                 },
             ]);
         }

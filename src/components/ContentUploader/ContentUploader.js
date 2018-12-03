@@ -729,7 +729,9 @@ class ContentUploader extends Component<Props, State> {
         const { onUpload, useUploadsManager } = this.props;
 
         item.progress = 100;
-        item.status = STATUS_COMPLETE;
+        if (!item.error) {
+            item.status = STATUS_COMPLETE;
+        }
         this.numItemsUploading -= 1;
 
         // Cache Box File object of successfully uploaded item

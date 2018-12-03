@@ -8,7 +8,7 @@ import FolderAPI from '../Folder';
 import {
     STATUS_COMPLETE,
     STATUS_ERROR,
-    ERROR_CODE_CHILD_FOLDER_FAILED_UPLOAD,
+    ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
     ERROR_CODE_ITEM_NAME_IN_USE,
 } from '../../constants';
 import { getFileFromEntry } from '../../util/uploads';
@@ -71,13 +71,12 @@ class FolderUploadNode {
         this.parentFolderId = parentFolderId;
 
         await this.createAndUploadFolder(errorCallback, isRoot);
-        if (!this.getFolderId()) {
-            // Folder was not successfully created. Do not attempt to upload its contents.
-            return;
-        }
-        this.addFilesToUploadQueue(this.getFormattedFiles(), noop, true);
 
-        await this.uploadChildFolders(errorCallback);
+        // Check if folder was successfully created before we attempt to upload its contents.
+        if (this.getFolderId()) {
+            this.addFilesToUploadQueue(this.getFormattedFiles(), noop, true);
+            await this.uploadChildFolders(errorCallback);
+        }
     }
 
     /**
@@ -115,18 +114,16 @@ class FolderUploadNode {
             errorEncountered = true;
             errorCode = error.code;
             // @TODO: Handle 429
-            if (error.code !== ERROR_CODE_ITEM_NAME_IN_USE) {
-                if (!isRoot) {
-                    // If this is a child folder of the folder being uploaded, this errorCallback will set
-                    // an error message on the root folder being uploaded. Set a generic messages saying that a
-                    // child has caused the error. The child folder will be tagged with the error message in
-                    // the call to this.addFolderToUploadQueue below
-                    errorCallback({ code: ERROR_CODE_CHILD_FOLDER_FAILED_UPLOAD });
-                } else {
-                    errorCallback(error);
-                }
-            } else {
+            if (error.code === ERROR_CODE_ITEM_NAME_IN_USE) {
                 this.folderId = error.context_info.conflicts[0].id;
+            } else if (isRoot) {
+                errorCallback(error);
+            } else {
+                // If this is a child folder of the folder being uploaded, this errorCallback will set
+                // an error message on the root folder being uploaded. Set a generic messages saying that a
+                // child has caused the error. The child folder will be tagged with the error message in
+                // the call to this.addFolderToUploadQueue below
+                errorCallback({ code: ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED });
             }
         }
 
@@ -135,15 +132,7 @@ class FolderUploadNode {
             return;
         }
 
-        const folderObject: {
-            extension: string,
-            name: string,
-            status: string,
-            isFolder: boolean,
-            size: number,
-            progress: number,
-            error?: Object,
-        } = {
+        const folderObject: FolderUploadItem = {
             extension: '',
             name: this.name,
             status: STATUS_COMPLETE,
@@ -157,7 +146,7 @@ class FolderUploadNode {
             folderObject.error = { code: errorCode };
         }
 
-        this.addFolderToUploadQueue([folderObject]);
+        this.addFolderToUploadQueue(folderObject);
     };
 
     /**

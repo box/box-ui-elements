@@ -6,7 +6,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import ItemProgress from './ItemProgress';
-import { STATUS_ERROR, STATUS_IN_PROGRESS, ERROR_CODE_CHILD_FOLDER_FAILED_UPLOAD } from '../../constants';
+import {
+    ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
+    ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT,
+    ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
+    ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
+    STATUS_ERROR,
+    STATUS_IN_PROGRESS,
+} from '../../constants';
 
 import messages from '../messages';
 
@@ -23,17 +31,17 @@ type Props = {
  */
 const getErrorMessage = (errorCode: ?string, itemName: ?string) => {
     switch (errorCode) {
-        case ERROR_CODE_CHILD_FOLDER_FAILED_UPLOAD:
+        case ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED:
             return <FormattedMessage {...messages.uploadsOneOrMoreChildFoldersFailedToUploadMessage} />;
-        case 'file_size_limit_exceeded':
+        case ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED:
             return <FormattedMessage {...messages.uploadsFileSizeLimitExceededErrorMessage} />;
-        case 'item_name_invalid':
+        case ERROR_CODE_ITEM_NAME_INVALID:
             return (
                 <FormattedMessage {...messages.uploadsProvidedFolderNameInvalidMessage} values={{ name: itemName }} />
             );
-        case 'storage_limit_exceeded':
+        case ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED:
             return <FormattedMessage {...messages.uploadsStorageLimitErrorMessage} />;
-        case 'pending_app_folder_size_limit':
+        case ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT:
             return <FormattedMessage {...messages.uploadsPendingFolderSizeLimitErrorMessage} />;
         default:
             return <FormattedMessage {...messages.uploadsDefaultErrorMessage} />;
