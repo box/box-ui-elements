@@ -7,6 +7,12 @@ import {
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
     METADATA_TEMPLATE_PROPERTIES,
+    ERROR_CODE_DELETE_METADATA,
+    ERROR_CODE_CREATE_METADATA,
+    ERROR_CODE_UPDATE_METADATA,
+    ERROR_CODE_UPDATE_SKILLS,
+    ERROR_CODE_FETCH_SKILLS,
+    ERROR_CODE_FETCH_CLASSIFICATION,
 } from '../../constants';
 
 let metadata;
@@ -211,7 +217,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.getSkills({}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_FETCH_SKILLS);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -409,7 +415,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_SKILLS);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -418,7 +424,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({ id: 'id' }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_SKILLS);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -427,7 +433,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({ id: 'id', permissions: {} }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_SKILLS);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -571,7 +577,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.getClassification({}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_FETCH_CLASSIFICATION);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -766,7 +772,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({}, {}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -775,7 +781,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({ id: 'id' }, {}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -784,7 +790,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({ id: 'id', permissions: {} }, {}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -799,7 +805,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -1011,7 +1017,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -1020,7 +1026,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({ id: 'id' }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -1029,7 +1035,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({ id: 'id', permissions: {} }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -1043,7 +1049,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -1061,7 +1067,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -1079,7 +1085,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -1286,7 +1292,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -1295,7 +1301,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({ id: 'id' }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -1304,7 +1310,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({ id: 'id', permissions: {} }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -1318,7 +1324,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });

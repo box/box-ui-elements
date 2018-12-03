@@ -18,7 +18,7 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { HTTP_STATUS_CODE_FORBIDDEN, IS_ERROR_DISPLAYED, ORIGIN_DETAILS_SIDEBAR } from '../../constants';
+import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR, IS_ERROR_DISPLAYED } from '../../constants';
 import API from '../../api';
 import './DetailsSidebar.scss';
 
@@ -35,7 +35,7 @@ type ExternalProps = {
     onClassificationClick: Function,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
-};
+} & ErrorContextProps;
 
 type PropsWithoutContext = {
     file: BoxItem,
@@ -147,13 +147,15 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * Handles a failed file access stats fetch
      *
      * @private
-     * @param {ElementsXhrError} error - API error
+     * @param {Error} e - API error
+     * @param {string} code - error code
      * @return {void}
      */
-    fetchAccessStatsErrorCallback = (error: ElementsXhrError) => {
+    fetchAccessStatsErrorCallback = (e: ElementsXhrError, code: string) => {
+        const isForbidden = getProp(e, 'status') === HTTP_STATUS_CODE_FORBIDDEN;
         let accessStatsError;
 
-        if (getProp(error, 'status') === HTTP_STATUS_CODE_FORBIDDEN) {
+        if (isForbidden) {
             accessStatsError = {
                 error: messages.fileAccessStatsPermissionsError,
             };
@@ -170,6 +172,11 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             isLoadingAccessStats: false,
             accessStats: undefined,
             accessStatsError,
+        });
+
+        this.props.onError(e, code, {
+            e,
+            [IS_ERROR_DISPLAYED]: !isForbidden,
         });
     };
 
@@ -198,11 +205,11 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         const { api }: Props = this.props;
         const { file }: State = this.state;
         this.setState({ isLoadingAccessStats: true });
-        api.getFileAccessStatsAPI(false).get({
-            id: file.id,
-            successCallback: this.fetchAccessStatsSuccessCallback,
-            errorCallback: this.fetchAccessStatsErrorCallback,
-        });
+        api.getFileAccessStatsAPI(false).getFileAccessStats(
+            file.id,
+            this.fetchAccessStatsSuccessCallback,
+            this.fetchAccessStatsErrorCallback,
+        );
     }
 
     /**

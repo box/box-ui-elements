@@ -7,8 +7,16 @@
 import noop from 'lodash/noop';
 import setProp from 'lodash/set';
 import Base from './Base';
-import { getBadItemError } from '../util/error';
-import { ACCESS_NONE, CACHE_PREFIX_SEARCH, CACHE_PREFIX_FOLDER, TYPE_FOLDER } from '../constants';
+import { getBadItemError, getBadPermissionsError } from '../util/error';
+import {
+    ACCESS_NONE,
+    CACHE_PREFIX_SEARCH,
+    CACHE_PREFIX_FOLDER,
+    TYPE_FOLDER,
+    ERROR_CODE_DELETE_ITEM,
+    ERROR_CODE_RENAME_ITEM,
+    ERROR_CODE_SHARE_ITEM,
+} from '../constants';
 
 class Item extends Base {
     /**
@@ -29,7 +37,7 @@ class Item extends Base {
     /**
      * @property {Function}
      */
-    errorCallback: Function;
+    errorCallback: ElementsErrorCallback;
 
     /**
      * Creates a key for the item's parent
@@ -152,21 +160,22 @@ class Item extends Base {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    deleteItem(item: BoxItem, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    deleteItem(item: BoxItem, successCallback: Function, errorCallback: ElementsErrorCallback = noop): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
 
+        this.errorCode = ERROR_CODE_DELETE_ITEM;
         const { id, permissions, parent, type }: BoxItem = item;
         if (!id || !permissions || !parent || !type) {
-            errorCallback();
+            errorCallback(getBadItemError(), this.errorCode);
             return Promise.reject();
         }
 
         const { id: parentId } = parent;
         const { can_delete }: BoxItemPermission = permissions;
         if (!can_delete || !parentId) {
-            errorCallback();
+            errorCallback(getBadPermissionsError(), this.errorCode);
             return Promise.reject();
         }
 
@@ -179,7 +188,9 @@ class Item extends Base {
         return this.xhr
             .delete({ url })
             .then(this.deleteSuccessHandler)
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e);
+            });
     }
 
     /**
@@ -206,20 +217,26 @@ class Item extends Base {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    rename(item: BoxItem, name: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    rename(
+        item: BoxItem,
+        name: string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback = noop,
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
 
+        this.errorCode = ERROR_CODE_RENAME_ITEM;
         const { id, permissions }: BoxItem = item;
         if (!id || !permissions) {
-            errorCallback();
+            errorCallback(getBadItemError(), this.errorCode);
             return Promise.reject();
         }
 
         const { can_rename }: BoxItemPermission = permissions;
         if (!can_rename) {
-            errorCallback();
+            errorCallback(getBadPermissionsError(), this.errorCode);
             return Promise.reject();
         }
 
@@ -230,7 +247,9 @@ class Item extends Base {
         return this.xhr
             .put({ url: `${this.getUrl(id)}`, data: { name } })
             .then(this.renameSuccessHandler)
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e);
+            });
     }
 
     /**
@@ -255,20 +274,26 @@ class Item extends Base {
      * @param {Function|void} errorCallback - Error callback
      * @return {void}
      */
-    share(item: BoxItem, access: string, successCallback: Function, errorCallback: Function = noop): Promise<void> {
+    share(
+        item: BoxItem,
+        access: string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback = noop,
+    ): Promise<void> {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
 
+        this.errorCode = ERROR_CODE_SHARE_ITEM;
         const { id, permissions }: BoxItem = item;
         if (!id || !permissions) {
-            errorCallback();
+            errorCallback(getBadItemError(), this.errorCode);
             return Promise.reject();
         }
 
         const { can_share, can_set_share_access }: BoxItemPermission = permissions;
         if (!can_share || !can_set_share_access) {
-            errorCallback();
+            errorCallback(getBadPermissionsError(), this.errorCode);
             return Promise.reject();
         }
 
@@ -286,7 +311,9 @@ class Item extends Base {
                 },
             })
             .then(this.shareSuccessHandler)
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e);
+            });
     }
 }
 
