@@ -8,7 +8,6 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { addTime } from 'box-react-ui/lib/utils/datetime';
 import Form from 'box-react-ui/lib/components/form-elements/form/Form';
 import DraftJSMentionSelector, {
     DraftMentionDecorator,
@@ -51,8 +50,6 @@ type State = {
     commentEditorState: any,
     isAddApprovalVisible: boolean,
 };
-
-const ONE_DAY_MINUS_ONE_MS = 86399999;
 
 class ApprovalCommentForm extends React.Component<Props, State> {
     static defaultProps = {
@@ -130,8 +127,8 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     onApprovalDateChangeHandler = (date: Date): void => {
         // The date given to us is midnight of the date selected.
         // Modify date to be the end of day (minus 1 millisecond) for the given due date
-        const dateAtEndOfDay = addTime(date, ONE_DAY_MINUS_ONE_MS);
-        this.setState({ approvalDate: dateAtEndOfDay });
+        date.setHours(24, 0, 0, -1);
+        this.setState({ approvalDate: date });
     };
 
     /**
