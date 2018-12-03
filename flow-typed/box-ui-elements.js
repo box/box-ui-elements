@@ -374,6 +374,18 @@ type Collection = {
     totalCount?: number,
 };
 
+type FolderUploadItem = {
+    boxFile?: BoxItem,
+    error?: Object,
+    extension: string,
+    name: string,
+    progress: number,
+    size: number,
+    status: UploadStatus,
+    options?: UploadItemAPIOptions,
+    isFolder?: boolean,
+}
+
 type UploadItem = {
     api: PlainUploadAPI | MultiputUploadAPI,
     boxFile?: BoxItem,
