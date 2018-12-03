@@ -47,7 +47,7 @@
         "build:prod:es": "BABEL_ENV=npm NODE_ENV=production yarn build:es --ignore \"**/__tests__/**\"",
         "build:prod:dist": "NODE_ENV=production webpack --config conf/webpack.config.js --mode production",
         "build:prod:examples": "LANGUAGE=en-US REACT=true NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config conf/styleguide.config.js --mode production",
-        "build:prod:npm": "BABEL_ENV=npm OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
+        "build:prod:npm": "BABEL_ENV=production OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
         "clean": "rm -rf dist lib i18n/json i18n/*.js reports styleguide",
         "copy:styles": "cpx './src/**/*.scss' lib",
         "lint": "npm-run-all lint:*",
