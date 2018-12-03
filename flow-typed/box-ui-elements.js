@@ -676,6 +676,8 @@ type ErrorContextProps = {
     ) => void,
 };
 
+type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
+
 type ClassificationInfo = {
     Box__Security__Classification__Key?: string
 } & MetadataInstance;
