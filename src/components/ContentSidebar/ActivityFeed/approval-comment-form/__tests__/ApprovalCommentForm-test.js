@@ -228,6 +228,19 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
         expect(wrapper.state('approvers').length).toBe(0);
     });
 
+    describe('onApprovalDateChangeHandler()', () => {
+        test('should set the approval date to be one millisecond before midnight of the next day', () => {
+            // Midnight on December 3rd GMT
+            const date = new Date('2018-12-03T00:00:00');
+            // 11:59:59:999 on December 3rd GMT
+            const oneMSBeforeMidnightOfNextDay = new Date('2018-12-03T23:59:59.999');
+            const wrapper = render({});
+            wrapper.instance().onApprovalDateChangeHandler(date);
+
+            expect(wrapper.state('approvalDate')).toEqual(oneMSBeforeMidnightOfNextDay);
+        });
+    });
+
     describe('getFormattedCommentText()', () => {
         const rawContentNoEntities = {
             blocks: [
