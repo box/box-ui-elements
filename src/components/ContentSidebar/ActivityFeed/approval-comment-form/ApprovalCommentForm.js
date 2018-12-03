@@ -127,7 +127,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     onApprovalDateChangeHandler = (date: Date): void => {
         // The date given to us is midnight of the date selected.
         // Modify date to be the end of day (minus 1 millisecond) for the given due date
-        date.setHours(24, 0, 0, -1);
+        date.setHours(23, 59, 59, 999);
         this.setState({ approvalDate: date });
     };
 
