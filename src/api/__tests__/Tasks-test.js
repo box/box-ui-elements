@@ -175,18 +175,18 @@ describe('api/Tasks', () => {
             test('should make a correct GET request for assignments for the specified task', () => {
                 const id = 'id';
                 const url = `${tasks.tasksUrl(taskId)}/assignments`;
-                const params = {
+                const requestData = {
                     fields: 'start=0',
                 };
                 tasks.get = jest.fn();
 
-                tasks.getAssignments(id, taskId, successCallback, errorCallback, params);
+                tasks.getAssignments(id, taskId, successCallback, errorCallback, requestData);
                 expect(tasks.get).toHaveBeenCalledWith({
                     id,
                     url,
                     successCallback,
                     errorCallback,
-                    params,
+                    requestData,
                 });
             });
         });
