@@ -345,7 +345,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                             retentionPolicy={retentionPolicy}
                             bannerPolicy={bannerPolicy}
                             onRetentionPolicyExtendClick={onRetentionPolicyExtendClick}
-                            isLoading={isLoadingAccessStats && isLoadingClassification}
+                            isLoading={isLoadingAccessStats || isLoadingClassification}
                             {...classificationError}
                         />
                     </SidebarSection>

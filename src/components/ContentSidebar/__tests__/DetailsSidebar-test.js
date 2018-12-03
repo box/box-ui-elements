@@ -82,6 +82,37 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
 
             expect(wrapper.find('SidebarContent').children()).toHaveLength(0);
         });
+
+        test('should render loading SidebarFileProperties when either access stats or classification are loading', () => {
+            const wrapper = getWrapper(
+                {
+                    file,
+                    hasProperties: true,
+                },
+                { disableLifecycleMethods: true },
+            );
+            const instance = wrapper.instance();
+
+            // Classification loading
+            instance.setState({ isLoadingAccessStats: false, isLoadingClassification: true });
+            instance.render();
+            expect(wrapper.find({ isLoading: true })).toHaveLength(1);
+
+            // Access stats loading
+            instance.setState({ isLoadingAccessStats: true, isLoadingClassification: false });
+            instance.render();
+            expect(wrapper.find({ isLoading: true })).toHaveLength(1);
+
+            // Both loading
+            instance.setState({ isLoadingAccessStats: true, isLoadingClassification: true });
+            instance.render();
+            expect(wrapper.find({ isLoading: true })).toHaveLength(1);
+
+            // nothing loading
+            instance.setState({ isLoadingAccessStats: false, isLoadingClassification: false });
+            instance.render();
+            expect(wrapper.find({ isLoading: true })).toHaveLength(0);
+        });
     });
 
     describe('componentDidMount()', () => {
