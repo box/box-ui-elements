@@ -2,12 +2,13 @@ import Recents from '../Recents';
 import Cache from '../../util/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../util/fields';
 
-let recents;
-let cache;
-
 describe('api/Recents', () => {
+    let recents;
+    let cache;
+    const errorCode = 'foo';
     beforeEach(() => {
         recents = new Recents({});
+        recents.errorCode = errorCode;
         cache = new Cache();
     });
 
@@ -122,13 +123,13 @@ describe('api/Recents', () => {
         test('should not do anything if destroyed', () => {
             recents.isDestroyed = jest.fn().mockReturnValueOnce(true);
             recents.errorCallback = jest.fn();
-            recents.recentsErrorHandler('foo');
+            recents.recentsErrorHandler('foo', errorCode);
             expect(recents.errorCallback).not.toHaveBeenCalled();
         });
         test('should call error callback', () => {
             recents.errorCallback = jest.fn();
-            recents.recentsErrorHandler('foo');
-            expect(recents.errorCallback).toHaveBeenCalledWith('foo');
+            recents.recentsErrorHandler('foo', errorCode);
+            expect(recents.errorCallback).toHaveBeenCalledWith('foo', errorCode);
         });
     });
 

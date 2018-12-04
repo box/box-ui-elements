@@ -10,6 +10,8 @@ import MultiputPart, {
     PART_STATE_NOT_STARTED,
 } from '../MultiputPart';
 
+import { ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED } from '../../../constants';
+
 const config = {
     a: 1,
 };
@@ -354,7 +356,7 @@ describe('api/uploads/MultiputUpload', () => {
 
         withData(
             {
-                'storage limit exceeded': [{ code: 'storage_limit_exceeded', status: 403 }],
+                'storage limit exceeded': [{ code: ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED, status: 403 }],
                 'insufficient permissions': [
                     {
                         code: 'access_denied_insufficient_permissions',

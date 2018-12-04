@@ -39,7 +39,7 @@ class MarkerBasedApi extends Base {
      * @param {string} id the file id
      * @param {string} marker the marker from the start to start fetching at
      * @param {number} limit the number of items to fetch
-     * @param {Object} params the request query params
+     * @param {Object} requestData the request query params
      * @param {boolean} shouldFetchAll true if should get all the pages before calling
      * @private
      */
@@ -48,7 +48,7 @@ class MarkerBasedApi extends Base {
         marker: string,
         limit: number,
         shouldFetchAll: boolean,
-        params?: Object,
+        requestData: Object = {},
     ): Promise<void> {
         if (this.isDestroyed()) {
             return;
@@ -58,7 +58,7 @@ class MarkerBasedApi extends Base {
         try {
             const url = this.getUrl(id);
             const queryParams: Params = {
-                ...params,
+                ...requestData,
                 marker,
                 limit,
             };
@@ -76,7 +76,7 @@ class MarkerBasedApi extends Base {
             };
             const nextMarker = data.next_marker;
             if (shouldFetchAll && this.hasMoreItems(nextMarker)) {
-                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, params);
+                this.markerGetRequest(id, nextMarker, limit, shouldFetchAll, requestData);
                 return;
             }
 
@@ -103,21 +103,21 @@ class MarkerBasedApi extends Base {
         errorCallback,
         marker = '',
         limit = 1000,
-        params,
+        requestData,
         shouldFetchAll = true,
     }: {
         id: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
         marker?: string,
         limit?: number,
-        params?: Object,
+        requestData?: Object,
         shouldFetchAll?: boolean,
     }): Promise<void> {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        return this.markerGetRequest(id, marker, limit, shouldFetchAll, params);
+        return this.markerGetRequest(id, marker, limit, shouldFetchAll, requestData);
     }
 }
 

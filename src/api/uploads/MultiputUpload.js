@@ -10,7 +10,11 @@ import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay 
 import { retryNumOfTimes } from '../../util/function';
 import { digest } from '../../util/webcrypto';
 import hexToBase64 from '../../util/base64';
-import { DEFAULT_RETRY_DELAY_MS, HTTP_STATUS_CODE_FORBIDDEN } from '../../constants';
+import {
+    DEFAULT_RETRY_DELAY_MS,
+    ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
+    HTTP_STATUS_CODE_FORBIDDEN,
+} from '../../constants';
 import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
 import createWorker from '../../util/uploadsSHA1Worker';
 
@@ -234,7 +238,8 @@ class MultiputUpload extends BaseMultiput {
 
             if (
                 (errorData &&
-                    (errorData.status === HTTP_STATUS_CODE_FORBIDDEN && errorData.code === 'storage_limit_exceeded')) ||
+                    (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
+                        errorData.code === ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED)) ||
                 (errorData.status === HTTP_STATUS_CODE_FORBIDDEN &&
                     errorData.code === 'access_denied_insufficient_permissions')
             ) {

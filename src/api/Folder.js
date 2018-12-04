@@ -10,7 +10,7 @@ import flatten from '../util/flatten';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
-import { CACHE_PREFIX_FOLDER } from '../constants';
+import { CACHE_PREFIX_FOLDER, ERROR_CODE_FETCH_FOLDER, ERROR_CODE_CREATE_FOLDER } from '../constants';
 import { getBadItemError } from '../util/error';
 
 class Folder extends Item {
@@ -57,7 +57,7 @@ class Folder extends Item {
     /**
      * @property {Function}
      */
-    errorCallback: Function;
+    errorCallback: ElementsErrorCallback;
 
     /**
      * Creates a key for the cache
@@ -184,6 +184,8 @@ class Folder extends Item {
             return Promise.reject();
         }
 
+        this.errorCode = ERROR_CODE_FETCH_FOLDER;
+
         return this.xhr
             .get({
                 url: this.getUrl(this.id),
@@ -303,6 +305,7 @@ class Folder extends Item {
             return Promise.reject();
         }
 
+        this.errorCode = ERROR_CODE_CREATE_FOLDER;
         const url = `${this.getUrl()}?fields=${FOLDER_FIELDS_TO_FETCH.toString()}`;
         return this.xhr
             .post({

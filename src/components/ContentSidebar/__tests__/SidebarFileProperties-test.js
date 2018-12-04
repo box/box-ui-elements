@@ -6,7 +6,7 @@ import SidebarFileProperties, {
     SidebarFilePropertiesComponent,
     getClassificationModal,
 } from '../SidebarFileProperties';
-import { METADATA_TEMPLATE_CLASSIFICATION, KEY_CLASSIFICATION_TYPE } from '../../../constants';
+import { KEY_CLASSIFICATION_TYPE } from '../../../constants';
 
 describe('components/ContentSidebar/SidebarFileProperties', () => {
     const getWrapper = props => shallow(<SidebarFilePropertiesComponent {...props} />);
@@ -41,19 +41,15 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
         },
         file: {
             size: '1',
-            metadata: {
-                enterprise: {
-                    [METADATA_TEMPLATE_CLASSIFICATION]: {
-                        [KEY_CLASSIFICATION_TYPE]: 'Public',
-                    },
-                },
-            },
             permissions: {
                 can_upload: false,
             },
         },
         intl: {
             locale: 'en',
+        },
+        classification: {
+            [KEY_CLASSIFICATION_TYPE]: 'Public',
         },
     };
 

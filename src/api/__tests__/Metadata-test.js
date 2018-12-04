@@ -1,7 +1,19 @@
 import Metadata from '../Metadata';
 import Cache from '../../util/Cache';
 import * as ErrorUtil from '../../util/error';
-import { METADATA_TEMPLATE_CLASSIFICATION, METADATA_SCOPE_GLOBAL, METADATA_TEMPLATE_PROPERTIES } from '../../constants';
+import {
+    KEY_CLASSIFICATION_TYPE,
+    METADATA_TEMPLATE_CLASSIFICATION,
+    METADATA_SCOPE_ENTERPRISE,
+    METADATA_SCOPE_GLOBAL,
+    METADATA_TEMPLATE_PROPERTIES,
+    ERROR_CODE_DELETE_METADATA,
+    ERROR_CODE_CREATE_METADATA,
+    ERROR_CODE_UPDATE_METADATA,
+    ERROR_CODE_UPDATE_SKILLS,
+    ERROR_CODE_FETCH_SKILLS,
+    ERROR_CODE_FETCH_CLASSIFICATION,
+} from '../../constants';
 
 let metadata;
 
@@ -25,6 +37,12 @@ describe('api/Metadata', () => {
     describe('getSkillsCacheKey()', () => {
         test('should return correct key', () => {
             expect(metadata.getSkillsCacheKey('foo')).toBe('metadata_foo_skills');
+        });
+    });
+
+    describe('getClassificationCacheKey()', () => {
+        test('should return correct key', () => {
+            expect(metadata.getClassificationCacheKey('foo')).toBe('metadata_foo_classification');
         });
     });
 
@@ -199,7 +217,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.getSkills({}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_FETCH_SKILLS);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -397,7 +415,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_SKILLS);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -406,7 +424,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({ id: 'id' }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_SKILLS);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -415,7 +433,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({ id: 'id', permissions: {} }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_SKILLS);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -553,13 +571,208 @@ describe('api/Metadata', () => {
         });
     });
 
+    describe('getClassification()', () => {
+        test('should call error callback with a bad item error, and code, when no id', () => {
+            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.getClassification({}, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_FETCH_CLASSIFICATION);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
+        test('should not make request but get classification from cache and call success handler', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            cache.set('cache_id_classification', { [KEY_CLASSIFICATION_TYPE]: 'Test' });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: { [KEY_CLASSIFICATION_TYPE]: 'Test' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
+            metadata.getClassificationCacheKey = jest.fn().mockReturnValueOnce('cache_id_classification');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.getClassification(file, success, error);
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).not.toHaveBeenCalled();
+            expect(metadata.xhr.get).not.toHaveBeenCalled();
+            expect(metadata.isDestroyed).not.toHaveBeenCalled();
+            expect(metadata.getClassificationCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.successHandler).toHaveBeenCalledWith({ [KEY_CLASSIFICATION_TYPE]: 'Test' });
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+        });
+        test('should get classification from cache and call success handler, and then refresh the cache by making a request', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            cache.set('cache_id_classification', { [KEY_CLASSIFICATION_TYPE]: 'Test' });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: { [KEY_CLASSIFICATION_TYPE]: 'Test' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
+            metadata.getClassificationCacheKey = jest.fn().mockReturnValueOnce('cache_id_classification');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.getClassification(file, success, error, { refreshCache: true });
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalled();
+            expect(metadata.isDestroyed).toHaveBeenCalled();
+            expect(metadata.getClassificationCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.successHandler).toHaveBeenCalledWith({ [KEY_CLASSIFICATION_TYPE]: 'Test' });
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+        });
+        test('should make request and update cache and success handler', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            cache.set('cache_id_classification', { [KEY_CLASSIFICATION_TYPE]: 'Test' });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: { [KEY_CLASSIFICATION_TYPE]: 'Foo' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getClassificationCacheKey = jest.fn().mockReturnValueOnce('cache_id_classification');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.getClassification(file, success, error, { forceFetch: true });
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).toHaveBeenCalledWith(
+                file.id,
+                METADATA_SCOPE_ENTERPRISE,
+                METADATA_TEMPLATE_CLASSIFICATION,
+            );
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+            });
+            expect(metadata.isDestroyed).toHaveBeenCalled();
+            expect(metadata.getCache).toHaveBeenCalled();
+            expect(metadata.getClassificationCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.successHandler).toHaveBeenCalledWith({ [KEY_CLASSIFICATION_TYPE]: 'Foo' });
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+            expect(cache.get('cache_id_classification')).toEqual({ [KEY_CLASSIFICATION_TYPE]: 'Foo' });
+        });
+        test('should make request but update cache or call success handler when destroyed', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            cache.set('cache_id_classification', { [KEY_CLASSIFICATION_TYPE]: 'test' });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: { [KEY_CLASSIFICATION_TYPE]: 'test' } });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getClassificationCacheKey = jest.fn().mockReturnValueOnce('cache_id_classification');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.getClassification(file, success, error, { forceFetch: true });
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).toHaveBeenCalledWith(
+                file.id,
+                METADATA_SCOPE_ENTERPRISE,
+                METADATA_TEMPLATE_CLASSIFICATION,
+            );
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+            });
+            expect(metadata.isDestroyed).toHaveBeenCalled();
+            expect(metadata.getClassificationCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.successHandler).not.toHaveBeenCalled();
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+            expect(cache.get('cache_id_classification')).toBeUndefined();
+        });
+        test('should make request and call error handler for error', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            cache.set('cache_id_classification', { [KEY_CLASSIFICATION_TYPE]: 'test' });
+            const xhrError = new Error('error');
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce(Promise.reject(xhrError));
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getClassificationCacheKey = jest.fn().mockReturnValueOnce('cache_id_classification');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.getClassification(file, success, error, { forceFetch: true });
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).toHaveBeenCalledWith(
+                file.id,
+                METADATA_SCOPE_ENTERPRISE,
+                METADATA_TEMPLATE_CLASSIFICATION,
+            );
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+            });
+            expect(metadata.isDestroyed).not.toHaveBeenCalled();
+            expect(metadata.getClassificationCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.successHandler).not.toHaveBeenCalled();
+            expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
+            expect(cache.get('cache_id_classificiation')).toBeUndefined();
+        });
+    });
+
     describe('updateMetadata()', () => {
         test('should call error callback with a bad item error when no id', () => {
             ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({}, {}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -568,7 +781,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({ id: 'id' }, {}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -577,7 +790,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({ id: 'id', permissions: {} }, {}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -592,7 +805,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_UPDATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -804,7 +1017,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -813,7 +1026,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({ id: 'id' }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -822,7 +1035,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({ id: 'id', permissions: {} }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -836,7 +1049,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -854,7 +1067,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -872,7 +1085,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -1079,7 +1292,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({}, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -1088,7 +1301,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({ id: 'id' }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
@@ -1097,7 +1310,7 @@ describe('api/Metadata', () => {
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({ id: 'id', permissions: {} }, {}, successCallback, errorCallback);
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });
@@ -1111,7 +1324,7 @@ describe('api/Metadata', () => {
                 successCallback,
                 errorCallback,
             );
-            expect(errorCallback).toBeCalledWith('error');
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadPermissionsError).toBeCalled();
         });

@@ -9,22 +9,24 @@ import {
     HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR,
 } from '../constants';
 
-export function getBadItemError(): Error {
+function getBadItemError(): Error {
     return new Error('Bad box item!');
 }
 
-export function getBadPermissionsError(): Error {
+function getBadPermissionsError(): Error {
     return new Error('Insufficient Permissions!');
 }
 
-export function getBadUserError(): Error {
+function getBadUserError(): Error {
     return new Error('Bad box user!');
 }
 
-export function isUserCorrectableError(status: number) {
+function isUserCorrectableError(status: number) {
     return (
         status === HTTP_STATUS_CODE_RATE_LIMIT ||
         status === HTTP_STATUS_CODE_UNAUTHORIZED ||
         status >= HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR
     );
 }
+
+export { getBadItemError, getBadPermissionsError, getBadUserError, isUserCorrectableError };

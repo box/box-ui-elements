@@ -7,7 +7,13 @@
 import Item from './Item';
 import { findMissingProperties, fillMissingProperties } from '../util/fields';
 import { getTypedFileId } from '../util/file';
-import { FIELD_DOWNLOAD_URL, CACHE_PREFIX_FILE, X_REP_HINTS } from '../constants';
+import {
+    FIELD_DOWNLOAD_URL,
+    CACHE_PREFIX_FILE,
+    X_REP_HINTS,
+    ERROR_CODE_GET_DOWNLOAD_URL,
+    ERROR_CODE_FETCH_FILE,
+} from '../constants';
 import { getBadItemError, getBadPermissionsError } from '../util/error';
 
 class File extends Item {
@@ -40,7 +46,8 @@ class File extends Item {
      * @param {Function} errorCallback - Error callback
      * @return {void}
      */
-    getDownloadUrl(id: string, successCallback: Function, errorCallback: Function): Promise<void> {
+    getDownloadUrl(id: string, successCallback: Function, errorCallback: ElementsErrorCallback): Promise<void> {
+        this.errorCode = ERROR_CODE_GET_DOWNLOAD_URL;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         return this.xhr
@@ -53,7 +60,9 @@ class File extends Item {
             .then(({ data }: { data: BoxItem }) => {
                 this.successHandler(data[FIELD_DOWNLOAD_URL]);
             })
-            .catch(this.errorHandler);
+            .catch((e: $AxiosError<any>) => {
+                this.errorHandler(e);
+            });
     }
 
     /**
@@ -117,7 +126,7 @@ class File extends Item {
     async getFile(
         id: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
         options: FetchOptions = {},
     ): Promise<void> {
         if (this.isDestroyed()) {
@@ -134,7 +143,7 @@ class File extends Item {
             url: this.getUrl(id),
             headers: { 'X-Rep-Hints': X_REP_HINTS },
         };
-
+        this.errorCode = ERROR_CODE_FETCH_FILE;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 

@@ -6,9 +6,11 @@ describe('api/OffsetBasedAPI', () => {
     let offsetBasedAPI;
     const offsetBasedAPIResponse = { total_count: 0, entries: [] };
     const url = 'https://foo.bar';
+    const errorCode = 'foo';
 
     beforeEach(() => {
         offsetBasedAPI = new OffsetBasedAPI({});
+        offsetBasedAPI.errorCode = errorCode;
     });
 
     describe('getQueryParameters()', () => {
@@ -150,7 +152,7 @@ describe('api/OffsetBasedAPI', () => {
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
                 expect(successCb).not.toHaveBeenCalled();
-                expect(errorCb).toHaveBeenCalledWith(error);
+                expect(errorCb).toHaveBeenCalledWith(error, errorCode);
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',
                     url,

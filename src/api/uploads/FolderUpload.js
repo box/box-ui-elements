@@ -158,12 +158,15 @@ class FolderUpload {
         successCallback: Function,
     }): Promise<any> {
         await this.folder.upload(this.destinationFolderId, errorCallback, true);
-        // Simulate BoxItem
-        successCallback([
-            {
-                id: this.folder.folderId,
-            },
-        ]);
+        // If the folder upload failed then a folderID will not be set
+        const newFolderId = this.folder.getFolderId();
+        if (newFolderId) {
+            successCallback([
+                {
+                    id: newFolderId,
+                },
+            ]);
+        }
     }
 
     /**
