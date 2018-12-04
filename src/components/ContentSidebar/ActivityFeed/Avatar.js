@@ -49,13 +49,8 @@ class Avatar extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { user, className, getAvatarUrl }: Props = this.props;
+        const { user, className }: Props = this.props;
         const { avatarUrl }: State = this.state;
-
-        if (getAvatarUrl && !avatarUrl) {
-            return null;
-        }
-
         const { id, name } = user;
 
         return <AvatarComponent className={className} id={id} name={name} avatarUrl={avatarUrl} />;
