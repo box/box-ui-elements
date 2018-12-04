@@ -61,4 +61,13 @@ describe('components/ContentSidebar/ActivityFeed/Avatar', () => {
             });
         expect(getAvatarUrl).not.toBeCalledWith(user.id);
     });
+
+    test('should set the avatarUrl state from user prop', () => {
+        const wrapper = getWrapper({ user });
+        expect(wrapper.state('avatarUrl')).toBe(null);
+        wrapper.instance().getAvatarUrl();
+        wrapper.update();
+        expect(getAvatarUrl).not.toBeCalledWith(user.id);
+        expect(wrapper.dive()).toMatchSnapshot();
+    });
 });
