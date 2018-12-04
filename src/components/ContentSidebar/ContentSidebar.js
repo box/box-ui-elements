@@ -24,7 +24,6 @@ import {
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
     ORIGIN_CONTENT_SIDEBAR,
-    ERROR_CODE_FETCH_FILE,
 } from '../../constants';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
@@ -226,15 +225,16 @@ class ContentSidebar extends PureComponent<Props, State> {
      *
      * @private
      * @param {Error} error - Error object
+     * @param {string} code - error code
      * @return {void}
      */
-    errorCallback = (error: ElementsXhrError): void => {
+    errorCallback = (error: ElementsXhrError, code: string): void => {
         /* eslint-disable no-console */
         console.error(error);
         /* eslint-enable no-console */
 
         /* eslint-disable react/prop-types */
-        this.props.onError(error, ERROR_CODE_FETCH_FILE, {
+        this.props.onError(error, code, {
             error,
         });
         /* eslint-enable react/prop-types */

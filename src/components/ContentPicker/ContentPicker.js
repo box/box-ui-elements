@@ -351,10 +351,10 @@ class ContentPicker extends Component<Props, State> {
      * @param {Error} error error object
      * @return {void}
      */
-    errorCallback = (error: Error): void => {
+    errorCallback = (error: ElementsXhrError, code: string): void => {
         this.setState({ view: VIEW_ERROR });
         /* eslint-disable no-console */
-        console.error(error);
+        console.error(error, code);
         /* eslint-enable no-console */
     };
 

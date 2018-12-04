@@ -40,7 +40,6 @@ import {
     HEADER_RETRY_AFTER,
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
-    ERROR_CODE_FETCH_FILE,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import '../fonts.scss';
@@ -754,11 +753,11 @@ class ContentPreview extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    fetchFileErrorCallback = (fileError: ElementsXhrError): void => {
+    fetchFileErrorCallback = (fileError: ElementsXhrError, code: string): void => {
         const { currentFileId } = this.state;
         if (this.retryCount >= RETRY_COUNT) {
             this.setState({ isFileError: true });
-            this.props.onError(fileError, ERROR_CODE_FETCH_FILE, {
+            this.props.onError(fileError, code, {
                 error: fileError,
             });
         } else {

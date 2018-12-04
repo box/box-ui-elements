@@ -7,6 +7,7 @@
 import Base from './Base';
 import TokenService from '../util/TokenService';
 import { getTypedFileId } from '../util/file';
+import { ERROR_CODE_FETCH_CURRENT_USER } from '../constants';
 
 class Users extends Base {
     /**
@@ -46,6 +47,30 @@ class Users extends Base {
         }
 
         return null;
+    }
+
+    /**
+     * API for fetching a user
+     *
+     * @param {string} id - a box file id
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {Object} requestData - additional request data
+     * @returns {Promise<void>}
+     */
+    getUser(
+        id: string,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+        requestData: Object = {},
+    ): void {
+        this.errorCode = ERROR_CODE_FETCH_CURRENT_USER;
+        this.get({
+            id,
+            successCallback,
+            errorCallback,
+            requestData,
+        });
     }
 }
 

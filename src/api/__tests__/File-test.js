@@ -1,7 +1,7 @@
 import File from '../File';
 import Cache from '../../util/Cache';
 import * as fields from '../../util/fields';
-import { X_REP_HINTS } from '../../constants';
+import { X_REP_HINTS, ERROR_CODE_FETCH_FILE, ERROR_CODE_GET_DOWNLOAD_URL } from '../../constants';
 
 jest.mock('../../util/file', () => ({
     getTypedFileId: jest.fn().mockReturnValue('file_id'),
@@ -67,7 +67,7 @@ describe('api/File', () => {
             file.xhr = { get };
             return file.getDownloadUrl('foo', successCb, errorCb).then(() => {
                 expect(successCb).not.toHaveBeenCalled();
-                expect(errorCb).toHaveBeenCalledWith(error);
+                expect(errorCb).toHaveBeenCalledWith(error, ERROR_CODE_GET_DOWNLOAD_URL);
                 expect(get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/files/foo',
                     params: { fields: 'download_url' },
@@ -374,7 +374,7 @@ describe('api/File', () => {
             });
 
             expect(successCb).not.toHaveBeenCalled();
-            expect(errorCb).toHaveBeenCalledWith(error);
+            expect(errorCb).toHaveBeenCalledWith(error, ERROR_CODE_FETCH_FILE);
             expect(file.xhr.get).toHaveBeenCalledWith({
                 id: 'file_id',
                 url: 'https://api.box.com/2.0/files/id',

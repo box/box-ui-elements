@@ -10,9 +10,11 @@ describe('api/MarkerBasedAPI', () => {
         entries: [],
     };
     const url = 'https://foo.bar';
+    const errorCode = 'foo';
 
     beforeEach(() => {
         markerBasedAPI = new MarkerBasedAPI({});
+        markerBasedAPI.errorCode = errorCode;
     });
 
     describe('hasMoreItems()', () => {
@@ -102,6 +104,9 @@ describe('api/MarkerBasedAPI', () => {
         });
 
         test('should make xhr to get markerBasedAPI and call success callback', () => {
+            const requestData = {
+                foo: 'bar',
+            };
             markerBasedAPI.xhr = {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse })),
             };
@@ -115,6 +120,7 @@ describe('api/MarkerBasedAPI', () => {
                     marker: 'next_marker',
                     limit: LIMIT,
                     shouldFetchAll: true,
+                    requestData,
                 })
                 .then(() => {
                     expect(successCallback).toHaveBeenCalledWith(markerBasedAPIResponse);
@@ -126,6 +132,7 @@ describe('api/MarkerBasedAPI', () => {
                         params: {
                             marker: 'next_marker',
                             limit: LIMIT,
+                            ...requestData,
                         },
                     });
                 });
@@ -145,10 +152,11 @@ describe('api/MarkerBasedAPI', () => {
                     marker: '',
                     limit: LIMIT,
                     shouldFetchAll: true,
+                    errorCode,
                 })
                 .then(() => {
                     expect(successCallback).not.toHaveBeenCalled();
-                    expect(errorCallback).toHaveBeenCalledWith(error);
+                    expect(errorCallback).toHaveBeenCalledWith(error, errorCode);
                     expect(markerBasedAPI.xhr.get).toHaveBeenCalledWith({
                         id: 'file_id',
                         url,
