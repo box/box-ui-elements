@@ -6,6 +6,7 @@
 
 import React from 'react';
 import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
+import isFinite from 'lodash/isFinite';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import messages from '../messages';
@@ -33,10 +34,10 @@ const SidebarAccessStats = ({
     const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
     if (
-        !Number.isFinite(preview_count) &&
-        !Number.isFinite(comment_count) &&
-        !Number.isFinite(download_count) &&
-        !Number.isFinite(edit_count) &&
+        !isFinite(preview_count) &&
+        !isFinite(comment_count) &&
+        !isFinite(download_count) &&
+        !isFinite(edit_count) &&
         !error
     ) {
         return null;

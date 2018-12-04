@@ -6,6 +6,7 @@ let item;
 let file;
 let folder;
 let cache;
+const errorCode = 'foo';
 
 describe('api/Item', () => {
     beforeEach(() => {
@@ -32,6 +33,9 @@ describe('api/Item', () => {
     });
 
     describe('errorHandler()', () => {
+        beforeEach(() => {
+            item.errorCode = errorCode;
+        });
         test('should not do anything if destroyed', () => {
             item.isDestroyed = jest.fn().mockReturnValueOnce(true);
             item.errorCallback = jest.fn();
@@ -48,7 +52,7 @@ describe('api/Item', () => {
         test('should call error callback with response data', () => {
             item.errorCallback = jest.fn();
             item.errorHandler({ response: { data: 'foo' } });
-            expect(item.errorCallback).toHaveBeenCalledWith('foo');
+            expect(item.errorCallback).toHaveBeenCalledWith('foo', errorCode);
         });
     });
 

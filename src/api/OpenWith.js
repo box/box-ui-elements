@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE } from '../constants';
+import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE, ERROR_CODE_FETCH_INTEGRATIONS } from '../constants';
 
 class OpenWith extends Base {
     /**
@@ -35,8 +35,9 @@ class OpenWith extends Base {
         fileId: string,
         locale: ?string = DEFAULT_LOCALE,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     ) {
+        this.errorCode = ERROR_CODE_FETCH_INTEGRATIONS;
         const params = {
             headers: {
                 [HEADER_ACCEPT_LANGUAGE]: locale,

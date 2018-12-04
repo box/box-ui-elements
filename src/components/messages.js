@@ -637,6 +637,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Error message shown when pending app folder size exceeds the limit',
         defaultMessage: 'Pending app folder size limit exceeded',
     },
+    uploadsProvidedFolderNameInvalidMessage: {
+        id: 'be.uploadsProvidedFolderNameInvalidMessage',
+        description: 'Error message shown when pending folder upload contains invalid characters',
+        defaultMessage: 'Provided folder name, {name}, could not be used to create a folder.',
+    },
+    uploadsOneOrMoreChildFoldersFailedToUploadMessage: {
+        id: 'be.uploadsOneOrMoreChildFoldersFailedToUploadMessage',
+        description: 'Error message shown when one or more child folders failed to upload',
+        defaultMessage: 'One or more child folders failed to upload.',
+    },
     uploadsDefaultErrorMessage: {
         id: 'be.uploadsDefaultErrorMessage',
         description: 'Default error message shown when upload fails',
@@ -887,6 +897,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.accessStatsPermissionsError',
         description: 'The text for when the user does not have permissions to see access stats.',
         defaultMessage: 'Sorry, you do not have permission to see the access stats for this file.',
+    },
+    fileClassificationErrorHeaderMessage: {
+        id: 'be.fileClassificationErrorHeaderMessage',
+        description: 'File classification error message',
+        defaultMessage: 'Something went wrong when fetching classification.',
     },
     currentUserErrorHeaderMessage: {
         id: 'be.currentUserErrorHeaderMessage',

@@ -3,8 +3,9 @@
  * @file class for Box offset based API's to inherit common functionality from
  * @author Box
  */
-import { getTypedFileId } from '../util/file';
 import Base from './Base';
+import { getTypedFileId } from '../util/file';
+import { DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
 
 type Params = {
     offset: number,
@@ -119,9 +120,9 @@ class OffsetBasedApi extends Base {
     async offsetGet(
         id: string,
         successCallback: Function,
-        errorCallback: Function,
-        offset: number = 0,
-        limit: number = 1000,
+        errorCallback: ElementsErrorCallback,
+        offset: number = DEFAULT_FETCH_START,
+        limit: number = DEFAULT_FETCH_END,
         fields?: Array<string>,
         shouldFetchAll: boolean = true,
     ): Promise<void> {

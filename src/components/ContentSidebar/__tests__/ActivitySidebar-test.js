@@ -18,10 +18,15 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
     const usersAPI = {
         get: jest.fn(),
         getAvatarUrlWithAccessToken: jest.fn().mockResolvedValue('foo'),
+        getUser: jest.fn(),
+    };
+    const fileCollaboratorsAPI = {
+        getFileCollaborators: jest.fn(),
     };
     const api = {
         getUsersAPI: () => usersAPI,
         getFeedAPI: () => feedAPI,
+        getFileCollaboratorsAPI: () => fileCollaboratorsAPI,
     };
     const file = {
         id: 'I_AM_A_FILE',
@@ -38,7 +43,9 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             },
         ],
     };
-    const getWrapper = (props = {}) => shallow(<ActivitySidebarComponent api={api} file={file} {...props} />);
+    const onError = jest.fn();
+    const getWrapper = (props = {}) =>
+        shallow(<ActivitySidebarComponent api={api} file={file} onError={onError} {...props} />);
 
     describe('componentDidMount()', () => {
         let wrapper;
@@ -162,7 +169,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
 
         test('should get the user', () => {
             instance.fetchCurrentUser();
-            expect(usersAPI.get).toBeCalled();
+            expect(usersAPI.getUser).toBeCalled();
         });
     });
 
@@ -483,6 +490,39 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             const avatarUrl = instance.getAvatarUrl(currentUser.id);
             expect(avatarUrl instanceof Promise).toBe(true);
             expect(usersAPI.getAvatarUrlWithAccessToken).toBeCalledWith(currentUser.id, file.id);
+        });
+    });
+
+    describe('getCollaborators()', () => {
+        let wrapper;
+        let instance;
+        let successCb;
+        let errorCb;
+
+        beforeEach(() => {
+            successCb = jest.fn();
+            errorCb = jest.fn();
+            wrapper = getWrapper({
+                file,
+            });
+            instance = wrapper.instance();
+        });
+
+        test('should short circuit if there is no search string', () => {
+            instance.getCollaborators(successCb, errorCb);
+            instance.getCollaborators(successCb, errorCb, '');
+            instance.getCollaborators(successCb, errorCb, '  ');
+            expect(fileCollaboratorsAPI.getFileCollaborators).not.toHaveBeenCalled();
+        });
+
+        test('should get the collaborators', () => {
+            const searchStr = 'foo';
+            instance.getCollaborators(successCb, errorCb, searchStr);
+            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(file.id, successCb, errorCb, {
+                params: {
+                    filter_term: searchStr,
+                },
+            });
         });
     });
 });

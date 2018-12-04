@@ -36,6 +36,7 @@ describe('api/uploads/FolderUploadNode', () => {
             folderUploadNodeInstance.addFilesToUploadQueue = jest.fn();
             folderUploadNodeInstance.uploadChildFolders = jest.fn();
             folderUploadNodeInstance.getFormattedFiles = jest.fn(() => files);
+            folderUploadNodeInstance.getFolderId = jest.fn(() => 123);
 
             await folderUploadNodeInstance.upload(parentFolderId, errorCallback, isRoot);
 
@@ -127,16 +128,14 @@ describe('api/uploads/FolderUploadNode', () => {
 
             await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
 
-            expect(folderUploadNodeInstance.addFolderToUploadQueue).toHaveBeenCalledWith([
-                {
-                    extension: '',
-                    name,
-                    status: STATUS_COMPLETE,
-                    isFolder: true,
-                    size: 1,
-                    progress: 100,
-                },
-            ]);
+            expect(folderUploadNodeInstance.addFolderToUploadQueue).toHaveBeenCalledWith({
+                extension: '',
+                name,
+                status: STATUS_COMPLETE,
+                isFolder: true,
+                size: 1,
+                progress: 100,
+            });
         });
 
         test('should not addFolderToUploadQueue() when folder is created successfully for root folder', async () => {
