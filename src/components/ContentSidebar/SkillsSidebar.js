@@ -15,7 +15,6 @@ import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
 import SidebarSkills from './Skills/SidebarSkills';
 import API from '../../api';
-import './SkillsSidebar.scss';
 
 type PropsWithoutContext = {
     file: BoxItem,

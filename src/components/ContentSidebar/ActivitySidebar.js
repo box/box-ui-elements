@@ -16,7 +16,6 @@ import { withErrorBoundary } from '../ErrorBoundary';
 import { getBadUserError, getBadItemError } from '../../util/error';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
-import './ActivitySidebar.scss';
 
 type ExternalProps = {
     onCommentCreate?: Function,
