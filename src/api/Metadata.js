@@ -549,11 +549,16 @@ class Metadata extends File {
             return null;
         }
 
-        legacyInstance.fields.forEach(({ key, type, displayName, options, description }) => {
+        legacyInstance.fields.forEach(({ key, type, displayName, options, description, editor }) => {
             let v2Type = type;
-            if (type === 'array') {
+            if (editor === 'calendar') {
+                v2Type = 'date';
+            } else if (editor === 'dropdown') {
+                v2Type = 'enum';
+            } else if (editor === 'multipleSelection') {
                 v2Type = 'multiSelect';
             }
+
             fields.push({
                 id: uniqueId('metadata_field_'),
                 type: v2Type,
