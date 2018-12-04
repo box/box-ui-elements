@@ -9,6 +9,13 @@ green=$"\n\e[1;32m(✔) "
 blue=$"\n\e[1;34m(ℹ) "
 end=$"\e[0m\n"
 
+check_release_scripts_changed() {
+    if [[ $(git diff --shortstat HEAD..release/master conf  2> /dev/null | tail -n1) != "" ]] ; then
+        printf "${red}Build scripts have changed, aborting! Reset to master before running release.${end}"
+        return 1
+    fi
+}
+
 setup() {
     # Add release remote branch
     if git remote get-url release; then
@@ -31,6 +38,9 @@ setup() {
     printf "${blue}Fetching from remote release branch...${end}"
     git fetch release || return 1
     printf "${green}Fetched from remote release branch!${end}"
+
+    # Only proceed if release scripts haven't changed
+    check_release_scripts_changed || return 1
 
     if [ "$HOTFIX" == true ]; then
         printf "${blue}This is a hotfix release, ignoring reset to master...${end}"
