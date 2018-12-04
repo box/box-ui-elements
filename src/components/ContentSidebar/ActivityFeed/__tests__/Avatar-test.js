@@ -16,6 +16,7 @@ describe('components/ContentSidebar/ActivityFeed/Avatar', () => {
     test('should render nothing if no avatarUrl in state and getAvatarUrl method was passed', () => {
         expect(
             getWrapper({ user, getAvatarUrl })
+                .dive()
                 .find('Avatar')
                 .exists(),
         ).toBe(false);
