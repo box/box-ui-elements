@@ -84,6 +84,7 @@ type Props = {
 type State = {
     errorCode?: string,
     isUploadsManagerExpanded: boolean,
+    isAutoExpanded: boolean,
     itemIds: Object,
     items: UploadItem[],
     view: View,
@@ -147,6 +148,7 @@ class ContentUploader extends Component<Props, State> {
             errorCode: '',
             itemIds: {},
             isUploadsManagerExpanded: false,
+            isAutoExpanded: false,
         };
         this.id = uniqueid('bcu_');
     }
@@ -561,6 +563,9 @@ class ContentUploader extends Component<Props, State> {
                 totalNumOfItems >= EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
                 useUploadsManager
             ) {
+                this.setState({
+                    isAutoExpanded: true,
+                });
                 this.expandUploadsManager();
             }
         }
@@ -755,6 +760,13 @@ class ContentUploader extends Component<Props, State> {
         this.upload();
     };
 
+    resetUploadManagerExpandState = () => {
+        this.setState({
+            isUploadsManagerExpanded: false,
+            isAutoExpanded: false,
+        });
+    };
+
     /**
      * Updates view and internal upload collection with provided items.
      *
@@ -792,13 +804,15 @@ class ContentUploader extends Component<Props, State> {
         }
 
         if (noFileIsPendingOrInProgress && useUploadsManager) {
+            if (this.state.isAutoExpanded) {
+                this.resetUploadManagerExpandState();
+            } // Else manually expanded so don't close
             onComplete(items);
         }
 
         const state: Object = {
             items,
             view,
-            isUploadsManagerExpanded: this.state.isUploadsManagerExpanded,
         };
 
         if (itemIds) {
@@ -931,8 +945,7 @@ class ContentUploader extends Component<Props, State> {
         clearTimeout(this.resetItemsTimeout);
 
         onMinimize();
-        this.setState({ isUploadsManagerExpanded: false });
-
+        this.resetUploadManagerExpandState();
         this.hideUploadsManager();
     };
 
