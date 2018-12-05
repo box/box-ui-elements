@@ -519,9 +519,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             const searchStr = 'foo';
             instance.getCollaborators(successCb, errorCb, searchStr);
             expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(file.id, successCb, errorCb, {
-                params: {
-                    filter_term: searchStr,
-                },
+                filter_term: searchStr,
             });
         });
     });
