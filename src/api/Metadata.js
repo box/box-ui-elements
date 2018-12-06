@@ -115,7 +115,7 @@ class Metadata extends File {
             }
         });
 
-        const visibleFields = template.fields && template.fields.filter(field => !field.hidden);
+        const visibleFields = (template.fields && template.fields.filter(field => field && !field.hidden)) || [];
 
         return {
             template: {
