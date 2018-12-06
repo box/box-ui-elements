@@ -541,7 +541,7 @@ class ContentUploader extends Component<Props, State> {
      */
     addToQueue = (newItems: UploadItem[], itemUpdateCallback: Function) => {
         const { fileLimit, useUploadsManager } = this.props;
-        const { view, items } = this.state;
+        const { view, items, isUploadsManagerExpanded } = this.state;
 
         let updatedItems = [];
         const prevItemsNum = items.length;
@@ -561,7 +561,8 @@ class ContentUploader extends Component<Props, State> {
             if (
                 prevItemsNum < EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
                 totalNumOfItems >= EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
-                useUploadsManager
+                useUploadsManager &&
+                !isUploadsManagerExpanded
             ) {
                 this.setState({
                     isAutoExpanded: true,
@@ -751,7 +752,7 @@ class ContentUploader extends Component<Props, State> {
         // Broadcast that a file has been uploaded
         if (useUploadsManager) {
             onUpload(item);
-            this.hideUploadsManager();
+            this.checkClearUploadItems();
         } else {
             onUpload(item.boxFile);
         }
@@ -861,6 +862,9 @@ class ContentUploader extends Component<Props, State> {
         this.updateViewAndCollection(items);
 
         if (useUploadsManager) {
+            this.setState({
+                isAutoExpanded: true,
+            });
             this.expandUploadsManager();
         }
 
@@ -946,15 +950,15 @@ class ContentUploader extends Component<Props, State> {
 
         onMinimize();
         this.resetUploadManagerExpandState();
-        this.hideUploadsManager();
+        this.checkClearUploadItems();
     };
 
     /**
-     * Hides the upload manager
+     * Checks if the upload items should be cleared after a timeout
      *
      * @return {void}
      */
-    hideUploadsManager = () => {
+    checkClearUploadItems = () => {
         this.resetItemsTimeout = setTimeout(
             this.resetUploadsManagerItemsWhenUploadsComplete,
             HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT,
