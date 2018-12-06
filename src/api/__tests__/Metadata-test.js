@@ -84,12 +84,12 @@ describe('api/Metadata', () => {
                         foo: 'bar',
                         $canEdit: true,
                     },
-                    { id: 'foo' },
+                    { id: '1' },
                     false,
                 ),
             ).toEqual({
                 template: {
-                    id: 'foo',
+                    id: '1',
                     fields: [],
                 },
                 instance: {
