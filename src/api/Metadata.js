@@ -103,7 +103,7 @@ class Metadata extends File {
      * and metadata templates.
      *
      * @param {Object} instance - metadata instance
-     * @param {Object} template - metadata tempalte
+     * @param {Object} template - metadata template
      * @param {boolean} canEdit - is instance editable
      * @return {Object} metadata editor
      */
@@ -114,8 +114,14 @@ class Metadata extends File {
                 data[key] = instance[key];
             }
         });
+
+        const visibleFields = (template.fields && template.fields.filter(field => field && !field.hidden)) || [];
+
         return {
-            template,
+            template: {
+                ...template,
+                fields: visibleFields,
+            },
             instance: {
                 id: instance.$id,
                 canEdit: instance.$canEdit && canEdit,
