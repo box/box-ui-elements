@@ -104,7 +104,7 @@ describe('components/ContentUploader/ContentUploader', () => {
         let getChunkedUploadAPI;
 
         const expectAutoExpandStateToBe = expectation => {
-            expect(wrapper.state().isAutoExpanded).toBe(expectation);
+            expect(instance.isAutoExpanded).toBe(expectation);
             expect(wrapper.state().isUploadsManagerExpanded).toBe(expectation);
         };
 
@@ -170,9 +170,10 @@ describe('components/ContentUploader/ContentUploader', () => {
             });
             wrapper.setState({
                 items,
-                isAutoExpanded: true,
                 isUploadsManagerExpanded: true,
             });
+
+            instance.isAutoExpanded = true;
 
             instance.handleUploadSuccess(items[0]);
 

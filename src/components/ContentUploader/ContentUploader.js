@@ -84,7 +84,6 @@ type Props = {
 type State = {
     errorCode?: string,
     isUploadsManagerExpanded: boolean,
-    isAutoExpanded: boolean,
     itemIds: Object,
     items: UploadItem[],
     view: View,
@@ -110,6 +109,8 @@ class ContentUploader extends Component<Props, State> {
     resetItemsTimeout: TimeoutID;
 
     numItemsUploading: number = 0;
+
+    isAutoExpanded: boolean = false;
 
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
@@ -148,7 +149,6 @@ class ContentUploader extends Component<Props, State> {
             errorCode: '',
             itemIds: {},
             isUploadsManagerExpanded: false,
-            isAutoExpanded: false,
         };
         this.id = uniqueid('bcu_');
     }
@@ -564,9 +564,7 @@ class ContentUploader extends Component<Props, State> {
                 useUploadsManager &&
                 !isUploadsManagerExpanded
             ) {
-                this.setState({
-                    isAutoExpanded: true,
-                });
+                this.isAutoExpanded = true;
                 this.expandUploadsManager();
             }
         }
@@ -762,9 +760,9 @@ class ContentUploader extends Component<Props, State> {
     };
 
     resetUploadManagerExpandState = () => {
+        this.isAutoExpanded = false;
         this.setState({
             isUploadsManagerExpanded: false,
-            isAutoExpanded: false,
         });
     };
 
@@ -805,7 +803,7 @@ class ContentUploader extends Component<Props, State> {
         }
 
         if (noFileIsPendingOrInProgress && useUploadsManager) {
-            if (this.state.isAutoExpanded) {
+            if (this.isAutoExpanded) {
                 this.resetUploadManagerExpandState();
             } // Else manually expanded so don't close
             onComplete(items);
@@ -862,9 +860,7 @@ class ContentUploader extends Component<Props, State> {
         this.updateViewAndCollection(items);
 
         if (useUploadsManager) {
-            this.setState({
-                isAutoExpanded: true,
-            });
+            this.isAutoExpanded = true;
             this.expandUploadsManager();
         }
 
