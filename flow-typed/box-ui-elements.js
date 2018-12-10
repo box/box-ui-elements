@@ -225,10 +225,20 @@ type MetadataType = {
     global?: MetadataSkillsTemplate,
 };
 
+type MetadataTemplateField = {
+    displayName: string,
+    description: string,
+    id: string,
+    hidden?: boolean,
+    key: string,
+    type: string,
+}
+
 type MetadataEditorTemplate = {
     id: string,
     scope: string,
     templateKey: string,
+    fields?: Array<MetadataTemplateField>,
     hidden: boolean,
 };
 
