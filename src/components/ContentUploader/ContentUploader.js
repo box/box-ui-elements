@@ -110,6 +110,8 @@ class ContentUploader extends Component<Props, State> {
 
     numItemsUploading: number = 0;
 
+    isAutoExpanded: boolean = false;
+
     static defaultProps = {
         rootFolderId: DEFAULT_ROOT,
         apiHost: DEFAULT_HOSTNAME_API,
@@ -539,7 +541,7 @@ class ContentUploader extends Component<Props, State> {
      */
     addToQueue = (newItems: UploadItem[], itemUpdateCallback: Function) => {
         const { fileLimit, useUploadsManager } = this.props;
-        const { view, items } = this.state;
+        const { view, items, isUploadsManagerExpanded } = this.state;
 
         let updatedItems = [];
         const prevItemsNum = items.length;
@@ -559,8 +561,10 @@ class ContentUploader extends Component<Props, State> {
             if (
                 prevItemsNum < EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
                 totalNumOfItems >= EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD &&
-                useUploadsManager
+                useUploadsManager &&
+                !isUploadsManagerExpanded
             ) {
+                this.isAutoExpanded = true;
                 this.expandUploadsManager();
             }
         }
@@ -746,13 +750,20 @@ class ContentUploader extends Component<Props, State> {
         // Broadcast that a file has been uploaded
         if (useUploadsManager) {
             onUpload(item);
-            this.hideUploadsManager();
+            this.checkClearUploadItems();
         } else {
             onUpload(item.boxFile);
         }
 
         this.updateViewAndCollection(items);
         this.upload();
+    };
+
+    resetUploadManagerExpandState = () => {
+        this.isAutoExpanded = false;
+        this.setState({
+            isUploadsManagerExpanded: false,
+        });
     };
 
     /**
@@ -792,13 +803,15 @@ class ContentUploader extends Component<Props, State> {
         }
 
         if (noFileIsPendingOrInProgress && useUploadsManager) {
+            if (this.isAutoExpanded) {
+                this.resetUploadManagerExpandState();
+            } // Else manually expanded so don't close
             onComplete(items);
         }
 
         const state: Object = {
             items,
             view,
-            isUploadsManagerExpanded: this.state.isUploadsManagerExpanded,
         };
 
         if (itemIds) {
@@ -847,6 +860,7 @@ class ContentUploader extends Component<Props, State> {
         this.updateViewAndCollection(items);
 
         if (useUploadsManager) {
+            this.isAutoExpanded = true;
             this.expandUploadsManager();
         }
 
@@ -931,17 +945,16 @@ class ContentUploader extends Component<Props, State> {
         clearTimeout(this.resetItemsTimeout);
 
         onMinimize();
-        this.setState({ isUploadsManagerExpanded: false });
-
-        this.hideUploadsManager();
+        this.resetUploadManagerExpandState();
+        this.checkClearUploadItems();
     };
 
     /**
-     * Hides the upload manager
+     * Checks if the upload items should be cleared after a timeout
      *
      * @return {void}
      */
-    hideUploadsManager = () => {
+    checkClearUploadItems = () => {
         this.resetItemsTimeout = setTimeout(
             this.resetUploadsManagerItemsWhenUploadsComplete,
             HIDE_UPLOAD_MANAGER_DELAY_MS_DEFAULT,
