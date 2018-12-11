@@ -160,6 +160,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
+        const isLoading = !feedItems || !currentUser;
 
         return (
             // eslint-disable-next-line
@@ -171,7 +172,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     className="bcs-activity-feed-items-container"
                 >
                     {isEmpty ? (
-                        <EmptyState isLoading={!feedItems} showCommentMessage={showApprovalCommentForm} />
+                        <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
                             {...activityFeedError}

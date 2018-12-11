@@ -387,6 +387,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             detailsSidebarProps,
             metadataSidebarProps,
             onVersionHistoryClick,
+            currentUser,
         }: Props = this.props;
         const { editors, file, view, isVisible }: State = this.state;
 
@@ -434,6 +435,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                                     hasActivityFeed={hasActivityFeed}
                                     onToggle={this.onToggle}
                                     onVersionHistoryClick={onVersionHistoryClick}
+                                    currentUser={currentUser}
                                 />
                             </APIContext.Provider>
                         ) : (
