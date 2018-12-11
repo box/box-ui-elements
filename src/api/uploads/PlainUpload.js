@@ -7,6 +7,7 @@
 import noop from 'lodash/noop';
 import BaseUpload from './BaseUpload';
 import { digest } from '../../util/webcrypto';
+import { getFileLastModifiedAsISONoMSIfPossible } from '../../util/uploads';
 
 const CONTENT_MD5_HEADER = 'Content-MD5';
 
@@ -75,6 +76,7 @@ class PlainUpload extends BaseUpload {
         const attributes = JSON.stringify({
             name: this.fileName,
             parent: { id: this.folderId },
+            content_modified_at: getFileLastModifiedAsISONoMSIfPossible(this.file),
         });
 
         const options = {
