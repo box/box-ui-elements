@@ -50,6 +50,10 @@ class ContentUploader extends ES6Wrapper {
         this.emit('upload', data);
     };
 
+    onStage = (data: BoxItem): void => {
+        this.emit('stage', data);
+    };
+
     /** @inheritdoc */
     render() {
         const { modal, ...rest }: { modal?: ModalOptions } = this.options;
@@ -67,6 +71,7 @@ class ContentUploader extends ES6Wrapper {
                 onClose={this.onClose}
                 onComplete={this.onComplete}
                 onError={this.onError}
+                onStage={this.onStage}
                 onUpload={this.onUpload}
                 modal={((modal: any): ModalOptions)}
                 {...rest}

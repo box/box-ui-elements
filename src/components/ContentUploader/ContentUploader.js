@@ -66,6 +66,7 @@ type Props = {
     onComplete: Function,
     onError: Function,
     onMinimize?: Function,
+    onStage?: Function,
     onUpload: Function,
     onUpload: Function,
     overwrite: boolean,
@@ -301,7 +302,7 @@ class ContentUploader extends Component<Props, State> {
         itemUpdateCallback: Function,
         isRelativePathIgnored?: boolean = false,
     ) => {
-        const { rootFolderId } = this.props;
+        const { onStage, rootFolderId } = this.props;
         if (!files || files.length === 0) {
             return;
         }
@@ -325,6 +326,10 @@ class ContentUploader extends Component<Props, State> {
         if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
             this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
             return;
+        }
+
+        if (onStage) {
+            onStage(newFiles);
         }
 
         this.addFilesWithoutRelativePathToQueue(newFiles, itemUpdateCallback);
