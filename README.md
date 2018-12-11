@@ -211,6 +211,7 @@ render(
 | rootFolderId | string | `0` | The root folder for the content uploader. |
 | onClose | function |  | Callback function for when the close button is pressed. |
 | onComplete | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for when uploads are complete. |
+| onBeforeUpload | function(Array&lt;[File](https://developer.box.com/reference#file-object)&gt;) |  | Callback function for retrieving an item before it has uploaded |
 | isTouch | boolean |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | logoUrl | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-uploader#section-options).* |
