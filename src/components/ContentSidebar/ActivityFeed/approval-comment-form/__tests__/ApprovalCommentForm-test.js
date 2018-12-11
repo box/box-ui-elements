@@ -237,6 +237,20 @@ describe('components/ContentSidebar/ActivityFeed/approval-comment-form/ApprovalC
 
             expect(wrapper.state('approvalDate')).toEqual(lastMillisecondOfDate);
         });
+
+        test('should change a previously set approval date to null if there is no approval date', () => {
+            // Midnight on December 3rd GMT
+            const date = new Date('2018-12-03T00:00:00');
+            // 11:59:59:999 on December 3rd GMT
+            const lastMillisecondOfDate = new Date('2018-12-03T23:59:59.999');
+            const wrapper = render({});
+
+            wrapper.instance().onApprovalDateChangeHandler(date);
+            expect(wrapper.state('approvalDate')).toEqual(lastMillisecondOfDate);
+
+            wrapper.instance().onApprovalDateChangeHandler(null);
+            expect(wrapper.state('approvalDate')).toEqual(null);
+        });
     });
 
     describe('getFormattedCommentText()', () => {
