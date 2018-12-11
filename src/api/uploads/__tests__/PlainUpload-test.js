@@ -1,5 +1,6 @@
 import PlainUpload from '../PlainUpload';
 import * as crypto from '../../../util/webcrypto';
+import * as uploads from '../../../util/uploads';
 
 let upload;
 
@@ -124,6 +125,15 @@ describe('api/uploads/PlainUpload', () => {
     });
 
     describe('preflightSuccessHandler', () => {
+        const MODIFIED_AT = 123456;
+        beforeEach(() => {
+            jest.spyOn(uploads, 'getFileLastModifiedAsISONoMSIfPossible').mockReturnValue(MODIFIED_AT);
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
         test('should not do anything if API is destroyed', () => {
             upload.isDestroyed = jest.fn().mockReturnValueOnce(true);
             upload.xhr = {
@@ -149,7 +159,7 @@ describe('api/uploads/PlainUpload', () => {
                 expect(upload.xhr.uploadFile).toHaveBeenCalledWith({
                     url: `${upload.uploadHost}/api/2.0/files/content`,
                     data: {
-                        attributes: '{"name":"warlock-152340","parent":{"id":"123"}}',
+                        attributes: `{"name":"warlock-152340","parent":{"id":"123"},"content_modified_at":${MODIFIED_AT}}`,
                         file: upload.file,
                     },
                     headers: {
