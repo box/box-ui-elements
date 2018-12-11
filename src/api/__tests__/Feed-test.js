@@ -11,7 +11,7 @@ jest.mock('../Tasks', () => {
         type: 'task',
         id: '1234',
         created_at: 'Thu Sep 25 33658 19:45:39 GMT-0600 (CST)',
-        modified_at: 'Thu Sep 25 33658 19:46:39 GMT-0600 (CST)',
+        content_modified_at: 'Thu Sep 25 33658 19:46:39 GMT-0600 (CST)',
         tagged_message: 'test',
         modified_by: { name: 'Jay-Z', id: 10 },
         dueAt: 1234567891,
@@ -1050,7 +1050,7 @@ describe('api/Feed', () => {
             expect(versionsWithRestore.entries.length).toBe(versions.entries.length + 1);
             const restoredVersion = versionsWithRestore.entries.pop();
             expect(restoredVersion.action).toBe('restore');
-            expect(restoredVersion.created_at).toBe(file.modified_at);
+            expect(restoredVersion.created_at).toBe(file.content_modified_at);
         });
     });
 

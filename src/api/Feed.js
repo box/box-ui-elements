@@ -899,7 +899,7 @@ class Feed extends Base {
      * @return {FileVersions} modified versions array including the current/restored version
      */
     addCurrentVersion(versions: ?FileVersions, file: BoxItem): ?FileVersions {
-        const { restored_from, modified_at, file_version } = file;
+        const { restored_from, content_modified_at, file_version } = file;
 
         if (!file_version || !versions) {
             return versions;
@@ -927,7 +927,7 @@ class Feed extends Base {
             ...currentVersion,
             action,
             modified_by,
-            created_at: modified_at,
+            created_at: content_modified_at,
             version_number: versionNumber,
         };
         return {
