@@ -23,7 +23,8 @@ import {
     ERROR_CODE_UPDATE_METADATA,
     ERROR_CODE_CREATE_METADATA,
     ERROR_CODE_DELETE_METADATA,
-    ERROR_CODE_FETCH_EDITORS,
+    ERROR_CODE_FETCH_METADATA,
+    ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_FETCH_SKILLS,
 } from '../constants';
 
@@ -70,7 +71,6 @@ class Metadata extends File {
         if (scope && template) {
             return `${baseUrl}/${scope}/${template}`;
         }
-
         return baseUrl;
     }
 
@@ -80,8 +80,12 @@ class Metadata extends File {
      * @param {string} scope - metadata scope or id
      * @return {string} base url for files
      */
-    getMetadataTemplateUrl(scope: string): string {
-        return `${this.getBaseApiUrl()}/metadata_templates/${scope}`;
+    getMetadataTemplateUrl(scope: string, isInstanceId?: boolean): string {
+        const baseUrl = `${this.getBaseApiUrl()}/metadata_templates`;
+        if (isInstanceId) {
+            return `${baseUrl}?metadata_instance_id=${scope}`;
+        }
+        return `${baseUrl}/${scope}`;
     }
 
     /**
@@ -115,13 +119,8 @@ class Metadata extends File {
             }
         });
 
-        const visibleFields = (template.fields && template.fields.filter(field => field && !field.hidden)) || [];
-
         return {
-            template: {
-                ...template,
-                fields: visibleFields,
-            },
+            template,
             instance: {
                 id: instance.$id,
                 canEdit: instance.$canEdit && canEdit,
@@ -137,14 +136,15 @@ class Metadata extends File {
      * @param {string} scope - metadata scope
      * @return {Object} array of metadata templates
      */
-    async getTemplates(id: string, scope: string): Promise<Array<MetadataEditorTemplate>> {
+    async getTemplates(id: string, scope: string, isInstanceId?: boolean): Promise<Array<MetadataEditorTemplate>> {
+        this.errorCode = ERROR_CODE_FETCH_METADATA_TEMPLATES;
         let templates = {};
         try {
             templates = await this.xhr.get({
-                url: this.getMetadataTemplateUrl(scope),
+                url: this.getMetadataTemplateUrl(scope, isInstanceId),
                 id: getTypedFileId(id),
                 params: {
-                    limit: 1000,
+                    limit: 1000, // internal hard limit is 500
                 },
             });
         } catch (e) {
@@ -153,27 +153,220 @@ class Metadata extends File {
                 throw e;
             }
         }
-
-        return getProp(templates, 'data.entries', []).filter(
-            template => !template.hidden && template.templateKey !== METADATA_TEMPLATE_CLASSIFICATION,
-        );
+        return getProp(templates, 'data.entries', []);
     }
 
     /**
-     * Gets metadata instances for file
+     * Gets metadata instances for a box file
      *
      * @param {string} id - file id
      * @return {Object} array of metadata instances
      */
     async getInstances(id: string): Promise<Array<MetadataInstance>> {
-        return getProp(
-            await this.xhr.get({
+        this.errorCode = ERROR_CODE_FETCH_METADATA;
+        let instances = {};
+        try {
+            instances = await this.xhr.get({
                 url: this.getMetadataUrl(id),
                 id: getTypedFileId(id),
-            }),
-            'data.entries',
-            [],
+            });
+        } catch (e) {
+            const { status } = e;
+            if (isUserCorrectableError(status)) {
+                throw e;
+            }
+        }
+        return getProp(instances, 'data.entries', []);
+    }
+
+    /**
+     * Returns a list of templates that can be added by the user.
+     * For collabed files, only custom properties is allowed.
+     *
+     * @return {Object} template for custom properties
+     */
+    getUserAddableTemplates(
+        customPropertiesTemplate: MetadataEditorTemplate,
+        enterpriseTemplates: Array<MetadataEditorTemplate>,
+        hasMetadataFeature: boolean,
+        isExternallyOwned?: boolean,
+    ): Array<MetadataEditorTemplate> {
+        let userAddableTemplates: Array<MetadataEditorTemplate> = [];
+        if (hasMetadataFeature) {
+            userAddableTemplates = isExternallyOwned
+                ? [customPropertiesTemplate]
+                : [customPropertiesTemplate].concat(enterpriseTemplates);
+        }
+        return userAddableTemplates.filter(template => template.templateKey !== METADATA_TEMPLATE_CLASSIFICATION);
+    }
+
+    /**
+     * Extracts classification for different representation in the UI.
+     *
+     * @param {string} id - box file id
+     * @param {Array} instances - metadata instances
+     * @return {Array} metadata instances without classification
+     */
+    extractClassification(id: string, instances: Array<MetadataInstance>): Array<MetadataInstance> {
+        const index = instances.findIndex(instance => instance.$template === METADATA_TEMPLATE_CLASSIFICATION);
+        if (index !== -1) {
+            const classification = instances.splice(index, 1);
+            const cache: APICache = this.getCache();
+            const key = this.getClassificationCacheKey(id);
+            cache.set(key, classification[0]);
+        }
+        return instances;
+    }
+
+    /**
+     * Finds template for a given metadata instance.
+     *
+     * @param {string} id - box file id
+     * @param {Object} instance - metadata instance
+     * @param {Array} templates - metadata templates
+     * @return {Object|undefined} template for metadata instance
+     */
+    async getTemplateForInstance(
+        id: string,
+        instance: MetadataInstance,
+        templates: Array<MetadataEditorTemplate>,
+    ): Promise<?MetadataEditorTemplate> {
+        const instanceId = instance.$id;
+        const templateKey = instance.$template;
+        const scope = instance.$scope;
+        let template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
+        if (scope === METADATA_SCOPE_ENTERPRISE && !template) {
+            // If the template does not exist, it can be a template from another
+            // enterprise because the user is viewing a collaborated file.
+            const crossEnterpriseTemplate = await this.getTemplates(id, instanceId, true);
+            // The API always returns an array of at most one item
+            template = crossEnterpriseTemplate[0]; // eslint-disable-line
+        }
+        return template;
+    }
+
+    /**
+     * Creates and returns metadata editors.
+     *
+     * @param {string} id - box file id
+     * @param {Array} instances - metadata instances
+     * @param {Object} customPropertiesTemplate - custom properties template
+     * @param {Array} enterpriseTemplates - enterprise templates
+     * @param {Array} globalTemplates - global templates
+     * @param {boolean} canEdit - metadata editability
+     * @return {Array} metadata editors
+     */
+    async getEditors(
+        id: string,
+        instances: Array<MetadataInstance>,
+        customPropertiesTemplate: MetadataEditorTemplate,
+        enterpriseTemplates: Array<MetadataEditorTemplate>,
+        globalTemplates: Array<MetadataEditorTemplate>,
+        canEdit: boolean,
+    ): Promise<Array<MetadataEditor>> {
+        // All usable templates for metadata instances
+        const templates: Array<MetadataEditorTemplate> = [customPropertiesTemplate].concat(
+            enterpriseTemplates,
+            globalTemplates,
         );
+
+        // Filter out skills and classification
+        // let filteredInstances = this.extractSkills(id, instances);
+        const filteredInstances = this.extractClassification(id, instances);
+
+        // Create editors from each instance
+        const editors: Array<MetadataEditor> = [];
+        await Promise.all(
+            filteredInstances.map(async instance => {
+                const template: ?MetadataEditorTemplate = await this.getTemplateForInstance(id, instance, templates);
+                if (template) {
+                    editors.push(this.createEditor(instance, template, canEdit));
+                }
+            }),
+        );
+        return editors;
+    }
+
+    /**
+     * API for getting metadata editors
+     *
+     * @param {string} fileId - box file id
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @param {boolean} hasMetadataFeature - metadata feature check
+     * @param {Object} options - fetch options
+     * @return {Promise}
+     */
+    async getMetadata(
+        file: BoxItem,
+        successCallback: ({ editors: Array<MetadataEditor>, templates: Array<MetadataEditorTemplate> }) => void,
+        errorCallback: ElementsErrorCallback,
+        hasMetadataFeature: boolean,
+        options: FetchOptions = {},
+    ): Promise<void> {
+        const { id, permissions, is_externally_owned }: BoxItem = file;
+        this.errorCode = ERROR_CODE_FETCH_METADATA;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        // Check for valid file object.
+        // Need to eventually check for upload permission.
+        if (!id || !permissions) {
+            this.errorHandler(getBadItemError());
+            return;
+        }
+
+        const cache: APICache = this.getCache();
+        const key = this.getMetadataCacheKey(id);
+
+        // Clear the cache if needed
+        if (options.forceFetch) {
+            cache.unset(key);
+        }
+
+        // Return the cached value if it exists
+        if (cache.has(key)) {
+            this.successHandler(cache.get(key));
+            if (!options.refreshCache) {
+                return;
+            }
+        }
+
+        try {
+            const customPropertiesTemplate: MetadataEditorTemplate = this.getCustomPropertiesTemplate();
+            const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
+                this.getInstances(id),
+                this.getTemplates(id, METADATA_SCOPE_GLOBAL),
+                hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
+            ]);
+
+            const editors = await this.getEditors(
+                id,
+                instances,
+                customPropertiesTemplate,
+                enterpriseTemplates,
+                globalTemplates,
+                !!permissions.can_upload,
+            );
+
+            if (this.isDestroyed()) {
+                return;
+            }
+
+            const metadata = {
+                editors,
+                templates: this.getUserAddableTemplates(
+                    customPropertiesTemplate,
+                    enterpriseTemplates,
+                    hasMetadataFeature,
+                    is_externally_owned,
+                ),
+            };
+            cache.set(key, metadata);
+            this.successHandler(metadata);
+        } catch (e) {
+            this.errorHandler(e);
+        }
     }
 
     /**
@@ -321,7 +514,6 @@ class Metadata extends File {
         // Return the Cache value if it exists
         if (cache.has(key)) {
             this.successHandler(cache.get(key));
-
             if (!options.refreshCache) {
                 return;
             }
@@ -360,21 +552,21 @@ class Metadata extends File {
         errorCallback: ElementsErrorCallback,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_UPDATE_METADATA;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
         const { id, permissions } = file;
         if (!id || !permissions) {
-            errorCallback(getBadItemError(), this.errorCode);
+            this.errorHandler(getBadItemError());
             return;
         }
 
         const canEdit = !!permissions.can_upload;
 
         if (!canEdit) {
-            errorCallback(getBadPermissionsError(), this.errorCode);
+            this.errorHandler(getBadPermissionsError());
             return;
         }
-
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
 
         try {
             const metadata = await this.xhr.put({
@@ -519,153 +711,6 @@ class Metadata extends File {
         } catch (e) {
             this.errorHandler(e);
         }
-    }
-
-    /**
-     * API for getting metadata editors
-     *
-     * @param {string} id - box file id
-     * @param {Function} successCallback - Success callback
-     * @param {Function} errorCallback - Error callback
-     * @return {Promise}
-     */
-    async getEditors(
-        file: BoxItem,
-        successCallback: Function,
-        errorCallback: ElementsErrorCallback,
-        getMetadata?: Function,
-        hasMetadataFeature: boolean,
-        forceFetch: boolean = false,
-    ): Promise<void> {
-        this.errorCode = ERROR_CODE_FETCH_EDITORS;
-        const { id, permissions, is_externally_owned }: BoxItem = file;
-        if (!id || !permissions) {
-            errorCallback(getBadItemError(), this.errorCode);
-            return;
-        }
-
-        const cache: APICache = this.getCache();
-        const key = this.getMetadataCacheKey(id);
-        const editors: Array<MetadataEditor> = [];
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
-
-        // Clear the cache if needed
-        if (forceFetch) {
-            cache.unset(key);
-        }
-
-        // Return the Cache value if it exists
-        if (cache.has(key)) {
-            successCallback(cache.get(key));
-            return;
-        }
-
-        try {
-            // Metadata instances
-            const instances: Array<MetadataInstance> = await this.getInstances(id);
-
-            // Metadata instances and templates from webapp
-            // This will be removed soon
-            const legacyInstances = getMetadata ? await getMetadata(id) : null;
-
-            // Get custom properties template
-            const customPropertiesTemplate: MetadataEditorTemplate = this.getCustomPropertiesTemplate();
-
-            // Get templates for the enterprise  of the current user and
-            // not templates from the enterprise of file owner if collabed
-            const enterpriseTemplates: Array<MetadataEditorTemplate> = hasMetadataFeature
-                ? await this.getTemplates(id, METADATA_SCOPE_ENTERPRISE)
-                : [];
-
-            // Get global templates defined by box
-            const globalTemplates: Array<MetadataEditorTemplate> = await this.getTemplates(id, METADATA_SCOPE_GLOBAL);
-
-            // Templates that can be added by the user.
-            // This will only be current user's enterprise templates
-            // and only global properties.
-            let userAddableTemplates: Array<MetadataEditorTemplate> = [];
-            if (hasMetadataFeature) {
-                userAddableTemplates = is_externally_owned
-                    ? [customPropertiesTemplate]
-                    : [customPropertiesTemplate].concat(enterpriseTemplates);
-            }
-
-            // Templates that can have an associated instance.
-            // This will be all templates.
-            const templates: Array<MetadataEditorTemplate> = [customPropertiesTemplate].concat(
-                enterpriseTemplates,
-                globalTemplates,
-            );
-
-            if (this.isDestroyed()) {
-                return;
-            }
-
-            instances.forEach(instance => {
-                const templateKey = instance.$template;
-                const scope = instance.$scope;
-                let template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
-
-                if (!template && legacyInstances && legacyInstances.entries && legacyInstances.entries.length > 0) {
-                    template = this.createTemplateFromLegacy(legacyInstances.entries, templateKey, scope);
-                }
-
-                if (template && !template.hidden) {
-                    editors.push(this.createEditor(instance, template, !!permissions.can_upload));
-                }
-            });
-
-            const metadata = {
-                editors,
-                templates: userAddableTemplates,
-            };
-            cache.set(key, metadata);
-            this.successHandler(metadata);
-        } catch (e) {
-            this.errorHandler(e);
-        }
-    }
-
-    createTemplateFromLegacy(legacyInstances: Array<any>, templateKey: string, scope: string): ?MetadataEditorTemplate {
-        const fields = [];
-        const legacyInstance = legacyInstances.find(instance => {
-            const template = instance.type.substring(0, instance.type.indexOf('-'));
-            return template === templateKey && instance.scope === scope;
-        });
-
-        if (!legacyInstance) {
-            return null;
-        }
-
-        legacyInstance.fields.forEach(({ key, type, displayName, options, description, editor }) => {
-            let v2Type = type;
-            if (editor === 'calendar') {
-                v2Type = 'date';
-            } else if (editor === 'dropdown') {
-                v2Type = 'enum';
-            } else if (editor === 'multipleSelection') {
-                v2Type = 'multiSelect';
-            }
-
-            fields.push({
-                id: uniqueId('metadata_field_'),
-                type: v2Type,
-                key,
-                displayName,
-                description,
-                options: Array.isArray(options) ? options.map(option => ({ key: option.value })) : undefined,
-            });
-        });
-
-        return {
-            id: legacyInstance.type,
-            scope,
-            templateKey,
-            displayName: legacyInstance.displayName,
-            fields,
-            hidden: legacyInstance.hidden,
-        };
     }
 }
 

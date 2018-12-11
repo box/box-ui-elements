@@ -17,71 +17,66 @@ import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
 import API from '../../api';
-import { ORIGIN_METADATA_SIDEBAR } from '../../constants';
+import { isUserCorrectableError } from '../../util/error';
+import {
+    FIELD_IS_EXTERNALLY_OWNED,
+    FIELD_PERMISSIONS,
+    IS_ERROR_DISPLAYED,
+    ORIGIN_METADATA_SIDEBAR,
+} from '../../constants';
 import './MetadataSidebar.scss';
 
 type ExternalProps = {
     isFeatureEnabled?: boolean,
-    getMetadata?: Function,
 };
 
 type PropsWithoutContext = {
-    file: BoxItem,
+    fileId: string,
 } & ExternalProps;
 
 type Props = {
     api: API,
-} & PropsWithoutContext;
+} & PropsWithoutContext &
+    ErrorContextProps;
 
 type State = {
     editors?: Array<MetadataEditor>,
-    templates?: Array<MetadataEditorTemplate>,
+    file?: BoxItem,
+    error?: MessageDescriptor,
     isLoading: boolean,
-    hasError: boolean,
+    templates?: Array<MetadataEditorTemplate>,
 };
 
 class MetadataSidebar extends React.PureComponent<Props, State> {
-    state = {
-        isLoading: false,
-        hasError: false,
-    };
+    state = { hasError: false, isLoading: false };
 
     componentDidMount() {
-        this.getMetadataEditors();
+        this.fetchFile();
     }
 
     /**
-     * Sets the error state to true
+     * Common error callback
      *
      * @return {void}
      */
-    errorCallback = (): void => {
-        this.setState({ isLoading: false, hasError: true });
-    };
-
-    /**
-     * Fetches the metadata editors
-     *
-     * @return {void}
-     */
-    getMetadataEditors = (): void => {
-        const { api, file, getMetadata, isFeatureEnabled = true }: Props = this.props;
-
-        api.getMetadataAPI(true).getEditors(
-            file,
-            ({ editors, templates }: { editors: Array<MetadataEditor>, templates: Array<MetadataEditorTemplate> }) => {
-                this.setState({
-                    templates,
-                    editors: editors.slice(0),
+    commonErrorCallback(error: ElementsXhrError, code: string, newState: Object = {}) {
+        const { onError }: Props = this.props;
+        const { status } = error;
+        const isValidError = isUserCorrectableError(status);
+        this.setState(
+            Object.assign(
+                {
+                    error: messages.sidebarMetadataEditingErrorContent,
                     isLoading: false,
-                    hasError: false,
-                });
-            },
-            this.errorCallback,
-            getMetadata,
-            isFeatureEnabled,
+                },
+                newState,
+            ),
         );
-    };
+        onError(error, code, {
+            error,
+            [IS_ERROR_DISPLAYED]: isValidError,
+        });
+    }
 
     /**
      * Checks upload permission
@@ -89,14 +84,17 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @return {boolean} - true if metadata can be edited
      */
     canEdit(): boolean {
-        const { file }: Props = this.props;
+        const { file }: State = this.state;
+        if (!file) {
+            return false;
+        }
         const { permissions = {} }: BoxItem = file;
         const { can_upload }: BoxItemPermission = permissions;
         return !!can_upload;
     }
 
     /**
-     * Editor we are changing
+     * Finds the editor we are editing
      *
      * @param {number} id - instance id
      * @return {Object} editor instance
@@ -126,9 +124,11 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onRemove = (id: string): void => {
-        const { api, file }: Props = this.props;
+        const { api }: Props = this.props;
+        const { file }: State = this.state;
         const editor = this.getEditor(id);
-        if (!editor) {
+
+        if (!editor || !file) {
             return;
         }
 
@@ -136,7 +136,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             file,
             editor.template,
             () => this.onRemoveSuccessHandler(editor),
-            this.errorCallback,
+            this.commonErrorCallback,
         );
     };
 
@@ -160,9 +160,15 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onAdd = (template: MetadataEditorTemplate) => {
-        const { api, file }: Props = this.props;
+        const { api }: Props = this.props;
+        const { file }: State = this.state;
+
+        if (!file) {
+            return;
+        }
+
         this.setState({ isLoading: true });
-        api.getMetadataAPI(false).createMetadata(file, template, this.onAddSuccessHandler, this.errorCallback);
+        api.getMetadataAPI(false).createMetadata(file, template, this.onAddSuccessHandler, this.commonErrorCallback);
     };
 
     /**
@@ -180,6 +186,20 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     }
 
     /**
+     * Instance save error handler
+     *
+     * @param {Object} oldEditor - prior editor
+     * @param {Object} newEditor - updated editor
+     * @return {void}
+     */
+    onSaveErrorHandler(oldEditor: MetadataEditor, error: ElementsXhrError, code: string): void {
+        const clone: MetadataEditor = { ...oldEditor }; // shallow clone only needed
+        clone.hasError = true;
+        this.onSaveSuccessHandler(oldEditor, clone);
+        this.commonErrorCallback(error, code);
+    }
+
+    /**
      * Instance save handler
      *
      * @param {number} id - instance id
@@ -187,9 +207,11 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onSave = (id: string, ops: JsonPatchData): void => {
-        const { api, file }: Props = this.props;
+        const { api }: Props = this.props;
+        const { file }: State = this.state;
         const oldEditor = this.getEditor(id);
-        if (!oldEditor) {
+
+        if (!oldEditor || !file) {
             return;
         }
 
@@ -200,7 +222,9 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             (newEditor: MetadataEditor) => {
                 this.onSaveSuccessHandler(oldEditor, newEditor);
             },
-            this.errorCallback,
+            (error: ElementsXhrError, code: string) => {
+                this.onSaveErrorHandler(oldEditor, error, code);
+            },
         );
     };
 
@@ -212,23 +236,113 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onModification = (id: string, isDirty: boolean) => {
-        const { editors = [] }: State = this.state;
-        const index = editors.findIndex(({ instance }) => instance.id === id);
-        if (index === -1) {
+        const oldEditor = this.getEditor(id);
+        if (!oldEditor) {
+            return;
+        }
+        const newEditor = { ...oldEditor };
+        newEditor.isDirty = isDirty;
+        this.onSaveSuccessHandler(oldEditor, newEditor);
+    };
+
+    /**
+     * Handles a failed metadata fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @param {string} code - error code
+     * @return {void}
+     */
+    fetchMetadataErrorCallback = (e: ElementsXhrError, code: string) => {
+        this.commonErrorCallback(e, code, {
+            editors: undefined,
+            error: messages.sidebarMetadataFetchingErrorContent,
+            templates: undefined,
+        });
+    };
+
+    /**
+     * Handles a successful metadata fetch
+     *
+     * @param {Object} file - the box file
+     * @return {void}
+     */
+    fetchMetadataSuccessCallback = ({
+        editors,
+        templates,
+    }: {
+        editors: Array<MetadataEditor>,
+        templates: Array<MetadataEditorTemplate>,
+    }) => {
+        this.setState({
+            editors: editors.slice(0),
+            error: undefined,
+            isLoading: false,
+            templates,
+        });
+    };
+
+    /**
+     * Fetches the metadata editors
+     *
+     * @return {void}
+     */
+    fetchMetadata(): void {
+        const { api, isFeatureEnabled = true }: Props = this.props;
+        const { file }: State = this.state;
+
+        if (!file) {
             return;
         }
 
-        const editor = { ...editors[index] };
-        editor.isDirty = isDirty;
-        const clone = editors.slice(0);
-        clone.splice(index, 1, editor);
-        this.setState({ editors: clone });
+        api.getMetadataAPI(false).getMetadata(
+            file,
+            this.fetchMetadataSuccessCallback,
+            this.fetchMetadataErrorCallback,
+            isFeatureEnabled,
+            { refreshCache: true },
+        );
+    }
+
+    /**
+     * Handles a failed file fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @param {string} code - error code
+     * @return {void}
+     */
+    fetchFileErrorCallback = (e: ElementsXhrError, code: string) => {
+        this.commonErrorCallback(e, code, { error: messages.sidebarFileFetchingErrorContent, file: undefined });
     };
 
+    /**
+     * Handles a successful file fetch
+     *
+     * @param {Object} file - the box file
+     * @return {void}
+     */
+    fetchFileSuccessCallback = (file: BoxItem) => {
+        this.setState({ file }, this.fetchMetadata);
+    };
+
+    /**
+     * Fetches a file with the fields needed for metadata sidebar
+     *
+     * @return {void}
+     */
+    fetchFile(): void {
+        const { api, fileId }: Props = this.props;
+        api.getFileAPI().getFile(fileId, this.fetchFileSuccessCallback, this.fetchFileErrorCallback, {
+            fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
+            refreshCache: true,
+        });
+    }
+
     render() {
-        const { editors, templates, isLoading, hasError }: State = this.state;
-        const showEditor = !!templates && !!editors;
-        const showLoadingIndicator = !hasError && !showEditor;
+        const { editors, file, error, isLoading, templates }: State = this.state;
+        const showEditor = !!file && !!templates && !!editors;
+        const showLoadingIndicator = !error && !showEditor;
         const canEdit = this.canEdit();
         const showTemplateDropdown = showEditor && canEdit;
         const showEmptyContent = showEditor && ((editors: any): Array<MetadataEditor>).length === 0;
@@ -248,9 +362,9 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                     ) : null
                 }
             >
-                {hasError && (
-                    <InlineError title={<FormattedMessage {...messages.sidebarMetadataErrorTitle} />}>
-                        <FormattedMessage {...messages.sidebarMetadataErrorContent} />
+                {error && (
+                    <InlineError title={<FormattedMessage {...messages.error} />}>
+                        <FormattedMessage {...error} />
                     </InlineError>
                 )}
                 {showLoadingIndicator && <LoadingIndicator />}

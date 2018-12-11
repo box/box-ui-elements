@@ -65,7 +65,7 @@ const Sidebar = ({
                 {...activitySidebarProps}
             />
         )}
-        {selectedView === SIDEBAR_VIEW_METADATA && <MetadataSidebar file={file} {...metadataSidebarProps} />}
+        {selectedView === SIDEBAR_VIEW_METADATA && <MetadataSidebar fileId={fileId} {...metadataSidebarProps} />}
     </React.Fragment>
 );
 

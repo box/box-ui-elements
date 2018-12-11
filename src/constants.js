@@ -196,7 +196,8 @@ export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
 export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';
 export const ERROR_CODE_FETCH_TASK_ASSIGNMENT = 'fetch_task_assignment_error';
 export const ERROR_CODE_FETCH_INTEGRATIONS = 'fetch_integrations_error';
-export const ERROR_CODE_FETCH_EDITORS = 'fetch_editors_error';
+export const ERROR_CODE_FETCH_METADATA = 'fetch_metadata_error';
+export const ERROR_CODE_FETCH_METADATA_TEMPLATES = 'fetch_metadata_templates_error';
 export const ERROR_CODE_FETCH_ACCESS_STATS = 'fetch_access_stats_error';
 export const ERROR_CODE_FETCH_SKILLS = 'fetch_skills_error';
 export const ERROR_CODE_FETCH_RECENTS = 'fetch_recents_error';
@@ -224,6 +225,7 @@ export const ERROR_CODE_UPLOAD = 'upload_error';
 export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
 export const ERROR_CODE_SEARCH = 'search_error';
 export const ERROR_CODE_UNKNOWN = 'unknown_error';
+export const ERROR_CODE_METADATA_CONFLICT = 'metadata_conflic_error';
 
 /* ------------------ Error Origins ---------------------- */
 export const ORIGIN_CONTENT_PREVIEW = 'content_preview';
