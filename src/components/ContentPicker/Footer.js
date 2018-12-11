@@ -52,14 +52,10 @@ const Footer = ({
 
             <div className="bcp-footer-actions">
                 <Button type="button" onClick={onCancel}>
-                    {cancelButtonLabel || (
-                        <FormattedMessage {...messages.cancel} />
-                    )}
+                    {cancelButtonLabel || <FormattedMessage {...messages.cancel} />}
                 </Button>
                 <PrimaryButton type="button" onClick={onChoose}>
-                    {chooseButtonLabel || (
-                        <FormattedMessage {...messages.choose} />
-                    )}
+                    {chooseButtonLabel || <FormattedMessage {...messages.choose} />}
                 </PrimaryButton>
             </div>
         </div>

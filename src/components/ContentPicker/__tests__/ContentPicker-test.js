@@ -7,15 +7,11 @@ jest.mock('../../SubHeader/SubHeader', () => 'mock-subheader');
 jest.mock('../Footer', () => 'mock-footer');
 jest.mock('../Content', () => 'mock-content');
 jest.mock('../../UploadDialog/UploadDialog', () => 'mock-uploaddialog');
-jest.mock(
-    '../../CreateFolderDialog/CreateFolderDialog',
-    () => 'mock-createfolderdialog',
-);
+jest.mock('../../CreateFolderDialog/CreateFolderDialog', () => 'mock-createfolderdialog');
 
 describe('components/ContentPicker/ContentPicker', () => {
     let rootElement;
-    const getWrapper = props =>
-        mount(<ContentPicker {...props} />, { attachTo: rootElement });
+    const getWrapper = props => mount(<ContentPicker {...props} />, { attachTo: rootElement });
 
     beforeEach(() => {
         rootElement = document.createElement('div');

@@ -1,9 +1,5 @@
 import Comments from '../Comments';
-import {
-    PERMISSION_CAN_COMMENT,
-    PERMISSION_CAN_DELETE,
-    PERMISSION_CAN_EDIT,
-} from '../../constants';
+import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_DELETE, PERMISSION_CAN_EDIT } from '../../constants';
 import { COMMENTS_FIELDS_TO_FETCH } from '../../util/fields';
 
 let comments;
@@ -20,17 +16,13 @@ describe('api/Comments', () => {
             }).toThrow();
         });
         test('should return correct version api url with id', () => {
-            expect(comments.getUrl('foo')).toBe(
-                'https://api.box.com/2.0/files/foo/comments',
-            );
+            expect(comments.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/comments');
         });
     });
 
     describe('commentsUrl()', () => {
         test('should add an id if provided', () => {
-            expect(comments.commentsUrl('foo')).toBe(
-                'https://api.box.com/2.0/comments/foo',
-            );
+            expect(comments.commentsUrl('foo')).toBe('https://api.box.com/2.0/comments/foo');
         });
     });
 
@@ -100,6 +92,7 @@ describe('api/Comments', () => {
             comments.put = jest.fn();
             comments.delete = jest.fn();
             comments.checkApiCallValidity = jest.fn(() => true);
+            comments.offsetGet = jest.fn();
 
             const url = 'https://www.foo.com/comments';
             comments.commentsUrl = jest.fn(() => url);
@@ -113,11 +106,7 @@ describe('api/Comments', () => {
                     successCallback,
                     errorCallback,
                 });
-                expect(comments.checkApiCallValidity).toBeCalledWith(
-                    PERMISSION_CAN_COMMENT,
-                    file.permissions,
-                    file.id,
-                );
+                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_COMMENT, file.permissions, file.id);
             });
 
             test('should post a well formed comment to the comments endpoint', () => {
@@ -164,11 +153,7 @@ describe('api/Comments', () => {
                     successCallback,
                     errorCallback,
                 });
-                expect(comments.checkApiCallValidity).toBeCalledWith(
-                    PERMISSION_CAN_EDIT,
-                    permissions,
-                    file.id,
-                );
+                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_EDIT, permissions, file.id);
             });
 
             test('should put a well formed comment update to the comments endpoint', () => {
@@ -205,11 +190,7 @@ describe('api/Comments', () => {
                     successCallback,
                     errorCallback,
                 });
-                expect(comments.checkApiCallValidity).toBeCalledWith(
-                    PERMISSION_CAN_DELETE,
-                    permissions,
-                    file.id,
-                );
+                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_DELETE, permissions, file.id);
             });
 
             test('should delete a comment from the comments endpoint', () => {
@@ -225,6 +206,32 @@ describe('api/Comments', () => {
                     successCallback,
                     errorCallback,
                 });
+            });
+        });
+
+        describe('getComments()', () => {
+            test('should check for valid comment permissions', () => {
+                const permissions = {
+                    [PERMISSION_CAN_COMMENT]: true,
+                };
+                comments.getComments(file.id, permissions, successCallback, errorCallback);
+                expect(comments.checkApiCallValidity).toBeCalledWith(PERMISSION_CAN_COMMENT, permissions, file.id);
+            });
+
+            test('should return a list of comments from the comments endpoint', () => {
+                const permissions = {
+                    [PERMISSION_CAN_COMMENT]: true,
+                };
+                comments.getComments(file.id, permissions, successCallback, errorCallback);
+                expect(comments.offsetGet).toBeCalledWith(
+                    'foo',
+                    successCallback,
+                    errorCallback,
+                    undefined,
+                    undefined,
+                    COMMENTS_FIELDS_TO_FETCH,
+                    undefined,
+                );
             });
         });
     });

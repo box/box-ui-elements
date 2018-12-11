@@ -82,10 +82,7 @@ class Xhr {
 
         if (typeof responseInterceptor === 'function') {
             // Called on any non 2xx response
-            this.axios.interceptors.response.use(
-                responseInterceptor,
-                this.errorInterceptor,
-            );
+            this.axios.interceptors.response.use(responseInterceptor, this.errorInterceptor);
         }
 
         if (typeof requestInterceptor === 'function') {
@@ -149,9 +146,7 @@ class Xhr {
             headers.BoxApi = `shared_link=${this.sharedLink}`;
 
             if (this.sharedLinkPassword) {
-                headers.BoxApi = `${headers.BoxApi}&shared_link_password=${
-                    this.sharedLinkPassword
-                }`;
+                headers.BoxApi = `${headers.BoxApi}&shared_link_password=${this.sharedLinkPassword}`;
             }
         }
 
@@ -388,18 +383,12 @@ class Xhr {
                         }
                     };
 
-                    idleTimeout = setTimeout(
-                        idleTimeoutFunc,
-                        idleTimeoutDuration,
-                    );
+                    idleTimeout = setTimeout(idleTimeoutFunc, idleTimeoutDuration);
 
                     // Progress handler that aborts upload if there has been no progress for >= timeoutMs
                     progressHandlerToUse = event => {
                         clearTimeout(idleTimeout);
-                        idleTimeout = setTimeout(
-                            idleTimeoutFunc,
-                            idleTimeoutDuration,
-                        );
+                        idleTimeout = setTimeout(idleTimeoutFunc, idleTimeoutDuration);
                         progressHandler(event);
                     };
                 }
@@ -413,16 +402,11 @@ class Xhr {
                         delete reqHeaders[HEADER_CONTENT_TYPE];
 
                         if (headers[HEADER_CONTENT_TYPE]) {
-                            reqHeaders[HEADER_CONTENT_TYPE] =
-                                headers[HEADER_CONTENT_TYPE];
+                            reqHeaders[HEADER_CONTENT_TYPE] = headers[HEADER_CONTENT_TYPE];
                         }
 
                         // Convert to FormData if needed
-                        if (
-                            reqData &&
-                            !(reqData instanceof Blob) &&
-                            reqData.attributes
-                        ) {
+                        if (reqData && !(reqData instanceof Blob) && reqData.attributes) {
                             const formData = new FormData();
                             Object.keys(reqData).forEach(key => {
                                 formData.append(key, reqData[key]);

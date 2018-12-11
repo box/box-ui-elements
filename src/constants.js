@@ -60,8 +60,7 @@ export const HEADER_ACCEPT_LANGUAGE = 'Accept-Language';
 
 /* ------------------ Metadata ---------------------- */
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
-export const METADATA_TEMPLATE_CLASSIFICATION =
-    'securityClassification-6VMVochwUWo';
+export const METADATA_TEMPLATE_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
 export const METADATA_TEMPLATE_SKILLS = 'boxSkillsCards';
 export const METADATA_TEMPLATE_PROPERTIES = 'properties';
 export const METADATA_SCOPE_GLOBAL = 'global';
@@ -84,8 +83,7 @@ export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';
 export const FIELD_SHARED_LINK = 'shared_link';
-export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS =
-    'allowed_shared_link_access_levels';
+export const FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS = 'allowed_shared_link_access_levels';
 export const FIELD_HAS_COLLABORATIONS = 'has_collaborations';
 export const FIELD_IS_EXTERNALLY_OWNED = 'is_externally_owned';
 export const FIELD_TOTAL_COUNT = 'total_count';
@@ -107,7 +105,7 @@ export const FIELD_VERSION_NUMBER = 'version_number';
 export const FIELD_METADATA = 'metadata';
 export const FIELD_METADATA_SKILLS = `${FIELD_METADATA}.${METADATA_SCOPE_GLOBAL}.${METADATA_TEMPLATE_SKILLS}`;
 export const FIELD_METADATA_PROPERTIES = `${FIELD_METADATA}.${METADATA_SCOPE_GLOBAL}.${METADATA_TEMPLATE_PROPERTIES}`;
-export const FIELD_METADATA_CLASSIFICATION = `${FIELD_METADATA}.${METADATA_SCOPE_ENTERPRISE}.${METADATA_TEMPLATE_CLASSIFICATION}`; // eslint-disable-line
+export const FIELD_METADATA_CLASSIFICATION = `${FIELD_METADATA}.${METADATA_SCOPE_ENTERPRISE}.${METADATA_TEMPLATE_CLASSIFICATION}`;
 export const FIELD_DUE_AT = 'due_at';
 export const FIELD_TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
 export const FIELD_IS_COMPLETED = 'is_completed';
@@ -149,6 +147,8 @@ export const DEFAULT_COLLAB_DEBOUNCE = 500;
 export const DEFAULT_MAX_COLLABORATORS = 5;
 export const DEFAULT_PAGE_NUMBER = 1;
 export const DEFAULT_PAGE_SIZE = 50;
+export const DEFAULT_FETCH_START = 0;
+export const DEFAULT_FETCH_END = 1000;
 export const DEFAULT_VIEW_FILES: 'files' = 'files';
 export const DEFAULT_VIEW_RECENTS: 'recents' = 'recents';
 export const CLIENT_NAME_CONTENT_PICKER = 'ContentPicker';
@@ -168,8 +168,7 @@ export const STATUS_ERROR: 'error' = 'error';
 
 /* ------------------- Styles ------------------------ */
 export const CLASS_MODAL_CONTENT = 'be-modal-dialog-content';
-export const CLASS_MODAL_CONTENT_FULL_BLEED =
-    'be-modal-dialog-content-full-bleed';
+export const CLASS_MODAL_CONTENT_FULL_BLEED = 'be-modal-dialog-content-full-bleed';
 export const CLASS_MODAL_OVERLAY = 'be-modal-dialog-overlay';
 export const CLASS_IS_SMALL = 'be-is-small';
 export const CLASS_IS_MEDIUM = 'be-is-medium';
@@ -182,6 +181,60 @@ export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
 export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
+export const ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED = 'child_folder_failed_upload';
+export const ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED = 'storage_limit_exceeded';
+export const ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED = 'file_size_limit_exceeded';
+export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_folder_size_limit';
+export const ERROR_CODE_FETCH_FILE = 'fetch_file_error';
+export const ERROR_CODE_FETCH_FOLDER = 'fetch_folder_error';
+export const ERROR_CODE_FETCH_CLASSIFICATION = 'fetch_classification_error';
+export const ERROR_CODE_FETCH_COMMENTS = 'fetch_comments_error';
+export const ERROR_CODE_FETCH_VERSIONS = 'fetch_versions_error';
+export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
+export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';
+export const ERROR_CODE_FETCH_TASK_ASSIGNMENT = 'fetch_task_assignment_error';
+export const ERROR_CODE_FETCH_INTEGRATIONS = 'fetch_integrations_error';
+export const ERROR_CODE_FETCH_EDITORS = 'fetch_editors_error';
+export const ERROR_CODE_FETCH_ACCESS_STATS = 'fetch_access_stats_error';
+export const ERROR_CODE_FETCH_SKILLS = 'fetch_skills_error';
+export const ERROR_CODE_FETCH_RECENTS = 'fetch_recents_error';
+export const ERROR_CODE_EXECUTE_INTEGRATION = 'execute_integrations_error';
+export const ERROR_CODE_CREATE_COMMENT = 'create_comment_error';
+export const ERROR_CODE_CREATE_TASK = 'create_task_error';
+export const ERROR_CODE_CREATE_TASK_ASSIGNMENT = 'create_task_assignment_error';
+export const ERROR_CODE_CREATE_FOLDER = 'create_folder_error';
+export const ERROR_CODE_CREATE_METADATA = 'create_metadata_error';
+export const ERROR_CODE_DELETE_COMMENT = 'delete_comment_error';
+export const ERROR_CODE_DELETE_TASK = 'delete_task_error';
+export const ERROR_CODE_DELETE_TASK_ASSIGNMENT = 'delete_task_assignment_error';
+export const ERROR_CODE_DELETE_ITEM = 'delete_item_error';
+export const ERROR_CODE_DELETE_METADATA = 'delete_metadata_error';
+export const ERROR_CODE_UPDATE_TASK = 'update_task_error';
+export const ERROR_CODE_UPDATE_TASK_ASSIGNMENT = 'update_task_assignment_error';
+export const ERROR_CODE_UPDATE_COMMENT = 'update_comment_error';
+export const ERROR_CODE_UPDATE_SKILLS = 'update_skills_error';
+export const ERROR_CODE_UPDATE_METADATA = 'update_metadata_error';
+export const ERROR_CODE_GET_DOWNLOAD_URL = 'get_download_url_error';
+export const ERROR_CODE_RENAME_ITEM = 'rename_item_error';
+export const ERROR_CODE_SHARE_ITEM = 'share_item_error';
+export const ERROR_CODE_SET_FILE_DESCRIPTION = 'set_file_description_error';
+export const ERROR_CODE_UPLOAD = 'upload_error';
+export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
+export const ERROR_CODE_SEARCH = 'search_error';
+export const ERROR_CODE_UNKNOWN = 'unknown_error';
+
+/* ------------------ Error Origins ---------------------- */
+export const ORIGIN_CONTENT_PREVIEW = 'content_preview';
+export const ORIGIN_CONTENT_SIDEBAR = 'content_sidebar';
+export const ORIGIN_ACTIVITY_SIDEBAR = 'activity_sidebar';
+export const ORIGIN_DETAILS_SIDEBAR = 'details_sidebar';
+export const ORIGIN_METADATA_SIDEBAR = 'metadata_sidebar';
+export const ORIGIN_SKILLS_SIDEBAR = 'skills_sidebar';
+export const ORIGIN_PREVIEW = 'preview';
+export const ORIGIN_CONTENT_EXPLORER = 'content_explorer';
+
+/* ------------------ Error Keys ---------------------- */
+export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message
 
 /* ------------- Representation Hints ------------------- */
 const X_REP_HINT_BASE = '[3d][pdf][text][mp3]';
@@ -189,9 +242,7 @@ const X_REP_HINT_DOC_THUMBNAIL = '[jpg?dimensions=1024x1024&paged=false]';
 const X_REP_HINT_IMAGE = '[jpg?dimensions=2048x2048,png?dimensions=2048x2048]';
 const X_REP_HINT_VIDEO_DASH = '[dash,mp4][filmstrip]';
 const X_REP_HINT_VIDEO_MP4 = '[mp4]';
-const videoHint = Browser.canPlayDash()
-    ? X_REP_HINT_VIDEO_DASH
-    : X_REP_HINT_VIDEO_MP4;
+const videoHint = Browser.canPlayDash() ? X_REP_HINT_VIDEO_DASH : X_REP_HINT_VIDEO_MP4;
 export const X_REP_HINTS = `${X_REP_HINT_BASE}${X_REP_HINT_DOC_THUMBNAIL}${X_REP_HINT_IMAGE}${videoHint}`;
 
 /* ------------------ Uploader ---------------------- */
@@ -214,8 +265,7 @@ export const SKILLS_ERROR_BILLING = 'skills_billing_error';
 export const SKILLS_ERROR_EXTERNAL_AUTH = 'skills_external_auth_error';
 export const SKILLS_ERROR_UNKNOWN = 'skills_unknown_error';
 export const SKILLS_ERROR_INVALID_FILE_SIZE = 'skills_invalid_file_size_error';
-export const SKILLS_ERROR_INVALID_FILE_FORMAT =
-    'skills_invalid_file_format_error';
+export const SKILLS_ERROR_INVALID_FILE_FORMAT = 'skills_invalid_file_format_error';
 export const SKILLS_ERROR_FILE_PROCESSING = 'skills_file_processing_error';
 export const SKILLS_STATUS_PENDING = 'skills_pending_status';
 export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
@@ -239,6 +289,10 @@ export const HTTP_HEAD: 'HEAD' = 'HEAD';
 
 /* ------------------ HTTP Codes  ---------------------- */
 export const HTTP_STATUS_CODE_FORBIDDEN = 403;
+export const HTTP_STATUS_CODE_CONFLICT = 409;
+export const HTTP_STATUS_CODE_UNAUTHORIZED = 401;
+export const HTTP_STATUS_CODE_RATE_LIMIT = 429;
+export const HTTP_STATUS_CODE_INTERNAL_SERVER_ERROR = 500;
 
 /* ------------------ Version Action Types  ---------------------- */
 export const VERSION_RESTORE_ACTION = 'restore';

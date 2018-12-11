@@ -14,6 +14,7 @@ import IconExpand from 'box-react-ui/lib/icons/general/IconExpand';
 import IconCollapse from 'box-react-ui/lib/icons/general/IconCollapse';
 import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
+import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
 import { nines } from 'box-react-ui/lib/styles/variables';
 import TranscriptRow from './TranscriptRow';
 import { isValidTimeSlice } from './timeSliceUtils';
@@ -69,14 +70,9 @@ class Transcript extends React.PureComponent<Props, State> {
      * @param {Object} accumulator - reducer accumulator
      * @return {string} accumulated transcript entries
      */
-    transcriptReducer = (
-        accumulator: string,
-        { appears, text }: SkillCardEntry,
-    ): string => {
+    transcriptReducer = (accumulator: string, { appears, text }: SkillCardEntry): string => {
         const start: string =
-            isValidTimeSlice(appears) && Array.isArray(appears)
-                ? `${formatTime(appears[0].start)}:`
-                : '';
+            isValidTimeSlice(appears) && Array.isArray(appears) ? `${formatTime(appears[0].start)}:` : '';
         return `${accumulator}${start} ${text || ''}\r\n`;
     };
 
@@ -87,10 +83,7 @@ class Transcript extends React.PureComponent<Props, State> {
      * @param {number} index - mapper index
      * @return {string} accumulated transcript entries
      */
-    transcriptMapper = (
-        { appears, text }: SkillCardEntry,
-        index: number,
-    ): React.Node => {
+    transcriptMapper = ({ appears, text }: SkillCardEntry, index: number): React.Node => {
         const { isEditingIndex, newTranscriptText }: State = this.state;
         const isEditingRow = isEditingIndex === index;
         const transcriptText = isEditingRow ? newTranscriptText : text;
@@ -120,8 +113,7 @@ class Transcript extends React.PureComponent<Props, State> {
      */
     toggleIsEditing = (): void => {
         this.setState(prevState => ({
-            isEditingIndex:
-                typeof prevState.isEditingIndex === 'number' ? undefined : -1,
+            isEditingIndex: typeof prevState.isEditingIndex === 'number' ? undefined : -1,
         }));
     };
 
@@ -139,10 +131,7 @@ class Transcript extends React.PureComponent<Props, State> {
         }: Props = this.props;
         const { appears } = entries[index];
         const viewer = getViewer ? getViewer() : null;
-        const isValid =
-            isValidTimeSlice(appears) &&
-            Array.isArray(appears) &&
-            appears.length === 1;
+        const isValid = isValidTimeSlice(appears) && Array.isArray(appears) && appears.length === 1;
         const timeSlice = ((appears: any): Array<SkillCardEntryTimeSlice>);
         const start = isValid ? timeSlice[0].start : 0;
 
@@ -297,65 +286,56 @@ class Transcript extends React.PureComponent<Props, State> {
         const contentClassName = classNames({
             'be-transcript-content-collapsed': isCollapsed,
         });
+        const expandCollapseMessage = isCollapsed ? messages.expand : messages.collapse;
 
         return (
-            <LoadingIndicatorWrapper
-                isLoading={isLoading}
-                className="be-transcript"
-            >
-                {hasEntries &&
-                    !isLoading && (
-                        <div className="be-transcript-actions">
+            <LoadingIndicatorWrapper isLoading={isLoading} className="be-transcript">
+                {hasEntries && !isLoading && (
+                    <div className="be-transcript-actions">
+                        <Tooltip text={<FormattedMessage {...messages.copy} />}>
                             <PlainButton
                                 type="button"
                                 className="be-transcript-copy"
                                 getDOMRef={this.copyBtnRef}
                                 onClick={this.copyTranscript}
-                                data-resin-target={
-                                    SKILLS_TARGETS.TRANSCRIPTS.COPY
-                                }
+                                data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.COPY}
                             >
                                 <IconCopy color={nines} />
                             </PlainButton>
-                            {hasManyEntries && (
+                        </Tooltip>
+                        {hasManyEntries && (
+                            <Tooltip text={<FormattedMessage {...expandCollapseMessage} />}>
                                 <PlainButton
                                     type="button"
                                     className="be-transcript-expand"
                                     onClick={this.toggleExpandCollapse}
-                                    data-resin-target={
-                                        SKILLS_TARGETS.TRANSCRIPTS.EXPAND
-                                    }
+                                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EXPAND}
                                 >
-                                    {isCollapsed ? (
-                                        <IconExpand color={nines} />
-                                    ) : (
-                                        <IconCollapse color={nines} />
-                                    )}
+                                    {isCollapsed ? <IconExpand color={nines} /> : <IconCollapse color={nines} />}
                                 </PlainButton>
-                            )}
-                            {isEditable && (
+                            </Tooltip>
+                        )}
+                        {isEditable && (
+                            <Tooltip text={<FormattedMessage {...messages.editLabel} />}>
                                 <PlainButton
                                     type="button"
                                     className={editBtnClassName}
                                     onClick={this.toggleIsEditing}
-                                    data-resin-target={
-                                        SKILLS_TARGETS.TRANSCRIPTS.EDIT
-                                    }
+                                    data-resin-target={SKILLS_TARGETS.TRANSCRIPTS.EDIT}
                                 >
                                     <IconEdit />
                                 </PlainButton>
-                            )}
-                        </div>
-                    )}
+                            </Tooltip>
+                        )}
+                    </div>
+                )}
                 {isEditing ? (
                     <div className="be-transcript-edit-message">
                         <FormattedMessage {...messages.transcriptEdit} />
                     </div>
                 ) : null}
                 {hasEntries ? (
-                    <div className={contentClassName}>
-                        {entries.map(this.transcriptMapper)}
-                    </div>
+                    <div className={contentClassName}>{entries.map(this.transcriptMapper)}</div>
                 ) : (
                     <FormattedMessage {...messages.skillNoInfoFoundError} />
                 )}

@@ -14,9 +14,7 @@ describe('api/FileCollaborators', () => {
             }).toThrow();
         });
         test('should return correct collaborators api url with id', () => {
-            expect(fileCollaborators.getUrl('foo')).toBe(
-                'https://api.box.com/2.0/files/foo/collaborators',
-            );
+            expect(fileCollaborators.getUrl('foo')).toBe('https://api.box.com/2.0/files/foo/collaborators');
         });
     });
 
@@ -51,9 +49,7 @@ describe('api/FileCollaborators', () => {
 
             fileCollaborators.successHandler(response);
 
-            expect(fileCollaborators.successCallback).toBeCalledWith(
-                formattedResponse,
-            );
+            expect(fileCollaborators.successCallback).toBeCalledWith(formattedResponse);
         });
     });
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import ErrorBoundary from '../ErrorBoundary';
+import { ERROR_CODE_UNEXPECTED_EXCEPTION } from '../../../constants';
 
 describe('components/ErrorBoundary', () => {
     const WrappedComponent = () => <div>Test</div>;
@@ -16,42 +17,53 @@ describe('components/ErrorBoundary', () => {
         wrapper.find(WrappedComponent).simulateError(wrappedError);
     };
 
-    describe('should render', () => {
-        test('the wrapped component when no error is thrown', () => {
+    describe('render()', () => {
+        test('should render the wrapped component when no error is thrown', () => {
             const wrapper = getWrapper();
 
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('nothing by default when an error is thrown', () => {
+        test('should render default error component an error is thrown', () => {
             const wrapper = getWrapper();
 
             simulateError(wrapper);
 
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.find('DefaultError').exists()).toBe(true);
         });
 
-        test('the component specified when an error is thrown', () => {
+        test('should render the component specified when an error is thrown', () => {
+            const ErrorComponent = () => <div>Error</div>;
             const wrapper = getWrapper({
-                component: <div>Error</div>,
+                errorComponent: ErrorComponent,
             });
 
             simulateError(wrapper);
 
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.find(ErrorComponent).exists()).toBe(true);
         });
     });
 
-    describe('onError callback', () => {
-        test('should be be called with any wrapped error', () => {
+    describe('componentDidCatch()', () => {
+        const origin = 'some_component';
+        test('should set the error state and call the onError callback', () => {
             const onError = jest.fn();
             const wrapper = getWrapper({
                 onError,
+                errorOrigin: origin,
             });
 
             simulateError(wrapper);
 
-            expect(onError).toHaveBeenCalledWith(wrappedError);
+            expect(onError).toHaveBeenCalledWith({
+                type: 'error',
+                code: ERROR_CODE_UNEXPECTED_EXCEPTION,
+                message: wrappedError.message,
+                origin,
+                context_info: expect.objectContaining({
+                    isErrorDisplayed: true,
+                }),
+            });
         });
     });
 });

@@ -8,10 +8,7 @@ import * as React from 'react';
 import PillCloud from 'box-react-ui/lib/components/pill-cloud/PillCloud';
 import Timeline from '../Timeline';
 import getPills from './keywordUtils';
-import {
-    SKILLS_TARGETS,
-    INTERACTION_TARGET,
-} from '../../../../interactionTargets';
+import { SKILLS_TARGETS, INTERACTION_TARGET } from '../../../../interactionTargets';
 import type { Pill, Pills } from './flowTypes';
 import './ReadOnlyKeywords.scss';
 
@@ -58,9 +55,7 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
         const { selectedIndex }: State = this.state;
         const options: Pills = getPills(keywords);
         const selected = keywords[selectedIndex];
-        const pillCloudProps = selected
-            ? { selectedOptions: [options[selectedIndex]] }
-            : {};
+        const pillCloudProps = selected ? { selectedOptions: [options[selectedIndex]] } : {};
 
         return (
             <React.Fragment>
@@ -72,17 +67,15 @@ class ReadOnlyselecteds extends React.PureComponent<Props, State> {
                         [INTERACTION_TARGET]: SKILLS_TARGETS.KEYWORDS.SELECT,
                     }}
                 />
-                {!!selected &&
-                    Array.isArray(selected.appears) &&
-                    selected.appears.length > 0 && (
-                        <Timeline
-                            text={selected.text}
-                            timeslices={selected.appears}
-                            duration={duration}
-                            getViewer={getViewer}
-                            interactionTarget={SKILLS_TARGETS.KEYWORDS.TIMELINE}
-                        />
-                    )}
+                {!!selected && Array.isArray(selected.appears) && selected.appears.length > 0 && (
+                    <Timeline
+                        text={selected.text}
+                        timeslices={selected.appears}
+                        duration={duration}
+                        getViewer={getViewer}
+                        interactionTarget={SKILLS_TARGETS.KEYWORDS.TIMELINE}
+                    />
+                )}
             </React.Fragment>
         );
     }

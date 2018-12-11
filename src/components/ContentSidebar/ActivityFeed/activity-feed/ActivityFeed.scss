@@ -38,7 +38,8 @@
         .bcs-activity-feed-task,
         .bcs-activity-feed-comment {
             border-bottom: 1px solid $ffive;
-            padding-bottom: 8px;
+            margin-top: 20px;
+            padding-bottom: 20px;
 
             &:first-child .bcs-comment {
                 margin-top: 0;
@@ -87,6 +88,7 @@
         margin-bottom: 4px;
         max-height: 500px;
         min-height: 93px;
+        overflow: hidden;
 
         &.bcs-is-disabled {
             opacity: .4;
@@ -95,6 +97,20 @@
 
         .selector-dropdown-wrapper {
             width: 100%;
+            // Override z index to prevent a new stacking context under the approval comment form
+            z-index: auto;
+        }
+
+        .overlay {
+            max-height: 95px;
+            overflow: auto;
+        }
+    }
+
+    .bcs-comment-add-approver-fields-container {
+        .overlay {
+            max-height: 140px;
+            overflow: auto;
         }
     }
 }

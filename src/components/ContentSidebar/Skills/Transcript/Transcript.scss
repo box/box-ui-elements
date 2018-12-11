@@ -24,6 +24,10 @@
 
         &.be-transcript-is-editing {
             background-color: $off-white;
+
+            .icon-edit > .fill-color {
+                fill: $fivef;
+            }
         }
     }
 

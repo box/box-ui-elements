@@ -16,7 +16,5 @@ export default function(size?: number): string {
     const decimals: number = 2;
     const sizes: string[] = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
     const exp: number = Math.floor(Math.log(size) / Math.log(kilo));
-    return `${parseFloat((size / kilo ** exp).toFixed(decimals))} ${
-        sizes[exp]
-    }`;
+    return `${parseFloat((size / kilo ** exp).toFixed(decimals))} ${sizes[exp]}`;
 }

@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import { TYPE_FILE } from '../constants';
+import { TYPE_FILE, ERROR_CODE_EXECUTE_INTEGRATION } from '../constants';
 
 class AppIntegrations extends Base {
     /**
@@ -33,7 +33,7 @@ class AppIntegrations extends Base {
         integrationId: ?string,
         fileId: ?string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     ): void {
         if (!integrationId) {
             throw new Error('Missing integration id!');
@@ -43,6 +43,7 @@ class AppIntegrations extends Base {
             throw new Error('Missing file id!');
         }
 
+        this.errorCode = ERROR_CODE_EXECUTE_INTEGRATION;
         const executeURL = `${this.getUrl(integrationId)}/execute`;
         const body = {
             data: {

@@ -13,13 +13,23 @@ describe('components/ContentSidebar/ActivityFeed/Avatar', () => {
 
     const getWrapper = props => shallow(<Avatar {...props} />);
 
-    test('should render nothing if no avatarUrl in state', () => {
+    test('should render nothing if no avatarUrl in state and getAvatarUrl method was passed', () => {
         expect(
             getWrapper({ user, getAvatarUrl })
+                .dive()
                 .find('Avatar')
                 .exists(),
         ).toBe(false);
         expect(getAvatarUrl).toBeCalledWith(user.id);
+    });
+
+    test('should render avatar with initials if getAvatarUrl is not passed in and no avatarUrl is in state', () => {
+        expect(
+            getWrapper({ user })
+                .find('AvatarInitials')
+                .exists(),
+        ).toBe(false);
+        expect(getAvatarUrl).not.toBeCalledWith(user.id);
     });
 
     test('should render the avatar with an avatarUrl', () => {
@@ -29,7 +39,7 @@ describe('components/ContentSidebar/ActivityFeed/Avatar', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should set the avatarUrl state', () => {
+    test('should set the avatarUrl state by calling getAvatarUrl function prop', () => {
         const wrapper = getWrapper({ user, getAvatarUrl });
         expect(wrapper.state('avatarUrl')).toBe(null);
         wrapper
@@ -38,5 +48,27 @@ describe('components/ContentSidebar/ActivityFeed/Avatar', () => {
             .then(() => {
                 expect(wrapper.state('avatarUrl')).toBe('foo');
             });
+    });
+
+    test('should set the avatarUrl state from user prop', () => {
+        const completeUser = { ...user, avatar_url: 'bar' };
+        const wrapper = getWrapper({ user: completeUser });
+        expect(wrapper.state('avatarUrl')).toBe(null);
+        wrapper
+            .instance()
+            .getAvatarUrl()
+            .then(() => {
+                expect(wrapper.state('avatarUrl')).toBe('bar');
+            });
+        expect(getAvatarUrl).not.toBeCalledWith(user.id);
+    });
+
+    test('should set the avatarUrl state from user prop', () => {
+        const wrapper = getWrapper({ user });
+        expect(wrapper.state('avatarUrl')).toBe(null);
+        wrapper.instance().getAvatarUrl();
+        wrapper.update();
+        expect(getAvatarUrl).not.toBeCalledWith(user.id);
+        expect(wrapper.dive()).toMatchSnapshot();
     });
 });

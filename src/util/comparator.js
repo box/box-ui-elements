@@ -21,11 +21,7 @@ import {
  * @param {string} sortDirection desc or asc
  * @return {Function} comparator function
  */
-export default function(
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-    cache: APICache,
-): Function {
+export default function(sortBy: SortBy, sortDirection: SortDirection, cache: APICache): Function {
     const invert: number = sortDirection === SORT_DESC ? 1 : -1;
     return (a: string, b: string): number => {
         const itemA: BoxItem = cache.get(a);
@@ -37,30 +33,22 @@ export default function(
         const itemBName: string = itemB.name || '';
         const itemADate: number = Date.parse(itemA.modified_at || '0');
         const itemBDate: number = Date.parse(itemB.modified_at || '0');
-        const itemAInteractedDate: number = Date.parse(
-            itemA.interacted_at || itemA.modified_at || '0',
-        );
-        const itemBInteractedDate: number = Date.parse(
-            itemB.interacted_at || itemB.modified_at || '0',
-        );
+        const itemAInteractedDate: number = Date.parse(itemA.interacted_at || itemA.modified_at || '0');
+        const itemBInteractedDate: number = Date.parse(itemB.interacted_at || itemB.modified_at || '0');
         const itemASize: number = itemA.size || 0;
         const itemBSize: number = itemB.size || 0;
 
         // If a and b are of the same type, then use sortBy
         if (itemAType === itemBType) {
             if (sortBy === FIELD_NAME) {
-                if (itemAName.toLowerCase() > itemBName.toLowerCase())
-                    return -1 * invert;
-                if (itemAName.toLowerCase() < itemBName.toLowerCase())
-                    return 1 * invert;
+                if (itemAName.toLowerCase() > itemBName.toLowerCase()) return -1 * invert;
+                if (itemAName.toLowerCase() < itemBName.toLowerCase()) return 1 * invert;
             } else if (sortBy === FIELD_MODIFIED_AT) {
                 if (itemADate > itemBDate) return -1 * invert;
                 if (itemADate < itemBDate) return 1 * invert;
             } else if (sortBy === FIELD_INTERACTED_AT) {
-                if (itemAInteractedDate > itemBInteractedDate)
-                    return -1 * invert;
-                if (itemAInteractedDate < itemBInteractedDate)
-                    return 1 * invert;
+                if (itemAInteractedDate > itemBInteractedDate) return -1 * invert;
+                if (itemAInteractedDate < itemBInteractedDate) return 1 * invert;
             } else if (sortBy === FIELD_SIZE) {
                 if (itemASize > itemBSize) return -1 * invert;
                 if (itemASize < itemBSize) return 1 * invert;

@@ -50,8 +50,7 @@ const file = {
 
 const feedItems = [...comments.entries];
 const currentUser = { name: 'Kanye West', id: 10 };
-const getWrapper = props =>
-    shallow(<ActivityFeed file={file} currentUser={currentUser} {...props} />);
+const getWrapper = props => shallow(<ActivityFeed file={file} currentUser={currentUser} {...props} />);
 
 describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render empty loading state', () => {
@@ -65,13 +64,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
             entries: [],
         };
         const wrapper = shallow(
-            <ActivityFeed
-                file={file}
-                currentUser={currentUser}
-                comments={items}
-                tasks={items}
-                versions={items}
-            />,
+            <ActivityFeed file={file} currentUser={currentUser} comments={items} tasks={items} versions={items} />,
         );
         expect(wrapper).toMatchSnapshot();
     });
@@ -97,21 +90,13 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should not render approval comment form if only comment submit handler is not passed in', () => {
         file.permissions.can_comment = true;
-        const wrapper = shallow(
-            <ActivityFeed file={file} currentUser={currentUser} />,
-        );
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should not render approval comment form if comment permissions are not present', () => {
         file.permissions.can_comment = false;
-        const wrapper = shallow(
-            <ActivityFeed
-                file={file}
-                currentUser={currentUser}
-                onCommentCreate={jest.fn()}
-            />,
-        );
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -124,15 +109,102 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
 
     test('should not expose add approval ui if task submit handler is not passed', () => {
         file.permissions.can_comment = true;
-        const wrapper = shallow(
-            <ActivityFeed
-                file={file}
-                currentUser={currentUser}
-                onCommentCreate={jest.fn()}
-            />,
-        );
+        const wrapper = shallow(<ActivityFeed file={file} currentUser={currentUser} onCommentCreate={jest.fn()} />);
 
         expect(wrapper.find('[name="addApproval"]').length).toEqual(0);
+    });
+
+    test('should set scrollTop to be the scrollHeight if feedContainer ref is set', () => {
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} />);
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+        instance.componentDidMount();
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should set scrollTop to be the scrollHeight if feedContainer exists and prevProps feedItems is undefined and this.props.feedItems is defined', () => {
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} feedItems={[{ type: 'comment' }]} />);
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidUpdate(
+            {
+                feedItems: undefined,
+                currentUser,
+            },
+            { isInputOpen: false },
+        );
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should set scrollTop to be the scrollHeight if more feedItems are added', () => {
+        const wrapper = shallow(
+            <ActivityFeed currentUser={currentUser} feedItems={[{ type: 'comment' }, { type: 'comment' }]} />,
+        );
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidUpdate(
+            {
+                feedItems: [{ type: 'comment' }],
+                currentUser,
+            },
+            { isInputOpen: false },
+        );
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should set scrollTop to be the scrollHeight if the user becomes defined', () => {
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} feedItems={[{ type: 'comment' }]} />);
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidUpdate(
+            {
+                feedItems: [{ type: 'comment' }],
+                currentUser: undefined,
+            },
+            { isInputOpen: false },
+        );
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
+    });
+
+    test('should set scrollTop to be the scrollHeight if input opens', () => {
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} feedItems={[{ type: 'comment' }]} />);
+        wrapper.setState({
+            isInputOpen: true,
+        });
+        const instance = wrapper.instance();
+        instance.feedContainer = {
+            scrollTop: 0,
+            scrollHeight: 100,
+        };
+
+        instance.componentDidUpdate(
+            {
+                feedItems: [{ type: 'comment' }],
+                currentUser,
+            },
+            { isInputOpen: false },
+        );
+
+        expect(instance.feedContainer.scrollTop).toEqual(100);
     });
 
     test('should show input when approvalCommentFormFocusHandler is called', () => {
@@ -145,12 +217,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should hide input when approvalCommentFormCancelHandler is called', () => {
-        const wrapper = shallow(
-            <ActivityFeed
-                currentUser={currentUser}
-                onCommentCreate={jest.fn()}
-            />,
-        );
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
 
         const instance = wrapper.instance();
         instance.approvalCommentFormFocusHandler();
@@ -209,12 +276,7 @@ describe('components/ContentSidebar/ActivityFeed/activity-feed/ActivityFeed', ()
     });
 
     test('should stop event propagation onKeyDown', () => {
-        const wrapper = shallow(
-            <ActivityFeed
-                currentUser={currentUser}
-                onCommentCreate={jest.fn()}
-            />,
-        );
+        const wrapper = shallow(<ActivityFeed currentUser={currentUser} onCommentCreate={jest.fn()} />);
         const stopPropagationSpy = jest.fn();
         wrapper.find('.bcs-activity-feed').simulate('keydown', {
             nativeEvent: {

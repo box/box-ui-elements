@@ -35,7 +35,6 @@ import {
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_VERSION_NUMBER,
     FIELD_METADATA_SKILLS,
-    FIELD_METADATA_CLASSIFICATION,
     FIELD_TASK_ASSIGNMENT_COLLECTION,
     FIELD_IS_COMPLETED,
     FIELD_MESSAGE,
@@ -84,7 +83,6 @@ const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_OWNED_BY,
     FIELD_DESCRIPTION,
     FIELD_METADATA_SKILLS,
-    FIELD_METADATA_CLASSIFICATION,
     FIELD_ITEM_EXPIRATION,
     FIELD_VERSION_NUMBER,
     FIELD_IS_EXTERNALLY_OWNED,
@@ -127,11 +125,7 @@ const VERSIONS_FIELDS_TO_FETCH = [
 ];
 
 // Fields needed to get task assignments data
-const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [
-    FIELD_ASSIGNED_TO,
-    FIELD_RESOLUTION_STATE,
-    FIELD_MESSAGE,
-];
+const TASK_ASSIGNMENTS_FIELDS_TO_FETCH = [FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE];
 
 // Fields needed to get tasks data
 const COMMENTS_FIELDS_TO_FETCH = [
@@ -144,12 +138,7 @@ const COMMENTS_FIELDS_TO_FETCH = [
 ];
 
 // Fields that represent users
-const USER_FIELDS = [
-    FIELD_CREATED_BY,
-    FIELD_MODIFIED_BY,
-    FIELD_OWNED_BY,
-    FIELD_ASSIGNED_TO,
-];
+const USER_FIELDS = [FIELD_CREATED_BY, FIELD_MODIFIED_BY, FIELD_OWNED_BY, FIELD_ASSIGNED_TO];
 
 /**
  * Finds properties missing in an object
@@ -158,10 +147,7 @@ const USER_FIELDS = [
  * @param {Array<string>|void} [properties] - object properties to check
  * @return {Array<string>} comma seperated list of properties missing
  */
-function findMissingProperties(
-    obj?: Object,
-    properties?: Array<string> = [],
-): Array<string> {
+function findMissingProperties(obj?: Object, properties?: Array<string> = []): Array<string> {
     // If file doesn't exist or is an empty object, we should fetch all fields
     if (!obj || typeof obj !== 'object' || Object.keys(obj).length === 0) {
         return properties;
@@ -177,10 +163,7 @@ function findMissingProperties(
  * @param {Array<string>|void} [properties] - some properties to check
  * @return {Object} new object with missing fields
  */
-function fillMissingProperties(
-    obj?: Object = {},
-    properties?: Array<string>,
-): Object {
+function fillMissingProperties(obj?: Object = {}, properties?: Array<string>): Object {
     // If file doesn't exist or is an empty object, we should fetch all fields
     if (!Array.isArray(properties) || properties.length === 0) {
         return obj;

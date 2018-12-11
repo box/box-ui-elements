@@ -19,17 +19,13 @@ describe('api/ContentOpenWith', () => {
             openWith.formatOpenWithData = jest.fn();
 
             openWith.getOpenWithIntegrations('123', successFn, errorFn);
-            expect(openWith.formatOpenWithData).toBeCalledWith(
-                mockOpenWithData,
-            );
+            expect(openWith.formatOpenWithData).toBeCalledWith(mockOpenWithData);
         });
     });
 
     describe('formatOpenWithData()', () => {
         test('should add a flattened and complete Integration', () => {
-            const formatedOpenWithIntegrations = openWith.formatOpenWithData(
-                mockOpenWithData,
-            );
+            const formatedOpenWithIntegrations = openWith.formatOpenWithData(mockOpenWithData);
             formatedOpenWithIntegrations.forEach(integration => {
                 expect(typeof integration.appIntegrationId).toBe('string');
                 expect(typeof integration.displayDescription).toBe('string');
@@ -43,18 +39,14 @@ describe('api/ContentOpenWith', () => {
         });
 
         test('should add isDefault to all items', () => {
-            const formatedOpenWithIntegrations = openWith.formatOpenWithData(
-                mockOpenWithData,
-            );
+            const formatedOpenWithIntegrations = openWith.formatOpenWithData(mockOpenWithData);
             formatedOpenWithIntegrations.forEach(integration => {
                 expect(typeof integration.isDefault).toBe('boolean');
             });
         });
 
         test('should return items sorted by displayOrder', () => {
-            const formatedOpenWithIntegrations = openWith.formatOpenWithData(
-                mockOpenWithData,
-            );
+            const formatedOpenWithIntegrations = openWith.formatOpenWithData(mockOpenWithData);
             formatedOpenWithIntegrations.forEach((integration, idx) => {
                 // displayOrder is 1 indexed
                 const expectedOrder = idx + 1;

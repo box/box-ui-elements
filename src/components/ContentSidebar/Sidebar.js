@@ -65,42 +65,29 @@ const Sidebar = ({
             hasActivityFeed={hasActivityFeed}
             hasDetails={hasDetails}
         />
-        {view === SIDEBAR_VIEW_DETAILS &&
-            hasDetails && (
-                <DetailsSidebar
-                    key={file.id}
-                    file={file}
-                    onVersionHistoryClick={onVersionHistoryClick}
-                    {...detailsSidebarProps}
-                />
-            )}
-        {view === SIDEBAR_VIEW_SKILLS &&
-            hasSkills && (
-                <SkillsSidebar
-                    key={file.id}
-                    file={file}
-                    getPreview={getPreview}
-                    getViewer={getViewer}
-                />
-            )}
-        {view === SIDEBAR_VIEW_ACTIVITY &&
-            hasActivityFeed && (
-                <ActivitySidebar
-                    key={file.id}
-                    currentUser={currentUser}
-                    file={file}
-                    onVersionHistoryClick={onVersionHistoryClick}
-                    {...activitySidebarProps}
-                />
-            )}
-        {view === SIDEBAR_VIEW_METADATA &&
-            hasMetadata && (
-                <MetadataSidebar
-                    key={file.id}
-                    file={file}
-                    {...metadataSidebarProps}
-                />
-            )}
+        {view === SIDEBAR_VIEW_DETAILS && hasDetails && (
+            <DetailsSidebar
+                key={file.id}
+                file={file}
+                onVersionHistoryClick={onVersionHistoryClick}
+                {...detailsSidebarProps}
+            />
+        )}
+        {view === SIDEBAR_VIEW_SKILLS && hasSkills && (
+            <SkillsSidebar key={file.id} file={file} getPreview={getPreview} getViewer={getViewer} />
+        )}
+        {view === SIDEBAR_VIEW_ACTIVITY && hasActivityFeed && (
+            <ActivitySidebar
+                key={file.id}
+                currentUser={currentUser}
+                file={file}
+                onVersionHistoryClick={onVersionHistoryClick}
+                {...activitySidebarProps}
+            />
+        )}
+        {view === SIDEBAR_VIEW_METADATA && hasMetadata && (
+            <MetadataSidebar currentUser={currentUser} key={file.id} file={file} {...metadataSidebarProps} />
+        )}
     </React.Fragment>
 );
 

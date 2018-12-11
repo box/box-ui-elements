@@ -7,17 +7,8 @@
 import comparator from './comparator';
 import { getBadItemError } from './error';
 
-function isSortingNeeded(
-    order?: Order[],
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-): boolean {
-    return (
-        !Array.isArray(order) ||
-        !order.some(
-            entry => entry.by === sortBy && entry.direction === sortDirection,
-        )
-    );
+function isSortingNeeded(order?: Order[], sortBy: SortBy, sortDirection: SortDirection): boolean {
+    return !Array.isArray(order) || !order.some(entry => entry.by === sortBy && entry.direction === sortDirection);
 }
 
 /**
@@ -65,9 +56,7 @@ export default function(
  * type that is allowed in the feed.
  * @return {Array<?Comments | ?Tasks | ?FileVersions>} the sorted feed items
  */
-export function sortFeedItems(
-    ...args: Array<?Comments | ?Tasks | ?FileVersions>
-): FeedItems {
+export function sortFeedItems(...args: Array<?Comments | ?Tasks | ?FileVersions>): FeedItems {
     const feedItems: FeedItems = args
         .reduce((items, itemContainer) => {
             if (itemContainer) {
@@ -76,7 +65,7 @@ export function sortFeedItems(
 
             return items;
         }, [])
-        .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+        .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at));
 
     return feedItems;
 }

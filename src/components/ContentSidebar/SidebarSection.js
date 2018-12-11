@@ -68,12 +68,7 @@ class SidebarSection extends React.PureComponent<Props, State> {
      */
     render() {
         const { isOpen }: State = this.state;
-        const {
-            children,
-            className,
-            title,
-            interactionTarget,
-        }: Props = this.props;
+        const { children, className, title, interactionTarget }: Props = this.props;
 
         const sectionClassName = classNames(
             'bcs-section',
@@ -96,9 +91,7 @@ class SidebarSection extends React.PureComponent<Props, State> {
                         <IconCaretDown color={COLOR_999} width={8} />
                     </PlainButton>
                 )}
-                {(isOpen || !title) && (
-                    <div className="bcs-section-content">{children}</div>
-                )}
+                {(isOpen || !title) && <div className="bcs-section-content">{children}</div>}
             </div>
         );
     }

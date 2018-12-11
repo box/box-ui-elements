@@ -10,7 +10,7 @@ import flatten from '../util/flatten';
 import FileAPI from './File';
 import WebLinkAPI from './WebLink';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
-import { CACHE_PREFIX_FOLDER } from '../constants';
+import { CACHE_PREFIX_FOLDER, ERROR_CODE_FETCH_FOLDER, ERROR_CODE_CREATE_FOLDER } from '../constants';
 import { getBadItemError } from '../util/error';
 
 class Folder extends Item {
@@ -57,7 +57,7 @@ class Folder extends Item {
     /**
      * @property {Function}
      */
-    errorCallback: Function;
+    errorCallback: ElementsErrorCallback;
 
     /**
      * Creates a key for the cache
@@ -102,22 +102,12 @@ class Folder extends Item {
 
         const cache: APICache = this.getCache();
         const folder: FlattenedBoxItem = cache.get(this.key);
-        const {
-            id,
-            name,
-            permissions,
-            path_collection,
-            item_collection,
-        }: FlattenedBoxItem = folder;
+        const { id, name, permissions, path_collection, item_collection }: FlattenedBoxItem = folder;
         if (!item_collection || !path_collection) {
             throw getBadItemError();
         }
 
-        const {
-            entries,
-            offset,
-            total_count,
-        }: FlattenedBoxItemCollection = item_collection;
+        const { entries, offset, total_count }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
@@ -154,12 +144,7 @@ class Folder extends Item {
             throw getBadItemError();
         }
 
-        const {
-            entries,
-            total_count,
-            limit,
-            offset,
-        }: BoxItemCollection = item_collection;
+        const { entries, total_count, limit, offset }: BoxItemCollection = item_collection;
         if (
             !Array.isArray(entries) ||
             typeof total_count !== 'number' ||
@@ -198,6 +183,8 @@ class Folder extends Item {
         if (this.isDestroyed()) {
             return Promise.reject();
         }
+
+        this.errorCode = ERROR_CODE_FETCH_FOLDER;
 
         return this.xhr
             .get({
@@ -297,10 +284,7 @@ class Folder extends Item {
             throw getBadItemError();
         }
 
-        const {
-            total_count,
-            entries,
-        }: FlattenedBoxItemCollection = item_collection;
+        const { total_count, entries }: FlattenedBoxItemCollection = item_collection;
         if (!Array.isArray(entries) || typeof total_count !== 'number') {
             throw getBadItemError();
         }
@@ -321,6 +305,7 @@ class Folder extends Item {
             return Promise.reject();
         }
 
+        this.errorCode = ERROR_CODE_CREATE_FOLDER;
         const url = `${this.getUrl()}?fields=${FOLDER_FIELDS_TO_FETCH.toString()}`;
         return this.xhr
             .post({
@@ -345,12 +330,7 @@ class Folder extends Item {
      * @param {Function} errorCallback - error callback
      * @return {void}
      */
-    create(
-        id: string,
-        name: string,
-        successCallback: Function,
-        errorCallback: Function = noop,
-    ): void {
+    create(id: string, name: string, successCallback: Function, errorCallback: Function = noop): void {
         if (this.isDestroyed()) {
             return;
         }

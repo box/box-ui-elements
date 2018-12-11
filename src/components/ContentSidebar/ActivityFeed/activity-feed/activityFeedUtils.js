@@ -5,7 +5,7 @@
 
 import { PLACEHOLDER_USER } from '../../../../constants';
 
-const ItemTypes = {
+export const ItemTypes = {
     fileVersion: 'file_version',
     upload: 'upload',
 };
@@ -37,14 +37,7 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
 
             const prevModifiedBy = tmpModifiedBy || PLACEHOLDER_USER;
 
-            const {
-                action,
-                modified_by: tmpCurModifiedBy,
-                created_at,
-                trashed_at,
-                id,
-                version_number,
-            } = feedItem;
+            const { action, modified_by: tmpCurModifiedBy, created_at, trashed_at, id, version_number } = feedItem;
             const parsedVersionNumber = parseInt(version_number, 10);
             const collaborators = previousFeedItem.collaborators || {
                 [prevModifiedBy.id]: { ...prevModifiedBy },
@@ -74,12 +67,4 @@ export function collapseFeedState(feedState: ?FeedItems): FeedItems {
 
         return collapsedFeedState.concat([previousFeedItem, feedItem]);
     }, []);
-}
-
-export function shouldShowEmptyState(feedState: ?FeedItems): boolean {
-    return (
-        !feedState ||
-        feedState.length === 0 ||
-        (feedState.length === 1 && feedState[0].type === ItemTypes.fileVersion)
-    );
 }

@@ -6,14 +6,11 @@
 
 import React from 'react';
 import AccessStats from 'box-react-ui/lib/features/access-stats/AccessStats';
+import isFinite from 'lodash/isFinite';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import SidebarSection from './SidebarSection';
 import messages from '../messages';
-import {
-    INTERACTION_TARGET,
-    SECTION_TARGETS,
-    DETAILS_TARGETS,
-} from '../../interactionTargets';
+import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../../interactionTargets';
 import { isBoxNote } from '../../util/file';
 import withErrorHandling from './withErrorHandling';
 
@@ -28,28 +25,19 @@ type Props = {
 const SidebarAccessStats = ({
     onAccessStatsClick,
     accessStats = {
-        preview_count: 0,
-        comment_count: 0,
-        download_count: 0,
-        edit_count: 0,
         has_count_overflowed: false,
     },
     file,
     error,
     intl,
 }: Props) => {
-    const {
-        preview_count,
-        comment_count,
-        download_count,
-        edit_count,
-    } = accessStats;
+    const { preview_count, comment_count, download_count, edit_count } = accessStats;
 
     if (
-        !preview_count &&
-        !comment_count &&
-        !download_count &&
-        !edit_count &&
+        !isFinite(preview_count) &&
+        !isFinite(comment_count) &&
+        !isFinite(download_count) &&
+        !isFinite(edit_count) &&
         !error
     ) {
         return null;
@@ -69,8 +57,7 @@ const SidebarAccessStats = ({
                 }}
                 downloadCount={download_count}
                 downloadStatButtonProps={{
-                    [INTERACTION_TARGET]:
-                        DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS,
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS,
                 }}
                 previewCount={preview_count}
                 previewStatButtonProps={{
@@ -86,8 +73,7 @@ const SidebarAccessStats = ({
                 openAccessStatsModal={onAccessStatsClick}
                 isBoxNote={isBoxNote(file)}
                 viewMoreButtonProps={{
-                    [INTERACTION_TARGET]:
-                        DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS,
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS,
                 }}
             />
         </SidebarSection>

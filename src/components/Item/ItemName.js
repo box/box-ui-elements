@@ -23,14 +23,8 @@ const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
     const onItemFocus = onFocus ? () => onFocus(item) : null;
     const onItemClick: Function = (): void => onClick(item);
 
-    return type === TYPE_FOLDER ||
-        (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
-        <PlainButton
-            type="button"
-            className="be-item-label"
-            onFocus={onItemFocus}
-            onClick={onItemClick}
-        >
+    return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
+        <PlainButton type="button" className="be-item-label" onFocus={onItemFocus} onClick={onItemClick}>
             {name}
         </PlainButton>
     ) : (

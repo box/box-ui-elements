@@ -25,11 +25,9 @@ type Props = {
 const Face = ({ face, selected, isEditing, onDelete, onSelect }: Props) => {
     const isAnyFaceSelected = !!selected;
     const isCurrentFaceSelected = face === selected;
-    const isFaceSelected =
-        isAnyFaceSelected && isCurrentFaceSelected && !isEditing;
+    const isFaceSelected = isAnyFaceSelected && isCurrentFaceSelected && !isEditing;
     const faceClassName = classNames('be-face-wrapper', {
-        'be-face-unselected':
-            !isEditing && isAnyFaceSelected && !isCurrentFaceSelected,
+        'be-face-unselected': !isEditing && isAnyFaceSelected && !isCurrentFaceSelected,
     });
 
     return (

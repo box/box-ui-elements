@@ -11,6 +11,7 @@ import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import Face from './Face';
@@ -147,51 +148,31 @@ class Faces extends React.PureComponent<Props, State> {
      */
     render() {
         const { card, isEditable, getViewer }: Props = this.props;
-        const {
-            selected,
-            faces,
-            removes,
-            isEditing,
-            hasError,
-            isLoading,
-        }: State = this.state;
+        const { selected, faces, removes, isEditing, hasError, isLoading }: State = this.state;
         const { duration }: SkillCard = card;
         const hasFaces = faces.length > 0;
-        const entries = faces.filter(
-            (face: SkillCardEntry) => !removes.includes(face),
-        );
-        const editClassName = classNames('be-faces', {
+        const entries = faces.filter((face: SkillCardEntry) => !removes.includes(face));
+        const editClassName = classNames('be-face-edit', {
             'be-faces-is-editing': isEditing,
         });
 
         return (
-            <LoadingIndicatorWrapper
-                isLoading={isLoading}
-                className={editClassName}
-            >
-                {hasFaces &&
-                    isEditable &&
-                    !isLoading && (
+            <LoadingIndicatorWrapper isLoading={isLoading} className="be-faces">
+                {hasFaces && isEditable && !isLoading && (
+                    <Tooltip text={<FormattedMessage {...messages.editLabel} />}>
                         <PlainButton
                             type="button"
-                            className="be-face-edit"
+                            className={editClassName}
                             onClick={this.toggleIsEditing}
                             data-resin-target={SKILLS_TARGETS.FACES.EDIT}
                         >
                             <IconEdit />
                         </PlainButton>
-                    )}
+                    </Tooltip>
+                )}
                 {hasError && (
-                    <InlineError
-                        title={
-                            <FormattedMessage
-                                {...messages.sidebarSkillsErrorTitle}
-                            />
-                        }
-                    >
-                        <FormattedMessage
-                            {...messages.sidebarSkillsErrorContent}
-                        />
+                    <InlineError title={<FormattedMessage {...messages.sidebarSkillsErrorTitle} />}>
+                        <FormattedMessage {...messages.sidebarSkillsErrorContent} />
                     </InlineError>
                 )}
                 {hasFaces ? (
@@ -210,17 +191,14 @@ class Faces extends React.PureComponent<Props, State> {
                 ) : (
                     <FormattedMessage {...messages.skillNoInfoFoundError} />
                 )}
-                {!!selected &&
-                    !isEditing &&
-                    Array.isArray(selected.appears) &&
-                    selected.appears.length > 0 && (
-                        <Timeline
-                            timeslices={selected.appears}
-                            duration={duration}
-                            getViewer={getViewer}
-                            interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
-                        />
-                    )}
+                {!!selected && !isEditing && Array.isArray(selected.appears) && selected.appears.length > 0 && (
+                    <Timeline
+                        timeslices={selected.appears}
+                        duration={duration}
+                        getViewer={getViewer}
+                        interactionTarget={SKILLS_TARGETS.FACES.TIMELINE}
+                    />
+                )}
                 {isEditing && (
                     <div className="be-faces-buttons">
                         <Button

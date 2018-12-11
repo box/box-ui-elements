@@ -1,4 +1,3 @@
-import { withData } from 'leche';
 import {
     toISOStringNoMS,
     getFileLastModifiedAsISONoMSIfPossible,
@@ -36,65 +35,44 @@ describe('util/uploads', () => {
     });
 
     describe('getFileLastModifiedAsISONoMSIfPossible()', () => {
-        withData(
-            {
-                'file with valid lastModified': [
-                    {
-                        lastModified: 1483326245678,
-                    },
-                    '2017-01-02T03:04:05Z',
-                ],
-                'file with non-numeric lastModified (string)': [
-                    {
-                        lastModified: 'not a number',
-                    },
-                    null,
-                ],
-                // I don't know of a browser that has lastModified as a Date object, but I just added
-                // these two test cases to confirm that our code does something reasonable (i.e. return
-                // a string or null, but not crash).
-                'file with non-numeric lastModified (valid Date)': [
-                    {
-                        lastModified: new Date('2017-01-02T03:04:05.678Z'),
-                    },
-                    '2017-01-02T03:04:05Z',
-                ],
-                'file with non-numeric lastModified (invalid Date)': [
-                    {
-                        lastModified: new Date('not valid'),
-                    },
-                    null,
-                ],
-                'file no lastModified': [{}, null],
-            },
-            (file, expectedResult) => {
-                test('should return the properly formatted date when possible and return null otherwise', () => {
-                    expect(getFileLastModifiedAsISONoMSIfPossible(file)).toBe(
-                        expectedResult,
-                    );
-                });
+        // Test cases in order
+        // file with valid last modified
+        // file with non-numeric last modified (string)
+        // I don't know of a browser that has lastModified as a Date object, but I just added
+        // these two test cases to confirm that our code does something reasonable (i.e. return
+        // a string or null, but not crash).
+        // file with non-numeric lastModified (valid date)
+        // file with non-numeric lastModified (invalid Date)
+        // file no lastModified
+        test.each`
+            file                                                      | expectedResult
+            ${{ lastModified: 1483326245678 }}                        | ${'2017-01-02T03:04:05Z'}
+            ${{ lastModified: 'not a number' }}                       | ${null}
+            ${{ lastModified: new Date('2017-01-02T03:04:05.678Z') }} | ${'2017-01-02T03:04:05Z'}
+            ${{ lastModified: new Date('not valid') }}                | ${null}
+            ${{}}                                                     | ${null}
+        `(
+            'should return the properly formatted date when possible and return null otherwise',
+            ({ file, expectedResult }) => {
+                expect(getFileLastModifiedAsISONoMSIfPossible(file)).toBe(expectedResult);
             },
         );
     });
 
     describe('tryParseJson()', () => {
-        withData(
-            [
-                ['', null],
-                ['a', null],
-                ['{', null],
-                ['1', 1],
-                ['"a"', 'a'],
-                ['{}', {}],
-                ['[1,2,3]', [1, 2, 3]],
-                ['{"a": 1}', { a: 1 }],
-            ],
-            (str, expectedResult) => {
-                test('should return correct results', () => {
-                    expect(tryParseJson(str)).toEqual(expectedResult);
-                });
-            },
-        );
+        test.each`
+            str           | expectedResult
+            ${''}         | ${null}
+            ${'a'}        | ${null}
+            ${'{'}        | ${null}
+            ${'1'}        | ${1}
+            ${'"a"'}      | ${'a'}
+            ${'{}'}       | ${{}}
+            ${'[1,2,3]'}  | ${[1, 2, 3]}
+            ${'{"a": 1}'} | ${{ a: 1 }}
+        `('should return correct results', ({ str, expectedResult }) => {
+            expect(tryParseJson(str)).toEqual(expectedResult);
+        });
     });
 
     describe('doesFileContainAPIOptions()', () => {
@@ -183,14 +161,11 @@ describe('util/uploads', () => {
         });
 
         test('should return DEFAULT_API_OPTIONS when argument is DataTransferItem type', () => {
-            expect(getDataTransferItemAPIOptions(mockItem)).toEqual(
-                DEFAULT_API_OPTIONS,
-            );
+            expect(getDataTransferItemAPIOptions(mockItem)).toEqual(DEFAULT_API_OPTIONS);
         });
     });
 
     describe('getFileFromDataTransferItem()', () => {
-        // eslint-disable-next-line
         test('should return file of UploadFileWithAPIOptions type when itemData is UploadDataTransferItemWithAPIOptions type', async () => {
             const itemData = {
                 item: mockItem,
@@ -297,9 +272,7 @@ describe('util/uploads', () => {
         Date.now = jest.fn(() => now);
 
         test('should return item id correctly when item does not contain API options', () => {
-            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe(
-                `hi_0_${now}`,
-            );
+            expect(getDataTransferItemId(mockItem, rootFolderId)).toBe(`hi_0_${now}`);
         });
 
         test('should return item id correctly when item does contain API options', () => {
@@ -311,9 +284,7 @@ describe('util/uploads', () => {
                 },
             };
 
-            expect(getDataTransferItemId(item, rootFolderId)).toBe(
-                'hi_0_123123',
-            );
+            expect(getDataTransferItemId(item, rootFolderId)).toBe('hi_0_123123');
         });
     });
 });

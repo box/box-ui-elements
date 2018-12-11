@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /**
  * @flow
  * @file i18n messages
@@ -31,8 +30,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     previewError: {
         id: 'be.previewError',
         description: 'Error message when Preview fails due to the files call.',
-        defaultMessage:
-            'We’re sorry, the preview didn’t load. Please refresh the page.',
+        defaultMessage: 'We’re sorry, the preview didn’t load. Please refresh the page.',
     },
     previewUpdate: {
         id: 'be.previewUpdate',
@@ -141,8 +139,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     max: {
         id: 'be.max',
-        description:
-            'Indicator on the footer that max items have been selected.',
+        description: 'Indicator on the footer that max items have been selected.',
         defaultMessage: 'max',
     },
     nameDate: {
@@ -213,8 +210,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     deleteDialogFolderText: {
         id: 'be.deleteDialogFolderText',
         description: 'Text for delete confirmation dialog for folders',
-        defaultMessage:
-            'Are you sure you want to delete {name} and all its contents?',
+        defaultMessage: 'Are you sure you want to delete {name} and all its contents?',
     },
     renameDialogLabel: {
         id: 'be.renameDialogLabel',
@@ -258,14 +254,12 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     createDialogErrorTooLong: {
         id: 'be.createDialogErrorTooLong',
-        description:
-            'Error text for create folder dialog when name is too long',
+        description: 'Error text for create folder dialog when name is too long',
         defaultMessage: 'This folder name is too long.',
     },
     createDialogErrorInUse: {
         id: 'be.createDialogErrorInUse',
-        description:
-            'Error text for create folder dialog when name is already in use',
+        description: 'Error text for create folder dialog when name is already in use',
         defaultMessage: 'A folder with the same name already exists.',
     },
     shareDialogLabel: {
@@ -356,8 +350,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     sidebarSkillsErrorContent: {
         id: 'be.sidebarSkillsErrorContent',
         description: 'Generic error content for skills editing.',
-        defaultMessage:
-            'An error has occurred while updating skills. Please refresh the page and try again.',
+        defaultMessage: 'An error has occurred while updating skills. Please refresh the page and try again.',
     },
     sidebarActivityTitle: {
         id: 'be.sidebarActivityTitle',
@@ -377,8 +370,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     sidebarMetadataErrorContent: {
         id: 'be.sidebarMetadataErrorContent',
         description: 'Generic error content for metadata editing.',
-        defaultMessage:
-            'An error has occurred while editing metadata. Please refresh the page and try again.',
+        defaultMessage: 'An error has occurred while editing metadata. Please refresh the page and try again.',
     },
     sidebarProperties: {
         id: 'be.sidebarProperties',
@@ -402,14 +394,12 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     topicsSkill: {
         id: 'be.topicsSkill',
-        description:
-            'Label for keywords/topics skill section in the preview sidebar',
+        description: 'Label for keywords/topics skill section in the preview sidebar',
         defaultMessage: 'Topics',
     },
     keywordSkill: {
         id: 'be.keywordSkill',
-        description:
-            'Label for keywords/topics skill section in the preview sidebar',
+        description: 'Label for keywords/topics skill section in the preview sidebar',
         defaultMessage: 'Topics',
     },
     faceSkill: {
@@ -419,8 +409,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     transcriptSkill: {
         id: 'be.transcriptSkill',
-        description:
-            'Label for transcript skill section in the preview sidebar',
+        description: 'Label for transcript skill section in the preview sidebar',
         defaultMessage: 'Transcript',
     },
     skillPendingStatus: {
@@ -436,20 +425,17 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     skillUnknownError: {
         id: 'be.skillUnknownError',
         description: 'Default error message when skills fail to run',
-        defaultMessage:
-            'Something went wrong with running this skill or fetching its data.',
+        defaultMessage: 'Something went wrong with running this skill or fetching its data.',
     },
     skillInvalidFileSizeError: {
         id: 'be.skillInvalidFileSizeError',
         description: 'Error message when skill fails due to file size',
-        defaultMessage:
-            'We’re sorry, no skills information was found. This file size is currently not supported.',
+        defaultMessage: 'We’re sorry, no skills information was found. This file size is currently not supported.',
     },
     skillInvalidFileExtensionError: {
         id: 'be.skillInvalidFileExtensionError',
         description: 'Error message when skill fails due to file extension',
-        defaultMessage:
-            'We’re sorry, no skills information was found. This file extension is currently not supported.',
+        defaultMessage: 'We’re sorry, no skills information was found. This file extension is currently not supported.',
     },
     skillNoInfoFoundError: {
         id: 'be.skillNoInfoFoundError',
@@ -459,115 +445,96 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     skillFileProcessingError: {
         id: 'be.skillFileProcessingError',
         description: 'Error message when a skill processing failed',
-        defaultMessage:
-            'We’re sorry, something went wrong with processing the file.',
+        defaultMessage: 'We’re sorry, something went wrong with processing the file.',
     },
     uploadErrorTooManyFiles: {
         id: 'be.uploadErrorTooManyFiles',
         description: 'Message shown when too many files are uploaded at once',
-        defaultMessage:
-            'You can only upload up to {fileLimit} file(s) at a time.',
+        defaultMessage: 'You can only upload up to {fileLimit} file(s) at a time.',
     },
     uploadError: {
         id: 'be.uploadError',
-        description:
-            'Message shown when there is a network error when uploading',
+        description: 'Message shown when there is a network error when uploading',
         defaultMessage: 'A network error has occurred while trying to upload.',
     },
     uploadEmptyWithFolderUploadEnabled: {
         id: 'be.uploadEmptyWithFolderUploadEnabled',
-        description:
-            'Message shown when there are no items to upload and folder upload is enabled',
+        description: 'Message shown when there are no items to upload and folder upload is enabled',
         defaultMessage: 'Drag and Drop Files and Folders',
     },
     uploadEmptyWithFolderUploadDisabled: {
         id: 'be.uploadEmptyWithFolderUploadDisabled',
-        description:
-            'Message shown when there are no items to upload and folder upload is disabled',
+        description: 'Message shown when there are no items to upload and folder upload is disabled',
         defaultMessage: 'Drag and Drop Files',
     },
     uploadEmptyFileInput: {
         id: 'be.uploadEmptyFileInput',
-        description:
-            'Message shown for upload link for uploading more files when there are no items to upload',
+        description: 'Message shown for upload link for uploading more files when there are no items to upload',
         defaultMessage: 'Select Files',
     },
     uploadEmptyFolderInput: {
         id: 'be.uploadEmptyFolderInput',
-        description:
-            'Message shown for upload link for uploading more folders when there are no items to upload',
+        description: 'Message shown for upload link for uploading more folders when there are no items to upload',
         defaultMessage: 'Select Folders',
     },
     uploadNoDragDrop: {
         id: 'be.uploadNoDragDrop',
-        description:
-            'Message shown on a device with no drag and drop support when there are no items to upload',
+        description: 'Message shown on a device with no drag and drop support when there are no items to upload',
         defaultMessage: 'Select files from your device',
     },
     uploadInProgress: {
         id: 'be.uploadInProgress',
-        description:
-            'Message shown when user drag and drops files onto uploads in progress',
+        description: 'Message shown when user drag and drops files onto uploads in progress',
         defaultMessage: 'Drag and drop to add additional files',
     },
     uploadSuccess: {
         id: 'be.uploadSuccess',
-        description:
-            'Message shown when all files have been successfully uploaded',
+        description: 'Message shown when all files have been successfully uploaded',
         defaultMessage: 'Success! Your files have been uploaded.',
     },
     uploadSuccessFileInput: {
         id: 'be.uploadSuccessFileInput',
-        description:
-            'Message shown for upload link for uploading more files after a successful upload',
+        description: 'Message shown for upload link for uploading more files after a successful upload',
         defaultMessage: 'Select More Files',
     },
     uploadSuccessFolderInput: {
         id: 'be.uploadSuccessFolderInput',
-        description:
-            'Message shown for upload link for uploading more folders after a successful upload',
+        description: 'Message shown for upload link for uploading more folders after a successful upload',
         defaultMessage: 'Select More Folders',
     },
     uploadOptions: {
         id: 'be.uploadOptions',
-        description:
-            'Message shown for letting user choose between {option1} and {option2}',
+        description: 'Message shown for letting user choose between {option1} and {option2}',
         defaultMessage: '{option1} or {option2}',
     },
     nameASC: {
         id: 'be.nameASC',
-        description:
-            'Name ascending option shown in the share access drop down select.',
+        description: 'Name ascending option shown in the share access drop down select.',
         defaultMessage: 'Name: A → Z',
     },
     nameDESC: {
         id: 'be.nameDESC',
-        description:
-            'Name descending option shown in the share access drop down select.',
+        description: 'Name descending option shown in the share access drop down select.',
         defaultMessage: 'Name: Z → A',
     },
     dateASC: {
         id: 'be.dateASC',
-        description:
-            'Date ascending option shown in the share access drop down select.',
+        description: 'Date ascending option shown in the share access drop down select.',
         defaultMessage: 'Date: Oldest → Newest',
     },
     dateDESC: {
         id: 'be.dateDESC',
-        description:
-            'Date descending option shown in the share access drop down select.',
+        description: 'Date descending option shown in the share access drop down select.',
         defaultMessage: 'Date: Newest → Oldest',
     },
     sizeASC: {
         id: 'be.sizeASC',
-        description:
-            'Size ascending option shown in the share access drop down select.',
+        description: 'Size ascending option shown in the share access drop down select.',
         defaultMessage: 'Size: Smallest → Largest',
     },
     sizeDESC: {
         id: 'be.sizeDESC',
-        description:
-            'Size descending option shown in the share access drop down select.',
+        description: 'Size descending option shown in the share access drop down select.',
         defaultMessage: 'Size: Largest → Smallest',
     },
     searchState: {
@@ -612,20 +579,17 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     recentsBreadcrumb: {
         id: 'be.recentsBreadcrumb',
-        description:
-            'Shown as the title in the sub header when showing recents.',
+        description: 'Shown as the title in the sub header when showing recents.',
         defaultMessage: 'Recents',
     },
     selectedBreadcrumb: {
         id: 'be.selectedBreadcrumb',
-        description:
-            'Shown as the title in the sub header while showing selected items.',
+        description: 'Shown as the title in the sub header while showing selected items.',
         defaultMessage: 'Selected Items',
     },
     errorBreadcrumb: {
         id: 'be.errorBreadcrumb',
-        description:
-            'Shown as the title in the sub header while showing an error.',
+        description: 'Shown as the title in the sub header while showing an error.',
         defaultMessage: 'Error',
     },
     uploadsManagerUploadInProgress: {
@@ -636,8 +600,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     uploadsManagerUploadPrompt: {
         id: 'be.uploadsManagerUploadPrompt',
         description: 'Text shown to guide the user to drag drop file to upload',
-        defaultMessage:
-            'Drop files on this page to upload them into this folder.',
+        defaultMessage: 'Drop files on this page to upload them into this folder.',
     },
     uploadsManagerUploadComplete: {
         id: 'be.uploadsManagerUploadComplete',
@@ -666,21 +629,28 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     uploadsStorageLimitErrorMessage: {
         id: 'be.uploadsStorageLimitErrorMessage',
-        description:
-            'Error message shown when account storage limit has been reached',
+        description: 'Error message shown when account storage limit has been reached',
         defaultMessage: 'Account storage limit reached',
     },
     uploadsPendingFolderSizeLimitErrorMessage: {
         id: 'be.uploadsPendingFolderSizeLimitErrorMessage',
-        description:
-            'Error message shown when pending app folder size exceeds the limit',
+        description: 'Error message shown when pending app folder size exceeds the limit',
         defaultMessage: 'Pending app folder size limit exceeded',
+    },
+    uploadsProvidedFolderNameInvalidMessage: {
+        id: 'be.uploadsProvidedFolderNameInvalidMessage',
+        description: 'Error message shown when pending folder upload contains invalid characters',
+        defaultMessage: 'Provided folder name, {name}, could not be used to create a folder.',
+    },
+    uploadsOneOrMoreChildFoldersFailedToUploadMessage: {
+        id: 'be.uploadsOneOrMoreChildFoldersFailedToUploadMessage',
+        description: 'Error message shown when one or more child folders failed to upload',
+        defaultMessage: 'One or more child folders failed to upload.',
     },
     uploadsDefaultErrorMessage: {
         id: 'be.uploadsDefaultErrorMessage',
         description: 'Default error message shown when upload fails',
-        defaultMessage:
-            'Something went wrong with the upload. Please try again.',
+        defaultMessage: 'Something went wrong with the upload. Please try again.',
     },
     approvalAddAssignee: {
         id: 'be.approvalAddAssignee',
@@ -716,8 +686,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     atMentionTip: {
         id: 'be.atMentionTip',
         defaultMessage: '@mention users to notify them.',
-        description:
-            'Mentioning call to action displayed below the comment input',
+        description: 'Mentioning call to action displayed below the comment input',
     },
     errorOccured: {
         id: 'be.errorOccured',
@@ -776,8 +745,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     commentCreateConflictMessage: {
         id: 'be.commentCreateConflictMessage',
-        description:
-            'Error message when a comment creation fails due to a conflict',
+        description: 'Error message when a comment creation fails due to a conflict',
         defaultMessage: 'This comment already exists.',
     },
     commentDeleteErrorMessage: {
@@ -808,8 +776,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     completedAssignment: {
         id: 'be.completedAssignment',
         defaultMessage: 'Completed',
-        description:
-            'Title for checkmark icon indicating someone completed a task',
+        description: 'Title for checkmark icon indicating someone completed a task',
     },
     deleteLabel: {
         id: 'be.deleteLabel',
@@ -824,20 +791,17 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     getVersionInfo: {
         id: 'be.getVersionInfo',
         defaultMessage: 'Get version information',
-        description:
-            'Aria label for button to get information about a file’s versions',
+        description: 'Aria label for button to get information about a file’s versions',
     },
     keywordsApplied: {
         id: 'be.keywordsAppliedList',
         defaultMessage: 'Keywords were applied',
-        description:
-            'Message displayed in the activity feed for when image keyword search applies keywords',
+        description: 'Message displayed in the activity feed for when image keyword search applies keywords',
     },
     keywordsList: {
         id: 'be.keywordsList',
         defaultMessage: 'Keywords: { words }',
-        description:
-            'Label for a list of keywords. {words} are the list of keywords.',
+        description: 'Label for a list of keywords. {words} are the list of keywords.',
     },
     noActivity: {
         id: 'be.noActivity',
@@ -888,8 +852,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     versionMultipleUsersUploaded: {
         id: 'be.versionMultipleUsersUploaded',
-        defaultMessage:
-            '{ numberOfCollaborators } collaborators uploaded versions { versions }',
+        defaultMessage: '{ numberOfCollaborators } collaborators uploaded versions { versions }',
         description:
             'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. { numberOfCollaborators } is a number and { versions } is a range of versions.',
     },
@@ -915,6 +878,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Inline error title message for file description',
         defaultMessage: 'Something went wrong when saving the description.',
     },
+    defaultErrorMaskHeaderMessage: {
+        id: 'be.defaultErrorMaskHeaderMessage',
+        description: 'Default error mask top message',
+        defaultMessage: 'We’re sorry, something went wrong.',
+    },
     defaultErrorMaskSubHeaderMessage: {
         id: 'be.defaultErrorMaskSubHeaderMessage',
         description: 'Default error mask bottom message',
@@ -927,10 +895,13 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     fileAccessStatsPermissionsError: {
         id: 'be.accessStatsPermissionsError',
-        description:
-            'The text for when the user does not have permissions to see access stats.',
-        defaultMessage:
-            'Sorry, you do not have permission to see the access stats for this file.',
+        description: 'The text for when the user does not have permissions to see access stats.',
+        defaultMessage: 'Sorry, you do not have permission to see the access stats for this file.',
+    },
+    fileClassificationErrorHeaderMessage: {
+        id: 'be.fileClassificationErrorHeaderMessage',
+        description: 'File classification error message',
+        defaultMessage: 'Something went wrong when fetching classification.',
     },
     currentUserErrorHeaderMessage: {
         id: 'be.currentUserErrorHeaderMessage',
@@ -940,8 +911,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     activityFeedItemApiError: {
         id: 'be.activityFeedItemApiError',
         description: 'Error message for feed item API errors',
-        defaultMessage:
-            'There was a problem loading the activity feed. Please refresh the page or try again later.',
+        defaultMessage: 'There was a problem loading the activity feed. Please refresh the page or try again later.',
     },
     nextPage: {
         defaultMessage: 'Next Page',
@@ -950,8 +920,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     pageStatus: {
         defaultMessage: '{pageNumber} of {pageCount}',
-        description:
-            'Pagination menu button with current page number out of total number of pages',
+        description: 'Pagination menu button with current page number out of total number of pages',
         id: 'be.pagination.pageStatus',
     },
     previousPage: {
@@ -971,51 +940,53 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     },
     transcriptEdit: {
         id: 'be.transcriptEdit',
-        description:
-            'Message to the user for editing the transcript in the sidebar',
+        description: 'Message to the user for editing the transcript in the sidebar',
         defaultMessage: 'Click any section to edit.',
     },
     emptyOpenWithDescription: {
         id: 'be.emptyOpenWithDescription',
-        description:
-            'Message to the user when there are no Open With integrations',
+        description: 'Message to the user when there are no Open With integrations',
         defaultMessage: 'No integrations are available for this file',
     },
     errorOpenWithDescription: {
         id: 'be.errorOpenWithDescription',
         description: 'Message to the user when the open with element errors',
-        defaultMessage:
-            'Opening this file with other services is currently unavailable',
+        defaultMessage: 'Opening this file with other services is currently unavailable',
     },
     defaultOpenWithDescription: {
         id: 'be.defaultOpenWithDescription',
-        description:
-            'Message to the user when there is at least one Open With integration available',
+        description: 'Message to the user when there is at least one Open With integration available',
         defaultMessage: 'Open this file with a partner service',
     },
     executeIntegrationOpenWithErrorHeader: {
         id: 'be.executeIntegrationOpenWithErrorHeader',
-        description:
-            'Header message to the user when an Open With integration fails to execute',
-        defaultMessage:
-            'We’re sorry, this integration is currently unavailable.',
+        description: 'Header message to the user when an Open With integration fails to execute',
+        defaultMessage: 'We’re sorry, this integration is currently unavailable.',
     },
     executeIntegrationOpenWithErrorSubHeader: {
         id: 'be.executeIntegrationOpenWithErrorSubHeader',
-        description:
-            'Sub header message to the user when an Open With integration fails to execute',
+        description: 'Sub header message to the user when an Open With integration fails to execute',
         defaultMessage: 'Please try again later.',
     },
     drawAnnotation: {
         id: 'be.drawAnnotation',
-        description:
-            'Message to the user to enter into drawing annotation mode',
+        description: 'Message to the user to enter into drawing annotation mode',
         defaultMessage: 'Drawing annotation mode',
     },
     pointAnnotation: {
         id: 'be.pointAnnotation',
         description: 'Message to the user to enter into point annotation mode',
         defaultMessage: 'Point annotation mode',
+    },
+    expand: {
+        id: 'be.expand',
+        description: 'Message to the user to expand the Transcript entries',
+        defaultMessage: 'Expand',
+    },
+    collapse: {
+        id: 'be.collapse',
+        description: 'Message to the user to collapse the Transcript entries',
+        defaultMessage: 'Collapse',
     },
 });
 

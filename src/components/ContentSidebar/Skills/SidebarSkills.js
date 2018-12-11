@@ -55,10 +55,7 @@ const getCardInteractionTarget = ({ skill_card_type }: SkillCard): string => {
  * @param {Object} card - skill card
  * @return {string} - skill title
  */
-const getCardTitle = ({
-    skill_card_type,
-    skill_card_title = {},
-}: SkillCard): string | React.Node => {
+const getCardTitle = ({ skill_card_type, skill_card_title = {} }: SkillCard): string | React.Node => {
     const { code, message }: SkillCardLocalizableType = skill_card_title;
     const defaultKey = `${skill_card_type}Skill`;
     const defaultMessage = messages[defaultKey] || messages.defaultSkill;
@@ -79,13 +76,7 @@ const getCardTitle = ({
     }
 };
 
-const SidebarSkills = ({
-    file,
-    cards,
-    errors,
-    getViewer,
-    onSkillChange,
-}: Props): Array<React.Node> => {
+const SidebarSkills = ({ file, cards, errors, getViewer, onSkillChange }: Props): Array<React.Node> => {
     const { permissions = {} }: BoxItem = file;
     const isSkillEditable = !!permissions.can_upload;
 
@@ -103,17 +94,10 @@ const SidebarSkills = ({
         const isValid = isValidSkillsCard(file, card);
         const interactionTarget = getCardInteractionTarget(card);
         const title = getCardTitle(card);
-        const hasEntries = Array.isArray(card.entries)
-            ? card.entries.length > 0
-            : isValid;
+        const hasEntries = Array.isArray(card.entries) ? card.entries.length > 0 : isValid;
 
         return isValid ? (
-            <SidebarSection
-                key={cardId}
-                isOpen={hasEntries}
-                interactionTarget={interactionTarget}
-                title={title}
-            >
+            <SidebarSection key={cardId} isOpen={hasEntries} interactionTarget={interactionTarget} title={title}>
                 <SidebarSkillsCard
                     card={card}
                     cards={cards}

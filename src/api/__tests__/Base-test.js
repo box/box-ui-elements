@@ -8,9 +8,11 @@ let base;
 
 describe('api/Base', () => {
     const baseResponse = { total_count: 0, entries: [] };
+    const errorCode = 'foo';
 
     beforeEach(() => {
         base = new Base({});
+        base.errorCode = errorCode;
     });
 
     test('should should have correct defaults on construct', () => {
@@ -65,21 +67,13 @@ describe('api/Base', () => {
             }
 
             try {
-                base.checkApiCallValidity(
-                    'can_edit',
-                    { permissions: { can_edit: false } },
-                    null,
-                );
+                base.checkApiCallValidity('can_edit', { permissions: { can_edit: false } }, null);
             } catch (error) {
                 expect(error.message).toBe(badItemError.message);
             }
 
             try {
-                base.checkApiCallValidity(
-                    'can_edit',
-                    { permissions: {} },
-                    'id',
-                );
+                base.checkApiCallValidity('can_edit', { permissions: {} }, 'id');
             } catch (error) {
                 expect(error.message).toBe(permissionsError.message);
             }
@@ -130,20 +124,20 @@ describe('api/Base', () => {
             const url = 'https://www.foo.com';
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            const params = {
+            const requestData = {
                 fields: 'start=0',
             };
             base.makeRequest = jest.fn();
             base.getUrl = jest.fn(() => url);
 
-            base.get({ id, successCallback, errorCallback, params });
+            base.get({ id, successCallback, errorCallback, requestData });
             expect(base.makeRequest).toHaveBeenCalledWith(
                 HTTP_GET,
                 id,
                 url,
                 successCallback,
                 errorCallback,
-                params,
+                requestData,
             );
         });
     });
@@ -157,35 +151,27 @@ describe('api/Base', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base
-                .makeRequest(HTTP_GET, 'id', url, successCb, errorCb)
-                .catch(() => {
-                    expect(successCb).not.toHaveBeenCalled();
-                    expect(errorCb).not.toHaveBeenCalled();
-                });
+            return base.makeRequest(HTTP_GET, 'id', url, successCb, errorCb).catch(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).not.toHaveBeenCalled();
+            });
         });
 
         test('should make xhr to get base and call success callback', () => {
             base.xhr = {
-                post: jest
-                    .fn()
-                    .mockReturnValueOnce(
-                        Promise.resolve({ data: baseResponse }),
-                    ),
+                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse })),
             };
 
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base
-                .makeRequest(HTTP_POST, 'id', url, successCb, errorCb)
-                .then(() => {
-                    expect(successCb).toHaveBeenCalledWith(baseResponse);
-                    expect(base.xhr.post).toHaveBeenCalledWith({
-                        id: 'file_id',
-                        url,
-                    });
+            return base.makeRequest(HTTP_POST, 'id', url, successCb, errorCb).then(() => {
+                expect(successCb).toHaveBeenCalledWith(baseResponse);
+                expect(base.xhr.post).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url,
                 });
+            });
         });
 
         test('should call error callback when xhr fails', () => {
@@ -197,16 +183,14 @@ describe('api/Base', () => {
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base
-                .makeRequest(HTTP_PUT, 'id', url, successCb, errorCb)
-                .then(() => {
-                    expect(successCb).not.toHaveBeenCalled();
-                    expect(errorCb).toHaveBeenCalledWith(error);
-                    expect(base.xhr.put).toHaveBeenCalledWith({
-                        id: 'file_id',
-                        url,
-                    });
+            return base.makeRequest(HTTP_PUT, 'id', url, successCb, errorCb).then(() => {
+                expect(successCb).not.toHaveBeenCalled();
+                expect(errorCb).toHaveBeenCalledWith(error, errorCode);
+                expect(base.xhr.put).toHaveBeenCalledWith({
+                    id: 'file_id',
+                    url,
                 });
+            });
         });
 
         test('should pass along request data', () => {
@@ -220,33 +204,20 @@ describe('api/Base', () => {
                 },
             };
             base.xhr = {
-                post: jest
-                    .fn()
-                    .mockReturnValueOnce(
-                        Promise.resolve({ data: baseResponse }),
-                    ),
+                post: jest.fn().mockReturnValueOnce(Promise.resolve({ data: baseResponse })),
             };
 
             const successCb = jest.fn();
             const errorCb = jest.fn();
 
-            return base
-                .makeRequest(
-                    HTTP_POST,
-                    'id',
+            return base.makeRequest(HTTP_POST, 'id', url, successCb, errorCb, requestData).then(() => {
+                expect(successCb).toHaveBeenCalledWith(baseResponse);
+                expect(base.xhr.post).toHaveBeenCalledWith({
+                    id: 'file_id',
                     url,
-                    successCb,
-                    errorCb,
-                    requestData,
-                )
-                .then(() => {
-                    expect(successCb).toHaveBeenCalledWith(baseResponse);
-                    expect(base.xhr.post).toHaveBeenCalledWith({
-                        id: 'file_id',
-                        url,
-                        data: requestData.data,
-                    });
+                    data: requestData.data,
                 });
+            });
         });
     });
 });

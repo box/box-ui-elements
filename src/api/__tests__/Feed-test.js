@@ -1,6 +1,8 @@
 import Feed from '../Feed';
 import messages from '../../components/messages';
+import { IS_ERROR_DISPLAYED } from '../../constants';
 import * as sorter from '../../util/sorter';
+import * as error from '../../util/error';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
@@ -29,49 +31,43 @@ jest.mock('../Tasks', () => {
         deleteTask: jest.fn().mockImplementation(({ successCallback }) => {
             successCallback();
         }),
-        get: jest.fn().mockReturnValue(task),
-        getAssignments: jest
-            .fn()
-            .mockImplementation((id, taskId, successCallback) => { // eslint-disable-line
-                successCallback({
-                    total_count: 1,
-                    entries: [
-                        {
-                            type: 'task_assignment',
-                            id: '48714317',
-                            assigned_to: {
-                                type: 'user',
-                                id: '3086276240',
-                                name: 'Daniel DeMicco',
-                                login: 'ddemicco@box.com',
-                            },
-                            resolution_state: 'incomplete',
-                            message: 'Completed',
+        getTasks: jest.fn().mockReturnValue(task),
+        getAssignments: jest.fn().mockImplementation((id, taskId, successCallback) => {
+            successCallback({
+                total_count: 1,
+                entries: [
+                    {
+                        type: 'task_assignment',
+                        id: '48714317',
+                        assigned_to: {
+                            type: 'user',
+                            id: '3086276240',
+                            name: 'Daniel DeMicco',
+                            login: 'ddemicco@box.com',
                         },
-                    ],
-                });
-            }),
+                        resolution_state: 'incomplete',
+                        message: 'Completed',
+                    },
+                ],
+            });
+        }),
     }));
 });
 
 jest.mock('../TaskAssignments', () =>
     jest.fn().mockImplementation(() => ({
-        updateTaskAssignment: jest
-            .fn()
-            .mockImplementation(({ successCallback }) => {
-                successCallback();
-            }),
-        createTaskAssignment: jest
-            .fn()
-            .mockImplementation(({ successCallback }) => {
-                successCallback();
-            }),
+        updateTaskAssignment: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
+        createTaskAssignment: jest.fn().mockImplementation(({ successCallback }) => {
+            successCallback();
+        }),
     })),
 );
 
 jest.mock('../Comments', () =>
     jest.fn().mockImplementation(() => ({
-        offsetGet: jest.fn().mockReturnValue({
+        getComments: jest.fn().mockReturnValue({
             total_count: 1,
             entries: [
                 {
@@ -94,7 +90,7 @@ jest.mock('../Comments', () =>
 
 jest.mock('../Versions', () =>
     jest.fn().mockImplementation(() => ({
-        offsetGet: jest.fn().mockReturnValue({
+        getVersions: jest.fn().mockReturnValue({
             total_count: 1,
             entries: [
                 {
@@ -185,11 +181,7 @@ describe('api/Feed', () => {
         entries: [first_version, deleted_version],
     };
 
-    const feedItems = [
-        ...comments.entries,
-        ...tasks.entries,
-        ...versions.entries,
-    ];
+    const feedItems = [...comments.entries, ...tasks.entries, ...versions.entries];
 
     const file = {
         id: '12345',
@@ -207,11 +199,16 @@ describe('api/Feed', () => {
     };
 
     const user = { id: 'user1' };
-
     const fileError = 'Bad box item!';
+    const errorCode = 'foo';
 
     beforeEach(() => {
         feed = new Feed({});
+        jest.spyOn(global.console, 'error').mockImplementation();
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     describe('getCacheKey()', () => {
@@ -260,12 +257,8 @@ describe('api/Feed', () => {
         });
     });
 
-    describe('feedItems', () => {
-        const sortedItems = [
-            ...versions.entries,
-            ...tasks.entries,
-            ...comments.entries,
-        ];
+    describe('feedItems()', () => {
+        const sortedItems = [...versions.entries, ...tasks.entries, ...comments.entries];
         let successCb;
         let errorCb;
 
@@ -278,21 +271,18 @@ describe('api/Feed', () => {
             successCb = jest.fn();
             errorCb = jest.fn();
             feed.isDestroyed = jest.fn().mockReturnValue(false);
-            sorter.sortFeedItems = jest.fn().mockReturnValue(sortedItems);
+            jest.spyOn(sorter, 'sortFeedItems').mockReturnValue(sortedItems);
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
         });
 
         test('should get feed items, sort, save to cache, and call the success callback', done => {
-            feed.feedItems(file, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
-                expect(sorter.sortFeedItems).toHaveBeenCalledWith(
-                    versions,
-                    comments,
-                    tasks,
-                );
-                expect(feed.setCachedItems).toHaveBeenCalledWith(
-                    file.id,
-                    sortedItems,
-                );
+                expect(sorter.sortFeedItems).toHaveBeenCalledWith(versions, comments, tasks);
+                expect(feed.setCachedItems).toHaveBeenCalledWith(file.id, sortedItems);
                 expect(successCb).toHaveBeenCalledWith(sortedItems);
                 done();
             });
@@ -304,7 +294,7 @@ describe('api/Feed', () => {
                 return [];
             };
 
-            feed.feedItems(file, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
                 expect(errorCb).toHaveBeenCalledWith(sortedItems);
                 done();
@@ -313,7 +303,7 @@ describe('api/Feed', () => {
 
         test('should not call success or error callback if it is destroyed', done => {
             feed.isDestroyed = jest.fn().mockReturnValue(true);
-            feed.feedItems(file, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb);
             setImmediate(() => {
                 expect(successCb).not.toHaveBeenCalled();
                 expect(errorCb).not.toHaveBeenCalled();
@@ -326,33 +316,62 @@ describe('api/Feed', () => {
                 hasError: false,
                 items: feedItems,
             });
-            feed.feedItems(file, successCb, errorCb);
+            feed.feedItems(file, false, successCb, errorCb);
             expect(feed.getCachedItems).toHaveBeenCalledWith(file.id);
             expect(successCb).toHaveBeenCalledWith(feedItems);
+        });
+
+        test('should refersh the cache after returning the cached items', done => {
+            feed.getCachedItems = jest.fn().mockReturnValue({
+                hasError: false,
+                items: feedItems,
+            });
+            feed.feedItems(file, true, successCb, errorCb);
+            expect(feed.getCachedItems).toHaveBeenCalledWith(file.id);
+            expect(successCb).toHaveBeenCalledTimes(1);
+            expect(successCb).toHaveBeenCalledWith(feedItems);
+
+            // refresh cache
+            setImmediate(() => {
+                expect(successCb).toHaveBeenCalledTimes(2);
+                done();
+            });
         });
     });
 
     describe('fetchComments()', () => {
+        beforeEach(() => {
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
         test('should return a promise and call the comments api', () => {
             const commentItems = feed.fetchComments();
             expect(commentItems instanceof Promise).toBeTruthy();
-            expect(feed.commentsAPI.offsetGet).toBeCalled();
+            expect(feed.commentsAPI.getComments).toBeCalled();
         });
     });
 
     describe('fetchVersions()', () => {
+        beforeEach(() => {
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
         test('should return a promise and call the versions api', () => {
             const versionItems = feed.fetchVersions();
             expect(versionItems instanceof Promise).toBeTruthy();
-            expect(feed.versionsAPI.offsetGet).toBeCalled();
+            expect(feed.versionsAPI.getVersions).toBeCalled();
         });
     });
 
     describe('fetchTasks()', () => {
+        beforeEach(() => {
+            feed.fetchFeedItemErrorCallback = jest.fn();
+        });
+
         test('should return a promise and call the tasks api', () => {
             const taskItems = feed.fetchTasks();
             expect(taskItems instanceof Promise).toBeTruthy();
-            expect(feed.tasksAPI.get).toBeCalled();
+            expect(feed.tasksAPI.getTasks).toBeCalled();
         });
     });
 
@@ -368,9 +387,7 @@ describe('api/Feed', () => {
         test('should call the tasks assignments api and if successful, the success callback', () => {
             feed.updateTaskAssignment(file);
             expect(feed.taskAssignmentsAPI.length).toBe(1);
-            expect(
-                feed.taskAssignmentsAPI.pop().updateTaskAssignment,
-            ).toBeCalled();
+            expect(feed.taskAssignmentsAPI.pop().updateTaskAssignment).toBeCalled();
             expect(feed.updateTaskAssignmentSuccessCallback).toBeCalled();
         });
     });
@@ -396,10 +413,9 @@ describe('api/Feed', () => {
                 },
                 successCb,
             );
-            expect(
-                feed.updateFeedItem.mock.calls[0][0].task_assignment_collection
-                    .entries[0].resolution_state,
-            ).toBe(updatedState);
+            expect(feed.updateFeedItem.mock.calls[0][0].task_assignment_collection.entries[0].resolution_state).toBe(
+                updatedState,
+            );
             expect(successCb).toBeCalled();
         });
     });
@@ -417,25 +433,6 @@ describe('api/Feed', () => {
             feed.updateTask(file);
             expect(feed.tasksAPI.updateTask).toBeCalled();
             expect(feed.updateTaskSuccessCallback).toBeCalled();
-        });
-    });
-
-    describe('updateTaskErrorCallback()', () => {
-        let errorCb;
-        beforeEach(() => {
-            feed.errorCallback = jest.fn();
-            errorCb = jest.fn();
-        });
-
-        test('should call the error callback', () => {
-            feed.updateTaskErrorCallback(tasks.entries[0], errorCb);
-            expect(errorCb).toBeCalled();
-        });
-
-        test('should not call the error callback', () => {
-            feed.isDestroyed = jest.fn().mockReturnValue(true);
-            feed.updateTaskErrorCallback(tasks.entries[0], errorCb);
-            expect(errorCb).not.toBeCalled();
         });
     });
 
@@ -486,24 +483,19 @@ describe('api/Feed', () => {
     });
 
     describe('deleteCommentErrorCallback()', () => {
-        const error = 'foo';
-        let errorCb;
+        const e = new Error('foo');
+
         beforeEach(() => {
             feed.updateFeedItem = jest.fn();
             feed.createFeedError = jest.fn().mockReturnValue(error);
-            errorCb = jest.fn();
+            feed.feedErrorCallback = jest.fn();
         });
 
         test('should update the feed item and call the error callback', () => {
             const commentId = '1';
-            feed.deleteCommentErrorCallback(commentId, errorCb);
+            feed.deleteCommentErrorCallback(e, errorCode, commentId);
             expect(feed.updateFeedItem).toBeCalledWith(error, commentId);
-            expect(errorCb).toBeCalled();
-        });
-
-        test('should not call the error callback', () => {
-            feed.isDestroyed = jest.fn().mockReturnValue(true);
-            expect(errorCb).not.toBeCalled();
+            expect(feed.feedErrorCallback).toBeCalledWith(true, e, errorCode);
         });
     });
 
@@ -514,6 +506,7 @@ describe('api/Feed', () => {
         beforeEach(() => {
             feed.appendAssignmentsToTask = jest.fn();
             feed.updateFeedItem = jest.fn();
+            feed.feedErrorCallback = jest.fn();
             successCb = jest.fn();
             errorCb = jest.fn();
         });
@@ -524,18 +517,9 @@ describe('api/Feed', () => {
 
         test('should call the success callback', done => {
             feed.createTaskAssignment = jest.fn().mockResolvedValue('foo');
-            feed.createTaskSuccessCallback(
-                file,
-                'generated',
-                tasks.entries[0],
-                assignees,
-                successCb,
-                errorCb,
-            );
+            feed.createTaskSuccessCallback(file, 'generated', tasks.entries[0], assignees, successCb, errorCb);
             setImmediate(() => {
-                expect(feed.createTaskAssignment).toHaveBeenCalledTimes(
-                    assignees.length,
-                );
+                expect(feed.createTaskAssignment).toHaveBeenCalledTimes(assignees.length);
                 expect(feed.updateFeedItem).toBeCalled();
                 expect(successCb).toBeCalled();
                 done();
@@ -544,19 +528,10 @@ describe('api/Feed', () => {
 
         test('should call the error callback', done => {
             feed.createTaskAssignment = jest.fn().mockRejectedValue('bar');
-            feed.createTaskSuccessCallback(
-                file,
-                'generated',
-                tasks.entries[0],
-                assignees,
-                successCb,
-                errorCb,
-            );
+            feed.createTaskSuccessCallback(file, 'generated', tasks.entries[0], assignees, successCb, errorCb);
             setImmediate(() => {
-                expect(feed.createTaskAssignment).toHaveBeenCalledTimes(
-                    assignees.length,
-                );
-                expect(errorCb).toBeCalled();
+                expect(feed.createTaskAssignment).toHaveBeenCalledTimes(assignees.length);
+                expect(feed.feedErrorCallback).toBeCalled();
                 done();
             });
         });
@@ -580,15 +555,7 @@ describe('api/Feed', () => {
         });
 
         test('should call the tasks api and if successful, the success callback', () => {
-            feed.createTask(
-                file,
-                currentUser,
-                message,
-                assignees,
-                null,
-                successCb,
-                errorCb,
-            );
+            feed.createTask(file, currentUser, message, assignees, null, successCb, errorCb);
             expect(feed.addPendingItem).toBeCalledWith(file.id, currentUser, {
                 id: 'uniqueId',
                 is_completed: false,
@@ -611,15 +578,7 @@ describe('api/Feed', () => {
         test('should set the due at string', () => {
             const dueAt = 123456;
             const dueDateString = new Date(dueAt).toISOString();
-            feed.createTask(
-                file,
-                currentUser,
-                message,
-                assignees,
-                dueAt,
-                successCb,
-                errorCb,
-            );
+            feed.createTask(file, currentUser, message, assignees, dueAt, successCb, errorCb);
             expect(feed.addPendingItem).toBeCalledWith(file.id, currentUser, {
                 due_at: dueDateString,
                 id: 'uniqueId',
@@ -652,41 +611,13 @@ describe('api/Feed', () => {
         });
 
         test('should call the task assignment api and if successful, resolve', done => {
-            const promise = feed.createTaskAssignment(
-                file,
-                tasks.entries[0],
-                'foo',
-                errorCb,
-            );
+            const promise = feed.createTaskAssignment(file, tasks.entries[0], 'foo', errorCb);
             expect(feed.id).toBe(file.id);
             expect(promise instanceof Promise).toBeTruthy();
-            expect(
-                feed.taskAssignmentsAPI[0].createTaskAssignment,
-            ).toBeCalled();
+            expect(feed.taskAssignmentsAPI[0].createTaskAssignment).toBeCalled();
             promise.then(() => {
                 done();
             });
-        });
-    });
-
-    describe('createTaskAssignmentErrorCallback()', () => {
-        let errorCb;
-        beforeEach(() => {
-            feed.errorCallback = jest.fn();
-            feed.deleteTask = jest.fn();
-            errorCb = jest.fn();
-        });
-
-        test('should call generic error callback, delete feed item', () => {
-            feed.createTaskAssignmentErrorCallback(
-                'foo',
-                file,
-                tasks.entries[0],
-                errorCb,
-            );
-            expect(feed.errorCallback).toBeCalled();
-            expect(feed.deleteTask).toBeCalled();
-            expect(errorCb).toBeCalled();
         });
     });
 
@@ -723,9 +654,7 @@ describe('api/Feed', () => {
                 items: feedItems,
             });
             feed.deleteFeedItem(feedItemId, successCb);
-            expect(feed.setCachedItems.mock.calls[0][1].length).toBe(
-                feedItems.length - 1,
-            );
+            expect(feed.setCachedItems.mock.calls[0][1].length).toBe(feedItems.length - 1);
             expect(successCb).toBeCalled();
         });
 
@@ -736,19 +665,46 @@ describe('api/Feed', () => {
         });
     });
 
-    describe('errorCallback()', () => {
+    describe('feedErrorCallback()', () => {
+        const code = 'foo';
+        const e = new Error('bar');
+
         beforeEach(() => {
-            global.console.error = jest.fn();
+            jest.spyOn(global.console, 'error').mockImplementation();
+            feed.errorCallback = jest.fn();
         });
 
         afterEach(() => {
-            global.console.error.mockRestore();
+            jest.restoreAllMocks();
         });
 
-        test('should log the error and set the hasError property', () => {
-            const e = 'foo error';
-            feed.errorCallback(e);
+        test('should log the error and set the hasError property if its not destroyed and hasError is set to true', () => {
+            const hasError = true;
+            feed.feedErrorCallback(hasError, e, code);
             expect(global.console.error).toBeCalledWith(e);
+            expect(feed.hasError).toBe(true);
+            expect(feed.errorCallback).toHaveBeenCalledWith(e, code, {
+                error: e,
+                [IS_ERROR_DISPLAYED]: hasError,
+            });
+        });
+
+        test('should call the error callback with the value of hasError', () => {
+            const hasError = false;
+            feed.feedErrorCallback(hasError, e, code);
+            expect(feed.errorCallback).toHaveBeenCalledWith(e, code, {
+                error: e,
+                [IS_ERROR_DISPLAYED]: hasError,
+            });
+        });
+
+        test('should set hasError only if hasError is set', () => {
+            feed.hasError = null;
+            expect(feed.hasError).toBe(null);
+            const hasError = false;
+            feed.feedErrorCallback(hasError, e, code);
+            expect(feed.hasError).toBe(null);
+            feed.feedErrorCallback(true, e, code);
             expect(feed.hasError).toBe(true);
         });
     });
@@ -761,20 +717,14 @@ describe('api/Feed', () => {
             },
         };
         beforeEach(() => {
-            feed.appendAssignmentsToTask = jest
-                .fn()
-                .mockReturnValue(tasksEntriesWithAssignments);
+            feed.appendAssignmentsToTask = jest.fn().mockReturnValue(tasksEntriesWithAssignments);
             feed.errorCallback = jest.fn();
         });
 
         test('should fetch the task assignments', done => {
             feed.fetchTaskAssignments(tasks).then(tasksWithAssignments => {
-                expect(
-                    feed.taskAssignmentsAPI.pop().getAssignments,
-                ).toHaveBeenCalledTimes(tasks.entries.length);
-                expect(feed.appendAssignmentsToTask).toHaveBeenCalledTimes(
-                    tasks.entries.length,
-                );
+                expect(feed.taskAssignmentsAPI.pop().getAssignments).toHaveBeenCalledTimes(tasks.entries.length);
+                expect(feed.appendAssignmentsToTask).toHaveBeenCalledTimes(tasks.entries.length);
                 expect(tasksWithAssignments).toEqual({
                     ...tasks,
                     entries: [tasksEntriesWithAssignments],
@@ -869,10 +819,7 @@ describe('api/Feed', () => {
             });
 
             const item = feed.addPendingItem(file.id, user, itemBase);
-            expect(feed.setCachedItems).toBeCalledWith(file.id, [
-                item,
-                ...feedItems,
-            ]);
+            expect(feed.setCachedItems).toBeCalledWith(file.id, [...feedItems, item]);
         });
     });
 
@@ -964,10 +911,7 @@ describe('api/Feed', () => {
             feed.id = file.id;
             const updatedFeedItems = feed.updateFeedItem(updates, id);
             expect(updatedFeedItems).not.toBeNull();
-            expect(feed.setCachedItems).toBeCalledWith(
-                file.id,
-                updatedFeedItems,
-            );
+            expect(feed.setCachedItems).toBeCalledWith(file.id, updatedFeedItems);
         });
     });
 
@@ -990,27 +934,11 @@ describe('api/Feed', () => {
         });
 
         test('should throw if no file id', () => {
-            expect(() =>
-                feed.createComment(
-                    {},
-                    currentUser,
-                    text,
-                    true,
-                    successCb,
-                    errorCb,
-                ),
-            ).toThrow(fileError);
+            expect(() => feed.createComment({}, currentUser, text, true, successCb, errorCb)).toThrow(fileError);
         });
 
         test('should create a pending item', () => {
-            feed.createComment(
-                file,
-                currentUser,
-                text,
-                true,
-                successCb,
-                errorCb,
-            );
+            feed.createComment(file, currentUser, text, true, successCb, errorCb);
 
             expect(feed.addPendingItem).toBeCalledWith(file.id, currentUser, {
                 id: 'uniqueId',
@@ -1020,14 +948,7 @@ describe('api/Feed', () => {
         });
 
         test('should create the comment and invoke the success callback', done => {
-            feed.createComment(
-                file,
-                currentUser,
-                text,
-                hasMention,
-                successCb,
-                errorCb,
-            );
+            feed.createComment(file, currentUser, text, hasMention, successCb, errorCb);
             setImmediate(() => {
                 expect(feed.commentsAPI.createComment).toBeCalled();
                 expect(feed.createCommentSuccessCallback).toBeCalled();
@@ -1038,32 +959,28 @@ describe('api/Feed', () => {
     });
 
     describe('createCommentErrorCallback()', () => {
-        let errorCb;
         const message = 'foo';
         const id = 'uniqueId';
         beforeEach(() => {
             feed.updateFeedItem = jest.fn();
             feed.createFeedError = jest.fn().mockReturnValue(message);
-            errorCb = jest.fn();
+            feed.feedErrorCallback = jest.fn();
         });
 
         test('should invoke update the feed item with an AF error and call the success callback', () => {
-            feed.createCommentErrorCallback({ status: 409 }, id, errorCb);
-            expect(feed.createFeedError).toBeCalledWith(
-                messages.commentCreateConflictMessage,
-            );
+            const error = { status: 409 };
+            feed.createCommentErrorCallback(error, errorCode, id);
+            expect(feed.createFeedError).toBeCalledWith(messages.commentCreateConflictMessage);
             expect(feed.updateFeedItem).toBeCalledWith(message, id);
-            expect(errorCb).toBeCalled();
+            expect(feed.feedErrorCallback).toHaveBeenCalledWith(false, error, errorCode);
         });
 
         test('should invoke update the feed item with an AF error', () => {
+            const error = { status: 500 };
             feed.isDestroyed = jest.fn().mockReturnValue(true);
-            feed.createCommentErrorCallback({ status: 500 }, id, errorCb);
-            expect(feed.createFeedError).toBeCalledWith(
-                messages.commentCreateErrorMessage,
-            );
+            feed.createCommentErrorCallback(error, errorCode, id);
+            expect(feed.createFeedError).toBeCalledWith(messages.commentCreateErrorMessage);
             expect(feed.updateFeedItem).toBeCalledWith(message, id);
-            expect(errorCb).not.toBeCalled();
         });
     });
 
@@ -1123,26 +1040,46 @@ describe('api/Feed', () => {
                 ...file,
                 restored_from: null,
             };
-            const versionsWithCurrent = feed.addCurrentVersion(
-                versions,
-                fileWithoutRestoredVersion,
-            );
-            expect(versionsWithCurrent.entries.length).toBe(
-                versions.entries.length + 1,
-            );
-            expect(versionsWithCurrent.entries.pop().id).toBe(
-                file.file_version.id,
-            );
+            const versionsWithCurrent = feed.addCurrentVersion(versions, fileWithoutRestoredVersion);
+            expect(versionsWithCurrent.entries.length).toBe(versions.entries.length + 1);
+            expect(versionsWithCurrent.entries.pop().id).toBe(file.file_version.id);
         });
 
         test('should append the current version as restored type', () => {
             const versionsWithRestore = feed.addCurrentVersion(versions, file);
-            expect(versionsWithRestore.entries.length).toBe(
-                versions.entries.length + 1,
-            );
+            expect(versionsWithRestore.entries.length).toBe(versions.entries.length + 1);
             const restoredVersion = versionsWithRestore.entries.pop();
             expect(restoredVersion.action).toBe('restore');
             expect(restoredVersion.created_at).toBe(file.modified_at);
+        });
+    });
+
+    describe('fetchFeedItemErrorCallback()', () => {
+        let errorCb;
+        const code = 'foo';
+        const e = new Error('bar');
+
+        beforeEach(() => {
+            feed.feedErrorCallback = jest.fn();
+            errorCb = jest.fn();
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should call the error callback if error is internal server error', () => {
+            const shouldDisplayError = true;
+            jest.spyOn(error, 'isUserCorrectableError').mockReturnValue(shouldDisplayError);
+            feed.fetchFeedItemErrorCallback(errorCb, e, code);
+            expect(feed.feedErrorCallback).toHaveBeenCalledWith(shouldDisplayError, e, code);
+        });
+
+        test('should not call the error callback if error is forbidden or another error', () => {
+            const shouldDisplayError = false;
+            jest.spyOn(error, 'isUserCorrectableError').mockReturnValue(shouldDisplayError);
+            feed.fetchFeedItemErrorCallback(errorCb, e, code);
+            expect(feed.feedErrorCallback).toHaveBeenCalledWith(shouldDisplayError, e, code);
         });
     });
 });

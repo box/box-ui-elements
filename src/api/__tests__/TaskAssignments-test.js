@@ -10,9 +10,7 @@ describe('api/TaskAssignments', () => {
 
     describe('getUrl()', () => {
         test('should return correct version api url with id', () => {
-            expect(taskAssignments.getUrl('foo')).toBe(
-                'https://api.box.com/2.0/task_assignments/foo',
-            );
+            expect(taskAssignments.getUrl('foo')).toBe('https://api.box.com/2.0/task_assignments/foo');
         });
     });
 
@@ -87,6 +85,10 @@ describe('api/TaskAssignments', () => {
         });
 
         describe('updateTaskAssignment()', () => {
+            beforeEach(() => {
+                taskAssignments.put = jest.fn();
+            });
+
             test('should check for valid task assignment permissions', () => {
                 taskAssignments.updateTaskAssignment({
                     file,

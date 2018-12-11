@@ -7,11 +7,13 @@ reports
 desktop.ini
 npm-debug.log
 yarn-debug.log
+npm-error.log
+yarn-error.log
 .npmrc
 Thumbs.db
 .idea
 src
-.babelrc
+babel.config.js
 .DS_Store
 .editorconfig
 .eslintrc.json
@@ -25,6 +27,7 @@ src
 .vscode
 .yarnrc
 build
+conf
 postcss.config.js
 reports
 test
@@ -32,7 +35,6 @@ yarn.lock
 .travis.yml
 flow
 .flowconfig
-browserslist
 .conventional-changelog-lintrc
 *~~bak
 flow-typed
@@ -42,3 +44,4 @@ flow-typed
 .eslintignore
 examples
 styleguide
+release.config.js

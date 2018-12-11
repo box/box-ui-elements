@@ -2,12 +2,7 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import UploadState from '../UploadState';
-import {
-    VIEW_ERROR,
-    VIEW_UPLOAD_EMPTY,
-    VIEW_UPLOAD_IN_PROGRESS,
-    VIEW_UPLOAD_SUCCESS,
-} from '../../../constants';
+import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../../constants';
 
 describe('components/ContentUploader/UploadState', () => {
     const getWrapper = props =>

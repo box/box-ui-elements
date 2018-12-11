@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /**
  * @flow
  * @file IconActivityFeedEmptyState icon component
@@ -14,11 +13,7 @@ type Props = {
     height?: number,
 };
 
-const IconActivityFeedEmptyState = ({
-    className = '',
-    width = 90,
-    height = 90,
-}: Props): React.Node => (
+const IconActivityFeedEmptyState = ({ className = '', width = 90, height = 90 }: Props): React.Node => (
     <AccessibleSVG
         className={`bcs-activity-feed-empty-state-illustration ${className}`}
         width={width}

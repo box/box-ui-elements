@@ -8,7 +8,6 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
-
 import Form from 'box-react-ui/lib/components/form-elements/form/Form';
 import DraftJSMentionSelector, {
     DraftMentionDecorator,
@@ -73,9 +72,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
 
         if (isOpen !== this.props.isOpen && !isOpen) {
             this.setState({
-                commentEditorState: EditorState.createEmpty(
-                    DraftMentionDecorator,
-                ),
+                commentEditorState: EditorState.createEmpty(DraftMentionDecorator),
                 isAddApprovalVisible: false,
             });
         }
@@ -85,14 +82,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         this.setState({ isAddApprovalVisible: formData.addApproval === 'on' });
 
     onFormValidSubmitHandler = (formData: any): void => {
-        const {
-            createComment = noop,
-            createTask = noop,
-            intl,
-            updateTask = noop,
-            onSubmit,
-            entityId,
-        } = this.props;
+        const { createComment = noop, createTask = noop, intl, updateTask = noop, onSubmit, entityId } = this.props;
 
         const { text, hasMention } = this.getFormattedCommentText();
         if (!text) {
@@ -103,9 +93,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             const { approvers, approvalDate } = this.state;
             if (approvers.length === 0) {
                 this.setState({
-                    approverSelectorError: intl.formatMessage(
-                        commonMessages.requiredFieldError,
-                    ),
+                    approverSelectorError: intl.formatMessage(commonMessages.requiredFieldError),
                 });
                 return;
             }
@@ -136,7 +124,13 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     onMentionSelectorChangeHandler = (nextEditorState: any): void =>
         this.setState({ commentEditorState: nextEditorState });
 
-    onApprovalDateChangeHandler = (date: Date): void => {
+    onApprovalDateChangeHandler = (date: ?Date): void => {
+        if (date) {
+            // The date given to us is midnight of the date selected.
+            // Modify date to be the end of day (minus 1 millisecond) for the given due date
+            date.setHours(23, 59, 59, 999);
+        }
+
         this.setState({ approvalDate: date });
     };
 
@@ -170,9 +164,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                     // Otherwise append its text to the block result as-is
                     if (entityKey) {
                         const entity = contentState.getEntity(entityKey);
-                        const stringToAdd = `@[${
-                            entity.getData().id
-                        }:${text.substring(start + 1, end)}]`;
+                        const stringToAdd = `@[${entity.getData().id}:${text.substring(start + 1, end)}]`;
                         blockMapStringArr.push(stringToAdd);
                         hasMention = true;
                     } else {
@@ -198,7 +190,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         this.setState({ approvers: this.state.approvers.concat(pills) });
     };
 
-    handleApproverSelectorRemove = (option: any, index: number): void => { // eslint-disable-line
+    handleApproverSelectorRemove = (option: any, index: number): void => {
         const approvers = this.state.approvers.slice();
         approvers.splice(index, 1);
         this.setState({ approvers });
@@ -221,20 +213,10 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             tagged_message,
             getAvatarUrl,
         } = this.props;
-        const {
-            approvalDate,
-            approvers,
-            approverSelectorError,
-            commentEditorState,
-            isAddApprovalVisible,
-        } = this.state;
-        const inputContainerClassNames = classNames(
-            'bcs-comment-input-container',
-            className,
-            {
-                'bcs-comment-input-is-open': isOpen,
-            },
-        );
+        const { approvalDate, approvers, approverSelectorError, commentEditorState, isAddApprovalVisible } = this.state;
+        const inputContainerClassNames = classNames('bcs-comment-input-container', className, {
+            'bcs-comment-input-is-open': isOpen,
+        });
 
         return (
             <div className={inputContainerClassNames}>
@@ -244,10 +226,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                     </div>
                 )}
                 <div className="bcs-comment-input-form-container">
-                    <Form
-                        onChange={this.onFormChangeHandler}
-                        onValidSubmit={this.onFormValidSubmitHandler}
-                    >
+                    <Form onChange={this.onFormChangeHandler} onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
                             className="bcs-comment-input"
                             contacts={isOpen ? mentionSelectorContacts : []}
@@ -260,11 +239,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}
-                            placeholder={
-                                tagged_message
-                                    ? null
-                                    : formatMessage(messages.commentWrite)
-                            }
+                            placeholder={tagged_message ? null : formatMessage(messages.commentWrite)}
                             validateOnBlur={false}
                         />
                         <aside
@@ -278,24 +253,14 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             <AddApproval
                                 approvalDate={approvalDate}
                                 approvers={approvers}
-                                approverSelectorContacts={
-                                    approverSelectorContacts
-                                }
+                                approverSelectorContacts={approverSelectorContacts}
                                 approverSelectorError={approverSelectorError}
                                 formatMessage={formatMessage}
                                 isAddApprovalVisible={isAddApprovalVisible}
-                                onApprovalDateChange={
-                                    this.onApprovalDateChangeHandler
-                                }
-                                onApproverSelectorInput={
-                                    this.handleApproverSelectorInput
-                                }
-                                onApproverSelectorRemove={
-                                    this.handleApproverSelectorRemove
-                                }
-                                onApproverSelectorSelect={
-                                    this.handleApproverSelectorSelect
-                                }
+                                onApprovalDateChange={this.onApprovalDateChangeHandler}
+                                onApproverSelectorInput={this.handleApproverSelectorInput}
+                                onApproverSelectorRemove={this.handleApproverSelectorRemove}
+                                onApproverSelectorSelect={this.handleApproverSelectorSelect}
                             />
                         ) : null}
                         <CommentInputControls onCancel={onCancel} />

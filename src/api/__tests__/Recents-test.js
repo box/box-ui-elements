@@ -2,12 +2,13 @@ import Recents from '../Recents';
 import Cache from '../../util/Cache';
 import { FOLDER_FIELDS_TO_FETCH } from '../../util/fields';
 
-let recents;
-let cache;
-
 describe('api/Recents', () => {
+    let recents;
+    let cache;
+    const errorCode = 'foo';
     beforeEach(() => {
         recents = new Recents({});
+        recents.errorCode = errorCode;
         cache = new Cache();
     });
 
@@ -19,9 +20,7 @@ describe('api/Recents', () => {
 
     describe('getUrl()', () => {
         test('should return correct recents api url', () => {
-            expect(recents.getUrl()).toBe(
-                'https://api.box.com/2.0/recent_items',
-            );
+            expect(recents.getUrl()).toBe('https://api.box.com/2.0/recent_items');
         });
     });
 
@@ -91,9 +90,7 @@ describe('api/Recents', () => {
                 get: jest.fn().mockReturnValueOnce(Promise.resolve('success')),
             };
             return recents.recentsRequest().then(() => {
-                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(
-                    'success',
-                );
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith('success');
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
@@ -112,9 +109,7 @@ describe('api/Recents', () => {
             };
 
             return recents.recentsRequest().then(() => {
-                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(
-                    error,
-                );
+                expect(recents.recentsSuccessHandler).toHaveBeenCalledWith(error);
                 expect(recents.recentsErrorHandler).not.toHaveBeenCalled();
                 expect(recents.xhr.get).toHaveBeenCalledWith({
                     url: 'https://api.box.com/2.0/recent_items',
@@ -128,13 +123,13 @@ describe('api/Recents', () => {
         test('should not do anything if destroyed', () => {
             recents.isDestroyed = jest.fn().mockReturnValueOnce(true);
             recents.errorCallback = jest.fn();
-            recents.recentsErrorHandler('foo');
+            recents.recentsErrorHandler('foo', errorCode);
             expect(recents.errorCallback).not.toHaveBeenCalled();
         });
         test('should call error callback', () => {
             recents.errorCallback = jest.fn();
-            recents.recentsErrorHandler('foo');
-            expect(recents.errorCallback).toHaveBeenCalledWith('foo');
+            recents.recentsErrorHandler('foo', errorCode);
+            expect(recents.errorCallback).toHaveBeenCalledWith('foo', errorCode);
         });
     });
 
@@ -208,12 +203,8 @@ describe('api/Recents', () => {
                     ],
                 },
             });
-            expect(cache.get('file_item1')).toEqual(
-                Object.assign({}, item1, { interacted_at: 'interacted_at1' }),
-            );
-            expect(cache.get('file_item3')).toEqual(
-                Object.assign({}, item3, { interacted_at: 'interacted_at3' }),
-            );
+            expect(cache.get('file_item1')).toEqual(Object.assign({}, item1, { interacted_at: 'interacted_at1' }));
+            expect(cache.get('file_item3')).toEqual(Object.assign({}, item3, { interacted_at: 'interacted_at3' }));
             expect(cache.get('file_item2')).toBeUndefined();
         });
     });

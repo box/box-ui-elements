@@ -10,9 +10,11 @@ describe('api/MarkerBasedAPI', () => {
         entries: [],
     };
     const url = 'https://foo.bar';
+    const errorCode = 'foo';
 
     beforeEach(() => {
         markerBasedAPI = new MarkerBasedAPI({});
+        markerBasedAPI.errorCode = errorCode;
     });
 
     describe('hasMoreItems()', () => {
@@ -53,15 +55,11 @@ describe('api/MarkerBasedAPI', () => {
                     ),
             };
 
-            return markerBasedAPI
-                .markerGetRequest('id', 'next_marker', LIMIT, true)
-                .then(() => {
-                    expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
-                    expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(
-                        1,
-                    );
-                    expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
-                });
+            return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
+                expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(2);
+                expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(1);
+                expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
+            });
         });
 
         test('should do one xhr call and call successHandler once', () => {
@@ -73,15 +71,11 @@ describe('api/MarkerBasedAPI', () => {
                 ),
             };
 
-            return markerBasedAPI
-                .markerGetRequest('id', 'next_marker', LIMIT, true)
-                .then(() => {
-                    expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
-                    expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(
-                        1,
-                    );
-                    expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
-                });
+            return markerBasedAPI.markerGetRequest('id', 'next_marker', LIMIT, true).then(() => {
+                expect(markerBasedAPI.xhr.get).toHaveBeenCalledTimes(1);
+                expect(markerBasedAPI.successHandler).toHaveBeenCalledTimes(1);
+                expect(markerBasedAPI.errorHandler).not.toHaveBeenCalled();
+            });
         });
     });
 
@@ -110,12 +104,11 @@ describe('api/MarkerBasedAPI', () => {
         });
 
         test('should make xhr to get markerBasedAPI and call success callback', () => {
+            const requestData = {
+                foo: 'bar',
+            };
             markerBasedAPI.xhr = {
-                get: jest
-                    .fn()
-                    .mockReturnValueOnce(
-                        Promise.resolve({ data: markerBasedAPIResponse }),
-                    ),
+                get: jest.fn().mockReturnValueOnce(Promise.resolve({ data: markerBasedAPIResponse })),
             };
             markerBasedAPI.marker = '';
 
@@ -127,11 +120,10 @@ describe('api/MarkerBasedAPI', () => {
                     marker: 'next_marker',
                     limit: LIMIT,
                     shouldFetchAll: true,
+                    requestData,
                 })
                 .then(() => {
-                    expect(successCallback).toHaveBeenCalledWith(
-                        markerBasedAPIResponse,
-                    );
+                    expect(successCallback).toHaveBeenCalledWith(markerBasedAPIResponse);
                     expect(successCallback).toHaveBeenCalledTimes(1);
                     expect(errorCallback).not.toHaveBeenCalled();
                     expect(markerBasedAPI.xhr.get).toHaveBeenCalledWith({
@@ -140,6 +132,7 @@ describe('api/MarkerBasedAPI', () => {
                         params: {
                             marker: 'next_marker',
                             limit: LIMIT,
+                            ...requestData,
                         },
                     });
                 });
@@ -159,10 +152,11 @@ describe('api/MarkerBasedAPI', () => {
                     marker: '',
                     limit: LIMIT,
                     shouldFetchAll: true,
+                    errorCode,
                 })
                 .then(() => {
                     expect(successCallback).not.toHaveBeenCalled();
-                    expect(errorCallback).toHaveBeenCalledWith(error);
+                    expect(errorCallback).toHaveBeenCalledWith(error, errorCode);
                     expect(markerBasedAPI.xhr.get).toHaveBeenCalledWith({
                         id: 'file_id',
                         url,

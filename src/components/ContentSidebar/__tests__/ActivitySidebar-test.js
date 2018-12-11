@@ -1,15 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import {
-    ActivitySidebarComponent,
-    activityFeedInlineError,
-} from '../ActivitySidebar';
+import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import messages from '../../messages';
 
-const {
-    defaultErrorMaskSubHeaderMessage,
-    currentUserErrorHeaderMessage,
-} = messages;
+const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
 describe('components/ContentSidebar/ActivitySidebar', () => {
     const feedAPI = {
@@ -24,10 +18,15 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
     const usersAPI = {
         get: jest.fn(),
         getAvatarUrlWithAccessToken: jest.fn().mockResolvedValue('foo'),
+        getUser: jest.fn(),
+    };
+    const fileCollaboratorsAPI = {
+        getFileCollaborators: jest.fn(),
     };
     const api = {
         getUsersAPI: () => usersAPI,
         getFeedAPI: () => feedAPI,
+        getFileCollaboratorsAPI: () => fileCollaboratorsAPI,
     };
     const file = {
         id: 'I_AM_A_FILE',
@@ -44,8 +43,34 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             },
         ],
     };
+    const onError = jest.fn();
     const getWrapper = (props = {}) =>
-        shallow(<ActivitySidebarComponent api={api} file={file} {...props} />);
+        shallow(<ActivitySidebarComponent api={api} file={file} onError={onError} {...props} />);
+
+    describe('componentDidMount()', () => {
+        let wrapper;
+        let instance;
+        const currentUser = {
+            id: '123',
+        };
+        beforeEach(() => {
+            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
+            jest.spyOn(ActivitySidebarComponent.prototype, 'fetchCurrentUser');
+            wrapper = getWrapper({
+                currentUser,
+            });
+            instance = wrapper.instance();
+        });
+
+        afterEach(() => {
+            jest.restoreAllMocks();
+        });
+
+        test('should fetch the file and refresh the cache and fetch the current user', () => {
+            expect(instance.fetchFeedItems).toHaveBeenCalledWith(true);
+            expect(instance.fetchCurrentUser).toHaveBeenCalledWith(currentUser);
+        });
+    });
 
     describe('render()', () => {
         test('should render the activity feed sidebar', () => {
@@ -144,7 +169,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
 
         test('should get the user', () => {
             instance.fetchCurrentUser();
-            expect(usersAPI.get).toBeCalled();
+            expect(usersAPI.getUser).toBeCalled();
         });
     });
 
@@ -165,12 +190,8 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
             const inlineErrorState = wrapper.state().currentUserError.maskError;
             expect(typeof currentUserErrorHeaderMessage).toBe('object');
             expect(typeof defaultErrorMaskSubHeaderMessage).toBe('object');
-            expect(inlineErrorState.errorHeader).toEqual(
-                currentUserErrorHeaderMessage,
-            );
-            expect(inlineErrorState.errorSubHeader).toEqual(
-                defaultErrorMaskSubHeaderMessage,
-            );
+            expect(inlineErrorState.errorHeader).toEqual(currentUserErrorHeaderMessage);
+            expect(inlineErrorState.errorSubHeader).toEqual(defaultErrorMaskSubHeaderMessage);
         });
     });
 
@@ -258,9 +279,7 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         });
 
         test('should throw an error if missing current user', () => {
-            expect(() => instance.createComment(message, true)).toThrow(
-                'Bad box user!',
-            );
+            expect(() => instance.createComment(message, true)).toThrow('Bad box user!');
         });
 
         test('should call the create comment API and fetch the items', () => {
@@ -330,23 +349,32 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
     });
 
     describe('errorCallback()', () => {
-        const message = 'foo';
         let instance;
         let wrapper;
+        let onError;
+        let error;
+        const code = 'some_code';
+        const contextInfo = {
+            foo: 'bar',
+        };
 
         beforeEach(() => {
-            wrapper = getWrapper();
+            error = new Error('foo');
+            onError = jest.fn();
+            wrapper = getWrapper({
+                onError,
+            });
             instance = wrapper.instance();
-            global.console.error = jest.fn();
+            jest.spyOn(global.console, 'error').mockImplementation();
         });
 
         afterEach(() => {
-            global.console.error.mockRestore();
+            jest.restoreAllMocks();
         });
 
         test('should log the error', () => {
-            instance.errorCallback(message);
-            expect(global.console.error).toBeCalledWith(message);
+            instance.errorCallback(error, code, contextInfo);
+            expect(onError).toHaveBeenCalledWith(error, code, contextInfo);
         });
     });
 
@@ -461,10 +489,38 @@ describe('components/ContentSidebar/ActivitySidebar', () => {
         test('should set the current user error and call the error callback', () => {
             const avatarUrl = instance.getAvatarUrl(currentUser.id);
             expect(avatarUrl instanceof Promise).toBe(true);
-            expect(usersAPI.getAvatarUrlWithAccessToken).toBeCalledWith(
-                currentUser.id,
-                file.id,
-            );
+            expect(usersAPI.getAvatarUrlWithAccessToken).toBeCalledWith(currentUser.id, file.id);
+        });
+    });
+
+    describe('getCollaborators()', () => {
+        let wrapper;
+        let instance;
+        let successCb;
+        let errorCb;
+
+        beforeEach(() => {
+            successCb = jest.fn();
+            errorCb = jest.fn();
+            wrapper = getWrapper({
+                file,
+            });
+            instance = wrapper.instance();
+        });
+
+        test('should short circuit if there is no search string', () => {
+            instance.getCollaborators(successCb, errorCb);
+            instance.getCollaborators(successCb, errorCb, '');
+            instance.getCollaborators(successCb, errorCb, '  ');
+            expect(fileCollaboratorsAPI.getFileCollaborators).not.toHaveBeenCalled();
+        });
+
+        test('should get the collaborators', () => {
+            const searchStr = 'foo';
+            instance.getCollaborators(successCb, errorCb, searchStr);
+            expect(fileCollaboratorsAPI.getFileCollaborators).toHaveBeenCalledWith(file.id, successCb, errorCb, {
+                filter_term: searchStr,
+            });
         });
     });
 });

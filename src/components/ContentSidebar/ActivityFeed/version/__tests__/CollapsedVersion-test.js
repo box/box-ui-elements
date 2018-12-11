@@ -8,8 +8,7 @@ const translationProps = {
 };
 
 describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () => {
-    const render = item =>
-        shallow(<CollapsedVersion {...translationProps} {...item} />);
+    const render = item => shallow(<CollapsedVersion {...translationProps} {...item} />);
 
     test('should correctly render for single collaborator', () => {
         const version_start = 1;
@@ -25,9 +24,7 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
         const formattedMessage = wrapper.find('FormattedMessage');
         expect(wrapper).toMatchSnapshot();
 
-        const renderedVersionsMessage = shallow(
-            formattedMessage.prop('values').versions,
-        );
+        const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
         expect(renderedVersionsMessage).toMatchSnapshot();
     });
 
@@ -50,9 +47,7 @@ describe('components/ContentSidebar/ActivityFeed/version/CollapsedVersion', () =
         expect(wrapper.hasClass('bcs-collapsed-version')).toBe(true);
         expect(wrapper).toMatchSnapshot();
 
-        const renderedVersionsMessage = shallow(
-            formattedMessage.prop('values').versions,
-        );
+        const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
         expect(renderedVersionsMessage).toMatchSnapshot();
     });
 

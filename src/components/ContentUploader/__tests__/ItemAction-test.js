@@ -2,12 +2,7 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import { ItemActionForTesting as ItemAction } from '../ItemAction';
-import {
-    STATUS_PENDING,
-    STATUS_IN_PROGRESS,
-    STATUS_COMPLETE,
-    STATUS_ERROR,
-} from '../../../constants';
+import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../../constants';
 
 describe('components/ContentUploader/ItemAction', () => {
     const getWrapper = props =>

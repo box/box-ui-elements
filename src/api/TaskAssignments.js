@@ -5,7 +5,12 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT } from '../constants';
+import {
+    PERMISSION_CAN_COMMENT,
+    ERROR_CODE_CREATE_TASK_ASSIGNMENT,
+    ERROR_CODE_UPDATE_TASK_ASSIGNMENT,
+    ERROR_CODE_DELETE_TASK_ASSIGNMENT,
+} from '../constants';
 
 class TaskAssignments extends Base {
     /**
@@ -42,14 +47,15 @@ class TaskAssignments extends Base {
         taskId: string,
         assignTo: { id: string },
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     }): void {
+        this.errorCode = ERROR_CODE_CREATE_TASK_ASSIGNMENT;
         const { id = '', permissions } = file;
 
         try {
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
@@ -95,16 +101,17 @@ class TaskAssignments extends Base {
         taskAssignmentId: string,
         resolutionState: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
         message?: string,
     }): void {
+        this.errorCode = ERROR_CODE_UPDATE_TASK_ASSIGNMENT;
         const { id = '', permissions } = file;
 
         try {
             // We don't know task_assignment_edit specific permissions, so let the client try and fail gracefully
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 
@@ -139,15 +146,16 @@ class TaskAssignments extends Base {
         file: BoxItem,
         taskAssignmentId: string,
         successCallback: Function,
-        errorCallback: Function,
+        errorCallback: ElementsErrorCallback,
     }): void {
+        this.errorCode = ERROR_CODE_DELETE_TASK_ASSIGNMENT;
         const { id = '', permissions } = file;
 
         try {
             // We don't know task_assignment_delete specific permissions, so let the client try and fail gracefully
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, id);
         } catch (e) {
-            errorCallback(e);
+            errorCallback(e, this.errorCode);
             return;
         }
 

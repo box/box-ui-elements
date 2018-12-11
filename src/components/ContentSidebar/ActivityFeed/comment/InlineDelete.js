@@ -52,11 +52,7 @@ class InlineDelete extends React.Component<Props, State> {
                     'bcs-is-confirming': this.state.isConfirming,
                 })}
             >
-                <Flyout
-                    onClose={this.handleFlyoutClose}
-                    onOpen={this.handleFlyoutOpen}
-                    position="middle-left"
-                >
+                <Flyout onClose={this.handleFlyoutClose} onOpen={this.handleFlyoutOpen} position="middle-left">
                     <PlainButton
                         aria-label={intl.formatMessage(messages.deleteLabel)}
                         className="bcs-comment-delete"
@@ -72,18 +68,11 @@ class InlineDelete extends React.Component<Props, State> {
                                 onClick={this.onDeleteConfirmedHandler}
                                 type="button"
                             >
-                                <FormattedMessage
-                                    {...messages.commentDeleteConfirm}
-                                />
+                                <FormattedMessage {...messages.commentDeleteConfirm} />
                             </PlainButton>
                             {' / '}
-                            <PlainButton
-                                className="lnk bcs-comment-delete-no"
-                                type="button"
-                            >
-                                <FormattedMessage
-                                    {...messages.commentDeleteCancel}
-                                />
+                            <PlainButton className="lnk bcs-comment-delete-no" type="button">
+                                <FormattedMessage {...messages.commentDeleteCancel} />
                             </PlainButton>
                         </div>
                     </Overlay>

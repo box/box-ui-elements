@@ -13,16 +13,11 @@ function isRowSelectable(
     rowData: BoxItem,
 ): boolean {
     const { type, extension = '', selected }: BoxItem = rowData;
-    const shouldAllowSelection: boolean = hasHitSelectionLimit
-        ? !!selected
-        : true;
-    const isTypeSelectable: boolean =
-        !!type && selectableType.indexOf(type) > -1;
+    const shouldAllowSelection: boolean = hasHitSelectionLimit ? !!selected : true;
+    const isTypeSelectable: boolean = !!type && selectableType.indexOf(type) > -1;
     const isFilePicker: boolean = selectableType.indexOf(TYPE_FILE) > -1;
     const isExtensionWhitelisted: boolean =
-        isFilePicker && extensionsWhitelist.length
-            ? extensionsWhitelist.indexOf(extension) > -1
-            : true;
+        isFilePicker && extensionsWhitelist.length ? extensionsWhitelist.indexOf(extension) > -1 : true;
 
     return shouldAllowSelection && isTypeSelectable && isExtensionWhitelisted;
 }

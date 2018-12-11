@@ -1,16 +1,15 @@
 const path = require('path');
-const packageJSON = require('../package.json');
-const TranslationsPlugin = require('@box/i18n/TranslationsPlugin.js');
+const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin.js');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const safeParser = require('postcss-safe-parser');
+const packageJSON = require('../package.json');
 const license = require('./license');
 
-const DefinePlugin = webpack.DefinePlugin;
-const BannerPlugin = webpack.BannerPlugin;
+const { BannerPlugin, DefinePlugin } = webpack;
 const noReactSuffix = '.no.react';
 const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'dev';
@@ -23,22 +22,20 @@ const outputDir = process.env.OUTPUT;
 const locale = language.substr(0, language.indexOf('-'));
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
-const propsDir = path.resolve('i18n'); // Where the .properties files are dumped
-const jsonDir = path.join(propsDir, 'json'); // Where the react-intl plugin dumps json
-const Translations = new TranslationsPlugin(propsDir, jsonDir);
+const Translations = new TranslationsPlugin();
 const entries = {
     picker: path.resolve('src/wrappers/ContentPickers.js'),
     uploader: path.resolve('src/wrappers/ContentUploader.js'),
     explorer: path.resolve('src/wrappers/ContentExplorer.js'),
     preview: path.resolve('src/wrappers/ContentPreview.js'),
     sidebar: path.resolve('src/wrappers/ContentSidebar.js'),
-    openwith: path.resolve('src/wrappers/ContentOpenWith.js')
+    openwith: path.resolve('src/wrappers/ContentOpenWith.js'),
 };
 const entriesToBuild =
     typeof process.env.ENTRY === 'string'
         ? {
-            [process.env.ENTRY]: entries[process.env.ENTRY]
-        }
+              [process.env.ENTRY]: entries[process.env.ENTRY],
+          }
         : entries;
 
 function getConfig(isReactExternalized) {
@@ -48,36 +45,36 @@ function getConfig(isReactExternalized) {
         output: {
             path: outputPath,
             filename: `[name]${isReactExternalized ? noReactSuffix : ''}.js`,
-            publicPath: `/${version}/${language}/`
+            publicPath: `/${version}/${language}/`,
         },
         resolve: {
             modules: ['src', 'node_modules'],
             alias: {
-                'examples':  path.join(__dirname, '../examples/src'),
+                examples: path.join(__dirname, '../examples/src'),
                 'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
                 'box-react-ui-locale-data': path.resolve(`node_modules/box-react-ui/i18n/${language}`),
-                moment: path.resolve('src/util/MomentShim') // Hack to leverage Intl instead
-            }
+                moment: path.resolve('src/util/MomentShim'), // Hack to leverage Intl instead
+            },
         },
         devServer: {
-            host: '0.0.0.0'
+            host: '0.0.0.0',
         },
         resolveLoader: {
-            modules: [path.resolve('src'), path.resolve('node_modules')]
+            modules: [path.resolve('src'), path.resolve('node_modules')],
         },
         module: {
             rules: [
                 {
                     test: /\.js$/,
                     loader: 'babel-loader',
-                    exclude: /(node_modules)/
+                    exclude: /(node_modules)/,
                 },
                 {
                     test: /\.s?css$/,
-                    use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
-                }
-            ]
+                    use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
+                },
+            ],
         },
         plugins: [
             new DefinePlugin({
@@ -88,19 +85,19 @@ function getConfig(isReactExternalized) {
                 __FILEID__: JSON.stringify(fileId), // used for examples only
                 'process.env': {
                     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-                    BABEL_ENV: JSON.stringify(process.env.BABEL_ENV)
-                }
+                    BABEL_ENV: JSON.stringify(process.env.BABEL_ENV),
+                },
             }),
             new MiniCssExtractPlugin({
-                filename: '[name].css'
+                filename: '[name].css',
             }),
             new OptimizeCssAssetsPlugin({
                 cssProcessorOptions: {
                     discardComments: { removeAll: true },
                     parser: safeParser,
-                }
+                },
             }),
-            new BannerPlugin(license)
+            new BannerPlugin(license),
         ],
         stats: {
             assets: true,
@@ -110,8 +107,8 @@ function getConfig(isReactExternalized) {
             timings: true,
             chunks: false,
             chunkModules: false,
-            children: false
-        }
+            children: false,
+        },
     };
 
     if (isDev) {
@@ -120,8 +117,8 @@ function getConfig(isReactExternalized) {
         config.plugins.push(
             new CircularDependencyPlugin({
                 exclude: /node_modules/,
-                failOnError: true
-            })
+                failOnError: true,
+            }),
         );
     }
 
@@ -132,15 +129,15 @@ function getConfig(isReactExternalized) {
                 openAnalyzer: false,
                 reportFilename: path.resolve(`reports/webpack-stats${isReactExternalized ? '' : '-react'}.html`),
                 generateStatsFile: true,
-                statsFilename: path.resolve(`reports/webpack-stats${isReactExternalized ? '' : '-react'}.json`)
-            })
+                statsFilename: path.resolve(`reports/webpack-stats${isReactExternalized ? '' : '-react'}.json`),
+            }),
         );
     }
 
     if (isReactExternalized) {
         config.externals = {
             react: 'React',
-            'react-dom': 'ReactDOM'
+            'react-dom': 'ReactDOM',
         };
     }
 

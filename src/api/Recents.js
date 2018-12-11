@@ -11,12 +11,7 @@ import WebLinkAPI from './WebLink';
 import flatten from '../util/flatten';
 import { getBadItemError } from '../util/error';
 import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
-import {
-    DEFAULT_ROOT,
-    CACHE_PREFIX_RECENTS,
-    FIELD_DATE,
-    SORT_DESC,
-} from '../constants';
+import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, FIELD_DATE, SORT_DESC, ERROR_CODE_FETCH_RECENTS } from '../constants';
 
 class Recents extends Base {
     /**
@@ -37,7 +32,7 @@ class Recents extends Base {
     /**
      * @property {Function}
      */
-    errorCallback: Function;
+    errorCallback: ElementsErrorCallback;
 
     /**
      * Creates a key for the cache
@@ -111,10 +106,7 @@ class Recents extends Base {
             const { path_collection }: BoxItem = item;
             const shouldInclude =
                 this.id === DEFAULT_ROOT ||
-                (!!path_collection &&
-                    path_collection.entries.findIndex(
-                        (crumb: Crumb) => crumb.id === this.id,
-                    ) !== -1);
+                (!!path_collection && path_collection.entries.findIndex((crumb: Crumb) => crumb.id === this.id) !== -1);
             if (shouldInclude) {
                 items.push(Object.assign(item, { interacted_at }));
             }
@@ -152,7 +144,7 @@ class Recents extends Base {
             return;
         }
 
-        this.errorCallback(error);
+        this.errorCallback(error, this.errorCode);
     };
 
     /**
@@ -165,6 +157,7 @@ class Recents extends Base {
             return Promise.reject();
         }
 
+        this.errorCode = ERROR_CODE_FETCH_RECENTS;
         return this.xhr
             .get({
                 url: this.getUrl(),
@@ -185,12 +178,7 @@ class Recents extends Base {
      * @param {boolean|void} [options.forceFetch] - Bypasses the cache
      * @return {void}
      */
-    recents(
-        id: string,
-        successCallback: Function,
-        errorCallback: Function,
-        options: Object = {},
-    ): void {
+    recents(id: string, successCallback: Function, errorCallback: ElementsErrorCallback, options: Object = {}): void {
         if (this.isDestroyed()) {
             return;
         }

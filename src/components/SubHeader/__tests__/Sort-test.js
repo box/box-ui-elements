@@ -11,12 +11,7 @@ import { SORT_ASC, SORT_DESC } from '../../../constants';
 describe('components/SubHeader/Sort', () => {
     test('should render a button and menu with 4 menu items', () => {
         const wrapper = shallow(
-            <Sort
-                isLoaded={false}
-                sortBy="name"
-                sortDirection={SORT_ASC}
-                onSortChange={jest.fn()}
-            />,
+            <Sort isLoaded={false} sortBy="name" sortDirection={SORT_ASC} onSortChange={jest.fn()} />,
         );
         expect(wrapper.find(Button)).toHaveLength(1);
         expect(wrapper.find(DropdownMenu)).toHaveLength(1);
@@ -26,12 +21,7 @@ describe('components/SubHeader/Sort', () => {
 
     test('should render a select with 4 options', () => {
         const wrapper = shallow(
-            <Sort
-                isLoaded={false}
-                sortBy="name"
-                sortDirection={SORT_ASC}
-                onSortChange={jest.fn()}
-            />,
+            <Sort isLoaded={false} sortBy="name" sortDirection={SORT_ASC} onSortChange={jest.fn()} />,
         );
         const options = wrapper.find(MenuItem);
         expect(options).toHaveLength(4);
@@ -91,14 +81,7 @@ describe('components/SubHeader/Sort', () => {
 
     test('should pass correct parameters when clicked', () => {
         const sort = jest.fn();
-        const wrapper = shallow(
-            <Sort
-                isLoaded={false}
-                sortBy="name"
-                sortDirection={SORT_ASC}
-                onSortChange={sort}
-            />,
-        );
+        const wrapper = shallow(<Sort isLoaded={false} sortBy="name" sortDirection={SORT_ASC} onSortChange={sort} />);
         const options = wrapper.find(MenuItem);
 
         options.at(0).simulate('click');
@@ -116,12 +99,7 @@ describe('components/SubHeader/Sort', () => {
 
     test('should render a select with correct option selected', () => {
         const wrapper = shallow(
-            <Sort
-                isLoaded={false}
-                sortBy="date"
-                sortDirection={SORT_DESC}
-                onSortChange={jest.fn()}
-            />,
+            <Sort isLoaded={false} sortBy="date" sortDirection={SORT_DESC} onSortChange={jest.fn()} />,
         );
         const options = wrapper.find(MenuItem);
         expect(options).toHaveLength(4);
@@ -142,25 +120,13 @@ describe('components/SubHeader/Sort', () => {
 
     test('should render a disabled button when isLoaded is false', () => {
         const wrapper = shallow(
-            <Sort
-                isLoaded={false}
-                sortBy="name"
-                sortDirection={SORT_ASC}
-                onSortChange={jest.fn()}
-            />,
+            <Sort isLoaded={false} sortBy="name" sortDirection={SORT_ASC} onSortChange={jest.fn()} />,
         );
         expect(wrapper.find(Button).prop('isDisabled')).toBe(true);
     });
 
     test('should render a non-disabled button when isLoaded is true', () => {
-        const wrapper = mount(
-            <Sort
-                isLoaded
-                sortBy="name"
-                sortDirection={SORT_ASC}
-                onSortChange={jest.fn()}
-            />,
-        );
+        const wrapper = mount(<Sort isLoaded sortBy="name" sortDirection={SORT_ASC} onSortChange={jest.fn()} />);
         expect(wrapper.find(Button).prop('isDisabled')).toBe(false);
     });
 });

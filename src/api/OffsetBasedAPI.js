@@ -3,8 +3,9 @@
  * @file class for Box offset based API's to inherit common functionality from
  * @author Box
  */
-import { getTypedFileId } from '../util/file';
 import Base from './Base';
+import { getTypedFileId } from '../util/file';
+import { DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
 
 type Params = {
     offset: number,
@@ -31,11 +32,7 @@ class OffsetBasedApi extends Base {
      * @param {array} fields the fields to fetch
      * @return the query params object
      */
-    getQueryParameters(
-        offset: number,
-        limit: number,
-        fields?: Array<string>,
-    ): Object {
+    getQueryParameters(offset: number, limit: number, fields?: Array<string>): Object {
         const queryParams: Params = {
             offset,
             limit,
@@ -99,13 +96,7 @@ class OffsetBasedApi extends Base {
             const totalCount = data.total_count;
             const nextOffset = offset + limit;
             if (shouldFetchAll && this.hasMoreItems(nextOffset, totalCount)) {
-                this.offsetGetRequest(
-                    id,
-                    nextOffset,
-                    limit,
-                    shouldFetchAll,
-                    fields,
-                );
+                this.offsetGetRequest(id, nextOffset, limit, shouldFetchAll, fields);
                 return;
             }
 
@@ -129,9 +120,9 @@ class OffsetBasedApi extends Base {
     async offsetGet(
         id: string,
         successCallback: Function,
-        errorCallback: Function,
-        offset: number = 0,
-        limit: number = 1000,
+        errorCallback: ElementsErrorCallback,
+        offset: number = DEFAULT_FETCH_START,
+        limit: number = DEFAULT_FETCH_END,
         fields?: Array<string>,
         shouldFetchAll: boolean = true,
     ): Promise<void> {

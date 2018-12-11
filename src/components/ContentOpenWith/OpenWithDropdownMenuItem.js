@@ -22,9 +22,7 @@ const OpenWithDropdownMenuItem = ({ integration, onClick }: Props) => {
             <Icon />
             <span>
                 <p className="bcow-menu-item-title">{displayName}</p>
-                <p className="bcow-menu-item-description">
-                    {displayDescription}
-                </p>
+                <p className="bcow-menu-item-description">{displayDescription}</p>
             </span>
         </MenuItem>
     );

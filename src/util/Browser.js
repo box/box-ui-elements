@@ -24,9 +24,7 @@ class Browser {
      */
     static isMobile(): boolean {
         // Relying on the user agent to avoid desktop browsers on machines with touch screens.
-        return /iphone|ipad|ipod|android|blackberry|bb10|mini|windows\sce|palm/i.test(
-            Browser.getUserAgent(),
-        );
+        return /iphone|ipad|ipod|android|blackberry|bb10|mini|windows\sce|palm/i.test(Browser.getUserAgent());
     }
 
     /**

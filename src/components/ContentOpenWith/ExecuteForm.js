@@ -43,15 +43,7 @@ class ExecuteForm extends PureComponent<Props> {
                 rel="noreferrer noopener"
                 method={HTTP_POST}
             >
-                {params &&
-                    params.map(({ key, value }) => (
-                        <input
-                            key={key}
-                            name={key}
-                            value={value}
-                            type="hidden"
-                        />
-                    ))}
+                {params && params.map(({ key, value }) => <input key={key} name={key} value={value} type="hidden" />)}
             </form>
         );
     }
