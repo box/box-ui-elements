@@ -79,6 +79,7 @@ export const FIELD_PERMISSIONS = 'permissions';
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_MODIFIED_AT: 'modified_at' = 'modified_at';
+export const FIELD_CONTENT_MODIFIED_AT = 'content_modified_at';
 export const FIELD_RESTORED_FROM = 'restored_from';
 export const FIELD_CREATED_AT = 'created_at';
 export const FIELD_INTERACTED_AT: 'interacted_at' = 'interacted_at';

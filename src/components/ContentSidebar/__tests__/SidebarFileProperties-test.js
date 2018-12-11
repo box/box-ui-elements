@@ -15,7 +15,7 @@ describe('components/ContentSidebar/SidebarFileProperties', () => {
         file: {
             created_at: '2018-04-18T16:56:05.352Z',
             description: 'foo',
-            modified_at: '2018-04-18T16:56:05.352Z',
+            content_modified_at: '2018-04-18T16:56:05.352Z',
             owned_by: {
                 name: 'foo',
             },

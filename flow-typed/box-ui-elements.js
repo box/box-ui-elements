@@ -297,6 +297,7 @@ type BoxItem = {
     path_collection?: BoxPathCollection,
     interacted_at?: string,
     modified_at?: string,
+    content_modified_at?: string,
     created_at?: string,
     shared_link?: SharedLink,
     allowed_shared_link_access_levels?: Array<Access>,
