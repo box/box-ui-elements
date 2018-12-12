@@ -25,7 +25,7 @@ type Props = {
     intl: any,
 };
 
-const inputProps = { autocomplete: false };
+const inputProps = { autocomplete: 'off' };
 
 const AddApprovalFields = ({
     approvalDate,
