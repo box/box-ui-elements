@@ -41,6 +41,16 @@ class ContentUploader extends ES6Wrapper {
     };
 
     /**
+     * Callback on a single pre-uploaded file. Emits 'beforeupload' event with the Box File object pre-upload.
+     *
+     * @param {Object} data - Upload item
+     * @return {void}
+     */
+    onBeforeUpload = (data: UploadFileWithAPIOptions | File): void => {
+        this.emit('beforeupload', data);
+    };
+
+    /**
      * Callback on a single successful upload. Emits 'uploadsuccess' event with Box File object of uploaded item.
      *
      * @param {BoxItem} data - Successfully uploaded item
@@ -65,6 +75,7 @@ class ContentUploader extends ES6Wrapper {
                 onClose={this.onClose}
                 onComplete={this.onComplete}
                 onError={this.onError}
+                onBeforeUpload={this.onBeforeUpload}
                 onUpload={this.onUpload}
                 modal={((modal: any): ModalOptions)}
                 {...rest}

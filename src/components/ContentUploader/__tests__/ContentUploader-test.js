@@ -34,6 +34,16 @@ describe('components/ContentUploader/ContentUploader', () => {
         });
     };
 
+    describe('onBeforeUpload()', () => {
+        const onBeforeUpload = jest.fn();
+        const wrapper = getWrapper({
+            onBeforeUpload,
+        });
+        wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+
+        expect(onBeforeUpload).toBeCalled();
+    });
+
     describe('getUploadAPI()', () => {
         const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
         let wrapper;

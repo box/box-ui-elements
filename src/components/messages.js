@@ -460,17 +460,17 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     uploadEmptyWithFolderUploadEnabled: {
         id: 'be.uploadEmptyWithFolderUploadEnabled',
         description: 'Message shown when there are no items to upload and folder upload is enabled',
-        defaultMessage: 'Drag and Drop Files and Folders',
+        defaultMessage: 'Drag and drop files and folders',
     },
     uploadEmptyWithFolderUploadDisabled: {
         id: 'be.uploadEmptyWithFolderUploadDisabled',
         description: 'Message shown when there are no items to upload and folder upload is disabled',
-        defaultMessage: 'Drag and Drop Files',
+        defaultMessage: 'Drag and drop files',
     },
     uploadEmptyFileInput: {
         id: 'be.uploadEmptyFileInput',
         description: 'Message shown for upload link for uploading more files when there are no items to upload',
-        defaultMessage: 'Select Files',
+        defaultMessage: 'Browse your device',
     },
     uploadEmptyFolderInput: {
         id: 'be.uploadEmptyFolderInput',
