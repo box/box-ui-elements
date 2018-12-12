@@ -25,6 +25,8 @@ type Props = {
     intl: any,
 };
 
+const inputProps = { autocomplete: false };
+
 const AddApprovalFields = ({
     approvalDate,
     approvers,
@@ -57,6 +59,7 @@ const AddApprovalFields = ({
                 placeholder={intl.formatMessage(messages.approvalAddAssignee)}
                 selectedOptions={approvers}
                 selectorOptions={approverOptions}
+                inputProps={inputProps}
             >
                 {approverOptions.map(({ id, name, email }) => (
                     <ContactDatalistItem key={id} name={name} subtitle={email} />
