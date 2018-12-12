@@ -23,7 +23,7 @@ describe('api/FileCollaborators', () => {
             const collaborator = {
                 id: 123,
                 name: 'Kanye West',
-                login: 'kwest@box.com',
+                login: 'foo@bar.com',
             };
             const response = {
                 next_marker: null,
@@ -41,7 +41,7 @@ describe('api/FileCollaborators', () => {
                         item: {
                             id: 123,
                             name: 'Kanye West',
-                            email: 'kwest@box.com',
+                            email: 'foo@bar.com',
                         },
                     },
                 ],
