@@ -30,14 +30,14 @@ exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_EMPTY 
     <UploadStateContent
       fileInputLabel={
         <FormattedMessage
-          defaultMessage="Select Files"
+          defaultMessage="Browse your device"
           id="be.uploadEmptyFileInput"
         />
       }
       folderInputLabel={false}
       message={
         <FormattedMessage
-          defaultMessage="Drag and Drop Files"
+          defaultMessage="Drag and drop files"
           id="be.uploadEmptyWithFolderUploadDisabled"
         />
       }
@@ -59,7 +59,7 @@ exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_EMPTY 
     <UploadStateContent
       fileInputLabel={
         <FormattedMessage
-          defaultMessage="Select Files"
+          defaultMessage="Browse your device"
           id="be.uploadEmptyFileInput"
         />
       }
@@ -71,7 +71,7 @@ exports[`components/ContentUploader/UploadState should render VIEW_UPLOAD_EMPTY 
       }
       message={
         <FormattedMessage
-          defaultMessage="Drag and Drop Files and Folders"
+          defaultMessage="Drag and drop files and folders"
           id="be.uploadEmptyWithFolderUploadEnabled"
         />
       }
