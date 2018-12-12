@@ -66,7 +66,7 @@ type Props = {
     onComplete: Function,
     onError: Function,
     onMinimize?: Function,
-    onUpload: Function,
+    onBeforeUpload: (file: Array<UploadFileWithAPIOptions | File>) => void,
     onUpload: Function,
     overwrite: boolean,
     requestInterceptor?: Function,
@@ -120,6 +120,7 @@ class ContentUploader extends Component<Props, State> {
         clientName: CLIENT_NAME_CONTENT_UPLOADER,
         fileLimit: FILE_LIMIT_DEFAULT,
         uploadHost: DEFAULT_HOSTNAME_UPLOAD,
+        onBeforeUpload: noop,
         onClose: noop,
         onComplete: noop,
         onError: noop,
@@ -286,7 +287,7 @@ class ContentUploader extends Component<Props, State> {
         itemUpdateCallback: Function,
         isRelativePathIgnored?: boolean = false,
     ) => {
-        const { rootFolderId } = this.props;
+        const { onBeforeUpload, rootFolderId } = this.props;
         if (!files || files.length === 0) {
             return;
         }
@@ -311,6 +312,8 @@ class ContentUploader extends Component<Props, State> {
             this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
             return;
         }
+
+        onBeforeUpload(newFiles);
 
         this.addFilesWithoutRelativePathToQueue(newFiles, itemUpdateCallback);
     };

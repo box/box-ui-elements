@@ -19,8 +19,12 @@ const approverSelectorContacts = [];
 const mentionSelectorContacts = [];
 
 describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
+    const currentUser = { name: 'Jake Thomas', id: 1 };
+    const otherUser = { name: 'Patrick Paul', id: 3 };
+
     const task = {
         created_at: 12345678,
+        created_by: currentUser,
         due_at: 87654321,
         id: '123125',
         message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
@@ -40,16 +44,13 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                 },
             ],
         },
-        permissions: {
-            can_delete: true,
-            can_edit: true,
-        },
     };
-    const currentUser = { name: 'Jake Thomas', id: 1 };
 
     test('should correctly render task', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} {...task} />);
+        const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
 
+        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_edit).toBe(true);
+        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_delete).toBe(true);
         expect(wrapper.hasClass('bcs-task')).toBe(true);
         expect(wrapper.find('mock-comment').length).toEqual(1);
         expect(
@@ -63,14 +64,14 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render a pending task', () => {
+    test('should correctly render a pending task for task creators', () => {
         const myTask = {
             created_at: Date.now(),
+            created_by: currentUser,
             due_at: Date.now(),
             id: '123125',
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
-            permissions: {},
             task_assignment_collection: {
                 total_count: 2,
                 entries: [
@@ -84,12 +85,13 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                         assigned_to: { name: 'Peter Pan', id: 2 },
                         resolution_state: 'completed',
                     },
+                    ``,
                 ],
             },
             isPending: true,
         };
 
-        const wrapper = shallow(<Task currentUser={currentUser} {...myTask} />);
+        const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...myTask} />);
         expect(wrapper.hasClass('bcs-is-pending')).toBe(true);
     });
 
@@ -114,7 +116,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
     });
 
     test('should show tooltips when actions are shown', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
+        const wrapper = mount(<Task currentUser={currentUser} {...task} onAssignmentUpdate={jest.fn()} />);
         const assignment = shallow(
             wrapper
                 .find('.bcs-task-assignees')
@@ -172,14 +174,14 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
         expect(onAssignmentUpdateSpy).toHaveBeenCalledWith('123125', 0, 'rejected');
     });
 
-    test('should not allow user to delete if they lack delete permissions on the comment', () => {
+    test('should not allow user to delete if they are not the task creator', () => {
         const myTask = {
             created_at: Date.now(),
+            created_by: otherUser,
             due_at: Date.now(),
             id: '123125',
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
-            permissions: {},
             task_assignment_collection: {
                 total_count: 2,
                 entries: [
@@ -208,17 +210,17 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             />,
         );
 
-        expect(wrapper.find('InlineDelete').length).toEqual(0);
+        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_delete).toBe(false);
     });
 
-    test('should not allow user to edit if they lack edit permissions on the comment', () => {
+    test('should not allow user to edit if they are not the task creator', () => {
         const myTask = {
             created_at: Date.now(),
+            created_by: otherUser,
             due_at: Date.now(),
             id: '123125',
             message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
             modified_by: { name: 'Tarrence van As', id: 10 },
-            permissions: {},
             task_assignment_collection: {
                 total_count: 2,
                 entries: [
@@ -247,82 +249,7 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
             />,
         );
 
-        expect(wrapper.find('InlineEdit').length).toEqual(0);
-    });
-
-    test('should not allow task creator to delete if onDelete handler is undefined', () => {
-        const myTask = {
-            created_at: Date.now(),
-            due_at: Date.now(),
-            id: '123125',
-            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            modified_by: { name: 'Tarrence van As', id: 10 },
-            permissions: {},
-            task_assignment_collection: {
-                total_count: 2,
-                entries: [
-                    {
-                        id: 0,
-                        assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete',
-                    },
-                    {
-                        id: 1,
-                        assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed',
-                    },
-                ],
-            },
-        };
-
-        const wrapper = shallow(
-            <Task
-                {...myTask}
-                currentUser={currentUser}
-                approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
-            />,
-        );
-
-        expect(wrapper.find('InlineDelete').length).toEqual(0);
-    });
-
-    test('should not allow task creator to edit if onEdit handler is undefined', () => {
-        const myTask = {
-            created_at: Date.now(),
-            due_at: Date.now(),
-            id: '123125',
-            message: 'Do it! Do it! Do it! Do it! Do it! Do it! Do it! Do it! .',
-            modified_by: { name: 'Tarrence van As', id: 10 },
-            permissions: {},
-            task_assignment_collection: {
-                total_count: 2,
-                entries: [
-                    {
-                        id: 0,
-                        assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete',
-                    },
-                    {
-                        id: 1,
-                        assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed',
-                    },
-                ],
-            },
-        };
-
-        const wrapper = shallow(
-            <Task
-                {...myTask}
-                currentUser={currentUser}
-                approverSelectorContacts={approverSelectorContacts}
-                mentionSelectorContacts={mentionSelectorContacts}
-                handlers={allHandlers}
-            />,
-        );
-
-        expect(wrapper.find('InlineEdit').length).toEqual(0);
+        expect(wrapper.find('mock-comment').getElements()[0].props.permissions.can_edit).toBe(false);
     });
 
     test('should not render due date when not passed in', () => {
