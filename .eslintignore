@@ -1,6 +1,7 @@
-flow/**
-lib/**
-dist/**
-flow-typed/**
-i18n/**
-node_modules/**
+flow/
+lib/
+dist/
+flow-typed/
+i18n/
+node_modules/
+reports/
