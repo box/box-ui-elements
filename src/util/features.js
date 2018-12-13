@@ -3,7 +3,6 @@ import * as React from 'react';
 import get from 'lodash/get';
 
 export type FeatureOptions = {
-    enabled: Boolean,
     [key: string]: any,
 };
 
@@ -12,7 +11,7 @@ export type FeatureConfig = {
 };
 
 function isFeatureEnabled(features: FeatureConfig, featureName: string) {
-    return !!get(features, `${featureName}.enabled`, false);
+    return !!get(features, `${featureName}`, false);
 }
 
 function getFeatureConfig(features: FeatureConfig, featureName: string) {
@@ -35,16 +34,16 @@ function FeatureFlag({
 }: {
     feature: string,
     enabled?: FeatureOptions => React.Node,
-    disabled?: FeatureOptions => React.Node,
-    children?: (Boolean, FeatureOptions) => React.Node,
+    disabled?: () => React.Node,
+    children?: React.Node,
 }) {
     return (
         <FeatureContext.Consumer>
             {features => {
                 const isEnabled = isFeatureEnabled(features, feature);
                 const featureConfig = getFeatureConfig(features, feature);
-                if (children) return children(isEnabled, featureConfig);
-                return isEnabled ? enabled(featureConfig) : disabled(featureConfig);
+                if (children) return isEnabled && children;
+                return isEnabled ? enabled(featureConfig) : disabled();
             }}
         </FeatureContext.Consumer>
     );

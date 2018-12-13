@@ -3,46 +3,65 @@ import { mount } from 'enzyme';
 import { isFeatureEnabled, FeatureProvider, FeatureFlag } from '../features';
 
 describe('isFeatureEnabled', () => {
-    test('returns value of `enabled` property in feature options', () => {
+    test('returns feature object if key is truthy', () => {
         const features = {
-            myFeature: {
-                enabled: false,
-            },
-            otherFeature: {
+            isEnabled: {
                 someProperty: 'sdafas',
-                enabled: true,
             },
+            isDisabled: false,
         };
-        expect(isFeatureEnabled(features, 'otherFeature')).toBe(true);
-        expect(isFeatureEnabled(features, 'myFeature')).toBe(false);
-        expect(isFeatureEnabled(features, 'somethingElse')).toBe(false);
+        expect(isFeatureEnabled(features, 'isEnabled')).toBe(true);
+        expect(isFeatureEnabled(features, 'isDisabled')).toBe(false);
     });
     test('defaults to false', () => {
         const features = {};
-        expect(isFeatureEnabled(features, 'somethingElse')).toBe(false);
+        expect(isFeatureEnabled(features, 'unknownKey')).toBe(false);
     });
 });
 
 describe('FeatureFlag', () => {
-    test('calls child function with target feature', () => {
-        const childFn = jest.fn(() => null);
-        const foo = { enabled: true, otherProp: 'foo is enabled' };
-        mount(
+    test('renders children if target feature is enabled', () => {
+        const MockChild = jest.fn(({ children }) => children);
+        const foo = true;
+        const wrapper = mount(
             <FeatureProvider
                 features={{
                     foo,
                 }}
             >
-                <FeatureFlag feature="foo">{childFn}</FeatureFlag>
+                <div>
+                    <FeatureFlag feature="foo">
+                        <MockChild>Foo</MockChild>
+                    </FeatureFlag>
+                </div>
             </FeatureProvider>,
         );
-        expect(childFn).toHaveBeenCalledWith(true, foo);
+        expect(wrapper.html()).toMatchInlineSnapshot(`"<div>Foo</div>"`);
+        expect(MockChild).toHaveBeenCalled();
+    });
+
+    test('does not render children if target feature is disabled', () => {
+        const MockChild = jest.fn(({ children }) => children);
+        const bar = false;
+        const wrapper = mount(
+            <FeatureProvider
+                features={{
+                    bar,
+                }}
+            >
+                <FeatureFlag feature="bar">
+                    <MockChild>Bar</MockChild>
+                </FeatureFlag>
+            </FeatureProvider>,
+        );
+        expect(wrapper.html()).toBeNull();
+        expect(MockChild).not.toHaveBeenCalled();
     });
     test('calls enabled/disabled props', () => {
         const enabledFn = jest.fn(() => null);
         const disabledFn = jest.fn(() => null);
-        const foo = { enabled: true, otherProp: 'foo' };
-        const bar = { enabled: false, otherProp: 'bar' };
+        const foo = { otherProp: 'foo' };
+        const bar = false;
         mount(
             <FeatureProvider
                 features={{
@@ -55,12 +74,12 @@ describe('FeatureFlag', () => {
             </FeatureProvider>,
         );
         expect(enabledFn).toHaveBeenCalledWith(foo);
-        expect(disabledFn).toHaveBeenCalledWith(bar);
+        expect(disabledFn).toHaveBeenCalled();
     });
-    test('calls children prop instead of enabled prop if both are provided', () => {
-        const childFn = jest.fn(() => null);
+    test('uses children prop instead of enabled prop if both are provided', () => {
+        const MockChild = jest.fn(() => null);
         const enabledFn = jest.fn(() => null);
-        const foo = { enabled: true, otherProp: 'foo is enabled' };
+        const foo = { otherProp: 'foo is enabled' };
         mount(
             <FeatureProvider
                 features={{
@@ -68,30 +87,27 @@ describe('FeatureFlag', () => {
                 }}
             >
                 <FeatureFlag feature="foo" enabled={enabledFn}>
-                    {childFn}
+                    <MockChild />
                 </FeatureFlag>
             </FeatureProvider>,
         );
-        expect(childFn).toHaveBeenCalled();
+        expect(MockChild).toHaveBeenCalled();
         expect(enabledFn).not.toHaveBeenCalled();
     });
-    test('defaults to returning nothing', () => {
-        const foo = { enabled: false };
+    test('defaults to rendering nothing', () => {
+        const foo = undefined;
         const bar = { enabled: true };
+        const features = { foo, bar };
         const containerWithinProvider = mount(
             <div>
-                <FeatureProvider
-                    features={{
-                        foo,
-                        bar,
-                    }}
-                >
+                <FeatureProvider features={features}>
                     <FeatureFlag feature="foo" />
                     <FeatureFlag feature="bar" />
                 </FeatureProvider>
             </div>,
         );
         expect(containerWithinProvider.html()).toMatchInlineSnapshot(`"<div></div>"`);
+
         const containerWithoutFeatureConfig = mount(
             <div>
                 <FeatureProvider>
@@ -101,6 +117,7 @@ describe('FeatureFlag', () => {
             </div>,
         );
         expect(containerWithoutFeatureConfig.html()).toMatchInlineSnapshot(`"<div></div>"`);
+
         const containerWithoutProvider = mount(
             <div>
                 <FeatureFlag feature="foo" />
