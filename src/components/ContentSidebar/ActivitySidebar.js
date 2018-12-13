@@ -388,9 +388,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
 
         api.getFileCollaboratorsAPI(true).getFileCollaborators(file.id, successCallback, errorCallback, {
-            params: {
-                filter_term: searchStr,
-            },
+            filter_term: searchStr,
         });
     }
 

@@ -7,3 +7,15 @@ exports[`components/ContentSidebar/ActivityFeed/Avatar should render the avatar 
   name="foo bar"
 />
 `;
+
+exports[`components/ContentSidebar/ActivityFeed/Avatar should set the avatarUrl state from user prop 1`] = `
+<span
+  className="avatar "
+  role="presentation"
+>
+  <AvatarInitials
+    id="foo"
+    name="foo bar"
+  />
+</span>
+`;

@@ -20,6 +20,7 @@ import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
 import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR, IS_ERROR_DISPLAYED } from '../../constants';
 import API from '../../api';
+import { isUserCorrectableError } from '../../util/error';
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
@@ -235,10 +236,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchClassificationErrorCallback = (error: ElementsXhrError, code: string): void => {
-        const isForbiddenError = getProp(error, 'status') === HTTP_STATUS_CODE_FORBIDDEN;
+        const isValidError = isUserCorrectableError(error.status);
         let classificationError;
 
-        if (!isForbiddenError) {
+        if (isValidError) {
             classificationError = {
                 inlineError: {
                     title: messages.fileClassificationErrorHeaderMessage,
@@ -255,7 +256,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
         this.props.onError(error, code, {
             error,
-            [IS_ERROR_DISPLAYED]: !isForbiddenError,
+            [IS_ERROR_DISPLAYED]: isValidError,
         });
     };
 

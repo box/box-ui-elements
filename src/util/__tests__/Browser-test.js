@@ -1,4 +1,3 @@
-import { withData } from 'leche';
 import browser from '../Browser';
 
 describe('util/Browser/isMobile()', () => {
@@ -6,25 +5,22 @@ describe('util/Browser/isMobile()', () => {
         browser.getUserAgent = jest.fn().mockReturnValueOnce('foobar');
         expect(browser.isMobile()).toBeFalsy();
     });
-    withData(
-        {
-            ipad: 'ipad',
-            iphone: 'iphone',
-            ipod: 'ipod',
-            android: 'android',
-            blackberry: 'blackberry',
-            bb10: 'bb10',
-            mini: 'mini',
-            'window ce': 'windows ce',
-            palm: 'palm',
-        },
-        device => {
-            test(`should return true for ${device}`, () => {
-                browser.getUserAgent = jest.fn().mockReturnValueOnce(device);
-                expect(browser.isMobile()).toBeTruthy();
-            });
-        },
-    );
+
+    test.each`
+        device
+        ${'ipad'}
+        ${'iphone'}
+        ${'ipod'}
+        ${'android'}
+        ${'blackberry'}
+        ${'bb10'}
+        ${'mini'}
+        ${'windows ce'}
+        ${'palm'}
+    `('should return true for $device', ({ device }) => {
+        browser.getUserAgent = jest.fn().mockReturnValueOnce(device);
+        expect(browser.isMobile()).toBeTruthy();
+    });
 });
 
 describe('util/Browser/isIE()', () => {

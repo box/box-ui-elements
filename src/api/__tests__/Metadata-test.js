@@ -84,11 +84,14 @@ describe('api/Metadata', () => {
                         foo: 'bar',
                         $canEdit: true,
                     },
-                    'template',
+                    { id: 'foo' },
                     false,
                 ),
             ).toEqual({
-                template: 'template',
+                template: {
+                    id: 'foo',
+                    fields: [],
+                },
                 instance: {
                     id: 'id',
                     canEdit: false,
@@ -108,11 +111,62 @@ describe('api/Metadata', () => {
                         foo: 'bar',
                         $canEdit: true,
                     },
-                    'template',
+                    { id: 'foo' },
                     true,
                 ),
             ).toEqual({
-                template: 'template',
+                template: {
+                    id: 'foo',
+                    fields: [],
+                },
+                instance: {
+                    id: 'id',
+                    canEdit: true,
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+            });
+        });
+
+        test('should ignore hidden fields', () => {
+            const template = {
+                id: 'foo',
+                fields: [
+                    {
+                        hidden: true,
+                        id: '1',
+                    },
+                    {
+                        hidden: false,
+                        id: '2',
+                    },
+                ],
+            };
+
+            const templateWithVisibleFieldsOnly = {
+                id: 'foo',
+                fields: [
+                    {
+                        hidden: false,
+                        id: '2',
+                    },
+                ],
+            };
+
+            expect(
+                metadata.createEditor(
+                    {
+                        $id: 'id',
+                        $foo: 'bar',
+                        foo: 'bar',
+                        $canEdit: true,
+                    },
+                    template,
+                    true,
+                ),
+            ).toEqual({
+                template: templateWithVisibleFieldsOnly,
                 instance: {
                     id: 'id',
                     canEdit: true,

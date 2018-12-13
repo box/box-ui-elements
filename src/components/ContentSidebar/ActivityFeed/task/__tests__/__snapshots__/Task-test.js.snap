@@ -6,6 +6,12 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly rende
 >
   <mock-comment
     created_at={12345678}
+    created_by={
+      Object {
+        "id": 1,
+        "name": "Jake Thomas",
+      }
+    }
     currentUser={
       Object {
         "id": 1,
@@ -19,6 +25,8 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should correctly rende
         "id": "be.taskDeletePrompt",
       }
     }
+    onDelete={[MockFunction]}
+    onEdit={[MockFunction]}
     permissions={
       Object {
         "can_delete": true,
@@ -81,6 +89,12 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should not render due 
 >
   <mock-comment
     created_at={12345678}
+    created_by={
+      Object {
+        "id": 1,
+        "name": "Jake Thomas",
+      }
+    }
     currentUser={
       Object {
         "id": 1,
@@ -143,6 +157,12 @@ exports[`components/ContentSidebar/ActivityFeed/task/Task should show actions fo
 >
   <mock-comment
     created_at={12345678}
+    created_by={
+      Object {
+        "id": 1,
+        "name": "Jake Thomas",
+      }
+    }
     currentUser={
       Object {
         "id": 1,

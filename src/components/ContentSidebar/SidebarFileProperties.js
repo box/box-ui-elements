@@ -62,9 +62,9 @@ const SidebarFileProperties = ({
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
             <ItemProperties
-                createdAt={file.created_at}
+                createdAt={file.content_created_at}
                 description={file.description}
-                modifiedAt={file.modified_at}
+                modifiedAt={file.content_modified_at}
                 owner={getProp(file, 'owned_by.name')}
                 size={getFileSize(file.size, intl.locale)}
                 uploader={getProp(file, 'created_by.name')}

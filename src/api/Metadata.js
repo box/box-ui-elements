@@ -103,7 +103,7 @@ class Metadata extends File {
      * and metadata templates.
      *
      * @param {Object} instance - metadata instance
-     * @param {Object} template - metadata tempalte
+     * @param {Object} template - metadata template
      * @param {boolean} canEdit - is instance editable
      * @return {Object} metadata editor
      */
@@ -114,8 +114,14 @@ class Metadata extends File {
                 data[key] = instance[key];
             }
         });
+
+        const visibleFields = (template.fields && template.fields.filter(field => field && !field.hidden)) || [];
+
         return {
-            template,
+            template: {
+                ...template,
+                fields: visibleFields,
+            },
             instance: {
                 id: instance.$id,
                 canEdit: instance.$canEdit && canEdit,
@@ -630,11 +636,16 @@ class Metadata extends File {
             return null;
         }
 
-        legacyInstance.fields.forEach(({ key, type, displayName, options, description }) => {
+        legacyInstance.fields.forEach(({ key, type, displayName, options, description, editor }) => {
             let v2Type = type;
-            if (type === 'array') {
+            if (editor === 'calendar') {
+                v2Type = 'date';
+            } else if (editor === 'dropdown') {
+                v2Type = 'enum';
+            } else if (editor === 'multipleSelection') {
                 v2Type = 'multiSelect';
             }
+
             fields.push({
                 id: uniqueId('metadata_field_'),
                 type: v2Type,

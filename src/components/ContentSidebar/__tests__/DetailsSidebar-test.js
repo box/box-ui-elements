@@ -188,11 +188,16 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
     });
 
     describe('fetchClassificationErrorCallback', () => {
-        test('should set an inlineError if there is an error in fetching the classification', () => {
+        const code = ERROR_CODE_FETCH_CLASSIFICATION;
+
+        test('should set an inlineError and call onError prop if there is an error in fetching the classification', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.setState = jest.fn();
-            instance.fetchClassificationErrorCallback();
+            const error = {
+                status: 500,
+            };
+            instance.fetchClassificationErrorCallback(error, code);
             expect(instance.setState).toBeCalledWith({
                 isLoadingClassification: false,
                 classification: undefined,
@@ -203,11 +208,14 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
                     },
                 },
             });
+            expect(onError).toBeCalledWith(error, code, {
+                error,
+                [IS_ERROR_DISPLAYED]: true,
+            });
         });
 
         test('should invoke onError prop with error details', () => {
             const onError = jest.fn();
-            const code = ERROR_CODE_FETCH_CLASSIFICATION;
             const error = {};
             const wrapper = getWrapper({ onError });
             const instance = wrapper.instance();
@@ -215,13 +223,12 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance.fetchClassificationErrorCallback(error, code);
             expect(onError).toBeCalledWith(error, code, {
                 error,
-                [IS_ERROR_DISPLAYED]: true,
+                [IS_ERROR_DISPLAYED]: false,
             });
         });
 
         test('should not display inline error when a forbidden error', () => {
             const onError = jest.fn();
-            const code = ERROR_CODE_FETCH_CLASSIFICATION;
             const error = {
                 status: 403,
             };

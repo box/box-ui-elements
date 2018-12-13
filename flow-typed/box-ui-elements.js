@@ -117,12 +117,11 @@ type Order = {
 
 type BoxItemPermission = {
     can_comment?: boolean,
-    can_edit_comment?: boolean,
-    can_delete_comment?: boolean,
     can_preview?: boolean,
     can_rename?: boolean,
     can_download?: boolean,
     can_delete?: boolean,
+    can_edit?: boolean,
     can_upload?: boolean,
     can_share?: boolean,
     can_set_share_access?: boolean,
@@ -225,10 +224,20 @@ type MetadataType = {
     global?: MetadataSkillsTemplate,
 };
 
+type MetadataTemplateField = {
+    displayName: string,
+    description: string,
+    id: string,
+    hidden?: boolean,
+    key: string,
+    type: string,
+}
+
 type MetadataEditorTemplate = {
     id: string,
     scope: string,
     templateKey: string,
+    fields?: Array<MetadataTemplateField>,
     hidden: boolean,
 };
 
@@ -286,6 +295,8 @@ type BoxItem = {
     item_collection?: BoxItemCollection,
     path_collection?: BoxPathCollection,
     interacted_at?: string,
+    content_created_at?: string,
+    content_modified_at?: string,
     modified_at?: string,
     created_at?: string,
     shared_link?: SharedLink,

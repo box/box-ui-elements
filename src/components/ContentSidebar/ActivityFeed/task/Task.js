@@ -60,7 +60,6 @@ class Task extends React.Component<Props> {
             onDelete,
             onEdit,
             onAssignmentUpdate = noop,
-            permissions,
             message,
             translatedTaggedMessage,
             translations,
@@ -69,6 +68,14 @@ class Task extends React.Component<Props> {
             getMentionWithQuery,
             mentionSelectorContacts,
         } = this.props;
+
+        const isCommentAuthor = currentUser && created_by && created_by.id === currentUser.id;
+
+        const taskPermissions = {
+            can_edit: isCommentAuthor,
+            can_delete: isCommentAuthor,
+        };
+
         return (
             <div
                 className={classNames('bcs-task', {
@@ -85,7 +92,7 @@ class Task extends React.Component<Props> {
                     isPending={isPending}
                     onDelete={onDelete}
                     onEdit={onEdit}
-                    permissions={permissions}
+                    permissions={taskPermissions}
                     tagged_message={message}
                     translatedTaggedMessage={translatedTaggedMessage}
                     translations={translations}
