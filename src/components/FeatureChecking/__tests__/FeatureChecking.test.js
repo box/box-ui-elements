@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import { isFeatureEnabled, FeatureProvider, FeatureFlag } from '../features';
+import { isFeatureEnabled, FeatureProvider, FeatureFlag } from '..';
 
 describe('isFeatureEnabled', () => {
     test('returns feature object if key is truthy', () => {
