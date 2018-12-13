@@ -120,14 +120,14 @@ function toISOStringNoMS(date: Date): string {
  * @return {?string}
  */
 function getFileLastModifiedAsISONoMSIfPossible(file: UploadFile): ?string {
+    // The compatibility chart at https://developer.mozilla.org/en-US/docs/Web/API/File/lastModified#Browser_compatibility
+    // is not up to date as of 12-13-2018. Edge & ie11 do not support lastModified, but support lastModifiedDate.
+    const lastModified = file.lastModified || file.lastModifiedDate;
     if (
-        // $FlowFixMe https://github.com/facebook/flow/issues/6131
-        file.lastModified &&
-        (typeof file.lastModified === 'string' ||
-            typeof file.lastModified === 'number' ||
-            file.lastModified instanceof Date)
+        lastModified &&
+        (typeof lastModified === 'string' || typeof lastModified === 'number' || lastModified instanceof Date)
     ) {
-        const lastModifiedDate = new Date(file.lastModified);
+        const lastModifiedDate = new Date(lastModified);
         if (isValidDateObject(lastModifiedDate)) {
             return toISOStringNoMS(lastModifiedDate);
         }
