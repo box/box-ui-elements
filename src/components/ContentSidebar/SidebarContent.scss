@@ -27,22 +27,12 @@
         bottom: 0;
         left: 0;
         overflow: auto;
-        padding-top: 15px;
         position: absolute; // Prevents non-sidebar parts from re-painting
         right: 0;
         top: 60px; // Same as title above
 
-        .bcs-scroll-content {
+        .bcs-scroll-content { // Styles can be overriden by each sidebar
             width: 323px; // 17px less than the total width for scroll bar
-        }
-
-        .bcs.bcs-activity & {
-            padding-top: 0;
-
-            .bcs-scroll-content {
-                height: 100%;
-                width: 100%;
-            }
         }
     }
 }
