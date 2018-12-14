@@ -9,7 +9,7 @@ const CHANNEL_NAME = 'http-channel';
 const TIMEOUT_MS = 5000;
 const TIMEOUT_SECONDS = 5;
 
-describe('lib/box-edit/HTTPChannel', () => {
+describe('api/box-edit/HTTPChannel', () => {
     beforeEach(() => {
         fakeXHR = {
             open: jest.fn(),
@@ -19,7 +19,9 @@ describe('lib/box-edit/HTTPChannel', () => {
         jest.useFakeTimers();
     });
 
-    afterEach(() => {});
+    afterEach(() => {
+        jest.clearAllTimers();
+    });
 
     describe('createCORSRequest()', () => {
         beforeEach(() => {
