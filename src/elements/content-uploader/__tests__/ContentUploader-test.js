@@ -39,6 +39,7 @@ describe('elements/content-uploader/ContentUploader', () => {
         const wrapper = getWrapper({
             onBeforeUpload,
         });
+
         wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
 
         expect(onBeforeUpload).toBeCalled();
@@ -56,6 +57,17 @@ describe('elements/content-uploader/ContentUploader', () => {
             wrapper.instance().updateViewAndCollection([], null);
 
             expect(wrapper.state().itemIds).toEqual({});
+        });
+    });
+    describe('addFilesToUploadQueue()', () => {
+        test('should overwrite itemIds if they already exist', () => {
+            const wrapper = getWrapper();
+            wrapper.setState({ itemIds: { yoyo: false } });
+
+            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+
+            const expected = { yoyo: true };
+            expect(wrapper.state().itemIds).toMatchObject(expected);
         });
     });
 
