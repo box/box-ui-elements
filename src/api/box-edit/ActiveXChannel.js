@@ -25,9 +25,9 @@ class ActiveXChannel extends Channel {
         this.reqIdToPromiseMap = new Map();
         this.isActiveXExtensionListenerAttached = false;
         this.retryAttempt = 0;
-        this.setupActiveXCommunication();
-        this.window = window;
         this.document = document;
+        this.window = window;
+        this.setupActiveXCommunication();
     }
 
     executeOperation = (

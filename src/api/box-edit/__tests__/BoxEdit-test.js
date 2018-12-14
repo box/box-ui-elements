@@ -8,6 +8,7 @@ describe('api/box-edit/BoxEdit', () => {
 
     afterEach(() => {
         jest.clearAllTimers();
+        jest.restoreAllMocks();
     });
 
     test('should create a singleton', () => {

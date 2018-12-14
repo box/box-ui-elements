@@ -21,6 +21,7 @@ describe('api/box-edit/HTTPChannel', () => {
 
     afterEach(() => {
         jest.clearAllTimers();
+        jest.restoreAllMocks();
     });
 
     describe('createCORSRequest()', () => {
