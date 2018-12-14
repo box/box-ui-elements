@@ -1,19 +1,12 @@
 // @flow
 import get from 'lodash/get';
+import * as types from './flowTypes';
 
-export type FeatureOptions = {
-    [key: string]: any,
-};
-
-export type FeatureConfig = {
-    [key: string]: FeatureOptions,
-};
-
-function isFeatureEnabled(features: FeatureConfig, featureName: string) {
+function isFeatureEnabled(features: types.FeatureConfig, featureName: string) {
     return !!get(features, `${featureName}`, false);
 }
 
-function getFeatureConfig(features: FeatureConfig, featureName: string) {
+function getFeatureConfig(features: types.FeatureConfig, featureName: string) {
     return get(features, `${featureName}`, {});
 }
 
