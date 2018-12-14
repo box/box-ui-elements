@@ -1,7 +1,7 @@
 import HTTPChannel from '../HTTPChannel';
+import * as cookies from '../cookies';
 
-let clock;
-let FakeXHR;
+let fakeXHR;
 
 const APP_NAME = 'AppName';
 const URL = 'http://127.0.0.1:';
@@ -9,28 +9,20 @@ const CHANNEL_NAME = 'http-channel';
 const TIMEOUT_MS = 5000;
 const TIMEOUT_SECONDS = 5;
 
-let stubGetCookie;
-let stubSetCookie;
-let stubGenerateId;
-let stubGetWindow;
-
 describe('lib/box-edit/HTTPChannel', () => {
     beforeEach(() => {
-        stubGetCookie = jest.fn();
-        stubSetCookie = jest.fn();
-        stubGenerateId = jest.fn();
-        stubGetWindow = jest.fn();
+        fakeXHR = {
+            open: jest.fn(),
+            send: jest.fn(),
+            setRequestHeader: jest.fn(),
+        };
+        jest.useFakeTimers();
     });
 
     afterEach(() => {});
 
     describe('createCORSRequest()', () => {
-        let fakeXHR;
-
         beforeEach(() => {
-            fakeXHR = {
-                open: jest.fn(),
-            };
             window.XMLHttpRequest = jest.fn(() => fakeXHR);
         });
 
@@ -96,7 +88,7 @@ describe('lib/box-edit/HTTPChannel', () => {
             const expected = '1234';
             const channel = new HTTPChannel(APP_NAME, URL, CHANNEL_NAME);
 
-            channel.checkInstallStatus = jest.fn().mockImplementationOnce(() => Promise.resolve(expected));
+            channel.checkInstallStatus = jest.fn().mockResolvedValue(expected);
 
             const result = await channel.getComServerStatusInstallationPromise(TIMEOUT_MS);
             expect(result).toEqual(expected);
@@ -105,7 +97,7 @@ describe('lib/box-edit/HTTPChannel', () => {
         test('should reject when checkInstallStatus rejects with notrunning', async () => {
             const channel = new HTTPChannel(APP_NAME, URL, CHANNEL_NAME);
             const expected = 'notrunning';
-            channel.checkInstallStatus = jest.fn().mockImplementationOnce(() => Promise.reject(expected));
+            channel.checkInstallStatus = jest.fn().mockRejectedValueOnce(expected);
             const catchMock = jest.fn();
 
             try {
@@ -123,233 +115,224 @@ describe('lib/box-edit/HTTPChannel', () => {
 
             channel.checkInstallStatus = jest
                 .fn()
-                .mockImplementationOnce(() => Promise.reject())
-                .mockImplementationOnce(() => Promise.resolve(expected));
+                .mockRejectedValueOnce()
+                .mockResolvedValueOnce(expected);
 
             const result = await channel.getComServerStatusInstallationPromise(TIMEOUT_MS);
             expect(result).toEqual(expected);
         });
     });
 
-    // describe('sendComServerRequest()', () => {
-    //     test('should return a promise that resolves when its request succeeds', done => {
-    //         const fakeXHRInstance = new FakeXHR();
-    //         fakeXHRInstance.open('GET', URL, true);
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.createCORSRequest = jest.fn().returns(fakeXHRInstance);
+    describe('sendComServerRequest()', () => {
+        test('should return a promise that resolves when its request succeeds', done => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.createCORSRequest = jest.fn().mockReturnValue(fakeXHR);
 
-    //         channel.sendComServerRequest('GET', URL, {}, TIMEOUT_MS).then(result => {
-    //             expect(result).toEqual(fakeXHRInstance);
-    //             done();
-    //         });
+            channel.sendComServerRequest('GET', URL, {}, TIMEOUT_MS).then(result => {
+                expect(result).toEqual(fakeXHR);
+                done();
+            });
 
-    //         clock.tick(1);
-    //         fakeXHRInstance.onload();
-    //     });
+            jest.advanceTimersByTime(1);
+            fakeXHR.onload();
+        });
 
-    //     test('should return a promise that rejects when its request errors', done => {
-    //         const fakeXHRInstance = new FakeXHR();
-    //         fakeXHRInstance.open('GET', URL, true);
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.createCORSRequest = jest.fn().returns(fakeXHRInstance);
+        test('should return a promise that rejects when its request errors', done => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.createCORSRequest = jest.fn().mockReturnValue(fakeXHR);
 
-    //         channel.sendComServerRequest('GET', URL, {}, TIMEOUT_MS).catch(result => {
-    //             expect(result).toEqual(fakeXHRInstance);
-    //             done();
-    //         });
+            channel.sendComServerRequest('GET', URL, {}, TIMEOUT_MS).catch(result => {
+                expect(result).toEqual(fakeXHR);
+                done();
+            });
 
-    //         fakeXHRInstance.onerror();
-    //     });
+            fakeXHR.onerror();
+        });
 
-    //     test('should return a promise that rejects when it times out', done => {
-    //         const fakeXHRInstance = new FakeXHR();
-    //         fakeXHRInstance.open('GET', URL, true);
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.createCORSRequest = jest.fn().returns(fakeXHRInstance);
+        test('should return a promise that rejects when it times out', done => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.createCORSRequest = jest.fn().mockReturnValue(fakeXHR);
 
-    //         channel.sendComServerRequest('GET', URL, {}, TIMEOUT_MS).catch(result => {
-    //             expect(result).toEqual(fakeXHRInstance);
-    //             done();
-    //         });
+            channel.sendComServerRequest('GET', URL, {}, TIMEOUT_MS).catch(result => {
+                expect(result).toEqual(fakeXHR);
+                done();
+            });
 
-    //         fakeXHRInstance.ontimeout();
-    //     });
-    // });
+            fakeXHR.ontimeout();
+        });
+    });
 
-    // describe('checkInstallStatus()', () => {
-    //     test('should return a promise that resolves successfully when its AJAX call succeeds', async () => {
-    //         const channel = new HTTPChannel(APP_NAME, URL);
+    describe('checkInstallStatus()', () => {
+        test('should return a promise that resolves successfully when its AJAX call succeeds', async () => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            const expectedResponse = {
+                running: true,
+            };
+            channel.sendComServerRequest = jest.fn().mockResolvedValue({
+                responseText: JSON.stringify(expectedResponse),
+            });
+            const result = await channel.checkInstallStatus(1234, TIMEOUT_MS);
+            expect(result).toEqual(expectedResponse);
+        });
 
-    //         const expectedResponse = {
-    //             running: true,
-    //         };
+        test('should return a promise that rejects when its AJAX call fails', async () => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.sendComServerRequest = jest.fn().mockRejectedValue();
+            const catchMock = jest.fn();
+            try {
+                await channel.checkInstallStatus(1234, TIMEOUT_MS);
+            } catch (err) {
+                catchMock();
+            } finally {
+                expect(catchMock).toBeCalled();
+            }
+        });
+        test('should return a promise that rejects when its AJAX response is invalid ', async () => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            const expectedResponse = {
+                running: false,
+            };
+            channel.sendComServerRequest = jest.fn().mockResolvedValue({
+                responseText: JSON.stringify(expectedResponse),
+            });
+            try {
+                await channel.checkInstallStatus(1234, TIMEOUT_MS);
+            } catch (err) {
+                expect(err.message).toEqual('notrunning');
+            }
+        });
+    });
 
-    //         channel.sendComServerRequest = jest.fn().resolves({
-    //             responseText: JSON.stringify(expectedResponse),
-    //         });
+    describe('getComChannel()', () => {
+        test('should return the appropriate cookie when called', () => {
+            const appName = 'foo';
+            const expected = {
+                [appName]: 'bar',
+            };
 
-    //         const result = await channel.checkInstallStatus(1234, TIMEOUT_MS);
+            cookies.get = jest.fn(appName).mockReturnValue(expected[appName]);
 
-    //         expect(result).toEqual(expectedResponse);
-    //     });
+            const channel = new HTTPChannel(APP_NAME, URL);
+            const result = channel.getComChannel(appName);
 
-    //     test('should return a promise that rejects when its AJAX call fails', async () => {
-    //         const channel = new HTTPChannel(APP_NAME, URL);
+            expect(result).toEqual('bar');
+        });
+    });
 
-    //         channel.sendComServerRequest = jest.fn().rejects();
+    describe('setComChannel()', () => {
+        test('should set the appropriate cookies and return appropriately when called and bgp-id already set', () => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.getComChannel = jest.fn().mockReturnValue('foo-id');
+            cookies.set = jest.fn();
 
-    //         const catchMock = sandbox.mock();
+            const result = channel.setComChannel('foo');
 
-    //         try {
-    //             await channel.checkInstallStatus(1234, TIMEOUT_MS);
-    //         } catch (err) {
-    //             catchMock();
-    //         }
-    //     });
+            expect(cookies.set.mock.calls[0]).toContain('foo-bgp-id');
+            expect(cookies.set.mock.calls[1]).toContain('bgp-foo-id');
+            expect(result).toEqual('bgp-foo-id');
+        });
 
-    //     test('should return a promise that rejects when its AJAX response is invalid ', async () => {
-    //         const channel = new HTTPChannel(APP_NAME, URL);
+        test('should set the appropriate cookies and return appropriately when called and bgp-id already set', () => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.getComChannel = jest.fn().mockReturnValue(undefined);
+            channel.generateId = jest.fn().mockReturnValue('bar-id');
+            cookies.set = jest.fn();
 
-    //         const expectedResponse = {
-    //             running: false,
-    //         };
+            const result = channel.setComChannel('foo');
 
-    //         channel.sendComServerRequest = jest.fn().resolves({
-    //             responseText: JSON.stringify(expectedResponse),
-    //         });
+            expect(cookies.set.mock.calls[0]).toContain('foo-bgp-id');
+            expect(cookies.set.mock.calls[1]).toContain('bgp-bar-id');
+            expect(result).toEqual('bgp-bar-id');
+        });
+    });
 
-    //         try {
-    //             await channel.checkInstallStatus(1234, TIMEOUT_MS);
-    //         } catch (err) {
-    //             expect(err.message).toEqual('notrunning');
-    //         }
-    //     });
-    // });
+    describe('getComServerStatus()', () => {
+        test('should set and return the com server installation status when called and comserver installation promise not set', () => {
+            const expected = { foo: 'bar' };
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.comServerInstallationPromise = false;
+            channel.getComServerStatusInstallationPromise = jest.fn().mockReturnValue(expected);
+            const result = channel.getComServerStatus(1234);
 
-    // describe('getComChannel()', () => {
-    //     test('should return the appropriate cookie when called', () => {
-    //         const expected = 'bar';
-    //         stubGetCookie.withArgs('foo-bgp-id').returns(expected);
+            expect(channel.comServerInstallationPromise).toEqual(expected);
+            expect(result).toEqual(expected);
+        });
 
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         const result = channel.getComChannel('foo');
+        test('should return comserver installation promise without reinitializing when called and it is already set', () => {
+            const expected = { foo: 'bar' };
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.comServerInstallationPromise = expected;
+            channel.getComServerStatusInstallationPromise = jest.fn();
 
-    //         expect(result).toEqual(expected);
-    //     });
-    // });
+            const result = channel.getComServerStatus(111);
+            expect(result).toEqual(expected);
+            expect(channel.getComServerStatusInstallationPromise).not.toBeCalled();
+        });
+    });
 
-    // describe('setComChannel()', () => {
-    //     test('should set the appropriate cookies and return appropriately when called and bgp-id already set', () => {
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         jest.fn(channel, 'getComChannel').returns('foo-id');
+    describe('sendRequest()', () => {
+        test('should return a promise that resolves when its com server request succeeds', async () => {
+            const expectedResponseText = {
+                bar: 'baz',
+            };
 
-    //         const result = channel.setComChannel('foo');
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.sendComServerRequest = jest.fn().mockResolvedValue({
+                responseText: JSON.stringify(expectedResponseText),
+            });
 
-    //         expect(stubSetCookie.calledWith('foo-bgp-id')).toBe(true);
-    //         expect(stubSetCookie.calledWith('bgp-foo-id')).toBe(true);
-    //         expect(result).toEqual('bgp-foo-id');
-    //     });
+            const result = await channel.sendRequest({ foo: 'bar' }, TIMEOUT_MS, TIMEOUT_SECONDS);
 
-    //     test('should set the appropriate cookies and return appropriately when called and bgp-id already set', () => {
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         jest.fn(channel, 'getComChannel').returns(undefined);
-    //         stubGenerateId.returns('bar-id');
+            expect(result).toEqual(expectedResponseText);
+        });
 
-    //         const result = channel.setComChannel('foo');
+        test('should return a promise that rejects when the com server response is not well formed', async () => {
+            const expectedResponseText = {
+                response_type: 'error',
+                message: 'blah',
+            };
 
-    //         expect(stubSetCookie.calledWith('foo-bgp-id')).toBe(true);
-    //         expect(stubSetCookie.calledWith('bgp-bar-id')).toBe(true);
-    //         expect(result).toEqual('bgp-bar-id');
-    //     });
-    // });
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.sendComServerRequest = jest.fn().mockResolvedValue({
+                responseText: JSON.stringify(expectedResponseText),
+            });
 
-    // describe('getComServerStatus()', () => {
-    //     test('should set and return the com server installation status when called and comserver installation promise not set', () => {
-    //         const expected = { foo: 'bar' };
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.comServerInstallationPromise = false;
-    //         channel.getComServerStatusInstallationPromise = jest
-    //             .fn()
-    //             .withArgs(1234)
-    //             .returns(expected);
-    //         const result = channel.getComServerStatus(1234);
+            try {
+                await channel.sendRequest({ foo: 'bar' }, TIMEOUT_MS, TIMEOUT_SECONDS);
+            } catch (err) {
+                expect(err.message).toEqual('Communication error: blah');
+            }
+        });
+    });
 
-    //         expect(channel.comServerInstallationPromise).toEqual(expected);
-    //         expect(result).toEqual(expected);
-    //     });
+    describe('sendCommand()', () => {
+        test('should return a promise that resolves when its com server request succeeds', async () => {
+            const expected = { firstName: 'greatest', lastName: 'ever' };
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.sendComServerRequest = jest.fn().mockResolvedValue({
+                responseText: JSON.stringify(expected),
+            });
 
-    //     test('should return comserver installation promise without reinitializing when called and it is already set', () => {
-    //         const expected = { foo: 'bar' };
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.comServerInstallationPromise = expected;
-    //         channel.getComServerStatusInstallationPromise = sandbox.mock().never();
+            const result = await channel.sendCommand({}, TIMEOUT_MS, TIMEOUT_SECONDS);
 
-    //         const result = channel.getComServerStatus(111);
-    //         expect(result).toEqual(expected);
-    //     });
-    // });
+            expect(result).toEqual(expected);
+        });
 
-    // describe('sendRequest()', () => {
-    //     test('should return a promise that resolves when its com server request succeeds', async () => {
-    //         const expectedResponseText = {
-    //             bar: 'baz',
-    //         };
+        test('should return a promise that rejects when the com server response is not well formed', async () => {
+            const channel = new HTTPChannel(APP_NAME, URL);
+            channel.sendComServerRequest = jest.fn().mockResolvedValue({
+                responseText: 'not json',
+            });
 
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.sendComServerRequest = jest.fn().resolves({
-    //             responseText: JSON.stringify(expectedResponseText),
-    //         });
+            const catchMock = jest.fn();
 
-    //         const result = await channel.sendRequest({ foo: 'bar' }, TIMEOUT_MS, TIMEOUT_SECONDS);
-
-    //         expect(result).toEqual(expectedResponseText);
-    //     });
-
-    //     test('should return a promise that rejects when the com server response is not well formed', async () => {
-    //         const expectedResponseText = {
-    //             response_type: 'error',
-    //             message: 'blah',
-    //         };
-
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.sendComServerRequest = jest.fn().resolves({
-    //             responseText: JSON.stringify(expectedResponseText),
-    //         });
-
-    //         try {
-    //             await channel.sendRequest({ foo: 'bar' }, TIMEOUT_MS, TIMEOUT_SECONDS);
-    //         } catch (err) {
-    //             expect(err.message).toEqual('Communication error: blah');
-    //         }
-    //     });
-    // });
-
-    // describe('sendCommand()', () => {
-    //     test('should return a promise that resolves when its com server request succeeds', async () => {
-    //         const expected = { firstName: 'greatest', lastName: 'ever' };
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.sendComServerRequest = jest.fn().resolves({
-    //             responseText: JSON.stringify(expected),
-    //         });
-
-    //         const result = await channel.sendCommand({}, TIMEOUT_MS, TIMEOUT_SECONDS);
-
-    //         expect(result).toEqual(expected);
-    //     });
-
-    //     test('should return a promise that rejects when the com server response is not well formed', async () => {
-    //         const channel = new HTTPChannel(APP_NAME, URL);
-    //         channel.sendComServerRequest = jest.fn().resolves({
-    //             responseText: 'not json',
-    //         });
-
-    //         const catchMock = sandbox.mock();
-
-    //         try {
-    //             await channel.sendCommand({}, TIMEOUT_MS, TIMEOUT_SECONDS);
-    //         } catch (err) {
-    //             catchMock();
-    //         }
-    //     });
-    // });
+            try {
+                await channel.sendCommand({}, TIMEOUT_MS, TIMEOUT_SECONDS);
+            } catch (err) {
+                catchMock();
+            } finally {
+                expect(catchMock).toBeCalled();
+            }
+        });
+    });
 });

@@ -40,17 +40,6 @@ function getPreferredPortOrdering() {
     };
 }
 
-function generateId() {
-    const time = new Date().getTime();
-    return 'xxxxxxxx'.replace(/x/g, () => {
-        // Generate random number between 1 and 16.
-        // Using time for added entropy.
-        const rand = Math.floor((time + Math.random() * 16) % 16);
-        // Convert number to a HEX
-        return rand.toString(16);
-    });
-}
-
 class HTTPChannel extends Channel {
     url: string;
 
@@ -189,7 +178,7 @@ class HTTPChannel extends Channel {
     getComChannel = (appName: string) => getCookie(`${appName}-bgp-id`);
 
     setComChannel = (appName: string) => {
-        const bgpId = this.getComChannel(appName) || generateId();
+        const bgpId = this.getComChannel(appName) || this.generateId();
         const comChannelName = `bgp-${bgpId}`;
         const aYearFromNow = new Date().getTime() + YEAR_MS;
         setCookie(`${appName}-bgp-id`, bgpId, aYearFromNow);
@@ -235,6 +224,17 @@ class HTTPChannel extends Channel {
         }&timeout=${comServerToApplicationTimeoutSec}`;
         return this.sendComServerRequest(POST, url, data, browserToComServerTimeoutMS).then(results => {
             return JSON.parse(results.responseText);
+        });
+    };
+
+    generateId = () => {
+        const time = new Date().getTime();
+        return 'xxxxxxxx'.replace(/x/g, () => {
+            // Generate random number between 1 and 16.
+            // Using time for added entropy.
+            const rand = Math.floor((time + Math.random() * 16) % 16);
+            // Convert number to a HEX
+            return rand.toString(16);
         });
     };
 }
