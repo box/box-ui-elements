@@ -27,6 +27,8 @@ import { getTypedFileId } from '../../util/file';
 import { withErrorBoundary } from '../ErrorBoundary';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../util/fields';
+import { FeatureProvider } from '../FeatureChecking';
+import type { FeatureConfig } from '../FeatureChecking';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -54,6 +56,7 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
+    features?: FeatureConfig,
     fileId?: string,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
@@ -167,6 +170,7 @@ class ContentPreview extends PureComponent<Props, State> {
         collection: [],
         contentOpenWithProps: {},
         contentSidebarProps: {},
+        features: {},
         hasHeader: false,
         language: DEFAULT_LOCALE,
         onDownload: noop,
@@ -1061,6 +1065,7 @@ class ContentPreview extends PureComponent<Props, State> {
             sharedLinkPassword,
             requestInterceptor,
             responseInterceptor,
+            features,
         }: Props = this.props;
 
         const { file, isFileError, isReloadNotificationVisible, currentFileId }: State = this.state;
@@ -1073,69 +1078,60 @@ class ContentPreview extends PureComponent<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div
-                    id={this.id}
-                    className={`be bcpr ${className}`}
-                    ref={measureRef}
-                    onKeyDown={this.onKeyDown}
-                    tabIndex={0}
-                >
-                    {hasHeader && (
-                        <Header
-                            file={file}
-                            token={token}
-                            onClose={onClose}
-                            onPrint={this.print}
-                            canDownload={this.canDownload()}
-                            onDownload={this.download}
-                            contentOpenWithProps={contentOpenWithProps}
-                            canAnnotate={this.canAnnotate()}
-                        />
-                    )}
-                    <div className="bcpr-body">
-                        <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
-                            {file ? (
-                                <Measure bounds onResize={this.onResize}>
-                                    {({ measureRef: previewRef }) => <div ref={previewRef} className="bcpr-content" />}
-                                </Measure>
-                            ) : (
-                                <div className="bcpr-loading-wrapper">
-                                    <PreviewLoading
-                                        isLoading={!isFileError}
-                                        loadingIndicatorProps={{
-                                            size: 'large',
-                                        }}
-                                    />
-                                </div>
-                            )}
-                            <PreviewNavigation
-                                collection={collection}
-                                currentIndex={this.getFileIndex()}
-                                onNavigateLeft={this.navigateLeft}
-                                onNavigateRight={this.navigateRight}
-                            />
-                        </div>
-                        {file && (
-                            <ContentSidebar
-                                {...contentSidebarProps}
-                                isLarge={isLarge}
-                                apiHost={apiHost}
+                <FeatureProvider features={features}>
+                    <div
+                        id={this.id}
+                        className={`be bcpr ${className}`}
+                        ref={measureRef}
+                        onKeyDown={this.onKeyDown}
+                        tabIndex={0}
+                    >
+                        {hasHeader && (
+                            <Header
+                                file={file}
                                 token={token}
-                                cache={this.api.getCache()}
-                                fileId={currentFileId}
-                                getPreview={this.getPreview}
-                                getViewer={this.getViewer}
-                                sharedLink={sharedLink}
-                                sharedLinkPassword={sharedLinkPassword}
-                                requestInterceptor={requestInterceptor}
-                                responseInterceptor={responseInterceptor}
+                                onClose={onClose}
+                                onPrint={this.print}
+                                canDownload={this.canDownload()}
+                                onDownload={this.download}
+                                contentOpenWithProps={contentOpenWithProps}
+                                canAnnotate={this.canAnnotate()}
                             />
                         )}
+                        <div className="bcpr-body">
+                            <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
+                                {file ? (
+                                    <Measure bounds onResize={this.onResize}>
+                                        {({ measureRef: previewRef }) => (
+                                            <div ref={previewRef} className="bcpr-content" />
+                                        )}
+                                    </Measure>
+                                ) : (
+                                    <div className="bcpr-loading-wrapper">
+                                        <PreviewLoading
+                                            isLoading={!isFileError}
+                                            loadingIndicatorProps={{
+                                                size: 'large',
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                                <PreviewNavigation
+                                    collection={collection}
+                                    currentIndex={this.getFileIndex()}
+                                    onNavigateLeft={this.navigateLeft}
+                                    onNavigateRight={this.navigateRight}
+                                />
+                            </div>
+                            {isReloadNotificationVisible && (
+                                <ReloadNotification
+                                    onClose={this.closeReloadNotification}
+                                    onClick={this.loadFileFromStage}
+                                />
+                            )}
+                        </div>
                     </div>
-                    {isReloadNotificationVisible && (
-                        <ReloadNotification onClose={this.closeReloadNotification} onClick={this.loadFileFromStage} />
-                    )}
-                </div>
+                </FeatureProvider>
             </Internationalize>
         );
         /* eslint-enable jsx-a11y/no-static-element-interactions */
