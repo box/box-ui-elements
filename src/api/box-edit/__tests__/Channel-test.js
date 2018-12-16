@@ -4,8 +4,6 @@ import CONSTANTS from '../constants';
 const APP_NAME = 'dummy';
 
 describe('lib/box-edit/Channel', () => {
-    beforeEach(() => {});
-
     afterEach(() => {
         jest.restoreAllMocks();
     });

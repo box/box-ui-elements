@@ -81,7 +81,6 @@ function isUnsupportedMSEdgeVersion() {
 function isMixedContentAllowedOnLocalhost() {
     const { CHROME, FIREFOX } = BROWSER_CONSTANTS;
     // TODO can we do this with feature detection rather than sniffing?
-
     return (
         Browser.isMinBrowser(CHROME, 53) ||
         Browser.isMinBrowser(FIREFOX, MIN_FIREFOX_VERSION_FOR_MIXED_CONTENT) ||
@@ -255,7 +254,7 @@ class ComServerClient {
             browserToComServerTimeoutMS,
         );
 
-        const shouldRejectPromiseDueToUnSupportedMSEdgeOrVersion = Browser.isEdge() || isUnsupportedMSEdgeVersion();
+        const shouldRejectPromiseDueToUnSupportedMSEdgeOrVersion = isUnsupportedMSEdgeVersion();
 
         return new Promise((resolve, reject) => {
             if (shouldRejectPromiseDueToUnSupportedMSEdgeOrVersion) {
