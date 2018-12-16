@@ -1,5 +1,6 @@
 // @flow
 /**
+ * NOTE: we don't use the NPM package directly because it has an unnecessary dependency on es6-promise + its commonjs format.
  * Returns the first promise in `promises` to successfully resolve.
  * If all fail, reject.
  * @see {@link https://github.com/jarofghosts/promise-one}
