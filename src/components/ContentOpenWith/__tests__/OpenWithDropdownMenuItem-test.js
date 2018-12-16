@@ -31,4 +31,33 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
         const wrapper = getWrapper(props);
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should be disabled with a reason if the integration is disabled', () => {
+        const props = {
+            integration: {
+                displayName: 'A new integration',
+                displayDescription: 'Open With the new integration',
+                isDisabled: true,
+                disabledReasons: ['The integration is not currently available'],
+                appIntegrationId: '22',
+            },
+            onClick: noop,
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should use the display description for a disabled integration if there is no reason', () => {
+        const props = {
+            integration: {
+                displayName: 'A new integration',
+                displayDescription: 'Open With the new integration',
+                isDisabled: true,
+                appIntegrationId: '22',
+            },
+            onClick: noop,
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+    });
 });

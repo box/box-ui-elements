@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/ContentOpenWith/OpenWithMenu should be disabled with a reason if the integration is disabled 1`] = `
+<MenuItem
+  isDisabled={true}
+  onClick={[Function]}
+>
+  <IconFileDefault />
+  <span>
+    <p
+      className="bcow-menu-item-title"
+    >
+      A new integration
+    </p>
+    <p
+      className="bcow-menu-item-description"
+    >
+      The integration is not currently available
+    </p>
+  </span>
+</MenuItem>
+`;
+
 exports[`components/ContentOpenWith/OpenWithMenu should render the description and correct icon 1`] = `
 <MenuItem
   onClick={[Function]}
@@ -22,6 +43,27 @@ exports[`components/ContentOpenWith/OpenWithMenu should render the description a
 
 exports[`components/ContentOpenWith/OpenWithMenu should use the default icon when no mapping can be found to an existing icon 1`] = `
 <MenuItem
+  onClick={[Function]}
+>
+  <IconFileDefault />
+  <span>
+    <p
+      className="bcow-menu-item-title"
+    >
+      A new integration
+    </p>
+    <p
+      className="bcow-menu-item-description"
+    >
+      Open With the new integration
+    </p>
+  </span>
+</MenuItem>
+`;
+
+exports[`components/ContentOpenWith/OpenWithMenu should use the display description for a disabled integration if there is no reason 1`] = `
+<MenuItem
+  isDisabled={true}
   onClick={[Function]}
 >
   <IconFileDefault />
