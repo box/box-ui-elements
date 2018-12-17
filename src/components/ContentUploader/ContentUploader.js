@@ -787,7 +787,6 @@ class ContentUploader extends Component<Props, State> {
         );
 
         let view = '';
-        let itemIds;
         if ((items && items.length === 0) || allItemsArePending) {
             view = VIEW_UPLOAD_EMPTY;
         } else if (someUploadHasFailed && useUploadsManager) {
@@ -801,7 +800,6 @@ class ContentUploader extends Component<Props, State> {
                 onComplete(cloneDeep(items.map(item => item.boxFile)));
                 // Reset item collection after successful upload
                 items = [];
-                itemIds = {};
             }
         }
 
@@ -817,11 +815,8 @@ class ContentUploader extends Component<Props, State> {
             view,
         };
 
-        if (itemIds) {
-            state.itemIds = itemIds;
-        }
-
         if (items.length === 0) {
+            state.itemIds = {};
             state.errorCode = '';
         }
 

@@ -44,6 +44,21 @@ describe('components/ContentUploader/ContentUploader', () => {
         expect(onBeforeUpload).toBeCalled();
     });
 
+    describe('updateViewAndCollection()', () => {
+        test('should set itemIds to be an empty when method is called with an empty array', () => {
+            const onComplete = jest.fn();
+            const useUploadsManager = false;
+            const wrapper = getWrapper({
+                onComplete,
+                useUploadsManager,
+            });
+
+            wrapper.instance().updateViewAndCollection([], null);
+
+            expect(wrapper.state().itemIds).toEqual({});
+        });
+    });
+
     describe('getUploadAPI()', () => {
         const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 52428800; // 50MB
         let wrapper;
