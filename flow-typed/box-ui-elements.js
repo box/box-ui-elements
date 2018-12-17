@@ -617,6 +617,7 @@ type ExecuteAPI = {
 
 type Integration = {
     appIntegrationId: string,
+    extension?: string,
     disabledReasons: Array<string>,
     displayDescription: string,
     displayName: string,

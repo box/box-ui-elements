@@ -29,32 +29,53 @@ type Props = {
  * @private
  * @return {?(string | Element)} the tooltip message
  */
-export const getTooltip = (displayDescription: ?string, error: ?any, isLoading: boolean): ?(string | Element) => {
+export const getTooltip = (
+    isLoading: boolean,
+    error: ?Error,
+    isDisabled: boolean,
+    disabledReasons: Array<string> = [],
+    displayDescription: string,
+): ?(string | Element) => {
     if (isLoading) {
         return null;
     }
+
     if (error) {
-        return <FormattedMessage {...messages.errorOpenWithDescription} />;
+        return disabledReasons[0] || <FormattedMessage {...messages.errorOpenWithDescription} />;
     }
+
+    if (isDisabled) {
+        return disabledReasons[0] || <FormattedMessage {...messages.emptyOpenWithDescription} />;
+    }
+
     if (displayDescription) {
         return displayDescription;
     }
 
-    return <FormattedMessage {...messages.emptyOpenWithDescription} />;
+    return disabledReasons[0] || <FormattedMessage {...messages.emptyOpenWithDescription} />;
 };
 
 const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props) => {
-    const { displayDescription, displayName, isDisabled: isDisplayIntegrationDisabled } = displayIntegration || {};
+    const { displayName, isDisabled: isDisplayIntegrationDisabled, extension, disabledReasons, displayDescription } =
+        displayIntegration || {};
 
     const isDisabled = !!isDisplayIntegrationDisabled || !displayName;
-    const IntegrationIcon = displayName && ICON_FILE_MAP[displayName];
-    const Icon = IntegrationIcon || IconOpenWith;
+
+    let Icon;
+    if (displayName) {
+        Icon = ICON_FILE_MAP[displayName];
+    } else {
+        Icon = IconOpenWith;
+    }
 
     return (
-        <Tooltip text={getTooltip(displayDescription, error, isLoading)} position="bottom-center">
-            <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration)}>
+        <Tooltip
+            text={getTooltip(isLoading, error, isDisplayIntegrationDisabled, disabledReasons, displayDescription)}
+            position="bottom-center"
+        >
+            <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration, isLoading)}>
                 <OpenWithButtonContents>
-                    <Icon className={CLASS_INTEGRATION_ICON} height={26} width={26} />
+                    <Icon extension={extension} className={CLASS_INTEGRATION_ICON} height={26} width={26} />
                 </OpenWithButtonContents>
             </Button>
         </Tooltip>
