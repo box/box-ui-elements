@@ -12,6 +12,7 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
                 displayName: 'Adobe Sign',
                 displayDescription: 'Open With Adobe',
                 appIntegrationId: '1',
+                disabledReasons: [],
             },
             onClick: noop,
         };
@@ -25,6 +26,7 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
                 displayName: 'A new integration',
                 displayDescription: 'Open With the new integration',
                 appIntegrationId: '22',
+                disabledReasons: [],
             },
             onClick: noop,
         };
