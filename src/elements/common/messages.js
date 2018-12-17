@@ -843,6 +843,31 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: 'Decline',
         description: 'Reject option for a task',
     },
+    tasksAddTask: {
+        id: 'be.tasks.addTask',
+        defaultMessage: 'Add Task',
+        description: 'label for button that opens task popup',
+    },
+    tasksAddTaskFormTitle: {
+        id: 'be.tasks.addTaskForm.title',
+        defaultMessage: 'Add Task',
+        description: 'title for task popup',
+    },
+    tasksAddTaskFormMessageLabel: {
+        id: 'be.tasks.addTaskForm.messageLabel',
+        defaultMessage: 'Message',
+        description: 'label for task create form message input',
+    },
+    tasksAddTaskFormSubmitLabel: {
+        id: 'be.tasks.addTaskForm.submit',
+        defaultMessage: 'Add Task',
+        description: 'label for create button in create task popup',
+    },
+    tasksAddTaskFormCancelLabel: {
+        id: 'be.tasks.addTaskForm.cancel',
+        defaultMessage: 'Cancel',
+        description: 'label for cancel button in create task popup',
+    },
     versionDeleted: {
         id: 'be.versionDeleted',
         defaultMessage: '{ name } deleted version { version_number }',

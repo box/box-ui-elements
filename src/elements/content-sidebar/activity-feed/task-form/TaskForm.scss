@@ -1,0 +1,58 @@
+@import '../../../variables';
+
+.be .bcs-task-input-container {
+    display: flex;
+
+    .bcs-task-input-controls {
+        display: block;
+        text-align: right;
+
+        .btn {
+            margin-bottom: 10px;
+            margin-right: 0;
+            margin-top: 0;
+        }
+
+        .btn:last-child {
+            margin-left: 10px;
+        }
+    }
+
+    .bcs-task-input-form-container {
+        flex: 1;
+        min-width: 0;
+
+        textarea,
+        input {
+            width: 100%;
+        }
+
+        .bcs-task-add-due-date-input {
+            margin-left: 0;
+            margin-right: 0;
+
+            .date-picker-wrapper {
+                width: 166px;
+            }
+        }
+
+        .bcs-task-name-input {
+            margin-bottom: 15px;
+            margin-top: 20px;
+            max-height: 140px;
+        }
+
+        input.pill-selector-hidden-input {
+            width: 1px;
+        }
+
+        .pill-selector-wrapper {
+            margin-left: 0;
+            width: 100%;
+
+            .pill-selector-input-wrapper {
+                width: auto;
+            }
+        }
+    }
+}
