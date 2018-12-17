@@ -231,7 +231,7 @@ type MetadataTemplateField = {
     hidden?: boolean,
     key: string,
     type: string,
-}
+};
 
 type MetadataEditorTemplate = {
     id: string,
@@ -395,7 +395,7 @@ type FolderUploadItem = {
     status: UploadStatus,
     options?: UploadItemAPIOptions,
     isFolder?: boolean,
-}
+};
 
 type UploadItem = {
     api: PlainUploadAPI | MultiputUploadAPI,
@@ -649,7 +649,7 @@ type UploadDataTransferItemWithAPIOptions = {
     options?: UploadItemAPIOptions,
 };
 
-type UploadFile = File & { webkitRelativePath?: string };
+type UploadFile = File & { webkitRelativePath?: string, lastModifiedDate?: Date };
 
 type DirectoryReader = {
     readEntries: (Function, Function) => void,
@@ -691,16 +691,11 @@ type ElementsError = {
 };
 
 type ErrorContextProps = {
-    onError: (
-        error: ElementsXhrError | Error,
-        code: string,
-        contextInfo?: Object,
-        origin: ErrorOrigins,
-    ) => void,
+    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin: ErrorOrigins) => void,
 };
 
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
 type ClassificationInfo = {
-    Box__Security__Classification__Key?: string
+    Box__Security__Classification__Key?: string,
 } & MetadataInstance;
