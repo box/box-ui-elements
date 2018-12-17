@@ -242,10 +242,6 @@ class ComServerClient {
         }
     }
 
-    isInitialized() {
-        return this.isInitialized;
-    }
-
     getComServerStatus(customTimeoutMS: ?number): Promise<any> {
         const { ACTIVE_STATUS } = CONSTANTS;
 
