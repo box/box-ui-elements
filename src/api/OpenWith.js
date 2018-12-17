@@ -78,7 +78,7 @@ class OpenWith extends Base {
                 return {
                     appIntegrationId: id,
                     displayDescription: display_description,
-                    disabledReasons: disabled_reasons,
+                    disabledReasons: disabled_reasons || [],
                     displayOrder: display_order,
                     isDefault: !!defaultIntegration && id === defaultIntegration.id,
                     isDisabled: is_disabled,
