@@ -7,7 +7,9 @@
 import * as React from 'react';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
+import { FormattedMessage } from 'react-intl';
 import ICON_FILE_MAP from './IconFileMap';
+import messages from '../messages';
 
 type Props = {
     integration: Integration,
@@ -15,10 +17,12 @@ type Props = {
 };
 
 const OpenWithDropdownMenuItem = ({ integration, onClick }: Props) => {
-    const { displayName, displayDescription, isDisabled, disabledReasons = [] } = integration;
+    const { displayName, displayDescription, isDisabled, disabledReasons } = integration;
     const Icon = ICON_FILE_MAP[displayName] || IconFileDefault;
     // Use the first disabled reason as the description if the integration is disabled.
-    const description = (isDisabled && disabledReasons[0]) || displayDescription;
+    const description = isDisabled
+        ? disabledReasons[0] || <FormattedMessage {...messages.errorOpenWithDescription} />
+        : displayDescription;
     return (
         <MenuItem isDisabled={isDisabled} onClick={() => onClick(integration)}>
             <Icon />

@@ -41,8 +41,9 @@ exports[`components/ContentOpenWith/OpenWithMenu should render the description a
 </MenuItem>
 `;
 
-exports[`components/ContentOpenWith/OpenWithMenu should use the default icon when no mapping can be found to an existing icon 1`] = `
+exports[`components/ContentOpenWith/OpenWithMenu should use the default error for a disabled integration if there is no reason 1`] = `
 <MenuItem
+  isDisabled={true}
   onClick={[Function]}
 >
   <IconFileDefault />
@@ -55,15 +56,17 @@ exports[`components/ContentOpenWith/OpenWithMenu should use the default icon whe
     <p
       className="bcow-menu-item-description"
     >
-      Open With the new integration
+      <FormattedMessage
+        defaultMessage="Opening this file with other services is currently unavailable"
+        id="be.errorOpenWithDescription"
+      />
     </p>
   </span>
 </MenuItem>
 `;
 
-exports[`components/ContentOpenWith/OpenWithMenu should use the display description for a disabled integration if there is no reason 1`] = `
+exports[`components/ContentOpenWith/OpenWithMenu should use the default icon when no mapping can be found to an existing icon 1`] = `
 <MenuItem
-  isDisabled={true}
   onClick={[Function]}
 >
   <IconFileDefault />

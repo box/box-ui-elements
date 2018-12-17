@@ -47,10 +47,11 @@ describe('components/ContentOpenWith/OpenWithMenu', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should use the display description for a disabled integration if there is no reason', () => {
+    test('should use the default error for a disabled integration if there is no reason', () => {
         const props = {
             integration: {
                 displayName: 'A new integration',
+                disabledReasons: [],
                 displayDescription: 'Open With the new integration',
                 isDisabled: true,
                 appIntegrationId: '22',
