@@ -294,7 +294,6 @@ class Feed extends Base {
                         return {
                             ...item,
                             ...updatedAssignment,
-                            resolution_state: updatedAssignment.message.toLowerCase(),
                         };
                     }
 
@@ -712,7 +711,7 @@ class Feed extends Base {
                 id,
                 assigned_to,
                 message,
-                resolution_state: message ? message.toLowerCase() : resolution_state,
+                resolution_state: resolution_state.toLowerCase(),
             };
         });
 

@@ -45,8 +45,7 @@ jest.mock('../Tasks', () => {
                             name: 'Daniel DeMicco',
                             login: 'ddemicco@foo.com',
                         },
-                        resolution_state: 'incomplete',
-                        message: 'Completed',
+                        resolution_state: 'Completed',
                     },
                 ],
             });
@@ -151,8 +150,7 @@ describe('api/Feed', () => {
                     name: 'Daniel DeMicco',
                     login: 'ddemicco@foo.com',
                 },
-                resolution_state: 'incomplete',
-                message: 'Completed',
+                resolution_state: 'Completed',
             },
         ],
     };
@@ -409,7 +407,7 @@ describe('api/Feed', () => {
                 taskId,
                 {
                     ...tasks.entries[0].task_assignment_collection.entries[0],
-                    message: updatedState,
+                    resolution_state: updatedState,
                 },
                 successCb,
             );
@@ -748,13 +746,12 @@ describe('api/Feed', () => {
                 {
                     id: '1',
                     assigned_to: { id: '1234' },
-                    message: 'completed',
-                    resolution_state: 'completed',
+                    resolution_state: 'Completed',
                 },
             ];
             const expectedResult = {
                 task_assignment_collection: {
-                    entries: [{ ...assignments[0], type: 'task_assignment' }],
+                    entries: [{ ...assignments[0], resolution_state: 'completed', type: 'task_assignment' }],
                     total_count: 1,
                 },
             };
@@ -776,12 +773,12 @@ describe('api/Feed', () => {
                 {
                     id: '1',
                     assigned_to: { id: '1234' },
-                    resolution_state: 'completed',
+                    resolution_state: 'Completed',
                 },
             ];
             const expectedResult = {
                 task_assignment_collection: {
-                    entries: [{ ...assignments[0], type: 'task_assignment' }],
+                    entries: [{ ...assignments[0], resolution_state: 'completed', type: 'task_assignment' }],
                     total_count: 1,
                 },
             };
