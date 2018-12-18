@@ -204,7 +204,7 @@ class MultiputUpload extends BaseMultiput {
         let createSessionUrl = `${uploadUrl}/files/upload_sessions`;
 
         // Parallelism is currently detrimental to multiput upload performance in Zones, so set it to 1.
-        if (createSessionUrl.indexOf('fupload-ec2') >= 0) {
+        if (createSessionUrl.includes('fupload-ec2')) {
             this.config.parallelism = 1;
         }
 
