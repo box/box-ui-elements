@@ -322,6 +322,12 @@ describe('api/uploads/MultiputUpload', () => {
             expect(multiputUploadTest.xhr.post).not.toHaveBeenCalled();
         });
 
+        test('should set parallelism to 1 for Zones', async () => {
+            multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest.fn().mockReturnValueOnce('fupload-ec2usw1.app.box.com');
+            await multiputUploadTest.preflightSuccessHandler();
+            expect(multiputUploadTest.config.parallelism).toBe(1);
+        });
+
         test('should call createSessionSuccessHandler when the session is created successfully', async () => {
             const data = { a: 2 };
 
