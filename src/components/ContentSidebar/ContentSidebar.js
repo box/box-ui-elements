@@ -13,6 +13,8 @@ import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/Load
 import Sidebar from './Sidebar';
 import API from '../../api';
 import APIContext from '../APIContext';
+import Logger from '../../logger';
+import LoggerContext from '../LoggerContext';
 import Internationalize from '../Internationalize';
 import { withErrorBoundary } from '../ErrorBoundary';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../util/fields';
@@ -79,6 +81,8 @@ class ContentSidebar extends PureComponent<Props, State> {
 
     api: API;
 
+    logger: Logger;
+
     static defaultProps = {
         className: '',
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
@@ -127,6 +131,10 @@ class ContentSidebar extends PureComponent<Props, State> {
             clientName,
             requestInterceptor,
             responseInterceptor,
+        });
+
+        this.logger = new Logger({
+            onMetricLog: console.log,
         });
 
         // Clone initial state to allow for state reset on new files
@@ -420,24 +428,26 @@ class ContentSidebar extends PureComponent<Props, State> {
                 <aside id={this.id} className={styleClassName}>
                     <div className="be-app-element">
                         {hasSidebar ? (
-                            <APIContext.Provider value={(this.api: any)}>
-                                <Sidebar
-                                    file={((file: any): BoxItem)}
-                                    view={view}
-                                    detailsSidebarProps={detailsSidebarProps}
-                                    activitySidebarProps={activitySidebarProps}
-                                    metadataSidebarProps={metadataSidebarProps}
-                                    getPreview={getPreview}
-                                    getViewer={getViewer}
-                                    hasSkills={hasSkills}
-                                    hasDetails={hasDetails}
-                                    hasMetadata={hasMetadata}
-                                    hasActivityFeed={hasActivityFeed}
-                                    onToggle={this.onToggle}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    currentUser={currentUser}
-                                />
-                            </APIContext.Provider>
+                            <LoggerContext.Provider value={(this.logger: any)}>
+                                <APIContext.Provider value={(this.api: any)}>
+                                    <Sidebar
+                                        file={((file: any): BoxItem)}
+                                        view={view}
+                                        detailsSidebarProps={detailsSidebarProps}
+                                        activitySidebarProps={activitySidebarProps}
+                                        metadataSidebarProps={metadataSidebarProps}
+                                        getPreview={getPreview}
+                                        getViewer={getViewer}
+                                        hasSkills={hasSkills}
+                                        hasDetails={hasDetails}
+                                        hasMetadata={hasMetadata}
+                                        hasActivityFeed={hasActivityFeed}
+                                        onToggle={this.onToggle}
+                                        onVersionHistoryClick={onVersionHistoryClick}
+                                        currentUser={currentUser}
+                                    />
+                                </APIContext.Provider>
+                            </LoggerContext.Provider>
                         ) : (
                             <div className="bcs-loading">
                                 <LoadingIndicator />

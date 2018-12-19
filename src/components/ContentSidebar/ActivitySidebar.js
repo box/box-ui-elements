@@ -8,7 +8,6 @@ import * as React from 'react';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import ActivityFeed from './ActivityFeed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../messages';
 import { withAPIContext } from '../APIContext';
@@ -16,7 +15,16 @@ import { withErrorBoundary } from '../ErrorBoundary';
 import { getBadUserError, getBadItemError } from '../../util/error';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
+import Logger from '../../logger';
 import './ActivitySidebar.scss';
+import Timer from '../../util/Timer'; // Note that this is a thin wrapper around performance api
+// To track whether or not the Activity Feed JS is loaded
+let isAFJSLoaded = false;
+const ActivityFeed = React.lazy(() => {
+    const afPromise = import('./ActivityFeed/activity-feed/ActivityFeed');
+    afPromise.then(() => (isAFJSLoaded = true));
+    return afPromise;
+});
 
 type ExternalProps = {
     onCommentCreate?: Function,
@@ -38,6 +46,7 @@ type PropsWithoutContext = {
 
 type Props = {
     api: API,
+    logger: Logger,
 } & PropsWithoutContext &
     ErrorContextProps;
 
@@ -56,6 +65,18 @@ export const activityFeedInlineError: Errors = {
         content: messages.activityFeedItemApiError,
     },
 };
+
+// The time it takes for ActivityFeed JS to be loaded, but still loading feed items and current user.
+let hasLoadRenderMetricBeenRecorded = false;
+// The time it takes for ActivityFeed JS to be loaded and presented with complete data.
+let hasRenderMetricBeenRecorded = false;
+// According to React docs, ActivityFeed loaded via React.lazy() WILL NOT begin loading until first render occurs
+let hasAFJSBegunLoading = false;
+
+const TIME_START_ACTIVITY_FEED = 'activity_feed_js';
+const TIME_TO_LOAD_STATE_TAG = 'activity_feed_ttl';
+const TIME_TO_RENDER_TAG = 'activity_feed_ttr';
+
 class ActivitySidebar extends React.PureComponent<Props, State> {
     state = {};
 
@@ -429,7 +450,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
+        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl, logger } = this.props;
         const {
             currentUser,
             approverSelectorContacts,
@@ -438,29 +459,59 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activityFeedError,
             currentUserError,
         } = this.state;
+
+        // Since this is the first render, we know that ActivityFeed will finally be lazy loaded in!
+        if (!hasAFJSBegunLoading) {
+            Timer.mark(ACTIVITY_FEED_START_TAG);
+            hasAFJSBegunLoading = true;
+        } else if (isAFJSLoaded) {
+            // If the JS is loaded, then we can stop some timers!
+            if (!hasRenderMetricBeenRecorded && currentUser && feedItems) {
+                hasRenderMetricBeenRecorded = true;
+                Timer.mark(TIME_TO_RENDER_TAG);
+                logger.logMetric(
+                    'activity_feed',
+                    'time_to_render_state',
+                    Timer.getDuration(TIME_START_ACTIVITY_FEED, TIME_TO_RENDER_TAG),
+                );
+            } else if (!hasRenderMetricBeenRecorded && !hasLoadRenderMetricBeenRecorded && !currentUser && !feedItems) {
+                // If we know that we're currently in the loading state (has loading crawler) for Activity Feed
+                // Then we know that the AF is rendered as loading!
+                hasLoadRenderMetricBeenRecorded = true;
+                Timer.mark(TIME_TO_LOAD_STATE_TAG);
+                logger.logMetric(
+                    'activity_feed',
+                    'time_to_load_state',
+                    Timer.getDuration(TIME_START_ACTIVITY_FEED, TIME_TO_LOAD_STATE_TAG),
+                );
+            }
+        }
+
         return (
             <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
-                <ActivityFeed
-                    file={file}
-                    activityFeedError={activityFeedError}
-                    approverSelectorContacts={approverSelectorContacts}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    currentUser={currentUser}
-                    isDisabled={isDisabled}
-                    onCommentCreate={this.createComment}
-                    onCommentDelete={this.deleteComment}
-                    onTaskCreate={this.createTask}
-                    onTaskDelete={this.deleteTask}
-                    onTaskUpdate={this.updateTask}
-                    onTaskAssignmentUpdate={this.updateTaskAssignment}
-                    getApproverWithQuery={this.getApproverWithQuery}
-                    getMentionWithQuery={this.getMentionWithQuery}
-                    onVersionHistoryClick={onVersionHistoryClick}
-                    getAvatarUrl={this.getAvatarUrl}
-                    getUserProfileUrl={getUserProfileUrl}
-                    feedItems={feedItems}
-                    currentUserError={currentUserError}
-                />
+                <Suspense fallback={<a>Loading AF JS...</a>}>
+                    <ActivityFeed
+                        file={file}
+                        activityFeedError={activityFeedError}
+                        approverSelectorContacts={approverSelectorContacts}
+                        mentionSelectorContacts={mentionSelectorContacts}
+                        currentUser={currentUser}
+                        isDisabled={isDisabled}
+                        onCommentCreate={this.createComment}
+                        onCommentDelete={this.deleteComment}
+                        onTaskCreate={this.createTask}
+                        onTaskDelete={this.deleteTask}
+                        onTaskUpdate={this.updateTask}
+                        onTaskAssignmentUpdate={this.updateTaskAssignment}
+                        getApproverWithQuery={this.getApproverWithQuery}
+                        getMentionWithQuery={this.getMentionWithQuery}
+                        onVersionHistoryClick={onVersionHistoryClick}
+                        getAvatarUrl={this.getAvatarUrl}
+                        getUserProfileUrl={getUserProfileUrl}
+                        feedItems={feedItems}
+                        currentUserError={currentUserError}
+                    />
+                </Suspense>
             </SidebarContent>
         );
     }
