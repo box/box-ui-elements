@@ -92,14 +92,14 @@ class TaskAssignments extends Base {
     updateTaskAssignment({
         file,
         taskAssignmentId,
-        resolutionState,
+        taskStatus,
         message,
         successCallback,
         errorCallback,
     }: {
         file: BoxItem,
         taskAssignmentId: string,
-        resolutionState: string,
+        taskStatus: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
         message?: string,
@@ -116,7 +116,7 @@ class TaskAssignments extends Base {
         }
 
         const requestData = {
-            data: { resolution_state: resolutionState, message },
+            data: { status: taskStatus, message },
         };
 
         this.put({

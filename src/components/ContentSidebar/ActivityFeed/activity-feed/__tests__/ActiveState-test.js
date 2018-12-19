@@ -25,7 +25,7 @@ const items = [
             entries: [
                 {
                     assigned_to: { name: 'Akon', id: 11 },
-                    resolution_state: 'incomplete',
+                    status: 'incomplete',
                 },
             ],
             total_count: 1,

@@ -523,7 +523,7 @@ type TaskAssignment = {
     type: 'task_assignment',
     id: string,
     assigned_to: User,
-    resolution_state: string,
+    status: string,
     message: string,
 };
 

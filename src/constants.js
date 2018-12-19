@@ -115,8 +115,8 @@ export const FIELD_MESSAGE = 'message';
 export const FIELD_TAGGED_MESSAGE = 'tagged_message';
 export const FIELD_TRASHED_AT = 'trashed_at';
 export const FIELD_ASSIGNED_TO = 'assigned_to';
-export const FIELD_RESOLUTION_STATE = 'resolution_state';
 export const FIELD_RELEVANCE: '' = '';
+export const FIELD_STATUS = 'status';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_PREVIEW = 'can_preview';

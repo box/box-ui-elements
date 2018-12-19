@@ -48,7 +48,7 @@ import {
     FIELD_DUE_AT,
     FIELD_TRASHED_AT,
     FIELD_ASSIGNED_TO,
-    FIELD_RESOLUTION_STATE,
+    FIELD_STATUS,
     FIELD_RESTORED_FROM,
     PLACEHOLDER_USER,
 } from '../../constants';
@@ -139,7 +139,7 @@ describe('util/fields', () => {
     });
 
     test('should fetch correct task assignment fields', () => {
-        expect(TASK_ASSIGNMENTS_FIELDS_TO_FETCH).toEqual([FIELD_ASSIGNED_TO, FIELD_RESOLUTION_STATE, FIELD_MESSAGE]);
+        expect(TASK_ASSIGNMENTS_FIELDS_TO_FETCH).toEqual([FIELD_ASSIGNED_TO, FIELD_STATUS, FIELD_MESSAGE]);
     });
 
     test('should fetch correct comments fields', () => {

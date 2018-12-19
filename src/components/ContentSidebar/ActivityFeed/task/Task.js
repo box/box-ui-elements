@@ -117,8 +117,8 @@ class Task extends React.Component<Props> {
                         {task_assignment_collection && task_assignment_collection.entries
                             ? task_assignment_collection.entries
                                   .map(fillUserPlaceholder)
-                                  .map(({ id: assignmentId, assigned_to, resolution_state }) => {
-                                      switch (resolution_state) {
+                                  .map(({ id: assignmentId, assigned_to, status }) => {
+                                      switch (status) {
                                           case TASK_COMPLETED:
                                           case TASK_APPROVED:
                                               return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;
