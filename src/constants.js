@@ -306,3 +306,9 @@ export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Integrations ------------------------- */
 export const APP_INTEGRATION = 'app_integration';
+
+/* ------------------ Task Assignment Statuses ----------------- */
+export const TASK_APPROVED = 'approved';
+export const TASK_COMPLETED = 'completed';
+export const TASK_INCOMPLETE = 'incomplete';
+export const TASK_REJECTED = 'rejected';

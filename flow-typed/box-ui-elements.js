@@ -69,6 +69,10 @@ import {
     ORIGIN_ACTIVITY_SIDEBAR,
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
+    TASK_APPROVED,
+    TASK_COMPLETED,
+    TASK_INCOMPLETE,
+    TASK_REJECTED,
 } from '../src/constants';
 
 type Method =
@@ -104,6 +108,7 @@ type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
 type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
+type TaskAssignmentStatus = typeof TASK_APPROVED | typeof TASK_COMPLETED | typeof TASK_INCOMPLETE | typeof TASK_REJECTED;
 
 type SharedLink = {
     url: string,
@@ -523,7 +528,7 @@ type TaskAssignment = {
     type: 'task_assignment',
     id: string,
     assigned_to: User,
-    status: string,
+    status: TaskAssignmentStatus,
 };
 
 type TaskAssignments = {

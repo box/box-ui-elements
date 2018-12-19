@@ -16,11 +16,7 @@ import RejectedAssignment from './RejectedAssignment';
 
 import './Task.scss';
 import { fillUserPlaceholder } from '../../../../util/fields';
-
-const TASK_APPROVED = 'approved';
-const TASK_REJECTED = 'rejected';
-const TASK_COMPLETED = 'completed';
-const TASK_INCOMPLETE = 'incomplete';
+import { TASK_APPROVED, TASK_REJECTED, TASK_COMPLETED, TASK_INCOMPLETE } from '../../../../constants';
 
 type Props = {
     task_assignment_collection: TaskAssignments | SelectorItems,
