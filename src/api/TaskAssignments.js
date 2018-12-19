@@ -83,7 +83,7 @@ class TaskAssignments extends Base {
      *
      * @param {BoxItem} file - File object for which we are updating a task assignment
      * @param {string} taskAssignmentId - Task assignment to be edited
-     * @param {string} resolutionState - The updated task assignment status
+     * @param {TaskAssignmentStatus} taskStatus - The updated task assignment status
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -97,7 +97,7 @@ class TaskAssignments extends Base {
     }: {
         file: BoxItem,
         taskAssignmentId: string,
-        taskStatus: string,
+        taskStatus: TaskAssignmentStatus,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
     }): void {
