@@ -111,8 +111,8 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     /**
      * Fetches a file with the fields needed for details sidebar
      *
-     * @param {function} successCallback - the success callback
-     * @param {function} errorCallback - the error callback
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
      * @return {void}
      */
     fetchFile(
