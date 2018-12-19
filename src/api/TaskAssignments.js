@@ -86,14 +86,12 @@ class TaskAssignments extends Base {
      * @param {string} resolutionState - The updated task assignment status
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {string} [message] - The task assignments text
      * @return {void}
      */
     updateTaskAssignment({
         file,
         taskAssignmentId,
         taskStatus,
-        message,
         successCallback,
         errorCallback,
     }: {
@@ -102,7 +100,6 @@ class TaskAssignments extends Base {
         taskStatus: string,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
-        message?: string,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_TASK_ASSIGNMENT;
         const { id = '', permissions } = file;
@@ -116,7 +113,7 @@ class TaskAssignments extends Base {
         }
 
         const requestData = {
-            data: { status: taskStatus, message },
+            data: { resolution_state: taskStatus },
         };
 
         this.put({

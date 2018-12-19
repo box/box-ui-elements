@@ -524,7 +524,6 @@ type TaskAssignment = {
     id: string,
     assigned_to: User,
     status: string,
-    message: string,
 };
 
 type TaskAssignments = {

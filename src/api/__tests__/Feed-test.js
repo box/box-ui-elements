@@ -45,7 +45,7 @@ jest.mock('../Tasks', () => {
                             name: 'Daniel DeMicco',
                             login: 'ddemicco@foo.com',
                         },
-                        status: 'Completed',
+                        status: 'completed',
                     },
                 ],
             });
@@ -150,7 +150,7 @@ describe('api/Feed', () => {
                     name: 'Daniel DeMicco',
                     login: 'ddemicco@foo.com',
                 },
-                status: 'Completed',
+                status: 'completed',
             },
         ],
     };
@@ -746,7 +746,7 @@ describe('api/Feed', () => {
                 {
                     id: '1',
                     assigned_to: { id: '1234' },
-                    status: 'Completed',
+                    status: 'completed',
                 },
             ];
             const expectedResult = {
@@ -773,7 +773,7 @@ describe('api/Feed', () => {
                 {
                     id: '1',
                     assigned_to: { id: '1234' },
-                    status: 'Completed',
+                    status: 'completed',
                 },
             ];
             const expectedResult = {

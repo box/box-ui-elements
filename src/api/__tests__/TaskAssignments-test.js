@@ -106,7 +106,7 @@ describe('api/TaskAssignments', () => {
 
             test('should put a well formed task update to the tasks endpoint', () => {
                 const requestData = {
-                    data: { status: taskStatus },
+                    data: { resolution_state: taskStatus },
                 };
 
                 taskAssignments.updateTaskAssignment({

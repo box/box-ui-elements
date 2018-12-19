@@ -233,7 +233,6 @@ class Feed extends Base {
      * @param {string} taskId - ID of task to be updated
      * @param {string} taskAssignmentId - Task assignment ID
      * @param {string} taskStatus - New task assignment status
-     * @param {string} message - optional the message to the assignee
      * @param {Function} successCallback - the function which will be called on success
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
@@ -243,7 +242,6 @@ class Feed extends Base {
         taskId: string,
         taskAssignmentId: string,
         taskStatus: string,
-        message?: string,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -260,7 +258,6 @@ class Feed extends Base {
             file,
             taskAssignmentId,
             taskStatus,
-            message,
             successCallback: (taskAssignment: TaskAssignment) => {
                 this.updateTaskAssignmentSuccessCallback(taskId, taskAssignment, successCallback);
             },
@@ -705,13 +702,12 @@ class Feed extends Base {
         }
 
         task.task_assignment_collection.entries = assignments.map(taskAssignment => {
-            const { id, assigned_to, message, status } = taskAssignment;
+            const { id, assigned_to, status } = taskAssignment;
             return {
                 type: TASK_ASSIGNMENT,
                 id,
                 assigned_to,
-                message,
-                status: status.toLowerCase(),
+                status,
             };
         });
 
