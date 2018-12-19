@@ -22,6 +22,7 @@ import type { MetadataSidebarProps } from './MetadataSidebar';
 import './Sidebar.scss';
 
 type Props = {
+    fileId: string,
     view?: SidebarView,
     currentUser?: User,
     file: BoxItem,
@@ -55,6 +56,7 @@ const Sidebar = ({
     metadataSidebarProps,
     onToggle,
     onVersionHistoryClick,
+    fileId,
 }: Props) => (
     <React.Fragment>
         <SidebarNav
@@ -67,8 +69,8 @@ const Sidebar = ({
         />
         {view === SIDEBAR_VIEW_DETAILS && hasDetails && (
             <DetailsSidebar
-                key={file.id}
-                file={file}
+                key={fileId}
+                fileId={fileId}
                 onVersionHistoryClick={onVersionHistoryClick}
                 {...detailsSidebarProps}
             />

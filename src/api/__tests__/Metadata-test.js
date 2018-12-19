@@ -630,7 +630,7 @@ describe('api/Metadata', () => {
             ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
-            metadata.getClassification({}, successCallback, errorCallback);
+            metadata.getClassification(null, successCallback, errorCallback);
             expect(errorCallback).toBeCalledWith('error', ERROR_CODE_FETCH_CLASSIFICATION);
             expect(successCallback).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
@@ -656,7 +656,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error);
+            await metadata.getClassification(file.id, success, error);
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -688,7 +688,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error, { refreshCache: true });
+            await metadata.getClassification(file.id, success, error, { refreshCache: true });
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -719,7 +719,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error, { forceFetch: true });
+            await metadata.getClassification(file.id, success, error, { forceFetch: true });
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -759,7 +759,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error, { forceFetch: true });
+            await metadata.getClassification(file.id, success, error, { forceFetch: true });
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);
@@ -799,7 +799,7 @@ describe('api/Metadata', () => {
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
-            await metadata.getClassification(file, success, error, { forceFetch: true });
+            await metadata.getClassification(file.id, success, error, { forceFetch: true });
 
             expect(metadata.successCallback).toBe(success);
             expect(metadata.errorCallback).toBe(error);

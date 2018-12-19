@@ -285,7 +285,7 @@ class Metadata extends File {
     /**
      * Gets classification for a file.
      *
-     * @param {BoxItem} file - File object for which we are getting classification
+     * @param {string} id - The file id
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {boolean|void} [options.forceFetch] - Optionally Bypasses the cache
@@ -293,12 +293,11 @@ class Metadata extends File {
      * @return {Promise}
      */
     async getClassification(
-        file: BoxItem,
+        id: string,
         successCallback: Function,
         errorCallback: Function,
         options: FetchOptions = {},
     ): Promise<void> {
-        const { id }: BoxItem = file;
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
         this.errorCode = ERROR_CODE_FETCH_CLASSIFICATION;
