@@ -111,6 +111,7 @@ export const FIELD_METADATA_CLASSIFICATION = `${FIELD_METADATA}.${METADATA_SCOPE
 export const FIELD_DUE_AT = 'due_at';
 export const FIELD_TASK_ASSIGNMENT_COLLECTION = 'task_assignment_collection';
 export const FIELD_IS_COMPLETED = 'is_completed';
+export const FIELD_MESSAGE = 'message';
 export const FIELD_TAGGED_MESSAGE = 'tagged_message';
 export const FIELD_TRASHED_AT = 'trashed_at';
 export const FIELD_ASSIGNED_TO = 'assigned_to';

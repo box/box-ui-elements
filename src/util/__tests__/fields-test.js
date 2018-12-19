@@ -43,6 +43,7 @@ import {
     FIELD_METADATA_SKILLS,
     FIELD_TASK_ASSIGNMENT_COLLECTION,
     FIELD_IS_COMPLETED,
+    FIELD_MESSAGE,
     FIELD_TAGGED_MESSAGE,
     FIELD_DUE_AT,
     FIELD_TRASHED_AT,
@@ -123,6 +124,7 @@ describe('util/fields', () => {
             FIELD_CREATED_AT,
             FIELD_CREATED_BY,
             FIELD_DUE_AT,
+            FIELD_MESSAGE,
         ]);
     });
 
@@ -143,6 +145,7 @@ describe('util/fields', () => {
     test('should fetch correct comments fields', () => {
         expect(COMMENTS_FIELDS_TO_FETCH).toEqual([
             FIELD_TAGGED_MESSAGE,
+            FIELD_MESSAGE,
             FIELD_CREATED_AT,
             FIELD_CREATED_BY,
             FIELD_MODIFIED_AT,

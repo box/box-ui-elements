@@ -113,7 +113,7 @@ class TaskAssignments extends Base {
         }
 
         const requestData = {
-            data: { resolution_state: taskStatus },
+            data: { status: taskStatus },
         };
 
         this.put({
