@@ -13,6 +13,7 @@ import {
     X_REP_HINTS,
     ERROR_CODE_GET_DOWNLOAD_URL,
     ERROR_CODE_FETCH_FILE,
+    FIELD_EXTENSION,
 } from '../constants';
 import { getBadItemError, getBadPermissionsError } from '../util/error';
 
@@ -188,6 +189,24 @@ class File extends Item {
         } catch (e) {
             this.errorHandler(e);
         }
+    }
+
+    /**
+     * Gets the extension of a box file.
+     *
+     * @param {string} id - File id
+     * @param {Function} successCallback - Function to call with results
+     * @param {Function} errorCallback - Function to call with errors
+     * @return {Promise}
+     */
+    async getFileExtension(id: string, successCallback: Function, errorCallback: ElementsErrorCallback): Promise<void> {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        this.getFile(id, successCallback, errorCallback, {
+            fields: [FIELD_EXTENSION],
+        });
     }
 }
 

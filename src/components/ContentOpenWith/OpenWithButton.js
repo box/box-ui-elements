@@ -30,29 +30,25 @@ type Props = {
  * @return {?(string | Element)} the tooltip message
  */
 export const getTooltip = (
-    isLoading: boolean,
-    error: ?Error,
-    isDisabled: boolean,
-    disabledReasons: Array<string> = [],
     displayDescription: string,
+    disabledReasons: Array<string> = [],
+    error: ?Error,
+    isLoading: boolean,
 ): ?(string | Element) => {
     if (isLoading) {
         return null;
     }
 
-    if (error) {
-        return disabledReasons[0] || <FormattedMessage {...messages.errorOpenWithDescription} />;
+    let message = '';
+    if (disabledReasons[0]) {
+        [message] = disabledReasons;
+    } else if (error) {
+        message = <FormattedMessage {...messages.errorOpenWithDescription} />;
+    } else if (displayDescription) {
+        message = displayDescription;
     }
 
-    if (isDisabled) {
-        return disabledReasons[0] || <FormattedMessage {...messages.emptyOpenWithDescription} />;
-    }
-
-    if (displayDescription) {
-        return displayDescription;
-    }
-
-    return disabledReasons[0] || <FormattedMessage {...messages.emptyOpenWithDescription} />;
+    return message || <FormattedMessage {...messages.emptyOpenWithDescription} />;
 };
 
 const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props) => {
@@ -61,18 +57,10 @@ const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props
 
     const isDisabled = !!isDisplayIntegrationDisabled || !displayName;
 
-    let Icon;
-    if (displayName) {
-        Icon = ICON_FILE_MAP[displayName];
-    } else {
-        Icon = IconOpenWith;
-    }
+    const Icon = displayName ? ICON_FILE_MAP[displayName] : IconOpenWith;
 
     return (
-        <Tooltip
-            text={getTooltip(isLoading, error, isDisplayIntegrationDisabled, disabledReasons, displayDescription)}
-            position="bottom-center"
-        >
+        <Tooltip text={getTooltip(displayDescription, disabledReasons, error, isLoading)} position="bottom-center">
             <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration, isLoading)}>
                 <OpenWithButtonContents>
                     <Icon extension={extension} className={CLASS_INTEGRATION_ICON} height={26} width={26} />

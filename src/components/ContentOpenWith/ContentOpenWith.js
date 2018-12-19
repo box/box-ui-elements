@@ -14,11 +14,11 @@ import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import OpenWithButton from './OpenWithButton';
 import ExecuteForm from './ExecuteForm';
-import BoxEdit from '../../api/box-edit/BoxEdit';
+import BoxEditAPI from '../../api/box-edit';
 import '../base.scss';
 import './ContentOpenWith.scss';
 
-import { CLIENT_NAME_OPEN_WITH, DEFAULT_HOSTNAME_API, FIELD_EXTENSION, HTTP_GET, HTTP_POST } from '../../constants';
+import { CLIENT_NAME_OPEN_WITH, DEFAULT_HOSTNAME_API, HTTP_GET, HTTP_POST } from '../../constants';
 
 const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
@@ -67,7 +67,7 @@ type State = {
 class ContentOpenWith extends PureComponent<Props, State> {
     api: API;
 
-    boxEdit: Object;
+    boxEditAPI: Object;
 
     id: string;
 
@@ -180,8 +180,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
         }
     }
 
-    isBoxEditIntegration(integration: Integration): boolean {
-        return integration.appIntegrationId === BOX_EDIT_INTEGRATION_ID;
+    isBoxEditIntegration(integrationId: ?string): boolean {
+        return integrationId === BOX_EDIT_INTEGRATION_ID;
     }
 
     /**
@@ -203,43 +203,21 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchOpenWithSuccessHandler = (integrations: Array<Integration>): void => {
-        const boxEditIntegration = integrations.find(integration => {
-            return this.isBoxEditIntegration(integration);
-        });
+        const boxEditIntegration = integrations.find(({ appIntegrationId }) =>
+            this.isBoxEditIntegration(appIntegrationId),
+        );
 
-        if (boxEditIntegration && !boxEditIntegration.isDisabled) {
-            this.boxEdit = new BoxEdit();
-            // Check if Box Tools is installed and reachable
-            this.boxEdit
-                .checkBoxEditAvailability()
-                .catch(() => {
-                    boxEditIntegration.isDisabled = true;
-                    boxEditIntegration.disabledReasons = ['Install Box Tools to open this file on your desktop'];
-                })
-                .then(this.getFileExtension)
-                .then(extension => {
-                    // Add the extension to render the correct icon.
-                    boxEditIntegration.extension = extension;
-
-                    if (boxEditIntegration.isDisabled) {
-                        return;
-                    }
-
-                    this.boxEdit
-                        // Ping box edit server to see if we can open this file
-                        .canOpenWithBoxEdit([extension])
-                        .catch(() => {
-                            // Box Tools was unable to open this file type
-                            boxEditIntegration.isDisabled = true;
-                            boxEditIntegration.disabledReasons = ['Box Tools cannot open this file type'];
-                        });
-                })
-                .finally(() => {
-                    this.setState({ integrations, isLoading: false });
-                });
-        } else {
+        if (!boxEditIntegration || boxEditIntegration.isDisabled) {
             this.setState({ integrations, isLoading: false });
+            return;
         }
+
+        // If Box Edit is present and enabled, we need to set it's ability to locally open the given file
+        this.setIntegrationFileExtension(boxEditIntegration)
+            .then(this.setBoxEditAvailability)
+            .then(() => {
+                this.setState({ integrations, isLoading: false });
+            });
     };
 
     /**
@@ -247,13 +225,64 @@ class ContentOpenWith extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    getFileExtension = (): Promise<any> => {
+    setIntegrationFileExtension = (integration: Integration): Promise<Integration> => {
         const { fileId }: Props = this.props;
         return new Promise((resolve, reject) => {
-            this.api.getFileAPI().getFile(fileId, data => resolve(data.extension), error => reject(error), {
-                fields: [FIELD_EXTENSION],
-            });
+            this.api.getFileAPI().getFileExtension(
+                fileId,
+                data => {
+                    integration.extension = data.extension;
+                    resolve(integration);
+                },
+                () => reject(integration),
+            );
         });
+    };
+
+    /**
+     * Sets a Box Edit integration based on application and file type availability
+     *
+     * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
+     * @return {void}
+     */
+    setBoxEditAvailability = (boxEditIntegration: Integration): Promise<any> => {
+        this.boxEditAPI = new BoxEditAPI();
+        // Check if Box Tools is installed and reachable, and can open the given file type
+        return this.checkBoxEditAvailability(boxEditIntegration)
+            .then(this.canOpenExtensionWithBoxEdit)
+            .catch(error => {
+                boxEditIntegration.isDisabled = true;
+                boxEditIntegration.disabledReasons = [error.message];
+            })
+            .finally(() => {
+                return Promise.resolve(boxEditIntegration);
+            });
+    };
+
+    /**
+     * Uses Box Edit to check if Box Tools is installed and reachable
+     *
+     * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
+     * @return {void}
+     */
+    checkBoxEditAvailability = (integration: Integration): Promise<any> => {
+        return this.boxEditAPI
+            .checkBoxEditAvailability()
+            .then(() => Promise.resolve(integration))
+            .catch(() => Promise.reject(new Error('Install Box Tools to open this file on your desktop')));
+    };
+
+    /**
+     * Uses Box Edit to check if Box Tools can open a given file type
+     *
+     * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
+     * @return {void}
+     */
+    canOpenExtensionWithBoxEdit = (integration: Integration): Promise<any> => {
+        return this.boxEditAPI
+            .canOpenWithBoxEdit([integration.extension])
+            .then(() => Promise.resolve(integration))
+            .catch(() => Promise.reject(new Error('Unable to open this file type')));
     };
 
     /**
@@ -283,15 +312,22 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @private
      * @return {void}
      */
-    onIntegrationClick = (integration: Integration): void => {
-        const { appIntegrationId, displayName } = integration;
+    onIntegrationClick = ({ appIntegrationId, displayName }: Integration): void => {
         const { fileId }: Props = this.props;
 
         this.executeId = appIntegrationId;
-        if (this.isBoxEditIntegration(integration)) {
-            this.api
-                .getAppIntegrationsAPI(false)
-                .execute(appIntegrationId, fileId, this.executeBoxEditSuccessHandler, this.executeBoxEditErrorHandler);
+
+        this.api
+            .getAppIntegrationsAPI(false)
+            .execute(
+                appIntegrationId,
+                fileId,
+                this.executeIntegrationSuccessHandler,
+                this.executeIntegrationErrorHandler,
+            );
+
+        if (this.isBoxEditIntegration(appIntegrationId)) {
+            // No window management is required when using Box Edit.
             return;
         }
         // window.open() is immediately invoked to avoid popup-blockers
@@ -306,15 +342,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
             shouldRenderLoadingIntegrationPortal: true,
             shouldRenderErrorIntegrationPortal: false,
         });
-
-        this.api
-            .getAppIntegrationsAPI(false)
-            .execute(
-                appIntegrationId,
-                fileId,
-                this.executeIntegrationSuccessHandler,
-                this.executeIntegrationErrorHandler,
-            );
     };
 
     /**
@@ -339,6 +366,13 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     executeIntegrationSuccessHandler = (executeData: ExecuteAPI): void => {
+        if (this.isBoxEditIntegration(this.executeId)) {
+            this.executeBoxEditSuccessHandler(executeData);
+            return;
+        }
+
+        this.onExecute();
+
         const { method, url } = executeData;
         switch (method) {
             case HTTP_POST:
@@ -354,8 +388,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 // see here for more details: https://mathiasbynens.github.io/rel-noopener/
                 this.integrationWindow.location = url;
                 this.integrationWindow.opener = null;
-                this.onExecute();
-
                 break;
             default:
                 this.executeIntegrationErrorHandler(Error(UNSUPPORTED_INVOCATION_METHOD_TYPE));
@@ -373,19 +405,18 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     executeBoxEditSuccessHandler = (executeData: ExecuteAPI): void => {
-        const { fileId, token, onExecute } = this.props;
+        this.onExecute();
+
+        const { fileId, token } = this.props;
         const { url } = executeData;
         const authCode = url.split(AUTH_CODE_DELIMITER)[1];
 
-        this.boxEdit.openFile(`f_${fileId}`, {
+        this.boxEditAPI.openFile(fileId, {
             data: {
                 auth_code: authCode,
                 token,
             },
         });
-
-        onExecute(this.executeId);
-        this.executeId = null;
     };
 
     /**
@@ -395,7 +426,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     onExecuteFormSubmit = (): void => {
-        this.onExecute();
         this.setState({ executePostData: null });
     };
 
