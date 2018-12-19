@@ -45,8 +45,7 @@ jest.mock('../Tasks', () => {
                             name: 'Daniel DeMicco',
                             login: 'ddemicco@foo.com',
                         },
-                        resolution_state: 'incomplete',
-                        message: 'Completed',
+                        status: 'completed',
                     },
                 ],
             });
@@ -151,8 +150,7 @@ describe('api/Feed', () => {
                     name: 'Daniel DeMicco',
                     login: 'ddemicco@foo.com',
                 },
-                resolution_state: 'incomplete',
-                message: 'Completed',
+                status: 'completed',
             },
         ],
     };
@@ -409,11 +407,11 @@ describe('api/Feed', () => {
                 taskId,
                 {
                     ...tasks.entries[0].task_assignment_collection.entries[0],
-                    message: updatedState,
+                    status: updatedState,
                 },
                 successCb,
             );
-            expect(feed.updateFeedItem.mock.calls[0][0].task_assignment_collection.entries[0].resolution_state).toBe(
+            expect(feed.updateFeedItem.mock.calls[0][0].task_assignment_collection.entries[0].status).toBe(
                 updatedState,
             );
             expect(successCb).toBeCalled();
@@ -564,7 +562,7 @@ describe('api/Feed', () => {
                     entries: [
                         {
                             assigned_to: assignees[0],
-                            resolution_state: 'incomplete',
+                            status: 'incomplete',
                         },
                     ],
                     total_count: 1,
@@ -588,7 +586,7 @@ describe('api/Feed', () => {
                     entries: [
                         {
                             assigned_to: assignees[0],
-                            resolution_state: 'incomplete',
+                            status: 'incomplete',
                         },
                     ],
                     total_count: 1,
@@ -748,13 +746,12 @@ describe('api/Feed', () => {
                 {
                     id: '1',
                     assigned_to: { id: '1234' },
-                    message: 'completed',
-                    resolution_state: 'completed',
+                    status: 'completed',
                 },
             ];
             const expectedResult = {
                 task_assignment_collection: {
-                    entries: [{ ...assignments[0], type: 'task_assignment' }],
+                    entries: [{ ...assignments[0], status: 'completed', type: 'task_assignment' }],
                     total_count: 1,
                 },
             };
@@ -776,12 +773,12 @@ describe('api/Feed', () => {
                 {
                     id: '1',
                     assigned_to: { id: '1234' },
-                    resolution_state: 'completed',
+                    status: 'completed',
                 },
             ];
             const expectedResult = {
                 task_assignment_collection: {
-                    entries: [{ ...assignments[0], type: 'task_assignment' }],
+                    entries: [{ ...assignments[0], status: 'completed', type: 'task_assignment' }],
                     total_count: 1,
                 },
             };

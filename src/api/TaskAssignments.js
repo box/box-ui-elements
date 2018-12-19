@@ -83,26 +83,23 @@ class TaskAssignments extends Base {
      *
      * @param {BoxItem} file - File object for which we are updating a task assignment
      * @param {string} taskAssignmentId - Task assignment to be edited
-     * @param {string} resolutionState - The updated task assignment status
+     * @param {TaskAssignmentStatus} taskStatus - The updated task assignment status
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {string} [message] - The task assignments text
      * @return {void}
      */
     updateTaskAssignment({
         file,
         taskAssignmentId,
-        resolutionState,
-        message,
+        taskStatus,
         successCallback,
         errorCallback,
     }: {
         file: BoxItem,
         taskAssignmentId: string,
-        resolutionState: string,
+        taskStatus: TaskAssignmentStatus,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
-        message?: string,
     }): void {
         this.errorCode = ERROR_CODE_UPDATE_TASK_ASSIGNMENT;
         const { id = '', permissions } = file;
@@ -116,7 +113,7 @@ class TaskAssignments extends Base {
         }
 
         const requestData = {
-            data: { resolution_state: resolutionState, message },
+            data: { status: taskStatus },
         };
 
         this.put({
