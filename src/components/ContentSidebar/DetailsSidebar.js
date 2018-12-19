@@ -82,6 +82,17 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     }
 
     /**
+     * File description update callback
+     *
+     * @private
+     * @param {BoxItem} file - Updated file object
+     * @return {void}
+     */
+    descriptionChangeSuccessCallback = (file: BoxItem): void => {
+        this.setState({ file, fileError: undefined });
+    };
+
+    /**
      * Fetches the rest of the data needed for the details sidebar to load (besides file info)
      *
      * @return {void}
@@ -100,18 +111,16 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     /**
      * Fetches a file with the fields needed for details sidebar
      *
-     * @param {string} id - File id
-     * @param {Object|void} [fetchOptions] - Fetch options
+     * @param {function} successCallback - the success callback
+     * @param {function} errorCallback - the error callback
      * @return {void}
      */
     fetchFile(
-        fetchOptions: FetchOptions = {},
         successCallback: (file: BoxItem) => void = this.fetchFileSuccessCallback,
         errorCallback: ElementsErrorCallback = this.fetchFileErrorCallback,
     ): void {
         const { api, fileId }: Props = this.props;
         api.getFileAPI().getFile(fileId, successCallback, errorCallback, {
-            ...fetchOptions,
             fields: SIDEBAR_FIELDS_TO_FETCH, // TODO: replace this with DETAILS_SIDEBAR_FIELDS_TO_FETCH as we do not need all the sidebar fields
         });
     }
@@ -190,10 +199,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         api.getFileAPI().setFileDescription(
             file,
             newDescription,
-            () => {
-                // Refetch the file from cache
-                this.fetchFile();
-            },
+            this.descriptionChangeSuccessCallback,
             this.descriptionChangeErrorCallback,
         );
     };

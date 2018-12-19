@@ -326,6 +326,19 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         });
     });
 
+    describe('descriptionChangeSuccessCallback()', () => {
+        test('should update the file state', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+            instance.descriptionChangeSuccessCallback('file');
+            expect(instance.setState).toBeCalledWith({
+                file: 'file',
+                fileError: undefined,
+            });
+        });
+    });
+
     describe('onClassificationClick()', () => {
         let instance;
         let onClassificationClick;
