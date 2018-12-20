@@ -157,6 +157,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         }
 
         this.window = window;
+        this.boxEditAPI = new BoxEditAPI();
 
         this.fetchOpenWithData();
     }
@@ -180,6 +181,11 @@ class ContentOpenWith extends PureComponent<Props, State> {
         }
     }
 
+    /**
+     * Checks if a given integration is a Box Edit integration.
+     *
+     * @return {boolean}
+     */
     isBoxEditIntegration(integrationId: ?string): boolean {
         return integrationId === BOX_EDIT_INTEGRATION_ID;
     }
@@ -212,10 +218,19 @@ class ContentOpenWith extends PureComponent<Props, State> {
             return;
         }
 
-        // If Box Edit is present and enabled, we need to set it's ability to locally open the given file
-        this.setIntegrationFileExtension(boxEditIntegration)
-            .then(this.setBoxEditAvailability)
-            .then(() => {
+        // If Box Edit is present and enabled, we need to set its ability to locally open the given file
+        this.setIntegrationFileExtension()
+            .then(data => {
+                boxEditIntegration.extension = data.extension;
+                return boxEditIntegration;
+            })
+            .then(this.checkBoxEditAvailability)
+            .then(this.canOpenExtensionWithBoxEdit)
+            .catch(error => {
+                boxEditIntegration.isDisabled = true;
+                boxEditIntegration.disabledReasons = [error.message];
+            })
+            .finally(() => {
                 this.setState({ integrations, isLoading: false });
             });
     };
@@ -225,38 +240,11 @@ class ContentOpenWith extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    setIntegrationFileExtension = (integration: Integration): Promise<Integration> => {
+    setIntegrationFileExtension = (): Promise<any> => {
         const { fileId }: Props = this.props;
         return new Promise((resolve, reject) => {
-            this.api.getFileAPI().getFileExtension(
-                fileId,
-                data => {
-                    integration.extension = data.extension;
-                    resolve(integration);
-                },
-                () => reject(integration),
-            );
+            this.api.getFileAPI().getFileExtension(fileId, resolve, reject);
         });
-    };
-
-    /**
-     * Sets a Box Edit integration based on application and file type availability
-     *
-     * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
-     * @return {void}
-     */
-    setBoxEditAvailability = (boxEditIntegration: Integration): Promise<any> => {
-        this.boxEditAPI = new BoxEditAPI();
-        // Check if Box Tools is installed and reachable, and can open the given file type
-        return this.checkBoxEditAvailability(boxEditIntegration)
-            .then(this.canOpenExtensionWithBoxEdit)
-            .catch(error => {
-                boxEditIntegration.isDisabled = true;
-                boxEditIntegration.disabledReasons = [error.message];
-            })
-            .finally(() => {
-                return Promise.resolve(boxEditIntegration);
-            });
     };
 
     /**
@@ -268,8 +256,10 @@ class ContentOpenWith extends PureComponent<Props, State> {
     checkBoxEditAvailability = (integration: Integration): Promise<any> => {
         return this.boxEditAPI
             .checkBoxEditAvailability()
-            .then(() => Promise.resolve(integration))
-            .catch(() => Promise.reject(new Error('Install Box Tools to open this file on your desktop')));
+            .then(() => integration)
+            .catch(() => {
+                throw new Error('Install Box Tools to open this file on your desktop');
+            });
     };
 
     /**
@@ -278,11 +268,14 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
      * @return {void}
      */
-    canOpenExtensionWithBoxEdit = (integration: Integration): Promise<any> => {
+    canOpenExtensionWithBoxEdit = (integration: Integration): Promise<Integration> => {
+        const { extension } = integration;
         return this.boxEditAPI
-            .canOpenWithBoxEdit([integration.extension])
-            .then(() => Promise.resolve(integration))
-            .catch(() => Promise.reject(new Error('Unable to open this file type')));
+            .getAppForExtension(extension)
+            .then(() => integration)
+            .catch(() => {
+                throw new Error('This file cannot be opened with Box Tools');
+            });
     };
 
     /**
@@ -310,6 +303,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * Click handler when an integration is clicked
      *
      * @private
+     * @param {string} appIntegrationId - An app integration ID
+     * @param {string} displayName - The integration's display name
      * @return {void}
      */
     onIntegrationClick = ({ appIntegrationId, displayName }: Integration): void => {
@@ -368,11 +363,21 @@ class ContentOpenWith extends PureComponent<Props, State> {
     executeIntegrationSuccessHandler = (executeData: ExecuteAPI): void => {
         if (this.isBoxEditIntegration(this.executeId)) {
             this.executeBoxEditSuccessHandler(executeData);
-            return;
+        } else {
+            this.executeOnlineIntegrationSuccessHandler(executeData);
         }
-
         this.onExecute();
+    };
 
+    /**
+     * Opens the file via Box Edit
+     *
+     * @private
+     * @param {ExecuteAPI} executeData - API response on how to open an executed integration
+
+     * @return {void}
+     */
+    executeOnlineIntegrationSuccessHandler = (executeData: ExecuteAPI): void => {
         const { method, url } = executeData;
         switch (method) {
             case HTTP_POST:
@@ -405,8 +410,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     executeBoxEditSuccessHandler = (executeData: ExecuteAPI): void => {
-        this.onExecute();
-
         const { fileId, token } = this.props;
         const { url } = executeData;
         const authCode = url.split(AUTH_CODE_DELIMITER)[1];
