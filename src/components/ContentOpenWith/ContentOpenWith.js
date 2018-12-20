@@ -67,7 +67,7 @@ type State = {
 class ContentOpenWith extends PureComponent<Props, State> {
     api: API;
 
-    boxEditAPI: Object;
+    boxEditAPI: BoxEditAPI;
 
     id: string;
 
@@ -270,7 +270,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     canOpenExtensionWithBoxEdit = (integration: Integration): Promise<Integration> => {
-        const { extension } = integration;
+        const { extension = '' } = integration;
         return this.boxEditAPI
             .getAppForExtension(extension)
             .then(() => integration)
