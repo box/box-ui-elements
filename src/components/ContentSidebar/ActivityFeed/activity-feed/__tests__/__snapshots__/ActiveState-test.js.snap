@@ -88,7 +88,7 @@ exports[`components/ContentSidebar/ActiveState/activity-feed/ActiveState should 
                 "id": 11,
                 "name": "Akon",
               },
-              "resolution_state": "incomplete",
+              "status": "incomplete",
             },
           ],
           "total_count": 1,
