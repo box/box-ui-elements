@@ -458,6 +458,7 @@ type Options = {
     requestInterceptor?: Function,
     consoleLog?: boolean,
     consoleError?: boolean,
+    shouldRetry?: boolean,
 };
 
 type Recent = {

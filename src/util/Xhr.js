@@ -16,11 +16,17 @@ import {
     HTTP_PUT,
     HTTP_DELETE,
     HTTP_OPTIONS,
+    HTTP_STATUS_CODE_RATE_LIMIT,
 } from '../constants';
+import type { $AxiosXHR, $AxiosError } from 'axios'; //eslint-disable-line
 
 type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
+const MAX_NUM_RETRIES = 3;
+const BASE_RETRY_INTERVAL = 2000;
+// Retry intervals are between 50% and 150% of the exponentially increasing base amount
+const RETRY_RANDOMIZATION_FACTOR = 0.5;
 
 class Xhr {
     id: ?string;
@@ -41,11 +47,17 @@ class Xhr {
 
     xhr: XMLHttpRequest;
 
-    responseInterceptor: ?Function;
+    responseInterceptor: Function;
 
     requestInterceptor: ?Function;
 
     tokenService: TokenService;
+
+    retryCount: number;
+
+    retryTimeout: ?TimeoutID;
+
+    shouldRetry: boolean;
 
     /**
      * [constructor]
@@ -69,6 +81,7 @@ class Xhr {
         sharedLinkPassword,
         responseInterceptor,
         requestInterceptor,
+        shouldRetry = true,
     }: Options = {}) {
         this.id = id;
         this.token = token;
@@ -76,18 +89,74 @@ class Xhr {
         this.version = version;
         this.sharedLink = sharedLink;
         this.sharedLinkPassword = sharedLinkPassword;
-        this.responseInterceptor = responseInterceptor;
+        this.responseInterceptor = responseInterceptor || this.defaultResponseInterceptor;
         this.axios = axios.create();
         this.axiosSource = axios.CancelToken.source();
+        this.retryCount = 0;
+        this.shouldRetry = shouldRetry;
 
-        if (typeof responseInterceptor === 'function') {
-            // Called on any non 2xx response
-            this.axios.interceptors.response.use(responseInterceptor, this.errorInterceptor);
-        }
+        this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
 
         if (typeof requestInterceptor === 'function') {
             this.axios.interceptors.request.use(requestInterceptor);
         }
+    }
+
+    /**
+     * Default response interceptor which just returns the response
+     *
+     * @param {Object} response - the axios response
+     * @return the response
+     */
+    defaultResponseInterceptor(response: $AxiosXHR<any>) {
+        return response;
+    }
+
+    /**
+     * Determines if a request should be retried
+     *
+     * @param {Object} error - Error object from axios
+     * @return {boolean} true if the request should be retried
+     */
+    shouldRetryRequest(error: $AxiosError<any>): boolean {
+        if (!this.shouldRetry || this.retryCount >= MAX_NUM_RETRIES) {
+            return false;
+        }
+
+        const { response, request } = error;
+        // Retry if there is a network error (e.g. ECONNRESET) or rate limited
+        const isNetworkError = request && !response;
+        const isRetryableStatusCode = isNetworkError || getProp(response, 'status') === HTTP_STATUS_CODE_RATE_LIMIT;
+        return isRetryableStatusCode;
+    }
+
+    /**
+     * Calculate the exponential backoff time with randomized jitter. Taken from box node SDK
+     *
+     * @param {number} numRetries Which retry number this one will be. Must be > 0
+     * @returns {number} The number of milliseconds after which to retry
+     */
+    getExponentialRetryTimeoutInMs(numRetries: number): number {
+        const minRandomization = 1 - RETRY_RANDOMIZATION_FACTOR;
+        const maxRandomization = 1 + RETRY_RANDOMIZATION_FACTOR;
+        const randomization = Math.random() * (maxRandomization - minRandomization) + minRandomization;
+        const exponential = 2 ** (numRetries - 1);
+        return Math.ceil(exponential * BASE_RETRY_INTERVAL * randomization);
+    }
+
+    /**
+     * Gets the retry delay number in milliseconds Retry-After header or random jitter
+     *
+     * @param {Object} error - Error object from axios
+     * @return {number} the number which represents when the next retry should occur
+     */
+    getRetryDelayInMs(error: $AxiosError<any>): number {
+        const exponentialBackoffInMs = this.getExponentialRetryTimeoutInMs(this.retryCount);
+        const retryAfterInSeconds = parseInt(getProp(error, 'response.headers.Retry-After'), 10);
+        // Respect 'Retry-After' header for first retry, otherwise use exponential backoff as recommended by box reference docs
+        return this.retryCount === 0 && !Number.isNaN(retryAfterInSeconds)
+            ? retryAfterInSeconds * 1000
+            : exponentialBackoffInMs;
     }
 
     /**
@@ -96,11 +165,20 @@ class Xhr {
      * @param {Object} error - Error object from axios
      * @return {Promise} rejected promise with error info
      */
-    errorInterceptor = (error: Object): Promise<any> => {
-        const errorObject = getProp(error, 'response.data', error);
-        if (typeof this.responseInterceptor === 'function') {
-            this.responseInterceptor(errorObject);
+    errorInterceptor = (error: $AxiosError<any>): Promise<any> => {
+        const shouldRetry = this.shouldRetryRequest(error);
+        if (shouldRetry) {
+            const delay = this.getRetryDelayInMs(error);
+            this.retryCount += 1;
+            return new Promise((resolve, reject) => {
+                this.retryTimeout = setTimeout(() => {
+                    this.axios(error.config).then(resolve, reject);
+                }, delay);
+            });
         }
+
+        const errorObject = getProp(error, 'response.data') || error; // In the case of 401, response.data is empty so fall back to error
+        this.responseInterceptor(errorObject);
 
         return Promise.reject(error);
     };
@@ -440,6 +518,9 @@ class Xhr {
      * @return {void}
      */
     abort(): void {
+        if (this.retryTimeout) {
+            clearTimeout(this.retryTimeout);
+        }
         if (this.axiosSource) {
             this.axiosSource.cancel();
         }
@@ -447,3 +528,4 @@ class Xhr {
 }
 
 export default Xhr;
+export { RETRY_RANDOMIZATION_FACTOR, BASE_RETRY_INTERVAL };
