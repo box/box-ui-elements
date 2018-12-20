@@ -14,7 +14,6 @@ import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import OpenWithButton from './OpenWithButton';
 import ExecuteForm from './ExecuteForm';
-import BoxEditAPI from '../../api/box-edit';
 import '../base.scss';
 import './ContentOpenWith.scss';
 
@@ -66,8 +65,6 @@ type State = {
 
 class ContentOpenWith extends PureComponent<Props, State> {
     api: API;
-
-    boxEditAPI: BoxEditAPI;
 
     id: string;
 
@@ -157,7 +154,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
         }
 
         this.window = window;
-        this.boxEditAPI = new BoxEditAPI();
 
         this.fetchOpenWithData();
     }
@@ -255,7 +251,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     checkBoxEditAvailability = (integration: Integration): Promise<any> => {
-        return this.boxEditAPI
+        return this.api
+            .getBoxEditAPI(false)
             .checkBoxEditAvailability()
             .then(() => integration)
             .catch(() => {
@@ -271,7 +268,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     canOpenExtensionWithBoxEdit = (integration: Integration): Promise<Integration> => {
         const { extension = '' } = integration;
-        return this.boxEditAPI
+        return this.api
+            .getBoxEditAPI(false)
             .getAppForExtension(extension)
             .then(() => integration)
             .catch(() => {
@@ -406,16 +404,15 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * Opens the file via Box Edit
      *
      * @private
-     * @param {ExecuteAPI} executeData - API response on how to open an executed integration
+     * @param {string} url - Integration execution URL
 
      * @return {void}
      */
-    executeBoxEditSuccessHandler = (executeData: ExecuteAPI): void => {
+    executeBoxEditSuccessHandler = ({ url }: ExecuteAPI): void => {
         const { fileId, token } = this.props;
-        const { url } = executeData;
         const authCode = url.split(AUTH_CODE_DELIMITER)[1];
 
-        this.boxEditAPI.openFile(fileId, {
+        this.api.getBoxEditAPI(false).openFile(fileId, {
             data: {
                 auth_code: authCode,
                 token,

@@ -10,7 +10,7 @@ import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
 import Tooltip from '../Tooltip';
 import OpenWithButtonContents from './OpenWithButtonContents';
-import ICON_FILE_MAP from './IconFileMap';
+import getIcon from './IconFileMap';
 import { CLASS_INTEGRATION_ICON } from '../../constants';
 import messages from '../messages';
 
@@ -39,7 +39,7 @@ export const getTooltip = (
         return null;
     }
 
-    let message = '';
+    let message = <FormattedMessage {...messages.emptyOpenWithDescription} />;
     if (disabledReasons[0]) {
         [message] = disabledReasons;
     } else if (error) {
@@ -48,7 +48,7 @@ export const getTooltip = (
         message = displayDescription;
     }
 
-    return message || <FormattedMessage {...messages.emptyOpenWithDescription} />;
+    return message;
 };
 
 const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props) => {
@@ -57,7 +57,7 @@ const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props
 
     const isDisabled = !!isDisplayIntegrationDisabled || !displayName;
 
-    const Icon = displayName ? ICON_FILE_MAP[displayName] : IconOpenWith;
+    const Icon = displayName ? getIcon(displayName) : IconOpenWith;
 
     return (
         <Tooltip text={getTooltip(displayDescription, disabledReasons, error, isLoading)} position="bottom-center">

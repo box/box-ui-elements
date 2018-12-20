@@ -23,6 +23,7 @@ import FileCollaboratorsAPI from './FileCollaborators';
 import FeedAPI from './Feed';
 import AppIntegrationsAPI from './AppIntegrations';
 import OpenWithAPI from './OpenWith';
+import BoxEditAPI from './box-edit';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 
 class APIFactory {
@@ -120,6 +121,11 @@ class APIFactory {
      * @property {AppIntegrationsAPI}
      */
     appIntegrationsAPI: AppIntegrationsAPI;
+
+    /** @property {BoxEditAPI}
+     *
+     */
+    boxEditAPI: BoxEditAPI;
 
     /**
      * [constructor]
@@ -509,6 +515,21 @@ class APIFactory {
 
         this.appIntegrationsAPI = new AppIntegrationsAPI(this.options);
         return this.appIntegrationsAPI;
+    }
+
+    /**
+     * API for Box Edit
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {BoxEditAPI} BoxEditAPI instance
+     */
+    getBoxEditAPI(shouldDestroy: boolean): BoxEditAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.boxEditAPI = new BoxEditAPI();
+        return this.boxEditAPI;
     }
 }
 
