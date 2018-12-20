@@ -25,8 +25,8 @@ const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BOX_EDIT_INTEGRATION_ID = '1338';
 const AUTH_CODE_DELIMITER = 'auth_code=';
-const BOX_EDIT_UNAVAILABLE = 'box_edit_unavailable';
-const BOX_EDIT_BLACKLISTED = 'box_edit_blacklisted';
+const BOX_TOOLS_UNAVAILABLE = 'box_tools_unavailable';
+const BOX_TOOLS_BLACKLISTED = 'box_tools_blacklisted';
 
 type ExternalProps = {
     show?: boolean,
@@ -230,9 +230,9 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .catch(error => {
                 boxEditIntegration.isDisabled = true;
                 let disabledReason = messages.executeIntegrationOpenWithErrorHeader;
-                if (error.message === BOX_EDIT_BLACKLISTED) {
+                if (error.message === BOX_TOOLS_BLACKLISTED) {
                     disabledReason = messages.boxToolsBlacklistedError;
-                } else if (error.message === BOX_EDIT_UNAVAILABLE) {
+                } else if (error.message === BOX_TOOLS_UNAVAILABLE) {
                     disabledReason = messages.boxToolsUninstalledErrorMessage;
                 }
 
@@ -267,7 +267,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .checkBoxEditAvailability()
             .then(() => integration)
             .catch(() => {
-                throw new Error(BOX_EDIT_UNAVAILABLE);
+                throw new Error(BOX_TOOLS_UNAVAILABLE);
             });
     };
 
@@ -284,7 +284,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .getAppForExtension(extension)
             .then(() => integration)
             .catch(() => {
-                throw new Error(BOX_EDIT_BLACKLISTED);
+                throw new Error(BOX_TOOLS_BLACKLISTED);
             });
     };
 
