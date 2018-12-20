@@ -11,9 +11,12 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
+import Timer from '../../../../util/Timer';
+import withLoggerContext from '../../../LoggerContext/withLoggerContext';
+import { ACTIVITY_SIDEBAR_TAGS, ACTIVITY_FEED_TAGS } from '../../../../logger/loggingConstants';
 import './ActivityFeed.scss';
 
-type Props = {
+type PropsWithoutContext = {
     file: BoxItem,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
@@ -35,9 +38,17 @@ type Props = {
     feedItems?: FeedItems,
 };
 
+type Props = {
+    logger: Logger,
+} & PropsWithoutContext;
+
 type State = {
     isInputOpen: boolean,
 };
+
+const ACTIVITY_FEED_COMPONENT = 'activity_feed';
+const EVENT_TIME_TO_LOAD_STATE = 'time_to_load_state';
+const EVENT_TIME_TO_RENDER = 'time_to_render_state';
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
@@ -51,8 +62,8 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { feedItems: prevFeedItems } = prevProps;
-        const { feedItems: currFeedItems } = this.props;
+        const { feedItems: prevFeedItems, currentUser: prevCurrentUser } = prevProps;
+        const { feedItems: currFeedItems, currentUser: currCurrentUser } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const { isInputOpen: currIsInputOpen } = this.state;
 
@@ -66,6 +77,38 @@ class ActivityFeed extends React.Component<Props, State> {
 
         if (hasLoaded || hasMoreItems || hasNewItems || hasInputOpened) {
             this.resetFeedScroll();
+        }
+
+        if (currCurrentUser !== prevCurrentUser || currFeedItems !== prevFeedItems) {
+            this.checkAndLogRenderMetrics(currCurrentUser, currFeedItems);
+        }
+    }
+
+    /**
+     * Log render and load state timing events.
+     *
+     * @param {*} currentUser
+     * @param {*} feedItems
+     */
+    checkAndLogRenderMetrics(currentUser?: User, feedItems?: FeedItems) {
+        const { logger } = this.props;
+        const hasLoggedRender = logger.hasLoggedEvent(ACTIVITY_FEED_COMPONENT, EVENT_TIME_TO_RENDER);
+        if (!hasLoggedRender) {
+            if (currentUser && feedItems) {
+                Timer.mark(ACTIVITY_FEED_TAGS.TimeToRender);
+                logger.logUniqueMetric(
+                    ACTIVITY_FEED_COMPONENT,
+                    EVENT_TIME_TO_RENDER,
+                    Timer.getDuration(ACTIVITY_SIDEBAR_TAGS.Initialized, ACTIVITY_FEED_TAGS.TimeToRender),
+                );
+            } else if (!logger.hasLoggedEvent(ACTIVITY_FEED_COMPONENT, EVENT_TIME_TO_LOAD_STATE)) {
+                Timer.mark(ACTIVITY_FEED_TAGS.TimeToLoadState);
+                logger.logUniqueMetric(
+                    ACTIVITY_FEED_COMPONENT,
+                    EVENT_TIME_TO_LOAD_STATE,
+                    Timer.getDuration(ACTIVITY_SIDEBAR_TAGS.Initialized, ACTIVITY_FEED_TAGS.TimeToLoadState),
+                );
+            }
         }
     }
 
@@ -220,4 +263,4 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 }
 
-export default ActivityFeed;
+export default withLoggerContext(ActivityFeed);
