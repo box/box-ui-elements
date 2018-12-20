@@ -617,11 +617,11 @@ type ExecuteAPI = {
 
 type Integration = {
     appIntegrationId: string,
-    extension?: string,
     disabledReasons: Array<string>,
     displayDescription: string,
     displayName: string,
     displayOrder: number,
+    extension?: string,
     isDefault: boolean,
     isDisabled: boolean,
     requiresConsent: boolean,

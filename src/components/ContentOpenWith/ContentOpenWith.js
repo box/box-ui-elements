@@ -184,6 +184,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     /**
      * Checks if a given integration is a Box Edit integration.
      *
+     * @param {string} [integrationId] - The integration ID
      * @return {boolean}
      */
     isBoxEditIntegration(integrationId: ?string): boolean {
@@ -240,7 +241,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      *
      * @return {void}
      */
-    setIntegrationFileExtension = (): Promise<any> => {
+    setIntegrationFileExtension = (): Promise<BoxItem> => {
         const { fileId }: Props = this.props;
         return new Promise((resolve, reject) => {
             this.api.getFileAPI().getFileExtension(fileId, resolve, reject);
