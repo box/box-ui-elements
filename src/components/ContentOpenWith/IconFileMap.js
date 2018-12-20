@@ -14,7 +14,6 @@ const ICON_FILE_MAP = {
     'Google Docs': IconGoogleDocs,
     'Google Sheets': IconGoogleSheets,
     'Google Slides': IconGoogleSlides,
-    Open: FileIcon,
 };
 
 function getIcon(iconName: string): Element {
