@@ -10,9 +10,9 @@ import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
 import Tooltip from '../Tooltip';
 import OpenWithButtonContents from './OpenWithButtonContents';
-import getIcon from './IconFileMap';
 import { CLASS_INTEGRATION_ICON } from '../../constants';
 import messages from '../messages';
+import getIcon from './IconFileMap';
 
 type Props = {
     displayIntegration?: ?Integration,
@@ -31,7 +31,7 @@ type Props = {
  */
 export const getTooltip = (
     displayDescription: string,
-    disabledReasons: Array<string> = [],
+    disabledReasons: Array<DisabledReason> = [],
     error: ?Error,
     isLoading: boolean,
 ): ?(string | Element) => {

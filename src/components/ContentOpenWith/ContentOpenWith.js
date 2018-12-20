@@ -8,10 +8,12 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
+import messages from '../messages';
 import OpenWithButton from './OpenWithButton';
 import ExecuteForm from './ExecuteForm';
 import '../base.scss';
@@ -23,6 +25,8 @@ const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BOX_EDIT_INTEGRATION_ID = '1338';
 const AUTH_CODE_DELIMITER = 'auth_code=';
+const BOX_EDIT_UNAVAILABLE = 'box_edit_unavailable';
+const BOX_EDIT_BLACKLISTED = 'box_edit_blacklisted';
 
 type ExternalProps = {
     show?: boolean,
@@ -225,7 +229,14 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .then(this.canOpenExtensionWithBoxEdit)
             .catch(error => {
                 boxEditIntegration.isDisabled = true;
-                boxEditIntegration.disabledReasons = [error.message];
+                let disabledReason = messages.executeIntegrationOpenWithErrorHeader;
+                if (error.message === BOX_EDIT_BLACKLISTED) {
+                    disabledReason = messages.boxToolsBlacklistedError;
+                } else if (error.message === BOX_EDIT_UNAVAILABLE) {
+                    disabledReason = messages.boxToolsUninstalledErrorMessage;
+                }
+
+                boxEditIntegration.disabledReasons.push(<FormattedMessage {...disabledReason} />);
             })
             .finally(() => {
                 this.setState({ integrations, isLoading: false });
@@ -256,7 +267,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .checkBoxEditAvailability()
             .then(() => integration)
             .catch(() => {
-                throw new Error('Install Box Tools to open this file on your desktop');
+                throw new Error(BOX_EDIT_UNAVAILABLE);
             });
     };
 
@@ -273,7 +284,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .getAppForExtension(extension)
             .then(() => integration)
             .catch(() => {
-                throw new Error('This file cannot be opened with Box Tools');
+                throw new Error(BOX_EDIT_BLACKLISTED);
             });
     };
 
