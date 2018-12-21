@@ -23,14 +23,7 @@ exports[`components/ContentSidebar/Sidebar should render details sidebar 1`] = `
     hasDetails={true}
     selectedView="details"
   />
-  <DetailsSidebar
-    file={
-      Object {
-        "id": "id",
-      }
-    }
-    key="id"
-  />
+  <DetailsSidebar />
 </Fragment>
 `;
 

@@ -16,11 +16,7 @@ import RejectedAssignment from './RejectedAssignment';
 
 import './Task.scss';
 import { fillUserPlaceholder } from '../../../../util/fields';
-
-const TASK_APPROVED = 'approved';
-const TASK_REJECTED = 'rejected';
-const TASK_COMPLETED = 'completed';
-const TASK_INCOMPLETE = 'incomplete';
+import { TASK_APPROVED, TASK_REJECTED, TASK_COMPLETED, TASK_INCOMPLETE } from '../../../../constants';
 
 type Props = {
     task_assignment_collection: TaskAssignments | SelectorItems,
@@ -117,8 +113,8 @@ class Task extends React.Component<Props> {
                         {task_assignment_collection && task_assignment_collection.entries
                             ? task_assignment_collection.entries
                                   .map(fillUserPlaceholder)
-                                  .map(({ id: assignmentId, assigned_to, resolution_state }) => {
-                                      switch (resolution_state) {
+                                  .map(({ id: assignmentId, assigned_to, status }) => {
+                                      switch (status) {
                                           case TASK_COMPLETED:
                                           case TASK_APPROVED:
                                               return <CompletedAssignment {...assigned_to} key={assigned_to.id} />;

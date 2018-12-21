@@ -26,7 +26,7 @@ describe('api/TaskAssignments', () => {
             id: '987654321',
         };
 
-        const resolutionState = 'rejected';
+        const taskStatus = 'rejected';
         const successCallback = jest.fn();
         const errorCallback = jest.fn();
 
@@ -93,7 +93,7 @@ describe('api/TaskAssignments', () => {
                 taskAssignments.updateTaskAssignment({
                     file,
                     taskAssignmentId,
-                    resolutionState,
+                    taskStatus,
                     successCallback,
                     errorCallback,
                 });
@@ -106,13 +106,13 @@ describe('api/TaskAssignments', () => {
 
             test('should put a well formed task update to the tasks endpoint', () => {
                 const requestData = {
-                    data: { resolution_state: resolutionState },
+                    data: { status: taskStatus },
                 };
 
                 taskAssignments.updateTaskAssignment({
                     file,
                     taskAssignmentId,
-                    resolutionState,
+                    taskStatus,
                     successCallback,
                     errorCallback,
                 });
