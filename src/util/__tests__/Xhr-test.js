@@ -345,7 +345,7 @@ describe('util/Xhr', () => {
                         foo: 'bar',
                     },
                 },
-                4,
+                3,
                 false,
             ], // false, max number exceeded
             [
