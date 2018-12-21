@@ -16,7 +16,7 @@ type Props = {
 };
 
 const OpenWithDropdownMenu = ({ integrations, onClick }: Props) => (
-    <DropdownMenu isRightAligned>
+    <DropdownMenu>
         <MultipleIntegrationsOpenWithButton />
         <Menu className="bcow-menu">
             {integrations &&

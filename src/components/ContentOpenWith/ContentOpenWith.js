@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
+import queryString from 'query-string';
 import API from '../../api';
 import Internationalize from '../Internationalize';
 import IntegrationPortalContainer from './IntegrationPortalContainer';
@@ -24,7 +25,7 @@ import { CLIENT_NAME_OPEN_WITH, DEFAULT_HOSTNAME_API, HTTP_GET, HTTP_POST } from
 const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BOX_EDIT_INTEGRATION_ID = '1338';
-const AUTH_CODE_DELIMITER = 'auth_code=';
+const AUTH_CODE = 'auth_code';
 const BOX_TOOLS_UNAVAILABLE = 'box_tools_unavailable';
 const BOX_TOOLS_BLACKLISTED = 'box_tools_blacklisted';
 
@@ -421,7 +422,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     executeBoxEditSuccessHandler = ({ url }: ExecuteAPI): void => {
         const { fileId, token } = this.props;
-        const authCode = url.split(AUTH_CODE_DELIMITER)[1];
+        const queryParams = queryString.parse(url);
+        const authCode = queryParams[AUTH_CODE];
 
         this.api.getBoxEditAPI(false).openFile(fileId, {
             data: {

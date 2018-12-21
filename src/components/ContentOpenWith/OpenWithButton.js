@@ -40,7 +40,7 @@ export const getTooltip = (
     }
 
     let message = <FormattedMessage {...messages.emptyOpenWithDescription} />;
-    if (disabledReasons[0]) {
+    if (disabledReasons.length > 0) {
         [message] = disabledReasons;
     } else if (error) {
         message = <FormattedMessage {...messages.errorOpenWithDescription} />;
