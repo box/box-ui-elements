@@ -24,9 +24,6 @@ type PayloadType = StringAnyMap | Array<StringAnyMap>;
 
 const DEFAULT_UPLOAD_TIMEOUT_MS = 120000;
 const MAX_NUM_RETRIES = 3;
-const BASE_RETRY_INTERVAL = 2000;
-// Retry intervals are between 50% and 150% of the exponentially increasing base amount
-const RETRY_RANDOMIZATION_FACTOR = 0.5;
 
 class Xhr {
     id: ?string;
@@ -131,17 +128,15 @@ class Xhr {
     }
 
     /**
-     * Calculate the exponential backoff time with randomized jitter. Taken from box node SDK
+     * Calculate the exponential backoff time with randomized jitter.
      *
      * @param {number} numRetries Which retry number this one will be. Must be > 0
      * @returns {number} The number of milliseconds after which to retry
      */
     getExponentialRetryTimeoutInMs(numRetries: number): number {
-        const minRandomization = 1 - RETRY_RANDOMIZATION_FACTOR;
-        const maxRandomization = 1 + RETRY_RANDOMIZATION_FACTOR;
-        const randomization = Math.random() * (maxRandomization - minRandomization) + minRandomization;
-        const exponential = 2 ** (numRetries - 1);
-        return Math.ceil(exponential * BASE_RETRY_INTERVAL * randomization);
+        const randomizationMs = Math.ceil(Math.random() * 1000);
+        const exponentialMs = 2 ** (numRetries - 1) * 1000;
+        return exponentialMs + randomizationMs;
     }
 
     /**
@@ -513,4 +508,3 @@ class Xhr {
 }
 
 export default Xhr;
-export { RETRY_RANDOMIZATION_FACTOR, BASE_RETRY_INTERVAL };
