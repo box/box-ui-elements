@@ -145,21 +145,6 @@ class Xhr {
     }
 
     /**
-     * Gets the retry delay number in milliseconds Retry-After header or random jitter
-     *
-     * @param {Object} error - Error object from axios
-     * @return {number} the number which represents when the next retry should occur
-     */
-    getRetryDelayInMs(error: $AxiosError<any>): number {
-        const exponentialBackoffInMs = this.getExponentialRetryTimeoutInMs(this.retryCount);
-        const retryAfterInSeconds = parseInt(getProp(error, 'response.headers.Retry-After'), 10);
-        // Respect 'Retry-After' header for first retry, otherwise use exponential backoff as recommended by box reference docs
-        return this.retryCount === 0 && !Number.isNaN(retryAfterInSeconds)
-            ? retryAfterInSeconds * 1000
-            : exponentialBackoffInMs;
-    }
-
-    /**
      * Error interceptor that wraps the passed in responseInterceptor
      *
      * @param {Object} error - Error object from axios
@@ -168,8 +153,8 @@ class Xhr {
     errorInterceptor = (error: $AxiosError<any>): Promise<any> => {
         const shouldRetry = this.shouldRetryRequest(error);
         if (shouldRetry) {
-            const delay = this.getRetryDelayInMs(error);
             this.retryCount += 1;
+            const delay = this.getExponentialRetryTimeoutInMs(this.retryCount);
             return new Promise((resolve, reject) => {
                 this.retryTimeout = setTimeout(() => {
                     this.axios(error.config).then(resolve, reject);

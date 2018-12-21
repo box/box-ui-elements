@@ -412,10 +412,10 @@ describe('util/Xhr', () => {
 
     describe('getExponentialRetryTimeoutInMs()', () => {
         beforeEach(() => {
-            jest.spyOn(Math, 'random').mockReturnValue(0.1);
+            jest.spyOn(Math, 'random').mockReturnValue(0.5);
         });
 
-        test.each([[1, 1200], [2, 2400], [3, 4800], [4, 9600]])(
+        test.each([[1, 2000], [2, 4000], [3, 8000], [4, 16000]])(
             'should get exponential retry timeout %#',
             (retryCount, expected) => {
                 expect(xhrInstance.getExponentialRetryTimeoutInMs(retryCount)).toBe(expected);
@@ -423,55 +423,11 @@ describe('util/Xhr', () => {
         );
     });
 
-    describe('getRetryDelayInMs()', () => {
-        const RETRY_AFTER = 4;
-        const RETRY_AFTER_EXPONENTIAL = 5000;
-
-        beforeEach(() => {
-            xhrInstance.getExponentialRetryTimeoutInMs = jest.fn().mockReturnValue(RETRY_AFTER_EXPONENTIAL);
-        });
-        test('should use the retry-after header if first retry and rate limit', () => {
-            const result = xhrInstance.getRetryDelayInMs({
-                status: 429,
-                response: {
-                    headers: {
-                        'Retry-After': RETRY_AFTER.toString(),
-                    },
-                },
-            });
-            expect(result).toBe(RETRY_AFTER * 1000);
-        });
-
-        test('should use exponential backoff if retry-after header does not exist', () => {
-            const result = xhrInstance.getRetryDelayInMs({
-                status: 429,
-                response: {
-                    headers: {
-                        foo: 'bar',
-                    },
-                },
-            });
-            expect(result).toEqual(RETRY_AFTER_EXPONENTIAL);
-        });
-
-        test('should use exponential backoff on try > 0 even if retry-after header exists', () => {
-            xhrInstance.retryCount = 1;
-            const result = xhrInstance.getRetryDelayInMs({
-                response: {
-                    headers: {
-                        'Retry-After': RETRY_AFTER.toString(),
-                    },
-                },
-            });
-            expect(result).toEqual(RETRY_AFTER_EXPONENTIAL);
-        });
-    });
-
     describe('errorInterceptor()', () => {
         const DELAY = 500;
         beforeEach(() => {
             xhrInstance.shouldRetryRequest = jest.fn();
-            xhrInstance.getRetryDelayInMs = jest.fn().mockReturnValue(DELAY);
+            xhrInstance.getExponentialRetryTimeoutInMs = jest.fn().mockReturnValue(DELAY);
             xhrInstance.responseInterceptor = jest.fn();
 
             jest.useFakeTimers();
@@ -479,7 +435,7 @@ describe('util/Xhr', () => {
 
         test('should retry the request before calling the error interceptor', () => {
             const error = {
-                status: 500,
+                status: 429,
                 response: {
                     data: undefined,
                 },
@@ -492,11 +448,14 @@ describe('util/Xhr', () => {
             xhrInstance.shouldRetryRequest.mockReturnValue(false).mockReturnValueOnce(true);
             xhrInstance.errorInterceptor(error);
 
+            expect(xhrInstance.retryCount).toBe(1);
+            expect(xhrInstance.getExponentialRetryTimeoutInMs).toHaveBeenCalled();
             expect(xhrInstance.responseInterceptor).not.toHaveBeenCalled();
 
             jest.runAllTimers();
 
             expect(xhrInstance.axios).toHaveBeenCalled();
+            expect(xhrInstance.retryCount).toBe(1);
             expect(xhrInstance.responseInterceptor).toHaveBeenCalledWith(error);
         });
 
@@ -517,6 +476,7 @@ describe('util/Xhr', () => {
             xhrInstance.shouldRetryRequest.mockReturnValue(false);
             xhrInstance.errorInterceptor(error);
 
+            expect(xhrInstance.getExponentialRetryTimeoutInMs).not.toHaveBeenCalled();
             expect(xhrInstance.axios).not.toHaveBeenCalled();
             expect(xhrInstance.responseInterceptor).toHaveBeenCalledWith(response.data);
         });
