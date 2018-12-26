@@ -135,6 +135,22 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('executeIntegrationSuccessHandler()', () => {
+        test('should invoke the box edit success handler if we executed a box edit integration', () => {});
+        test('should invoke the online success handler if we executed an online integration', () => {});
+        test('should invoke the execute callback', () => {
+            instance.onExecute = jest.fn();
+            const executeData = {
+                method: 'GET',
+                url: 'foo.com/bar',
+            };
+            const id = '3';
+
+            instance.executeIntegrationSuccessHandler(id, executeData);
+            expect(instance.onExecute).toBeCalledWith(id);
+        });
+    });
+
+    describe('executeOnlineIntegrationSuccessHandler()', () => {
         test('should set the post data in state for a POST integration', () => {
             const executeData = {
                 method: 'POST',
@@ -142,7 +158,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             };
             instance.setState = jest.fn();
 
-            instance.executeIntegrationSuccessHandler(executeData);
+            instance.executeOnlineIntegrationSuccessHandler(executeData);
             expect(instance.setState).toBeCalledWith({
                 executePostData: executeData,
             });
@@ -155,10 +171,10 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             instance.integrationWindow = false;
             instance.executeIntegrationErrorHandler = jest.fn();
 
-            instance.executeIntegrationSuccessHandler(executeData);
+            instance.executeOnlineIntegrationSuccessHandler(executeData);
             expect(instance.executeIntegrationErrorHandler).toBeCalled();
         });
-        test('should call the execute handler and null the integrationWindow', () => {
+        test('should  null the integrationWindow', () => {
             instance.onExecute = jest.fn();
             const executeData = {
                 method: 'GET',
@@ -169,8 +185,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
                 opener: 'url',
             };
 
-            instance.executeIntegrationSuccessHandler(executeData);
-            expect(instance.onExecute).toBeCalled();
+            instance.executeOnlineIntegrationSuccessHandler(executeData);
             expect(instance.integrationWindow).toEqual(null);
         });
         test('should throw an error in the default case', () => {
@@ -180,18 +195,15 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             };
             instance.executeIntegrationErrorHandler = jest.fn();
 
-            instance.executeIntegrationSuccessHandler(executeData);
+            instance.executeOnlineIntegrationSuccessHandler(executeData);
             expect(instance.executeIntegrationErrorHandler).toBeCalled();
         });
     });
 
     describe('onExecuteFormSubmit()', () => {
-        test('should call the execute handler and clear out the form state data', () => {
-            instance.onExecute = jest.fn();
+        test('should clear out the form state data', () => {
             instance.setState = jest.fn();
-
             instance.onExecuteFormSubmit();
-            expect(instance.onExecute).toBeCalled();
             expect(instance.setState).toBeCalledWith({ executePostData: null });
         });
     });
@@ -202,11 +214,9 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
         const id = '1';
         instance = getWrapper({ onExecute: propFunction }).instance();
         instance.setState = jest.fn();
-        instance.executeId = id;
 
-        instance.onExecute();
+        instance.onExecute(id);
         expect(propFunction).toBeCalledWith(id);
-        expect(instance.executeId).toEqual(null);
         expect(instance.setState).toBeCalledWith({
             shouldRenderLoadingIntegrationPortal: false,
         });

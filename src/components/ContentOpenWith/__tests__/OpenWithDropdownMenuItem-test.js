@@ -3,7 +3,7 @@ import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import OpenWithDropdownMenuItem from '../OpenWithDropdownMenuItem';
 
-describe('components/ContentOpenWith/OpenWithMenu', () => {
+describe('components/ContentOpenWith/OpenWithMenuItem', () => {
     const getWrapper = props => shallow(<OpenWithDropdownMenuItem {...props} />);
 
     test('should render the description and correct icon', () => {

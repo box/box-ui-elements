@@ -31,9 +31,9 @@ type Props = {
  */
 export const getTooltip = (
     displayDescription: string,
-    disabledReasons: Array<DisabledReason> = [],
-    error: ?Error,
     isLoading: boolean,
+    error: ?Error,
+    disabledReasons: Array<DisabledReason> = [],
 ): ?(string | Element) => {
     if (isLoading) {
         return null;
@@ -60,7 +60,7 @@ const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props
     const Icon = displayName ? getIcon(displayName) : IconOpenWith;
 
     return (
-        <Tooltip text={getTooltip(displayDescription, disabledReasons, error, isLoading)} position="bottom-center">
+        <Tooltip text={getTooltip(displayDescription, isLoading, error, disabledReasons)} position="bottom-center">
             <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration, isLoading)}>
                 <OpenWithButtonContents>
                     <Icon extension={extension} className={CLASS_INTEGRATION_ICON} height={26} width={26} />

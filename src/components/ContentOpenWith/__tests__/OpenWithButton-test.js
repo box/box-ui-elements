@@ -9,23 +9,29 @@ describe('components/ContentOpenWith/OpenWithButton', () => {
 
     describe('getTooltip()', () => {
         test('should return nothing if the button is loading', () => {
-            const result = getTooltip(null, null, true);
+            const result = getTooltip(null, true, null, null);
             expect(result).toBe(null);
         });
 
-        test('should use a message if there is an error', () => {
-            const result = getTooltip(null, 'error', false);
+        test('should use the first disabled reason if one is provided', () => {
+            const disabledReasons = ['bad integration', 'foo'];
+            const result = getTooltip(null, false, 'error', disabledReasons);
+            expect(result).toEqual(disabledReasons[0]);
+        });
+
+        test('should use the default error message if there is an error', () => {
+            const result = getTooltip(null, false, 'error', []);
             expect(result.props.defaultMessage).toEqual(messages.errorOpenWithDescription.defaultMessage);
         });
 
         test('should return the display description if provided', () => {
             const description = 'tooltip description';
-            const result = getTooltip(description, null, false);
+            const result = getTooltip(description, false, null, []);
             expect(result).toBe(description);
         });
 
-        test('should use a message if there is nothing else to display', () => {
-            const result = getTooltip(null, null, false);
+        test('should use the default empty message if there is nothing else to display', () => {
+            const result = getTooltip(null, false, null, []);
             expect(result.props.defaultMessage).toEqual(messages.emptyOpenWithDescription.defaultMessage);
         });
     });
