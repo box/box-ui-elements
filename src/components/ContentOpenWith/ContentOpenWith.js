@@ -77,8 +77,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
     state: State;
 
-    executeId: ?string;
-
     window: any;
 
     integrationWindow: ?any;
@@ -320,15 +318,12 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     onIntegrationClick = ({ appIntegrationId, displayName }: Integration): void => {
         const { fileId }: Props = this.props;
-
-        this.executeId = appIntegrationId;
-
         this.api
             .getAppIntegrationsAPI(false)
             .execute(
                 appIntegrationId,
                 fileId,
-                this.executeIntegrationSuccessHandler,
+                this.executeIntegrationSuccessHandler.bind(this, appIntegrationId),
                 this.executeIntegrationErrorHandler,
             );
 
@@ -367,17 +362,18 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * Opens the integration in a new tab based on the API data
      *
      * @private
+     * @param {string} integrationID - The integration that was executed
      * @param {ExecuteAPI} executeData - API response on how to open an executed integration
 
      * @return {void}
      */
-    executeIntegrationSuccessHandler = (executeData: ExecuteAPI): void => {
-        if (this.isBoxEditIntegration(this.executeId)) {
+    executeIntegrationSuccessHandler = (integrationID: string, executeData: ExecuteAPI): void => {
+        if (this.isBoxEditIntegration(integrationID)) {
             this.executeBoxEditSuccessHandler(executeData);
         } else {
             this.executeOnlineIntegrationSuccessHandler(executeData);
         }
-        this.onExecute();
+        this.onExecute(integrationID);
     };
 
     /**
@@ -447,11 +443,11 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * Calls the onExecute prop and resets the execute ID
      *
      * @private
+     * @param {string} integrationID - The integration that was executed
      * @return {void}
      */
-    onExecute() {
-        this.props.onExecute(this.executeId);
-        this.executeId = null;
+    onExecute(integrationID: string) {
+        this.props.onExecute(integrationID);
         this.setState({
             shouldRenderLoadingIntegrationPortal: false,
         });
