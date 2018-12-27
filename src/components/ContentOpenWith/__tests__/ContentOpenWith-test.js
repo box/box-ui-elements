@@ -121,12 +121,12 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
 
         test('should set the disabled reason if we are unable to get the extension before setting state', async () => {
             instance.getIntegrationFileExtension = jest.fn().mockRejectedValue();
-            instance.checkBoxEditAvailability = jest.fn();
+            instance.isBoxEditAvailable = jest.fn();
             instance.canOpenExtensionWithBoxEdit = jest.fn();
 
             await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
             expect(instance.setState).toBeCalled();
-            expect(instance.checkBoxEditAvailability).not.toBeCalled();
+            expect(instance.isBoxEditAvailable).not.toBeCalled();
             expect(instance.canOpenExtensionWithBoxEdit).not.toBeCalled();
         });
 
@@ -137,7 +137,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             };
 
             instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
-            instance.checkBoxEditAvailability = jest.fn().mockResolvedValue(true);
+            instance.isBoxEditAvailable = jest.fn().mockResolvedValue(true);
             instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue(true);
 
             await instance.fetchOpenWithSuccessHandler([...mockIntegrations, boxEditIntegration]);
@@ -146,13 +146,13 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
                 integrations: [...mockIntegrations, integrationWithExtension],
                 isLoading: false,
             });
-            expect(instance.checkBoxEditAvailability).toBeCalled();
+            expect(instance.isBoxEditAvailable).toBeCalled();
             expect(instance.canOpenExtensionWithBoxEdit).toBeCalled();
         });
 
         test('should set the disabled reason if box tools is not available before setting state', async () => {
             instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
-            instance.checkBoxEditAvailability = jest.fn().mockResolvedValue(false);
+            instance.isBoxEditAvailable = jest.fn().mockResolvedValue(false);
             instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue(true);
 
             await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
@@ -172,7 +172,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
 
         test('should set the disabled reason if the file type is black listed by box tools before setting state', async () => {
             instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
-            instance.checkBoxEditAvailability = jest.fn().mockResolvedValue(true);
+            instance.isBoxEditAvailable = jest.fn().mockResolvedValue(true);
             instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue(false);
 
             await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
@@ -204,19 +204,19 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
         });
     });
 
-    describe('checkBoxEditAvailability()', () => {
+    describe('isBoxEditAvailable()', () => {
         test('should resolve with result of box edit', async () => {
             let checkBoxEditAvailabilityStub = jest.fn().mockResolvedValueOnce();
             instance.api = {
                 getBoxEditAPI: () => ({ checkBoxEditAvailability: checkBoxEditAvailabilityStub }),
             };
 
-            const result = await instance.checkBoxEditAvailability();
+            const result = await instance.isBoxEditAvailable();
             expect(result).toBe(true);
 
             checkBoxEditAvailabilityStub = jest.fn().mockRejectedValue('Not Available!');
 
-            const otherResult = await instance.checkBoxEditAvailability();
+            const otherResult = await instance.isBoxEditAvailable();
             expect(otherResult).toBe(false);
         });
     });
