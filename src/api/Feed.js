@@ -232,8 +232,7 @@ class Feed extends Base {
      * @param {BoxItem} file - The file to which the task is assigned
      * @param {string} taskId - ID of task to be updated
      * @param {string} taskAssignmentId - Task assignment ID
-     * @param {string} resolutionState - New task assignment status
-     * @param {string} message - optional the message to the assignee
+     * @param {TaskAssignmentStatus} taskStatus - New task assignment status
      * @param {Function} successCallback - the function which will be called on success
      * @param {Function} errorCallback - the function which will be called on error
      * @return {void}
@@ -242,8 +241,7 @@ class Feed extends Base {
         file: BoxItem,
         taskId: string,
         taskAssignmentId: string,
-        resolutionState: string,
-        message?: string,
+        taskStatus: TaskAssignmentStatus,
         successCallback: Function,
         errorCallback: ErrorCallback,
     ): void => {
@@ -259,8 +257,7 @@ class Feed extends Base {
         assignmentAPI.updateTaskAssignment({
             file,
             taskAssignmentId,
-            resolutionState,
-            message,
+            taskStatus,
             successCallback: (taskAssignment: TaskAssignment) => {
                 this.updateTaskAssignmentSuccessCallback(taskId, taskAssignment, successCallback);
             },
@@ -294,7 +291,6 @@ class Feed extends Base {
                         return {
                             ...item,
                             ...updatedAssignment,
-                            resolution_state: updatedAssignment.message.toLowerCase(),
                         };
                     }
 
@@ -513,7 +509,7 @@ class Feed extends Base {
                 id: assignee.id,
                 name: assignee.name,
             },
-            resolution_state: TASK_INCOMPLETE,
+            status: TASK_INCOMPLETE,
         }));
 
         const task = {
@@ -706,13 +702,12 @@ class Feed extends Base {
         }
 
         task.task_assignment_collection.entries = assignments.map(taskAssignment => {
-            const { id, assigned_to, message, resolution_state } = taskAssignment;
+            const { id, assigned_to, status } = taskAssignment;
             return {
                 type: TASK_ASSIGNMENT,
                 id,
                 assigned_to,
-                message,
-                resolution_state: message ? message.toLowerCase() : resolution_state,
+                status,
             };
         });
 

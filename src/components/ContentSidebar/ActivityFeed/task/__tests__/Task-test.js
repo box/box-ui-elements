@@ -35,12 +35,12 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                 {
                     id: 0,
                     assigned_to: { name: 'Jake Thomas', id: 1 },
-                    resolution_state: 'incomplete',
+                    status: 'incomplete',
                 },
                 {
                     id: 1,
                     assigned_to: { name: 'Peter Pan', id: 2 },
-                    resolution_state: 'completed',
+                    status: 'completed',
                 },
             ],
         },
@@ -78,12 +78,12 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                     {
                         id: 0,
                         assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete',
+                        status: 'incomplete',
                     },
                     {
                         id: 1,
                         assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed',
+                        status: 'completed',
                     },
                     ``,
                 ],
@@ -188,12 +188,12 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                     {
                         id: 0,
                         assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete',
+                        status: 'incomplete',
                     },
                     {
                         id: 1,
                         assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed',
+                        status: 'completed',
                     },
                 ],
             },
@@ -227,12 +227,12 @@ describe('components/ContentSidebar/ActivityFeed/task/Task', () => {
                     {
                         id: 0,
                         assigned_to: { name: 'Jake Thomas', id: 1 },
-                        resolution_state: 'incomplete',
+                        status: 'incomplete',
                     },
                     {
                         id: 1,
                         assigned_to: { name: 'Peter Pan', id: 2 },
-                        resolution_state: 'completed',
+                        status: 'completed',
                     },
                 ],
             },

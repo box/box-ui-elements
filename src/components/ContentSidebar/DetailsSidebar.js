@@ -19,11 +19,13 @@ import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
 import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR, IS_ERROR_DISPLAYED } from '../../constants';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../util/fields';
 import API from '../../api';
-import { isUserCorrectableError } from '../../util/error';
+import { isUserCorrectableError, getBadItemError } from '../../util/error';
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
+    fileId: string, // TODO: add fileVersionId
     hasNotices?: boolean,
     hasProperties?: boolean,
     hasAccessStats?: boolean,
@@ -38,13 +40,9 @@ type ExternalProps = {
     onVersionHistoryClick?: Function,
 } & ErrorContextProps;
 
-type PropsWithoutContext = {
-    file: BoxItem,
-} & ExternalProps;
-
 type Props = {
     api: API,
-} & PropsWithoutContext &
+} & ExternalProps &
     ErrorContextProps;
 
 type State = {
@@ -54,7 +52,7 @@ type State = {
     classification?: ClassificationInfo,
     classificationError?: Errors,
     isLoadingClassification: boolean,
-    file: BoxItem,
+    file?: BoxItem,
     fileError?: Errors,
 };
 
@@ -73,21 +71,14 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            file: props.file,
             isLoadingAccessStats: false,
             isLoadingClassification: false,
         };
     }
 
     componentDidMount() {
-        const { hasAccessStats, hasClassification }: Props = this.props;
-        if (hasAccessStats) {
-            this.fetchAccessStats();
-        }
-
-        if (hasClassification) {
-            this.fetchClassification();
-        }
+        this.fetchFile();
+        this.fetchData();
     }
 
     /**
@@ -99,6 +90,71 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      */
     descriptionChangeSuccessCallback = (file: BoxItem): void => {
         this.setState({ file, fileError: undefined });
+    };
+
+    /**
+     * Fetches the rest of the data needed for the details sidebar to load (besides file info)
+     *
+     * @return {void}
+     */
+    fetchData() {
+        const { hasAccessStats, hasClassification }: Props = this.props;
+        if (hasAccessStats) {
+            this.fetchAccessStats();
+        }
+
+        if (hasClassification) {
+            this.fetchClassification();
+        }
+    }
+
+    /**
+     * Fetches a file with the fields needed for details sidebar
+     *
+     * @param {Function} successCallback - the success callback
+     * @param {Function} errorCallback - the error callback
+     * @return {void}
+     */
+    fetchFile(
+        successCallback: (file: BoxItem) => void = this.fetchFileSuccessCallback,
+        errorCallback: ElementsErrorCallback = this.fetchFileErrorCallback,
+    ): void {
+        const { api, fileId }: Props = this.props;
+        api.getFileAPI().getFile(fileId, successCallback, errorCallback, {
+            fields: SIDEBAR_FIELDS_TO_FETCH, // TODO: replace this with DETAILS_SIDEBAR_FIELDS_TO_FETCH as we do not need all the sidebar fields
+        });
+    }
+
+    /**
+     * Handles a successful file fetch
+     *
+     * @param {Object} file - the box file
+     * @return {void}
+     */
+    fetchFileSuccessCallback = (file: BoxItem) => {
+        this.setState({
+            file,
+            fileError: undefined,
+        });
+    };
+
+    /**
+     * Handles a failed file fetch
+     *
+     * @private
+     * @param {Error} e - API error
+     * @param {string} code - error code
+     * @return {void}
+     */
+    fetchFileErrorCallback = (e: ElementsXhrError, code: string) => {
+        // TODO: handle the error properly (probably with maskError) once files call split out
+        this.setState({
+            file: undefined,
+        });
+
+        this.props.onError(e, code, {
+            e,
+        });
     };
 
     /**
@@ -131,6 +187,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     onDescriptionChange = (newDescription: string): void => {
         const { api }: Props = this.props;
         const { file }: State = this.state;
+        if (!file) {
+            throw getBadItemError();
+        }
+
         const { description }: BoxItem = file;
         if (newDescription === description) {
             return;
@@ -203,11 +263,11 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchAccessStats(): void {
-        const { api }: Props = this.props;
-        const { file }: State = this.state;
+        const { api, fileId }: Props = this.props;
+
         this.setState({ isLoadingAccessStats: true });
         api.getFileAccessStatsAPI(false).getFileAccessStats(
-            file.id,
+            fileId,
             this.fetchAccessStatsSuccessCallback,
             this.fetchAccessStatsErrorCallback,
         );
@@ -267,11 +327,11 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchClassification = (): void => {
-        const { api }: Props = this.props;
-        const { file }: State = this.state;
+        const { api, fileId }: Props = this.props;
+
         this.setState({ isLoadingClassification: true });
         api.getMetadataAPI(false).getClassification(
-            file,
+            fileId,
             this.fetchClassificationSuccessCallback,
             this.fetchClassificationErrorCallback,
             {
@@ -316,6 +376,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             isLoadingAccessStats,
             isLoadingClassification,
         }: State = this.state;
+
+        if (!file) {
+            return null; // TODO: change to loading indicator and handle errors once file call split out
+        }
 
         return (
             <SidebarContent title={<FormattedMessage {...messages.sidebarDetailsTitle} />}>

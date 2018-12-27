@@ -388,6 +388,7 @@ class ContentSidebar extends PureComponent<Props, State> {
             metadataSidebarProps,
             onVersionHistoryClick,
             currentUser,
+            fileId,
         }: Props = this.props;
         const { editors, file, view, isVisible }: State = this.state;
 
@@ -397,7 +398,7 @@ class ContentSidebar extends PureComponent<Props, State> {
         // in the sidebar. This can only happen if skills sidebar was showing
         // however there is no skills data to show. For all other sidebars
         // we show them by default even if there is no data in them.
-        if (!isVisible || !SidebarUtils.canHaveSidebar(this.props)) {
+        if (!isVisible || !SidebarUtils.canHaveSidebar(this.props) || !fileId) {
             return null;
         }
 
@@ -422,6 +423,7 @@ class ContentSidebar extends PureComponent<Props, State> {
                         {hasSidebar ? (
                             <APIContext.Provider value={(this.api: any)}>
                                 <Sidebar
+                                    fileId={fileId}
                                     file={((file: any): BoxItem)}
                                     view={view}
                                     detailsSidebarProps={detailsSidebarProps}

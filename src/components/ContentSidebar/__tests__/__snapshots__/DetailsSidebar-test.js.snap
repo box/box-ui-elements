@@ -12,6 +12,7 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
   <SidebarAccessStats
     file={
       Object {
+        "description": "bar",
         "id": "foo",
       }
     }
@@ -34,6 +35,7 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
     <SidebarNotices
       file={
         Object {
+          "description": "bar",
           "id": "foo",
         }
       }
@@ -42,6 +44,7 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
   <SidebarAccessStats
     file={
       Object {
+        "description": "bar",
         "id": "foo",
       }
     }
@@ -63,6 +66,7 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
       <SidebarVersions
         file={
           Object {
+            "description": "bar",
             "id": "foo",
           }
         }
@@ -71,6 +75,7 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
     <SidebarFileProperties
       file={
         Object {
+          "description": "bar",
           "id": "foo",
         }
       }
@@ -99,6 +104,7 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
     <SidebarNotices
       file={
         Object {
+          "description": "bar",
           "id": "foo",
         }
       }
@@ -130,6 +136,7 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
     <SidebarFileProperties
       file={
         Object {
+          "description": "bar",
           "id": "foo",
         }
       }
@@ -153,3 +160,5 @@ exports[`components/ContentSidebar/DetailsSidebar render() should render Details
   }
 />
 `;
+
+exports[`components/ContentSidebar/DetailsSidebar render() should render nothing if there is no file information 1`] = `""`;
