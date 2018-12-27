@@ -24,6 +24,9 @@ import { CLIENT_NAME_OPEN_WITH, DEFAULT_HOSTNAME_API, HTTP_GET, HTTP_POST } from
 
 const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
+const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
+const UNINSTALLED_ERROR_MESSAGE_KEY = 'boxToolsUninstalledErrorMessage';
+const GENERIC_EXECUTE_MESSAGE_KEY = 'executeIntegrationOpenWithErrorHeader';
 const BOX_EDIT_INTEGRATION_ID = '1338';
 const AUTH_CODE = 'auth_code';
 
@@ -211,29 +214,18 @@ class ContentOpenWith extends PureComponent<Props, State> {
             this.isBoxEditIntegration(appIntegrationId),
         );
 
-        if (!boxEditIntegration || boxEditIntegration.isDisabled) {
-            this.setState({ integrations, isLoading: false });
-            return;
-        }
-
-        try {
-            const { extension } = await this.getIntegrationFileExtension();
-            boxEditIntegration.extension = extension;
-            // If Box Edit is present and enabled, we need to set its ability to locally open the given file
-            if (!(await this.isBoxEditAvailable())) {
-                boxEditIntegration.disabledReasons.push(
-                    <FormattedMessage {...messages.boxToolsUninstalledErrorMessage} />,
-                );
-                boxEditIntegration.isDisabled = true;
-            } else if (!(await this.canOpenExtensionWithBoxEdit(boxEditIntegration))) {
-                boxEditIntegration.disabledReasons.push(<FormattedMessage {...messages.boxToolsBlacklistedError} />);
+        if (boxEditIntegration && !boxEditIntegration.isDisabled) {
+            try {
+                const { extension } = await this.getIntegrationFileExtension();
+                boxEditIntegration.extension = extension;
+                // If Box Edit is present and enabled, we need to set its ability to locally open the given file
+                // No-op if these checks are successful
+                await this.isBoxEditAvailable();
+                await this.canOpenExtensionWithBoxEdit(boxEditIntegration);
+            } catch (error) {
+                boxEditIntegration.disabledReasons.push(<FormattedMessage {...messages[error.message]} />);
                 boxEditIntegration.isDisabled = true;
             }
-        } catch (error) {
-            boxEditIntegration.disabledReasons.push(
-                <FormattedMessage {...messages.executeIntegrationOpenWithErrorHeader} />,
-            );
-            boxEditIntegration.isDisabled = true;
         }
 
         this.setState({ integrations, isLoading: false });
@@ -247,37 +239,39 @@ class ContentOpenWith extends PureComponent<Props, State> {
     getIntegrationFileExtension = (): Promise<BoxItem> => {
         const { fileId }: Props = this.props;
         return new Promise((resolve, reject) => {
-            this.api.getFileAPI().getFileExtension(fileId, resolve, reject);
+            this.api
+                .getFileAPI()
+                .getFileExtension(fileId, resolve, () => reject(new Error(GENERIC_EXECUTE_MESSAGE_KEY)));
         });
     };
 
     /**
      * Uses Box Edit to check if Box Tools is installed and reachable
      *
-     * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
-     * @return {void}
+     * @return {Promise}
      */
-    isBoxEditAvailable = (): Promise<boolean> => {
+    isBoxEditAvailable = (): Promise<any> => {
         return this.api
             .getBoxEditAPI()
             .checkBoxEditAvailability()
-            .then(() => true)
-            .catch(() => false);
+            .catch(() => {
+                throw new Error(UNINSTALLED_ERROR_MESSAGE_KEY);
+            });
     };
 
     /**
      * Uses Box Edit to check if Box Tools can open a given file type
      *
-     * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
-     * @return {void}
+     * @param {String} extension - A file extension
+     * @return {Promise}
      */
-    canOpenExtensionWithBoxEdit = (integration: Integration): Promise<boolean> => {
-        const { extension = '' } = integration;
+    canOpenExtensionWithBoxEdit = ({ extension = '' }: Integration): Promise<any> => {
         return this.api
             .getBoxEditAPI()
             .getAppForExtension(extension)
-            .then(() => true)
-            .catch(() => false);
+            .catch(() => {
+                throw new Error(BLACKLISTED_ERROR_MESSAGE_KEY);
+            });
     };
 
     /**
