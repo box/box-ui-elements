@@ -50,7 +50,7 @@ class Xhr {
 
     tokenService: TokenService;
 
-    retryCount: number;
+    retryCount: number = 0;
 
     retryTimeout: ?TimeoutID;
 
@@ -89,7 +89,6 @@ class Xhr {
         this.responseInterceptor = responseInterceptor || this.defaultResponseInterceptor;
         this.axios = axios.create();
         this.axiosSource = axios.CancelToken.source();
-        this.retryCount = 0;
         this.shouldRetry = shouldRetry;
 
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
@@ -123,8 +122,7 @@ class Xhr {
         const { response, request } = error;
         // Retry if there is a network error (e.g. ECONNRESET) or rate limited
         const isNetworkError = request && !response;
-        const isRetryableStatusCode = isNetworkError || getProp(response, 'status') === HTTP_STATUS_CODE_RATE_LIMIT;
-        return isRetryableStatusCode;
+        return isNetworkError || getProp(response, 'status') === HTTP_STATUS_CODE_RATE_LIMIT;
     }
 
     /**
