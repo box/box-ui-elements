@@ -520,14 +520,9 @@ class APIFactory {
     /**
      * API for Box Edit
      *
-     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
      * @return {BoxEditAPI} BoxEditAPI instance
      */
-    getBoxEditAPI(shouldDestroy: boolean): BoxEditAPI {
-        if (shouldDestroy) {
-            this.destroy();
-        }
-
+    getBoxEditAPI(): BoxEditAPI {
         this.boxEditAPI = new BoxEditAPI();
         return this.boxEditAPI;
     }

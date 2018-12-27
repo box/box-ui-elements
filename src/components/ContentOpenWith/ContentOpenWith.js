@@ -263,7 +263,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     checkBoxEditAvailability = (): Promise<boolean> => {
         return this.api
-            .getBoxEditAPI(false)
+            .getBoxEditAPI()
             .checkBoxEditAvailability()
             .then(() => true)
             .catch(() => false);
@@ -278,7 +278,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     canOpenExtensionWithBoxEdit = (integration: Integration): Promise<boolean> => {
         const { extension = '' } = integration;
         return this.api
-            .getBoxEditAPI(false)
+            .getBoxEditAPI()
             .getAppForExtension(extension)
             .then(() => true)
             .catch(() => false);

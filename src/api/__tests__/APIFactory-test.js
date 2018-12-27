@@ -325,17 +325,8 @@ describe('api/APIFactory', () => {
     });
 
     describe('getBoxEditAPI()', () => {
-        test('should call destroy and return box edit API', () => {
-            const spy = jest.spyOn(factory, 'destroy');
-            const boxEditAPI = factory.getBoxEditAPI(true);
-            expect(spy).toBeCalled();
-            expect(boxEditAPI).toBeInstanceOf(BoxEditAPI);
-        });
-
         test('should not call destroy and return box edit API', () => {
-            const spy = jest.spyOn(factory, 'destroy');
             const boxEditAPI = factory.getBoxEditAPI();
-            expect(spy).not.toHaveBeenCalled();
             expect(boxEditAPI).toBeInstanceOf(BoxEditAPI);
         });
     });
