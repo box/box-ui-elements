@@ -971,7 +971,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     boxToolsUninstalledErrorMessage: {
         id: 'be.boxToolsUninstalledErrorMessage',
         description: 'Sub header message to the user when Box Tools is not installed',
-        defaultMessage: 'Box Tools is not installed on this device.',
+        defaultMessage: 'Box Tools is not installed on this device',
     },
     boxToolsBlacklistedError: {
         id: 'be.boxEditBlacklistedError',
