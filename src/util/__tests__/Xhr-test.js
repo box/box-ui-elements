@@ -288,4 +288,197 @@ describe('util/Xhr', () => {
             expect(xhrInstance.axiosSource.cancel).toHaveBeenCalled();
         });
     });
+
+    describe('defaultResponseInterceptor()', () => {
+        test('should return the response', () => {
+            const origResponse = {
+                status: 500,
+                foo: 'bar',
+            };
+            const response = xhrInstance.defaultResponseInterceptor(origResponse);
+            expect(response).toEqual(origResponse);
+        });
+    });
+
+    describe('shouldRetryRequest', () => {
+        const createXhrInstance = shouldRetryRequest => {
+            xhrInstance = new Xhr({
+                token: '123',
+                shouldRetryRequest,
+            });
+        };
+
+        test.each([
+            [
+                false,
+                {
+                    status: 429,
+                },
+                {
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+                4,
+                false,
+            ], // false, shouldRetry false
+            [
+                true,
+                {
+                    status: 429,
+                },
+                {
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+                0,
+                true,
+            ], // true, rate limit
+            [
+                true,
+                {
+                    status: 429,
+                },
+                {
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+                3,
+                false,
+            ], // false, max number exceeded
+            [
+                true,
+                {
+                    status: 500,
+                },
+                {
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+                0,
+                false,
+            ], // false, not valid code
+            [
+                true,
+                {
+                    status: 404,
+                },
+                {
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+                0,
+                false,
+            ], // false, not valid code
+            [
+                true,
+                undefined,
+                {
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+                0,
+                true,
+            ], // true, generic network error
+            [
+                true,
+                {
+                    status: 404,
+                },
+                {
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+                0,
+                false,
+            ], // false, invalid status code
+            [true, undefined, undefined, 0, false], // false, error thrown during request
+        ])('should retry request %#', (shouldRetryRequest, response, request, retryCount, expected) => {
+            createXhrInstance(shouldRetryRequest);
+            xhrInstance.retryCount = retryCount;
+            const result = xhrInstance.shouldRetryRequest({
+                response,
+                request,
+            });
+            expect(result).toBe(expected);
+        });
+    });
+
+    describe('getExponentialRetryTimeoutInMs()', () => {
+        beforeEach(() => {
+            jest.spyOn(Math, 'random').mockReturnValue(0.5);
+        });
+
+        test.each([[1, 1500], [2, 2500], [3, 4500], [4, 8500]])(
+            'should get exponential retry timeout %#',
+            (retryCount, expected) => {
+                expect(xhrInstance.getExponentialRetryTimeoutInMs(retryCount)).toBe(expected);
+            },
+        );
+    });
+
+    describe('errorInterceptor()', () => {
+        const DELAY = 500;
+        beforeEach(() => {
+            xhrInstance.shouldRetryRequest = jest.fn();
+            xhrInstance.getExponentialRetryTimeoutInMs = jest.fn().mockReturnValue(DELAY);
+            xhrInstance.responseInterceptor = jest.fn();
+
+            jest.useFakeTimers();
+        });
+
+        test('should retry the request before calling the error interceptor', () => {
+            const error = {
+                status: 429,
+                response: {
+                    data: undefined,
+                },
+            };
+            xhrInstance.axios = jest.fn().mockImplementation(() => {
+                xhrInstance.errorInterceptor(error);
+                return Promise.resolve();
+            });
+            // first time return true, then false
+            xhrInstance.shouldRetryRequest.mockReturnValue(false).mockReturnValueOnce(true);
+            xhrInstance.errorInterceptor(error);
+
+            expect(xhrInstance.retryCount).toBe(1);
+            expect(xhrInstance.getExponentialRetryTimeoutInMs).toHaveBeenCalled();
+            expect(xhrInstance.responseInterceptor).not.toHaveBeenCalled();
+
+            jest.runAllTimers();
+
+            expect(xhrInstance.axios).toHaveBeenCalled();
+            expect(xhrInstance.retryCount).toBe(1);
+            expect(xhrInstance.responseInterceptor).toHaveBeenCalledWith(error);
+        });
+
+        test('should not retry the request before calling the error interceptor', () => {
+            const response = {
+                data: {
+                    foo: 'bar',
+                },
+            };
+            const error = {
+                status: 500,
+                response,
+            };
+            xhrInstance.axios = jest.fn().mockImplementation(() => {
+                xhrInstance.errorInterceptor(error);
+                return Promise.resolve();
+            });
+            xhrInstance.shouldRetryRequest.mockReturnValue(false);
+            xhrInstance.errorInterceptor(error);
+
+            expect(xhrInstance.getExponentialRetryTimeoutInMs).not.toHaveBeenCalled();
+            expect(xhrInstance.axios).not.toHaveBeenCalled();
+            expect(xhrInstance.responseInterceptor).toHaveBeenCalledWith(response.data);
+        });
+    });
 });

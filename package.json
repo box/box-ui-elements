@@ -90,6 +90,7 @@
     },
     "jest": {
         "clearMocks": true,
+        "restoreMocks": true,
         "moduleNameMapper": {
             "react-intl": "<rootDir>/conf/react-intl-mocks.js",
             "intl": "<rootDir>/conf/lib-intl-mock.js",

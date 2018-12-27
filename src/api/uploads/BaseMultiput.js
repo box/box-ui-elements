@@ -28,7 +28,10 @@ class BaseMultiput extends BaseUpload {
      * @return {void}
      */
     constructor(options: Options, sessionEndpoints: Object, config?: MultiputConfig): void {
-        super(options);
+        super({
+            ...options,
+            shouldRetry: false, // disable XHR retries as there is already retry logic
+        });
 
         this.config = config || DEFAULT_MULTIPUT_CONFIG;
         this.sessionEndpoints = sessionEndpoints;
