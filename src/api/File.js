@@ -199,7 +199,7 @@ class File extends Item {
      * @param {Function} errorCallback - Function to call with errors
      * @return {Promise}
      */
-    async getFileExtension(id: string, successCallback: Function, errorCallback: ElementsErrorCallback): Promise<void> {
+    getFileExtension(id: string, successCallback: Function, errorCallback: ElementsErrorCallback): void {
         if (this.isDestroyed()) {
             return;
         }

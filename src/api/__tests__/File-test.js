@@ -1,7 +1,7 @@
 import File from '../File';
 import Cache from '../../util/Cache';
 import * as fields from '../../util/fields';
-import { X_REP_HINTS, ERROR_CODE_FETCH_FILE, ERROR_CODE_GET_DOWNLOAD_URL } from '../../constants';
+import { X_REP_HINTS, ERROR_CODE_FETCH_FILE, ERROR_CODE_GET_DOWNLOAD_URL, FIELD_EXTENSION } from '../../constants';
 
 jest.mock('../../util/file', () => ({
     getTypedFileId: jest.fn().mockReturnValue('file_id'),
@@ -444,6 +444,30 @@ describe('api/File', () => {
                 headers: {
                     'X-Rep-Hints': X_REP_HINTS,
                 },
+            });
+        });
+    });
+
+    describe('getFileExtension()', () => {
+        beforeEach(() => {
+            file.getFile = jest.fn();
+        });
+        test('should do nothing if destroyed', () => {
+            file.isDestroyed = jest.fn().mockReturnValue(true);
+            file.getFileExtension('id', () => {}, () => {});
+            expect(file.getFile).not.toBeCalled();
+        });
+
+        test('should get the file with the extension field only', () => {
+            file.isDestroyed = jest.fn().mockReturnValue(false);
+            const id = 'id';
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+
+            file.getFileExtension(id, successCallback, errorCallback);
+
+            expect(file.getFile).toBeCalledWith(id, successCallback, errorCallback, {
+                fields: [FIELD_EXTENSION],
             });
         });
     });

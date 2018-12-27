@@ -26,8 +26,6 @@ const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BOX_EDIT_INTEGRATION_ID = '1338';
 const AUTH_CODE = 'auth_code';
-const BOX_TOOLS_UNAVAILABLE = 'box_tools_unavailable';
-const BOX_TOOLS_BLACKLISTED = 'box_tools_blacklisted';
 
 type ExternalProps = {
     show?: boolean,
@@ -202,13 +200,16 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .getOpenWithIntegrations(fileId, language, this.fetchOpenWithSuccessHandler, this.fetchErrorHandler);
     }
 
+    setResolvedIntegrationState = (integrations: Array<Integration>) =>
+        this.setState({ integrations, isLoading: false });
+
     /**
      * Fetch app integrations info needed to render.
      *
      * @param {OpenWithIntegrations} integrations - The available Open With integrations
      * @return {void}
      */
-    fetchOpenWithSuccessHandler = (integrations: Array<Integration>): void => {
+    fetchOpenWithSuccessHandler = async (integrations: Array<Integration>): Promise<any> => {
         const boxEditIntegration = integrations.find(({ appIntegrationId }) =>
             this.isBoxEditIntegration(appIntegrationId),
         );
@@ -218,36 +219,36 @@ class ContentOpenWith extends PureComponent<Props, State> {
             return;
         }
 
-        // If Box Edit is present and enabled, we need to set its ability to locally open the given file
-        this.setIntegrationFileExtension()
-            .then(data => {
-                boxEditIntegration.extension = data.extension;
-                return boxEditIntegration;
-            })
-            .then(this.checkBoxEditAvailability)
-            .then(this.canOpenExtensionWithBoxEdit)
-            .catch(error => {
-                boxEditIntegration.isDisabled = true;
-                let disabledReason = messages.executeIntegrationOpenWithErrorHeader;
-                if (error.message === BOX_TOOLS_BLACKLISTED) {
-                    disabledReason = messages.boxToolsBlacklistedError;
-                } else if (error.message === BOX_TOOLS_UNAVAILABLE) {
-                    disabledReason = messages.boxToolsUninstalledErrorMessage;
-                }
+        try {
+            const { extension } = await this.getIntegrationFileExtension();
+            boxEditIntegration.extension = extension;
+        } catch (error) {
+            boxEditIntegration.disabledReasons.push(
+                <FormattedMessage {...messages.executeIntegrationOpenWithErrorHeader} />,
+            );
+            boxEditIntegration.isDisabled = true;
+            this.setState({ integrations, isLoading: false });
+            return;
+        }
 
-                boxEditIntegration.disabledReasons.push(<FormattedMessage {...disabledReason} />);
-            })
-            .finally(() => {
-                this.setState({ integrations, isLoading: false });
-            });
+        // If Box Edit is present and enabled, we need to set its ability to locally open the given file
+        if (!(await this.checkBoxEditAvailability())) {
+            boxEditIntegration.disabledReasons.push(<FormattedMessage {...messages.boxToolsUninstalledErrorMessage} />);
+            boxEditIntegration.isDisabled = true;
+        } else if (!(await this.canOpenExtensionWithBoxEdit(boxEditIntegration))) {
+            boxEditIntegration.disabledReasons.push(<FormattedMessage {...messages.boxToolsBlacklistedError} />);
+            boxEditIntegration.isDisabled = true;
+        }
+
+        this.setState({ integrations, isLoading: false });
     };
 
     /**
      * Fetches the file extension of the current file.
      *
-     * @return {void}
+     * @return {Promise}
      */
-    setIntegrationFileExtension = (): Promise<BoxItem> => {
+    getIntegrationFileExtension = (): Promise<BoxItem> => {
         const { fileId }: Props = this.props;
         return new Promise((resolve, reject) => {
             this.api.getFileAPI().getFileExtension(fileId, resolve, reject);
@@ -260,14 +261,12 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
      * @return {void}
      */
-    checkBoxEditAvailability = (integration: Integration): Promise<any> => {
+    checkBoxEditAvailability = (): Promise<boolean> => {
         return this.api
             .getBoxEditAPI(false)
             .checkBoxEditAvailability()
-            .then(() => integration)
-            .catch(() => {
-                throw new Error(BOX_TOOLS_UNAVAILABLE);
-            });
+            .then(() => true)
+            .catch(() => false);
     };
 
     /**
@@ -276,15 +275,13 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @param {Integration} boxEditIntegration - A Box Edit or Box Edit SFC integration
      * @return {void}
      */
-    canOpenExtensionWithBoxEdit = (integration: Integration): Promise<Integration> => {
+    canOpenExtensionWithBoxEdit = (integration: Integration): Promise<boolean> => {
         const { extension = '' } = integration;
         return this.api
             .getBoxEditAPI(false)
             .getAppForExtension(extension)
-            .then(() => integration)
-            .catch(() => {
-                throw new Error(BOX_TOOLS_BLACKLISTED);
-            });
+            .then(() => true)
+            .catch(() => false);
     };
 
     /**
@@ -440,7 +437,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     };
 
     /**
-     * Calls the onExecute prop and resets the execute ID
+     * Calls the onExecute prop
      *
      * @private
      * @param {string} integrationID - The integration that was executed

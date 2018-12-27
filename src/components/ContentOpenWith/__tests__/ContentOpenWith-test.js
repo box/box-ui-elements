@@ -1,8 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { FormattedMessage } from 'react-intl';
 import ContentOpenWith from '../ContentOpenWith';
+import messages from '../../messages';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
+
+const BOX_EDIT_INTEGRATION_ID = '1338';
+const ADOBE_INTEGRATION_ID = '1234';
 
 describe('components/ContentOpenWith/ContentOpenWith', () => {
     const fileId = '1234';
@@ -40,6 +45,13 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
         });
     });
 
+    describe('isBoxEditIntegration()', () => {
+        test('should determine if the integration is a box edit integration', () => {
+            expect(instance.isBoxEditIntegration(ADOBE_INTEGRATION_ID)).toBe(false);
+            expect(instance.isBoxEditIntegration(BOX_EDIT_INTEGRATION_ID)).toBe(true);
+        });
+    });
+
     describe('fetchOpenWithData()', () => {
         const fileStub = jest.fn();
         const openWithStub = jest.fn();
@@ -66,13 +78,113 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('fetchOpenWithSuccessHandler()', () => {
-        test('should set the state with the new integrations and disable loading', () => {
-            const mockIntegrations = ['Adobe', 'Google'];
-            instance.setState = jest.fn();
+        let mockIntegrations = [];
+        let boxEditIntegration = {};
+        const extension = 'pdf';
 
-            instance.fetchOpenWithSuccessHandler(mockIntegrations);
+        beforeEach(() => {
+            instance.setState = jest.fn();
+            mockIntegrations = [
+                {
+                    isDisabled: false,
+                    name: 'Adobe',
+                    appIntegrationId: '2',
+                    disabledReasons: [],
+                },
+                {
+                    isDisabled: false,
+                    name: 'Google',
+                    appIntegrationId: '1',
+                    disabledReasons: [],
+                },
+            ];
+            boxEditIntegration = {
+                isDisabled: false,
+                name: 'Open',
+                appIntegrationId: BOX_EDIT_INTEGRATION_ID,
+                disabledReasons: [],
+            };
+        });
+
+        test('should set the state with the new integrations and disable loading', async () => {
+            instance.getIntegrationFileExtension = jest.fn();
+
+            await instance.fetchOpenWithSuccessHandler(mockIntegrations);
+
             expect(instance.setState).toHaveBeenCalledWith({
                 integrations: mockIntegrations,
+                isLoading: false,
+            });
+            expect(instance.getIntegrationFileExtension).not.toBeCalled();
+        });
+
+        test('should set the disabled reason if we are unable to get the extension before setting state', async () => {
+            instance.getIntegrationFileExtension = jest.fn().mockRejectedValue();
+            instance.checkBoxEditAvailability = jest.fn();
+            instance.canOpenExtensionWithBoxEdit = jest.fn();
+
+            await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
+            expect(instance.setState).toBeCalled();
+            expect(instance.checkBoxEditAvailability).not.toBeCalled();
+            expect(instance.canOpenExtensionWithBoxEdit).not.toBeCalled();
+        });
+
+        test('should get the file extension and check box edit for availability and openability before setting state', async () => {
+            const integrationWithExtension = {
+                ...boxEditIntegration,
+                extension,
+            };
+
+            instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
+            instance.checkBoxEditAvailability = jest.fn().mockResolvedValue(true);
+            instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue(true);
+
+            await instance.fetchOpenWithSuccessHandler([...mockIntegrations, boxEditIntegration]);
+
+            expect(instance.setState).toBeCalledWith({
+                integrations: [...mockIntegrations, integrationWithExtension],
+                isLoading: false,
+            });
+            expect(instance.checkBoxEditAvailability).toBeCalled();
+            expect(instance.canOpenExtensionWithBoxEdit).toBeCalled();
+        });
+
+        test('should set the disabled reason if box tools is not available before setting state', async () => {
+            instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
+            instance.checkBoxEditAvailability = jest.fn().mockResolvedValue(false);
+            instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue(true);
+
+            await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
+
+            expect(instance.setState).toBeCalledWith({
+                integrations: [
+                    {
+                        ...boxEditIntegration,
+                        isDisabled: true,
+                        // eslint-disable-next-line
+                        disabledReasons: [<FormattedMessage {...messages.boxToolsUninstalledErrorMessage} />],
+                    },
+                ],
+                isLoading: false,
+            });
+        });
+
+        test('should set the disabled reason if the file type is black listed by box tools before setting state', async () => {
+            instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
+            instance.checkBoxEditAvailability = jest.fn().mockResolvedValue(true);
+            instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue(false);
+
+            await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
+
+            expect(instance.setState).toBeCalledWith({
+                integrations: [
+                    {
+                        ...boxEditIntegration,
+                        isDisabled: true,
+                        // eslint-disable-next-line
+                        disabledReasons: [<FormattedMessage {...messages.boxToolsBlacklistedError} />],
+                    },
+                ],
                 isLoading: false,
             });
         });
