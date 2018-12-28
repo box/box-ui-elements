@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`components/ContentOpenWith/OpenWithMenu should be disabled with a reason if the integration is disabled 1`] = `
+exports[`components/ContentOpenWith/OpenWithMenuItem should be disabled with a reason if the integration is disabled 1`] = `
 <MenuItem
   isDisabled={true}
   onClick={[Function]}
 >
-  <IconFileDefault />
+  <FileIcon />
   <span>
     <p
       className="bcow-menu-item-title"
@@ -21,7 +21,7 @@ exports[`components/ContentOpenWith/OpenWithMenu should be disabled with a reaso
 </MenuItem>
 `;
 
-exports[`components/ContentOpenWith/OpenWithMenu should render the description and correct icon 1`] = `
+exports[`components/ContentOpenWith/OpenWithMenuItem should render the description and correct icon 1`] = `
 <MenuItem
   onClick={[Function]}
 >
@@ -41,12 +41,12 @@ exports[`components/ContentOpenWith/OpenWithMenu should render the description a
 </MenuItem>
 `;
 
-exports[`components/ContentOpenWith/OpenWithMenu should use the default error for a disabled integration if there is no reason 1`] = `
+exports[`components/ContentOpenWith/OpenWithMenuItem should use the default error for a disabled integration if there is no reason 1`] = `
 <MenuItem
   isDisabled={true}
   onClick={[Function]}
 >
-  <IconFileDefault />
+  <FileIcon />
   <span>
     <p
       className="bcow-menu-item-title"
@@ -65,11 +65,11 @@ exports[`components/ContentOpenWith/OpenWithMenu should use the default error fo
 </MenuItem>
 `;
 
-exports[`components/ContentOpenWith/OpenWithMenu should use the default icon when no mapping can be found to an existing icon 1`] = `
+exports[`components/ContentOpenWith/OpenWithMenuItem should use the default icon when no mapping can be found to an existing icon 1`] = `
 <MenuItem
   onClick={[Function]}
 >
-  <IconFileDefault />
+  <FileIcon />
   <span>
     <p
       className="bcow-menu-item-title"

@@ -14,6 +14,7 @@ import FileAccessStatsAPI from '../FileAccessStats';
 import MetadataAPI from '../Metadata';
 import FileCollaboratorsAPI from '../FileCollaborators';
 import UsersAPI from '../Users';
+import BoxEditAPI from '../box-edit';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../constants';
 
 let factory;
@@ -41,6 +42,7 @@ describe('api/APIFactory', () => {
             factory.versionsAPI = { destroy: jest.fn() };
             factory.metadataAPI = { destroy: jest.fn() };
             factory.usersAPI = { destroy: jest.fn() };
+            factory.boxEditAPI = { destroy: jest.fn() };
             factory.destroy();
             expect(factory.fileAPI).toBeUndefined();
             expect(factory.folderAPI).toBeUndefined();
@@ -319,6 +321,13 @@ describe('api/APIFactory', () => {
             expect(usersAPI.options.cache).toBeInstanceOf(Cache);
             expect(usersAPI.options.apiHost).toBe(DEFAULT_HOSTNAME_API);
             expect(usersAPI.options.uploadHost).toBe(DEFAULT_HOSTNAME_UPLOAD);
+        });
+    });
+
+    describe('getBoxEditAPI()', () => {
+        test('should not call destroy and return box edit API', () => {
+            const boxEditAPI = factory.getBoxEditAPI();
+            expect(boxEditAPI).toBeInstanceOf(BoxEditAPI);
         });
     });
 });

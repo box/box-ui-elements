@@ -617,15 +617,18 @@ type ExecuteAPI = {
 
 type Integration = {
     appIntegrationId: string,
-    disabledReasons: Array<string>,
+    disabledReasons: Array<DisabledReason>,
     displayDescription: string,
     displayName: string,
     displayOrder: number,
+    extension?: string,
     isDefault: boolean,
     isDisabled: boolean,
     requiresConsent: boolean,
     type: APP_INTEGRATION,
 };
+
+type DisabledReason = ?string | ?Element;
 
 type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',

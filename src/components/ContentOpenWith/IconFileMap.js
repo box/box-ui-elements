@@ -1,15 +1,23 @@
+/**
+ * @flow
+ * @file Maintains a mapping of integration names to icons.
+ * @author Box
+ */
 import IconAdobeSign from 'box-react-ui/lib/icons/adobe-sign/IconAdobeSign';
-import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
 import IconGoogleDocs from 'box-react-ui/lib/icons/google-docs/IconGoogleDocs';
 import IconGoogleSheets from 'box-react-ui/lib/icons/google-docs/IconGoogleSheets';
 import IconGoogleSlides from 'box-react-ui/lib/icons/google-docs/IconGoogleSlides';
+import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
 
 const ICON_FILE_MAP = {
-    default: IconFileDefault,
     'Adobe Sign': IconAdobeSign,
     'Google Docs': IconGoogleDocs,
     'Google Sheets': IconGoogleSheets,
     'Google Slides': IconGoogleSlides,
 };
 
-export default ICON_FILE_MAP;
+function getIcon(iconName: string): Element {
+    return ICON_FILE_MAP[iconName] || FileIcon;
+}
+
+export default getIcon;

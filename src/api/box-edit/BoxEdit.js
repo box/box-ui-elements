@@ -113,13 +113,13 @@ class BoxEdit {
         return Promise.resolve(resultMap);
     }
 
-    openFile(fileTypedID: string, token: Object): Promise<any> {
+    openFile(fileID: string, token: Object): Promise<any> {
         // @NOTE. canOpenWithBoxEdit, create token taken care of higher levels
         // therefore not ported into React library
 
         // TODO is token the right name?
         const executeDataAsString = createExecuteData(
-            fileTypedID.slice(2),
+            fileID,
             token.data.token,
             token.data.auth_code,
             token.data.token_scope,

@@ -209,7 +209,7 @@ describe('api/box-edit/BoxEdit', () => {
 
             Browser.getName = jest.fn().mockReturnValue(expectedBrowser);
 
-            const itemTypedID = 'f_1234';
+            const itemID = '1234';
             const expected = 'success';
 
             const token = {
@@ -223,14 +223,14 @@ describe('api/box-edit/BoxEdit', () => {
                 sendCommand: jest.fn().mockResolvedValue(expected),
             };
 
-            const result = await boxEdit.openFile(itemTypedID, token);
+            const result = await boxEdit.openFile(itemID, token);
 
             // TODO. more assertions as appropriate.
             const commandData = JSON.parse(boxEdit.client.sendCommand.mock.calls[0][0]);
             expect(result).toEqual(expected);
 
             expect(commandData.command_type).toEqual('launch_application');
-            expect(commandData.file_id).toEqual(itemTypedID.slice(2));
+            expect(commandData.file_id).toEqual(itemID);
             expect(commandData.auth_code).toEqual(token.data.auth_code);
             expect(commandData.browser_type).toEqual(expectedBrowser);
         });

@@ -1,17 +1,25 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { FormattedMessage } from 'react-intl';
 import ContentOpenWith from '../ContentOpenWith';
+import messages from '../../messages';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
+const BOX_EDIT_INTEGRATION_ID = '1338';
+const ADOBE_INTEGRATION_ID = '1234';
+const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
+const UNINSTALLED_ERROR_MESSAGE_KEY = 'boxToolsUninstalledErrorMessage';
+
 describe('components/ContentOpenWith/ContentOpenWith', () => {
     const fileId = '1234';
+    const token = '4321';
     let wrapper;
     let instance;
     const getWrapper = props => shallow(<ContentOpenWith {...props} />);
 
     beforeEach(() => {
-        wrapper = getWrapper({ fileId });
+        wrapper = getWrapper({ fileId, token });
         instance = wrapper.instance();
         jest.spyOn(global.console, 'error').mockImplementation();
     });
@@ -37,6 +45,13 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             instance.componentDidUpdate({ fileId: '4321' });
             expect(instance.fetchOpenWithData).toHaveBeenCalled();
             expect(instance.setState).toHaveBeenCalledWith({ isLoading: true });
+        });
+    });
+
+    describe('isBoxEditIntegration()', () => {
+        test('should determine if the integration is a box edit integration', () => {
+            expect(instance.isBoxEditIntegration(ADOBE_INTEGRATION_ID)).toBe(false);
+            expect(instance.isBoxEditIntegration(BOX_EDIT_INTEGRATION_ID)).toBe(true);
         });
     });
 
@@ -66,15 +81,170 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('fetchOpenWithSuccessHandler()', () => {
-        test('should set the state with the new integrations and disable loading', () => {
-            const mockIntegrations = ['Adobe', 'Google'];
-            instance.setState = jest.fn();
+        let mockIntegrations = [];
+        let boxEditIntegration = {};
+        const extension = 'pdf';
 
-            instance.fetchOpenWithSuccessHandler(mockIntegrations);
+        beforeEach(() => {
+            instance.setState = jest.fn();
+            mockIntegrations = [
+                {
+                    isDisabled: false,
+                    name: 'Adobe',
+                    appIntegrationId: '2',
+                    disabledReasons: [],
+                },
+                {
+                    isDisabled: false,
+                    name: 'Google',
+                    appIntegrationId: '1',
+                    disabledReasons: [],
+                },
+            ];
+            boxEditIntegration = {
+                isDisabled: false,
+                name: 'Open',
+                appIntegrationId: BOX_EDIT_INTEGRATION_ID,
+                disabledReasons: [],
+            };
+        });
+
+        test('should set the state with the new integrations and disable loading', async () => {
+            instance.getIntegrationFileExtension = jest.fn();
+
+            await instance.fetchOpenWithSuccessHandler(mockIntegrations);
+
             expect(instance.setState).toHaveBeenCalledWith({
                 integrations: mockIntegrations,
                 isLoading: false,
             });
+            expect(instance.getIntegrationFileExtension).not.toBeCalled();
+        });
+
+        test('should set the disabled reason if we are unable to get the extension before setting state', async () => {
+            instance.getIntegrationFileExtension = jest.fn().mockRejectedValue(new Error('error'));
+            instance.isBoxEditAvailable = jest.fn();
+            instance.canOpenExtensionWithBoxEdit = jest.fn();
+
+            await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
+            expect(instance.setState).toBeCalled();
+            expect(instance.isBoxEditAvailable).not.toBeCalled();
+            expect(instance.canOpenExtensionWithBoxEdit).not.toBeCalled();
+        });
+
+        test('should get the file extension and check box edit for availability and openability before setting state', async () => {
+            const integrationWithExtension = {
+                ...boxEditIntegration,
+                extension,
+            };
+
+            instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
+            instance.isBoxEditAvailable = jest.fn().mockResolvedValue(true);
+            instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue(true);
+
+            await instance.fetchOpenWithSuccessHandler([...mockIntegrations, boxEditIntegration]);
+
+            expect(instance.setState).toBeCalledWith({
+                integrations: [...mockIntegrations, integrationWithExtension],
+                isLoading: false,
+            });
+            expect(instance.isBoxEditAvailable).toBeCalled();
+            expect(instance.canOpenExtensionWithBoxEdit).toBeCalled();
+        });
+
+        test('should set the disabled reason if box tools is not available before setting state', async () => {
+            instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
+            instance.isBoxEditAvailable = jest.fn().mockRejectedValue(new Error(UNINSTALLED_ERROR_MESSAGE_KEY));
+            instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue();
+
+            await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
+
+            expect(instance.setState).toBeCalledWith({
+                integrations: [
+                    {
+                        ...boxEditIntegration,
+                        isDisabled: true,
+                        // eslint-disable-next-line
+                        disabledReasons: [<FormattedMessage {...messages.boxToolsUninstalledErrorMessage} />],
+                    },
+                ],
+                isLoading: false,
+            });
+        });
+
+        test('should set the disabled reason if the file type is black listed by box tools before setting state', async () => {
+            instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
+            instance.isBoxEditAvailable = jest.fn().mockResolvedValue();
+            instance.canOpenExtensionWithBoxEdit = jest
+                .fn()
+                .mockRejectedValue(new Error(BLACKLISTED_ERROR_MESSAGE_KEY));
+
+            await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
+
+            expect(instance.setState).toBeCalledWith({
+                integrations: [
+                    {
+                        ...boxEditIntegration,
+                        isDisabled: true,
+                        // eslint-disable-next-line
+                        disabledReasons: [<FormattedMessage {...messages.boxToolsBlacklistedError} />],
+                    },
+                ],
+                isLoading: false,
+            });
+        });
+    });
+
+    describe('getIntegrationFileExtension()', () => {
+        test('should get the file extension', () => {
+            const getFileExtensionStub = jest.fn();
+            instance.api = {
+                getFileAPI: () => ({ getFileExtension: getFileExtensionStub }),
+            };
+
+            instance.getIntegrationFileExtension();
+
+            expect(getFileExtensionStub).toBeCalled();
+        });
+    });
+
+    describe('isBoxEditAvailable()', () => {
+        test('should resolve with result of box edit', async () => {
+            let checkBoxEditAvailabilityStub = jest.fn().mockResolvedValueOnce();
+            instance.api = {
+                getBoxEditAPI: () => ({ checkBoxEditAvailability: checkBoxEditAvailabilityStub }),
+            };
+
+            const result = await instance.isBoxEditAvailable();
+            expect(result).toBe(undefined);
+
+            checkBoxEditAvailabilityStub = jest.fn().mockRejectedValue('Not Available!');
+
+            try {
+                await instance.isBoxEditAvailable();
+            } catch (error) {
+                expect(typeof error.message).toBe('string');
+            }
+        });
+    });
+
+    describe('canOpenExtensionWithBoxEdit()', () => {
+        test('should resolve with result of box edit', async () => {
+            let getAppForExtensionStub = jest.fn().mockResolvedValueOnce();
+            instance.api = {
+                getBoxEditAPI: () => ({ getAppForExtension: getAppForExtensionStub }),
+            };
+
+            const result = await instance.canOpenExtensionWithBoxEdit('pdf');
+            expect(result).toBe(undefined);
+
+            getAppForExtensionStub = jest.fn().mockRejectedValue('blacklisted!');
+
+            try {
+                await instance.canOpenExtensionWithBoxEdit('js');
+            } catch (error) {
+                expect(typeof error.message).toBe('string');
+            }
         });
     });
 
@@ -92,6 +262,23 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('onIntegrationClick()', () => {
+        let api;
+        let displayIntegration;
+        beforeEach(() => {
+            const executeStub = jest.fn();
+            api = {
+                getAppIntegrationsAPI: () => ({ execute: executeStub }),
+            };
+
+            displayIntegration = {
+                appIntegrationId: '1',
+                displayName: 'Adobe Sign',
+            };
+
+            instance.setState = jest.fn();
+            instance.api = api;
+        });
+
         it('should open a new window, set state, unload, title, and kick off the integration execution', () => {
             instance.window.open = jest.fn().mockReturnValue({
                 onunload: null,
@@ -99,16 +286,6 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
                     title: null,
                 },
             });
-            const executeStub = jest.fn();
-            const api = {
-                getAppIntegrationsAPI: () => ({ execute: executeStub }),
-            };
-            instance.api = api;
-            instance.setState = jest.fn();
-            const displayIntegration = {
-                appIntegrationId: '1',
-                displayName: 'Adobe Sign',
-            };
 
             instance.onIntegrationClick(displayIntegration);
             expect(instance.window.open).toBeCalled();
@@ -119,6 +296,14 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
                 shouldRenderErrorIntegrationPortal: false,
             });
             expect(api.getAppIntegrationsAPI().execute).toBeCalled();
+        });
+
+        it('should not perform any window management for a box edit integration', () => {
+            instance.isBoxEditIntegration = jest.fn().mockReturnValue(true);
+
+            instance.onIntegrationClick(displayIntegration);
+            expect(api.getAppIntegrationsAPI().execute).toBeCalled();
+            expect(instance.setState).not.toBeCalled();
         });
     });
 
@@ -135,6 +320,45 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('executeIntegrationSuccessHandler()', () => {
+        const id = 3;
+        const executeData = {
+            method: 'GET',
+            url: 'foo.com/bar',
+        };
+
+        beforeEach(() => {
+            instance.isBoxEditIntegration = jest.fn();
+            instance.executeBoxEditSuccessHandler = jest.fn();
+            instance.executeOnlineIntegrationSuccessHandler = jest.fn();
+            instance.onExecute = jest.fn();
+        });
+
+        test('should invoke the box edit success handler if we executed a box edit integration', () => {
+            instance.isBoxEditIntegration.mockReturnValue(true);
+
+            instance.executeIntegrationSuccessHandler(id, executeData);
+
+            expect(instance.executeBoxEditSuccessHandler).toBeCalledWith(executeData);
+        });
+
+        test('should invoke the online success handler if we executed an online integration', () => {
+            instance.isBoxEditIntegration.mockReturnValue(false);
+
+            instance.executeIntegrationSuccessHandler(id, executeData);
+
+            expect(instance.executeOnlineIntegrationSuccessHandler).toBeCalledWith(executeData);
+            expect(instance.executeBoxEditSuccessHandler).not.toBeCalled();
+        });
+
+        test('should invoke the execute callback', () => {
+            instance.onExecute = jest.fn();
+
+            instance.executeIntegrationSuccessHandler(id, executeData);
+            expect(instance.onExecute).toBeCalledWith(id);
+        });
+    });
+
+    describe('executeOnlineIntegrationSuccessHandler()', () => {
         test('should set the post data in state for a POST integration', () => {
             const executeData = {
                 method: 'POST',
@@ -142,7 +366,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             };
             instance.setState = jest.fn();
 
-            instance.executeIntegrationSuccessHandler(executeData);
+            instance.executeOnlineIntegrationSuccessHandler(executeData);
             expect(instance.setState).toBeCalledWith({
                 executePostData: executeData,
             });
@@ -155,10 +379,10 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             instance.integrationWindow = false;
             instance.executeIntegrationErrorHandler = jest.fn();
 
-            instance.executeIntegrationSuccessHandler(executeData);
+            instance.executeOnlineIntegrationSuccessHandler(executeData);
             expect(instance.executeIntegrationErrorHandler).toBeCalled();
         });
-        test('should call the execute handler and null the integrationWindow', () => {
+        test('should  null the integrationWindow', () => {
             instance.onExecute = jest.fn();
             const executeData = {
                 method: 'GET',
@@ -169,8 +393,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
                 opener: 'url',
             };
 
-            instance.executeIntegrationSuccessHandler(executeData);
-            expect(instance.onExecute).toBeCalled();
+            instance.executeOnlineIntegrationSuccessHandler(executeData);
             expect(instance.integrationWindow).toEqual(null);
         });
         test('should throw an error in the default case', () => {
@@ -180,18 +403,38 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             };
             instance.executeIntegrationErrorHandler = jest.fn();
 
-            instance.executeIntegrationSuccessHandler(executeData);
+            instance.executeOnlineIntegrationSuccessHandler(executeData);
             expect(instance.executeIntegrationErrorHandler).toBeCalled();
         });
     });
 
-    describe('onExecuteFormSubmit()', () => {
-        test('should call the execute handler and clear out the form state data', () => {
-            instance.onExecute = jest.fn();
-            instance.setState = jest.fn();
+    describe('executeBoxEditSuccessHandler()', () => {
+        test('should use box edit to open the file', () => {
+            const openFileStub = jest.fn();
+            const authCode = 'abcde';
+            instance.api = {
+                getBoxEditAPI: () => ({ openFile: openFileStub }),
+            };
 
+            const executeData = {
+                url: `www.box.com/execute?file_id=1&auth_code=${authCode}&other_param=foo`,
+            };
+
+            instance.executeBoxEditSuccessHandler(executeData);
+
+            expect(openFileStub).toBeCalledWith(fileId, {
+                data: {
+                    auth_code: authCode,
+                    token,
+                },
+            });
+        });
+    });
+
+    describe('onExecuteFormSubmit()', () => {
+        test('should clear out the form state data', () => {
+            instance.setState = jest.fn();
             instance.onExecuteFormSubmit();
-            expect(instance.onExecute).toBeCalled();
             expect(instance.setState).toBeCalledWith({ executePostData: null });
         });
     });
@@ -202,11 +445,9 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
         const id = '1';
         instance = getWrapper({ onExecute: propFunction }).instance();
         instance.setState = jest.fn();
-        instance.executeId = id;
 
-        instance.onExecute();
+        instance.onExecute(id);
         expect(propFunction).toBeCalledWith(id);
-        expect(instance.executeId).toEqual(null);
         expect(instance.setState).toBeCalledWith({
             shouldRenderLoadingIntegrationPortal: false,
         });
