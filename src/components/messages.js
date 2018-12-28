@@ -976,7 +976,7 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
     boxToolsBlacklistedError: {
         id: 'be.boxEditBlacklistedError',
         description: 'Message when Box Tools cannot open a particular file type',
-        defaultMessage: 'This file type cannot be opened by Box Tools',
+        defaultMessage: 'This file cannot be opened by Box Tools',
     },
     drawAnnotation: {
         id: 'be.drawAnnotation',
