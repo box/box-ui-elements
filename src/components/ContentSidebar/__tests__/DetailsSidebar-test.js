@@ -131,11 +131,26 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             });
             instance = wrapper.instance();
             instance.fetchFile = jest.fn();
+            instance.fetchAccessStats = jest.fn();
+            instance.fetchClassification = jest.fn();
         });
 
         test('should fetch the file information', () => {
             instance.componentDidMount();
             expect(instance.fetchFile).toHaveBeenCalled();
+            expect(instance.fetchAccessStats).not.toHaveBeenCalled();
+            expect(instance.fetchAccessStats).not.toHaveBeenCalled();
+        });
+
+        test('should fetch the file info, access stats, and classification', () => {
+            wrapper.setProps({
+                hasAccessStats: true,
+                hasClassification: true,
+            });
+            instance.componentDidMount();
+            expect(instance.fetchFile).toHaveBeenCalled();
+            expect(instance.fetchAccessStats).toHaveBeenCalled();
+            expect(instance.fetchAccessStats).toHaveBeenCalled();
         });
     });
 
