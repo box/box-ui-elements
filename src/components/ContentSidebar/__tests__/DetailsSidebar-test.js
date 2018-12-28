@@ -193,8 +193,31 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         let wrapper;
         let instance;
         beforeEach(() => {
-            wrapper = getWrapper();
+            wrapper = getWrapper(
+                {
+                    hasAccessStats: true,
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
             instance = wrapper.instance();
+        });
+
+        test('should short circuit if access stats is disabled', () => {
+            wrapper.setProps({
+                hasAccessStats: false,
+            });
+            instance.fetchAccessStats();
+            expect(getStats).not.toHaveBeenCalled();
+        });
+
+        test('should short circuit if it is already fetching', () => {
+            wrapper.setState({
+                isLoadingAccessStats: true,
+            });
+            instance.fetchAccessStats();
+            expect(getStats).not.toHaveBeenCalled();
         });
 
         test('should fetch the file access stats', () => {
@@ -289,8 +312,31 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         let wrapper;
         let instance;
         beforeEach(() => {
-            wrapper = getWrapper();
+            wrapper = getWrapper(
+                {
+                    hasClassification: true,
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
             instance = wrapper.instance();
+        });
+
+        test('should short circuit if classification is disabled', () => {
+            wrapper.setProps({
+                hasClassification: false,
+            });
+            instance.fetchAccessStats();
+            expect(getClassification).not.toHaveBeenCalled();
+        });
+
+        test('should short circuit if it is already fetching', () => {
+            wrapper.setState({
+                isLoadingClassification: true,
+            });
+            instance.fetchClassification();
+            expect(getClassification).not.toHaveBeenCalled();
         });
 
         test('should fetch the classification info', () => {
@@ -464,6 +510,38 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             expect(onError).toBeCalledWith(error, code, {
                 e: error,
             });
+        });
+    });
+
+    describe('componentDidUpdate()', () => {
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            wrapper = getWrapper({
+                file,
+                hasAccessStats: true,
+                hasClassification: true,
+            });
+            instance = wrapper.instance();
+            instance.fetchAccessStats = jest.fn();
+            instance.fetchClassification = jest.fn();
+        });
+
+        test('should fetch the access stats data if the access stats visibility changed', () => {
+            wrapper.setProps({
+                hasAccessStats: false,
+            });
+
+            expect(instance.fetchAccessStats).toHaveBeenCalled();
+        });
+
+        test('should fetch the classification data if the classification visibility changed', () => {
+            wrapper.setProps({
+                hasClassification: false,
+            });
+
+            expect(instance.fetchClassification).toHaveBeenCalled();
         });
     });
 });

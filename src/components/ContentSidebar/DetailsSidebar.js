@@ -78,7 +78,22 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         this.fetchFile();
-        this.fetchData();
+        this.fetchAccessStats();
+        this.fetchClassification();
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        const { hasAccessStats, hasClassification } = this.props;
+        // Component visibility props such as hasAccessStats can sometimes be flipped after an async call
+        const hasAccessStatsVisibilityChanged = prevProps.hasAccessStats !== hasAccessStats;
+        const hasClassificationVisibilityChanged = prevProps.hasClassification !== hasClassification;
+        if (hasAccessStatsVisibilityChanged) {
+            this.fetchAccessStats();
+        }
+
+        if (hasClassificationVisibilityChanged) {
+            this.fetchClassification();
+        }
     }
 
     /**
@@ -91,22 +106,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     descriptionChangeSuccessCallback = (file: BoxItem): void => {
         this.setState({ file, fileError: undefined });
     };
-
-    /**
-     * Fetches the rest of the data needed for the details sidebar to load (besides file info)
-     *
-     * @return {void}
-     */
-    fetchData() {
-        const { hasAccessStats, hasClassification }: Props = this.props;
-        if (hasAccessStats) {
-            this.fetchAccessStats();
-        }
-
-        if (hasClassification) {
-            this.fetchClassification();
-        }
-    }
 
     /**
      * Fetches a file with the fields needed for details sidebar
@@ -263,7 +262,20 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchAccessStats(): void {
-        const { api, fileId }: Props = this.props;
+        const { api, fileId, hasAccessStats }: Props = this.props;
+        const { isLoadingAccessStats } = this.state;
+        if (!hasAccessStats) {
+            this.setState({
+                isLoadingAccessStats: false,
+                accessStats: undefined,
+                accessStatsError: undefined,
+            });
+            return;
+        }
+
+        if (isLoadingAccessStats) {
+            return;
+        }
 
         this.setState({ isLoadingAccessStats: true });
         api.getFileAccessStatsAPI(false).getFileAccessStats(
@@ -327,7 +339,21 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchClassification = (): void => {
-        const { api, fileId }: Props = this.props;
+        const { api, fileId, hasClassification }: Props = this.props;
+        const { isLoadingClassification } = this.state;
+
+        if (!hasClassification) {
+            this.setState({
+                classification: undefined,
+                classificationError: undefined,
+                isLoadingClassification: false,
+            });
+            return;
+        }
+
+        if (isLoadingClassification) {
+            return;
+        }
 
         this.setState({ isLoadingClassification: true });
         api.getMetadataAPI(false).getClassification(
