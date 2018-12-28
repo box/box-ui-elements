@@ -140,10 +140,30 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
     });
 
     describe('fetchAccessStatsSuccessCallback()', () => {
-        test('should update the file state', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper(
+                {
+                    hasAccessStats: true,
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            instance = wrapper.instance();
             instance.setState = jest.fn();
+        });
+
+        test('should short circuit if access stats is disabled', () => {
+            wrapper.setProps({
+                hasAccessStats: false,
+            });
+            instance.fetchAccessStatsSuccessCallback('stats');
+            expect(instance.setState).not.toHaveBeenCalled();
+        });
+
+        test('should update the file state', () => {
             instance.fetchAccessStatsSuccessCallback('stats');
             expect(instance.setState).toBeCalledWith({
                 isLoadingAccessStats: false,
@@ -154,10 +174,30 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
     });
 
     describe('fetchAccessStatsErrorCallback()', () => {
-        test('should set a maskError if there is an error in fetching the access stats', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper(
+                {
+                    hasAccessStats: true,
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            instance = wrapper.instance();
             instance.setState = jest.fn();
+        });
+
+        test('should short circuit if access stats is disabled', () => {
+            wrapper.setProps({
+                hasAccessStats: false,
+            });
+            instance.fetchAccessStatsSuccessCallback('stats');
+            expect(instance.setState).not.toHaveBeenCalled();
+        });
+
+        test('should set a maskError if there is an error in fetching the access stats', () => {
             instance.fetchAccessStatsErrorCallback();
             expect(instance.setState).toBeCalledWith({
                 isLoadingAccessStats: false,
@@ -172,12 +212,9 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         });
 
         test('should set an error if user is forbidden from fetching the access stats', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
             const error = {
                 status: 403,
             };
-            instance.setState = jest.fn();
             instance.fetchAccessStatsErrorCallback(error);
             expect(instance.setState).toBeCalledWith({
                 isLoadingAccessStats: false,
@@ -233,10 +270,29 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
     });
 
     describe('fetchClassificationSuccessCallback', () => {
-        test('should update the classification state', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper(
+                {
+                    hasClassification: true,
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            instance = wrapper.instance();
             instance.setState = jest.fn();
+        });
+
+        test('should short circuit if hasClassification is false', () => {
+            wrapper.setProps({
+                hasClassification: false,
+            });
+            instance.fetchClassificationSuccessCallback('classification');
+            expect(instance.setState).not.toHaveBeenCalled();
+        });
+        test('should update the classification state', () => {
             instance.fetchClassificationSuccessCallback('classification');
             expect(instance.setState).toBeCalledWith({
                 isLoadingClassification: false,
@@ -248,11 +304,30 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
 
     describe('fetchClassificationErrorCallback', () => {
         const code = ERROR_CODE_FETCH_CLASSIFICATION;
+        let wrapper;
+        let instance;
+        beforeEach(() => {
+            wrapper = getWrapper(
+                {
+                    hasClassification: true,
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            instance = wrapper.instance();
+            instance.setState = jest.fn();
+        });
+
+        test('should short circuit if hasClassification is false', () => {
+            wrapper.setProps({
+                hasClassification: false,
+            });
+            instance.fetchClassificationSuccessCallback('classification');
+            expect(instance.setState).not.toHaveBeenCalled();
+        });
 
         test('should set an inlineError and call onError prop if there is an error in fetching the classification', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
             const error = {
                 status: 500,
             };
@@ -276,9 +351,9 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         test('should invoke onError prop with error details', () => {
             const onError = jest.fn();
             const error = {};
-            const wrapper = getWrapper({ onError });
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
+            wrapper.setProps({
+                onError,
+            });
             instance.fetchClassificationErrorCallback(error, code);
             expect(onError).toBeCalledWith(error, code, {
                 error,
@@ -291,9 +366,9 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             const error = {
                 status: 403,
             };
-            const wrapper = getWrapper({ onError });
-            const instance = wrapper.instance();
-            instance.setState = jest.fn();
+            wrapper.setProps({
+                onError,
+            });
             instance.fetchClassificationErrorCallback(error, code);
             expect(onError).toBeCalledWith(error, code, {
                 error,
@@ -520,8 +595,8 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
         beforeEach(() => {
             wrapper = getWrapper({
                 file,
-                hasAccessStats: true,
-                hasClassification: true,
+                hasAccessStats: false,
+                hasClassification: false,
             });
             instance = wrapper.instance();
             instance.fetchAccessStats = jest.fn();
@@ -530,7 +605,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
 
         test('should fetch the access stats data if the access stats visibility changed', () => {
             wrapper.setProps({
-                hasAccessStats: false,
+                hasAccessStats: true,
             });
 
             expect(instance.fetchAccessStats).toHaveBeenCalled();
@@ -538,7 +613,7 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
 
         test('should fetch the classification data if the classification visibility changed', () => {
             wrapper.setProps({
-                hasClassification: false,
+                hasClassification: true,
             });
 
             expect(instance.fetchClassification).toHaveBeenCalled();
