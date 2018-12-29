@@ -12,8 +12,11 @@ import FileIcon from 'box-react-ui/lib/icons/file-icon/FileIcon';
 const ICON_FILE_MAP = {
     'Adobe Sign': IconAdobeSign,
     'Google Docs': IconGoogleDocs,
+    'Google Docs (beta)': IconGoogleDocs,
     'Google Sheets': IconGoogleSheets,
+    'Google Sheets (beta)': IconGoogleSheets,
     'Google Slides': IconGoogleSlides,
+    'Google Slides (beta)': IconGoogleSlides,
 };
 
 function getIcon(iconName: string): Element {
