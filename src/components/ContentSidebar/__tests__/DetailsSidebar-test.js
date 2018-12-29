@@ -256,14 +256,6 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
             instance = wrapper.instance();
         });
 
-        test('should short circuit if access stats is disabled', () => {
-            wrapper.setProps({
-                hasAccessStats: false,
-            });
-            instance.fetchAccessStats();
-            expect(getStats).not.toHaveBeenCalled();
-        });
-
         test('should short circuit if it is already fetching', () => {
             wrapper.setState({
                 isLoadingAccessStats: true,
@@ -411,14 +403,6 @@ describe('components/ContentSidebar/DetailsSidebar', () => {
                 },
             );
             instance = wrapper.instance();
-        });
-
-        test('should short circuit if classification is disabled', () => {
-            wrapper.setProps({
-                hasClassification: false,
-            });
-            instance.fetchAccessStats();
-            expect(getClassification).not.toHaveBeenCalled();
         });
 
         test('should short circuit if it is already fetching', () => {

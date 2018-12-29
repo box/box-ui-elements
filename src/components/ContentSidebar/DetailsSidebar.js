@@ -290,10 +290,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchAccessStats(): void {
-        const { api, fileId, hasAccessStats }: Props = this.props;
+        const { api, fileId }: Props = this.props;
         const { isLoadingAccessStats } = this.state;
 
-        if (!hasAccessStats || isLoadingAccessStats) {
+        if (isLoadingAccessStats) {
             return;
         }
 
@@ -367,10 +367,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchClassification = (): void => {
-        const { api, fileId, hasClassification }: Props = this.props;
+        const { api, fileId }: Props = this.props;
         const { isLoadingClassification } = this.state;
 
-        if (!hasClassification || isLoadingClassification) {
+        if (isLoadingClassification) {
             return;
         }
 
