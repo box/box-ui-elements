@@ -5,7 +5,13 @@
  */
 
 import Base from './Base';
-import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE, ERROR_CODE_FETCH_INTEGRATIONS } from '../constants';
+import {
+    HEADER_ACCEPT_LANGUAGE,
+    DEFAULT_LOCALE,
+    ERROR_CODE_FETCH_INTEGRATIONS,
+    BOX_EDIT_INTEGRATION_ID,
+    BOX_EDIT_SFC_INTEGRATION_ID,
+} from '../constants';
 
 class OpenWith extends Base {
     /**
@@ -48,11 +54,36 @@ class OpenWith extends Base {
             id: fileId,
             params,
             successCallback: openWithIntegrations => {
-                const formattedOpenWithData = this.formatOpenWithData(openWithIntegrations);
+                const consolidatedOpenWithIntegrations = this.consolidateBoxEditIntegrations(openWithIntegrations);
+                const formattedOpenWithData = this.formatOpenWithData(consolidatedOpenWithIntegrations);
                 successCallback(formattedOpenWithData);
             },
             errorCallback,
         });
+    }
+
+    /**
+     * Removes the Box Edit SFC integration if the higher scoped Box Edit integration is present.
+     *
+     * @param {OpenWithAPI} openWithIntegrations - Open With integration items
+     * @return {OpenWithAPI} Open With Integrations with only one Box Edit integration
+     */
+    consolidateBoxEditIntegrations(openWithIntegrations: OpenWithAPI): OpenWithAPI {
+        let { items } = openWithIntegrations;
+        const boxEditIntegration = items.find(
+            integration => integration.app_integration.id === BOX_EDIT_INTEGRATION_ID,
+        );
+
+        if (boxEditIntegration) {
+            items = items.filter(integration => {
+                return integration.app_integration.id !== BOX_EDIT_SFC_INTEGRATION_ID;
+            });
+        }
+
+        return {
+            ...openWithIntegrations,
+            items,
+        };
     }
 
     /**
