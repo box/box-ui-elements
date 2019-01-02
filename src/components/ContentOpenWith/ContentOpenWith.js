@@ -366,7 +366,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * Opens the integration in a new tab based on the API data
      *
      * @private
-     * @param {string} integrationd - The integration that was executed
+     * @param {string} integrationId - The integration that was executed
      * @param {ExecuteAPI} executeData - API response on how to open an executed integration
 
      * @return {void}

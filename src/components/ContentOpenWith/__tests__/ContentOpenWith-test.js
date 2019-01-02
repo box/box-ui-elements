@@ -338,7 +338,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
 
             instance.executeIntegrationSuccessHandler(id, executeData);
 
-            expect(instance.executeBoxEditSuccessHandler).toBeCalledWith(executeData);
+            expect(instance.executeBoxEditSuccessHandler).toBeCalledWith(id, executeData);
         });
 
         test('should invoke the online success handler if we executed an online integration', () => {
@@ -415,17 +415,19 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             instance.api = {
                 getBoxEditAPI: () => ({ openFile: openFileStub }),
             };
+            instance.isBoxEditSFCIntegration = jest.fn().mockReturnValue(true);
 
             const executeData = {
                 url: `www.box.com/execute?file_id=1&auth_code=${authCode}&other_param=foo`,
             };
 
-            instance.executeBoxEditSuccessHandler(executeData);
+            instance.executeBoxEditSuccessHandler('1234', executeData);
 
             expect(openFileStub).toBeCalledWith(fileId, {
                 data: {
                     auth_code: authCode,
                     token,
+                    token_scope: 'file',
                 },
             });
         });
