@@ -23,7 +23,7 @@ const OpenWithDropdownMenuItem = ({ integration, onClick }: Props) => {
     const description = isDisabled ? errorDescription : displayDescription;
     return (
         <MenuItem isDisabled={isDisabled} onClick={() => onClick(integration)}>
-            <Icon extension={extension} />
+            <Icon dimension={30} extension={extension} height={30} width={30} />
             <span>
                 <p className="bcow-menu-item-title">{displayName}</p>
                 <p className="bcow-menu-item-description">{description}</p>
