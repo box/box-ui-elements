@@ -143,6 +143,9 @@ class Metadata extends File {
             templates = await this.xhr.get({
                 url: this.getMetadataTemplateUrl(scope),
                 id: getTypedFileId(id),
+                params: {
+                    limit: 1000,
+                },
             });
         } catch (e) {
             const { status } = e;
