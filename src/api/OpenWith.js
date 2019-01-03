@@ -54,9 +54,9 @@ class OpenWith extends Base {
             id: fileId,
             params,
             successCallback: openWithIntegrations => {
-                const consolidatedOpenWithIntegrations = this.consolidateBoxEditIntegrations(openWithIntegrations);
-                const formattedOpenWithData = this.formatOpenWithData(consolidatedOpenWithIntegrations);
-                successCallback(formattedOpenWithData);
+                const formattedOpenWithData = this.formatOpenWithData(openWithIntegrations);
+                const consolidatedOpenWithIntegrations = this.consolidateBoxEditIntegrations(formattedOpenWithData);
+                successCallback(consolidatedOpenWithIntegrations);
             },
             errorCallback,
         });
@@ -67,22 +67,20 @@ class OpenWith extends Base {
      * Box Edit and SFC Box Edit are considered separate integrations by the API. We only want to show one,
      * even if both are enabled and returned from the API.
      *
-     * @param {OpenWithAPI} openWithIntegrations - Open With integration items
-     * @return {OpenWithAPI} Open With Integrations with only one Box Edit integration
+     * @param {Array<Integration>} integrations - List of integrations
+     * @return {Array<Integration>} Integrations with only one Box Edit integration
      */
-    consolidateBoxEditIntegrations(openWithIntegrations: OpenWithAPI): OpenWithAPI {
-        const { items } = openWithIntegrations;
-        let consolidatedItems = [...items];
-        const boxEditIntegration = items.some(item => item.app_integration.id === BOX_EDIT_INTEGRATION_ID);
+    consolidateBoxEditIntegrations(integrations: Array<Integration>): Array<Integration> {
+        let consolidatedIntegrations = [...integrations];
+        const boxEditIntegration = integrations.some(item => item.appIntegrationId === BOX_EDIT_INTEGRATION_ID);
 
         if (boxEditIntegration) {
-            consolidatedItems = items.filter(item => item.app_integration.id !== BOX_EDIT_SFC_INTEGRATION_ID);
+            consolidatedIntegrations = integrations.filter(
+                item => item.appIntegrationId !== BOX_EDIT_SFC_INTEGRATION_ID,
+            );
         }
 
-        return {
-            ...openWithIntegrations,
-            items: consolidatedItems,
-        };
+        return consolidatedIntegrations;
     }
 
     /**

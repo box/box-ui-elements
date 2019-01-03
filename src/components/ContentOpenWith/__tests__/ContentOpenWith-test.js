@@ -2,11 +2,11 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
 import ContentOpenWith from '../ContentOpenWith';
+import { BOX_EDIT_INTEGRATION_ID, BOX_EDIT_SFC_INTEGRATION_ID } from '../../../constants';
 import messages from '../../messages';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
-const BOX_EDIT_INTEGRATION_ID = '1338';
 const ADOBE_INTEGRATION_ID = '1234';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
 const UNINSTALLED_ERROR_MESSAGE_KEY = 'boxToolsUninstalledErrorMessage';
@@ -49,9 +49,18 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
     });
 
     describe('isBoxEditIntegration()', () => {
-        test('should determine if the integration is a box edit integration', () => {
+        test('should determine if the integration is a Box Edit integration', () => {
             expect(instance.isBoxEditIntegration(ADOBE_INTEGRATION_ID)).toBe(false);
             expect(instance.isBoxEditIntegration(BOX_EDIT_INTEGRATION_ID)).toBe(true);
+            expect(instance.isBoxEditIntegration(BOX_EDIT_SFC_INTEGRATION_ID)).toBe(true);
+        });
+    });
+
+    describe('isBoxEditSFCIntegration()', () => {
+        test('should determine if the integration is a Box Edit SFC integration', () => {
+            expect(instance.isBoxEditSFCIntegration(ADOBE_INTEGRATION_ID)).toBe(false);
+            expect(instance.isBoxEditSFCIntegration(BOX_EDIT_INTEGRATION_ID)).toBe(false);
+            expect(instance.isBoxEditSFCIntegration(BOX_EDIT_SFC_INTEGRATION_ID)).toBe(true);
         });
     });
 
