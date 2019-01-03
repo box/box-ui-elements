@@ -207,6 +207,9 @@ describe('api/Metadata', () => {
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
                 id: 'file_id',
+                params: {
+                    limit: 1000,
+                },
             });
         });
         test('should return empty array of templates when error is 400', async () => {
@@ -225,6 +228,9 @@ describe('api/Metadata', () => {
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
                 id: 'file_id',
+                params: {
+                    limit: 1000,
+                },
             });
         });
         test('should throw error when error is not 400', async () => {
@@ -243,6 +249,9 @@ describe('api/Metadata', () => {
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
                 id: 'file_id',
+                params: {
+                    limit: 1000,
+                },
             });
         });
     });

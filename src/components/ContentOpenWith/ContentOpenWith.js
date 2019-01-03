@@ -19,15 +19,22 @@ import OpenWithButton from './OpenWithButton';
 import ExecuteForm from './ExecuteForm';
 import '../base.scss';
 import './ContentOpenWith.scss';
-
-import { CLIENT_NAME_OPEN_WITH, DEFAULT_HOSTNAME_API, HTTP_GET, HTTP_POST } from '../../constants';
+import {
+    BOX_EDIT_INTEGRATION_ID,
+    BOX_EDIT_SFC_INTEGRATION_ID,
+    CLIENT_NAME_OPEN_WITH,
+    DEFAULT_HOSTNAME_API,
+    HTTP_GET,
+    HTTP_POST,
+    TYPE_FILE,
+    TYPE_FOLDER,
+} from '../../constants';
 
 const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
 const UNINSTALLED_ERROR_MESSAGE_KEY = 'boxToolsUninstalledErrorMessage';
 const GENERIC_EXECUTE_MESSAGE_KEY = 'executeIntegrationOpenWithErrorHeader';
-const BOX_EDIT_INTEGRATION_ID = '1338';
 const AUTH_CODE = 'auth_code';
 
 type ExternalProps = {
@@ -188,7 +195,17 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {boolean}
      */
     isBoxEditIntegration(integrationId: ?string): boolean {
-        return integrationId === BOX_EDIT_INTEGRATION_ID;
+        return integrationId === BOX_EDIT_INTEGRATION_ID || this.isBoxEditSFCIntegration(integrationId);
+    }
+
+    /**
+     * Checks if a given integration is a Box Edit integration.
+     *
+     * @param {string} [integrationId] - The integration ID
+     * @return {boolean}
+     */
+    isBoxEditSFCIntegration(integrationId: ?string): boolean {
+        return integrationId === BOX_EDIT_SFC_INTEGRATION_ID;
     }
 
     /**
@@ -349,18 +366,18 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * Opens the integration in a new tab based on the API data
      *
      * @private
-     * @param {string} integrationID - The integration that was executed
+     * @param {string} integrationId - The integration that was executed
      * @param {ExecuteAPI} executeData - API response on how to open an executed integration
 
      * @return {void}
      */
-    executeIntegrationSuccessHandler = (integrationID: string, executeData: ExecuteAPI): void => {
-        if (this.isBoxEditIntegration(integrationID)) {
-            this.executeBoxEditSuccessHandler(executeData);
+    executeIntegrationSuccessHandler = (integrationId: string, executeData: ExecuteAPI): void => {
+        if (this.isBoxEditIntegration(integrationId)) {
+            this.executeBoxEditSuccessHandler(integrationId, executeData);
         } else {
             this.executeOnlineIntegrationSuccessHandler(executeData);
         }
-        this.onExecute(integrationID);
+        this.onExecute(integrationId);
     };
 
     /**
@@ -403,15 +420,17 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
      * @return {void}
      */
-    executeBoxEditSuccessHandler = ({ url }: ExecuteAPI): void => {
+    executeBoxEditSuccessHandler = (integrationId: string, { url }: ExecuteAPI): void => {
         const { fileId, token } = this.props;
         const queryParams = queryString.parse(url);
         const authCode = queryParams[AUTH_CODE];
+        const isFileScoped = this.isBoxEditSFCIntegration(integrationId);
 
         this.api.getBoxEditAPI().openFile(fileId, {
             data: {
                 auth_code: authCode,
                 token,
+                token_scope: isFileScoped ? TYPE_FILE : TYPE_FOLDER,
             },
         });
     };
