@@ -63,7 +63,13 @@ const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props
         <Tooltip text={getTooltip(displayDescription, isLoading, error, disabledReasons)} position="bottom-center">
             <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration)}>
                 <OpenWithButtonContents>
-                    <Icon extension={extension} className={CLASS_INTEGRATION_ICON} height={26} width={26} />
+                    <Icon
+                        className={CLASS_INTEGRATION_ICON}
+                        dimension={26}
+                        extension={extension}
+                        height={26}
+                        width={26}
+                    />
                 </OpenWithButtonContents>
             </Button>
         </Tooltip>

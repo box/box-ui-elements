@@ -23,7 +23,7 @@ const MultipleIntegrationsOpenWithButton = (buttonProps: Props) => (
         <Button {...buttonProps}>
             <MenuToggle>
                 <OpenWithButtonContents>
-                    <IconOpenWith height={26} width={26} className={CLASS_INTEGRATION_ICON} />
+                    <IconOpenWith className={CLASS_INTEGRATION_ICON} dimension={26} height={26} width={26} />
                 </OpenWithButtonContents>
             </MenuToggle>
         </Button>
