@@ -2,9 +2,16 @@ const eslintrc = require.resolve('@box/frontend/eslint/eslintrc.js');
 
 module.exports = {
     extends: [eslintrc],
+    globals: {
+        after: true,
+        before: true,
+        context: true,
+        cy: true,
+        Cypress: true,
+    },
     rules: {
+        camelcase: 'off',
         'class-methods-use-this': 'off',
-        'camelcase': 'off',
         'flowtype/sort-keys': 'off', //fixme
         'jsx-a11y/label-has-associated-control': 'off',
         'no-shadow': 'off', //fixme
@@ -17,5 +24,5 @@ module.exports = {
         'react/no-access-state-in-setstate': 'off', //fixme
         'react/no-this-in-sfc': 'off',
         'react/no-unused-state': 'off', //fixme
-    }
+    },
 };

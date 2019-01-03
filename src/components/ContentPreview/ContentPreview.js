@@ -1114,12 +1114,22 @@ class ContentPreview extends PureComponent<Props, State> {
                                 </div>
                             )}
                             {hasLeftNavigation && (
-                                <PlainButton type="button" className="bcpr-navigate-left" onClick={this.navigateLeft}>
+                                <PlainButton
+                                    className="bcpr-navigate-left"
+                                    data-testid="bcpr-navigate-left"
+                                    onClick={this.navigateLeft}
+                                    type="button"
+                                >
                                     <IconNavigateLeft />
                                 </PlainButton>
                             )}
                             {hasRightNavigation && (
-                                <PlainButton type="button" className="bcpr-navigate-right" onClick={this.navigateRight}>
+                                <PlainButton
+                                    className="bcpr-navigate-right"
+                                    data-testid="bcpr-navigate-right"
+                                    onClick={this.navigateRight}
+                                    type="button"
+                                >
                                     <IconNavigateRight />
                                 </PlainButton>
                             )}

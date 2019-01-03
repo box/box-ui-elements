@@ -50,6 +50,9 @@
         "build:prod:npm": "BABEL_ENV=production OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
         "clean": "rm -rf dist lib i18n/json i18n/*.js reports styleguide",
         "copy:styles": "cpx './src/**/*.scss' lib",
+        "cy:open": "yarn cy:wait; cypress open --project ./test",
+        "cy:run": "yarn cy:wait; cypress run --project ./test --spec test/cypress/**/*.spec.js",
+        "cy:wait": "wait-on tcp:6060",
         "lint": "npm-run-all lint:*",
         "lint:js": "eslint --max-warnings=0 .",
         "lint:css": "stylelint \"src/**/*.scss\" --syntax scss",
@@ -61,7 +64,9 @@
         "start:dev": "yarn setup; LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/webpack-dev-server/bin/webpack-dev-server.js --config conf/webpack.config.js --mode development",
         "start:examples": "yarn setup; LANGUAGE=en-US REACT=true BABEL_ENV=dev NODE_ENV=dev node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js server --config conf/styleguide.config.js --mode development",
         "start:npm": "yarn setup; npm-run-all build:prod:npm build:dev:es",
-        "test": "BABEL_ENV=test NODE_ENV=test yarn jest"
+        "test": "BABEL_ENV=test NODE_ENV=test yarn jest",
+        "test:e2e": "npm-run-all -p -r start:examples cy:run",
+        "test:e2e:open": "npm-run-all -p -r start:examples cy:open"
     },
     "browserslist": {
         "production": [
@@ -152,6 +157,8 @@
         "cpx": "^1.5.0",
         "css-loader": "^1.0.0",
         "cssnano": "^4.1.0",
+        "cypress": "^3.1.4",
+        "cypress-testing-library": "^2.3.5",
         "deepmerge": "^2.1.1",
         "draft-js": "^0.10.1",
         "enzyme": "^3.6.0",
@@ -215,6 +222,7 @@
         "stylelint-config-standard": "^18.2.0",
         "stylelint-order": "^1.0.0",
         "tabbable": "^1.1.3",
+        "wait-on": "^3.2.0",
         "webpack": "^4.19.0",
         "webpack-bundle-analyzer": "^3.0.2",
         "webpack-cli": "^3.1.0",
