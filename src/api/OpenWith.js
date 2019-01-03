@@ -5,7 +5,13 @@
  */
 
 import Base from './Base';
-import { HEADER_ACCEPT_LANGUAGE, DEFAULT_LOCALE, ERROR_CODE_FETCH_INTEGRATIONS } from '../constants';
+import {
+    HEADER_ACCEPT_LANGUAGE,
+    DEFAULT_LOCALE,
+    ERROR_CODE_FETCH_INTEGRATIONS,
+    BOX_EDIT_INTEGRATION_ID,
+    BOX_EDIT_SFC_INTEGRATION_ID,
+} from '../constants';
 
 class OpenWith extends Base {
     /**
@@ -49,10 +55,32 @@ class OpenWith extends Base {
             params,
             successCallback: openWithIntegrations => {
                 const formattedOpenWithData = this.formatOpenWithData(openWithIntegrations);
-                successCallback(formattedOpenWithData);
+                const consolidatedOpenWithIntegrations = this.consolidateBoxEditIntegrations(formattedOpenWithData);
+                successCallback(consolidatedOpenWithIntegrations);
             },
             errorCallback,
         });
+    }
+
+    /**
+     * Removes the Box Edit SFC integration if the higher scoped Box Edit integration is present.
+     * Box Edit and SFC Box Edit are considered separate integrations by the API. We only want to show one,
+     * even if both are enabled and returned from the API.
+     *
+     * @param {Array<Integration>} integrations - List of integrations
+     * @return {Array<Integration>} Integrations with only one Box Edit integration
+     */
+    consolidateBoxEditIntegrations(integrations: Array<Integration>): Array<Integration> {
+        let consolidatedIntegrations = [...integrations];
+        const boxEditIntegration = integrations.some(item => item.appIntegrationId === BOX_EDIT_INTEGRATION_ID);
+
+        if (boxEditIntegration) {
+            consolidatedIntegrations = integrations.filter(
+                item => item.appIntegrationId !== BOX_EDIT_SFC_INTEGRATION_ID,
+            );
+        }
+
+        return consolidatedIntegrations;
     }
 
     /**

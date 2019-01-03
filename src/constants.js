@@ -306,6 +306,8 @@ export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
 
 /* ------------------ Integrations ------------------------- */
 export const APP_INTEGRATION = 'app_integration';
+export const BOX_EDIT_INTEGRATION_ID = '1338';
+export const BOX_EDIT_SFC_INTEGRATION_ID = '13418';
 
 /* ------------------ Task Assignment Statuses ----------------- */
 export const TASK_APPROVED: 'approved' = 'approved';
