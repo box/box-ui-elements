@@ -913,6 +913,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Error message for feed item API errors',
         defaultMessage: 'There was a problem loading the activity feed. Please refresh the page or try again later.',
     },
+    nextFile: {
+        defaultMessage: 'Next File',
+        description: 'Next file button title',
+        id: 'be.nextFile',
+    },
     nextPage: {
         defaultMessage: 'Next Page',
         description: 'Next page button tooltip',
@@ -922,6 +927,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: '{pageNumber} of {pageCount}',
         description: 'Pagination menu button with current page number out of total number of pages',
         id: 'be.pagination.pageStatus',
+    },
+    previousFile: {
+        defaultMessage: 'Previous File',
+        description: 'Previous file button title',
+        id: 'be.previousFile',
     },
     previousPage: {
         defaultMessage: 'Previous Page',

@@ -25,6 +25,8 @@
 .yarnrc
 babel.config.js
 build
+CODEOWNERS
+commitlint.config.js
 conf
 coverage
 desktop.ini
@@ -38,9 +40,8 @@ release.config.js
 reports
 src
 styleguide
+stylelint.config.js
 test
-test/cypress/screenshots
-test/cypress/videos
 Thumbs.db
 yarn-debug.log
 yarn-error.log
