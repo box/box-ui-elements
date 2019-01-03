@@ -12,10 +12,10 @@ import IconDrawAnnotationMode from 'box-react-ui/lib/icons/annotations/IconDrawA
 import IconPointAnnotation from 'box-react-ui/lib/icons/annotations/IconPointAnnotation';
 import IconPrint from 'box-react-ui/lib/icons/general/IconPrint';
 import IconDownload from 'box-react-ui/lib/icons/general/IconDownloadSolid';
+import AsyncLoad from 'elements/common/async-load';
 import messages from 'elements/common/messages';
 import { getIcon } from 'elements/common/item/iconCellRenderer';
 import { COLOR_999 } from '../../constants';
-import ContentOpenWith from '../content-open-with/ContentOpenWith';
 import './Header.scss';
 
 type Props = {
@@ -28,6 +28,10 @@ type Props = {
     onPrint: Function,
     token: ?string,
 } & InjectIntlProvidedProps;
+
+const LoadableContentOpenWith = AsyncLoad({
+    loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../content-open-with'),
+});
 
 const Header = ({
     canAnnotate,
@@ -58,7 +62,7 @@ const Header = ({
                 </div>
                 <div className="bcpr-btns">
                     {shouldRenderOpenWith && (
-                        <ContentOpenWith
+                        <LoadableContentOpenWith
                             className="bcpr-bcow-btn"
                             fileId={id}
                             token={token}

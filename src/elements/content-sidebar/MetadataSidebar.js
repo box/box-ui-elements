@@ -24,12 +24,14 @@ import { withLogger } from 'elements/common/logger';
 import { mark } from 'utils/performance';
 import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import SidebarContent from './SidebarContent';
+import SidebarUtils from './SidebarUtils';
 import {
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,
     FIELD_PERMISSIONS_CAN_UPLOAD,
     IS_ERROR_DISPLAYED,
     ORIGIN_METADATA_SIDEBAR,
+    SIDEBAR_VIEW_METADATA,
 } from '../../constants';
 import './MetadataSidebar.scss';
 
@@ -379,7 +381,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
-                title={<FormattedMessage {...messages.sidebarMetadataTitle} />}
+                title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_METADATA)}
                 actions={
                     showTemplateDropdown ? (
                         <TemplateDropdown

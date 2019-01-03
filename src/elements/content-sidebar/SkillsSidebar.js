@@ -5,7 +5,6 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import flow from 'lodash/flow';
@@ -18,7 +17,13 @@ import { withErrorBoundary } from 'elements/common/error-boundary';
 import { withLogger } from 'elements/common/logger';
 import API from 'api';
 import SidebarContent from './SidebarContent';
-import { FIELD_PERMISSIONS_CAN_UPLOAD, SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
+import SidebarUtils from './SidebarUtils';
+import {
+    FIELD_PERMISSIONS_CAN_UPLOAD,
+    SKILLS_TRANSCRIPT,
+    ORIGIN_SKILLS_SIDEBAR,
+    SIDEBAR_VIEW_SKILLS,
+} from '../../constants';
 import SidebarSkills from './skills/SidebarSkills';
 import './SkillsSidebar.scss';
 
@@ -232,7 +237,7 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
         const { cards, errors }: State = this.state;
 
         return (
-            <SidebarContent title={<FormattedMessage {...messages.sidebarSkillsTitle} />}>
+            <SidebarContent title={SidebarUtils.getTitleForView(SIDEBAR_VIEW_SKILLS)}>
                 {cards ? (
                     <SidebarSkills
                         file={file}

@@ -1,5 +1,16 @@
+import noop from 'lodash/noop';
+import * as performance from 'utils/performance';
 import SidebarUtils from '../SidebarUtils';
 import * as skillUtils from '../skills/skillUtils';
+import {
+    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_METADATA,
+    SIDEBAR_VIEW_DETAILS,
+} from '../../../constants';
+
+jest.mock('../../common/async-load', () => () => 'LoadableComponent');
+jest.mock('../SidebarLoadingError', () => 'sidebar-loading-error');
 
 describe('elements/content-sidebar/SidebarUtil', () => {
     describe('canHaveSidebar()', () => {
@@ -190,6 +201,7 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             ).toBeTruthy();
         });
     });
+
     describe('shouldRenderSidebar()', () => {
         test('should return false when nothing is wanted in the sidebar', () => {
             expect(SidebarUtils.shouldRenderSidebar({})).toBeFalsy();
@@ -228,6 +240,56 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             SidebarUtils.shouldRenderMetadataSidebar = jest.fn().mockReturnValueOnce(false);
             expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
             expect(SidebarUtils.shouldRenderSkillsSidebar).toHaveBeenCalledWith('props', 'file');
+        });
+    });
+
+    describe('getTitleForView()', () => {
+        test.each([SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_METADATA, SIDEBAR_VIEW_ACTIVITY])(
+            'should return the title for %s',
+            view => {
+                const title = SidebarUtils.getTitleForView(view);
+                expect(title).toMatchSnapshot();
+            },
+        );
+
+        test('should return null if invalid view', () => {
+            const title = SidebarUtils.getTitleForView('foo');
+            expect(title).toBe(null);
+        });
+    });
+
+    describe('getLoaderForView()', () => {
+        const MARK_NAME = 'foo_mark';
+        beforeEach(() => {
+            jest.spyOn(performance, 'mark').mockImplementation(noop);
+        });
+
+        test.each([SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_METADATA, SIDEBAR_VIEW_ACTIVITY, 'foo'])(
+            'should return the loader for %s',
+            view => {
+                const loader = SidebarUtils.getLoaderForView(view, MARK_NAME);
+                expect(performance.mark).toHaveBeenCalledWith(MARK_NAME);
+                expect(loader).toBeInstanceOf(Promise);
+            },
+        );
+    });
+
+    describe('getAsyncSidebarContent()', () => {
+        beforeEach(() => {
+            jest.spyOn(SidebarUtils, 'getTitleForView').mockReturnValue('foo');
+        });
+
+        test('should return the async component', () => {
+            const asyncComponent = SidebarUtils.getAsyncSidebarContent('foo_view', 'foo_mark');
+            expect(asyncComponent).toMatchSnapshot();
+        });
+
+        test('should mix in additional props', () => {
+            const asyncComponent = SidebarUtils.getAsyncSidebarContent('foo_view', 'foo_mark', {
+                foo: 'bar',
+                errorComponent: null,
+            });
+            expect(asyncComponent).toMatchSnapshot();
         });
     });
 });

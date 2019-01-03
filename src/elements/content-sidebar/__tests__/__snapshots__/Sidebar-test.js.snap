@@ -2,7 +2,7 @@
 
 exports[`elements/content-sidebar/Sidebar should render activity sidebar 1`] = `
 <Fragment>
-  <ActivitySidebar
+  <LoadableComponent
     file={
       Object {
         "id": "id",
@@ -15,7 +15,7 @@ exports[`elements/content-sidebar/Sidebar should render activity sidebar 1`] = `
 
 exports[`elements/content-sidebar/Sidebar should render details sidebar 1`] = `
 <Fragment>
-  <DetailsSidebar
+  <LoadableComponent
     startMarkName="details_sidebar_JS_LOADING"
   />
 </Fragment>
@@ -23,7 +23,7 @@ exports[`elements/content-sidebar/Sidebar should render details sidebar 1`] = `
 
 exports[`elements/content-sidebar/Sidebar should render metadata sidebar 1`] = `
 <Fragment>
-  <MetadataSidebar
+  <LoadableComponent
     startMarkName="metadata_sidebar_JS_LOADING"
   />
 </Fragment>
@@ -33,7 +33,7 @@ exports[`elements/content-sidebar/Sidebar should render no sidebar 1`] = `<Fragm
 
 exports[`elements/content-sidebar/Sidebar should render skills sidebar 1`] = `
 <Fragment>
-  <SkillsSidebar
+  <LoadableComponent
     file={
       Object {
         "id": "id",

@@ -379,6 +379,8 @@ render(
 | --- | --- | --- | --- |
 | *tbd* | - | - | - |
 
+# Code Splitting
+[Code splitting](https://webpack.js.org/guides/code-splitting/) is currently supported for the `ContentPreview` and `ContentSidebar` UI Elements. In order to use an Element with code splitting, you will need to build the Element with webpack by importing the Element from the `lib` folder in our npm package.
 
 # Questions
 If you have any questions, please visit our [developer forum](https://community.box.com/t5/Box-Developer-Forum/bd-p/DeveloperForum) or contact us via one of our [available support channels](https://community.box.com/t5/Community/ct-p/English).

@@ -18,6 +18,7 @@ import Measure from 'react-measure';
 import { decode } from 'box-react-ui/lib/utils/keys';
 import makeResponsive from 'elements/common/makeResponsive';
 import Internationalize from 'elements/common/Internationalize';
+import AsyncLoad from 'elements/common/async-load';
 import TokenService from 'utils/TokenService';
 import { isInputElement, focus } from 'utils/dom';
 import { getTypedFileId } from 'utils/file';
@@ -139,6 +140,10 @@ const PREVIEW_LOAD_METRIC_EVENT = 'load';
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_PREVIEW}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
+
+const LoadableSidebar = AsyncLoad({
+    loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-sidebar" */ '../content-sidebar'),
+});
 
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
@@ -1116,7 +1121,7 @@ class ContentPreview extends PureComponent<Props, State> {
                             />
                         </div>
                         {file && (
-                            <ContentSidebar
+                            <LoadableSidebar
                                 {...contentSidebarProps}
                                 isLarge={isLarge}
                                 apiHost={apiHost}

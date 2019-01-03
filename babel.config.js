@@ -10,6 +10,7 @@ module.exports = {
         '@babel/preset-flow',
     ],
     plugins: [
+        '@babel/plugin-syntax-dynamic-import',
         '@babel/plugin-transform-flow-strip-types',
         '@babel/plugin-transform-object-assign',
         '@babel/plugin-proposal-class-properties',
@@ -58,6 +59,7 @@ module.exports = {
         test: {
             plugins: [
                 '@babel/plugin-transform-modules-commonjs',
+                'dynamic-import-node', // https://github.com/facebook/jest/issues/5920
                 [
                     'react-intl',
                     {
