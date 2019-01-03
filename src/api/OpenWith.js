@@ -64,25 +64,24 @@ class OpenWith extends Base {
 
     /**
      * Removes the Box Edit SFC integration if the higher scoped Box Edit integration is present.
+     * Box Edit and SFC Box Edit are considered separate integrations by the API. We only want to show one,
+     * even if both are enabled and returned from the API.
      *
      * @param {OpenWithAPI} openWithIntegrations - Open With integration items
      * @return {OpenWithAPI} Open With Integrations with only one Box Edit integration
      */
     consolidateBoxEditIntegrations(openWithIntegrations: OpenWithAPI): OpenWithAPI {
-        let { items } = openWithIntegrations;
-        const boxEditIntegration = items.find(
-            integration => integration.app_integration.id === BOX_EDIT_INTEGRATION_ID,
-        );
+        const { items } = openWithIntegrations;
+        let consolidatedItems = [...items];
+        const boxEditIntegration = items.some(item => item.app_integration.id === BOX_EDIT_INTEGRATION_ID);
 
         if (boxEditIntegration) {
-            items = items.filter(integration => {
-                return integration.app_integration.id !== BOX_EDIT_SFC_INTEGRATION_ID;
-            });
+            consolidatedItems = items.filter(item => item.app_integration.id !== BOX_EDIT_SFC_INTEGRATION_ID);
         }
 
         return {
             ...openWithIntegrations,
-            items,
+            items: consolidatedItems,
         };
     }
 
