@@ -43,7 +43,6 @@ type Props = {
     className: string,
     clientName: string,
     currentUser?: User,
-    defaultView?: SidebarView,
     detailsSidebarProps: DetailsSidebarProps,
     fileId?: string,
     getPreview: Function,
@@ -226,15 +225,9 @@ class ContentSidebar extends React.PureComponent<Props, State> {
      */
     getSidebarView(): ?SidebarView {
         const { file, isOpen, metadataEditors, view }: State = this.state;
-        const { defaultView }: Props = this.props;
 
         if (!isOpen) {
             return undefined;
-        }
-
-        // If there was a default view provided, force use that
-        if (defaultView) {
-            return defaultView;
         }
 
         let newView = view;
@@ -318,11 +311,9 @@ class ContentSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
-        const view = this.getSidebarView();
         this.setState(
             {
                 file,
-                view,
                 isLoading: false,
             },
             this.fetchMetadata,
@@ -376,7 +367,8 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             return null;
         }
 
-        const selectedView = isOpen ? this.state.view : undefined;
+        // const selectedView = isOpen ? this.state.view : undefined;
+        const selectedView = this.getSidebarView();
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
