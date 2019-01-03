@@ -11,7 +11,7 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import { FormattedMessage } from 'react-intl';
 import OpenWithButtonContents from './OpenWithButtonContents';
 import Tooltip from '../Tooltip';
-import { CLASS_INTEGRATION_ICON } from '../../constants';
+import { CLASS_INTEGRATION_ICON, OPEN_WITH_BUTTON_ICON_SIZE } from '../../constants';
 import messages from '../messages';
 
 type Props = {
@@ -23,7 +23,12 @@ const MultipleIntegrationsOpenWithButton = (buttonProps: Props) => (
         <Button {...buttonProps}>
             <MenuToggle>
                 <OpenWithButtonContents>
-                    <IconOpenWith className={CLASS_INTEGRATION_ICON} dimension={26} height={26} width={26} />
+                    <IconOpenWith
+                        className={CLASS_INTEGRATION_ICON}
+                        dimension={OPEN_WITH_BUTTON_ICON_SIZE}
+                        height={OPEN_WITH_BUTTON_ICON_SIZE}
+                        width={OPEN_WITH_BUTTON_ICON_SIZE}
+                    />
                 </OpenWithButtonContents>
             </MenuToggle>
         </Button>
