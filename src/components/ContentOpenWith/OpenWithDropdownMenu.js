@@ -12,11 +12,14 @@ import MultipleIntegrationsOpenWithButton from './MultipleIntegrationsOpenWithBu
 
 type Props = {
     integrations: ?Array<Integration>,
+    dropdownAlignment: Alignment,
     onClick: Function,
 };
 
-const OpenWithDropdownMenu = ({ integrations, onClick }: Props) => (
-    <DropdownMenu isRightAligned>
+const RIGHT_ALIGNMENT = 'right';
+
+const OpenWithDropdownMenu = ({ dropdownAlignment = RIGHT_ALIGNMENT, integrations, onClick }: Props) => (
+    <DropdownMenu isRightAligned={dropdownAlignment === RIGHT_ALIGNMENT}>
         <MultipleIntegrationsOpenWithButton />
         <Menu className="bcow-menu">
             {integrations &&
