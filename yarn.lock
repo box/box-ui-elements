@@ -716,13 +716,6 @@
     "@babel/plugin-transform-react-jsx-self" "^7.0.0"
     "@babel/plugin-transform-react-jsx-source" "^7.0.0"
 
-"@babel/runtime@^7.1.5":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.2.0.tgz#b03e42eeddf5898e00646e4c840fa07ba8dcad7f"
-  integrity sha512-oouEibCbHMVdZSDlJBO6bZmID/zA/G/Qx3H1d3rSNPTD+L8UNKvCat7aKWSJ74zYbm5zWGh0GQN0hKj8zYFTCg==
-  dependencies:
-    regenerator-runtime "^0.12.0"
-
 "@babel/template@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.0.0.tgz#c2bc9870405959c89a9c814376a2ecb247838c80"
@@ -1083,11 +1076,6 @@
     import-from "^2.1.0"
     into-stream "^4.0.0"
     lodash "^4.17.4"
-
-"@sheerun/mutationobserver-shim@^0.3.2":
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/@sheerun/mutationobserver-shim/-/mutationobserver-shim-0.3.2.tgz#8013f2af54a2b7d735f71560ff360d3a8176a87b"
-  integrity sha512-vTCdPp/T/Q3oSqwHmZ5Kpa9oI7iLtGl3RQaA/NyLHikvcrPxACkkKVr/XzkSPJWXHRhKGzVvb0urJsbMlRxi1Q==
 
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
@@ -4549,13 +4537,6 @@ cyclist@~0.2.2:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
   integrity sha1-GzN5LhHpFKL9bW7WRHRkRE5fpkA=
 
-cypress-testing-library@^2.3.5:
-  version "2.3.5"
-  resolved "https://registry.yarnpkg.com/cypress-testing-library/-/cypress-testing-library-2.3.5.tgz#2df56f6282b8d171c9674f4cec4ede10ff0edf0b"
-  integrity sha512-gKbMYyz/l+4qp1w2RI/FJvEryHbEULDBN1pyotST6FCBM0mitf9Q0nOwyENo69a8C1dSPI7VnD951jCfM4gMug==
-  dependencies:
-    dom-testing-library "^3.12.4"
-
 cypress@^3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-3.1.4.tgz#2af04da05e09f9d3871d05713b364472744c4216"
@@ -4998,16 +4979,6 @@ dom-serializer@0, dom-serializer@~0.1.0:
   dependencies:
     domelementtype "~1.1.1"
     entities "~1.1.1"
-
-dom-testing-library@^3.12.4:
-  version "3.16.2"
-  resolved "https://registry.yarnpkg.com/dom-testing-library/-/dom-testing-library-3.16.2.tgz#018b26e41d41cc9b17c0625a1570dea2ef1c4d59"
-  integrity sha512-mcvX8y22yiZV2D/9EqlhZ+lAldQAu5v7jHxwKBDtZiKOJqtgs8PyxXTkO/xgWonXBocMpXlUu/oaKHBzJClFWQ==
-  dependencies:
-    "@babel/runtime" "^7.1.5"
-    "@sheerun/mutationobserver-shim" "^0.3.2"
-    pretty-format "^23.6.0"
-    wait-for-expect "^1.1.0"
 
 domain-browser@^1.1.1:
   version "1.1.7"
@@ -13741,7 +13712,7 @@ regenerator-runtime@^0.11.1:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
   integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
 
-regenerator-runtime@^0.12.0, regenerator-runtime@^0.12.1:
+regenerator-runtime@^0.12.1:
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.12.1.tgz#fa1a71544764c036f8c49b13a08b2594c9f8a0de"
   integrity sha512-odxIc1/vDlo4iZcfXqRYFj0vpXFNoGdKMAUieAlFYO6m/nl5e9KR/beGf41z4a1FI+aQgtjhuaSlDxQ0hmkrHg==
@@ -16564,11 +16535,6 @@ vm-browserify@0.0.4:
   integrity sha1-XX6kW7755Kb/ZflUOOCofDV9WnM=
   dependencies:
     indexof "0.0.1"
-
-wait-for-expect@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/wait-for-expect/-/wait-for-expect-1.1.0.tgz#6607375c3f79d32add35cd2c87ce13f351a3d453"
-  integrity sha512-vQDokqxyMyknfX3luCDn16bSaRcOyH6gGuUXMIbxBLeTo6nWuEWYqMTT9a+44FmW8c2m6TRWBdNvBBjA1hwEKg==
 
 wait-on@^3.2.0:
   version "3.2.0"
