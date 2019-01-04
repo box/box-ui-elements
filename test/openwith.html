@@ -99,8 +99,11 @@
                     console.log(error);
                 });
 
+                var dropdownAlignment = buttonNum !== 1 ? 'right' : 'left';
+
                 openwith.show(fileId, token, {
                     container: '.openwith' + buttonNum,
+                    dropdownAlignment: dropdownAlignment,
                 });
             }
             load(1);
