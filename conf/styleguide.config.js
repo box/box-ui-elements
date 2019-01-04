@@ -26,6 +26,7 @@ module.exports = {
         fontFamily: {
             base: 'Lato, "Helvetica Neue", Helvetica, Arial, sans-serif',
         },
+        maxWidth: '100%',
     },
     pagePerSection: true,
 };
