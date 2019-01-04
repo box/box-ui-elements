@@ -48,11 +48,11 @@ type Props = {
     className: string,
     /** Application client name. */
     clientName: string,
+    /** Determines positioning of menu dropdown */
+    dropdownAlignment: Alignment,
     /** Box File ID. */
     fileId: string,
-    /** Determines positioning of menu dropdown */
-    isDropdownRightAligned: boolean,
-    /** Language to use for translations. */
+    /** Language to use for tra nslations. */
     language?: string,
     /** Messages to be translated. */
     messages?: StringMap,
@@ -95,7 +95,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
         apiHost: DEFAULT_HOSTNAME_API,
         className: '',
         clientName: CLIENT_NAME_OPEN_WITH,
-        isDropdownRightAligned: true,
         onExecute: noop,
         onError: noop,
     };
@@ -512,7 +511,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {Element}
      */
     render() {
-        const { language, messages: intlMessages, isDropdownRightAligned }: Props = this.props;
+        const { language, messages: intlMessages, dropdownAlignment }: Props = this.props;
         const {
             fetchError,
             isLoading,
@@ -538,7 +537,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                         />
                     ) : (
                         <OpenWithDropdownMenu
-                            isRightAligned={isDropdownRightAligned}
+                            dropdownAlignment={dropdownAlignment}
                             onClick={this.onIntegrationClick}
                             integrations={integrations}
                         />

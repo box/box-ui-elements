@@ -99,11 +99,11 @@
                     console.log(error);
                 });
 
-                var isDropdownRightAligned = buttonNum !== 1;
+                var dropdownAlignment = buttonNum !== 1 ? 'right' : 'left';
 
                 openwith.show(fileId, token, {
                     container: '.openwith' + buttonNum,
-                    isDropdownRightAligned: isDropdownRightAligned,
+                    dropdownAlignment: dropdownAlignment,
                 });
             }
             load(1);

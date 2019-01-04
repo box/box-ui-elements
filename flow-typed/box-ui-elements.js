@@ -630,6 +630,8 @@ type Integration = {
 
 type DisabledReason = ?string | ?Element;
 
+type Alignment = 'left' | 'right';
+
 type JsonPatch = {
     op: 'add' | 'remove' | 'replace' | 'test',
     path: string,
