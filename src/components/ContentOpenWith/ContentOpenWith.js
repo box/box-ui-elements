@@ -42,28 +42,30 @@ type ExternalProps = {
 };
 
 type Props = {
-    /** Box File ID. */
-    fileId: string,
-    /** Application client name. */
-    clientName: string,
     /** Box API url. */
     apiHost: string,
-    /** Access token. */
-    token: Token,
     /** Class name applied to base component. */
     className: string,
+    /** Application client name. */
+    clientName: string,
+    /** Box File ID. */
+    fileId: string,
+    /** Determines positioning of menu dropdown */
+    isDropdownRightAligned: boolean,
     /** Language to use for translations. */
     language?: string,
     /** Messages to be translated. */
     messages?: StringMap,
-    /** Axios request interceptor that runs before a network request. */
-    requestInterceptor?: Function,
-    /** Axios response interceptor that runs before a network response is returned. */
-    responseInterceptor?: Function,
     /** Callback that executes when an integration attempts to open the given file */
     onExecute: Function,
     /** Callback that executes when an integration invocation fails. The two most common cases being API failures or blocking of a new window */
     onError: Function,
+    /** Axios request interceptor that runs before a network request. */
+    requestInterceptor?: Function,
+    /** Axios response interceptor that runs before a network response is returned. */
+    responseInterceptor?: Function,
+    /** Access token. */
+    token: Token,
 };
 
 type State = {
@@ -90,9 +92,10 @@ class ContentOpenWith extends PureComponent<Props, State> {
     integrationWindow: ?any;
 
     static defaultProps = {
+        apiHost: DEFAULT_HOSTNAME_API,
         className: '',
         clientName: CLIENT_NAME_OPEN_WITH,
-        apiHost: DEFAULT_HOSTNAME_API,
+        isDropdownRightAligned: true,
         onExecute: noop,
         onError: noop,
     };
@@ -509,7 +512,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {Element}
      */
     render() {
-        const { language, messages: intlMessages }: Props = this.props;
+        const { language, messages: intlMessages, isDropdownRightAligned }: Props = this.props;
         const {
             fetchError,
             isLoading,
@@ -534,7 +537,11 @@ class ContentOpenWith extends PureComponent<Props, State> {
                             isLoading={isLoading}
                         />
                     ) : (
-                        <OpenWithDropdownMenu onClick={this.onIntegrationClick} integrations={integrations} />
+                        <OpenWithDropdownMenu
+                            isRightAligned={isDropdownRightAligned}
+                            onClick={this.onIntegrationClick}
+                            integrations={integrations}
+                        />
                     )}
                     {(shouldRenderLoadingIntegrationPortal || shouldRenderErrorIntegrationPortal) && (
                         <IntegrationPortalContainer

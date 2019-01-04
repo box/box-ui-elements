@@ -99,8 +99,11 @@
                     console.log(error);
                 });
 
+                var isDropdownRightAligned = buttonNum !== 1;
+
                 openwith.show(fileId, token, {
                     container: '.openwith' + buttonNum,
+                    isDropdownRightAligned: isDropdownRightAligned,
                 });
             }
             load(1);

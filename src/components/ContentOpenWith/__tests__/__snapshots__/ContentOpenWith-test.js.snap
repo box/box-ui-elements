@@ -75,6 +75,7 @@ exports[`components/ContentOpenWith/ContentOpenWith render() should render the O
           "Google Suite",
         ]
       }
+      isRightAligned={true}
       onClick={[Function]}
     />
   </div>
@@ -94,6 +95,7 @@ exports[`components/ContentOpenWith/ContentOpenWith render() should render the P
           "Google Suite",
         ]
       }
+      isRightAligned={true}
       onClick={[Function]}
     />
     <IntegrationPortalContainer
@@ -116,6 +118,7 @@ exports[`components/ContentOpenWith/ContentOpenWith render() should render the P
           "Google Suite",
         ]
       }
+      isRightAligned={true}
       onClick={[Function]}
     />
     <IntegrationPortalContainer
