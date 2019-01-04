@@ -2,60 +2,38 @@
 
 exports[`components/ContentSidebar/Sidebar should render activity sidebar 1`] = `
 <Fragment>
-  <SidebarNav
-    hasActivityFeed={true}
-    selectedView="activity"
-  />
   <ActivitySidebar
     file={
       Object {
         "id": "id",
       }
     }
-    key="id"
   />
 </Fragment>
 `;
 
 exports[`components/ContentSidebar/Sidebar should render details sidebar 1`] = `
 <Fragment>
-  <SidebarNav
-    hasDetails={true}
-    selectedView="details"
-  />
   <DetailsSidebar />
 </Fragment>
 `;
 
 exports[`components/ContentSidebar/Sidebar should render metadata sidebar 1`] = `
 <Fragment>
-  <SidebarNav
-    hasMetadata={true}
-    selectedView="metadata"
-  />
   <MetadataSidebar
     file={
       Object {
         "id": "id",
       }
     }
-    key="id"
   />
 </Fragment>
 `;
 
-exports[`components/ContentSidebar/Sidebar should render no sidebar 1`] = `
-<Fragment>
-  <SidebarNav />
-</Fragment>
-`;
+exports[`components/ContentSidebar/Sidebar should render no sidebar 1`] = `<Fragment />`;
 
 exports[`components/ContentSidebar/Sidebar should render skills sidebar 1`] = `
 <Fragment>
-  <SidebarNav
-    hasSkills={true}
-    selectedView="skills"
-  />
   <SkillsSidebar
     file={
       Object {
