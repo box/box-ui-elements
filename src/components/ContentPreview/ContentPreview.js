@@ -14,10 +14,8 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import { decode } from 'box-react-ui/lib/utils/keys';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import IconNavigateLeft from 'box-react-ui/lib/icons/general/IconNavigateLeft';
-import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight';
 import PreviewLoading from './PreviewLoading';
+import PreviewNavigation from './PreviewNavigation';
 import ContentSidebar from '../ContentSidebar';
 import Header from './Header';
 import API from '../../api';
@@ -1067,9 +1065,6 @@ class ContentPreview extends PureComponent<Props, State> {
 
         const { file, isFileError, isReloadNotificationVisible, currentFileId }: State = this.state;
         const { collection }: Props = this.props;
-        const fileIndex = this.getFileIndex();
-        const hasLeftNavigation = collection.length > 1 && fileIndex > 0 && fileIndex < collection.length;
-        const hasRightNavigation = collection.length > 1 && fileIndex > -1 && fileIndex < collection.length - 1;
 
         if (!currentFileId) {
             return null;
@@ -1113,16 +1108,12 @@ class ContentPreview extends PureComponent<Props, State> {
                                     />
                                 </div>
                             )}
-                            {hasLeftNavigation && (
-                                <PlainButton type="button" className="bcpr-navigate-left" onClick={this.navigateLeft}>
-                                    <IconNavigateLeft />
-                                </PlainButton>
-                            )}
-                            {hasRightNavigation && (
-                                <PlainButton type="button" className="bcpr-navigate-right" onClick={this.navigateRight}>
-                                    <IconNavigateRight />
-                                </PlainButton>
-                            )}
+                            <PreviewNavigation
+                                collection={collection}
+                                currentIndex={this.getFileIndex()}
+                                onNavigateLeft={this.navigateLeft}
+                                onNavigateRight={this.navigateRight}
+                            />
                         </div>
                         {file && (
                             <ContentSidebar

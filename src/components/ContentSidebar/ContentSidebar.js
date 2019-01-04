@@ -367,7 +367,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             return null;
         }
 
-        // const selectedView = isOpen ? this.state.view : undefined;
         const selectedView = this.getSidebarView();
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);

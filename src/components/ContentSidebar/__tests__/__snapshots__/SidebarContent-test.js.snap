@@ -3,6 +3,7 @@
 exports[`components/ContentSidebar/SidebarContent should render sidebar content component 1`] = `
 <div
   className="bcs-content"
+  data-testid="bcs-content"
 >
   <div
     className="bcs-content-header"
