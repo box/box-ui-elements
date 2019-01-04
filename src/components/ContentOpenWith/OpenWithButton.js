@@ -10,7 +10,7 @@ import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
 import Tooltip from '../Tooltip';
 import OpenWithButtonContents from './OpenWithButtonContents';
-import { CLASS_INTEGRATION_ICON } from '../../constants';
+import { CLASS_INTEGRATION_ICON, OPEN_WITH_BUTTON_ICON_SIZE } from '../../constants';
 import messages from '../messages';
 import getIcon from './IconFileMap';
 
@@ -63,7 +63,13 @@ const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props
         <Tooltip text={getTooltip(displayDescription, isLoading, error, disabledReasons)} position="bottom-center">
             <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration)}>
                 <OpenWithButtonContents>
-                    <Icon extension={extension} className={CLASS_INTEGRATION_ICON} height={26} width={26} />
+                    <Icon
+                        className={CLASS_INTEGRATION_ICON}
+                        dimension={OPEN_WITH_BUTTON_ICON_SIZE}
+                        extension={extension}
+                        height={OPEN_WITH_BUTTON_ICON_SIZE}
+                        width={OPEN_WITH_BUTTON_ICON_SIZE}
+                    />
                 </OpenWithButtonContents>
             </Button>
         </Tooltip>

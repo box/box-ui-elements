@@ -7,6 +7,7 @@
 import * as React from 'react';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import { FormattedMessage } from 'react-intl';
+import { OPEN_WITH_MENU_ITEM_ICON_SIZE } from '../../constants';
 import getIcon from './IconFileMap';
 import messages from '../messages';
 
@@ -23,7 +24,12 @@ const OpenWithDropdownMenuItem = ({ integration, onClick }: Props) => {
     const description = isDisabled ? errorDescription : displayDescription;
     return (
         <MenuItem isDisabled={isDisabled} onClick={() => onClick(integration)}>
-            <Icon extension={extension} />
+            <Icon
+                dimension={OPEN_WITH_MENU_ITEM_ICON_SIZE}
+                extension={extension}
+                height={OPEN_WITH_MENU_ITEM_ICON_SIZE}
+                width={OPEN_WITH_MENU_ITEM_ICON_SIZE}
+            />
             <span>
                 <p className="bcow-menu-item-title">{displayName}</p>
                 <p className="bcow-menu-item-description">{description}</p>
