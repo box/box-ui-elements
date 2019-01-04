@@ -304,10 +304,12 @@ export const VERSION_UPLOAD_ACTION = 'upload';
 /* ------------------ Placeholder Feed Items ------------------------- */
 export const PLACEHOLDER_USER = { type: 'user', id: '2', name: '' };
 
-/* ------------------ Integrations ------------------------- */
+/* ------------------ Open With ------------------------- */
 export const APP_INTEGRATION = 'app_integration';
 export const BOX_EDIT_INTEGRATION_ID = '1338';
 export const BOX_EDIT_SFC_INTEGRATION_ID = '13418';
+export const OPEN_WITH_BUTTON_ICON_SIZE = 26;
+export const OPEN_WITH_MENU_ITEM_ICON_SIZE = 30;
 
 /* ------------------ Task Assignment Statuses ----------------- */
 export const TASK_APPROVED: 'approved' = 'approved';
