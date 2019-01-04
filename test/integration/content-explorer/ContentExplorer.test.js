@@ -21,10 +21,9 @@ describe('ContentExplorer', () => {
             cy.queryByTestId('bcs-content').should('exist');
         });
 
-        // TODO: Remove exclusion once sidebar closed state bug is resolved
-        it.skip('Navigation within a collection keeps sidebar closed', () => {
+        it('Navigation within a collection keeps sidebar closed', () => {
             // Manually closing the sidebar should remove its content
-            cy.queryByTestId('activitysidebar').click();
+            cy.queryByTestId('sidebaractivity').click();
             cy.queryByTestId('bcs-content').should('not.exist');
 
             // Navigating between files in a collection should retain the prior closed state

@@ -5,6 +5,7 @@ cache:
   yarn: true
   directories:
     - node_modules
+    - ~/.cache/Cypress
 jobs:
   include:
     - name: "Commit Lint"
@@ -15,5 +16,7 @@ jobs:
       script: yarn flow
     - name: "Tests"
       script: yarn test; yarn test:e2e
-    - name: "Build"
-      script: npm-run-all clean build:i18n build:ci:es build:ci:dist
+    - name: "Build Babel"
+      script: npm-run-all clean build:i18n build:ci:es
+    - name: "Build Webpack"
+      script: npm-run-all clean build:i18n build:ci:dist

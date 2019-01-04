@@ -13,8 +13,8 @@ npm-debug.log
 npm-error.log
 reports
 styleguide
-test/cypress/screenshots
-test/cypress/videos
+test/screenshots
+test/videos
 test/dev.html
 yarn-debug.log
 yarn-error.log
