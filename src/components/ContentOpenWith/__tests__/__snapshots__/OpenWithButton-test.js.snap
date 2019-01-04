@@ -17,6 +17,7 @@ exports[`components/ContentOpenWith/OpenWithButton should render as disabled if 
     <OpenWithButtonContents>
       <IconAdobeSign
         className="bcow-integration-icon"
+        dimension={26}
         height={26}
         width={26}
       />
@@ -42,6 +43,7 @@ exports[`components/ContentOpenWith/OpenWithButton should render as disabled if 
     <OpenWithButtonContents>
       <IconOpenWith
         className="bcow-integration-icon"
+        dimension={26}
         height={26}
         width={26}
       />
@@ -67,6 +69,7 @@ exports[`components/ContentOpenWith/OpenWithButton should render with the correc
     <OpenWithButtonContents>
       <IconGoogleDocs
         className="bcow-integration-icon"
+        dimension={26}
         height={26}
         width={26}
       />

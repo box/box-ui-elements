@@ -5,7 +5,11 @@ exports[`components/ContentOpenWith/OpenWithMenuItem should be disabled with a r
   isDisabled={true}
   onClick={[Function]}
 >
-  <FileIcon />
+  <FileIcon
+    dimension={30}
+    height={30}
+    width={30}
+  />
   <span>
     <p
       className="bcow-menu-item-title"
@@ -25,7 +29,11 @@ exports[`components/ContentOpenWith/OpenWithMenuItem should render the descripti
 <MenuItem
   onClick={[Function]}
 >
-  <IconAdobeSign />
+  <IconAdobeSign
+    dimension={30}
+    height={30}
+    width={30}
+  />
   <span>
     <p
       className="bcow-menu-item-title"
@@ -46,7 +54,11 @@ exports[`components/ContentOpenWith/OpenWithMenuItem should use the default erro
   isDisabled={true}
   onClick={[Function]}
 >
-  <FileIcon />
+  <FileIcon
+    dimension={30}
+    height={30}
+    width={30}
+  />
   <span>
     <p
       className="bcow-menu-item-title"
@@ -69,7 +81,11 @@ exports[`components/ContentOpenWith/OpenWithMenuItem should use the default icon
 <MenuItem
   onClick={[Function]}
 >
-  <FileIcon />
+  <FileIcon
+    dimension={30}
+    height={30}
+    width={30}
+  />
   <span>
     <p
       className="bcow-menu-item-title"
