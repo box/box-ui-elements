@@ -23,6 +23,10 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
     const hasLeftNavigation = collection.length > 1 && currentIndex > 0 && currentIndex < collection.length;
     const hasRightNavigation = collection.length > 1 && currentIndex > -1 && currentIndex < collection.length - 1;
 
+    if (!hasLeftNavigation && !hasRightNavigation) {
+        return null;
+    }
+
     return (
         <React.Fragment>
             {hasLeftNavigation && (
@@ -49,4 +53,5 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
     );
 };
 
+export { PreviewNavigation as PreviewNavigationComponent };
 export default injectIntl(PreviewNavigation);
