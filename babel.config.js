@@ -38,7 +38,7 @@ module.exports = {
             ],
         },
         production: {
-            plugins: [['react-remove-properties', { properties: ['data-testid'] }]],
+            plugins: [['react-remove-properties', { properties: ['data-resin-target', 'data-testid'] }]],
         },
         test: {
             plugins: [
