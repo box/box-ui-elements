@@ -34,7 +34,11 @@ module.exports = {
                         extensions: ['.scss', '.css'],
                     },
                 ],
+                ['react-remove-properties', { properties: ['data-testid'] }],
             ],
+        },
+        production: {
+            plugins: [['react-remove-properties', { properties: ['data-testid'] }]],
         },
         test: {
             plugins: [
