@@ -43,6 +43,7 @@ type Props = {
     className: string,
     clientName: string,
     currentUser?: User,
+    defaultView?: SidebarView,
     detailsSidebarProps: DetailsSidebarProps,
     fileId?: string,
     getPreview: Function,
@@ -189,7 +190,8 @@ class ContentSidebar extends React.PureComponent<Props, State> {
      */
     onToggle = (view: SidebarView): void => {
         const { isOpen, view: priorView }: State = this.state;
-        const isClosing = isOpen && (!priorView || view === priorView);
+        const lastView = priorView || this.getSidebarView();
+        const isClosing = isOpen && view === lastView;
 
         this.setState({
             view,
@@ -225,9 +227,15 @@ class ContentSidebar extends React.PureComponent<Props, State> {
      */
     getSidebarView(): ?SidebarView {
         const { file, isOpen, metadataEditors, view }: State = this.state;
+        const { defaultView }: Props = this.props;
 
         if (!isOpen) {
             return undefined;
+        }
+
+        // If there was a default view provided, force use that
+        if (defaultView) {
+            return defaultView;
         }
 
         let newView = view;
