@@ -14,6 +14,7 @@ import API from '../../api';
 import Internationalize from '../Internationalize';
 import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
+import BoxToolsInstallMessage from './BoxToolsInstallMessage';
 import messages from '../messages';
 import OpenWithButton from './OpenWithButton';
 import ExecuteForm from './ExecuteForm';
@@ -33,7 +34,7 @@ import {
 const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
-const UNINSTALLED_ERROR_MESSAGE_KEY = 'boxToolsUninstalledErrorMessage';
+const BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY = 'boxToolsInstallErrorMessage';
 const GENERIC_EXECUTE_MESSAGE_KEY = 'executeIntegrationOpenWithErrorHeader';
 const AUTH_CODE = 'auth_code';
 
@@ -52,7 +53,7 @@ type Props = {
     dropdownAlignment: Alignment,
     /** Box File ID. */
     fileId: string,
-    /** Language to use for tra nslations. */
+    /** Language to use for translations. */
     language?: string,
     /** Messages to be translated. */
     messages?: StringMap,
@@ -242,7 +243,12 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 await this.isBoxEditAvailable();
                 await this.canOpenExtensionWithBoxEdit(boxEditIntegration);
             } catch (error) {
-                boxEditIntegration.disabledReasons.push(<FormattedMessage {...messages[error.message]} />);
+                let errorMessage = <FormattedMessage {...messages[error.message]} />;
+                if (error.message === BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY) {
+                    errorMessage = <BoxToolsInstallMessage />;
+                }
+
+                boxEditIntegration.disabledReasons.push(errorMessage);
                 boxEditIntegration.isDisabled = true;
             }
         }
@@ -274,7 +280,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .getBoxEditAPI()
             .checkBoxEditAvailability()
             .catch(() => {
-                throw new Error(UNINSTALLED_ERROR_MESSAGE_KEY);
+                throw new Error(BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY);
             });
     };
 

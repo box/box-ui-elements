@@ -978,10 +978,10 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Sub header message to the user when an Open With integration fails to execute',
         defaultMessage: 'Please try again later.',
     },
-    boxToolsUninstalledErrorMessage: {
-        id: 'be.boxToolsUninstalledErrorMessage',
-        description: 'Sub header message to the user when Box Tools is not installed',
-        defaultMessage: 'Box Tools is not installed on this device',
+    boxToolsInstallMessage: {
+        id: 'be.boxToolsInstallMessage',
+        description: 'Message shown telling user how to install Box Tools',
+        defaultMessage: 'Install {boxTools} to open this file on your desktop',
     },
     boxToolsBlacklistedError: {
         id: 'be.boxEditBlacklistedError',
