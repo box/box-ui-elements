@@ -220,7 +220,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
     };
 
     /**
-     * File fetch success callback that sets the file and view
+     * Determines the current sidebar tab view
      *
      * @private
      * @return {string} Sidebar view to use

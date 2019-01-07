@@ -40,8 +40,9 @@ describe('ContentExplorer', () => {
             // Skills tab should be selected
             cy.getByTestId('sidebarskills').should('have.class', 'bcs-nav-btn-is-selected');
 
-            // Navigate to previous file should default to activity feed
+            // Navigate to previous file (Sample 3D.box3d) should default to activity feed
             cy.getByTitle('Previous File').click();
+            cy.contains('Sample 3D.box3d').should('exist');
             cy.getByTestId('bcs-content').should('exist');
             cy.getByTestId('sidebaractivity').should('have.class', 'bcs-nav-btn-is-selected');
         });
