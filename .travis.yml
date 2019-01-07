@@ -11,9 +11,9 @@ jobs:
     - name: "Commit Lint"
       script: commitlint-travis
     - name: "Code Lint"
-      script: yarn lint
+      script: npm-run-all clean build:i18n lint
     - name: "Flow types"
-      script: yarn flow
+      script: npm-run-all clean build:i18n; yarn flow
     - name: "Tests"
       script: yarn test; yarn test:e2e
     - name: "Build Babel"
