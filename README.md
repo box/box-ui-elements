@@ -296,6 +296,8 @@ render(
 );
 ```
 
+# Code Splitting
+[Code splitting](https://webpack.js.org/guides/code-splitting/) is enabled for certain elements, such as `ContentPreview` and `ContentSidebar`. This is done using [react-loadable](https://github.com/jamiebuilds/react-loadable), but in a future release will change to `React.lazy`. In order to use code splitting, you will need to build an element with webpack by importing the element from the `lib` folder in our npm package.
 
 # Questions
 If you have any questions, please visit our [developer forum](https://community.box.com/t5/Box-Developer-Forum/bd-p/DeveloperForum) or contact us via one of our [available support channels](https://community.box.com/t5/Community/ct-p/English).
