@@ -3,7 +3,7 @@ import BoxToolsInstallMessage from './BoxToolsInstallMessage';
 
 /**
  * @flow
- * @file Skills utils
+ * @file Open With utils
  * @author Box
  */
 

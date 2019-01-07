@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Open With button
+ * @file Custom message to install Box Tools inside of Open With.
  * @author Box
  */
 
@@ -13,7 +13,7 @@ const DEFAULT_BOX_TOOLS_INSTALLATION_URL =
     'https://community.box.com/t5/Using-Box-Tools/Installing-Box-Tools/ta-p/50143';
 
 const onLinkClick = () => {
-    // Manually open the URL since disabled menu items are normally prevented from clickable actions
+    // Manually open the URL since disabled menu items are blocked from clickable actions by default
     window.open(DEFAULT_BOX_TOOLS_INSTALLATION_URL);
 };
 
