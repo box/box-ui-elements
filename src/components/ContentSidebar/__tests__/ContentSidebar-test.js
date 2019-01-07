@@ -77,8 +77,10 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             wrapper.setState({ view: 'activity', isOpen: true });
             instance.setState = jest.fn();
+            instance.getSidebarView = jest.fn();
             instance.onToggle('skills');
 
+            expect(instance.getSidebarView).not.toBeCalled();
             expect(instance.setState).toBeCalledWith({
                 isOpen: true,
                 view: 'skills',
@@ -91,8 +93,26 @@ describe('components/ContentSidebar/ContentSidebar', () => {
 
             wrapper.setState({ view: 'skills' });
             instance.setState = jest.fn();
+            instance.getSidebarView = jest.fn();
             instance.onToggle('skills');
 
+            expect(instance.getSidebarView).not.toBeCalled();
+            expect(instance.setState).toBeCalledWith({
+                isOpen: false,
+                view: 'skills',
+            });
+        });
+
+        test('should call getSidebarView if prior view is falsy', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            wrapper.setState({ view: undefined });
+            instance.setState = jest.fn();
+            instance.getSidebarView = jest.fn().mockReturnValueOnce('skills');
+            instance.onToggle('skills');
+
+            expect(instance.getSidebarView).toBeCalled();
             expect(instance.setState).toBeCalledWith({
                 isOpen: false,
                 view: 'skills',
