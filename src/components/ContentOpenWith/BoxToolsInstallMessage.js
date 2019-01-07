@@ -25,8 +25,7 @@ const BoxToolsInstallMessage = () => {
                 boxTools: (
                     /* eslint-disable jsx-a11y/anchor-is-valid */
                     <a onClick={onLinkClick} href="#" rel="noopener noreferrer">
-                        {' '}
-                        Box Tools
+                        {'Box Tools'}
                     </a>
                     /* eslint-enable jsx-a11y/anchor-is-valid */
                 ),
