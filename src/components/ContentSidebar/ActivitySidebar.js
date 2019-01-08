@@ -17,6 +17,8 @@ import { getBadUserError, getBadItemError } from '../../util/error';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
 import './ActivitySidebar.scss';
+import Timer from '../../util/Timer'; // Note that this is a thin wrapper around performance api
+import { ACTIVITY_SIDEBAR_TAGS } from '../../logger/loggingConstants';
 
 type ExternalProps = {
     onCommentCreate?: Function,
@@ -50,12 +52,15 @@ type State = {
     feedItems?: FeedItems,
 };
 
+Timer.mark(ACTIVITY_SIDEBAR_TAGS.JSReady);
+
 export const activityFeedInlineError: Errors = {
     inlineError: {
         title: messages.errorOccured,
         content: messages.activityFeedItemApiError,
     },
 };
+
 class ActivitySidebar extends React.PureComponent<Props, State> {
     state = {};
 
@@ -63,6 +68,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { currentUser } = this.props;
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
+        // Start time to interaction timer
+        Timer.mark(ACTIVITY_SIDEBAR_TAGS.Initialized);
     }
 
     /**
@@ -436,6 +443,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activityFeedError,
             currentUserError,
         } = this.state;
+
         return (
             <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
                 <ActivityFeed

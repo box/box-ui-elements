@@ -14,6 +14,8 @@ import Sidebar from './Sidebar';
 import SidebarNav from './SidebarNav';
 import API from '../../api';
 import APIContext from '../APIContext';
+import Logger from '../../logger';
+import LoggerContext from '../LoggerContext';
 import Internationalize from '../Internationalize';
 import { withErrorBoundary } from '../ErrorBoundary';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../util/fields';
@@ -397,29 +399,31 @@ class ContentSidebar extends React.PureComponent<Props, State> {
                                 <LoadingIndicator />
                             </div>
                         ) : (
-                            <APIContext.Provider value={(this.api: any)}>
-                                <SidebarNav
-                                    hasSkills={hasSkills}
-                                    hasMetadata={hasMetadata}
-                                    hasActivityFeed={hasActivityFeed}
-                                    hasDetails={hasDetails}
-                                    onToggle={this.onToggle}
-                                    selectedView={selectedView}
-                                />
-                                <Sidebar
-                                    activitySidebarProps={activitySidebarProps}
-                                    currentUser={currentUser}
-                                    detailsSidebarProps={detailsSidebarProps}
-                                    file={file}
-                                    fileId={fileId}
-                                    getPreview={getPreview}
-                                    getViewer={getViewer}
-                                    key={file.id}
-                                    metadataSidebarProps={metadataSidebarProps}
-                                    onVersionHistoryClick={onVersionHistoryClick}
-                                    selectedView={selectedView}
-                                />
-                            </APIContext.Provider>
+                            <LoggerContext.Provider value={(Logger: any)}>
+                                <APIContext.Provider value={(this.api: any)}>
+                                    <SidebarNav
+                                        hasSkills={hasSkills}
+                                        hasMetadata={hasMetadata}
+                                        hasActivityFeed={hasActivityFeed}
+                                        hasDetails={hasDetails}
+                                        onToggle={this.onToggle}
+                                        selectedView={selectedView}
+                                    />
+                                    <Sidebar
+                                        activitySidebarProps={activitySidebarProps}
+                                        currentUser={currentUser}
+                                        detailsSidebarProps={detailsSidebarProps}
+                                        file={file}
+                                        fileId={fileId}
+                                        getPreview={getPreview}
+                                        getViewer={getViewer}
+                                        key={file.id}
+                                        metadataSidebarProps={metadataSidebarProps}
+                                        onVersionHistoryClick={onVersionHistoryClick}
+                                        selectedView={selectedView}
+                                    />
+                                </APIContext.Provider>
+                            </LoggerContext.Provider>
                         )}
                     </div>
                 </aside>
