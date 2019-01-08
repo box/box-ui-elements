@@ -93,15 +93,15 @@ class Logger {
      *
      * @param {string} component - the name of the component
      * @param {string} name - the event name
-     * @param {string} from - Performance API mark for the start of the timer
-     * @param {string} to - Performance API mark for the end of the timer
+     * @param {string} start - Performance API mark for the start of the timer
+     * @param {string} end - Performance API mark for the end of the timer
      * @param {boolean} [isUnique] - If true, guarantees a unique event firing
      * @returns {void}
      */
-    logTimeMetric(component: string, name: string, from: string, to: string, isUnique?: boolean = false): void {
+    logTimeMetric(component: string, name: string, start: string, end: string, isUnique?: boolean = false): void {
         const tagInfo = {
-            from,
-            to,
+            start,
+            end,
         };
 
         if (isUnique) {
