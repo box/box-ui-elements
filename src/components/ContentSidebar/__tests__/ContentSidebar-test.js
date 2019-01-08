@@ -134,7 +134,20 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(instance.getSidebarView()).toBe('default');
         });
 
-        test('should return skills when no current view is skills and skills exist', () => {
+        test('should not return default view if toggled view is set', () => {
+            const wrapper = getWrapper({ defaultView: 'default' });
+            const instance = wrapper.instance();
+            instance.setState({ view: 'activity' });
+
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+
+            expect(instance.getSidebarView()).toBe('activity');
+        });
+
+        test('should return skills when current view is skills and skills exist', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
