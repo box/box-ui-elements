@@ -17,8 +17,7 @@ import { getBadUserError, getBadItemError } from '../../util/error';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
 import './ActivitySidebar.scss';
-import Timer from '../../util/Timer'; // Note that this is a thin wrapper around performance api
-import { ACTIVITY_SIDEBAR_TAGS } from '../../logger/loggingConstants';
+import { ACTIVITY_SIDEBAR_TAGS, EVENT_JS_READY } from '../../logger/loggingConstants';
 
 type ExternalProps = {
     onCommentCreate?: Function,
@@ -52,7 +51,8 @@ type State = {
     feedItems?: FeedItems,
 };
 
-Timer.mark(ACTIVITY_SIDEBAR_TAGS.JSReady);
+window.performance.mark(ACTIVITY_SIDEBAR_TAGS.JSReady);
+const ACTIVITY_SIDEBAR_COMPONENT = 'activity_sidebar';
 
 export const activityFeedInlineError: Errors = {
     inlineError: {
@@ -64,12 +64,27 @@ export const activityFeedInlineError: Errors = {
 class ActivitySidebar extends React.PureComponent<Props, State> {
     state = {};
 
+    constructor(props: Props) {
+        super(props);
+
+        const { logger } = this.props;
+        if (!logger.hasLoggedEvent(ACTIVITY_SIDEBAR_COMPONENT, EVENT_JS_READY)) {
+            logger.logTimeMetric(
+                ACTIVITY_SIDEBAR_COMPONENT,
+                EVENT_JS_READY,
+                undefined,
+                ACTIVITY_SIDEBAR_TAGS.JSReady,
+                true,
+            );
+        }
+    }
+
     componentDidMount() {
         const { currentUser } = this.props;
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
         // Start time to interaction timer
-        Timer.mark(ACTIVITY_SIDEBAR_TAGS.Initialized);
+        window.performance.mark(ACTIVITY_SIDEBAR_TAGS.Initialized);
     }
 
     /**

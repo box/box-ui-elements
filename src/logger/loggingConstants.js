@@ -9,3 +9,5 @@ export const ACTIVITY_FEED_TAGS = {
     TimeToLoadState: 'activity_feed_ttl',
     TimeToRender: 'activity_feed_ttr',
 };
+
+export const EVENT_JS_READY = 'js_ready';

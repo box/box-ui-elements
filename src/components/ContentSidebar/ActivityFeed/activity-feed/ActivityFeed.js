@@ -11,7 +11,6 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
-import Timer from '../../../../util/Timer';
 import withLoggerContext from '../../../LoggerContext/withLoggerContext';
 import { LoggerType } from '../../../../logger';
 import { ACTIVITY_SIDEBAR_TAGS, ACTIVITY_FEED_TAGS } from '../../../../logger/loggingConstants';
@@ -96,7 +95,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const hasLoggedRender = logger.hasLoggedEvent(ACTIVITY_FEED_COMPONENT, EVENT_TIME_TO_RENDER);
         if (!hasLoggedRender) {
             if (currentUser && feedItems) {
-                Timer.mark(ACTIVITY_FEED_TAGS.TimeToRender);
+                window.performance.mark(ACTIVITY_FEED_TAGS.TimeToRender);
                 logger.logTimeMetric(
                     ACTIVITY_FEED_COMPONENT,
                     EVENT_TIME_TO_RENDER,
@@ -105,7 +104,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     true,
                 );
             } else if (!logger.hasLoggedEvent(ACTIVITY_FEED_COMPONENT, EVENT_TIME_TO_LOAD_STATE)) {
-                Timer.mark(ACTIVITY_FEED_TAGS.TimeToLoadState);
+                window.performance.mark(ACTIVITY_FEED_TAGS.TimeToLoadState);
                 logger.logTimeMetric(
                     ACTIVITY_FEED_COMPONENT,
                     EVENT_TIME_TO_LOAD_STATE,

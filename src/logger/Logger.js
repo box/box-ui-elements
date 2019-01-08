@@ -29,7 +29,7 @@ class Logger {
     onMetricLog: Function = console.log; // eslint-disable-line no-console
 
     /* A list of unique events that have occurred */
-    uniqueEvents: Array<string> = [];
+    uniqueEvents: Set = new Set();
 
     /**
      * Composes a component and event name together to make a semi-unique tag.
@@ -50,7 +50,7 @@ class Logger {
      * @returns {boolean} True if the event has already been fired
      */
     hasLoggedEvent(component: string, name: string): boolean {
-        return this.uniqueEvents.includes(this.createComponentEventName(component, name));
+        return this.uniqueEvents.has(this.createComponentEventName(component, name));
     }
 
     /**
@@ -85,7 +85,7 @@ class Logger {
             return;
         }
         this.logMetric(component, name, data);
-        this.uniqueEvents.push(this.createComponentEventName(component, name));
+        this.uniqueEvents.add(this.createComponentEventName(component, name));
     }
 
     /**
@@ -93,8 +93,8 @@ class Logger {
      *
      * @param {string} component - the name of the component
      * @param {string} name - the event name
-     * @param {string} from - Timer mark for the start of the timer
-     * @param {string} to - Timer mark for the end of the timer
+     * @param {string} from - Performance API mark for the start of the timer
+     * @param {string} to - Performance API mark for the end of the timer
      * @param {boolean} [isUnique] - If true, guarantees a unique event firing
      * @returns {void}
      */
