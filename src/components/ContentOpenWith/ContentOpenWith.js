@@ -243,12 +243,13 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 await this.isBoxEditAvailable();
                 await this.canOpenExtensionWithBoxEdit(boxEditIntegration);
             } catch (error) {
-                let errorMessage = <FormattedMessage {...messages[error.message]} />;
+                const errorMessageObject = messages[error.message] || messages[GENERIC_EXECUTE_MESSAGE_KEY];
+                let formattedErrorMessage = <FormattedMessage {...errorMessageObject} />;
                 if (error.message === BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY) {
-                    errorMessage = <BoxToolsInstallMessage />;
+                    formattedErrorMessage = <BoxToolsInstallMessage />;
                 }
 
-                boxEditIntegration.disabledReasons.push(errorMessage);
+                boxEditIntegration.disabledReasons.push(formattedErrorMessage);
                 boxEditIntegration.isDisabled = true;
             }
         }

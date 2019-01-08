@@ -9,8 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import './BoxToolsInstallMessage.scss';
 
-const DEFAULT_BOX_TOOLS_INSTALLATION_URL =
-    'https://community.box.com/t5/Using-Box-Tools/Installing-Box-Tools/ta-p/50143';
+const DEFAULT_BOX_TOOLS_INSTALLATION_URL = 'https://cloud.box.com/v/installboxtools';
 
 const onLinkClick = () => {
     // Manually open the URL since disabled menu items are blocked from clickable actions by default
@@ -23,11 +22,10 @@ const BoxToolsInstallMessage = () => {
             {...messages.boxToolsInstallMessage}
             values={{
                 boxTools: (
-                    /* eslint-disable jsx-a11y/anchor-is-valid */
+                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
                     <a onClick={onLinkClick} href="#" rel="noopener noreferrer">
                         {'Box Tools'}
                     </a>
-                    /* eslint-enable jsx-a11y/anchor-is-valid */
                 ),
             }}
         />

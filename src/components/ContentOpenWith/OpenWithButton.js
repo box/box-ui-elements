@@ -10,7 +10,7 @@ import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
 import Tooltip from '../Tooltip';
 import OpenWithButtonContents from './OpenWithButtonContents';
-import isDisabledBecauseBoxToolsIsNotInstalled from './openWithUtils';
+import utils from './openWithUtils';
 import { CLASS_INTEGRATION_ICON, OPEN_WITH_BUTTON_ICON_SIZE } from '../../constants';
 import messages from '../messages';
 import getIcon from './IconFileMap';
@@ -59,16 +59,16 @@ const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props
     const isDisabled = !!isDisplayIntegrationDisabled || !displayName;
     const Icon = displayName ? getIcon(displayName) : IconOpenWith;
 
-    const tooltipDisplayProps = isDisabledBecauseBoxToolsIsNotInstalled(disabledReasons)
+    const tooltipDisplayProps = utils.isDisabledBecauseBoxToolsIsNotInstalled(displayIntegration)
         ? { isShown: true, showCloseButton: true }
         : {};
 
     return (
         <Tooltip
             className="bcow-tooltip"
-            {...tooltipDisplayProps}
             text={getTooltip(displayDescription, isLoading, error, disabledReasons)}
             position="bottom-center"
+            {...tooltipDisplayProps}
         >
             <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration)}>
                 <OpenWithButtonContents>

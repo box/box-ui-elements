@@ -1,21 +1,15 @@
-import getProp from 'lodash/get';
-import BoxToolsInstallMessage from './BoxToolsInstallMessage';
-
 /**
  * @flow
  * @file Open With utils
  * @author Box
  */
 
-/**
- * Determines if the integration is disabled because Box Tools is not installed.
- *
- * @private
- * @return {object} Object of display related props
- */
-const isDisabledBecauseBoxToolsNotInstalled = (disabledReasons: Array<DisabledReason> = []): Object => {
-    const disabledReasonType = getProp(disabledReasons, '0.type');
+import getProp from 'lodash/get';
+import BoxToolsInstallMessage from './BoxToolsInstallMessage';
+
+const isDisabledBecauseBoxToolsIsNotInstalled = (integration: ?Integration): boolean => {
+    const disabledReasonType = getProp(integration, 'disabledReasons.0.type');
     return disabledReasonType === BoxToolsInstallMessage;
 };
 
-export { isDisabledBecauseBoxToolsNotInstalled as default };
+export default { isDisabledBecauseBoxToolsIsNotInstalled };

@@ -7,9 +7,10 @@
 import * as React from 'react';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import { FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
 import { OPEN_WITH_MENU_ITEM_ICON_SIZE } from '../../constants';
 import getIcon from './IconFileMap';
-import isDisabledBecauseBoxToolsIsNotInstalled from './openWithUtils';
+import utils from './openWithUtils';
 import messages from '../messages';
 import './OpenWithDropdownMenuItem.scss';
 
@@ -24,7 +25,10 @@ const OpenWithDropdownMenuItem = ({ integration, onClick }: Props) => {
     // Use the first disabled reason as the description if the integration is disabled.
     const errorDescription = disabledReasons[0] || <FormattedMessage {...messages.errorOpenWithDescription} />;
     const description = isDisabled ? errorDescription : displayDescription;
-    const className = isDisabledBecauseBoxToolsIsNotInstalled(disabledReasons) ? 'bcow-box-tools-uninstalled' : '';
+    const className = classNames({
+        'bcow-box-tools-uninstalled': utils.isDisabledBecauseBoxToolsIsNotInstalled(integration),
+    });
+
     return (
         <MenuItem className={className} isDisabled={isDisabled} onClick={() => onClick(integration)}>
             <Icon
