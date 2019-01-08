@@ -323,7 +323,9 @@ describe('api/uploads/MultiputUpload', () => {
         });
 
         test('should set parallelism to 1 for Zones', async () => {
-            multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest.fn().mockReturnValueOnce('fupload-ec2usw1.app.box.com');
+            multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest
+                .fn()
+                .mockReturnValueOnce('fupload-ec2usw1.app.box.com');
             await multiputUploadTest.preflightSuccessHandler();
             expect(multiputUploadTest.config.parallelism).toBe(1);
         });
