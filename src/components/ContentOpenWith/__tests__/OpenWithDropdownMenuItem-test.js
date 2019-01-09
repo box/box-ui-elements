@@ -1,9 +1,10 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
+import utils from '../openWithUtils';
 import OpenWithDropdownMenuItem from '../OpenWithDropdownMenuItem';
 
-describe('components/ContentOpenWith/OpenWithMenuItem', () => {
+describe('components/ContentOpenWith/OpenWithDropdownMenuItem', () => {
     const getWrapper = props => shallow(<OpenWithDropdownMenuItem {...props} />);
 
     test('should render the description and correct icon', () => {
@@ -50,6 +51,22 @@ describe('components/ContentOpenWith/OpenWithMenuItem', () => {
     });
 
     test('should use the default error for a disabled integration if there is no reason', () => {
+        const props = {
+            integration: {
+                displayName: 'A new integration',
+                disabledReasons: [],
+                displayDescription: 'Open With the new integration',
+                isDisabled: true,
+                appIntegrationId: '22',
+            },
+            onClick: noop,
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render correctly if the item is disabled because Box Tools is not installed', () => {
+        utils.isDisabledBecauseBoxToolsIsNotInstalled = jest.fn().mockReturnValue(true);
         const props = {
             integration: {
                 displayName: 'A new integration',
