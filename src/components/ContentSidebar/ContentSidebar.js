@@ -234,7 +234,8 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         }
 
         // If there was a default view provided, force use that
-        if (defaultView) {
+        // only if the view has not been set
+        if (!view && defaultView) {
             return defaultView;
         }
 

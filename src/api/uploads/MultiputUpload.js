@@ -203,6 +203,11 @@ class MultiputUpload extends BaseMultiput {
         const uploadUrl = this.getBaseUploadUrlFromPreflightResponse(preflightResponse);
         let createSessionUrl = `${uploadUrl}/files/upload_sessions`;
 
+        // Parallelism is currently detrimental to multiput upload performance in Zones, so set it to 1.
+        if (createSessionUrl.includes('fupload-ec2')) {
+            this.config.parallelism = 1;
+        }
+
         // Set up post body
         const postData: StringAnyMap = {
             file_size: this.file.size,
