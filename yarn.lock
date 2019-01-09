@@ -2494,10 +2494,10 @@ bottleneck@^2.0.1:
   resolved "https://registry.yarnpkg.com/bottleneck/-/bottleneck-2.13.0.tgz#875df17df9e62c76bea42b62af3a45c73a995c4f"
   integrity sha512-9YmZ0aiKta2OAxTujKCS/INjGWCIGWK4Ff1nQpgHnR4CTjlk9jcnpaHOjPnMZPtqRXkqwKdtxZgvJ9udsXylaw==
 
-box-react-ui@^26.17.0:
-  version "26.17.0"
-  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-26.17.0.tgz#24719a0035e500c7264dd338d07f831076f30f55"
-  integrity sha512-MBGYRHzyoG4KRz8qEPJUvx9FMsmb9fuZgMphv4zlLGG/MD7tvOOcYUw7UMxe1q5ivBRMiv5yl95YTTXDgfiLXQ==
+box-react-ui@^26.29.0:
+  version "26.29.0"
+  resolved "https://registry.yarnpkg.com/box-react-ui/-/box-react-ui-26.29.0.tgz#de45270307fcc7ebbc2d3791ebca9b23dce7fda8"
+  integrity sha512-VyD+gOTeNvTXsBOdWCWJ2fZrhexUPSQe+s5APlfCZ9s0eKI28LrDO153ms0y5+UTTXy7dQ4bbP50EmoaiKcy1g==
 
 boxen@^1.2.1:
   version "1.3.0"

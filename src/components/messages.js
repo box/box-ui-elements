@@ -22,6 +22,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Placeholder for a logo.',
         defaultMessage: 'Logo',
     },
+    error: {
+        id: 'be.error',
+        description: 'Generic error label.',
+        defaultMessage: 'Error',
+    },
     preview: {
         id: 'be.preview',
         description: 'Label for preview action.',
@@ -362,15 +367,20 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Title for the preview metadata.',
         defaultMessage: 'Metadata',
     },
-    sidebarMetadataErrorTitle: {
-        id: 'be.sidebarMetadataErrorTitle',
-        description: 'Generic error title for metadata editing.',
-        defaultMessage: 'Metadata Error',
-    },
-    sidebarMetadataErrorContent: {
-        id: 'be.sidebarMetadataErrorContent',
+    sidebarMetadataEditingErrorContent: {
+        id: 'be.sidebarMetadataEditingErrorContent',
         description: 'Generic error content for metadata editing.',
-        defaultMessage: 'An error has occurred while editing metadata. Please refresh the page and try again.',
+        defaultMessage: 'An error has occurred while updating metadata. Please refresh the page and try again.',
+    },
+    sidebarMetadataFetchingErrorContent: {
+        id: 'be.sidebarMetadataFetchingErrorContent',
+        description: 'Generic error content for metadata fetching.',
+        defaultMessage: 'An error has occurred while fetching metadata. Please refresh the page and try again.',
+    },
+    sidebarFileFetchingErrorContent: {
+        id: 'be.sidebarFileFetchingErrorContent',
+        description: 'Generic error content for file fetching.',
+        defaultMessage: 'An error has occurred while fetching your Box file. Please refresh the page and try again.',
     },
     sidebarProperties: {
         id: 'be.sidebarProperties',

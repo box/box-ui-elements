@@ -1,8 +1,14 @@
 @import '../variables';
 
 .be.bcs.bcs-metadata {
-    .bcs-scroll-content > .crawler {
-        padding-top: 20px;
+    .bcs-scroll-content {
+        > .inline-alert {
+            margin: 0 10px 10px 25px;
+        }
+
+        > .crawler {
+            padding-top: 20px;
+        }
     }
 
     .metadata-instance-editor {
@@ -34,9 +40,5 @@
 
     .collapsible-card.is-open .metadata-instance-editor-instance-title-text {
         max-width: 190px;
-    }
-
-    > .inline-alert {
-        margin: 0 10px 10px 25px;
     }
 }

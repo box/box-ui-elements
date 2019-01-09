@@ -18,6 +18,10 @@ describe('util/error', () => {
             expect(isUserCorrectableError(401)).toBe(true);
         });
 
+        test('should return true if status is 409', () => {
+            expect(isUserCorrectableError(409)).toBe(true);
+        });
+
         test('should return true if status is >= 500', () => {
             expect(isUserCorrectableError(500)).toBe(true);
             expect(isUserCorrectableError(502)).toBe(true);
@@ -27,7 +31,7 @@ describe('util/error', () => {
             expect(isUserCorrectableError(429)).toBe(true);
         });
 
-        test('should return false if status is not 401, 429, or >= 500', () => {
+        test('should return false if status is not 401, 409, 429, or >= 500', () => {
             expect(isUserCorrectableError(404)).toBe(false);
         });
     });
