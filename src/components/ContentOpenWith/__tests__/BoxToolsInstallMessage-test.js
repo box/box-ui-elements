@@ -15,4 +15,14 @@ describe('components/ContentOpenWith/BoxToolsInstallMessage', () => {
             expect(wrapper).toMatchSnapshot();
         });
     });
+
+    describe('render', () => {
+        it('should use passed in name and URL if provided', () => {
+            const wrapper = getWrapper({
+                boxToolsName: 'a local application',
+                boxToolsInstallUrl: 'https://foo.com/bar',
+            });
+            expect(wrapper).toMatchSnapshot();
+        });
+    });
 });

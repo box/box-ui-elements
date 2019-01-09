@@ -17,3 +17,21 @@ exports[`components/ContentOpenWith/BoxToolsInstallMessage render should render 
   }
 />
 `;
+
+exports[`components/ContentOpenWith/BoxToolsInstallMessage render should use passed in name and URL if provided 1`] = `
+<FormattedMessage
+  defaultMessage="Install {boxTools} to open this file on your desktop"
+  id="be.boxToolsInstallMessage"
+  values={
+    Object {
+      "boxTools": <a
+        href="#"
+        onClick={[Function]}
+        rel="noopener noreferrer"
+      >
+        a local application
+      </a>,
+    }
+  }
+/>
+`;
