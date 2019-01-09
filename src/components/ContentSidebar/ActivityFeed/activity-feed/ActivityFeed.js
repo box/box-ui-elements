@@ -11,13 +11,12 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
-import withLoggerContext from '../../../LoggerContext/withLoggerContext';
-import { LoggerType } from '../../../../logger';
-import { ACTIVITY_SIDEBAR_TAGS, ACTIVITY_FEED_TAGS, EVENT_TIME_TO_RENDER } from '../../../../logger/constants';
+import Logger, { withLoggerContext } from '../../../logger';
+import { ACTIVITY_SIDEBAR_TAGS, ACTIVITY_FEED_TAGS, EVENT_TIME_TO_RENDER } from '../../../logger/constants';
 import './ActivityFeed.scss';
 
 type PropsWithContext = {
-    logger: LoggerType,
+    logger: Logger,
 };
 
 type Props = {

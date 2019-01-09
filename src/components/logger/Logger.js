@@ -128,4 +128,3 @@ class Logger {
 }
 
 export default new Logger();
-export const LoggerType = Logger;

@@ -14,8 +14,7 @@ import Sidebar from './Sidebar';
 import SidebarNav from './SidebarNav';
 import API from '../../api';
 import APIContext from '../APIContext';
-import Logger from '../../logger';
-import LoggerContext from '../LoggerContext';
+import { LoggerContext } from '../logger';
 import Internationalize from '../Internationalize';
 import { withErrorBoundary } from '../ErrorBoundary';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../util/fields';
@@ -399,7 +398,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
                                 <LoadingIndicator />
                             </div>
                         ) : (
-                            <LoggerContext.Provider value={(Logger: any)}>
+                            <LoggerContext.Provider>
                                 <APIContext.Provider value={(this.api: any)}>
                                     <SidebarNav
                                         hasSkills={hasSkills}
