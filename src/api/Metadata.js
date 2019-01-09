@@ -260,7 +260,7 @@ class Metadata extends File {
         let template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
 
         // Enterprise scopes are always enterprise_XXXXX
-        if (scope.startsWith(METADATA_SCOPE_ENTERPRISE) && !template) {
+        if (!template && scope.startsWith(METADATA_SCOPE_ENTERPRISE)) {
             // If the template does not exist, it can be a template from another
             // enterprise because the user is viewing a collaborated file.
             const crossEnterpriseTemplate = await this.getTemplates(id, scope, instanceId);
@@ -375,10 +375,6 @@ class Metadata extends File {
                 !!permissions.can_upload,
             );
 
-            if (this.isDestroyed()) {
-                return;
-            }
-
             const metadata = {
                 editors,
                 templates: this.getUserAddableTemplates(
@@ -388,8 +384,12 @@ class Metadata extends File {
                     is_externally_owned,
                 ),
             };
+
             cache.set(key, metadata);
-            this.successHandler(metadata);
+
+            if (!this.isDestroyed()) {
+                this.successHandler(metadata);
+            }
         } catch (e) {
             this.errorHandler(e);
         }

@@ -810,7 +810,7 @@ describe('api/Metadata', () => {
             expect(metadata.errorHandler).toHaveBeenCalledWith('error');
             expect(cache.get('cache_id_metadata')).toBeUndefined();
         });
-        test('should not call any callback when destroyed', async () => {
+        test('should not call any callback when destroyed but still update the cache', async () => {
             const file = {
                 id: 'id',
                 is_externally_owned: true,
@@ -820,6 +820,7 @@ describe('api/Metadata', () => {
             };
 
             const cache = new Cache();
+            cache.set('cache_id_metadata', 'cached_metadata');
 
             metadata.errorHandler = jest.fn();
             metadata.successHandler = jest.fn();
@@ -835,7 +836,7 @@ describe('api/Metadata', () => {
                 .mockResolvedValueOnce('global')
                 .mockResolvedValueOnce('enterprise');
 
-            await metadata.getMetadata(file, jest.fn(), jest.fn(), true);
+            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { forceFetch: true });
 
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
@@ -851,10 +852,13 @@ describe('api/Metadata', () => {
                 'global',
                 true,
             );
-            expect(metadata.getUserAddableTemplates).not.toHaveBeenCalled();
+            expect(metadata.getUserAddableTemplates).toHaveBeenCalled();
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(metadata.errorHandler).not.toHaveBeenCalled();
-            expect(cache.get('cache_id_metadata')).toBeUndefined();
+            expect(cache.get('cache_id_metadata')).toEqual({
+                editors: 'editors',
+                templates: 'templates',
+            });
         });
     });
 

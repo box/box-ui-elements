@@ -63,6 +63,9 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     /**
      * Common error callback
      *
+     * @param {Error} error - API error
+     * @param {string} code - error code
+     * @param {Object} [newState] - optional state to set
      * @return {void}
      */
     onApiError(error: ElementsXhrError, code: string, newState: Object = {}) {
@@ -121,7 +124,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     /**
      * Instance remove handler
      *
-     * @param {number} id - instance id
+     * @param {string} id - instance id
      * @return {void}
      */
     onRemove = (id: string): void => {
@@ -144,7 +147,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     /**
      * Instance add success handler
      *
-     * @param {number} id - instance id
+     * @param {Object} editor - instance editor
      * @return {void}
      */
     onAddSuccessHandler = (editor: MetadataEditor): void => {
@@ -190,13 +193,12 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * Instance save error handler
      *
      * @param {Object} oldEditor - prior editor
-     * @param {Object} newEditor - updated editor
+     * @param {Object} error - api error
      * @param {string} code - error code
      * @return {void}
      */
     onSaveErrorHandler(oldEditor: MetadataEditor, error: ElementsXhrError, code: string): void {
-        const clone: MetadataEditor = { ...oldEditor }; // shallow clone suffices for hasError setting
-        clone.hasError = true;
+        const clone: MetadataEditor = { ...oldEditor, hasError: true }; // shallow clone suffices for hasError setting
         this.replaceEditor(oldEditor, clone);
         this.onApiError(error, code);
     }
@@ -204,7 +206,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     /**
      * Instance save handler
      *
-     * @param {number} id - instance id
+     * @param {string} id - instance id
      * @param {Array} ops - json patch ops
      * @return {void}
      */
@@ -233,7 +235,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     /**
      * Instance dirty handler
      *
-     * @param {number} id - instance id
+     * @param {string} id - instance id
      * @param {boolean} isDirty - instance dirty state
      * @return {void}
      */
@@ -242,8 +244,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
         if (!oldEditor) {
             return;
         }
-        const newEditor = { ...oldEditor }; // shallow clone suffices for isDirty setting
-        newEditor.isDirty = isDirty;
+        const newEditor = { ...oldEditor, isDirty }; // shallow clone suffices for isDirty setting
         this.replaceEditor(oldEditor, newEditor);
     };
 
@@ -266,7 +267,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
     /**
      * Handles a successful metadata fetch
      *
-     * @param {Object} file - the box file
+     * @param {Object} metadata - instances and templates
      * @return {void}
      */
     fetchMetadataSuccessCallback = ({
@@ -280,7 +281,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
             editors: editors.slice(0), // cloned for potential editing
             error: undefined,
             isLoading: false,
-            templates, // not edited
+            templates: templates.slice(0), // cloned for potential editing
         });
     };
 
@@ -325,7 +326,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * if the file permissions haven't changed from a prior file fetch.
      * Metadata editors mostly care about upload permission.
      *
-     * @param {Object} file - the box file
+     * @param {Object} file - the Box file
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem) => {
