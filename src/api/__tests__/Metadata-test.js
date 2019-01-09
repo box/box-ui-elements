@@ -63,11 +63,22 @@ describe('api/Metadata', () => {
 
     describe('getMetadataTemplateUrl()', () => {
         test('should return correct base api url', () => {
-            expect(metadata.getMetadataTemplateUrl('scope')).toBe('https://api.box.com/2.0/metadata_templates/scope');
+            expect(metadata.getMetadataTemplateUrl('scope')).toBe('https://api.box.com/2.0/metadata_templates');
         });
-        test('should return api url with id when instance id is passed in', () => {
-            expect(metadata.getMetadataTemplateUrl('scope', true)).toBe(
-                'https://api.box.com/2.0/metadata_templates?metadata_instance_id=scope',
+    });
+
+    describe('getMetadataTemplateUrlForInstance()', () => {
+        test('should return template url for an instance', () => {
+            expect(metadata.getMetadataTemplateUrlForInstance('id')).toBe(
+                'https://api.box.com/2.0/metadata_templates?metadata_instance_id=id',
+            );
+        });
+    });
+
+    describe('getMetadataTemplateUrlForScope()', () => {
+        test('should return correct template url for scope', () => {
+            expect(metadata.getMetadataTemplateUrlForScope('scope')).toBe(
+                'https://api.box.com/2.0/metadata_templates/scope',
             );
         });
     });
@@ -155,7 +166,7 @@ describe('api/Metadata', () => {
                     templateKey: METADATA_TEMPLATE_CLASSIFICATION,
                 },
             ];
-            metadata.getMetadataTemplateUrl = jest.fn().mockReturnValueOnce('template_url');
+            metadata.getMetadataTemplateUrlForScope = jest.fn().mockReturnValueOnce('template_url');
             metadata.xhr.get = jest.fn().mockReturnValueOnce({
                 data: {
                     entries: templatesFromServer,
@@ -164,7 +175,7 @@ describe('api/Metadata', () => {
             const templates = await metadata.getTemplates('id', 'enterprise');
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TEMPLATES);
             expect(templates).toEqual(templates);
-            expect(metadata.getMetadataTemplateUrl).toHaveBeenCalledWith('enterprise', undefined);
+            expect(metadata.getMetadataTemplateUrlForScope).toHaveBeenCalledWith('enterprise');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
                 id: 'file_id',
@@ -176,16 +187,16 @@ describe('api/Metadata', () => {
 
         test('should return templates scoped to instance id', async () => {
             const templatesFromServer = [{ id: 1, hidden: false }];
-            metadata.getMetadataTemplateUrl = jest.fn().mockReturnValueOnce('template_url');
+            metadata.getMetadataTemplateUrlForInstance = jest.fn().mockReturnValueOnce('template_url');
             metadata.xhr.get = jest.fn().mockReturnValueOnce({
                 data: {
                     entries: templatesFromServer,
                 },
             });
-            const templates = await metadata.getTemplates('id', 'scope', true);
+            const templates = await metadata.getTemplates('id', 'scope', 'id');
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TEMPLATES);
             expect(templates).toEqual(templates);
-            expect(metadata.getMetadataTemplateUrl).toHaveBeenCalledWith('scope', true);
+            expect(metadata.getMetadataTemplateUrlForInstance).toHaveBeenCalledWith('id');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
                 id: 'file_id',
@@ -197,7 +208,7 @@ describe('api/Metadata', () => {
         test('should return empty array of templates when error is 400', async () => {
             const error = new Error();
             error.status = 400;
-            metadata.getMetadataTemplateUrl = jest.fn().mockReturnValueOnce('template_url');
+            metadata.getMetadataTemplateUrlForScope = jest.fn().mockReturnValueOnce('template_url');
             metadata.xhr.get = jest.fn().mockReturnValueOnce(Promise.reject(error));
             let templates;
             try {
@@ -207,7 +218,7 @@ describe('api/Metadata', () => {
             }
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TEMPLATES);
             expect(templates).toEqual([]);
-            expect(metadata.getMetadataTemplateUrl).toHaveBeenCalledWith('scope', undefined);
+            expect(metadata.getMetadataTemplateUrlForScope).toHaveBeenCalledWith('scope');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
                 id: 'file_id',
@@ -219,7 +230,7 @@ describe('api/Metadata', () => {
         test('should throw error when error is not 400', async () => {
             const error = new Error();
             error.status = 401;
-            metadata.getMetadataTemplateUrl = jest.fn().mockReturnValueOnce('template_url');
+            metadata.getMetadataTemplateUrlForScope = jest.fn().mockReturnValueOnce('template_url');
             metadata.xhr.get = jest.fn().mockReturnValueOnce(Promise.reject(error));
             let templates;
             try {
@@ -229,7 +240,7 @@ describe('api/Metadata', () => {
             }
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TEMPLATES);
             expect(templates).toBeUndefined();
-            expect(metadata.getMetadataTemplateUrl).toHaveBeenCalledWith('scope', undefined);
+            expect(metadata.getMetadataTemplateUrlForScope).toHaveBeenCalledWith('scope');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
                 id: 'file_id',
@@ -325,7 +336,7 @@ describe('api/Metadata', () => {
     });
 
     describe('extractClassification()', () => {
-        test('should return empty array when metadata feature is off', async () => {
+        test('should extract and cache classification and return filtered instances', async () => {
             const cache = new Cache();
 
             metadata.getCache = jest.fn().mockReturnValueOnce(cache);
@@ -340,6 +351,19 @@ describe('api/Metadata', () => {
             ).toEqual([{ $template: 'foo' }, { $template: 'bad' }]);
             expect(metadata.getClassificationCacheKey).toHaveBeenCalledWith('id');
             expect(cache.get('cache_id_classification')).toEqual({ $template: 'securityClassification-6VMVochwUWo' });
+        });
+        test('should return instances if no classification found', async () => {
+            const cache = new Cache();
+
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getClassificationCacheKey = jest.fn().mockReturnValueOnce('cache_id_classification');
+
+            expect(metadata.extractClassification('id', [{ $template: 'foo' }, { $template: 'bad' }])).toEqual([
+                { $template: 'foo' },
+                { $template: 'bad' },
+            ]);
+            expect(metadata.getClassificationCacheKey).not.toHaveBeenCalled();
+            expect(cache.get('cache_id_classification')).toBeUndefined();
         });
     });
 
@@ -391,7 +415,7 @@ describe('api/Metadata', () => {
                 templatesFromServer,
             );
             expect(template).toBe('collabed_template');
-            expect(metadata.getTemplates).toBeCalledWith('id', 'instanceId', true);
+            expect(metadata.getTemplates).toBeCalledWith('id', 'enterprise', 'instanceId');
         });
     });
 
@@ -498,6 +522,47 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).not.toBeCalled();
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
+        test('should not make request and and return cached data', async () => {
+            const file = {
+                id: 'id',
+                is_externally_owned: true,
+                permissions: {
+                    can_upload: true,
+                },
+            };
+
+            const cache = new Cache();
+            cache.set('cache_id_metadata', 'cached_metadata');
+
+            metadata.errorHandler = jest.fn();
+            metadata.successHandler = jest.fn();
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
+            metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
+            metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
+            metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
+            metadata.getTemplates = jest
+                .fn()
+                .mockResolvedValueOnce('global')
+                .mockResolvedValueOnce('enterprise');
+
+            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { refreshCache: false });
+
+            expect(metadata.isDestroyed).not.toHaveBeenCalled();
+            expect(metadata.getCache).toHaveBeenCalled();
+            expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).not.toHaveBeenCalledWith();
+            expect(metadata.getTemplates).not.toHaveBeenCalledWith();
+            expect(metadata.getTemplates).not.toHaveBeenCalledWith();
+            expect(metadata.getEditors).not.toHaveBeenCalledWith();
+            expect(metadata.getUserAddableTemplates).not.toHaveBeenCalledWith();
+            expect(metadata.successHandler).toHaveBeenCalledWith('cached_metadata');
+            expect(metadata.successHandler).toHaveBeenCalledTimes(1);
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+            expect(cache.get('cache_id_metadata')).toEqual('cached_metadata');
+        });
         test('should make request and update cache and call success handler', async () => {
             const file = {
                 id: 'id',
@@ -593,6 +658,7 @@ describe('api/Metadata', () => {
                 true,
             );
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
+            expect(metadata.successHandler).toHaveBeenCalledTimes(2);
             expect(metadata.successHandler).toHaveBeenCalledWith('cached_metadata');
             expect(metadata.successHandler).toHaveBeenCalledWith({
                 editors: 'editors',
@@ -647,6 +713,7 @@ describe('api/Metadata', () => {
                 true,
             );
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
+            expect(metadata.successHandler).toHaveBeenCalledTimes(1);
             expect(metadata.successHandler).not.toHaveBeenCalledWith('cached_metadata');
             expect(metadata.successHandler).toHaveBeenCalledWith({
                 editors: 'editors',
@@ -693,6 +760,7 @@ describe('api/Metadata', () => {
             expect(metadata.getTemplates).not.toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.getEditors).toHaveBeenCalledWith(file.id, 'instances', 'custom', [], 'global', true);
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', [], false, true);
+            expect(metadata.successHandler).toHaveBeenCalledTimes(1);
             expect(metadata.successHandler).toHaveBeenCalledWith({
                 editors: 'editors',
                 templates: 'templates',
@@ -1591,6 +1659,24 @@ describe('api/Metadata', () => {
     });
 
     describe('createMetadata()', () => {
+        test('should call error callback with a bad item error when no file', () => {
+            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadata(undefined, {}, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
+        test('should call error callback with a bad item error when no template', () => {
+            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadata({}, undefined, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
         test('should call error callback with a bad item error when no id', () => {
             ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
             const successCallback = jest.fn();
@@ -1866,6 +1952,24 @@ describe('api/Metadata', () => {
     });
 
     describe('deleteMetadata()', () => {
+        test('should call error callback with a bad item error when no file', () => {
+            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.deleteMetadata(undefined, {}, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
+        test('should call error callback with a bad item error when no template', () => {
+            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.deleteMetadata({}, undefined, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_DELETE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
         test('should call error callback with a bad item error when no id', () => {
             ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
             const successCallback = jest.fn();

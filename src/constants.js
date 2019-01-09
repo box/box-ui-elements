@@ -65,6 +65,7 @@ export const METADATA_TEMPLATE_SKILLS = 'boxSkillsCards';
 export const METADATA_TEMPLATE_PROPERTIES = 'properties';
 export const METADATA_SCOPE_GLOBAL = 'global';
 export const METADATA_SCOPE_ENTERPRISE = 'enterprise';
+export const METADATA_TEMPLATE_FETCH_LIMIT = 1000;
 
 /* ----------------------- Fields --------------------------- */
 export const FIELD_ID = 'id';
@@ -225,7 +226,6 @@ export const ERROR_CODE_UPLOAD = 'upload_error';
 export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
 export const ERROR_CODE_SEARCH = 'search_error';
 export const ERROR_CODE_UNKNOWN = 'unknown_error';
-export const ERROR_CODE_METADATA_CONFLICT = 'metadata_conflic_error';
 
 /* ------------------ Error Origins ---------------------- */
 export const ORIGIN_CONTENT_PREVIEW = 'content_preview';

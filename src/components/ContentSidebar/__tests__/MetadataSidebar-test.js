@@ -1,4 +1,5 @@
 import React from 'react';
+import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
@@ -172,7 +173,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
         });
     });
 
-    describe('commonErrorCallback()', () => {
+    describe('onApiError()', () => {
         test('should set error state and call onError', () => {
             const error = { status: 429 }; // user correctable error
             const code = 'code';
@@ -189,7 +190,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             instance.setState = jest.fn();
-            instance.commonErrorCallback(error, code, { foo: 'bar' });
+            instance.onApiError(error, code, { foo: 'bar' });
             expect(instance.setState).toBeCalledWith({
                 error: messages.sidebarMetadataEditingErrorContent,
                 isLoading: false,
@@ -375,12 +376,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             wrapper.setState({ editors, file });
             instance.setState = jest.fn();
             instance.onRemove(1);
-            expect(deleteMetadata).toBeCalledWith(
-                file,
-                editors[1].template,
-                expect.any(Function),
-                instance.commonErrorCallback,
-            );
+            expect(deleteMetadata).toBeCalledWith(file, editors[1].template, expect.any(Function), instance.onApiError);
         });
     });
 
@@ -461,19 +457,14 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             const instance = wrapper.instance();
             instance.setState = jest.fn();
             instance.onAdd('template');
-            expect(createMetadata).toBeCalledWith(
-                file,
-                'template',
-                instance.onAddSuccessHandler,
-                instance.commonErrorCallback,
-            );
+            expect(createMetadata).toBeCalledWith(file, 'template', instance.onAddSuccessHandler, instance.onApiError);
             expect(instance.setState).toBeCalledWith({
                 isLoading: true,
             });
         });
     });
 
-    describe('onSaveSuccessHandler()', () => {
+    describe('replaceEditor()', () => {
         test('should update the correct editor', () => {
             const getEditors = jest.fn();
             const api = {
@@ -493,7 +484,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             const editors = [{ instance: { id: 1 } }, { instance: { id: 2 } }, { instance: { id: 3 } }];
             wrapper.setState({ editors });
             instance.setState = jest.fn();
-            instance.onSaveSuccessHandler(editors[1], { instance: { id: 5 } });
+            instance.replaceEditor(editors[1], { instance: { id: 5 } });
             expect(instance.setState).toBeCalledWith({
                 editors: [{ instance: { id: 1 } }, { instance: { id: 5 } }, { instance: { id: 3 } }],
             });
@@ -512,11 +503,11 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 },
             );
             const instance = wrapper.instance();
-            instance.onSaveSuccessHandler = jest.fn();
-            instance.commonErrorCallback = jest.fn();
+            instance.replaceEditor = jest.fn();
+            instance.onApiError = jest.fn();
             instance.onSaveErrorHandler(oldEditor, error, code);
-            expect(instance.onSaveSuccessHandler).toBeCalledWith(oldEditor, { foo: 'bar', hasError: true });
-            expect(instance.commonErrorCallback).toBeCalledWith(error, code);
+            expect(instance.replaceEditor).toBeCalledWith(oldEditor, { foo: 'bar', hasError: true });
+            expect(instance.onApiError).toBeCalledWith(error, code);
         });
     });
 
@@ -692,7 +683,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
     });
 
     describe('fetchFileSuccessCallback()', () => {
-        test('should set state with the new file object', () => {
+        test('should set state with the new file object and call metadata fetch when no prior file exists', () => {
             const wrapper = getWrapper(
                 {
                     fileId: 'fileId',
@@ -706,6 +697,39 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             instance.setState = jest.fn();
             instance.fetchFileSuccessCallback(file);
             expect(instance.setState).toBeCalledWith({ file }, instance.fetchMetadata);
+        });
+        test('should set state with the new file object and call metadata fetch when prior file exists but with different permissions', () => {
+            const wrapper = getWrapper(
+                {
+                    fileId: 'fileId',
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            const file = { id: 'fileId', permissions: { can_upload: true } };
+            const newFile = { id: 'fileId', permissions: { can_upload: false } };
+            const instance = wrapper.instance();
+            wrapper.setState({ file });
+            instance.setState = jest.fn();
+            instance.fetchFileSuccessCallback(newFile);
+            expect(instance.setState).toBeCalledWith({ file: newFile }, instance.fetchMetadata);
+        });
+        test('should set state with the new file object but not call metadata fetch when prior file exists with same permissions', () => {
+            const wrapper = getWrapper(
+                {
+                    fileId: 'fileId',
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            const file = { id: 'fileId', permissions: { can_upload: true } };
+            const instance = wrapper.instance();
+            wrapper.setState({ file });
+            instance.setState = jest.fn();
+            instance.fetchFileSuccessCallback(file);
+            expect(instance.setState).toBeCalledWith({ file }, noop);
         });
     });
 
@@ -722,9 +746,9 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             const e = new Error();
             const code = 'code';
             const instance = wrapper.instance();
-            instance.commonErrorCallback = jest.fn();
+            instance.onApiError = jest.fn();
             instance.fetchFileErrorCallback(e, code);
-            expect(instance.commonErrorCallback).toBeCalledWith(e, code, {
+            expect(instance.onApiError).toBeCalledWith(e, code, {
                 error: messages.sidebarFileFetchingErrorContent,
                 file: undefined,
             });
@@ -753,7 +777,7 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             expect(getMetadata).not.toBeCalled();
         });
 
-        test('should call metadata api with correct options', () => {
+        test('should call metadata api with correct options with feature turned off', () => {
             const file = { id: 'fileId' };
             const getMetadata = jest.fn();
             const getMetadataAPI = jest.fn().mockReturnValueOnce({
@@ -778,6 +802,34 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
                 instance.fetchMetadataSuccessCallback,
                 instance.fetchMetadataErrorCallback,
                 false,
+                { refreshCache: true },
+            );
+        });
+
+        test('should call metadata api with correct options with feature defaulted to true', () => {
+            const file = { id: 'fileId' };
+            const getMetadata = jest.fn();
+            const getMetadataAPI = jest.fn().mockReturnValueOnce({
+                getMetadata,
+            });
+            const wrapper = getWrapper(
+                {
+                    fileId: 'fileId',
+                    api: { getMetadataAPI },
+                },
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            const instance = wrapper.instance();
+            wrapper.setState({ file });
+            instance.fetchMetadata();
+            expect(getMetadataAPI).toBeCalledWith(false);
+            expect(getMetadata).toBeCalledWith(
+                file,
+                instance.fetchMetadataSuccessCallback,
+                instance.fetchMetadataErrorCallback,
+                true,
                 { refreshCache: true },
             );
         });
@@ -823,9 +875,9 @@ describe('components/ContentSidebar/Metadata/MetadataSidebar', () => {
             const e = new Error();
             const code = 'code';
             const instance = wrapper.instance();
-            instance.commonErrorCallback = jest.fn();
+            instance.onApiError = jest.fn();
             instance.fetchMetadataErrorCallback(e, code);
-            expect(instance.commonErrorCallback).toBeCalledWith(e, code, {
+            expect(instance.onApiError).toBeCalledWith(e, code, {
                 editors: undefined,
                 error: messages.sidebarMetadataFetchingErrorContent,
                 templates: undefined,

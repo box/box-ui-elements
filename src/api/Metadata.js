@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Helper for the box metadata related API
+ * @file Helper for the Box metadata related API
  * @author Box
  */
 
@@ -14,6 +14,7 @@ import {
     HEADER_CONTENT_TYPE,
     METADATA_SCOPE_ENTERPRISE,
     METADATA_SCOPE_GLOBAL,
+    METADATA_TEMPLATE_FETCH_LIMIT,
     METADATA_TEMPLATE_PROPERTIES,
     METADATA_TEMPLATE_CLASSIFICATION,
     METADATA_TEMPLATE_SKILLS,
@@ -62,7 +63,7 @@ class Metadata extends File {
     /**
      * API URL for metadata
      *
-     * @param {string} id - a box file id
+     * @param {string} id - a Box file id
      * @param {string} field - metadata field
      * @return {string} base url for files
      */
@@ -75,17 +76,33 @@ class Metadata extends File {
     }
 
     /**
+     * API URL for metadata templates for a scope
+     *
+     * @param {string} scope - metadata scope
+     * @return {string} base url for files
+     */
+    getMetadataTemplateUrl(): string {
+        return `${this.getBaseApiUrl()}/metadata_templates`;
+    }
+
+    /**
+     * API URL for metadata template for an instance
+     *
+     * @param {string} id - metadata instance id
+     * @return {string} base url for files
+     */
+    getMetadataTemplateUrlForInstance(id: string): string {
+        return `${this.getMetadataTemplateUrl()}?metadata_instance_id=${id}`;
+    }
+
+    /**
      * API URL for metadata templates
      *
      * @param {string} scope - metadata scope or id
      * @return {string} base url for files
      */
-    getMetadataTemplateUrl(scope: string, isInstanceId?: boolean): string {
-        const baseUrl = `${this.getBaseApiUrl()}/metadata_templates`;
-        if (isInstanceId) {
-            return `${baseUrl}?metadata_instance_id=${scope}`;
-        }
-        return `${baseUrl}/${scope}`;
+    getMetadataTemplateUrlForScope(scope: string): string {
+        return `${this.getMetadataTemplateUrl()}/${scope}`;
     }
 
     /**
@@ -134,17 +151,22 @@ class Metadata extends File {
      *
      * @param {string} id - file id
      * @param {string} scope - metadata scope
+     * @param {string|void} [instanceId] - metadata instance id
      * @return {Object} array of metadata templates
      */
-    async getTemplates(id: string, scope: string, isInstanceId?: boolean): Promise<Array<MetadataEditorTemplate>> {
+    async getTemplates(id: string, scope: string, instanceId?: string): Promise<Array<MetadataEditorTemplate>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA_TEMPLATES;
         let templates = {};
+        const url = instanceId
+            ? this.getMetadataTemplateUrlForInstance(instanceId)
+            : this.getMetadataTemplateUrlForScope(scope);
+
         try {
             templates = await this.xhr.get({
-                url: this.getMetadataTemplateUrl(scope, isInstanceId),
+                url,
                 id: getTypedFileId(id),
                 params: {
-                    limit: 1000, // internal hard limit is 500
+                    limit: METADATA_TEMPLATE_FETCH_LIMIT, // internal hard limit is 500
                 },
             });
         } catch (e) {
@@ -153,11 +175,12 @@ class Metadata extends File {
                 throw e;
             }
         }
+
         return getProp(templates, 'data.entries', []);
     }
 
     /**
-     * Gets metadata instances for a box file
+     * Gets metadata instances for a Box file
      *
      * @param {string} id - file id
      * @return {Object} array of metadata instances
@@ -203,17 +226,17 @@ class Metadata extends File {
     /**
      * Extracts classification for different representation in the UI.
      *
-     * @param {string} id - box file id
+     * @param {string} id - Box file id
      * @param {Array} instances - metadata instances
      * @return {Array} metadata instances without classification
      */
     extractClassification(id: string, instances: Array<MetadataInstance>): Array<MetadataInstance> {
-        const index = instances.findIndex(instance => instance.$template === METADATA_TEMPLATE_CLASSIFICATION);
-        if (index !== -1) {
-            const classification = instances.splice(index, 1);
+        const classification = instances.find(instance => instance.$template === METADATA_TEMPLATE_CLASSIFICATION);
+        if (classification) {
+            instances.splice(instances.indexOf(classification), 1);
             const cache: APICache = this.getCache();
             const key = this.getClassificationCacheKey(id);
-            cache.set(key, classification[0]);
+            cache.set(key, classification);
         }
         return instances;
     }
@@ -221,7 +244,7 @@ class Metadata extends File {
     /**
      * Finds template for a given metadata instance.
      *
-     * @param {string} id - box file id
+     * @param {string} id - Box file id
      * @param {Object} instance - metadata instance
      * @param {Array} templates - metadata templates
      * @return {Object|undefined} template for metadata instance
@@ -235,20 +258,23 @@ class Metadata extends File {
         const templateKey = instance.$template;
         const scope = instance.$scope;
         let template = templates.find(t => t.templateKey === templateKey && t.scope === scope);
-        if (scope === METADATA_SCOPE_ENTERPRISE && !template) {
+
+        // Enterprise scopes are always enterprise_XXXXX
+        if (scope.startsWith(METADATA_SCOPE_ENTERPRISE) && !template) {
             // If the template does not exist, it can be a template from another
             // enterprise because the user is viewing a collaborated file.
-            const crossEnterpriseTemplate = await this.getTemplates(id, instanceId, true);
+            const crossEnterpriseTemplate = await this.getTemplates(id, scope, instanceId);
             // The API always returns an array of at most one item
             template = crossEnterpriseTemplate[0]; // eslint-disable-line
         }
+
         return template;
     }
 
     /**
      * Creates and returns metadata editors.
      *
-     * @param {string} id - box file id
+     * @param {string} id - Box file id
      * @param {Array} instances - metadata instances
      * @param {Object} customPropertiesTemplate - custom properties template
      * @param {Array} enterpriseTemplates - enterprise templates
@@ -290,7 +316,7 @@ class Metadata extends File {
     /**
      * API for getting metadata editors
      *
-     * @param {string} fileId - box file id
+     * @param {string} fileId - Box file id
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {boolean} hasMetadataFeature - metadata feature check
