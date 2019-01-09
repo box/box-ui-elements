@@ -5,19 +5,25 @@
  */
 
 /**
+ * Converts a character, using it as a seed, to a random integer and returns it as a string.
+ *
+ * @param {string} c - A single character
+ * @returns {string} The random character
+ */
+function generateRandom(c: string): string {
+    /* eslint-disable no-bitwise */
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+    /* eslint-enable no-bitwise */
+}
+
+/**
  * Generates a GUID/UUID compliant with RFC4122 version 4.
  *
  * @return {string} A 36 character uuid
  */
 function uuidv4() {
-    /* eslint-disable */
-    function generateRandom(c) {
-        const r = (Math.random() * 16) | 0;
-        const v = c == 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-    }
-    /* eslint-enable */
-
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generateRandom);
 }
 

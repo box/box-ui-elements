@@ -13,10 +13,14 @@ import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import withLoggerContext from '../../../LoggerContext/withLoggerContext';
 import { LoggerType } from '../../../../logger';
-import { ACTIVITY_SIDEBAR_TAGS, ACTIVITY_FEED_TAGS } from '../../../../logger/loggingConstants';
+import { ACTIVITY_SIDEBAR_TAGS, ACTIVITY_FEED_TAGS, EVENT_TIME_TO_RENDER } from '../../../../logger/constants';
 import './ActivityFeed.scss';
 
-type PropsWithoutContext = {
+type PropsWithContext = {
+    logger: LoggerType,
+};
+
+type Props = {
     file: BoxItem,
     activityFeedError: ?Errors,
     approverSelectorContacts?: SelectorItems,
@@ -36,19 +40,11 @@ type PropsWithoutContext = {
     getAvatarUrl: string => Promise<?string>,
     getUserProfileUrl?: string => Promise<string>,
     feedItems?: FeedItems,
-};
-
-type Props = {
-    logger: LoggerType,
-} & PropsWithoutContext;
+} & PropsWithContext;
 
 type State = {
     isInputOpen: boolean,
 };
-
-const ACTIVITY_FEED_COMPONENT = 'activity_feed';
-const EVENT_TIME_TO_LOAD_STATE = 'time_to_load_state';
-const EVENT_TIME_TO_RENDER = 'time_to_render_state';
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
@@ -62,8 +58,8 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
-        const { feedItems: prevFeedItems, currentUser: prevCurrentUser } = prevProps;
-        const { feedItems: currFeedItems, currentUser: currCurrentUser } = this.props;
+        const { feedItems: prevFeedItems } = prevProps;
+        const { feedItems: currFeedItems } = this.props;
         const { isInputOpen: prevIsInputOpen } = prevState;
         const { isInputOpen: currIsInputOpen } = this.state;
 
@@ -79,40 +75,39 @@ class ActivityFeed extends React.Component<Props, State> {
             this.resetFeedScroll();
         }
 
-        if (currCurrentUser !== prevCurrentUser || currFeedItems !== prevFeedItems) {
-            this.checkAndLogRenderMetrics(currCurrentUser, currFeedItems);
+        if (hasLoaded) {
+            this.logRenderMetrics();
         }
     }
 
     /**
-     * Log render and load state timing events.
+     * Checks to see whether or not the Actvity Feed is still loading
      *
-     * @param {*} currentUser
-     * @param {*} feedItems
+     * @returns {boolean} True if still loading
      */
-    checkAndLogRenderMetrics(currentUser?: User, feedItems?: FeedItems) {
+    isLoading(): boolean {
+        const { feedItems, currentUser } = this.props;
+        return !feedItems || !currentUser;
+    }
+
+    /**
+     * Log time to meaningful render
+     *
+     * @param {User} currentUser - CurrentUser for the session
+     * @param {FeedItems} feedItems - Feed items populating the activity feed
+     */
+    logRenderMetrics(): void {
         const { logger } = this.props;
-        const hasLoggedRender = logger.hasLoggedEvent(ACTIVITY_FEED_COMPONENT, EVENT_TIME_TO_RENDER);
+        const hasLoggedRender = logger.hasLoggedEvent(ACTIVITY_FEED_TAGS.ComponentName, EVENT_TIME_TO_RENDER);
         if (!hasLoggedRender) {
-            if (currentUser && feedItems) {
-                window.performance.mark(ACTIVITY_FEED_TAGS.TimeToRender);
-                logger.logTimeMetric(
-                    ACTIVITY_FEED_COMPONENT,
-                    EVENT_TIME_TO_RENDER,
-                    ACTIVITY_SIDEBAR_TAGS.Initialized,
-                    ACTIVITY_FEED_TAGS.TimeToRender,
-                    true,
-                );
-            } else if (!logger.hasLoggedEvent(ACTIVITY_FEED_COMPONENT, EVENT_TIME_TO_LOAD_STATE)) {
-                window.performance.mark(ACTIVITY_FEED_TAGS.TimeToLoadState);
-                logger.logTimeMetric(
-                    ACTIVITY_FEED_COMPONENT,
-                    EVENT_TIME_TO_LOAD_STATE,
-                    ACTIVITY_SIDEBAR_TAGS.Initialized,
-                    ACTIVITY_FEED_TAGS.TimeToLoadState,
-                    true,
-                );
-            }
+            window.performance.mark(ACTIVITY_FEED_TAGS.TimeToRender);
+            logger.logTimeMetric(
+                ACTIVITY_FEED_TAGS.ComponentName,
+                EVENT_TIME_TO_RENDER,
+                ACTIVITY_SIDEBAR_TAGS.Initialized,
+                ACTIVITY_FEED_TAGS.TimeToRender,
+                true,
+            );
         }
     }
 
@@ -207,7 +202,6 @@ class ActivityFeed extends React.Component<Props, State> {
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
-        const isLoading = !feedItems || !currentUser;
 
         return (
             // eslint-disable-next-line
@@ -219,7 +213,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     className="bcs-activity-feed-items-container"
                 >
                     {isEmpty ? (
-                        <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
+                        <EmptyState isLoading={this.isLoading()} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
                             {...activityFeedError}

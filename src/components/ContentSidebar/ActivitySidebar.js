@@ -17,7 +17,7 @@ import { getBadUserError, getBadItemError } from '../../util/error';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
 import './ActivitySidebar.scss';
-import { ACTIVITY_SIDEBAR_TAGS, EVENT_JS_READY } from '../../logger/loggingConstants';
+import { ACTIVITY_SIDEBAR_TAGS, EVENT_JS_READY } from '../../logger/constants';
 
 type ExternalProps = {
     onCommentCreate?: Function,
