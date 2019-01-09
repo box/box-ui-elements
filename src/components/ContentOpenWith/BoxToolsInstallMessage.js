@@ -10,21 +10,30 @@ import messages from '../messages';
 import './BoxToolsInstallMessage.scss';
 
 const DEFAULT_BOX_TOOLS_INSTALLATION_URL = 'https://cloud.box.com/v/installboxtools';
+const DEFAULT_BOX_TOOLS_NAME = 'Box Tools';
 
-const onLinkClick = () => {
+const onLinkClick = (installationUrl: string) => {
     // Manually open the URL since disabled menu items are blocked from clickable actions by default
-    window.open(DEFAULT_BOX_TOOLS_INSTALLATION_URL);
+    window.open(installationUrl);
 };
 
-const BoxToolsInstallMessage = () => {
+type Props = {
+    boxToolsName?: string,
+    boxToolsInstallUrl?: string,
+};
+
+const BoxToolsInstallMessage = ({
+    boxToolsName = DEFAULT_BOX_TOOLS_NAME,
+    boxToolsInstallUrl = DEFAULT_BOX_TOOLS_INSTALLATION_URL,
+}: Props) => {
     return (
         <FormattedMessage
             {...messages.boxToolsInstallMessage}
             values={{
                 boxTools: (
                     // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <a onClick={onLinkClick} href="#" rel="noopener noreferrer">
-                        {'Box Tools'}
+                    <a onClick={onLinkClick.bind(this, boxToolsInstallUrl)} href="#" rel="noopener noreferrer">
+                        {boxToolsName}
                     </a>
                 ),
             }}
