@@ -1,13 +1,24 @@
-.bcow-menu-item-description {
-    a, a:hover, a:active, a:visited, a:focus {
+@import '../variables';
+/* stylelint-disable */
+.bcow-tooltip {
+    a,
+    a:hover,
+    a:active,
+    a:visited,
+    a:focus {
+        color: $white;
         text-decoration: underline;
-        color: #464A4F;
     }
 }
 
-.bcow-tooltip {
-    a, a:hover, a:active, a:visited, a:focus {
+.bcow-menu-item-description {
+    a,
+    a:hover,
+    a:active,
+    a:visited,
+    a:focus {
+        color: $twos;
         text-decoration: underline;
-        color: #F9F9F9;
     }
 }
+/* stylelint-enable */
