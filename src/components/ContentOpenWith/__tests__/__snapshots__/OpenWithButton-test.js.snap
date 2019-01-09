@@ -1,5 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`components/ContentOpenWith/OpenWithButton should force the tooltip open with a close button if Box Tools is not installed 1`] = `
+<Tooltip
+  className="bcow-tooltip"
+  isShown={true}
+  position="bottom-center"
+  showCloseButton={true}
+  text="Box Tools is not installed"
+>
+  <Button
+    isDisabled={true}
+    onClick={[Function]}
+  >
+    <OpenWithButtonContents>
+      <FileIcon
+        className="bcow-integration-icon"
+        dimension={26}
+        height={26}
+        width={26}
+      />
+    </OpenWithButtonContents>
+  </Button>
+</Tooltip>
+`;
+
 exports[`components/ContentOpenWith/OpenWithButton should render as disabled if the integration is disabled 1`] = `
 <Tooltip
   className="bcow-tooltip"
