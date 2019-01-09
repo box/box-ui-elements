@@ -28,7 +28,6 @@ import { withErrorBoundary } from '../ErrorBoundary';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../util/fields';
 import { FeatureProvider } from '../FeatureChecking';
-import type { FeatureConfig } from '../FeatureChecking';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
