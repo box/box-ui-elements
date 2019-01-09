@@ -853,10 +853,20 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: 'Add Task',
         description: 'title for task popup',
     },
+    tasksAddTaskFormAssigneesLabel: {
+        id: 'be.tasks.addTaskForm.assigneesLabel',
+        defaultMessage: 'Assignees',
+        description: 'label for task create form assignee input',
+    },
     tasksAddTaskFormMessageLabel: {
         id: 'be.tasks.addTaskForm.messageLabel',
         defaultMessage: 'Message',
         description: 'label for task create form message input',
+    },
+    tasksAddTaskFormDueDateLabel: {
+        id: 'be.tasks.addTaskForm.dueDateLabel',
+        defaultMessage: 'Due Date',
+        description: 'label for task create form due date input',
     },
     tasksAddTaskFormSubmitLabel: {
         id: 'be.tasks.addTaskForm.submit',

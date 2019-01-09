@@ -3,6 +3,7 @@
 exports[`elements/content-sidebar/ActivityFeed/task/Task should correctly render task 1`] = `
 <div
   className="bcs-task"
+  data-testid="task-card"
 >
   <mock-comment
     created_at={12345678}
@@ -86,6 +87,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should correctly render
 exports[`elements/content-sidebar/ActivityFeed/task/Task should not render due date when not passed in 1`] = `
 <div
   className="bcs-task"
+  data-testid="task-card"
 >
   <mock-comment
     created_at={12345678}
@@ -154,6 +156,7 @@ exports[`elements/content-sidebar/ActivityFeed/task/Task should not render due d
 exports[`elements/content-sidebar/ActivityFeed/task/Task should show actions for current user and if onAssignmentUpdate is defined 1`] = `
 <div
   className="bcs-task"
+  data-testid="task-card"
 >
   <mock-comment
     created_at={12345678}

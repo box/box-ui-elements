@@ -55,6 +55,7 @@ class AddTaskButton extends React.Component<Props, State> {
                     onRequestClose={this.handleClose}
                     title={<FormattedMessage {...messages.tasksAddTaskFormTitle} />}
                     className="be task-modal"
+                    data-testid="create-task-modal"
                 >
                     <TaskForm
                         {...passThrough}

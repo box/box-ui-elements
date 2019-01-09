@@ -172,7 +172,7 @@ class TaskForm extends React.Component<Props, State> {
                             error={this.getErrorByFieldname('taskAssignees')}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
-                            label={<FormattedMessage {...messages.approvalAssignees} />}
+                            label={<FormattedMessage {...messages.tasksAddTaskFormAssigneesLabel} />}
                             name="taskAssignees"
                             onBlur={() => this.validateForm('taskAssignees')}
                             onInput={this.handleApproverSelectorInput}
@@ -184,7 +184,12 @@ class TaskForm extends React.Component<Props, State> {
                             validateForError={() => this.validateForm('taskAssignees')}
                         >
                             {approverOptions.map(({ id, name, email }) => (
-                                <ContactDatalistItem key={id} name={name} subtitle={email} />
+                                <ContactDatalistItem
+                                    key={id}
+                                    name={name}
+                                    subtitle={email}
+                                    data-testid="task-assignee-option"
+                                />
                             ))}
                         </PillSelectorDropdown>
                         <TextArea
@@ -208,7 +213,7 @@ class TaskForm extends React.Component<Props, State> {
                                 'data-testid': 'task-form-date-input',
                             }}
                             isRequired={false}
-                            label={<FormattedMessage {...messages.approvalDueDate} />}
+                            label={<FormattedMessage {...messages.tasksAddTaskFormDueDateLabel} />}
                             minDate={new Date()}
                             name="taskDueDate"
                             onBlur={() => this.validateForm('taskDueDate')}
