@@ -2,6 +2,7 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import OpenWithButton, { getTooltip } from '../OpenWithButton';
+import utils from '../openWithUtils';
 import messages from '../../messages';
 
 describe('components/ContentOpenWith/OpenWithButton', () => {
@@ -58,6 +59,20 @@ describe('components/ContentOpenWith/OpenWithButton', () => {
             displayIntegration: {
                 isDisabled: false,
                 displayName: 'Google Docs',
+            },
+            onClick: noop,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should force the tooltip open with a close button if Box Tools is not installed', () => {
+        utils.isDisabledBecauseBoxToolsIsNotInstalled = jest.fn().mockReturnValue(true);
+        const wrapper = getWrapper({
+            displayIntegration: {
+                isDisabled: true,
+                disabledReasons: ['Box Tools is not installed'],
+                displayName: 'Open',
             },
             onClick: noop,
         });
