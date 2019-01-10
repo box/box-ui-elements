@@ -397,11 +397,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Label for status skill card in the preview sidebar',
         defaultMessage: 'Status',
     },
-    errorSkill: {
-        id: 'be.errorSkill',
-        description: 'Label for error skill card in the preview sidebar',
-        defaultMessage: 'Error',
-    },
     topicsSkill: {
         id: 'be.topicsSkill',
         description: 'Label for keywords/topics skill section in the preview sidebar',
@@ -596,11 +591,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.selectedBreadcrumb',
         description: 'Shown as the title in the sub header while showing selected items.',
         defaultMessage: 'Selected Items',
-    },
-    errorBreadcrumb: {
-        id: 'be.errorBreadcrumb',
-        description: 'Shown as the title in the sub header while showing an error.',
-        defaultMessage: 'Error',
     },
     uploadsManagerUploadInProgress: {
         id: 'be.uploadsManagerUploadInProgress',
