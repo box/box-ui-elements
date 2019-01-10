@@ -77,6 +77,7 @@ export const FIELD_PARENT = 'parent';
 export const FIELD_EXTENSION = 'extension';
 export const FIELD_ITEM_EXPIRATION = 'expires_at';
 export const FIELD_PERMISSIONS = 'permissions';
+export const FIELD_PERMISSIONS_CAN_UPLOAD = `${FIELD_PERMISSIONS}.can_upload`;
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_CONTENT_CREATED_AT: 'content_created_at' = 'content_created_at';
