@@ -11,7 +11,7 @@ const getFormatter = memoize(messageId => new IntlMessageFormat(messages[message
  * @param {string} messageId id of message in i18n file
  * @param {Object} variables substitutions for translation, e.g. counts for plurals
  * @example usually aliased as "l()"
- * @example cy.getByText(l('be.greeting', {name: 'Alex'})).click()
+ * @example cy.contains(l('be.greeting', {name: 'Alex'})).click()
  */
 const localize = (messageId, variables = {}) => {
     return getFormatter(messageId).format(variables);
