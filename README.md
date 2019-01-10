@@ -50,7 +50,7 @@ The Box UI Elements are designed to be agnostic of authentication type. They can
 The Box UI Elements require their corresponding CSS stylesheets to render properly. You will need to set up Webpack's style-loader and css-loader in order to properly include the CSS like in the examples below. Alternatively, you can include the appropriate CSS files in your application's HTML without importing it in React. Links to hosted versions of these CSS files on the Box CDN can be found in the documentation links below.
 
 # Components
-You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview` or `ContentOpenWith`. Similarly, you can also import the `ContentPickerPopup` and `ContentUploaderPopup` which are popup versions for the Content Picker and Content Uploader, respectively.
+You can import the `ContentExplorer`, `ContentPicker`, `ContentUploader`, `ContentPreview`, `ContentOpenWith` or `ContentSidebar`. Similarly, you can also import the `ContentPickerPopup` and `ContentUploaderPopup` which are popup versions for the Content Picker and Content Uploader, respectively.
 
 ## Content Explorer ([Documentation](https://developer.box.com/docs/box-content-explorer))
 
@@ -81,7 +81,7 @@ render(
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
-| language | string |  | *See the [Internationalization](#internationalization) section* |
+| language | string | `en-US` | *See the [Internationalization](#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
 | rootFolderId | string | `0` | The root folder for the content explorer. |
 | currentFolderId | string | | The current folder shown for the content explorer. This should be a sub folder to the root folder. |
@@ -113,6 +113,7 @@ render(
 | defaultView | string | `files` | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
 | responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-options).* |
+| contentPreviewProps | Object | `{}` | Props that can be forwarded to the Content Preview UI Element. *See them in the props section of [Content Preview UI Element](#content-preview-documentation)* |
 
 ### Keyboard Shortcuts
 *See the [developer docs](https://developer.box.com/docs/box-content-explorer#section-keyboard-shortcuts).*
@@ -251,12 +252,13 @@ render(
 ### Props
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| canDownload | boolean | `true` | Visually hides the download and print buttons in the preview header if this is set to `false`. *This prop has no effect when the file permission `can_download` is set to `false`.* |
-| collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | fileId* | string | | The id of the file to preview. |
-| hasHeader | boolean | `true` | Visually hides the preview header if this is set to `false`. |
 | language | string | `en-US` | *See the [Internationalization](#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
+| canDownload | boolean | `true` | Visually hides the download and print buttons in the preview header if this is set to `false`. *This prop has no effect when the file permission `can_download` is set to `false`.* |
+| collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| hasHeader | boolean | `true` | Visually hides the preview header if this is set to `false`. |
 | onClose | function |  | Callback function for when the file preview closes. If absent, the close button will not render in the header. |
 | onLoad | function |  | Callback function for when a file preview loads. |
 | requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
@@ -264,15 +266,14 @@ render(
 | sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | showAnnotations | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| contentSidebarProps | Object | `{}` | Props that can be forwarded to the Content Sidebar UI Element. *See them in the props section of [Content Sidebar UI Element](#content-sidebar-documentation)* |
+| contentOpenWithProps | Object | `{}` | Props that can be forwarded to the Content Open With UI Element. *See them in the props section of [Content Open With UI Element](#content-open-with-documentation)* |
 
 ***Note: Any other option listed here https://github.com/box/box-content-preview#parameters--options, which is also not listed or overriden above as a prop, will be passed on as-is to the Preview Library.***
 
-## Content Open With ([Documentation](https://developer.box.com/docs/box-content-open-with)) [Beta]
+## Content Open With ([Documentation](https://developer.box.com/docs/box-content-open-with))
 
 <img src="https://cdn-images-1.medium.com/max/1600/1*dd2YfUFtbt9z6Lrv6hNF_g.gif" width="75%"/>
-
-***IMPORTANT: The Content Open With Element is in beta, see the documentation for more information.***
 
 ```js
 import React from 'react';
@@ -295,6 +296,88 @@ render(
     document.querySelector('.container')
 );
 ```
+### Props
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| language | string | `en-US` | *See the [Internationalization](#internationalization) section* |
+| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
+| fileId* | string | | The id of the file to preview. |
+| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+
+
+
+## Content Sidebar ([Documentation](https://developer.box.com/docs/box-content-sidebar))
+
+<img src="https://user-images.githubusercontent.com/1075325/50999865-3707d200-14e0-11e9-8488-81a4e2a5fe43.png" width="40%"/>
+
+```js
+import React from 'react';
+import { render } from 'react-dom';
+import { addLocaleData } from 'react-intl';
+import enLocaleData from 'react-intl/locale-data/en';
+import { ContentSidebar } from 'box-ui-elements';
+import messages from 'box-ui-elements/i18n/en-US';
+import 'box-ui-elements/dist/sidebar.css';
+
+addLocaleData(enLocaleData);
+
+render(
+    <ContentSidebar
+        fileId='FILE_ID'
+        token='ACCESS_TOKEN'
+        language='en-US'
+        messages={messages}
+    />,
+    document.querySelector('.container')
+);
+```
+### Props
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| language | string | `en-US` | *See the [Internationalization](#internationalization) section* |
+| messages | Map<string, string> |  | *See the [Internationalization](#internationalization) section* |
+| fileId* | string | | The id of the file to preview. |
+| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| hasActivityFeed | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| hasMetadata | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| hasSkills | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-options).* |
+| detailsSidebarProps | Object | `{}` | *See below* |
+| activitySidebarProps | Object | `{}` | *See below* |
+| metadataSidebarProps | Object | `{}` | *See below* |
+| skillsSidebarProps | Object | `{}` | *See below* |
+
+
+### detailsSidebarProps
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| hasProperties | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
+| hasAccessStats | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
+| hasVersions | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
+| hasNotices | boolean | `false` | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-detailssidebarprops).* |
+
+### activitySidebarProps
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| onCommentCreate | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
+| onCommentDelete | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
+| onTaskCreate | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
+| onTaskDelete | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
+| onTaskUpdate | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
+| onTaskAssignmentUpdate | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
+
+### metadataSidebarProps
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| *tbd* | - | - | - |
+
+### skillsSidebarProps
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| *tbd* | - | - | - |
 
 
 # Questions
