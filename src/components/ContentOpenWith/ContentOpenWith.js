@@ -49,6 +49,10 @@ type Props = {
     className: string,
     /** Application client name. */
     clientName: string,
+    /** Custom name for Box Tools to display to users */
+    boxToolsName?: string,
+    /** Custom URL to direct users to install Box Tools */
+    boxToolsInstallUrl?: string,
     /** Determines positioning of menu dropdown */
     dropdownAlignment: Alignment,
     /** Box File ID. */
@@ -230,6 +234,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchOpenWithSuccessHandler = async (integrations: Array<Integration>): Promise<any> => {
+        const { boxToolsName, boxToolsInstallUrl } = this.props;
         const boxEditIntegration = integrations.find(({ appIntegrationId }) =>
             this.isBoxEditIntegration(appIntegrationId),
         );
@@ -246,7 +251,9 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 const errorMessageObject = messages[error.message] || messages[GENERIC_EXECUTE_MESSAGE_KEY];
                 let formattedErrorMessage = <FormattedMessage {...errorMessageObject} />;
                 if (error.message === BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY) {
-                    formattedErrorMessage = <BoxToolsInstallMessage />;
+                    formattedErrorMessage = (
+                        <BoxToolsInstallMessage boxToolsName={boxToolsName} boxToolsInstallUrl={boxToolsInstallUrl} />
+                    );
                 }
 
                 boxEditIntegration.disabledReasons.push(formattedErrorMessage);
