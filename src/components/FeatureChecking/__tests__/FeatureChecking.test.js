@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import { isFeatureEnabled, FeatureProvider, FeatureFlag, withFeatureProvider } from '..';
+import { isFeatureEnabled, FeatureProvider, FeatureFlag } from '..';
 
 describe('isFeatureEnabled', () => {
     test('returns feature object if key is truthy', () => {
@@ -125,18 +125,5 @@ describe('FeatureFlag', () => {
             </div>,
         );
         expect(containerWithoutProvider.html()).toMatchInlineSnapshot(`"<div></div>"`);
-    });
-});
-
-describe('withFeatureProvider HOC', () => {
-    test('wraps component with FeatureProvider', () => {
-        const MyComponent = () => <div />;
-        const featureProp = { foo: true };
-        const otherProps = { bar: true, baz: false };
-        const WrapperComponent = withFeatureProvider(MyComponent);
-        const container = mount(<WrapperComponent features={featureProp} {...otherProps} />);
-        expect(container.find('withFeatureProvider(MyComponent)')).toHaveLength(1);
-        expect(container.find('FeatureProvider').props().features).toEqual(featureProp);
-        expect(container.find('MyComponent').props()).toEqual(otherProps);
     });
 });

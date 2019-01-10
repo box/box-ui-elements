@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import * as React from 'react';
 import FeatureProvider from './FeatureProvider';
 import type { FeatureConfig } from './flowTypes';
@@ -8,16 +8,17 @@ type WrapperProps = {
 };
 
 function withFeatureProvider(WrappedComponent: React.ComponentType<any>) {
-    function WrapperComponent({ features, ...props }: WrapperProps) {
+    function wrapComponent({ features, ...props }: WrapperProps, ref) {
         return (
-            <FeatureProvider features={features}>
+            <FeatureProvider features={features} ref={ref}>
                 <WrappedComponent {...props} />
             </FeatureProvider>
         );
     }
-    const wrappedName = WrappedComponent.displayName || WrappedComponent.name || '';
-    WrapperComponent.displayName = `withFeatureProvider(${wrappedName})`;
-    return WrapperComponent;
+    const wrappedName = WrappedComponent.displayName || WrappedComponent.name;
+    wrapComponent.displayName = `withFeatureProvider(${wrappedName})`;
+    // $FlowFixMe forwardRef not supported until Flow 0.89.0
+    return React.forwardRef(wrapComponent);
 }
 
 export default withFeatureProvider;
