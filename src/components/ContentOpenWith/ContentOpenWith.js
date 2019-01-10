@@ -14,6 +14,7 @@ import API from '../../api';
 import Internationalize from '../Internationalize';
 import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
+import BoxToolsInstallMessage from './BoxToolsInstallMessage';
 import messages from '../messages';
 import OpenWithButton from './OpenWithButton';
 import ExecuteForm from './ExecuteForm';
@@ -33,7 +34,7 @@ import {
 const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
-const UNINSTALLED_ERROR_MESSAGE_KEY = 'boxToolsUninstalledErrorMessage';
+const BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY = 'boxToolsInstallErrorMessage';
 const GENERIC_EXECUTE_MESSAGE_KEY = 'executeIntegrationOpenWithErrorHeader';
 const AUTH_CODE = 'auth_code';
 
@@ -48,11 +49,15 @@ type Props = {
     className: string,
     /** Application client name. */
     clientName: string,
+    /** Custom name for Box Tools to display to users */
+    boxToolsName?: string,
+    /** Custom URL to direct users to install Box Tools */
+    boxToolsInstallUrl?: string,
     /** Determines positioning of menu dropdown */
     dropdownAlignment: Alignment,
     /** Box File ID. */
     fileId: string,
-    /** Language to use for tra nslations. */
+    /** Language to use for translations. */
     language?: string,
     /** Messages to be translated. */
     messages?: StringMap,
@@ -229,6 +234,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     fetchOpenWithSuccessHandler = async (integrations: Array<Integration>): Promise<any> => {
+        const { boxToolsName, boxToolsInstallUrl } = this.props;
         const boxEditIntegration = integrations.find(({ appIntegrationId }) =>
             this.isBoxEditIntegration(appIntegrationId),
         );
@@ -242,7 +248,15 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 await this.isBoxEditAvailable();
                 await this.canOpenExtensionWithBoxEdit(boxEditIntegration);
             } catch (error) {
-                boxEditIntegration.disabledReasons.push(<FormattedMessage {...messages[error.message]} />);
+                const errorMessageObject = messages[error.message] || messages[GENERIC_EXECUTE_MESSAGE_KEY];
+                let formattedErrorMessage = <FormattedMessage {...errorMessageObject} />;
+                if (error.message === BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY) {
+                    formattedErrorMessage = (
+                        <BoxToolsInstallMessage boxToolsName={boxToolsName} boxToolsInstallUrl={boxToolsInstallUrl} />
+                    );
+                }
+
+                boxEditIntegration.disabledReasons.push(formattedErrorMessage);
                 boxEditIntegration.isDisabled = true;
             }
         }
@@ -274,7 +288,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             .getBoxEditAPI()
             .checkBoxEditAvailability()
             .catch(() => {
-                throw new Error(UNINSTALLED_ERROR_MESSAGE_KEY);
+                throw new Error(BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY);
             });
     };
 

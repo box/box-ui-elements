@@ -22,6 +22,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Placeholder for a logo.',
         defaultMessage: 'Logo',
     },
+    error: {
+        id: 'be.error',
+        description: 'Generic error label.',
+        defaultMessage: 'Error',
+    },
     preview: {
         id: 'be.preview',
         description: 'Label for preview action.',
@@ -362,15 +367,20 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Title for the preview metadata.',
         defaultMessage: 'Metadata',
     },
-    sidebarMetadataErrorTitle: {
-        id: 'be.sidebarMetadataErrorTitle',
-        description: 'Generic error title for metadata editing.',
-        defaultMessage: 'Metadata Error',
-    },
-    sidebarMetadataErrorContent: {
-        id: 'be.sidebarMetadataErrorContent',
+    sidebarMetadataEditingErrorContent: {
+        id: 'be.sidebarMetadataEditingErrorContent',
         description: 'Generic error content for metadata editing.',
-        defaultMessage: 'An error has occurred while editing metadata. Please refresh the page and try again.',
+        defaultMessage: 'An error has occurred while updating metadata. Please refresh the page and try again.',
+    },
+    sidebarMetadataFetchingErrorContent: {
+        id: 'be.sidebarMetadataFetchingErrorContent',
+        description: 'Generic error content for metadata fetching.',
+        defaultMessage: 'An error has occurred while fetching metadata. Please refresh the page and try again.',
+    },
+    sidebarFileFetchingErrorContent: {
+        id: 'be.sidebarFileFetchingErrorContent',
+        description: 'Generic error content for file fetching.',
+        defaultMessage: 'An error has occurred while fetching your Box file. Please refresh the page and try again.',
     },
     sidebarProperties: {
         id: 'be.sidebarProperties',
@@ -978,15 +988,15 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Sub header message to the user when an Open With integration fails to execute',
         defaultMessage: 'Please try again later.',
     },
-    boxToolsUninstalledErrorMessage: {
-        id: 'be.boxToolsUninstalledErrorMessage',
-        description: 'Sub header message to the user when Box Tools is not installed',
-        defaultMessage: 'Box Tools is not installed on this device',
+    boxToolsInstallMessage: {
+        id: 'be.boxToolsInstallMessage',
+        description: 'Message shown telling user how to install Box Tools',
+        defaultMessage: 'Install {boxTools} to open this file on your desktop',
     },
     boxToolsBlacklistedError: {
         id: 'be.boxEditBlacklistedError',
         description: 'Message when Box Tools cannot open a particular file type',
-        defaultMessage: 'This file cannot be opened by Box Tools',
+        defaultMessage: 'This file cannot be opened locally',
     },
     drawAnnotation: {
         id: 'be.drawAnnotation',
