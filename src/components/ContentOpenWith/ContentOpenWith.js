@@ -351,11 +351,17 @@ class ContentOpenWith extends PureComponent<Props, State> {
             // No window management is required when using Box Edit.
             return;
         }
+
+        // These window features will open the new window directly on top of the current window at the same
+        const windowFeatures = `left=${window.screenX},top=${window.screenY},height=${window.outerHeight},width=${
+            window.innerWidth
+        },toolbar=0`;
+
         // window.open() is immediately invoked to avoid popup-blockers
         // The name is included to be the target of a form if the integration is a POST integration.
         // A uniqueid is used to force the browser to open a new tab every time, while still allowing
         // a form to reference a given tab.
-        this.integrationWindow = this.window.open('', `${uniqueid(appIntegrationId)}`);
+        this.integrationWindow = this.window.open('', `${uniqueid(appIntegrationId)}`, windowFeatures);
         this.integrationWindow.document.title = displayName;
         this.integrationWindow.onunload = this.cleanupIntegrationWindow;
 
