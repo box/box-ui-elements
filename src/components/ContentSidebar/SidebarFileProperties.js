@@ -11,7 +11,7 @@ import ItemProperties from 'box-react-ui/lib/features/item-details/ItemPropertie
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import getFileSize from 'box-react-ui/lib/utils/getFileSize';
 import withErrorHandling from './withErrorHandling';
-import { KEY_CLASSIFICATION_TYPE } from '../../constants';
+import { FIELD_PERMISSIONS_CAN_UPLOAD, KEY_CLASSIFICATION_TYPE } from '../../constants';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from '../../interactionTargets';
 
 type Props = {
@@ -37,7 +37,7 @@ type Props = {
  */
 export const getClassificationModal = (file: BoxItem, onClassificationClick: ?Function) => {
     // Changing classification requires edit metadata permission, which is included in can_upload
-    if (onClassificationClick && getProp(file, 'permissions.can_upload', false)) {
+    if (onClassificationClick && getProp(file, FIELD_PERMISSIONS_CAN_UPLOAD, false)) {
         return onClassificationClick;
     }
 

@@ -23,6 +23,7 @@ import { isUserCorrectableError } from '../../util/error';
 import {
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,
+    FIELD_PERMISSIONS_CAN_UPLOAD,
     IS_ERROR_DISPLAYED,
     ORIGIN_METADATA_SIDEBAR,
 } from '../../constants';
@@ -94,7 +95,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      */
     canEdit(): boolean {
         const { file }: State = this.state;
-        return getProp(file, 'permissions.can_upload', false);
+        return getProp(file, FIELD_PERMISSIONS_CAN_UPLOAD, false);
     }
 
     /**
@@ -330,10 +331,9 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem) => {
-        const uploadPermission = 'permissions.can_upload';
         const { file: currentFile }: State = this.state;
-        const currentCanUpload = getProp(currentFile, uploadPermission, false);
-        const newCanUpload = getProp(file, uploadPermission, false);
+        const currentCanUpload = getProp(currentFile, FIELD_PERMISSIONS_CAN_UPLOAD, false);
+        const newCanUpload = getProp(file, FIELD_PERMISSIONS_CAN_UPLOAD, false);
         const shouldFetchMetadata = !currentFile || currentCanUpload !== newCanUpload;
         const callback = shouldFetchMetadata ? this.fetchMetadata : noop;
         this.setState({ file }, callback);
