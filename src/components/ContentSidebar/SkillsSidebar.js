@@ -7,8 +7,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
+import getProp from 'lodash/get';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import { SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
+import { FIELD_PERMISSIONS_CAN_UPLOAD, SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
 import messages from '../messages';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../APIContext';
@@ -39,15 +40,20 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         const { api, file }: Props = this.props;
-        api.getMetadataAPI(false).getSkills(
-            file,
-            (cards: Array<SkillCard>) => {
-                this.updatePreviewTranscript(cards);
-                this.setState({ cards });
-            },
-            noop,
-        );
+        api.getMetadataAPI(false).getSkills(file, this.fetchSkillsSuccessCallback, noop);
     }
+
+    /**
+     * Handles skills fetch success
+     *
+     * @private
+     * @param {Array<SkillCard>} cards - Skills cards
+     * @return {void}
+     */
+    fetchSkillsSuccessCallback = (cards: Array<SkillCard>) => {
+        this.updatePreviewTranscript(cards);
+        this.setState({ cards });
+    };
 
     /**
      * Updates Preview with transcript data
@@ -77,10 +83,43 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
     };
 
     /**
+     * Success handler for save
+     *
+     * @private
+     * @param {Array} updatedCards - updated skill cards
+     * @param {number} index - index of the card being edited
+     * @return {void}
+     */
+    onSaveSuccessHandler = (index: number, updatedCards: Array<SkillCard>): void => {
+        const { errors }: State = this.state;
+        const clone = { ...errors };
+        delete clone[index];
+        this.updatePreviewTranscript(updatedCards);
+        this.setState({ cards: updatedCards, errors: clone });
+    };
+
+    /**
+     * Error handler for save
+     *
+     * @private
+     * @param {number} index - index of the card being edited
+     * @return {void}
+     */
+    onSaveErrorHandler = (index: number): void => {
+        const { errors }: State = this.state;
+        const clone = { ...errors };
+        clone[index] = true;
+        this.setState({ errors: clone });
+    };
+
+    /**
      * Updates skill metadata
      *
      * @private
-     * @param {string} id - File id
+     * @param {number} index - index of the card being edited
+     * @param {Array} removes - entries to remove
+     * @param {Array} adds - entries to add
+     * @param {Array} replaces - entries to replace
      * @return {void}
      */
     onSave = (
@@ -93,13 +132,13 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
         }> = [],
     ): void => {
         const { api, file }: Props = this.props;
-        const { cards = [], errors }: State = this.state;
-        const { permissions = {} }: BoxItem = file;
+        const { cards = [] }: State = this.state;
         const card = cards[index];
         const path = `/cards/${index}`;
         const ops: JsonPatchData = [];
+        const canEdit = getProp(file, FIELD_PERMISSIONS_CAN_UPLOAD, false);
 
-        if (!permissions.can_upload || !card) {
+        if (!canEdit || !card) {
             return;
         }
 
@@ -124,9 +163,11 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
                     deletes.push(idx);
                 }
             });
+            // To maintain metadata index positions, removes should be
+            // done is reverse order with largest index being removed first.
+            // Remove operations are atomic and don't happen in batch.
             deletes
-                .sort()
-                .reverse()
+                .sort((a, b) => b - a) // number sort in descending order
                 .forEach(idx => {
                     ops.push({
                         op: 'remove',
@@ -161,15 +202,10 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
             file,
             ops,
             (updatedCards: Array<SkillCard>) => {
-                const clone = { ...errors };
-                delete clone[index];
-                this.updatePreviewTranscript(updatedCards);
-                this.setState({ cards: updatedCards, errors: clone });
+                this.onSaveSuccessHandler(index, updatedCards);
             },
             () => {
-                const clone = { ...errors };
-                clone[index] = true;
-                this.setState({ errors: clone });
+                this.onSaveErrorHandler(index);
             },
         );
     };
