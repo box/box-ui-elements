@@ -1,3 +1,13 @@
+export const CONTENT_PREVIEW_TAGS = {
+    Initialized: 'content_preview_init',
+    JSReady: 'content_preview_js',
+};
+
+export const CONTENT_SIDEBAR_TAGS = {
+    Initialized: 'content_sidebar_init',
+    JSReady: 'content_sidebar_js',
+};
+
 // Activity Sidebar
 export const ACTIVITY_SIDEBAR_TAGS = {
     Initialized: 'activity_sidebar_init',

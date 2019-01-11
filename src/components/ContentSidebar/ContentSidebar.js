@@ -26,7 +26,9 @@ import {
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
     ORIGIN_CONTENT_SIDEBAR,
+    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
 } from '../../constants';
+import { CONTENT_SIDEBAR_TAGS } from '../logger/constants';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -71,6 +73,8 @@ type State = {
     metadataEditors?: Array<MetadataEditor>,
     view?: SidebarView,
 };
+
+window.performance.mark(CONTENT_SIDEBAR_TAGS.JSReady);
 
 class ContentSidebar extends React.PureComponent<Props, State> {
     id: string;
@@ -129,6 +133,14 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         });
 
         this.state = { isLoading: true, isOpen: !!isLarge };
+        this.props.onMetric(
+            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+            {
+                end: CONTENT_SIDEBAR_TAGS.JSReady,
+            },
+            CONTENT_SIDEBAR_TAGS.JSReady,
+            true,
+        );
     }
 
     /**

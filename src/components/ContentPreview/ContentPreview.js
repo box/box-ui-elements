@@ -41,7 +41,9 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
     METRIC_TYPE_PREVIEW_METRIC,
+    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
 } from '../../constants';
+import { CONTENT_PREVIEW_TAGS } from '../logger/constants';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
@@ -132,6 +134,7 @@ const RETRY_COUNT = 3; // number of times to retry network request for a file
 const MS_IN_S = 1000; // ms in a sec
 const PREVIEW_LOAD_METRIC_EVENT = 'load';
 
+window.performance.mark(CONTENT_PREVIEW_TAGS.JSReady);
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
 
@@ -226,6 +229,14 @@ class ContentPreview extends PureComponent<Props, State> {
             currentFileId: fileId,
             prevFileIdProp: fileId,
         };
+        this.props.onMetric(
+            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+            {
+                end: CONTENT_PREVIEW_TAGS.JSReady,
+            },
+            CONTENT_PREVIEW_TAGS.JSReady,
+            true,
+        );
     }
 
     /**
