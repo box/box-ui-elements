@@ -40,7 +40,7 @@
         "build:ci:es": "yarn build:prod:es",
         "build:ci:dist": "LANGUAGE=en-US REACT=true yarn build:prod:dist",
         "build:dev:dist": "LANGUAGE=en-US BABEL_ENV=dev NODE_ENV=dev webpack --config conf/webpack.config.js --mode development --progress --colors",
-        "build:dev:es": "BABEL_ENV=dev NODE_ENV=dev yarn build:es --copy-files --source-maps inline --watch --ignore \"**/__tests__/**\"",
+        "build:dev:es": "BABEL_ENV=dev NODE_ENV=dev yarn build:es --copy-files --source-maps inline --watch --ignore \"**/__tests__/**\",\"src/components/messages.js\"",
         "build:es": "babel src --out-dir lib",
         "build:i18n": "props2es",
         "build:npm": "npm-run-all clean build:i18n build:prod:npm copy:styles build:prod:es",
