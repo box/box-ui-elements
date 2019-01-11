@@ -8,6 +8,7 @@ import {
 } from '../../constants';
 
 type Props = {
+    fileId?: string,
     onMetric: (data: Object) => void,
     children: React.ChildrenArray<React.Element<any>>,
     source: MetricSources,
@@ -64,7 +65,7 @@ class Logging extends React.Component<Props> {
      * @returns {boolean} True if the event has already been fired
      */
     hasLoggedEvent(name: string): boolean {
-        return uniqueEvents.has(this.createComponentEventName(name));
+        return uniqueEvents.has(name);
     }
 
     /**
@@ -95,11 +96,18 @@ class Logging extends React.Component<Props> {
      * @param {Object} [data] - Additional data to apply to the event
      */
     logUniqueMetric(type: MetricTypes, name: string, data?: Object): void {
-        if (this.hasLoggedEvent(name)) {
+        let eventName = this.createComponentEventName(name);
+        if (type !== METRIC_TYPE_ELEMENTS_LOAD_METRIC) {
+            const fileId = this.props.fileId || '';
+            eventName = `${fileId}::${eventName}`;
+        }
+
+        if (this.hasLoggedEvent(eventName)) {
             return;
         }
+
         this.logMetric(type, name, data);
-        uniqueEvents.add(this.createComponentEventName(name));
+        uniqueEvents.add(eventName);
     }
 
     /**
@@ -130,7 +138,10 @@ class Logging extends React.Component<Props> {
             case METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC:
                 return this.logTimeMetric(type, data, name, isUnique);
             case METRIC_TYPE_PREVIEW_METRIC:
-                return this.props.onMetric(data);
+                return this.props.onMetric({
+                    ...data,
+                    type,
+                });
             default:
                 break;
         }
