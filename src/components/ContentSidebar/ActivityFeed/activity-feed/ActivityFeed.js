@@ -11,13 +11,7 @@ import ActiveState from './ActiveState';
 import ApprovalCommentForm from '../approval-comment-form';
 import EmptyState from './EmptyState';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
-import Logger, { withLoggerContext } from '../../../logger';
-import { ACTIVITY_SIDEBAR_TAGS, ACTIVITY_FEED_TAGS, EVENT_TIME_TO_RENDER } from '../../../logger/constants';
 import './ActivityFeed.scss';
-
-type PropsWithContext = {
-    logger: Logger,
-};
 
 type Props = {
     file: BoxItem,
@@ -39,7 +33,7 @@ type Props = {
     getAvatarUrl: string => Promise<?string>,
     getUserProfileUrl?: string => Promise<string>,
     feedItems?: FeedItems,
-} & PropsWithContext;
+};
 
 type State = {
     isInputOpen: boolean,
@@ -73,47 +67,12 @@ class ActivityFeed extends React.Component<Props, State> {
         if (hasLoaded || hasMoreItems || hasNewItems || hasInputOpened) {
             this.resetFeedScroll();
         }
-
-        if (hasLoaded) {
-            this.logRenderMetrics();
-        }
-    }
-
-    /**
-     * Checks to see whether or not the Actvity Feed is still loading
-     *
-     * @returns {boolean} True if still loading
-     */
-    isLoading(): boolean {
-        const { feedItems, currentUser } = this.props;
-        return !feedItems || !currentUser;
-    }
-
-    /**
-     * Log time to meaningful render
-     *
-     * @param {User} currentUser - CurrentUser for the session
-     * @param {FeedItems} feedItems - Feed items populating the activity feed
-     */
-    logRenderMetrics(): void {
-        const { logger } = this.props;
-        const hasLoggedRender = logger.hasLoggedEvent(ACTIVITY_FEED_TAGS.ComponentName, EVENT_TIME_TO_RENDER);
-        if (!hasLoggedRender) {
-            window.performance.mark(ACTIVITY_FEED_TAGS.TimeToRender);
-            logger.logTimeMetric(
-                ACTIVITY_FEED_TAGS.ComponentName,
-                EVENT_TIME_TO_RENDER,
-                ACTIVITY_SIDEBAR_TAGS.Initialized,
-                ACTIVITY_FEED_TAGS.TimeToRender,
-                true,
-            );
-        }
     }
 
     /**
      * Detects whether or not the empty state should be shown.
-     * @param {Object} currentUser - The user that is logged into the account
-     * @param {Object} feedItems - Items in the activity feed
+     * @param {object} currentUser - The user that is logged into the account
+     * @param {object} feedItems - Items in the activity feed
      */
     isEmpty = ({ currentUser, feedItems }: Props = this.props): boolean =>
         !currentUser ||
@@ -201,6 +160,7 @@ class ActivityFeed extends React.Component<Props, State> {
         const showApprovalCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
 
         const isEmpty = this.isEmpty(this.props);
+        const isLoading = !feedItems || !currentUser;
 
         return (
             // eslint-disable-next-line
@@ -212,7 +172,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     className="bcs-activity-feed-items-container"
                 >
                     {isEmpty ? (
-                        <EmptyState isLoading={this.isLoading()} showCommentMessage={showApprovalCommentForm} />
+                        <EmptyState isLoading={isLoading} showCommentMessage={showApprovalCommentForm} />
                     ) : (
                         <ActiveState
                             {...activityFeedError}
@@ -260,4 +220,4 @@ class ActivityFeed extends React.Component<Props, State> {
     }
 }
 
-export default withLoggerContext(ActivityFeed);
+export default ActivityFeed;
