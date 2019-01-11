@@ -210,7 +210,7 @@
         "react-measure": "^2.2.2",
         "react-modal": "^3.5.1",
         "react-process-string": "^1.2.0",
-        "react-styleguidist": "^7.3.8",
+        "react-styleguidist": "^8.0.6",
         "react-tether": "^0.6.1",
         "react-textarea-autosize": "^6.1.0",
         "react-virtualized": "^9.20.1",
