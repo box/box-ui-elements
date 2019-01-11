@@ -113,6 +113,8 @@
             width: 100%;
 
             .pill-selector-input-wrapper {
+                max-height: 75px;
+                overflow: auto;
                 width: auto;
             }
         }
