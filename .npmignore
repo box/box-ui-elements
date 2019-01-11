@@ -29,6 +29,7 @@ CODEOWNERS
 commitlint.config.js
 conf
 coverage
+cypress.json
 desktop.ini
 examples
 flow

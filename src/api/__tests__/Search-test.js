@@ -1,6 +1,6 @@
 import Search from '../Search';
-import Cache from '../../util/Cache';
-import { FOLDER_FIELDS_TO_FETCH } from '../../util/fields';
+import Cache from '../../utils/Cache';
+import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 import { FIELD_RELEVANCE, SORT_DESC } from '../../constants';
 
 let search;

@@ -1,5 +1,4 @@
 const path = require('path');
-const { version } = require('../package.json');
 const webpackConf = require('./webpack.config.js');
 
 module.exports = {
@@ -9,15 +8,15 @@ module.exports = {
         {
             name: 'Elements',
             components: () => [
-                '../src/components/ContentPicker/ContentPicker.js',
-                '../src/components/ContentExplorer/ContentExplorer.js',
-                '../src/components/ContentUploader/ContentUploader.js',
-                '../src/components/ContentSidebar/ContentSidebar.js',
-                '../src/components/ContentPreview/ContentPreview.js',
+                '../src/elements/content-picker/ContentPicker.js',
+                '../src/elements/content-explorer/ContentExplorer.js',
+                '../src/elements/content-uploader/ContentUploader.js',
+                '../src/elements/content-sidebar/ContentSidebar.js',
+                '../src/elements/content-preview/ContentPreview.js',
             ],
         },
     ],
-    title: `Box UI Elements ${version}`,
+    title: 'Box UI Elements',
     theme: {
         color: {
             link: '#777',

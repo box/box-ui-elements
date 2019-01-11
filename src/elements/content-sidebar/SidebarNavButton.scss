@@ -1,0 +1,40 @@
+@import '../common/variables';
+
+.bcs .bcs-nav-btn {
+    align-items: center;
+    background-color: transparent;
+    display: flex;
+    height: 60px;
+    justify-content: center;
+    position: relative;
+    width: 59px; // 1px for left border
+
+    &::before {
+        bottom: 0;
+        content: '';
+        display: block;
+        left: -1px;
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        width: 3px;
+    }
+
+    &.bcs-nav-btn-is-selected {
+        &::before {
+            background-color: $blue;
+        }
+
+        svg path {
+            fill: $blue;
+        }
+    }
+
+    &:hover {
+        background-color: $ffive;
+
+        &:not(.bcs-nav-btn-is-selected) svg path {
+            fill: $fours;
+        }
+    }
+}

@@ -5,8 +5,8 @@
  */
 
 import Item from './Item';
-import { findMissingProperties, fillMissingProperties } from '../util/fields';
-import { getTypedFileId } from '../util/file';
+import { findMissingProperties, fillMissingProperties } from '../utils/fields';
+import { getTypedFileId } from '../utils/file';
 import {
     FIELD_DOWNLOAD_URL,
     CACHE_PREFIX_FILE,
@@ -15,7 +15,7 @@ import {
     ERROR_CODE_FETCH_FILE,
     FIELD_EXTENSION,
 } from '../constants';
-import { getBadItemError, getBadPermissionsError } from '../util/error';
+import { getBadItemError, getBadPermissionsError } from '../utils/error';
 
 class File extends Item {
     /**

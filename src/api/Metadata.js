@@ -7,8 +7,8 @@
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 import File from './File';
-import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../util/error';
-import { getTypedFileId } from '../util/file';
+import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
+import { getTypedFileId } from '../utils/file';
 import {
     ERROR_CODE_FETCH_CLASSIFICATION,
     HEADER_CONTENT_TYPE,

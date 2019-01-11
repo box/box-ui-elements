@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correctly render 1`] = `
+<span
+  className="pill-selector-wrapper"
+>
+  <PillSelector
+    disabled={false}
+    error=""
+    inputProps={Object {}}
+    onBlur={[Function]}
+    onCompositionEnd={[Function]}
+    onCompositionStart={[Function]}
+    onInput={[Function]}
+    onKeyDown={[Function]}
+    onPaste={[Function]}
+    onRemove={[Function]}
+    placeholder=""
+    selectedOptions={
+      Array [
+        Object {
+          "text": "foo",
+          "value": 0,
+        },
+        Object {
+          "text": "bar",
+          "value": 1,
+        },
+      ]
+    }
+    value=""
+  />
+  <div
+    className="be-keywords-buttons"
+  >
+    <Button
+      data-resin-target="skill-keywordeditcancel"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <FormattedMessage
+        defaultMessage="Cancel"
+        id="be.cancel"
+      />
+    </Button>
+    <PrimaryButton
+      data-resin-target="skill-keywordeditsave"
+      onClick={[MockFunction]}
+      type="button"
+    >
+      <FormattedMessage
+        defaultMessage="Save"
+        id="be.save"
+      />
+    </PrimaryButton>
+  </div>
+</span>
+`;

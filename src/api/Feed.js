@@ -11,8 +11,8 @@ import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksAPI from './Tasks';
 import TaskAssignmentsAPI from './TaskAssignments';
-import { getBadItemError, getBadUserError, isUserCorrectableError } from '../util/error';
-import messages from '../components/messages';
+import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
+import messages from '../elements/common/messages';
 import {
     VERSION_UPLOAD_ACTION,
     VERSION_RESTORE_ACTION,
@@ -21,7 +21,7 @@ import {
     IS_ERROR_DISPLAYED,
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
 } from '../constants';
-import { sortFeedItems } from '../util/sorter';
+import { sortFeedItems } from '../utils/sorter';
 
 const TASK_INCOMPLETE = 'incomplete';
 const TASK = 'task';
