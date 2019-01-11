@@ -13,11 +13,12 @@ import SidebarContent from './SidebarContent';
 import messages from '../messages';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
+import { withLoggerContext } from '../logger';
 import { getBadUserError, getBadItemError } from '../../util/error';
-import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
+import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../constants';
 import API from '../../api';
 import './ActivitySidebar.scss';
-import { ACTIVITY_SIDEBAR_TAGS, EVENT_JS_READY } from '../../logger/constants';
+import { ACTIVITY_SIDEBAR_TAGS, EVENT_JS_READY } from '../logger/constants';
 
 type ExternalProps = {
     onCommentCreate?: Function,
@@ -52,7 +53,6 @@ type State = {
 };
 
 window.performance.mark(ACTIVITY_SIDEBAR_TAGS.JSReady);
-const ACTIVITY_SIDEBAR_COMPONENT = 'activity_sidebar';
 
 export const activityFeedInlineError: Errors = {
     inlineError: {
@@ -67,16 +67,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        const { logger } = this.props;
-        if (!logger.hasLoggedEvent(ACTIVITY_SIDEBAR_COMPONENT, EVENT_JS_READY)) {
-            logger.logTimeMetric(
-                ACTIVITY_SIDEBAR_COMPONENT,
-                EVENT_JS_READY,
-                undefined,
-                ACTIVITY_SIDEBAR_TAGS.JSReady,
-                true,
-            );
-        }
+        this.props.onMetric(
+            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+            {
+                end: ACTIVITY_SIDEBAR_TAGS.JSReady,
+            },
+            EVENT_JS_READY,
+            true,
+        );
     }
 
     componentDidMount() {
@@ -489,4 +487,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR)(withAPIContext(ActivitySidebar));
+export default withLoggerContext(ORIGIN_ACTIVITY_SIDEBAR)(
+    withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR)(withAPIContext(ActivitySidebar)),
+);

@@ -1,10 +1,17 @@
-/**
- * @flow
- * @file Logging Class
- * @author Box
- */
-
+// @flow
+import * as React from 'react';
 import noop from 'lodash/noop';
+import {
+    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+    METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC,
+    METRIC_TYPE_PREVIEW_METRIC,
+} from '../../constants';
+
+type Props = {
+    onMetric: (data: Object) => void,
+    children: React.ChildrenArray<React.Element<any>>,
+    source: MetricSources,
+};
 
 /**
  * Converts a character, using it as a seed, to a random integer and returns it as a string.
@@ -31,13 +38,12 @@ function uuidv4() {
 
 // Unique ID of this session.
 const SESSION_ID = uuidv4();
+const uniqueEvents: Set<string> = new Set();
 
-class Logger {
-    /* Function callback to invoke with a metric object */
-    onMetricLog: (data: Object) => void = noop;
-
-    /* A list of unique events that have occurred */
-    uniqueEvents: Set<string> = new Set();
+class Logging extends React.Component<Props> {
+    static defaultProps = {
+        onMetric: noop,
+    };
 
     /**
      * Composes a component and event name together to make a semi-unique tag.
@@ -46,8 +52,8 @@ class Logger {
      * @param {string} name - The event namne
      * @returns {string} A string containing the component and event name
      */
-    createComponentEventName(component: string, name: string): string {
-        return `${component}::${name}`;
+    createComponentEventName(name: string): string {
+        return `${this.props.source}::${name}`;
     }
 
     /**
@@ -57,8 +63,8 @@ class Logger {
      * @param {string} name - the event name
      * @returns {boolean} True if the event has already been fired
      */
-    hasLoggedEvent(component: string, name: string): boolean {
-        return this.uniqueEvents.has(this.createComponentEventName(component, name));
+    hasLoggedEvent(name: string): boolean {
+        return uniqueEvents.has(this.createComponentEventName(name));
     }
 
     /**
@@ -68,17 +74,17 @@ class Logger {
      * @param {string} name  - the name of the event
      * @param {Object} [data] - Additional data to apply to the event
      */
-    logMetric(component: string, name: string, data?: Object = {}): void {
-        const event = {
-            component,
+    logMetric(type: MetricTypes, name: string, data?: Object = {}): void {
+        const metric = {
+            ...data,
+            component: this.props.source,
             name,
             timestamp: this.getTimestamp(),
             sessionId: SESSION_ID,
-            type: 'metric',
-            ...data,
+            type,
         };
 
-        this.onMetricLog(event);
+        this.props.onMetric(metric);
     }
 
     /**
@@ -88,36 +94,49 @@ class Logger {
      * @param {string} name  - the name of the event
      * @param {Object} [data] - Additional data to apply to the event
      */
-    logUniqueMetric(component: string, name: string, data?: Object): void {
-        if (this.hasLoggedEvent(component, name)) {
+    logUniqueMetric(type: MetricTypes, name: string, data?: Object): void {
+        if (this.hasLoggedEvent(name)) {
             return;
         }
-        this.logMetric(component, name, data);
-        this.uniqueEvents.add(this.createComponentEventName(component, name));
+        this.logMetric(type, name, data);
+        uniqueEvents.add(this.createComponentEventName(name));
     }
 
     /**
      * Log a timing related metric.
      *
-     * @param {string} component - the name of the component
      * @param {string} name - the event name
      * @param {string} start - Performance API mark for the start of the timer
      * @param {string} end - Performance API mark for the end of the timer
      * @param {boolean} [isUnique] - If true, guarantees a unique event firing
      * @returns {void}
      */
-    logTimeMetric(component: string, name: string, start: string, end: string, isUnique?: boolean = false): void {
-        const tagInfo = {
-            start,
-            end,
-        };
+    logTimeMetric(type: MetricTypes, data: Object, name?: string, isUnique?: boolean): void {
+        if (!name) {
+            return;
+        }
 
         if (isUnique) {
-            this.logUniqueMetric(component, name, tagInfo);
+            this.logUniqueMetric(type, name, data);
         } else {
-            this.logMetric(component, name, tagInfo);
+            this.logMetric(type, name, data);
         }
     }
+
+    handleMetric = (type: MetricTypes, data: Object, name?: string, isUnique?: boolean) => {
+        switch (type) {
+            case METRIC_TYPE_ELEMENTS_LOAD_METRIC:
+                return this.logTimeMetric(type, data, name, isUnique);
+            case METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC:
+                return this.logTimeMetric(type, data, name, isUnique);
+            case METRIC_TYPE_PREVIEW_METRIC:
+                return this.props.onMetric(data);
+            default:
+                break;
+        }
+
+        return undefined;
+    };
 
     /**
      * Create an ISO Timestamp for right now.
@@ -127,6 +146,15 @@ class Logger {
     getTimestamp(): string {
         return new Date().toISOString();
     }
+
+    render() {
+        const { children, ...rest } = this.props;
+
+        return React.cloneElement(children, {
+            ...rest,
+            onMetric: this.handleMetric,
+        });
+    }
 }
 
-export default Logger;
+export default Logging;

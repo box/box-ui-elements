@@ -25,6 +25,7 @@ import TokenService from '../../util/TokenService';
 import { isInputElement, focus } from '../../util/dom';
 import { getTypedFileId } from '../../util/file';
 import { withErrorBoundary } from '../ErrorBoundary';
+import { withLoggerContext } from '../logger';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../util/fields';
 import {
@@ -39,6 +40,7 @@ import {
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
+    METRIC_TYPE_PREVIEW_METRIC,
 } from '../../constants';
 import '../fonts.scss';
 import '../base.scss';
@@ -172,7 +174,6 @@ class ContentPreview extends PureComponent<Props, State> {
         onDownload: noop,
         onError: noop,
         onLoad: noop,
-        onMetric: noop,
         onNavigate: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: true,
@@ -535,7 +536,7 @@ class ContentPreview extends PureComponent<Props, State> {
             };
         }
 
-        onMetric(metrics);
+        onMetric(METRIC_TYPE_PREVIEW_METRIC, metrics);
     };
 
     /**
@@ -1145,4 +1146,6 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default withErrorBoundary(ORIGIN_CONTENT_PREVIEW)(makeResponsive(ContentPreview));
+export default withLoggerContext(ORIGIN_CONTENT_PREVIEW)(
+    withErrorBoundary(ORIGIN_CONTENT_PREVIEW)(makeResponsive(ContentPreview)),
+);

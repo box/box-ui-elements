@@ -4,6 +4,11 @@ export const ACTIVITY_SIDEBAR_TAGS = {
     JSReady: 'activity_sidebar_js',
 };
 
+export const DETAILS_SIDEBAR_TAGS = {
+    Initialized: 'details_sidebar_init',
+    JSReady: 'details_sidebar_js',
+};
+
 // Activity Feed
 export const ACTIVITY_FEED_TAGS = {
     ComponentName: 'activity_feed',

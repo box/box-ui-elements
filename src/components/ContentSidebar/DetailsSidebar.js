@@ -18,7 +18,14 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR, IS_ERROR_DISPLAYED } from '../../constants';
+import { withLoggerContext } from '../logger';
+import { DETAILS_SIDEBAR_TAGS } from '../logger/constants';
+import {
+    HTTP_STATUS_CODE_FORBIDDEN,
+    ORIGIN_DETAILS_SIDEBAR,
+    IS_ERROR_DISPLAYED,
+    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+} from '../../constants';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../util/fields';
 import API from '../../api';
 import { isUserCorrectableError, getBadItemError } from '../../util/error';
@@ -56,6 +63,8 @@ type State = {
     fileError?: Errors,
 };
 
+window.performance.mark(DETAILS_SIDEBAR_TAGS.JSReady);
+
 class DetailsSidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
         hasNotices: false,
@@ -74,6 +83,14 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             isLoadingAccessStats: false,
             isLoadingClassification: false,
         };
+        this.props.onMetric(
+            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+            {
+                end: DETAILS_SIDEBAR_TAGS.JSReady,
+            },
+            DETAILS_SIDEBAR_TAGS.JSReady,
+            true,
+        );
     }
 
     componentDidMount() {
@@ -474,4 +491,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default withErrorBoundary(ORIGIN_DETAILS_SIDEBAR)(withAPIContext(DetailsSidebar));
+export default withLoggerContext(ORIGIN_DETAILS_SIDEBAR)(
+    withErrorBoundary(ORIGIN_DETAILS_SIDEBAR)(withAPIContext(DetailsSidebar)),
+);
