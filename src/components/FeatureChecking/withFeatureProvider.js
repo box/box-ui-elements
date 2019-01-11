@@ -10,8 +10,8 @@ type WrapperProps = {
 function withFeatureProvider(WrappedComponent: React.ComponentType<any>) {
     function wrapComponent({ features, ...props }: WrapperProps, ref) {
         return (
-            <FeatureProvider features={features} ref={ref}>
-                <WrappedComponent {...props} />
+            <FeatureProvider features={features}>
+                <WrappedComponent {...props} ref={ref} />
             </FeatureProvider>
         );
     }
