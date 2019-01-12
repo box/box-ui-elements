@@ -572,6 +572,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Message shown when folder items are still fetching.',
         defaultMessage: 'Please wait while the items load...',
     },
+    errorBreadcrumb: {
+        id: 'be.errorBreadcrumb',
+        description: 'Default label for signifying error in the sub header.',
+        defaultMessage: 'Error',
+    },
     rootBreadcrumb: {
         id: 'be.rootBreadcrumb',
         description: 'Default label for root folder.',
