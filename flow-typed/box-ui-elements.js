@@ -723,3 +723,7 @@ type MetricTypes =
     | METRIC_TYPE_PREVIEW_METRIC
     | METRIC_TYPE_ELEMENTS_LOAD_METRIC
     | METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
+
+type ElementsMetricCallback = {
+    onMetric: (type: MetricTypes, data: Object, name?: string, isUnique?: boolean) => void,
+};

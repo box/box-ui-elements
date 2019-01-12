@@ -69,7 +69,6 @@ type Props = {
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
-    onMetric: Function,
     onNavigate: Function,
     previewLibraryVersion: string,
     requestInterceptor?: Function,
@@ -81,7 +80,8 @@ type Props = {
     staticPath: string,
     token: Token,
     useHotkeys: boolean,
-} & ErrorContextProps;
+} & ErrorContextProps &
+    ElementsMetricCallback;
 
 type State = {
     file?: BoxItem,
@@ -232,7 +232,7 @@ class ContentPreview extends PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                end: CONTENT_PREVIEW_TAGS.JSReady,
+                endMark: CONTENT_PREVIEW_TAGS.JSReady,
             },
             CONTENT_PREVIEW_TAGS.JSReady,
             true,

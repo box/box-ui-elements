@@ -36,7 +36,8 @@ type PropsWithoutContext = {
     translations?: Translations,
     isDisabled?: boolean,
     onVersionHistoryClick?: Function,
-} & ExternalProps;
+} & ExternalProps &
+    ElementsMetricCallback;
 
 type Props = {
     api: API,
@@ -70,7 +71,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                end: ACTIVITY_SIDEBAR_TAGS.JSReady,
+                endMark: ACTIVITY_SIDEBAR_TAGS.JSReady,
             },
             EVENT_JS_READY,
             true,

@@ -45,7 +45,8 @@ type ExternalProps = {
     onClassificationClick: Function,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
-} & ErrorContextProps;
+} & ErrorContextProps &
+    ElementsMetricCallback;
 
 type Props = {
     api: API,
@@ -86,7 +87,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                end: DETAILS_SIDEBAR_TAGS.JSReady,
+                endMark: DETAILS_SIDEBAR_TAGS.JSReady,
             },
             DETAILS_SIDEBAR_TAGS.JSReady,
             true,

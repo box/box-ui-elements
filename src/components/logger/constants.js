@@ -1,31 +1,24 @@
-export const CONTENT_PREVIEW_TAGS = {
+// @flow
+const CONTENT_PREVIEW_TAGS = {
     Initialized: 'content_preview_init',
     JSReady: 'content_preview_js',
 };
 
-export const CONTENT_SIDEBAR_TAGS = {
+const CONTENT_SIDEBAR_TAGS = {
     Initialized: 'content_sidebar_init',
     JSReady: 'content_sidebar_js',
 };
 
-// Activity Sidebar
-export const ACTIVITY_SIDEBAR_TAGS = {
+const ACTIVITY_SIDEBAR_TAGS = {
     Initialized: 'activity_sidebar_init',
     JSReady: 'activity_sidebar_js',
 };
 
-export const DETAILS_SIDEBAR_TAGS = {
+const DETAILS_SIDEBAR_TAGS = {
     Initialized: 'details_sidebar_init',
     JSReady: 'details_sidebar_js',
 };
 
-// Activity Feed
-export const ACTIVITY_FEED_TAGS = {
-    ComponentName: 'activity_feed',
-    TimeToLoadState: 'activity_feed_ttl',
-    TimeToRender: 'activity_feed_ttr',
-};
+const EVENT_JS_READY = 'js_ready';
 
-export const EVENT_JS_READY = 'js_ready';
-export const EVENT_TIME_TO_LOAD_STATE = 'time_to_load_state';
-export const EVENT_TIME_TO_RENDER = 'time_to_render_state';
+export { CONTENT_PREVIEW_TAGS, CONTENT_SIDEBAR_TAGS, ACTIVITY_SIDEBAR_TAGS, DETAILS_SIDEBAR_TAGS, EVENT_JS_READY };
