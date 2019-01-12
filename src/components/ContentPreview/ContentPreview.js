@@ -11,6 +11,7 @@ import throttle from 'lodash/throttle';
 import cloneDeep from 'lodash/cloneDeep';
 import omit from 'lodash/omit';
 import getProp from 'lodash/get';
+import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import { decode } from 'box-react-ui/lib/utils/keys';
@@ -27,6 +28,7 @@ import { getTypedFileId } from '../../util/file';
 import { withErrorBoundary } from '../ErrorBoundary';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../util/fields';
+import { withFeatureProvider } from '../FeatureChecking';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -54,6 +56,7 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
+    features?: FeatureConfig,
     fileId?: string,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
@@ -1145,4 +1148,4 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default withErrorBoundary(ORIGIN_CONTENT_PREVIEW)(makeResponsive(ContentPreview));
+export default flow([makeResponsive, withFeatureProvider, withErrorBoundary(ORIGIN_CONTENT_PREVIEW)])(ContentPreview);

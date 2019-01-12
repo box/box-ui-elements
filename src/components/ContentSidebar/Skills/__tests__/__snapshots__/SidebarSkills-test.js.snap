@@ -496,7 +496,7 @@ exports[`components/ContentSidebar/Skills/SidebarSkills should render the cards 
     title={
       <FormattedMessage
         defaultMessage="Error"
-        id="be.errorSkill"
+        id="be.error"
       />
     }
   >

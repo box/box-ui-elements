@@ -15,6 +15,7 @@ import type APICache from '../src/util/Cache';
 import type { ContentSidebarProps } from '../src/components/ContentSidebar';
 import type { ContentOpenWithProps } from '../src/components/ContentOpenWithProps';
 import type { ContentPreviewProps } from '../src/components/ContentPreview';
+import type { FeatureConfig } from '../FeatureChecking';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -108,7 +109,11 @@ type ItemType = typeof TYPE_FILE | typeof TYPE_FOLDER | typeof TYPE_WEBLINK;
 type UploadStatus = typeof STATUS_PENDING | typeof STATUS_IN_PROGRESS | typeof STATUS_COMPLETE | typeof STATUS_ERROR;
 type Delimiter = typeof DELIMITER_SLASH | typeof DELIMITER_CARET;
 type Size = typeof SIZE_SMALL | typeof SIZE_LARGE | typeof SIZE_MEDIUM;
-type TaskAssignmentStatus = typeof TASK_APPROVED | typeof TASK_COMPLETED | typeof TASK_INCOMPLETE | typeof TASK_REJECTED;
+type TaskAssignmentStatus =
+    | typeof TASK_APPROVED
+    | typeof TASK_COMPLETED
+    | typeof TASK_INCOMPLETE
+    | typeof TASK_REJECTED;
 
 type SharedLink = {
     url: string,

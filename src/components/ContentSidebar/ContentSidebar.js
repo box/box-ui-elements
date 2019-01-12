@@ -289,7 +289,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
     fetchMetadata(): void {
         const { file }: State = this.state;
         const { metadataSidebarProps }: Props = this.props;
-        const { getMetadata, isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
+        const { isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
 
         // Only fetch metadata if we think that the file may have metadata on it
         // but currently the metadata feature is turned off. Use case of this would be a free
@@ -301,13 +301,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         if (canHaveMetadataSidebar) {
             this.api
                 .getMetadataAPI(true)
-                .getEditors(
-                    ((file: any): BoxItem),
-                    this.fetchMetadataSuccessCallback,
-                    noop,
-                    getMetadata,
-                    isFeatureEnabled,
-                );
+                .getMetadata(((file: any): BoxItem), this.fetchMetadataSuccessCallback, noop, isFeatureEnabled);
         }
     }
 
