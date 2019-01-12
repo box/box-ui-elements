@@ -333,6 +333,15 @@ describe('api/Metadata', () => {
             const templates = [...ent, { templateKey: 'securityClassification-6VMVochwUWo' }];
             expect(metadata.getUserAddableTemplates(custom, templates, true)).toEqual(['custom', ...ent]);
         });
+        test('should return all templates for file owner minus hidden ones', async () => {
+            const custom = 'custom';
+            const ent = [{ templateKey: 'e1', hidden: true }, { templateKey: 'e2' }];
+            const templates = [...ent, { templateKey: 'securityClassification-6VMVochwUWo' }];
+            expect(metadata.getUserAddableTemplates(custom, templates, true)).toEqual([
+                'custom',
+                { templateKey: 'e2' },
+            ]);
+        });
     });
 
     describe('extractClassification()', () => {
