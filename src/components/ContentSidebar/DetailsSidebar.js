@@ -87,7 +87,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                endMark: DETAILS_SIDEBAR_TAGS.JSReady,
+                endMarkName: DETAILS_SIDEBAR_TAGS.JSReady,
             },
             DETAILS_SIDEBAR_TAGS.JSReady,
             true,

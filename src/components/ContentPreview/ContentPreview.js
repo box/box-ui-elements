@@ -232,7 +232,7 @@ class ContentPreview extends PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                endMark: CONTENT_PREVIEW_TAGS.JSReady,
+                endMarkName: CONTENT_PREVIEW_TAGS.JSReady,
             },
             CONTENT_PREVIEW_TAGS.JSReady,
             true,

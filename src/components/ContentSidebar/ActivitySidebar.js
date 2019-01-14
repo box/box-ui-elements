@@ -67,11 +67,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                endMark: ACTIVITY_SIDEBAR_TAGS.JSReady,
+                endMarkName: ACTIVITY_SIDEBAR_TAGS.JSReady,
             },
             EVENT_JS_READY,
             true,

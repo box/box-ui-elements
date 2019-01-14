@@ -134,16 +134,14 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         });
 
         this.state = { isLoading: true, isOpen: !!isLarge };
-        /* eslint-disable react/prop-types */
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                endMark: CONTENT_SIDEBAR_TAGS.JSReady,
+                endMarkName: CONTENT_SIDEBAR_TAGS.JSReady,
             },
             CONTENT_SIDEBAR_TAGS.JSReady,
             true,
         );
-        /* eslint-enable react/prop-types */
     }
 
     /**
