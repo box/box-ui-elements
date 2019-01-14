@@ -220,7 +220,10 @@ class Metadata extends File {
                 ? [customPropertiesTemplate]
                 : [customPropertiesTemplate].concat(enterpriseTemplates);
         }
-        return userAddableTemplates.filter(template => template.templateKey !== METADATA_TEMPLATE_CLASSIFICATION);
+        // Only templates that are not hidden and not classification
+        return userAddableTemplates.filter(
+            template => !template.hidden && template.templateKey !== METADATA_TEMPLATE_CLASSIFICATION,
+        );
     }
 
     /**
