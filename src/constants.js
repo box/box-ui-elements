@@ -237,6 +237,7 @@ export const ORIGIN_METADATA_SIDEBAR = 'metadata_sidebar';
 export const ORIGIN_SKILLS_SIDEBAR = 'skills_sidebar';
 export const ORIGIN_PREVIEW = 'preview';
 export const ORIGIN_CONTENT_EXPLORER = 'content_explorer';
+export const ORIGIN_OPEN_WITH = 'open_with';
 
 /* ------------------ Error Keys ---------------------- */
 export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message

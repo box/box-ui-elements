@@ -17,6 +17,7 @@ import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import BoxToolsInstallMessage from './BoxToolsInstallMessage';
 import messages from '../messages';
 import OpenWithButton from './OpenWithButton';
+import { withErrorBoundary } from '../ErrorBoundary';
 import ExecuteForm from './ExecuteForm';
 import '../base.scss';
 import './ContentOpenWith.scss';
@@ -27,6 +28,7 @@ import {
     DEFAULT_HOSTNAME_API,
     HTTP_GET,
     HTTP_POST,
+    ORIGIN_OPEN_WITH,
     TYPE_FILE,
     TYPE_FOLDER,
 } from '../../constants';
@@ -583,4 +585,5 @@ class ContentOpenWith extends PureComponent<Props, State> {
 }
 
 export type ContentOpenWithProps = Props & ExternalProps;
-export default ContentOpenWith;
+export { ContentOpenWith as ContentOpenWithComponent };
+export default withErrorBoundary(ORIGIN_OPEN_WITH)(ContentOpenWith);
