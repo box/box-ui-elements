@@ -19,7 +19,7 @@ import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
 import { withLoggerContext } from '../logger';
-import { DETAILS_SIDEBAR_TAGS } from '../logger/constants';
+import { EVENT_JS_READY } from '../logger/constants';
 import {
     HTTP_STATUS_CODE_FORBIDDEN,
     ORIGIN_DETAILS_SIDEBAR,
@@ -64,7 +64,9 @@ type State = {
     fileError?: Errors,
 };
 
-window.performance.mark(DETAILS_SIDEBAR_TAGS.JSReady);
+const MARK_NAME_JS_READY = `${ORIGIN_DETAILS_SIDEBAR}_${EVENT_JS_READY}`;
+
+window.performance.mark(MARK_NAME_JS_READY);
 
 class DetailsSidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
@@ -87,9 +89,9 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                endMarkName: DETAILS_SIDEBAR_TAGS.JSReady,
+                endMarkName: MARK_NAME_JS_READY,
             },
-            DETAILS_SIDEBAR_TAGS.JSReady,
+            EVENT_JS_READY,
             true,
         );
     }

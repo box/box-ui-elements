@@ -18,7 +18,7 @@ import { getBadUserError, getBadItemError } from '../../util/error';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../constants';
 import API from '../../api';
 import './ActivitySidebar.scss';
-import { ACTIVITY_SIDEBAR_TAGS, EVENT_JS_READY } from '../logger/constants';
+import { EVENT_JS_READY } from '../logger/constants';
 
 type ExternalProps = {
     onCommentCreate?: Function,
@@ -53,14 +53,16 @@ type State = {
     feedItems?: FeedItems,
 };
 
-window.performance.mark(ACTIVITY_SIDEBAR_TAGS.JSReady);
-
 export const activityFeedInlineError: Errors = {
     inlineError: {
         title: messages.errorOccured,
         content: messages.activityFeedItemApiError,
     },
 };
+
+const MARK_NAME_JS_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_JS_READY}`;
+
+window.performance.mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
     state = {};
@@ -70,7 +72,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                endMarkName: ACTIVITY_SIDEBAR_TAGS.JSReady,
+                endMarkName: MARK_NAME_JS_READY,
             },
             EVENT_JS_READY,
             true,
@@ -81,8 +83,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { currentUser } = this.props;
         this.fetchFeedItems(true);
         this.fetchCurrentUser(currentUser);
-        // Start time to interaction timer
-        window.performance.mark(ACTIVITY_SIDEBAR_TAGS.Initialized);
     }
 
     /**

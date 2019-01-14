@@ -45,7 +45,7 @@ import {
     METRIC_TYPE_PREVIEW_METRIC,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
 } from '../../constants';
-import { CONTENT_PREVIEW_TAGS } from '../logger/constants';
+import { EVENT_JS_READY } from '../logger/constants';
 import '../fonts.scss';
 import '../base.scss';
 import './ContentPreview.scss';
@@ -136,8 +136,10 @@ const InvalidIdError = new Error('Invalid id for Preview!');
 const RETRY_COUNT = 3; // number of times to retry network request for a file
 const MS_IN_S = 1000; // ms in a sec
 const PREVIEW_LOAD_METRIC_EVENT = 'load';
+const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_PREVIEW}_${EVENT_JS_READY}`;
 
-window.performance.mark(CONTENT_PREVIEW_TAGS.JSReady);
+window.performance.mark(MARK_NAME_JS_READY);
+
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
 
@@ -235,9 +237,9 @@ class ContentPreview extends PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                endMarkName: CONTENT_PREVIEW_TAGS.JSReady,
+                endMarkName: MARK_NAME_JS_READY,
             },
-            CONTENT_PREVIEW_TAGS.JSReady,
+            EVENT_JS_READY,
             true,
         );
     }

@@ -28,7 +28,7 @@ import {
     ORIGIN_CONTENT_SIDEBAR,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
 } from '../../constants';
-import { CONTENT_SIDEBAR_TAGS } from '../logger/constants';
+import { EVENT_JS_READY } from '../logger/constants';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -75,7 +75,9 @@ type State = {
     view?: SidebarView,
 };
 
-window.performance.mark(CONTENT_SIDEBAR_TAGS.JSReady);
+const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
+
+window.performance.mark(MARK_NAME_JS_READY);
 
 class ContentSidebar extends React.PureComponent<Props, State> {
     id: string;
@@ -137,9 +139,9 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
-                endMarkName: CONTENT_SIDEBAR_TAGS.JSReady,
+                endMarkName: MARK_NAME_JS_READY,
             },
-            CONTENT_SIDEBAR_TAGS.JSReady,
+            EVENT_JS_READY,
             true,
         );
     }
