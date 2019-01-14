@@ -3,3 +3,4 @@ export { default as ContentExplorerExample } from './content-explorer/ContentExp
 export { default as ContentUploaderExample } from './content-uploader/ContentUploaderExample';
 export { default as ContentSidebarExample } from './content-sidebar/ContentSidebarExample';
 export { default as ContentPreviewExample } from './content-preview/ContentPreviewExample';
+export { default as ContentOpenWithExample } from './content-open-with/ContentOpenWithExample';

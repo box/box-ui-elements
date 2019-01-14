@@ -13,6 +13,7 @@ module.exports = {
                 '../src/elements/content-uploader/ContentUploader.js',
                 '../src/elements/content-sidebar/ContentSidebar.js',
                 '../src/elements/content-preview/ContentPreview.js',
+                '../src/elements/content-open-with/ContentOpenWith.js',
             ],
         },
     ],
