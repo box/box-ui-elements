@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
-import ContentOpenWith from '../ContentOpenWith';
+import { ContentOpenWithComponent as ContentOpenWith } from '../ContentOpenWith';
 import { BOX_EDIT_INTEGRATION_ID, BOX_EDIT_SFC_INTEGRATION_ID } from '../../../constants';
 import BoxToolsInstallMessage from '../BoxToolsInstallMessage';
 import messages from '../../messages';

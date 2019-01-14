@@ -237,6 +237,7 @@ export const ORIGIN_METADATA_SIDEBAR = 'metadata_sidebar';
 export const ORIGIN_SKILLS_SIDEBAR = 'skills_sidebar';
 export const ORIGIN_PREVIEW = 'preview';
 export const ORIGIN_CONTENT_EXPLORER = 'content_explorer';
+export const ORIGIN_OPEN_WITH = 'open_with';
 
 /* ------------------ Metric Types ---------------------- */
 export const METRIC_TYPE_PREVIEW_METRIC: 'preview_metric' = 'preview_metric';
