@@ -1,5 +1,6 @@
 {
     "baseUrl": "http://localhost:6060/#",
+    "defaultCommandTimeout": 8000,
     "fileServerFolder": "test",
     "fixturesFolder": "test/fixtures",
     "integrationFolder": "test/integration",

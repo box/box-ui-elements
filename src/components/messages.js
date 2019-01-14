@@ -22,6 +22,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Placeholder for a logo.',
         defaultMessage: 'Logo',
     },
+    error: {
+        id: 'be.error',
+        description: 'Generic error label.',
+        defaultMessage: 'Error',
+    },
     preview: {
         id: 'be.preview',
         description: 'Label for preview action.',
@@ -362,15 +367,20 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Title for the preview metadata.',
         defaultMessage: 'Metadata',
     },
-    sidebarMetadataErrorTitle: {
-        id: 'be.sidebarMetadataErrorTitle',
-        description: 'Generic error title for metadata editing.',
-        defaultMessage: 'Metadata Error',
-    },
-    sidebarMetadataErrorContent: {
-        id: 'be.sidebarMetadataErrorContent',
+    sidebarMetadataEditingErrorContent: {
+        id: 'be.sidebarMetadataEditingErrorContent',
         description: 'Generic error content for metadata editing.',
-        defaultMessage: 'An error has occurred while editing metadata. Please refresh the page and try again.',
+        defaultMessage: 'An error has occurred while updating metadata. Please refresh the page and try again.',
+    },
+    sidebarMetadataFetchingErrorContent: {
+        id: 'be.sidebarMetadataFetchingErrorContent',
+        description: 'Generic error content for metadata fetching.',
+        defaultMessage: 'An error has occurred while fetching metadata. Please refresh the page and try again.',
+    },
+    sidebarFileFetchingErrorContent: {
+        id: 'be.sidebarFileFetchingErrorContent',
+        description: 'Generic error content for file fetching.',
+        defaultMessage: 'An error has occurred while fetching your Box file. Please refresh the page and try again.',
     },
     sidebarProperties: {
         id: 'be.sidebarProperties',
@@ -386,11 +396,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.statusSkill',
         description: 'Label for status skill card in the preview sidebar',
         defaultMessage: 'Status',
-    },
-    errorSkill: {
-        id: 'be.errorSkill',
-        description: 'Label for error skill card in the preview sidebar',
-        defaultMessage: 'Error',
     },
     topicsSkill: {
         id: 'be.topicsSkill',
@@ -567,6 +572,11 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Message shown when folder items are still fetching.',
         defaultMessage: 'Please wait while the items load...',
     },
+    errorBreadcrumb: {
+        id: 'be.errorBreadcrumb',
+        description: 'Default label for signifying error in the sub header.',
+        defaultMessage: 'Error',
+    },
     rootBreadcrumb: {
         id: 'be.rootBreadcrumb',
         description: 'Default label for root folder.',
@@ -586,11 +596,6 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         id: 'be.selectedBreadcrumb',
         description: 'Shown as the title in the sub header while showing selected items.',
         defaultMessage: 'Selected Items',
-    },
-    errorBreadcrumb: {
-        id: 'be.errorBreadcrumb',
-        description: 'Shown as the title in the sub header while showing an error.',
-        defaultMessage: 'Error',
     },
     uploadsManagerUploadInProgress: {
         id: 'be.uploadsManagerUploadInProgress',
@@ -978,15 +983,15 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         description: 'Sub header message to the user when an Open With integration fails to execute',
         defaultMessage: 'Please try again later.',
     },
-    boxToolsUninstalledErrorMessage: {
-        id: 'be.boxToolsUninstalledErrorMessage',
-        description: 'Sub header message to the user when Box Tools is not installed',
-        defaultMessage: 'Box Tools is not installed on this device',
+    boxToolsInstallMessage: {
+        id: 'be.boxToolsInstallMessage',
+        description: 'Message shown telling user how to install Box Tools',
+        defaultMessage: 'Install {boxTools} to open this file on your desktop',
     },
     boxToolsBlacklistedError: {
         id: 'be.boxEditBlacklistedError',
         description: 'Message when Box Tools cannot open a particular file type',
-        defaultMessage: 'This file cannot be opened by Box Tools',
+        defaultMessage: 'This file cannot be opened locally',
     },
     drawAnnotation: {
         id: 'be.drawAnnotation',

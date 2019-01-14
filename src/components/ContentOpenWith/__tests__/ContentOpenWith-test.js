@@ -3,13 +3,14 @@ import { shallow } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
 import ContentOpenWith from '../ContentOpenWith';
 import { BOX_EDIT_INTEGRATION_ID, BOX_EDIT_SFC_INTEGRATION_ID } from '../../../constants';
+import BoxToolsInstallMessage from '../BoxToolsInstallMessage';
 import messages from '../../messages';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 const ADOBE_INTEGRATION_ID = '1234';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
-const UNINSTALLED_ERROR_MESSAGE_KEY = 'boxToolsUninstalledErrorMessage';
+const BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY = 'boxToolsInstallErrorMessage';
 
 describe('components/ContentOpenWith/ContentOpenWith', () => {
     const fileId = '1234';
@@ -161,9 +162,9 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
             expect(instance.canOpenExtensionWithBoxEdit).toBeCalled();
         });
 
-        test('should set the disabled reason if box tools is not available before setting state', async () => {
+        test('should set the disabled reason if Box Tools is not available before setting state', async () => {
             instance.getIntegrationFileExtension = jest.fn().mockResolvedValue({ extension });
-            instance.isBoxEditAvailable = jest.fn().mockRejectedValue(new Error(UNINSTALLED_ERROR_MESSAGE_KEY));
+            instance.isBoxEditAvailable = jest.fn().mockRejectedValue(new Error(BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY));
             instance.canOpenExtensionWithBoxEdit = jest.fn().mockResolvedValue();
 
             await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
@@ -174,7 +175,7 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
                         ...boxEditIntegration,
                         isDisabled: true,
                         // eslint-disable-next-line
-                        disabledReasons: [<FormattedMessage {...messages.boxToolsUninstalledErrorMessage} />],
+                        disabledReasons: [<BoxToolsInstallMessage />],
                     },
                 ],
                 isLoading: false,
@@ -197,6 +198,23 @@ describe('components/ContentOpenWith/ContentOpenWith', () => {
                         isDisabled: true,
                         // eslint-disable-next-line
                         disabledReasons: [<FormattedMessage {...messages.boxToolsBlacklistedError} />],
+                    },
+                ],
+                isLoading: false,
+            });
+        });
+
+        test('should set the default disabled reason if there was a failure for an unknown reason', async () => {
+            instance.getIntegrationFileExtension = jest.fn().mockRejectedValue(new Error('foo'));
+            await instance.fetchOpenWithSuccessHandler([boxEditIntegration]);
+
+            expect(instance.setState).toBeCalledWith({
+                integrations: [
+                    {
+                        ...boxEditIntegration,
+                        isDisabled: true,
+                        // eslint-disable-next-line
+                        disabledReasons: [<FormattedMessage {...messages.executeIntegrationOpenWithErrorHeader} />],
                     },
                 ],
                 isLoading: false,

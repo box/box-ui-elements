@@ -1,4 +1,5 @@
 import React from 'react';
+import noop from 'lodash/noop';
 import { mount } from 'enzyme';
 import { ContentSidebarComponent as ContentSidebar } from '../ContentSidebar';
 import SidebarUtils from '../SidebarUtils';
@@ -134,7 +135,20 @@ describe('components/ContentSidebar/ContentSidebar', () => {
             expect(instance.getSidebarView()).toBe('default');
         });
 
-        test('should return skills when no current view is skills and skills exist', () => {
+        test('should not return default view if toggled view is set', () => {
+            const wrapper = getWrapper({ defaultView: 'default' });
+            const instance = wrapper.instance();
+            instance.setState({ view: 'activity' });
+
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderMetadataSidebar = jest.fn().mockReturnValueOnce(true);
+
+            expect(instance.getSidebarView()).toBe('activity');
+        });
+
+        test('should return skills when current view is skills and skills exist', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
 
@@ -391,60 +405,63 @@ describe('components/ContentSidebar/ContentSidebar', () => {
     describe('fetchMetadata()', () => {
         let wrapper;
         let instance;
-        let getEditorsStub;
 
         test('should fetch metadata if the feature is enabled and can have the sidebar', () => {
+            const getMetadata = jest.fn();
+            const getMetadataAPI = jest.fn().mockReturnValueOnce({
+                getMetadata,
+            });
+
             wrapper = getWrapper({ metadataSidebarProps: { isFeatureEnabled: false } });
+            wrapper.setState({ file });
             instance = wrapper.instance();
-            getEditorsStub = jest.fn();
-            instance.api = {
-                getMetadataAPI: () => ({
-                    getEditors: getEditorsStub,
-                }),
-                destroy: jest.fn(),
-            };
+            instance.api = { getMetadataAPI };
 
             SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
 
             instance.fetchMetadata();
 
-            expect(getEditorsStub).toBeCalled();
+            expect(SidebarUtils.canHaveMetadataSidebar).toBeCalledWith(instance.props);
+            expect(getMetadataAPI).toBeCalledWith(true);
+            expect(getMetadata).toBeCalledWith(file, instance.fetchMetadataSuccessCallback, noop, false);
         });
 
         test('should not fetch metadata if the feature is enabled', () => {
+            const getMetadata = jest.fn();
+            const getMetadataAPI = jest.fn().mockReturnValueOnce({
+                getMetadata,
+            });
+
             wrapper = getWrapper({ metadataSidebarProps: { isFeatureEnabled: true } });
             instance = wrapper.instance();
-            getEditorsStub = jest.fn();
-            instance.api = {
-                getMetadataAPI: () => ({
-                    getEditors: getEditorsStub,
-                }),
-                destroy: jest.fn(),
-            };
+            instance.api = { getMetadataAPI };
 
             SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(true);
 
             instance.fetchMetadata();
 
-            expect(getEditorsStub).not.toBeCalled();
+            expect(SidebarUtils.canHaveMetadataSidebar).not.toBeCalled();
+            expect(getMetadataAPI).not.toBeCalled();
+            expect(getMetadata).not.toBeCalled();
         });
 
         test('should not fetch the metadata if we cannot have the sidebar', () => {
+            const getMetadata = jest.fn();
+            const getMetadataAPI = jest.fn().mockReturnValueOnce({
+                getMetadata,
+            });
+
             wrapper = getWrapper({ metadataSidebarProps: { isFeatureEnabled: false } });
             instance = wrapper.instance();
-            getEditorsStub = jest.fn();
-            instance.api = {
-                getMetadataAPI: () => ({
-                    getEditors: getEditorsStub,
-                }),
-                destroy: jest.fn(),
-            };
+            instance.api = { getMetadataAPI };
 
             SidebarUtils.canHaveMetadataSidebar = jest.fn().mockReturnValueOnce(false);
 
             instance.fetchMetadata();
 
-            expect(getEditorsStub).not.toBeCalled();
+            expect(SidebarUtils.canHaveMetadataSidebar).toBeCalledWith(instance.props);
+            expect(getMetadataAPI).not.toBeCalled();
+            expect(getMetadata).not.toBeCalled();
         });
     });
 });

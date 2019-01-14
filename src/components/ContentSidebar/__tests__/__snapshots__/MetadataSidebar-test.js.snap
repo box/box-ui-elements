@@ -49,6 +49,46 @@ exports[`components/ContentSidebar/Metadata/MetadataSidebar should render Metada
 </SidebarContent>
 `;
 
+exports[`components/ContentSidebar/Metadata/MetadataSidebar should render Metadata sidebar component with template add dropdown 1`] = `
+<SidebarContent
+  actions={
+    <TemplateDropdown
+      hasTemplates={false}
+      isDropdownBusy={false}
+      onAdd={[Function]}
+      templates={Array []}
+      usedTemplates={
+        Array [
+          undefined,
+        ]
+      }
+    />
+  }
+  title={
+    <FormattedMessage
+      defaultMessage="Metadata"
+      id="be.sidebarMetadataTitle"
+    />
+  }
+>
+  <LoadingIndicatorWrapper
+    className="metadata-instance-editor"
+    isLoading={false}
+  >
+    <Instances
+      editors={
+        Array [
+          Object {},
+        ]
+      }
+      onModification={[Function]}
+      onRemove={[Function]}
+      onSave={[Function]}
+    />
+  </LoadingIndicatorWrapper>
+</SidebarContent>
+`;
+
 exports[`components/ContentSidebar/Metadata/MetadataSidebar should render error when there was an error 1`] = `
 <SidebarContent
   actions={null}
@@ -62,16 +102,27 @@ exports[`components/ContentSidebar/Metadata/MetadataSidebar should render error 
   <InlineError
     title={
       <FormattedMessage
-        defaultMessage="Metadata Error"
-        id="be.sidebarMetadataErrorTitle"
+        defaultMessage="Error"
+        id="be.error"
       />
     }
   >
-    <FormattedMessage
-      defaultMessage="An error has occurred while editing metadata. Please refresh the page and try again."
-      id="be.sidebarMetadataErrorContent"
-    />
+    <FormattedMessage />
   </InlineError>
+</SidebarContent>
+`;
+
+exports[`components/ContentSidebar/Metadata/MetadataSidebar should render loading indicator component when file is not available 1`] = `
+<SidebarContent
+  actions={null}
+  title={
+    <FormattedMessage
+      defaultMessage="Metadata"
+      id="be.sidebarMetadataTitle"
+    />
+  }
+>
+  <LoadingIndicator />
 </SidebarContent>
 `;
 

@@ -20,13 +20,7 @@ exports[`components/ContentSidebar/Sidebar should render details sidebar 1`] = `
 
 exports[`components/ContentSidebar/Sidebar should render metadata sidebar 1`] = `
 <Fragment>
-  <MetadataSidebar
-    file={
-      Object {
-        "id": "id",
-      }
-    }
-  />
+  <MetadataSidebar />
 </Fragment>
 `;
 
