@@ -46,9 +46,9 @@ class ErrorBoundary extends React.Component<Props, State> {
     /**
      * Formats the error and emits it to the top level onError prop
      *
-     * @param {Error} e - the error which occured
-     * @param {string} type - the error type to identify where the error occured
-     * @param {string} code - the error code to identify what error occured
+     * @param {Error} error - the error which occurred
+     * @param {string} type - the error type to identify where the error occurred
+     * @param {string} code - the error code to identify what error occurred
      * @param {Object} contextInfo - additional information which may be useful for the consumer of the error
      * @return {void}
      */

@@ -118,6 +118,42 @@ describe('api/Base', () => {
         });
     });
 
+    describe('errorCallback()', () => {
+        beforeEach(() => {
+            base.errorCallback = jest.fn();
+            base.isDestroyed = jest.fn().mockReturnValue(false);
+            base.errorCode = 1;
+        });
+
+        test('should do nothing if destroyed', () => {
+            base.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            base.errorHandler(new Error());
+            expect(base.errorCallback).not.toBeCalled();
+        });
+        test('should call the error callback with the response data if present', () => {
+            base.errorCallback = jest.fn();
+            const error = {
+                response: {
+                    data: 'foo',
+                },
+            };
+
+            base.errorHandler(error);
+            expect(base.errorCallback).toBeCalledWith('foo', 1);
+        });
+        test('should call the error callback with the whole error if the response data is not present', () => {
+            base.errorCallback = jest.fn();
+            const error = {
+                customStuff: {
+                    data: 'foo',
+                },
+            };
+
+            base.errorHandler(error);
+            expect(base.errorCallback).toBeCalledWith(error, 1);
+        });
+    });
+
     describe('get()', () => {
         test('should make a correct GET request', () => {
             const id = 'id';
