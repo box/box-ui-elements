@@ -1,29 +1,33 @@
 import LocalStore from '../LocalStore';
 
-const localStorageMock = (() => {
-    const store = {};
-    return {
-        getItem(key) {
-            return store[key];
-        },
-        setItem(key, value) {
-            store[key] = value.toString();
-        },
-        removeItem(key) {
-            delete store[key];
-        },
-    };
-})();
-
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
-
 describe('util/LocalStore', () => {
     let localStore;
+    let originalLocalStorage;
     const key = 'randomKey';
     const value = '{"hi": 1}';
 
+    beforeAll(() => {
+        originalLocalStorage = window.localStorage;
+        delete window.localStorage;
+        Object.defineProperty(window, 'localStorage', {
+            writable: true,
+            value: {
+                getItem: jest.fn().mockName('getItem'),
+                removeItem: jest.fn().mockName('removeItem'),
+                setItem: jest.fn().mockName('setItem'),
+            },
+        });
+    });
+
     beforeEach(() => {
+        localStorage.getItem.mockClear();
+        localStorage.removeItem.mockClear();
+        localStorage.setItem.mockClear();
         localStore = new LocalStore();
+    });
+
+    afterAll(() => {
+        Object.defineProperty(window, 'localStorage', { writable: true, value: originalLocalStorage });
     });
 
     describe('setItem()', () => {
