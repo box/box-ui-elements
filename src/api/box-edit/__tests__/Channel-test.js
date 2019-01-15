@@ -4,18 +4,18 @@ import CONSTANTS from '../constants';
 const APP_NAME = 'dummy';
 
 describe('lib/box-edit/Channel', () => {
-    afterEach(() => {
-        jest.restoreAllMocks();
-    });
-
     describe('buildNextRequestID()', () => {
         test('should return a string that contains performance.now', () => {
-            window.performance = {
-                now: jest.fn().mockReturnValue('foo'),
-            };
             const expected = `${CONSTANTS.REQUEST_ID_PRE}foo`;
-
             const channel = new Channel(APP_NAME);
+
+            // Replace global instance of window with mock to avoid side effects
+            channel.window = {
+                performance: {
+                    now: jest.fn().mockReturnValue('foo'),
+                },
+            };
+
             const result = channel.buildNextRequestID();
 
             expect(result).toEqual(expected);
