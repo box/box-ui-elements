@@ -17,8 +17,8 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import type { InjectIntlProvidedProps } from 'react-intl';
 
-import messages from '../../../messages';
-import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../../interactionTargets';
+import messages from '../../../common/messages';
+import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
 
 import './TaskForm.scss';
 
