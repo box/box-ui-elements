@@ -7,7 +7,7 @@
 import noop from 'lodash/noop';
 import setProp from 'lodash/set';
 import Base from './Base';
-import { getBadItemError, getBadPermissionsError } from '../util/error';
+import { getBadItemError, getBadPermissionsError } from '../utils/error';
 import {
     ACCESS_NONE,
     CACHE_PREFIX_SEARCH,

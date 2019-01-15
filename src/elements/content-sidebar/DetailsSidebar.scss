@@ -1,0 +1,23 @@
+@import '../common/variables';
+
+.be.bcs.bcs-details {
+    .bcs-scroll-content {
+        padding-top: 15px;
+    }
+
+    .item-properties dd {
+        margin-left: 0;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .bcs-details-content {
+        margin: 0 8px 20px 0;
+    }
+
+    .bcs-details-content:empty {
+        margin: 0;
+    }
+}

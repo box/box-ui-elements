@@ -1,6 +1,6 @@
-import * as func from '../../../util/function';
-import * as webcrypto from '../../../util/webcrypto';
-import * as uploadUtil from '../../../util/uploads';
+import * as func from '../../../utils/function';
+import * as webcrypto from '../../../utils/webcrypto';
+import * as uploadUtil from '../../../utils/uploads';
 import MultiputUpload from '../MultiputUpload';
 import MultiputPart, {
     PART_STATE_UPLOADED,

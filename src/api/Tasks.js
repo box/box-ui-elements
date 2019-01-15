@@ -13,7 +13,7 @@ import {
     ERROR_CODE_FETCH_TASK_ASSIGNMENT,
     ERROR_CODE_FETCH_TASKS,
 } from '../constants';
-import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../util/fields';
+import { TASKS_FIELDS_TO_FETCH, TASK_ASSIGNMENTS_FIELDS_TO_FETCH } from '../utils/fields';
 
 class Tasks extends Base {
     /**

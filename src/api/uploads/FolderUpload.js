@@ -11,7 +11,7 @@ import {
     getFileAPIOptions,
     getDataTransferItem,
     getDataTransferItemAPIOptions,
-} from '../../util/uploads';
+} from '../../utils/uploads';
 
 const PATH_DELIMITER = '/';
 

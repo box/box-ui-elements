@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/Sidebar should render activity sidebar 1`] = `
+<Fragment>
+  <ActivitySidebar
+    file={
+      Object {
+        "id": "id",
+      }
+    }
+  />
+</Fragment>
+`;
+
+exports[`elements/content-sidebar/Sidebar should render details sidebar 1`] = `
+<Fragment>
+  <DetailsSidebar />
+</Fragment>
+`;
+
+exports[`elements/content-sidebar/Sidebar should render metadata sidebar 1`] = `
+<Fragment>
+  <MetadataSidebar />
+</Fragment>
+`;
+
+exports[`elements/content-sidebar/Sidebar should render no sidebar 1`] = `<Fragment />`;
+
+exports[`elements/content-sidebar/Sidebar should render skills sidebar 1`] = `
+<Fragment>
+  <SkillsSidebar
+    file={
+      Object {
+        "id": "id",
+      }
+    }
+    key="id"
+  />
+</Fragment>
+`;
