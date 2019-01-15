@@ -189,7 +189,7 @@ class Base {
         if (!this.isDestroyed() && typeof this.errorCallback === 'function') {
             const { response } = error;
 
-            if (response) {
+            if (response && response.data) {
                 this.errorCallback(response.data, this.errorCode);
             } else {
                 this.errorCallback(error, this.errorCode);
