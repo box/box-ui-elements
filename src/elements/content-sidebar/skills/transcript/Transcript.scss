@@ -1,0 +1,52 @@
+@import '../../../common/variables';
+
+.be-transcript {
+    position: relative;
+
+    .be-transcript-actions {
+        position: absolute;
+        right: 15px;
+        top: -46px;
+    }
+
+    .btn-plain.be-transcript-edit,
+    .btn-plain.be-transcript-copy,
+    .btn-plain.be-transcript-expand {
+        border-radius: 3px;
+        height: 24px;
+        margin-left: 7px;
+        padding-top: 1px;
+        width: 24px;
+
+        &:hover svg path {
+            fill: $twos;
+        }
+
+        &.be-transcript-is-editing {
+            background-color: $off-white;
+
+            .icon-edit > .fill-color {
+                fill: $fivef;
+            }
+        }
+    }
+
+    .btn-plain.be-transcript-copy.be-transcript-copied {
+        background-color: $off-white;
+        transition: background-color 1s;
+
+        svg path {
+            fill: $thats-mint;
+        }
+    }
+
+    .be-transcript-edit-message {
+        color: $sevens;
+        margin-bottom: 15px;
+    }
+
+    .be-transcript-content-collapsed {
+        max-height: 400px;
+        overflow: auto;
+    }
+}

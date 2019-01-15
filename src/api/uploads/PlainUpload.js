@@ -6,8 +6,8 @@
 
 import noop from 'lodash/noop';
 import BaseUpload from './BaseUpload';
-import { digest } from '../../util/webcrypto';
-import { getFileLastModifiedAsISONoMSIfPossible } from '../../util/uploads';
+import { digest } from '../../utils/webcrypto';
+import { getFileLastModifiedAsISONoMSIfPossible } from '../../utils/uploads';
 
 const CONTENT_MD5_HEADER = 'Content-MD5';
 

@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`components/ErrorBoundary render() should render the wrapped component when no error is thrown 1`] = `
-<WrappedComponent
-  onError={[Function]}
-/>
-`;

@@ -8,9 +8,9 @@ import Base from './Base';
 import FileAPI from './File';
 import FolderAPI from './Folder';
 import WebLinkAPI from './WebLink';
-import flatten from '../util/flatten';
-import { getBadItemError } from '../util/error';
-import { FOLDER_FIELDS_TO_FETCH } from '../util/fields';
+import flatten from '../utils/flatten';
+import { getBadItemError } from '../utils/error';
+import { FOLDER_FIELDS_TO_FETCH } from '../utils/fields';
 import { DEFAULT_ROOT, CACHE_PREFIX_RECENTS, FIELD_DATE, SORT_DESC, ERROR_CODE_FETCH_RECENTS } from '../constants';
 
 class Recents extends Base {

@@ -1,5 +1,5 @@
 import APIFactory from '../APIFactory';
-import Cache from '../../util/Cache';
+import Cache from '../../utils/Cache';
 import ChunkedUploadAPI from '../uploads/MultiputUpload';
 import PlainUploadAPI from '../uploads/PlainUpload';
 import FolderAPI from '../Folder';

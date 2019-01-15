@@ -24,12 +24,12 @@ const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
 const Translations = new TranslationsPlugin();
 const entries = {
-    picker: path.resolve('src/wrappers/ContentPickers.js'),
-    uploader: path.resolve('src/wrappers/ContentUploader.js'),
-    explorer: path.resolve('src/wrappers/ContentExplorer.js'),
-    preview: path.resolve('src/wrappers/ContentPreview.js'),
-    sidebar: path.resolve('src/wrappers/ContentSidebar.js'),
-    openwith: path.resolve('src/wrappers/ContentOpenWith.js'),
+    picker: path.resolve('src/elements/wrappers/ContentPickers.js'),
+    uploader: path.resolve('src/elements/wrappers/ContentUploader.js'),
+    explorer: path.resolve('src/elements/wrappers/ContentExplorer.js'),
+    preview: path.resolve('src/elements/wrappers/ContentPreview.js'),
+    sidebar: path.resolve('src/elements/wrappers/ContentSidebar.js'),
+    openwith: path.resolve('src/elements/wrappers/ContentOpenWith.js'),
 };
 const entriesToBuild =
     typeof process.env.ENTRY === 'string'
@@ -54,7 +54,7 @@ function getConfig(isReactExternalized) {
                 'react-intl-locale-data': path.resolve(`node_modules/react-intl/locale-data/${locale}`),
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
                 'box-react-ui-locale-data': path.resolve(`node_modules/box-react-ui/i18n/${language}`),
-                moment: path.resolve('src/util/MomentShim'), // Hack to leverage Intl instead
+                moment: path.resolve('src/utils/MomentShim'), // Hack to leverage Intl instead
             },
         },
         devServer: {

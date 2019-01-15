@@ -4,7 +4,7 @@
  * @author Box
  */
 import Base from './Base';
-import { getTypedFileId } from '../util/file';
+import { getTypedFileId } from '../utils/file';
 import { DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
 
 type Params = {

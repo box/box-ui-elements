@@ -1,0 +1,116 @@
+@import '../../../common/variables';
+
+.be .bcs-activity-feed {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    width: $sidebarContentWidth;
+
+    ol,
+    ul {
+        list-style: none;
+    }
+
+    li {
+        line-height: 20px;
+    }
+
+    .bcs-activity-feed-items-container {
+        align-items: center;
+        display: flex;
+        flex: 1 1;
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        position: relative;
+
+        > .inline-alert-error {
+            margin: 9px 20px;
+        }
+
+        .bcs-version-item {
+            &:first-child .bcs-version {
+                margin-top: 0;
+            }
+        }
+
+        .bcs-activity-feed-task,
+        .bcs-activity-feed-comment {
+            border-bottom: 1px solid $ffive;
+            margin-top: 20px;
+            padding-bottom: 20px;
+
+            &:first-child .bcs-comment {
+                margin-top: 0;
+            }
+        }
+
+        .bcs-activity-feed-task {
+            padding-bottom: 28px;
+        }
+    }
+
+    .bcs-activity-feed-active-state {
+        padding: 9px 25px;
+        width: 100%;
+
+        > li:last-child {
+            margin-bottom: 10px;
+        }
+    }
+
+    .bcs-activity-feed-empty-state {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+
+        .bcs-empty-state-cta {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+
+            aside {
+                margin-top: 6px;
+                text-align: center;
+                width: 200px;
+            }
+        }
+
+        .bcs-activity-feed-empty-state-illustration {
+            margin-bottom: 15px;
+            margin-top: 60px;
+        }
+    }
+
+    .bcs-activity-feed-comment-input {
+        background-color: $white;
+        margin-bottom: 4px;
+        max-height: 500px;
+        min-height: 93px;
+        overflow: hidden;
+
+        &.bcs-is-disabled {
+            opacity: .4;
+            pointer-events: none;
+        }
+
+        .selector-dropdown-wrapper {
+            width: 100%;
+            // Override z index to prevent a new stacking context under the approval comment form
+            z-index: auto;
+        }
+
+        .overlay {
+            max-height: 95px;
+            overflow: auto;
+        }
+    }
+
+    .bcs-comment-add-approver-fields-container {
+        .overlay {
+            max-height: 140px;
+            overflow: auto;
+        }
+    }
+}

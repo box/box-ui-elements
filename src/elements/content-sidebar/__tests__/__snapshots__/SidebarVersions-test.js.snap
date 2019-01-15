@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/SidebarVersions should not render the versions when file is a box note 1`] = `""`;
+
+exports[`elements/content-sidebar/SidebarVersions should not render the versions when version_number <= 1 1`] = `""`;
+
+exports[`elements/content-sidebar/SidebarVersions should not render the versions when version_number is falsy 1`] = `""`;
+
+exports[`elements/content-sidebar/SidebarVersions should not render the versions when version_number is undefined 1`] = `""`;
+
+exports[`elements/content-sidebar/SidebarVersions should render the versions when version_number > 1 1`] = `
+<VersionHistoryLink
+  className=""
+  data-resin-target="versionhistory"
+  versionCount={2}
+/>
+`;

@@ -1,0 +1,30 @@
+@import '../common/variables';
+
+$sidebarTabsWidth: 60px;
+$sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
+
+.be {
+    &.bcs {
+        background-color: $haze;
+        display: flex;
+        max-width: $sidebarWidth;
+        min-width: $sidebarTabsWidth;
+        width: auto;
+    }
+
+    .bcs-loading {
+        align-items: center;
+        display: flex;
+        flex: 1;
+        font-size: 0;
+        margin: 0 auto;
+        white-space: nowrap;
+        width: 10px;
+    }
+
+    &.bcs-is-open {
+        .bcs-loading {
+            width: $sidebarWidth;
+        }
+    }
+}

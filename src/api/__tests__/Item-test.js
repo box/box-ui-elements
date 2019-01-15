@@ -1,6 +1,6 @@
 import noop from 'lodash/noop';
 import Item from '../Item';
-import Cache from '../../util/Cache';
+import Cache from '../../utils/Cache';
 
 let item;
 let file;
