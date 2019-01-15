@@ -7,6 +7,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
+import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
 import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
 import EmptyContent from 'box-react-ui/lib/features/metadata-instance-editor/EmptyContent';
@@ -28,7 +29,6 @@ import {
     FIELD_PERMISSIONS_CAN_UPLOAD,
     IS_ERROR_DISPLAYED,
     ORIGIN_METADATA_SIDEBAR,
-    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
 } from '../../constants';
 import './MetadataSidebar.scss';
 
@@ -44,7 +44,7 @@ type Props = {
     api: API,
 } & PropsWithoutContext &
     ErrorContextProps &
-    ElementsMetricCallback;
+    WithLoggerProps;
 
 type State = {
     editors?: Array<MetadataEditor>,
@@ -63,19 +63,13 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
     static defaultProps = {
         isFeatureEnabled: true,
-        onMetric: noop,
     };
 
     constructor(props: Props) {
         super(props);
-        this.props.onMetric(
-            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-            {
-                startMarkName: null, // TODO: replace with actual start mark once code splitting implemented
-                endMarkName: MARK_NAME_JS_READY,
-            },
-            EVENT_JS_READY,
-        );
+        this.props.logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
     }
 
     componentDidMount() {
@@ -423,6 +417,6 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
 export type MetadataSidebarProps = ExternalProps;
 export { MetadataSidebar as MetadataSidebarComponent };
-export default withLogger(ORIGIN_METADATA_SIDEBAR)(
-    withErrorBoundary(ORIGIN_METADATA_SIDEBAR)(withAPIContext(MetadataSidebar)),
+export default flow([withLogger(ORIGIN_METADATA_SIDEBAR), withErrorBoundary(ORIGIN_METADATA_SIDEBAR), withAPIContext])(
+    MetadataSidebar,
 );

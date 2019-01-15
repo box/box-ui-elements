@@ -43,8 +43,6 @@ import {
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
-    METRIC_TYPE_PREVIEW_METRIC,
-    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
 } from '../../constants';
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -84,7 +82,7 @@ type Props = {
     token: Token,
     useHotkeys: boolean,
 } & ErrorContextProps &
-    ElementsMetricCallback;
+    WithLoggerProps;
 
 type State = {
     file?: BoxItem,
@@ -182,7 +180,6 @@ class ContentPreview extends PureComponent<Props, State> {
         onDownload: noop,
         onError: noop,
         onLoad: noop,
-        onMetric: noop,
         onNavigate: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: true,
@@ -235,13 +232,9 @@ class ContentPreview extends PureComponent<Props, State> {
             currentFileId: fileId,
             prevFileIdProp: fileId,
         };
-        this.props.onMetric(
-            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-            {
-                endMarkName: MARK_NAME_JS_READY,
-            },
-            EVENT_JS_READY,
-        );
+        this.props.logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
     }
 
     /**
@@ -528,7 +521,6 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onPreviewMetric = (previewMetrics: PreviewMetrics): void => {
-        const { onMetric }: Props = this.props;
         const { event_name } = previewMetrics;
         let metrics = {
             ...previewMetrics,
@@ -552,7 +544,7 @@ class ContentPreview extends PureComponent<Props, State> {
             };
         }
 
-        onMetric(METRIC_TYPE_PREVIEW_METRIC, metrics);
+        this.props.logger.onPreviewMetric(metrics);
     };
 
     /**

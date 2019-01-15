@@ -9,6 +9,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import SidebarNav from './SidebarNav';
@@ -26,7 +27,6 @@ import {
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
     ORIGIN_CONTENT_SIDEBAR,
-    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
 } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import SidebarUtils from './SidebarUtils';
@@ -65,7 +65,7 @@ type Props = {
     sharedLinkPassword?: string,
     token: Token,
 } & ErrorContextProps &
-    ElementsMetricCallback;
+    WithLoggerProps;
 
 type State = {
     file?: BoxItem,
@@ -100,7 +100,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         hasMetadata: false,
         hasSkills: false,
         isLarge: true,
-        onMetric: noop,
         metadataSidebarProps: {},
     };
 
@@ -138,13 +137,9 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
         this.state = { isLoading: true, isOpen: !!isLarge };
         /* eslint-disable react/prop-types */
-        this.props.onMetric(
-            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-            {
-                endMarkName: MARK_NAME_JS_READY,
-            },
-            EVENT_JS_READY,
-        );
+        this.props.logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
         /* eslint-enable react/prop-types */
     }
 
@@ -443,4 +438,4 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
-export default withLogger(ORIGIN_CONTENT_SIDEBAR)(withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)(ContentSidebar));
+export default flow([withLogger(ORIGIN_CONTENT_SIDEBAR), withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)])(ContentSidebar);

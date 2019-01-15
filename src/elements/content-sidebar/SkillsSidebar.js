@@ -8,14 +8,10 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
+import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import { EVENT_JS_READY } from '../common/logger/constants';
-import {
-    FIELD_PERMISSIONS_CAN_UPLOAD,
-    SKILLS_TRANSCRIPT,
-    ORIGIN_SKILLS_SIDEBAR,
-    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-} from '../../constants';
+import { FIELD_PERMISSIONS_CAN_UPLOAD, SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -34,7 +30,7 @@ type PropsWithoutContext = {
 type Props = {
     api: API,
 } & PropsWithoutContext &
-    ElementsMetricCallback;
+    WithLoggerProps;
 
 type State = {
     cards?: Array<SkillCard>,
@@ -50,20 +46,11 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
         errors: {},
     };
 
-    static defaultProps = {
-        onMetric: noop,
-    };
-
     constructor(props: Props) {
         super(props);
-        this.props.onMetric(
-            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-            {
-                startMarkName: null, // TODO: replace with actual start mark once code splitting implemented
-                endMarkName: MARK_NAME_JS_READY,
-            },
-            EVENT_JS_READY,
-        );
+        this.props.logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
     }
 
     componentDidMount() {
@@ -261,6 +248,6 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
 }
 
 export { SkillsSidebar as SkillsSidebarComponent };
-export default withLogger(ORIGIN_SKILLS_SIDEBAR)(
-    withErrorBoundary(ORIGIN_SKILLS_SIDEBAR)(withAPIContext(SkillsSidebar)),
+export default flow([withLogger(ORIGIN_SKILLS_SIDEBAR), withErrorBoundary(ORIGIN_SKILLS_SIDEBAR), withAPIContext])(
+    SkillsSidebar,
 );

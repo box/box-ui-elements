@@ -691,7 +691,7 @@ type ErrorResponseData = {
 
 type ElementsXhrError = $AxiosError<any> | ErrorResponseData;
 
-type ElementsOrigins =
+type ElementOrigin =
     | typeof ORIGIN_CONTENT_SIDEBAR
     | typeof ORIGIN_CONTENT_PREVIEW
     | typeof ORIGIN_PREVIEW
@@ -704,12 +704,12 @@ type ElementsError = {
     type: 'error',
     code: string,
     message: string,
-    origin: ElementsOrigins,
+    origin: ElementOrigin,
     context_info: Object,
 };
 
 type ErrorContextProps = {
-    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin: ElementsOrigins) => void,
+    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin: ElementOrigin) => void,
 };
 
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
@@ -718,11 +718,21 @@ type ClassificationInfo = {
     Box__Security__Classification__Key?: string,
 } & MetadataInstance;
 
-type MetricTypes =
+type MetricType =
     | typeof METRIC_TYPE_PREVIEW_METRIC
     | typeof METRIC_TYPE_ELEMENTS_LOAD_METRIC
     | typeof METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
 
-type ElementsMetricCallback = {
-    onMetric: (type: MetricTypes, data: Object, name?: string, isUnique?: boolean) => void,
+type ElementsLoadMetricData = {
+    startMarkName?: string,
+    endMarkName: string,
+};
+
+type LoggerProps = {
+    onPreviewMetric: (data: Object) => void,
+    onReadyMetric: (data: ElementsLoadMetricData) => void,
+};
+
+type WithLoggerProps = {
+    logger: LoggerProps,
 };

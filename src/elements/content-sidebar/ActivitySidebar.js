@@ -7,6 +7,7 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
+import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './activity-feed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
@@ -16,7 +17,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { getBadUserError, getBadItemError } from '../../utils/error';
 import { EVENT_JS_READY } from '../common/logger/constants';
-import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../constants';
+import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
 import './ActivitySidebar.scss';
 
@@ -37,7 +38,7 @@ type PropsWithoutContext = {
     isDisabled?: boolean,
     onVersionHistoryClick?: Function,
 } & ExternalProps &
-    ElementsMetricCallback;
+    WithLoggerProps;
 
 type Props = {
     api: API,
@@ -65,22 +66,13 @@ const MARK_NAME_JS_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_JS_READY}`;
 window.performance.mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
-    static defaultProps = {
-        onMetric: noop,
-    };
-
     state = {};
 
     constructor(props: Props) {
         super(props);
-        this.props.onMetric(
-            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-            {
-                startMarkName: null, // TODO: replace with actual start mark once code splitting implemented
-                endMarkName: MARK_NAME_JS_READY,
-            },
-            EVENT_JS_READY,
-        );
+        this.props.logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
     }
 
     componentDidMount() {
@@ -491,6 +483,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default withLogger(ORIGIN_ACTIVITY_SIDEBAR)(
-    withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR)(withAPIContext(ActivitySidebar)),
+export default flow([withLogger(ORIGIN_ACTIVITY_SIDEBAR), withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR), withAPIContext])(
+    ActivitySidebar,
 );
