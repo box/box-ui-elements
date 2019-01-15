@@ -11,7 +11,8 @@ import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS } from '../../../constants
 import messages from '../../common/messages';
 
 describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
-    const getWrapper = (props, options) => shallow(<MetadataSidebar {...props} />, options);
+    const getWrapper = (props, options) =>
+        shallow(<MetadataSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
 
     test('should render Metadata sidebar component when instances and templates are available', () => {
         const getFile = jest.fn();

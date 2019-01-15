@@ -6,7 +6,8 @@ import { SkillsSidebarComponent as SkillsSidebar } from '../SkillsSidebar';
 import SidebarSkills from '../skills/SidebarSkills';
 
 describe('elements/content-sidebar/Skills/SkillsSidebar', () => {
-    const getWrapper = (props, options) => shallow(<SkillsSidebar {...props} />, options);
+    const getWrapper = (props, options) =>
+        shallow(<SkillsSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
 
     test('should render skills sidebar component when cards are available', () => {
         const getSkills = jest.fn();

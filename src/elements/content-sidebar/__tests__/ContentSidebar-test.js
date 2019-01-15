@@ -14,7 +14,10 @@ const file = {
 
 describe('elements/content-sidebar/ContentSidebar', () => {
     let rootElement;
-    const getWrapper = props => mount(<ContentSidebar {...props} />, { attachTo: rootElement });
+    const getWrapper = props =>
+        mount(<ContentSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, {
+            attachTo: rootElement,
+        });
 
     beforeEach(() => {
         SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);

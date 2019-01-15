@@ -6,7 +6,6 @@ import PreviewLoading from '../PreviewLoading';
 import * as TokenService from '../../../utils/TokenService';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
-import { METRIC_TYPE_PREVIEW_METRIC } from '../../../constants';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
 
@@ -14,7 +13,8 @@ let props;
 let file;
 
 describe('elements/content-preview/ContentPreview', () => {
-    const getWrapper = props => shallow(<ContentPreview {...props} />);
+    const getWrapper = props =>
+        shallow(<ContentPreview logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }} {...props} />);
 
     const PERFORMANCE_TIME = 100;
     beforeEach(() => {
@@ -553,8 +553,9 @@ describe('elements/content-preview/ContentPreview', () => {
     });
 
     describe('onPreviewMetric()', () => {
+        let wrapper;
         let instance;
-        let onMetric;
+        let onPreviewMetric;
         const data = {
             foo: 'bar',
             file_info_time: 0,
@@ -566,22 +567,20 @@ describe('elements/content-preview/ContentPreview', () => {
         const FETCHING_TIME = 20;
 
         beforeEach(() => {
-            onMetric = jest.fn();
             props = {
                 token: 'token',
-                fileId: file.id,
-                onMetric,
+                fileId: '123',
             };
-            const wrapper = getWrapper(props);
+            wrapper = getWrapper(props);
             instance = wrapper.instance();
             instance.getTotalFileFetchTime = jest.fn().mockReturnValue(FETCHING_TIME);
-            onMetric.mockReset();
+            ({ onPreviewMetric } = instance.props.logger);
         });
 
         test('should add in the total file fetching time to load events', () => {
             data.event_name = 'load';
             instance.onPreviewMetric(data);
-            expect(onMetric).toBeCalledWith(METRIC_TYPE_PREVIEW_METRIC, {
+            expect(onPreviewMetric).toBeCalledWith({
                 ...data,
                 file_info_time: FETCHING_TIME,
                 value: data.value + FETCHING_TIME,
@@ -593,7 +592,7 @@ describe('elements/content-preview/ContentPreview', () => {
             data.value = 0;
             instance.getTotalFileFetchTime = jest.fn().mockReturnValue(0);
             instance.onPreviewMetric(data);
-            expect(onMetric).not.toBeCalled();
+            expect(onPreviewMetric).not.toBeCalled();
         });
     });
 

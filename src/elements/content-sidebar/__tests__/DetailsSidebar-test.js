@@ -22,7 +22,16 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     let setFileDescription;
     const onError = jest.fn();
     const getWrapper = (props, options) =>
-        shallow(<DetailsSidebar fileId={file.id} api={api} onError={onError} {...props} />, options);
+        shallow(
+            <DetailsSidebar
+                fileId={file.id}
+                api={api}
+                onError={onError}
+                logger={{ onReadyMetric: jest.fn() }}
+                {...props}
+            />,
+            options,
+        );
 
     beforeEach(() => {
         getFile = jest.fn().mockResolvedValue(file);
