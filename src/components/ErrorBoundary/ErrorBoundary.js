@@ -11,7 +11,7 @@ import DefaultError from './DefaultError';
 
 type Props = {
     errorComponent: React.Element,
-    errorOrigin: ErrorOrigins,
+    errorOrigin: ElementsOrigins,
     children: React.ChildrenArray<React.Element<any>>,
     onError: (error: ElementsError) => void,
 };
@@ -56,7 +56,7 @@ class ErrorBoundary extends React.Component<Props, State> {
         error: ElementsXhrError | Error,
         code: string,
         contextInfo: Object = {},
-        origin: ErrorOrigins = this.props.errorOrigin,
+        origin: ElementsOrigins = this.props.errorOrigin,
     ) => {
         if (!error || !code || !origin) {
             return;

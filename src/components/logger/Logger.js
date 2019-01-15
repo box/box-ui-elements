@@ -4,7 +4,7 @@ import noop from 'lodash/noop';
 import { METRIC_TYPE_PREVIEW_METRIC, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../constants';
 
 type ElementsMetric = {
-    component: MetricSources,
+    component: ElementsOrigins,
     endMarkName: string,
     name: string,
     sessionId: string,
@@ -16,7 +16,7 @@ type Props = {
     fileId?: string,
     onMetric: (data: Object) => void,
     children: React.ChildrenArray<React.Element<any>>,
-    source: MetricSources,
+    source: ElementsOrigins,
 };
 
 /**
@@ -42,23 +42,20 @@ function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generateRandom);
 }
 
+const SESSION_ID = uuidv4();
+const uniqueEvents: Set<string> = new Set();
+
 class Logger extends React.Component<Props> {
-    uniqueEventsSet: Set<string>;
-
-    sessionId: string;
-
     static defaultProps = {
         onMetric: noop,
     };
 
-    constructor(props: Props) {
-        super(props);
-        this.uniqueEventsSet = new Set();
-        this.sessionId = uuidv4();
+    get uniqueEvents(): Set<string> {
+        return uniqueEvents;
     }
 
-    get uniqueEvents(): Set<string> {
-        return this.uniqueEventsSet;
+    get sessionId(): string {
+        return SESSION_ID;
     }
 
     /**

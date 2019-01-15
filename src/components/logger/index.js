@@ -1,3 +1,3 @@
 // @flow
-export { default as withLoggerContext } from './withLogger';
+export { default as withLogger } from './withLogger';
 export { default } from './Logger';

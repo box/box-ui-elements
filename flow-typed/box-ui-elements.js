@@ -691,25 +691,25 @@ type ErrorResponseData = {
 
 type ElementsXhrError = $AxiosError<any> | ErrorResponseData;
 
-type ErrorOrigins =
-    | ORIGIN_CONTENT_SIDEBAR
-    | ORIGIN_CONTENT_PREVIEW
-    | ORIGIN_PREVIEW
-    | ORIGIN_DETAILS_SIDEBAR
-    | ORIGIN_ACTIVITY_SIDEBAR
-    | ORIGIN_SKILLS_SIDEBAR
-    | ORIGIN_METADATA_SIDEBAR;
+type ElementsOrigins =
+    | typeof ORIGIN_CONTENT_SIDEBAR
+    | typeof ORIGIN_CONTENT_PREVIEW
+    | typeof ORIGIN_PREVIEW
+    | typeof ORIGIN_DETAILS_SIDEBAR
+    | typeof ORIGIN_ACTIVITY_SIDEBAR
+    | typeof ORIGIN_SKILLS_SIDEBAR
+    | typeof ORIGIN_METADATA_SIDEBAR;
 
 type ElementsError = {
     type: 'error',
     code: string,
     message: string,
-    origin: ErrorOrigins,
+    origin: ElementsOrigins,
     context_info: Object,
 };
 
 type ErrorContextProps = {
-    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin: ErrorOrigins) => void,
+    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin: ElementsOrigins) => void,
 };
 
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
@@ -718,12 +718,10 @@ type ClassificationInfo = {
     Box__Security__Classification__Key?: string,
 } & MetadataInstance;
 
-type MetricSources = ErrorOrigins;
-
 type MetricTypes =
-    | METRIC_TYPE_PREVIEW_METRIC
-    | METRIC_TYPE_ELEMENTS_LOAD_METRIC
-    | METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
+    | typeof METRIC_TYPE_PREVIEW_METRIC
+    | typeof METRIC_TYPE_ELEMENTS_LOAD_METRIC
+    | typeof METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
 
 type ElementsMetricCallback = {
     onMetric: (type: MetricTypes, data: Object, name?: string, isUnique?: boolean) => void,
