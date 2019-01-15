@@ -100,6 +100,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         hasMetadata: false,
         hasSkills: false,
         isLarge: true,
+        onMetric: noop,
         metadataSidebarProps: {},
     };
 
@@ -136,6 +137,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         });
 
         this.state = { isLoading: true, isOpen: !!isLarge };
+        /* eslint-disable react/prop-types */
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
@@ -144,6 +146,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             EVENT_JS_READY,
             true,
         );
+        /* eslint-enable react/prop-types */
     }
 
     /**

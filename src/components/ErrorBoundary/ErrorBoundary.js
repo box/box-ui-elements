@@ -13,7 +13,7 @@ type Props = {
     errorComponent: React.Element,
     errorOrigin: ErrorOrigins,
     children: React.ChildrenArray<React.Element<any>>,
-    onError?: (error: ElementsError) => void,
+    onError: (error: ElementsError) => void,
 };
 
 type State = {

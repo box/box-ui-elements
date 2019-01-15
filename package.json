@@ -111,6 +111,7 @@
         "coverageDirectory": "<rootDir>/reports",
         "collectCoverageFrom": ["src/**/*.js", "!**/node_modules/**", "!**/__tests__/**"],
         "roots": ["src"],
+        "setupFiles": ["<rootDir>/conf/performance-mock.js"],
         "setupTestFrameworkScriptFile": "<rootDir>/conf/enzyme-adapter.js",
         "snapshotSerializers": ["enzyme-to-json/serializer"]
     },

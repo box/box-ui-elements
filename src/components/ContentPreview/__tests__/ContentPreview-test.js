@@ -6,6 +6,7 @@ import PreviewLoading from '../PreviewLoading';
 import * as TokenService from '../../../util/TokenService';
 import SidebarUtils from '../../ContentSidebar/SidebarUtils';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../../util/fields';
+import { METRIC_TYPE_PREVIEW_METRIC } from '../../../constants';
 
 jest.mock('../../Internationalize', () => 'mock-internationalize');
 
@@ -574,12 +575,13 @@ describe('components/ContentPreview/ContentPreview', () => {
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
             instance.getTotalFileFetchTime = jest.fn().mockReturnValue(FETCHING_TIME);
+            onMetric.mockReset();
         });
 
         test('should add in the total file fetching time to load events', () => {
             data.event_name = 'load';
             instance.onPreviewMetric(data);
-            expect(onMetric).toBeCalledWith({
+            expect(onMetric).toBeCalledWith(METRIC_TYPE_PREVIEW_METRIC, {
                 ...data,
                 file_info_time: FETCHING_TIME,
                 value: data.value + FETCHING_TIME,

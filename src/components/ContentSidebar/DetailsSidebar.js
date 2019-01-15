@@ -78,6 +78,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         hasVersions: false,
         onClassificationClick: noop,
         onError: noop,
+        onMetric: noop,
     };
 
     constructor(props: Props) {

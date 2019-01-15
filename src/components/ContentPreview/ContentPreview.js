@@ -182,6 +182,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onDownload: noop,
         onError: noop,
         onLoad: noop,
+        onMetric: noop,
         onNavigate: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: true,

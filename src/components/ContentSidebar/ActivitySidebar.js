@@ -65,6 +65,10 @@ const MARK_NAME_JS_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_JS_READY}`;
 window.performance.mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
+    static defaultProps = {
+        onMetric: noop,
+    };
+
     state = {};
 
     constructor(props: Props) {
