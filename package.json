@@ -49,7 +49,7 @@
         "build:prod:examples": "LANGUAGE=en-US REACT=true NODE_ENV=production node --max_old_space_size=8192 node_modules/react-styleguidist/bin/styleguidist.js build --config conf/styleguide.config.js --mode production",
         "build:prod:npm": "BABEL_ENV=production OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
         "clean": "rm -rf dist es i18n/json i18n/*.js reports styleguide",
-        "copy:styles": "copyfiles './src/**/*.scss' lib --up 1",
+        "copy:styles": "copyfiles './src/**/*.scss' es --up 1",
         "cy:open": "yarn cy:wait; yarn cypress open",
         "cy:run": "yarn cy:wait; yarn cypress run --spec test/integration/**/*.test.js",
         "cy:wait": "wait-on tcp:6060",
