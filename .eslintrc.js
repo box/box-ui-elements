@@ -18,4 +18,9 @@ module.exports = {
         'react/no-this-in-sfc': 'off',
         'react/no-unused-state': 'off', //fixme
     },
+    settings: {
+        'import/resolver': {
+            'babel-module': {}
+        }
+    }
 };

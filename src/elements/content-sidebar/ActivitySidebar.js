@@ -9,17 +9,17 @@ import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
-import ActivityFeed from './activity-feed/activity-feed/ActivityFeed';
+import messages from 'elements/common/messages';
+import { withAPIContext } from 'elements/common/api-context';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { getBadUserError, getBadItemError } from 'utils/error';
+import API from 'api';
+import { withLogger } from 'elements/common/logger';
+import { mark } from 'utils/performance';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
+import ActivityFeed from './activity-feed';
 import SidebarContent from './SidebarContent';
-import messages from '../common/messages';
-import { withAPIContext } from '../common/api-context';
-import { withErrorBoundary } from '../common/error-boundary';
-import { withLogger } from '../common/logger';
-import { getBadUserError, getBadItemError } from '../../utils/error';
-import { mark } from '../../utils/performance';
-import { EVENT_JS_READY } from '../common/logger/constants';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
-import API from '../../api';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {

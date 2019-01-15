@@ -10,16 +10,16 @@ import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import { mark } from '../../utils/performance';
-import { EVENT_JS_READY } from '../common/logger/constants';
-import { FIELD_PERMISSIONS_CAN_UPLOAD, SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
-import messages from '../common/messages';
+import { mark } from 'utils/performance';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
+import messages from 'elements/common/messages';
+import { withAPIContext } from 'elements/common/api-context';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { withLogger } from 'elements/common/logger';
+import API from 'api';
 import SidebarContent from './SidebarContent';
-import { withAPIContext } from '../common/api-context';
-import { withErrorBoundary } from '../common/error-boundary';
-import { withLogger } from '../common/logger';
+import { FIELD_PERMISSIONS_CAN_UPLOAD, SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
 import SidebarSkills from './skills/SidebarSkills';
-import API from '../../api';
 import './SkillsSidebar.scss';
 
 type PropsWithoutContext = {

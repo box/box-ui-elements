@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
+import makeDroppable from 'elements/common/droppable';
 import ItemList from './ItemList';
 import UploadState from './UploadState';
-import makeDroppable from '../common/droppable';
 
 import './DroppableContent.scss';
 

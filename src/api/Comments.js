@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import { COMMENTS_FIELDS_TO_FETCH } from 'utils/fields';
 import OffsetBasedAPI from './OffsetBasedAPI';
 import {
     PERMISSION_CAN_COMMENT,
@@ -14,7 +15,6 @@ import {
     ERROR_CODE_DELETE_COMMENT,
     ERROR_CODE_FETCH_COMMENTS,
 } from '../constants';
-import { COMMENTS_FIELDS_TO_FETCH } from '../utils/fields';
 
 class Comments extends OffsetBasedAPI {
     /**

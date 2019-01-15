@@ -11,8 +11,8 @@ import PlainButton from 'box-react-ui/lib/components/plain-button';
 import { Flyout, Overlay } from 'box-react-ui/lib/components/flyout';
 import IconTrash from 'box-react-ui/lib/icons/general/IconTrash';
 
-import messages from '../../../common/messages';
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import messages from 'elements/common/messages';
+import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 
 type Props = {
     onDelete: Function,

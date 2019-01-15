@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
-import messages from '../../../common/messages';
+import messages from 'elements/common/messages';
 
 type Props = {
     words: string,

@@ -15,15 +15,15 @@ import TemplateDropdown from 'box-react-ui/lib/features/metadata-instance-editor
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
-import messages from '../common/messages';
+import messages from 'elements/common/messages';
+import { withAPIContext } from 'elements/common/api-context';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { isUserCorrectableError } from 'utils/error';
+import API from 'api';
+import { withLogger } from 'elements/common/logger';
+import { mark } from 'utils/performance';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import SidebarContent from './SidebarContent';
-import { withAPIContext } from '../common/api-context';
-import { withErrorBoundary } from '../common/error-boundary';
-import { withLogger } from '../common/logger';
-import API from '../../api';
-import { isUserCorrectableError } from '../../utils/error';
-import { mark } from '../../utils/performance';
-import { EVENT_JS_READY } from '../common/logger/constants';
 import {
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,

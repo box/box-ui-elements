@@ -4,9 +4,9 @@
  * @author Box
  */
 
-import Item from './Item';
-import { findMissingProperties, fillMissingProperties } from '../utils/fields';
-import { getTypedFileId } from '../utils/file';
+import { findMissingProperties, fillMissingProperties } from 'utils/fields';
+import { getTypedFileId } from 'utils/file';
+import { getBadItemError, getBadPermissionsError } from 'utils/error';
 import {
     FIELD_DOWNLOAD_URL,
     CACHE_PREFIX_FILE,
@@ -15,7 +15,7 @@ import {
     ERROR_CODE_FETCH_FILE,
     FIELD_EXTENSION,
 } from '../constants';
-import { getBadItemError, getBadPermissionsError } from '../utils/error';
+import Item from './Item';
 
 class File extends Item {
     /**

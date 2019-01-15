@@ -10,7 +10,7 @@ import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/S
 import { addTime } from 'box-react-ui/lib/utils/datetime';
 import ItemExpirationNotice from 'box-react-ui/lib/features/item-details/ItemExpirationNotice';
 
-import DateField from '../common/date';
+import DateField from 'elements/common/date';
 
 const ONE_MINUTE_IN_MS = 60000;
 

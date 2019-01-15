@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 
-import messages from '../../../common/messages';
+import messages from 'elements/common/messages';
 
 type Props = {
     handleShowOriginal: Function,

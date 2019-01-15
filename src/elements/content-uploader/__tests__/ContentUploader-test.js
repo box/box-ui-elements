@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import * as UploaderUtils from 'utils/uploads';
 import { ContentUploaderComponent } from '../ContentUploader';
 import { STATUS_PENDING, VIEW_UPLOAD_SUCCESS } from '../../../constants';
-import * as UploaderUtils from '../../../utils/uploads';
 
 const EXPAND_UPLOADS_MANAGER_ITEMS_NUM_THRESHOLD = 5;
 

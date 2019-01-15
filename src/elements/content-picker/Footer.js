@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import Button from 'box-react-ui/lib/components/button/Button';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import messages from '../common/messages';
+import messages from 'elements/common/messages';
 import './Footer.scss';
 
 type Props = {

@@ -10,8 +10,8 @@ import Button from 'box-react-ui/lib/components/button/Button';
 import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
 import Menu from 'box-react-ui/lib/components/menu/Menu';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
-import Browser from '../../utils/Browser';
-import messages from '../common/messages';
+import Browser from 'utils/Browser';
+import messages from 'elements/common/messages';
 import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_RENAME,
