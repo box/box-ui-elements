@@ -26,7 +26,7 @@ import TokenService from '../../util/TokenService';
 import { isInputElement, focus } from '../../util/dom';
 import { getTypedFileId } from '../../util/file';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { withLoggerContext } from '../logger';
+import { withLogger } from '../logger';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../util/fields';
 import { withFeatureProvider } from '../FeatureChecking';
@@ -1163,9 +1163,4 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default flow([
-    makeResponsive,
-    withFeatureProvider,
-    withLoggerContext(ORIGIN_CONTENT_PREVIEW),
-    withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
-])(ContentPreview);
+export default flow([makeResponsive, withFeatureProvider, withLogger('foo'), withErrorBoundary('foo')])(ContentPreview);

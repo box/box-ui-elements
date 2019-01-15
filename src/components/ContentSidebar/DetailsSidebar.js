@@ -18,7 +18,7 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { withLoggerContext } from '../logger';
+import { withLogger } from '../logger';
 import { EVENT_JS_READY } from '../logger/constants';
 import {
     HTTP_STATUS_CODE_FORBIDDEN,
@@ -495,6 +495,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default withLoggerContext(ORIGIN_DETAILS_SIDEBAR)(
+export default withLogger(ORIGIN_DETAILS_SIDEBAR)(
     withErrorBoundary(ORIGIN_DETAILS_SIDEBAR)(withAPIContext(DetailsSidebar)),
 );

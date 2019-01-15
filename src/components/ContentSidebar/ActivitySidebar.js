@@ -13,7 +13,7 @@ import SidebarContent from './SidebarContent';
 import messages from '../messages';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
-import { withLoggerContext } from '../logger';
+import { withLogger } from '../logger';
 import { getBadUserError, getBadItemError } from '../../util/error';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../constants';
 import API from '../../api';
@@ -491,6 +491,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default withLoggerContext(ORIGIN_ACTIVITY_SIDEBAR)(
+export default withLogger(ORIGIN_ACTIVITY_SIDEBAR)(
     withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR)(withAPIContext(ActivitySidebar)),
 );

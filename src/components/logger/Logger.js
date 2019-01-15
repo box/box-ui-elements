@@ -4,7 +4,7 @@ import noop from 'lodash/noop';
 import { METRIC_TYPE_PREVIEW_METRIC, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../constants';
 
 type ElementsMetric = {
-    component: MetricSources,
+    component: ElementsOrigins,
     endMarkName: string,
     name: string,
     sessionId: string,
@@ -16,7 +16,7 @@ type Props = {
     fileId?: string,
     onMetric: (data: Object) => void,
     children: React.ChildrenArray<React.Element<any>>,
-    source: MetricSources,
+    source: ElementsOrigins,
 };
 
 /**
