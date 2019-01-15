@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ContentOpenWith from '../../../src/components/ContentOpenWith/ContentOpenWith';
+import ContentOpenWith from '../../../src/elements/content-open-with/ContentOpenWith';
 import './ContentOpenWithExample.scss';
 import withConfig from '../withConfig';
 
