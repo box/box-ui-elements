@@ -241,7 +241,6 @@ class ContentPreview extends PureComponent<Props, State> {
                 endMarkName: MARK_NAME_JS_READY,
             },
             EVENT_JS_READY,
-            true,
         );
     }
 

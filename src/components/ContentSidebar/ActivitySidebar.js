@@ -76,10 +76,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.props.onMetric(
             METRIC_TYPE_ELEMENTS_LOAD_METRIC,
             {
+                startMarkName: null, // TODO: replace with actual start mark once code splitting implemented
                 endMarkName: MARK_NAME_JS_READY,
             },
             EVENT_JS_READY,
-            true,
         );
     }
 

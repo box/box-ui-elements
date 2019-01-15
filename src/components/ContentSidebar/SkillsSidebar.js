@@ -9,11 +9,18 @@ import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import { FIELD_PERMISSIONS_CAN_UPLOAD, SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
+import {
+    FIELD_PERMISSIONS_CAN_UPLOAD,
+    SKILLS_TRANSCRIPT,
+    ORIGIN_SKILLS_SIDEBAR,
+    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+} from '../../constants';
+import { EVENT_JS_READY } from '../logger/constants';
 import messages from '../messages';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
+import { withLogger } from '../logger';
 import SidebarSkills from './Skills/SidebarSkills';
 import API from '../../api';
 import './SkillsSidebar.scss';
@@ -26,17 +33,38 @@ type PropsWithoutContext = {
 
 type Props = {
     api: API,
-} & PropsWithoutContext;
+} & PropsWithoutContext &
+    ElementsMetricCallback;
 
 type State = {
     cards?: Array<SkillCard>,
     errors: NumberBooleanMap,
 };
 
+const MARK_NAME_JS_READY = `${ORIGIN_SKILLS_SIDEBAR}_${EVENT_JS_READY}`;
+
+window.performance.mark(MARK_NAME_JS_READY);
+
 class SkillsSidebar extends React.PureComponent<Props, State> {
     state: State = {
         errors: {},
     };
+
+    static defaultProps = {
+        onMetric: noop,
+    };
+
+    constructor(props: Props) {
+        super(props);
+        this.props.onMetric(
+            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+            {
+                startMarkName: null, // TODO: replace with actual start mark once code splitting implemented
+                endMarkName: MARK_NAME_JS_READY,
+            },
+            EVENT_JS_READY,
+        );
+    }
 
     componentDidMount() {
         const { api, file }: Props = this.props;
@@ -233,4 +261,6 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
 }
 
 export { SkillsSidebar as SkillsSidebarComponent };
-export default withErrorBoundary(ORIGIN_SKILLS_SIDEBAR)(withAPIContext(SkillsSidebar));
+export default withLogger(ORIGIN_SKILLS_SIDEBAR)(
+    withErrorBoundary(ORIGIN_SKILLS_SIDEBAR)(withAPIContext(SkillsSidebar)),
+);

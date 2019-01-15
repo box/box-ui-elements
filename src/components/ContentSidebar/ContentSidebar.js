@@ -144,7 +144,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
                 endMarkName: MARK_NAME_JS_READY,
             },
             EVENT_JS_READY,
-            true,
         );
         /* eslint-enable react/prop-types */
     }

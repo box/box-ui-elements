@@ -18,6 +18,7 @@ import messages from '../messages';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../APIContext';
 import { withErrorBoundary } from '../ErrorBoundary';
+import { withLogger } from '../logger';
 import API from '../../api';
 import { isUserCorrectableError } from '../../util/error';
 import {
@@ -26,7 +27,9 @@ import {
     FIELD_PERMISSIONS_CAN_UPLOAD,
     IS_ERROR_DISPLAYED,
     ORIGIN_METADATA_SIDEBAR,
+    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
 } from '../../constants';
+import { EVENT_JS_READY } from '../logger/constants';
 import './MetadataSidebar.scss';
 
 type ExternalProps = {
@@ -40,7 +43,8 @@ type PropsWithoutContext = {
 type Props = {
     api: API,
 } & PropsWithoutContext &
-    ErrorContextProps;
+    ErrorContextProps &
+    ElementsMetricCallback;
 
 type State = {
     editors?: Array<MetadataEditor>,
@@ -50,12 +54,29 @@ type State = {
     templates?: Array<MetadataEditorTemplate>,
 };
 
+const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
+
+window.performance.mark(MARK_NAME_JS_READY);
+
 class MetadataSidebar extends React.PureComponent<Props, State> {
     state = { hasError: false, isLoading: false };
 
     static defaultProps = {
         isFeatureEnabled: true,
+        onMetric: noop,
     };
+
+    constructor(props: Props) {
+        super(props);
+        this.props.onMetric(
+            METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+            {
+                startMarkName: null, // TODO: replace with actual start mark once code splitting implemented
+                endMarkName: MARK_NAME_JS_READY,
+            },
+            EVENT_JS_READY,
+        );
+    }
 
     componentDidMount() {
         this.fetchFile();
@@ -402,4 +423,6 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
 export type MetadataSidebarProps = ExternalProps;
 export { MetadataSidebar as MetadataSidebarComponent };
-export default withErrorBoundary(ORIGIN_METADATA_SIDEBAR)(withAPIContext(MetadataSidebar));
+export default withLogger(ORIGIN_METADATA_SIDEBAR)(
+    withErrorBoundary(ORIGIN_METADATA_SIDEBAR)(withAPIContext(MetadataSidebar)),
+);

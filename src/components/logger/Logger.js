@@ -5,6 +5,7 @@ import { METRIC_TYPE_PREVIEW_METRIC, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '..
 
 type ElementsMetric = {
     component: ElementsOrigins,
+    startMarkName?: string,
     endMarkName: string,
     name: string,
     sessionId: string,
@@ -145,7 +146,7 @@ class Logger extends React.Component<Props> {
      * @param {boolean} isUnique  - true if the metric should be logged only once
      * @returns {void}
      */
-    logTimeMetric(type: MetricTypes, data: Object, name: string, isUnique?: boolean): void {
+    logTimeMetric(type: MetricTypes, data: Object, name: string, isUnique: boolean): void {
         if (!name) {
             return;
         }
@@ -166,7 +167,7 @@ class Logger extends React.Component<Props> {
      * @param {boolean} isUnique  - true if the metric should be logged only once
      * @returns {void}
      */
-    handleMetric = (type: MetricTypes, data: Object, name?: string, isUnique?: boolean) => {
+    handleMetric = (type: MetricTypes, data: Object, name?: string, isUnique?: boolean = true) => {
         if (type === METRIC_TYPE_PREVIEW_METRIC) {
             this.props.onMetric({
                 ...data,
