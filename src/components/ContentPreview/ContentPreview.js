@@ -1162,4 +1162,9 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default flow([makeResponsive, withFeatureProvider, withLogger('foo'), withErrorBoundary('foo')])(ContentPreview);
+export default flow([
+    makeResponsive,
+    withFeatureProvider,
+    withLogger(ORIGIN_CONTENT_PREVIEW),
+    withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
+])(ContentPreview);
