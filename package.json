@@ -114,8 +114,8 @@
         "setupTestFrameworkScriptFile": "<rootDir>/conf/enzyme-adapter.js",
         "snapshotSerializers": ["enzyme-to-json/serializer"]
     },
-    "devEngines": {
-        "node": ">=8.x",
+    "engines": {
+        "node": ">=10.x",
         "yarn": ">=1.10.0"
     },
     "devDependencies": {
