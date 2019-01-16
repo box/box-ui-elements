@@ -24,6 +24,7 @@ type Props = {
     activitySidebarProps: ActivitySidebarProps,
     currentUser?: User,
     detailsSidebarProps: DetailsSidebarProps,
+    features?: FeatureConfig,
     file: BoxItem,
     fileId: string,
     getPreview: Function,
@@ -37,6 +38,7 @@ const Sidebar = ({
     activitySidebarProps,
     currentUser,
     detailsSidebarProps,
+    features,
     file,
     fileId,
     getPreview,
@@ -60,6 +62,7 @@ const Sidebar = ({
         {selectedView === SIDEBAR_VIEW_ACTIVITY && (
             <ActivitySidebar
                 currentUser={currentUser}
+                features={features}
                 file={file}
                 onVersionHistoryClick={onVersionHistoryClick}
                 {...activitySidebarProps}
