@@ -45,7 +45,6 @@ type Props = {
     currentUser?: User,
     defaultView?: SidebarView,
     detailsSidebarProps: DetailsSidebarProps,
-    features?: FeatureConfig,
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
@@ -355,7 +354,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
             className,
             currentUser,
             detailsSidebarProps,
-            features,
             fileId,
             getPreview,
             getViewer,
@@ -407,7 +405,6 @@ class ContentSidebar extends React.PureComponent<Props, State> {
                                     activitySidebarProps={activitySidebarProps}
                                     currentUser={currentUser}
                                     detailsSidebarProps={detailsSidebarProps}
-                                    features={features}
                                     file={file}
                                     fileId={fileId}
                                     getPreview={getPreview}

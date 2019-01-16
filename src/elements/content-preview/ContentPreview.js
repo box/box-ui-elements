@@ -1050,7 +1050,6 @@ class ContentPreview extends PureComponent<Props, State> {
     render() {
         const {
             apiHost,
-            features,
             isLarge,
             token,
             language,
@@ -1122,7 +1121,6 @@ class ContentPreview extends PureComponent<Props, State> {
                         {file && (
                             <ContentSidebar
                                 {...contentSidebarProps}
-                                features={features}
                                 isLarge={isLarge}
                                 apiHost={apiHost}
                                 token={token}
