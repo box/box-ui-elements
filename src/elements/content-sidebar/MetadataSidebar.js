@@ -22,6 +22,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import API from '../../api';
 import { isUserCorrectableError } from '../../utils/error';
+import { mark } from '../../utils/performance';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import {
     FIELD_IS_EXTERNALLY_OWNED,
@@ -56,7 +57,7 @@ type State = {
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
 
-window.performance.mark(MARK_NAME_JS_READY);
+mark(MARK_NAME_JS_READY);
 
 class MetadataSidebar extends React.PureComponent<Props, State> {
     state = { hasError: false, isLoading: false };
@@ -67,7 +68,8 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.props.logger.onReadyMetric({
+        const { logger } = this.props;
+        logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
     }

@@ -5,6 +5,10 @@ import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/Load
 import { SkillsSidebarComponent as SkillsSidebar } from '../SkillsSidebar';
 import SidebarSkills from '../skills/SidebarSkills';
 
+jest.mock('../../../utils/performance', () => ({
+    mark: jest.fn(),
+}));
+
 describe('elements/content-sidebar/Skills/SkillsSidebar', () => {
     const getWrapper = (props, options) =>
         shallow(<SkillsSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);

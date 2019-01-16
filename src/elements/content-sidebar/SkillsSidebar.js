@@ -10,6 +10,7 @@ import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
+import { mark } from '../../utils/performance';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { FIELD_PERMISSIONS_CAN_UPLOAD, SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
 import messages from '../common/messages';
@@ -39,7 +40,7 @@ type State = {
 
 const MARK_NAME_JS_READY = `${ORIGIN_SKILLS_SIDEBAR}_${EVENT_JS_READY}`;
 
-window.performance.mark(MARK_NAME_JS_READY);
+mark(MARK_NAME_JS_READY);
 
 class SkillsSidebar extends React.PureComponent<Props, State> {
     state: State = {
@@ -48,7 +49,8 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.props.logger.onReadyMetric({
+        const { logger } = this.props;
+        logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
     }

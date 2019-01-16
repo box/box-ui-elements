@@ -9,6 +9,7 @@ import DetailsSidebar from './DetailsSidebar';
 import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
 import MetadataSidebar from './MetadataSidebar';
+import { mark } from '../../utils/performance';
 import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
@@ -43,10 +44,10 @@ const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}_JS_LOADING`;
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}_JS_LOADING`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}_JS_LOADING`;
 
-window.performance.mark(MARK_NAME_JS_LOADING_DETAILS);
-window.performance.mark(MARK_NAME_JS_LOADING_ACTIVITY);
-window.performance.mark(MARK_NAME_JS_LOADING_SKILLS);
-window.performance.mark(MARK_NAME_JS_LOADING_METADATA);
+mark(MARK_NAME_JS_LOADING_DETAILS);
+mark(MARK_NAME_JS_LOADING_ACTIVITY);
+mark(MARK_NAME_JS_LOADING_SKILLS);
+mark(MARK_NAME_JS_LOADING_METADATA);
 
 const Sidebar = ({
     activitySidebarProps,

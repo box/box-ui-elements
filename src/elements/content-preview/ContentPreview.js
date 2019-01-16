@@ -29,6 +29,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
+import { mark } from '../../utils/performance';
 import { withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import {
@@ -136,7 +137,7 @@ const MS_IN_S = 1000; // ms in a sec
 const PREVIEW_LOAD_METRIC_EVENT = 'load';
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_PREVIEW}_${EVENT_JS_READY}`;
 
-window.performance.mark(MARK_NAME_JS_READY);
+mark(MARK_NAME_JS_READY);
 
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
@@ -232,7 +233,8 @@ class ContentPreview extends PureComponent<Props, State> {
             currentFileId: fileId,
             prevFileIdProp: fileId,
         };
-        this.props.logger.onReadyMetric({
+        const { logger } = this.props;
+        logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
     }
@@ -521,6 +523,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onPreviewMetric = (previewMetrics: PreviewMetrics): void => {
+        const { logger } = this.props;
         const { event_name } = previewMetrics;
         let metrics = {
             ...previewMetrics,
@@ -544,7 +547,7 @@ class ContentPreview extends PureComponent<Props, State> {
             };
         }
 
-        this.props.logger.onPreviewMetric(metrics);
+        logger.onPreviewMetric(metrics);
     };
 
     /**

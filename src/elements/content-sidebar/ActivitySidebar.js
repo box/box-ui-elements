@@ -16,6 +16,7 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { getBadUserError, getBadItemError } from '../../utils/error';
+import { mark } from '../../utils/performance';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
@@ -63,14 +64,15 @@ export const activityFeedInlineError: Errors = {
 
 const MARK_NAME_JS_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_JS_READY}`;
 
-window.performance.mark(MARK_NAME_JS_READY);
+mark(MARK_NAME_JS_READY);
 
 class ActivitySidebar extends React.PureComponent<Props, State> {
     state = {};
 
     constructor(props: Props) {
         super(props);
-        this.props.logger.onReadyMetric({
+        const { logger } = this.props;
+        logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
     }

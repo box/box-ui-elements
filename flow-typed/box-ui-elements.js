@@ -74,7 +74,7 @@ import {
     TASK_COMPLETED,
     TASK_INCOMPLETE,
     TASK_REJECTED,
-    METRIC_TYPE_PREVIEW_METRIC,
+    METRIC_TYPE_PREVIEW,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
     METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC,
 } from '../src/constants';
@@ -719,7 +719,7 @@ type ClassificationInfo = {
 } & MetadataInstance;
 
 type MetricType =
-    | typeof METRIC_TYPE_PREVIEW_METRIC
+    | typeof METRIC_TYPE_PREVIEW
     | typeof METRIC_TYPE_ELEMENTS_LOAD_METRIC
     | typeof METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
 

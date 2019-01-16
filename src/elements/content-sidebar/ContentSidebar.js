@@ -19,6 +19,7 @@ import Internationalize from '../common/Internationalize';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { mark } from '../../utils/performance';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
@@ -77,7 +78,7 @@ type State = {
 
 const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
 
-window.performance.mark(MARK_NAME_JS_READY);
+mark(MARK_NAME_JS_READY);
 
 class ContentSidebar extends React.PureComponent<Props, State> {
     id: string;
@@ -137,7 +138,8 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
         this.state = { isLoading: true, isOpen: !!isLarge };
         /* eslint-disable react/prop-types */
-        this.props.logger.onReadyMetric({
+        const { logger } = this.props;
+        logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
         /* eslint-enable react/prop-types */

@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Logger from '../Logger';
-import { METRIC_TYPE_PREVIEW_METRIC, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../../constants';
+import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../../constants';
 import { EVENT_JS_READY } from '../constants';
 
 describe('elements/common/logger/Logger', () => {
@@ -111,7 +111,7 @@ describe('elements/common/logger/Logger', () => {
             instance.handlePreviewMetric(data);
             expect(onMetric).toHaveBeenCalledWith({
                 ...data,
-                type: METRIC_TYPE_PREVIEW_METRIC,
+                type: METRIC_TYPE_PREVIEW,
             });
         });
     });

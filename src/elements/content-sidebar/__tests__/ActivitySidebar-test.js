@@ -3,6 +3,10 @@ import { shallow } from 'enzyme';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import messages from '../../common/messages';
 
+jest.mock('../../../utils/performance', () => ({
+    mark: jest.fn(),
+}));
+
 const { defaultErrorMaskSubHeaderMessage, currentUserErrorHeaderMessage } = messages;
 
 describe('elements/content-sidebar/ActivitySidebar', () => {

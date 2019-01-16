@@ -240,7 +240,7 @@ export const ORIGIN_CONTENT_EXPLORER: 'content_explorer' = 'content_explorer';
 export const ORIGIN_OPEN_WITH: 'open_with' = 'open_with';
 
 /* ------------------ Metric Types ---------------------- */
-export const METRIC_TYPE_PREVIEW_METRIC: 'preview_metric' = 'preview_metric';
+export const METRIC_TYPE_PREVIEW: 'preview_metric' = 'preview_metric';
 export const METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC: 'elements_performance_metric' = 'elements_performance_metric';
 export const METRIC_TYPE_ELEMENTS_LOAD_METRIC: 'elements_load_metric' = 'elements_load_metric';
 
