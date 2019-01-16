@@ -1,6 +1,6 @@
 module.exports = `Box UI Element
 
-Copyright 2017 Box, Inc. All rights reserved.
+Copyright 2017-present Box, Inc. All rights reserved.
 
 This product includes software developed by Box, Inc. ("Box")
 (http://www.box.com)
