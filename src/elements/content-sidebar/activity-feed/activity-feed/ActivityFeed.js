@@ -150,6 +150,7 @@ class ActivityFeed extends React.Component<Props, State> {
             activityFeedError,
             onVersionHistoryClick,
             onCommentDelete,
+            onTaskCreate,
             onTaskDelete,
             onTaskUpdate,
             onTaskAssignmentUpdate,
@@ -204,7 +205,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             'bcs-is-disabled': isDisabled,
                         })}
                         createComment={hasCommentPermission ? this.onCommentCreate : noop}
-                        createTask={hasCommentPermission ? this.onTaskCreate : noop}
+                        createTask={hasCommentPermission && onTaskCreate ? this.onTaskCreate : null}
                         updateTask={hasCommentPermission ? onTaskUpdate : noop}
                         getApproverWithQuery={getApproverWithQuery}
                         getMentionWithQuery={getMentionWithQuery}
