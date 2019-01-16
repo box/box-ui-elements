@@ -93,10 +93,10 @@ class Logger extends React.Component<Props> {
      * Invokes the provided metric logging callback.
      *
      * @param {string} type - the type of the event
-     * @param {Object} data  - the event data
      * @param {string} name - the name of the event
+     * @param {Object} data  - the event data
      */
-    logMetric(type: MetricType, data: Object, name: string): void {
+    logMetric(type: MetricType, name: string, data: Object): void {
         const metric: ElementsMetric = {
             ...data,
             component: this.props.source,
@@ -113,8 +113,8 @@ class Logger extends React.Component<Props> {
      * Logs a unique metric event. Prevents duplicate events from being logged in the session.
      *
      * @param {string} type - the type of the event
-     * @param {Object} data  - the event data
      * @param {string} name - the name of the event
+     * @param {Object} data  - the event data
      */
     logUniqueMetric(type: MetricType, name: string, data: Object): void {
         const eventName = this.createEventName(name);
@@ -122,7 +122,7 @@ class Logger extends React.Component<Props> {
             return;
         }
 
-        this.logMetric(type, data, name);
+        this.logMetric(type, name, data);
         this.uniqueEvents.add(eventName);
     }
 

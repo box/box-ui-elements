@@ -13,7 +13,7 @@ let props;
 let file;
 
 describe('elements/content-preview/ContentPreview', () => {
-    const getWrapper = props =>
+    const getWrapper = (props = {}) =>
         shallow(<ContentPreview logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }} {...props} />);
 
     const PERFORMANCE_TIME = 100;
@@ -32,6 +32,20 @@ describe('elements/content-preview/ContentPreview', () => {
 
     afterEach(() => {
         delete global.Box;
+    });
+
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
     });
 
     describe('componentDidUpdate()', () => {

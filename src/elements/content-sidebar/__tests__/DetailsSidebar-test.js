@@ -52,6 +52,20 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         };
     });
 
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
+    });
+
     describe('render()', () => {
         test('should render nothing if there is no file information', () => {
             // TODO: replace this test with proper loading and error cases once files call split out

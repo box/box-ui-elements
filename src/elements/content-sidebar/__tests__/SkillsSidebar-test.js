@@ -48,6 +48,25 @@ describe('elements/content-sidebar/Skills/SkillsSidebar', () => {
         expect(api.getMetadataAPI).toHaveBeenCalled();
     });
 
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper(
+                {},
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
+    });
+
     describe('onSave()', () => {
         test('should not do anything when no card exists', () => {
             const updateSkills = jest.fn();

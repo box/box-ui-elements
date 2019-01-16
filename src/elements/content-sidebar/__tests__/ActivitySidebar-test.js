@@ -55,6 +55,20 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             />,
         );
 
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
+    });
+
     describe('componentDidMount()', () => {
         let wrapper;
         let instance;
