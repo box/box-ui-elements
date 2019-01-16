@@ -7,7 +7,6 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
-import getProp from 'lodash/get';
 import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './activity-feed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
@@ -39,7 +38,6 @@ type PropsWithoutContext = {
 
 type Props = {
     api: API,
-    features?: FeatureConfig,
 } & PropsWithoutContext &
     ErrorContextProps;
 
@@ -429,7 +427,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl, features } = this.props;
+        const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
         const {
             currentUser,
             approverSelectorContacts,
@@ -449,9 +447,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     isDisabled={isDisabled}
                     onCommentCreate={this.createComment}
                     onCommentDelete={this.deleteComment}
-                    onTaskCreate={
-                        getProp(features, 'activityFeed.tasks.createButton', false) ? this.createTask : undefined
-                    }
+                    onTaskCreate={this.createTask}
                     onTaskDelete={this.deleteTask}
                     onTaskUpdate={this.updateTask}
                     onTaskAssignmentUpdate={this.updateTaskAssignment}
