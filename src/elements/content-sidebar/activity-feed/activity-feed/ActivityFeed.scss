@@ -35,6 +35,7 @@
             }
         }
 
+        .bcs-activity-feed-legacy-task,
         .bcs-activity-feed-task,
         .bcs-activity-feed-comment {
             border-bottom: 1px solid $ffive;
@@ -46,7 +47,7 @@
             }
         }
 
-        .bcs-activity-feed-task {
+        .bcs-activity-feed-legacy-task {
             padding-bottom: 28px;
         }
     }

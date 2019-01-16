@@ -6,6 +6,8 @@ import * as React from 'react';
 import getProp from 'lodash/get';
 import Comment from '../comment';
 import Task from '../task';
+import LegacyTask from '../legacy-task';
+import { FeatureFlag } from '../../../common/feature-checking';
 import Version, { CollapsedVersion } from '../version';
 import Keywords from '../keywords';
 import withErrorHandling from '../../withErrorHandling';
@@ -64,22 +66,46 @@ const ActiveState = ({
                 case 'task':
                     return item.task_assignment_collection.total_count ? (
                         <li className="bcs-activity-feed-task" key={type + id}>
-                            <Task
-                                {...item}
-                                currentUser={currentUser}
-                                onDelete={onTaskDelete}
-                                onEdit={onTaskEdit}
-                                onAssignmentUpdate={onTaskAssignmentUpdate}
-                                translations={translations}
-                                getAvatarUrl={getAvatarUrl}
-                                getUserProfileUrl={getUserProfileUrl}
-                                mentionSelectorContacts={mentionSelectorContacts}
-                                getMentionWithQuery={getMentionWithQuery}
-                                // permissions are not part of task API so hard code to true
-                                permissions={{
-                                    can_delete: true,
-                                    can_edit: true,
-                                }}
+                            <FeatureFlag
+                                feature="tasks"
+                                enabled={() => (
+                                    <Task
+                                        {...item}
+                                        currentUser={currentUser}
+                                        onDelete={onTaskDelete}
+                                        onEdit={onTaskEdit}
+                                        onAssignmentUpdate={onTaskAssignmentUpdate}
+                                        translations={translations}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        // permissions are not part of task API so hard code to true
+                                        permissions={{
+                                            can_delete: true,
+                                            can_edit: true,
+                                        }}
+                                    />
+                                )}
+                                disabled={() => (
+                                    <LegacyTask
+                                        {...item}
+                                        currentUser={currentUser}
+                                        onDelete={onTaskDelete}
+                                        onEdit={onTaskEdit}
+                                        onAssignmentUpdate={onTaskAssignmentUpdate}
+                                        translations={translations}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        mentionSelectorContacts={mentionSelectorContacts}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        // permissions are not part of task API so hard code to true
+                                        permissions={{
+                                            can_delete: true,
+                                            can_edit: true,
+                                        }}
+                                    />
+                                )}
                             />
                         </li>
                     ) : null;

@@ -878,6 +878,16 @@ const messages: { [string]: MessageDescriptor } = defineMessages({
         defaultMessage: 'Cancel',
         description: 'label for cancel button in create task popup',
     },
+    tasksFeedApproveAction: {
+        id: 'be.tasks.feed.approveAction',
+        defaultMessage: 'Approve',
+        description: 'Approve option for an approval task',
+    },
+    tasksFeedRejectAction: {
+        id: 'be.tasks.feed.rejectAction',
+        defaultMessage: 'Reject',
+        description: 'Reject option for an approval task',
+    },
     versionDeleted: {
         id: 'be.versionDeleted',
         defaultMessage: '{ name } deleted version { version_number }',

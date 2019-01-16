@@ -139,6 +139,18 @@ class Comment extends React.Component<Props, State> {
                                 name={createdByUser.name}
                                 getUserProfileUrl={getUserProfileUrl}
                             />
+
+                            {onEdit && canEdit && !isPending ? <InlineEdit id={id} toEdit={toEdit} /> : null}
+                            {onDelete && canDelete && !isPending ? (
+                                <InlineDelete
+                                    id={id}
+                                    permissions={permissions}
+                                    message={<FormattedMessage {...inlineDeleteMessage} />}
+                                    onDelete={onDelete}
+                                />
+                            ) : null}
+                        </div>
+                        <div className="bcs-comment-meta">
                             <Tooltip
                                 text={
                                     <FormattedMessage
@@ -151,15 +163,6 @@ class Comment extends React.Component<Props, State> {
                                     <ReadableTime timestamp={createdAtTimestamp} relativeThreshold={ONE_HOUR_MS} />
                                 </small>
                             </Tooltip>
-                            {onEdit && canEdit && !isPending ? <InlineEdit id={id} toEdit={toEdit} /> : null}
-                            {onDelete && canDelete && !isPending ? (
-                                <InlineDelete
-                                    id={id}
-                                    permissions={permissions}
-                                    message={<FormattedMessage {...inlineDeleteMessage} />}
-                                    onDelete={onDelete}
-                                />
-                            ) : null}
                         </div>
                         {isEditing ? (
                             <ApprovalCommentForm
