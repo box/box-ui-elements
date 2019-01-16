@@ -115,7 +115,7 @@
         "snapshotSerializers": ["enzyme-to-json/serializer"]
     },
     "engines": {
-        "node": ">=10.x",
+        "node": ">=8.x",
         "yarn": ">=1.10.0"
     },
     "devDependencies": {
