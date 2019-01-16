@@ -1,2 +1,4 @@
 // feature config for feature flags
-export default {};
+export default {
+    tasks: true,
+};
