@@ -121,19 +121,21 @@ describe('elements/common/logger/Logger', () => {
         const data = {
             foo: 'bar',
         };
+        const START = 'foo';
         beforeEach(() => {
-            const wrapper = getWrapper();
+            const wrapper = getWrapper({
+                startMarkName: START,
+            });
             instance = wrapper.instance();
             instance.logUniqueMetric = jest.fn();
         });
 
         test('should log a unique metric', () => {
             instance.handleReadyMetric(data);
-            expect(instance.logUniqueMetric).toHaveBeenCalledWith(
-                METRIC_TYPE_ELEMENTS_LOAD_METRIC,
-                EVENT_JS_READY,
-                data,
-            );
+            expect(instance.logUniqueMetric).toHaveBeenCalledWith(METRIC_TYPE_ELEMENTS_LOAD_METRIC, EVENT_JS_READY, {
+                ...data,
+                startMarkName: START,
+            });
         });
     });
 

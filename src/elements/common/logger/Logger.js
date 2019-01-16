@@ -17,6 +17,7 @@ type Props = {
     onMetric: (data: Object) => void,
     children: React.ChildrenArray<React.Element<any>>,
     source: ElementOrigin,
+    startMarkName?: string,
 };
 
 /**
@@ -146,7 +147,12 @@ class Logger extends React.Component<Props> {
      * @returns {void}
      */
     handleReadyMetric = (data: ElementsLoadMetricData) => {
-        this.logUniqueMetric(METRIC_TYPE_ELEMENTS_LOAD_METRIC, EVENT_JS_READY, data);
+        const { startMarkName } = this.props;
+        const metricData = {
+            ...data,
+            startMarkName,
+        };
+        this.logUniqueMetric(METRIC_TYPE_ELEMENTS_LOAD_METRIC, EVENT_JS_READY, metricData);
     };
 
     /**
@@ -159,7 +165,7 @@ class Logger extends React.Component<Props> {
     }
 
     render() {
-        const { children, onMetric, ...rest } = this.props;
+        const { children, onMetric, startMarkName, ...rest } = this.props;
 
         return React.cloneElement(children, {
             ...rest,

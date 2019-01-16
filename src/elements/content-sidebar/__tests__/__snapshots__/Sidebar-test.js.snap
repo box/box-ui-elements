@@ -8,19 +8,24 @@ exports[`elements/content-sidebar/Sidebar should render activity sidebar 1`] = `
         "id": "id",
       }
     }
+    startMarkName="activity_sidebar_JS_LOADING"
   />
 </Fragment>
 `;
 
 exports[`elements/content-sidebar/Sidebar should render details sidebar 1`] = `
 <Fragment>
-  <DetailsSidebar />
+  <DetailsSidebar
+    startMarkName="details_sidebar_JS_LOADING"
+  />
 </Fragment>
 `;
 
 exports[`elements/content-sidebar/Sidebar should render metadata sidebar 1`] = `
 <Fragment>
-  <MetadataSidebar />
+  <MetadataSidebar
+    startMarkName="metadata_sidebar_JS_LOADING"
+  />
 </Fragment>
 `;
 
@@ -35,6 +40,7 @@ exports[`elements/content-sidebar/Sidebar should render skills sidebar 1`] = `
       }
     }
     key="id"
+    startMarkName="skills_sidebar_JS_LOADING"
   />
 </Fragment>
 `;
