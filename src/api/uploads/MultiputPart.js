@@ -4,10 +4,11 @@
  * @author Box
  */
 import noop from 'lodash/noop';
+import getProp from 'lodash/get';
 import BaseMultiput from './BaseMultiput';
-import { updateQueryParameters } from '../../util/url';
+import { updateQueryParameters } from '../../utils/url';
 import { HTTP_PUT } from '../../constants';
-import { getBoundedExpBackoffRetryDelay } from '../../util/uploads';
+import { getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
 
 const PART_STATE_NOT_STARTED: 0 = 0;
 const PART_STATE_COMPUTING_DIGEST: 1 = 1;
@@ -237,9 +238,11 @@ class MultiputPart extends BaseMultiput {
             return;
         }
 
-        this.consoleLog(
-            `Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${this.xhr.xhr.readyState}.`,
-        );
+        const xhr_ready_state = getProp(this.xhr, 'xhr.readyState', null);
+        const xhr_status_text = getProp(this.xhr, 'xhr.statusText', '');
+
+        this.consoleLog(`Upload failure ${error.message} for part ${this.toJSON()}. XHR state: ${xhr_ready_state}.`);
+
         const eventInfo = {
             message: error.message,
             part: {
@@ -248,9 +251,10 @@ class MultiputPart extends BaseMultiput {
                 index: this.index,
                 offset: this.offset,
             },
-            xhr_ready_state: this.xhr.xhr.readyState,
-            xhr_status_text: this.xhr.xhr.statusText,
+            xhr_ready_state,
+            xhr_status_text,
         };
+
         const eventInfoString = JSON.stringify(eventInfo);
         this.logEvent('part_failure', eventInfoString);
 

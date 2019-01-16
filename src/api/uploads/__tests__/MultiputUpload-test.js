@@ -1,6 +1,6 @@
-import * as func from '../../../util/function';
-import * as webcrypto from '../../../util/webcrypto';
-import * as uploadUtil from '../../../util/uploads';
+import * as func from '../../../utils/function';
+import * as webcrypto from '../../../utils/webcrypto';
+import * as uploadUtil from '../../../utils/uploads';
 import MultiputUpload from '../MultiputUpload';
 import MultiputPart, {
     PART_STATE_UPLOADED,
@@ -320,6 +320,14 @@ describe('api/uploads/MultiputUpload', () => {
 
             await multiputUploadTest.preflightSuccessHandler();
             expect(multiputUploadTest.xhr.post).not.toHaveBeenCalled();
+        });
+
+        test('should set parallelism to 1 for Zones', async () => {
+            multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest
+                .fn()
+                .mockReturnValueOnce('fupload-ec2usw1.app.box.com');
+            await multiputUploadTest.preflightSuccessHandler();
+            expect(multiputUploadTest.config.parallelism).toBe(1);
         });
 
         test('should call createSessionSuccessHandler when the session is created successfully', async () => {

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import Browser from './util/Browser';
+import Browser from './utils/Browser';
 
 /* ----------------------- Size ---------------------------- */
 export const SIZE_SMALL: 'small' = 'small';
@@ -65,6 +65,7 @@ export const METADATA_TEMPLATE_SKILLS = 'boxSkillsCards';
 export const METADATA_TEMPLATE_PROPERTIES = 'properties';
 export const METADATA_SCOPE_GLOBAL = 'global';
 export const METADATA_SCOPE_ENTERPRISE = 'enterprise';
+export const METADATA_TEMPLATE_FETCH_LIMIT = 1000;
 
 /* ----------------------- Fields --------------------------- */
 export const FIELD_ID = 'id';
@@ -76,6 +77,7 @@ export const FIELD_PARENT = 'parent';
 export const FIELD_EXTENSION = 'extension';
 export const FIELD_ITEM_EXPIRATION = 'expires_at';
 export const FIELD_PERMISSIONS = 'permissions';
+export const FIELD_PERMISSIONS_CAN_UPLOAD = `${FIELD_PERMISSIONS}.can_upload`;
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_CONTENT_CREATED_AT: 'content_created_at' = 'content_created_at';
@@ -134,7 +136,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.55.0';
+export const DEFAULT_PREVIEW_VERSION = '1.60.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -196,7 +198,8 @@ export const ERROR_CODE_FETCH_TASKS = 'fetch_tasks_error';
 export const ERROR_CODE_FETCH_CURRENT_USER = 'fetch_current_user_error';
 export const ERROR_CODE_FETCH_TASK_ASSIGNMENT = 'fetch_task_assignment_error';
 export const ERROR_CODE_FETCH_INTEGRATIONS = 'fetch_integrations_error';
-export const ERROR_CODE_FETCH_EDITORS = 'fetch_editors_error';
+export const ERROR_CODE_FETCH_METADATA = 'fetch_metadata_error';
+export const ERROR_CODE_FETCH_METADATA_TEMPLATES = 'fetch_metadata_templates_error';
 export const ERROR_CODE_FETCH_ACCESS_STATS = 'fetch_access_stats_error';
 export const ERROR_CODE_FETCH_SKILLS = 'fetch_skills_error';
 export const ERROR_CODE_FETCH_RECENTS = 'fetch_recents_error';
@@ -234,6 +237,7 @@ export const ORIGIN_METADATA_SIDEBAR = 'metadata_sidebar';
 export const ORIGIN_SKILLS_SIDEBAR = 'skills_sidebar';
 export const ORIGIN_PREVIEW = 'preview';
 export const ORIGIN_CONTENT_EXPLORER = 'content_explorer';
+export const ORIGIN_OPEN_WITH = 'open_with';
 
 /* ------------------ Error Keys ---------------------- */
 export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message

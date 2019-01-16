@@ -1,0 +1,61 @@
+@import '../common/variables';
+
+.be.bcow {
+    font-family: $font;
+
+    .btn {
+        padding: 3px 13px 3px 10px;
+    }
+
+    .btn-content {
+        align-items: center;
+        display: flex;
+    }
+
+    .bcow-btn-header-text {
+        padding-left: 3px;
+    }
+
+    .bcow-integration-icon {
+        padding: 3px;
+    }
+}
+
+.bcow-menu {
+    .bcow-menu-item-title {
+        color: $threes;
+        font-weight: 700;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .bcow-menu-item-description {
+        color: $downtown-grey;
+        font-size: 11px;
+        line-height: 14px;
+        margin: 0;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+}
+
+.bcow-portal-container {
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+
+    .bcow-portal-loading-indicator {
+        div {
+            // Platform standard color
+            background-color: $twos;
+        }
+    }
+
+    .error-mask {
+        font-size: 16px;
+        margin: 0 auto;
+        max-width: 650px;
+    }
+}

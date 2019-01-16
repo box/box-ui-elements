@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/ActivitySidebar render() should render the activity feed sidebar 1`] = `
+<SidebarContent
+  title={
+    <FormattedMessage
+      defaultMessage="Activity"
+      id="be.sidebarActivityTitle"
+    />
+  }
+>
+  <ActivityFeed
+    file={
+      Object {
+        "id": "I_AM_A_FILE",
+      }
+    }
+    getApproverWithQuery={[Function]}
+    getAvatarUrl={[Function]}
+    getMentionWithQuery={[Function]}
+    isDisabled={false}
+    onCommentCreate={[Function]}
+    onCommentDelete={[Function]}
+    onTaskAssignmentUpdate={[Function]}
+    onTaskCreate={[Function]}
+    onTaskDelete={[Function]}
+    onTaskUpdate={[Function]}
+  />
+</SidebarContent>
+`;

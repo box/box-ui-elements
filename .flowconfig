@@ -33,4 +33,5 @@ module.name_mapper='react-virtualized/dist/es/AutoSizer' -> '<PROJECT_ROOT>/flow
 module.name_mapper='react-virtualized/dist/es/CellMeasurer' -> '<PROJECT_ROOT>/flow/ReactVirtualizedStub.js.flow'
 module.name_mapper='draft-js' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
 module.name_mapper='draft-js/EditorState' -> '<PROJECT_ROOT>/flow/DraftJSFlowStub.js.flow'
+module.name_mapper='react-measure' -> '<PROJECT_ROOT>/flow/ReactMeasure.js.flow'
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe

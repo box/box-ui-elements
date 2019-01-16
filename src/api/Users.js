@@ -5,8 +5,8 @@
  */
 
 import Base from './Base';
-import TokenService from '../util/TokenService';
-import { getTypedFileId } from '../util/file';
+import TokenService from '../utils/TokenService';
+import { getTypedFileId } from '../utils/file';
 import { ERROR_CODE_FETCH_CURRENT_USER } from '../constants';
 
 class Users extends Base {

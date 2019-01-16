@@ -1,7 +1,7 @@
 import Base from '../Base';
-import Xhr from '../../util/Xhr';
-import Cache from '../../util/Cache';
-import { getBadItemError, getBadPermissionsError } from '../../util/error';
+import Xhr from '../../utils/Xhr';
+import Cache from '../../utils/Cache';
+import { getBadItemError, getBadPermissionsError } from '../../utils/error';
 import { HTTP_GET, HTTP_POST, HTTP_PUT } from '../../constants';
 
 let base;
@@ -115,6 +115,42 @@ describe('api/Base', () => {
         test('should return correct cache', () => {
             base.cache = 'foo';
             expect(base.getCache()).toBe('foo');
+        });
+    });
+
+    describe('errorCallback()', () => {
+        beforeEach(() => {
+            base.errorCallback = jest.fn();
+            base.isDestroyed = jest.fn().mockReturnValue(false);
+            base.errorCode = 1;
+        });
+
+        test('should do nothing if destroyed', () => {
+            base.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            base.errorHandler(new Error());
+            expect(base.errorCallback).not.toBeCalled();
+        });
+        test('should call the error callback with the response data if present', () => {
+            base.errorCallback = jest.fn();
+            const error = {
+                response: {
+                    data: 'foo',
+                },
+            };
+
+            base.errorHandler(error);
+            expect(base.errorCallback).toBeCalledWith('foo', 1);
+        });
+        test('should call the error callback with the whole error if the response data is not present', () => {
+            base.errorCallback = jest.fn();
+            const error = {
+                customStuff: {
+                    data: 'foo',
+                },
+            };
+
+            base.errorHandler(error);
+            expect(base.errorCallback).toBeCalledWith(error, 1);
         });
     });
 

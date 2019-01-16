@@ -5,9 +5,9 @@
 .idea
 _site
 dist
+es
 i18n/*.js
 i18n/json
-lib
 node_modules
 npm-debug.log
 npm-error.log

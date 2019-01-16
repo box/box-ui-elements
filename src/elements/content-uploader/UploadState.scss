@@ -1,0 +1,71 @@
+@import '../common/variables';
+
+.bcu-drag-drop-overlay {
+    bottom: 0;
+    display: none;
+    left: 0;
+    opacity: .2;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.bcu-upload-state {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+
+    svg {
+        margin-bottom: 10px;
+    }
+
+    // Show blue indicator when item can be dropped
+    &.bcu-is-droppable .bcu-drag-drop-overlay {
+        background: $blue;
+        display: block;
+    }
+
+    // Show red indicator when item cannot be dropped
+    &.bcu-is-not-droppable .bcu-drag-drop-overlay {
+        background: $red;
+        display: block;
+    }
+
+    // Hide upload prompt if there are items queued
+    &.bcu-has-items {
+        display: none;
+
+        // If a file is dragged over, show the prompt on top of items
+        &.bcu-is-droppable,
+        &.bcu-is-not-droppable {
+            background-color: rgba(255, 255, 255, .8);
+            bottom: 0;
+            display: flex;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            .bcu-drag-drop-overlay {
+                display: none;
+            }
+        }
+    }
+}
+
+.bcu-upload-state-message + .be-input-btn {
+    margin-top: 10px;
+}
+
+.bcu-upload-state-message + .be-input-link {
+    margin-top: 5px;
+}
+
+.bcu-upload-input-container {
+    .be-input-link {
+        display: inline-block;
+    }
+}
