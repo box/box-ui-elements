@@ -16,7 +16,6 @@ import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import { decode } from 'box-react-ui/lib/utils/keys';
 import PreviewLoading from './PreviewLoading';
-import PreviewNavigation from './PreviewNavigation';
 import ContentSidebar from '../content-sidebar';
 import Header from './Header';
 import API from '../../api';
@@ -647,6 +646,24 @@ class ContentPreview extends PureComponent<Props, State> {
     }
 
     /**
+     * Handles the event emitted when Preview SDK navigates to another file
+     *
+     * @return {void}
+     */
+    onPreviewNavigate = (fileId: string) => {
+        const { collection }: Props = this.props;
+        const index = collection.findIndex(item => {
+            if (typeof item === 'string') {
+                return item === fileId;
+            }
+
+            return item.id === fileId;
+        });
+
+        this.navigateToIndex(index);
+    };
+
+    /**
      * Loads preview in the component using the preview library.
      *
      * @return {void}
@@ -673,12 +690,16 @@ class ContentPreview extends PureComponent<Props, State> {
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,
+            enableThumbnailsSidebar: true,
+            disableNavigation: true,
+            collection,
         };
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
+        this.preview.addListener('navigate', this.onPreviewNavigate);
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
@@ -1067,7 +1088,6 @@ class ContentPreview extends PureComponent<Props, State> {
         }: Props = this.props;
 
         const { file, isFileError, isReloadNotificationVisible, currentFileId }: State = this.state;
-        const { collection }: Props = this.props;
 
         if (!currentFileId) {
             return null;
@@ -1111,12 +1131,6 @@ class ContentPreview extends PureComponent<Props, State> {
                                     />
                                 </div>
                             )}
-                            <PreviewNavigation
-                                collection={collection}
-                                currentIndex={this.getFileIndex()}
-                                onNavigateLeft={this.navigateLeft}
-                                onNavigateRight={this.navigateRight}
-                            />
                         </div>
                         {file && (
                             <ContentSidebar
