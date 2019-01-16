@@ -26,6 +26,7 @@ import {
     BOX_EDIT_SFC_INTEGRATION_ID,
     CLIENT_NAME_OPEN_WITH,
     DEFAULT_HOSTNAME_API,
+    ERROR_CODE_EXECUTE_INTEGRATION,
     HTTP_GET,
     HTTP_POST,
     ORIGIN_OPEN_WITH,
@@ -33,7 +34,6 @@ import {
     TYPE_FOLDER,
 } from '../../constants';
 
-const WINDOW_OPEN_BLOCKED_ERROR = 'Unable to open integration in new window';
 const UNSUPPORTED_INVOCATION_METHOD_TYPE = 'Integration invocation using this HTTP method type is not supported';
 const BLACKLISTED_ERROR_MESSAGE_KEY = 'boxToolsBlacklistedError';
 const BOX_TOOLS_INSTALL_ERROR_MESSAGE_KEY = 'boxToolsInstallErrorMessage';
@@ -315,8 +315,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @param {Error} error - An axios fetch error
      * @return {void}
      */
-    fetchErrorHandler = (error: any): void => {
-        this.props.onError(error);
+    fetchErrorHandler = (error: any, code: string): void => {
+        this.props.onError(error, code, { error });
         this.setState({ fetchError: error, isLoading: false });
     };
 
@@ -420,7 +420,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 break;
             case HTTP_GET:
                 if (!this.integrationWindow) {
-                    this.executeIntegrationErrorHandler(Error(WINDOW_OPEN_BLOCKED_ERROR));
                     return;
                 }
 
@@ -430,7 +429,10 @@ class ContentOpenWith extends PureComponent<Props, State> {
                 this.integrationWindow.opener = null;
                 break;
             default:
-                this.executeIntegrationErrorHandler(Error(UNSUPPORTED_INVOCATION_METHOD_TYPE));
+                this.executeIntegrationErrorHandler(
+                    Error(UNSUPPORTED_INVOCATION_METHOD_TYPE),
+                    ERROR_CODE_EXECUTE_INTEGRATION,
+                );
         }
 
         this.integrationWindow = null;
@@ -490,8 +492,8 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @param {Error} error - Error object
      * @return {void}
      */
-    executeIntegrationErrorHandler = (error: any): void => {
-        this.props.onError(error);
+    executeIntegrationErrorHandler = (error: any, code: string): void => {
+        this.props.onError(error, code, { error });
         // eslint-disable-next-line no-console
         console.error(error);
         this.setState({

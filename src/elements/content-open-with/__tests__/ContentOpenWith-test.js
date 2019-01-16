@@ -398,17 +398,6 @@ describe('elements/content-open-with/ContentOpenWith', () => {
                 executePostData: executeData,
             });
         });
-        test('should throw an error if there is no integration window available in the GET case', () => {
-            const executeData = {
-                method: 'GET',
-                url: 'foo.com/bar',
-            };
-            instance.integrationWindow = false;
-            instance.executeIntegrationErrorHandler = jest.fn();
-
-            instance.executeOnlineIntegrationSuccessHandler(executeData);
-            expect(instance.executeIntegrationErrorHandler).toBeCalled();
-        });
         test('should  null the integrationWindow', () => {
             instance.onExecute = jest.fn();
             const executeData = {
@@ -486,11 +475,12 @@ describe('elements/content-open-with/ContentOpenWith', () => {
         test('should call the user provided callback and set the portal state', () => {
             const propFunction = jest.fn();
             instance = getWrapper({ onError: propFunction }).instance();
+            const errorCode = 'foo';
             instance.setState = jest.fn();
             const error = new Error();
 
-            instance.executeIntegrationErrorHandler(error);
-            expect(propFunction).toBeCalledWith(error);
+            instance.executeIntegrationErrorHandler(error, errorCode);
+            expect(propFunction).toBeCalledWith(error, errorCode, expect.any(Object));
             expect(instance.setState).toBeCalledWith({
                 shouldRenderLoadingIntegrationPortal: false,
                 shouldRenderErrorIntegrationPortal: true,
