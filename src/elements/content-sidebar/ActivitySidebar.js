@@ -49,7 +49,6 @@ type State = {
     activityFeedError?: Errors,
     currentUserError?: Errors,
     feedItems?: FeedItems,
-    isTaskFormOpen?: boolean,
 };
 
 export const activityFeedInlineError: Errors = {
