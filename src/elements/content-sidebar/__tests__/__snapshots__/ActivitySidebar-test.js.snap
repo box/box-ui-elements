@@ -5,7 +5,7 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
   actions={
     <FeatureFlag
       enabled={[Function]}
-      feature="tasks"
+      feature="activityFeed.tasks.createButton"
     />
   }
   title={

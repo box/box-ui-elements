@@ -460,7 +460,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         return (
             <SidebarContent
                 title={<FormattedMessage {...messages.sidebarActivityTitle} />}
-                actions={<FeatureFlag feature="tasks" enabled={this.renderAddTaskButton} />}
+                actions={<FeatureFlag feature="activityFeed.tasks.createButton" enabled={this.renderAddTaskButton} />}
             >
                 <ActivityFeed
                     file={file}

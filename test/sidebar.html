@@ -151,7 +151,11 @@
                     hasActivityFeed: true,
                     hasSkills: true,
                     features: {
-                        tasks: true,
+                        activityFeed: {
+                            tasks: {
+                                createButton: true,
+                            },
+                        },
                     }
                 });
                 if (refreshOnComplete) window.location.reload();
