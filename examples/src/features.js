@@ -3,6 +3,7 @@ export default {
     activityFeed: {
         tasks: {
             createFromComment: true,
+            createButton: true,
         },
     },
 };

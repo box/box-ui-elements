@@ -77,6 +77,7 @@ class Task extends React.Component<Props> {
                 className={classNames('bcs-task', {
                     'bcs-is-pending': isPending || error,
                 })}
+                data-testid="task-card"
             >
                 <Comment
                     created_at={created_at}
