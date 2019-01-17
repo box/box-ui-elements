@@ -5,7 +5,7 @@ Our development setup assumes a LINUX/BSD environemnt.
 ## Project Setup
 
 1. Install Node v10.0.0 or higher.
-2. Install yarn package manager `https://yarnpkg.com/en/docs/install` v1.10 or higher.
+2. Install Yarn package manager `https://yarnpkg.com/en/docs/install` v1.10 or higher.
 3. Fork the upstream repo `https://github.com/box/box-ui-elements` via github.
 4. Clone your fork locally `git clone git@github.com:[YOUR GITHUB USERNAME]/box-ui-elements.git`.
 5. Navigate to the cloned folder `cd box-ui-elements`.
@@ -33,7 +33,7 @@ To test the Box UI Elements with your own box data and auth token, launch a loca
 
 ## Testing UI Elements in a parent project
 
-To test the Box UI Elements with your own project use local yarn linking.
+To test the Box UI Elements with your own project use local Yarn linking.
 
 1. In the UI Elements project run `yarn link` as a one time setup.
 2. In UI Elements project run `yarn start:npm` which starts a local npm build in watch mode.
@@ -55,7 +55,7 @@ Install the following plugins in your preferred editor
 
 -   `yarn start` to launch a local styleguide examples server. Uses demo data.
 -   `yarn start:dev` to launch a local webpack server. Uses your own data.
--   `yarn start:npm` to symlink via yarn link to a parent project.
+-   `yarn start:npm` to symlink via `yarn link` to a parent project.
 -   `yarn lint` to lint js and css.
 -   `yarn lint --fix` to lint js and fix issues.
 -   `yarn test` to launch tests with jest.
