@@ -23,7 +23,7 @@ import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactio
 import './TaskForm.scss';
 
 export type TaskFormProps = {|
-    approverSelectorContacts?: SelectorItems,
+    approverSelectorContacts: SelectorItems,
     className: string,
     createTask: (text: string, approvers: SelectorItems, dueDate: ?Date) => any,
     getApproverWithQuery?: Function,
@@ -46,6 +46,10 @@ type State = {|
 |};
 
 class TaskForm extends React.Component<Props, State> {
+    static defaultProps = {
+        approverSelectorContacts: [],
+    };
+
     state = this.getInitialFormState();
 
     getInitialFormState() {
@@ -150,7 +154,7 @@ class TaskForm extends React.Component<Props, State> {
     };
 
     render() {
-        const { approverSelectorContacts = [], className, isDisabled, intl } = this.props;
+        const { approverSelectorContacts, className, isDisabled, intl } = this.props;
         const { dueDate, approvers, message, formValidityState, isValid } = this.state;
         const inputContainerClassNames = classNames('bcs-task-input-container', 'bcs-task-input-is-open', className);
 
