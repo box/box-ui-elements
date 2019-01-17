@@ -47,7 +47,7 @@ type Props = {
     currentUser?: User,
     defaultView?: SidebarView,
     detailsSidebarProps: DetailsSidebarProps,
-    features: ContentSidebarFeatures,
+    features: FeatureConfig,
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
@@ -380,7 +380,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         const styleClassName = classNames(
             'be bcs',
             {
-                [`bcs-${selectedView || ''}`]: isOpen,
+                [selectedView ? `bcs-${selectedView}` : '']: isOpen,
                 'bcs-is-open': isOpen,
             },
             className,
