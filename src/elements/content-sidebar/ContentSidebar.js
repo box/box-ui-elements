@@ -9,6 +9,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import SidebarNav from './SidebarNav';
@@ -427,4 +428,4 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
-export default withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)(withFeatureProvider(ContentSidebar));
+export default flow([withFeatureProvider, withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)])(ContentSidebar);
