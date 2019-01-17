@@ -47,7 +47,7 @@ type Props = {
     currentUser?: User,
     defaultView?: SidebarView,
     detailsSidebarProps: DetailsSidebarProps,
-    features: FeatureConfig,
+    features: ContentSidebarFeatures,
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
