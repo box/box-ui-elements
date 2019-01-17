@@ -364,10 +364,6 @@ render(
 | --- | --- | --- | --- |
 | onCommentCreate | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
 | onCommentDelete | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
-| onTaskCreate | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
-| onTaskDelete | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
-| onTaskUpdate | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
-| onTaskAssignmentUpdate | function | | *See the [developer docs](https://developer.box.com/docs/box-content-sidebar#section-activitySidebarProps).* |
 
 ### metadataSidebarProps
 | Prop | Type | Default | Description |
