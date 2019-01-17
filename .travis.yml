@@ -6,16 +6,19 @@ cache:
   directories:
     - node_modules
     - ~/.cache/Cypress
+before_install:
+    - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+    - export PATH=$HOME/.yarn/bin:$PATH
 jobs:
   include:
     - name: "Commit Lint"
       script: commitlint-travis
     - name: "Code Lint"
       script: npm-run-all clean build:i18n lint
-    - name: "Flow types"
-      script: npm-run-all clean build:i18n; yarn flow
+    - name: "Flow Types"
+      script: npm-run-all clean build:i18n && yarn flow
     - name: "Tests"
-      script: yarn test; yarn test:e2e
+      script: yarn test && yarn test:e2e
     - name: "Build Babel"
       script: npm-run-all clean build:i18n build:ci:es
     - name: "Build Webpack"
