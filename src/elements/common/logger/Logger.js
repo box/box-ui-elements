@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
+import uuidv4 from 'uuid/v4';
 import { EVENT_JS_READY } from './constants';
 import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../constants';
 
@@ -19,29 +20,6 @@ type Props = {
     source: ElementOrigin,
     startMarkName?: string,
 };
-
-/**
- * Converts a character, using it as a seed, to a random integer and returns it as a string.
- *
- * @param {string} c - A single character
- * @returns {string} The random character
- */
-function generateRandom(c: string): string {
-    /* eslint-disable no-bitwise */
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-    /* eslint-enable no-bitwise */
-}
-
-/**
- * Generates a GUID/UUID compliant with RFC4122 version 4.
- *
- * @return {string} A 36 character uuid
- */
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, generateRandom);
-}
 
 const SESSION_ID = uuidv4();
 const uniqueEvents: Set<string> = new Set();
@@ -76,7 +54,8 @@ class Logger extends React.Component<Props> {
      * @returns {string} A string containing the component and event name
      */
     createEventName(name: string): string {
-        return `${this.props.source}::${name}`;
+        const { source } = this.props;
+        return `${source}::${name}`;
     }
 
     /**
@@ -98,16 +77,17 @@ class Logger extends React.Component<Props> {
      * @param {Object} data  - the event data
      */
     logMetric(type: MetricType, name: string, data: Object): void {
+        const { onMetric, source } = this.props;
         const metric: ElementsMetric = {
             ...data,
-            component: this.props.source,
+            component: source,
             name,
             timestamp: this.getTimestamp(),
             sessionId: this.sessionId,
             type,
         };
 
-        this.props.onMetric(metric);
+        onMetric(metric);
     }
 
     /**
@@ -134,7 +114,8 @@ class Logger extends React.Component<Props> {
      * @returns {void}
      */
     handlePreviewMetric = (data: Object) => {
-        this.props.onMetric({
+        const { onMetric } = this.props;
+        onMetric({
             ...data,
             type: METRIC_TYPE_PREVIEW,
         });
@@ -174,4 +155,4 @@ class Logger extends React.Component<Props> {
     }
 }
 
-export { Logger as default, generateRandom, uuidv4 };
+export default Logger;
