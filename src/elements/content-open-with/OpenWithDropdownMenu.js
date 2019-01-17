@@ -21,7 +21,7 @@ const RIGHT_ALIGNMENT = 'right';
 const OpenWithDropdownMenu = ({ dropdownAlignment = RIGHT_ALIGNMENT, integrations, onClick }: Props) => (
     <DropdownMenu isRightAligned={dropdownAlignment === RIGHT_ALIGNMENT}>
         <MultipleIntegrationsOpenWithButton />
-        <Menu data-testid="openwithdropdown" className="bcow-menu">
+        <Menu className="bcow-menu">
             {integrations &&
                 integrations.map(integration => (
                     <OpenWithDropdownMenuItem

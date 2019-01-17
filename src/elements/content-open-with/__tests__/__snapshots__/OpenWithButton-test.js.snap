@@ -9,6 +9,7 @@ exports[`elements/content-open-with/OpenWithButton should force the tooltip open
   text="Box Tools is not installed"
 >
   <Button
+    data-testid="singleintegrationbutton"
     isDisabled={true}
     onClick={[Function]}
   >
@@ -36,6 +37,7 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
   }
 >
   <Button
+    data-testid="singleintegrationbutton"
     isDisabled={true}
     onClick={[Function]}
   >
@@ -63,6 +65,7 @@ exports[`elements/content-open-with/OpenWithButton should render as disabled if 
   }
 >
   <Button
+    data-testid="singleintegrationbutton"
     isDisabled={true}
     onClick={[Function]}
   >
@@ -90,6 +93,7 @@ exports[`elements/content-open-with/OpenWithButton should render with the correc
   }
 >
   <Button
+    data-testid="singleintegrationbutton"
     isDisabled={false}
     onClick={[Function]}
   >
