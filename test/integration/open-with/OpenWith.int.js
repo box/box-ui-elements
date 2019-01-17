@@ -1,6 +1,10 @@
 // <reference types="Cypress" />
 import l from '../../support/i18n';
 
+const getSingleButton = () => cy.getByTestId('singleintegrationbutton');
+const getOpenWithContent = () => cy.getByTestId('bcow-content');
+const getTooltip = () => cy.get('[role="tooltip"]');
+
 describe('OpenWith', () => {
     beforeEach(() => {
         cy.server();
@@ -12,12 +16,12 @@ describe('OpenWith', () => {
         cy.visit('/ContentOpenWith');
 
         // The button should be enabled
-        cy.getByTestId('singleintegrationbutton').should('not.have.attr', 'aria-disabled', 'true');
+        getSingleButton().should('not.have.attr', 'aria-disabled', 'true');
 
         // Hover over the Open With button
-        cy.getByTestId('bcow-content').trigger('mouseover');
+        getOpenWithContent().trigger('mouseover');
         // Tooltip should render on mouseover
-        cy.get('[role="tooltip"]').contains('Send this document for signature');
+        getTooltip().contains('Send this document for signature');
     });
 
     it('A custom integration', () => {
@@ -25,12 +29,12 @@ describe('OpenWith', () => {
         cy.visit('/ContentOpenWith');
 
         // The button should be enabled
-        cy.getByTestId('singleintegrationbutton').should('not.have.attr', 'aria-disabled', 'true');
+        getSingleButton().should('not.have.attr', 'aria-disabled', 'true');
 
         // Hover over the Open With button
-        cy.getByTestId('bcow-content').trigger('mouseover');
+        getOpenWithContent().trigger('mouseover');
         // Tooltip should render on mouseover
-        cy.get('[role="tooltip"]').contains('This is a custom integration');
+        getTooltip().contains('This is a custom integration');
     });
 
     it('Multiple integrations', () => {
@@ -57,15 +61,15 @@ describe('OpenWith', () => {
     });
 
     describe('box edit', () => {
-        it('box edit is uninstalled', () => {
+        it('is uninstalled', () => {
             cy.route('GET', '**/files/*/open_with_integrations', 'fixture:open-with/integration-box-edit');
             cy.visit('/ContentOpenWith');
 
             // The button should be disabled
-            cy.getByTestId('singleintegrationbutton').should('have.attr', 'aria-disabled', 'true');
+            getSingleButton().should('have.attr', 'aria-disabled', 'true');
 
             // Tooltip should render automatically
-            cy.get('[role="tooltip"]')
+            getTooltip()
                 .as('tooltip')
                 .contains(l('be.boxToolsInstallMessage', { boxTools: 'Box Tools' }));
 
@@ -83,15 +87,15 @@ describe('OpenWith', () => {
 
         [
             {
-                title: 'box edit is enabled',
+                title: 'is enabled',
                 fixture: 'fixture:open-with/integration-box-edit',
             },
             {
-                title: 'box edit sfc is enabled',
+                title: 'sfc is enabled',
                 fixture: 'fixture:open-with/integration-box-edit-sfc',
             },
             {
-                title: 'box edit and box edit sfc are enabled',
+                title: 'sfc and the regular integration are enabled',
                 fixture: 'fixture:open-with/integration-box-edit-and-sfc',
             },
         ].forEach(test => {
@@ -106,13 +110,13 @@ describe('OpenWith', () => {
                 cy.visit('/ContentOpenWith');
 
                 // The button should be enabled
-                cy.getByTestId('singleintegrationbutton').should('not.have.attr', 'aria-disabled', 'true');
+                getSingleButton().should('not.have.attr', 'aria-disabled', 'true');
 
                 // Hover over the Open With button
-                cy.getByTestId('bcow-content').trigger('mouseover');
+                getOpenWithContent().trigger('mouseover');
 
                 // Tooltip should render on mouseover
-                cy.get('[role="tooltip"]').contains('Open this file on your computer');
+                getTooltip().contains('Open this file on your computer');
             });
         });
 
@@ -127,16 +131,16 @@ describe('OpenWith', () => {
             cy.visit('/ContentOpenWith');
 
             // The button should be disabled
-            cy.getByTestId('singleintegrationbutton').should('have.attr', 'aria-disabled', 'true');
+            getSingleButton().should('have.attr', 'aria-disabled', 'true');
 
             // Wait until we know what openable applications are available
             cy.wait(['@getApplications']);
 
             // Hover over the Open With button
-            cy.getByTestId('bcow-content').trigger('mouseover');
+            getOpenWithContent().trigger('mouseover');
 
             // Tooltip should render on mouseover
-            cy.get('[role="tooltip"]').contains(l('be.boxEditBlacklistedError'));
+            getTooltip().contains(l('be.boxEditBlacklistedError'));
         });
     });
 });
