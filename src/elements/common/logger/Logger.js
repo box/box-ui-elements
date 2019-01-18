@@ -2,6 +2,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import uuidv4 from 'uuid/v4';
+import { isMarkSupported } from '../../../utils/performance';
 import { EVENT_JS_READY } from './constants';
 import { METRIC_TYPE_PREVIEW, METRIC_TYPE_ELEMENTS_LOAD_METRIC } from '../../../constants';
 
@@ -128,6 +129,10 @@ class Logger extends React.Component<Props> {
      * @returns {void}
      */
     handleReadyMetric = (data: ElementsLoadMetricData) => {
+        if (!isMarkSupported) {
+            return;
+        }
+
         const { startMarkName } = this.props;
         const metricData = {
             ...data,

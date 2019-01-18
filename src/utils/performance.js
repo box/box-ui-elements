@@ -1,5 +1,8 @@
 // @flow
-const mark = (markName: string) => window.performance.mark(markName);
+import getProp from 'lodash/get';
 
-// eslint-disable-next-line import/prefer-default-export
-export { mark };
+const isMarkSupported = typeof getProp(window, 'performance.mark') === 'function';
+
+const mark = (markName: string) => isMarkSupported && window.performance.mark(markName);
+
+export { mark, isMarkSupported };

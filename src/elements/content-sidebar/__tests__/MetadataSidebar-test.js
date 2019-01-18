@@ -10,10 +10,6 @@ import { MetadataSidebarComponent as MetadataSidebar } from '../MetadataSidebar'
 import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS } from '../../../constants';
 import messages from '../../common/messages';
 
-jest.mock('../../../utils/performance', () => ({
-    mark: jest.fn(),
-}));
-
 describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
     const getWrapper = (props = {}, options = {}) =>
         shallow(<MetadataSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);

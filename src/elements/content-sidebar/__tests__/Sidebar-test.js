@@ -6,9 +6,6 @@ jest.mock('../ActivitySidebar', () => 'ActivitySidebar');
 jest.mock('../DetailsSidebar', () => 'DetailsSidebar');
 jest.mock('../SkillsSidebar', () => 'SkillsSidebar');
 jest.mock('../MetadataSidebar', () => 'MetadataSidebar');
-jest.mock('../../../utils/performance', () => ({
-    mark: jest.fn(),
-}));
 
 describe('elements/content-sidebar/Sidebar', () => {
     const file = { id: 'id' };

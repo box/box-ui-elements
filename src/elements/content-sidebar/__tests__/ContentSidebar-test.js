@@ -7,9 +7,6 @@ import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
-jest.mock('../../../utils/performance', () => ({
-    mark: jest.fn(),
-}));
 
 const file = {
     id: 'I_AM_A_FILE',

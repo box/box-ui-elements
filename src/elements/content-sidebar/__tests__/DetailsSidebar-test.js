@@ -8,9 +8,6 @@ import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
-jest.mock('../../../utils/performance', () => ({
-    mark: jest.fn(),
-}));
 
 const file = {
     id: 'foo',

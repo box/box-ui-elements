@@ -8,9 +8,6 @@ import SidebarUtils from '../../content-sidebar/SidebarUtils';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../../common/Internationalize', () => 'mock-internationalize');
-jest.mock('../../../utils/performance', () => ({
-    mark: jest.fn(),
-}));
 
 let props;
 let file;
