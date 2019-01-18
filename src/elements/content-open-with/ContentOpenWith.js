@@ -192,7 +192,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         }
 
         if (currentFileId !== previousFileId) {
-            this.setState({ isLoading: true });
+            this.setState({ isLoading: true, integrations: null });
             this.fetchOpenWithData();
         }
     }
@@ -226,7 +226,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         const { fileId, language }: Props = this.props;
         this.api
             .getOpenWithAPI(false)
-            .getOpenWithIntegrations(fileId, language, this.fetchOpenWithSuccessHandler, this.fetchErrorHandler);
+            .getOpenWithIntegrations(fileId, this.fetchOpenWithSuccessHandler, this.fetchErrorHandler, language);
     }
 
     /**

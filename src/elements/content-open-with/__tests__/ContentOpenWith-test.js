@@ -45,7 +45,7 @@ describe('elements/content-open-with/ContentOpenWith', () => {
 
             instance.componentDidUpdate({ fileId: '4321' });
             expect(instance.fetchOpenWithData).toHaveBeenCalled();
-            expect(instance.setState).toHaveBeenCalledWith({ isLoading: true });
+            expect(instance.setState).toHaveBeenCalledWith({ isLoading: true, integrations: null });
         });
     });
 
@@ -86,7 +86,7 @@ describe('elements/content-open-with/ContentOpenWith', () => {
             instance.api = api;
 
             instance.fetchOpenWithData();
-            expect(openWithStub).toHaveBeenCalledWith('1234', 'en-US', expect.any(Function), expect.any(Function));
+            expect(openWithStub).toHaveBeenCalledWith('1234', expect.any(Function), expect.any(Function), 'en-US');
         });
     });
 
