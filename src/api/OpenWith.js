@@ -32,16 +32,16 @@ class OpenWith extends Base {
      * Gets Open With integration data
      *
      * @param {string} fileId - Box file ID
-     * @param {string} locale - locale to receive translated strings from the API
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param {string} locale - locale to receive translated strings from the API
      * @return {void}
      */
     getOpenWithIntegrations(
         fileId: string,
-        locale: ?string = DEFAULT_LOCALE,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        locale: ?string = DEFAULT_LOCALE,
     ) {
         this.errorCode = ERROR_CODE_FETCH_INTEGRATIONS;
         const params = {
