@@ -5,5 +5,5 @@ For more information on this element, see this [documentation](https://developer
 
 ```
 const ContentOpenWithExample = require('examples').ContentOpenWithExample;
-<ContentOpenWithExample />
+<ContentOpenWithExample dropdownAlignment="left" />
 ```
