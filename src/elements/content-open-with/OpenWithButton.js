@@ -70,7 +70,11 @@ const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props
             position="bottom-center"
             {...tooltipDisplayProps}
         >
-            <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration)}>
+            <Button
+                data-testid="singleintegrationbutton"
+                isDisabled={isDisabled}
+                onClick={() => onClick(displayIntegration)}
+            >
                 <OpenWithButtonContents>
                     <Icon
                         className={CLASS_INTEGRATION_ICON}

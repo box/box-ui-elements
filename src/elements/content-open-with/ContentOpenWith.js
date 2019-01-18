@@ -226,7 +226,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
         const { fileId, language }: Props = this.props;
         this.api
             .getOpenWithAPI(false)
-            .getOpenWithIntegrations(fileId, language, this.fetchOpenWithSuccessHandler, this.fetchErrorHandler);
+            .getOpenWithIntegrations(fileId, this.fetchOpenWithSuccessHandler, this.fetchErrorHandler, language);
     }
 
     /**
@@ -551,7 +551,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={intlMessages}>
-                <div id={this.id} className={className}>
+                <div id={this.id} className={className} data-testid="bcow-content">
                     {numIntegrations <= 1 ? (
                         <OpenWithButton
                             error={fetchError}
