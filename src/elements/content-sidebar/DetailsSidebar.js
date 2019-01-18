@@ -8,6 +8,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
+import flow from 'lodash/flow';
 import messages from '../common/messages';
 import { SECTION_TARGETS } from '../common/interactionTargets';
 import SidebarAccessStats from './SidebarAccessStats';
@@ -18,8 +19,11 @@ import SidebarNotices from './SidebarNotices';
 import SidebarFileProperties from './SidebarFileProperties';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
+import { withLogger } from '../common/logger';
+import { EVENT_JS_READY } from '../common/logger/constants';
 import { HTTP_STATUS_CODE_FORBIDDEN, ORIGIN_DETAILS_SIDEBAR, IS_ERROR_DISPLAYED } from '../../constants';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { mark } from '../../utils/performance';
 import API from '../../api';
 import { isUserCorrectableError, getBadItemError } from '../../utils/error';
 import './DetailsSidebar.scss';
@@ -38,12 +42,13 @@ type ExternalProps = {
     onClassificationClick: Function,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
-} & ErrorContextProps;
-
+} & ErrorContextProps &
+    WithLoggerProps;
 type Props = {
     api: API,
 } & ExternalProps &
-    ErrorContextProps;
+    ErrorContextProps &
+    WithLoggerProps;
 
 type State = {
     accessStats?: FileAccessStats,
@@ -55,6 +60,10 @@ type State = {
     file?: BoxItem,
     fileError?: Errors,
 };
+
+const MARK_NAME_JS_READY = `${ORIGIN_DETAILS_SIDEBAR}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
 
 class DetailsSidebar extends React.PureComponent<Props, State> {
     static defaultProps = {
@@ -74,6 +83,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             isLoadingAccessStats: false,
             isLoadingClassification: false,
         };
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
     }
 
     componentDidMount() {
@@ -474,4 +487,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default withErrorBoundary(ORIGIN_DETAILS_SIDEBAR)(withAPIContext(DetailsSidebar));
+export default flow([withLogger(ORIGIN_DETAILS_SIDEBAR), withErrorBoundary(ORIGIN_DETAILS_SIDEBAR), withAPIContext])(
+    DetailsSidebar,
+);

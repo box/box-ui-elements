@@ -8,12 +8,16 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
+import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
+import { mark } from '../../utils/performance';
+import { EVENT_JS_READY } from '../common/logger/constants';
 import { FIELD_PERMISSIONS_CAN_UPLOAD, SKILLS_TRANSCRIPT, ORIGIN_SKILLS_SIDEBAR } from '../../constants';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
+import { withLogger } from '../common/logger';
 import SidebarSkills from './skills/SidebarSkills';
 import API from '../../api';
 import './SkillsSidebar.scss';
@@ -26,17 +30,30 @@ type PropsWithoutContext = {
 
 type Props = {
     api: API,
-} & PropsWithoutContext;
+} & PropsWithoutContext &
+    WithLoggerProps;
 
 type State = {
     cards?: Array<SkillCard>,
     errors: NumberBooleanMap,
 };
 
+const MARK_NAME_JS_READY = `${ORIGIN_SKILLS_SIDEBAR}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
+
 class SkillsSidebar extends React.PureComponent<Props, State> {
     state: State = {
         errors: {},
     };
+
+    constructor(props: Props) {
+        super(props);
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
+    }
 
     componentDidMount() {
         const { api, file }: Props = this.props;
@@ -233,4 +250,6 @@ class SkillsSidebar extends React.PureComponent<Props, State> {
 }
 
 export { SkillsSidebar as SkillsSidebarComponent };
-export default withErrorBoundary(ORIGIN_SKILLS_SIDEBAR)(withAPIContext(SkillsSidebar));
+export default flow([withLogger(ORIGIN_SKILLS_SIDEBAR), withErrorBoundary(ORIGIN_SKILLS_SIDEBAR), withAPIContext])(
+    SkillsSidebar,
+);

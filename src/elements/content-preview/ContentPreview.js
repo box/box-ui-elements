@@ -26,9 +26,12 @@ import TokenService from '../../utils/TokenService';
 import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
 import { withErrorBoundary } from '../common/error-boundary';
+import { withLogger } from '../common/logger';
 import ReloadNotification from './ReloadNotification';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
+import { mark } from '../../utils/performance';
 import { withFeatureProvider } from '../common/feature-checking';
+import { EVENT_JS_READY } from '../common/logger/constants';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -68,7 +71,6 @@ type Props = {
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
-    onMetric: Function,
     onNavigate: Function,
     previewLibraryVersion: string,
     requestInterceptor?: Function,
@@ -80,7 +82,8 @@ type Props = {
     staticPath: string,
     token: Token,
     useHotkeys: boolean,
-} & ErrorContextProps;
+} & ErrorContextProps &
+    WithLoggerProps;
 
 type State = {
     file?: BoxItem,
@@ -132,6 +135,9 @@ const InvalidIdError = new Error('Invalid id for Preview!');
 const RETRY_COUNT = 3; // number of times to retry network request for a file
 const MS_IN_S = 1000; // ms in a sec
 const PREVIEW_LOAD_METRIC_EVENT = 'load';
+const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_PREVIEW}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
 
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
@@ -175,7 +181,6 @@ class ContentPreview extends PureComponent<Props, State> {
         onDownload: noop,
         onError: noop,
         onLoad: noop,
-        onMetric: noop,
         onNavigate: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
         showAnnotations: false,
@@ -228,6 +233,10 @@ class ContentPreview extends PureComponent<Props, State> {
             currentFileId: fileId,
             prevFileIdProp: fileId,
         };
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
     }
 
     /**
@@ -514,7 +523,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onPreviewMetric = (previewMetrics: PreviewMetrics): void => {
-        const { onMetric }: Props = this.props;
+        const { logger } = this.props;
         const { event_name } = previewMetrics;
         let metrics = {
             ...previewMetrics,
@@ -538,7 +547,7 @@ class ContentPreview extends PureComponent<Props, State> {
             };
         }
 
-        onMetric(metrics);
+        logger.onPreviewMetric(metrics);
     };
 
     /**
@@ -1148,4 +1157,9 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default flow([makeResponsive, withFeatureProvider, withErrorBoundary(ORIGIN_CONTENT_PREVIEW)])(ContentPreview);
+export default flow([
+    makeResponsive,
+    withFeatureProvider,
+    withLogger(ORIGIN_CONTENT_PREVIEW),
+    withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
+])(ContentPreview);

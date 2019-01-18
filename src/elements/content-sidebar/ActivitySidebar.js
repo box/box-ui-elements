@@ -7,13 +7,17 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
+import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
 import ActivityFeed from './activity-feed/activity-feed/ActivityFeed';
 import SidebarContent from './SidebarContent';
 import messages from '../common/messages';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
+import { withLogger } from '../common/logger';
 import { getBadUserError, getBadItemError } from '../../utils/error';
+import { mark } from '../../utils/performance';
+import { EVENT_JS_READY } from '../common/logger/constants';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import API from '../../api';
 import './ActivitySidebar.scss';
@@ -34,7 +38,8 @@ type PropsWithoutContext = {
     translations?: Translations,
     isDisabled?: boolean,
     onVersionHistoryClick?: Function,
-} & ExternalProps;
+} & ExternalProps &
+    WithLoggerProps;
 
 type Props = {
     api: API,
@@ -56,8 +61,21 @@ export const activityFeedInlineError: Errors = {
         content: messages.activityFeedItemApiError,
     },
 };
+
+const MARK_NAME_JS_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
+
 class ActivitySidebar extends React.PureComponent<Props, State> {
     state = {};
+
+    constructor(props: Props) {
+        super(props);
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
+    }
 
     componentDidMount() {
         const { currentUser } = this.props;
@@ -436,6 +454,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activityFeedError,
             currentUserError,
         } = this.state;
+
         return (
             <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
                 <ActivityFeed
@@ -466,4 +485,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR)(withAPIContext(ActivitySidebar));
+export default flow([withLogger(ORIGIN_ACTIVITY_SIDEBAR), withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR), withAPIContext])(
+    ActivitySidebar,
+);
