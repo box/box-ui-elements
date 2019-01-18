@@ -551,7 +551,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
         return (
             <Internationalize language={language} messages={intlMessages}>
-                <div id={this.id} className={className}>
+                <div id={this.id} className={className} data-testid="bcow-content">
                     {numIntegrations <= 1 ? (
                         <OpenWithButton
                             error={fetchError}
