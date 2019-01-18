@@ -178,7 +178,7 @@ class ContentPreview extends PureComponent<Props, State> {
         onMetric: noop,
         onNavigate: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
-        showAnnotations: true,
+        showAnnotations: false,
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         useHotkeys: true,
