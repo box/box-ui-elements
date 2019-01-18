@@ -201,7 +201,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             approverSelectorContacts,
             className,
             createTask,
-            getMentionWithQuery = noop,
+            getMentionWithQuery,
             intl: { formatMessage },
             isDisabled,
             isOpen,

@@ -395,6 +395,17 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         expect(content).toEqual('');
     });
 
+    test('should not display trigger @mention selector when getMentionQuery prop is empty', () => {
+        const wrapper = render({ getMentionWithQuery: null });
+
+        expect(
+            wrapper
+                .find('DraftJSMentionSelector')
+                .at(0)
+                .prop('onMention'),
+        ).toEqual(null);
+    });
+
     describe('handleApproverSelectorInput()', () => {
         test('should call getApproverWithQuery() when called', () => {
             const value = 'test';
