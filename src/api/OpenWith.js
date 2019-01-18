@@ -52,7 +52,7 @@ class OpenWith extends Base {
 
         this.get({
             id: fileId,
-            params,
+            requestData: params,
             successCallback: openWithIntegrations => {
                 const formattedOpenWithData = this.formatOpenWithData(openWithIntegrations);
                 const consolidatedOpenWithIntegrations = this.consolidateBoxEditIntegrations(formattedOpenWithData);
