@@ -45,7 +45,7 @@ describe('elements/content-open-with/ContentOpenWith', () => {
 
             instance.componentDidUpdate({ fileId: '4321' });
             expect(instance.fetchOpenWithData).toHaveBeenCalled();
-            expect(instance.setState).toHaveBeenCalledWith({ isLoading: true });
+            expect(instance.setState).toHaveBeenCalledWith({ isLoading: true, integrations: null });
         });
     });
 

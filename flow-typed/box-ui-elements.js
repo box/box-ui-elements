@@ -736,3 +736,15 @@ type LoggerProps = {
 type WithLoggerProps = {
     logger: LoggerProps,
 };
+
+type ActivityFeedFeatures = {
+    avatars?: boolean, // Show avatars
+    tasks?: {|
+        createButton?: boolean, // Show the Create Task button
+        createFromComment?: boolean // Show the Add Task checkbox
+    |}
+};
+
+type ContentSidebarFeatures = {
+    activityFeed?: ActivityFeedFeatures
+} & FeatureConfig;

@@ -18,6 +18,7 @@ import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
+import { withFeatureProvider } from '../common/feature-checking';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
 import {
@@ -49,6 +50,7 @@ type Props = {
     currentUser?: User,
     defaultView?: SidebarView,
     detailsSidebarProps: DetailsSidebarProps,
+    features: FeatureConfig,
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
@@ -392,7 +394,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         const styleClassName = classNames(
             'be bcs',
             {
-                [`bcs-${((selectedView: any): string)}`]: isOpen,
+                [selectedView ? `bcs-${selectedView}` : '']: isOpen,
                 'bcs-is-open': isOpen,
             },
             className,
@@ -440,4 +442,8 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
-export default flow([withLogger(ORIGIN_CONTENT_SIDEBAR), withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)])(ContentSidebar);
+export default flow([
+    withFeatureProvider,
+    withLogger(ORIGIN_CONTENT_SIDEBAR),
+    withErrorBoundary(ORIGIN_CONTENT_SIDEBAR),
+])(ContentSidebar);

@@ -861,14 +861,13 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should return true if showAnnotations prop is true and there are annotations edit permissions', () => {
-            wrapper = getWrapper(props);
+            wrapper = getWrapper({ ...props, showAnnotations: true });
             instance = wrapper.instance();
             wrapper.setState({ file });
             expect(instance.canAnnotate()).toBeTruthy();
         });
 
-        test('should return false if showAnnotations prop is false', () => {
-            props.showAnnotations = false;
+        test('should return false if showAnnotations prop is false (default is false)', () => {
             wrapper = getWrapper(props);
             instance = wrapper.instance();
             wrapper.setState({ file });
@@ -876,6 +875,7 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should return false if can_annotate permission is false', () => {
+            wrapper = getWrapper({ ...props, showAnnotations: true });
             wrapper = getWrapper(props);
             instance = wrapper.instance();
             file.permissions.can_annotate = false;
