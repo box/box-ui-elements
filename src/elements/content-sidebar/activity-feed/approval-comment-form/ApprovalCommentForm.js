@@ -18,6 +18,7 @@ import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';
 import Avatar from '../Avatar';
 import messages from '../../../common/messages';
+import { FeatureFlag } from '../../../common/feature-checking';
 
 import './ApprovalCommentForm.scss';
 
@@ -250,18 +251,20 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             <FormattedMessage {...messages.atMentionTip} />
                         </aside>
                         {createTask ? (
-                            <AddApproval
-                                approvalDate={approvalDate}
-                                approvers={approvers}
-                                approverSelectorContacts={approverSelectorContacts}
-                                approverSelectorError={approverSelectorError}
-                                formatMessage={formatMessage}
-                                isAddApprovalVisible={isAddApprovalVisible}
-                                onApprovalDateChange={this.onApprovalDateChangeHandler}
-                                onApproverSelectorInput={this.handleApproverSelectorInput}
-                                onApproverSelectorRemove={this.handleApproverSelectorRemove}
-                                onApproverSelectorSelect={this.handleApproverSelectorSelect}
-                            />
+                            <FeatureFlag feature="activityFeed.tasks.createFromComment">
+                                <AddApproval
+                                    approvalDate={approvalDate}
+                                    approvers={approvers}
+                                    approverSelectorContacts={approverSelectorContacts}
+                                    approverSelectorError={approverSelectorError}
+                                    formatMessage={formatMessage}
+                                    isAddApprovalVisible={isAddApprovalVisible}
+                                    onApprovalDateChange={this.onApprovalDateChangeHandler}
+                                    onApproverSelectorInput={this.handleApproverSelectorInput}
+                                    onApproverSelectorRemove={this.handleApproverSelectorRemove}
+                                    onApproverSelectorSelect={this.handleApproverSelectorSelect}
+                                />
+                            </FeatureFlag>
                         ) : null}
                         <CommentInputControls onCancel={onCancel} />
                     </Form>

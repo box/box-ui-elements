@@ -9,6 +9,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import Sidebar from './Sidebar';
 import SidebarNav from './SidebarNav';
@@ -17,6 +18,7 @@ import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
 import { withErrorBoundary } from '../common/error-boundary';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { withFeatureProvider } from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
@@ -45,6 +47,7 @@ type Props = {
     currentUser?: User,
     defaultView?: SidebarView,
     detailsSidebarProps: DetailsSidebarProps,
+    features: FeatureConfig,
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
@@ -377,7 +380,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         const styleClassName = classNames(
             'be bcs',
             {
-                [`bcs-${((selectedView: any): string)}`]: isOpen,
+                [selectedView ? `bcs-${selectedView}` : '']: isOpen,
                 'bcs-is-open': isOpen,
             },
             className,
@@ -425,4 +428,4 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
-export default withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)(ContentSidebar);
+export default flow([withFeatureProvider, withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)])(ContentSidebar);

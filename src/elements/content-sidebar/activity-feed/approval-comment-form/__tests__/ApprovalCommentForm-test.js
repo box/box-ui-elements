@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import { EditorState, convertFromRaw } from 'draft-js';
 
 import { ApprovalCommentFormUnwrapped as ApprovalCommentForm } from '../ApprovalCommentForm';
+import FeatureProvider from '../../../../common/feature-checking/FeatureProvider';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -11,6 +12,14 @@ const intlFake = {
 };
 
 describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCommentForm', () => {
+    const features = {
+        activityFeed: {
+            tasks: {
+                createFromComment: true,
+            },
+        },
+    };
+
     const render = props =>
         mount(
             <ApprovalCommentForm
@@ -79,16 +88,37 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         ).toEqual(true);
     });
 
-    test('should render add approval ui when createTask handler is defined', () => {
-        const wrapper = render({ createTask: jest.fn() });
+    test('should render add approval ui when createTask handler is defined, and the feature is enabled', () => {
+        const wrapper = mount(
+            <FeatureProvider features={features}>
+                <ApprovalCommentForm
+                    getMentionWithQuery={() => {}}
+                    user={{ id: 123, name: 'foo bar' }}
+                    intl={intlFake}
+                    createTask={jest.fn()}
+                />
+            </FeatureProvider>,
+        );
 
         expect(wrapper.find('.bcs-comment-add-approver').length).toEqual(1);
     });
 
     test('should render add approval fields when add approver is checked', () => {
-        const wrapper = render({ createTask: jest.fn() });
+        const wrapper = mount(
+            <FeatureProvider features={features}>
+                <ApprovalCommentForm
+                    getMentionWithQuery={() => {}}
+                    user={{ id: 123, name: 'foo bar' }}
+                    intl={intlFake}
+                    createTask={jest.fn()}
+                />
+            </FeatureProvider>,
+        );
 
-        wrapper.instance().onFormChangeHandler({ addApproval: 'on' });
+        wrapper
+            .find('ApprovalCommentForm')
+            .instance()
+            .onFormChangeHandler({ addApproval: 'on' });
         wrapper.update();
 
         expect(wrapper.find('.bcs-comment-add-approver-fields-container').length).toEqual(1);
@@ -189,17 +219,32 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
     });
 
     test('should filter approver selector options correctly', () => {
-        const wrapper = render({
+        const props = {
             approverSelectorContacts: [
                 { id: 123, item: { id: 123, name: 'name' }, name: 'name' },
                 { id: 234, item: { id: 234, name: 'test' }, name: 'test' },
             ],
             createTask: jest.fn(),
-        });
-        wrapper.setState({
+        };
+        const wrapper = mount(
+            <FeatureProvider features={features}>
+                <ApprovalCommentForm
+                    getMentionWithQuery={() => {}}
+                    user={{ id: 123, name: 'foo bar' }}
+                    intl={intlFake}
+                    createTask={jest.fn()}
+                    {...props}
+                />
+            </FeatureProvider>,
+        );
+
+        const approvalCommentForm = wrapper.find('ApprovalCommentForm');
+        approvalCommentForm.instance().setState({
             approvers: [{ text: 'name', value: 123 }],
             isAddApprovalVisible: true,
         });
+
+        wrapper.update();
         expect(wrapper.find('PillSelectorDropdown').prop('selectorOptions').length).toBe(1);
     });
 

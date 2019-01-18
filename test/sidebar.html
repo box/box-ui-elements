@@ -35,6 +35,8 @@
             <div class="sidebar2"></div>
             <div class="gap">&nbsp;&nbsp;</div>
             <div class="sidebar3"></div>
+            <div class="gap">&nbsp;&nbsp;</div>
+            <div class="sidebar4"></div>
             <div class="inputs">
                 <div>
                     <label>
@@ -46,7 +48,7 @@
                         <input class="token" type="text" placeholder="Enter auth token" />
                     </label>
                 </div>
-                <button type="button" onclick="load()">Submit</button>
+                <button type="button" onclick="load(true)">Submit</button>
             </div>
             </div>
         <link rel="stylesheet" type="text/css" href="../dev/en-US/sidebar.css" />
@@ -55,7 +57,7 @@
     <body>
         <div class="preview sidebar1"></div>
         <script>
-            function load() {
+            function load(refreshOnComplete = false) {
                 const { ContentSidebar } = Box;
                 const token = document.querySelector('.token').value || localStorage.getItem('token');
                 const fileId = document.querySelector('.file').value || localStorage.getItem('file');
@@ -134,8 +136,31 @@
                         getUserProfileUrl: (id) => { return Promise.resolve('#'); }
                     }
                 });
+
+                const sidebar4 = new ContentSidebar();
+                sidebar4.show(fileId, token, {
+                    container: '.sidebar4',
+                    isLarge: true,
+                    detailsSidebarProps: {
+                        hasProperties: true,
+                        hasNotices: true,
+                        hasVersions: true,
+                        hasAccessStats: true,
+                        hasClassification: true
+                    },
+                    hasActivityFeed: true,
+                    hasSkills: true,
+                    features: {
+                        activityFeed: {
+                            tasks: {
+                                createFromComment: true,
+                            },
+                        },
+                    }
+                });
+                if (refreshOnComplete) window.location.reload();
             }
-            load();
+            load(false);
         </script>
     </body>
 </html>

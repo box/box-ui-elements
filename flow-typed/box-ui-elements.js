@@ -714,3 +714,15 @@ type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: O
 type ClassificationInfo = {
     Box__Security__Classification__Key?: string,
 } & MetadataInstance;
+
+type ActivityFeedFeatures = {
+    avatars?: boolean, // Show avatars
+    tasks?: {|
+        createButton?: boolean, // Show the Create Task button
+        createFromComment?: boolean // Show the Add Task checkbox
+    |}
+};
+
+type ContentSidebarFeatures = {
+    activityFeed?: ActivityFeedFeatures
+} & FeatureConfig;
