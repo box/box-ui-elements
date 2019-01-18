@@ -11,6 +11,7 @@ exports[`elements/content-open-with/MultipleIntegrationsOpenWithButton should pa
   }
 >
   <Button
+    data-testid="multipleintegrationsbutton"
     width={50}
   >
     <MenuToggle>
@@ -37,7 +38,9 @@ exports[`elements/content-open-with/MultipleIntegrationsOpenWithButton should re
     />
   }
 >
-  <Button>
+  <Button
+    data-testid="multipleintegrationsbutton"
+  >
     <MenuToggle>
       <OpenWithButtonContents>
         <IconOpenWith
