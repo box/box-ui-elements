@@ -441,7 +441,10 @@ describe('util/Xhr', () => {
                 },
             };
             xhrInstance.axios = jest.fn().mockImplementation(() => {
-                xhrInstance.errorInterceptor(error);
+                xhrInstance
+                    .errorInterceptor(error)
+                    .then(() => {})
+                    .catch(() => {});
                 return Promise.resolve();
             });
             // first time return true, then false

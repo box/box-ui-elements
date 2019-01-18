@@ -17,8 +17,10 @@ import API from '../../api';
 import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
 import { withErrorBoundary } from '../common/error-boundary';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { withLogger } from '../common/logger';
 import { withFeatureProvider } from '../common/feature-checking';
+import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { mark } from '../../utils/performance';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
@@ -28,6 +30,7 @@ import {
     SIDEBAR_VIEW_METADATA,
     ORIGIN_CONTENT_SIDEBAR,
 } from '../../constants';
+import { EVENT_JS_READY } from '../common/logger/constants';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -64,7 +67,8 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     token: Token,
-} & ErrorContextProps;
+} & ErrorContextProps &
+    WithLoggerProps;
 
 type State = {
     file?: BoxItem,
@@ -73,6 +77,10 @@ type State = {
     metadataEditors?: Array<MetadataEditor>,
     view?: SidebarView,
 };
+
+const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
 
 class ContentSidebar extends React.PureComponent<Props, State> {
     id: string;
@@ -131,6 +139,12 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         });
 
         this.state = { isLoading: true, isOpen: !!isLarge };
+        /* eslint-disable react/prop-types */
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
+        /* eslint-enable react/prop-types */
     }
 
     /**
@@ -428,4 +442,8 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
-export default flow([withFeatureProvider, withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)])(ContentSidebar);
+export default flow([
+    withFeatureProvider,
+    withLogger(ORIGIN_CONTENT_SIDEBAR),
+    withErrorBoundary(ORIGIN_CONTENT_SIDEBAR),
+])(ContentSidebar);

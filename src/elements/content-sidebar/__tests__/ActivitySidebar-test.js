@@ -45,7 +45,29 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     };
     const onError = jest.fn();
     const getWrapper = (props = {}) =>
-        shallow(<ActivitySidebarComponent api={api} file={file} onError={onError} {...props} />);
+        shallow(
+            <ActivitySidebarComponent
+                api={api}
+                file={file}
+                onError={onError}
+                logger={{ onReadyMetric: jest.fn() }}
+                {...props}
+            />,
+        );
+
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
+    });
 
     describe('componentDidMount()', () => {
         let wrapper;

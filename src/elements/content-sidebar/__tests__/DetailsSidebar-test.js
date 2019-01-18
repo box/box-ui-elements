@@ -22,7 +22,16 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     let setFileDescription;
     const onError = jest.fn();
     const getWrapper = (props, options) =>
-        shallow(<DetailsSidebar fileId={file.id} api={api} onError={onError} {...props} />, options);
+        shallow(
+            <DetailsSidebar
+                fileId={file.id}
+                api={api}
+                onError={onError}
+                logger={{ onReadyMetric: jest.fn() }}
+                {...props}
+            />,
+            options,
+        );
 
     beforeEach(() => {
         getFile = jest.fn().mockResolvedValue(file);
@@ -41,6 +50,20 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 getFileAccessStats: getStats,
             })),
         };
+    });
+
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
     });
 
     describe('render()', () => {
