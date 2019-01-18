@@ -378,10 +378,14 @@ class MultiputUpload extends BaseMultiput {
             this.sha1Worker.terminate();
         }
 
-        if (this.sessionEndpoints.abort) {
-            this.xhr.delete({
-                url: this.sessionEndpoints.abort,
-            });
+        if (this.sessionEndpoints.abort && this.sessionId) {
+            this.xhr
+                .delete({
+                    url: this.sessionEndpoints.abort,
+                })
+                .then(() => {
+                    this.sessionId = '';
+                });
         }
     }
 
