@@ -6,6 +6,7 @@
 
 import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
+import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
 import cloneDeep from 'lodash/cloneDeep';
@@ -59,6 +60,7 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
+    enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
     getInnerRef: () => ?HTMLElement,
@@ -91,6 +93,7 @@ type State = {
     isReloadNotificationVisible: boolean,
     currentFileId?: string, // the currently displayed file id in the collection
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
+    isThumbnailsOpen: boolean,
 };
 
 // Emitted by preview's 'load' event
@@ -131,6 +134,11 @@ type PreviewError = {
     },
 };
 
+type PreviewViewerEvent = {
+    event: string,
+    data: any,
+};
+
 const InvalidIdError = new Error('Invalid id for Preview!');
 const RETRY_COUNT = 3; // number of times to retry network request for a file
 const MS_IN_S = 1000; // ms in a sec
@@ -165,6 +173,7 @@ class ContentPreview extends PureComponent<Props, State> {
     initialState: State = {
         isFileError: false,
         isReloadNotificationVisible: false,
+        isThumbnailsOpen: false,
     };
 
     static defaultProps = {
@@ -176,6 +185,7 @@ class ContentPreview extends PureComponent<Props, State> {
         collection: [],
         contentOpenWithProps: {},
         contentSidebarProps: {},
+        enableThumbnailsSidebar: false,
         hasHeader: false,
         language: DEFAULT_LOCALE,
         onDownload: noop,
@@ -551,6 +561,19 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
+     * Event handler for viewer events from Preview. Currently only handles thumbnails open and close
+     * @param {Object} viewerEvent - the viewer event object
+     * @return {void}
+     */
+    onPreviewViewerEvent = ({ event: eventName }: PreviewViewerEvent): void => {
+        if (eventName === 'thumbnailsOpen') {
+            this.setState({ isThumbnailsOpen: true });
+        } else if (eventName === 'thumbnailsClose') {
+            this.setState({ isThumbnailsOpen: false });
+        }
+    };
+
+    /**
      * Adds in the file fetch time to the preview metrics
      *
      * @param {Object} previewTimeMetrics - the preview time metrics
@@ -661,7 +684,13 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = async (): Promise<void> => {
-        const { token: tokenOrTokenFunction, collection, onError, ...rest }: Props = this.props;
+        const {
+            token: tokenOrTokenFunction,
+            collection,
+            onError,
+            enableThumbnailsSidebar,
+            ...rest
+        }: Props = this.props;
         const { file }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
@@ -682,12 +711,14 @@ class ContentPreview extends PureComponent<Props, State> {
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,
+            enableThumbnailsSidebar,
         };
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
+        this.preview.addListener('viewerevent', this.onPreviewViewerEvent);
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
@@ -1075,8 +1106,15 @@ class ContentPreview extends PureComponent<Props, State> {
             responseInterceptor,
         }: Props = this.props;
 
-        const { file, isFileError, isReloadNotificationVisible, currentFileId }: State = this.state;
+        const { file, isFileError, isReloadNotificationVisible, currentFileId, isThumbnailsOpen }: State = this.state;
         const { collection }: Props = this.props;
+        const styleClassName = classNames(
+            'be bcpr',
+            {
+                'bcpr-thumbnails-open': isThumbnailsOpen,
+            },
+            className,
+        );
 
         if (!currentFileId) {
             return null;
@@ -1085,13 +1123,7 @@ class ContentPreview extends PureComponent<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div
-                    id={this.id}
-                    className={`be bcpr ${className}`}
-                    ref={measureRef}
-                    onKeyDown={this.onKeyDown}
-                    tabIndex={0}
-                >
+                <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
                     {hasHeader && (
                         <Header
                             file={file}
