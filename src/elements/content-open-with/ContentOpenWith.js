@@ -405,7 +405,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     };
 
     /**
-     * Opens the file via Box Edit
+     * Opens the file via a Partner Integration
      *
      * @private
      * @param {ExecuteAPI} executeData - API response on how to open an executed integration
@@ -447,18 +447,23 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     executeBoxEditSuccessHandler = (integrationId: string, { url }: ExecuteAPI): void => {
-        const { fileId, token } = this.props;
+        const { fileId, token, onError } = this.props;
         const queryParams = queryString.parse(url);
         const authCode = queryParams[AUTH_CODE];
         const isFileScoped = this.isBoxEditSFCIntegration(integrationId);
 
-        this.api.getBoxEditAPI().openFile(fileId, {
-            data: {
-                auth_code: authCode,
-                token,
-                token_scope: isFileScoped ? TYPE_FILE : TYPE_FOLDER,
-            },
-        });
+        this.api
+            .getBoxEditAPI()
+            .openFile(fileId, {
+                data: {
+                    auth_code: authCode,
+                    token,
+                    token_scope: isFileScoped ? TYPE_FILE : TYPE_FOLDER,
+                },
+            })
+            .catch(error => {
+                onError(error, ERROR_CODE_EXECUTE_INTEGRATION, { error });
+            });
     };
 
     /**
