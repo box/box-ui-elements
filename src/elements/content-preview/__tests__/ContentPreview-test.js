@@ -956,41 +956,4 @@ describe('elements/content-preview/ContentPreview', () => {
             expect(instance.canViewAnnotations()).toBeFalsy();
         });
     });
-
-    describe('onPreviewViewerEvent()', () => {
-        let wrapper;
-        let instance;
-
-        beforeEach(() => {
-            file = { id: '123' };
-
-            props = {
-                hasSidebar: true,
-                token: 'token',
-                fileId: file.id,
-            };
-            wrapper = getWrapper(props);
-            wrapper.setState({ file });
-            instance = wrapper.instance();
-        });
-
-        test('should set state to be open when viewer event is thumbnailsOpen', () => {
-            expect(instance.state.isThumbnailsOpen).toBeFalsy();
-            instance.onPreviewViewerEvent({ event: 'thumbnailsOpen' });
-            expect(instance.state.isThumbnailsOpen).toBeTruthy();
-        });
-
-        test('should set state to be closed when viewer event is thumbnailsClose', () => {
-            instance.setState({ isThumbnailsOpen: true });
-            expect(instance.state.isThumbnailsOpen).toBeTruthy();
-            instance.onPreviewViewerEvent({ event: 'thumbnailsClose' });
-            expect(instance.state.isThumbnailsOpen).toBeFalsy();
-        });
-
-        test('should not affect thumbnails state for other viewer events', () => {
-            expect(instance.state.isThumbnailsOpen).toBeFalsy();
-            instance.onPreviewViewerEvent({ event: 'foo' });
-            expect(instance.state.isThumbnailsOpen).toBeFalsy();
-        });
-    });
 });

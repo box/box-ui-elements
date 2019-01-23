@@ -134,11 +134,6 @@ type PreviewError = {
     },
 };
 
-type PreviewViewerEvent = {
-    event: string,
-    data: any,
-};
-
 const InvalidIdError = new Error('Invalid id for Preview!');
 const RETRY_COUNT = 3; // number of times to retry network request for a file
 const MS_IN_S = 1000; // ms in a sec
@@ -561,19 +556,6 @@ class ContentPreview extends PureComponent<Props, State> {
     };
 
     /**
-     * Event handler for viewer events from Preview. Currently only handles thumbnails open and close
-     * @param {Object} viewerEvent - the viewer event object
-     * @return {void}
-     */
-    onPreviewViewerEvent = ({ event: eventName }: PreviewViewerEvent): void => {
-        if (eventName === 'thumbnailsOpen') {
-            this.setState({ isThumbnailsOpen: true });
-        } else if (eventName === 'thumbnailsClose') {
-            this.setState({ isThumbnailsOpen: false });
-        }
-    };
-
-    /**
      * Adds in the file fetch time to the preview metrics
      *
      * @param {Object} previewTimeMetrics - the preview time metrics
@@ -718,7 +700,8 @@ class ContentPreview extends PureComponent<Props, State> {
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
-        this.preview.addListener('viewerevent', this.onPreviewViewerEvent);
+        this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailsOpen: true }));
+        this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailsOpen: false }));
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
