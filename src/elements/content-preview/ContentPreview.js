@@ -93,7 +93,7 @@ type State = {
     isReloadNotificationVisible: boolean,
     currentFileId?: string, // the currently displayed file id in the collection
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
-    isThumbnailsOpen: boolean,
+    isThumbnailSidebarOpen: boolean,
 };
 
 // Emitted by preview's 'load' event
@@ -168,7 +168,7 @@ class ContentPreview extends PureComponent<Props, State> {
     initialState: State = {
         isFileError: false,
         isReloadNotificationVisible: false,
-        isThumbnailsOpen: false,
+        isThumbnailSidebarOpen: false,
     };
 
     static defaultProps = {
@@ -700,8 +700,8 @@ class ContentPreview extends PureComponent<Props, State> {
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
-        this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailsOpen: true }));
-        this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailsOpen: false }));
+        this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
+        this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
@@ -1089,12 +1089,18 @@ class ContentPreview extends PureComponent<Props, State> {
             responseInterceptor,
         }: Props = this.props;
 
-        const { file, isFileError, isReloadNotificationVisible, currentFileId, isThumbnailsOpen }: State = this.state;
+        const {
+            file,
+            isFileError,
+            isReloadNotificationVisible,
+            currentFileId,
+            isThumbnailSidebarOpen,
+        }: State = this.state;
         const { collection }: Props = this.props;
         const styleClassName = classNames(
             'be bcpr',
             {
-                'bcpr-thumbnails-open': isThumbnailsOpen,
+                'bcpr-thumbnails-open': isThumbnailSidebarOpen,
             },
             className,
         );
