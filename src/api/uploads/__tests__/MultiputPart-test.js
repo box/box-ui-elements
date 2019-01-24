@@ -116,10 +116,9 @@ describe('api/uploads/MultiputPart', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.numUploadRetriesPerformed = 100;
             MultiputPartTest.config.retries = 1;
-            MultiputPartTest.logEvent = jest.fn();
+            MultiputPartTest.logEvent = jest.fn().mockResolvedValue();
             MultiputPartTest.onError = jest.fn();
             MultiputPartTest.uploadErrorHandler(error);
-            expect(MultiputPartTest.logEvent).toHaveBeenCalled();
             expect(MultiputPartTest.onError).toHaveBeenCalled();
         });
 
@@ -130,13 +129,12 @@ describe('api/uploads/MultiputPart', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.numUploadRetriesPerformed = 100;
             MultiputPartTest.config.retries = 1000;
-            MultiputPartTest.logEvent = jest.fn();
+            MultiputPartTest.logEvent = jest.fn().mockResolvedValue();
             MultiputPartTest.onError = jest.fn();
             MultiputPartTest.retryUpload = jest.fn();
             MultiputPartTest.uploadErrorHandler(error);
             jest.runOnlyPendingTimers();
             expect(MultiputPartTest.numUploadRetriesPerformed).toBe(101);
-            expect(MultiputPartTest.logEvent).toHaveBeenCalled();
             expect(MultiputPartTest.onError).not.toHaveBeenCalled();
             jest.clearAllTimers();
         });
