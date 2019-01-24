@@ -471,12 +471,36 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
         });
     });
 
+    describe('scrollApproverSelector()', () => {
+        test('should scroll the approver selector input', () => {
+            const input = {
+                scrollTop: 0,
+                scrollHeight: 100,
+            };
+            document.querySelector = jest.fn().mockReturnValue(input);
+
+            const wrapper = render();
+            wrapper.instance().scrollApproverSelector();
+
+            expect(input.scrollTop).toEqual(100);
+        });
+    });
+
     describe('handleApproverSelectorSelect()', () => {
         test('should update approvers when called', () => {
             const wrapper = render();
             wrapper.setState({ approvers: [{ value: 123 }] });
             wrapper.instance().handleApproverSelectorSelect([{ value: 234 }]);
             expect(wrapper.state('approvers')).toEqual([{ value: 123 }, { value: 234 }]);
+        });
+
+        test('should scroll the selector input after the state has been set', () => {
+            const wrapper = render();
+            const instance = wrapper.instance();
+            instance.scrollApproverSelector = jest.fn();
+
+            wrapper.instance().handleApproverSelectorSelect([{ value: 234 }]);
+            expect(instance.scrollApproverSelector).toHaveBeenCalled();
         });
     });
 
