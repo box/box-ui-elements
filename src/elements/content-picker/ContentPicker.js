@@ -10,17 +10,17 @@ import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
-import Footer from './Footer';
+import Header from 'elements/common/header';
+import SubHeader from 'elements/common/sub-header/SubHeader';
+import UploadDialog from 'elements/common/upload-dialog';
+import CreateFolderDialog from 'elements/common/create-folder-dialog';
+import Internationalize from 'elements/common/Internationalize';
+import makeResponsive from 'elements/common/makeResponsive';
+import Pagination from 'elements/common/pagination/Pagination';
+import { isFocusableElement, isInputElement, focus } from 'utils/dom';
+import API from 'api';
 import Content from './Content';
-import Header from '../common/header';
-import SubHeader from '../common/sub-header/SubHeader';
-import UploadDialog from '../common/upload-dialog';
-import CreateFolderDialog from '../common/create-folder-dialog';
-import API from '../../api';
-import Internationalize from '../common/Internationalize';
-import makeResponsive from '../common/makeResponsive';
-import Pagination from '../common/pagination/Pagination';
-import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import Footer from './Footer';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -46,9 +46,9 @@ import {
     ERROR_CODE_ITEM_NAME_IN_USE,
     TYPED_ID_FOLDER_PREFIX,
 } from '../../constants';
-import '../common/fonts.scss';
-import '../common/base.scss';
-import '../common/modal.scss';
+import 'elements/common/fonts.scss';
+import 'elements/common/base.scss';
+import 'elements/common/modal.scss';
 
 type Props = {
     type: string,

@@ -9,7 +9,7 @@ import { injectIntl } from 'react-intl';
 import IconNavigateLeft from 'box-react-ui/lib/icons/general/IconNavigateLeft';
 import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import messages from '../common/messages';
+import messages from 'elements/common/messages';
 
 type Props = {
     collection: Array<String | BoxItem>,

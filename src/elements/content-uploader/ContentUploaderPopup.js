@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import makePopup from '../common/makePopup';
+import makePopup from 'elements/common/makePopup';
 import ContentUploader from './ContentUploader';
 import { CLIENT_NAME_CONTENT_UPLOADER } from '../../constants';
 

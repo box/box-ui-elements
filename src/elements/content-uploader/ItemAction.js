@@ -10,8 +10,8 @@ import Tooltip from 'box-react-ui/lib/components/tooltip';
 import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
 import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import IconRetry from 'box-react-ui/lib/icons/general/IconRetry';
+import messages from 'elements/common/messages';
 import IconInProgress from './IconInProgress';
-import messages from '../common/messages';
 import { STATUS_PENDING, STATUS_IN_PROGRESS, STATUS_COMPLETE, STATUS_ERROR } from '../../constants';
 
 import './ItemAction.scss';

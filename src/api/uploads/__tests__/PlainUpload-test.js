@@ -1,6 +1,6 @@
+import * as crypto from 'utils/webcrypto';
+import * as uploads from 'utils/uploads';
 import PlainUpload from '../PlainUpload';
-import * as crypto from '../../../utils/webcrypto';
-import * as uploads from '../../../utils/uploads';
 
 let upload;
 

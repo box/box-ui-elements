@@ -1,7 +1,7 @@
 // @flow
+import LocalStore from 'utils/LocalStore';
 import Channel from './Channel';
 import { get as getCookie, set as setCookie } from './cookies';
-import LocalStore from '../../utils/LocalStore';
 
 const GET = 'GET';
 const POST = 'POST';

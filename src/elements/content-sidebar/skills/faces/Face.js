@@ -9,8 +9,8 @@ import classNames from 'classnames';
 import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
 import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import IconMinus from 'box-react-ui/lib/icons/general/IconMinus';
+import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
 import { COLOR_999, COLOR_WHITE } from '../../../../constants';
-import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 
 import './Face.scss';
 

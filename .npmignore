@@ -35,6 +35,7 @@ desktop.ini
 examples
 flow
 flow-typed
+jsconfig.json
 npm-debug.log
 npm-error.log
 postcss.config.js

@@ -1,6 +1,6 @@
+import Cache from 'utils/Cache';
+import { FOLDER_FIELDS_TO_FETCH } from 'utils/fields';
 import Recents from '../Recents';
-import Cache from '../../utils/Cache';
-import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 
 describe('api/Recents', () => {
     let recents;

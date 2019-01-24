@@ -6,8 +6,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import messages from 'elements/common/messages';
 import Info from './Info';
-import messages from '../../../common/messages';
 
 import './Keywords.scss';
 

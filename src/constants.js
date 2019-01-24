@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import Browser from './utils/Browser';
+import Browser from 'utils/Browser';
 
 /* ----------------------- Size ---------------------------- */
 export const SIZE_SMALL: 'small' = 'small';

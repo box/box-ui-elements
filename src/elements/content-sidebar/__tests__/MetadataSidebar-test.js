@@ -6,9 +6,9 @@ import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicat
 import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
 import EmptyContent from 'box-react-ui/lib/features/metadata-instance-editor/EmptyContent';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import messages from 'elements/common/messages';
 import { MetadataSidebarComponent as MetadataSidebar } from '../MetadataSidebar';
 import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS } from '../../../constants';
-import messages from '../../common/messages';
 
 describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
     const getWrapper = (props = {}, options = {}) =>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
+import messages from 'elements/common/messages';
 import { ContentOpenWithComponent as ContentOpenWith } from '../ContentOpenWith';
 import { BOX_EDIT_INTEGRATION_ID, BOX_EDIT_SFC_INTEGRATION_ID } from '../../../constants';
 import BoxToolsInstallMessage from '../BoxToolsInstallMessage';
-import messages from '../../common/messages';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
@@ -426,7 +426,7 @@ describe('elements/content-open-with/ContentOpenWith', () => {
 
     describe('executeBoxEditSuccessHandler()', () => {
         test('should use box edit to open the file', () => {
-            const openFileStub = jest.fn();
+            const openFileStub = jest.fn().mockResolvedValue('open');
             const authCode = 'abcde';
             instance.api = {
                 getBoxEditAPI: () => ({ openFile: openFileStub }),
@@ -446,6 +446,28 @@ describe('elements/content-open-with/ContentOpenWith', () => {
                     token_scope: 'file',
                 },
             });
+        });
+
+        test('should call the onError callback when Box Tools cannot open a file ', async () => {
+            const onError = jest.fn();
+            const error = { error: 'error' };
+            wrapper = getWrapper({ fileId, token, onError });
+            instance = wrapper.instance();
+            const openFileStub = jest.fn().mockRejectedValue(error);
+            const authCode = 'abcde';
+            instance.api = {
+                getBoxEditAPI: () => ({ openFile: openFileStub }),
+            };
+
+            instance.isBoxEditSFCIntegration = jest.fn().mockReturnValue(true);
+
+            const executeData = {
+                url: `www.box.com/execute?file_id=1&auth_code=${authCode}&other_param=foo`,
+            };
+
+            await instance.executeBoxEditSuccessHandler('1234', executeData);
+
+            expect(onError).toBeCalledWith(error, 'execute_integrations_error', { error });
         });
     });
 

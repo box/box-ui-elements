@@ -1,8 +1,8 @@
-import Feed from '../Feed';
-import messages from '../../elements/common/messages';
+import messages from 'elements/common/messages';
+import * as sorter from 'utils/sorter';
+import * as error from 'utils/error';
 import { IS_ERROR_DISPLAYED } from '../../constants';
-import * as sorter from '../../utils/sorter';
-import * as error from '../../utils/error';
+import Feed from '../Feed';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 

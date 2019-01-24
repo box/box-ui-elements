@@ -10,16 +10,16 @@ import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
-import API from '../../api';
-import Internationalize from '../common/Internationalize';
+import Internationalize from 'elements/common/Internationalize';
+import messages from 'elements/common/messages';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import API from 'api';
 import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
 import BoxToolsInstallMessage from './BoxToolsInstallMessage';
-import messages from '../common/messages';
 import OpenWithButton from './OpenWithButton';
-import { withErrorBoundary } from '../common/error-boundary';
 import ExecuteForm from './ExecuteForm';
-import '../common/base.scss';
+import 'elements/common/base.scss';
 import './ContentOpenWith.scss';
 import {
     BOX_EDIT_INTEGRATION_ID,
@@ -405,7 +405,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
     };
 
     /**
-     * Opens the file via Box Edit
+     * Opens the file via a Partner Integration
      *
      * @private
      * @param {ExecuteAPI} executeData - API response on how to open an executed integration
@@ -447,18 +447,23 @@ class ContentOpenWith extends PureComponent<Props, State> {
      * @return {void}
      */
     executeBoxEditSuccessHandler = (integrationId: string, { url }: ExecuteAPI): void => {
-        const { fileId, token } = this.props;
+        const { fileId, token, onError } = this.props;
         const queryParams = queryString.parse(url);
         const authCode = queryParams[AUTH_CODE];
         const isFileScoped = this.isBoxEditSFCIntegration(integrationId);
 
-        this.api.getBoxEditAPI().openFile(fileId, {
-            data: {
-                auth_code: authCode,
-                token,
-                token_scope: isFileScoped ? TYPE_FILE : TYPE_FOLDER,
-            },
-        });
+        this.api
+            .getBoxEditAPI()
+            .openFile(fileId, {
+                data: {
+                    auth_code: authCode,
+                    token,
+                    token_scope: isFileScoped ? TYPE_FILE : TYPE_FOLDER,
+                },
+            })
+            .catch(error => {
+                onError(error, ERROR_CODE_EXECUTE_INTEGRATION, { error });
+            });
     };
 
     /**

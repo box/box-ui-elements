@@ -4,6 +4,7 @@
  * @author Box
  */
 import noop from 'lodash/noop';
+import { getFileFromEntry } from 'utils/uploads';
 import FolderAPI from '../Folder';
 import {
     STATUS_COMPLETE,
@@ -11,7 +12,6 @@ import {
     ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
     ERROR_CODE_ITEM_NAME_IN_USE,
 } from '../../constants';
-import { getFileFromEntry } from '../../utils/uploads';
 
 class FolderUploadNode {
     addFolderToUploadQueue: Function;

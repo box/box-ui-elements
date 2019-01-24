@@ -5,11 +5,11 @@
  */
 
 import * as React from 'react';
+import { mark } from 'utils/performance';
 import DetailsSidebar from './DetailsSidebar';
 import SkillsSidebar from './SkillsSidebar';
 import ActivitySidebar from './ActivitySidebar';
 import MetadataSidebar from './MetadataSidebar';
-import { mark } from '../../utils/performance';
 import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,

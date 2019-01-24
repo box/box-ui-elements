@@ -4,14 +4,14 @@
  * @author Box
  */
 
+import flatten from 'utils/flatten';
+import { FOLDER_FIELDS_TO_FETCH } from 'utils/fields';
+import { getBadItemError } from 'utils/error';
 import Base from './Base';
 import FileAPI from './File';
 import FolderAPI from './Folder';
 import WebLinkAPI from './WebLink';
-import flatten from '../utils/flatten';
-import { FOLDER_FIELDS_TO_FETCH } from '../utils/fields';
 import { CACHE_PREFIX_SEARCH, FIELD_RELEVANCE, SORT_DESC, ERROR_CODE_SEARCH } from '../constants';
-import { getBadItemError } from '../utils/error';
 
 class Search extends Base {
     /**

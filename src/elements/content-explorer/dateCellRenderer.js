@@ -6,8 +6,8 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Datefield from '../common/date';
-import messages from '../common/messages';
+import Datefield from 'elements/common/date';
+import messages from 'elements/common/messages';
 import { FIELD_INTERACTED_AT } from '../../constants';
 
 export default () => ({ dataKey, rowData }: { dataKey: string, rowData: BoxItem }) => {

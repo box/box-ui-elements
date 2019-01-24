@@ -8,10 +8,10 @@ import * as React from 'react';
 import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
+import messages from 'elements/common/messages';
 import { OPEN_WITH_MENU_ITEM_ICON_SIZE } from '../../constants';
 import getIcon from './IconFileMap';
 import utils from './openWithUtils';
-import messages from '../common/messages';
 import './OpenWithDropdownMenuItem.scss';
 
 type Props = {

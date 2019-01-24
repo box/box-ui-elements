@@ -8,7 +8,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Button from 'box-react-ui/lib/components/button/Button';
 import { Notification, NotificationConstants } from 'box-react-ui/lib/components/notification';
-import messages from '../common/messages';
+import messages from 'elements/common/messages';
 import './ReloadNotification.scss';
 
 type Props = {

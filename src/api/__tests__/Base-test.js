@@ -1,7 +1,7 @@
+import Xhr from 'utils/Xhr';
+import Cache from 'utils/Cache';
+import { getBadItemError, getBadPermissionsError } from 'utils/error';
 import Base from '../Base';
-import Xhr from '../../utils/Xhr';
-import Cache from '../../utils/Cache';
-import { getBadItemError, getBadPermissionsError } from '../../utils/error';
 import { HTTP_GET, HTTP_POST, HTTP_PUT } from '../../constants';
 
 let base;

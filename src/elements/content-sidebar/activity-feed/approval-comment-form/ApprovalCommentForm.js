@@ -14,11 +14,11 @@ import DraftJSMentionSelector, {
 } from 'box-react-ui/lib/components/form-elements/draft-js-mention-selector';
 import commonMessages from 'box-react-ui/lib/common/messages';
 
+import messages from 'elements/common/messages';
+import { FeatureFlag } from 'elements/common/feature-checking';
 import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';
 import Avatar from '../Avatar';
-import messages from '../../../common/messages';
-import { FeatureFlag } from '../../../common/feature-checking';
 
 import './ApprovalCommentForm.scss';
 
