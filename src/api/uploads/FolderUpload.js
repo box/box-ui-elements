@@ -4,14 +4,14 @@
  * @author Box
  */
 
-import FolderUploadNode from './FolderUploadNode';
 import {
     getEntryFromDataTransferItem,
     getFile,
     getFileAPIOptions,
     getDataTransferItem,
     getDataTransferItemAPIOptions,
-} from '../../utils/uploads';
+} from 'utils/uploads';
+import FolderUploadNode from './FolderUploadNode';
 
 const PATH_DELIMITER = '/';
 

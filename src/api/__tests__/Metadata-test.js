@@ -1,6 +1,6 @@
+import Cache from 'utils/Cache';
+import * as ErrorUtil from 'utils/error';
 import Metadata from '../Metadata';
-import Cache from '../../utils/Cache';
-import * as ErrorUtil from '../../utils/error';
 import {
     KEY_CLASSIFICATION_TYPE,
     METADATA_TEMPLATE_CLASSIFICATION,

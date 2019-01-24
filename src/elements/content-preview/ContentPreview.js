@@ -16,23 +16,23 @@ import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import { decode } from 'box-react-ui/lib/utils/keys';
-import PreviewLoading from './PreviewLoading';
-import PreviewNavigation from './PreviewNavigation';
-import ContentSidebar from '../content-sidebar';
-import Header from './Header';
-import API from '../../api';
-import makeResponsive from '../common/makeResponsive';
-import Internationalize from '../common/Internationalize';
-import TokenService from '../../utils/TokenService';
-import { isInputElement, focus } from '../../utils/dom';
-import { getTypedFileId } from '../../utils/file';
-import { withErrorBoundary } from '../common/error-boundary';
-import { withLogger } from '../common/logger';
+import makeResponsive from 'elements/common/makeResponsive';
+import Internationalize from 'elements/common/Internationalize';
+import TokenService from 'utils/TokenService';
+import { isInputElement, focus } from 'utils/dom';
+import { getTypedFileId } from 'utils/file';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { withLogger } from 'elements/common/logger';
+import { PREVIEW_FIELDS_TO_FETCH } from 'utils/fields';
+import { mark } from 'utils/performance';
+import { withFeatureProvider } from 'elements/common/feature-checking';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import ReloadNotification from './ReloadNotification';
-import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
-import { mark } from '../../utils/performance';
-import { withFeatureProvider } from '../common/feature-checking';
-import { EVENT_JS_READY } from '../common/logger/constants';
+import API from '../../api';
+import Header from './Header';
+import ContentSidebar from '../content-sidebar';
+import PreviewNavigation from './PreviewNavigation';
+import PreviewLoading from './PreviewLoading';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -46,8 +46,8 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
-import '../common/fonts.scss';
-import '../common/base.scss';
+import 'elements/common/fonts.scss';
+import 'elements/common/base.scss';
 import './ContentPreview.scss';
 
 type Props = {

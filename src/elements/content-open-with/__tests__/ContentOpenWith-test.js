@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
+import messages from 'elements/common/messages';
 import { ContentOpenWithComponent as ContentOpenWith } from '../ContentOpenWith';
 import { BOX_EDIT_INTEGRATION_ID, BOX_EDIT_SFC_INTEGRATION_ID } from '../../../constants';
 import BoxToolsInstallMessage from '../BoxToolsInstallMessage';
-import messages from '../../common/messages';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 

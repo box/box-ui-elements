@@ -10,9 +10,9 @@ import IconMagicWand from 'box-react-ui/lib/icons/general/IconMagicWand';
 import IconMetadataThick from 'box-react-ui/lib/icons/general/IconMetadataThick';
 import IconDocInfo from 'box-react-ui/lib/icons/general/IconDocInfo';
 import IconChatRound from 'box-react-ui/lib/icons/general/IconChatRound';
+import messages from 'elements/common/messages';
+import { SIDEBAR_NAV_TARGETS } from 'elements/common/interactionTargets';
 import SidebarNavButton from './SidebarNavButton';
-import messages from '../common/messages';
-import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,

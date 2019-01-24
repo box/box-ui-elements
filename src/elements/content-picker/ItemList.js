@@ -8,13 +8,13 @@ import React from 'react';
 import classNames from 'classnames';
 import { Table, Column } from 'react-virtualized/dist/es/Table';
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
-import KeyBinder from '../common/KeyBinder';
+import KeyBinder from 'elements/common/KeyBinder';
+import nameCellRenderer from 'elements/common/item/nameCellRenderer';
+import iconCellRenderer from 'elements/common/item/iconCellRenderer';
+import { isFocusableElement, focus } from 'utils/dom';
 import shareAccessCellRenderer from './shareAccessCellRenderer';
 import checkboxCellRenderer from './checkboxCellRenderer';
-import nameCellRenderer from '../common/item/nameCellRenderer';
-import iconCellRenderer from '../common/item/iconCellRenderer';
 import isRowSelectable from './cellRendererHelper';
-import { isFocusableElement, focus } from '../../utils/dom';
 import { VIEW_SELECTED, FIELD_NAME, FIELD_ID, FIELD_SHARED_LINK, TYPE_FOLDER } from '../../constants';
 
 import './ItemList.scss';

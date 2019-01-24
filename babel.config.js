@@ -21,6 +21,21 @@ module.exports = {
                 messagesDir: './i18n/json',
             },
         ],
+        [
+            'module-resolver',
+            {
+                alias: {
+                    api: './src/api',
+                    common: './src/common',
+                    components: './src/components',
+                    elements: './src/elements',
+                    features: './src/features',
+                    icons: './src/icons',
+                    styles: './src/styles',
+                    utils: './src/utils',
+                },
+            },
+        ],
     ],
     env: {
         dev: {

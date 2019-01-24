@@ -7,8 +7,8 @@
 import React from 'react';
 import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
 
-import { DETAILS_TARGETS } from '../common/interactionTargets';
-import { isBoxNote } from '../../utils/file';
+import { DETAILS_TARGETS } from 'elements/common/interactionTargets';
+import { isBoxNote } from 'utils/file';
 
 type Props = {
     onVersionHistoryClick?: Function,

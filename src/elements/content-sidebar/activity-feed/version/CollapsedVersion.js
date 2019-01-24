@@ -9,8 +9,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
 
-import messages from '../../../common/messages';
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import messages from 'elements/common/messages';
+import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 
 import './Version.scss';
 

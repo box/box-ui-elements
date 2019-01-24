@@ -5,18 +5,18 @@
  */
 
 import noop from 'lodash/noop';
-import BaseMultiput from './BaseMultiput';
-import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
-import { retryNumOfTimes } from '../../utils/function';
-import { digest } from '../../utils/webcrypto';
-import hexToBase64 from '../../utils/base64';
+import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from 'utils/uploads';
+import { retryNumOfTimes } from 'utils/function';
+import { digest } from 'utils/webcrypto';
+import hexToBase64 from 'utils/base64';
+import createWorker from 'utils/uploadsSHA1Worker';
 import {
     DEFAULT_RETRY_DELAY_MS,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
     HTTP_STATUS_CODE_FORBIDDEN,
 } from '../../constants';
 import MultiputPart, { PART_STATE_UPLOADED, PART_STATE_DIGEST_READY, PART_STATE_NOT_STARTED } from './MultiputPart';
-import createWorker from '../../utils/uploadsSHA1Worker';
+import BaseMultiput from './BaseMultiput';
 
 // Constants used for specifying log event types.
 

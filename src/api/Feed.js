@@ -6,13 +6,14 @@
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import omit from 'lodash/omit';
+import { getBadItemError, getBadUserError, isUserCorrectableError } from 'utils/error';
+import messages from 'elements/common/messages';
+import { sortFeedItems } from 'utils/sorter';
 import Base from './Base';
 import CommentsAPI from './Comments';
 import VersionsAPI from './Versions';
 import TasksAPI from './Tasks';
 import TaskAssignmentsAPI from './TaskAssignments';
-import { getBadItemError, getBadUserError, isUserCorrectableError } from '../utils/error';
-import messages from '../elements/common/messages';
 import {
     VERSION_UPLOAD_ACTION,
     VERSION_RESTORE_ACTION,
@@ -21,7 +22,6 @@ import {
     IS_ERROR_DISPLAYED,
     ERROR_CODE_CREATE_TASK_ASSIGNMENT,
 } from '../constants';
-import { sortFeedItems } from '../utils/sorter';
 
 const TASK_INCOMPLETE = 'incomplete';
 const TASK = 'task';

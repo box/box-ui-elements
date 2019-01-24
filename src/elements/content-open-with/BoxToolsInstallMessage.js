@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import messages from '../common/messages';
+import messages from 'elements/common/messages';
 import './BoxToolsInstallMessage.scss';
 
 const DEFAULT_BOX_TOOLS_INSTALLATION_URL = 'https://cloud.box.com/v/installboxtools';

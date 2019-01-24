@@ -12,6 +12,8 @@ import getProp from 'lodash/get';
 import { ReadableTime } from 'box-react-ui/lib/components/time';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
+import messages from 'elements/common/messages';
+import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 import UserLink from './UserLink';
 import InlineDelete from './InlineDelete';
 import InlineEdit from './InlineEdit';
@@ -20,8 +22,6 @@ import CommentText from './CommentText';
 import ApprovalCommentForm from '../approval-comment-form';
 import formatTaggedMessage from '../utils/formatTaggedMessage';
 import Avatar from '../Avatar';
-import messages from '../../../common/messages';
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 import './Comment.scss';
 import { PLACEHOLDER_USER } from '../../../../constants';

@@ -3,8 +3,8 @@
  * @file class for Box offset based API's to inherit common functionality from
  * @author Box
  */
+import { getTypedFileId } from 'utils/file';
 import Base from './Base';
-import { getTypedFileId } from '../utils/file';
 import { DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
 
 type Params = {

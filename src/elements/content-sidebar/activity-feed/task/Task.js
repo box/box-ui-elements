@@ -8,15 +8,15 @@ import noop from 'lodash/noop';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 
+import messages from 'elements/common/messages';
+import { fillUserPlaceholder } from 'utils/fields';
 import Comment from '../comment';
 import CompletedAssignment from './CompletedAssignment';
-import messages from '../../../common/messages';
 import PendingAssignment from './PendingAssignment';
 import RejectedAssignment from './RejectedAssignment';
 
-import './Task.scss';
-import { fillUserPlaceholder } from '../../../../utils/fields';
 import { TASK_APPROVED, TASK_REJECTED, TASK_COMPLETED, TASK_INCOMPLETE } from '../../../../constants';
+import './Task.scss';
 
 type Props = {
     task_assignment_collection: TaskAssignments | SelectorItems,

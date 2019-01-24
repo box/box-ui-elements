@@ -8,7 +8,7 @@ import * as React from 'react';
 import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import { FormattedMessage } from 'react-intl';
-import messages from '../common/messages';
+import messages from 'elements/common/messages';
 import IntegrationPortal from './IntegrationPortal';
 
 type Props = {

@@ -11,16 +11,15 @@ import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import Sidebar from './Sidebar';
-import SidebarNav from './SidebarNav';
-import API from '../../api';
-import APIContext from '../common/api-context';
-import Internationalize from '../common/Internationalize';
-import { withErrorBoundary } from '../common/error-boundary';
-import { withLogger } from '../common/logger';
-import { withFeatureProvider } from '../common/feature-checking';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
-import { mark } from '../../utils/performance';
+import APIContext from 'elements/common/api-context';
+import Internationalize from 'elements/common/Internationalize';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { SIDEBAR_FIELDS_TO_FETCH } from 'utils/fields';
+import API from 'api';
+import { withLogger } from 'elements/common/logger';
+import { withFeatureProvider } from 'elements/common/feature-checking';
+import { mark } from 'utils/performance';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
@@ -30,15 +29,16 @@ import {
     SIDEBAR_VIEW_METADATA,
     ORIGIN_CONTENT_SIDEBAR,
 } from '../../constants';
-import { EVENT_JS_READY } from '../common/logger/constants';
 import SidebarUtils from './SidebarUtils';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { $AxiosXHR } from 'axios'; // eslint-disable-line
-import '../common/fonts.scss';
-import '../common/base.scss';
-import '../common/modal.scss';
+import SidebarNav from './SidebarNav';
+import Sidebar from './Sidebar';
+import 'elements/common/fonts.scss';
+import 'elements/common/base.scss';
+import 'elements/common/modal.scss';
 import './ContentSidebar.scss';
 
 type Props = {

@@ -5,10 +5,10 @@
  */
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
+import { updateQueryParameters } from 'utils/url';
+import { getBoundedExpBackoffRetryDelay } from 'utils/uploads';
 import BaseMultiput from './BaseMultiput';
-import { updateQueryParameters } from '../../utils/url';
 import { HTTP_PUT } from '../../constants';
-import { getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
 
 const PART_STATE_NOT_STARTED: 0 = 0;
 const PART_STATE_COMPUTING_DIGEST: 1 = 1;

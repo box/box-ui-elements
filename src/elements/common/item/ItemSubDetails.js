@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import getSize from '../../../utils/size';
+import getSize from 'utils/size';
 import Datefield from '../date';
 import messages from '../messages';
 import { VIEW_RECENTS } from '../../../constants';
