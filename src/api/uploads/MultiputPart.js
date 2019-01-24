@@ -5,10 +5,13 @@
  */
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
-import BaseMultiput from './BaseMultiput';
 import { updateQueryParameters } from '../../utils/url';
-import { HTTP_PUT } from '../../constants';
 import { getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
+import { retryNumOfTimes } from '../../utils/function';
+
+import BaseMultiput from './BaseMultiput';
+
+import { HTTP_PUT } from '../../constants';
 
 const PART_STATE_NOT_STARTED: 0 = 0;
 const PART_STATE_COMPUTING_DIGEST: 1 = 1;
@@ -233,7 +236,7 @@ class MultiputPart extends BaseMultiput {
      * @param {Error} error
      * @return {void}
      */
-    uploadErrorHandler = (error: Error) => {
+    uploadErrorHandler = async (error: Error) => {
         if (this.isDestroyed()) {
             return;
         }
@@ -256,7 +259,24 @@ class MultiputPart extends BaseMultiput {
         };
 
         const eventInfoString = JSON.stringify(eventInfo);
-        this.logEvent('part_failure', eventInfoString);
+
+        try {
+            if (!this.sessionEndpoints.logEvent) {
+                throw new Error('logEvent endpoint not found');
+            }
+
+            await retryNumOfTimes(
+                (resolve: Function, reject: Function): void => {
+                    this.logEvent('eventInfoString', eventInfoString)
+                        .then(resolve)
+                        .catch(reject);
+                },
+                this.config.retries,
+                this.config.initialRetryDelayMs,
+            );
+        } catch (err) {
+            this.consoleLog('Failure in logEvent ', error);
+        }
 
         if (this.numUploadRetriesPerformed >= this.config.retries) {
             this.onError(error, eventInfoString);

@@ -496,8 +496,9 @@ describe('api/uploads/MultiputUpload', () => {
             multiputUploadTest.sha1Worker = {
                 terminate: jest.fn(),
             };
-            multiputUploadTest.xhr.delete = jest.fn();
+            multiputUploadTest.xhr.delete = jest.fn().mockResolvedValue();
             multiputUploadTest.sessionEndpoints.abort = 'foo';
+            multiputUploadTest.sessionId = '123';
 
             multiputUploadTest.abortSession(null, '123', '123');
             expect(multiputUploadTest.xhr.delete).toHaveBeenCalled();

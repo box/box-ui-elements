@@ -834,13 +834,17 @@ class ContentUploader extends Component<Props, State> {
     handleUploadError = (item: UploadItem, error: Error) => {
         const { onError, useUploadsManager } = this.props;
         const { file } = item;
+        const { items } = this.state;
 
         item.status = STATUS_ERROR;
         item.error = error;
         this.numItemsUploading -= 1;
 
-        const { items } = this.state;
-        items[items.indexOf(item)] = item;
+        const newItems = [...items];
+        const index = newItems.findIndex(singleItem => singleItem === item);
+        if (index !== -1) {
+            newItems[index] = item;
+        }
 
         // Broadcast that there was an error uploading a file
         const errorData = useUploadsManager
@@ -855,7 +859,7 @@ class ContentUploader extends Component<Props, State> {
 
         onError(errorData);
 
-        this.updateViewAndCollection(items);
+        this.updateViewAndCollection(newItems);
 
         if (useUploadsManager) {
             this.isAutoExpanded = true;
