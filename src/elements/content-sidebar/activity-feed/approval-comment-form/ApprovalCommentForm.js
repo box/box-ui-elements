@@ -176,7 +176,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             resultStringArr.push(blockMapStringArr.join(''));
         });
 
-        // Concatentate the array of block strings with newlines
+        // Concatenate the array of block strings with newlines
         // (Each block represents a paragraph)
         return { text: resultStringArr.join('\n'), hasMention };
     };
@@ -188,7 +188,12 @@ class ApprovalCommentForm extends React.Component<Props, State> {
     };
 
     handleApproverSelectorSelect = (pills: any): void => {
-        this.setState({ approvers: this.state.approvers.concat(pills) });
+        this.setState({ approvers: this.state.approvers.concat(pills) }, () => {
+            const input = document.querySelector('.pill-selector-input-wrapper');
+            if (input) {
+                input.scrollTop = input.scrollHeight;
+            }
+        });
     };
 
     handleApproverSelectorRemove = (option: any, index: number): void => {
