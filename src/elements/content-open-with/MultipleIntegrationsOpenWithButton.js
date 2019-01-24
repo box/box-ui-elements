@@ -9,10 +9,10 @@ import MenuToggle from 'box-react-ui/lib/components/dropdown-menu/MenuToggle';
 import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import Button from 'box-react-ui/lib/components/button/Button';
 import { FormattedMessage } from 'react-intl';
+import Tooltip from 'elements/common/Tooltip';
+import messages from 'elements/common/messages';
 import OpenWithButtonContents from './OpenWithButtonContents';
-import Tooltip from '../common/Tooltip';
 import { CLASS_INTEGRATION_ICON, OPEN_WITH_BUTTON_ICON_SIZE } from '../../constants';
-import messages from '../common/messages';
 
 type Props = {
     buttonProps?: ?Object,
@@ -20,7 +20,7 @@ type Props = {
 
 const MultipleIntegrationsOpenWithButton = (buttonProps: Props) => (
     <Tooltip text={<FormattedMessage {...messages.defaultOpenWithDescription} />} position="middle-left">
-        <Button {...buttonProps}>
+        <Button data-testid="multipleintegrationsbutton" {...buttonProps}>
             <MenuToggle>
                 <OpenWithButtonContents>
                     <IconOpenWith

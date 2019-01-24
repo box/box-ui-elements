@@ -11,14 +11,24 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import cloneDeep from 'lodash/cloneDeep';
-import { getTypedFileId, getTypedFolderId } from '../../utils/file';
-import API from '../../api';
+import { getTypedFileId, getTypedFolderId } from 'utils/file';
+import makeResponsive from 'elements/common/makeResponsive';
+import Internationalize from 'elements/common/Internationalize';
+import FolderUpload from 'api/uploads/FolderUpload';
+import API from 'api';
+import {
+    getDataTransferItemId,
+    getFileId,
+    getFileFromDataTransferItem,
+    getFile,
+    getFileAPIOptions,
+    getDataTransferItemAPIOptions,
+    isDataTransferItemAFolder,
+    isMultiputSupported,
+} from 'utils/uploads';
 import DroppableContent from './DroppableContent';
 import UploadsManager from './UploadsManager';
 import Footer from './Footer';
-import makeResponsive from '../common/makeResponsive';
-import Internationalize from '../common/Internationalize';
-import FolderUpload from '../../api/uploads/FolderUpload';
 import {
     DEFAULT_ROOT,
     CLIENT_NAME_CONTENT_UPLOADER,
@@ -34,18 +44,8 @@ import {
     STATUS_ERROR,
     ERROR_CODE_UPLOAD_FILE_LIMIT,
 } from '../../constants';
-import '../common/fonts.scss';
-import '../common/base.scss';
-import {
-    getDataTransferItemId,
-    getFileId,
-    getFileFromDataTransferItem,
-    getFile,
-    getFileAPIOptions,
-    getDataTransferItemAPIOptions,
-    isDataTransferItemAFolder,
-    isMultiputSupported,
-} from '../../utils/uploads';
+import 'elements/common/fonts.scss';
+import 'elements/common/base.scss';
 
 type Props = {
     apiHost: string,

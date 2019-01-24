@@ -16,11 +16,11 @@ import { formatTime } from 'box-react-ui/lib/utils/datetime';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
 import { nines } from 'box-react-ui/lib/styles/variables';
-import TranscriptRow from './TranscriptRow';
+import { copy } from 'utils/download';
+import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
+import messages from 'elements/common/messages';
 import { isValidTimeSlice } from './timeSliceUtils';
-import { copy } from '../../../../utils/download';
-import { SKILLS_TARGETS } from '../../../common/interactionTargets';
-import messages from '../../../common/messages';
+import TranscriptRow from './TranscriptRow';
 import './Transcript.scss';
 
 type Props = {

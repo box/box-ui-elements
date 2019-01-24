@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
+import ShareAccessSelect from 'elements/common/share-access-select';
 import isRowSelectable from './cellRendererHelper';
-import ShareAccessSelect from '../common/share-access-select';
 
 export default (
     onChange: Function,

@@ -74,6 +74,9 @@ import {
     TASK_COMPLETED,
     TASK_INCOMPLETE,
     TASK_REJECTED,
+    METRIC_TYPE_PREVIEW,
+    METRIC_TYPE_ELEMENTS_LOAD_METRIC,
+    METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC,
 } from '../src/constants';
 
 type Method =
@@ -688,25 +691,25 @@ type ErrorResponseData = {
 
 type ElementsXhrError = $AxiosError<any> | ErrorResponseData;
 
-type ErrorOrigins =
-    | ORIGIN_CONTENT_SIDEBAR
-    | ORIGIN_CONTENT_PREVIEW
-    | ORIGIN_PREVIEW
-    | ORIGIN_DETAILS_SIDEBAR
-    | ORIGIN_ACTIVITY_SIDEBAR
-    | ORIGIN_SKILLS_SIDEBAR
-    | ORIGIN_METADATA_SIDEBAR;
+type ElementOrigin =
+    | typeof ORIGIN_CONTENT_SIDEBAR
+    | typeof ORIGIN_CONTENT_PREVIEW
+    | typeof ORIGIN_PREVIEW
+    | typeof ORIGIN_DETAILS_SIDEBAR
+    | typeof ORIGIN_ACTIVITY_SIDEBAR
+    | typeof ORIGIN_SKILLS_SIDEBAR
+    | typeof ORIGIN_METADATA_SIDEBAR;
 
 type ElementsError = {
     type: 'error',
     code: string,
     message: string,
-    origin: ErrorOrigins,
+    origin: ElementOrigin,
     context_info: Object,
 };
 
 type ErrorContextProps = {
-    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin: ErrorOrigins) => void,
+    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin: ElementOrigin) => void,
 };
 
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
@@ -714,3 +717,34 @@ type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: O
 type ClassificationInfo = {
     Box__Security__Classification__Key?: string,
 } & MetadataInstance;
+
+type MetricType =
+    | typeof METRIC_TYPE_PREVIEW
+    | typeof METRIC_TYPE_ELEMENTS_LOAD_METRIC
+    | typeof METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
+
+type ElementsLoadMetricData = {
+    startMarkName?: string,
+    endMarkName: string,
+};
+
+type LoggerProps = {
+    onPreviewMetric: (data: Object) => void,
+    onReadyMetric: (data: ElementsLoadMetricData) => void,
+};
+
+type WithLoggerProps = {
+    logger: LoggerProps,
+};
+
+type ActivityFeedFeatures = {
+    avatars?: boolean, // Show avatars
+    tasks?: {|
+        createButton?: boolean, // Show the Create Task button
+        createFromComment?: boolean // Show the Add Task checkbox
+    |}
+};
+
+type ContentSidebarFeatures = {
+    activityFeed?: ActivityFeedFeatures
+} & FeatureConfig;

@@ -7,15 +7,21 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
 import noop from 'lodash/noop';
+import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
-import ActivityFeed from './activity-feed/activity-feed/ActivityFeed';
+import messages from 'elements/common/messages';
+import { withAPIContext } from 'elements/common/api-context';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { FeatureFlag } from 'elements/common/feature-checking';
+import { getBadUserError, getBadItemError } from 'utils/error';
+import API from 'api';
+import { withLogger } from 'elements/common/logger';
+import { mark } from 'utils/performance';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
+import ActivityFeed from './activity-feed';
 import SidebarContent from './SidebarContent';
-import messages from '../common/messages';
-import { withAPIContext } from '../common/api-context';
-import { withErrorBoundary } from '../common/error-boundary';
-import { getBadUserError, getBadItemError } from '../../utils/error';
+import AddTaskButton from './AddTaskButton';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
-import API from '../../api';
 import './ActivitySidebar.scss';
 
 type ExternalProps = {
@@ -27,19 +33,19 @@ type ExternalProps = {
     onTaskAssignmentUpdate?: Function,
     getUserProfileUrl?: string => Promise<string>,
     currentUser?: User,
-};
+} & ErrorContextProps;
 
 type PropsWithoutContext = {
     file: BoxItem,
     translations?: Translations,
-    isDisabled?: boolean,
+    isDisabled: boolean,
     onVersionHistoryClick?: Function,
-} & ExternalProps;
+} & ExternalProps &
+    WithLoggerProps;
 
 type Props = {
     api: API,
-} & PropsWithoutContext &
-    ErrorContextProps;
+} & PropsWithoutContext;
 
 type State = {
     currentUser?: User,
@@ -56,8 +62,25 @@ export const activityFeedInlineError: Errors = {
         content: messages.activityFeedItemApiError,
     },
 };
+
+const MARK_NAME_JS_READY = `${ORIGIN_ACTIVITY_SIDEBAR}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
+
 class ActivitySidebar extends React.PureComponent<Props, State> {
     state = {};
+
+    constructor(props: Props) {
+        super(props);
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
+    }
+
+    static defaultProps = {
+        isDisabled: false,
+    };
 
     componentDidMount() {
         const { currentUser } = this.props;
@@ -426,6 +449,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
     };
 
+    renderAddTaskButton = () => {
+        const { isDisabled } = this.props;
+        const { approverSelectorContacts, mentionSelectorContacts } = this.state;
+        const { createTask, getApproverWithQuery, getMentionWithQuery, getAvatarUrl } = this;
+        const props = {
+            isDisabled,
+            createTask,
+            getApproverWithQuery,
+            getMentionWithQuery,
+            approverSelectorContacts,
+            mentionSelectorContacts,
+            getAvatarUrl,
+        };
+        return <AddTaskButton {...props} />;
+    };
+
     render() {
         const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
         const {
@@ -436,8 +475,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activityFeedError,
             currentUserError,
         } = this.state;
+
         return (
-            <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
+            <SidebarContent
+                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                actions={<FeatureFlag feature="activityFeed.tasks.createButton" enabled={this.renderAddTaskButton} />}
+            >
                 <ActivityFeed
                     file={file}
                     activityFeedError={activityFeedError}
@@ -466,4 +509,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
 export type ActivitySidebarProps = ExternalProps;
 export { ActivitySidebar as ActivitySidebarComponent };
-export default withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR)(withAPIContext(ActivitySidebar));
+export default flow([withLogger(ORIGIN_ACTIVITY_SIDEBAR), withErrorBoundary(ORIGIN_ACTIVITY_SIDEBAR), withAPIContext])(
+    ActivitySidebar,
+);

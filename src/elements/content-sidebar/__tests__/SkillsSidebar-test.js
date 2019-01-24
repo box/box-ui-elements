@@ -6,7 +6,8 @@ import { SkillsSidebarComponent as SkillsSidebar } from '../SkillsSidebar';
 import SidebarSkills from '../skills/SidebarSkills';
 
 describe('elements/content-sidebar/Skills/SkillsSidebar', () => {
-    const getWrapper = (props, options) => shallow(<SkillsSidebar {...props} />, options);
+    const getWrapper = (props, options) =>
+        shallow(<SkillsSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
 
     test('should render skills sidebar component when cards are available', () => {
         const getSkills = jest.fn();
@@ -45,6 +46,25 @@ describe('elements/content-sidebar/Skills/SkillsSidebar', () => {
         expect(wrapper).toMatchSnapshot();
         expect(getSkills).toHaveBeenCalled();
         expect(api.getMetadataAPI).toHaveBeenCalled();
+    });
+
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper(
+                {},
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
     });
 
     describe('onSave()', () => {

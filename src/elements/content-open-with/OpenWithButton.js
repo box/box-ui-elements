@@ -8,11 +8,11 @@ import * as React from 'react';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
 import { FormattedMessage } from 'react-intl';
-import Tooltip from '../common/Tooltip';
+import Tooltip from 'elements/common/Tooltip';
+import messages from 'elements/common/messages';
 import OpenWithButtonContents from './OpenWithButtonContents';
 import utils from './openWithUtils';
 import { CLASS_INTEGRATION_ICON, OPEN_WITH_BUTTON_ICON_SIZE } from '../../constants';
-import messages from '../common/messages';
 import getIcon from './IconFileMap';
 
 type Props = {
@@ -70,7 +70,11 @@ const OpenWithButton = ({ error, onClick, displayIntegration, isLoading }: Props
             position="bottom-center"
             {...tooltipDisplayProps}
         >
-            <Button isDisabled={isDisabled} onClick={() => onClick(displayIntegration)}>
+            <Button
+                data-testid="singleintegrationbutton"
+                isDisabled={isDisabled}
+                onClick={() => onClick(displayIntegration)}
+            >
                 <OpenWithButtonContents>
                     <Icon
                         className={CLASS_INTEGRATION_ICON}

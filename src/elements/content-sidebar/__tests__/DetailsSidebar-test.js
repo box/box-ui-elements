@@ -1,10 +1,10 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import messages from '../../common/messages';
+import messages from 'elements/common/messages';
+import { getBadItemError } from 'utils/error';
+import { SIDEBAR_FIELDS_TO_FETCH } from 'utils/fields';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
 import { ERROR_CODE_FETCH_CLASSIFICATION, IS_ERROR_DISPLAYED } from '../../../constants';
-import { getBadItemError } from '../../../utils/error';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
@@ -22,7 +22,16 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     let setFileDescription;
     const onError = jest.fn();
     const getWrapper = (props, options) =>
-        shallow(<DetailsSidebar fileId={file.id} api={api} onError={onError} {...props} />, options);
+        shallow(
+            <DetailsSidebar
+                fileId={file.id}
+                api={api}
+                onError={onError}
+                logger={{ onReadyMetric: jest.fn() }}
+                {...props}
+            />,
+            options,
+        );
 
     beforeEach(() => {
         getFile = jest.fn().mockResolvedValue(file);
@@ -41,6 +50,20 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 getFileAccessStats: getStats,
             })),
         };
+    });
+
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
     });
 
     describe('render()', () => {

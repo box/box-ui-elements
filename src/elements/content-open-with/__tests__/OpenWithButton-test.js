@@ -1,9 +1,9 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
+import messages from 'elements/common/messages';
 import OpenWithButton, { getTooltip } from '../OpenWithButton';
 import utils from '../openWithUtils';
-import messages from '../../common/messages';
 
 describe('elements/content-open-with/OpenWithButton', () => {
     const getWrapper = props => shallow(<OpenWithButton {...props} />);

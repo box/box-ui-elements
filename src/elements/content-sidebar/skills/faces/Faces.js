@@ -14,10 +14,10 @@ import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
 import Button from 'box-react-ui/lib/components/button/Button';
 import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
+import messages from 'elements/common/messages';
+import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
 import Face from './Face';
 import Timeline from '../timeline';
-import messages from '../../../common/messages';
-import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import './Faces.scss';
 
 type Props = {

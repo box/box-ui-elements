@@ -7,6 +7,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
+import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
 import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
 import EmptyContent from 'box-react-ui/lib/features/metadata-instance-editor/EmptyContent';
@@ -14,12 +15,15 @@ import TemplateDropdown from 'box-react-ui/lib/features/metadata-instance-editor
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
-import messages from '../common/messages';
+import messages from 'elements/common/messages';
+import { withAPIContext } from 'elements/common/api-context';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { isUserCorrectableError } from 'utils/error';
+import API from 'api';
+import { withLogger } from 'elements/common/logger';
+import { mark } from 'utils/performance';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import SidebarContent from './SidebarContent';
-import { withAPIContext } from '../common/api-context';
-import { withErrorBoundary } from '../common/error-boundary';
-import API from '../../api';
-import { isUserCorrectableError } from '../../utils/error';
 import {
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS,
@@ -40,7 +44,8 @@ type PropsWithoutContext = {
 type Props = {
     api: API,
 } & PropsWithoutContext &
-    ErrorContextProps;
+    ErrorContextProps &
+    WithLoggerProps;
 
 type State = {
     editors?: Array<MetadataEditor>,
@@ -50,12 +55,24 @@ type State = {
     templates?: Array<MetadataEditorTemplate>,
 };
 
+const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
+
 class MetadataSidebar extends React.PureComponent<Props, State> {
     state = { hasError: false, isLoading: false };
 
     static defaultProps = {
         isFeatureEnabled: true,
     };
+
+    constructor(props: Props) {
+        super(props);
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
+    }
 
     componentDidMount() {
         this.fetchFile();
@@ -402,4 +419,6 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
 
 export type MetadataSidebarProps = ExternalProps;
 export { MetadataSidebar as MetadataSidebarComponent };
-export default withErrorBoundary(ORIGIN_METADATA_SIDEBAR)(withAPIContext(MetadataSidebar));
+export default flow([withLogger(ORIGIN_METADATA_SIDEBAR), withErrorBoundary(ORIGIN_METADATA_SIDEBAR), withAPIContext])(
+    MetadataSidebar,
+);

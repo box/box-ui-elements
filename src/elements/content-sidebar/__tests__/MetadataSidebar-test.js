@@ -6,12 +6,13 @@ import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicat
 import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
 import EmptyContent from 'box-react-ui/lib/features/metadata-instance-editor/EmptyContent';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import messages from 'elements/common/messages';
 import { MetadataSidebarComponent as MetadataSidebar } from '../MetadataSidebar';
 import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS } from '../../../constants';
-import messages from '../../common/messages';
 
 describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
-    const getWrapper = (props, options) => shallow(<MetadataSidebar {...props} />, options);
+    const getWrapper = (props = {}, options = {}) =>
+        shallow(<MetadataSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
 
     test('should render Metadata sidebar component when instances and templates are available', () => {
         const getFile = jest.fn();
@@ -155,6 +156,25 @@ describe('elements/content-sidebar/Metadata/MetadataSidebar', () => {
         expect(wrapper).toMatchSnapshot();
         expect(getFile).toHaveBeenCalled();
         expect(api.getFileAPI).toHaveBeenCalled();
+    });
+
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper(
+                {},
+                {
+                    disableLifecycleMethods: true,
+                },
+            );
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
     });
 
     describe('componentDidMount()', () => {

@@ -6,9 +6,9 @@
 
 import * as React from 'react';
 import PillCloud from 'box-react-ui/lib/components/pill-cloud/PillCloud';
+import { SKILLS_TARGETS, INTERACTION_TARGET } from 'elements/common/interactionTargets';
 import Timeline from '../timeline';
 import getPills from './keywordUtils';
-import { SKILLS_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
 import type { Pill, Pills } from './flowTypes';
 import './ReadOnlyKeywords.scss';
 

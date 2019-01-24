@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import Browser from './utils/Browser';
+import Browser from 'utils/Browser';
 
 /* ----------------------- Size ---------------------------- */
 export const SIZE_SMALL: 'small' = 'small';
@@ -136,7 +136,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '1.60.0';
+export const DEFAULT_PREVIEW_VERSION = '1.61.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -228,16 +228,21 @@ export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
 export const ERROR_CODE_SEARCH = 'search_error';
 export const ERROR_CODE_UNKNOWN = 'unknown_error';
 
-/* ------------------ Error Origins ---------------------- */
-export const ORIGIN_CONTENT_PREVIEW = 'content_preview';
-export const ORIGIN_CONTENT_SIDEBAR = 'content_sidebar';
-export const ORIGIN_ACTIVITY_SIDEBAR = 'activity_sidebar';
-export const ORIGIN_DETAILS_SIDEBAR = 'details_sidebar';
-export const ORIGIN_METADATA_SIDEBAR = 'metadata_sidebar';
-export const ORIGIN_SKILLS_SIDEBAR = 'skills_sidebar';
-export const ORIGIN_PREVIEW = 'preview';
-export const ORIGIN_CONTENT_EXPLORER = 'content_explorer';
-export const ORIGIN_OPEN_WITH = 'open_with';
+/* ------------------ Origins ---------------------- */
+export const ORIGIN_CONTENT_PREVIEW: 'content_preview' = 'content_preview';
+export const ORIGIN_CONTENT_SIDEBAR: 'content_sidebar' = 'content_sidebar';
+export const ORIGIN_ACTIVITY_SIDEBAR: 'activity_sidebar' = 'activity_sidebar';
+export const ORIGIN_DETAILS_SIDEBAR: 'details_sidebar' = 'details_sidebar';
+export const ORIGIN_METADATA_SIDEBAR: 'metadata_sidebar' = 'metadata_sidebar';
+export const ORIGIN_SKILLS_SIDEBAR: 'skills_sidebar' = 'skills_sidebar';
+export const ORIGIN_PREVIEW: 'preview' = 'preview';
+export const ORIGIN_CONTENT_EXPLORER: 'content_explorer' = 'content_explorer';
+export const ORIGIN_OPEN_WITH: 'open_with' = 'open_with';
+
+/* ------------------ Metric Types ---------------------- */
+export const METRIC_TYPE_PREVIEW: 'preview_metric' = 'preview_metric';
+export const METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC: 'elements_performance_metric' = 'elements_performance_metric';
+export const METRIC_TYPE_ELEMENTS_LOAD_METRIC: 'elements_load_metric' = 'elements_load_metric';
 
 /* ------------------ Error Keys ---------------------- */
 export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message

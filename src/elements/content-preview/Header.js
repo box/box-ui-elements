@@ -12,8 +12,8 @@ import IconDrawAnnotationMode from 'box-react-ui/lib/icons/annotations/IconDrawA
 import IconPointAnnotation from 'box-react-ui/lib/icons/annotations/IconPointAnnotation';
 import IconPrint from 'box-react-ui/lib/icons/general/IconPrint';
 import IconDownload from 'box-react-ui/lib/icons/general/IconDownloadSolid';
-import messages from '../common/messages';
-import { getIcon } from '../common/item/iconCellRenderer';
+import messages from 'elements/common/messages';
+import { getIcon } from 'elements/common/item/iconCellRenderer';
 import { COLOR_999 } from '../../constants';
 import ContentOpenWith from '../content-open-with/ContentOpenWith';
 import './Header.scss';

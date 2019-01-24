@@ -9,14 +9,17 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import flow from 'lodash/flow';
 import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import Sidebar from './Sidebar';
-import SidebarNav from './SidebarNav';
-import API from '../../api';
-import APIContext from '../common/api-context';
-import Internationalize from '../common/Internationalize';
-import { withErrorBoundary } from '../common/error-boundary';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import APIContext from 'elements/common/api-context';
+import Internationalize from 'elements/common/Internationalize';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { SIDEBAR_FIELDS_TO_FETCH } from 'utils/fields';
+import API from 'api';
+import { withLogger } from 'elements/common/logger';
+import { withFeatureProvider } from 'elements/common/feature-checking';
+import { mark } from 'utils/performance';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import {
     DEFAULT_HOSTNAME_API,
     CLIENT_NAME_CONTENT_SIDEBAR,
@@ -31,9 +34,11 @@ import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { $AxiosXHR } from 'axios'; // eslint-disable-line
-import '../common/fonts.scss';
-import '../common/base.scss';
-import '../common/modal.scss';
+import SidebarNav from './SidebarNav';
+import Sidebar from './Sidebar';
+import 'elements/common/fonts.scss';
+import 'elements/common/base.scss';
+import 'elements/common/modal.scss';
 import './ContentSidebar.scss';
 
 type Props = {
@@ -45,6 +50,7 @@ type Props = {
     currentUser?: User,
     defaultView?: SidebarView,
     detailsSidebarProps: DetailsSidebarProps,
+    features: FeatureConfig,
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
@@ -61,7 +67,8 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     token: Token,
-} & ErrorContextProps;
+} & ErrorContextProps &
+    WithLoggerProps;
 
 type State = {
     file?: BoxItem,
@@ -70,6 +77,10 @@ type State = {
     metadataEditors?: Array<MetadataEditor>,
     view?: SidebarView,
 };
+
+const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_SIDEBAR}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
 
 class ContentSidebar extends React.PureComponent<Props, State> {
     id: string;
@@ -128,6 +139,12 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         });
 
         this.state = { isLoading: true, isOpen: !!isLarge };
+        /* eslint-disable react/prop-types */
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
+        /* eslint-enable react/prop-types */
     }
 
     /**
@@ -377,7 +394,7 @@ class ContentSidebar extends React.PureComponent<Props, State> {
         const styleClassName = classNames(
             'be bcs',
             {
-                [`bcs-${((selectedView: any): string)}`]: isOpen,
+                [selectedView ? `bcs-${selectedView}` : '']: isOpen,
                 'bcs-is-open': isOpen,
             },
             className,
@@ -425,4 +442,8 @@ class ContentSidebar extends React.PureComponent<Props, State> {
 
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
-export default withErrorBoundary(ORIGIN_CONTENT_SIDEBAR)(ContentSidebar);
+export default flow([
+    withFeatureProvider,
+    withLogger(ORIGIN_CONTENT_SIDEBAR),
+    withErrorBoundary(ORIGIN_CONTENT_SIDEBAR),
+])(ContentSidebar);

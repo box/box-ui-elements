@@ -3,9 +3,9 @@ import FolderUploadNode from '../FolderUploadNode';
 import FolderAPI from '../../Folder';
 import { ERROR_CODE_ITEM_NAME_IN_USE, STATUS_COMPLETE } from '../../../constants';
 
-jest.mock('../../../api/Folder');
-jest.mock('../../../utils/uploads', () => ({
-    ...require.requireActual('../../../utils/uploads'),
+jest.mock('api/Folder');
+jest.mock('utils/uploads', () => ({
+    ...require.requireActual('utils/uploads'),
     getFileFromEntry: jest.fn(entry => entry),
 }));
 

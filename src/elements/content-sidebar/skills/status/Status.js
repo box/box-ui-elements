@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import messages from '../../../common/messages';
+import messages from 'elements/common/messages';
 import {
     SKILLS_ERROR_EXTERNAL_AUTH,
     SKILLS_ERROR_BILLING,

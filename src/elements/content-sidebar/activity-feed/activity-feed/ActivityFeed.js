@@ -164,7 +164,7 @@ class ActivityFeed extends React.Component<Props, State> {
 
         return (
             // eslint-disable-next-line
-            <div className="bcs-activity-feed" onKeyDown={this.onKeyDown}>
+            <div className="bcs-activity-feed" data-testid="activityfeed" onKeyDown={this.onKeyDown}>
                 <div
                     ref={ref => {
                         this.feedContainer = ref;

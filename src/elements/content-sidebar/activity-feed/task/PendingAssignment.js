@@ -11,8 +11,8 @@ import IconClose from 'box-react-ui/lib/icons/general/IconClose';
 import PlainButton from 'box-react-ui/lib/components/plain-button';
 import Tooltip from 'box-react-ui/lib/components/tooltip';
 
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import messages from '../../../common/messages';
+import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
+import messages from 'elements/common/messages';
 
 type Props = {
     name: string,

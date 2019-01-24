@@ -9,9 +9,9 @@ import { FormattedMessage } from 'react-intl';
 import PillSelector from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelector';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import Button from 'box-react-ui/lib/components/button/Button';
-import messages from '../../../common/messages';
+import messages from 'elements/common/messages';
+import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
 import getPills from './keywordUtils';
-import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 import type { Pill, Pills } from './flowTypes';
 import './EditableKeywords.scss';
 

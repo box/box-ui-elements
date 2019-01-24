@@ -12,10 +12,10 @@ import IconEdit from 'box-react-ui/lib/icons/general/IconEdit';
 import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
 import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
 import Tooltip from 'box-react-ui/lib/components/tooltip/Tooltip';
+import messages from 'elements/common/messages';
+import { SKILLS_TARGETS } from 'elements/common/interactionTargets';
 import EditableKeywords from './EditableKeywords';
 import ReadOnlyKeywords from './ReadOnlyKeywords';
-import messages from '../../../common/messages';
-import { SKILLS_TARGETS } from '../../../common/interactionTargets';
 
 import './Keywords.scss';
 

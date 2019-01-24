@@ -5,8 +5,8 @@
 
 import * as React from 'react';
 import { Link } from 'box-react-ui/lib/components/link';
+import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 import UserLink from '../comment/UserLink';
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 
 // this regex matches one of the following regular expressions:
 // mentions: ([@＠﹫]\[[0-9]+:[^\]]+])

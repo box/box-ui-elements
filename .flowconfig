@@ -23,6 +23,8 @@
 [libs]
 
 [options]
+module.system.node.resolve_dirname=node_modules
+module.system.node.resolve_dirname=./src
 module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/SCSSFlowStub.js.flow'
 module.name_mapper.extension='css' -> '<PROJECT_ROOT>/flow/SCSSFlowStub.js.flow'
 module.name_mapper='react-intl-locale-data' -> '<PROJECT_ROOT>/flow/WebpackI18N.js.flow'

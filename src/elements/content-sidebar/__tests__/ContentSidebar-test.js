@@ -1,9 +1,9 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';
+import { SIDEBAR_FIELDS_TO_FETCH } from 'utils/fields';
 import { ContentSidebarComponent as ContentSidebar } from '../ContentSidebar';
 import SidebarUtils from '../SidebarUtils';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 
 jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
@@ -14,7 +14,10 @@ const file = {
 
 describe('elements/content-sidebar/ContentSidebar', () => {
     let rootElement;
-    const getWrapper = props => mount(<ContentSidebar {...props} />, { attachTo: rootElement });
+    const getWrapper = (props = {}) =>
+        mount(<ContentSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, {
+            attachTo: rootElement,
+        });
 
     beforeEach(() => {
         SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
@@ -24,6 +27,20 @@ describe('elements/content-sidebar/ContentSidebar', () => {
 
     afterEach(() => {
         document.body.removeChild(rootElement);
+    });
+
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
     });
 
     describe('componentDidUpdate', () => {

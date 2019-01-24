@@ -4,9 +4,9 @@
  * @author Box
  */
 
+import TokenService from 'utils/TokenService';
+import { getTypedFileId } from 'utils/file';
 import Base from './Base';
-import TokenService from '../utils/TokenService';
-import { getTypedFileId } from '../utils/file';
 import { ERROR_CODE_FETCH_CURRENT_USER } from '../constants';
 
 class Users extends Base {

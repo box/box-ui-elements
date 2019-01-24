@@ -14,10 +14,11 @@ import DraftJSMentionSelector, {
 } from 'box-react-ui/lib/components/form-elements/draft-js-mention-selector';
 import commonMessages from 'box-react-ui/lib/common/messages';
 
+import messages from 'elements/common/messages';
+import { FeatureFlag } from 'elements/common/feature-checking';
 import AddApproval from './AddApproval';
 import CommentInputControls from './CommentInputControls';
 import Avatar from '../Avatar';
-import messages from '../../../common/messages';
 
 import './ApprovalCommentForm.scss';
 
@@ -175,7 +176,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             resultStringArr.push(blockMapStringArr.join(''));
         });
 
-        // Concatentate the array of block strings with newlines
+        // Concatenate the array of block strings with newlines
         // (Each block represents a paragraph)
         return { text: resultStringArr.join('\n'), hasMention };
     };
@@ -186,8 +187,16 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         this.setState({ approverSelectorError: '' });
     };
 
+    scrollApproverSelector = () => {
+        const input = document.querySelector('.bcs-comment-add-approver-fields-container .pill-selector-input-wrapper');
+
+        if (input) {
+            input.scrollTop = input.scrollHeight;
+        }
+    };
+
     handleApproverSelectorSelect = (pills: any): void => {
-        this.setState({ approvers: this.state.approvers.concat(pills) });
+        this.setState({ approvers: this.state.approvers.concat(pills) }, this.scrollApproverSelector);
     };
 
     handleApproverSelectorRemove = (option: any, index: number): void => {
@@ -201,7 +210,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
             approverSelectorContacts,
             className,
             createTask,
-            getMentionWithQuery = noop,
+            getMentionWithQuery,
             intl: { formatMessage },
             isDisabled,
             isOpen,
@@ -250,18 +259,20 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             <FormattedMessage {...messages.atMentionTip} />
                         </aside>
                         {createTask ? (
-                            <AddApproval
-                                approvalDate={approvalDate}
-                                approvers={approvers}
-                                approverSelectorContacts={approverSelectorContacts}
-                                approverSelectorError={approverSelectorError}
-                                formatMessage={formatMessage}
-                                isAddApprovalVisible={isAddApprovalVisible}
-                                onApprovalDateChange={this.onApprovalDateChangeHandler}
-                                onApproverSelectorInput={this.handleApproverSelectorInput}
-                                onApproverSelectorRemove={this.handleApproverSelectorRemove}
-                                onApproverSelectorSelect={this.handleApproverSelectorSelect}
-                            />
+                            <FeatureFlag feature="activityFeed.tasks.createFromComment">
+                                <AddApproval
+                                    approvalDate={approvalDate}
+                                    approvers={approvers}
+                                    approverSelectorContacts={approverSelectorContacts}
+                                    approverSelectorError={approverSelectorError}
+                                    formatMessage={formatMessage}
+                                    isAddApprovalVisible={isAddApprovalVisible}
+                                    onApprovalDateChange={this.onApprovalDateChangeHandler}
+                                    onApproverSelectorInput={this.handleApproverSelectorInput}
+                                    onApproverSelectorRemove={this.handleApproverSelectorRemove}
+                                    onApproverSelectorSelect={this.handleApproverSelectorSelect}
+                                />
+                            </FeatureFlag>
                         ) : null}
                         <CommentInputControls onCancel={onCancel} />
                     </Form>

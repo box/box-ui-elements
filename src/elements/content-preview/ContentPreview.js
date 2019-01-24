@@ -6,6 +6,7 @@
 
 import 'regenerator-runtime/runtime';
 import React, { PureComponent } from 'react';
+import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import throttle from 'lodash/throttle';
 import cloneDeep from 'lodash/cloneDeep';
@@ -15,20 +16,23 @@ import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
 import { decode } from 'box-react-ui/lib/utils/keys';
-import PreviewLoading from './PreviewLoading';
-import PreviewNavigation from './PreviewNavigation';
-import ContentSidebar from '../content-sidebar';
-import Header from './Header';
-import API from '../../api';
-import makeResponsive from '../common/makeResponsive';
-import Internationalize from '../common/Internationalize';
-import TokenService from '../../utils/TokenService';
-import { isInputElement, focus } from '../../utils/dom';
-import { getTypedFileId } from '../../utils/file';
-import { withErrorBoundary } from '../common/error-boundary';
+import makeResponsive from 'elements/common/makeResponsive';
+import Internationalize from 'elements/common/Internationalize';
+import TokenService from 'utils/TokenService';
+import { isInputElement, focus } from 'utils/dom';
+import { getTypedFileId } from 'utils/file';
+import { withErrorBoundary } from 'elements/common/error-boundary';
+import { withLogger } from 'elements/common/logger';
+import { PREVIEW_FIELDS_TO_FETCH } from 'utils/fields';
+import { mark } from 'utils/performance';
+import { withFeatureProvider } from 'elements/common/feature-checking';
+import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import ReloadNotification from './ReloadNotification';
-import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
-import { withFeatureProvider } from '../common/feature-checking';
+import API from '../../api';
+import Header from './Header';
+import ContentSidebar from '../content-sidebar';
+import PreviewNavigation from './PreviewNavigation';
+import PreviewLoading from './PreviewLoading';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -42,8 +46,8 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
-import '../common/fonts.scss';
-import '../common/base.scss';
+import 'elements/common/fonts.scss';
+import 'elements/common/base.scss';
 import './ContentPreview.scss';
 
 type Props = {
@@ -56,6 +60,7 @@ type Props = {
     collection: Array<string | BoxItem>,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
+    enableThumbnailsSidebar: boolean,
     features?: FeatureConfig,
     fileId?: string,
     getInnerRef: () => ?HTMLElement,
@@ -68,7 +73,6 @@ type Props = {
     onClose?: Function,
     onDownload: Function,
     onLoad: Function,
-    onMetric: Function,
     onNavigate: Function,
     previewLibraryVersion: string,
     requestInterceptor?: Function,
@@ -80,7 +84,8 @@ type Props = {
     staticPath: string,
     token: Token,
     useHotkeys: boolean,
-} & ErrorContextProps;
+} & ErrorContextProps &
+    WithLoggerProps;
 
 type State = {
     file?: BoxItem,
@@ -88,6 +93,7 @@ type State = {
     isReloadNotificationVisible: boolean,
     currentFileId?: string, // the currently displayed file id in the collection
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
+    isThumbnailSidebarOpen: boolean,
 };
 
 // Emitted by preview's 'load' event
@@ -132,6 +138,9 @@ const InvalidIdError = new Error('Invalid id for Preview!');
 const RETRY_COUNT = 3; // number of times to retry network request for a file
 const MS_IN_S = 1000; // ms in a sec
 const PREVIEW_LOAD_METRIC_EVENT = 'load';
+const MARK_NAME_JS_READY = `${ORIGIN_CONTENT_PREVIEW}_${EVENT_JS_READY}`;
+
+mark(MARK_NAME_JS_READY);
 
 class ContentPreview extends PureComponent<Props, State> {
     id: string;
@@ -159,6 +168,7 @@ class ContentPreview extends PureComponent<Props, State> {
     initialState: State = {
         isFileError: false,
         isReloadNotificationVisible: false,
+        isThumbnailSidebarOpen: false,
     };
 
     static defaultProps = {
@@ -170,15 +180,15 @@ class ContentPreview extends PureComponent<Props, State> {
         collection: [],
         contentOpenWithProps: {},
         contentSidebarProps: {},
+        enableThumbnailsSidebar: false,
         hasHeader: false,
         language: DEFAULT_LOCALE,
         onDownload: noop,
         onError: noop,
         onLoad: noop,
-        onMetric: noop,
         onNavigate: noop,
         previewLibraryVersion: DEFAULT_PREVIEW_VERSION,
-        showAnnotations: true,
+        showAnnotations: false,
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         useHotkeys: true,
@@ -228,6 +238,10 @@ class ContentPreview extends PureComponent<Props, State> {
             currentFileId: fileId,
             prevFileIdProp: fileId,
         };
+        const { logger } = this.props;
+        logger.onReadyMetric({
+            endMarkName: MARK_NAME_JS_READY,
+        });
     }
 
     /**
@@ -514,7 +528,7 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     onPreviewMetric = (previewMetrics: PreviewMetrics): void => {
-        const { onMetric }: Props = this.props;
+        const { logger } = this.props;
         const { event_name } = previewMetrics;
         let metrics = {
             ...previewMetrics,
@@ -538,7 +552,7 @@ class ContentPreview extends PureComponent<Props, State> {
             };
         }
 
-        onMetric(metrics);
+        logger.onPreviewMetric(metrics);
     };
 
     /**
@@ -652,7 +666,13 @@ class ContentPreview extends PureComponent<Props, State> {
      * @return {void}
      */
     loadPreview = async (): Promise<void> => {
-        const { token: tokenOrTokenFunction, collection, onError, ...rest }: Props = this.props;
+        const {
+            token: tokenOrTokenFunction,
+            collection,
+            onError,
+            enableThumbnailsSidebar,
+            ...rest
+        }: Props = this.props;
         const { file }: State = this.state;
 
         if (!this.isPreviewLibraryLoaded() || !file || !tokenOrTokenFunction) {
@@ -673,12 +693,15 @@ class ContentPreview extends PureComponent<Props, State> {
             showDownload: this.canDownload(),
             skipServerUpdate: true,
             useHotkeys: false,
+            enableThumbnailsSidebar,
         };
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);
         this.preview.addListener('preview_error', this.onPreviewError);
         this.preview.addListener('preview_metric', this.onPreviewMetric);
+        this.preview.addListener('thumbnailsOpen', () => this.setState({ isThumbnailSidebarOpen: true }));
+        this.preview.addListener('thumbnailsClose', () => this.setState({ isThumbnailSidebarOpen: false }));
         this.preview.updateFileCache([file]);
         this.preview.show(file.id, token, {
             ...previewOptions,
@@ -1066,8 +1089,21 @@ class ContentPreview extends PureComponent<Props, State> {
             responseInterceptor,
         }: Props = this.props;
 
-        const { file, isFileError, isReloadNotificationVisible, currentFileId }: State = this.state;
+        const {
+            file,
+            isFileError,
+            isReloadNotificationVisible,
+            currentFileId,
+            isThumbnailSidebarOpen,
+        }: State = this.state;
         const { collection }: Props = this.props;
+        const styleClassName = classNames(
+            'be bcpr',
+            {
+                'bcpr-thumbnails-open': isThumbnailSidebarOpen,
+            },
+            className,
+        );
 
         if (!currentFileId) {
             return null;
@@ -1076,13 +1112,7 @@ class ContentPreview extends PureComponent<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div
-                    id={this.id}
-                    className={`be bcpr ${className}`}
-                    ref={measureRef}
-                    onKeyDown={this.onKeyDown}
-                    tabIndex={0}
-                >
+                <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
                     {hasHeader && (
                         <Header
                             file={file}
@@ -1148,4 +1178,9 @@ class ContentPreview extends PureComponent<Props, State> {
 
 export type ContentPreviewProps = Props;
 export { ContentPreview as ContentPreviewComponent };
-export default flow([makeResponsive, withFeatureProvider, withErrorBoundary(ORIGIN_CONTENT_PREVIEW)])(ContentPreview);
+export default flow([
+    makeResponsive,
+    withFeatureProvider,
+    withLogger(ORIGIN_CONTENT_PREVIEW),
+    withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
+])(ContentPreview);

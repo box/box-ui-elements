@@ -9,9 +9,9 @@ import { FormattedMessage } from 'react-intl';
 import ErrorEmptyState from 'box-react-ui/lib/icons/states/ErrorEmptyState';
 import UploadEmptyState from 'box-react-ui/lib/icons/states/UploadEmptyState';
 import UploadSuccessState from 'box-react-ui/lib/icons/states/UploadSuccessState';
-import messages from '../common/messages';
+import messages from 'elements/common/messages';
+import Browser from 'utils/Browser';
 import UploadStateContent from './UploadStateContent';
-import Browser from '../../utils/Browser';
 import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
 
 import './UploadState.scss';

@@ -1,2 +1,9 @@
 // feature config for feature flags
-export default {};
+export default {
+    activityFeed: {
+        tasks: {
+            createFromComment: true,
+            createButton: true,
+        },
+    },
+};

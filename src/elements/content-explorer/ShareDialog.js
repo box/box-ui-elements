@@ -10,8 +10,8 @@ import noop from 'lodash/noop';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
 import Button from 'box-react-ui/lib/components/button/Button';
-import messages from '../common/messages';
-import ShareAccessSelect from '../common/share-access-select';
+import messages from 'elements/common/messages';
+import ShareAccessSelect from 'elements/common/share-access-select';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 
 import './ShareDialog.scss';

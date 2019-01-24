@@ -1,19 +1,20 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
+import * as TokenService from 'utils/TokenService';
+import { PREVIEW_FIELDS_TO_FETCH } from 'utils/fields';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
 import PreviewLoading from '../PreviewLoading';
-import * as TokenService from '../../../utils/TokenService';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
-import { PREVIEW_FIELDS_TO_FETCH } from '../../../utils/fields';
 
-jest.mock('../../common/Internationalize', () => 'mock-internationalize');
+jest.mock('elements/common/Internationalize', () => 'mock-internationalize');
 
 let props;
 let file;
 
 describe('elements/content-preview/ContentPreview', () => {
-    const getWrapper = props => shallow(<ContentPreview {...props} />);
+    const getWrapper = (props = {}) =>
+        shallow(<ContentPreview logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() }} {...props} />);
 
     const PERFORMANCE_TIME = 100;
     beforeEach(() => {
@@ -31,6 +32,20 @@ describe('elements/content-preview/ContentPreview', () => {
 
     afterEach(() => {
         delete global.Box;
+    });
+
+    describe('constructor()', () => {
+        let onReadyMetric;
+        beforeEach(() => {
+            const wrapper = getWrapper();
+            ({ onReadyMetric } = wrapper.instance().props.logger);
+        });
+
+        test('should emit when js loaded', () => {
+            expect(onReadyMetric).toHaveBeenCalledWith({
+                endMarkName: expect.any(String),
+            });
+        });
     });
 
     describe('componentDidUpdate()', () => {
@@ -552,8 +567,9 @@ describe('elements/content-preview/ContentPreview', () => {
     });
 
     describe('onPreviewMetric()', () => {
+        let wrapper;
         let instance;
-        let onMetric;
+        let onPreviewMetric;
         const data = {
             foo: 'bar',
             file_info_time: 0,
@@ -565,21 +581,20 @@ describe('elements/content-preview/ContentPreview', () => {
         const FETCHING_TIME = 20;
 
         beforeEach(() => {
-            onMetric = jest.fn();
             props = {
                 token: 'token',
-                fileId: file.id,
-                onMetric,
+                fileId: '123',
             };
-            const wrapper = getWrapper(props);
+            wrapper = getWrapper(props);
             instance = wrapper.instance();
             instance.getTotalFileFetchTime = jest.fn().mockReturnValue(FETCHING_TIME);
+            ({ onPreviewMetric } = instance.props.logger);
         });
 
         test('should add in the total file fetching time to load events', () => {
             data.event_name = 'load';
             instance.onPreviewMetric(data);
-            expect(onMetric).toBeCalledWith({
+            expect(onPreviewMetric).toBeCalledWith({
                 ...data,
                 file_info_time: FETCHING_TIME,
                 value: data.value + FETCHING_TIME,
@@ -591,7 +606,7 @@ describe('elements/content-preview/ContentPreview', () => {
             data.value = 0;
             instance.getTotalFileFetchTime = jest.fn().mockReturnValue(0);
             instance.onPreviewMetric(data);
-            expect(onMetric).not.toBeCalled();
+            expect(onPreviewMetric).not.toBeCalled();
         });
     });
 
@@ -846,14 +861,13 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should return true if showAnnotations prop is true and there are annotations edit permissions', () => {
-            wrapper = getWrapper(props);
+            wrapper = getWrapper({ ...props, showAnnotations: true });
             instance = wrapper.instance();
             wrapper.setState({ file });
             expect(instance.canAnnotate()).toBeTruthy();
         });
 
-        test('should return false if showAnnotations prop is false', () => {
-            props.showAnnotations = false;
+        test('should return false if showAnnotations prop is false (default is false)', () => {
             wrapper = getWrapper(props);
             instance = wrapper.instance();
             wrapper.setState({ file });
@@ -861,6 +875,7 @@ describe('elements/content-preview/ContentPreview', () => {
         });
 
         test('should return false if can_annotate permission is false', () => {
+            wrapper = getWrapper({ ...props, showAnnotations: true });
             wrapper = getWrapper(props);
             instance = wrapper.instance();
             file.permissions.can_annotate = false;

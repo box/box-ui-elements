@@ -4,9 +4,9 @@
  * @author Box
  */
 
+import { VERSIONS_FIELDS_TO_FETCH } from 'utils/fields';
 import OffsetBasedAPI from './OffsetBasedAPI';
 import { ERROR_CODE_FETCH_VERSIONS, DEFAULT_FETCH_START, DEFAULT_FETCH_END } from '../constants';
-import { VERSIONS_FIELDS_TO_FETCH } from '../utils/fields';
 
 const ACTION = {
     upload: 'upload',
