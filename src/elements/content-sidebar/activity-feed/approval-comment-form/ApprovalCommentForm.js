@@ -187,13 +187,16 @@ class ApprovalCommentForm extends React.Component<Props, State> {
         this.setState({ approverSelectorError: '' });
     };
 
+    scrollApproverSelector = () => {
+        const input = document.querySelector('.bcs-comment-add-approver-fields-container .pill-selector-input-wrapper');
+
+        if (input) {
+            input.scrollTop = input.scrollHeight;
+        }
+    };
+
     handleApproverSelectorSelect = (pills: any): void => {
-        this.setState({ approvers: this.state.approvers.concat(pills) }, () => {
-            const input = document.querySelector('.pill-selector-input-wrapper');
-            if (input) {
-                input.scrollTop = input.scrollHeight;
-            }
-        });
+        this.setState({ approvers: this.state.approvers.concat(pills) }, this.scrollApproverSelector);
     };
 
     handleApproverSelectorRemove = (option: any, index: number): void => {
