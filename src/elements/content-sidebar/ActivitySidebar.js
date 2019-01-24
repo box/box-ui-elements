@@ -12,6 +12,7 @@ import { FormattedMessage } from 'react-intl';
 import messages from 'elements/common/messages';
 import { withAPIContext } from 'elements/common/api-context';
 import { withErrorBoundary } from 'elements/common/error-boundary';
+import { FeatureFlag } from 'elements/common/feature-checking';
 import { getBadUserError, getBadItemError } from 'utils/error';
 import API from 'api';
 import { withLogger } from 'elements/common/logger';
@@ -19,6 +20,7 @@ import { mark } from 'utils/performance';
 import { EVENT_JS_READY } from 'elements/common/logger/constants';
 import ActivityFeed from './activity-feed';
 import SidebarContent from './SidebarContent';
+import AddTaskButton from './AddTaskButton';
 import { DEFAULT_COLLAB_DEBOUNCE, ORIGIN_ACTIVITY_SIDEBAR } from '../../constants';
 import './ActivitySidebar.scss';
 
@@ -31,20 +33,19 @@ type ExternalProps = {
     onTaskAssignmentUpdate?: Function,
     getUserProfileUrl?: string => Promise<string>,
     currentUser?: User,
-};
+} & ErrorContextProps;
 
 type PropsWithoutContext = {
     file: BoxItem,
     translations?: Translations,
-    isDisabled?: boolean,
+    isDisabled: boolean,
     onVersionHistoryClick?: Function,
 } & ExternalProps &
     WithLoggerProps;
 
 type Props = {
     api: API,
-} & PropsWithoutContext &
-    ErrorContextProps;
+} & PropsWithoutContext;
 
 type State = {
     currentUser?: User,
@@ -76,6 +77,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             endMarkName: MARK_NAME_JS_READY,
         });
     }
+
+    static defaultProps = {
+        isDisabled: false,
+    };
 
     componentDidMount() {
         const { currentUser } = this.props;
@@ -444,6 +449,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         return api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
     };
 
+    renderAddTaskButton = () => {
+        const { isDisabled } = this.props;
+        const { approverSelectorContacts, mentionSelectorContacts } = this.state;
+        const { createTask, getApproverWithQuery, getMentionWithQuery, getAvatarUrl } = this;
+        const props = {
+            isDisabled,
+            createTask,
+            getApproverWithQuery,
+            getMentionWithQuery,
+            approverSelectorContacts,
+            mentionSelectorContacts,
+            getAvatarUrl,
+        };
+        return <AddTaskButton {...props} />;
+    };
+
     render() {
         const { file, isDisabled = false, onVersionHistoryClick, getUserProfileUrl } = this.props;
         const {
@@ -456,7 +477,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         } = this.state;
 
         return (
-            <SidebarContent title={<FormattedMessage {...messages.sidebarActivityTitle} />}>
+            <SidebarContent
+                title={<FormattedMessage {...messages.sidebarActivityTitle} />}
+                actions={<FeatureFlag feature="activityFeed.tasks.createButton" enabled={this.renderAddTaskButton} />}
+            >
                 <ActivityFeed
                     file={file}
                     activityFeedError={activityFeedError}
