@@ -4,15 +4,13 @@ import * as React from 'react';
 import TextField from './TextField';
 import { isValidValue } from './validateField';
 
-import type { FieldValue } from '../flowTypes';
-
 type Props = {
     dataKey: string,
-    dataValue?: FieldValue,
+    dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
     error?: React.Node,
-    onChange: (key: string, value: FieldValue) => void,
+    onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
     type: string,
 };
@@ -24,7 +22,7 @@ const FloatField = ({ dataKey, dataValue, displayName, description, error, onCha
         description={description}
         displayName={displayName}
         error={error}
-        onChange={(key: string, value: FieldValue) => {
+        onChange={(key: string, value: MetadataFieldValue) => {
             if (isValidValue(type, value, { allowTrailingPeriod: true })) {
                 onChange(key, value);
             }

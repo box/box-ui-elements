@@ -8,11 +8,9 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { ContentState, EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import Form from 'box-react-ui/lib/components/form-elements/form/Form';
-import DraftJSMentionSelector, {
-    DraftMentionDecorator,
-} from 'box-react-ui/lib/components/form-elements/draft-js-mention-selector';
-import commonMessages from 'box-react-ui/lib/common/messages';
+import Form from 'components/form-elements/form/Form';
+import DraftJSMentionSelector, { DraftMentionDecorator } from 'components/form-elements/draft-js-mention-selector';
+import commonMessages from 'common/messages';
 
 import messages from 'elements/common/messages';
 import { FeatureFlag } from 'elements/common/feature-checking';
@@ -247,7 +245,7 @@ class ApprovalCommentForm extends React.Component<Props, State> {
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}
-                            placeholder={tagged_message ? null : formatMessage(messages.commentWrite)}
+                            placeholder={tagged_message ? undefined : formatMessage(messages.commentWrite)}
                             validateOnBlur={false}
                         />
                         <aside

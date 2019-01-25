@@ -7,9 +7,9 @@
 import React from 'react';
 import getProp from 'lodash/get';
 import { injectIntl } from 'react-intl';
-import ItemProperties from 'box-react-ui/lib/features/item-details/ItemProperties';
-import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
-import getFileSize from 'box-react-ui/lib/utils/getFileSize';
+import ItemProperties from 'features/item-details/ItemProperties';
+import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
+import getFileSize from 'utils/getFileSize';
 import { INTERACTION_TARGET, DETAILS_TARGETS } from 'elements/common/interactionTargets';
 import withErrorHandling from './withErrorHandling';
 import { FIELD_PERMISSIONS_CAN_UPLOAD, KEY_CLASSIFICATION_TYPE } from '../../constants';

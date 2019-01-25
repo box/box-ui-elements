@@ -6,9 +6,9 @@
 
 import * as React from 'react';
 import getProp from 'lodash/get';
-import SharedLinkExpirationNotice from 'box-react-ui/lib/features/item-details/SharedLinkExpirationNotice';
-import { addTime } from 'box-react-ui/lib/utils/datetime';
-import ItemExpirationNotice from 'box-react-ui/lib/features/item-details/ItemExpirationNotice';
+import SharedLinkExpirationNotice from 'features/item-details/SharedLinkExpirationNotice';
+import { addTime } from 'utils/datetime';
+import ItemExpirationNotice from 'features/item-details/ItemExpirationNotice';
 
 import DateField from 'elements/common/date';
 

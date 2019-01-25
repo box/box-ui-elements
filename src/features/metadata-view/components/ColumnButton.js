@@ -13,8 +13,6 @@ import MenuToggle from 'components/dropdown-menu/MenuToggle';
 import PrimaryButton from 'components/primary-button/PrimaryButton';
 import reorder from 'components/draggable-list/draggable-list-utils/reorder';
 import IconMetadataColumns from '../../../icons/metadata-view/IconMetadataColumns';
-
-import type { Template } from '../../metadata-instance-editor/flowTypes';
 import type { ColumnType } from '../flowTypes';
 
 import messages from '../messages';
@@ -27,7 +25,7 @@ type State = {
 
 type Props = {
     onColumnChange?: Function,
-    template?: Template,
+    template?: MetadataTemplate,
     visibleColumns?: Array<ColumnType>,
 };
 

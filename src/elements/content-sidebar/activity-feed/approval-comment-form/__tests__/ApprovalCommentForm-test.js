@@ -414,7 +414,7 @@ describe('elements/content-sidebar/ActivityFeed/approval-comment-form/ApprovalCo
                 .find('DraftJSMentionSelector')
                 .at(0)
                 .prop('placeholder'),
-        ).toEqual(null);
+        ).toBeUndefined();
 
         const content = wrapper
             .state()

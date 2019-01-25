@@ -81,6 +81,17 @@ import {
     METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC,
 } from '../src/constants';
 
+import {
+    FIELD_TYPE_DATE,
+    FIELD_TYPE_ENUM,
+    FIELD_TYPE_FLOAT,
+    FIELD_TYPE_MULTISELECT,
+    FIELD_TYPE_STRING,
+    JSON_PATCH_OP_ADD,
+    JSON_PATCH_OP_REMOVE,
+    JSON_PATCH_OP_REPLACE,
+    JSON_PATCH_OP_TEST,
+} from '../src/features/metadata-instance-editor/constants';
 type Method =
     | typeof HTTP_DELETE
     | typeof HTTP_GET
@@ -239,30 +250,62 @@ type MetadataType = {
     global?: MetadataSkillsTemplate,
 };
 
-type MetadataTemplateField = {
-    displayName: string,
-    description: string,
-    id: string,
-    hidden?: boolean,
+type MetadataFieldValue = string | number | Array<any>;
+
+type MetadataFields = { [string]: MetadataFieldValue };
+
+type MetadataFieldType =
+    | typeof FIELD_TYPE_DATE
+    | typeof FIELD_TYPE_ENUM
+    | typeof FIELD_TYPE_FLOAT
+    | typeof FIELD_TYPE_MULTISELECT
+    | typeof FIELD_TYPE_STRING;
+
+type MetadataTemplateFieldOption = {
+    id?: string,
     key: string,
-    type: string,
 };
 
-type MetadataEditorTemplate = {
+type MetadataTemplateField = {
+    id: string,
+    type: MetadataFieldType,
+    key: string,
+    displayName: string,
+    description?: string,
+    isHidden?: boolean, // V2
+    hidden?: boolean, // V3
+    options?: Array<MetadataTemplateFieldOption>,
+};
+
+type MetadataTemplate = {
     id: string,
     scope: string,
     templateKey: string,
+    displayName?: string,
     fields?: Array<MetadataTemplateField>,
-    hidden: boolean,
+    isHidden?: boolean, // V2
+    hidden?: boolean, // V3
 };
 
-type MetadataEditorInstance = {
-    id: string,
-    data: Object,
-    canEdit: boolean,
+type MetadataCascadePolicy = {
+    canEdit?: boolean,
+    id?: string,
+};
+
+type MetadataCascadingPolicyData = {
+    id?: string,
+    isEnabled: boolean,
+    overwrite: boolean,
 };
 
 type MetadataInstance = {
+    id: string,
+    data: MetadataFields,
+    canEdit: boolean,
+    cascadePolicy?: MetadataCascadePolicy,
+};
+
+type MetadataInstanceV2 = {
     $id: string,
     $template: string,
     $canEdit: boolean,
@@ -275,10 +318,22 @@ type MetadataInstance = {
 
 type MetadataEditor = {
     hasError?: boolean,
-    instance: MetadataEditorInstance,
+    instance: MetadataInstance,
     isDirty?: boolean,
-    template: MetadataEditorTemplate,
+    template: MetadataTemplate,
 };
+
+type JSONPatch = {
+    op:
+        | typeof JSON_PATCH_OP_ADD
+        | typeof JSON_PATCH_OP_REMOVE
+        | typeof JSON_PATCH_OP_REPLACE
+        | typeof JSON_PATCH_OP_TEST,
+    path: string,
+    value?: any,
+};
+
+type JSONPatchOperations = Array<JSONPatch>;
 
 type BoxItemVersion = {
     id: string,
@@ -641,14 +696,6 @@ type Integration = {
 };
 
 type Alignment = 'left' | 'right';
-
-type JsonPatch = {
-    op: 'add' | 'remove' | 'replace' | 'test',
-    path: string,
-    value?: Object,
-};
-
-type JsonPatchData = Array<JsonPatch>;
 
 type SidebarView =
     | typeof SIDEBAR_VIEW_SKILLS

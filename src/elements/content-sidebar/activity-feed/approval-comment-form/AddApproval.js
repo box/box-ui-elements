@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import Checkbox from 'box-react-ui/lib/components/checkbox/Checkbox';
+import Checkbox from 'components/checkbox/Checkbox';
 
 import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 import messages from 'elements/common/messages';

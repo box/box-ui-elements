@@ -32,4 +32,5 @@ const PillCloud = ({ options, onSelect, selectedOptions = [], buttonProps = {} }
     </div>
 );
 
+export type PillOption = Option;
 export default PillCloud;

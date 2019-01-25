@@ -6,14 +6,13 @@ import { convertISOStringToUTCDate } from 'utils/datetime';
 
 import { FIELD_TYPE_DATE } from '../constants';
 import messages from '../messages';
-import type { FieldValue, FieldType } from '../flowTypes';
 import './ReadOnlyField.scss';
 
 type Props = {
-    dataValue?: FieldValue,
+    dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
-    type: FieldType,
+    type: MetadataFieldType,
 };
 
 const ReadOnlyField = ({ dataValue, description, displayName, type }: Props) => {

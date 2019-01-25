@@ -14,8 +14,6 @@ import NameCell from './NameCell';
 import MultiSelectCell from './MultiSelectCell';
 import FloatCell from './FloatCell';
 
-import type { Template, TemplateField } from '../../metadata-instance-editor/flowTypes';
-
 import '../styles/MetadataView.scss';
 
 type Props = {
@@ -27,7 +25,7 @@ type Props = {
     tableHeaderHeight: number,
     tableHeight: number,
     tableRowHeight: number,
-    template: Template,
+    template: MetadataTemplate,
     totalWidth: number,
     width: number,
 };
@@ -105,7 +103,7 @@ class MetadataViewTable extends React.PureComponent<Props, State> {
         const { intl, width } = this.props;
         const { visibleColumns, widths } = this.state;
 
-        return visibleColumns.map<React.Element<Column>>((templateField: TemplateField, index: number) => {
+        return visibleColumns.map<React.Element<Column>>((templateField: MetadataTemplateField, index: number) => {
             const { displayName, key, type } = templateField;
 
             const isNameCell = key === 'name';

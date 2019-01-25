@@ -6,10 +6,10 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconCheck from 'box-react-ui/lib/icons/general/IconCheck';
-import IconClose from 'box-react-ui/lib/icons/general/IconClose';
-import PlainButton from 'box-react-ui/lib/components/plain-button';
-import Tooltip from 'box-react-ui/lib/components/tooltip';
+import IconCheck from 'icons/general/IconCheck';
+import IconClose from 'icons/general/IconClose';
+import PlainButton from 'components/plain-button';
+import Tooltip from 'components/tooltip';
 
 import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';
 import messages from 'elements/common/messages';

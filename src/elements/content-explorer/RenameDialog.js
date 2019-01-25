@@ -7,8 +7,8 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import PrimaryButton from 'box-react-ui/lib/components/primary-button/PrimaryButton';
-import Button from 'box-react-ui/lib/components/button/Button';
+import PrimaryButton from 'components/primary-button/PrimaryButton';
+import Button from 'components/button/Button';
 import messages from 'elements/common/messages';
 import {
     CLASS_MODAL_CONTENT,

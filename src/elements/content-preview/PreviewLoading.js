@@ -6,8 +6,8 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconFileDefault from 'box-react-ui/lib/icons/file/IconFileDefault';
-import makeLoadable from 'box-react-ui/lib/components/loading-indicator/makeLoadable';
+import IconFileDefault from 'icons/file/IconFileDefault';
+import makeLoadable from 'components/loading-indicator/makeLoadable';
 import messages from 'elements/common/messages';
 import './PreviewLoading.scss';
 

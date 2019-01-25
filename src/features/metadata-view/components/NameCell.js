@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import IconItem from '../../../icons/item-icon/ItemIcon';
-import type { CellData } from '../../metadata-instance-editor/flowTypes';
+import type { CellData } from '../flowTypes';
 
 import '../styles/MetadataViewCell.scss';
 

@@ -70,7 +70,7 @@ export type Position =
 type Props = {
     bodyElement?: HTMLElement,
     /** A React element to put the tooltip on */
-    children: React.Element<any>,
+    children: React.Node,
     /** A CSS class for the tooltip */
     className?: string,
     /** Whether to constrain the tooltip to the element's scroll parent. Defaults to `false` */
@@ -114,6 +114,7 @@ class Tooltip extends React.Component<Props, State> {
     };
 
     fireChildEvent = (type: string, event: SyntheticEvent<>) => {
+        // $FlowFixMe
         const handler = this.props.children.props[type];
         if (handler) {
             handler(event);

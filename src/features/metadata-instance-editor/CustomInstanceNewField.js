@@ -9,15 +9,14 @@ import commonMessages from '../../common/messages';
 import IconInfo from '../../icons/general/IconInfo';
 
 import messages from './messages';
-import type { Fields, FieldValue } from './flowTypes';
 import './CustomInstanceNewField.scss';
 
 type Props = {
     intl: any,
     isCancellable: boolean,
-    onAdd: (key: string, value: FieldValue) => void,
+    onAdd: (key: string, value: MetadataFieldValue) => void,
     onCancel: () => void,
-    properties: Fields,
+    properties: MetadataFields,
 };
 
 type State = {

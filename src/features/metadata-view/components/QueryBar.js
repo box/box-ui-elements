@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 
-import type { Template } from '../../metadata-instance-editor/flowTypes';
 import TemplateButton from './TemplateButton';
 import FilterButton from './FilterButton';
 import ColumnButton from './ColumnButton';
@@ -11,10 +10,10 @@ import type { ColumnType } from '../flowTypes';
 import '../styles/QueryBarButtons.scss';
 
 type Props = {
-    activeTemplate?: Template,
+    activeTemplate?: MetadataTemplate,
     onTemplateChange?: Function,
     onColumnChange?: Function,
-    templates?: Array<Template>,
+    templates?: Array<MetadataTemplate>,
     visibleColumns?: Array<ColumnType>,
 };
 

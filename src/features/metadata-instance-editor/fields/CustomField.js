@@ -9,17 +9,16 @@ import IconPlus from '../../../icons/general/IconPlusThin';
 
 import Field from './Field';
 import messages from '../messages';
-import type { FieldValue } from '../flowTypes';
 import './CustomField.scss';
 
 type Props = {
     dataKey: string,
-    dataValue: FieldValue,
+    dataValue: MetadataFieldValue,
     intl: any,
     canEdit: boolean,
     isLast: boolean,
     onAdd: () => void,
-    onChange: (key: string, value: FieldValue) => void,
+    onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
 };
 

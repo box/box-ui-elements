@@ -6,10 +6,10 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconMagicWand from 'box-react-ui/lib/icons/general/IconMagicWand';
-import IconMetadataThick from 'box-react-ui/lib/icons/general/IconMetadataThick';
-import IconDocInfo from 'box-react-ui/lib/icons/general/IconDocInfo';
-import IconChatRound from 'box-react-ui/lib/icons/general/IconChatRound';
+import IconMagicWand from 'icons/general/IconMagicWand';
+import IconMetadataThick from 'icons/general/IconMetadataThick';
+import IconDocInfo from 'icons/general/IconDocInfo';
+import IconChatRound from 'icons/general/IconChatRound';
 import messages from 'elements/common/messages';
 import { SIDEBAR_NAV_TARGETS } from 'elements/common/interactionTargets';
 import SidebarNavButton from './SidebarNavButton';

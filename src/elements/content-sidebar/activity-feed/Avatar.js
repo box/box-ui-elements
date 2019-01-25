@@ -4,7 +4,7 @@
  * @author Box
  */
 import * as React from 'react';
-import AvatarComponent from 'box-react-ui/lib/components/avatar';
+import AvatarComponent from 'components/avatar';
 
 type Props = {
     user: User,
@@ -13,7 +13,7 @@ type Props = {
 };
 
 type State = {
-    avatarUrl: ?string,
+    avatarUrl?: ?string,
 };
 
 class Avatar extends React.PureComponent<Props, State> {

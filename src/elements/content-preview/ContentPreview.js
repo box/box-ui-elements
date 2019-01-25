@@ -15,7 +15,7 @@ import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import Measure from 'react-measure';
-import { decode } from 'box-react-ui/lib/utils/keys';
+import { decode } from 'utils/keys';
 import makeResponsive from 'elements/common/makeResponsive';
 import Internationalize from 'elements/common/Internationalize';
 import AsyncLoad from 'elements/common/async-load';

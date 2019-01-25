@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
+import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
 import messages from 'elements/common/messages';
 import IconActivityFeedEmptyState from '../icons';
 

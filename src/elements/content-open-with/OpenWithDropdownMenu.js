@@ -5,13 +5,13 @@
  */
 
 import * as React from 'react';
-import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
-import Menu from 'box-react-ui/lib/components/menu/Menu';
+import DropdownMenu from 'components/dropdown-menu/DropdownMenu';
+import Menu from 'components/menu/Menu';
 import OpenWithDropdownMenuItem from './OpenWithDropdownMenuItem';
 import MultipleIntegrationsOpenWithButton from './MultipleIntegrationsOpenWithButton';
 
 type Props = {
-    integrations: ?Array<Integration>,
+    integrations: Array<Integration>,
     dropdownAlignment: Alignment,
     onClick: Function,
 };
@@ -22,14 +22,13 @@ const OpenWithDropdownMenu = ({ dropdownAlignment = RIGHT_ALIGNMENT, integration
     <DropdownMenu isRightAligned={dropdownAlignment === RIGHT_ALIGNMENT}>
         <MultipleIntegrationsOpenWithButton />
         <Menu className="bcow-menu">
-            {integrations &&
-                integrations.map(integration => (
-                    <OpenWithDropdownMenuItem
-                        integration={integration}
-                        onClick={onClick}
-                        key={integration.appIntegrationId}
-                    />
-                ))}
+            {integrations.map(integration => (
+                <OpenWithDropdownMenuItem
+                    integration={integration}
+                    onClick={onClick}
+                    key={integration.appIntegrationId}
+                />
+            ))}
         </Menu>
     </DropdownMenu>
 );

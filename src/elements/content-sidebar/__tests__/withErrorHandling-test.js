@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
-import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import ErrorMask from 'components/error-mask/ErrorMask';
+import InlineError from 'components/inline-error/InlineError';
 import withErrorHandling from '../withErrorHandling';
 
 describe('elements/withErrorHandling', () => {

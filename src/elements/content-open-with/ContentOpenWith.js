@@ -570,7 +570,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
                         <OpenWithDropdownMenu
                             dropdownAlignment={dropdownAlignment}
                             onClick={this.onIntegrationClick}
-                            integrations={integrations}
+                            integrations={((integrations: any): Array<Integration>)}
                         />
                     )}
                     {(shouldRenderLoadingIntegrationPortal || shouldRenderErrorIntegrationPortal) && (

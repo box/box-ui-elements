@@ -12,7 +12,7 @@ type Props = {
      *
      * Required if "name" is not specified.
      */
-    avatarUrl?: string,
+    avatarUrl?: ?string,
     /** classname to add to the container element. */
     className?: string,
     /** Users id */

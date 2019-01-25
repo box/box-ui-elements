@@ -13,7 +13,6 @@ import { Flyout, Overlay } from 'components/flyout';
 import MenuToggle from 'components/dropdown-menu/MenuToggle';
 import messages from './messages';
 import { TEMPLATE_CUSTOM_PROPERTIES } from './constants';
-import type { Template } from './flowTypes';
 import './TemplateDropdown.scss';
 
 type Props = {
@@ -22,18 +21,18 @@ type Props = {
     intl: any,
     title?: React.Node,
     entryButton?: React.Node,
-    onAdd: (template: Template) => void,
-    selectedTemplate?: Template | null,
+    onAdd: (template: MetadataTemplate) => void,
+    selectedTemplate?: MetadataTemplate | null,
     defaultTemplateIcon?: React.Node,
     selectedTemplateIcon?: React.Node,
-    templates: Array<Template>,
-    usedTemplates: Array<Template>,
+    templates: Array<MetadataTemplate>,
+    usedTemplates: Array<MetadataTemplate>,
 };
 
 type State = {
     isDropdownOpen: boolean,
     filterText: string,
-    templates: Array<Template>,
+    templates: Array<MetadataTemplate>,
 };
 
 const InputContainer = ({ inputProps = {}, ...rest }: { inputProps?: Object }) => (
@@ -45,11 +44,11 @@ const InputContainer = ({ inputProps = {}, ...rest }: { inputProps?: Object }) =
     />
 );
 
-const getAvailableTemplates = (allTemplates: Array<Template>, usedTemplates: Array<Template>) =>
+const getAvailableTemplates = (allTemplates: Array<MetadataTemplate>, usedTemplates: Array<MetadataTemplate>) =>
     allTemplates.filter(
-        (template: Template) =>
+        (template: MetadataTemplate) =>
             usedTemplates.findIndex(
-                (usedTemplate: Template) =>
+                (usedTemplate: MetadataTemplate) =>
                     usedTemplate.templateKey === template.templateKey && usedTemplate.scope === template.scope,
             ) === -1,
     );
@@ -178,7 +177,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
      *
      * @return {React.Node} - string or formatted name
      */
-    getTemplateName(template: Template): React.Node {
+    getTemplateName(template: MetadataTemplate): React.Node {
         return template.templateKey === TEMPLATE_CUSTOM_PROPERTIES ? (
             <FormattedMessage className="template-display-name" {...messages.customTitle} />
         ) : (

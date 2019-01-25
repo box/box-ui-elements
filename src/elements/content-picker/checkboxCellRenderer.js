@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import Checkbox from 'box-react-ui/lib/components/checkbox/Checkbox';
+import Checkbox from 'components/checkbox/Checkbox';
 import isRowSelectable from './cellRendererHelper';
 
 export default (
@@ -20,5 +20,13 @@ export default (
         return <span />;
     }
 
-    return <Checkbox hideLabel label={name} name={name} isChecked={selected} onChange={() => onItemSelect(rowData)} />;
+    return (
+        <Checkbox
+            hideLabel
+            label={((name: any): string)}
+            name={((name: any): string)}
+            isChecked={selected}
+            onChange={() => onItemSelect(rowData)}
+        />
+    );
 };

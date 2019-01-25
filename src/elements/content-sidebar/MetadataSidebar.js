@@ -9,12 +9,12 @@ import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
-import Instances from 'box-react-ui/lib/features/metadata-instance-editor/Instances';
-import EmptyContent from 'box-react-ui/lib/features/metadata-instance-editor/EmptyContent';
-import TemplateDropdown from 'box-react-ui/lib/features/metadata-instance-editor/TemplateDropdown';
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator/LoadingIndicator';
-import LoadingIndicatorWrapper from 'box-react-ui/lib/components/loading-indicator/LoadingIndicatorWrapper';
-import InlineError from 'box-react-ui/lib/components/inline-error/InlineError';
+import Instances from 'features/metadata-instance-editor/Instances';
+import EmptyContent from 'features/metadata-instance-editor/EmptyContent';
+import TemplateDropdown from 'features/metadata-instance-editor/TemplateDropdown';
+import LoadingIndicator from 'components/loading-indicator/LoadingIndicator';
+import LoadingIndicatorWrapper from 'components/loading-indicator/LoadingIndicatorWrapper';
+import InlineError from 'components/inline-error/InlineError';
 import messages from 'elements/common/messages';
 import { withAPIContext } from 'elements/common/api-context';
 import { withErrorBoundary } from 'elements/common/error-boundary';
@@ -23,6 +23,7 @@ import API from 'api';
 import { withLogger } from 'elements/common/logger';
 import { mark } from 'utils/performance';
 import { EVENT_JS_READY } from 'elements/common/logger/constants';
+
 import SidebarContent from './SidebarContent';
 import SidebarUtils from './SidebarUtils';
 import {
@@ -54,7 +55,7 @@ type State = {
     file?: BoxItem,
     error?: MessageDescriptor,
     isLoading: boolean,
-    templates?: Array<MetadataEditorTemplate>,
+    templates?: Array<MetadataTemplate>,
 };
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
@@ -183,7 +184,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @param {Object} template - instance template
      * @return {void}
      */
-    onAdd = (template: MetadataEditorTemplate) => {
+    onAdd = (template: MetadataTemplate) => {
         const { api }: Props = this.props;
         const { file }: State = this.state;
 
@@ -230,7 +231,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
      * @param {Array} ops - json patch ops
      * @return {void}
      */
-    onSave = (id: string, ops: JsonPatchData): void => {
+    onSave = (id: string, ops: JSONPatchOperations): void => {
         const { api }: Props = this.props;
         const { file }: State = this.state;
         const oldEditor = this.getEditor(id);
@@ -295,7 +296,7 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
         templates,
     }: {
         editors: Array<MetadataEditor>,
-        templates: Array<MetadataEditorTemplate>,
+        templates: Array<MetadataTemplate>,
     }) => {
         this.setState({
             editors: editors.slice(0), // cloned for potential editing
@@ -388,8 +389,10 @@ class MetadataSidebar extends React.PureComponent<Props, State> {
                             hasTemplates={templates && templates.length !== 0}
                             isDropdownBusy={false}
                             onAdd={this.onAdd}
+                            // $FlowFixMe checked via showTemplateDropdown & showEditor
                             templates={templates}
-                            usedTemplates={editors && editors.map(editor => editor.template)}
+                            // $FlowFixMe checked via showTemplateDropdown & showEditor
+                            usedTemplates={editors.map(editor => editor.template)}
                         />
                     ) : null
                 }

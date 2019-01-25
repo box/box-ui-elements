@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Draggable from 'react-draggable';
 
-import type { HeaderData } from '../../metadata-instance-editor/flowTypes';
+import type { HeaderData } from '../flowTypes';
 
 import '../styles/Header.scss';
 

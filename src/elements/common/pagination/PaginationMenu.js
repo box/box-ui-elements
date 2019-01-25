@@ -6,9 +6,9 @@
 
 import React from 'react';
 import range from 'lodash/range';
-import Button from 'box-react-ui/lib/components/button';
-import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu';
-import { Menu, MenuItem } from 'box-react-ui/lib/components/menu';
+import Button from 'components/button';
+import DropdownMenu from 'components/dropdown-menu';
+import { Menu, MenuItem } from 'components/menu';
 import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import './PaginationMenu.scss';

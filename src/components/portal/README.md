@@ -11,7 +11,7 @@ etc.
 ### Usage
 
 ```jsx
-import { Portal } from 'box-react-ui';
+import { Portal } from 'box-ui-elements';
 
 const MyPortalExample = () => {
     if (!this.props.isOpen) return null;

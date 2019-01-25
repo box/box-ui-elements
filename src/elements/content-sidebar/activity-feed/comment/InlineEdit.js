@@ -6,8 +6,8 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
-import PlainButton from 'box-react-ui/lib/components/plain-button';
-import IconPencil from 'box-react-ui/lib/icons/general/IconPencil';
+import PlainButton from 'components/plain-button';
+import IconPencil from 'icons/general/IconPencil';
 
 import messages from 'elements/common/messages';
 import { ACTIVITY_TARGETS } from 'elements/common/interactionTargets';

@@ -6,7 +6,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 
-import LoadingIndicator from 'box-react-ui/lib/components/loading-indicator';
+import LoadingIndicator from 'components/loading-indicator';
 
 import formatTaggedMessage from '../utils/formatTaggedMessage';
 import ShowOriginalButton from './ShowOriginalButton';

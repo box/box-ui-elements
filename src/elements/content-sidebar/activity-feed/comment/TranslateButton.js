@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import PlainButton from 'box-react-ui/lib/components/plain-button';
+import PlainButton from 'components/plain-button';
 
 import messages from 'elements/common/messages';
 

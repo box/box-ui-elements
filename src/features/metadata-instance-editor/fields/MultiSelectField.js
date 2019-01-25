@@ -6,19 +6,18 @@ import Label from 'components/label/Label';
 import MultiSelect from 'components/select-field/MultiSelectField';
 import type { SelectOptionProp } from 'components/select-field/props';
 
-import type { FieldValue, TemplateFieldOption } from '../flowTypes';
 import messages from '../messages';
 
 import './MultiSelectField.scss';
 
 type Props = {
     dataKey: string,
-    dataValue?: FieldValue,
+    dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
-    onChange: (key: string, value: FieldValue) => void,
+    onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
-    options?: Array<TemplateFieldOption>,
+    options?: Array<MetadataTemplateFieldOption>,
 };
 
 const MultiSelectField = ({

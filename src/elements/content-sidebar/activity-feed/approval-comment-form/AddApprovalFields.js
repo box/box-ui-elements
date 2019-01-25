@@ -6,15 +6,15 @@
 import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
 
-import ContactDatalistItem from 'box-react-ui/lib/components/contact-datalist-item/ContactDatalistItem';
-import DatePicker from 'box-react-ui/lib/components/date-picker/DatePicker';
-import PillSelectorDropdown from 'box-react-ui/lib/components/pill-selector-dropdown/PillSelectorDropdown';
+import ContactDatalistItem from 'components/contact-datalist-item/ContactDatalistItem';
+import DatePicker from 'components/date-picker/DatePicker';
+import PillSelectorDropdown from 'components/pill-selector-dropdown/PillSelectorDropdown';
 
 import messages from 'elements/common/messages';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from 'elements/common/interactionTargets';
 
 type Props = {
-    approvalDate: ?Date,
+    approvalDate?: Date,
     approvers: SelectorItems,
     approverSelectorContacts?: SelectorItems,
     approverSelectorError: string,

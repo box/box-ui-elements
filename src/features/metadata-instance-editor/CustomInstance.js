@@ -4,19 +4,18 @@ import * as React from 'react';
 import CustomNewField from './CustomInstanceNewField';
 import CustomField from './fields/CustomField';
 import EmptyContent from './EmptyContent';
-import type { Fields, FieldValue } from './flowTypes';
 import { FIELD_TYPE_STRING } from './constants';
 
 type Props = {
     canEdit: boolean,
-    onFieldChange?: (key: string, value: FieldValue, type: string) => void,
+    onFieldChange?: (key: string, value: MetadataFieldValue, type: string) => void,
     onFieldRemove?: (key: string) => void,
-    data: Fields,
+    data: MetadataFields,
 };
 
 type State = {
     isAddFieldVisible: boolean,
-    properties: Fields,
+    properties: MetadataFields,
 };
 
 class CustomInstance extends React.PureComponent<Props, State> {
@@ -47,7 +46,7 @@ class CustomInstance extends React.PureComponent<Props, State> {
      * @param {string} value - metadata value
      * @return {void}
      */
-    onFieldChange = (key: string, value: FieldValue) => {
+    onFieldChange = (key: string, value: MetadataFieldValue) => {
         const { canEdit, onFieldChange }: Props = this.props;
         if (canEdit && onFieldChange) {
             onFieldChange(key, value, FIELD_TYPE_STRING);

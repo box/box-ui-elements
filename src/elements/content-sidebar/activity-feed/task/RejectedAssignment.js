@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconClose from 'box-react-ui/lib/icons/general/IconClose';
+import IconClose from 'icons/general/IconClose';
 
 import messages from 'elements/common/messages';
 

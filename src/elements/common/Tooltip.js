@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import TooltipCore from 'box-react-ui/lib/components/tooltip/Tooltip';
+import TooltipCore from 'components/tooltip/Tooltip';
 
 const Tooltip = ({
     children,

@@ -51,7 +51,9 @@ Show retentionPolicy:
     retentionPolicyProps={{
         retentionPolicyDescription: 'Retention',
         policyType: 'finite',
-        openModal: () => {},
+        openModal: () => {
+            alert('Retention Modal');
+        },
         dispositionTime: 1489899991883,
     }}
 />

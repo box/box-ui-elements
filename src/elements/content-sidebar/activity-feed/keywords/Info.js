@@ -6,8 +6,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import IconInfoInverted from 'box-react-ui/lib/icons/general/IconInfoInverted';
-import Tooltip from 'box-react-ui/lib/components/tooltip';
+import IconInfoInverted from 'icons/general/IconInfoInverted';
+import Tooltip from 'components/tooltip';
 
 import messages from 'elements/common/messages';
 

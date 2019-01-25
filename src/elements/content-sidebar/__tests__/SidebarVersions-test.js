@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import VersionHistoryLink from 'box-react-ui/lib/features/item-details/VersionHistoryLink';
+import VersionHistoryLink from 'features/item-details/VersionHistoryLink';
 import SidebarVersions from '../SidebarVersions';
 
 describe('elements/content-sidebar/SidebarVersions', () => {

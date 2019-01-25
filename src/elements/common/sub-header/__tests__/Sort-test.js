@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import Button from 'box-react-ui/lib/components/button/Button';
-import DropdownMenu from 'box-react-ui/lib/components/dropdown-menu/DropdownMenu';
-import Menu from 'box-react-ui/lib/components/menu/Menu';
-import MenuItem from 'box-react-ui/lib/components/menu/MenuItem';
+import Button from 'components/button/Button';
+import DropdownMenu from 'components/dropdown-menu/DropdownMenu';
+import Menu from 'components/menu/Menu';
+import MenuItem from 'components/menu/MenuItem';
 import Sort from '../Sort';
 import messages from '../../messages';
 import { SORT_ASC, SORT_DESC } from '../../../../constants';

@@ -6,9 +6,9 @@
 
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import IconNavigateLeft from 'box-react-ui/lib/icons/general/IconNavigateLeft';
-import IconNavigateRight from 'box-react-ui/lib/icons/general/IconNavigateRight';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
+import IconNavigateLeft from 'icons/general/IconNavigateLeft';
+import IconNavigateRight from 'icons/general/IconNavigateRight';
+import PlainButton from 'components/plain-button/PlainButton';
 import messages from 'elements/common/messages';
 
 type Props = {

@@ -6,12 +6,12 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import PlainButton from 'box-react-ui/lib/components/plain-button/PlainButton';
-import IconClose from 'box-react-ui/lib/icons/general/IconClose';
-import IconDrawAnnotationMode from 'box-react-ui/lib/icons/annotations/IconDrawAnnotation';
-import IconPointAnnotation from 'box-react-ui/lib/icons/annotations/IconPointAnnotation';
-import IconPrint from 'box-react-ui/lib/icons/general/IconPrint';
-import IconDownload from 'box-react-ui/lib/icons/general/IconDownloadSolid';
+import PlainButton from 'components/plain-button/PlainButton';
+import IconClose from 'icons/general/IconClose';
+import IconDrawAnnotationMode from 'icons/annotations/IconDrawAnnotation';
+import IconPointAnnotation from 'icons/annotations/IconPointAnnotation';
+import IconPrint from 'icons/general/IconPrint';
+import IconDownload from 'icons/general/IconDownloadSolid';
 import AsyncLoad from 'elements/common/async-load';
 import messages from 'elements/common/messages';
 import { getIcon } from 'elements/common/item/iconCellRenderer';

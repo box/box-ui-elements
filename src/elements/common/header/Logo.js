@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import IconLogo from 'box-react-ui/lib/icons/general/IconLogo';
+import IconLogo from 'icons/general/IconLogo';
 import messages from '../messages';
 import './Logo.scss';
 

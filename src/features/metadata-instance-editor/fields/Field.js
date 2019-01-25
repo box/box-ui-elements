@@ -21,20 +21,19 @@ import {
     FIELD_TYPE_DATE,
     FIELD_TYPE_MULTISELECT,
 } from '../constants';
-import type { FieldType, TemplateFieldOption, FieldValue } from '../flowTypes';
 
 type Props = {
     dataKey: string,
     displayName: string,
-    dataValue?: FieldValue,
+    dataValue?: MetadataFieldValue,
     description?: string,
     error?: React.Node,
     isHidden?: boolean,
     canEdit: boolean,
-    onChange?: (key: string, value: FieldValue) => void,
+    onChange?: (key: string, value: MetadataFieldValue) => void,
     onRemove?: (key: string) => void,
-    options?: Array<TemplateFieldOption>,
-    type: FieldType,
+    options?: Array<MetadataTemplateFieldOption>,
+    type: MetadataFieldType,
 };
 
 const Field = ({

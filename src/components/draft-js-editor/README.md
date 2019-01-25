@@ -1,6 +1,6 @@
 # DraftJSEditor
 
-This component exposes a [Draft][1] editor for use in box-react-ui.
+This component exposes a [Draft][1] editor for use in box-ui-elements.
 It was initially written for use with `src/components/form-elements`'s `<DraftJSMentionSelector />` components.
 
 It doesn't own its own `editorState`. Any changes in the `<Editor />` cause the component's `onChange` method to be called with the new state.

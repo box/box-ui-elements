@@ -1,7 +1,6 @@
 // @flow
-import type { Template, TemplateField } from './flowTypes';
 
-const isHidden = (obj: Template | TemplateField): boolean => {
+const isHidden = (obj: MetadataTemplate | MetadataTemplateField): boolean => {
     return !!obj.isHidden || !!obj.hidden;
 };
 

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import ErrorMask from 'box-react-ui/lib/components/error-mask/ErrorMask';
+import ErrorMask from 'components/error-mask/ErrorMask';
 import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
 import './DefaultError.scss';

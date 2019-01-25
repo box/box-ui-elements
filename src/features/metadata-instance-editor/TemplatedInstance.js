@@ -3,7 +3,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Field from './fields/Field';
-import type { Fields, FieldValue, Template } from './flowTypes';
 import messages from './messages';
 import isHidden from './metadataUtil';
 import './TemplatedInstance.scss';
@@ -11,10 +10,10 @@ import './TemplatedInstance.scss';
 type Props = {
     canEdit: boolean,
     errors: { [string]: React.Node },
-    onFieldChange?: (key: string, value: FieldValue, type: string) => void,
+    onFieldChange?: (key: string, value: MetadataFieldValue, type: string) => void,
     onFieldRemove?: (key: string) => void,
-    data: Fields,
-    template: Template,
+    data: MetadataFields,
+    template: MetadataTemplate,
 };
 
 const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldRemove, template }: Props) => {
@@ -37,7 +36,7 @@ const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldR
                         displayName={field.displayName}
                         error={errors[field.key]}
                         isHidden={isHidden(field)} // Checking both isHidden and hidden attributes due to differences in V2 and V3 APIs
-                        onChange={(key: string, value: FieldValue) => {
+                        onChange={(key: string, value: MetadataFieldValue) => {
                             if (canEdit && onFieldChange) {
                                 onFieldChange(key, value, field.type);
                             }

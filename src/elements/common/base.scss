@@ -1,19 +1,19 @@
 @import './variables';
-@import '~box-react-ui/lib/styles/common/buttons';
-@import '~box-react-ui/lib/styles/common/inline-notifications';
-@import '~box-react-ui/lib/styles/modifiers/accessibility';
-@import '~box-react-ui/lib/styles/common/overlay';
-@import '~box-react-ui/lib/styles/common/pills';
-@import '~box-react-ui/lib/components/pill-selector-dropdown/PillSelector';
-@import '~box-react-ui/lib/components/notification/Notification';
+@import '../../styles/common/buttons';
+@import '../../styles/common/inline-notifications';
+@import '../../styles/modifiers/accessibility';
+@import '../../styles/common/overlay';
+@import '../../styles/common/pills';
+@import '../../components/pill-selector-dropdown/PillSelector';
+@import '../../components/notification/Notification';
 
 .be {
     @include reset;
 
     // links have tag styles
-    @import '~box-react-ui/lib/styles/common/links';
+    @import '../../styles/common/links';
     // Forms have tag styles
-    @import '~box-react-ui/lib/styles/common/forms';
+    @import '../../styles/common/forms';
 
     background: $white;
     border: 0 none;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import IconOpenWith from 'box-react-ui/lib/icons/general/IconOpenWith';
+import IconOpenWith from 'icons/general/IconOpenWith';
 import OpenWithButtonContents from '../OpenWithButtonContents';
 
 describe('elements/content-open-with/MultipleIntegrationsOpenWithButton', () => {
